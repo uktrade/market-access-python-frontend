@@ -1,0 +1,54 @@
+$dash-button-width: 295px;
+$dash-button-margin: 30px;
+
+$dash-button-from-tablet-width: ( ( $dash-button-width * 2 ) + $dash-button-margin + 60px );
+$dash-button-from-desktop-width: ( ( $dash-button-width * 3 ) + ( $dash-button-margin * 2 ) + 60px );
+$tablet-width: mq-get-breakpoint-width(tablet, $mq-breakpoints);
+$desktop-width: mq-get-breakpoint-width(desktop, $mq-breakpoints);
+
+@if $dash-button-from-tablet-width < $tablet-width {
+	$dash-button-from-tablet-width: $tablet-width;
+}
+
+@if $dash-button-from-desktop-width < $desktop-width {
+	$dash-button-from-desktop-width: $desktop-width;
+}
+
+.dash-button {
+	@extend .govuk-button;
+	@extend .govuk-button--start;
+	text-align: left;
+	background-image: none;
+	padding: govuk-em( 15, 24 ) govuk-em( 13, 24 );
+	box-sizing: border-box;
+	width: 100%;
+	min-height: govuk-em( ( 100 - 30 ), 16 );
+
+	@include mq( $from: $dash-button-from-tablet-width ){
+		width: $dash-button-width;
+		margin-left: $dash-button-margin;
+	}
+
+	&:first-of-type {
+		margin-left: 0;
+	}
+}
+
+.dash-button__heading {
+
+	background-image: govuk-image-url("icon-pointer.png");
+	background-repeat: no-repeat;
+	background-position: 100% 50%;
+	padding-right: govuk-em( 45, 24 );
+
+	@include govuk-device-pixel-ratio {
+		background-image: govuk-image-url("icon-pointer-2x.png");
+		background-size: 30px 19px;
+	}
+}
+
+.dash-button__text {
+	@include govuk-font( $size: 14 );
+	display: block;
+	padding-top: govuk-em( 10, 14 );
+}

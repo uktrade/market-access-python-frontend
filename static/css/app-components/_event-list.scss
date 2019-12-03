@@ -1,0 +1,91 @@
+.event-list {
+	list-style: none;
+	padding: 0;
+}
+
+.event-list__item {
+
+	border: 2px solid $govuk-grey-3;
+	padding: govuk-em( 15, 16 );
+	margin-bottom: govuk-em( 15, 16 );
+	position: relative;
+	margin-left: govuk-em( 30, 16 );
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: govuk-em( 17, 16 );
+		left: govuk-em( -35, 16 );
+		display: inline-block;
+		border: 5px solid $govuk-grey-3;
+		border-radius: 50%;
+		width: 10px;
+		height: 10px;
+		z-index: 10;
+		background: white;
+	}
+
+	&:after {
+		content: '';
+		border-left: 3px solid $govuk-grey-3;
+		height: 120%;
+		display: inline-block;
+		position: absolute;
+		top: govuk-em( 17, 16 );
+		left: govuk-em( -27, 16 );
+	}
+
+	&:last-of-type:after {
+		border-color: white;
+	}
+}
+
+.event_list__item--note {
+	background-color: $govuk-yellow-10;
+	border-color: $govuk-yellow-10;
+}
+
+.event-list__item__document {
+}
+
+.event-list__item__heading {
+	margin-top: 0;
+	margin-bottom: govuk-em( 15, 16 );
+	color: $secondary-text-colour;
+}
+
+.event-list__item__heading__recede {
+	font-weight: normal;
+}
+
+.event-list__item__text {
+
+	@include govuk-font( $size: 19 );
+	margin: 0 0 govuk-em( 15, 19 ) 0;
+	overflow: hidden;
+
+	&:last-of-type {
+		margin-bottom: 0;
+	}
+}
+
+.event-list__item__document__list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	@include govuk-font( 19 );
+}
+
+.event-list__item__document__list__item {
+	background: transparent url( 'data:image/svg+xml;charset=UTF-8,<svg width="15" height="20" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.0475 4.11718L10.4475 0.367184C10.2225 0.132809 9.915 0 9.6 0H1.2C0.54 0 0 0.5625 0 1.25V18.75C0 19.4375 0.54 20 1.2 20H13.2C13.86 20 14.4 19.4375 14.4 18.75V5C14.4 4.67188 14.2725 4.35156 14.0475 4.11718ZM9.6 1.2578L13.2 5.0078H9.6V1.2578ZM13.2 18.7578H1.2V1.2578H9V5.0078C9 5.35155 9.27 5.6328 9.6 5.6328H13.2V18.7578Z" fill="black"/></svg>' ) 0 0 no-repeat;
+	padding-left: 25px;
+}
+
+.event-list__item__edit-link {
+	display: inline-block;
+	margin-bottom: govuk-em( 30, 19 );
+}
+
+.event-list__item__document__list__item__status {
+	color: $govuk-black;
+}

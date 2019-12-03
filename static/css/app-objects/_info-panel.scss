@@ -1,0 +1,13 @@
+.info-panel {
+	background-color: $govuk-grey-3;
+	padding: govuk-em( 20, 16 );
+}
+
+.info-panel__heading {
+	@include govuk-font( 19, $weight: bold );
+	margin-top: 0;
+}
+
+.info-panel__text {
+	margin: 0;
+}

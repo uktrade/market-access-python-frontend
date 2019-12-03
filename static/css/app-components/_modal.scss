@@ -1,0 +1,42 @@
+.modal-open {
+	height: 100%;
+	overflow: hidden;
+}
+
+.modal {
+
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	background: rgba( 11, 12, 12, 0.7 );
+	display: block;
+	overflow-y: scroll;
+
+	.modal__content {
+
+		@include govuk-font( $size: 19 );
+		padding: govuk-em( 20, 16 );
+		display: block;
+		position: relative;
+		margin: 0 auto;
+		width: 80%;
+		top: 6%;
+		background: white;
+
+		@include mq( $from: desktop ){
+			width: 60%;
+			top: 15%;
+		}
+
+		&__title {
+
+			@include govuk-font( $size: 24 );
+			font-weight: bold;
+			line-height: 1;
+			margin: 0;
+		}
+	}
+}

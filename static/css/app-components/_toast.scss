@@ -1,0 +1,75 @@
+$toast-hide-seconds: 10s;
+$toast-top: govuk-em( 100, 16 );
+$toast-border: 4px;
+$toast-top-hidden: -( $toast-top + govuk-em( $toast-border * 2, 16 ) );
+
+.toast {
+
+	border: $toast-border solid $govuk-green;
+	background-color: $govuk-green-10;
+	padding: govuk-em( 15, 16 ) govuk-em( 30, 16 ) govuk-em( 15, 16 ) govuk-em( 70, 16 );
+	position: absolute;
+	top: $toast-top;
+	left: 0;
+	z-index: 999;
+	width: 100%;
+	box-sizing: border-box;
+	box-shadow: 0px 5px 5px rgba( 0, 0, 0, 0.3 );
+
+	-moz-animation: hideAnimation $toast-hide-seconds forwards;
+	-webkit-animation: hideAnimation $toast-hide-seconds forwards;
+	-o-animation: hideAnimation $toast-hide-seconds forwards;
+	animation: hideAnimation $toast-hide-seconds forwards;
+
+	@include mq( $from: tablet ){
+		left: 50%;
+		transform: translateX( -50% );
+		width: 75%;
+		max-width: govuk-em( 750, 16 );
+	}
+}
+
+.toast__checkmark {
+	position: absolute;
+	top: govuk-em( 15, 16 );
+	left: govuk-em( 15, 16 );
+}
+
+.toast__heading {
+	@include govuk-font( $size: 19, $weight: bold );
+	padding: 0;
+	margin: 0;
+}
+
+.toast__message {
+	padding: govuk-em( 5, 16 ) 0 0 0;
+	margin: 0;
+}
+
+.toast__dismiss {
+
+	@include govuk-font( $size: 24, $weight: bold, $line-height: 1 );
+	position: absolute;
+	top: govuk-em( 10, 24 );
+	right: govuk-em( 15, 24 );
+	text-decoration: none;
+
+	&:visited {
+		color: $govuk-blue;
+	}
+}
+
+@keyframes hideAnimation {
+	0%   { top: $toast-top-hidden; }
+	6%   { top: $toast-top; }
+	96%  { top: $toast-top; }
+	99%  { opacity: 1; }
+	100% { opacity: 0; top: $toast-top-hidden; } /* Opacity 0 to ensure it's hidden on iOS */
+}
+@-webkit-keyframes hideAnimation {
+	0%   { top: $toast-top-hidden; }
+	6%   { top: $toast-top; }
+	96%  { top: $toast-top; }
+	99%  { opacity: 1; }
+	100% { opacity: 0; top: $toast-top-hidden; }
+}

@@ -1,0 +1,30 @@
+.details-list {
+	display: table;
+	width: 100%;
+	border-top: 1px solid $govuk-grey-2;
+}
+
+.details-list__group {
+
+	display: table-row;
+	@include govuk-font( $size: 14 );
+
+	&:nth-of-type( odd ){
+		background-color: $govuk-grey-4;
+	}
+}
+
+
+.details-list__key {
+	font-weight: bold;
+	text-transform: capitalize;
+}
+
+.details-list__key,
+.details-list__value {
+	display: table-cell;
+	width: 50%;
+	padding: govuk-em( 10, 14 );
+	margin: 0;
+	border-bottom: 1px solid $govuk-grey-2;
+}

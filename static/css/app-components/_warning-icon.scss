@@ -1,0 +1,39 @@
+.warning-icon {
+
+	$icon-size: 14px;
+	$text-padding: 3px;
+
+	@include govuk-font($size: false, $weight: bold);
+
+	display: inline-block;
+
+	min-width: $icon-size + $text-padding;
+	min-height: $icon-size;
+	margin-top: -( $icon-size / 2 ); // Half the height of the circle (adjusted for NTA)
+	padding-top: $text-padding;
+	margin-right: 0.5em;
+
+	// When a user customises their colours the background colour will often be removed.
+	// Adding a border to the component keeps it's shape as a circle.
+	border: 3px solid govuk-colour("black");
+	border-radius: 50%;
+
+	color: govuk-colour("white");
+	background: govuk-colour("black");
+
+	font-size: 1.2em;
+	line-height: $icon-size;
+
+	text-align: center;
+
+	// Prevent the exclamation mark from being included when the warning text is copied, for example.
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.warning-icon--error {
+	border-color: $govuk-bright-red;
+	background-color: $govuk-bright-red;
+}

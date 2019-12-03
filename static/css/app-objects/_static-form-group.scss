@@ -1,0 +1,13 @@
+.static-form-group {
+	@extend .govuk-form-group;
+}
+
+.static-form-group__label {
+	@extend .govuk-label--s;
+}
+
+.static-form-group__value {
+	display: block;
+	@include govuk-font( 19 );
+	padding: govuk-em( 5, 19 ) 0 0 0;
+}

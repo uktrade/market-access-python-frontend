@@ -1,0 +1,87 @@
+$baseline-grid-unit: 4px;
+$default-spacing-unit: $baseline-grid-unit * 4;
+
+@mixin _pageless {
+	.pagination__list {
+		display: none;
+	}
+
+	.pagination__label--prev,
+	.pagination__label--next {
+		@include govuk-font( 24 );
+		float: left;
+		margin: 0;
+	}
+
+	.pagination__label--next {
+		float: right;
+	}
+}
+
+.pagination {
+	@include govuk-clearfix;
+	text-align: center;
+	line-height: 1;
+}
+
+.pagination__list {
+	display: inline-block;
+	padding: 0;
+}
+
+.pagination__list-item {
+
+	display: inline-block;
+
+	& + & {
+		margin-left: ( $baseline-grid-unit * 1.5 );
+	}
+}
+
+.pagination__label {
+
+	@include govuk-font( 16, $weight: bold );
+	display: inline-block;
+	padding: ( $default-spacing-unit / 2 ) $default-spacing-unit;
+	background-color: $govuk-grey-4;
+
+	&:link,
+	&:visited {
+
+		color: $govuk-link-colour;
+		text-decoration: none;
+
+		&:hover:not( .is-current ) {
+			background-color: $govuk-grey-3;
+		}
+	}
+
+	&.is-current {
+		background-color: transparent;
+		color: $govuk-text-colour;
+		text-decoration: none;
+	}
+}
+
+.pagination__label--prev {
+	margin-right: $baseline-grid-unit * 1.5;
+}
+
+.pagination__label--next {
+	margin-left: $baseline-grid-unit * 1.5;
+}
+
+.pagination__label--truncation {
+	background-color: transparent;
+	padding-right: $default-spacing-unit / 2;
+	padding-left: $default-spacing-unit / 2;
+	color: $govuk-grey-1;
+}
+
+@include mq( $until: tablet ){
+	@include _pageless;
+}
+
+.pagination--pageless {
+	@include _pageless;
+}

@@ -1,0 +1,111 @@
+.dashboard-page-summary {
+	color: $govuk-grey-1;
+}
+
+.dashboard-table__barrier-title {
+	display: block;
+}
+
+.dashboard-results-header {
+
+	border-bottom: 5px solid $govuk-black;
+	position: relative;
+
+	.toggle-box__label {
+		margin-left: govuk-em( 30, 16 );
+	}
+}
+
+.dashboard-results-header__title {
+	@include govuk-font( 27, $weight: bold );
+	padding: 0 0 govuk-em( 5, 27 ) 0;
+	margin: govuk-em( 10, 27 ) govuk-em( 10, 27 ) govuk-em( 5, 27 ) 0;
+	display: inline-block;
+}
+
+.dashboard-results-header__title__caption {
+	@include govuk-font( 19 );
+}
+
+.dashboard-results-header__link-wrapper {
+	float: right;
+	margin-top: govuk-em( 10, 16 );
+}
+
+.dashboard-results-header__link {
+	margin-left: govuk-em( 5, 16 );
+	display: inline-block;
+}
+
+.standard-table--barriers {
+
+	min-width: govuk-em( 950, 16 );
+
+	.standard-table__heading,
+	.standard-table__cell{
+
+		&:nth-child( 1 ){
+			min-width: govuk-em( 90, 16 );
+		}
+
+		&:nth-child( 2 ){
+			max-width: govuk-em( 150, 16 );
+			width: 15%;
+		}
+
+		&:nth-child( 3 ){
+			width: 30%;
+		}
+
+		&:nth-child( 4 ){
+			width: 20%;
+		}
+
+		&:nth-child( 5 ){
+			width: 20%;
+		}
+
+		&:nth-child( 6 ){
+			max-width: govuk-em( 150, 16 );
+			width: 15%;
+		}
+
+		&:nth-child( 7 ){
+			min-width: govuk-em( 110, 16 );
+		}
+	}
+}
+
+.standard-table--country-barriers {
+
+	min-width: govuk-em( 950, 16 );
+
+	.standard-table__heading,
+	.standard-table__cell{
+
+		&:nth-child( 1 ){
+			min-width: govuk-em( 90, 16 );
+		}
+
+		&:nth-child( 2 ){
+			max-width: govuk-em( 150, 16 );
+			width: 15%;
+		}
+
+		&:nth-child( 3 ){
+			width: 30%;
+		}
+
+		&:nth-child( 4 ){
+			width: 20%;
+		}
+
+		&:nth-child( 5 ){
+			width: 20%;
+		}
+
+		&:nth-child( 6 ){
+			min-width: govuk-em( 90, 16 );
+		}
+	}
+}

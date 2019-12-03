@@ -1,0 +1,29 @@
+{% if params.pages.length %}
+    <nav
+        class="pagination {{ 'pagination--pageless' if not showPages }}"
+        aria-label="pagination: total {{ params.totalPages }} pages">
+        {% if params.prev %}
+            <a href="{{ params.prev }}" class="pagination__label pagination__label--prev">Previous</a>
+        {% endif %}
+        {% if showPages %}
+            <ul class="pagination__list">
+                {% for page in params.pages %}
+                    <li class="pagination__list-item">
+                        {% if page.url %}
+                            <a href="{{ page.url }}" class="pagination__label {{ 'is-current' if page.label == params.currentPage }}">
+                                {{ page.label }}
+                            </a>
+                        {% else -%}
+                            <span class="pagination__label pagination__label--truncation">
+                                {{ page.label }}
+                            </span>
+                        {%- endif %}
+                    </li>
+                {%- endfor %}
+            </ul>
+        {% endif %}
+        {% if params.next %}
+            <a href="{{ params.next }}" class="pagination__label pagination__label--next">Next</a>
+        {% endif %}
+    </nav>
+{% endif %}

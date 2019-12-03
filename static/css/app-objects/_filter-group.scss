@@ -1,0 +1,12 @@
+.filter-group {
+	padding: govuk-em( 10, 16 ) govuk-em( 5, 16 ) govuk-em( 5, 16 ) govuk-em( 5, 16 );
+	background: $govuk-grey-3;
+	margin-bottom: govuk-em( 10, 16 );
+}
+
+// .filter-group__inner {
+// }
+
+.filter-group__label {
+	padding: 0 govuk-em( 5, 16 );
+}

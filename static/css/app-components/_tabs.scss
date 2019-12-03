@@ -1,0 +1,40 @@
+.page-tabs {
+	padding: 0;
+	border-bottom: 2px solid $govuk-grey-2;
+	margin-top: govuk-em( 25, 16 );
+}
+
+.page-tabs--no-margin {
+	margin-top: 0;
+}
+
+.page-tabs__tab {
+	display: inline-block;
+	position: relative;
+	top: 2px;
+	background: $govuk-grey-4;
+}
+
+.page-tabs__tab__text {
+	@include govuk-font( $size: 19 );
+	display: inline-block;
+	padding: govuk-em( 7, 19 ) govuk-em( 15, 19 );
+	background: inherit;
+	text-decoration: none;
+}
+
+.page-tabs__tab__number {
+	margin-right: govuk-em( 15, 16 );
+}
+
+.page-tabs__tab--active {
+
+	border: 2px solid $govuk-grey-2;
+	border-bottom: 2px solid #fff;
+	background: white;
+
+	.page-tabs__tab__text {
+		font-weight: bold;
+		padding: govuk-em( 11, 19 );
+	}
+}

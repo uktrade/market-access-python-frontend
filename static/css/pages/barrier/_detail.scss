@@ -1,0 +1,49 @@
+.barrier-status-details {
+	border: 2px solid $govuk-grey-3;
+	padding: govuk-em( 15, 16 );
+	margin-bottom: govuk-em( 30, 16 );
+}
+
+.barrier-status-details__icon {
+	float: left;
+	margin-right: govuk-em( 8, 16 );
+}
+
+.barrier-status-details__heading {
+	@include govuk-font( 19, $weight: bold );
+	margin: 0 0 govuk-em( 15, 19 ) 0;
+}
+
+.barrier-status-details__heading__caption {
+	font-weight: normal;
+}
+
+.barrier-status-details__sub-heading {
+	@include govuk-font( 16, $weight: bold);
+	margin: 0 0 govuk-em( 5, 16 ) 0;
+}
+
+.barrier-status-details__text {
+	margin: 0;
+	line-height: 1.25;
+}
+
+.barrier-content {
+	max-width: 100%;
+	display: inline-block;
+	@include mq($from: 768px) {
+		width: calc(100% - 435px);
+	}
+	@include mq( $from: 1024px ){
+		width: calc(100% - 535px);
+	}
+	.section-heading {
+		border-bottom: none;
+	}
+}
+
+.interaction-panel {
+	background-color: $govuk-grey-3;
+	padding: govuk-em( 15, 16 );
+	margin-bottom: govuk-em( 30, 16 );
+}

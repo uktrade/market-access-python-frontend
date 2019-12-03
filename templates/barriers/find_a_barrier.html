@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Find a barrier{% endblock %}
+
+{% block body_script %}
+    <!-- build:js(src) /public/js/vue.min.js -->
+    <script src="/public/js/vue/vue-bundle.js"></script>
+    <!-- endbuild -->
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'heading.html' with caption='Market access barriers' text='Find a barrier' %}
+
+    <section class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+            <h2 class="filter-list-title">Filter barriers by:</h2>
+            <form action="" method="GET" class="filter-items">
+
+                {% if isEdit %}
+                <input type="hidden" name="editList" value="{{ editListIndex }}">
+                {% endif %}
+
+                {{ govukInput({
+                    label: {
+                        text: filters.search.label,
+                        classes: 'filter-items__label'
+                    },
+                    formGroup: {
+                        classes: 'filter-items-group'
+                    },
+                    id: 'search',
+                    name: 'search',
+                    value: filters.search.text
+                }) }}
+
+                {{ typeahead({
+                    id: 'country',
+                    name: 'country',
+                    classes: 'govuk-!-width-full',
+                    formGroup: {
+                        classes: 'filter-items-group'
+                    },
+                    fieldset: {
+                        legend: {
+                            text: filters.country.label,
+                            classes: 'filter-items__label'
+                        }
+                    },
+                    placeholder: 'Search locations',
+                    items: filters.country.items
+                }) }}
+
+                {{ typeahead({
+                    id: 'sector',
+                    name: 'sector',
+                    classes: 'govuk-!-width-full',
+                    formGroup: {
+                        classes: 'filter-items-group'
+                    },
+                    fieldset: {
+                        legend: {
+                            text: filters.sector.label,
+                            classes: 'filter-items__label'
+                        }
+                    },
+                    placeholder: 'Search sector',
+                    items: filters.sector.items
+                }) }}
+
+                {{ typeahead({
+                    id: 'type',
+                    name: 'type',
+                    classes: 'govuk-!-width-full ',
+                    formGroup: {
+                        classes: 'filter-items-group'
+                    },
+                    fieldset: {
+                        legend: {
+                            text: filters.type.label,
+                            classes: 'filter-items__label'
+                        }
+                    },
+                    placeholder: 'Search type',
+                    items: filters.type.items
+                }) }}
+
+                {{ typeahead({
+                    id: 'region',
+                    name: 'region',
+                    classes: 'govuk-!-width-full js-filter',
+                    formGroup: {
+                        classes: 'filter-items-group'
+                    },
+                    fieldset: {
+                        legend: {
+                            text: filters.region.label,
+                            classes: 'filter-items__label'
+                        }
+                    },
+                    placeholder: 'Search regions',
+                    items: filters.region.items
+                }) }}
+
+                {{ checkboxFilter({
+                    id: 'priority',
+                    name: 'priority',
+                    classes: 'govuk-!-width-full barrier-priority-filter',
+                    formGroup: {
+                        classes: 'filter-group'
+                    },
+                    fieldset: {
+                        classes: 'filter-group__inner',
+                        legend: {
+                            text: filters.priority.label,
+                            classes: "filter-items__label filter-group__label"
+                        }
+                    },
+                    items: filters.priority.items
+                })  }}
+
+                {{ checkboxFilter({
+                    id: 'status',
+                    name: 'status',
+                    classes: 'govuk-!-width-full',
+                    formGroup: {
+                        classes: 'filter-group'
+                    },
+                    fieldset: {
+                        classes: 'filter-group__inner',
+                        legend: {
+                            text: filters.status.label,
+                            classes: "filter-items__label filter-group__label"
+                        }
+                    },
+                    items: filters.status.items
+                })  }}
+
+                {{ checkboxFilter({
+                    id: 'user-filter',
+                    name: 'createdBy',
+                    classes: 'govuk-!-width-full',
+                    formGroup: {
+                        classes: 'filter-group'
+                    },
+                    fieldset: {
+                        classes: 'filter-group__inner',
+                        legend: {
+                            text: filters.createdBy.label,
+                            classes: "filter-items__label filter-group__label"
+                        }
+                    },
+                    items: filters.createdBy.items
+                })  }}
+
+                {% if hasFilters %}
+                <a class="filter-items__clear" href="{{ removeAllUrl }}">Remove all filters</a>
+                {% endif %}
+
+                <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
+            </form>
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+
+            {% if filter.active %}
+            <li class="active-filters__item">
+                <a href="{{ filter.removeUrl }}" class="active-filters__item__link" title="Remove {{ filter.label }} filter">
+                    <h4 class="active-filter__heading">{{ filter.label }}:</h4>
+                    <p class="active-filter__text">
+                        {{ filter.text }}
+                    </p>
+                </a>
+            </li>
+            {% endif %}
+
+            <div class="filter-results-header">
+                <h2 class="filter-results-title">{{ barriers|length }}<span class="filter-results-title__caption"> barrier{{ barriers|length|pluralize }}</span></h2>
+
+                {% if hasFilters %}
+
+                    <h3 class="visually-hidden">Active filters:</h3>
+                    <ul class="active-filters">
+                        {% include 'active_filter.html' with filter=filters.search %}
+                        {% include 'active_filter.html' with filter=filters.country %}
+                        {% include 'active_filter.html' with filter=filters.sector %}
+                        {% include 'active_filter.html' with filter=filters.type %}
+                        {% include 'active_filter.html' with filter=filters.region %}
+                        {% include 'active_filter.html' with filter=filters.priority %}
+                        {% include 'active_filter.html' with filter=filters.status %}
+                        {% include 'active_filter.html' with filter=filters.createdBy %}
+                    </ul>
+
+                    <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">
+                        <a class="filter-results-clear-link" href="{{ removeAllUrl }}">Remove all filters</a>
+                        {% if showSaveButton %}
+                            {# save watchlist url #}
+                            <a href="" class="govuk-button govuk-button--watch-list">{% if isEdit %}Edit{% else %}Save{% endif %} watch list</a>
+                        }
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if paginationData.totalPages > 1 %}
+            <p class="filter-results-pagination-summary">
+                Page {{ paginationData.currentPage }} of {{ paginationData.totalPages }}
+            </p>
+            {% endif %}
+
+            <p class="filter-results-download">
+                {% if barriers|length > 0 %}
+                    <span class="filter-results-download__text">
+                    {% if barriers|length == 1 %}
+                        You can download this barrier
+                    {% else %}
+                        You can download these {{ barriers|length }} barriers
+                    {% endif %}
+                    </span>
+                    {# Download barriers url #}
+                    <a class="govuk-button filter-results-download__button" href="">Download</a>
+                {% else %}
+                    <span class="filter-results-download__text">There are no barriers to download</span>
+                {% endif %}
+            </p>
+
+            <ol class="filter-results-list">
+                {% for barrier in barriers %}
+                    <li class='filter-results-list__item'>
+                        <div class="filter-results-list__item__main-content">
+                            {# Barrier detail url #}
+                            <h3 class='filter-results-list__item__heading'><a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a></h3>
+                            <dl class="filter-results-list__item__definitions">
+
+                                <dt class="filter-results-list__item__definitions__key visually-hidden">ID:</dt>
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.code }}</dd>
+
+                                <dt class="filter-results-list__item__definitions__key">Added:</dt>
+                                {# dateOnly filter #}
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.date.reported|date:"j F Y" }}</dd>
+
+                                {% if barrier.sectors.length %}
+                                <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectorsList|pluralize }} affected:</dt>
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.sectorsList | join:', ' }}</dd>
+                                {% endif %}
+
+                                <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.location }}</dd>
+                            </dl>
+                        </div>
+
+                        <ul class="filter-results-list__item__sub-content">
+                            <li class="filter-results-list__item__sub-content__item">
+                                <span class="barrier-status-badge barrier-status-badge--compact barrier-status-badge--{{ barrier.status.modifier }}">
+                                    <strong>{{ barrier.status.name }}</strong>
+                                </span>
+                            </li>
+                            <li class="filter-results-list__item__sub-content__item">
+                                <span class="priority-marker-wrapper">
+                                    <span class="priority-marker priority-marker--{{ barrier.priority.code|lower }}"></span><strong>{{ barrier.priority.name }}</strong> priority
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ol>
+
+
+        </div>
+    </section>
+
+{% endblock %}

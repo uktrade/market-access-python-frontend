@@ -1,0 +1,38 @@
+.collapsible-widget {
+
+	display: table;
+	position: relative;
+	background: inherit;
+
+	&--closed {
+
+		.collapsible-widget__content--initial {
+
+			display: table-header-group;
+
+			&:after {
+				content: ' ...';
+			}
+		}
+
+		.collapsible-widget__content--toggled {
+			display: none;
+		}
+	}
+
+	&--opened {
+
+		.collapsible-widget__content--initial {
+
+			display: table-header-group;
+
+			&:after {
+				display: none;
+			}
+		}
+
+		.collapsible-widget__content--toggled {
+			display: table-header-group;
+		}
+	}
+}

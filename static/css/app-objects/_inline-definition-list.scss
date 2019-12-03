@@ -1,0 +1,14 @@
+.inline-definition-list {
+    overflow: hidden;
+    dt, dd {
+        float: left;
+        margin-bottom: govuk-em( 10, 16 );
+    }
+    dt { 
+        clear:both;
+        width: govuk-em( 80, 16 );
+    }
+    dd {
+        font-weight: bold;
+    }
+}

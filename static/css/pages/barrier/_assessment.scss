@@ -1,0 +1,68 @@
+.assessment-item {
+	margin-bottom: govuk-em( 45, 16 );
+}
+
+.assessment-item__heading {
+	@include govuk-font( 24, $weight: 'bold' );
+	margin-bottom: govuk-em( 5, 24 );
+}
+
+.assessment-item__sub-heading {
+	@include govuk-font( 19, $weight: bold );
+	margin: govuk-em( 15, 19 ) 0 govuk-em( 5, 19 ) 0;
+}
+
+.assessment-item__value {
+	margin: 0;
+}
+
+.assessment-item__edit {
+	display: inline-block;
+	margin-top: govuk-em( 5, 16 );
+}
+
+.assessment-item-content {
+	border: 2px dashed $govuk-grey-3;
+	padding: govuk-em( 15, 16 );
+	max-width: 600px;
+	box-sizing: border-box;
+}
+
+/* .assessment-item-content__link {
+
+} */
+
+.assessment-item-content__hint {
+	color: $govuk-grey-1;
+	margin: 0;
+}
+
+.assessment-item-content__restriction {
+	background: $govuk-grey-4;
+	padding: govuk-em( 10, 16 );
+	margin: govuk-em( 10, 16 ) 0 0 0;
+	@include govuk-font( 16 );
+}
+
+
+.barrier-impact-value {
+	display: inline-block;
+	min-width: 200px;
+	padding: govuk-em( 5, 16 ) 0;
+	margin: 0 govuk-em( 20, 16 ) 0 0;
+	text-align: center;
+	background-color: $govuk-black;
+	color: white;
+	font-weight: bold;
+}
+
+.currency-input__prefix {
+	display: inline-block;
+	@include govuk-font( 24 );
+	vertical-align: bottom;
+	padding-bottom: 5px;
+}
+.currency-input__value {
+	width: 50%;
+	display: inline-block;
+}

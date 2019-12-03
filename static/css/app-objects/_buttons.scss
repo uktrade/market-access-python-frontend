@@ -1,0 +1,42 @@
+.govuk-button--full-width {
+	width: 100%;
+}
+
+.button--secondary {
+
+	background-color: $govuk-grey-3;
+	box-shadow: 0 2px 0 $govuk-grey-1;
+	color: $govuk-grey-1;
+	display: inline-block;
+
+	&:link,
+	&:visited,
+	&:active,
+	&:hover {
+		color: $govuk-grey-1;
+	}
+
+	&:focus,
+	&:hover {
+		background-color: $govuk-grey-4;
+	}
+}
+
+.button-cancel {
+	line-height: 2.5;
+	margin-left: govuk-em( 10, 16 );
+}
+
+.button-as-link {
+	@include govuk-link-common;
+	color: $govuk-blue;
+	cursor: pointer;
+	text-decoration: underline;
+	font-family: inherit;
+	font-size: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: inherit;
+	overflow: visible;
+}

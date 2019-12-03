@@ -1,0 +1,27 @@
+.dash-card {
+	display: inline-block;
+	border-top: 5px solid $govuk-black;
+	padding-right: govuk-em( 15, 16 );
+	box-sizing: border-box;
+	width: 100%;
+
+	@include mq( $from: $dash-button-from-tablet-width ){
+		width: ( $dash-button-width * 2 ) + $dash-button-margin;
+	}
+
+	@include mq( $from: $dash-button-from-desktop-width ){
+		width: $dash-button-width;
+		margin-left: $dash-button-margin;
+	}
+}
+
+.dash-card__heading {
+	@include govuk-font( 24, $weight: bold, $line-height: 1.2 );
+	margin: govuk-em( 5, 24 ) 0;
+	line-height: 1.25;
+}
+
+.dash-card__text {
+	margin: 0;
+	@include govuk-font( 14 );
+}

@@ -1,0 +1,270 @@
+.barrier-priority-filter {
+	.checkbox-filter__label {
+		padding-top: 6px;
+	}
+}
+
+.filter-list-title {
+	@include govuk-font( $size: 19, $line-height: 1 );
+	color: $govuk-grey-1;
+}
+
+.filter-items-group {
+	padding: govuk-em( 10, 16 ) govuk-em( 8, 16 );
+	background: $govuk-grey-3;
+	margin-bottom: govuk-em( 10, 16 );
+}
+
+.filter-items__label {
+	@include govuk-font( 16, $weight: bold );
+}
+
+.filter-items__clear {
+	display: block;
+	margin-bottom: govuk-em( 10, 16 );
+}
+
+
+.filter-results-header {
+	border-bottom: 5px solid $govuk-black;
+	position: relative;
+}
+
+.filter-results-title {
+	@include govuk-font( 36, $weight: bold );
+	padding: 0 0 govuk-em( 5, 36 ) 0;
+	margin: govuk-em( 10, 36 ) govuk-em( 10, 36 ) govuk-em( 5, 36 ) 0;
+	display: inline-block;
+}
+
+.filter-results-title__caption {
+	@include govuk-font( 24 );
+}
+
+.filter-results-action-buttons {
+
+	display: block;
+	width: 100%;
+	padding-bottom: govuk-em( 10, 16 );
+
+	@include mq( $from: tablet ){
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: auto;
+		padding-top: govuk-em( 20, 16 );
+	}
+
+	& > * {
+		margin-bottom: 10px;
+	}
+
+	.govuk-button--watch-list {
+
+		vertical-align: bottom;
+		margin-top: govuk-em( 10, 16 );
+
+		@include mq( $from: tablet ){
+
+			margin-bottom: 0;
+			margin-left: govuk-em( 15, 16 );
+		}
+	}
+}
+
+.filter-results-action-buttons--save {
+	padding-top: 0;
+}
+
+.filter-results-clear-link {
+	@include mq( $from: tablet ){
+		position: relative;
+		top: govuk-em( 6, 16 );
+		display: inline-block;
+		vertical-align: bottom;
+	}
+}
+
+.active-filters {
+	margin: 0;
+	padding: 0;
+	display: block;
+	padding-bottom: govuk-em( 10, 16 );
+}
+
+.active-filters__item {
+	display: inline;
+	background: $govuk-grey-4;
+	margin-right: govuk-em( 5, 16 );
+	padding: govuk-em( 2, 16 ) govuk-em( 5, 16 );
+}
+
+.active-filter__heading {
+	display: inline;
+	font-weight: normal;
+	color: $govuk-grey-1;
+}
+
+.active-filter__text {
+	margin: 0;
+	padding: 0;
+	display: inline;
+	font-weight: bold;
+}
+
+.filter-results-pagination-summary {
+	color: $govuk-grey-1;
+}
+
+.filter-results-download {
+	overflow: hidden;
+	margin: govuk-em( 10, 16 ) 0 govuk-em( 5, 16 ) 0;
+	padding: govuk-em( 10, 16 ) 0 0 0;
+	border-top: 1px solid $govuk-grey-2;
+}
+
+.filter-results-download__text {
+
+	display: inline-block;
+	padding-bottom: govuk-em( 10, 16 );
+
+	@include mq( $from: tablet ){
+		padding-top: 0.5em;
+	}
+}
+
+.filter-results-download__button {
+
+	@include mq( $from: tablet ){
+		float: right;
+	}
+
+	margin-bottom: govuk-em( 5, 16 );
+}
+
+.filter-results-list {
+	list-style: none;
+	padding: 0;
+	margin-top: 0;
+}
+
+.filter-results-list__item {
+
+	border-bottom: 1px solid $govuk-grey-2;
+	padding: govuk-em( 15, 16 ) 0;
+	overflow: hidden;
+
+	&:first-of-type {
+		border-top: 1px solid $govuk-grey-2;
+	}
+}
+
+.active-filters__item__link {
+
+	text-decoration: none;
+
+	&:after {
+		content: "\D7";
+		font-weight: bold;
+	}
+
+	&:visited {
+		color: $govuk-blue;
+	}
+}
+
+.filter-results-list__item__main-content {
+
+	@include mq( $from: 550px ){
+		float: left;
+		width: 70%;
+	}
+
+	@include mq( $from: tablet ){
+		width: 60%;
+	}
+
+	@include mq( $from: 1024px ){
+		width: 76%;
+	}
+}
+
+.filter-results-list__item__sub-content {
+
+	@include govuk-font( 16 );
+	margin-top: govuk-em( 10, 16 );
+	list-style: none;
+	padding: 0;
+
+	@include mq( $from: 550px ){
+		margin-top: 0;
+		float: right;
+		width: 25%;
+	}
+
+	@include mq( $from: tablet ){
+		width: 35%;
+	}
+
+	@include mq( $from: 1024px ){
+		width: 21%;
+	}
+
+	.barrier-status-badge {
+		width: 100%;
+		text-align: center;
+		display: inline-block;
+	}
+}
+
+.filter-results-list__item__sub-content__item {
+
+	margin-bottom: 0;
+	line-height: 1;
+
+	@include mq( $from: 350px ){
+		display: inline-block;
+		width: 45%;
+	}
+
+	@include mq( $from: 550px ){
+		display: block;
+		width: 100%;
+	}
+}
+
+.filter-results-list__item__heading {
+	@include govuk-font( 19, $weight: bold );
+	margin: 0 0 govuk-em( 15, 19 ) 0;
+}
+
+.filter-results-list__item__definitions {
+	@include govuk-font( 16 );
+	margin: 0;
+}
+
+.filter-results-list__item__definitions__key {
+
+	color: $govuk-grey-1;
+	display: inline;
+
+	@include mq( $from: tablet ){
+		min-width: 125px;
+	}
+
+	&:before {
+		content: "";
+		display: block;
+	}
+}
+
+.filter-results-list__item__definitions__value {
+
+	margin: 0;
+	margin-bottom: govuk-em( 5, 16 );
+	display: inline-block;
+
+	@include mq( $from: tablet ){
+		margin-bottom: 0;
+	}
+}

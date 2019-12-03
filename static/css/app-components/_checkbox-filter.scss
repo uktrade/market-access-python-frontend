@@ -1,0 +1,143 @@
+$default-spacing-unit: 5px;
+
+.checkbox-filter {
+
+	transform: translateZ(0); // Enforcing GPU acceleration fixes overflow cropping caused by CSS columns
+	border-bottom: 1px solid $govuk-grey-2;
+	max-height: govuk-em( 200, 16 );
+	overflow-y: auto;
+
+	&:last-child {
+		border-bottom: 0;
+	}
+
+	& + & {
+		margin-top: 0;
+	}
+}
+
+.checkbox-filter__item {
+
+	position: relative;
+	background-color: white;
+	border-bottom: 1px solid $govuk-grey-2;
+
+	&:last-of-type {
+		border-bottom: none;
+	}
+
+	&:hover {
+		background-color: $govuk-grey-4;
+	}
+}
+
+@mixin _scale-input($font-size) {
+
+	$input-size: $font-size * 2;
+	width: $input-size;
+	height: $input-size;
+
+	&[type="checkbox"] + .checkbox-filter__label::after {
+
+		@if round($font-size) < 10 {
+			border-width: 0 0 2px 2px;
+		} @else {
+			border-width: 0 0 5px 5px;
+		}
+
+		width: round($input-size / 1.7);
+		height: round($input-size / 3);
+	}
+
+	& + .checkbox-filter__label {
+
+		&::before {
+			height: $input-size;
+			width: $input-size;
+		}
+
+		&::after {
+			border: ceil($font-size / 2) solid black;
+			left: floor($font-size * 1.4);
+			top: floor($font-size * 1.7);
+		}
+	}
+}
+
+.checkbox-filter__input {
+
+	@include _scale-input(8px);
+	@include govuk-font( 16 );
+	position: absolute;
+	top: $default-spacing-unit;
+	left: $default-spacing-unit;
+	margin: auto;
+	opacity: 0;
+
+	+ .checkbox-filter__label {
+		@include govuk-font( 16, $line-height: 1.25 );
+		padding-top: 9px;
+		padding-bottom: 8px;
+	}
+
+	&[ type="checkbox" ] + .checkbox-filter__label::after {
+		transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+	}
+
+	& + .checkbox-filter__label {
+
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+		}
+
+		&::before {
+			border: 2px solid black;
+			background-color: #fff;
+			top: 8px;
+			left: 6px;
+		}
+
+		&::after {
+			height: 0;
+			width: 0;
+			visibility: hidden;
+		}
+	}
+
+	&:checked + .checkbox-filter__label::after {
+		visibility: visible;
+	}
+
+	&:focus + .checkbox-filter__label::before {
+		box-shadow: 0 0 0 3px $govuk-focus-colour;
+	}
+}
+
+.checkbox-filter__label {
+	cursor: pointer;
+	display: block;
+	padding: ($default-spacing-unit / 2) ($default-spacing-unit / 2) $default-spacing-unit round($default-spacing-unit * 6.5);
+	line-height: 1.2;
+	margin-bottom: 0;
+}
+
+.checkbox-filter__hint {
+
+	@include govuk-font(16);
+	display: block;
+	margin-top: 5px;
+	color: $govuk-grey-1;
+
+	a {
+		&,
+		&:active,
+		&:link,
+		&:hover,
+		&:visited {
+			color: $govuk-grey-1;
+		}
+	}
+}

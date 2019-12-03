@@ -1,0 +1,11 @@
+.section-heading {
+	@include govuk-font( $size: 24, $weight: bold );
+	padding-bottom: govuk-em( 10, 24 );
+	margin-top: 0;
+	border-bottom: 4px solid $govuk-black;
+}
+
+.tab-heading {
+	@include govuk-font( 19 );
+	margin: govuk-em( 30, 19 ) 0;
+}

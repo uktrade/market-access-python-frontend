@@ -1,0 +1,58 @@
+.callout {
+
+	background-color: $govuk-grey-3;
+	padding: govuk-em( 15, 16 );
+	position: relative;
+	margin-bottom: govuk-em( 30, 16 );
+
+	.govuk-warning-text {
+		margin-bottom: 0;
+	}
+}
+
+.callout--with-button {
+	@include mq( $from: tablet ){
+		padding-right: govuk-em( 200, 16 );
+	}
+}
+
+.callout__heading {
+	@include govuk-font( $size: 19, $weight: bold );
+	margin-top: govuk-em( 4, 19 );
+	margin-bottom: 0;
+}
+
+.callout__text {
+	margin: govuk-em( 5, 16 ) 0 govuk-em( 10, 16 ) 0;
+}
+
+.callout__button {
+
+	@extend .govuk-button;
+	margin-bottom: 2px;
+
+	@include mq( $from: tablet ){
+
+		position: absolute;
+		top: govuk-em( 13, 16 );
+		right: govuk-em( 15, 16 );
+
+		&:active {
+			top: govuk-em( 15, 16 );
+		}
+	}
+}
+
+.callout__button--start {
+	@extend .govuk-button--start;
+}
+
+.callout--warn {
+	border: 5px solid $govuk-orange;
+	background-color: $govuk-orange-10;
+}
+
+.callout--success {
+	border: 5px solid $govuk-green;
+	background-color: $govuk-green-10;
+}

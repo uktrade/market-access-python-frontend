@@ -1,0 +1,41 @@
+$checkmark-circle-size: 42px;
+$checkmark-tick-width: 7px;
+$checkmark-tick-height: ( $checkmark-tick-width * 0.75 );
+$checkmark-stem-multiplier: 3;
+
+.checkmark {
+    display: inline-block;
+    width: $checkmark-circle-size;
+    height: $checkmark-circle-size;
+    -ms-transform: rotate( 45deg ); /* IE 9 */
+    -webkit-transform: rotate( 45deg ); /* Chrome, Safari, Opera */
+    transform: rotate( 45deg );
+}
+
+.checkmark__circle {
+    position: absolute;
+    width: $checkmark-circle-size;
+    height: $checkmark-circle-size;
+    background-color: $govuk-green;
+    border-radius: ( $checkmark-circle-size / 2 );
+    left: 0;
+    top: 0;
+}
+
+.checkmark__stem {
+    position: absolute;
+    width: $checkmark-tick-height;
+    height: ( $checkmark-tick-width * $checkmark-stem-multiplier );
+    background-color: #fff;
+    left: ( $checkmark-circle-size / 2 );
+    top: ( ( $checkmark-circle-size / 2 ) + $checkmark-stem-multiplier ) - ( $checkmark-tick-width * 2 );
+}
+
+.checkmark__kick {
+    position: absolute;
+    width: $checkmark-tick-width + 1;
+    height: $checkmark-tick-height;
+    background-color: #fff;
+    left: ( ( $checkmark-circle-size / 2 ) - $checkmark-tick-width );
+    top: ( $checkmark-circle-size / 2 ) + $checkmark-stem-multiplier + ( $checkmark-tick-width - $checkmark-tick-height );
+}

@@ -1,0 +1,26 @@
+.toggle-box {
+
+	background: $govuk-grey-3;
+	margin: govuk-em( 10, 16 ) 0;
+	padding: govuk-em( 20, 16 );
+
+	.govuk-button {
+		margin-bottom: 0;
+	}
+
+	ul {
+
+		list-style: none;
+		padding: 0;
+		margin: 0 0 govuk-em( 10, 16 ) 0;
+
+		li {
+			display: inline-block;
+			margin-right: govuk-em( 10, 16 );
+		}
+	}
+}
+
+.toggle-box--closed {
+	display: none !important;
+}

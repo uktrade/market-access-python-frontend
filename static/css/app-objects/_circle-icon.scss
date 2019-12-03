@@ -1,0 +1,22 @@
+.circle-icon {
+
+	width: 1em;
+	height: 1em;
+	padding: 1px;
+	border: 1px solid $govuk-blue;
+	border-radius: 50%;
+	cursor: pointer;
+	font-weight: bold;
+	background-color: $govuk-blue;
+	color: white;
+
+	&:hover {
+		border-color: $govuk-link-hover-colour;
+		background-color: $govuk-link-hover-colour;
+	}
+
+	&:active {
+		border-color: $govuk-black;
+		background-color: $govuk-black;
+	}
+ }

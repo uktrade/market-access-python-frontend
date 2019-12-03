@@ -1,0 +1,15 @@
+.error-heading {
+	border-left: 4px solid $govuk-red;
+	@include govuk-font( $weight: bold, $size: 19 );
+	padding-left: govuk-em( 10, 19 );
+	margin-top: 30px;
+}
+
+.stack-trace {
+	@include govuk-font( $size: 14 );
+	margin-bottom: 30px;
+	font-family: monospace;
+	overflow: auto;
+	word-wrap: normal;
+	white-space: pre;
+}

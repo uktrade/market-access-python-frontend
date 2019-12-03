@@ -1,0 +1,48 @@
+.search-card-list {
+	padding: 0;
+}
+
+.search-card {
+	list-style: none;
+	margin-bottom: govuk-em( 15, 16 );
+}
+
+.search-card__heading {
+	@include govuk-font( $weight: bold, $size: 19 );
+}
+
+.search-card__values {
+	color: $govuk-black;
+	@include govuk-font( $size: 14 );
+}
+
+.search-card__values__key {
+	color: $govuk-grey-1;
+	display: inline-block;
+	padding: govuk-em( 5, 14 ) 0 govuk-em( 5, 14 ) 0;
+}
+
+.search-card__values__value {
+
+	margin: 0 0 govuk-em( 10, 14 ) 0;
+	display: inline;
+
+	&:after {
+		content: '';
+		display: block;
+	}
+}
+
+.search-card__link {
+
+	text-decoration: none;
+	display: inline-block;
+	border: 1px solid $govuk-grey-2;
+	padding: govuk-em( 15, 16 ) govuk-em( 15, 16 ) 0 govuk-em( 15, 16 );
+	width: 100%;
+	box-sizing: border-box;
+
+	&:focus {
+		background-color: $govuk-grey-4;
+	}
+}

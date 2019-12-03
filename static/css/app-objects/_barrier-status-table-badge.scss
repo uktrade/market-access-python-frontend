@@ -1,0 +1,14 @@
+.barrier-status-table-badge {
+	background-color: $govuk-blue;
+	display: inline-block;
+	padding: govuk-em( 2, 16 ) govuk-em( 10, 16 );
+	color: white;
+}
+
+.barrier-status-table-badge--resolved {
+	background-color: $govuk-green;
+}
+
+.barrier-status-table-badge--hibernated {
+	background-color: $govuk-grey-1;
+}

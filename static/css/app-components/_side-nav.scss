@@ -1,0 +1,38 @@
+.side-nav {
+	margin-bottom: govuk-em( 30, 16 );
+}
+
+.side-nav__item {
+
+	@include govuk-font( $size: 19 );
+	display: block;
+	padding: govuk-em( 10, 19 ) govuk-em( 15, 19 );
+	text-decoration: none;
+
+	&:hover {
+		background-color: $govuk-grey-4;
+		color: $govuk-black;
+	}
+
+	&:link,
+	&:visited {
+		color: $govuk-blue;
+	}
+}
+
+.side-nav__item--active {
+
+	color: $govuk-white;
+	background-color: $govuk-blue;
+	font-weight: bold;
+
+	&:hover {
+		color: $govuk-white;
+		background-color: $govuk-blue;
+	}
+
+	&:link,
+	&:visited {
+		color: $govuk-white;
+	}
+}

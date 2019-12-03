@@ -1,0 +1,11 @@
+{% if back %}
+  {% include 'back_link.html' %}
+{% endif %}
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-m js-heading-caption">{{ caption }}</span> {{ text }}
+</h1>
+
+{% if params.errors and params.errors.length %}
+  {% include 'error_summary.html' with titleText='There is a problem' errorList=params.errors classes='restrict-width' %}
+{% endif %}

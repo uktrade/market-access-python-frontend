@@ -1,0 +1,75 @@
+// Task list pattern
+
+// Spacing to the left of the task list
+$task-list-indent: 35px;
+$gutter: 30px;
+
+.task-list {
+
+	@extend .govuk-list;
+	margin-top: $gutter;
+
+	@include mq( $from: tablet ){
+		margin-top: ($gutter * 2);
+	}
+}
+
+
+.task-list__section-heading {
+
+	display: table;
+
+	@include govuk-font( $size: 24, $weight: bold );
+	padding-bottom: ($gutter / 6);
+}
+
+.task-list__items {
+
+	@extend .govuk-list;
+	margin-bottom: $gutter;
+
+	@include mq( $from: tablet ){
+		margin-bottom: ($gutter * 2);
+	}
+}
+
+.task-list__item {
+	@include govuk-font( $size: 16 );
+	border-bottom: 1px solid $govuk-grey-2;
+	padding-top: ( $gutter / 3 );
+	padding-bottom: ( $gutter / 3 );
+	overflow: hidden;
+}
+
+.task-list__item:first-child {
+	border-top: 1px solid $govuk-grey-2;
+}
+
+.task-list__item__name {
+	width: 66.66%;
+	float: left;
+}
+
+.task-list__item__number {
+	float: left;
+	margin-right: govuk-em( 15, 16 );
+}
+
+.task-list__item__banner {
+	@extend .govuk-tag;
+	float: right;
+	margin-right: 0;
+	padding-top: 3px;
+}
+
+.task-list__item__banner--complete {
+	/* default blue provided by govuk-tag */
+}
+
+.task-list__item__banner--in-progress {
+	background-color: $govuk-orange-aa;
+}
+
+.task-list__item__banner--not-started {
+	background-color: $govuk-grey-1;
+}

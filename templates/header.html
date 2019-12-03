@@ -1,0 +1,61 @@
+<header class="datahub-header js-datahub-header{% if fluid is False %} datahub-header--max-width{% endif %}" role="banner" data-module="header"
+    {% for attribute, value in params.attributes %} {{attribute}}="{{value}}"{% endfor %}>
+    <div class="datahub-header__logo-container">
+        <div class="datahub-header__logo">
+            <span class="datahub-header__logo__site-name">Department for International Trade</span>
+            {% if hasCrmPermission %}
+                <a href="{{ datahubDomain }}" class="datahub-header__logo__link"><span class="datahub-header__logo__text">Data Hub</span></a>
+            {% else %}
+                <span class="datahub-header__logo__text">Data Hub</span>
+            {% endif %}
+            <strong class="datahub-header__logo__tag">beta</strong>
+        </div>
+        <ul id="logo-navigation" class="datahub-header__links" aria-label="Header links">
+            <li class="datahub-header__links__item">
+                <a class="datahub-header__links__item__text" href="{{ datahub_domain }}support">Support</a>
+            </li>
+            <li class="datahub-header__links__item">
+                {% if hasCrmPermission %}
+                    <a class="datahub-header__links__item__text" href="{{ datahub_domain }}profile">{{ user.username }}</a>
+                {% else %}
+                    <span class="datahub-header__links__item__text">{{ user.username }}</span>
+                {% endif %}
+            </li>
+            <li class="datahub-header__links__item">
+                <a class="datahub-header__links__item__text" href="{{ datahub_domain }}oauth/sign-out">Sign out</a>
+            </li>
+        </ul>
+    </div>
+    <button role="button" class="datahub-header__menu-button js-datahub-header-toggle" aria-controls="navigation sub-navigation logo-navigation" aria-label="Show or hide navigation">Menu</button>
+    <div class="datahub-header__navigation-container">
+        <nav class="datahub-header__navigation-wrapper" aria-labelledby="navigation">
+            <ul id="navigation" class="datahub-header__navigation{% if params.navigationClasses %} params.navigationClasses{% endif %}" aria-label="Top Level Navigation">
+            {% for item in apps %}
+                {% for permitted_application in user.permitted_applications %}
+                    {% if item.permittedKey != permitted_application.key %}
+                    <li class="datahub-header__navigation__item">
+                        <a class="datahub-header__navigation__item__link{% if item.activeKey == params.active %} datahub-header__navigation__item__link--active{% endif %}" href="{{ item.href }}">
+                            {{ item.name }}
+                        </a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        </nav>
+
+        <nav class="datahub-header__navigation-wrapper datahub-header__navigation-wrapper--sub" aria-labelledby="sub-navigation">
+            <ul id="sub-navigation" class="datahub-header__navigation" aria-label="Second Level Navigation">
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'dashboard' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'add-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:add_a_barrier' %}">Add a barrier</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'find-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:find_a_barrier' %}">Find a barrier</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

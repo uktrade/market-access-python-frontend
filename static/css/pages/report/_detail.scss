@@ -1,0 +1,27 @@
+.report-summary {
+	@include govuk-clearfix;
+	margin: 0;
+}
+
+.report-summary__group {
+	float: left;
+	width: 50%;
+	margin-bottom: govuk-em( 15, 16 );
+	padding-right: govuk-em( 15, 16 );
+	box-sizing: border-box;
+
+	@include mq( $from: tablet ){
+		width: auto;
+		padding-right: govuk-em( 45, 16 );
+	}
+}
+
+.report-summary__key {
+	font-weight: bold;
+}
+
+.report-summary__value {
+
+	margin: 0;
+	padding: 0;
+}

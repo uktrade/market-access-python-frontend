@@ -1,0 +1,63 @@
+.selection-list {
+	border: 1px solid $govuk-grey-2;
+	padding: govuk-em( 15, 16 );
+	margin-bottom: govuk-em( 30, 16 );
+}
+
+.selection-list__add-button {
+	margin-bottom: 0;
+}
+
+.selection-list__heading {
+	margin: 0;
+}
+
+.selection-list__list {
+	padding: 0;
+}
+
+.selection-list__list__item {
+
+	list-style: none;
+	line-height: 1.5;
+	padding: govuk-em( 10, 16 ) govuk-em( 55, 16 ) govuk-em( 10, 16 ) govuk-em( 30, 16 );
+	border-bottom: 1px solid $govuk-grey-3;
+	position: relative;
+
+	&:last-of-type {
+		border-bottom: 0;
+	}
+}
+
+.selection-list__list__item__number {
+
+	&[ data-number ]:after {
+		content: attr( data-number );
+		position: absolute;
+		top: 10px;
+		left: 0;
+		font-size: 1em;
+		background: $govuk-black;
+		color: white;
+		width: 1.5em;
+		height: 1.5em;
+		text-align: center;
+		line-height: 1.5em;
+		border-radius: 50%;
+		font-weight: bold;
+	}
+}
+
+.selection-list__list__item__remove-form {
+	position: absolute;
+	bottom: govuk-em( 10, 16 );
+	right: 0;
+}
+
+.selection-list__list__item__remove-form__submit {
+	border: none;
+	text-decoration: underline;
+	color: $govuk-blue;
+	@include govuk-font( 14 );
+	background: none; /* for Edge/IE 8 */
+}
