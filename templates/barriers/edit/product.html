@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Edit product or service{% endblock %}
+
+{% block page_content %}
+
+    <h1>{{ object.title }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+    </form>
+
+{% endblock %}

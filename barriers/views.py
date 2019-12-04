@@ -1,5 +1,16 @@
-from django.views.generic import TemplateView
+from django.urls import reverse
+from django.views.generic import FormView, TemplateView
 
+from .forms import (
+    UpdateBarrierTitleForm,
+    UpdateBarrierProductForm,
+    UpdateBarrierDescriptionForm,
+    UpdateBarrierSourceForm,
+    UpdateBarrierPriorityForm,
+    UpdateBarrierEUExitRelatedForm,
+    UpdateBarrierProblemStatusForm,
+    UpdateBarrierStatusForm,
+)
 from utils.api_client import MarketAccessAPIClient
 
 
@@ -51,3 +62,73 @@ class BarrierDetail(TemplateView):
         return {
             'barrier': barrier,
         }
+
+
+class APIFormMixin:
+    def get(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient()
+        id = self.kwargs.get('id')
+        self.object = client.barriers.get(id=id)
+        return super().get(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['id'] = self.kwargs.get('id')
+        if hasattr(self, 'object'):
+            kwargs['instance'] = self.object
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        if self.object:
+            context_data['object'] = self.object
+        return context_data
+
+
+class APIBarrierFormMixin(APIFormMixin):
+    def get_success_url(self):
+        return reverse('barriers:barrier_detail', kwargs={'id': self.kwargs.get('id')})
+
+
+class BarrierEditTitle(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/title.html"
+    form_class = UpdateBarrierTitleForm
+
+
+class BarrierEditProduct(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/product.html"
+    form_class = UpdateBarrierProductForm
+
+
+class BarrierEditDescription(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/description.html"
+    form_class = UpdateBarrierDescriptionForm
+
+
+class BarrierEditSource(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/source.html"
+    form_class = UpdateBarrierSourceForm
+
+
+class BarrierEditPriority(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/priority.html"
+    form_class = UpdateBarrierPriorityForm
+
+
+class BarrierEditEUExitRelated(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/eu_exit_related.html"
+    form_class = UpdateBarrierEUExitRelatedForm
+
+
+class BarrierEditProblemStatus(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/problem_status.html"
+    form_class = UpdateBarrierProblemStatusForm
+
+
+class BarrierEditStatus(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/status.html"
+    form_class = UpdateBarrierStatusForm

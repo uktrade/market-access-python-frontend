@@ -21,3 +21,9 @@ class Barrier:
             'status': dateutil.parser.parse(data['status']['date']),
             'created': dateutil.parser.parse(data['created_on']),
         }
+
+    def to_dict(self):
+        return {
+            'title': self.title,
+            'priority': self.priority,
+        }

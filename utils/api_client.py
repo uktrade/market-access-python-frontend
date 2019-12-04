@@ -44,6 +44,36 @@ class MarketAccessAPIClient:
         """
         return f'{settings.API_URL}{path}'
 
+    def post(self, path, data=None, files=None, extra_headers=None):
+        _headers = self.headers(extra_headers=extra_headers)
+        data = data or {}
+        try:
+            _url = self.get_url(path)
+            response = requests.post(_url, data=data, headers=_headers, files=files)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as http_exception:
+            raise APIException(http_exception)
+        response_data = response.json()
+        if response_data.get('response', {}).get('success'):
+            return response_data['response'].get('result', response_data['response'].get('results'))
+        else:
+            return response_data
+
+    def patch(self, path, data=None, files=None, extra_headers=None):
+        _headers = self.headers(extra_headers=extra_headers)
+        data = data or {}
+        try:
+            _url = self.get_url(path)
+            response = requests.patch(_url, data=data, headers=_headers, files=files)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as http_exception:
+            raise APIException(http_exception)
+        response_data = response.json()
+        if response_data.get('response', {}).get('success'):
+            return response_data['response'].get('result', response_data['response'].get('results'))
+        else:
+            return response_data
+
 
 class Resource:
     def __init__(self, client):
@@ -57,6 +87,17 @@ class Resource:
     def get(self, id, *args, **kwargs):
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.get(url, *args, **kwargs))
+
+    def patch(self, id, *args, **kwargs):
+        url = f"{self.resource_name}/{id}"
+        return self.model(self.client.patch(url, data=kwargs))
+
+    def create(self, id, *args, **kwargs):
+        return self.model(self.client.post(self.resource_name, data=kwargs))
+
+    def update(self, id, *args, **kwargs):
+        url = f"{self.resource_name}/{id}"
+        return self.model(self.client.put(url, data=kwargs))
 
 
 class BarriersResource(Resource):
