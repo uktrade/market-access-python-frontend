@@ -227,7 +227,6 @@
                 {% for barrier in barriers %}
                     <li class='filter-results-list__item'>
                         <div class="filter-results-list__item__main-content">
-                            {# Barrier detail url #}
                             <h3 class='filter-results-list__item__heading'><a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a></h3>
                             <dl class="filter-results-list__item__definitions">
 
@@ -235,12 +234,12 @@
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.code }}</dd>
 
                                 <dt class="filter-results-list__item__definitions__key">Added:</dt>
-                                {# dateOnly filter #}
+
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.date.reported|date:"j F Y" }}</dd>
 
-                                {% if barrier.sectors.length %}
-                                <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectorsList|pluralize }} affected:</dt>
-                                <dd class="filter-results-list__item__definitions__value">{{ barrier.sectorsList | join:', ' }}</dd>
+                                {% if barrier.sectors|length %}
+                                <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
                                 {% endif %}
 
                                 <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>

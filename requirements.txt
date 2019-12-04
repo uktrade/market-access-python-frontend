@@ -3,4 +3,5 @@ django-compressor==2.3
 django-libsass==0.7
 django-sass-processor==0.7.5
 python-dateutil==2.8.1
+redis==3.3.11
 requests==2.22.0
