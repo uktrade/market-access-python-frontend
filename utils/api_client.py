@@ -3,7 +3,7 @@ import requests
 from django.conf import settings
 
 from barriers.models import Barrier
-from interactions.models import Interaction
+from interactions.models import HistoryItem, Interaction
 
 
 class MarketAccessAPIClient:
@@ -104,7 +104,21 @@ class BarriersResource(Resource):
     resource_name = "barriers"
     model = Barrier
 
+    def get_history(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/history"
+        return [HistoryItem(result) for result in self.client.get(url, params=kwargs)['history']]
+
+    def get_assessment_history(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/assessment_history"
+        return [HistoryItem(result) for result in self.client.get(url, params=kwargs)['history']]
+
 
 class InteractionsResource(Resource):
     resource_name = "interactions"
     model = Interaction
+
+    def list(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/interactions"
+        return [
+            self.model(result) for result in self.client.get(url, params=kwargs)['results']
+        ]

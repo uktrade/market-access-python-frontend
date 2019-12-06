@@ -1,0 +1,32 @@
+<ul class="page-tabs page-tabs--no-margin">
+    {% if active == 'detail' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Barrier information</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:barrier_detail' barrier.id %}">Barrier information</a>
+        </li>
+    {% endif %}
+
+    {# TODO: Update links #}
+    {% if active == 'team' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Barrier team</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:barrier_detail' barrier.id %}">Barrier team</a>
+        </li>
+    {% endif %}
+
+    {% if active == 'assessment' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Assessment</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:barrier_detail' barrier.id %}">Assessment</a>
+        </li>
+    {% endif %}
+</ul>

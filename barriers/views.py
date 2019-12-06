@@ -59,8 +59,19 @@ class BarrierDetail(TemplateView):
         uuid = self.kwargs.get('id')
         barrier = client.barriers.get(id=uuid)
 
+        notes = client.interactions.list(barrier_id=uuid)
+        history = client.barriers.get_history(barrier_id=uuid)
+        interactions = notes + history
+
+        if barrier.has_assessment:
+            assessment_history = client.barriers.get_assessment_history(barrier_id=uuid)
+            interactions += assessment_history
+
+        interactions.sort(key=lambda object: object.date, reverse=True)
+
         return {
             'barrier': barrier,
+            'interactions': interactions,
         }
 
 
@@ -132,3 +143,15 @@ class BarrierEditProblemStatus(APIBarrierFormMixin, FormView):
 class BarrierEditStatus(APIBarrierFormMixin, FormView):
     template_name = "barriers/edit/status.html"
     form_class = UpdateBarrierStatusForm
+
+
+class BarrierAddNote(TemplateView):
+    pass
+
+
+class BarrierEditNote(TemplateView):
+    pass
+
+
+class BarrierDeleteNote(TemplateView):
+    pass

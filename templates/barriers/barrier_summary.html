@@ -1,0 +1,22 @@
+<section class="barrier-summary">
+    <div class="barrier-summary__heading">
+        {{ barrier.code }}
+        <h1 class="barrier-summary__heading__text">{{ barrier.title }}</h1>
+        <p class="barrier-summary__heading__country"> in {{ barrier.location }}</p>
+        <p>
+            <a href="{% url 'barriers:edit_title' barrier.id %}">Edit title</a>
+            or
+            <a href="{% url 'barriers:edit_title' barrier.id %}">location</a>
+        </p>
+    </div>
+    <div class="barrier-summary__status">
+        <span class="barrier-summary__status__badge barrier-status-badge barrier-status-badge--{{ barrier.status.modifier }}">
+            Status: <strong>{{ barrier.status.name }}</strong>
+        </span>
+        <span class="barrier-summary__priority">
+            <span class="priority-marker priority-marker--{{ barrier.priority.code|lower}}"></span><strong>{{ barrier.priority.name }}</strong> priority
+        </span>
+        <a class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_status' barrier.id %}">change status</a>
+        <a class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">change priority</a>
+    </div>
+</section>

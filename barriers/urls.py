@@ -11,6 +11,9 @@ from .views import (
     BarrierEditEUExitRelated,
     BarrierEditProblemStatus,
     BarrierEditStatus,
+    BarrierAddNote,
+    BarrierEditNote,
+    BarrierDeleteNote,
     Dashboard,
     FindABarrier,
 )
@@ -31,4 +34,8 @@ urlpatterns = [
     path("barriers/<uuid:id>/edit/eu-exit-related/", BarrierEditEUExitRelated.as_view(), name="edit_eu_exit_related"),
     path("barriers/<uuid:id>/edit/problem-status/", BarrierEditProblemStatus.as_view(), name="edit_problem_status"),
     path("barriers/<uuid:id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
+
+    path("barriers/<uuid:id>/interactions/add-note/", BarrierAddNote.as_view(), name="add_note"),
+    path("barriers/<uuid:id>/interactions/edit-note/<int:note_id>/", BarrierEditNote.as_view(), name="edit_note"),
+    path("barriers/<uuid:id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
 ]

@@ -1,0 +1,11 @@
+<div class="modal">
+    <div class="modal__content" role="alertdialog" tabindex="1" aria-describedby="modal-label">
+        <h3 class="modal__content__title" id="modal-label">{% block title %}{% endblock %}</h3>
+        {% block message %}{% endblock %}
+        <form action="{% block action_url %}{% endblock %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="{% block action_text %}Submit{% endblock %}" class="govuk-button" tabindex="2">
+            <a href="{% block cancel_url %}{% endblock %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">{% block cancel_text %}Cancel{% endblock %}</a>
+        </form>
+    </div>
+</div>

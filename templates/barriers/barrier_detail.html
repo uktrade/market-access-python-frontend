@@ -1,9 +1,347 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Barrier details{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.barrier.detail( {
+            noteErrorText: '{{ noteErrorText }}',
+            toggleLinks: {
+                text: 'Update the barrier',
+                linkClass: 'js-barrier-summary-link'
+            }
+        } );
+    </script>
+{% endblock %}
+
+{% block outsideContent %}
+    {% if isDelete %}
+        {% include 'partials/delete_note.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/barrier_summary.html' %}
+    </div>
+{% endblock %}
 
 {% block page_content %}
 
-    <h1>{{ barrier.title }}</h1>
+    {% if toast and toast.heading %}
+        {% include 'partials/toast.html' %}
+    {% endif %}
+
+    {% include 'barriers/barrier_tabs.html' with active='detail' %}
+
+    <section class="summary-group">
+        {% if barrier.is_resolved or barrier.is_hibernated %}
+            <h3 class="summary-group__heading">Barrier headlines</h3>
+        {% else %}
+            <h2 class="summary-group__heading">Barrier headlines</h2>
+        {% endif %}
+
+        <dl class="summary-group__list">
+            <div class="summary-group__list-item-50">
+                <dt class="summary-group__list__key">Last Modified</dt>
+                <dd class="summary-group__list__value">
+                    {{ barrier.modified_on|date:"j F Y" }}
+                </dd>
+            </div>
+            <div class="summary-group__list-item-50">
+                <dt class="summary-group__list__key">Date added</dt>
+                <dd class="summary-group__list__value">
+                    {{ barrier.reported_on|date:"j F Y" }}
+                </dd>
+            </div>
+
+            <dt class="summary-group__list__key">Barrier summary</dt>
+            <dd class="summary-group__list__value">
+                {{ barrier.problem.description|escape|linebreaksbr }}
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_description' barrier.id %}">Edit</a>
+            </dd>
+
+            <div class="summary-group__list-item-50">
+                <dt class="summary-group__list__key">Barrier type</dt>
+                <dd class="summary-group__list__value">
+                    {{ barrier.problem.status }}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_problem_status' barrier.id %}">Edit</a>
+                </dd>
+            </div>
+
+            <div class="summary-group__list-item-50">
+                <dt class="summary-group__list__key">Related to Brexit</dt>
+                <dd class="summary-group__list__value">
+                    {{ barrier.eu_exit_related }}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_eu_exit_related' barrier.id %}">Edit</a>
+                </dd>
+            </div>
+
+            {% if addCompany %}
+                <dt class="summary-group__list__key">Companies known to be affected</dt>
+                <dd class="summary-group__list__value">
+                    {% if barrier.companies %}
+                        <ul class="summary-group__list__value__list">
+                            {% for item in barrier.companies %}
+                            <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                            {% endfor %}
+                        </ul>
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:barrier_detail' barrier.id %}">Edit</a>
+                    {% else %}
+                        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
+                    {% endif %}
+                </dd>
+            {% endif %}
+
+            <dt class="summary-group__list__key">Sector{{ barrier.sectors|pluralize }} affected</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.sectors %}
+                    <ul class="summary-group__list__value__list">
+                        {% if barrier.all_sectors %}
+                            <li class="summary-group__list__value__list__item">All sectors</li>
+                        {% else %}
+                            {% for item in barrier.sectors %}
+                            <li class="summary-group__list__value__list__item">{{ item.name|default:"Unknown" }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:barrier_detail' barrier.id %}">Edit</a>
+                {% else %}
+                    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="summary-group__list__value__add">Add one or more sectors</a>
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Barrier categories</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.type.category.name %}
+                    {% if barrier.is_resolved or barrier.is_hibernated %}
+                    <h4 class="summary-group__list__value__heading">{{ barrier.type.category.name }}:</h4>
+                    {% else %}
+                    <h3 class="summary-group__list__value__heading">{{ barrier.type.category.name }}:</h3>
+                    {% endif %}
+                {% endif %}
+                {% if barrier.types %}
+                    <ul class="summary-group__list__value__list">
+                        {% for item in barrier.types %}
+                        <li class="summary-group__list__value__list__item">{{ item.text }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:barrier_detail' barrier.id %}">Edit</a>
+                {% else %}
+                    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Product, service or investment affected</dt>
+            <dd class="summary-group__list__value">
+                {{ barrier.product }}
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_product' barrier.id %}">Edit</a>
+            </dd>
+
+            <dt class="summary-group__list__key">Information source</dt>
+            <dd class="summary-group__list__value">
+                {{ barrier.source.name }}{% if barrier.source.description %}<br>{{ barrier.source.description }}{% endif %}
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_source' barrier.id %}">Edit</a>
+            </dd>
+
+            <dt class="summary-group__list__key">Barrier added by</dt>
+            <dd class="summary-group__list__value">
+                {{ barrier.added_by }}
+            </dd>
+        </dl>
+    </section>
+
+    <section class="barrier-content">
+
+        {% if barrier.is_resolved or barrier.is_hibernated %}
+
+            <div class="barrier-status-details">
+                <span class="barrier-status-details__icon barrier-status-details__icon--{{ barrier.status.modifier }}">
+                    {% if barrier.is_resolved %}
+
+                        <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6 0L9.6 12L4 6.4L0 10.4L9.6 20L25.6 4L21.6 0Z" fill="#006435">
+                        </svg>
+
+                    {% else %}
+
+                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.9573 9.37476C10.9573 8.03905 11.3176 6.78937 11.9416 5.71059C12.0928 5.44964 11.8648 5.12717 11.5725 5.20195C8.20306 6.06723 5.76604 9.25092 6.07886 12.9581C6.37479 16.4566 9.20223 19.3122 12.6983 19.6395C15.1229 19.8667 17.3291 18.9113 18.8184 17.2881C19.0195 17.0686 18.8478 16.7124 18.5506 16.7248C18.4718 16.7284 18.3918 16.7301 18.3118 16.7301C14.2508 16.7301 10.9573 13.4374 10.9573 9.37476ZM25 12.5C25 14.1415 24.6767 15.767 24.0485 17.2835C23.4203 18.8001 22.4996 20.1781 21.3388 21.3388C20.1781 22.4996 18.8001 23.4203 17.2835 24.0485C15.767 24.6767 14.1415 25 12.5 25C10.8585 25 9.23303 24.6767 7.71646 24.0485C6.19989 23.4203 4.8219 22.4996 3.66116 21.3388C2.50043 20.1781 1.57969 18.8001 0.951505 17.2835C0.323321 15.767 -4.75086e-07 14.1415 5.29359e-08 12.5C-4.75086e-07 10.8585 0.323321 9.23303 0.951505 7.71646C1.57969 6.19989 2.50043 4.8219 3.66116 3.66116C4.8219 2.50043 6.19989 1.57969 7.71646 0.951505C9.23303 0.323321 10.8585 -4.99897e-07 12.5 2.81248e-08C14.1415 -4.99897e-07 15.767 0.323321 17.2835 0.951505C18.8001 1.57969 20.1781 2.50043 21.3388 3.66116C22.4996 4.8219 23.4203 6.19989 24.0485 7.71646C24.6767 9.23303 25 10.8585 25 12.5Z" fill="#6F777B">
+                    </svg>
+
+                    {% endif %}
+                </span>
+                <h2 class="barrier-status-details__heading">Barrier {% if barrier.is_partially_resolved %}partially resolved{% elif barrier.is_resolved %}resolved{% else %}dormant{% endif %} <span class="barrier-status-details__heading__caption">in {{ barrier.status.date|date:"F Y" }}</span></2>
+                <h3 class="barrier-status-details__sub-heading">Summary {% if barrier.is_resolved %} of resolution{% endif %}</h3>
+                <p class="barrier-status-details__text">{{ barrier.status.description|escape|linebreaksbr }}</p>
+                <a href="{% url 'barriers:edit_status' barrier.id %}"> Edit</a>
+            </div>
+
+        {% endif %}
+
+        <h2 class="section-heading">
+            Progress and documents
+        </h2>
+
+        {% if showNoteForm %}
+            <div class="interaction-panel">
+                {{ noteForm( {
+                    action: urls.barriers.notes.add( barrier.id ),
+                    cancel: urls.barriers.documents.cancel( barrier.id ),
+                    xhr: {
+                        upload: urls.barriers.documents.add( barrier.id ),
+                        delete: urls.barriers.documents.delete( barrier.id, ':uuid' )
+                    },
+                    documents: documents
+                } )}}
+            </div>
+        {% else %}
+            <a class="govuk-button button--primary" href="{% url 'barriers:add_note' barrier.id %}">Add note</a>
+        {% endif %}
+
+        <ol class="event-list js-delete-modal-container">
+            {% for item in interactions %}
+
+            <li class="event-list__item event_list__item--{{ item.modifier }}">
+
+                {% if item.is_note %}
+
+                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span>
+                        {% if item.user.name %}
+                        <span class="event-list__item__heading__recede"> by </span>{{ item.user.name }}
+                        {% endif %}
+                    </h4>
+
+                    {% if item.edit %}
+
+                        {{ noteForm( {
+                            isEdit: true,
+                            action: urls.barriers.notes.edit( barrier.id, item.id ),
+                            cancel: urls.barriers.notes.documents.cancel( barrier.id, item.id ),
+                            xhr: {
+                                upload: urls.barriers.notes.documents.add( barrier.id, item.id ),
+                                delete: urls.barriers.notes.documents.delete( barrier.id, item.id, ':uuid' )
+                            },
+                            note: item,
+                            documents: documents
+                        } ) }}
+
+                    {% else %}
+                        {# TODO: linkify #}
+                        <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|safe  }}</p>
+                        <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
+                        {% if item.user.id == user.id %}
+                            <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:delete_note' barrier.id item.id %}">Delete</a>
+                        {% endif %}
+
+                        {% if item.has_documents %}
+
+                            <div class="event-list__item__document">
+                                <ul class="event-list__item__document__list">
+                                    {% for doc in item.documents %}
+
+                                        <li class="event-list__item__document__list__item">
+
+                                            {% if doc.can_download %}
+
+                                                <a class="event-list__item__document__list__item__name" href="{% url 'barriers:download_document' doc.id %}">{{ doc.name }}</a> - {{ doc.size|filesizeformat }}
+
+                                            {% else %}
+
+                                                <span class="event-list__item__document__list__item__name">{{ doc.name }}</span>
+                                                <span class="event-list__item__document__list__item__status">({{ doc.readable_status }})</span>
+
+                                            {% endif %}
+                                        </li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        {% endif %}
+                    {% endif %}
+
+                {% elif item.is_status %}
+
+                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+                    <p class="event-list__item__text">
+
+                    {% if item.event == 'REPORT_CREATED' %}
+
+                        Barrier started{% if item.user.name %} by <strong>{{ item.user.name }}</strong>{% endif %}
+
+                    {% elif item.event == 'BARRIER_CREATED' %}
+
+                        Barrier added to the service{% if item.user.name %} by <strong>{{ item.user.name }}</strong>{% endif %}
+
+                    {% elif item.event == 'BARRIER_STATUS_CHANGE' %}
+
+                        Barrier status changed from <strong>{{ item.state.from }}</strong> to <strong>{{ item.state.to }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
+
+                        {% if item.state.is_resolved %}
+
+                             Resolved date set as <strong>{{ item.state.date|date:"F Y" }}</strong>.
+
+                        {% endif %}
+                    {% endif %}
+                    </p>
+
+                    {% if item.event == 'BARRIER_STATUS_CHANGE' and item.state.showSummary %}
+                        <p class="event-list__item__text">{{ item.text|escape|linebreaksbr  }}</p>
+                    {% endif %}
+
+                {% elif item.is_priority %}
+
+                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+                    <p class="event-list__item__text">
+                        <span class="priority-marker priority-marker--{{ item.priority.code|lower }}"></span> Barrier priority set to <strong>{{ item.priority.name }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
+                    </p>
+
+                    {% if item.text %}
+                        <p class="event-list__item__text">
+                             {{ item.text }}
+                        </p>
+                        {% endif %}
+
+                {% elif item.is_assessment %}
+
+                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+                    <p class="event-list__item__text">
+                        <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ item.name }}</a> {% if item.is_edit %}edited{% else %}added{% endif %}{% if item.user.name %} by {{ item.user.name }}{% endif %}.
+                    </p>
+                {% endif %}
+
+            </li>
+
+            {% empty %}
+
+            <li class="event-list__item">
+
+                {% if barrier.is_resolved %}
+
+                    <h4 class="event-list__item__heading">Attach any useful documents</h4>
+                    <p class="event-list__item__text">
+                        You can attach any useful documents associated with the resolution of this barrier.
+                    </p>
+
+                {% else %}
+
+                    <h4 class="event-list__item__heading">You have not stated any next steps or progress</h4>
+                    <p class="event-list__item__text">
+                        Record agreed team actions and any progress made on resolving it. You can also upload documents, for example relevant emails or meeting readouts.
+                    </p>
+
+                {% endif %}
+
+                    <a href="{% url 'barriers:add_note' barrier.id %}">Add your first note</a>
+            </li>
+
+            {% endfor %}
+        </ol>
+    </section>
 
 {% endblock %}
