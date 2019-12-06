@@ -42,7 +42,11 @@ class FindABarrier(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient()
-        barriers = client.barriers.list(ordering="-reported_on", limit=100, offset=0)
+        barriers = client.barriers.list(
+            ordering="-reported_on",
+            limit=100,
+            offset=0
+        )
 
         context_data.update({
             'barriers': barriers,
@@ -64,8 +68,9 @@ class BarrierDetail(TemplateView):
         interactions = notes + history
 
         if barrier.has_assessment:
-            assessment_history = client.barriers.get_assessment_history(barrier_id=uuid)
-            interactions += assessment_history
+            interactions += client.barriers.get_assessment_history(
+                barrier_id=uuid
+            )
 
         interactions.sort(key=lambda object: object.date, reverse=True)
 
@@ -102,7 +107,10 @@ class APIFormMixin:
 
 class APIBarrierFormMixin(APIFormMixin):
     def get_success_url(self):
-        return reverse('barriers:barrier_detail', kwargs={'id': self.kwargs.get('id')})
+        return reverse(
+            'barriers:barrier_detail',
+            kwargs={'id': self.kwargs.get('id')}
+        )
 
 
 class BarrierEditTitle(APIBarrierFormMixin, FormView):

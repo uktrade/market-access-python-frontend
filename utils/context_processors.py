@@ -21,37 +21,37 @@ def permitted_applications(request):
                 'activeKey': 'datahub-companies',
                 'canShow': True,
                 'name': 'Companies',
-                'href': ( datahubDomain + 'companies' )
+                'href': (datahubDomain + 'companies')
             }, {
                 'permittedKey': 'datahub-crm',
                 'activeKey': 'datahub-contacts',
                 'canShow': True,
                 'name': 'Contacts',
-                'href': ( datahubDomain + 'contacts' )
+                'href': (datahubDomain + 'contacts')
             }, {
                 'permittedKey': 'datahub-crm',
                 'activeKey': 'datahub-events',
                 'canShow': True,
                 'name': 'Events',
-                'href': ( datahubDomain + 'events' )
+                'href': (datahubDomain + 'events')
             }, {
                 'permittedKey': 'datahub-crm',
                 'activeKey': 'datahub-interactions',
                 'canShow': True,
                 'name': 'Interactions',
-                'href': ( datahubDomain + 'interactions' )
+                'href': (datahubDomain + 'interactions')
             }, {
                 'permittedKey': 'datahub-crm',
                 'activeKey': 'datahub-investments',
                 'canShow': True,
                 'name': 'Investments',
-                'href': ( datahubDomain + 'investments' )
+                'href': (datahubDomain + 'investments')
             }, {
                 'permittedKey': 'datahub-crm',
                 'activeKey': 'datahub-orders',
                 'canShow': True,
                 'name': 'Orders',
-                'href': ( datahubDomain + 'omis' )
+                'href': (datahubDomain + 'omis')
             }, {
                 'permittedKey': 'datahub-mi',
                 'activeKey': 'datahub-mi',

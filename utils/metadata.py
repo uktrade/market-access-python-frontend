@@ -21,14 +21,49 @@ def get_metadata():
 
 class Metadata:
     STATUS_INFO = {
-        '0': { 'name': 'Unfinished', 'modifier': 'unfinished', 'hint': 'Barrier is unfinished' },
-        '1': { 'name': 'Pending', 'modifier': 'assessment', 'hint': 'Barrier is awaiting action' },
-        '2': { 'name': 'Open', 'modifier': 'assessment', 'hint': 'Barrier is being worked on' },
-        '3': { 'name': 'Part resolved', 'modifier': 'resolved', 'hint': 'Barrier impact has been significantly reduced but remains in part' },
-        '4': { 'name': 'Resolved', 'modifier': 'resolved', 'hint': 'Barrier has been resolved for all UK companies' },
-        '5': { 'name': 'Paused', 'modifier': 'hibernated', 'hint': 'Barrier is present but not being pursued' },
-        '6': { 'name': 'Archived', 'modifier': 'archived', 'hint': 'Barrier is archived' },
-        '7': { 'name': 'Unknown', 'modifier': 'hibernated', 'hint': 'Barrier requires further work for the status to be known' },
+        '0': {
+            'name': 'Unfinished',
+            'modifier': 'unfinished',
+            'hint': 'Barrier is unfinished'
+        },
+        '1': {
+            'name': 'Pending',
+            'modifier': 'assessment',
+            'hint': 'Barrier is awaiting action'
+        },
+        '2': {
+            'name': 'Open',
+            'modifier': 'assessment',
+            'hint': 'Barrier is being worked on'
+        },
+        '3': {
+            'name': 'Part resolved',
+            'modifier': 'resolved',
+            'hint': (
+                'Barrier impact has been significantly reduced but remains '
+                'in part'
+            )
+        },
+        '4': {
+            'name': 'Resolved',
+            'modifier': 'resolved',
+            'hint': 'Barrier has been resolved for all UK companies'
+         },
+        '5': {
+            'name': 'Paused',
+            'modifier': 'hibernated',
+            'hint': 'Barrier is present but not being pursued'
+         },
+        '6': {
+            'name': 'Archived',
+            'modifier': 'archived',
+            'hint': 'Barrier is archived'
+        },
+        '7': {
+            'name': 'Unknown',
+            'modifier': 'hibernated',
+            'hint': 'Barrier requires further work for the status to be known'
+         },
     }
 
     def __init__(self, data):
@@ -72,9 +107,10 @@ class Metadata:
             country_name = ""
 
         if admin_areas:
-            admin_areas_string = ", ".join(
-                [self.get_admin_area(admin_area)['name'] for admin_area in admin_areas]
-            )
+            admin_areas_string = ", ".join([
+                self.get_admin_area(admin_area)['name']
+                for admin_area in admin_areas
+            ])
             return f"{admin_areas_string} ({country_name})"
 
         return country_name
@@ -90,7 +126,7 @@ class Metadata:
 
     def get_status_type(self, id, field_info=None):
         if id in self.STATUS_INFO.keys():
-            name = self.get_status(id)['name'];
+            name = self.get_status(id)['name']
             if field_info and id == '1':
                 sub_status = self.get_sub_status_text(field_info)
                 return f"{name}{sub_status}"

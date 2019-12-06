@@ -27,14 +27,24 @@ class HistoryItem(APIModel):
             self.event = data['field_info']['event']
             self.state = {
                 'from': metadata.get_status_type(data['old_value']),
-                'to': metadata.get_status_type(data['new_value'], data['field_info']),
+                'to': metadata.get_status_type(
+                    data['new_value'],
+                    data['field_info']
+                ),
                 'date': data['field_info']['status_date'],
-                'isResolved': data['new_value'] in ("RESOLVED", "PART_RESOLVED"),
-                'showSummary': data['new_value'] in ("OPEN", "UNKNOWN", "PENDING"),
+                'isResolved': data['new_value'] in (
+                    "RESOLVED",
+                    "PART_RESOLVED"
+                ),
+                'showSummary': data['new_value'] in (
+                    "OPEN",
+                    "UNKNOWN",
+                    "PENDING"
+                ),
             }
             self.text = data['field_info']['status_summary']
             self.user = data['user']
-        elif data['field'] ==  'priority':
+        elif data['field'] == 'priority':
             self.is_priority = True
             self.modifier = 'priority'
             self.date = dateutil.parser.parse(data['date'])

@@ -38,7 +38,9 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
 
 class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
     description = forms.CharField(
-        label='Provide a summary of the problem and how you became aware of it',
+        label=(
+            'Provide a summary of the problem and how you became aware of it'
+        ),
         widget=forms.Textarea,
     )
 
@@ -51,11 +53,11 @@ class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
 
 
 class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
-    CHOICES=[
-        ('COMPANY','Company'),
-        ('TRADE','Trade association'),
-        ('GOVT','Government entity'),
-        ('OTHER','Other '),
+    CHOICES = [
+        ('COMPANY', 'Company'),
+        ('TRADE', 'Trade association'),
+        ('GOVT', 'Government entity'),
+        ('OTHER', 'Other '),
     ]
     source = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
 
@@ -68,11 +70,11 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
 
 
 class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
-    CHOICES=[
-        ('UNKNOWN','Unknown priority'),
-        ('HIGH','High priority'),
-        ('MEDIUM','Medium priority'),
-        ('LOW','Low priority'),
+    CHOICES = [
+        ('UNKNOWN', 'Unknown priority'),
+        ('HIGH', 'High priority'),
+        ('MEDIUM', 'Medium priority'),
+        ('LOW', 'Low priority'),
     ]
     priority = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     description = forms.CharField(
@@ -90,7 +92,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
 
 
 class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
-    CHOICES=[
+    CHOICES = [
         (1, 'Yes'),
         (2, 'No'),
         (3, "Don't know"),
@@ -110,7 +112,7 @@ class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
 
 
 class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
-    CHOICES=[
+    CHOICES = [
         (1, 'A procedural, short-term barrier'),
         (2, 'A long-term strategic barrier'),
     ]
