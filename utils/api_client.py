@@ -10,6 +10,7 @@ class MarketAccessAPIClient:
     def __init__(self, token=None, **kwargs):
         self.barriers = BarriersResource(self)
         self.interactions = InteractionsResource(self)
+        self.notes = NotesResource(self)
 
         self._method = None
         self.token = token or settings.TRUSTED_USER_TOKEN
@@ -112,7 +113,7 @@ class Resource:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.patch(url, data=kwargs))
 
-    def create(self, id, *args, **kwargs):
+    def create(self, *args, **kwargs):
         return self.model(self.client.post(self.resource_name, data=kwargs))
 
     def update(self, id, *args, **kwargs):
@@ -149,3 +150,16 @@ class InteractionsResource(Resource):
             self.model(result)
             for result in self.client.get(url, params=kwargs)['results']
         ]
+
+
+class NotesResource(Resource):
+    resource_name = "notes"
+    model = Interaction
+
+    def create(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/interactions"
+        return self.model(self.client.post(url, data=kwargs))
+
+    def update(self, id, *args, **kwargs):
+        url = f"barriers/interactions/{id}"
+        return self.model(self.client.patch(url, data=kwargs))
