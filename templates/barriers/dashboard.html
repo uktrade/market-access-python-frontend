@@ -1,9 +1,95 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Dashboard{% endblock %}
+{% block page_title %}{{ super() }} - Homepage{% endblock %}
+
+{% block body_script %}
+    <script>
+        ma.pages.index();
+    </script>
+{% endblock %}
 
 {% block page_content %}
 
-    {% include 'heading.html' with caption='Market access barriers' text='Dashboard' %}
+    {{ dashboardHeading( dashboardData ) }}
+
+    {% if barriers and barriers.length or isWatchList %}
+        <div class="dashboard-results-header">
+            <h2 class="dashboard-results-header__title">{{ barrierCount }}<span class="dashboard-results-header__title__caption"> barrier{{ 's' if barrierCount != 1 }}</span></h2>
+            <div class="dashboard-results-header__link-wrapper js-toggle-box-control">
+                <a class="dashboard-results-header__link js-list-link js-only" href="{{ urls.findABarrier( editQueryString ) }}"> Edit list filters </a>
+                <a class="dashboard-results-header__link js-list-link" href="{{ urls.watchList.rename( watchListIndex ) }}"> Rename list </a>
+                <a class="dashboard-results-header__link js-list-link" href="{{ urls.watchList.remove( watchListIndex ) + '?_csrf=' + csrfToken }}"> Delete list </a>
+            </div>
+            <div class="toggle-box">
+                {% if watchListFilters %}
+                    <ul>
+                        {% for watchListFilter in watchListFilters %}
+                            <li>{{ watchListFilter.key | capitalize }}: <strong>{{ watchListFilter.value }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ urls.findABarrier( editQueryString ) }}">Edit list filters</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    {%- if barriers and barriers.length -%}
+
+        {% if paginationData.totalPages > 1 %}
+        <p class="dashboard-page-summary">
+            Page {{ paginationData.currentPage }} of {{ paginationData.totalPages }}
+        </p>
+        {% endif %}
+
+        <div class="overflow-wrapper">
+        <table class="standard-table standard-table--barriers">
+            <thead>
+                <tr class="standard-table__heading-row">
+                    {{ tableHeading( 'Priority', sortableFields.priority ) }}
+                    {{ tableHeading( 'Last updated', sortableFields.updated ) }}
+                    {{ tableHeading( 'Barrier title' ) }}
+                    {{ tableHeading( 'Sectors affected' ) }}
+                    {{ tableHeading( 'Barrier location', sortableFields.location ) }}
+                    {{ tableHeading( 'Status', sortableFields.status ) }}
+                    {{ tableHeading( 'Date added', sortableFields.date ) }}
+                </tr>
+            </thead>
+            <tbody>
+                {%- for barrier in barriers %}
+                <tr class="standard-table__row">
+                    <td class="standard-table__cell"><span class="priority-marker priority-marker--{{ barrier.priority.modifier }}"></span>{{ barrier.priority.name }}</td>
+                    <td class="standard-table__cell">{{ barrier.date.modified | dateOnly }}</td>
+                    <td class="standard-table__cell">
+                        <a class="dashboard-table__barrier-title" href="{{ urls.barriers.detail( barrier.id ) }}">
+                            {{ barrier.title }}
+                        </a>
+                        {{ barrier.code }}
+                    </td>
+                    <td class="standard-table__cell">
+                        {{ collapsible( barrier.sectors ) }}
+                    </td>
+                    <td class="standard-table__cell">{{ barrier.country.name }}</td>
+                    <td class="standard-table__cell"><span class="barrier-status-table-badge barrier-status-table-badge--{{ barrier.status.modifier }}">{{ barrier.status.name }}</span></td>
+                    <td class="standard-table__cell">{{ barrier.date.reported | dateOnly }}</td>
+                </tr>
+                {%- endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        {{ pagination( paginationData ) }}
+
+    {%- elseif isWatchList -%}
+        <div class="no-results-box">
+            <p><strong>There are no barriers for your search yet</strong></p>
+            <p> We'll update your watch list if you get a match. Or you can <a href="{{ urls.findABarrier( editQueryString ) }}"> edit your search </a></p>
+        </div>
+    {% else %}
+        <div class="no-results-box">
+            <p><strong>Your watch list</strong></p>
+            <p> You can create your own list of existing barriers to watch. For example, all barriers in a certain country, or all barriers in a specific sector. </p>
+            <a href="{{ urls.findABarrier() }}"> Create your watch list </a>
+        </div>
+    {%- endif %}
 
 {% endblock %}
