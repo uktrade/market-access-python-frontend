@@ -61,6 +61,11 @@ class Barrier(APIModel):
         return {
             'title': self.title,
             'priority': self.priority,
+            'description': self.problem_description,
+            'problem_status': self.problem_status,
+            'eu_exit_related': self.data['eu_exit_related'],
+            'product': self.product,
+            'source': self.data['source'],
         }
 
     @property
