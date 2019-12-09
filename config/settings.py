@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env = environ.Env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -136,4 +138,10 @@ COMPRESS_PRECOMPILERS = (
 API_URL = "http://127.0.0.1:8000/"
 TRUSTED_USER_TOKEN = 'ssobypass'
 
-METADATA_CACHE_TIME = "600"
+METADATA_CACHE_TIME = "3600"
+
+REDIS_SERVER = "localhost"
+REDIS_PORT = 6379
+
+HAWK_ID = env("HAWK_ID"),
+HAWK_KEY = env("HAWK_KEY"),

@@ -2,19 +2,45 @@ import json
 
 from django.conf import settings
 
+from mohawk import Sender
 import redis
+import requests
 
 
 def get_metadata():
-    r = redis.Redis(host='localhost', port=6379, db=0)
+    r = redis.Redis(
+        host=settings.REDIS_SERVER,
+        port=settings.REDIS_PORT,
+        db=0
+    )
     metadata = r.get('metadata')
     if metadata:
         return Metadata(json.loads(metadata))
 
-    # TODO: Fix circular import
-    from utils.api_client import MarketAccessAPIClient
-    client = MarketAccessAPIClient()
-    metadata = client.get('metadata')
+    url = f'{settings.API_URL}metadata'
+    credentials = {
+        "id": settings.HAWK_ID,
+        "key": settings.HAWK_KEY,
+        "algorithm": "sha256",
+    }
+    sender = Sender(
+        credentials,
+        url,
+        'GET',
+        content="",
+        content_type="text/plain",
+        always_hash_content=False,
+    )
+
+    response = requests.get(
+        url,
+        verify=not settings.DEBUG,
+        headers={
+            'Authorization': sender.request_header
+        }
+    )
+
+    metadata = response.json()
     r.set('metadata', json.dumps(metadata), ex=settings.METADATA_CACHE_TIME)
     return Metadata(metadata)
 
