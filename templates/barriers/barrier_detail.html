@@ -184,21 +184,9 @@
             Progress and documents
         </h2>
 
-        {% if showNoteForm %}
-            <div class="interaction-panel">
-                {{ noteForm( {
-                    action: urls.barriers.notes.add( barrier.id ),
-                    cancel: urls.barriers.documents.cancel( barrier.id ),
-                    xhr: {
-                        upload: urls.barriers.documents.add( barrier.id ),
-                        delete: urls.barriers.documents.delete( barrier.id, ':uuid' )
-                    },
-                    documents: documents
-                } )}}
-            </div>
-        {% else %}
+        {% block note_form %}
             <a class="govuk-button button--primary" href="{% url 'barriers:add_note' barrier.id %}">Add note</a>
-        {% endif %}
+        {% endblock %}
 
         <ol class="event-list js-delete-modal-container">
             {% for item in interactions %}
@@ -213,20 +201,8 @@
                         {% endif %}
                     </h4>
 
-                    {% if item.edit %}
-
-                        {{ noteForm( {
-                            isEdit: true,
-                            action: urls.barriers.notes.edit( barrier.id, item.id ),
-                            cancel: urls.barriers.notes.documents.cancel( barrier.id, item.id ),
-                            xhr: {
-                                upload: urls.barriers.notes.documents.add( barrier.id, item.id ),
-                                delete: urls.barriers.notes.documents.delete( barrier.id, item.id, ':uuid' )
-                            },
-                            note: item,
-                            documents: documents
-                        } ) }}
-
+                    {% if form.note_id == item.id %}
+                        {% include 'barriers/partials/note_form.html' %}
                     {% else %}
                         {# TODO: linkify #}
                         <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|safe  }}</p>

@@ -1,0 +1,7 @@
+<div class="interaction-panel">
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save note" class="govuk-button">
+    </form>
+</div>

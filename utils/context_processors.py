@@ -5,7 +5,8 @@ def permitted_applications(request):
     marketAccessDomain = 'https://market-access.trade.gov.uk/'
     return {
         'user': {
-            'username': 'Test User',
+            'username': 'Mark',
+            'id': 48,
             'permitted_applications': [
                 {
                     'key': 'datahub-crm',

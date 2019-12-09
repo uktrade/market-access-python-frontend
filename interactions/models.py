@@ -14,6 +14,12 @@ class Interaction(APIModel):
         self.user = data['created_by']
         self.documents = [Document(document) for document in data['documents']]
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'text': self.text,
+        }
+
 
 class HistoryItem(APIModel):
     def __init__(self, data):

@@ -10,6 +10,9 @@ from .forms import (
     UpdateBarrierEUExitRelatedForm,
     UpdateBarrierProblemStatusForm,
     UpdateBarrierStatusForm,
+    UpdateBarrierSectorsForm,
+    AddNoteForm,
+    EditNoteForm,
 )
 from utils.api_client import MarketAccessAPIClient
 
@@ -55,43 +58,59 @@ class FindABarrier(TemplateView):
         return context_data
 
 
-class BarrierDetail(TemplateView):
-    template_name = "barriers/barrier_detail.html"
+class BarrierContextMixin:
+    def get(self, request, *args, **kwargs):
+        self.barrier = self.get_barrier()
+        self.interactions = self.get_interactions()
+        return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
+    def get_barrier(self):
         client = MarketAccessAPIClient()
-        uuid = self.kwargs.get('id')
-        barrier = client.barriers.get(id=uuid)
+        barrier_id = self.kwargs.get('barrier_id')
+        return client.barriers.get(id=barrier_id)
 
-        notes = client.interactions.list(barrier_id=uuid)
-        history = client.barriers.get_history(barrier_id=uuid)
+    def get_interactions(self):
+        client = MarketAccessAPIClient()
+        barrier_id = self.kwargs.get('barrier_id')
+        notes = client.interactions.list(barrier_id=barrier_id)
+        history = client.barriers.get_history(barrier_id=barrier_id)
         interactions = notes + history
 
-        if barrier.has_assessment:
+        if self.barrier.has_assessment:
             interactions += client.barriers.get_assessment_history(
-                barrier_id=uuid
+                barrier_id=barrier_id
             )
 
         interactions.sort(key=lambda object: object.date, reverse=True)
 
-        return {
-            'barrier': barrier,
-            'interactions': interactions,
-        }
+        return interactions
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data.update({
+            'barrier': self.barrier,
+            'interactions': self.interactions,
+        })
+        return context_data
+
+
+class BarrierDetail(BarrierContextMixin, TemplateView):
+    template_name = "barriers/barrier_detail.html"
 
 
 class APIFormMixin:
     def get(self, request, *args, **kwargs):
-        client = MarketAccessAPIClient()
-        id = self.kwargs.get('id')
-        self.object = client.barriers.get(id=id)
+        self.object = self.get_object()
         return super().get(request, *args, **kwargs)
+
+    def get_initial(self):
+        if hasattr(self, 'object'):
+            return self.object.to_dict()
+        return {}
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['id'] = self.kwargs.get('id')
-        if hasattr(self, 'object'):
-            kwargs['instance'] = self.object
+        kwargs.update(self.kwargs)
         return kwargs
 
     def form_valid(self, form):
@@ -106,10 +125,20 @@ class APIFormMixin:
 
 
 class APIBarrierFormMixin(APIFormMixin):
+    def get_object(self):
+        client = MarketAccessAPIClient()
+        barrier_id = self.kwargs.get('barrier_id')
+        return client.barriers.get(id=barrier_id)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['id'] = kwargs.pop('barrier_id')
+        return kwargs
+
     def get_success_url(self):
         return reverse(
             'barriers:barrier_detail',
-            kwargs={'id': self.kwargs.get('id')}
+            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
         )
 
 
@@ -153,12 +182,38 @@ class BarrierEditStatus(APIBarrierFormMixin, FormView):
     form_class = UpdateBarrierStatusForm
 
 
-class BarrierAddNote(TemplateView):
-    pass
+class BarrierEditSectors(APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/sectors.html"
+    form_class = UpdateBarrierSectorsForm
 
 
-class BarrierEditNote(TemplateView):
-    pass
+class BarrierAddNote(BarrierContextMixin, APIBarrierFormMixin, FormView):
+    template_name = "barriers/edit/add_note.html"
+    form_class = AddNoteForm
+
+
+class BarrierEditNote(BarrierContextMixin, APIFormMixin, FormView):
+    template_name = "barriers/barrier_detail.html"
+    form_class = EditNoteForm
+
+    def get_object(self):
+        note_id = self.kwargs.get('note_id')
+
+        for interaction in self.interactions:
+            if interaction.id == note_id:
+                return interaction
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['barrier_id'] = self.kwargs.get('barrier_id')
+        kwargs['note_id'] = self.kwargs.get('note_id')
+        return kwargs
+
+    def get_success_url(self):
+        return reverse(
+            'barriers:barrier_detail',
+            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+        )
 
 
 class BarrierDeleteNote(TemplateView):
