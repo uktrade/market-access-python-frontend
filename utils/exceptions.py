@@ -1,0 +1,2 @@
+class HawkException(Exception):
+    pass

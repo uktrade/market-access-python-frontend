@@ -1,5 +1,7 @@
 import json
 
+from utils.exceptions import HawkException
+
 from django.conf import settings
 
 from mohawk import Sender
@@ -40,9 +42,12 @@ def get_metadata():
         }
     )
 
-    metadata = response.json()
-    r.set('metadata', json.dumps(metadata), ex=settings.METADATA_CACHE_TIME)
-    return Metadata(metadata)
+    if response.ok:
+        metadata = response.json()
+        r.set('metadata', json.dumps(metadata), ex=settings.METADATA_CACHE_TIME)
+        return Metadata(metadata)
+
+    raise HawkException("Call to fetch metadata failed")
 
 
 class Metadata:
