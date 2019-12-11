@@ -105,10 +105,23 @@ class Metadata:
             if country['id'] == country_id:
                 return country
 
+    def get_country_list(self):
+        return self.data['countries']
+
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data['country_admin_areas']:
-            if admin_area['id'] == admin_area_id:
+            if admin_area['id'] == admin_area_id and admin_area['disabled_on'] == None:
                 return admin_area
+
+    def get_admin_areas(self, admin_area_ids):
+        return [self.get_admin_area(id) for id in admin_area_ids]
+
+    def get_admin_areas_by_country(self, country_id):
+        return [
+            admin_area
+            for admin_area in self.data['country_admin_areas']
+            if admin_area['country']['id'] == country_id
+        ]
 
     def get_sector(self, sector_id):
         for sector in self.data.get('sectors', []):

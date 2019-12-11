@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier - Edit location{% endblock %}
+
+{% block page_content %}
+
+
+    {% include 'heading.html' with caption=barrier.barrier_title text='Edit location' %}
+
+    {# TODO: back link, errors #}
+
+    <h3> Exports to which country are affected by this issue? </h3>
+
+    {{ form.errors }}
+
+    <div class="selection-list restrict-width">
+        <h3 class="selection-list__heading">Selected country</h3>
+        <p>{{ country.name }}</p>
+        <a href="{% url 'barriers:edit_country' barrier.id %}" class="govuk-button button--secondary selection-list__add-button"> Change country </a>
+    </div>
+
+    {% if form.fields.admin_areas.choices %}
+        <h3> Which administrative areas in {{ country.name }} are affected by the barrier? </h3>
+
+        <div class="selection-list restrict-width">
+            <h3 class="selection-list__heading">Selected admin areas</h3>
+            {% if admin_areas %}
+                <ul class="selection-list__list">
+                    {% for item in admin_areas %}
+                        <li class="selection-list__list__item">
+                            <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
+
+                            <form action="{% url 'barriers:remove_admin_area' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="admin_area" value="{{ item.id }}">
+                                <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <a href="{% url 'barriers:add_admin_area' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another admin area</a>
+        </div>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
+    </form>
+
+{% endblock %}

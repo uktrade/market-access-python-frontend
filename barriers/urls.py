@@ -16,6 +16,11 @@ from .views import (
     BarrierDeleteNote,
     Dashboard,
     FindABarrier,
+    BarrierEditLocation,
+    BarrierEditLocationSession,
+    BarrierEditCountry,
+    AddAdminArea,
+    RemoveAdminArea,
 )
 
 app_name = "barriers"
@@ -50,11 +55,11 @@ urlpatterns = [
     # path("barriers/<uuid:id>/interactions/notes/<int:note_id>/documents/cancel/", CancelNoteDocument.as_view(), name=""),
     # path("barriers/<uuid:id>/interactions/notes/<int:note_id>/documents/<int:document_id>/delete/", DeleteNoteDocument.as_view(), name=""),
 
-    # path("barriers/<uuid:id>/location/", ListLocation.as_view(), name=""),
-    # path("barriers/<uuid:id>/location/edit/", EditLocation.as_view(), name=""),
-    # path("barriers/<uuid:id>/location/country/", LocationCountry.as_view(), name=""),
-    # path("barriers/<uuid:id>/location/add-admin-area/", AddAdminArea.as_view(), name=""),
-    # path("barriers/<uuid:id>/location/remove-admin-area/", RemoveAdminArea.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/location/", BarrierEditLocationSession.as_view(), name="edit_location_session"),
+    path("barriers/<uuid:barrier_id>/location/edit/", BarrierEditLocation.as_view(), name="edit_location"),
+    path("barriers/<uuid:barrier_id>/location/country/", BarrierEditCountry.as_view(), name="edit_country"),
+    path("barriers/<uuid:barrier_id>/location/add-admin-area/", AddAdminArea.as_view(), name="add_admin_area"),
+    path("barriers/<uuid:barrier_id>/location/remove-admin-area/", RemoveAdminArea.as_view(), name="remove_admin_area"),
 
     # path("barriers/<uuid:id>/status/", BarrierStatus.as_view(), name=""),
 

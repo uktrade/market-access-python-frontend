@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier - Edit Country{% endblock %}
+
+{% block page_content %}
+
+    {% include 'heading.html' with caption=barrier.barrier_title text='Edit barrier country' %}
+
+    {# TODO: back link, errors #}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        {{ form }}
+        <div class="selection-list restrict-width">
+            <h3 class="selection-list__heading">Selected admin areas</h3>
+            {% if admin_areas %}
+                <ul class="selection-list__list">
+                    {% for item in admin_areas %}
+                        <li class="selection-list__list__item">
+                            <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <input type="submit" value="Add administrative area" class="govuk-button">
+        <a href="{% url 'barriers:edit_location' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
+    </form>
+
+{% endblock %}

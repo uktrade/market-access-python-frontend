@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier - Edit Country{% endblock %}
+
+{% block page_content %}
+
+    {% include 'heading.html' with caption=barrier.barrier_title text='Edit barrier country' %}
+
+    {# TODO: back link, errors #}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        {{ form }}
+        <input type="submit" value="Change country" class="govuk-button">
+        <a href="{% url 'barriers:edit_location' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
+    </form>
+{% endblock %}

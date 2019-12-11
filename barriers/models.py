@@ -57,6 +57,19 @@ class Barrier(APIModel):
         if 'companies' in self.data:
             self.companies = data['companies']
 
+        if self.export_country:
+            self.country = {
+                'id': self.export_country,
+                'name': metadata.get_country(self.export_country),
+            }
+
+            self.admin_area_ids = self.data['country_admin_areas']
+
+            if self.admin_area_ids:
+                self.admin_areas = metadata.get_admin_areas(self.admin_area_ids)
+            else:
+                self.admin_areas = []
+
     def to_dict(self):
         return {
             'title': self.title,
