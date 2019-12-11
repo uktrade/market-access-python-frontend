@@ -121,5 +121,6 @@ config/settings/static/
 # SSO src commit pip install folder
 src/
 
-# Static cache
+# Static files
+static/admin
 static/CACHE

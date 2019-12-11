@@ -18,19 +18,21 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+urlpatterns = []
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
+if settings.DJANGO_ENV == "local":
+    urlpatterns += [
+        path("admin/", admin.site.urls),
+    ]
 
-    path("", include("barriers.urls", namespace='barriers')),
-    path("reports/", include("reports.urls", namespace='reports')),
-
+urlpatterns += [
+    path("", include("barriers.urls", namespace="barriers")),
+    path("reports/", include("reports.urls", namespace="reports")),
     # path("documents/<uuid:uuid>/download/", DownloadDocument.as_view(), name="download_document"),
     # path("watch-list/save/", SaveWatchList.as_view(), name="save_watch_list"),
     # path("watch-list/rename/<int:index>/", RenameWatchList.as_view(), name="rename_watch_list"),
     # path("watch-list/remove/<int:index>/", RemoveWatchList.as_view(), name="remove_watch_list"),
 ]
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
