@@ -21,8 +21,8 @@ def get_metadata():
 
     url = f'{settings.API_URL}metadata'
     credentials = {
-        "id": settings.HAWK_ID,
-        "key": settings.HAWK_KEY,
+        "id": settings.MARKET_ACCESS_API_HAWK_ID,
+        "key": settings.MARKET_ACCESS_API_HAWK_KEY,
         "algorithm": "sha256",
     }
     sender = Sender(

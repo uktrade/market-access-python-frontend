@@ -10,7 +10,6 @@ from .forms import (
     UpdateBarrierEUExitRelatedForm,
     UpdateBarrierProblemStatusForm,
     UpdateBarrierStatusForm,
-    UpdateBarrierSectorsForm,
     AddNoteForm,
     EditNoteForm,
 )
@@ -180,11 +179,6 @@ class BarrierEditProblemStatus(APIBarrierFormMixin, FormView):
 class BarrierEditStatus(APIBarrierFormMixin, FormView):
     template_name = "barriers/edit/status.html"
     form_class = UpdateBarrierStatusForm
-
-
-class BarrierEditSectors(APIBarrierFormMixin, FormView):
-    template_name = "barriers/edit/sectors.html"
-    form_class = UpdateBarrierSectorsForm
 
 
 class BarrierAddNote(BarrierContextMixin, APIBarrierFormMixin, FormView):

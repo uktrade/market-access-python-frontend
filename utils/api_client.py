@@ -31,7 +31,7 @@ class MarketAccessAPIClient:
 
     def headers(self, extra_headers=None):
         _headers = {
-            'Authorization': f'Token {self.token}',
+            'Authorization': "Bearer {self.token}",
             'X-User-Agent': '',
             'X-Forwarded-For': '',
         }
@@ -43,7 +43,7 @@ class MarketAccessAPIClient:
         """
         Construct a full API url
         """
-        return f'{settings.API_URL}{path}'
+        return f'{settings.MARKET_ACCESS_API_URI}{path}'
 
     def post(self, path, data=None, files=None, extra_headers=None):
         _headers = self.headers(extra_headers=extra_headers)
