@@ -142,6 +142,7 @@ METADATA_CACHE_TIME = "3600"
 
 REDIS_SERVER = os.environ.get("REDIS_HOST")
 REDIS_PORT = os.environ.get("REDIS_PORT")
+REDIS_DB = os.environ.get("REDIS_DB", 4)
 
 # Market access API
 MARKET_ACCESS_API_URI = os.environ.get("MARKET_ACCESS_API_URI", "unset")

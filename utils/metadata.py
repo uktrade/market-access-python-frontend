@@ -13,13 +13,14 @@ def get_metadata():
     r = redis.Redis(
         host=settings.REDIS_SERVER,
         port=settings.REDIS_PORT,
-        db=0
+        db=settings.REDIS_DB,
     )
+
     metadata = r.get('metadata')
     if metadata:
         return Metadata(json.loads(metadata))
 
-    url = f'{settings.API_URL}metadata'
+    url = f'{settings.MARKET_ACCESS_API_URI}metadata'
     credentials = {
         "id": settings.MARKET_ACCESS_API_HAWK_ID,
         "key": settings.MARKET_ACCESS_API_HAWK_KEY,
