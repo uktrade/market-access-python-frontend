@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views.generic import FormView, View
 
 from .mixins import BarrierContextMixin
-from barriers.forms import (
+from barriers.forms.location import (
     AddAdminAreaForm,
     EditCountryForm,
     EditLocationForm,

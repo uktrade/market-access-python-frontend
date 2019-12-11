@@ -1,12 +1,8 @@
 from django import forms
 
+from .mixins import APIFormMixin
+
 from utils.api_client import MarketAccessAPIClient
-
-
-class APIFormMixin:
-    def __init__(self, id, *args, **kwargs):
-        self.id = id
-        super().__init__(*args, **kwargs)
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -140,84 +136,3 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
             id=self.id,
             status=self.cleaned_data['status']
         )
-
-
-class AddNoteForm(APIFormMixin, forms.Form):
-    text = forms.CharField(
-        label=(
-            'Add notes on an interaction or event'
-        ),
-        widget=forms.Textarea,
-    )
-
-    def save(self):
-        client = MarketAccessAPIClient()
-        client.notes.create(
-            barrier_id=self.id,
-            text=self.cleaned_data['text']
-        )
-
-
-class EditNoteForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea)
-
-    def __init__(self, barrier_id, note_id, *args, **kwargs):
-        self.barrier_id = barrier_id
-        self.note_id = note_id
-        super().__init__(*args, **kwargs)
-
-    def save(self):
-        client = MarketAccessAPIClient()
-        client.notes.update(
-            id=self.note_id,
-            text=self.cleaned_data['text']
-        )
-
-
-class EditLocationForm(forms.Form):
-    country = forms.ChoiceField(
-        label='Exports to which country are affected by this issue?',
-        choices=[],
-        widget=forms.HiddenInput(),
-    )
-    admin_areas = forms.MultipleChoiceField(
-        label='Exports to which country are affected by this issue?',
-        choices=[],
-        widget=forms.MultipleHiddenInput(),
-    )
-
-    def __init__(self, barrier_id, countries, admin_areas, *args, **kwargs):
-        self.barrier_id = barrier_id
-        super().__init__(*args, **kwargs)
-        self.fields['country'].choices = countries
-        self.fields['admin_areas'].choices = admin_areas
-
-    def save(self):
-        client = MarketAccessAPIClient()
-        client.barriers.patch(
-            id=self.barrier_id,
-            export_country=self.cleaned_data['country'],
-            country_admin_areas=self.cleaned_data['admin_areas'],
-        )
-
-
-class EditCountryForm(forms.Form):
-    country = forms.ChoiceField(
-        label='Exports to which country are affected by this issue?',
-        choices=[],
-    )
-
-    def __init__(self, countries, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['country'].choices = countries
-
-
-class AddAdminAreaForm(forms.Form):
-    admin_area = forms.ChoiceField(
-        label='Choose the parts of the country that are affected',
-        choices=[],
-    )
-
-    def __init__(self, admin_areas, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['admin_area'].choices = admin_areas

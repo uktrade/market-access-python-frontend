@@ -1,7 +1,7 @@
 from django.views.generic import FormView
 
 from .mixins import APIBarrierFormMixin
-from barriers.forms import (
+from barriers.forms.edit import (
     UpdateBarrierTitleForm,
     UpdateBarrierProductForm,
     UpdateBarrierDescriptionForm,

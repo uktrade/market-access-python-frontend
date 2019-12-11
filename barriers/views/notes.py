@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
 from .mixins import APIBarrierFormMixin, APIFormMixin, BarrierContextMixin
-from barriers.forms import AddNoteForm, EditNoteForm
+from barriers.forms.notes import AddNoteForm, EditNoteForm
 
 
 class BarrierAddNote(BarrierContextMixin, APIBarrierFormMixin, FormView):
