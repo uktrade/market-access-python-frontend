@@ -1,8 +1,12 @@
 from django.urls import path
 
-from .views import (
+from .views.core import (
     AddABarrier,
     BarrierDetail,
+    Dashboard,
+    FindABarrier,
+)
+from .views.edit import (
     BarrierEditTitle,
     BarrierEditProduct,
     BarrierEditDescription,
@@ -11,16 +15,18 @@ from .views import (
     BarrierEditEUExitRelated,
     BarrierEditProblemStatus,
     BarrierEditStatus,
-    BarrierAddNote,
-    BarrierEditNote,
-    BarrierDeleteNote,
-    Dashboard,
-    FindABarrier,
+)
+from .views.location import (
     BarrierEditLocation,
     BarrierEditLocationSession,
     BarrierEditCountry,
     AddAdminArea,
     RemoveAdminArea,
+)
+from .views.notes import (
+    BarrierAddNote,
+    BarrierEditNote,
+    BarrierDeleteNote,
 )
 
 app_name = "barriers"
