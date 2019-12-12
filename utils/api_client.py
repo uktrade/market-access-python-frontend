@@ -68,7 +68,7 @@ class MarketAccessAPIClient:
         else:
             return response_data
 
-    def patch(self, path, data=None, files=None, extra_headers=None):
+    def patch(self, path, data=None, files=None, extra_headers=None, json=None):
         _headers = self.headers(extra_headers=extra_headers)
         data = data or {}
         try:
@@ -77,7 +77,8 @@ class MarketAccessAPIClient:
                 _url,
                 data=data,
                 headers=_headers,
-                files=files
+                files=files,
+                json=json,
             )
             response.raise_for_status()
         except requests.exceptions.HTTPError as http_exception:
@@ -111,7 +112,7 @@ class Resource:
 
     def patch(self, id, *args, **kwargs):
         url = f"{self.resource_name}/{id}"
-        return self.model(self.client.patch(url, data=kwargs))
+        return self.model(self.client.patch(url, json=kwargs))
 
     def create(self, *args, **kwargs):
         return self.model(self.client.post(self.resource_name, data=kwargs))

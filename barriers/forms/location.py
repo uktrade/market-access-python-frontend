@@ -13,6 +13,7 @@ class EditLocationForm(forms.Form):
         label='Exports to which country are affected by this issue?',
         choices=[],
         widget=forms.MultipleHiddenInput(),
+        required=False,
     )
 
     def __init__(self, barrier_id, countries, admin_areas, *args, **kwargs):
