@@ -35,8 +35,8 @@ class Dashboard(TemplateView):
             'watchlists': watchlists,
             'barriers': barriers,
             'can_add_watchlist': (
-                len(watchlists) < settings.MAX_WATCHLIST_LENGTH,
-            )
+                len(watchlists) < settings.MAX_WATCHLIST_LENGTH
+            ),
             'sort_field': sort.lstrip('-'),
             'sort_descending': sort.startswith('-'),
         })

@@ -67,7 +67,9 @@ class Barrier(APIModel):
             self.admin_area_ids = self.data['country_admin_areas']
 
             if self.admin_area_ids:
-                self.admin_areas = metadata.get_admin_areas(self.admin_area_ids)
+                self.admin_areas = metadata.get_admin_areas(
+                    self.admin_area_ids
+                )
             else:
                 self.admin_areas = []
 

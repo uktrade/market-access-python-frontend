@@ -32,7 +32,10 @@ class BarrierEditLocation(BarrierContextMixin, FormView):
         context_data = super().get_context_data(**kwargs)
         metadata = get_metadata()
         country_id = self.request.session['location']['country']
-        admin_area_ids = self.request.session['location'].get('admin_areas', [])
+        admin_area_ids = self.request.session['location'].get(
+            'admin_areas',
+            []
+        )
 
         context_data.update({
             'country': {
@@ -148,7 +151,9 @@ class AddAdminArea(BarrierContextMixin, FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         metadata = get_metadata()
-        admin_area_ids = self.request.session['location'].get('admin_areas', [])
+        admin_area_ids = self.request.session['location'].get(
+            'admin_areas', []
+        )
         context_data.update({
             'admin_areas': metadata.get_admin_areas(admin_area_ids)
         })

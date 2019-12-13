@@ -45,7 +45,11 @@ def get_metadata():
 
     if response.ok:
         metadata = response.json()
-        r.set('metadata', json.dumps(metadata), ex=settings.METADATA_CACHE_TIME)
+        r.set(
+            'metadata',
+            json.dumps(metadata),
+            ex=settings.METADATA_CACHE_TIME
+        )
         return Metadata(metadata)
 
     raise HawkException("Call to fetch metadata failed")
@@ -111,7 +115,10 @@ class Metadata:
 
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data['country_admin_areas']:
-            if admin_area['id'] == admin_area_id and admin_area['disabled_on'] == None:
+            if (
+                admin_area['id'] == admin_area_id
+                and admin_area['disabled_on'] is None
+            ):
                 return admin_area
 
     def get_admin_areas(self, admin_area_ids):
