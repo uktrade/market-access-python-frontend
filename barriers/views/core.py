@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.views.generic import TemplateView
 
 from .mixins import BarrierContextMixin
@@ -10,10 +11,64 @@ class Dashboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+
+        client = MarketAccessAPIClient()
+        user_data = client.get('whoami')
+        watchlists = user_data['user_profile']['watchList']['lists']
+        barriers = []
+        sort = self.request.GET.get('sort', '-modified_on')
+
+        if watchlists:
+            selected_watchlist = int(self.request.GET.get('list', 0))
+            watchlists[selected_watchlist]['is_current'] = True
+
+            filters = self.get_watchlist_params(
+                watchlists[selected_watchlist]
+            )
+            barriers = client.barriers.list(
+                ordering=sort,
+                **filters
+            )
+
         context_data.update({
             'page': 'dashboard',
+            'watchlists': watchlists,
+            'barriers': barriers,
+            'can_add_watchlist': (
+                len(watchlists) < settings.MAX_WATCHLIST_LENGTH,
+            )
+            'sort_field': sort.lstrip('-'),
+            'sort_descending': sort.startswith('-'),
         })
         return context_data
+
+    def get_watchlist_params(self, watchlist):
+        filter_map = {
+            'type': 'barrier_type',
+            'search': 'text',
+        }
+        filters = {
+            filter_map.get(name, name): value
+            for name, value in watchlist.get('filters').items()
+        }
+
+        region = filters.pop('region', [])
+        country = filters.pop('country', [])
+
+        if country or region:
+            filters['location'] = ",".join(country + region)
+
+        if filters.get('sector'):
+            filters['sector'] = ",".join(filters['sector'])
+
+        if 'createdBy' in filters:
+            created_by = filters.pop('createdBy')
+            if '1' in created_by:
+                filters['user'] = 1
+            elif '2' in created_by:
+                filters['team'] = 1
+
+        return filters
 
 
 class AddABarrier(TemplateView):

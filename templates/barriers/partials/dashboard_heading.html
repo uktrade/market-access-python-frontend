@@ -1,0 +1,66 @@
+<h1 class="govuk-heading-l">
+    <span class="govuk-caption-m">Market access barriers</span> Dashboard
+</h1>
+
+<a href="{% url 'barriers:dashboard' %}" role="button" class="dash-button">
+    <span class="dash-button__heading">Add a barrier</span>
+    <span class="dash-button__text">
+        Add a market access barrier that is emerging, ongoing or has been resolved.
+    </span>
+</a>
+
+<a href="{% url 'barriers:find_a_barrier' %}" role="button" class="dash-button">
+    <span class="dash-button__heading">Find a barrier</span>
+    <span class="dash-button__text">
+        You can search and filter all barriers.
+    </span>
+</a>
+
+<div class="dash-card">
+    <h2 class="dash-card__heading">
+        What are market access barriers?
+    </h2>
+    <p class="dash-card__text">
+        <a href="{% url 'barriers:dashboard' %}">Find out more</a> about the digital market access service.
+    </p>
+</div>
+
+<div class="page-tabs-container">
+    <ul class="page-tabs">
+        {% for watchlist in watchlists %}
+            {% if watchlist.is_current %}
+                <li class="page-tabs__tab page-tabs__tab--active">
+                    <span class="page-tabs__tab__text">{{ watchlist.name }}</span>
+                </li>
+            {% else %}
+                <li class="page-tabs__tab">
+                    <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?list={{ forloop.counter0 }}">{{ watchlist.name }}</a>
+                </li>
+            {% endif %}
+        {% empty %}
+            {% if 1 %}
+                <li class="page-tabs__tab page-tabs__tab--active">
+                    <span class="page-tabs__tab__text">My watch list</span>
+                </li>
+            {% else %}
+                <li class="page-tabs__tab">
+                    <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}">My watch list</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page == my_draft_barriers %}
+            <li class="page-tabs__tab page-tabs__tab--active">
+                <span class="page-tabs__tab__text">My draft barriers</span>
+            </li>
+        {% else %}
+            <li class="page-tabs__tab">
+                <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}">My draft barriers</a>
+            </li>
+        {% endif %}
+    </ul>
+
+    {% if canAddWatchList %}
+    <a class="page-tabs-add-watch-list" href="{% url 'barriers:barrier_detail' barrier.id %}"><span class="circle-icon">&#xFF0B</span> add watch list</a>
+    {% endif %}
+</div>

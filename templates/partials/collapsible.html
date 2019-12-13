@@ -1,0 +1,12 @@
+{% if items|length > 5 %}
+    <div class="collapsible-widget">
+        <div class="collapsible-widget__content--initial">
+            {{ items|slice:":3"|join:', ' }},
+        </div>
+        <div class="collapsible-widget__content--toggled">
+            {{ items|slice:"3:"|join:', ' }}
+        </div>
+    </div>
+{% else %}
+    {{ items|join:', ' }}
+{% endif %}

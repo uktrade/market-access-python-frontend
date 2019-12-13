@@ -26,7 +26,12 @@ class Barrier(APIModel):
         else:
             self.sectors = []
 
-        self.sector_names = [sector['name'] for sector in self.sectors]
+        if self.sectors:
+            self.sector_names = [
+                sector.get('name', "Unknown") for sector in self.sectors
+            ]
+        else:
+            self.sector_names = ["All sectors"]
         status_code = str(data['status']['id'])
         self.status = metadata.get_status(status_code)
         self.problem = {
@@ -58,11 +63,7 @@ class Barrier(APIModel):
             self.companies = data['companies']
 
         if self.export_country:
-            self.country = {
-                'id': self.export_country,
-                'name': metadata.get_country(self.export_country),
-            }
-
+            self.country = metadata.get_country(self.export_country)
             self.admin_area_ids = self.data['country_admin_areas']
 
             if self.admin_area_ids:
