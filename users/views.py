@@ -1,3 +1,4 @@
+import re
 from urllib.parse import urlencode
 import uuid
 
@@ -5,6 +6,8 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import RedirectView
+
+from .exceptions import SSOException
 
 import requests
 
@@ -42,9 +45,10 @@ class LoginCallback(RedirectView):
     which assumes the same domain for both addresses.
     """
     def get(self, request, *args, **kwargs):
-        state_id = request.session.get('oauth_state_id')
-        if not state_id:
+        if not request.session.get('oauth_state_id'):
             return HttpResponseRedirect(reverse('users:login'))
+
+        self.check_for_errors()
 
         response = requests.post(
             url=settings.SSO_TOKEN_URI,
@@ -75,3 +79,20 @@ class LoginCallback(RedirectView):
             del self.request.session['return_path']
             return url
         return reverse('barriers:dashboard')
+
+    def check_for_errors(self):
+        error = self.request.GET.get('error')
+        if error:
+            raise SSOException(f"Error with SSO: {error}")
+
+        state_id = self.request.session.get('oauth_state_id')
+        state = self.request.GET.get('state')
+        if state != state_id:
+            raise SSOException(f"state_id mismatch: {state} != {state_id}")
+
+        code = self.request.GET.get('code')
+        if len(code) > settings.OAUTH_PARAM_LENGTH:
+            raise SSOException(f"Code too long: {len(code)}")
+
+        if not re.match('^[a-zA-Z0-9-]+$', code):
+            raise SSOException(f"Invalid code: {code}")
