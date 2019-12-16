@@ -12,7 +12,7 @@ class Dashboard(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
 
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         user_data = client.get('whoami')
         watchlists = user_data['user_profile']['watchList']['lists']
         barriers = []
@@ -87,7 +87,7 @@ class FindABarrier(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barriers = client.barriers.list(
             ordering="-reported_on",
             limit=100,

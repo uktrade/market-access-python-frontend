@@ -23,6 +23,7 @@ class BarrierEditNote(BarrierContextMixin, APIFormMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['token'] = self.request.session.get('sso_token')
         kwargs['barrier_id'] = self.kwargs.get('barrier_id')
         kwargs['note_id'] = self.kwargs.get('note_id')
         return kwargs

@@ -14,7 +14,7 @@ class AddNoteForm(APIFormMixin, forms.Form):
     )
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.notes.create(
             barrier_id=self.id,
             text=self.cleaned_data['text']
@@ -25,12 +25,13 @@ class EditNoteForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
 
     def __init__(self, barrier_id, note_id, *args, **kwargs):
+        self.token = kwargs.pop('token')
         self.barrier_id = barrier_id
         self.note_id = note_id
         super().__init__(*args, **kwargs)
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.notes.update(
             id=self.note_id,
             text=self.cleaned_data['text']

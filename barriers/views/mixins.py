@@ -13,12 +13,12 @@ class BarrierContextMixin:
         return super().get(request, *args, **kwargs)
 
     def get_barrier(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barrier_id = self.kwargs.get('barrier_id')
         return client.barriers.get(id=barrier_id)
 
     def get_interactions(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barrier_id = self.kwargs.get('barrier_id')
         notes = client.interactions.list(barrier_id=barrier_id)
         history = client.barriers.get_history(barrier_id=barrier_id)
@@ -54,6 +54,7 @@ class APIFormMixin:
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update(self.kwargs)
+        kwargs['token'] = self.request.session.get('sso_token')
         return kwargs
 
     def form_valid(self, form):
@@ -69,7 +70,7 @@ class APIFormMixin:
 
 class APIBarrierFormMixin(APIFormMixin):
     def get_object(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barrier_id = self.kwargs.get('barrier_id')
         return client.barriers.get(id=barrier_id)
 

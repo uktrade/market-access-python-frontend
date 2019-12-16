@@ -17,13 +17,14 @@ class EditLocationForm(forms.Form):
     )
 
     def __init__(self, barrier_id, countries, admin_areas, *args, **kwargs):
+        self.token = kwargs.pop('token')
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
         self.fields['country'].choices = countries
         self.fields['admin_areas'].choices = admin_areas
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.barrier_id,
             export_country=self.cleaned_data['country'],

@@ -9,7 +9,7 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
     title = forms.CharField(label='Title', max_length=255)
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             barrier_title=self.cleaned_data['title']
@@ -23,7 +23,7 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
     )
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             product=self.cleaned_data['product']
@@ -39,7 +39,7 @@ class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
     )
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             problem_description=self.cleaned_data['description']
@@ -56,7 +56,7 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
     source = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             source=self.cleaned_data['source']
@@ -77,7 +77,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
     )
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             priority=self.cleaned_data['priority'],
@@ -98,7 +98,7 @@ class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
     )
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             eu_exit_related=self.cleaned_data['eu_exit_related']
@@ -117,7 +117,7 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
     )
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             problem_status=self.cleaned_data['problem_status']
@@ -131,7 +131,7 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
     )
 
     def save(self):
-        client = MarketAccessAPIClient()
+        client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             status=self.cleaned_data['status']

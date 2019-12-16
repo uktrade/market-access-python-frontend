@@ -32,10 +32,9 @@ class BarrierEditLocation(BarrierContextMixin, FormView):
         context_data = super().get_context_data(**kwargs)
         metadata = get_metadata()
         country_id = self.request.session['location']['country']
-        admin_area_ids = self.request.session['location'].get(
-            'admin_areas',
-            []
-        )
+        admin_area_ids = self.request.session['location'].get('admin_areas')
+        if admin_area_ids is None:
+            admin_area_ids = []
 
         context_data.update({
             'country': {
@@ -82,6 +81,7 @@ class BarrierEditLocation(BarrierContextMixin, FormView):
         kwargs['admin_areas'] = admin_area_choices
 
         kwargs['barrier_id'] = self.kwargs.get('barrier_id')
+        kwargs['token'] = self.request.session.get('sso_token')
         return kwargs
 
 

@@ -16,7 +16,7 @@ class MarketAccessAPIClient:
     def request(self, method, path, **kwargs):
         url = f'{settings.MARKET_ACCESS_API_URI}{path}'
         headers = {
-            'Authorization': "Bearer {self.token}",
+            'Authorization': f"Bearer {self.token}",
             'X-User-Agent': '',
             'X-Forwarded-For': '',
         }
