@@ -8,82 +8,42 @@ from interactions.models import HistoryItem, Interaction
 
 class MarketAccessAPIClient:
     def __init__(self, token=None, **kwargs):
+        self.token = token or settings.TRUSTED_USER_TOKEN
         self.barriers = BarriersResource(self)
         self.interactions = InteractionsResource(self)
         self.notes = NotesResource(self)
 
-        self._method = None
-        self.token = token or settings.TRUSTED_USER_TOKEN
-        self.use_cache = kwargs.get('use_cache', False)
-        for k in kwargs:
-            setattr(self, k, kwargs[k])
-
-    def get(self, url, params=None, extra_headers=None, fields=None):
-        url = self.get_url(url)
-
-        params = params or {}
-        if fields:
-            params['fields'] = fields
-        _headers = self.headers(extra_headers=extra_headers)
-        response = requests.get(url, headers=_headers, params=params)
-        response.raise_for_status()
-        return response.json()
-
-    def headers(self, extra_headers=None):
-        _headers = {
+    def request(self, method, path, **kwargs):
+        url = f'{settings.MARKET_ACCESS_API_URI}{path}'
+        headers = {
             'Authorization': "Bearer {self.token}",
             'X-User-Agent': '',
             'X-Forwarded-For': '',
         }
-        if extra_headers and isinstance(extra_headers, dict):
-            _headers.update(extra_headers)
-        return _headers
+        response = getattr(requests, method)(url, headers=headers, **kwargs)
+        response.raise_for_status()
+        return response.json()
 
-    def get_url(self, path):
-        """
-        Construct a full API url
-        """
-        return f'{settings.MARKET_ACCESS_API_URI}{path}'
+    def get(self, path, **kwargs):
+        return self.request('get', path, **kwargs)
 
-    def post(self, path, data=None, files=None, extra_headers=None):
-        _headers = self.headers(extra_headers=extra_headers)
-        data = data or {}
+    def post(self, path, **kwargs):
+        return self.request_with_results('post', path, **kwargs)
+
+    def patch(self, path, **kwargs):
+        return self.request_with_results('patch', path, **kwargs)
+
+    def put(self, path, **kwargs):
+        return self.request_with_results('put', path, **kwargs)
+
+    def request_with_results(self, method, path, **kwargs):
         try:
-            _url = self.get_url(path)
-            response = requests.post(
-                _url,
-                data=data,
-                headers=_headers,
-                files=files
-            )
-            response.raise_for_status()
+            response_data = self.request(method, path, **kwargs)
+            return self.get_results_from_response_data(response_data)
         except requests.exceptions.HTTPError as http_exception:
             raise APIException(http_exception)
-        response_data = response.json()
-        if response_data.get('response', {}).get('success'):
-            return response_data['response'].get(
-                'result',
-                response_data['response'].get('results')
-            )
-        else:
-            return response_data
 
-    def patch(self, path, data=None, files=None, extra_headers=None, json=None):
-        _headers = self.headers(extra_headers=extra_headers)
-        data = data or {}
-        try:
-            _url = self.get_url(path)
-            response = requests.patch(
-                _url,
-                data=data,
-                headers=_headers,
-                files=files,
-                json=json,
-            )
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as http_exception:
-            raise APIException(http_exception)
-        response_data = response.json()
+    def get_results_from_response_data(self, response_data):
         if response_data.get('response', {}).get('success'):
             return response_data['response'].get(
                 'result',
