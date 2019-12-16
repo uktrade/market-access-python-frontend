@@ -1,9 +1,9 @@
 <th class="standard-table__heading{% if sort_field == field %} standard-table__heading--active{% endif %}">
     {% if field %}
         {% if field == sort_field %}
-            <a href="?sort={% if not sort_descending %}-{% endif %}{{ field }}&list={{ request.GET.list }}" title="Sort by {{ text }} {% if not sort_descending %}descending{% else %}ascending{% endif %}" class="standard-table__heading__sorted-{% if sort_descending %}descending{% else %}ascending{% endif %}">{{ text }}</a>
+            <a href="?sort={% if not sort_descending %}-{% endif %}{{ field }}&list={{ request.GET.list|default:0 }}" title="Sort by {{ text }} {% if not sort_descending %}descending{% else %}ascending{% endif %}" class="standard-table__heading__sorted-{% if sort_descending %}descending{% else %}ascending{% endif %}">{{ text }}</a>
         {% else %}
-            <a href="?sort=-{{ field }}&list={{ request.GET.list }}" title="Sort by {{ text }} descending" class="standard-table__heading__sortable">{{ text }}</a>
+            <a href="?sort=-{{ field }}&list={{ request.GET.list|default:0 }}" title="Sort by {{ text }} descending" class="standard-table__heading__sortable">{{ text }}</a>
         {% endif %}
     {% else %}
         {{ text | safe }}
