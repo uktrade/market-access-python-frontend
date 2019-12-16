@@ -46,7 +46,7 @@ class BarrierEditLocation(BarrierContextMixin, FormView):
         return context_data
 
     def get_initial(self):
-        return self.request.session['location']
+        return self.request.session.get('location', {})
 
     def form_valid(self, form):
         form.save()
