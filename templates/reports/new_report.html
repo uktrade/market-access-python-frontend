@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add a barrier{% endblock %}
+
+{% block page_content %}
+
+    {% include 'heading.html' with caption='Market access barriers' text='Add a barrier' %}
+
+    <section class="restrict-width">
+
+        {% include 'partials/callout.html' with callout=callout %}
+
+        <div class="task-list">
+            <h2 class="task-list__section-heading">Add a barrier</h2>
+            <ul class="task-list__items">
+            {% for key, stage_name in stages.items %}
+                <li class="task-list__item">
+                    <span class="task-list__item__number">{{ forloop.counter }}</span>
+                    <span class="task-list__item__name">{{ stage_name }}</span>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+
+    </section>
+
+{% endblock %}

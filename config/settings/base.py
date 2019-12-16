@@ -84,6 +84,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'utils.context_processors.user_scope',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -167,6 +168,10 @@ MARKET_ACCESS_API_HAWK_ID = os.environ.get("MARKET_ACCESS_API_HAWK_ID")
 MARKET_ACCESS_API_HAWK_KEY = os.environ.get("MARKET_ACCESS_API_HAWK_KEY")
 
 MAX_WATCHLIST_LENGTH = 3
+
+SETTINGS_EXPORT = [
+    'DJANGO_ENV',
+]
 
 SSO_CLIENT = os.environ.get("SSO_CLIENT")
 SSO_SECRET = os.environ.get("SSO_SECRET")

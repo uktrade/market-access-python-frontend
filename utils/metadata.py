@@ -270,3 +270,17 @@ class Metadata:
 
     def get_services(self):
         return self.get_barrier_types_by_category("SERVICES")
+
+    def get_report_stages(self):
+        stages = self.data.get("report_stages", {})
+        # filter out "Add a barrier" as that's not a valid stage
+        exclude_stages = ("Add a barrier",)
+        remove_keys = []
+        for key, value in stages.items():
+            if value in exclude_stages:
+                remove_keys.append(key)
+
+        for key in remove_keys:
+            stages.pop(key)
+
+        return stages

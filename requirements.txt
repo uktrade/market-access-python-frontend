@@ -4,6 +4,7 @@ django-extensions==2.2.3
 django-compressor==2.3
 django-libsass==0.7
 django-sass-processor==0.7.5
+django-settings-export==1.2.1
 environ==1.0
 mohawk==1.1.0
 psycopg2-binary==2.8.4

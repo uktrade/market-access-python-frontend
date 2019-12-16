@@ -10,7 +10,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     {% compress css %}
-    <link type="text/x-scss" href="{% static 'css/main.scss' %}" rel="stylesheet" media="screen">
+        {% if settings.DJANGO_ENV == "local" %}
+            <link type="text/x-scss" href="{% static 'css/index.local.scss' %}" rel="stylesheet" media="screen">
+        {% else %}
+            <link type="text/x-scss" href="{% static 'css/index.scss' %}" rel="stylesheet" media="screen">
+        {% endif %}
     {% endcompress %}
 
     {% block headIcons %}
