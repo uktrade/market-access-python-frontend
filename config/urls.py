@@ -26,6 +26,7 @@ if settings.DJANGO_ENV == "local":
     ]
 
 urlpatterns += [
+    path("", include("users.urls", namespace="users")),
     path("", include("barriers.urls", namespace="barriers")),
     path("reports/", include("reports.urls", namespace="reports")),
     # path("documents/<uuid:uuid>/download/", DownloadDocument.as_view(), name="download_document"),

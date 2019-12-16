@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.SSOMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -150,3 +151,9 @@ MARKET_ACCESS_API_HAWK_ID = os.environ.get("MARKET_ACCESS_API_HAWK_ID")
 MARKET_ACCESS_API_HAWK_KEY = os.environ.get("MARKET_ACCESS_API_HAWK_KEY")
 
 MAX_WATCHLIST_LENGTH = 3
+
+SSO_CLIENT = os.environ.get("SSO_CLIENT")
+SSO_SECRET = os.environ.get("SSO_SECRET")
+SSO_AUTHORIZE_URI = os.environ.get("SSO_AUTHORIZE_URI")
+SSO_TOKEN_URI = os.environ.get("SSO_TOKEN_URI")
+SSO_MOCK_CODE = os.environ.get("SSO_MOCK_CODE")
