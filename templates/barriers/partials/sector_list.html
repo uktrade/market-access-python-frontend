@@ -1,0 +1,15 @@
+<ul class="selection-list__list">
+    {% for item in sectors %}
+        <li class="selection-list__list__item">
+            <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
+
+            {% if show_remove_links %}
+            <form action="{% url 'barriers:remove_sector' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="sector" value="{{ item.id }}">
+                <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+            </form>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

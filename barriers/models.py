@@ -84,6 +84,9 @@ class Barrier(APIModel):
             'source': self.data['source'],
         }
 
+    def get_sector_ids(self):
+        return [sector['id'] for sector in self.sectors]
+
     @property
     def is_resolved(self):
         return self.status == "RESOLVED"

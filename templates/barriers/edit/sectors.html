@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Sectors affected by the barrier{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+
+    {% include 'heading.html' with caption=barrier.barrier_title text='Sectors affected by the barrier' %}
+
+    <h3 class="report-sectors-heading">Save or add {% if sectors %}another{% else %}a{% endif %} sector</h3>
+
+    <div class="selection-list restrict-width">
+        <h3 class="selection-list__heading">Selected sectors</h3>
+        {% if sectors %}
+            {% include 'barriers/partials/sector_list.html' with sectors=sectors show_remove_links=True %}
+        {% elif all_sectors %}
+            <ul class="selection-list__list">
+                <li class="selection-list__list__item">
+                    <span class="selection-list__list__item__number" data-number="1"></span>All sectors
+                    <form action="{% url 'barriers:remove_sector' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="sector" value="">
+                        <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+                    </form>
+                </li>
+            </ul>
+        {% endif %}
+
+        <a href="{% url 'barriers:add_sectors' barrier.id %}" id="add-sector-button" class="govuk-button button--secondary selection-list__add-button">Add specific sectors</a>
+
+        {% if not all_sectors %}
+        <a href="{% url 'barriers:add_all_sectors' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Select all sectors</a>
+        {% endif %}
+    </div>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+    </form>
+{% endblock %}

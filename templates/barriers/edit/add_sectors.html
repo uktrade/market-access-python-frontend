@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier - Add an affected sector{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+
+    {% include 'heading.html' with caption=barrier.barrier_title text='Sectors affected by the barrier' %}
+
+    <form action="{{ href.form }}" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div class="govuk-form-group {% if form.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="sectors">Which sector is affected by the barrier?</label>
+
+            {% if form.errors %}
+                <span id="sectors-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>{{ form.errors }}
+                </span>
+            {% endif %}
+
+            <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="sectors" name="sector"{% if form.errors %} aria-describedby="sectors-error"{% endif %}>
+                {% for id, name in form.fields.sector.choices %}
+                <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if current_sectors %}
+            {% include 'barriers/partials/sector_list.html' with show_remove_links=False %}
+        {% endif %}
+
+        <input type="submit" value="Add sector" class="govuk-button">
+        <a class="form-cancel" href="{{ href.cancel }}">cancel</a>
+    </form>
+{% endblock %}

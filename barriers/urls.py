@@ -28,6 +28,13 @@ from .views.notes import (
     BarrierEditNote,
     BarrierDeleteNote,
 )
+from .views.sectors import (
+    BarrierAddAllSectors,
+    BarrierAddSectors,
+    BarrierEditSectors,
+    BarrierEditSectorsSession,
+    BarrierRemoveSector,
+)
 
 app_name = "barriers"
 
@@ -75,13 +82,11 @@ urlpatterns = [
     # path("barriers/<uuid:id>/types/new/", NewBarrierType.as_view(), name=""),
     # path("barriers/<uuid:id>/types/add/", AddBarrierType.as_view(), name=""),
 
-    # path("barriers/<uuid:id>/sectors/", BarrierSectors.as_view(), name=""),
-    # path("barriers/<uuid:id>/sectors/edit/", BarrierEditSectors.as_view(), name=""),
-    # path("barriers/<uuid:id>/sectors/remove/", RemoveBarrierSectors.as_view(), name=""),
-    # path("barriers/<uuid:id>/sectors/remove/all/", RemoveAllBarrierSectors.as_view(), name=""),
-    # path("barriers/<uuid:id>/sectors/add/", AddBarrierSectors.as_view(), name=""),
-    # path("barriers/<uuid:id>/sectors/add/all/", AddAllBarrierSectors.as_view(), name=""),
-    # path("barriers/<uuid:id>/sectors/new/", NewBarrierSectors.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/sectors/", BarrierEditSectorsSession.as_view(), name="edit_sectors_session"),
+    path("barriers/<uuid:barrier_id>/sectors/edit/", BarrierEditSectors.as_view(), name="edit_sectors"),
+    path("barriers/<uuid:barrier_id>/sectors/remove/", BarrierRemoveSector.as_view(), name="remove_sector"),
+    path("barriers/<uuid:barrier_id>/sectors/add/", BarrierAddSectors.as_view(), name="add_sectors"),
+    path("barriers/<uuid:barrier_id>/sectors/add/all/", BarrierAddAllSectors.as_view(), name="add_all_sectors"),
 
     # path("barriers/<uuid:id>/companies/", BarrierCompanyList.as_view(), name=""),
     # path("barriers/<uuid:id>/companies/new/", NewBarrierCompany.as_view(), name=""),

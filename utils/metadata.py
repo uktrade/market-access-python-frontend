@@ -136,6 +136,22 @@ class Metadata:
             if sector['id'] == sector_id:
                 return sector
 
+    def get_sectors_by_ids(self, sector_ids):
+        return [
+            sector
+            for sector in self.data.get('sectors', [])
+            if sector['id'] in sector_ids
+        ]
+
+    def get_sector_list(self, level=None):
+        if level is not None:
+            return [
+                sector
+                for sector in self.data['sectors']
+                if sector['level'] == level
+            ]
+        return self.data['sectors']
+
     def get_status(self, status_id):
         for id, name in self.data['barrier_status'].items():
             self.STATUS_INFO[id]['name'] = name
