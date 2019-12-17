@@ -11,24 +11,28 @@ class Dashboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        sort = self.request.GET.get('sort', '-modified_on')
+        watchlists = []
+        barriers = []
 
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         user_data = client.get('whoami')
-        watchlists = user_data['user_profile']['watchList']['lists']
-        barriers = []
-        sort = self.request.GET.get('sort', '-modified_on')
+        user_profile = user_data.get('user_profile', None)
 
-        if watchlists:
-            selected_watchlist = int(self.request.GET.get('list', 0))
-            watchlists[selected_watchlist]['is_current'] = True
+        if user_profile:
+            watchlists = user_profile.get('watchList', ())
+            if watchlists:
+                watchlists = watchlists['lists']
+                selected_watchlist = int(self.request.GET.get('list', 0))
+                watchlists[selected_watchlist]['is_current'] = True
 
-            filters = self.get_watchlist_params(
-                watchlists[selected_watchlist]
-            )
-            barriers = client.barriers.list(
-                ordering=sort,
-                **filters
-            )
+                filters = self.get_watchlist_params(
+                    watchlists[selected_watchlist]
+                )
+                barriers = client.barriers.list(
+                    ordering=sort,
+                    **filters
+                )
 
         context_data.update({
             'page': 'dashboard',
