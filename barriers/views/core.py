@@ -1,9 +1,11 @@
 from django.conf import settings
-from django.views.generic import TemplateView
+from django.views.generic import FormView, TemplateView
 
+from ..forms.search import BarrierSearchForm
 from .mixins import BarrierContextMixin
 
 from utils.api_client import MarketAccessAPIClient
+from utils.metadata import get_metadata
 
 
 class Dashboard(TemplateView):
@@ -86,16 +88,19 @@ class AddABarrier(TemplateView):
         return context_data
 
 
-class FindABarrier(TemplateView):
+class FindABarrier(FormView):
     template_name = "barriers/find_a_barrier.html"
+    form_class = BarrierSearchForm
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
+
         barriers = client.barriers.list(
             ordering="-reported_on",
             limit=100,
-            offset=0
+            offset=0,
+            **form.get_search_parameters(),
         )
 
         context_data.update({
@@ -103,6 +108,22 @@ class FindABarrier(TemplateView):
             'page': 'find-a-barrier',
         })
         return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['metadata'] = get_metadata()
+        kwargs['data'] = self.get_form_data()
+        return kwargs
+
+    def get_form_data(self):
+        data = dict(self.request.GET)
+        if 'search' in data:
+            data['search'] = self.request.GET.get('search', "")
+        return data
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class BarrierDetail(BarrierContextMixin, TemplateView):

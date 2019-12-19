@@ -1,0 +1,19 @@
+<div class="govuk-form-group filter-group">
+    <fieldset class="govuk-fieldset filter-group__inner">
+        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
+            {{ field.label }}
+        </legend>
+
+        <div class="checkbox-filter govuk-!-width-full{% if extra_classes %} {{ extra_classes }}{% endif %}">
+            {% for value, text in field.field.choices %}
+                <div class="checkbox-filter__item">
+                    <input class="checkbox-filter__input" id="{{ field.name }}-{{ forloop.counter }}" name="{{ field.name }}" type="checkbox" value="{{ value }}" {% if value in field.value %}checked="checked"{% endif %}>
+
+                    <label class="govuk-label checkbox-filter__label" for="{{ field.name }}-{{ forloop.counter }}">
+                      {{ text|safe }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+</div>

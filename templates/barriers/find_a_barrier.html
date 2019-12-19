@@ -21,140 +21,24 @@
                 <input type="hidden" name="editList" value="{{ editListIndex }}">
                 {% endif %}
 
-                {{ govukInput({
-                    label: {
-                        text: filters.search.label,
-                        classes: 'filter-items__label'
-                    },
-                    formGroup: {
-                        classes: 'filter-items-group'
-                    },
-                    id: 'search',
-                    name: 'search',
-                    value: filters.search.text
-                }) }}
+                <div class="govuk-form-group filter-items-group">
+                    <label class="govuk-label filter-items__label" for="search">
+                      {{ form.search.label }}
+                    </label>
 
-                {{ typeahead({
-                    id: 'country',
-                    name: 'country',
-                    classes: 'govuk-!-width-full',
-                    formGroup: {
-                        classes: 'filter-items-group'
-                    },
-                    fieldset: {
-                        legend: {
-                            text: filters.country.label,
-                            classes: 'filter-items__label'
-                        }
-                    },
-                    placeholder: 'Search locations',
-                    items: filters.country.items
-                }) }}
+                    <input class="govuk-input" id="search" name="search" type="text" value="{{ form.search.value }}">
+                </div>
 
-                {{ typeahead({
-                    id: 'sector',
-                    name: 'sector',
-                    classes: 'govuk-!-width-full',
-                    formGroup: {
-                        classes: 'filter-items-group'
-                    },
-                    fieldset: {
-                        legend: {
-                            text: filters.sector.label,
-                            classes: 'filter-items__label'
-                        }
-                    },
-                    placeholder: 'Search sector',
-                    items: filters.sector.items
-                }) }}
+                {% include 'partials/typeahead.html' with placeholder='Search locations' field=form.country %}
+                {% include 'partials/typeahead.html' with placeholder='Search sector' field=form.sector %}
+                {% include 'partials/typeahead.html' with placeholder='Search type' field=form.type %}
+                {% include 'partials/typeahead.html' with placeholder='Search regions' field=form.region extra_classes='js-filter' %}
+                {% include 'partials/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
+                {% include 'partials/checkbox_filter.html' with field=form.status %}
+                {% include 'partials/checkbox_filter.html' with field=form.created_by %}
 
-                {{ typeahead({
-                    id: 'type',
-                    name: 'type',
-                    classes: 'govuk-!-width-full ',
-                    formGroup: {
-                        classes: 'filter-items-group'
-                    },
-                    fieldset: {
-                        legend: {
-                            text: filters.type.label,
-                            classes: 'filter-items__label'
-                        }
-                    },
-                    placeholder: 'Search type',
-                    items: filters.type.items
-                }) }}
-
-                {{ typeahead({
-                    id: 'region',
-                    name: 'region',
-                    classes: 'govuk-!-width-full js-filter',
-                    formGroup: {
-                        classes: 'filter-items-group'
-                    },
-                    fieldset: {
-                        legend: {
-                            text: filters.region.label,
-                            classes: 'filter-items__label'
-                        }
-                    },
-                    placeholder: 'Search regions',
-                    items: filters.region.items
-                }) }}
-
-                {{ checkboxFilter({
-                    id: 'priority',
-                    name: 'priority',
-                    classes: 'govuk-!-width-full barrier-priority-filter',
-                    formGroup: {
-                        classes: 'filter-group'
-                    },
-                    fieldset: {
-                        classes: 'filter-group__inner',
-                        legend: {
-                            text: filters.priority.label,
-                            classes: "filter-items__label filter-group__label"
-                        }
-                    },
-                    items: filters.priority.items
-                })  }}
-
-                {{ checkboxFilter({
-                    id: 'status',
-                    name: 'status',
-                    classes: 'govuk-!-width-full',
-                    formGroup: {
-                        classes: 'filter-group'
-                    },
-                    fieldset: {
-                        classes: 'filter-group__inner',
-                        legend: {
-                            text: filters.status.label,
-                            classes: "filter-items__label filter-group__label"
-                        }
-                    },
-                    items: filters.status.items
-                })  }}
-
-                {{ checkboxFilter({
-                    id: 'user-filter',
-                    name: 'createdBy',
-                    classes: 'govuk-!-width-full',
-                    formGroup: {
-                        classes: 'filter-group'
-                    },
-                    fieldset: {
-                        classes: 'filter-group__inner',
-                        legend: {
-                            text: filters.createdBy.label,
-                            classes: "filter-items__label filter-group__label"
-                        }
-                    },
-                    items: filters.createdBy.items
-                })  }}
-
-                {% if hasFilters %}
-                <a class="filter-items__clear" href="{{ removeAllUrl }}">Remove all filters</a>
+                {% if form.data %}
+                <a class="filter-items__clear" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
                 {% endif %}
 
                 <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">

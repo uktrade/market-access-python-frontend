@@ -232,3 +232,11 @@ class Metadata:
         for barrier_type in self.data['barrier_types']:
             if barrier_type['id'] == type_id:
                 return barrier_type
+
+    def get_overseas_region_list(self):
+        return [
+            country['overseas_region']
+            for country in self.get_country_list()
+            if country['disabled_on'] is None
+            and country.get('overseas_region') is not None
+        ]
