@@ -74,6 +74,10 @@ pip-deptree: ## Output pip dependecy tree.
 	@echo "$$(tput setaf 0)$$(tput setab 2)  🌳  Pip Dependency Tree  🌳   $$(tput sgr 0)"
 	@docker-compose exec web bash -c "pip3.6 install pipdeptree && pipdeptree -fl"
 
+.PHONY: gen-secretkey
+gen-secretkey: ## Generates a secret key (using django's util function)
+	@docker-compose exec web bash -c "python3 tools/secret_keygen.py"
+
 
 # SSH COMMANDS (to debug via ssh)
 # ==================================================

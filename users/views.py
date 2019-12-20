@@ -1,15 +1,20 @@
+import logging
+
 import re
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit
 import uuid
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import RedirectView
 
-from .exceptions import SSOException
-
 import requests
+
+from utils.helpers import build_absolute_uri
+
+logger = logging.getLogger(__name__)
 
 
 class Login(RedirectView):
@@ -19,12 +24,11 @@ class Login(RedirectView):
         return super().get(request, *args, **kwargs)
 
     def get_redirect_url(self):
+        redirect_uri = build_absolute_uri(self.request, 'users:login_callback')
         params = {
             'response_type': 'code',
             'client_id': settings.SSO_CLIENT,
-            'redirect_uri': self.request.build_absolute_uri(
-                reverse('users:login_callback')
-            ),
+            'redirect_uri': redirect_uri,
             'state': self.state_id,
         }
         if settings.SSO_MOCK_CODE:
@@ -50,49 +54,51 @@ class LoginCallback(RedirectView):
 
         self.check_for_errors()
 
-        response = requests.post(
-            url=settings.SSO_TOKEN_URI,
-            json={
-                'code': request.GET.get('code'),
-                'grant_type': 'authorization_code',
-                'client_id': settings.SSO_CLIENT,
-                'client_secret': settings.SSO_SECRET,
-                'redirect_uri': request.build_absolute_uri(
-                    reverse('users:login_callback')
-                ),
-            },
-        )
-        response_data = response.json()
+        redirect_uri = build_absolute_uri(self.request, 'users:login_callback')
+        payload = {
+            'code': request.GET.get('code'),
+            'grant_type': 'authorization_code',
+            'client_id': settings.SSO_CLIENT,
+            'client_secret': settings.SSO_SECRET,
+            'redirect_uri': redirect_uri,
+        }
 
-        if response_data.get('access_token'):
-            request.session['sso_token'] = response_data['access_token']
-            del request.session['oauth_state_id']
-            return HttpResponseRedirect(self.get_redirect_url())
+        response = requests.post(url=settings.SSO_TOKEN_URI, data=payload)
+
+        if response.status_code == 200:
+            response_data = response.json()
+            access_token = response_data.get('access_token')
+            if access_token:
+                request.session['sso_token'] = access_token
+                del request.session['oauth_state_id']
+                return HttpResponseRedirect(self.get_redirect_url())
+            else:
+                raise PermissionDenied()
         else:
-            raise Exception("No access_token from SSO")
-
-        return super().get(request, *args, **kwargs)
+            error_msg = f"Status code: {response.status_code}, error: {response.text}"
+            raise PermissionDenied("No access_token from SSO: %s", error_msg)
 
     def get_redirect_url(self):
         url = self.request.session.get('return_path')
         if url:
             del self.request.session['return_path']
             return url
+
         return reverse('barriers:dashboard')
 
     def check_for_errors(self):
         error = self.request.GET.get('error')
         if error:
-            raise SSOException(f"Error with SSO: {error}")
+            raise PermissionDenied(f"Error with SSO: {error}")
 
         state_id = self.request.session.get('oauth_state_id')
         state = self.request.GET.get('state')
         if state != state_id:
-            raise SSOException(f"state_id mismatch: {state} != {state_id}")
+            raise PermissionDenied(f"state_id mismatch: {state} != {state_id}")
 
         code = self.request.GET.get('code')
         if len(code) > settings.OAUTH_PARAM_LENGTH:
-            raise SSOException(f"Code too long: {len(code)}")
+            raise PermissionDenied(f"Code too long: {len(code)}")
 
         if not re.match('^[a-zA-Z0-9-]+$', code):
-            raise SSOException(f"Invalid code: {code}")
+            raise PermissionDenied(f"Invalid code: {code}")
