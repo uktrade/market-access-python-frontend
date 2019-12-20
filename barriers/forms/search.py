@@ -66,7 +66,7 @@ class BarrierSearchForm(forms.Form):
 
     def set_barrier_type_choices(self):
         choices = [
-            (barrier_type['id'], barrier_type['title'])
+            (str(barrier_type['id']), barrier_type['title'])
             for barrier_type in self.metadata.data['barrier_types']
         ]
         choices = list(set(choices))
@@ -122,7 +122,7 @@ class BarrierSearchForm(forms.Form):
             data.remove("")
         return data
 
-    def get_search_parameters(self):
+    def get_api_search_parameters(self):
         params = {}
         if self.is_valid():
             params['text'] = self.cleaned_data['search']
@@ -131,7 +131,7 @@ class BarrierSearchForm(forms.Form):
                 + self.cleaned_data['region']
             )
             params['sector'] = ",".join(self.cleaned_data['sector'])
-            params['type'] = ",".join(self.cleaned_data['type'])
+            params['barrier_type'] = ",".join(self.cleaned_data['type'])
             params['priority'] = ",".join(self.cleaned_data['priority'])
             params['status'] = ",".join(self.cleaned_data['status'])
 

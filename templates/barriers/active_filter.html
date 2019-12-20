@@ -1,9 +1,9 @@
-{% if filter.active %}
+{% if filter.value %}
 <li class="active-filters__item">
-    <a href="{{ filter.removeUrl }}" class="active-filters__item__link" title="Remove {{ filter.label }} filter">
+    <a href="{% if filter.remove_url %}?{{ filter.remove_url }}{% else %}{% url 'barriers:find_a_barrier' %}{% endif %}" class="active-filters__item__link" title="Remove {{ filter.label }} filter">
         <h4 class="active-filter__heading">{{ filter.label }}:</h4>
         <p class="active-filter__text">
-            {{ filter.text }}
+            {{ filter.value|striptags }}
         </p>
     </a>
 </li>

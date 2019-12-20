@@ -26,7 +26,7 @@
                       {{ form.search.label }}
                     </label>
 
-                    <input class="govuk-input" id="search" name="search" type="text" value="{{ form.search.value }}">
+                    <input class="govuk-input" id="search" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
                 </div>
 
                 {% include 'partials/typeahead.html' with placeholder='Search locations' field=form.country %}
@@ -37,7 +37,7 @@
                 {% include 'partials/checkbox_filter.html' with field=form.status %}
                 {% include 'partials/checkbox_filter.html' with field=form.created_by %}
 
-                {% if form.data %}
+                {% if filters %}
                 <a class="filter-items__clear" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
                 {% endif %}
 
@@ -46,36 +46,24 @@
         </div>
         <div class="govuk-grid-column-three-quarters">
 
-            {% if filter.active %}
-            <li class="active-filters__item">
-                <a href="{{ filter.removeUrl }}" class="active-filters__item__link" title="Remove {{ filter.label }} filter">
-                    <h4 class="active-filter__heading">{{ filter.label }}:</h4>
-                    <p class="active-filter__text">
-                        {{ filter.text }}
-                    </p>
-                </a>
-            </li>
-            {% endif %}
-
             <div class="filter-results-header">
                 <h2 class="filter-results-title">{{ barriers|length }}<span class="filter-results-title__caption"> barrier{{ barriers|length|pluralize }}</span></h2>
 
-                {% if hasFilters %}
-
+                {% if filters %}
                     <h3 class="visually-hidden">Active filters:</h3>
                     <ul class="active-filters">
-                        {% include 'active_filter.html' with filter=filters.search %}
-                        {% include 'active_filter.html' with filter=filters.country %}
-                        {% include 'active_filter.html' with filter=filters.sector %}
-                        {% include 'active_filter.html' with filter=filters.type %}
-                        {% include 'active_filter.html' with filter=filters.region %}
-                        {% include 'active_filter.html' with filter=filters.priority %}
-                        {% include 'active_filter.html' with filter=filters.status %}
-                        {% include 'active_filter.html' with filter=filters.createdBy %}
+                        {% include 'barriers/active_filter.html' with filter=filters.search %}
+                        {% include 'barriers/active_filter.html' with filter=filters.country %}
+                        {% include 'barriers/active_filter.html' with filter=filters.sector %}
+                        {% include 'barriers/active_filter.html' with filter=filters.type %}
+                        {% include 'barriers/active_filter.html' with filter=filters.region %}
+                        {% include 'barriers/active_filter.html' with filter=filters.priority %}
+                        {% include 'barriers/active_filter.html' with filter=filters.status %}
+                        {% include 'barriers/active_filter.html' with filter=filters.created_by %}
                     </ul>
 
                     <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">
-                        <a class="filter-results-clear-link" href="{{ removeAllUrl }}">Remove all filters</a>
+                        <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
                         {% if showSaveButton %}
                             {# save watchlist url #}
                             <a href="" class="govuk-button govuk-button--watch-list">{% if isEdit %}Edit{% else %}Save{% endif %} watch list</a>
