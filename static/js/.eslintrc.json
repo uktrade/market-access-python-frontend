@@ -1,0 +1,11 @@
+{
+	"env": {
+		"browser": true,
+		"jasmine": true
+	},
+	"globals": {
+		"ma": true,
+		"jessie": false,
+		"bodyScrollLock": false
+	}
+}

@@ -57,6 +57,100 @@
       {% include 'footer.html' %}
     {% endblock %}
 
-    {% block bodyEnd %}{% endblock %}
+    {% block body_end %}
+      <!-- build:js(src) /public/js/vendor.min.js -->
+      <script src="{% static 'js/vendor/jessie.js' %}"></script>
+      <script src="{% static 'js/vendor/body-scroll-lock.js' %}"></script>
+      <!-- endbuild -->
+      <!-- build:js({src,node_modules/@uktrade}) /public/js/app.min.js -->
+      <script src="{% static 'datahub-header/component/header.js' %}"></script>
+      <script src="{% static 'js/ma.js' %}"></script>
+      <script src="{% static 'js/ma.CustomEvent.js' %}"></script>
+      <script src="{% static 'js/ma.xhr2.js' %}"></script>
+      <script src="{% static 'js/components/ConditionalRadioContent.js' %}"></script>
+      <script src="{% static 'js/components/FileUpload.js' %}"></script>
+      <script src="{% static 'js/components/Collapsible.js' %}"></script>
+      <script src="{% static 'js/components/TextArea.js' %}"></script>
+      <script src="{% static 'js/components/ToggleLinks.js' %}"></script>
+      <script src="{% static 'js/components/Toast.js' %}"></script>
+      <script src="{% static 'js/components/CharacterCount.js' %}"></script>
+      <script src="{% static 'js/components/Attachments.js' %}"></script>
+      <script src="{% static 'js/components/Modal.js' %}"></script>
+      <script src="{% static 'js/components/DeleteModal.js' %}"></script>
+      <script src="{% static 'js/components/ToggleBox.js' %}"></script>
+      <script src="{% static 'js/components/AttachmentForm.js' %}"></script>
+      <script src="{% static 'js/pages/index.js' %}"></script>
+      <script src="{% static 'js/pages/report/index.js' %}"></script>
+      <script src="{% static 'js/pages/report/is-resolved.js' %}"></script>
+      <script src="{% static 'js/pages/report/about-problem.js' %}"></script>
+      <script src="{% static 'js/pages/barrier/status.js' %}"></script>
+      <script src="{% static 'js/pages/barrier/type.js' %}"></script>
+      <script src="{% static 'js/pages/barrier/edit.js' %}"></script>
+      <script src="{% static 'js/pages/barrier/detail.js' %}"></script>
+      <script src="{% static 'js/pages/barrier/team.js' %}"></script>
+      <script src="{% static 'js/pages/barrier/assessment.js' %}"></script>
+      <script src="{% static 'js/pages/watch-list.js' %}"></script>
+      <!-- endbuild -->
+      <script>ma.init();</script>
+      {% block body_script %}{% endblock %}
+      {% if not user.internal and analytics.enabled and analytics.id %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics.id }}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '{{ analytics.id }}');
+        </script>
+      {% endif %}
+
+      {% if env.banner and env.name %}
+        <style>
+          .env-banner {
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 100%;
+            padding: 5px 15px;
+            background-color: red;
+            font-size: 24px;
+            text-align: center;
+            opacity: 0.95;
+            color: white;
+            padding-right: 30px;
+            z-index: 999;
+            box-sizing: border-box;
+          }
+
+          @media (min-width: 600px ){
+
+            .env-banner {
+              left: 10%;
+              width: 80%;
+            }
+          }
+
+          @media (min-width: 800px ){
+
+            .env-banner {
+              left: 20%;
+              width: 60%;
+            }
+          }
+
+          .env-banner__dismiss {
+            float: right;
+            color: white !important;
+            text-decoration: none;
+          }
+        </style>
+
+        <div class="env-banner">
+          <strong>{{ env.name | upper }}</strong> environment
+          <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss">X</a>
+        </div>
+      {% endif %}
+
+    {% endblock %}
   </body>
 </html>

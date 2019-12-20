@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block page_title %}{{ block.super }} - Find a barrier{% endblock %}
 
 {% block body_script %}
     <!-- build:js(src) /public/js/vue.min.js -->
-    <script src="/public/js/vue/vue-bundle.js"></script>
+    <script src="{% static 'js/vue/vue-bundle.js' %}"></script>
     <!-- endbuild -->
 {% endblock %}
 
