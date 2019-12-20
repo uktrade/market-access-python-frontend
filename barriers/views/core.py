@@ -16,27 +16,20 @@ class Dashboard(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         sort = self.request.GET.get('sort', '-modified_on')
-        watchlists = []
-        barriers = []
 
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         user_data = client.get('whoami')
-        user_profile = user_data.get('user_profile', None)
+        watchlists = user_data.get(
+            'user_profile', {}
+        ).get('watchList', {}).get('lists', [])
 
-        if user_profile:
-            watchlists = user_profile.get('watchList', ())
-            if watchlists:
-                watchlists = watchlists['lists']
-                selected_watchlist = int(self.request.GET.get('list', 0))
-                watchlists[selected_watchlist]['is_current'] = True
-
-                filters = self.get_watchlist_params(
-                    watchlists[selected_watchlist]
-                )
-                barriers = client.barriers.list(
-                    ordering=sort,
-                    **filters
-                )
+        if watchlists:
+            index = self.get_watchlist_index(max_index=len(watchlists))
+            watchlists[index]['is_current'] = True
+            filters = self.get_watchlist_params(watchlists[index])
+            barriers = client.barriers.list(ordering=sort, **filters)
+        else:
+            barriers = []
 
         context_data.update({
             'page': 'dashboard',
@@ -49,6 +42,20 @@ class Dashboard(TemplateView):
             'sort_descending': sort.startswith('-'),
         })
         return context_data
+
+    def get_watchlist_index(self, max_index):
+        """
+        Get list index from querystring and ensure it's a valid number
+        """
+        try:
+            list_index = int(self.request.GET.get('list', 0))
+        except ValueError:
+            return 0
+
+        if list_index not in range(0, max_index):
+            return 0
+
+        return list_index
 
     def get_watchlist_params(self, watchlist):
         filter_map = {
