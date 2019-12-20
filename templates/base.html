@@ -32,10 +32,7 @@
     {% block bodyStart %}{% endblock %}
 
     {% block skipLink %}
-      {{ govukSkipLink({
-        href: '#main-content',
-        text: 'Skip to main content'
-      }) }}
+      <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
     {% endblock %}
 
     {% block header %}
