@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier - Save or add another company{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=barrier.barrier_title text='Name of company affected' %}
+
+    <div class="restrict-width">
+
+        <h3 class="">Save or add another company</h3>
+
+        {% include 'barriers/partials/company_list.html' with show_remove_links=True show_add_button=True %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="govuk-button" value="Save and exit to barrier">
+        </form>
+    </div>
+
+{% endblock %}

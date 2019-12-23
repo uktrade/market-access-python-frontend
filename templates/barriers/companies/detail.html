@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier - Company details{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=barrier.barrier_title text='Name of company affected' %}
+
+    <section class="restrict-width">
+
+        <h2 class="govuk-heading-s">Company details</h2>
+
+        <dl class="details-list">
+            {% if company.name %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Registered name</dt>
+                <dd class="details-list__value">{{ company.name }}</dd>
+            </div>
+            {% endif %}
+            {% if company.company_number %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Companies House number</dt>
+                <dd class="details-list__value">{{ company.company_number }}</dd>
+            </div>
+            {% endif %}
+            {% if company.address %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Primary address</dt>
+                <dd class="details-list__value">{{ company.get_address_display }}</dd>
+            </div>
+            {% endif %}
+            {% if company.sector.name %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Sector</dt>
+                <dd class="details-list__value">{{ company.sector.name }}</dd>
+            </div>
+            {% endif %}
+            {% if company.created_on %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Incorporated on</dt>
+                <dd class="details-list__value">{{ company.created_on|date:"j F Y" }}</dd>
+            </div>
+            {% endif %}
+            {% if company.business_type.name %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Type</dt>
+                <dd class="details-list__value">{{ company.business_type.name }}</dd>
+            </div>
+            {% endif %}
+            {% if company.turnover_range.name %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Scale of company</dt>
+                <dd class="details-list__value">{{ company.turnover_range.name }}</dd>
+            </div>
+            {% endif %}
+            {% if company.employee_range.name %}
+            <div class="details-list__group">
+                <dt class="details-list__key">Number of employees</dt>
+                <dd class="details-list__value">{{ company.employee_range.name }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="company_id" value="{{ company.id }}">
+            <input type="submit" class="govuk-button" value="Add company">
+        </form>
+
+    </section>
+
+    <span class="govuk-heading-s">Or</span>
+
+    <a href="{% url 'barriers:search_company' barrier.id %}">Search again</a>
+
+{% endblock %}

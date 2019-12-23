@@ -5,9 +5,15 @@ from utils.api_client import MarketAccessAPIClient
 
 class BarrierContextMixin:
     include_interactions = True
+    _barrier = None
+
+    @property
+    def barrier(self):
+        if not self._barrier:
+            self._barrier = self.get_barrier()
+        return self._barrier
 
     def get(self, request, *args, **kwargs):
-        self.barrier = self.get_barrier()
         if self.include_interactions:
             self.interactions = self.get_interactions()
         return super().get(request, *args, **kwargs)

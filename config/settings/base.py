@@ -158,3 +158,9 @@ SSO_AUTHORIZE_URI = os.environ.get("SSO_AUTHORIZE_URI")
 SSO_TOKEN_URI = os.environ.get("SSO_TOKEN_URI")
 SSO_MOCK_CODE = os.environ.get("SSO_MOCK_CODE")
 OAUTH_PARAM_LENGTH = os.environ.get("OAUTH_PARAM_LENGTH", 75)
+
+ADD_COMPANY = os.environ.get("ADD_COMPANY", True)
+
+DATAHUB_URL = os.environ.get("DATAHUB_URL")
+DATAHUB_HAWK_ID = os.environ.get("DATAHUB_HAWK_ID", "")
+DATAHUB_HAWK_KEY = os.environ.get("DATAHUB_HAWK_KEY", "")

@@ -1,5 +1,12 @@
 from django.urls import path
 
+from .views.companies import (
+    BarrierEditCompanies,
+    BarrierEditCompaniesSession,
+    BarrierRemoveCompany,
+    BarrierSearchCompany,
+    CompanyDetail,
+)
 from .views.core import (
     AddABarrier,
     BarrierDetail,
@@ -88,12 +95,11 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/sectors/add/", BarrierAddSectors.as_view(), name="add_sectors"),
     path("barriers/<uuid:barrier_id>/sectors/add/all/", BarrierAddAllSectors.as_view(), name="add_all_sectors"),
 
-    # path("barriers/<uuid:id>/companies/", BarrierCompanyList.as_view(), name=""),
-    # path("barriers/<uuid:id>/companies/new/", NewBarrierCompany.as_view(), name=""),
-    # path("barriers/<uuid:id>/companies/edit/", EditBarrierCompany.as_view(), name=""),
-    # path("barriers/<uuid:id>/companies/remove/", RemoveBarrierCompany.as_view(), name=""),
-    # path("barriers/<uuid:id>/companies/search/", SearchBarrierCompany.as_view(), name=""),
-    # path("barriers/<uuid:id>/companies/<int:company_id>/", CompanyDetail.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/companies/", BarrierEditCompaniesSession.as_view(), name="edit_companies_session"),
+    path("barriers/<uuid:barrier_id>/companies/edit/", BarrierEditCompanies.as_view(), name="edit_companies"),
+    path("barriers/<uuid:barrier_id>/companies/search/", BarrierSearchCompany.as_view(), name="search_company"),
+    path("barriers/<uuid:barrier_id>/companies/remove/", BarrierRemoveCompany.as_view(), name="remove_company"),
+    path("barriers/<uuid:barrier_id>/companies/<uuid:company_id>/", CompanyDetail.as_view(), name="company_detail"),
 
     # path("barriers/<uuid:id>/team/", BarrierTeam.as_view(), name=""),
     # path("barriers/<uuid:id>/team/add/", AddBarrierTeam.as_view(), name=""),

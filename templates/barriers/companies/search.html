@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier - Add an affected company{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+
+    {% include 'heading.html' with caption=barrier.barrier_title text='Name of company affected' %}
+
+    <div class="restrict-width">
+
+        {% if companies.length %}
+            {% include 'barriers/partials/company_list.html' %}
+        {% endif %}
+
+        <form action="" method="POST" role="search" class="search-form">
+            {% csrf_token %}
+
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-!-font-size-19 govuk-!-font-weight-bold" for="company">
+                    Find details of the company affected
+                </label>
+
+                <span id="company-hint" class="govuk-hint">
+                    You can search by name, address or company number
+                </span>
+
+                {% if form.errors %}
+                    <span class="govuk-error-message">
+                      <span class="govuk-visually-hidden">Error:</span>
+                      {{ form.errors }}
+                    </span>
+                {% endif %}
+
+                <div class="search-form__input-group">
+                    <input
+                        class="govuk-input search-form__input{% if form.query.error %} govuk-input--error{% endif %}"
+                        id="company"
+                        name="query"
+                        type="text"
+                        value="{% if form.query.value %}{{ form.query.value }}{% endif %}"
+                        placeholder="Search for company"
+                        required
+                        {% if not form.query.value and not form.query.error %}autofocus{% endif %}
+                        aria-describedby="company-hint">
+                    <button type="submit" class="search-form__button govuk-button">Search</button>
+                </div>
+            </div>
+        </form>
+
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        {% if results %}
+            <h2 class="results-count">
+                <span class="results-count__number">{{ results.count }}</span>
+                companies match <span class="highlight">{{ query }}</span>
+            </h2>
+
+            <ul class="search-card-list">
+            {% for company in results.results %}
+                <li class="search-card">
+                    <a href="{% url 'barriers:company_detail' barrier.id company.id %}" class="search-card__link">
+                        {# TODO: | highlight( query ) #}
+                        <h3 class="search-card__heading">{{ company.name|safe }}</h3>
+                        <dl class="search-card__values">
+                            {% if company.company_number %}
+                            <dt class="search-card__values__key">Companies House number</dt>
+                            {# TODO: | highlight( query ) #}
+                            <dd class="search-card__values__value">{{ company.company_number|safe }}</dd>
+                            {% endif %}
+                            {% if company.headquarter_type %}
+                            <dt class="search-card__values__key">Type</dt>
+                            {# TODO: | highlight( query ) #}
+                            <dd class="search-card__values__value">{{ company.headquarter_type.name|safe }}</dd>
+                            {% endif %}
+                            <dt class="search-card__values__key">Sector</dt>
+                            {# TODO: | highlight( query ) #}
+                            <dd class="search-card__values__value">{{ company.sector.name|safe }}</dd>
+
+                            <dt class="search-card__values__key">Incorporated on</dt>
+                            <dd class="search-card__values__value">{{ company.created_on|date:"j F Y" }}</dd>
+
+                            <dt class="search-card__values__key">Primary address</dt>
+                            <dd class="search-card__values__value">
+                                {{ company.get_address_display }}
+                            </dd>
+                        </dl>
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
+
+        {% if results or error %} {# only show when the user has done a search #}
+            <div class="info-panel">
+                <h4 class="info-panel__heading">Can't find the company?</h4>
+                <p class="info-panel__text">
+                    If you can’t find the company or organisation you’re looking for, try a different search query, check the company’s website or any email correspondence that contains company registration details.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+

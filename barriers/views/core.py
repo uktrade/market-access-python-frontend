@@ -176,3 +176,8 @@ class FindABarrier(FormView):
 
 class BarrierDetail(BarrierContextMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['add_company'] = settings.ADD_COMPANY
+        return context_data
