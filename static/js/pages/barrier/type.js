@@ -5,7 +5,7 @@ ma.pages.barrier.type = (function( doc ){
 		if( !ma.components.ConditionalRadioContent ){ return; }
 
 		var container = '.barrier-type';
-		var inputName = 'barrierType';
+		var inputName = 'barrier_type';
 		var conditional;
 		var i = 0;
 

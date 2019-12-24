@@ -42,6 +42,12 @@ from .views.sectors import (
     BarrierEditSectorsSession,
     BarrierRemoveSector,
 )
+from .views.types import (
+    AddBarrierType,
+    BarrierEditTypes,
+    BarrierEditTypesSession,
+    BarrierRemoveType,
+)
 
 app_name = "barriers"
 
@@ -83,11 +89,10 @@ urlpatterns = [
 
     # path("barriers/<uuid:id>/status/", BarrierStatus.as_view(), name=""),
 
-    # path("barriers/<uuid:id>/types/", BarrierTypeList.as_view(), name=""),
-    # path("barriers/<uuid:id>/types/edit/", EditBarrierType.as_view(), name=""),
-    # path("barriers/<uuid:id>/types/remove/", RemoveBarrierType.as_view(), name=""),
-    # path("barriers/<uuid:id>/types/new/", NewBarrierType.as_view(), name=""),
-    # path("barriers/<uuid:id>/types/add/", AddBarrierType.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/types/", BarrierEditTypesSession.as_view(), name="edit_types_session"),
+    path("barriers/<uuid:barrier_id>/types/edit/", BarrierEditTypes.as_view(), name="edit_types"),
+    path("barriers/<uuid:barrier_id>/types/remove/", BarrierRemoveType.as_view(), name="remove_type"),
+    path("barriers/<uuid:barrier_id>/types/add/", AddBarrierType.as_view(), name="add_type"),
 
     path("barriers/<uuid:barrier_id>/sectors/", BarrierEditSectorsSession.as_view(), name="edit_sectors_session"),
     path("barriers/<uuid:barrier_id>/sectors/edit/", BarrierEditSectors.as_view(), name="edit_sectors"),

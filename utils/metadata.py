@@ -1,9 +1,9 @@
 import json
+from operator import itemgetter
 
 from utils.exceptions import HawkException
 
 from django.conf import settings
-
 from mohawk import Sender
 import redis
 import requests
@@ -228,9 +228,23 @@ class Metadata:
         }
         return assessment_names.get(assessment_code)
 
+    def get_barrier_type_list(self):
+        """
+        Dedupe and sort the barrier types
+        """
+        ids = []
+        unique_barrier_types = []
+        for barrier_type in self.data.get('barrier_types'):
+            if barrier_type['id'] not in ids:
+                unique_barrier_types.append(barrier_type)
+                ids.append(barrier_type['id'])
+
+        unique_barrier_types.sort(key=itemgetter('title'))
+        return unique_barrier_types
+
     def get_barrier_type(self, type_id):
         for barrier_type in self.data['barrier_types']:
-            if barrier_type['id'] == type_id:
+            if str(barrier_type['id']) == str(type_id):
                 return barrier_type
 
     def get_overseas_region_list(self):

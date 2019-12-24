@@ -114,22 +114,15 @@
 
             <dt class="summary-group__list__key">Barrier categories</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.type.category.name %}
-                    {% if barrier.is_resolved or barrier.is_hibernated %}
-                    <h4 class="summary-group__list__value__heading">{{ barrier.type.category.name }}:</h4>
-                    {% else %}
-                    <h3 class="summary-group__list__value__heading">{{ barrier.type.category.name }}:</h3>
-                    {% endif %}
-                {% endif %}
                 {% if barrier.types %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.types %}
-                        <li class="summary-group__list__value__list__item">{{ item.text }}</li>
+                        <li class="summary-group__list__value__list__item">{{ item.title }}</li>
                         {% endfor %}
                     </ul>
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:barrier_detail' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_types' barrier.id %}">Edit</a>
                 {% else %}
-                    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
+                    <a href="{% url 'barriers:add_type' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
                 {% endif %}
             </dd>
 
