@@ -40,10 +40,10 @@
     {% endblock %}
 
     {% block main %}
-      {% block outsideContent %}{% endblock %}
+      {% block outside_content %}{% endblock %}
       {% block masthead %}{% endblock %}
       <div class="govuk-width-container ma-container-full">
-        {% block beforeContent %}{% endblock %}
+        {% block before_content %}{% endblock %}
         <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
           {% block content %}{% block page_content %}{% endblock %}{% endblock %}
         </main>

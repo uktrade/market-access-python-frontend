@@ -47,6 +47,31 @@ class BarrierContextMixin:
         return context_data
 
 
+class TeamMembersContextMixin:
+    _team_members = None
+
+    def get_team_members(self):
+        if self._team_members is None:
+            client = MarketAccessAPIClient(
+                self.request.session.get('sso_token')
+            )
+            self._team_members = client.barriers.get_team_members(
+                barrier_id=self.kwargs.get('barrier_id')
+            ).get('results', [])
+
+        return self._team_members
+
+    def get_team_member(self, team_member_id):
+        for member in self.get_team_members():
+            if member['id'] == team_member_id:
+                return member
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['team_members'] = self.get_team_members()
+        return context_data
+
+
 class APIFormMixin:
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

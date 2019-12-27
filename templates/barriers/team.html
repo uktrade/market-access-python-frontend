@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier team - List of members{% endblock %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.barrier.team( {
+            toggleLinks: {
+                text: 'Update the barrier',
+                linkClass: 'js-barrier-summary-link'
+            }
+        } );
+    </script>
+{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/barrier_summary.html' %}
+    </div>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/barrier_tabs.html' with active='team' %}
+
+    {% include 'barriers/partials/team_list.html' %}
+
+    <a href="{% url 'barriers:search_team_member' barrier.id %}" class="govuk-button button--secondary">Add team member</a>
+
+{% endblock %}

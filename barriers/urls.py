@@ -42,6 +42,12 @@ from .views.sectors import (
     BarrierEditSectorsSession,
     BarrierRemoveSector,
 )
+from .views.teams import (
+    AddTeamMember,
+    BarrierTeam,
+    DeleteTeamMember,
+    SearchTeamMember,
+)
 from .views.types import (
     AddBarrierType,
     BarrierEditTypes,
@@ -106,10 +112,10 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/companies/remove/", BarrierRemoveCompany.as_view(), name="remove_company"),
     path("barriers/<uuid:barrier_id>/companies/<uuid:company_id>/", CompanyDetail.as_view(), name="company_detail"),
 
-    # path("barriers/<uuid:id>/team/", BarrierTeam.as_view(), name=""),
-    # path("barriers/<uuid:id>/team/add/", AddBarrierTeam.as_view(), name=""),
-    # path("barriers/<uuid:id>/team/add/search/", SearchBarrierTeam.as_view(), name=""),
-    # path("barriers/<uuid:id>/team/delete/<int:member_id>", DeleteTeamMember.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/team/", BarrierTeam.as_view(), name="team"),
+    path("barriers/<uuid:barrier_id>/team/add/", AddTeamMember.as_view(), name="add_team_member"),
+    path("barriers/<uuid:barrier_id>/team/add/search/", SearchTeamMember.as_view(), name="search_team_member"),
+    path("barriers/<uuid:barrier_id>/team/delete/<int:team_member_id>", DeleteTeamMember.as_view(), name="delete_team_member"),
 
     # path("barriers/<uuid:id>/assessment/", BarrierAssessment.as_view(), name=""),
     # path("barriers/<uuid:id>/assessment/economic/", EconomicAssessment.as_view(), name=""),

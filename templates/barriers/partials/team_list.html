@@ -1,0 +1,25 @@
+{% if team_members %}
+    <table class="standard-table standard-table--barrier-team">
+        <caption class="visually-hidden">List of team members for this barrier</caption>
+        <thead>
+            <tr class="standard-table__heading-row">
+                <th class="standard-table__heading">Name</th>
+                <th class="standard-table__heading">Contact details</th>
+                <th class="standard-table__heading">Role</th>
+                <th class="standard-table__heading">Action</th>
+            </tr>
+        </thead>
+        <tbody class="js-delete-modal-container">
+            {% for member in team_members %}
+                <tr class="standard-table__row">
+                    <td class="standard-table__cell">{{ member.user.full_name }}</td>
+                    <td class="standard-table__cell">{{ member.user.email|default:'---' }}</td>
+                    <td class="standard-table__cell">{{ member.role }}</td>
+                    <td class="standard-table__cell">
+                        {% if not member.default %}<a class="js-delete-modal" href="{% url 'barriers:delete_team_member' barrier.id member.id %}">Delete</a>{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

@@ -22,10 +22,10 @@ class MarketAccessAPIClient:
         }
         response = getattr(requests, method)(url, headers=headers, **kwargs)
         response.raise_for_status()
-        return response.json()
+        return response
 
     def get(self, path, **kwargs):
-        return self.request('get', path, **kwargs)
+        return self.request('get', path, **kwargs).json()
 
     def post(self, path, **kwargs):
         return self.request_with_results('post', path, **kwargs)
@@ -36,10 +36,13 @@ class MarketAccessAPIClient:
     def put(self, path, **kwargs):
         return self.request_with_results('put', path, **kwargs)
 
+    def delete(self, path, **kwargs):
+        return self.request('delete', path, **kwargs)
+
     def request_with_results(self, method, path, **kwargs):
         try:
-            response_data = self.request(method, path, **kwargs)
-            return self.get_results_from_response_data(response_data)
+            response = self.request(method, path, **kwargs)
+            return self.get_results_from_response_data(response.json())
         except requests.exceptions.HTTPError as http_exception:
             raise APIException(http_exception)
 
@@ -99,6 +102,26 @@ class BarriersResource(Resource):
             HistoryItem(result)
             for result in self.client.get(url, params=kwargs)['history']
         ]
+
+    def get_team_members(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/members"
+        return self.client.get(url, params=kwargs)
+
+    def add_team_member(self, barrier_id, user_id, role, **kwargs):
+        url = f"barriers/{barrier_id}/members"
+        data = {
+            'user': {
+                'profile': {
+                    'sso_user_id': user_id,
+                }
+            },
+            'role': role,
+        }
+        return self.client.post(url, json=data)
+
+    def delete_team_member(self, team_member_id, **kwargs):
+        url = f"barriers/members/{team_member_id}"
+        return self.client.delete(url, params=kwargs)
 
 
 class InteractionsResource(Resource):

@@ -1,0 +1,28 @@
+{% extends 'barriers/team.html' %}
+
+{% block outside_content %}
+    <div class="modal">
+        <div class="modal__content" role="alertdialog" tabindex="1" aria-describedby="modal-label">
+            <h3 class="modal__content__title" id="modal-label">Delete team member</h3>
+
+            <dl class="details-list">
+                <div class="details-list__group">
+                    <dt class="details-list__key">Name</dt>
+                    <dd class="details-list__value">{{ team_member.user.full_name }}</dd>
+                </div>
+                <div class="details-list__group">
+                    <dt class="details-list__key">Role</dt>
+                    <dd class="details-list__value">{{ team_member.role }}</dd>
+                </div>
+            </dl>
+
+            <p>Are you sure you want to delete this team member?</p>
+
+            <form action="{% url 'barriers:delete_team_member' barrier.id team_member.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Yes, delete" class="govuk-button" tabindex="2">
+                <a href="{% url 'barriers:team' barrier.id %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">No, cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

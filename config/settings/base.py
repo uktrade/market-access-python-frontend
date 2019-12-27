@@ -154,6 +154,7 @@ MAX_WATCHLIST_LENGTH = 3
 
 SSO_CLIENT = os.environ.get("SSO_CLIENT")
 SSO_SECRET = os.environ.get("SSO_SECRET")
+SSO_API_URI = os.environ.get("SSO_API_URI")
 SSO_AUTHORIZE_URI = os.environ.get("SSO_AUTHORIZE_URI")
 SSO_TOKEN_URI = os.environ.get("SSO_TOKEN_URI")
 SSO_MOCK_CODE = os.environ.get("SSO_MOCK_CODE")
