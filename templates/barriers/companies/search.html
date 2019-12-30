@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load highlight %}
+
 {% block page_title %}{{ block.super }} - Barrier - Add an affected company{% endblock %}
 
 {% block page_content %}
@@ -63,31 +65,27 @@
             {% for company in results.results %}
                 <li class="search-card">
                     <a href="{% url 'barriers:company_detail' barrier.id company.id %}" class="search-card__link">
-                        {# TODO: | highlight( query ) #}
-                        <h3 class="search-card__heading">{{ company.name|safe }}</h3>
+                        <h3 class="search-card__heading">{{ company.name|highlight:form.query.value }}</h3>
                         <dl class="search-card__values">
                             {% if company.company_number %}
                             <dt class="search-card__values__key">Companies House number</dt>
-                            {# TODO: | highlight( query ) #}
-                            <dd class="search-card__values__value">{{ company.company_number|safe }}</dd>
+                            <dd class="search-card__values__value">{{ company.company_number|highlight:form.query.value }}</dd>
                             {% endif %}
                             {% if company.headquarter_type %}
                             <dt class="search-card__values__key">Type</dt>
-                            {# TODO: | highlight( query ) #}
-                            <dd class="search-card__values__value">{{ company.headquarter_type.name|safe }}</dd>
+                            <dd class="search-card__values__value">{{ company.headquarter_type.name|highlight:form.query.value }}</dd>
                             {% endif %}
                             <dt class="search-card__values__key">Sector</dt>
-                            {# TODO: | highlight( query ) #}
-                            <dd class="search-card__values__value">{{ company.sector.name|safe }}</dd>
+                            <dd class="search-card__values__value">{{ company.sector.name|highlight:form.query.value }}</dd>
 
                             <dt class="search-card__values__key">Incorporated on</dt>
                             <dd class="search-card__values__value">{{ company.created_on|date:"j F Y" }}</dd>
 
                             <dt class="search-card__values__key">Primary address</dt>
                             <dd class="search-card__values__value">
-                                {{ company.get_address_display }}
+                                {{ company.get_address_display|highlight:form.query.value }}
                             </dd>
-                        </dl>
+                        </dl
                     </a>
                 </li>
             {% endfor %}

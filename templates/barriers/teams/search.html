@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load highlight %}
+
 {% block page_title %}{{ block.super }} - Barrier team - Find user{% endblock %}
 
 {% block page_content %}
@@ -57,7 +59,7 @@
                     <li class="search-card">
                         <a href="{% url 'barriers:add_team_member' barrier.id %}?user={{ user.user_id }}#role" class="search-card__link">
                             {# TODO: highlight query #}
-                            <h3 class="search-card__heading">{{ user.first_name }} {{ user.last_name }}</h3>
+                            <h3 class="search-card__heading">{{ user.first_name|highlight:form.query.value }} {{ user.last_name|highlight:form.query.value }}</h3>
                         </a>
                     </li>
                 {% endfor %}
