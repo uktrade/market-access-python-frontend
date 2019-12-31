@@ -14,7 +14,7 @@ def get_metadata():
         host=settings.REDIS_SERVER,
         port=settings.REDIS_PORT,
         db=settings.REDIS_DB,
-        health_check_interval=10
+        # health_check_interval=10
     )
 
     metadata = r.get('metadata')
