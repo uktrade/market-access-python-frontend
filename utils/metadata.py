@@ -9,15 +9,11 @@ import redis
 import requests
 
 
-def get_metadata():
-    r = redis.Redis(
-        host=settings.REDIS_SERVER,
-        port=settings.REDIS_PORT,
-        db=settings.REDIS_DB,
-        # health_check_interval=10
-    )
+redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
 
-    metadata = r.get('metadata')
+
+def get_metadata():
+    metadata = redis_client.get('metadata')
     if metadata:
         return Metadata(json.loads(metadata))
 
@@ -46,7 +42,7 @@ def get_metadata():
 
     if response.ok:
         metadata = response.json()
-        r.set(
+        redis_client.set(
             'metadata',
             json.dumps(metadata),
             ex=settings.METADATA_CACHE_TIME

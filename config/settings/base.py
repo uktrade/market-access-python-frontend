@@ -154,14 +154,12 @@ METADATA_CACHE_TIME = "10600"
 
 # CACHE / REDIS
 # Try to read from PaaS service env vars first
-if "redis" in VCAP_SERVICES:
-    REDIS_SERVER = VCAP_SERVICES["redis"][0]["credentials"]["host"]
-    REDIS_PORT = VCAP_SERVICES["redis"][0]["credentials"]["port"]
-else:
-    REDIS_SERVER = os.environ.get("REDIS_HOST")
-    REDIS_PORT = os.environ.get("REDIS_PORT")
-
 REDIS_DB = os.environ.get("REDIS_DB", 4)
+if "redis" in VCAP_SERVICES:
+    REDIS_URI = VCAP_SERVICES["redis"][0]["credentials"]["uri"]
+else:
+    REDIS_URI = os.environ.get("REDIS_URI")
+REDIS_URI = f"{REDIS_URI}/{REDIS_DB}"
 
 # Market access API
 MARKET_ACCESS_API_URI = os.environ.get("MARKET_ACCESS_API_URI", "unset")
