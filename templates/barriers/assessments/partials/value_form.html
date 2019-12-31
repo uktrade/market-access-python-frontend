@@ -1,0 +1,30 @@
+<form action="" method="POST" class="restrict-width">
+    {% csrf_token %}
+
+    <div class="govuk-form-group">
+        <label class="govuk-label govuk-label--s" for="value">
+            {{ form.value.label }}
+        </label>
+
+        <span id="value-hint" class="govuk-hint">
+            {{ form.value.help_text }}
+        </span>
+
+        {% if form.value.errors %}
+            <span id="value-error" class="govuk-error-message">
+                {{ form.value.errors.as_text }}
+            </span>
+        {% endif %}
+
+        <div class="currency-input">
+            <span class="currency-input__prefix" title="GBP">&pound;</span>
+            <div class="currency-input__value">
+                <input class="currency-input__value__input govuk-input govuk-input--currency" id="value" name="value" type="text" aria-describedby="value-hint" required {% if form.value.value %}value="{{ form.value.value }}"{% endif %}>
+            </div>
+        </div>
+    </div>
+
+    {% include 'barriers/partials/analyst_warning.html' %}
+
+    <input type="submit" value="Save and exit to barrier" class="govuk-button">
+</form>

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier Assessment - Import market size{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=barrier.barrier_title text='Import Market Size' %}
+
+    {% include 'barriers/assessments/partials/value_form.html' %}
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier Assessment - UK economy value{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=barrier.barrier_title text='Value to UK Economy' %}
+
+    {% include 'barriers/assessments/partials/value_form.html' %}
+
+{% endblock %}

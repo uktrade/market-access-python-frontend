@@ -254,3 +254,6 @@ class Metadata:
             if country['disabled_on'] is None
             and country.get('overseas_region') is not None
         ]
+
+    def get_impact_text(self, impact_code):
+        return self.data.get('assessment_impact', {}).get(impact_code)

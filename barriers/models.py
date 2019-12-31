@@ -127,3 +127,10 @@ class Company(APIModel):
         ]
         address_parts = [part for part in address_parts if part]
         return ", ".join(address_parts)
+
+
+class Assessment(APIModel):
+    def __init__(self, data):
+        self.data = data
+        metadata = get_metadata()
+        self.impact_text = metadata.get_impact_text(self.data.get('impact'))

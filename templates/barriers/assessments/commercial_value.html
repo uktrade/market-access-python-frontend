@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier Assessment - Commercial value{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=barrier.barrier_title text='Commercial value' %}
+
+    {% include 'barriers/assessments/partials/value_form.html' %}
+
+{% endblock %}

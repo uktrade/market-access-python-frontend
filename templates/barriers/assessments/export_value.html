@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Barrier Assessment - Affected UK exports{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=barrier.barrier_title text='Value of currently affected UK exports' %}
+
+    {% include 'barriers/assessments/partials/value_form.html' %}
+
+{% endblock %}

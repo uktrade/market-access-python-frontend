@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}{{ block.super }} - Barrier Assessment - Economic assessment{% endblock %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.barrier.assessment();
+    </script>
+{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors, back #}
+
+    {% include 'heading.html' with caption=barrier.barrier_title text='Economic assessment' %}
+
+    <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_assessment_document' barrier.id %}" data-xhr-delete="{% url 'barriers:delete_assessment_document' barrier.id 1 %}">
+
+        {% csrf_token %}
+
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                    What is the economic impact of the barrier?
+                </legend>
+
+                {% if form.impact.errors %}
+                    <span class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span>
+                        {{ form.impact.errors }}
+                    </span>
+                {% endif %}
+
+                <div class="govuk-radios">
+                    {% for value, name in form.fields.impact.choices %}
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="impact-{{ forloop.counter }}" name="impact" type="radio" value="{{ value }}" {% if form.impact.value == value %}checked="checked"{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="impact-{{ forloop.counter }}">{{ name }}</label>
+                    </div>
+                    {% endfor %}
+              </div>
+            </fieldset>
+        </div>
+
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-label--s" for="description">
+                Explain the assessment
+            </label>
+
+            {% if form.description.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>
+                    {{ form.description.errors }}
+                </span>
+            {% endif %}
+
+            <textarea class="govuk-textarea" id="description" name="description" rows="5">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+        </div>
+
+        <h3 class="govuk-label--s">Add supporting documents (optional)</h3>
+
+        <div class="govuk-form-group file-upload js-form-group">
+            <label class="govuk-label visually-hidden" for="document">Attach a document</label>
+
+            {% if form.document.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>
+                    {{ form.document.errors }}
+                </span>
+            {% endif %}
+
+            <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
+            (file size limit <strong>5 MB</strong>)
+            </span>
+
+            <input class="govuk-file-upload file-upload__input js-file-input" id="document" name="document" type="file" aria-describedby="document-hint">
+        </div>
+
+        {% include 'barriers/partials/analyst_warning.html' %}
+
+        <input type="submit" value="Save and exit to barrier" class="govuk-button js-submit-button">
+    </form>
+{% endblock %}

@@ -1,5 +1,15 @@
 from django.urls import path
 
+from .views.assessments import (
+    AddAssessmentDocument,
+    AssessmentDetail,
+    CommercialValueAssessment,
+    DeleteAssessmentDocument,
+    EconomicAssessment,
+    EconomyValueAssessment,
+    ExportValueAssessment,
+    MarketSizeAssessment,
+)
 from .views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
@@ -79,13 +89,13 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/interactions/edit-note/<int:note_id>/", BarrierEditNote.as_view(), name="edit_note"),
     path("barriers/<uuid:barrier_id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
 
-    # path("barriers/<uuid:id>/interactions/documents/add/", AddDocument.as_view(), name=""),
-    # path("barriers/<uuid:id>/interactions/documents/cancel/", CancelDocument.as_view(), name=""),
-    # path("barriers/<uuid:id>/interactions/documents/<int:document_id>/delete/", DeleteDocument.as_view(), name=""),
+    # path("barriers/<uuid:barrier_id>/interactions/documents/add/", AddDocument.as_view(), name=""),
+    # path("barriers/<uuid:barrier_id>/interactions/documents/cancel/", CancelDocument.as_view(), name=""),
+    # path("barriers/<uuid:barrier_id>/interactions/documents/<int:document_id>/delete/", DeleteDocument.as_view(), name=""),
 
-    # path("barriers/<uuid:id>/interactions/notes/<int:note_id>/documents/add/", AddNoteDocument.as_view(), name=""),
-    # path("barriers/<uuid:id>/interactions/notes/<int:note_id>/documents/cancel/", CancelNoteDocument.as_view(), name=""),
-    # path("barriers/<uuid:id>/interactions/notes/<int:note_id>/documents/<int:document_id>/delete/", DeleteNoteDocument.as_view(), name=""),
+    # path("barriers/<uuid:barrier_id>/interactions/notes/<int:note_id>/documents/add/", AddNoteDocument.as_view(), name=""),
+    # path("barriers/<uuid:barrier_id>/interactions/notes/<int:note_id>/documents/cancel/", CancelNoteDocument.as_view(), name=""),
+    # path("barriers/<uuid:barrier_id>/interactions/notes/<int:note_id>/documents/<int:document_id>/delete/", DeleteNoteDocument.as_view(), name=""),
 
     path("barriers/<uuid:barrier_id>/location/", BarrierEditLocationSession.as_view(), name="edit_location_session"),
     path("barriers/<uuid:barrier_id>/location/edit/", BarrierEditLocation.as_view(), name="edit_location"),
@@ -93,7 +103,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/location/add-admin-area/", AddAdminArea.as_view(), name="add_admin_area"),
     path("barriers/<uuid:barrier_id>/location/remove-admin-area/", RemoveAdminArea.as_view(), name="remove_admin_area"),
 
-    # path("barriers/<uuid:id>/status/", BarrierStatus.as_view(), name=""),
+    # path("barriers/<uuid:barrier_id>/status/", BarrierStatus.as_view(), name=""),
 
     path("barriers/<uuid:barrier_id>/types/", BarrierEditTypesSession.as_view(), name="edit_types_session"),
     path("barriers/<uuid:barrier_id>/types/edit/", BarrierEditTypes.as_view(), name="edit_types"),
@@ -117,14 +127,14 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/team/add/search/", SearchTeamMember.as_view(), name="search_team_member"),
     path("barriers/<uuid:barrier_id>/team/delete/<int:team_member_id>", DeleteTeamMember.as_view(), name="delete_team_member"),
 
-    # path("barriers/<uuid:id>/assessment/", BarrierAssessment.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/economic/", EconomicAssessment.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/economic/new/", NewEconomicAssessment.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/economy-value/", EconomyValueAssessment.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/market-size/", MarketSizeAssessment.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/export-value/", ExportValueAssessment.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/commercial-value/", CommercialValueAssessment.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/documents/add/", AddAssessmentDocument.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name=""),
-    # path("barriers/<uuid:id>/assessment/documents/<int:document_id>/delete/", DeleteAssessmentDocument.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/assessment/", AssessmentDetail.as_view(), name="assessment_detail"),
+    path("barriers/<uuid:barrier_id>/assessment/economic/", EconomicAssessment.as_view(), name="economic_assessment"),
+    # path("barriers/<uuid:barrier_id>/assessment/economic/new/", NewEconomicAssessment.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/assessment/economy-value/", EconomyValueAssessment.as_view(), name="economy_value_assessment"),
+    path("barriers/<uuid:barrier_id>/assessment/market-size/", MarketSizeAssessment.as_view(), name="market_size_assessment"),
+    path("barriers/<uuid:barrier_id>/assessment/export-value/", ExportValueAssessment.as_view(), name="export_value_assessment"),
+    path("barriers/<uuid:barrier_id>/assessment/commercial-value/", CommercialValueAssessment.as_view(), name="commercial_value_assessment"),
+    path("barriers/<uuid:barrier_id>/assessment/documents/add/", AddAssessmentDocument.as_view(), name="add_assessment_document"),
+    # path("barriers/<uuid:barrier_id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/assessment/documents/<int:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
 ]

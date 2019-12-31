@@ -2,7 +2,7 @@ import requests
 
 from django.conf import settings
 
-from barriers.models import Barrier
+from barriers.models import Assessment, Barrier
 from interactions.models import HistoryItem, Interaction
 
 
@@ -122,6 +122,18 @@ class BarriersResource(Resource):
     def delete_team_member(self, team_member_id, **kwargs):
         url = f"barriers/members/{team_member_id}"
         return self.client.delete(url, params=kwargs)
+
+    def get_assessment(self, barrier_id):
+        url = f"barriers/{barrier_id}/assessment"
+        return Assessment(self.client.get(url))
+
+    def create_assessment(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/assessment"
+        return self.client.post(url, json=kwargs)
+
+    def update_assessment(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/assessment"
+        return self.client.patch(url, json=kwargs)
 
 
 class InteractionsResource(Resource):
