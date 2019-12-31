@@ -36,7 +36,8 @@ def get_metadata():
         url,
         verify=not settings.DEBUG,
         headers={
-            'Authorization': sender.request_header
+            'Authorization': sender.request_header,
+            'Content-Type': 'text/plain',
         }
     )
 
