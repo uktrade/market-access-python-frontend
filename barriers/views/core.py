@@ -194,3 +194,14 @@ class BarrierDetail(BarrierContextMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data['add_company'] = settings.ADD_COMPANY
         return context_data
+
+
+class WhatIsABarrier(TemplateView):
+    template_name = "barriers/what_is_a_barrier.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        metadata = get_metadata()
+        context_data['goods'] = metadata.get_goods()
+        context_data['services'] = metadata.get_services()
+        return context_data

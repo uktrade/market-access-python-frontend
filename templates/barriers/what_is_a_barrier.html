@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - What is a barrier{% endblock %}
+
+{% block page_content %}
+
+    {% include 'heading.html' with caption="Market access barriers" text="About the Digital Market Access Service" %}
+
+    <div class="restrict-width">
+
+        <p>
+            Read about different types of barriers and why it's important to report them.
+
+            <ol class="paragraph-list">
+                <li class="paragraph-list__item"><a href="#help-work">How using this digital service helps your work</a></li>
+                <li class="paragraph-list__item"><a href="#help-business">How market access work helps UK businesses</a></li>
+                <li class="paragraph-list__item"><a href="#what">What are market access barriers</a></li>
+                <li class="paragraph-list__item"><a href="#goods-barriers">Categories of goods barriers</a></li>
+                <li class="paragraph-list__item"><a href="#service-barriers">Categories of service barriers</a></li>
+            </ol>
+        </p>
+
+        <h2 class="barrier-type-section-heading" id="help-work">
+            How using this digital service helps your work
+        </h2>
+
+        <p>When you enter details of market access barriers, you're enabling colleagues across government in the UK and overseas to work together more effectively to resolve them. You're also helping to create a worldwide knowledge base.</p>
+        <p>You can view barriers created by other colleagues across government. You can see all barriers in all regions, or filter for the regions or barrier types you’re interested in and can create watch lists so you’re automatically shown barriers you're interested in.</p>
+        <p>The information you enter can only be seen by government colleagues. You should enter as much detail as you can.</p>
+        <p>When contributing to a barrier that you did not create, add yourself to the barrier team so colleagues know your role and can contact you if needed.</p>
+        <p>Questions on this system should be directed to the Bilateral Trade Relations Team in DIT, who coordinate this work centrally.</p>
+
+
+        <h2 class="barrier-type-section-heading" id="help-business">
+            How market access work helps UK businesses
+        </h2>
+
+        <p>
+            Market access barriers are a significant impediment to global trade and investment and this work has the potential to value of billions of pounds to the UK economy. Removing market access barriers can enable greater exports and investment overseas as new opportunities are created. Opening markets should provide dividends for UK businesses – otherwise we are targeting the wrong barriers.
+        </p>
+
+        <h2 class="barrier-type-section-heading" id="what">
+            What are market access barriers
+        </h2>
+        <p>
+            Market access barriers are problems that delay or obstruct UK businesses trading and investing overseas.
+            Barriers can take the form of tariffs or non-tariff barriers and ODI restrictions, such as having to train and use local workers. They can affect goods, services or investments.
+            There are 2 types of market access barriers – short term and long term.
+        </p>
+
+        <div class="barrier-type-card">
+            <h3 class="barrier-type-card__heading">
+                Short-term barriers
+            </h3>
+
+            <p class='barrier-type-card__text'>
+                Also called procedural barriers, these short-term problems are often relatively easy to resolve. For example, goods stuck in customs because of incorrect documents.
+            </p>
+            <p class='barrier-type-card__text'>
+                Even though these barriers are short term, they could point to a bigger underlying problem, which is why it’s still important to log them in this system.
+            </p>
+        </div>
+
+        <div class="barrier-type-card">
+            <h3 class="barrier-type-card__heading">
+                Long-term barriers
+            </h3>
+
+            <p class='barrier-type-card__text'>
+                Also called strategic barriers, these problems usually cannot be fixed without a change of regulation or broader change to the business environment. For example, a ban on British products due to food safety regulations.
+            </p>
+            <p class='barrier-type-card__text'>
+                Resolving these types of barriers might mean engagement with local, national or UK government. If a barrier breaks World Trade Organisation (WTO) rules or other agreements, resolution can be sought through the appropriate channels available under each agreement.
+            </p>
+        </div>
+
+        <h2 class="visually-hidden">Barrier categories</h2>
+
+        <h3 class="barrier-type-section-heading" id="goods-barriers">
+            Categories of goods barriers
+        </h3>
+
+        <div class="barrier-type-group">
+            {% for item in goods %}
+                <h4>{{ item.title }}</h4>
+                {{ item.description|safe }}
+            {% endfor %}
+        </div>
+
+        <h3 class="barrier-type-section-heading" id="service-barriers">
+            Categories of service barriers
+        </h3>
+
+        <div class="barrier-type-group">
+            {% for item in services %}
+                <h4>{{ item.title }}</h4>
+                {{ item.description|safe }}
+            {% endfor %}
+        </div>
+
+        <a class="barrier-type-section-link" href="{% url 'barriers:dashboard' %}">View your dashboard</a>
+    </div>
+
+{% endblock %}

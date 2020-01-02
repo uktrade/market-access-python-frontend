@@ -226,7 +226,7 @@ class Metadata:
         }
         return assessment_names.get(assessment_code)
 
-    def get_barrier_type_list(self):
+    def get_barrier_type_list(self, sort=True):
         """
         Dedupe and sort the barrier types
         """
@@ -237,7 +237,8 @@ class Metadata:
                 unique_barrier_types.append(barrier_type)
                 ids.append(barrier_type['id'])
 
-        unique_barrier_types.sort(key=itemgetter('title'))
+        if sort:
+            unique_barrier_types.sort(key=itemgetter('title'))
         return unique_barrier_types
 
     def get_barrier_type(self, type_id):
@@ -255,3 +256,16 @@ class Metadata:
 
     def get_impact_text(self, impact_code):
         return self.data.get('assessment_impact', {}).get(impact_code)
+
+    def get_barrier_types_by_category(self, category):
+        return [
+            barrier_type
+            for barrier_type in self.get_barrier_type_list(sort=False)
+            if barrier_type['category'] == category
+        ]
+
+    def get_goods(self):
+        return self.get_barrier_types_by_category("GOODS")
+
+    def get_services(self):
+        return self.get_barrier_types_by_category("SERVICES")
