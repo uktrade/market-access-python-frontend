@@ -50,6 +50,7 @@ class DocumentMixin:
         }
 
     def upload_to_s3(self, url, document):
+        document.seek(0)
         response = requests.put(
             url,
             headers={

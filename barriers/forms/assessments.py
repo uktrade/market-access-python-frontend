@@ -1,9 +1,10 @@
 from django import forms
+from django.conf import settings
 
 from .mixins import DocumentMixin
 
 from utils.api_client import MarketAccessAPIClient
-from utils.forms import MultipleValueField
+from utils.forms import MultipleValueField, RestrictedFileField
 
 
 class EconomicAssessmentForm(DocumentMixin, forms.Form):
@@ -22,7 +23,11 @@ class EconomicAssessmentForm(DocumentMixin, forms.Form):
         widget=forms.Textarea,
     )
     document_ids = MultipleValueField(required=False)
-    document = forms.FileField(required=False)
+    document = RestrictedFileField(
+        content_types=['text/csv', 'image/jpeg'],
+        max_upload_size=settings.FILE_MAX_SIZE,
+        required=False,
+    )
 
     def __init__(self, barrier, *args, **kwargs):
         self.barrier = barrier
@@ -54,7 +59,10 @@ class EconomicAssessmentForm(DocumentMixin, forms.Form):
 
 
 class DocumentForm(DocumentMixin, forms.Form):
-    document = forms.FileField()
+    document = RestrictedFileField(
+        content_types=['text/csv', 'image/jpeg'],
+        max_upload_size=settings.FILE_MAX_SIZE,
+    )
 
     def save(self):
         return self.upload_document()

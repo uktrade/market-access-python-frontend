@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from django.conf import settings
 from django.http import JsonResponse
 from django.template.defaultfilters import filesizeformat
 from django.urls import reverse
@@ -39,6 +40,7 @@ class EconomicAssessment(AssessmentMixin, BarrierContextMixin, FormView):
         context_data['documents'] = (
             self.request.session.get('assessment_documents', [])
         )
+        context_data['max_file_size'] = settings.FILE_MAX_SIZE
         return context_data
 
     def get_initial(self):
@@ -130,7 +132,7 @@ class AddAssessmentDocument(FormView):
 
     def form_invalid(self, form):
         return JsonResponse({
-            "message": form.errors,
+            "message": ", ".join(form.errors.get('document', [])),
         }, status=HTTPStatus.BAD_REQUEST)
 
 

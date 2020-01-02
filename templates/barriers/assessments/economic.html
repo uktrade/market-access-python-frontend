@@ -90,7 +90,7 @@
             {% endif %}
 
             <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
-            (file size limit <strong>5 MB</strong>)
+            (file size limit <strong>{{ max_file_size|filesizeformat }}</strong>)
             </span>
 
             <input class="govuk-file-upload file-upload__input js-file-input" id="document" name="document" type="file" aria-describedby="document-hint">

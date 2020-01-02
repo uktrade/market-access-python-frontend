@@ -8,6 +8,7 @@ environ==1.0
 mohawk==1.1.0
 psycopg2-binary==2.8.4
 python-dateutil==2.8.1
+python-magic==0.4.15
 redis==3.3.11
 requests==2.22.0
 whitenoise==1.0.6   # manages static assets
