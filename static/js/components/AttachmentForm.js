@@ -4,21 +4,34 @@ ma.components.AttachmentForm = (function( jessie ){
 
 	var bind = jessie.bind;
 
-	function AttachmentForm( fileUpload, attachments, submitButton, deleteUrl ){
+	function AttachmentForm( fileUpload, attachments, submitButton ){
 
 		if( !fileUpload ){ throw new Error( 'fileUpload is required' ); }
 		if( !attachments ){ throw new Error( 'attachments is required' ); }
 		if( !submitButton ){ throw new Error( 'submitButton is required' ); }
-		if( !deleteUrl ){ throw new Error( 'deleteUrl is required' ); }
 
 		this.fileUpload = fileUpload;
 		this.attachments = attachments;
 		this.submitButton = submitButton;
-		this.deleteUrl = deleteUrl;
 
 		fileUpload.events.file.subscribe( bind( this.newFile, this ) );
 		attachments.events.delete.subscribe( bind( this.deleteDocument, this ) );
+	}
 
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
 	}
 
 	AttachmentForm.prototype.showError = function( message ){
@@ -116,20 +129,23 @@ ma.components.AttachmentForm = (function( jessie ){
 		xhr2.addEventListener( 'abort', bind( this.transferCanceled, this ), false );
 		xhr2.addEventListener( 'load', bind( this.loaded, this ), false );
 
+		var csrftoken = getCookie('csrftoken');
+
 		xhr2.open( 'POST', this.fileUpload.action, true );
+		xhr2.setRequestHeader("X-CSRFToken", csrftoken);
 		xhr2.send( formData );
 
 		this.fileUpload.setProgress( 'uploading file... 0%' );
 	};
 
-	AttachmentForm.prototype.deleteDocument = function( documentId ){
-
+	AttachmentForm.prototype.deleteDocument = function( documentId, deleteUrl ){
 		if( !documentId ){ return; }
 
 		var xhr = ma.xhr2();
-		var url = this.deleteUrl.replace( ':uuid', documentId );
+		var csrftoken = getCookie('csrftoken');
 
-		xhr.open( 'POST', url, true );
+		xhr.open( 'POST', deleteUrl, true );
+		xhr.setRequestHeader("X-CSRFToken", csrftoken);
 		xhr.send();
 
 		this.attachments.removeItem( documentId );

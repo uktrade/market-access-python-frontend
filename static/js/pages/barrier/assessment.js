@@ -25,12 +25,10 @@ ma.pages.barrier.assessment = (function(){
 		if( !submitButton ){ throw new Error( 'Submit button not found' ); }
 		if( !form ){ throw new Error( 'No form found' ); }
 
-		var deleteUrl = jessie.getElementData( form, 'xhr-delete' );
-
 		try {
 
 			attachments = new ma.components.Attachments( fileUpload );
-			new ma.components.AttachmentForm( fileUpload, attachments, submitButton, deleteUrl );
+			new ma.components.AttachmentForm( fileUpload, attachments, submitButton );
 
 		} catch( e ){ return; }
 

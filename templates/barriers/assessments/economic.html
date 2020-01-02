@@ -17,7 +17,7 @@
 
     {% include 'heading.html' with caption=barrier.barrier_title text='Economic assessment' %}
 
-    <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_assessment_document' barrier.id %}" data-xhr-delete="{% url 'barriers:delete_assessment_document' barrier.id 1 %}">
+    <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_assessment_document' barrier.id %}">
 
         {% csrf_token %}
 
@@ -61,6 +61,23 @@
         </div>
 
         <h3 class="govuk-label--s">Add supporting documents (optional)</h3>
+
+        {% if documents %}
+        <div class="attachments">
+            <h3 class="attachments__heading">Attached documents</h3>
+            <ul class="attachments__list js-documents-list">
+                {% for document in documents %}
+                    {% if document %}
+                        <li class="attachments__list__item">
+                            <span class="attachments__list__item__file-name">{{ document.name }} - {{ document.size|filesizeformat }}</span>
+                            <a href="{% url 'barriers:delete_assessment_document' barrier.id document.id %}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
+                            <input type="hidden" name="document_ids" value="{{ document.id }}">
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
         <div class="govuk-form-group file-upload js-form-group">
             <label class="govuk-label visually-hidden" for="document">Attach a document</label>

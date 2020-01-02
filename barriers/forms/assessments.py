@@ -1,9 +1,12 @@
 from django import forms
 
+from .mixins import DocumentMixin
+
 from utils.api_client import MarketAccessAPIClient
+from utils.forms import MultipleValueField
 
 
-class EconomicAssessmentForm(forms.Form):
+class EconomicAssessmentForm(DocumentMixin, forms.Form):
     IMPACT_CHOICES = (
         ('HIGH', 'High'),
         ('MEDIUMHIGH', 'Medium High'),
@@ -18,27 +21,43 @@ class EconomicAssessmentForm(forms.Form):
         label='Explain the assessment',
         widget=forms.Textarea,
     )
+    document_ids = MultipleValueField(required=False)
     document = forms.FileField(required=False)
 
     def __init__(self, barrier, *args, **kwargs):
-        self.token = kwargs.pop('token')
         self.barrier = barrier
         super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
+
+        document_ids = self.cleaned_data.get('document_ids')
+
+        if self.cleaned_data.get('document'):
+            document = self.upload_document()
+            document_ids.append(document['id'])
+
         if self.barrier.has_assessment:
             client.barriers.update_assessment(
                 barrier_id=self.barrier.id,
                 impact=self.cleaned_data.get('impact'),
                 explanation=self.cleaned_data.get('description'),
+                documents=document_ids,
             )
         else:
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id,
                 impact=self.cleaned_data.get('impact'),
                 explanation=self.cleaned_data.get('description'),
+                documents=document_ids,
             )
+
+
+class DocumentForm(DocumentMixin, forms.Form):
+    document = forms.FileField()
+
+    def save(self):
+        return self.upload_document()
 
 
 class EconomyValueForm(forms.Form):

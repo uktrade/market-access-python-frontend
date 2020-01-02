@@ -9,6 +9,7 @@ from .views.assessments import (
     EconomyValueAssessment,
     ExportValueAssessment,
     MarketSizeAssessment,
+    NewEconomicAssessment,
 )
 from .views.companies import (
     BarrierEditCompanies,
@@ -23,6 +24,7 @@ from .views.core import (
     Dashboard,
     FindABarrier,
 )
+from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditTitle,
     BarrierEditProduct,
@@ -73,6 +75,7 @@ urlpatterns = [
     path("find-a-barrier/", FindABarrier.as_view(), name="find_a_barrier"),
     # path("find-a-barrier/download/", DownloadBarriers.as_view(), name="download_barriers"),
     # path("what-is-a-barrier/", WhatIsABarrier.as_view(), name="what_is_a_barrier"),
+    path("documents/<uuid:document_id>/download/", DownloadDocument.as_view(), name="download_document"),
 
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
 
@@ -129,12 +132,12 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/assessment/", AssessmentDetail.as_view(), name="assessment_detail"),
     path("barriers/<uuid:barrier_id>/assessment/economic/", EconomicAssessment.as_view(), name="economic_assessment"),
-    # path("barriers/<uuid:barrier_id>/assessment/economic/new/", NewEconomicAssessment.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/assessment/economic/new/", NewEconomicAssessment.as_view(), name="new_economic_assessment"),
     path("barriers/<uuid:barrier_id>/assessment/economy-value/", EconomyValueAssessment.as_view(), name="economy_value_assessment"),
     path("barriers/<uuid:barrier_id>/assessment/market-size/", MarketSizeAssessment.as_view(), name="market_size_assessment"),
     path("barriers/<uuid:barrier_id>/assessment/export-value/", ExportValueAssessment.as_view(), name="export_value_assessment"),
     path("barriers/<uuid:barrier_id>/assessment/commercial-value/", CommercialValueAssessment.as_view(), name="commercial_value_assessment"),
     path("barriers/<uuid:barrier_id>/assessment/documents/add/", AddAssessmentDocument.as_view(), name="add_assessment_document"),
     # path("barriers/<uuid:barrier_id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name=""),
-    path("barriers/<uuid:barrier_id>/assessment/documents/<int:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
+    path("barriers/<uuid:barrier_id>/assessment/documents/<uuid:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
 ]

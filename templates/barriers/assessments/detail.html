@@ -38,17 +38,17 @@
             <h3 class="assessment-item__sub-heading">Assessment explanation</h3>
             <p class="assessment-item__value">{{ assessment.explanation|linebreaksbr|safe }}</p>
 
-            {% if documents and documents.length %}
+            {% if assessment.documents %}
                 <h3 class="assessment-item__sub-heading">Supporting documents</h3>
                 <ul class="document-list document-list--assessment">
-                    {% for document in documents %}
+                    {% for document in assessment.documents %}
                         <li class="document-list__item">
-                        {% if document.canDownload %}
-                            <a href="">{{ document.name }}</a>
+                        {% if document.status == 'virus_scanned' %}
+                            <a href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
                         {% else %}
                             {{ document.name }}
                         {% endif %}
-                        - {{ document.size }}
+                        - {{ document.size|filesizeformat }}
                         </li>
                     {% endfor %}
                 </ul>
@@ -63,7 +63,7 @@
         <div class="assessment-item">
             <h2 class="assessment-item__heading">Economic assessment</h2>
                 <div class="assessment-item-content">
-                    <a class="assessment-item-content__link" href="{% url 'barriers:economic_assessment' barrier.id %}">Add economic assessment</a>
+                    <a class="assessment-item-content__link" href="{% url 'barriers:new_economic_assessment' barrier.id %}">Add economic assessment</a>
                     <p class="assessment-item-content__hint">The assessed economic importance of resolving this barrier relative to others in the same country.</p>
                     <div class="govuk-inset-text assessment-item-content__restriction">To be completed by the Market Access Analysts</div>
                 </div>

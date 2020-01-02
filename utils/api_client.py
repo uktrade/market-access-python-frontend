@@ -1,15 +1,19 @@
 import requests
+import time
 
 from django.conf import settings
 
 from barriers.models import Assessment, Barrier
 from interactions.models import HistoryItem, Interaction
 
+from utils.exceptions import APIException, ScanError
+
 
 class MarketAccessAPIClient:
     def __init__(self, token=None, **kwargs):
         self.token = token or settings.TRUSTED_USER_TOKEN
         self.barriers = BarriersResource(self)
+        self.documents = DocumentsResource(self)
         self.interactions = InteractionsResource(self)
         self.notes = NotesResource(self)
 
@@ -159,3 +163,45 @@ class NotesResource(Resource):
     def update(self, id, *args, **kwargs):
         url = f"barriers/interactions/{id}"
         return self.model(self.client.patch(url, data=kwargs))
+
+
+class DocumentsResource(Resource):
+    def create(self, filename, filesize):
+        return self.client.post(
+            "documents",
+            json={
+                "original_filename": filename,
+                "size": filesize,
+            }
+        )
+
+    def complete_upload(self, document_id):
+        return self.client.post(f"documents/{document_id}/upload-callback")
+
+    def check_scan_status(self, document_id):
+        max_wait_time = settings.FILE_SCAN_MAX_WAIT_TIME
+        interval = settings.FILE_SCAN_STATUS_CHECK_INTERVAL
+
+        url = f"documents/{document_id}/upload-callback"
+        max_attempts = int(max_wait_time / interval)
+
+        for i in range(max_attempts):
+            try:
+                response = self.client.post(url)
+            except requests.exceptions.HTTPError:
+                raise ScanError("Unable to get scan status")
+
+            if response.get('status') == "virus_scanning_failed":
+                raise ScanError(
+                    "This file may be infected with a virus and will not be "
+                    "accepted."
+                )
+            elif response.get('status') == "virus_scanned":
+                return
+
+            time.sleep(interval / 1000)
+
+        raise ScanError("Virus scan took too long")
+
+    def get_download(self, document_id):
+        return self.client.get(f"documents/{document_id}/download")

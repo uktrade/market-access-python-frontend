@@ -43,7 +43,7 @@ ma.components.Attachments = (function( doc ){
 		if( documentId ){
 
 			jessie.cancelDefault( e );
-			this.events.delete.publish( documentId );
+			this.events.delete.publish( documentId, target.href );
 		}
 	};
 
@@ -84,7 +84,7 @@ ma.components.Attachments = (function( doc ){
 		jessie.setElementData( deleteLink, DATA_KEY, document.id );
 
 		input.type = 'hidden';
-		input.name = 'documentIds';
+		input.name = 'document_ids';
 		input.value = document.id;
 
 		item.appendChild( file );
