@@ -196,9 +196,10 @@ class EconomyValueAssessment(AssessmentValueView, FormView):
     form_class = EconomyValueForm
 
     def get_initial(self):
-        return {
-            'value': self.assessment.value_to_economy
-        }
+        if self.assessment:
+            return {
+                'value': self.assessment.value_to_economy
+            }
 
 
 class MarketSizeAssessment(AssessmentValueView, FormView):
@@ -206,9 +207,10 @@ class MarketSizeAssessment(AssessmentValueView, FormView):
     form_class = MarketSizeForm
 
     def get_initial(self):
-        return {
-            'value': self.assessment.import_market_size
-        }
+        if self.assessment:
+            return {
+                'value': self.assessment.import_market_size
+            }
 
 
 class CommercialValueAssessment(AssessmentValueView):
@@ -216,7 +218,8 @@ class CommercialValueAssessment(AssessmentValueView):
     form_class = CommercialValueForm
 
     def get_initial(self):
-        return {'value': self.assessment.commercial_value}
+        if self.assessment:
+            return {'value': self.assessment.commercial_value}
 
 
 class ExportValueAssessment(AssessmentValueView):
@@ -224,4 +227,5 @@ class ExportValueAssessment(AssessmentValueView):
     form_class = ExportValueForm
 
     def get_initial(self):
-        return {'value': self.assessment.export_value}
+        if self.assessment:
+            return {'value': self.assessment.export_value}
