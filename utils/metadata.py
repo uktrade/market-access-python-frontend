@@ -9,14 +9,11 @@ import redis
 import requests
 
 
-def get_metadata():
-    r = redis.Redis(
-        host=settings.REDIS_SERVER,
-        port=settings.REDIS_PORT,
-        db=settings.REDIS_DB,
-    )
+redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
 
-    metadata = r.get('metadata')
+
+def get_metadata():
+    metadata = redis_client.get('metadata')
     if metadata:
         return Metadata(json.loads(metadata))
 
@@ -39,13 +36,14 @@ def get_metadata():
         url,
         verify=not settings.DEBUG,
         headers={
-            'Authorization': sender.request_header
+            'Authorization': sender.request_header,
+            'Content-Type': 'text/plain',
         }
     )
 
     if response.ok:
         metadata = response.json()
-        r.set(
+        redis_client.set(
             'metadata',
             json.dumps(metadata),
             ex=settings.METADATA_CACHE_TIME

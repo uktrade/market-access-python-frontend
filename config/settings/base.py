@@ -11,12 +11,19 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import dj_database_url
+import logging.config
+import json
 import os
+
+from django.utils.log import DEFAULT_LOGGING
 
 ROOT_DIR = os.path.abspath(os.path.dirname(__name__))
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Load PaaS Service env vars
+VCAP_SERVICES = json.loads(os.environ.get('VCAP_SERVICES', "{}"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -41,6 +48,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "django_extensions",
     'compressor',
     'sass_processor',
 ]
@@ -144,9 +152,14 @@ TRUSTED_USER_TOKEN = 'ssobypass'
 
 METADATA_CACHE_TIME = "10600"
 
-REDIS_SERVER = os.environ.get("REDIS_HOST")
-REDIS_PORT = os.environ.get("REDIS_PORT")
+# CACHE / REDIS
+# Try to read from PaaS service env vars first
 REDIS_DB = os.environ.get("REDIS_DB", 4)
+if "redis" in VCAP_SERVICES:
+    REDIS_URI = VCAP_SERVICES["redis"][0]["credentials"]["uri"]
+else:
+    REDIS_URI = os.environ.get("REDIS_URI")
+REDIS_URI = f"{REDIS_URI}/{REDIS_DB}"
 
 # Market access API
 MARKET_ACCESS_API_URI = os.environ.get("MARKET_ACCESS_API_URI", "unset")
@@ -168,3 +181,41 @@ ADD_COMPANY = os.environ.get("ADD_COMPANY", True)
 DATAHUB_URL = os.environ.get("DATAHUB_URL")
 DATAHUB_HAWK_ID = os.environ.get("DATAHUB_HAWK_ID", "")
 DATAHUB_HAWK_KEY = os.environ.get("DATAHUB_HAWK_KEY", "")
+
+
+# Logging
+# ============================================
+DJANGO_LOG_LEVEL = os.environ.get("DJANGO_LOG_LEVEL", "info").upper()
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {
+            "format": "[%(asctime)s] %(name)s %(levelname)5s - %(message)s"
+        },
+        "django.server": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[%(asctime)s] %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "console"},
+        "django.server": DEFAULT_LOGGING['handlers']['django.server']
+
+    },
+    "loggers": {
+        # default for all undefined Python modules
+        '': {
+            'level': DJANGO_LOG_LEVEL,
+            'handlers': ['console'],
+        },
+        # application code
+        "app": {
+            "level": DJANGO_LOG_LEVEL,
+            "handlers": ["console"],
+            "propagate": False,
+        },
+        # Default runserver request logging
+        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
+    },
+}

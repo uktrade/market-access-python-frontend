@@ -16,20 +16,32 @@ class Dashboard(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         sort = self.request.GET.get('sort', '-modified_on')
+        default_user_profile_watchlists = {
+            'watchLists': {
+                'lists': [],    # this is where the watchlists live
+                'version': 2
+            }
+        }
+        watchlists = []
+        barriers = []
 
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         user_data = client.get('whoami')
-        watchlists = user_data.get(
-            'user_profile', {}
-        ).get('watchList', {}).get('lists', [])
+        user_profile = user_data.get('user_profile', None)
 
-        if watchlists:
-            index = self.get_watchlist_index(max_index=len(watchlists))
-            watchlists[index]['is_current'] = True
-            filters = self.get_watchlist_params(watchlists[index])
-            barriers = client.barriers.list(ordering=sort, **filters)
-        else:
-            barriers = []
+        if user_profile:
+            user_profile_watchlists = user_profile.get('watchList', default_user_profile_watchlists)
+            watchlists = user_profile_watchlists.get('lists', ())
+            if watchlists:
+                watchlist_index = int(self.request.GET.get('list', 0))
+                selected_watchlist = watchlists[watchlist_index]
+                selected_watchlist.setdefault('is_current', True)
+
+                filters = self.get_watchlist_params(selected_watchlist)
+                barriers = client.barriers.list(
+                    ordering=sort,
+                    **filters
+                )
 
         context_data.update({
             'page': 'dashboard',
