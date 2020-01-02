@@ -8,11 +8,13 @@ from barriers.forms.notes import AddNoteForm, EditNoteForm
 class BarrierAddNote(BarrierContextMixin, APIBarrierFormMixin, FormView):
     template_name = "barriers/edit/add_note.html"
     form_class = AddNoteForm
+    include_interactions = True
 
 
 class BarrierEditNote(BarrierContextMixin, APIFormMixin, FormView):
     template_name = "barriers/barrier_detail.html"
     form_class = EditNoteForm
+    include_interactions = True
 
     def get_object(self):
         note_id = self.kwargs.get('note_id')

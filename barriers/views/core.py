@@ -188,6 +188,7 @@ class FindABarrier(FormView):
 
 class BarrierDetail(BarrierContextMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
+    include_interactions = True
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

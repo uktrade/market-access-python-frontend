@@ -14,7 +14,6 @@ class BarrierEditSectors(BarrierContextMixin, FormView):
     template_name = "barriers/edit/sectors.html"
     form_class = EditSectorsForm
     use_session_sectors = False
-    include_interactions = False
 
     def get(self, request, *args, **kwargs):
         self.barrier = self.get_barrier()
@@ -75,7 +74,6 @@ class BarrierEditSectorsSession(BarrierEditSectors):
 class BarrierAddSectors(BarrierContextMixin, FormView):
     template_name = "barriers/edit/add_sectors.html"
     form_class = AddSectorsForm
-    include_interactions = False
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

@@ -14,7 +14,6 @@ from utils.datahub import DatahubClient
 class BarrierSearchCompany(BarrierContextMixin, FormView):
     template_name = "barriers/companies/search.html"
     form_class = CompanySearchForm
-    include_interactions = False
 
     def form_valid(self, form):
         client = DatahubClient()
@@ -27,7 +26,6 @@ class BarrierSearchCompany(BarrierContextMixin, FormView):
 class CompanyDetail(BarrierContextMixin, FormView):
     template_name = "barriers/companies/detail.html"
     form_class = AddCompanyForm
-    include_interactions = False
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -57,7 +55,6 @@ class CompanyDetail(BarrierContextMixin, FormView):
 class BarrierEditCompanies(BarrierContextMixin, FormView):
     template_name = "barriers/companies/edit.html"
     form_class = EditCompaniesForm
-    include_interactions = False
     use_session_companies = False
 
     def get(self, request, *args, **kwargs):

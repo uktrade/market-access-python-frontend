@@ -15,7 +15,6 @@ class BarrierEditLocation(BarrierContextMixin, FormView):
     template_name = "barriers/edit/location.html"
     form_class = EditLocationForm
     use_session_location = False
-    include_interactions = False
 
     def get(self, request, *args, **kwargs):
         self.barrier = self.get_barrier()
@@ -92,7 +91,6 @@ class BarrierEditLocationSession(BarrierEditLocation):
 class BarrierEditCountry(BarrierContextMixin, FormView):
     template_name = "barriers/edit/country.html"
     form_class = EditCountryForm
-    include_interactions = False
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -131,7 +129,6 @@ class BarrierEditCountry(BarrierContextMixin, FormView):
 class AddAdminArea(BarrierContextMixin, FormView):
     template_name = "barriers/edit/add_admin_area.html"
     form_class = AddAdminAreaForm
-    include_interactions = False
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

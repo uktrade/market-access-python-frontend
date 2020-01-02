@@ -11,13 +11,11 @@ from utils.sso import SSOClient
 
 class BarrierTeam(TeamMembersContextMixin, BarrierContextMixin, TemplateView):
     template_name = "barriers/team.html"
-    include_interactions = False
 
 
 class SearchTeamMember(BarrierContextMixin, FormView):
     template_name = "barriers/teams/search.html"
     form_class = UserSearchForm
-    include_interactions = False
 
     def form_valid(self, form):
         client = SSOClient()
@@ -30,7 +28,6 @@ class SearchTeamMember(BarrierContextMixin, FormView):
 class AddTeamMember(TeamMembersContextMixin, BarrierContextMixin, FormView):
     template_name = "barriers/teams/add_member.html"
     form_class = AddTeamMemberForm
-    include_interactions = False
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -64,7 +61,6 @@ class DeleteTeamMember(
     TemplateView
 ):
     template_name = "barriers/teams/delete_member.html"
-    include_interactions = False
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
