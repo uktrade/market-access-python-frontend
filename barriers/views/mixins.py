@@ -95,12 +95,16 @@ class AssessmentMixin:
 
 
 class APIFormMixin:
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
+    _object = None
+
+    @property
+    def object(self):
+        if not self._object:
+            self._object = self.get_object()
+        return self._object
 
     def get_initial(self):
-        if hasattr(self, 'object'):
+        if self.request.method.lower() == "get":
             return self.object.to_dict()
         return {}
 
@@ -116,8 +120,7 @@ class APIFormMixin:
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        if self.object:
-            context_data['object'] = self.object
+        context_data['object'] = self.object
         return context_data
 
 

@@ -3,6 +3,7 @@ from django import forms
 from .mixins import APIFormMixin
 
 from utils.api_client import MarketAccessAPIClient
+from utils.forms import ChoiceFieldWithHelpText
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -130,10 +131,18 @@ class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
 
 class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
     CHOICES = [
-        (1, 'A procedural, short-term barrier'),
-        (2, 'A long-term strategic barrier'),
+        (
+            1,
+            "A procedural, short-term barrier",
+            "for example, goods stuck at the border or documentation issue",
+        ),
+        (
+            2,
+            "A long-term strategic barrier",
+            "for example, a change of regulation",
+        ),
     ]
-    problem_status = forms.ChoiceField(
+    problem_status = ChoiceFieldWithHelpText(
         label='What is the scope of the barrier?',
         choices=CHOICES,
         widget=forms.RadioSelect

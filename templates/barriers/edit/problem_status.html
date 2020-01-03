@@ -4,11 +4,35 @@
 
 {% block page_content %}
 
-    <h1>{{ object.title }}</h1>
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=object.barrier_title text='Edit barrier scope' %}
 
-    <form method="post">
+    <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-        {{ form }}
+
+        <div class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.problem_status.label }}</legend>
+
+                {% if form.problem_status.errors %}
+                    <span class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span>
+                        {{ form.problem_status.errors.as_text }}
+                    </span>
+                {% endif %}
+
+                <div class="govuk-radios">
+                    {% for value, name, help_text in form.fields.problem_status.choices %}
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="{{ forloop.counter }}" name="{{ form.problem_status.name }}" type="radio" value="{{ value }}" {% if form.problem_status.value == value %}checked="checked"{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="{{ forloop.counter }}">{{ name }}</label>
+                        <span id="{{ forloop.counter }}-item-hint" class="govuk-hint govuk-radios__hint">{{ help_text }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
     </form>
 

@@ -17,8 +17,6 @@ class BarrierEditLocation(BarrierContextMixin, FormView):
     use_session_location = False
 
     def get(self, request, *args, **kwargs):
-        self.barrier = self.get_barrier()
-
         if not self.use_session_location:
             request.session['location'] = {
                 'country': self.barrier.country['id'],
