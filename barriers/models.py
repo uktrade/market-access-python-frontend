@@ -76,7 +76,7 @@ class Barrier(APIModel):
     def to_dict(self):
         return {
             'title': self.title,
-            'priority': self.priority,
+            'priority': self.priority['code'],
             'description': self.problem_description,
             'problem_status': self.problem_status,
             'eu_exit_related': self.data['eu_exit_related'],

@@ -20,7 +20,7 @@
                 </span>
             {% endif %}
 
-            <textarea class="govuk-textarea" id="description" name="description" rows="5" required>{{ form.description.value }}</textarea>
+            <textarea class="govuk-textarea" id="description" name="description" rows="5" required>{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
         </div>
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button">

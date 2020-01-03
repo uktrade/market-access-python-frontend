@@ -89,23 +89,36 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
 
 class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
     CHOICES = [
-        ('UNKNOWN', 'Unknown priority'),
-        ('HIGH', 'High priority'),
-        ('MEDIUM', 'Medium priority'),
-        ('LOW', 'Low priority'),
+        ('UNKNOWN', '<strong>Unknown</strong> priority'),
+        ('HIGH', '<strong>High</strong> priority'),
+        ('MEDIUM', '<strong>Medium</strong> priority'),
+        ('LOW', '<strong>Low</strong> priority'),
     ]
-    priority = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
-    description = forms.CharField(
-        label='Why did you choose this priority? (optional)',
-        widget=forms.Textarea,
+    priority = forms.ChoiceField(
+        label="What is the priority of the barrier?",
+        choices=CHOICES,
+        widget=forms.RadioSelect
     )
+    priority_summary = forms.CharField(
+        label="Why did the priority change? (optional)",
+        widget=forms.Textarea,
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        initial_priority = kwargs.get('initial', {}).get('priority')
+        if initial_priority == "UNKNOWN":
+            self.fields['priority_summary'].label = (
+                "Why did you choose this priority? (optional)"
+            )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
             priority=self.cleaned_data['priority'],
-            priority_description=self.cleaned_data['priority_description']
+            priority_summary=self.cleaned_data['priority_summary'] or None,
         )
 
 
