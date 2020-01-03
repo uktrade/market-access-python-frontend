@@ -4,11 +4,25 @@
 
 {% block page_content %}
 
-    <h1>{{ object.title }}</h1>
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=object.barrier_title text='About the barrier' %}
 
-    <form method="post">
+    <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-        {{ form }}
+
+        <div class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="{{ form.product.name }}">{{ form.product.label }}</label>
+
+            {% if form.product.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>
+                    {{ form.product.errors.as_text }}
+                </span>
+            {% endif %}
+
+            <input class="govuk-input" id="{{ form.product.name }}" name="{{ form.product.name }}" type="text" value="{% if form.product.value %}{{ form.product.value }}{% endif %}" required>
+        </div>
+
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
     </form>
 
