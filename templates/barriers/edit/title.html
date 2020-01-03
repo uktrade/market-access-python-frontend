@@ -2,14 +2,37 @@
 
 {% block page_title %}{{ block.super }} - Edit title{% endblock %}
 
+{% block body_script %}
+    <script>
+        ma.pages.barrier.edit.title();
+    </script>
+{% endblock %}
+
 {% block page_content %}
 
-    <h1>{{ object.title }}</h1>
+    {# TODO: Errors, back #}
+    {% include 'heading.html' with caption=object.barrier_title text='Edit title' %}
 
-    <form method="post">
+    <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-        {{ form }}
+
+        <div class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">{{ form.title.label }}</label>
+
+            <span id="{{ form.title.name }}-hint" class="govuk-hint">{{ form.title.help_text }}</span>
+
+            {% if form.title.errors %}
+                <span class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>
+                    {{ form.title.errors.as_text }}
+                </span>
+            {% endif %}
+
+            <input class="govuk-input" id="{{ form.title.name }}" name="{{ form.title.name }}" type="text" value="{% if form.title.value %}{{ form.title.value }}{% endif %}" aria-describedby="{{ form.title.name }}-hint" required>
+        </div>
+
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 
 {% endblock %}

@@ -6,7 +6,14 @@ from utils.api_client import MarketAccessAPIClient
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
-    title = forms.CharField(label='Title', max_length=255)
+    title = forms.CharField(
+        label="Suggest a title for this barrier",
+        help_text=(
+            "Include both the title or service name and the country being "
+            "exported to, for example, Import quotas for steel rods in India."
+        ),
+        max_length=255
+    )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
