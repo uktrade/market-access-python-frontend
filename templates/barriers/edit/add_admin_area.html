@@ -1,29 +1,47 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Barrier - Edit Country{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier - Add an admin area{% endblock %}
 
 {% block page_content %}
 
-    {% include 'heading.html' with caption=barrier.barrier_title text='Edit barrier country' %}
+    {% include 'heading.html' with caption=barrier.barrier_title text='Edit location' %}
 
     {# TODO: back link, errors #}
 
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        {{ form }}
-        <div class="selection-list restrict-width">
-            <h3 class="selection-list__heading">Selected admin areas</h3>
-            {% if admin_areas %}
-                <ul class="selection-list__list">
-                    {% for item in admin_areas %}
-                        <li class="selection-list__list__item">
-                            <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
-                        </li>
-                    {% endfor %}
-                </ul>
+        <div class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="{{ form.admin_area.name }}">{{ form.admin_area.label }}</label>
+
+            {% if form.admin_area.errors %}
+                <span id="{{ form.admin_area.name }}-error" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>
+                    {{ form.admin_area.errors.as_text }}
+                </span>
             {% endif %}
+
+            <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.admin_area.name }}" name="{{ form.admin_area.name }}"{% if form.errors %} aria-describedby="{{ form.admin_area.name }}-error"{% endif %}>
+                {% for id, name in form.fields.admin_area.choices %}
+                <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
         </div>
+
+        {% if admin_areas %}
+            <div class="selection-list restrict-width">
+                <h3 class="selection-list__heading">Selected admin areas</h3>
+                {% if admin_areas %}
+                    <ul class="selection-list__list">
+                        {% for item in admin_areas %}
+                            <li class="selection-list__list__item">
+                                <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
         <input type="submit" value="Add administrative area" class="govuk-button">
         <a href="{% url 'barriers:edit_location' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
