@@ -190,7 +190,7 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        if self.is_resolved:
+        if self.is_resolved and self.is_valid():
             self.validate_status_date()
 
     def validate_status_date(self):
