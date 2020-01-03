@@ -16,8 +16,6 @@ class BarrierEditSectors(BarrierContextMixin, FormView):
     use_session_sectors = False
 
     def get(self, request, *args, **kwargs):
-        self.barrier = self.get_barrier()
-
         if not self.use_session_sectors:
             request.session['sectors'] = self.barrier.get_sector_ids()
             request.session['all_sectors'] = self.barrier.all_sectors
@@ -44,10 +42,6 @@ class BarrierEditSectors(BarrierContextMixin, FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
-
-    def form_invalid(self, form):
-        self.barrier = self.get_barrier()
-        return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse(

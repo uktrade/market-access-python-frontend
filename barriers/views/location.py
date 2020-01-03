@@ -49,10 +49,6 @@ class BarrierEditLocation(BarrierContextMixin, FormView):
         form.save()
         return super().form_valid(form)
 
-    def form_invalid(self, form):
-        self.barrier = self.get_barrier()
-        return super().form_invalid(form)
-
     def get_success_url(self):
         return reverse(
             'barriers:barrier_detail',
