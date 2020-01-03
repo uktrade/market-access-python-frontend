@@ -61,12 +61,28 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         ('OTHER', 'Other '),
     ]
     source = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    other_source = forms.CharField(label="Please specify", required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        source = cleaned_data.get("source")
+        other_source = cleaned_data.get("other_source")
+
+        if source == "OTHER":
+            if not other_source:
+                self.add_error(
+                    "other_source",
+                    "Enter how you became aware of the barrier"
+                )
+        else:
+            cleaned_data['other_source'] = None
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            source=self.cleaned_data['source']
+            source=self.cleaned_data['source'],
+            other_source=self.cleaned_data['other_source'],
         )
 
 

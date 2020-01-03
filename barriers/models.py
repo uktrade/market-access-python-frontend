@@ -82,6 +82,7 @@ class Barrier(APIModel):
             'eu_exit_related': self.data['eu_exit_related'],
             'product': self.product,
             'source': self.data['source'],
+            'other_source': self.data['other_source'],
         }
 
     def get_sector_ids(self):
