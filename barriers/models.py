@@ -41,6 +41,7 @@ class Barrier(APIModel):
         self.priority = data['priority']
         self.reported_on = dateutil.parser.parse(data['reported_on'])
         self.modified_on = dateutil.parser.parse(data['modified_on'])
+        self.status_date = dateutil.parser.parse(data['status']['date'])
         self.added_by = data.get('reported_by')
         self.date = {
             'reported': self.reported_on,
@@ -83,6 +84,7 @@ class Barrier(APIModel):
             'product': self.product,
             'source': self.data['source'],
             'other_source': self.data['other_source'],
+            'status': self.status,
         }
 
     def get_sector_ids(self):
@@ -97,19 +99,19 @@ class Barrier(APIModel):
 
     @property
     def is_resolved(self):
-        return self.status == "RESOLVED"
+        return self.status['id'] == '4'
 
     @property
     def is_partially_resolved(self):
-        return self.status == "PART_RESOLVED"
+        return self.status['id'] == '3'
 
     @property
     def is_open(self):
-        return self.status == "OPEN"
+        return self.status['id'] == '2'
 
     @property
     def is_hibernated(self):
-        return self.status == "HIBERNATED"
+        return self.status['id'] == '5'
 
 
 class Company(APIModel):

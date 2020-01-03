@@ -152,6 +152,7 @@ class Metadata:
 
     def get_status(self, status_id):
         for id, name in self.data['barrier_status'].items():
+            self.STATUS_INFO[id]['id'] = id
             self.STATUS_INFO[id]['name'] = name
 
         return self.STATUS_INFO[status_id]

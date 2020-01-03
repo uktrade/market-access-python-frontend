@@ -51,3 +51,21 @@ class BarrierEditProblemStatus(APIBarrierFormMixin, FormView):
 class BarrierEditStatus(APIBarrierFormMixin, FormView):
     template_name = "barriers/edit/status.html"
     form_class = UpdateBarrierStatusForm
+
+    def is_barrier_resolved(self):
+        return self.object.is_resolved or self.object.is_partially_resolved
+
+    def get_initial(self):
+        initial = {'status_summary': self.object.status_summary}
+
+        if self.is_barrier_resolved():
+            initial.update({
+                'month': self.object.status_date.month,
+                'year': self.object.status_date.year,
+            })
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['is_resolved'] = self.is_barrier_resolved()
+        return kwargs
