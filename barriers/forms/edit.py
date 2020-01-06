@@ -63,7 +63,11 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         ('GOVT', 'Government entity'),
         ('OTHER', 'Other '),
     ]
-    source = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    source = forms.ChoiceField(
+        label="How did you find out about the barrier?",
+        choices=CHOICES,
+        widget=forms.RadioSelect,
+    )
     other_source = forms.CharField(label="Please specify", required=False)
 
     def clean(self):

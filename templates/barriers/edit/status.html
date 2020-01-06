@@ -4,7 +4,8 @@
 
 {% block page_content %}
 
-    {# TODO: Errors, back #}
+    {# TODO: Errors #}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=object.barrier_title text='Barrier status' %}
 
     <form action="" method="POST" class="restrict-width">

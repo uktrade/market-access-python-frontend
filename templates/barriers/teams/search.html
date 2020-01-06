@@ -6,7 +6,8 @@
 
 {% block page_content %}
 
-    {# TODO: Errors, back #}
+    {# TODO: Errors #}
+    <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=barrier.barrier_title text='Name of user' %}
 
     <div class="restrict-width">

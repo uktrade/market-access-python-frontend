@@ -10,8 +10,8 @@
 
 {% block page_content %}
 
-    {# TODO: Errors, back #}
-
+    {# TODO: Errors #}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=barrier.barrier_title text='Define barrier category' %}
 
     <form action="" method="POST" class="restrict-width">
@@ -19,10 +19,6 @@
 
         <div class="govuk-form-group {% if form.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                    {{ params.legend.text }}
-                </legend>
-
                 {% if form.errors %}
                     <span id="sectors-error" class="govuk-error-message">
                       <span class="govuk-visually-hidden">Error:</span>{{ form.barrier_type.errors }}
