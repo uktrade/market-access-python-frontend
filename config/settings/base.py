@@ -171,7 +171,9 @@ MAX_WATCHLIST_LENGTH = 3
 SSO_CLIENT = os.environ.get("SSO_CLIENT")
 SSO_SECRET = os.environ.get("SSO_SECRET")
 SSO_API_URI = os.environ.get("SSO_API_URI")
+SSO_API_TOKEN = os.environ.get("SSO_API_TOKEN")
 SSO_AUTHORIZE_URI = os.environ.get("SSO_AUTHORIZE_URI")
+SSO_BASE_URI = os.environ.get("SSO_BASE_URI")
 SSO_TOKEN_URI = os.environ.get("SSO_TOKEN_URI")
 SSO_MOCK_CODE = os.environ.get("SSO_MOCK_CODE")
 OAUTH_PARAM_LENGTH = os.environ.get("OAUTH_PARAM_LENGTH", 75)
@@ -219,7 +221,7 @@ LOGGING = {
         "app": {
             "level": DJANGO_LOG_LEVEL,
             "handlers": ["console"],
-            "propagate": False,
+            "propagate": True,
         },
         # Default runserver request logging
         'django.server': DEFAULT_LOGGING['loggers']['django.server'],

@@ -3,7 +3,9 @@
         <div class="datahub-header__logo">
             <span class="datahub-header__logo__site-name">Department for International Trade</span>
             {% if hasCrmPermission %}
-                <a href="{{ datahubDomain }}" class="datahub-header__logo__link"><span class="datahub-header__logo__text">Data Hub</span></a>
+                <a href="{{ datahubDomain }}" class="datahub-header__logo__link">
+                    <span class="datahub-header__logo__text">Data Hub</span>
+                </a>
             {% else %}
                 <span class="datahub-header__logo__text">Data Hub</span>
             {% endif %}
@@ -21,7 +23,7 @@
                 {% endif %}
             </li>
             <li class="datahub-header__links__item">
-                <a class="datahub-header__links__item__text" href="{{ datahub_domain }}oauth/sign-out">Sign out</a>
+                <a class="datahub-header__links__item__text" href="{% url 'users:sign-out' %}">Sign out</a>
             </li>
         </ul>
     </div>
