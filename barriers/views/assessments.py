@@ -23,7 +23,12 @@ class AssessmentDetail(AssessmentMixin, BarrierMixin, TemplateView):
     template_name = "barriers/assessments/detail.html"
 
 
-class EconomicAssessment(AssessmentSessionDocumentMixin, AssessmentMixin, BarrierMixin, FormView):
+class EconomicAssessment(
+    AssessmentSessionDocumentMixin,
+    AssessmentMixin,
+    BarrierMixin,
+    FormView,
+):
     template_name = "barriers/assessments/economic.html"
     form_class = EconomicAssessmentForm
 
@@ -83,7 +88,10 @@ class NewEconomicAssessment(RedirectView):
         )
 
 
-class AddAssessmentDocument(AssessmentSessionDocumentMixin, AddDocumentAjaxView):
+class AddAssessmentDocument(
+    AssessmentSessionDocumentMixin,
+    AddDocumentAjaxView,
+):
     form_class = AssessmentDocumentForm
 
     def get_delete_url(self, document):
@@ -96,7 +104,10 @@ class AddAssessmentDocument(AssessmentSessionDocumentMixin, AddDocumentAjaxView)
         )
 
 
-class DeleteAssessmentDocument(AssessmentSessionDocumentMixin, DeleteDocumentAjaxView):
+class DeleteAssessmentDocument(
+    AssessmentSessionDocumentMixin,
+    DeleteDocumentAjaxView,
+):
     def get_redirect_url(self, *args, **kwargs):
         return reverse(
             'barriers:economic_assessment',

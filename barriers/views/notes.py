@@ -153,6 +153,6 @@ class BarrierDeleteNote(NoteSessionDocumentMixin, BarrierMixin, TemplateView):
         self.delete_session_documents()
         url = reverse(
             'barriers:barrier_detail',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id'),}
+            kwargs={'barrier_id': self.kwargs.get('barrier_id')},
         )
         return HttpResponseRedirect(url)
