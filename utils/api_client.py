@@ -180,6 +180,9 @@ class InteractionsResource(Resource):
             for result in self.client.get(url, params=kwargs)['results']
         ]
 
+    def delete_note(self, note_id):
+        return self.client.delete(f"barriers/interactions/{note_id}")
+
 
 class NotesResource(Resource):
     resource_name = "notes"

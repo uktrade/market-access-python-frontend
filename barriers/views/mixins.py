@@ -7,6 +7,8 @@ class BarrierContextMixin:
     include_interactions = False
     _barrier = None
     _interactions = None
+    _notes = None
+    _note = None
 
     @property
     def barrier(self):
@@ -20,6 +22,18 @@ class BarrierContextMixin:
             self._interactions = self.get_interactions()
         return self._interactions
 
+    @property
+    def note(self):
+        if not self._note:
+            self._note = self.get_note()
+        return self._note
+
+    @property
+    def notes(self):
+        if not self._notes:
+            self._notes = self.get_notes()
+        return self._notes
+
     def get_barrier(self):
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barrier_id = self.kwargs.get('barrier_id')
@@ -28,9 +42,9 @@ class BarrierContextMixin:
     def get_interactions(self):
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barrier_id = self.kwargs.get('barrier_id')
-        notes = client.interactions.list(barrier_id=barrier_id)
+
         history = client.barriers.get_history(barrier_id=barrier_id)
-        interactions = notes + history
+        interactions = self.notes + history
 
         if self.barrier.has_assessment:
             interactions += client.barriers.get_assessment_history(
@@ -41,12 +55,24 @@ class BarrierContextMixin:
 
         return interactions
 
+    def get_notes(self):
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
+        barrier_id = self.kwargs.get('barrier_id')
+        return client.interactions.list(barrier_id=barrier_id)
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['barrier'] = self.barrier
         if self.include_interactions:
             context_data['interactions'] = self.interactions
         return context_data
+
+    def get_note(self):
+        note_id = self.kwargs.get('note_id')
+
+        for note in self.notes:
+            if note.id == note_id:
+                return note
 
 
 class TeamMembersContextMixin:
