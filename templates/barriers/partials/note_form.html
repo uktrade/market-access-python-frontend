@@ -14,7 +14,7 @@
                 {% if document %}
                     <li class="attachments__list__item">
                         <span class="attachments__list__item__file-name">{{ document.name }} - {{ document.size|filesizeformat }}</span>
-                        <a href="{% url 'barriers:delete_note_document' barrier.id document.id %}?redirect={{ request.path|urlencode }}{% if form.note_id %}&note_id={{ form.note_id }}{% endif %}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
+                        <a href="{% url 'barriers:delete_note_document' barrier.id document.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
                         <input type="hidden" name="document_ids" value="{{ document.id }}">
                     </li>
                 {% endif %}

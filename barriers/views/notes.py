@@ -49,7 +49,7 @@ class BarrierEditNote(NoteSessionDocumentMixin, BarrierContextMixin, FormView):
     include_interactions = True
 
     def get(self, request, *args, **kwargs):
-        note = self.get_object()
+        note = self.get_note()
         session_key = self.get_session_key()
         if session_key not in self.request.session:
             self.set_session_documents(note.documents)
@@ -113,7 +113,13 @@ class DeleteNoteDocument(NoteSessionDocumentMixin, DeleteDocumentAjaxView):
     Deletes a document from the session
     """
     def get_redirect_url(self, *args, **kwargs):
-        return self.kwargs.get('redirect')
+        return reverse(
+            'barriers:edit_note',
+            kwargs={
+                'barrier_id': self.kwargs.get('barrier_id'),
+                'note_id': self.request.GET.get('note_id'),
+            }
+        )
 
 
 class CancelNoteDocument(NoteSessionDocumentMixin, RedirectView):
