@@ -204,7 +204,7 @@
                             <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:delete_note' barrier.id item.id %}">Delete</a>
                         {% endif %}
 
-                        {% if item.has_documents %}
+                        {% if item.documents %}
 
                             <div class="event-list__item__document">
                                 <ul class="event-list__item__document__list">

@@ -187,11 +187,11 @@ class NotesResource(Resource):
 
     def create(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/interactions"
-        return self.model(self.client.post(url, data=kwargs))
+        return self.model(self.client.post(url, json=kwargs))
 
     def update(self, id, *args, **kwargs):
         url = f"barriers/interactions/{id}"
-        return self.model(self.client.patch(url, data=kwargs))
+        return self.model(self.client.patch(url, json=kwargs))
 
 
 class DocumentsResource(Resource):

@@ -14,7 +14,7 @@
 {% block page_content %}
 
     {# TODO: Errors #}
-    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link">Back</a>
+    <a href="{% url 'barriers:cancel_assessment_document' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=barrier.barrier_title text='Economic assessment' %}
 
     <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_assessment_document' barrier.id %}">
@@ -90,7 +90,7 @@
             {% endif %}
 
             <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
-            (file size limit <strong>{{ max_file_size|filesizeformat }}</strong>)
+            (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
             </span>
 
             <input class="govuk-file-upload file-upload__input js-file-input" id="document" name="document" type="file" aria-describedby="document-hint">

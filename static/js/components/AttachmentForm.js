@@ -92,6 +92,7 @@ ma.components.AttachmentForm = (function( jessie ){
 				this.fileUpload.showLink();
 				this.attachments.addItem( {
 					id: documentId,
+					delete_url: data.delete_url,
 					name: file.name,
 					size: file.size
 				} );

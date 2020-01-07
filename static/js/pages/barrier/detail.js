@@ -25,14 +25,10 @@ ma.pages.barrier.detail = (function( doc, jessie ){
 		if( !submitButton ){ return; }
 		if( !form ){ return; }
 
-		var deleteUrl = jessie.getElementData( form, 'xhr-delete' );
-
-		if( !deleteUrl ){ return; }
-
 		try {
 
 			attachments = new ma.components.Attachments( fileUpload );
-			new ma.components.AttachmentForm( fileUpload, attachments, submitButton, deleteUrl );
+			new ma.components.AttachmentForm( fileUpload, attachments, submitButton );
 
 		} catch( e ){ return; }
 

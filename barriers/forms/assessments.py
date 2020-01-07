@@ -58,7 +58,7 @@ class EconomicAssessmentForm(DocumentMixin, forms.Form):
             )
 
 
-class DocumentForm(DocumentMixin, forms.Form):
+class AssessmentDocumentForm(DocumentMixin, forms.Form):
     document = RestrictedFileField(
         content_types=['text/csv', 'image/jpeg'],
         max_upload_size=settings.FILE_MAX_SIZE,

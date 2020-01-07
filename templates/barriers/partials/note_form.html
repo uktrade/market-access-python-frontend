@@ -1,7 +1,45 @@
-<div class="interaction-panel">
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Save note" class="govuk-button">
-    </form>
-</div>
+<form action="" method="post" enctype="multipart/form-data" data-xhr-upload="{% url 'barriers:add_note_document' barrier.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}">
+    {% csrf_token %}
+
+    <div class="govuk-form-group js-note-group">
+        <label class="govuk-label govuk-!-font-weight-bold" for="{{ form.note.name }}">{{ form.note.label }}</label>
+        <textarea class="govuk-textarea js-note-text" id="{{ form.note.name }}" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+    </div>
+
+    {% if documents %}
+    <div class="attachments">
+        <h3 class="attachments__heading">Attached documents</h3>
+        <ul class="attachments__list js-documents-list">
+            {% for document in documents %}
+                {% if document %}
+                    <li class="attachments__list__item">
+                        <span class="attachments__list__item__file-name">{{ document.name }} - {{ document.size|filesizeformat }}</span>
+                        <a href="{% url 'barriers:delete_note_document' barrier.id document.id %}?redirect={{ request.path|urlencode }}{% if form.note_id %}&note_id={{ form.note_id }}{% endif %}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
+                        <input type="hidden" name="document_ids" value="{{ document.id }}">
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="govuk-form-group file-upload js-form-group">
+        <label class="govuk-label visually-hidden" for="document">{{ form.document.label }}</label>
+
+        {% if form.document.errors %}
+            <span class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span>
+                {{ form.document.errors }}
+            </span>
+        {% endif %}
+
+        <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
+        (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
+        </span>
+
+        <input class="govuk-file-upload file-upload__input js-file-input" id="document" name="document" type="file" aria-describedby="document-hint">
+    </div>
+
+    <input type="submit" value="Save note" class="govuk-button js-submit-button">
+    <a class="button-cancel" href="{% url 'barriers:cancel_note_document' barrier.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}">Cancel</a>
+</form>

@@ -1,46 +1,43 @@
-from http import HTTPStatus
-
-from django.conf import settings
-from django.http import JsonResponse
-from django.template.defaultfilters import filesizeformat
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
 from ..forms.assessments import (
+    AssessmentDocumentForm,
     CommercialValueForm,
-    DocumentForm,
     EconomicAssessmentForm,
     EconomyValueForm,
     ExportValueForm,
     MarketSizeForm,
 )
-from .mixins import AssessmentMixin, BarrierContextMixin
+from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
+from .mixins import AssessmentMixin, BarrierContextMixin, SessionDocumentMixin
 
-from utils.exceptions import FileUploadError, ScanError
+
+class AssessmentSessionDocumentMixin(SessionDocumentMixin):
+    def get_session_key(self):
+        barrier_id = self.kwargs.get('barrier_id')
+        return f"barrier:{barrier_id}:assessment_documents"
 
 
 class AssessmentDetail(AssessmentMixin, BarrierContextMixin, TemplateView):
     template_name = "barriers/assessments/detail.html"
 
 
-class EconomicAssessment(AssessmentMixin, BarrierContextMixin, FormView):
+class EconomicAssessment(AssessmentSessionDocumentMixin, AssessmentMixin, BarrierContextMixin, FormView):
     template_name = "barriers/assessments/economic.html"
     form_class = EconomicAssessmentForm
 
     def get(self, request, *args, **kwargs):
         if self.assessment:
-            if 'assessment_documents' not in self.request.session:
-                self.request.session['assessment_documents'] = (
-                    self.assessment.documents
-                )
+            session_key = self.get_session_key()
+            if session_key not in self.request.session:
+                self.set_session_documents(self.assessment.documents)
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['documents'] = (
-            self.request.session.get('assessment_documents', [])
-        )
-        context_data['max_file_size'] = settings.FILE_MAX_SIZE
+        context_data['documents'] = self.get_session_documents()
         return context_data
 
     def get_initial(self):
@@ -58,7 +55,7 @@ class EconomicAssessment(AssessmentMixin, BarrierContextMixin, FormView):
 
     def form_valid(self, form):
         form.save()
-        del self.request.session['assessment_documents']
+        self.delete_session_documents()
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -86,83 +83,38 @@ class NewEconomicAssessment(RedirectView):
         )
 
 
-class AddAssessmentDocument(FormView):
-    """
-    Ajax view for uploading documents
-    """
-    form_class = DocumentForm
+class AddAssessmentDocument(AssessmentSessionDocumentMixin, AddDocumentAjaxView):
+    form_class = AssessmentDocumentForm
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['token'] = self.request.session.get('sso_token')
-        return kwargs
-
-    def form_valid(self, form):
-        try:
-            document = form.save()
-        except FileUploadError as e:
-            return JsonResponse(
-                {"message": str(e)},
-                status=HTTPStatus.INTERNAL_SERVER_ERROR,
-            )
-        except ScanError as e:
-            return JsonResponse(
-                {"message": str(e)},
-                status=HTTPStatus.UNAUTHORIZED,
-            )
-
-        self.add_document_to_session(document)
-
-        return JsonResponse({
-            "documentId": document['id'],
-            "file": {
-                "name": document['file']['name'],
-                "size": filesizeformat(document['file']['size']),
+    def get_delete_url(self, document):
+        return reverse(
+            'barriers:delete_assessment_document',
+            kwargs={
+                'barrier_id': self.kwargs.get('barrier_id'),
+                'document_id': document['id'],
             }
-        })
-
-    def add_document_to_session(self, document):
-        documents = self.request.session.get('assessment_documents', [])
-        documents.append({
-            'id': document['id'],
-            'name': document['file']['name'],
-            'size': document['file']['size'],
-        })
-        self.request.session['assessment_documents'] = documents
-
-    def form_invalid(self, form):
-        return JsonResponse({
-            "message": ", ".join(form.errors.get('document', [])),
-        }, status=HTTPStatus.BAD_REQUEST)
+        )
 
 
-class DeleteAssessmentDocument(RedirectView):
-    """
-    Deletes an assessment document from the session.
-
-    Can be called via ajax or as a get request.
-    """
-    def delete_document_from_session(self):
-        document_id = self.kwargs.get('document_id')
-        documents = self.request.session['assessment_documents']
-
-        self.request.session['assessment_documents'] = [
-            document
-            for document in documents
-            if document['id'] != str(document_id)
-        ]
-
-    def get(self, request, *args, **kwargs):
-        self.delete_document_from_session()
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.delete_document_from_session()
-        return JsonResponse({})
-
+class DeleteAssessmentDocument(AssessmentSessionDocumentMixin, DeleteDocumentAjaxView):
     def get_redirect_url(self, *args, **kwargs):
         return reverse(
             'barriers:economic_assessment',
+            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+        )
+
+
+class CancelAssessmentDocument(AssessmentSessionDocumentMixin, RedirectView):
+    """
+    Clears the session and redirects to the barrier detail page
+    """
+    def get(self, request, *args, **kwargs):
+        self.delete_session_documents()
+        return super().get(request, *args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse(
+            'barriers:assessment_detail',
             kwargs={'barrier_id': self.kwargs.get('barrier_id')}
         )
 

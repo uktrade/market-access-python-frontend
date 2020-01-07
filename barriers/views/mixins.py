@@ -6,6 +6,7 @@ from utils.api_client import MarketAccessAPIClient
 class BarrierContextMixin:
     include_interactions = False
     _barrier = None
+    _interactions = None
 
     @property
     def barrier(self):
@@ -13,10 +14,11 @@ class BarrierContextMixin:
             self._barrier = self.get_barrier()
         return self._barrier
 
-    def get(self, request, *args, **kwargs):
-        if self.include_interactions:
-            self.interactions = self.get_interactions()
-        return super().get(request, *args, **kwargs)
+    @property
+    def interactions(self):
+        if not self._interactions:
+            self._interactions = self.get_interactions()
+        return self._interactions
 
     def get_barrier(self):
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
@@ -140,3 +142,34 @@ class APIBarrierFormMixin(APIFormMixin):
             'barriers:barrier_detail',
             kwargs={'barrier_id': self.kwargs.get('barrier_id')}
         )
+
+
+class SessionDocumentMixin:
+    """
+    Helper class for handling session documents.
+
+    The session key can be specific to a particular object, so that multiple
+    objects can be edited without interfering with eachother.
+    """
+    def get_session_key(self):
+        raise NotImplementedError
+
+    def get_session_documents(self):
+        return self.request.session.get(self.get_session_key(), [])
+
+    def set_session_documents(self, documents):
+        session_key = self.get_session_key()
+        self.request.session[session_key] = [
+            {
+                'id': document.id,
+                'name': document.name,
+                'size': document.size,
+            }
+            for document in documents
+        ]
+
+    def delete_session_documents(self):
+        try:
+            del self.request.session[self.get_session_key()]
+        except KeyError:
+            pass

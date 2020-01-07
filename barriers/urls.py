@@ -3,6 +3,7 @@ from django.urls import path
 from .views.assessments import (
     AddAssessmentDocument,
     AssessmentDetail,
+    CancelAssessmentDocument,
     CommercialValueAssessment,
     DeleteAssessmentDocument,
     EconomicAssessment,
@@ -44,6 +45,9 @@ from .views.location import (
     RemoveAdminArea,
 )
 from .views.notes import (
+    AddNoteDocument,
+    CancelNoteDocument,
+    DeleteNoteDocument,
     BarrierAddNote,
     BarrierEditNote,
     BarrierDeleteNote,
@@ -95,13 +99,9 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/interactions/edit-note/<int:note_id>/", BarrierEditNote.as_view(), name="edit_note"),
     path("barriers/<uuid:barrier_id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
 
-    # path("barriers/<uuid:barrier_id>/interactions/documents/add/", AddDocument.as_view(), name=""),
-    # path("barriers/<uuid:barrier_id>/interactions/documents/cancel/", CancelDocument.as_view(), name=""),
-    # path("barriers/<uuid:barrier_id>/interactions/documents/<int:document_id>/delete/", DeleteDocument.as_view(), name=""),
-
-    # path("barriers/<uuid:barrier_id>/interactions/notes/<int:note_id>/documents/add/", AddNoteDocument.as_view(), name=""),
-    # path("barriers/<uuid:barrier_id>/interactions/notes/<int:note_id>/documents/cancel/", CancelNoteDocument.as_view(), name=""),
-    # path("barriers/<uuid:barrier_id>/interactions/notes/<int:note_id>/documents/<int:document_id>/delete/", DeleteNoteDocument.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/interactions/documents/add/", AddNoteDocument.as_view(), name="add_note_document"),
+    path("barriers/<uuid:barrier_id>/interactions/documents/cancel/", CancelNoteDocument.as_view(), name="cancel_note_document"),
+    path("barriers/<uuid:barrier_id>/interactions/documents/<uuid:document_id>/delete/", DeleteNoteDocument.as_view(), name="delete_note_document"),
 
     path("barriers/<uuid:barrier_id>/location/", BarrierEditLocationSession.as_view(), name="edit_location_session"),
     path("barriers/<uuid:barrier_id>/location/edit/", BarrierEditLocation.as_view(), name="edit_location"),
@@ -141,6 +141,6 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/assessment/export-value/", ExportValueAssessment.as_view(), name="export_value_assessment"),
     path("barriers/<uuid:barrier_id>/assessment/commercial-value/", CommercialValueAssessment.as_view(), name="commercial_value_assessment"),
     path("barriers/<uuid:barrier_id>/assessment/documents/add/", AddAssessmentDocument.as_view(), name="add_assessment_document"),
-    # path("barriers/<uuid:barrier_id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name=""),
+    path("barriers/<uuid:barrier_id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name="cancel_assessment_document"),
     path("barriers/<uuid:barrier_id>/assessment/documents/<uuid:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
 ]
