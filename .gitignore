@@ -112,6 +112,7 @@ db.sqlite3
 
 # VS Code
 .vscode/
+docker-compose.dev.env
 docker-compose.env
 config/settings/static/
 
@@ -124,3 +125,4 @@ src/
 # Static files
 static/admin
 static/CACHE
+static/django_extensions

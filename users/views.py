@@ -1,7 +1,7 @@
 import logging
 
 import re
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import urlencode
 import uuid
 
 from django.conf import settings
@@ -13,6 +13,7 @@ from django.views.generic import RedirectView
 import requests
 
 from utils.helpers import build_absolute_uri
+from utils.sessions import init_session
 
 logger = logging.getLogger(__name__)
 
@@ -68,12 +69,11 @@ class LoginCallback(RedirectView):
         if response.status_code == 200:
             response_data = response.json()
             access_token = response_data.get('access_token')
-            if access_token:
-                request.session['sso_token'] = access_token
-                del request.session['oauth_state_id']
+            success = init_session(request.session, access_token)
+            if success:
                 return HttpResponseRedirect(self.get_redirect_url())
             else:
-                raise PermissionDenied()
+                raise PermissionDenied("Failed to initialise session.")
         else:
             error_msg = f"Status code: {response.status_code}, error: {response.text}"
             raise PermissionDenied("No access_token from SSO: %s", error_msg)
@@ -102,3 +102,10 @@ class LoginCallback(RedirectView):
 
         if not re.match('^[a-zA-Z0-9-]+$', code):
             raise PermissionDenied(f"Invalid code: {code}")
+
+
+class SignOut(RedirectView):
+    def get(self, request, *args, **kwargs):
+        uri = f"{settings.SSO_BASE_URI}logout/"
+        request.session.flush()
+        return HttpResponseRedirect(uri)

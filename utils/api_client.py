@@ -1,3 +1,6 @@
+import logging
+from json import JSONDecodeError
+
 import requests
 import time
 
@@ -7,6 +10,9 @@ from barriers.models import Assessment, Barrier
 from interactions.models import HistoryItem, Interaction
 
 from utils.exceptions import APIException, ScanError
+
+
+logger = logging.getLogger(__name__)
 
 
 class MarketAccessAPIClient:
@@ -28,8 +34,27 @@ class MarketAccessAPIClient:
         response.raise_for_status()
         return response
 
-    def get(self, path, **kwargs):
-        return self.request('get', path, **kwargs).json()
+    def get(self, path, json=True, **kwargs):
+        response = self.request('get', path, **kwargs)
+        if response.status_code is 200:
+            if json:
+                json_data = None
+                try:
+                    json_data = response.json()
+                except JSONDecodeError:
+                    # some endpoints might return 200 even if they failed (like /whoami as of 2020/01/06)
+                    # in which case .json() is going to raise a JSONDecodeError
+                    logging.error(
+                        "Unexpected error at URI: %s, response.text: %s",
+                        response.url,
+                        response.text
+                    )
+                return json_data
+            else:
+                return response
+        else:
+            # TODO: The call has failed - investigate if sending back the error messages makes any sense?
+            return None
 
     def post(self, path, **kwargs):
         return self.request_with_results('post', path, **kwargs)

@@ -4,18 +4,7 @@ def permitted_applications(request):
     findExportersDomain = 'https://find-exporters.datahub.trade.gov.uk/'
     marketAccessDomain = 'https://market-access.trade.gov.uk/'
     return {
-        'user': {
-            'username': 'Mark',
-            'id': 48,
-            'permitted_applications': [
-                {
-                    'key': 'datahub-crm',
-                },
-                {
-                    'key': 'market-access',
-                }
-            ]
-        },
+        'user': request.session.get("user_data") or None,
         'apps': [
             {
                 'permittedKey': 'datahub-crm',

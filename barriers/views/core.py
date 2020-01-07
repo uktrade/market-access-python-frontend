@@ -25,8 +25,7 @@ class Dashboard(TemplateView):
         watchlists = []
         barriers = []
 
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
-        user_data = client.get('whoami')
+        user_data = self.request.session['user_data']
         user_profile = user_data.get('user_profile', None)
 
         if user_profile:
@@ -38,6 +37,7 @@ class Dashboard(TemplateView):
                 selected_watchlist.setdefault('is_current', True)
 
                 filters = self.get_watchlist_params(selected_watchlist)
+                client = MarketAccessAPIClient(self.request.session['sso_token'])
                 barriers = client.barriers.list(
                     ordering=sort,
                     **filters
