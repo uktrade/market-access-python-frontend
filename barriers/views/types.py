@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierContextMixin
+from .mixins import BarrierMixin
 from ..forms.types import (
     AddTypeForm,
     EditTypesForm,
@@ -10,7 +10,7 @@ from ..forms.types import (
 from utils.metadata import get_metadata
 
 
-class AddBarrierType(BarrierContextMixin, FormView):
+class AddBarrierType(BarrierMixin, FormView):
     template_name = "barriers/types/add_type.html"
     form_class = AddTypeForm
 
@@ -64,7 +64,7 @@ class AddBarrierType(BarrierContextMixin, FormView):
         )
 
 
-class BarrierEditTypes(BarrierContextMixin, FormView):
+class BarrierEditTypes(BarrierMixin, FormView):
     template_name = "barriers/types/edit.html"
     form_class = EditTypesForm
     use_session_types = False

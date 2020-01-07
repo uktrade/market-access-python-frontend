@@ -3,7 +3,7 @@ from django.urls import reverse
 from utils.api_client import MarketAccessAPIClient
 
 
-class BarrierContextMixin:
+class BarrierMixin:
     include_interactions = False
     _barrier = None
     _interactions = None

@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierContextMixin
+from .mixins import BarrierMixin
 from barriers.forms.location import (
     AddAdminAreaForm,
     EditCountryForm,
@@ -11,7 +11,7 @@ from barriers.forms.location import (
 from utils.metadata import get_metadata
 
 
-class BarrierEditLocation(BarrierContextMixin, FormView):
+class BarrierEditLocation(BarrierMixin, FormView):
     template_name = "barriers/edit/location.html"
     form_class = EditLocationForm
     use_session_location = False
@@ -82,7 +82,7 @@ class BarrierEditLocationSession(BarrierEditLocation):
     use_session_location = True
 
 
-class BarrierEditCountry(BarrierContextMixin, FormView):
+class BarrierEditCountry(BarrierMixin, FormView):
     template_name = "barriers/edit/country.html"
     form_class = EditCountryForm
 
@@ -120,7 +120,7 @@ class BarrierEditCountry(BarrierContextMixin, FormView):
         )
 
 
-class AddAdminArea(BarrierContextMixin, FormView):
+class AddAdminArea(BarrierMixin, FormView):
     template_name = "barriers/edit/add_admin_area.html"
     form_class = AddAdminAreaForm
 

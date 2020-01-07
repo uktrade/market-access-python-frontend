@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
-from .mixins import BarrierContextMixin, SessionDocumentMixin
+from .mixins import BarrierMixin, SessionDocumentMixin
 from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
 from ..forms.notes import AddNoteForm, EditNoteForm, NoteDocumentForm
 
@@ -18,7 +18,7 @@ class NoteSessionDocumentMixin(SessionDocumentMixin):
         return f"barrier:{barrier_id}:note:{note_id}:documents"
 
 
-class BarrierAddNote(NoteSessionDocumentMixin, BarrierContextMixin, FormView):
+class BarrierAddNote(NoteSessionDocumentMixin, BarrierMixin, FormView):
     template_name = "barriers/edit/add_note.html"
     form_class = AddNoteForm
     include_interactions = True
@@ -46,7 +46,7 @@ class BarrierAddNote(NoteSessionDocumentMixin, BarrierContextMixin, FormView):
         )
 
 
-class BarrierEditNote(NoteSessionDocumentMixin, BarrierContextMixin, FormView):
+class BarrierEditNote(NoteSessionDocumentMixin, BarrierMixin, FormView):
     template_name = "barriers/barrier_detail.html"
     form_class = EditNoteForm
     include_interactions = True
@@ -127,7 +127,7 @@ class CancelNoteDocument(NoteSessionDocumentMixin, RedirectView):
         )
 
 
-class BarrierDeleteNote(NoteSessionDocumentMixin, BarrierContextMixin, TemplateView):
+class BarrierDeleteNote(NoteSessionDocumentMixin, BarrierMixin, TemplateView):
     template_name = "barriers/delete_note.html"
     include_interactions = True
 

@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierContextMixin
+from .mixins import BarrierMixin
 from barriers.forms.sectors import (
     AddSectorsForm,
     EditSectorsForm,
@@ -10,7 +10,7 @@ from barriers.forms.sectors import (
 from utils.metadata import get_metadata
 
 
-class BarrierEditSectors(BarrierContextMixin, FormView):
+class BarrierEditSectors(BarrierMixin, FormView):
     template_name = "barriers/edit/sectors.html"
     form_class = EditSectorsForm
     use_session_sectors = False
@@ -65,7 +65,7 @@ class BarrierEditSectorsSession(BarrierEditSectors):
     use_session_sectors = True
 
 
-class BarrierAddSectors(BarrierContextMixin, FormView):
+class BarrierAddSectors(BarrierMixin, FormView):
     template_name = "barriers/edit/add_sectors.html"
     form_class = AddSectorsForm
 

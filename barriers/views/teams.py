@@ -3,17 +3,17 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
 from ..forms.teams import AddTeamMemberForm, UserSearchForm
-from .mixins import BarrierContextMixin, TeamMembersContextMixin
+from .mixins import BarrierMixin, TeamMembersContextMixin
 
 from utils.api_client import MarketAccessAPIClient
 from utils.sso import SSOClient
 
 
-class BarrierTeam(TeamMembersContextMixin, BarrierContextMixin, TemplateView):
+class BarrierTeam(TeamMembersContextMixin, BarrierMixin, TemplateView):
     template_name = "barriers/team.html"
 
 
-class SearchTeamMember(BarrierContextMixin, FormView):
+class SearchTeamMember(BarrierMixin, FormView):
     template_name = "barriers/teams/search.html"
     form_class = UserSearchForm
 
@@ -25,7 +25,7 @@ class SearchTeamMember(BarrierContextMixin, FormView):
         )
 
 
-class AddTeamMember(TeamMembersContextMixin, BarrierContextMixin, FormView):
+class AddTeamMember(TeamMembersContextMixin, BarrierMixin, FormView):
     template_name = "barriers/teams/add_member.html"
     form_class = AddTeamMemberForm
 
@@ -57,7 +57,7 @@ class AddTeamMember(TeamMembersContextMixin, BarrierContextMixin, FormView):
 
 class DeleteTeamMember(
     TeamMembersContextMixin,
-    BarrierContextMixin,
+    BarrierMixin,
     TemplateView
 ):
     template_name = "barriers/teams/delete_member.html"

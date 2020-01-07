@@ -5,7 +5,7 @@ from django.http import StreamingHttpResponse
 from django.views.generic import FormView, TemplateView, View
 
 from ..forms.search import BarrierSearchForm
-from .mixins import BarrierContextMixin
+from .mixins import BarrierMixin
 
 from utils.api_client import MarketAccessAPIClient
 from utils.metadata import get_metadata
@@ -203,7 +203,7 @@ class DownloadBarriers(SearchFormMixin, View):
         return response
 
 
-class BarrierDetail(BarrierContextMixin, TemplateView):
+class BarrierDetail(BarrierMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
     include_interactions = True
 

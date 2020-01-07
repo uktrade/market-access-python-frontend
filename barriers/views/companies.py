@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierContextMixin
+from .mixins import BarrierMixin
 from barriers.forms.companies import (
     AddCompanyForm,
     CompanySearchForm,
@@ -11,7 +11,7 @@ from barriers.forms.companies import (
 from utils.datahub import DatahubClient
 
 
-class BarrierSearchCompany(BarrierContextMixin, FormView):
+class BarrierSearchCompany(BarrierMixin, FormView):
     template_name = "barriers/companies/search.html"
     form_class = CompanySearchForm
 
@@ -23,7 +23,7 @@ class BarrierSearchCompany(BarrierContextMixin, FormView):
         )
 
 
-class CompanyDetail(BarrierContextMixin, FormView):
+class CompanyDetail(BarrierMixin, FormView):
     template_name = "barriers/companies/detail.html"
     form_class = AddCompanyForm
 
@@ -52,7 +52,7 @@ class CompanyDetail(BarrierContextMixin, FormView):
         )
 
 
-class BarrierEditCompanies(BarrierContextMixin, FormView):
+class BarrierEditCompanies(BarrierMixin, FormView):
     template_name = "barriers/companies/edit.html"
     form_class = EditCompaniesForm
     use_session_companies = False
