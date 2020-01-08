@@ -82,7 +82,7 @@
             {% endif %}
 
             <p class="filter-results-download">
-                {% if barriers|length > 0 %}
+                {% if barriers|length %}
                     <span class="filter-results-download__text">
                     {% if barriers|length == 1 %}
                         You can download this barrier
@@ -90,8 +90,7 @@
                         You can download these {{ barriers|length }} barriers
                     {% endif %}
                     </span>
-                    {# Download barriers url #}
-                    <a class="govuk-button filter-results-download__button" href="">Download</a>
+                    <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">Download</a>
                 {% else %}
                     <span class="filter-results-download__text">There are no barriers to download</span>
                 {% endif %}

@@ -1,7 +1,8 @@
 from urllib.parse import urlencode
 
 from django.conf import settings
-from django.views.generic import FormView, TemplateView
+from django.http import StreamingHttpResponse
+from django.views.generic import FormView, TemplateView, View
 
 from ..forms.search import BarrierSearchForm
 from .mixins import BarrierContextMixin
@@ -192,6 +193,25 @@ class FindABarrier(SearchFormMixin, FormView):
         form = self.get_form()
         form.full_clean()
         return self.render_to_response(self.get_context_data(form=form))
+
+
+class DownloadBarriers(SearchFormMixin, View):
+    form_class = BarrierSearchForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(**self.get_form_kwargs())
+        form.full_clean()
+        search_parameters = form.get_api_search_parameters()
+
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
+        file = client.barriers.get_csv(**search_parameters)
+
+        response = StreamingHttpResponse(
+            file.iter_content(),
+            content_type=file.headers['Content-Type']
+        )
+        response['Content-Disposition'] = file.headers['Content-Disposition']
+        return response
 
 
 class BarrierDetail(BarrierContextMixin, TemplateView):

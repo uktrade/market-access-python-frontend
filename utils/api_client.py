@@ -164,6 +164,10 @@ class BarriersResource(Resource):
         url = f"barriers/{barrier_id}/assessment"
         return self.client.patch(url, json=kwargs)
 
+    def get_csv(self, *args, **kwargs):
+        url = f"barriers/export"
+        return self.client.get(url, params=kwargs, json=False)
+
 
 class InteractionsResource(Resource):
     resource_name = "interactions"
