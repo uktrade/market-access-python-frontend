@@ -124,20 +124,18 @@ class BarrierSearchForm(forms.Form):
 
     def get_api_search_parameters(self):
         params = {}
-        if self.is_valid():
-            params['text'] = self.cleaned_data['search']
-            params['location'] = ",".join(
-                self.cleaned_data['country']
-                + self.cleaned_data['region']
-            )
-            params['sector'] = ",".join(self.cleaned_data['sector'])
-            params['barrier_type'] = ",".join(self.cleaned_data['type'])
-            params['priority'] = ",".join(self.cleaned_data['priority'])
-            params['status'] = ",".join(self.cleaned_data['status'])
+        params['text'] = self.cleaned_data.get('search')
+        params['location'] = ",".join(
+            self.cleaned_data.get('country', [])
+            + self.cleaned_data.get('region', [])
+        )
+        params['sector'] = ",".join(self.cleaned_data.get('sector', []))
+        params['barrier_type'] = ",".join(self.cleaned_data.get('type', []))
+        params['priority'] = ",".join(self.cleaned_data.get('priority', []))
+        params['status'] = ",".join(self.cleaned_data.get('status', []))
 
-            if '1' in self.cleaned_data['created_by']:
-                params['user'] = '1'
-            elif '2' in self.cleaned_data['created_by']:
-                params['team'] = '2'
-            params = {k: v for k, v in params.items() if v}
-        return params
+        if '1' in self.cleaned_data.get('created_by', []):
+            params['user'] = '1'
+        elif '2' in self.cleaned_data.get('created_by', []):
+            params['team'] = '2'
+        return {k: v for k, v in params.items() if v}

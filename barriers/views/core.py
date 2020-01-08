@@ -109,7 +109,38 @@ class AddABarrier(TemplateView):
         return context_data
 
 
-class FindABarrier(FormView):
+class SearchFormMixin:
+    """
+    Mixin for use with BarrierSearchForm.
+
+    Retrieves search form data from the querystring.
+    """
+    def get_form_kwargs(self):
+        return {
+            'metadata': get_metadata(),
+            'data': self.get_form_data(),
+        }
+
+    def get_form_data(self):
+        """
+        Get form data from the GET parameters.
+
+        The 'search' field is a string, everything else should be a list.
+        """
+        data = {
+            'search': self.request.GET.get('search'),
+            'country': self.request.GET.getlist('country'),
+            'sector': self.request.GET.getlist('sector'),
+            'type': self.request.GET.getlist('type'),
+            'region': self.request.GET.getlist('region'),
+            'priority': self.request.GET.getlist('priority'),
+            'status': self.request.GET.getlist('status'),
+            'created_by': self.request.GET.getlist('created_by'),
+        }
+        return {k: v for k, v in data.items() if v}
+
+
+class FindABarrier(SearchFormMixin, FormView):
     template_name = "barriers/find_a_barrier.html"
     form_class = BarrierSearchForm
 
@@ -139,8 +170,8 @@ class FindABarrier(FormView):
         """
         filters = {}
 
-        for name, value in form.data.items():
-            remove_params = form.data.copy()
+        for name, value in form.cleaned_data.items():
+            remove_params = form.cleaned_data.copy()
             del remove_params[name]
 
             field = form.fields[name]
@@ -157,32 +188,9 @@ class FindABarrier(FormView):
 
         return filters
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['metadata'] = get_metadata()
-        kwargs['data'] = self.get_form_data()
-        return kwargs
-
-    def get_form_data(self):
-        """
-        Get form data from the GET parameters.
-
-        The 'search' field is a string, everything else should be a list.
-        """
-        data = {
-            'search': self.request.GET.get('search'),
-            'country': self.request.GET.getlist('country'),
-            'sector': self.request.GET.getlist('sector'),
-            'type': self.request.GET.getlist('type'),
-            'region': self.request.GET.getlist('region'),
-            'priority': self.request.GET.getlist('priority'),
-            'status': self.request.GET.getlist('status'),
-            'created_by': self.request.GET.getlist('created_by'),
-        }
-        return {k: v for k, v in data.items() if v}
-
     def get(self, request, *args, **kwargs):
         form = self.get_form()
+        form.full_clean()
         return self.render_to_response(self.get_context_data(form=form))
 
 
