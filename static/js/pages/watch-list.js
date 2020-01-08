@@ -6,7 +6,7 @@ ma.pages.watchList = function(){
 
 		new ma.components.ConditionalRadioContent({
 			inputContainer: '.replace-or-new',
-			inputName: 'replaceOrNew',
+			inputName: 'replace_or_new',
 			conditionalElem: '#conditional-replace',
 			shouldShow: function( value ){ return ( value === 'replace' ); }
 		});

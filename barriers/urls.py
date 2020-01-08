@@ -68,6 +68,7 @@ from .views.types import (
     BarrierEditTypesSession,
     BarrierRemoveType,
 )
+from .views.watchlist import SaveWatchlist
 
 app_name = "barriers"
 
@@ -78,6 +79,8 @@ urlpatterns = [
     path("find-a-barrier/download/", DownloadBarriers.as_view(), name="download"),
     path("what-is-a-barrier/", WhatIsABarrier.as_view(), name="what_is_a_barrier"),
     path("documents/<uuid:document_id>/download/", DownloadDocument.as_view(), name="download_document"),
+
+    path("watch-list/save/", SaveWatchlist.as_view(), name="save_watchlist"),
 
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
 
