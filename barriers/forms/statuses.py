@@ -11,7 +11,27 @@ from utils.metadata import (
     RESOLVED_IN_PART,
     RESOLVED_IN_FULL,
     DORMANT,
+    UNKNOWN,
 )
+
+
+class UnknownForm(forms.Form):
+    """
+    Subform of BarrierStatusForm
+    """
+    unknown_summary = forms.CharField(
+        label="Provide a summary of why this barrier is unknown",
+        widget=forms.Textarea,
+    )
+
+    def as_html(self):
+        template_name = "barriers/forms/statuses/unknown.html"
+        return render_to_string(template_name, context={'form': self})
+
+    def get_api_params(self):
+        return {
+            'status_summary': self.cleaned_data['unknown_summary'],
+        }
 
 
 class OpenPendingForm(forms.Form):
@@ -147,6 +167,11 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
     """
     CHOICES = [
         (
+            UNKNOWN,
+            "Unknown",
+            "Barrier requires further work for the status to be known "
+        ),
+        (
             OPEN_PENDING_ACTION,
             "Open: Pending action",
             "Barrier is awaiting action"
@@ -174,6 +199,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         widget=forms.RadioSelect,
     )
     subform_classes = {
+        UNKNOWN: UnknownForm,
         OPEN_PENDING_ACTION: OpenPendingForm,
         OPEN_IN_PROGRESS: OpenInProgressForm,
         RESOLVED_IN_PART: ResolvedInPartForm,
