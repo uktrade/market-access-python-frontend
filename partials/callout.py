@@ -45,20 +45,12 @@ class CalloutButton:
             "start": "callout__button--start",
         }
 
-    def __init__(self, form_action=None, form_method="POST", csrf_token=None, text=None, href=None, button_type=None):
+    def __init__(self, form_action=None, form_method="POST", text=None, href=None, button_type=None):
         """
         Helper to add a form or simple button to Callout.
-
-        :param action:
-        :param method:
-        :param csrf_token:
-        :param text:
-        :param href:
-        :param type:
         """
         self.form_action = form_action
         self.form_method = form_method
-        self.csrf_token = csrf_token
         self.text = text
         self.href = href
         self.button_type = button_type

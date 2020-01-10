@@ -10,20 +10,15 @@
     {#  Button  #}
     {% if callout.button %}
         {#    FORM    #}
-        {% if callout.button.action %}
-            <form action="{{ callout.button.action }}" method="{{ callout.button.method }}">
-                {% if callout.button.csrf_token %}
-                    <input type="hidden" name="_csrf" value="{{ callout.button.csrfToken }}">
-                {% endif %}
-                    <input type="submit"
-                           value="{{ callout.button.text }}"
-                           class="{{ callout.button.button_css_class }}">
+        {% if callout.button.form_action %}
+            <form action="{{ callout.button.form_action }}" method="{{ callout.button.form_method }}">
+                {% csrf_token %}
+                <input type="submit" value="{{ callout.button.text }}" class="{{ callout.button.button_css_class }}">
             </form>
         {% endif %}
         {#  Simple Link  #}
         {% if callout.button.href %}
-            <a href="{{ callout.button.href }}"
-               class="{{ callout.button.button_css_class }}">{{ callout.button.text }}</a>
+            <a href="{{ callout.button.href }}" class="{{ callout.button.button_css_class }}">{{ callout.button.text }}</a>
         {% endif %}
     {% endif %}
 
