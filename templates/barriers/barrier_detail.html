@@ -144,11 +144,11 @@
 
     <section class="barrier-content">
 
-        {% if barrier.is_resolved or barrier.is_hibernated %}
+        {% if barrier.is_resolved or barrier.is_partially_resolved or barrier.is_hibernated %}
 
             <div class="barrier-status-details">
                 <span class="barrier-status-details__icon barrier-status-details__icon--{{ barrier.status.modifier }}">
-                    {% if barrier.is_resolved %}
+                    {% if barrier.is_resolved or barrier.is_partially_resolved %}
 
                         <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M21.6 0L9.6 12L4 6.4L0 10.4L9.6 20L25.6 4L21.6 0Z" fill="#006435">
@@ -163,7 +163,7 @@
                     {% endif %}
                 </span>
                 <h2 class="barrier-status-details__heading">Barrier {% if barrier.is_partially_resolved %}partially resolved{% elif barrier.is_resolved %}resolved{% else %}dormant{% endif %} <span class="barrier-status-details__heading__caption">in {{ barrier.status_date|date:"F Y" }}</span></2>
-                <h3 class="barrier-status-details__sub-heading">Summary {% if barrier.is_resolved %} of resolution{% endif %}</h3>
+                <h3 class="barrier-status-details__sub-heading">Summary {% if barrier.is_resolved or barrier.is_partially_resolved %} of resolution{% endif %}</h3>
                 <p class="barrier-status-details__text">{{ barrier.status_summary|linebreaksbr }}</p>
                 <a href="{% url 'barriers:edit_status' barrier.id %}"> Edit</a>
             </div>
@@ -247,14 +247,12 @@
                         Barrier status changed from <strong>{{ item.state.from }}</strong> to <strong>{{ item.state.to }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
 
                         {% if item.state.is_resolved %}
-
                              Resolved date set as <strong>{{ item.state.date|date:"F Y" }}</strong>.
-
                         {% endif %}
                     {% endif %}
                     </p>
 
-                    {% if item.event == 'BARRIER_STATUS_CHANGE' and item.state.showSummary %}
+                    {% if item.event == 'BARRIER_STATUS_CHANGE' and item.state.show_summary %}
                         <p class="event-list__item__text">{{ item.text|escape|linebreaksbr  }}</p>
                     {% endif %}
 

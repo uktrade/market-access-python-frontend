@@ -1,4 +1,11 @@
 from utils.metadata import get_metadata
+from utils.metadata import (
+    OPEN_PENDING_ACTION,
+    OPEN_IN_PROGRESS,
+    RESOLVED_IN_PART,
+    RESOLVED_IN_FULL,
+    UNKNOWN,
+)
 from utils.models import APIModel
 
 import dateutil.parser
@@ -37,15 +44,17 @@ class HistoryItem(APIModel):
                     data['new_value'],
                     data['field_info']
                 ),
-                'date': data['field_info']['status_date'],
-                'isResolved': data['new_value'] in (
-                    "RESOLVED",
-                    "PART_RESOLVED"
+                'date': dateutil.parser.parse(
+                    data['field_info']['status_date']
                 ),
-                'showSummary': data['new_value'] in (
-                    "OPEN",
-                    "UNKNOWN",
-                    "PENDING"
+                'is_resolved': data['new_value'] in (
+                    RESOLVED_IN_PART,
+                    RESOLVED_IN_FULL,
+                ),
+                'show_summary': data['new_value'] in (
+                    OPEN_IN_PROGRESS,
+                    UNKNOWN,
+                    OPEN_PENDING_ACTION,
                 ),
             }
             self.text = data['field_info']['status_summary']
