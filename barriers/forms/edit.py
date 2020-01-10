@@ -5,7 +5,7 @@ from django import forms
 from .mixins import APIFormMixin
 
 from utils.api_client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText
+from utils.forms import ChoiceFieldWithHelpText, MonthYearField
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -176,8 +176,7 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
 
 
 class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
-    month = forms.IntegerField(label="Month", min_value=1, max_value=12)
-    year = forms.IntegerField(label="Year", min_value=2000, max_value=2100)
+    status_date = MonthYearField(required=False)
     status_summary = forms.CharField(
         label='Provide a summary of why this barrier is dormant',
         widget=forms.Textarea,
@@ -190,12 +189,7 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
             self.fields['status_summary'].label = (
                 "Provide a summary of how this barrier was resolved"
             )
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        if self.is_resolved and self.is_valid():
-            self.validate_status_date()
+            self.fields['status_date'].required = True
 
     def validate_status_date(self):
         status_date = datetime.date(

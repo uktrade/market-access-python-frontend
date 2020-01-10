@@ -12,31 +12,19 @@
         {% csrf_token %}
 
         {% if object.is_resolved or object.is_partially_resolved %}
-            <div class="govuk-form-group{% if form.month.errors %} govuk-form-group--error{% endif %}">
-                <fieldset class="govuk-fieldset" {% if form.month.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
+            <div class="govuk-form-group{% if form.status_date.errors %} govuk-form-group--error{% endif %}">
+                <fieldset class="govuk-fieldset" {% if form.status_date.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date the barrier was resolved</legend>
 
-                    {% if form.month.errors %}
+                    {% if form.status_date.errors %}
                         <span id="status-date-group-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span>
-                            {{ form.month.errors.as_text }}
+                            {{ form.status_date.errors.as_text }}
                         </span>
                     {% endif %}
 
                     <div class="govuk-date-input" id="status-date-group">
-                        <div class="govuk-date-input__item">
-                            <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="status-date">{{ form.month.label }}</label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="status-date" name="month" type="number" pattern="[0-9]*" {% if form.month.value %}value="{{ form.month.value }}"{% endif %}>
-                            </div>
-                        </div>
-
-                        <div class="govuk-date-input__item">
-                            <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="status-date-group-year">{{ form.year.label }}</label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="status-date-group-year" name="year" type="number" pattern="[0-9]*" {% if form.year.value %}value="{{ form.year.value }}"{% endif %}>
-                            </div>
-                        </div>
+                        {{ form.status_date }}
                     </div>
                 </fieldset>
             </div>
