@@ -1,7 +1,12 @@
+import datetime
 import magic
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.forms import widgets
 from django.template.defaultfilters import filesizeformat
+
+from .validators import validate_date_not_in_future
 
 
 class MultipleValueField(forms.MultipleChoiceField):
@@ -83,3 +88,53 @@ class ChoiceFieldWithHelpText(forms.ChoiceField):
                 if value == k or text_value == str(k):
                     return True
         return False
+
+
+class MonthYearWidget(forms.MultiWidget):
+    template_name = "forms/widgets/month_year_widget.html"
+
+    def __init__(self, attrs=None):
+        widget = (widgets.NumberInput(), widgets.NumberInput())
+        super().__init__(widget, attrs=attrs)
+
+    def decompress(self, value):
+        if value:
+            return [value.month, value.year]
+        return [None, None]
+
+
+class MonthYearField(forms.MultiValueField):
+    widget = MonthYearWidget
+    default_validators = [validate_date_not_in_future]
+
+    def __init__(self, **kwargs):
+        fields = (
+            forms.IntegerField(label="Month", min_value=1, max_value=12),
+            forms.IntegerField(label="Year", min_value=2000, max_value=2100),
+        )
+        super().__init__(
+            error_messages={
+                'incomplete': (
+                    'Enter resolution date and include a month and year.'
+                ),
+            },
+            fields=fields,
+            require_all_fields=True,
+            **kwargs
+        )
+
+    def compress(self, data_list):
+        if data_list:
+            month, year = data_list
+            if month in self.empty_values:
+                raise ValidationError(
+                    self.error_messages['invalid_month'],
+                    code='invalid_month'
+                )
+            if year in self.empty_values:
+                raise ValidationError(
+                    self.error_messages['invalid_year'],
+                    code='invalid_year'
+                )
+
+            return datetime.date(year, month, 1)
