@@ -99,17 +99,6 @@ class Dashboard(TemplateView):
         return filters
 
 
-class AddABarrier(TemplateView):
-    template_name = "barriers/add_a_barrier.html"
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data.update({
-            'page': 'add-a-barrier',
-        })
-        return context_data
-
-
 class SearchFormMixin:
     """
     Mixin for use with BarrierSearchForm.

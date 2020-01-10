@@ -1,0 +1,25 @@
+<div class="{{ callout.css_class }}">
+    {#  Header & description  #}
+    {% if callout.heading %}
+        <h2 class="callout__heading">{{ callout.heading }}</h2>
+    {% endif %}
+    {% if callout.text %}
+        <p class="callout__text">{{ callout.text }}</p>
+    {% endif %}
+
+    {#  Button  #}
+    {% if callout.button %}
+        {#    FORM    #}
+        {% if callout.button.form_action %}
+            <form action="{{ callout.button.form_action }}" method="{{ callout.button.form_method }}">
+                {% csrf_token %}
+                <input type="submit" value="{{ callout.button.text }}" class="{{ callout.button.button_css_class }}">
+            </form>
+        {% endif %}
+        {#  Simple Link  #}
+        {% if callout.button.href %}
+            <a href="{{ callout.button.href }}" class="{{ callout.button.button_css_class }}">{{ callout.button.text }}</a>
+        {% endif %}
+    {% endif %}
+
+</div>

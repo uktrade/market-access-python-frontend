@@ -1,14 +1,12 @@
 from django.urls import path
 
-# from .views import (
-#     NewReport
-# )
+from reports.views import NewReport, NewReportBarrierStatus
 
-app_name = "barriers"
+app_name = "reports"
 
 urlpatterns = [
-    # path("", Dashboard.as_view(), name="dashboard"),
-    # path("new/", NewReport.as_view(), name="new_report"),
+    path("reports/new/", NewReport.as_view(), name="new_report"),
+    path("reports/new/start/", NewReportBarrierStatus.as_view(), name="barrier_status"),
 
     # path("barriers/<uuid:id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
 
