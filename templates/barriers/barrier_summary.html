@@ -16,7 +16,7 @@
         <span class="barrier-summary__priority">
             <span class="priority-marker priority-marker--{{ barrier.priority.code|lower}}"></span><strong>{{ barrier.priority.name }}</strong> priority
         </span>
-        <a class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_status' barrier.id %}">change status</a>
+        <a class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:status' barrier.id %}">change status</a>
         <a class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">change priority</a>
     </div>
 </section>

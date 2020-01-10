@@ -9,7 +9,6 @@ ma.pages.barrier.status = function( data ){
 	for( ; i < l; i++ ){
 
 		(function( type ){
-
 			new ma.components.ConditionalRadioContent({
 				inputContainer: '.status',
 				inputName: 'status',
@@ -17,13 +16,13 @@ ma.pages.barrier.status = function( data ){
 				shouldShow: function( value ){ return ( value == type ); }
 			});
 
-			if( type === data.statusTypes.PENDING ){
+			if( type === data.openPendingActionValue ){
 
 				new ma.components.ConditionalRadioContent({
 					inputContainer: '.js-pending-type',
-					inputName: 'pendingType',
-					conditionalElem: ( '#conditional-' + data.pendingOther ),
-					shouldShow: function( value ){ return ( value == data.pendingOther ); }
+					inputName: 'pending_type',
+					conditionalElem: ( '#conditional-OTHER' ),
+					shouldShow: function( value ){ return ( value == "OTHER" ); }
 				});
 			}
 

@@ -10,6 +10,13 @@ from barriers.models import Assessment, Barrier
 from interactions.models import HistoryItem, Interaction
 
 from utils.exceptions import APIException, ScanError
+from utils.metadata import (
+    OPEN_PENDING_ACTION,
+    OPEN_IN_PROGRESS,
+    RESOLVED_IN_PART,
+    RESOLVED_IN_FULL,
+    DORMANT,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -167,6 +174,19 @@ class BarriersResource(Resource):
     def get_csv(self, *args, **kwargs):
         url = f"barriers/export"
         return self.client.get(url, params=kwargs, json=False)
+
+    def set_status(self, barrier_id, status, **kwargs):
+        if status == OPEN_PENDING_ACTION:
+            url = f"barriers/{barrier_id}/open-action_required"
+        elif status == OPEN_IN_PROGRESS:
+            url = f"barriers/{barrier_id}/open-in-progress"
+        elif status == RESOLVED_IN_PART:
+            url = f"barriers/{barrier_id}/resolve-in-part"
+        elif status == RESOLVED_IN_FULL:
+            url = f"barriers/{barrier_id}/resolve-in-full"
+        elif status == DORMANT:
+            url = f"barriers/{barrier_id}/hibernate"
+        return self.client.put(url, json=kwargs)
 
 
 class InteractionsResource(Resource):

@@ -1,0 +1,29 @@
+<div class="govuk-form-group{% if form.resolved_date.errors %} govuk-form-group--error{% endif %}">
+    <fieldset class="govuk-fieldset" {% if form.resolved_date.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date the barrier was resolved</legend>
+
+        {% if form.resolved_date.errors %}
+            <span id="status-date-group-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span>
+                {{ form.resolved_date.errors.as_text }}
+            </span>
+        {% endif %}
+
+        <div class="govuk-date-input" id="status-date-group">
+            {{ form.resolved_date }}
+        </div>
+    </fieldset>
+</div>
+
+<div class="govuk-form-group{% if form.resolved_summary.errors %} govuk-form-group--error{% endif %}">
+    <label class="govuk-label govuk-label--s" for="{{ form.resolved_summary.name }}">{{ form.resolved_summary.label }}</label>
+
+    {% if form.resolved_summary.errors %}
+        <span class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span>
+            {{ form.resolved_summary.errors.as_text }}
+        </span>
+    {% endif %}
+
+    <textarea class="govuk-textarea{% if form.resolved_summary.errors %} govuk-textarea--error{% endif %}" id="{{ form.resolved_summary.name }}" name="{{ form.resolved_summary.name }}" rows="5">{% if form.resolved_summary.value %}{{ form.resolved_summary.value }}{% endif %}</textarea>
+</div>
