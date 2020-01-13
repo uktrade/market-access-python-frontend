@@ -16,6 +16,7 @@ from utils.metadata import (
     RESOLVED_IN_PART,
     RESOLVED_IN_FULL,
     DORMANT,
+    UNKNOWN,
 )
 
 
@@ -176,6 +177,8 @@ class BarriersResource(Resource):
         return self.client.get(url, params=kwargs, json=False)
 
     def set_status(self, barrier_id, status, **kwargs):
+        if status == UNKNOWN:
+            url = f"barriers/{barrier_id}/unknown"
         if status == OPEN_PENDING_ACTION:
             url = f"barriers/{barrier_id}/open-action_required"
         elif status == OPEN_IN_PROGRESS:

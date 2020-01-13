@@ -1,8 +1,6 @@
 from django import forms
 from django.template.loader import render_to_string
 
-from .mixins import APIFormMixin
-
 from utils.api_client import MarketAccessAPIClient
 from utils.forms import ChoiceFieldWithHelpText, MonthYearField
 from utils.metadata import (
@@ -72,15 +70,17 @@ class OpenPendingForm(forms.Form):
                 "pending_type_other",
                 "Enter a description for the pending action"
             )
-        else:
-            cleaned_data['pending_type_other'] = None
 
     def get_api_params(self):
-        return {
+        params = {
             'status_summary': self.cleaned_data['pending_summary'],
             'sub_status': self.cleaned_data['pending_type'],
-            'sub_status_other': self.cleaned_data['pending_type_other'],
         }
+        if self.cleaned_data.get("pending_type") == "OTHER":
+            params.update({
+                'sub_status_other': self.cleaned_data['pending_type_other']
+            })
+        return params
 
 
 class OpenInProgressForm(forms.Form):
@@ -161,7 +161,7 @@ class DormantForm(forms.Form):
         return {'status_summary': self.cleaned_data['dormant_summary']}
 
 
-class BarrierStatusForm(APIFormMixin, forms.Form):
+class BarrierStatusForm(forms.Form):
     """
     Form with subforms depending on the radio button selected
     """
@@ -208,14 +208,24 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
     }
     subforms = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, barrier, token, *args, **kwargs):
+        self.barrier = barrier
+        self.token = token
         super().__init__(*args, **kwargs)
+        self.remove_current_status_from_choices()
         data = kwargs.get('data')
         for value, subform_class in self.subform_classes.items():
             if data and data.get('status') == value:
                 self.subforms[value] = subform_class(data)
             else:
                 self.subforms[value] = subform_class()
+
+    def remove_current_status_from_choices(self):
+        self.fields['status'].choices = [
+            choice
+            for choice in self.fields['status'].choices
+            if choice[0] != self.barrier.status['id']
+        ]
 
     def status_choices(self):
         for value, name, help_text in self.fields['status'].choices:
@@ -236,7 +246,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         subform = self.get_subform()
         client.barriers.set_status(
-            barrier_id=self.id,
+            barrier_id=self.barrier.id,
             status=self.cleaned_data['status'],
             **subform.get_api_params(),
         )
