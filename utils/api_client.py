@@ -30,6 +30,7 @@ class MarketAccessAPIClient:
         self.documents = DocumentsResource(self)
         self.interactions = InteractionsResource(self)
         self.notes = NotesResource(self)
+        self.users = UsersResource(self)
 
     def request(self, method, path, **kwargs):
         url = f'{settings.MARKET_ACCESS_API_URI}{path}'
@@ -260,3 +261,11 @@ class DocumentsResource(Resource):
 
     def get_download(self, document_id):
         return self.client.get(f"documents/{document_id}/download")
+
+
+class UsersResource(Resource):
+    resource_name = "whoami"
+
+    def patch(self, *args, **kwargs):
+        url = f"{self.resource_name}"
+        return self.client.patch(url, json=kwargs)

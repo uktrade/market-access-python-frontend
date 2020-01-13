@@ -56,6 +56,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'barriers',
+    'users',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -74,6 +75,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'config.urls'
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+
+SESSION_ENGINE = "users.sessions"
 
 TEMPLATES = [
     {

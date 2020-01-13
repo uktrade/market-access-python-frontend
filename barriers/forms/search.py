@@ -1,4 +1,5 @@
 from operator import itemgetter
+from urllib.parse import urlencode
 
 from django import forms
 
@@ -40,6 +41,7 @@ class BarrierSearchForm(forms.Form):
 
     def __init__(self, metadata, *args, **kwargs):
         self.metadata = metadata
+        kwargs['data'] = self.get_data_from_querydict(kwargs['data'])
         super().__init__(*args, **kwargs)
         self.set_country_choices()
         self.set_sector_choices()
@@ -47,6 +49,24 @@ class BarrierSearchForm(forms.Form):
         self.set_region_choices()
         self.set_priority_choices()
         self.set_status_choices()
+
+    def get_data_from_querydict(self, data):
+        """
+        Get form data from the GET parameters.
+
+        The 'search' field is a string, everything else should be a list.
+        """
+        cleaned_data = {
+            'search': data.get('search'),
+            'country': data.getlist('country'),
+            'sector': data.getlist('sector'),
+            'type': data.getlist('type'),
+            'region': data.getlist('region'),
+            'priority': data.getlist('priority'),
+            'status': data.getlist('status'),
+            'created_by': data.getlist('created_by'),
+        }
+        return {k: v for k, v in cleaned_data.items() if v}
 
     def set_country_choices(self):
         self.fields['country'].choices = [
@@ -139,3 +159,30 @@ class BarrierSearchForm(forms.Form):
         elif '2' in self.cleaned_data.get('created_by', []):
             params['team'] = '2'
         return {k: v for k, v in params.items() if v}
+
+    def get_filters(self):
+        """
+        Get the currently applied filters.
+
+        Looks up the human-friendly value for fields with choices
+        and calculates the url to remove each filter.
+        """
+        filters = {}
+
+        for name, value in self.cleaned_data.items():
+            remove_params = self.cleaned_data.copy()
+            del remove_params[name]
+
+            field = self.fields[name]
+            filters[name] = {
+                'label': field.label,
+                'value': value,
+                'remove_url': urlencode(remove_params, doseq=True),
+            }
+            if hasattr(field, 'choices'):
+                field_lookup = dict(field.choices)
+                filters[name]['value'] = ", ".join(
+                    [field_lookup.get(x) for x in value]
+                )
+
+        return filters

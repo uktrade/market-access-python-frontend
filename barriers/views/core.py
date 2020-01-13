@@ -108,26 +108,8 @@ class SearchFormMixin:
     def get_form_kwargs(self):
         return {
             'metadata': get_metadata(),
-            'data': self.get_form_data(),
+            'data': self.request.GET,
         }
-
-    def get_form_data(self):
-        """
-        Get form data from the GET parameters.
-
-        The 'search' field is a string, everything else should be a list.
-        """
-        data = {
-            'search': self.request.GET.get('search'),
-            'country': self.request.GET.getlist('country'),
-            'sector': self.request.GET.getlist('sector'),
-            'type': self.request.GET.getlist('type'),
-            'region': self.request.GET.getlist('region'),
-            'priority': self.request.GET.getlist('priority'),
-            'status': self.request.GET.getlist('status'),
-            'created_by': self.request.GET.getlist('created_by'),
-        }
-        return {k: v for k, v in data.items() if v}
 
 
 class FindABarrier(SearchFormMixin, FormView):
@@ -135,7 +117,7 @@ class FindABarrier(SearchFormMixin, FormView):
     form_class = BarrierSearchForm
 
     def get_context_data(self, form, **kwargs):
-        context_data = super().get_context_data(**kwargs)
+        context_data = super().get_context_data(form=form, **kwargs)
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barriers = client.barriers.list(
             ordering="-reported_on",
@@ -146,37 +128,10 @@ class FindABarrier(SearchFormMixin, FormView):
 
         context_data.update({
             'barriers': barriers,
-            'filters': self.get_filters(form),
+            'filters': form.get_filters(),
             'page': 'find-a-barrier',
         })
         return context_data
-
-    def get_filters(self, form):
-        """
-        Get the currently applied filters.
-
-        Looks up the human-friendly value for fields with choices
-        and calculates the url to remove each filter.
-        """
-        filters = {}
-
-        for name, value in form.cleaned_data.items():
-            remove_params = form.cleaned_data.copy()
-            del remove_params[name]
-
-            field = form.fields[name]
-            filters[name] = {
-                'label': field.label,
-                'value': value,
-                'remove_url': urlencode(remove_params, doseq=True),
-            }
-            if hasattr(field, 'choices'):
-                field_lookup = dict(field.choices)
-                filters[name]['value'] = ", ".join(
-                    [field_lookup.get(x) for x in value]
-                )
-
-        return filters
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()

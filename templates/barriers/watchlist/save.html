@@ -10,52 +10,83 @@
 
 {% block page_content %}
 
-    {# TODO: Errors, href querystring #}
+    {# TODO: Errors #}
     <a href="{% url 'barriers:find_a_barrier' %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with text='Save watch list' %}
 
     <section class="restrict-width">
+
+        {% if filters %}
+            <dl class="details-list">
+                {% for filter_key, filter in filters.items %}
+                    {% if filter.value %}
+                    <div class="details-list__group">
+                        <dt class="details-list__key">{{ filter.label }}</dt>
+                        <dd class="details-list__value">{{ filter.value|striptags }}</dd>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </dl>
+        {% endif %}
+
         <form action="" method="POST">
             {% csrf_token %}
 
-            <div class="govuk-form-group">
+            <div class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
-                <input class="govuk-input" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text">
+
+                {% if form.name.errors %}
+                    <span class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span>
+                        {{ form.name.errors.as_text }}
+                    </span>
+                {% endif %}
+
+                <input class="govuk-input{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text">
             </div>
 
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.replace_or_new.label }}</label>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.replace_or_new.label }}</legend>
                     <div class="govuk-radios replace-or-new govuk-radios--conditional" data-module="radios">
                         {% for value, name in form.fields.replace_or_new.choices %}
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="{{ value }}" name="{{ form.replace_or_new.name }}" type="radio" value="{{ value }}" {% if form.replace_or_new.value == value %}checked="checked"{% endif %}{% if value == "replace" %} data-aria-controls="conditional-{{ form.replace_or_new.name }}"{% endif %}>
+
+                                {% if form.replace_or_new.errors %}
+                                    <span class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span>
+                                        {{ form.replace_or_new.errors.as_text }}
+                                    </span>
+                                {% endif %}
+
                                 <label class="govuk-label govuk-radios__label" for="{{ value }}">{{ name|safe }}</label>
                             </div>
 
                             {% if value == "replace" %}
                                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ value }}">
-                                    <div class="govuk-form-group">
+                                    <div class="govuk-form-group{% if form.replace_index.errors %} govuk-form-group--error{% endif %}">
                                         <fieldset class="govuk-fieldset">
                                             <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                                                 Which list would you like to replace?
                                             </legend>
 
-                                            {% if form.watchlist.errors %}
+                                            {% if form.replace_index.errors %}
                                                 <span class="govuk-error-message">
                                                     <span class="govuk-visually-hidden">Error:</span>
-                                                    {{ form.watchlist.errors.as_text }}
+                                                    {{ form.replace_index.errors.as_text }}
                                                 </span>
                                             {% endif %}
 
-                                            {# TODO: Loop over watchlists #}
                                             <div class="govuk-radios">
+                                                {% for watchlist_index, watchlist_name in form.fields.replace_index.choices %}
                                                 <div class="govuk-radios__item">
-                                                  <input class="govuk-radios__input" id="replace-index-1" name="replaceIndex" type="radio" value="0">
-                                                  <label class="govuk-label govuk-radios__label" for="replace-index-1">
-                                                      Watchlist Name
+                                                  <input class="govuk-radios__input" id="{{ form.replace_index.name }}-{{ forloop.counter }}" name="{{ form.replace_index.name }}" type="radio" value="{{ watchlist_index }}"{% if form.replace_index.value == watchlist_index %} checked="checked"{% endif %}>
+                                                  <label class="govuk-label govuk-radios__label" for="{{ form.replace_index.name }}-{{ forloop.counter }}">
+                                                      {{ watchlist_name }}
                                                   </label>
                                                 </div>
+                                                {% endfor %}
                                             </div>
                                         </fieldset>
                                     </div>
@@ -67,7 +98,7 @@
             </div>
 
             <input type="submit" value="Save" class="govuk-button">
-            <a href="" class="govuk-button button--secondary">Cancel</a>
+            <a href="{% url 'barriers:find_a_barrier' %}?{{ request.GET.urlencode }}" class="govuk-button button--secondary">Cancel</a>
         </form>
     </section>
 

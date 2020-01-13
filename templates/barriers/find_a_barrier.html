@@ -66,10 +66,9 @@
 
                     <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">
                         <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
-                        {% if showSaveButton %}
+                        {% if filters %}
                             {# save watchlist url #}
-                            <a href="" class="govuk-button govuk-button--watch-list">{% if isEdit %}Edit{% else %}Save{% endif %} watch list</a>
-                        }
+                            <a href="{% url 'barriers:save_watchlist' %}?{{ request.GET.urlencode }}" class="govuk-button govuk-button--watch-list">{% if isEdit %}Edit{% else %}Save{% endif %} watch list</a>
                         {% endif %}
                     </div>
                 {% endif %}
