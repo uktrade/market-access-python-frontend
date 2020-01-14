@@ -1,5 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView
+from django.views.generic import FormView, View
 
 from ..forms.search import BarrierSearchForm
 from ..forms.watchlist import SaveWatchlistForm
@@ -52,3 +53,10 @@ class SaveWatchlist(FormView):
 
     def get_success_url(self):
         return reverse('barriers:dashboard')
+
+
+class RemoveWatchlist(View):
+    def get(self, request, *args, **kwargs):
+        index = self.kwargs.get('index')
+        request.session.delete_watchlist(index)
+        return HttpResponseRedirect(reverse('barriers:dashboard'))

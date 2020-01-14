@@ -20,3 +20,9 @@ class SessionStore(DBStore):
         client = MarketAccessAPIClient(self['sso_token'])
         client.users.patch(user_profile=self['user_data']['user_profile'])
         self.save()
+
+    def delete_watchlist(self, index):
+        watchlists = self.get_watchlists()
+        if index < len(watchlists):
+            del watchlists[index]
+            self.set_watchlists(watchlists)

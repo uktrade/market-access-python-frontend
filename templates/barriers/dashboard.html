@@ -18,7 +18,7 @@
             <div class="dashboard-results-header__link-wrapper js-toggle-box-control">
                 <a class="dashboard-results-header__link js-list-link js-only" href="{% url 'barriers:dashboard' %}"> Edit list filters </a>
                 <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:dashboard' %}"> Rename list </a>
-                <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:dashboard' %}"> Delete list </a>
+                <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:remove_watchlist' watchlist_index %}"> Delete list </a>
             </div>
             <div class="toggle-box">
                 {% if watchListFilters %}
