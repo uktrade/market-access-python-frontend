@@ -1,0 +1,25 @@
+<div class="govuk-form-group{% if form.replace_index.errors %} govuk-form-group--error{% endif %}">
+    <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            Which list would you like to replace?
+        </legend>
+
+        {% if form.replace_index.errors %}
+            <span class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span>
+                {{ form.replace_index.errors.as_text }}
+            </span>
+        {% endif %}
+
+        <div class="govuk-radios">
+            {% for watchlist_index, watchlist_name in form.fields.replace_index.choices %}
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="{{ form.replace_index.name }}-{{ forloop.counter }}" name="{{ form.replace_index.name }}" type="radio" value="{{ watchlist_index }}"{% if form.replace_index.value == watchlist_index %} checked="checked"{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="{{ form.replace_index.name }}-{{ forloop.counter }}">
+                    {{ watchlist_name }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+</div>

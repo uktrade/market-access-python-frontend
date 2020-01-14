@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 
 
 class SaveWatchlistForm(forms.Form):
@@ -8,7 +9,10 @@ class SaveWatchlistForm(forms.Form):
         (REPLACE, "<strong>Replace</strong> current watch list"),
         (NEW, "<strong>Create new</strong> watch list"),
     ]
-    name = forms.CharField(label="Name your watch list ")
+    name = forms.CharField(
+        label="Name your watch list",
+        max_length=settings.MAX_WATCH_LIST_NAME_LENGTH,
+    )
     replace_or_new = forms.ChoiceField(
         label="Replace current list or create new?",
         choices=CHOICES,
@@ -27,6 +31,12 @@ class SaveWatchlistForm(forms.Form):
             (str(index), watchlist.get('name'))
             for index, watchlist in enumerate(watchlists)
         ]
+        if self.has_to_replace():
+            del self.fields['replace_or_new']
+            self.fields['replace_index'].required = True
+
+    def has_to_replace(self):
+        return len(self.watchlists) >= settings.MAX_WATCH_LISTS
 
     def clean(self):
         cleaned_data = super().clean()
@@ -43,9 +53,11 @@ class SaveWatchlistForm(forms.Form):
             'filters': self.filters,
         }
 
-        if self.cleaned_data['replace_or_new'] == self.NEW:
+        replace_or_new = self.cleaned_data.get('replace_or_new')
+
+        if replace_or_new == self.NEW:
             self.watchlists.append(new_watchlist)
-        elif self.cleaned_data['replace_or_new'] == self.REPLACE:
+        elif self.has_to_replace() or replace_or_new == self.REPLACE:
             index = int(self.cleaned_data['replace_index'])
             self.watchlists = self.watchlists[:index] + [
                 new_watchlist

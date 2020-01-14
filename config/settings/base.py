@@ -202,6 +202,9 @@ FILE_SCAN_STATUS_CHECK_INTERVAL = os.environ.get(
     500
 )
 
+MAX_WATCH_LISTS = os.environ.get('MAX_WATCH_LISTS', 3)
+MAX_WATCH_LIST_NAME_LENGTH = os.environ.get('MAX_WATCH_LIST_NAME_LENGTH', 25)
+
 # Logging
 # ============================================
 DJANGO_LOG_LEVEL = os.environ.get("DJANGO_LOG_LEVEL", "info").upper()
