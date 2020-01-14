@@ -71,23 +71,15 @@ class Dashboard(TemplateView):
         return list_index
 
     def get_watchlist_params(self, watchlist):
-        filter_map = {
-            'type': 'barrier_type',
-            'search': 'text',
-        }
-        filters = {
-            filter_map.get(name, name): value
-            for name, value in watchlist.get('filters').items()
-        }
-
+        """
+        Transform watchlist filters from session into api parameters
+        """
+        filters = watchlist.get('filters')
         region = filters.pop('region', [])
         country = filters.pop('country', [])
 
         if country or region:
-            filters['location'] = ",".join(country + region)
-
-        if filters.get('sector'):
-            filters['sector'] = ",".join(filters['sector'])
+            filters['location'] = country + region
 
         if 'createdBy' in filters:
             created_by = filters.pop('createdBy')
@@ -96,7 +88,20 @@ class Dashboard(TemplateView):
             elif '2' in created_by:
                 filters['team'] = 1
 
-        return filters
+        filter_map = {
+            'type': 'barrier_type',
+            'search': 'text',
+        }
+
+        api_params = {}
+        for name, value in filters.items():
+            mapped_name = filter_map.get(name, name)
+            if isinstance(value, list):
+                api_params[mapped_name] = ",".join(value)
+            else:
+                api_params[mapped_name] = value
+
+        return api_params
 
 
 class SearchFormMixin:
