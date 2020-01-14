@@ -21,6 +21,12 @@ class SessionStore(DBStore):
         client.users.patch(user_profile=self['user_data']['user_profile'])
         self.save()
 
+    def rename_watchlist(self, index, name):
+        watchlists = self.get_watchlists()
+        if index < len(watchlists):
+            watchlists[index]['name'] = name
+            self.set_watchlists(watchlists)
+
     def delete_watchlist(self, index):
         watchlists = self.get_watchlists()
         if index < len(watchlists):

@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 from django.conf import settings
 from django.http import StreamingHttpResponse
 from django.views.generic import FormView, TemplateView, View

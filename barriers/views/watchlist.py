@@ -3,19 +3,17 @@ from django.urls import reverse
 from django.views.generic import FormView, View
 
 from ..forms.search import BarrierSearchForm
-from ..forms.watchlist import SaveWatchlistForm
+from ..forms.watchlist import RenameWatchlistForm, SaveWatchlistForm
 
 from utils.metadata import get_metadata
 
 
-class SaveWatchlist(FormView):
+class SearchFiltersMixin:
     """
-    Save a watchlist either as a new watchlist or by replacing an existing one.
+    Validates search filters and gets in readable form.
 
-    Cleans the search parameters using BarrierSearchForm.
+    Override get_search_form_data to use a different data source.
     """
-    template_name = "barriers/watchlist/save.html"
-    form_class = SaveWatchlistForm
     _search_form = None
 
     def get_context_data(self, **kwargs):
@@ -28,10 +26,23 @@ class SaveWatchlist(FormView):
         if not self._search_form:
             self._search_form = BarrierSearchForm(
                 metadata=get_metadata(),
-                data=self.request.GET
+                data=self.get_search_form_data()
             )
             self._search_form.full_clean()
         return self._search_form
+
+    def get_search_form_data(self):
+        return self.request.GET
+
+
+class SaveWatchlist(SearchFiltersMixin, FormView):
+    """
+    Save a watchlist either as a new watchlist or by replacing an existing one.
+
+    Cleans the search parameters using BarrierSearchForm.
+    """
+    template_name = "barriers/watchlist/save.html"
+    form_class = SaveWatchlistForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -60,3 +71,45 @@ class RemoveWatchlist(View):
         index = self.kwargs.get('index')
         request.session.delete_watchlist(index)
         return HttpResponseRedirect(reverse('barriers:dashboard'))
+
+
+class RenameWatchlist(SearchFiltersMixin, FormView):
+    template_name = "barriers/watchlist/rename.html"
+    form_class = RenameWatchlistForm
+
+    def get(self, request, *args, **kwargs):
+        self.watchlist = self.get_watchlist()
+        if not self.watchlist:
+            return HttpResponseRedirect(reverse('barriers:dashboard'))
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.watchlist = self.get_watchlist()
+        if not self.watchlist:
+            return HttpResponseRedirect(reverse('barriers:dashboard'))
+        return super().post(request, *args, **kwargs)
+
+    def get_watchlist(self):
+        watchlists = self.request.session.get_watchlists()
+        index = self.kwargs.get('index')
+
+        try:
+            return watchlists[index]
+        except IndexError:
+            return None
+
+    def get_initial(self):
+        return {'name': self.watchlist.get('name')}
+
+    def get_search_form_data(self):
+        return self.watchlist.get('filters')
+
+    def form_valid(self, form):
+        self.request.session.rename_watchlist(
+            index=self.kwargs.get('index'),
+            name=form.cleaned_data.get('name'),
+        )
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('barriers:dashboard')

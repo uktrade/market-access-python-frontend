@@ -17,7 +17,7 @@
             <h2 class="dashboard-results-header__title">{{ barriers|length }}<span class="dashboard-results-header__title__caption"> barrier{{ barriers|pluralize }}</span></h2>
             <div class="dashboard-results-header__link-wrapper js-toggle-box-control">
                 <a class="dashboard-results-header__link js-list-link js-only" href="{% url 'barriers:dashboard' %}"> Edit list filters </a>
-                <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:dashboard' %}"> Rename list </a>
+                <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:rename_watchlist' watchlist_index %}"> Rename list </a>
                 <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:remove_watchlist' watchlist_index %}"> Delete list </a>
             </div>
             <div class="toggle-box">

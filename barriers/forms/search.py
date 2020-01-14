@@ -2,6 +2,7 @@ from operator import itemgetter
 from urllib.parse import urlencode
 
 from django import forms
+from django.http import QueryDict
 
 
 class BarrierSearchForm(forms.Form):
@@ -41,7 +42,10 @@ class BarrierSearchForm(forms.Form):
 
     def __init__(self, metadata, *args, **kwargs):
         self.metadata = metadata
-        kwargs['data'] = self.get_data_from_querydict(kwargs['data'])
+
+        if isinstance(kwargs['data'], QueryDict):
+            kwargs['data'] = self.get_data_from_querydict(kwargs['data'])
+
         super().__init__(*args, **kwargs)
         self.set_country_choices()
         self.set_sector_choices()

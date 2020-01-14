@@ -69,3 +69,10 @@ class SaveWatchlistForm(forms.Form):
             ] + self.watchlists[index+1:]
 
         return self.watchlists
+
+
+class RenameWatchlistForm(forms.Form):
+    name = forms.CharField(
+        label="Name your watch list",
+        max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
+    )
