@@ -3,7 +3,11 @@ from django.urls import reverse
 from django.views.generic import FormView, View
 
 from ..forms.search import BarrierSearchForm
-from ..forms.watchlist import RenameWatchlistForm, SaveWatchlistForm
+from ..forms.watchlist import (
+    EditWatchlistForm,
+    RenameWatchlistForm,
+    SaveWatchlistForm,
+)
 
 from utils.metadata import get_metadata
 
@@ -19,7 +23,7 @@ class SearchFiltersMixin:
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         search_form = self.get_search_form()
-        context_data['filters'] = search_form.get_filters()
+        context_data['filters'] = search_form.get_grouped_filters()
         return context_data
 
     def get_search_form(self):
@@ -49,11 +53,7 @@ class SaveWatchlist(SearchFiltersMixin, FormView):
         search_form = self.get_search_form()
         kwargs.update({
             'watchlists': self.request.session.get_watchlists(),
-            'filters': {
-                key: value
-                for key, value in search_form.cleaned_data.items()
-                if value
-            },
+            'filters': search_form.get_filters_with_values()
         })
         return kwargs
 
@@ -66,6 +66,45 @@ class SaveWatchlist(SearchFiltersMixin, FormView):
     def get_success_url(self, index=0):
         if index:
             return f"{reverse('barriers:dashboard')}?list={index}"
+        return reverse('barriers:dashboard')
+
+
+class EditWatchlist(SearchFiltersMixin, FormView):
+    template_name = "barriers/watchlist/edit.html"
+    form_class = EditWatchlistForm
+
+    def get(self, request, *args, **kwargs):
+        self.watchlist = self.get_watchlist()
+        if not self.watchlist:
+            return HttpResponseRedirect(reverse('barriers:dashboard'))
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.watchlist = self.get_watchlist()
+        if not self.watchlist:
+            return HttpResponseRedirect(reverse('barriers:dashboard'))
+        return super().post(request, *args, **kwargs)
+
+    def get_watchlist(self):
+        index = self.request.GET.get('edit')
+        return self.request.session.get_watchlist(index)
+
+    def get_initial(self):
+        return {'name': self.watchlist.get('name')}
+
+    def form_valid(self, form):
+        search_form = self.get_search_form()
+
+        self.request.session.update_watchlist(
+            index=int(self.request.GET.get('edit')),
+            watchlist={
+                'name': form.cleaned_data.get('name'),
+                'filters': search_form.get_filters_with_values(),
+            },
+        )
+        return super().form_valid(form)
+
+    def get_success_url(self):
         return reverse('barriers:dashboard')
 
 
@@ -93,13 +132,8 @@ class RenameWatchlist(SearchFiltersMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def get_watchlist(self):
-        watchlists = self.request.session.get_watchlists()
         index = self.kwargs.get('index')
-
-        try:
-            return watchlists[index]
-        except IndexError:
-            return None
+        return self.request.session.get_watchlist(index)
 
     def get_initial(self):
         return {'name': self.watchlist.get('name')}

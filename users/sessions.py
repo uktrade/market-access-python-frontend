@@ -15,11 +15,23 @@ class SessionStore(DBStore):
         except KeyError:
             return []
 
+    def get_watchlist(self, index):
+        watchlists = self.get_watchlists()
+        try:
+            return watchlists[int(index)]
+        except IndexError:
+            return None
+
     def set_watchlists(self, watchlists):
         self['user_data']['user_profile']['watchList']['lists'] = watchlists
         client = MarketAccessAPIClient(self['sso_token'])
         client.users.patch(user_profile=self['user_data']['user_profile'])
         self.save()
+
+    def update_watchlist(self, index, watchlist):
+        watchlists = self.get_watchlists()
+        watchlists[index] = watchlist
+        self.set_watchlists(watchlists)
 
     def rename_watchlist(self, index, name):
         watchlists = self.get_watchlists()

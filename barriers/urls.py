@@ -72,7 +72,12 @@ from .views.types import (
     BarrierEditTypesSession,
     BarrierRemoveType,
 )
-from .views.watchlist import RemoveWatchlist, RenameWatchlist, SaveWatchlist
+from .views.watchlist import (
+    EditWatchlist,
+    RemoveWatchlist,
+    RenameWatchlist,
+    SaveWatchlist,
+)
 
 app_name = "barriers"
 
@@ -84,6 +89,7 @@ urlpatterns = [
     path("documents/<uuid:document_id>/download/", DownloadDocument.as_view(), name="download_document"),
 
     path("watch-list/save/", SaveWatchlist.as_view(), name="save_watchlist"),
+    path("watch-list/edit/", EditWatchlist.as_view(), name="edit_watchlist"),
     path("watch-list/rename/<int:index>/", RenameWatchlist.as_view(), name="rename_watchlist"),
     path("watch-list/remove/<int:index>/", RemoveWatchlist.as_view(), name="remove_watchlist"),
 

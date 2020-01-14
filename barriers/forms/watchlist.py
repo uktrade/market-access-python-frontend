@@ -82,3 +82,10 @@ class RenameWatchlistForm(forms.Form):
         label="Name your watch list",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
     )
+
+
+class EditWatchlistForm(forms.Form):
+    name = forms.CharField(
+        label="Name your watch list",
+        max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
+    )

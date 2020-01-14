@@ -19,9 +19,7 @@
             <h2 class="filter-list-title">Filter barriers by:</h2>
             <form action="" method="GET" class="filter-items">
 
-                {% if isEdit %}
-                <input type="hidden" name="editList" value="{{ editListIndex }}">
-                {% endif %}
+                {% if form.edit.value %}{{ form.edit }}{% endif %}
 
                 <div class="govuk-form-group filter-items-group">
                     <label class="govuk-label filter-items__label" for="search">
@@ -66,9 +64,12 @@
 
                     <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">
                         <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
-                        {% if filters %}
-                            {# save watchlist url #}
-                            <a href="{% url 'barriers:save_watchlist' %}?{{ request.GET.urlencode }}" class="govuk-button govuk-button--watch-list">{% if isEdit %}Edit{% else %}Save{% endif %} watch list</a>
+                        {% if form.edit.value is not None %}
+                            {% if have_filters_changed %}
+                            <a href="{% url 'barriers:edit_watchlist' %}?{{ request.GET.urlencode }}" class="govuk-button govuk-button--watch-list">Edit watch list</a>
+                            {% endif %}
+                        {% elif filters %}
+                            <a href="{% url 'barriers:save_watchlist' %}?{{ request.GET.urlencode }}" class="govuk-button govuk-button--watch-list">Save watch list</a>
                         {% endif %}
                     </div>
                 {% endif %}

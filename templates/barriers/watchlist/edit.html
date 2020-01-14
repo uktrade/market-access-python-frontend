@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Edit watch list{% endblock %}
+
+{% block page_content %}
+
+    {# TODO: Errors #}
+    <a href="{% url 'barriers:find_a_barrier' %}?{{ request.GET.urlencode }}" class="govuk-back-link">Back</a>
+    {% include 'heading.html' with text='Edit watch list' %}
+
+    <section class="restrict-width">
+        {% if filters %}
+            <dl class="details-list">
+                {% for filter_key, filter in filters.items %}
+                    {% if filter.value %}
+                    <div class="details-list__group">
+                        <dt class="details-list__key">{{ filter.label }}</dt>
+                        <dd class="details-list__value">{{ filter.value|striptags }}</dd>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </dl>
+        {% endif %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <div class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
+
+                {% if form.name.errors %}
+                    <span class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span>
+                        {{ form.name.errors.as_text }}
+                    </span>
+                {% endif %}
+
+                <input class="govuk-input{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
+            </div>
+
+            <input type="submit" value="Save" class="govuk-button">
+            <a href="{% url 'barriers:find_a_barrier' %}?{{ request.GET.urlencode }}" class="govuk-button button--secondary">Cancel</a>
+        </form>
+    </section>
+
+{% endblock %}

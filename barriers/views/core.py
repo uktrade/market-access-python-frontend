@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.conf import settings
 from django.http import StreamingHttpResponse
 from django.views.generic import FormView, TemplateView, View
@@ -30,6 +32,10 @@ class Dashboard(TemplateView):
 
             context_data.update({
                 'watchlist_index': watchlist_index,
+                'watchlist_querystring': urlencode(
+                    selected_watchlist['filters'],
+                    doseq=True,
+                ),
                 'sort_field': sort.lstrip('-'),
                 'sort_descending': sort.startswith('-'),
             })
@@ -121,9 +127,17 @@ class FindABarrier(SearchFormMixin, FormView):
 
         context_data.update({
             'barriers': barriers,
-            'filters': form.get_filters(),
+            'filters': form.get_grouped_filters(),
             'page': 'find-a-barrier',
         })
+
+        if form.cleaned_data.get('edit') is not None:
+            watchlist_index = form.cleaned_data.get('edit')
+            watchlist = self.request.session.get_watchlist(watchlist_index)
+            context_data['have_filters_changed'] = not form.do_filters_match(
+                watchlist['filters']
+            )
+
         return context_data
 
     def get(self, request, *args, **kwargs):

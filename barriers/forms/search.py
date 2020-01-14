@@ -4,8 +4,11 @@ from urllib.parse import urlencode
 from django import forms
 from django.http import QueryDict
 
+from utils.tools import nested_sort
+
 
 class BarrierSearchForm(forms.Form):
+    edit = forms.IntegerField(required=False, widget=forms.HiddenInput())
     search = forms.CharField(label='Search', max_length=255, required=False)
     country = forms.MultipleChoiceField(
         label='Barrier location',
@@ -57,10 +60,9 @@ class BarrierSearchForm(forms.Form):
     def get_data_from_querydict(self, data):
         """
         Get form data from the GET parameters.
-
-        The 'search' field is a string, everything else should be a list.
         """
         cleaned_data = {
+            'edit': data.get('edit'),
             'search': data.get('search'),
             'country': data.getlist('country'),
             'sector': data.getlist('sector'),
@@ -164,9 +166,16 @@ class BarrierSearchForm(forms.Form):
             params['team'] = '2'
         return {k: v for k, v in params.items() if v}
 
-    def get_filters(self):
+    def get_filters_with_values(self):
+        return {
+            key: value
+            for key, value in self.cleaned_data.items()
+            if value
+        }
+
+    def get_grouped_filters(self):
         """
-        Get the currently applied filters.
+        Get the currently applied filters grouped by name.
 
         Looks up the human-friendly value for fields with choices
         and calculates the url to remove each filter.
@@ -174,6 +183,9 @@ class BarrierSearchForm(forms.Form):
         filters = {}
 
         for name, value in self.cleaned_data.items():
+            if self.fields[name].widget.is_hidden:
+                continue
+
             remove_params = self.cleaned_data.copy()
             del remove_params[name]
 
@@ -190,3 +202,7 @@ class BarrierSearchForm(forms.Form):
                 )
 
         return filters
+
+    def do_filters_match(self, filters):
+        form_filters = self.get_filters_with_values()
+        return nested_sort(filters) == nested_sort(form_filters)
