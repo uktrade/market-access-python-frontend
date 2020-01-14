@@ -11,7 +11,7 @@ class SaveWatchlistForm(forms.Form):
     ]
     name = forms.CharField(
         label="Name your watch list",
-        max_length=settings.MAX_WATCH_LIST_NAME_LENGTH,
+        max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
     )
     replace_or_new = forms.ChoiceField(
         label="Replace current list or create new?",
@@ -41,7 +41,7 @@ class SaveWatchlistForm(forms.Form):
         return len(self.watchlists) == 0
 
     def has_to_replace(self):
-        return len(self.watchlists) >= settings.MAX_WATCH_LISTS
+        return len(self.watchlists) >= settings.MAX_WATCHLIST_LENGTH
 
     def clean(self):
         cleaned_data = super().clean()

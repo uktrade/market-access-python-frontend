@@ -173,8 +173,6 @@ MARKET_ACCESS_API_URI = os.environ.get("MARKET_ACCESS_API_URI", "unset")
 MARKET_ACCESS_API_HAWK_ID = os.environ.get("MARKET_ACCESS_API_HAWK_ID")
 MARKET_ACCESS_API_HAWK_KEY = os.environ.get("MARKET_ACCESS_API_HAWK_KEY")
 
-MAX_WATCHLIST_LENGTH = 3
-
 SETTINGS_EXPORT = [
     'DJANGO_ENV',
 ]
@@ -202,8 +200,8 @@ FILE_SCAN_STATUS_CHECK_INTERVAL = os.environ.get(
     500
 )
 
-MAX_WATCH_LISTS = os.environ.get('MAX_WATCH_LISTS', 3)
-MAX_WATCH_LIST_NAME_LENGTH = os.environ.get('MAX_WATCH_LIST_NAME_LENGTH', 25)
+MAX_WATCHLIST_LENGTH = os.environ.get('MAX_WATCHLIST_LENGTH', 3)
+MAX_WATCHLIST_NAME_LENGTH = os.environ.get('MAX_WATCHLIST_NAME_LENGTH', 25)
 
 # Logging
 # ============================================
