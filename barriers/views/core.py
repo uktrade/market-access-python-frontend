@@ -16,33 +16,25 @@ class Dashboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        sort = self.request.GET.get('sort', '-modified_on')
-        default_user_profile_watchlists = {
-            'watchLists': {
-                'lists': [],    # this is where the watchlists live
-                'version': 2
-            }
-        }
-        watchlists = []
+
         barriers = []
+        watchlists = self.request.session.get_watchlists()
 
-        user_data = self.request.session['user_data']
-        user_profile = user_data.get('user_profile', None)
+        if watchlists:
+            watchlist_index = self.get_watchlist_index()
+            selected_watchlist = watchlists[watchlist_index]
+            selected_watchlist.setdefault('is_current', True)
 
-        if user_profile:
-            user_profile_watchlists = user_profile.get('watchList', default_user_profile_watchlists)
-            watchlists = user_profile_watchlists.get('lists', ())
-            if watchlists:
-                watchlist_index = int(self.request.GET.get('list', 0))
-                selected_watchlist = watchlists[watchlist_index]
-                selected_watchlist.setdefault('is_current', True)
+            filters = self.get_watchlist_params(selected_watchlist)
+            sort = self.request.GET.get('sort', '-modified_on')
+            client = MarketAccessAPIClient(self.request.session['sso_token'])
+            barriers = client.barriers.list(ordering=sort, **filters)
 
-                filters = self.get_watchlist_params(selected_watchlist)
-                client = MarketAccessAPIClient(self.request.session['sso_token'])
-                barriers = client.barriers.list(
-                    ordering=sort,
-                    **filters
-                )
+            context_data.update({
+                'watchlist_index': watchlist_index,
+                'sort_field': sort.lstrip('-'),
+                'sort_descending': sort.startswith('-'),
+            })
 
         context_data.update({
             'page': 'dashboard',
@@ -51,12 +43,10 @@ class Dashboard(TemplateView):
             'can_add_watchlist': (
                 len(watchlists) < settings.MAX_WATCHLIST_LENGTH
             ),
-            'sort_field': sort.lstrip('-'),
-            'sort_descending': sort.startswith('-'),
         })
         return context_data
 
-    def get_watchlist_index(self, max_index):
+    def get_watchlist_index(self):
         """
         Get list index from querystring and ensure it's a valid number
         """
@@ -65,7 +55,7 @@ class Dashboard(TemplateView):
         except ValueError:
             return 0
 
-        if list_index not in range(0, max_index):
+        if list_index not in range(0, settings.MAX_WATCHLIST_LENGTH - 1):
             return 0
 
         return list_index
