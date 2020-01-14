@@ -1,16 +1,21 @@
 from django.urls import path
 
-from reports.views import NewReport, NewReportBarrierStatus
+from reports.views import (
+    NewReport,
+    NewReportBarrierStatus1,
+    NewReportBarrierStatus2,
+    NewReportBarrierLocation,
+)
 
 app_name = "reports"
 
 urlpatterns = [
     path("reports/new/", NewReport.as_view(), name="new_report"),
-    path("reports/new/start/", NewReportBarrierStatus.as_view(), name="barrier_status"),
+    path("reports/new/start/", NewReportBarrierStatus1.as_view(), name="barrier_problem_status"),
+    path("reports/new/start/is-resolved/", NewReportBarrierStatus2.as_view(), name="barrier_status"),
+    path("reports/new/start/country/", NewReportBarrierLocation.as_view(), name="barrier_location"),
 
     # path("barriers/<uuid:id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
-
-
 
     # app.get( '/:reportId?/start/', controller.start );
     # app.post( '/:reportId?/start/', controller.start );

@@ -1,0 +1,6 @@
+{% if error %}
+<span class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span>
+    {{ error|as_text }}
+</span>
+{% endif %}

@@ -56,6 +56,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'barriers',
+    'core',
     'users',
 ]
 
@@ -91,6 +92,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'utils.context_processors.user_scope',
                 'django_settings_export.settings_export',
+            ],
+            'builtins':[
+                'core.templatetags.govuk_forms'
             ],
         },
     },

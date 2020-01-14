@@ -4,11 +4,113 @@
 
 {% block page_content %}
 
-    {% include 'heading.html' with caption='Add a barrier' text='Barrier status' %}
-
     <section class="restrict-width">
-        TODO: continue...
+
+        <a href="{% url 'reports:barrier_problem_status' %}" class="govuk-back-link">Back</a>
+        {% include 'heading.html' with caption='Add a barrier' text='Barrier status' %}
+        {% form_error_banner form %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="{% form_group_classes form.status.errors %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.fields.status.label }}
+                    </legend>
+
+                    {% form_field_error form "status" %}
+
+                    <div class="govuk-radios is-resolved govuk-radios--conditional" data-module="radios">
+                    {% for choice_id, choice_data in form.fields.status.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                   name="status"
+                                   type="radio"
+                                   id="{{ choice_id }}"
+                                   value="{{ choice_id }}"
+                                   aria-describedby="{{ choice_id }}-item-hint"
+                                   {% if form.status.value == choice_id %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="{{ choice_id }}">
+                                {{ choice_data.label }}
+                            </label>
+                            <span id="{{ choice_id }}-item-hint" class="govuk-hint govuk-radios__hint">
+                                {{ choice_data.hint }}
+                            </span>
+                        </div>
+
+                        {% if choice_data.subforms %}
+                        {% for sf_name, sf_attr in choice_data.subforms.items %}
+                        {% with month_fieldname=sf_name|add:"_month" year_fieldname=sf_name|add:"_year" %}
+                        {% with month_field=form|get_field:month_fieldname year_field=form|get_field:year_fieldname %}
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ choice_id }}">
+                            <div class="{% form_group_classes form.errors month_field.errors year_field.errors %}">
+                                <fieldset class="govuk-fieldset" role="group">
+                                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                                        {{ choice_data.sf_attr.legend }}
+                                    </legend>
+
+                                    {% form_field_error form month_fieldname %}
+                                    {% form_field_error form year_fieldname %}
+
+                                    <div class="govuk-date-input" id="{{ choice_data.sf_name }}-date-group">
+                                        {% if month_field %}
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="{{ choice_data.sf_name }}-date">
+                                                    {{ month_field.label }}
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                                       id="{{ choice_data.sf_name }}-date"
+                                                       value="{{ month_field.value }}"
+                                                       name="{{ month_fieldname }}"
+                                                       type="number"
+                                                       pattern="[0-9]*">
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        {% if year_field %}
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="{{ choice_data.sf_name }}-date-group-partYear">
+                                                {{ year_field.label }}
+                                                </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                                                       id="{{ choice_data.sf_name }}-date-group-partYear"
+                                                       value="{{ year_field.value }}"
+                                                       name="{{ year_fieldname }}"
+                                                       type="number"
+                                                       pattern="[0-9]*">
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        {% endwith %}
+                        {% endwith %}
+                        {% endfor %}
+                        {% endif %}
+
+                    {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            <input type="submit" value="Continue" class="govuk-button">
+        </form>
 	</section>
 
 
+{% endblock %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+		ma.pages.report.isResolved({
+        {% for key, value in form.ma_mapping.items %}
+            "{{ key }}": "{{ value }}",
+        {% endfor %}
+        });
+	</script>
 {% endblock %}
