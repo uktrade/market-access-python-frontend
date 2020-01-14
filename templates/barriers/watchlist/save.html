@@ -47,7 +47,7 @@
 
             {% if form.has_to_replace %}
                 {% include 'barriers/watchlist/partials/replace_form.html' %}
-            {% else %}
+            {% elif not form.has_to_create %}
                 <div class="govuk-form-group">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.replace_or_new.label }}</legend>

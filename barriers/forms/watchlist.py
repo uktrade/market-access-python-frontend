@@ -34,6 +34,11 @@ class SaveWatchlistForm(forms.Form):
         if self.has_to_replace():
             del self.fields['replace_or_new']
             self.fields['replace_index'].required = True
+        elif self.has_to_create():
+            del self.fields['replace_or_new']
+
+    def has_to_create(self):
+        return len(self.watchlists) == 0
 
     def has_to_replace(self):
         return len(self.watchlists) >= settings.MAX_WATCH_LISTS
@@ -55,7 +60,7 @@ class SaveWatchlistForm(forms.Form):
 
         replace_or_new = self.cleaned_data.get('replace_or_new')
 
-        if replace_or_new == self.NEW:
+        if self.has_to_create() or replace_or_new == self.NEW:
             self.watchlists.append(new_watchlist)
         elif self.has_to_replace() or replace_or_new == self.REPLACE:
             index = int(self.cleaned_data['replace_index'])
