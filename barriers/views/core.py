@@ -53,7 +53,7 @@ class Dashboard(TemplateView):
         except ValueError:
             return 0
 
-        if list_index not in range(0, settings.MAX_WATCHLIST_LENGTH - 1):
+        if list_index not in range(0, settings.MAX_WATCHLIST_LENGTH):
             return 0
 
         return list_index

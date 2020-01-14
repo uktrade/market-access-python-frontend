@@ -60,9 +60,12 @@ class SaveWatchlist(SearchFiltersMixin, FormView):
     def form_valid(self, form):
         watchlists = form.save()
         self.request.session.set_watchlists(watchlists)
-        return super().form_valid(form)
+        index = form.get_new_watchlist_index()
+        return HttpResponseRedirect(self.get_success_url(index=index))
 
-    def get_success_url(self):
+    def get_success_url(self, index=0):
+        if index:
+            return f"{reverse('barriers:dashboard')}?list={index}"
         return reverse('barriers:dashboard')
 
 

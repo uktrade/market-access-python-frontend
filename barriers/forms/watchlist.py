@@ -43,6 +43,12 @@ class SaveWatchlistForm(forms.Form):
     def has_to_replace(self):
         return len(self.watchlists) >= settings.MAX_WATCHLIST_LENGTH
 
+    def get_new_watchlist_index(self):
+        replace_index = self.cleaned_data.get('replace_index')
+        if replace_index not in self.fields['replace_index'].empty_values:
+            return int(replace_index)
+        return len(self.watchlists) - 1
+
     def clean(self):
         cleaned_data = super().clean()
         if cleaned_data.get('replace_or_new') == self.REPLACE:
