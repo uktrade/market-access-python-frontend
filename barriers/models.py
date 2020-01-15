@@ -1,4 +1,5 @@
 import copy
+from urllib.parse import urlencode
 
 from .forms.search import BarrierSearchForm
 from interactions.models import Document
@@ -150,7 +151,22 @@ class Watchlist:
 
     def __init__(self, name, filters, *args, **kwargs):
         self.name = name
-        self.filters = filters
+        self.filters = self.clean_filters(filters)
+
+    def clean_filters(self, filters):
+        """
+        Node saves the watchlist search term as a list for some reason.
+
+        We also use created_by instead of createdBy.
+        """
+        if 'search' in filters and isinstance(filters['search'], list):
+            try:
+                filters['search'] = filters['search'][0]
+            except IndexError:
+                filters['search'] = ""
+        if 'createdBy' in filters:
+            filters['created_by'] = filters.pop('createdBy')
+        return filters
 
     def to_dict(self):
         return {
@@ -169,6 +185,10 @@ class Watchlist:
             self._readable_filters = search_form.get_readable_filters()
         return self._readable_filters
 
+    @property
+    def querystring(self):
+        return urlencode(self.filters, doseq=True)
+
     def get_api_params(self):
         """
         Transform watchlist filters into api parameters
@@ -180,12 +200,13 @@ class Watchlist:
         if country or region:
             filters['location'] = country + region
 
-        if 'createdBy' in filters:
-            created_by = filters.pop('createdBy')
-            if '1' in created_by:
-                filters['user'] = 1
-            elif '2' in created_by:
-                filters['team'] = 1
+        created_by = (
+            filters.pop('createdBy', []) + filters.pop('created_by', [])
+        )
+        if '1' in created_by:
+            filters['user'] = 1
+        elif '2' in created_by:
+            filters['team'] = 1
 
         filter_map = {
             'type': 'barrier_type',

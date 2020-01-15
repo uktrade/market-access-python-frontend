@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 from django.conf import settings
 from django.http import StreamingHttpResponse
 from django.views.generic import FormView, TemplateView, View
@@ -35,10 +33,6 @@ class Dashboard(TemplateView):
             context_data.update({
                 'selected_watchlist': selected_watchlist,
                 'watchlist_index': watchlist_index,
-                'watchlist_querystring': urlencode(
-                    selected_watchlist.filters,
-                    doseq=True,
-                ),
                 'sort_field': sort.lstrip('-'),
                 'sort_descending': sort.startswith('-'),
             })
