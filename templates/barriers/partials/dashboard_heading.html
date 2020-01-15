@@ -60,7 +60,7 @@
         {% endif %}
     </ul>
 
-    {% if canAddWatchList %}
-    <a class="page-tabs-add-watch-list" href="{% url 'barriers:barrier_detail' barrier.id %}"><span class="circle-icon">&#xFF0B</span> add watch list</a>
+    {% if watchlists|length < settings.MAX_WATCHLIST_LENGTH %}
+    <a class="page-tabs-add-watch-list" href="{% url 'barriers:find_a_barrier' %}"><span class="circle-icon">&#xFF0B</span> add watch list</a>
     {% endif %}
 </div>
