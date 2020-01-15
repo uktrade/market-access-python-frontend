@@ -1,3 +1,5 @@
+import copy
+
 from .forms.search import BarrierSearchForm
 from interactions.models import Document
 
@@ -166,3 +168,36 @@ class Watchlist:
             search_form.full_clean()
             self._readable_filters = search_form.get_readable_filters()
         return self._readable_filters
+
+    def get_api_params(self):
+        """
+        Transform watchlist filters into api parameters
+        """
+        filters = copy.deepcopy(self.filters)
+        region = filters.pop('region', [])
+        country = filters.pop('country', [])
+
+        if country or region:
+            filters['location'] = country + region
+
+        if 'createdBy' in filters:
+            created_by = filters.pop('createdBy')
+            if '1' in created_by:
+                filters['user'] = 1
+            elif '2' in created_by:
+                filters['team'] = 1
+
+        filter_map = {
+            'type': 'barrier_type',
+            'search': 'text',
+        }
+
+        api_params = {}
+        for name, value in filters.items():
+            mapped_name = filter_map.get(name, name)
+            if isinstance(value, list):
+                api_params[mapped_name] = ",".join(value)
+            else:
+                api_params[mapped_name] = value
+
+        return api_params

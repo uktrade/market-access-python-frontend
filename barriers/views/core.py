@@ -26,10 +26,12 @@ class Dashboard(TemplateView):
             selected_watchlist = watchlists[watchlist_index]
             selected_watchlist.setdefault('is_current', True)
 
-            filters = self.get_watchlist_params(selected_watchlist)
             sort = self.request.GET.get('sort', '-modified_on')
             client = MarketAccessAPIClient(self.request.session['sso_token'])
-            barriers = client.barriers.list(ordering=sort, **filters)
+            barriers = client.barriers.list(
+                ordering=sort,
+                **selected_watchlist.get_api_params()
+            )
 
             context_data.update({
                 'watchlist_index': watchlist_index,
@@ -64,39 +66,6 @@ class Dashboard(TemplateView):
             return 0
 
         return list_index
-
-    def get_watchlist_params(self, watchlist):
-        """
-        Transform watchlist filters from session into api parameters
-        """
-        filters = watchlist.get('filters')
-        region = filters.pop('region', [])
-        country = filters.pop('country', [])
-
-        if country or region:
-            filters['location'] = country + region
-
-        if 'createdBy' in filters:
-            created_by = filters.pop('createdBy')
-            if '1' in created_by:
-                filters['user'] = 1
-            elif '2' in created_by:
-                filters['team'] = 1
-
-        filter_map = {
-            'type': 'barrier_type',
-            'search': 'text',
-        }
-
-        api_params = {}
-        for name, value in filters.items():
-            mapped_name = filter_map.get(name, name)
-            if isinstance(value, list):
-                api_params[mapped_name] = ",".join(value)
-            else:
-                api_params[mapped_name] = value
-
-        return api_params
 
     def get_search_form_data(self):
         return self.watchlist.filters
