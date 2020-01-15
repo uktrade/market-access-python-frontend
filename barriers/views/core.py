@@ -24,7 +24,6 @@ class Dashboard(TemplateView):
         if watchlists:
             watchlist_index = self.get_watchlist_index()
             selected_watchlist = watchlists[watchlist_index]
-            selected_watchlist.setdefault('is_current', True)
 
             sort = self.request.GET.get('sort', '-modified_on')
             client = MarketAccessAPIClient(self.request.session['sso_token'])
@@ -34,6 +33,7 @@ class Dashboard(TemplateView):
             )
 
             context_data.update({
+                'selected_watchlist': selected_watchlist,
                 'watchlist_index': watchlist_index,
                 'watchlist_querystring': urlencode(
                     selected_watchlist.filters,

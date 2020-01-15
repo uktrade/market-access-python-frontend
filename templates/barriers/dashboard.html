@@ -11,8 +11,7 @@
 {% block page_content %}
     {% include 'barriers/partials/dashboard_heading.html' %}
 
-    {# TODO: isWatchList #}
-    {% if barriers or isWatchList %}
+    {% if selected_watchlist %}
         <div class="dashboard-results-header">
             <h2 class="dashboard-results-header__title">{{ barriers|length }}<span class="dashboard-results-header__title__caption"> barrier{{ barriers|pluralize }}</span></h2>
             <div class="dashboard-results-header__link-wrapper js-toggle-box-control">
@@ -21,13 +20,13 @@
                 <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:remove_watchlist' watchlist_index %}"> Delete list </a>
             </div>
             <div class="toggle-box">
-                {% if watchListFilters %}
+                {% if selected_watchlist.filters %}
                     <ul>
-                        {% for watchListFilter in watchListFilters %}
-                            <li>{{ watchListFilter.key | upper }}: <strong>{{ watchListFilter.value }}</strong></li>
+                        {% for name, value in selected_watchlist.readable_filters.items %}
+                            <li>{{ value.label }}: <strong>{{ value.readable_value|striptags }}</strong></li>
                         {% endfor %}
                     </ul>
-                    <a href="{% url 'barriers:dashboard' %}">Edit list filters</a>
+                    <a href="{% url 'barriers:find_a_barrier' %}?{{ watchlist_querystring }}&edit={{ watchlist_index }}">Edit list filters</a>
                 {% endif %}
             </div>
         </div>
@@ -80,10 +79,10 @@
 
         {% include 'partials/pagination.html' %}
 
-    {% elif isWatchList %}
+    {% elif selected_watchlist %}
         <div class="no-results-box">
             <p><strong>There are no barriers for your search yet</strong></p>
-            <p> We'll update your watch list if you get a match. Or you can <a href="{% url 'barriers:dashboard' %}"> edit your search </a></p>
+            <p> We'll update your watch list if you get a match. Or you can <a href="{% url 'barriers:find_a_barrier' %}?{{ watchlist_querystring }}&edit={{ watchlist_index }}"> edit your search </a></p>
         </div>
     {% else %}
         <div class="no-results-box">

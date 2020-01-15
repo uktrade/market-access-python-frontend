@@ -28,7 +28,7 @@
 <div class="page-tabs-container">
     <ul class="page-tabs">
         {% for watchlist in watchlists %}
-            {% if watchlist.is_current %}
+            {% if watchlist == selected_watchlist %}
                 <li class="page-tabs__tab page-tabs__tab--active">
                     <span class="page-tabs__tab__text">{{ watchlist.name }}</span>
                 </li>
