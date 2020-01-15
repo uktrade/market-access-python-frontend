@@ -4,8 +4,6 @@ from urllib.parse import urlencode
 from django import forms
 from django.http import QueryDict
 
-from utils.tools import nested_sort
-
 
 class BarrierSearchForm(forms.Form):
     edit = forms.IntegerField(required=False, widget=forms.HiddenInput())
@@ -28,11 +26,11 @@ class BarrierSearchForm(forms.Form):
     )
     priority = forms.MultipleChoiceField(
         label='Barrier priority',
-        required=False
+        required=False,
     )
     status = forms.MultipleChoiceField(
         label='Barrier status',
-        required=False
+        required=False,
     )
     created_by = forms.MultipleChoiceField(
         label='Show only',
@@ -40,7 +38,7 @@ class BarrierSearchForm(forms.Form):
             ('1', 'My barriers'),
             ('2', 'My team barriers'),
         ],
-        required=False
+        required=False,
     )
 
     def __init__(self, metadata, *args, **kwargs):
@@ -166,43 +164,42 @@ class BarrierSearchForm(forms.Form):
             params['team'] = '2'
         return {k: v for k, v in params.items() if v}
 
-    def get_filters_with_values(self):
+    def get_raw_filters(self):
+        """
+        Get the currently applied filters in the same format as cleaned_data.
+        """
         return {
             key: value
             for key, value in self.cleaned_data.items()
-            if value
+            if value and not self.fields[key].widget.is_hidden
         }
 
-    def get_grouped_filters(self):
+    def get_readable_value(self, field_name, value):
+        field = self.fields[field_name]
+        if hasattr(field, 'choices'):
+            field_lookup = dict(field.choices)
+            return ", ".join([field_lookup.get(x) for x in value])
+        return value
+
+    def get_readable_filters(self, with_remove_links=False):
         """
-        Get the currently applied filters grouped by name.
+        Get the currently applied filters with their readable values.
 
         Looks up the human-friendly value for fields with choices
         and calculates the url to remove each filter.
         """
         filters = {}
 
-        for name, value in self.cleaned_data.items():
-            if self.fields[name].widget.is_hidden:
-                continue
-
-            remove_params = self.cleaned_data.copy()
-            del remove_params[name]
-
-            field = self.fields[name]
+        for name, value in self.get_raw_filters().items():
             filters[name] = {
-                'label': field.label,
+                'label': self.fields[name].label,
                 'value': value,
-                'remove_url': urlencode(remove_params, doseq=True),
+                'readable_value': self.get_readable_value(name, value),
             }
-            if hasattr(field, 'choices'):
-                field_lookup = dict(field.choices)
-                filters[name]['value'] = ", ".join(
-                    [field_lookup.get(x) for x in value]
-                )
+
+            if with_remove_links:
+                params = self.cleaned_data.copy()
+                del params[name]
+                filters[name]['remove_url'] = urlencode(params, doseq=True)
 
         return filters
-
-    def do_filters_match(self, filters):
-        form_filters = self.get_filters_with_values()
-        return nested_sort(filters) == nested_sort(form_filters)

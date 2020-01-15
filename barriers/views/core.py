@@ -9,6 +9,7 @@ from .mixins import BarrierMixin
 
 from utils.api_client import MarketAccessAPIClient
 from utils.metadata import get_metadata
+from utils.tools import nested_sort
 
 
 class Dashboard(TemplateView):
@@ -127,15 +128,16 @@ class FindABarrier(SearchFormMixin, FormView):
 
         context_data.update({
             'barriers': barriers,
-            'filters': form.get_grouped_filters(),
+            'filters': form.get_readable_filters(with_remove_links=True),
             'page': 'find-a-barrier',
         })
 
         if form.cleaned_data.get('edit') is not None:
             watchlist_index = form.cleaned_data.get('edit')
             watchlist = self.request.session.get_watchlist(watchlist_index)
-            context_data['have_filters_changed'] = not form.do_filters_match(
-                watchlist['filters']
+            form_filters = form.get_raw_filters()
+            context_data['have_filters_changed'] = (
+                nested_sort(form_filters) != nested_sort(watchlist['filters'])
             )
 
         return context_data

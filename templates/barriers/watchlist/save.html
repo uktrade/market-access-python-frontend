@@ -22,7 +22,7 @@
                     {% if filter.value %}
                     <div class="details-list__group">
                         <dt class="details-list__key">{{ filter.label }}</dt>
-                        <dd class="details-list__value">{{ filter.value|striptags }}</dd>
+                        <dd class="details-list__value">{{ filter.readable_value|striptags }}</dd>
                     </div>
                     {% endif %}
                 {% endfor %}

@@ -23,7 +23,7 @@ class SearchFiltersMixin:
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         search_form = self.get_search_form()
-        context_data['filters'] = search_form.get_grouped_filters()
+        context_data['filters'] = search_form.get_readable_filters()
         return context_data
 
     def get_search_form(self):
@@ -53,7 +53,7 @@ class SaveWatchlist(SearchFiltersMixin, FormView):
         search_form = self.get_search_form()
         kwargs.update({
             'watchlists': self.request.session.get_watchlists(),
-            'filters': search_form.get_filters_with_values()
+            'filters': search_form.get_raw_filters()
         })
         return kwargs
 
@@ -99,7 +99,7 @@ class EditWatchlist(SearchFiltersMixin, FormView):
             index=int(self.request.GET.get('edit')),
             watchlist={
                 'name': form.cleaned_data.get('name'),
-                'filters': search_form.get_filters_with_values(),
+                'filters': search_form.get_raw_filters(),
             },
         )
         return super().form_valid(form)
