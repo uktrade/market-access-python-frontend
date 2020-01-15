@@ -1,6 +1,8 @@
 from django import forms
 from django.conf import settings
 
+from ..models import Watchlist
+
 
 class SaveWatchlistForm(forms.Form):
     REPLACE = "replace"
@@ -28,7 +30,7 @@ class SaveWatchlistForm(forms.Form):
         self.filters = filters
         super().__init__(*args, **kwargs)
         self.fields['replace_index'].choices = [
-            (str(index), watchlist.get('name'))
+            (str(index), watchlist.name)
             for index, watchlist in enumerate(watchlists)
         ]
         if self.has_to_replace():
@@ -59,10 +61,10 @@ class SaveWatchlistForm(forms.Form):
                 )
 
     def save(self):
-        new_watchlist = {
-            'name': self.cleaned_data['name'],
-            'filters': self.filters,
-        }
+        new_watchlist = Watchlist(
+            name=self.cleaned_data['name'],
+            filters=self.filters,
+        )
 
         replace_or_new = self.cleaned_data.get('replace_or_new')
 

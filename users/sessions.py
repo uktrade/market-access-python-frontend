@@ -1,5 +1,7 @@
 from django.contrib.sessions.backends.db import SessionStore as DBStore
 
+from barriers.models import Watchlist
+
 from utils.api_client import MarketAccessAPIClient
 
 
@@ -9,9 +11,10 @@ class SessionStore(DBStore):
     """
     def get_watchlists(self):
         try:
-            return self['user_data']['user_profile']['watchList'].get(
+            watchlists = self['user_data']['user_profile']['watchList'].get(
                 'lists', []
             )
+            return [Watchlist(**watchlist) for watchlist in watchlists]
         except KeyError:
             return []
 
@@ -23,7 +26,9 @@ class SessionStore(DBStore):
             return None
 
     def set_watchlists(self, watchlists):
-        self['user_data']['user_profile']['watchList']['lists'] = watchlists
+        self['user_data']['user_profile']['watchList']['lists'] = [
+            watchlist.to_dict() for watchlist in watchlists
+        ]
         client = MarketAccessAPIClient(self['sso_token'])
         client.users.patch(user_profile=self['user_data']['user_profile'])
         self.save()
@@ -36,7 +41,7 @@ class SessionStore(DBStore):
     def rename_watchlist(self, index, name):
         watchlists = self.get_watchlists()
         if index < len(watchlists):
-            watchlists[index]['name'] = name
+            watchlists[index].name = name
             self.set_watchlists(watchlists)
 
     def delete_watchlist(self, index):

@@ -1,7 +1,8 @@
+from .forms.search import BarrierSearchForm
+from interactions.models import Document
+
 from utils.metadata import get_metadata
 from utils.models import APIModel
-
-from interactions.models import Document
 
 import dateutil.parser
 
@@ -140,3 +141,28 @@ class Assessment(APIModel):
         metadata = get_metadata()
         self.impact_text = metadata.get_impact_text(self.data.get('impact'))
         self.documents = [Document(document) for document in data['documents']]
+
+
+class Watchlist:
+    _readable_filters = None
+
+    def __init__(self, name, filters, *args, **kwargs):
+        self.name = name
+        self.filters = filters
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'filters': self.filters,
+        }
+
+    @property
+    def readable_filters(self):
+        if self._readable_filters is None:
+            search_form = BarrierSearchForm(
+                metadata=get_metadata(),
+                data=self.filters,
+            )
+            search_form.full_clean()
+            self._readable_filters = search_form.get_readable_filters()
+        return self._readable_filters

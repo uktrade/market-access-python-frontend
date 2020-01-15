@@ -8,6 +8,7 @@ from ..forms.watchlist import (
     RenameWatchlistForm,
     SaveWatchlistForm,
 )
+from ..models import Watchlist
 
 from utils.metadata import get_metadata
 
@@ -90,17 +91,17 @@ class EditWatchlist(SearchFiltersMixin, FormView):
         return self.request.session.get_watchlist(index)
 
     def get_initial(self):
-        return {'name': self.watchlist.get('name')}
+        return {'name': self.watchlist.name}
 
     def form_valid(self, form):
         search_form = self.get_search_form()
 
         self.request.session.update_watchlist(
             index=int(self.request.GET.get('edit')),
-            watchlist={
-                'name': form.cleaned_data.get('name'),
-                'filters': search_form.get_raw_filters(),
-            },
+            watchlist=Watchlist(
+                name=form.cleaned_data.get('name'),
+                filters=search_form.get_raw_filters(),
+            ),
         )
         return super().form_valid(form)
 
@@ -136,10 +137,10 @@ class RenameWatchlist(SearchFiltersMixin, FormView):
         return self.request.session.get_watchlist(index)
 
     def get_initial(self):
-        return {'name': self.watchlist.get('name')}
+        return {'name': self.watchlist.name}
 
     def get_search_form_data(self):
-        return self.watchlist.get('filters')
+        return self.watchlist.filters
 
     def form_valid(self, form):
         self.request.session.rename_watchlist(

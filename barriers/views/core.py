@@ -34,7 +34,7 @@ class Dashboard(TemplateView):
             context_data.update({
                 'watchlist_index': watchlist_index,
                 'watchlist_querystring': urlencode(
-                    selected_watchlist['filters'],
+                    selected_watchlist.filters,
                     doseq=True,
                 ),
                 'sort_field': sort.lstrip('-'),
@@ -98,6 +98,9 @@ class Dashboard(TemplateView):
 
         return api_params
 
+    def get_search_form_data(self):
+        return self.watchlist.filters
+
 
 class SearchFormMixin:
     """
@@ -137,7 +140,7 @@ class FindABarrier(SearchFormMixin, FormView):
             watchlist = self.request.session.get_watchlist(watchlist_index)
             form_filters = form.get_raw_filters()
             context_data['have_filters_changed'] = (
-                nested_sort(form_filters) != nested_sort(watchlist['filters'])
+                nested_sort(form_filters) != nested_sort(watchlist.filters)
             )
 
         return context_data
