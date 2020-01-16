@@ -4,9 +4,9 @@
 
 {% block page_content %}
 
-    {# TODO: Errors #}
     <a href="{% url 'barriers:dashboard' %}{% if view.kwargs.index %}?list={{ view.kwargs.index }}{% endif %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with text='Rename watch list' %}
+    {% include 'partials/forms/error_summary.html' %}
 
     <section class="restrict-width">
         {% if filters %}

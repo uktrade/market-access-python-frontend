@@ -1,2 +1,0 @@
-<a href="{% if href %}{{ href }}{% else %}#{% endif %}" class="govuk-back-link{% if classes %} {{ classes }}{% endif %}"
-  {% for attribute, value in attributes %} {{attribute}}="{{value}}"{% endfor %}>{% if text %}{{ html | safe }}{% else %}Back{% endif %}</a>

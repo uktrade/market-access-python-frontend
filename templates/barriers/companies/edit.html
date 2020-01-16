@@ -4,9 +4,9 @@
 
 {% block page_content %}
 
-    {# TODO: Errors #}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=barrier.barrier_title text='Name of company affected' %}
+    {% include 'partials/forms/error_summary.html' %}
 
     <div class="restrict-width">
 

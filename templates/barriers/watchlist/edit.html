@@ -4,9 +4,9 @@
 
 {% block page_content %}
 
-    {# TODO: Errors #}
     <a href="{% url 'barriers:find_a_barrier' %}?{{ request.GET.urlencode }}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with text='Edit watch list' %}
+    {% include 'partials/forms/error_summary.html' %}
 
     <section class="restrict-width">
         {% if filters %}

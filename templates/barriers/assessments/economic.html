@@ -13,9 +13,9 @@
 
 {% block page_content %}
 
-    {# TODO: Errors #}
     <a href="{% url 'barriers:cancel_assessment_document' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=barrier.barrier_title text='Economic assessment' %}
+    {% include 'partials/forms/error_summary.html' %}
 
     <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_assessment_document' barrier.id %}">
 
