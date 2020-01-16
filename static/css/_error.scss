@@ -5,6 +5,10 @@
 	margin-top: 30px;
 }
 
+#error-summary-title {
+	margin-bottom: 0;
+}
+
 .stack-trace {
 	@include govuk-font( $size: 14 );
 	margin-bottom: 30px;

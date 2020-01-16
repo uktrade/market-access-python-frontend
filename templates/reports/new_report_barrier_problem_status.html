@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add - Status of the barrier{% endblock %}
+
+{% block page_content %}
+
+    <section class="restrict-width">
+
+        {% include 'heading.html' with caption='Add a barrier' text='Barrier status' %}
+
+        {% form_error_banner form %}
+
+        <form action="" method="POST">
+		    {% csrf_token %}
+            <div class="{% form_group_classes form.errors %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.fields.status.label }}
+                    </legend>
+
+                    {% form_field_error form "status" %}
+
+                    <div class="govuk-radios problem-status">
+                    {% for choice_id, choice_data in form.fields.status.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                   name="status"
+                                   type="radio"
+                                   id="status-{{ choice_id }}"
+                                   value="{{ choice_id }}"
+                                   aria-describedby="{{ choice_id }}-item-hint"
+                                   {% if form.initial.status == choice_id %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="{{ choice_id }}">
+                                {{ choice_data.label }}
+                            </label>
+                            <span id="{{ choice_id }}-item-hint" class="govuk-hint govuk-radios__hint">
+                                {{ choice_data.hint }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+		    <input type="submit" value="Continue" class="govuk-button">
+	    </form>
+	</section>
+
+
+{% endblock %}
