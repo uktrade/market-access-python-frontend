@@ -11,6 +11,23 @@ class APIFormMixin:
         super().__init__(*args, **kwargs)
 
 
+class CustomErrorsMixin:
+    @property
+    def custom_errors(self):
+        custom_errors = {}
+        for field_name, errors in self.errors.items():
+            for error in errors:
+                custom_errors[field_name] = {
+                    'id': field_name,
+                    'field_name': self.get_readable_field_name(field_name),
+                    'text': error,
+                }
+        return custom_errors
+
+    def get_readable_field_name(self, field_name):
+        return field_name.replace("_", " ").title()
+
+
 class DocumentMixin:
     """
     Helper functions to upload the 'document' field of a form.

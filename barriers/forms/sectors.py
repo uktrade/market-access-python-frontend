@@ -1,5 +1,7 @@
 from django import forms
 
+from .mixins import CustomErrorsMixin
+
 from utils.api_client import MarketAccessAPIClient
 
 
@@ -38,7 +40,7 @@ class EditSectorsForm(forms.Form):
         )
 
 
-class AddSectorsForm(forms.Form):
+class AddSectorsForm(CustomErrorsMixin, forms.Form):
     sector = forms.ChoiceField(label='', choices=[])
 
     def __init__(self, sectors, *args, **kwargs):

@@ -1,6 +1,8 @@
 from django import forms
 from django.template.loader import render_to_string
 
+from .mixins import CustomErrorsMixin
+
 from utils.api_client import MarketAccessAPIClient
 from utils.forms import ChoiceFieldWithHelpText, MonthYearField
 from utils.metadata import (
@@ -13,7 +15,7 @@ from utils.metadata import (
 )
 
 
-class UnknownForm(forms.Form):
+class UnknownForm(CustomErrorsMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -32,7 +34,7 @@ class UnknownForm(forms.Form):
         }
 
 
-class OpenPendingForm(forms.Form):
+class OpenPendingForm(CustomErrorsMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -83,7 +85,7 @@ class OpenPendingForm(forms.Form):
         return params
 
 
-class OpenInProgressForm(forms.Form):
+class OpenInProgressForm(CustomErrorsMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -102,7 +104,7 @@ class OpenInProgressForm(forms.Form):
         }
 
 
-class ResolvedInPartForm(forms.Form):
+class ResolvedInPartForm(CustomErrorsMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -123,7 +125,7 @@ class ResolvedInPartForm(forms.Form):
         }
 
 
-class ResolvedInFullForm(forms.Form):
+class ResolvedInFullForm(CustomErrorsMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -144,7 +146,7 @@ class ResolvedInFullForm(forms.Form):
         }
 
 
-class DormantForm(forms.Form):
+class DormantForm(CustomErrorsMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -161,7 +163,7 @@ class DormantForm(forms.Form):
         return {'status_summary': self.cleaned_data['dormant_summary']}
 
 
-class BarrierStatusForm(forms.Form):
+class BarrierStatusForm(CustomErrorsMixin, forms.Form):
     """
     Form with subforms depending on the radio button selected
     """
@@ -238,6 +240,12 @@ class BarrierStatusForm(forms.Form):
 
     def get_subform(self):
         return self.subforms.get(self.cleaned_data['status'])
+
+    @property
+    def custom_errors(self):
+        form_errors = super().custom_errors
+        form_errors.update(self.get_subform().custom_errors)
+        return form_errors
 
     def is_valid(self):
         return super().is_valid() and self.get_subform().is_valid()

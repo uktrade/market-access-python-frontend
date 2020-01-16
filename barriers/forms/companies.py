@@ -1,9 +1,11 @@
 from django import forms
 
+from .mixins import CustomErrorsMixin
+
 from utils.api_client import MarketAccessAPIClient
 
 
-class CompanySearchForm(forms.Form):
+class CompanySearchForm(CustomErrorsMixin, forms.Form):
     query = forms.CharField(
         label='Find details of the company affected',
         max_length=255,

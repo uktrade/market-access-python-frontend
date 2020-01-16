@@ -2,13 +2,13 @@ import datetime
 
 from django import forms
 
-from .mixins import APIFormMixin
+from .mixins import APIFormMixin, CustomErrorsMixin
 
 from utils.api_client import MarketAccessAPIClient
 from utils.forms import ChoiceFieldWithHelpText, MonthYearField
 
 
-class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
+class UpdateBarrierTitleForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     title = forms.CharField(
         label="Suggest a title for this barrier",
         help_text=(
@@ -26,7 +26,7 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierProductForm(APIFormMixin, forms.Form):
+class UpdateBarrierProductForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     product = forms.CharField(
         label='What product or service is being exported?',
         max_length=255
@@ -40,7 +40,7 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
+class UpdateBarrierDescriptionForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     description = forms.CharField(
         label=(
             'Provide a summary of the problem and how you became aware of it'
@@ -56,7 +56,7 @@ class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
+class UpdateBarrierSourceForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     CHOICES = [
         ('COMPANY', 'Company'),
         ('TRADE', 'Trade association'),
@@ -93,7 +93,7 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
+class UpdateBarrierPriorityForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     CHOICES = [
         ('UNKNOWN', '<strong>Unknown</strong> priority'),
         ('HIGH', '<strong>High</strong> priority'),
@@ -128,7 +128,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
+class UpdateBarrierEUExitRelatedForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     CHOICES = [
         (1, 'Yes'),
         (2, 'No'),
@@ -148,7 +148,7 @@ class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
+class UpdateBarrierProblemStatusForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     CHOICES = [
         (
             1,
@@ -175,7 +175,7 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
+class UpdateBarrierStatusForm(CustomErrorsMixin, APIFormMixin, forms.Form):
     status_date = MonthYearField(required=False)
     status_summary = forms.CharField(
         label='Provide a summary of why this barrier is dormant',

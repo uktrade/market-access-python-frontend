@@ -1,13 +1,13 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import DocumentMixin
+from .mixins import DocumentMixin, CustomErrorsMixin
 
 from utils.api_client import MarketAccessAPIClient
 from utils.forms import MultipleValueField, RestrictedFileField
 
 
-class EconomicAssessmentForm(DocumentMixin, forms.Form):
+class EconomicAssessmentForm(DocumentMixin, CustomErrorsMixin, forms.Form):
     IMPACT_CHOICES = (
         ('HIGH', 'High'),
         ('MEDIUMHIGH', 'Medium High'),
@@ -68,7 +68,7 @@ class AssessmentDocumentForm(DocumentMixin, forms.Form):
         return self.upload_document()
 
 
-class EconomyValueForm(forms.Form):
+class EconomyValueForm(CustomErrorsMixin, forms.Form):
     value = forms.IntegerField(
         label="What is the total value of the barrier to the UK economy?",
         help_text=(
@@ -96,7 +96,7 @@ class EconomyValueForm(forms.Form):
             )
 
 
-class MarketSizeForm(forms.Form):
+class MarketSizeForm(CustomErrorsMixin, forms.Form):
     value = forms.IntegerField(
         label="What is the size of the import market?",
         help_text=(
@@ -124,7 +124,7 @@ class MarketSizeForm(forms.Form):
             )
 
 
-class CommercialValueForm(forms.Form):
+class CommercialValueForm(CustomErrorsMixin, forms.Form):
     value = forms.IntegerField(
         label="What is the value of the barrier to the affected business(es)?",
         help_text=(
@@ -152,7 +152,7 @@ class CommercialValueForm(forms.Form):
             )
 
 
-class ExportValueForm(forms.Form):
+class ExportValueForm(CustomErrorsMixin, forms.Form):
     value = forms.IntegerField(
         label="What is the value of currently affected UK exports?",
         help_text=(
