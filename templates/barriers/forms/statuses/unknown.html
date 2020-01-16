@@ -1,4 +1,4 @@
-<div class="govuk-form-group{% if form.unknown_summary.errors %} govuk-form-group--error{% endif %}">
+<div id="{{ form.unknown_summary.name }}" class="govuk-form-group{% if form.unknown_summary.errors %} govuk-form-group--error{% endif %}">
     <label class="govuk-label govuk-label--s" for="{{ form.unknown_summary.name }}">{{ form.unknown_summary.label }}</label>
 
     {% if form.unknown_summary.errors %}

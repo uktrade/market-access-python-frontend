@@ -32,7 +32,7 @@
         <form action="" method="POST">
             {% csrf_token %}
 
-            <div class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
+            <div id="{{ form.name.name }}" class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
 
                 {% if form.name.errors %}
@@ -48,7 +48,7 @@
             {% if form.has_to_replace %}
                 {% include 'barriers/watchlist/partials/replace_form.html' %}
             {% elif not form.has_to_create %}
-                <div class="govuk-form-group{% if form.replace_or_new.errors %} govuk-form-group--error{% endif %}">
+                <div id="{{ form.replace_or_new.name }}" class="govuk-form-group{% if form.replace_or_new.errors %} govuk-form-group--error{% endif %}">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.replace_or_new.label }}</legend>
 

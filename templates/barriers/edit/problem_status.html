@@ -11,7 +11,7 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.problem_status.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.problem_status.label }}</legend>
 

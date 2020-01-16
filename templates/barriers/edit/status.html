@@ -12,7 +12,7 @@
         {% csrf_token %}
 
         {% if object.is_resolved or object.is_partially_resolved %}
-            <div class="govuk-form-group{% if form.status_date.errors %} govuk-form-group--error{% endif %}">
+            <div id="{{ form.status_date.name }}" class="govuk-form-group{% if form.status_date.errors %} govuk-form-group--error{% endif %}">
                 <fieldset class="govuk-fieldset" {% if form.status_date.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date the barrier was resolved</legend>
 
@@ -30,7 +30,7 @@
             </div>
         {% endif %}
 
-        <div class="govuk-form-group{% if form.status_summary.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.status_summary.name }}" class="govuk-form-group{% if form.status_summary.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="status_summary">{{ form.status_summary.label }}</label>
 
             {% if form.status_summary.errors %}

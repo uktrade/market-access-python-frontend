@@ -1,9 +1,9 @@
 <form action="" method="post" enctype="multipart/form-data" data-xhr-upload="{% url 'barriers:add_note_document' barrier.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}">
     {% csrf_token %}
 
-    <div class="govuk-form-group js-note-group">
+    <div id="{{ form.note.name }}" class="govuk-form-group js-note-group">
         <label class="govuk-label govuk-!-font-weight-bold" for="{{ form.note.name }}">{{ form.note.label }}</label>
-        <textarea class="govuk-textarea js-note-text" id="{{ form.note.name }}" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+        <textarea class="govuk-textarea js-note-text" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
     </div>
 
     {% if documents %}
@@ -23,7 +23,7 @@
     </div>
     {% endif %}
 
-    <div class="govuk-form-group file-upload js-form-group">
+    <div id="{{ form.document.name }}" class="govuk-form-group file-upload js-form-group">
         <label class="govuk-label visually-hidden" for="document">{{ form.document.label }}</label>
 
         {% if form.document.errors %}
@@ -37,7 +37,7 @@
         (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
         </span>
 
-        <input class="govuk-file-upload file-upload__input js-file-input" id="document" name="document" type="file" aria-describedby="document-hint">
+        <input class="govuk-file-upload file-upload__input js-file-input" name="document" type="file" aria-describedby="document-hint">
     </div>
 
     <input type="submit" value="Save note" class="govuk-button js-submit-button">

@@ -20,7 +20,7 @@
     <form action="" method="POST">
         {% csrf_token %}
 
-        <div class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.status.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
 

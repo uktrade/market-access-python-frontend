@@ -11,7 +11,7 @@
     <form action="{{ href.form }}" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div class="govuk-form-group {% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.sector.name }}" class="govuk-form-group {% if form.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="sectors">Which sector is affected by the barrier?</label>
 
             {% if form.errors %}

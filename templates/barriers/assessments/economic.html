@@ -21,7 +21,7 @@
 
         {% csrf_token %}
 
-        <div class="govuk-form-group">
+        <div id="{{ form.impact.name }}" class="govuk-form-group">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                     What is the economic impact of the barrier?
@@ -45,7 +45,7 @@
             </fieldset>
         </div>
 
-        <div class="govuk-form-group">
+        <div id="{{ form.description.name }}" class="govuk-form-group">
             <label class="govuk-label govuk-label--s" for="description">
                 Explain the assessment
             </label>
@@ -57,7 +57,7 @@
                 </span>
             {% endif %}
 
-            <textarea class="govuk-textarea" id="description" name="description" rows="5">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+            <textarea class="govuk-textarea" name="description" rows="5">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
         </div>
 
         <h3 class="govuk-label--s">Add supporting documents (optional)</h3>
@@ -79,7 +79,7 @@
         </div>
         {% endif %}
 
-        <div class="govuk-form-group file-upload js-form-group">
+        <div id="{{ form.document.name }}" class="govuk-form-group file-upload js-form-group">
             <label class="govuk-label visually-hidden" for="document">Attach a document</label>
 
             {% if form.document.errors %}

@@ -1,4 +1,4 @@
-<div class="govuk-form-group{% if form.resolved_date.errors %} govuk-form-group--error{% endif %}">
+<div id="{{ form.resolved_date.name }}" class="govuk-form-group{% if form.resolved_date.errors %} govuk-form-group--error{% endif %}">
     <fieldset class="govuk-fieldset" {% if form.resolved_date.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date the barrier was resolved</legend>
 
@@ -15,7 +15,7 @@
     </fieldset>
 </div>
 
-<div class="govuk-form-group{% if form.resolved_summary.errors %} govuk-form-group--error{% endif %}">
+<div id="{{ form.resolved_summary.name }}" class="govuk-form-group{% if form.resolved_summary.errors %} govuk-form-group--error{% endif %}">
     <label class="govuk-label govuk-label--s" for="{{ form.resolved_summary.name }}">{{ form.resolved_summary.label }}</label>
 
     {% if form.resolved_summary.errors %}

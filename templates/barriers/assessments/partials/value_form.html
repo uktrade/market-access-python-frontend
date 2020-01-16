@@ -1,7 +1,7 @@
 <form action="" method="POST" class="restrict-width">
     {% csrf_token %}
 
-    <div class="govuk-form-group">
+    <div id="{{ form.value.name }}" class="govuk-form-group">
         <label class="govuk-label govuk-label--s" for="value">
             {{ form.value.label }}
         </label>
@@ -19,7 +19,7 @@
         <div class="currency-input">
             <span class="currency-input__prefix" title="GBP">&pound;</span>
             <div class="currency-input__value">
-                <input class="currency-input__value__input govuk-input govuk-input--currency" id="value" name="value" type="text" aria-describedby="value-hint" required {% if form.value.value %}value="{{ form.value.value }}"{% endif %}>
+                <input class="currency-input__value__input govuk-input govuk-input--currency" name="value" type="text" aria-describedby="value-hint" required {% if form.value.value %}value="{{ form.value.value }}"{% endif %}>
             </div>
         </div>
     </div>

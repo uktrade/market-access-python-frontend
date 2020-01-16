@@ -21,12 +21,12 @@
 
                 {% if form.edit.value %}{{ form.edit }}{% endif %}
 
-                <div class="govuk-form-group filter-items-group">
+                <div id="{{ form.search.name }}" class="govuk-form-group filter-items-group">
                     <label class="govuk-label filter-items__label" for="search">
                       {{ form.search.label }}
                     </label>
 
-                    <input class="govuk-input" id="search" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
+                    <input class="govuk-input" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
                 </div>
 
                 {% include 'partials/typeahead.html' with placeholder='Search locations' field=form.country %}

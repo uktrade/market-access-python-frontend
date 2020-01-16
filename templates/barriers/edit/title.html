@@ -17,7 +17,7 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.title.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">{{ form.title.label }}</label>
 
             <span id="{{ form.title.name }}-hint" class="govuk-hint">{{ form.title.help_text }}</span>
