@@ -24,7 +24,7 @@ def form_field_error(form, field_name):
     }
 
 
-@register.inclusion_tag('partials/form_error_banner.html')
+@register.inclusion_tag('partials/forms/error_summary.html')
 def form_error_banner(form):
     return {
         'errors': form.errors

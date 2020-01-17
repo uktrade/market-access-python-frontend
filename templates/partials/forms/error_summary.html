@@ -1,9 +1,9 @@
-{% if form.custom_errors %}
+{% if custom_errors %}
   <div class="govuk-error-summary restrict-width" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
       <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
       <div class="govuk-error-summary__body">
           <ul class="govuk-list govuk-error-summary__list">
-          {% for field, error in form.custom_errors.items %}
+          {% for field, error in custom_errors.items %}
               <li>
               {% if error.id %}
                   <a href="#{{ error.id }}">{{ error.field_name }}: {{ error.text }}</a>
