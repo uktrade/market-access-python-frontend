@@ -7,7 +7,7 @@
 {% block page_content %}
 
     <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link">Back</a>
-    {% include 'heading.html' with caption=barrier.barrier_title text='Name of user' %}
+    {% include 'partials/heading.html' with caption=barrier.barrier_title text='Name of user' %}
     {% form_error_banner form %}
 
     <div class="restrict-width">

@@ -91,7 +91,7 @@ class ChoiceFieldWithHelpText(forms.ChoiceField):
 
 
 class MonthYearWidget(forms.MultiWidget):
-    template_name = "forms/widgets/month_year_widget.html"
+    template_name = "partials/forms/widgets/month_year_widget.html"
 
     def __init__(self, attrs=None):
         widget = (widgets.NumberInput(), widgets.NumberInput())

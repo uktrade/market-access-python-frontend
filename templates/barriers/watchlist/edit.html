@@ -5,7 +5,7 @@
 {% block page_content %}
 
     <a href="{% url 'barriers:find_a_barrier' %}?{{ request.GET.urlencode }}" class="govuk-back-link">Back</a>
-    {% include 'heading.html' with text='Edit watch list' %}
+    {% include 'partials/heading.html' with text='Edit watch list' %}
     {% form_error_banner form %}
 
     <section class="restrict-width">

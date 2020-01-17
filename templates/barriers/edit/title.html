@@ -11,7 +11,7 @@
 {% block page_content %}
 
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link">Back</a>
-    {% include 'heading.html' with caption=object.barrier_title text='Edit title' %}
+    {% include 'partials/heading.html' with caption=object.barrier_title text='Edit title' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">

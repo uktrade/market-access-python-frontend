@@ -5,7 +5,7 @@
 {% block page_content %}
 
     <a href="{% url 'barriers:edit_location_session' barrier.id %}" class="govuk-back-link">Back</a>
-    {% include 'heading.html' with caption=barrier.barrier_title text='Edit barrier country' %}
+    {% include 'partials/heading.html' with caption=barrier.barrier_title text='Edit barrier country' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">

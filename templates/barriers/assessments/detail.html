@@ -6,7 +6,7 @@
 
 {% block masthead %}
     <div class="ma-masthead">
-        {% include 'barriers/barrier_summary.html' %}
+        {% include 'barriers/partials/barrier_summary.html' %}
     </div>
 {% endblock %}
 
@@ -24,7 +24,7 @@
 
 {% block page_content %}
 
-    {% include 'barriers/barrier_tabs.html' with active='assessment' %}
+    {% include 'barriers/partials/barrier_tabs.html' with active='assessment' %}
 
     {% if assessment and assessment.explanation and assessment.impact %}
         <div class="assessment-item">

@@ -20,7 +20,7 @@
 
 {% block masthead %}
     <div class="ma-masthead">
-        {% include 'barriers/barrier_summary.html' %}
+        {% include 'barriers/partials/barrier_summary.html' %}
     </div>
 {% endblock %}
 
@@ -30,7 +30,7 @@
         {% include 'partials/toast.html' %}
     {% endif %}
 
-    {% include 'barriers/barrier_tabs.html' with active='detail' %}
+    {% include 'barriers/partials/barrier_tabs.html' with active='detail' %}
 
     <section class="summary-group">
         {% if barrier.is_resolved or barrier.is_hibernated %}

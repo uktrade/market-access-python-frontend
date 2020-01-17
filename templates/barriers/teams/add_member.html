@@ -16,12 +16,12 @@
 
 {% block masthead %}
     <div class="ma-masthead">
-        {% include 'barriers/barrier_summary.html' %}
+        {% include 'barriers/partials/barrier_summary.html' %}
     </div>
 {% endblock %}
 
 {% block page_content %}
-    {% include 'barriers/barrier_tabs.html' with active='team' %}
+    {% include 'barriers/partials/barrier_tabs.html' with active='team' %}
     {% include 'barriers/partials/team_list.html' %}
     {% form_error_banner form %}
 

@@ -5,7 +5,7 @@
 {% block page_content %}
 
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link">Back</a>
-    {% include 'heading.html' with caption=barrier.barrier_title text='Edit location' %}
+    {% include 'partials/heading.html' with caption=barrier.barrier_title text='Edit location' %}
     {% form_error_banner form %}
 
     <h3> Exports to which country are affected by this issue?</h3>
