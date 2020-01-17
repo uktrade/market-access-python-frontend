@@ -24,10 +24,22 @@ def form_field_error(form, field_name):
     }
 
 
+def get_custom_errors(errors):
+    custom_errors = {}
+    for field_name, errors in errors.items():
+        for error in errors:
+            custom_errors[field_name] = {
+                'id': field_name,
+                'field_name': field_name.replace("_", " ").title(),
+                'text': error,
+            }
+    return custom_errors
+
+
 @register.inclusion_tag('partials/forms/error_summary.html')
 def form_error_banner(form):
     return {
-        'errors': form.errors
+        'custom_errors': get_custom_errors(form.errors)
     }
 
 
