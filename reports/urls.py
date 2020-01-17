@@ -1,6 +1,7 @@
 from django.urls import path
 
 from reports.views import (
+    DraftBarriers,
     NewReport,
     NewReportBarrierStatus1,
     NewReportBarrierStatus2,
@@ -10,6 +11,7 @@ from reports.views import (
 app_name = "reports"
 
 urlpatterns = [
+    path("reports/", DraftBarriers.as_view(), name="draft_barriers"),
     path("reports/new/", NewReport.as_view(), name="new_report"),
     path("reports/new/start/", NewReportBarrierStatus1.as_view(), name="barrier_problem_status"),
     path("reports/new/start/is-resolved/", NewReportBarrierStatus2.as_view(), name="barrier_status"),

@@ -38,24 +38,24 @@
                 </li>
             {% endif %}
         {% empty %}
-            {% if 1 %}
-                <li class="page-tabs__tab page-tabs__tab--active">
-                    <span class="page-tabs__tab__text">My watch list</span>
-                </li>
-            {% else %}
+            {% if page == "draft_barriers" %}
                 <li class="page-tabs__tab">
                     <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}">My watch list</a>
+                </li>
+            {% else %}
+                <li class="page-tabs__tab page-tabs__tab--active">
+                    <span class="page-tabs__tab__text">My watch list</span>
                 </li>
             {% endif %}
         {% endfor %}
 
-        {% if page == my_draft_barriers %}
+        {% if page == "draft_barriers" %}
             <li class="page-tabs__tab page-tabs__tab--active">
                 <span class="page-tabs__tab__text">My draft barriers</span>
             </li>
         {% else %}
             <li class="page-tabs__tab">
-                <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}">My draft barriers</a>
+                <a class="page-tabs__tab__text" href="{% url 'reports:draft_barriers' %}">My draft barriers</a>
             </li>
         {% endif %}
     </ul>

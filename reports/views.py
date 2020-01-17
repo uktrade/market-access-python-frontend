@@ -8,6 +8,8 @@ from reports.forms.new_report_barrier_status import (
     NewReportBarrierProblemStatusForm,
     NewReportBarrierStatus2Form,
 )
+
+from utils.api_client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
 
@@ -155,3 +157,15 @@ class NewReportBarrierLocation(ReportsFormView):
     form_class = NewReportBarrierStatus2Form
     # TODO: wrap this view up as per MAR-115
 
+
+class DraftBarriers(TemplateView):
+    template_name = "reports/draft_barriers.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
+        reports = client.reports.list(ordering="-created_on")
+        context_data['page'] = "draft_barriers"
+        context_data['watchlists'] =  self.request.session.get_watchlists()
+        context_data['reports'] = reports
+        return context_data

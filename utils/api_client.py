@@ -7,6 +7,7 @@ from django.conf import settings
 
 from barriers.models import Assessment, Barrier
 from interactions.models import HistoryItem, Interaction
+from reports.models import Report
 
 from utils.exceptions import APIException, ScanError
 from utils.metadata import (
@@ -31,6 +32,7 @@ class MarketAccessAPIClient:
         self.interactions = InteractionsResource(self)
         self.notes = NotesResource(self)
         self.users = UsersResource(self)
+        self.reports = ReportsResource(self)
 
     def request(self, method, path, **kwargs):
         url = f'{settings.MARKET_ACCESS_API_URI}{path}'
@@ -270,3 +272,8 @@ class UsersResource(Resource):
     def patch(self, *args, **kwargs):
         url = f"{self.resource_name}"
         return self.client.patch(url, json=kwargs)
+
+
+class ReportsResource(Resource):
+    resource_name = "reports"
+    model = Report

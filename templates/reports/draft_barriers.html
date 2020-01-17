@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Draft barriers{% endblock %}
+
+{% if isDelete %}
+    bodyClasses = 'modal-open'
+{% endif %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.report.index();
+    </script>
+{% endblock %}
+
+{% block outside_content %}
+    {% if isDelete %}
+        {% include 'reports/partials/delete_report.html' %}
+    {% endif %}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/dashboard_heading.html' %}
+
+    {% if reports %}
+
+        <table class="standard-table">
+            <thead>
+                <tr class="standard-table__heading-row">
+                    <th class="standard-table__heading standard-table__heading--active">Date started</th>
+                    <th class="standard-table__heading">Barrier ID</th>
+                    <th class="standard-table__heading">Barrier location</th>
+                    <th class="standard-table__heading">Resolved?</th>
+                    <th class="standard-table__heading">Barrier scope</th>
+                    <th class="standard-table__heading">Started by</th>
+                    <th class="standard-table__heading">Action</th>
+                </tr>
+            </thead>
+            <tbody class="js-delete-modal-container">
+                {% for report in reports %}
+                <tr class="standard-table__row">
+                    <td class="standard-table__cell">
+                        {% if report.created_on %}{{ report.created_on|date:"j F Y" }} at {{ report.created_on|date:"g:iA"|lower }}{% else %}---{% endif %}
+                    </td>
+                    <td class="standard-table__cell">
+                        {{ report.code }}
+                    </td>
+                    <td class="standard-table__cell">
+                        {{ report.country.name|default:'---' }}
+                    </td>
+                    <td class="standard-table__cell">
+                        {{ report.resolved_text }}
+                    </td>
+                    <td class="standard-table__cell">
+                        {{ report.problem_status_text|default:'---' }}
+                    </td>
+                    <td class="standard-table__cell">
+                        {{ report.created_by.name|default:'---' }}
+                    </td>
+                    <td class="standard-table__cell">
+                        <a class="table__link" href="">Continue</a>
+                        {% if report.created_by.id == user.id %}
+                            <a class="table__link js-delete-modal" href="">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+
+        <div class="no-results-box">
+            <p>
+                There are currently no draft market access barriers.
+            </p>
+        </div>
+
+    {% endif %}
+{% endblock %}
