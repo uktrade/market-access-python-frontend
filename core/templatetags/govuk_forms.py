@@ -16,9 +16,9 @@ def form_group_classes(*args):
     return " ".join(set(classes))
 
 
+@register.inclusion_tag('partials/forms/field_error.html')
 def form_field_error(form, field_name):
     error = form.errors.get(field_name)
-@register.inclusion_tag('partials/forms/field_error.html')
     return {
         'error': error
     }
