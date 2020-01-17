@@ -17,6 +17,7 @@ from utils.metadata import (
     DORMANT,
     UNKNOWN,
 )
+from utils.models import ModelList
 
 
 logger = logging.getLogger(__name__)
@@ -99,14 +100,13 @@ class Resource:
     def __init__(self, client):
         self.client = client
 
-    def list(self, **kwargs):
-        return [
-            self.model(result)
-            for result in self.client.get(
-                self.resource_name,
-                params=kwargs
-            )['results']
-        ]
+    def list(self, with_pagination=True, **kwargs):
+        response_data = self.client.get(self.resource_name, params=kwargs)
+        return ModelList(
+            model=self.model,
+            data=response_data['results'],
+            total_count=response_data['count'],
+        )
 
     def get(self, id, *args, **kwargs):
         url = f"{self.resource_name}/{id}"

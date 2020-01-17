@@ -47,7 +47,7 @@
         <div class="govuk-grid-column-three-quarters">
 
             <div class="filter-results-header">
-                <h2 class="filter-results-title">{{ barriers|length }}<span class="filter-results-title__caption"> barrier{{ barriers|length|pluralize }}</span></h2>
+                <h2 class="filter-results-title">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
 
                 {% if filters %}
                     <h3 class="visually-hidden">Active filters:</h3>
@@ -66,31 +66,31 @@
                         <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
                         {% if form.edit.value is not None %}
                             {% if have_filters_changed %}
-                            <a href="{% url 'barriers:edit_watchlist' %}?{{ request.GET.urlencode }}" class="govuk-button govuk-button--watch-list">Edit watch list</a>
+                            <a href="{% url 'barriers:edit_watchlist' %}?{{ pageless_querystring }}" class="govuk-button govuk-button--watch-list">Edit watch list</a>
                             {% endif %}
                         {% elif filters %}
-                            <a href="{% url 'barriers:save_watchlist' %}?{{ request.GET.urlencode }}" class="govuk-button govuk-button--watch-list">Save watch list</a>
+                            <a href="{% url 'barriers:save_watchlist' %}?{{ pageless_querystring }}" class="govuk-button govuk-button--watch-list">Save watch list</a>
                         {% endif %}
                     </div>
                 {% endif %}
             </div>
 
-            {% if paginationData.totalPages > 1 %}
+            {% if pagination.total_pages > 1 %}
             <p class="filter-results-pagination-summary">
-                Page {{ paginationData.currentPage }} of {{ paginationData.totalPages }}
+                Page {{ pagination.current_page }} of {{ pagination.total_pages }}
             </p>
             {% endif %}
 
             <p class="filter-results-download">
-                {% if barriers|length %}
+                {% if barriers %}
                     <span class="filter-results-download__text">
-                    {% if barriers|length == 1 %}
+                    {% if barriers.total_count == 1 %}
                         You can download this barrier
                     {% else %}
-                        You can download these {{ barriers|length }} barriers
+                        You can download these {{ barriers.total_count }} barriers
                     {% endif %}
                     </span>
-                    <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">Download</a>
+                    <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">Download</a>
                 {% else %}
                     <span class="filter-results-download__text">There are no barriers to download</span>
                 {% endif %}
@@ -110,7 +110,7 @@
 
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.date.reported|date:"j F Y" }}</dd>
 
-                                {% if barrier.sectors|length %}
+                                {% if barrier.sectors %}
                                 <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
                                 {% endif %}
@@ -136,6 +136,7 @@
                 {% endfor %}
             </ol>
 
+            {% include 'partials/pagination.html' %}
 
         </div>
     </section>

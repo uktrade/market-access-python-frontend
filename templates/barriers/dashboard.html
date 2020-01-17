@@ -13,7 +13,7 @@
 
     {% if selected_watchlist %}
         <div class="dashboard-results-header">
-            <h2 class="dashboard-results-header__title">{{ barriers|length }}<span class="dashboard-results-header__title__caption"> barrier{{ barriers|pluralize }}</span></h2>
+            <h2 class="dashboard-results-header__title">{{ barriers.total_count }}<span class="dashboard-results-header__title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
             <div class="dashboard-results-header__link-wrapper js-toggle-box-control">
                 <a class="dashboard-results-header__link js-list-link js-only" href="{% url 'barriers:find_a_barrier' %}?{{ selected_watchlist.querystring }}&edit={{ watchlist_index }}"> Edit list filters </a>
                 <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:rename_watchlist' watchlist_index %}"> Rename list </a>
@@ -34,10 +34,9 @@
 
     {% if barriers %}
 
-        {# TODO: Pagination #}
-        {% if paginationData.totalPages > 1 %}
-        <p class="dashboard-page-summary">
-            Page {{ paginationData.currentPage }} of {{ paginationData.totalPages }}
+        {% if pagination.total_pages > 1 %}
+        <p class="filter-results-pagination-summary">
+            Page {{ pagination.current_page }} of {{ pagination.total_pages }}
         </p>
         {% endif %}
 

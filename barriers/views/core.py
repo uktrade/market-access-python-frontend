@@ -7,34 +7,29 @@ from .mixins import BarrierMixin
 
 from utils.api_client import MarketAccessAPIClient
 from utils.metadata import get_metadata
+from utils.pagination import PaginationMixin
 from utils.tools import nested_sort
 
 
-class Dashboard(TemplateView):
+class Dashboard(PaginationMixin, TemplateView):
     template_name = "barriers/dashboard.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-
         barriers = []
         watchlists = self.request.session.get_watchlists()
 
         if watchlists:
             watchlist_index = self.get_watchlist_index()
             selected_watchlist = watchlists[watchlist_index]
-
-            sort = self.request.GET.get('sort', '-modified_on')
-            client = MarketAccessAPIClient(self.request.session['sso_token'])
-            barriers = client.barriers.list(
-                ordering=sort,
-                **selected_watchlist.get_api_params()
-            )
-
+            sort = self.get_ordering()
+            barriers = self.get_barriers(selected_watchlist)
             context_data.update({
                 'selected_watchlist': selected_watchlist,
                 'watchlist_index': watchlist_index,
                 'sort_field': sort.lstrip('-'),
                 'sort_descending': sort.startswith('-'),
+                'pagination': self.get_pagination_data(object_list=barriers),
             })
 
         context_data.update({
@@ -46,6 +41,19 @@ class Dashboard(TemplateView):
             ),
         })
         return context_data
+
+    def get_barriers(self, watchlist):
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
+
+        return client.barriers.list(
+            ordering=self.get_ordering(),
+            limit=settings.API_RESULTS_LIMIT,
+            offset=settings.API_RESULTS_LIMIT * (self.get_current_page() - 1),
+            **watchlist.get_api_params()
+        )
+
+    def get_ordering(self):
+        return self.request.GET.get('sort', '-modified_on')
 
     def get_watchlist_index(self):
         """
@@ -78,23 +86,30 @@ class SearchFormMixin:
         }
 
 
-class FindABarrier(SearchFormMixin, FormView):
+class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
     template_name = "barriers/find_a_barrier.html"
     form_class = BarrierSearchForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        form.full_clean()
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(form=form, **kwargs)
         client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barriers = client.barriers.list(
             ordering="-reported_on",
-            limit=100,
-            offset=0,
+            limit=settings.API_RESULTS_LIMIT,
+            offset=settings.API_RESULTS_LIMIT * (self.get_current_page() - 1),
             **form.get_api_search_parameters(),
         )
 
         context_data.update({
             'barriers': barriers,
             'filters': form.get_readable_filters(with_remove_links=True),
+            'pagination': self.get_pagination_data(object_list=barriers),
+            'pageless_querystring': self.get_pageless_querystring(),
             'page': 'find-a-barrier',
         })
 
@@ -108,10 +123,10 @@ class FindABarrier(SearchFormMixin, FormView):
 
         return context_data
 
-    def get(self, request, *args, **kwargs):
-        form = self.get_form()
-        form.full_clean()
-        return self.render_to_response(self.get_context_data(form=form))
+    def get_pageless_querystring(self):
+        params = self.request.GET.copy()
+        params.pop('page', None)
+        return params.urlencode()
 
 
 class DownloadBarriers(SearchFormMixin, View):
