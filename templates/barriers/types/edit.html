@@ -6,7 +6,7 @@
 
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=barrier.barrier_title text='Define barrier category' %}
-    {% include 'partials/forms/error_summary.html' %}
+    {% form_error_banner form %}
 
     <h3 class="report-sectors-heading">Save or add another category</h3>
 

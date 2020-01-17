@@ -1,12 +1,10 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import CustomErrorsMixin
-
 from ..models import Watchlist
 
 
-class SaveWatchlistForm(CustomErrorsMixin, forms.Form):
+class SaveWatchlistForm(forms.Form):
     REPLACE = "replace"
     NEW = "new"
     CHOICES = [
@@ -81,14 +79,14 @@ class SaveWatchlistForm(CustomErrorsMixin, forms.Form):
         return self.watchlists
 
 
-class RenameWatchlistForm(CustomErrorsMixin, forms.Form):
+class RenameWatchlistForm(forms.Form):
     name = forms.CharField(
         label="Name your watch list",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
     )
 
 
-class EditWatchlistForm(CustomErrorsMixin, forms.Form):
+class EditWatchlistForm(forms.Form):
     name = forms.CharField(
         label="Name your watch list",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,

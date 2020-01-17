@@ -1,7 +1,5 @@
 from django import forms
 
-from .mixins import CustomErrorsMixin
-
 from utils.api_client import MarketAccessAPIClient
 
 
@@ -34,7 +32,7 @@ class EditLocationForm(forms.Form):
         )
 
 
-class EditCountryForm(CustomErrorsMixin, forms.Form):
+class EditCountryForm(forms.Form):
     country = forms.ChoiceField(
         label='Exports to which country are affected by this issue?',
         choices=[],
@@ -45,7 +43,7 @@ class EditCountryForm(CustomErrorsMixin, forms.Form):
         self.fields['country'].choices = countries
 
 
-class AddAdminAreaForm(CustomErrorsMixin, forms.Form):
+class AddAdminAreaForm(forms.Form):
     admin_area = forms.ChoiceField(
         label='Choose the parts of the country that are affected',
         choices=[],

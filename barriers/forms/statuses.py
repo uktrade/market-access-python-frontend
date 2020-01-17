@@ -1,8 +1,6 @@
 from django import forms
 from django.template.loader import render_to_string
 
-from .mixins import CustomErrorsMixin
-
 from utils.api_client import MarketAccessAPIClient
 from utils.forms import ChoiceFieldWithHelpText, MonthYearField
 from utils.metadata import (
@@ -15,7 +13,7 @@ from utils.metadata import (
 )
 
 
-class UnknownForm(CustomErrorsMixin, forms.Form):
+class UnknownForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -34,7 +32,7 @@ class UnknownForm(CustomErrorsMixin, forms.Form):
         }
 
 
-class OpenPendingForm(CustomErrorsMixin, forms.Form):
+class OpenPendingForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -85,7 +83,7 @@ class OpenPendingForm(CustomErrorsMixin, forms.Form):
         return params
 
 
-class OpenInProgressForm(CustomErrorsMixin, forms.Form):
+class OpenInProgressForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -104,7 +102,7 @@ class OpenInProgressForm(CustomErrorsMixin, forms.Form):
         }
 
 
-class ResolvedInPartForm(CustomErrorsMixin, forms.Form):
+class ResolvedInPartForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -125,7 +123,7 @@ class ResolvedInPartForm(CustomErrorsMixin, forms.Form):
         }
 
 
-class ResolvedInFullForm(CustomErrorsMixin, forms.Form):
+class ResolvedInFullForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -146,7 +144,7 @@ class ResolvedInFullForm(CustomErrorsMixin, forms.Form):
         }
 
 
-class DormantForm(CustomErrorsMixin, forms.Form):
+class DormantForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -163,7 +161,7 @@ class DormantForm(CustomErrorsMixin, forms.Form):
         return {'status_summary': self.cleaned_data['dormant_summary']}
 
 
-class BarrierStatusForm(CustomErrorsMixin, forms.Form):
+class BarrierStatusForm(forms.Form):
     """
     Form with subforms depending on the radio button selected
     """
@@ -244,7 +242,8 @@ class BarrierStatusForm(CustomErrorsMixin, forms.Form):
     @property
     def custom_errors(self):
         form_errors = super().custom_errors
-        form_errors.update(self.get_subform().custom_errors)
+        if self.is_bound and 'status' in self.cleaned_data:
+            form_errors.update(self.get_subform().custom_errors)
         return form_errors
 
     def is_valid(self):

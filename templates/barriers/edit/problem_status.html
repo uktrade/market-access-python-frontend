@@ -6,7 +6,7 @@
 
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with caption=object.barrier_title text='Edit barrier scope' %}
-    {% include 'partials/forms/error_summary.html' %}
+    {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}

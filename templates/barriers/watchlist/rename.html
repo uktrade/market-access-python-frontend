@@ -6,7 +6,7 @@
 
     <a href="{% url 'barriers:dashboard' %}{% if view.kwargs.index %}?list={{ view.kwargs.index }}{% endif %}" class="govuk-back-link">Back</a>
     {% include 'heading.html' with text='Rename watch list' %}
-    {% include 'partials/forms/error_summary.html' %}
+    {% form_error_banner form %}
 
     <section class="restrict-width">
         {% if filters %}

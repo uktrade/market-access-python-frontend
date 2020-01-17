@@ -1,13 +1,11 @@
 from django import forms
 
-from .mixins import CustomErrorsMixin
 
-
-class UserSearchForm(CustomErrorsMixin, forms.Form):
+class UserSearchForm(forms.Form):
     query = forms.CharField(label='Find a user', max_length=255)
 
 
-class AddTeamMemberForm(CustomErrorsMixin, forms.Form):
+class AddTeamMemberForm(forms.Form):
     user = forms.CharField(
         label='Name',
         max_length=255,

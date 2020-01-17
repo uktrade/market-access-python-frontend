@@ -1,11 +1,9 @@
 from django import forms
 
-from .mixins import CustomErrorsMixin
-
 from utils.api_client import MarketAccessAPIClient
 
 
-class AddTypeForm(CustomErrorsMixin, forms.Form):
+class AddTypeForm(forms.Form):
     barrier_type = forms.ChoiceField(label='', choices=[])
 
     def __init__(self, barrier_types, *args, **kwargs):
