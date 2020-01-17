@@ -1,6 +1,5 @@
 import logging
 from json import JSONDecodeError
-
 import requests
 import time
 
@@ -40,7 +39,12 @@ class MarketAccessAPIClient:
             'X-Forwarded-For': '',
         }
         response = getattr(requests, method)(url, headers=headers, **kwargs)
-        response.raise_for_status()
+
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            raise APIException(e)
+
         return response
 
     def get(self, path, json=True, **kwargs):
@@ -78,11 +82,8 @@ class MarketAccessAPIClient:
         return self.request('delete', path, **kwargs)
 
     def request_with_results(self, method, path, **kwargs):
-        try:
-            response = self.request(method, path, **kwargs)
-            return self.get_results_from_response_data(response.json())
-        except requests.exceptions.HTTPError as http_exception:
-            raise APIException(http_exception)
+        response = self.request(method, path, **kwargs)
+        return self.get_results_from_response_data(response.json())
 
     def get_results_from_response_data(self, response_data):
         if response_data.get('response', {}).get('success'):

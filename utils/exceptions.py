@@ -1,5 +1,6 @@
 class APIException(Exception):
-    pass
+    def __init__(self, http_exception):
+        self.status_code = http_exception.response.status_code
 
 
 class DataHubException(Exception):
