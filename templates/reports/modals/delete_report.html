@@ -1,0 +1,30 @@
+<div class="modal">
+    <div class="modal__content" role="alertdialog" tabindex="1" aria-describedby="modal-label">
+        <h3 class="modal__content__title" id="modal-label">Delete draft barrier</h3>
+        <p>Are you sure you want to delete this draft barrier?</p>
+
+        <dl class="inline-definition-list">
+            <dt>Barrier ID </dt>
+            <dd>{{ report.code }}</dd>
+
+            <dt>Location</dt>
+            <dd>{{ report.country.name }}</dd>
+
+            {% if report.barrier_title %}
+                <dt>Barrier title</dt>
+                <dd>{{ report.barrier_title }}</dd>
+            {% endif %}
+
+            {% if report.product %}
+                <dt>Product or service</dt>
+                <dd>{{ report.product}}</dd>
+            {% endif %}
+        </dl>
+
+        <form action="{% url 'reports:delete_report' report.id %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Yes, delete" class="govuk-button" tabindex="2">
+            <a href="{% url 'reports:draft_barriers' %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">No, cancel</a>
+        </form>
+    </div>
+</div>

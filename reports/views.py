@@ -1,4 +1,5 @@
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
 
@@ -165,7 +166,46 @@ class DraftBarriers(TemplateView):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session['sso_token'])
         reports = client.reports.list(ordering="-created_on")
-        context_data['page'] = "draft_barriers"
+        context_data['page'] = "draft-barriers"
         context_data['watchlists'] =  self.request.session.get_watchlists()
         context_data['reports'] = reports
         return context_data
+
+
+class DeleteReport(TemplateView):
+    template_name = "reports/delete_report.html"
+
+    def get_template_names(self):
+        if self.request.is_ajax():
+            return ["reports/modals/delete_report.html"]
+        return ["reports/delete_report.html"]
+
+    def get_report(self):
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
+        return client.reports.get(self.kwargs.get('report_id'))
+
+    def get_context_data(self, **kwargs):
+        if self.request.is_ajax():
+            return {'report': self.get_report()}
+
+        context_data = super().get_context_data(**kwargs)
+        context_data['page'] = "draft-barriers"
+
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
+        reports = client.reports.list(ordering="-created_on")
+
+        context_data['reports'] = reports
+        for report in reports:
+            if report.id == str(self.kwargs.get('report_id')):
+                context_data['report'] = report
+
+        return context_data
+
+    def post(self, request, *args, **kwargs):
+        report = self.get_report()
+
+        if report.created_by['id'] == request.session['user_data']['id']:
+            client = MarketAccessAPIClient(request.session.get('sso_token'))
+            client.reports.delete(self.kwargs.get('report_id'))
+
+        return HttpResponseRedirect(reverse('reports:draft_barriers'))

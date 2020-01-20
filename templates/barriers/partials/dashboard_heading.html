@@ -38,7 +38,7 @@
                 </li>
             {% endif %}
         {% empty %}
-            {% if page == "draft_barriers" %}
+            {% if page == "draft-barriers" %}
                 <li class="page-tabs__tab">
                     <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}">My watch list</a>
                 </li>
@@ -49,7 +49,7 @@
             {% endif %}
         {% endfor %}
 
-        {% if page == "draft_barriers" %}
+        {% if page == "draft-barriers" %}
             <li class="page-tabs__tab page-tabs__tab--active">
                 <span class="page-tabs__tab__text">My draft barriers</span>
             </li>

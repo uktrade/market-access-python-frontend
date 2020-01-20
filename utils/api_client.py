@@ -125,6 +125,10 @@ class Resource:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.put(url, data=kwargs))
 
+    def delete(self, id, *args, **kwargs):
+        url = f"{self.resource_name}/{id}"
+        return self.client.delete(url)
+
 
 class BarriersResource(Resource):
     resource_name = "barriers"

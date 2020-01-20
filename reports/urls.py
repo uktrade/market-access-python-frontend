@@ -1,6 +1,7 @@
 from django.urls import path
 
 from reports.views import (
+    DeleteReport,
     DraftBarriers,
     NewReport,
     NewReportBarrierStatus1,
@@ -60,6 +61,7 @@ urlpatterns = [
 
     # app.post( '/:reportId/submit/', controller.submit );
 
+    path("reports/<uuid:report_id>/delete/", DeleteReport.as_view(), name="delete_report"),
     # app.get( '/:reportId/delete/', headerNav( { isDashboard: true } ), dashboardData, controller.delete ),
     # app.post( '/:reportId/delete/', headerNav( { isDashboard: true } ), dashboardData, controller.delete ),
 

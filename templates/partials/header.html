@@ -44,7 +44,7 @@
         <nav class="datahub-header__navigation-wrapper datahub-header__navigation-wrapper--sub" aria-labelledby="sub-navigation">
             <ul id="sub-navigation" class="datahub-header__navigation" aria-label="Second Level Navigation">
                 <li class="datahub-header__navigation__item">
-                    <a class="datahub-header__navigation__item__link{% if page == 'dashboard' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
+                    <a class="datahub-header__navigation__item__link{% if page == 'dashboard' or page == 'draft-barriers' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
                 </li>
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link{% if page == 'add-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'reports:new_report' %}">Add a barrier</a>

@@ -13,11 +13,6 @@
     </script>
 {% endblock %}
 
-{% block outside_content %}
-    {% if isDelete %}
-        {% include 'reports/partials/delete_report.html' %}
-    {% endif %}
-{% endblock %}
 
 {% block page_content %}
 
@@ -61,7 +56,7 @@
                     <td class="standard-table__cell">
                         <a class="table__link" href="">Continue</a>
                         {% if report.created_by.id == user.id %}
-                            <a class="table__link js-delete-modal" href="">Delete</a>
+                            <a class="table__link js-delete-modal" href="{% url 'reports:delete_report' report.id %}">Delete</a>
                         {% endif %}
                     </td>
                 </tr>
