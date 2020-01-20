@@ -1,12 +1,17 @@
 from django.urls import path
 
 from reports.views import (
-    DeleteReport,
     DraftBarriers,
+    DeleteReport,
     NewReport,
-    NewReportBarrierStatus1,
-    NewReportBarrierStatus2,
-    NewReportBarrierLocation,
+    NewReportBarrierProblemStatusView,
+    NewReportBarrierStatusView,
+    NewReportBarrierLocationView,
+    NewReportBarrierLocationHasAdminAreasView,
+    NewReportBarrierLocationAddAdminAreasView,
+    NewReportBarrierAdminAreasView,
+    NewReportBarrierLocationRemoveAdminAreasView,
+    NewReportBarrierSectorsView,
     ReportDetail,
 )
 
@@ -15,9 +20,28 @@ app_name = "reports"
 urlpatterns = [
     path("reports/", DraftBarriers.as_view(), name="draft_barriers"),
     path("reports/new/", NewReport.as_view(), name="new_report"),
-    path("reports/new/start/", NewReportBarrierStatus1.as_view(), name="barrier_problem_status"),
-    path("reports/new/start/is-resolved/", NewReportBarrierStatus2.as_view(), name="barrier_status"),
-    path("reports/new/start/country/", NewReportBarrierLocation.as_view(), name="barrier_location"),
+    path("reports/<uuid:barrier_id>/", ReportDetail.as_view(), name="draft_barrier_details_uuid"),
+    path("reports/<uuid:report_id>/delete/", DeleteReport.as_view(), name="delete_report"),
+
+    # Problem Status
+    path("reports/new/start/", NewReportBarrierProblemStatusView.as_view(), name="barrier_problem_status"),
+    path("reports/<uuid:barrier_id>/start/", NewReportBarrierProblemStatusView.as_view(), name="barrier_problem_status_uuid"),
+    # Status
+    path("reports/new/start/is-resolved/", NewReportBarrierStatusView.as_view(), name="barrier_status"),
+    path("reports/<uuid:barrier_id>/is-resolved/", NewReportBarrierStatusView.as_view(), name="barrier_status_uuid"),
+    # Location
+    path("reports/new/country/", NewReportBarrierLocationView.as_view(), name="barrier_location"),
+    path("reports/<uuid:barrier_id>/country/", NewReportBarrierLocationView.as_view(), name="barrier_location_uuid"),
+    path("reports/new/country/admin-areas/", NewReportBarrierAdminAreasView.as_view(), name="barrier_admin_areas"),
+    path("reports/<uuid:barrier_id>/country/admin-areas/", NewReportBarrierAdminAreasView.as_view(), name="barrier_admin_areas_uuid"),
+    path("reports/new/country/has-admin-areas/", NewReportBarrierLocationHasAdminAreasView.as_view(), name="barrier_has_admin_areas"),
+    path("reports/<uuid:barrier_id>/country/has-admin-areas/", NewReportBarrierLocationHasAdminAreasView.as_view(), name="barrier_has_admin_areas_uuid"),
+    path("reports/new/country/admin-areas/add/", NewReportBarrierLocationAddAdminAreasView.as_view(), name="barrier_add_admin_areas"),
+    path("reports/<uuid:barrier_id>/country/admin-areas/add/", NewReportBarrierLocationAddAdminAreasView.as_view(), name="barrier_add_admin_areas_uuid"),
+    path("reports/new/country/admin-areas/remove/", NewReportBarrierLocationRemoveAdminAreasView.as_view(), name="barrier_remove_admin_areas"),
+    path("reports/<uuid:barrier_id>/country/admin-areas/remove/", NewReportBarrierLocationRemoveAdminAreasView.as_view(), name="barrier_remove_admin_areas_uuid"),
+    # Sectors
+    path("reports/<uuid:barrier_id>/has-sectors/", NewReportBarrierSectorsView.as_view(), name="barrier_has_sectors_uuid"),
 
     # path("barriers/<uuid:id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
 
@@ -61,7 +85,4 @@ urlpatterns = [
     # app.post( '/:reportId/summary/', controller.summary );
 
     # app.post( '/:reportId/submit/', controller.submit );
-
-    path("reports/<uuid:report_id>/", ReportDetail.as_view(), name="report_detail"),
-    path("reports/<uuid:report_id>/delete/", DeleteReport.as_view(), name="delete_report"),
 ]

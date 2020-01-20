@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+
+    <section class="restrict-width">
+
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+        {% form_error_banner form %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <p>TODO: MAR-116 Sectors</p>
+            <input type="submit" value="Continue" class="govuk-button" disabled>
+        </form>
+
+	</section>
+
+
+{% endblock %}

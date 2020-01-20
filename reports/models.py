@@ -1,7 +1,5 @@
 import operator
 
-from django.db import models
-
 from utils.metadata import get_metadata
 from utils.models import APIModel
 
@@ -12,6 +10,10 @@ class Report(APIModel):
     _metadata = None
     _stages = None
     _progress = None
+
+    @property
+    def id(self):
+        return self.data.get("id")
 
     @property
     def metadata(self):

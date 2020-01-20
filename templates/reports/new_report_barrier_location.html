@@ -1,17 +1,33 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Add - Status of the barrier{% endblock %}
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
 
 {% block page_content %}
 
     <section class="restrict-width">
 
-        <a href="{% url 'reports:barrier_status' %}" class="govuk-back-link">Back</a>
-        {% include 'partials/heading.html' with caption='Add a barrier' text='Location of the barrier' %}
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+        {% form_error_banner form %}
 
-        <p>TODO: wrap this view up as per MAR-115.</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="{% form_group_classes form.errors %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.country.name }}">
+                    {{ form.country.label }}
+                </label>
 
-        <input type="submit" value="Continue" class="govuk-button">
+                {% form_field_error form "country" %}
+
+                <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.country.name }}" name="{{ form.country.name }}" {% if form.errors %} aria-describedby="{{ form.country.name }}-error"{% endif %}>
+                    <option value {% if not form.initial.country %} selected{% endif %}>Choose a country</option>
+                    {% for id, name in form.fields.country.choices %}
+                    <option value="{{ id }}"{% if id == form.initial.country %} selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="submit" value="Continue" class="govuk-button">
+        </form>
 
 	</section>
 
