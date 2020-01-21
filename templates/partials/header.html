@@ -2,8 +2,8 @@
     <div class="datahub-header__logo-container">
         <div class="datahub-header__logo">
             <span class="datahub-header__logo__site-name">Department for International Trade</span>
-            {% if hasCrmPermission %}
-                <a href="{{ datahubDomain }}" class="datahub-header__logo__link">
+            {% if user.has_crm_permission %}
+                <a href="{{ settings.DATAHUB_DOMAIN }}" class="datahub-header__logo__link">
                     <span class="datahub-header__logo__text">Data Hub</span>
                 </a>
             {% else %}
@@ -13,11 +13,11 @@
         </div>
         <ul id="logo-navigation" class="datahub-header__links" aria-label="Header links">
             <li class="datahub-header__links__item">
-                <a class="datahub-header__links__item__text" href="{{ datahub_domain }}support">Support</a>
+                <a class="datahub-header__links__item__text" href="{{ settings.DATAHUB_DOMAIN }}/support">Support</a>
             </li>
             <li class="datahub-header__links__item">
-                {% if hasCrmPermission %}
-                    <a class="datahub-header__links__item__text" href="{{ datahub_domain }}profile">{{ user.username }}</a>
+                {% if user.has_crm_permission %}
+                    <a class="datahub-header__links__item__text" href="{{ settings.DATAHUB_DOMAIN }}/profile">{{ user.username }}</a>
                 {% else %}
                     <span class="datahub-header__links__item__text">{{ user.username }}</span>
                 {% endif %}

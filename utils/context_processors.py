@@ -83,10 +83,16 @@ def apps(user):
 
 def user_scope(request):
     user = request.session.get("user_data", {})
+    visible_apps = apps(user)
+    permitted_keys = [app['permittedKey'] for app in visible_apps]
+    if 'datahub-crm' in permitted_keys:
+        user['has_crm_permission'] = True
+    else:
+        user['has_crm_permission'] = False
 
     extra_context = {
         'user': user,
-        'apps': apps(user),
+        'apps': visible_apps,
     }
 
     return extra_context

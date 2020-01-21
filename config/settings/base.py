@@ -181,6 +181,7 @@ MARKET_ACCESS_API_HAWK_KEY = os.environ.get("MARKET_ACCESS_API_HAWK_KEY")
 SETTINGS_EXPORT = [
     'DJANGO_ENV',
     'MAX_WATCHLIST_LENGTH',
+    'DATAHUB_DOMAIN',
 ]
 
 SSO_CLIENT = os.environ.get("SSO_CLIENT")
@@ -195,6 +196,10 @@ OAUTH_PARAM_LENGTH = os.environ.get("OAUTH_PARAM_LENGTH", 75)
 
 ADD_COMPANY = os.environ.get("ADD_COMPANY", True)
 
+DATAHUB_DOMAIN = os.environ.get(
+    "DATAHUB_DOMAIN",
+    "https://www.datahub.trade.gov.uk"
+)
 DATAHUB_URL = os.environ.get("DATAHUB_URL")
 DATAHUB_HAWK_ID = os.environ.get("DATAHUB_HAWK_ID", "")
 DATAHUB_HAWK_KEY = os.environ.get("DATAHUB_HAWK_KEY", "")
