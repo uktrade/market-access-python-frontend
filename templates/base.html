@@ -105,7 +105,7 @@
         </script>
       {% endif %}
 
-      {% if env.banner and env.name %}
+      {% if settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
         <style>
           .env-banner {
             position: absolute;
@@ -147,7 +147,7 @@
         </style>
 
         <div class="env-banner">
-          <strong>{{ env.name | upper }}</strong> environment
+          <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
           <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss">X</a>
         </div>
       {% endif %}
