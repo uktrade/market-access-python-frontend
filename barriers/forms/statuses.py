@@ -240,10 +240,10 @@ class BarrierStatusForm(forms.Form):
         return self.subforms.get(self.cleaned_data['status'])
 
     @property
-    def custom_errors(self):
-        form_errors = super().custom_errors
+    def errors(self):
+        form_errors = super().errors
         if self.is_bound and 'status' in self.cleaned_data:
-            form_errors.update(self.get_subform().custom_errors)
+            form_errors.update(self.get_subform().errors)
         return form_errors
 
     def is_valid(self):
