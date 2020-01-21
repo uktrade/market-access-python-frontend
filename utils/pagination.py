@@ -48,4 +48,57 @@ class PaginationMixin:
                 page=current_page+1
             )
 
+        return self.truncate_pagination_data(pagination_data)
+
+    def truncate_pagination_data(self, pagination_data, block_size=4):
+        """
+        Truncate the pagination links.
+
+        We don't want to show a link for every page if there are hundreds of
+        pages. This trims out page links we're probably not interested in.
+
+        This is a direct port from the node project.
+        """
+        pages = pagination_data['pages']
+
+        if len(pages) <= block_size:
+            return pagination_data
+
+        current_page_num = pagination_data['current_page']
+        current_page_index = pagination_data['current_page'] - 1
+        first_page = pages[0]
+        last_page = pages[-1]
+
+        block_pivot = int(block_size / 2)
+        start_of_current_block = abs(current_page_num - block_pivot)
+        start_of_last_block = last_page['label'] - block_size
+        block_start_index = min(
+            start_of_current_block,
+            start_of_last_block,
+            current_page_index,
+        )
+
+        truncated_pages = pages[block_start_index:][:block_size]
+        first_of_truncated_pages_num = truncated_pages[0]['label']
+        last_of_truncated_pages_num = truncated_pages[-1]['label']
+
+        if first_of_truncated_pages_num > 3:
+            truncated_pages = [{'label': "..."}] + truncated_pages
+
+        if first_of_truncated_pages_num == 3:
+            truncated_pages = [pages[1]] + truncated_pages
+
+        if first_of_truncated_pages_num > 1:
+            truncated_pages = [first_page] + truncated_pages
+
+        if last_of_truncated_pages_num < last_page['label'] - 2:
+            truncated_pages.append({'label': "..."})
+
+        if last_of_truncated_pages_num == last_page['label'] - 2:
+            truncated_pages.append(pages[-2])
+
+        if last_of_truncated_pages_num < last_page['label']:
+            truncated_pages.append(last_page)
+
+        pagination_data['pages'] = truncated_pages
         return pagination_data
