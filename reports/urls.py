@@ -62,11 +62,6 @@ urlpatterns = [
 
     # app.post( '/:reportId/submit/', controller.submit );
 
-    path("reports/<uuid:report_id>/delete/", DeleteReport.as_view(), name="delete_report"),
-    # app.get( '/:reportId/delete/', headerNav( { isDashboard: true } ), dashboardData, controller.delete ),
-    # app.post( '/:reportId/delete/', headerNav( { isDashboard: true } ), dashboardData, controller.delete ),
-
-    # // detail must be last route
-    # app.get( '/:reportId/', controller.report );
     path("reports/<uuid:report_id>/", ReportDetail.as_view(), name="report_detail"),
+    path("reports/<uuid:report_id>/delete/", DeleteReport.as_view(), name="delete_report"),
 ]
