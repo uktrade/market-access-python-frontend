@@ -29,7 +29,7 @@
                 </span>
             {% endif %}
 
-            <input class="govuk-input" id="{{ form.title.name }}" name="{{ form.title.name }}" type="text" value="{% if form.title.value %}{{ form.title.value }}{% endif %}" aria-describedby="{{ form.title.name }}-hint" required>
+            <input class="govuk-input" name="{{ form.title.name }}" type="text" value="{% if form.title.value %}{{ form.title.value }}{% endif %}" aria-describedby="{{ form.title.name }}-hint" required>
         </div>
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button">

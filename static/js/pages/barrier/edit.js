@@ -5,7 +5,7 @@ ma.pages.barrier.edit = {
 		if( !( jessie.queryOne && jessie.attachListener ) ){ return; }
 
 		var heading = jessie.queryOne( '.js-heading-caption' );
-		var input = jessie.queryOne( '#title' );
+		var input = jessie.queryOne( 'input[name=title]' );
 
 		if( input && heading ){
 
