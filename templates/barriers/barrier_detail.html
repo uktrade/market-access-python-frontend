@@ -194,8 +194,7 @@
                     {% if form.note_id == item.id %}
                         {% include 'barriers/partials/note_form.html' %}
                     {% else %}
-                        {# TODO: linkify #}
-                        <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|safe  }}</p>
+                        <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
                         <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
                         {% if item.user.id == user.id %}
                             <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:delete_note' barrier.id item.id %}">Delete</a>
@@ -275,7 +274,7 @@
                     <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
 
                     <p class="event-list__item__text">
-                        <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ item.name }}</a> {% if item.is_edit %}edited{% else %}added{% endif %}{% if item.user.name %} by {{ item.user.name }}{% endif %}.
+                        <a href="{% url 'barriers:assessment_detail' barrier.id %}">{{ item.name }}</a> {% if item.is_edit %}edited{% else %}added{% endif %}{% if item.user.name %} by {{ item.user.name }}{% endif %}.
                     </p>
                 {% endif %}
 
@@ -301,7 +300,7 @@
 
                 {% endif %}
 
-                    <a href="{% url 'barriers:add_note' barrier.id %}">Add your first note</a>
+                <a href="{% url 'barriers:add_note' barrier.id %}">Add your first note</a>
             </li>
 
             {% endfor %}
