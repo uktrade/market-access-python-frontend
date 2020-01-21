@@ -57,6 +57,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'barriers',
     'core',
+    'reports',
     'users',
 ]
 

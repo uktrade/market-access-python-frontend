@@ -209,3 +209,17 @@ class DeleteReport(TemplateView):
             client.reports.delete(self.kwargs.get('report_id'))
 
         return HttpResponseRedirect(reverse('reports:draft_barriers'))
+
+
+class ReportDetail(TemplateView):
+    template_name = "reports/report_detail.html"
+
+    def get_report(self):
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
+        return client.reports.get(self.kwargs.get('report_id'))
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['page'] = "add-a-barrier"
+        context_data['report'] = self.get_report()
+        return context_data

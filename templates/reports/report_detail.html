@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load report_urls %}
+
+{% block page_title %}{{ block.super }} - Add - Barrier details{% endblock %}
+
+{% block page_content %}
+    {% include 'partials/heading.html' with caption="Market access barriers" text="Add a barrier" %}
+
+    <section class="restrict-width">
+        {% if report.is_complete %}
+            <div class="callout callout--success callout--with-button">
+                <h2 class="callout__heading">All tasks completed for</h2>
+                <p class="callout__text">{{ report.problem_status_text }}{% if report.country %} in {{ report.country.name }}{% endif %}</p>
+                <form action="{% url 'reports:submit' report.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Submit barrier" class="callout__button">
+                </form>
+            </div>
+        {% elif report.next_stage %}
+            <div class="callout callout--warn callout--with-button">
+                <h2 class="callout__heading">Unfinished barrier for</h2>
+                <p class="callout__text">{{ report.problem_status_text }}{% if report.country %} in {{ report.country.name }}{% endif %}</p>
+                <a href="{% report_stage_url report.id report.next_stage.stage_code %}" class="callout__button">Continue</a>
+            </div>
+        {% endif %}
+
+        <dl class="report-summary">
+            <div class="report-summary__group">
+                <dt class="report-summary__key">
+                    Barrier started
+                </dt>
+                <dd class="report-summary__value">
+                    {{ report.created_on|date:"j F Y" }} at {{ report.created_on|date:"g:iA"|lower }}
+                </dd>
+            </div>
+            <div class="report-summary__group">
+                <dt class="report-summary__key">
+                    Barrier started by
+                </dt>
+                <dd class="report-summary__value">
+                    {{ report.created_by.name|default:'---' }}
+                </dd>
+            </div>
+        </dl>
+
+        <ol class="task-list">
+            {% for parent_stage_number, parent_stage in report.stages.items %}
+                <li>
+                    <h2 class="task-list__section-heading">
+                        {{ parent_stage.name }}
+                    </h2>
+                    <ul class="task-list__items">
+                        {% for stage in parent_stage.stages %}
+                        <li class="task-list__item">
+                            <span class="task-list__item__number">{{ forloop.counter }}</span>
+
+                            {% if stage.status_id == 3 or stage.status_id == 2 %}
+                                <a class="task-list__item__name" href="{% report_stage_url report.id stage.stage_code %}" aria-describedby="{{ name }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                    {{ stage.name }}
+                                </a>
+                            {% else %}
+                                <span class="task-list__item__name" aria-describedby="{{ name }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                    {{ stage.name }}
+                                </span>
+                            {% endif %}
+
+                            {% if stage.status_id == 3 %}
+                                <strong class="task-list__item__banner task-list__item__banner--complete" id="{{ name }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">Completed</strong>
+                            {% elif stage.status_id == 2 %}
+                                <strong class="task-list__item__banner task-list__item__banner--in-progress" id="{{ name }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">In Progress</strong>
+                            {% elif stage.status_id == 1 %}
+                                <strong class="task-list__item__banner task-list__item__banner--not-started" id="{{ name }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">Not Started</strong>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ol>
+
+    </section>
+
+{% endblock %}

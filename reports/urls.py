@@ -7,6 +7,7 @@ from reports.views import (
     NewReportBarrierStatus1,
     NewReportBarrierStatus2,
     NewReportBarrierLocation,
+    ReportDetail,
 )
 
 app_name = "reports"
@@ -67,4 +68,5 @@ urlpatterns = [
 
     # // detail must be last route
     # app.get( '/:reportId/', controller.report );
+    path("reports/<uuid:report_id>/", ReportDetail.as_view(), name="report_detail"),
 ]
