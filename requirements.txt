@@ -1,5 +1,5 @@
 dj-database-url==0.5.0
-Django==2.2.8
+Django==2.2.9
 django-extensions==2.2.3
 django-compressor==2.3
 django-libsass==0.7
@@ -13,4 +13,4 @@ python-magic==0.4.15
 redis==3.3.11
 requests==2.22.0
 whitenoise==1.0.6   # manages static assets
-waitress==0.8.9     # a pure python WSGI server that is a replacement for gunicorn
+waitress==1.4.2     # a pure python WSGI server that is a replacement for gunicorn
