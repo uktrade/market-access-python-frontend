@@ -32,7 +32,7 @@ django-collectstatic: ## Collect static files.
 
 .PHONY: django-test
 django-test: ## Run django tests.
-	docker-compose exec web bash -c "python3.6 /usr/src/app/manage.py test"
+	docker-compose exec web bash -c "pytest"
 
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.

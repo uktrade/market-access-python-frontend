@@ -160,7 +160,7 @@ class APIBarrierFormMixin(APIFormMixin):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['id'] = kwargs.pop('barrier_id')
+        kwargs['id'] = str(kwargs.pop('barrier_id'))
         return kwargs
 
     def get_success_url(self):

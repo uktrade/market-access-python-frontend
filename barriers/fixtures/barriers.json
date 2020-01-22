@@ -1,0 +1,52 @@
+[
+    {
+        "id": "3e12dd72-8b51-43ec-8269-a173031a0eee",
+        "code": "B-19-9DD",
+        "problem_status": 2,
+        "is_resolved": false,
+        "resolved_date": null,
+        "export_country": "985f66a0-5d95-e211-a939-e4115bead28a",
+        "country_admin_areas": [],
+        "sectors_affected": true,
+        "all_sectors": false,
+        "sectors": ["9838cecc-5f95-e211-a939-e4115bead28a"],
+        "companies": [{
+            "id": "0692683e-5197-4853-a0fe-e43e35b8e7c5",
+            "name": "Nest Labs, Inc."
+        }, {
+            "id": "346f78a5-1d23-4213-b4c2-bf48246a13c3",
+            "name": "Archived Ltd"
+        }, {
+            "id": "79baa06b-9217-4178-8c05-0c294aab355e",
+            "name": "Christmas Tree Wholesale Ltd"
+        }],
+        "product": "McLaren",
+        "source": "GOVT",
+        "other_source": null,
+        "barrier_title": "Import quota for sports cars",
+        "problem_description": "Because of laws for pollution reduction, which Parlament imposed under pressure from EU, they are limiting the imports of sports cars.",
+        "barrier_types": [],
+        "reported_on": "2019-10-28T11:45:44.720000Z",
+        "reported_by": "Boris Karaberberov",
+        "status": {
+            "id": 4,
+            "sub_status": null,
+            "sub_status_text": null,
+            "date": "2019-08-01",
+            "summary": "aabc"
+        },
+        "status_summary": "aabc",
+        "status_date": "2019-08-01",
+        "priority": {
+            "code": "MEDIUM",
+            "name": "Medium",
+            "order": 2
+        },
+        "priority_summary": null,
+        "eu_exit_related": 2,
+        "has_assessment": false,
+        "created_on": "2019-10-28T11:36:39.469000Z",
+        "modified_by": "Test-user",
+        "modified_on": "2020-01-21T15:39:34.137208Z"
+    }
+]
