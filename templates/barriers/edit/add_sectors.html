@@ -8,7 +8,7 @@
     {% include 'partials/heading.html' with caption=barrier.barrier_title text='Sectors affected by the barrier' %}
     {% form_error_banner form %}
 
-    <form action="{{ href.form }}" method="POST" class="restrict-width">
+    <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
         <div id="{{ form.sector.name }}" class="govuk-form-group {% if form.errors %} govuk-form-group--error{% endif %}">
@@ -32,6 +32,6 @@
         {% endif %}
 
         <input type="submit" value="Add sector" class="govuk-button">
-        <a class="form-cancel" href="{{ href.cancel }}">cancel</a>
+        <a class="form-cancel" href="{% url 'barriers:edit_sectors_session' barrier.id %}">cancel</a>
     </form>
 {% endblock %}

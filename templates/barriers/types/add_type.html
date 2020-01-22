@@ -44,6 +44,6 @@
         </div>
 
         <input type="submit" value="Add barrier type" class="govuk-button">
-        <a class="form-cancel" href="">cancel</a>
+        <a class="form-cancel" href="{% url 'barriers:edit_types_session' barrier.id %}">cancel</a>
     </form>
 {% endblock %}
