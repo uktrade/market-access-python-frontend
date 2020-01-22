@@ -2,6 +2,8 @@ import json
 
 from django.test import TestCase
 
+from utils.api_client import BarriersResource
+
 from mock import patch
 
 
@@ -30,10 +32,14 @@ class MarketAccessTestCase(TestCase):
 
     def init_get_barrier(self):
         self.get_barrier_patcher = patch("utils.api_client.BarriersResource.get")
-        from utils.api_client import BarriersResource
         self.mock_get_barrier = self.get_barrier_patcher.start()
         self.mock_get_barrier.return_value = BarriersResource.model(self.barriers[0])
         self.addCleanup(self.get_barrier_patcher.stop)
+
+    def update_session(self, data):
+        session = self.client.session
+        session.update(data)
+        session.save()
 
     @property
     def metadata_json(self):

@@ -27,8 +27,11 @@
             </select>
         </div>
 
-        {% if current_sectors %}
-            {% include 'barriers/partials/sector_list.html' with show_remove_links=False %}
+        {% if sectors %}
+            <div class="selection-list restrict-width">
+                <h3 class="selection-list__heading">Selected sectors</h3>
+                {% include 'barriers/partials/sector_list.html' with show_remove_links=False %}
+            </div>
         {% endif %}
 
         <input type="submit" value="Add sector" class="govuk-button">

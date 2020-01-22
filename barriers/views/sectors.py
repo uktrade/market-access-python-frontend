@@ -56,7 +56,7 @@ class BarrierEditSectors(BarrierMixin, FormView):
             (sector['id'], sector['name'])
             for sector in metadata.get_sector_list()
         ]
-        kwargs['barrier_id'] = self.kwargs.get('barrier_id')
+        kwargs['barrier_id'] = str(self.kwargs.get('barrier_id'))
         kwargs['token'] = self.request.session.get('sso_token')
         return kwargs
 
@@ -68,6 +68,13 @@ class BarrierEditSectorsSession(BarrierEditSectors):
 class BarrierAddSectors(BarrierMixin, FormView):
     template_name = "barriers/edit/add_sectors.html"
     form_class = AddSectorsForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        metadata = get_metadata()
+        sector_ids = self.request.session.get('sectors', [])
+        context_data['sectors'] = metadata.get_sectors_by_ids(sector_ids)
+        return context_data
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

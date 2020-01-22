@@ -8,7 +8,6 @@ from mock import patch
 
 
 class EditBarrierTitleTestCase(MarketAccessTestCase):
-
     def test_edit_title_has_initial_data(self):
         response = self.client.get(
             reverse(
