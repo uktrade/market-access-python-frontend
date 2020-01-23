@@ -58,7 +58,7 @@
         {% if results %}
             <h2 class="results-count">
                 <span class="results-count__number">{{ results.count }}</span>
-                companies match <span class="highlight">{{ query }}</span>
+                companies match <span class="highlight">{{ form.query.value }}</span>
             </h2>
 
             <ul class="search-card-list">

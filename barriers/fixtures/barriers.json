@@ -11,12 +11,6 @@
         "all_sectors": false,
         "sectors": ["9838cecc-5f95-e211-a939-e4115bead28a"],
         "companies": [{
-            "id": "0692683e-5197-4853-a0fe-e43e35b8e7c5",
-            "name": "Nest Labs, Inc."
-        }, {
-            "id": "346f78a5-1d23-4213-b4c2-bf48246a13c3",
-            "name": "Archived Ltd"
-        }, {
             "id": "79baa06b-9217-4178-8c05-0c294aab355e",
             "name": "Christmas Tree Wholesale Ltd"
         }],

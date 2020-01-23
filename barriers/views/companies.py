@@ -29,7 +29,7 @@ class CompanyDetail(BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        company_id = self.kwargs.get('company_id')
+        company_id = str(self.kwargs.get('company_id'))
         client = DatahubClient()
         context_data['company'] = client.get_company(company_id)
         return context_data
@@ -75,7 +75,7 @@ class BarrierEditCompanies(BarrierMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['barrier_id'] = self.kwargs.get('barrier_id')
+        kwargs['barrier_id'] = str(self.kwargs.get('barrier_id'))
         kwargs['token'] = self.request.session.get('sso_token')
         kwargs['companies'] = self.request.session.get('companies', [])
         return kwargs
