@@ -55,14 +55,14 @@
 
             <dt class="summary-group__list__key">Barrier summary</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.problem.description|escape|linebreaksbr }}
+                {{ barrier.problem_description|escape|linebreaksbr }}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_description' barrier.id %}">Edit</a>
             </dd>
 
             <div class="summary-group__list-item-50">
                 <dt class="summary-group__list__key">Barrier type</dt>
                 <dd class="summary-group__list__value">
-                    {{ barrier.problem.status }}
+                    {{ barrier.problem_status }}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_problem_status' barrier.id %}">Edit</a>
                 </dd>
             </div>
@@ -70,7 +70,7 @@
             <div class="summary-group__list-item-50">
                 <dt class="summary-group__list__key">Related to Brexit</dt>
                 <dd class="summary-group__list__value">
-                    {{ barrier.eu_exit_related }}
+                    {{ barrier.eu_exit_related_text }}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_eu_exit_related' barrier.id %}">Edit</a>
                 </dd>
             </div>
@@ -131,13 +131,13 @@
 
             <dt class="summary-group__list__key">Information source</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.source.name }}{% if barrier.source.description %}<br>{{ barrier.source.description }}{% endif %}
+                {{ barrier.source_name }}{% if barrier.other_source %}<br>{{ barrier.other_source }}{% endif %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_source' barrier.id %}">Edit</a>
             </dd>
 
             <dt class="summary-group__list__key">Barrier added by</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.added_by }}
+                {{ barrier.reported_by }}
             </dd>
         </dl>
     </section>
@@ -162,7 +162,7 @@
 
                     {% endif %}
                 </span>
-                <h2 class="barrier-status-details__heading">Barrier {% if barrier.is_partially_resolved %}partially resolved{% elif barrier.is_resolved %}resolved{% else %}dormant{% endif %} <span class="barrier-status-details__heading__caption">in {{ barrier.status_date|date:"F Y" }}</span></2>
+                <h2 class="barrier-status-details__heading">Barrier {% if barrier.is_partially_resolved %}partially resolved{% elif barrier.is_resolved %}resolved{% else %}dormant{% endif %} <span class="barrier-status-details__heading__caption">in {{ barrier.status.date|date:"F Y" }}</span></2>
                 <h3 class="barrier-status-details__sub-heading">Summary {% if barrier.is_resolved or barrier.is_partially_resolved %} of resolution{% endif %}</h3>
                 <p class="barrier-status-details__text">{{ barrier.status_summary|linebreaksbr }}</p>
                 <a href="{% url 'barriers:edit_status' barrier.id %}"> Edit</a>

@@ -17,7 +17,7 @@ class BarrierEditSectors(BarrierMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         if not self.use_session_sectors:
-            request.session['sectors'] = self.barrier.get_sector_ids()
+            request.session['sectors'] = self.barrier.sector_ids
             request.session['all_sectors'] = self.barrier.all_sectors
 
         return super().get(request, *args, **kwargs)

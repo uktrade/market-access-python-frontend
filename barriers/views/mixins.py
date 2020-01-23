@@ -122,7 +122,7 @@ class AssessmentMixin:
         return context_data
 
 
-class APIFormMixin:
+class APIFormViewMixin:
     _object = None
 
     @property
@@ -131,13 +131,15 @@ class APIFormMixin:
             self._object = self.get_object()
         return self._object
 
-    def get_initial(self):
-        if self.request.method.lower() == "get":
-            return self.object.to_dict()
-        return {}
+    def get_form_kwargs(self, **kwargs):
+        if self.request.method == 'GET':
+            kwargs['initial'] = self.get_initial()
+        elif self.request.method in ('POST', 'PUT'):
+            kwargs.update({
+                'data': self.request.POST,
+                'files': self.request.FILES,
+            })
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
         kwargs.update(self.kwargs)
         kwargs['token'] = self.request.session.get('sso_token')
         return kwargs
@@ -152,11 +154,9 @@ class APIFormMixin:
         return context_data
 
 
-class APIBarrierFormMixin(APIFormMixin):
+class APIBarrierFormViewMixin(BarrierMixin, APIFormViewMixin):
     def get_object(self):
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
-        barrier_id = self.kwargs.get('barrier_id')
-        return client.barriers.get(id=barrier_id)
+        return self.barrier
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

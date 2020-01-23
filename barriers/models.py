@@ -11,90 +11,114 @@ import dateutil.parser
 
 
 class Barrier(APIModel):
+    _admin_areas = None
+    _country = None
+    _location = None
+    _metadata = None
+    _sectors = None
+    _status = None
+    _types = None
+
     def __init__(self, data):
         self.data = data
-        metadata = get_metadata()
 
-        self.id = data['id']
-        self.code = data['code']
-        self.title = data['barrier_title']
-        self.product = data.get('product')
-        self.location = metadata.get_location(
-            data['export_country'],
-            data['country_admin_areas']
-        )
+    @property
+    def metadata(self):
+        if self._metadata is None:
+            self._metadata = get_metadata()
+        return self._metadata
 
-        if data.get('sectors'):
-            self.sectors = [
-                metadata.get_sector(sector_id)
-                for sector_id in data['sectors']
+    @property
+    def admin_area_ids(self):
+        return self.data['country_admin_areas']
+
+    @property
+    def admin_areas(self):
+        if self._admin_areas is None:
+            self._admin_areas = self.metadata.get_admin_areas(
+                self.admin_area_ids
+            )
+        return self._admin_areas
+
+    @property
+    def country(self):
+        if self._country is None:
+            self._country = self.metadata.get_country(self.export_country)
+        return self._country
+
+    @property
+    def created_on(self):
+        return dateutil.parser.parse(self.data['created_on'])
+
+    @property
+    def eu_exit_related_text(self):
+        return self.metadata.get_eu_exit_related_text(self.eu_exit_related)
+
+    @property
+    def location(self):
+        if self._location is None:
+            self._location = self.metadata.get_location(
+                self.data['export_country'],
+                self.data['country_admin_areas']
+            )
+        return self._location
+
+    @property
+    def modified_on(self):
+        return dateutil.parser.parse(self.data['modified_on'])
+
+    @property
+    def problem_status(self):
+        return self.metadata.get_problem_status(self.data['problem_status'])
+
+    @property
+    def reported_on(self):
+        return dateutil.parser.parse(self.data['reported_on'])
+
+    @property
+    def sectors(self):
+        if self._sectors is None:
+            self._sectors = [
+                self.metadata.get_sector(sector_id)
+                for sector_id in self.sector_ids
             ]
-        else:
-            self.sectors = []
+        return self._sectors
 
+    @property
+    def sector_ids(self):
+        return self.data['sectors'] or []
+
+    @property
+    def sector_names(self):
         if self.sectors:
-            self.sector_names = [
-                sector.get('name', "Unknown") for sector in self.sectors
+            return [sector.get('name', "Unknown") for sector in self.sectors]
+        return ["All sectors"]
+
+    @property
+    def source_name(self):
+        return self.metadata.get_source(self.source)
+
+    @property
+    def status(self):
+        if self._status is None:
+            self. _status = self.data['status']
+            status_id = str(self._status['id'])
+            self._status.update(self.metadata.get_status(status_id))
+            self._status['date'] = dateutil.parser.parse(self._status['date'])
+        return self._status
+
+    @property
+    def title(self):
+        return self.barrier_title
+
+    @property
+    def types(self):
+        if self._types is None:
+            self._types = [
+                self.metadata.get_barrier_type(barrier_type)
+                for barrier_type in self.data['barrier_types']
             ]
-        else:
-            self.sector_names = ["All sectors"]
-        status_code = str(data['status']['id'])
-        self.status = metadata.get_status(status_code)
-        self.problem = {
-            'status': metadata.get_problem_status(self.problem_status),
-            'description': data.get('problem_description')
-        }
-        self.priority = data['priority']
-        self.reported_on = dateutil.parser.parse(data['reported_on'])
-        self.modified_on = dateutil.parser.parse(data['modified_on'])
-        self.status_date = dateutil.parser.parse(data['status']['date'])
-        self.added_by = data.get('reported_by')
-        self.date = {
-            'reported': self.reported_on,
-            'status': dateutil.parser.parse(data['status']['date']),
-            'created': dateutil.parser.parse(data['created_on']),
-        }
-        self.types = [
-            metadata.get_barrier_type(barrier_type)
-            for barrier_type in data['barrier_types']
-        ]
-        self.eu_exit_related = metadata.get_eu_exit_related_text(
-            data['eu_exit_related']
-        )
-        self.source = {
-            'id': data.get('source'),
-            'name': metadata.get_source(data.get('source')),
-            'description': data.get('other_source'),
-        }
-        if 'companies' in self.data:
-            self.companies = data['companies']
-
-        if self.export_country:
-            self.country = metadata.get_country(self.export_country)
-            self.admin_area_ids = self.data['country_admin_areas']
-
-            if self.admin_area_ids:
-                self.admin_areas = metadata.get_admin_areas(
-                    self.admin_area_ids
-                )
-            else:
-                self.admin_areas = []
-
-    def to_dict(self):
-        return {
-            'title': self.title,
-            'priority': self.priority['code'],
-            'description': self.problem_description,
-            'problem_status': self.problem_status,
-            'eu_exit_related': self.data['eu_exit_related'],
-            'product': self.product,
-            'source': self.data['source'],
-            'other_source': self.data['other_source'],
-            'status': self.status,
-        }
-
-    def get_sector_ids(self):
-        return [sector['id'] for sector in self.sectors]
+        return self._types
 
     def get_barrier_types(self):
         metadata = get_metadata()
