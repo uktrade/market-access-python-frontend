@@ -42,7 +42,7 @@ class Barrier(APIModel):
 
     @property
     def country(self):
-        if self._country is None:
+        if self._country is None and self.export_country:
             self._country = self.metadata.get_country(self.export_country)
         return self._country
 

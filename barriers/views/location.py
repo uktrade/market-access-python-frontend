@@ -18,11 +18,16 @@ class BarrierEditLocation(BarrierMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         if not self.use_session_location:
-            request.session['location'] = {
-                'country': self.barrier.country['id'],
-                'admin_areas': self.barrier.admin_area_ids,
-            }
-
+            if self.barrier.country:
+                request.session['location'] = {
+                    'country': self.barrier.country['id'],
+                    'admin_areas': self.barrier.admin_area_ids,
+                }
+            else:
+                request.session['location'] = {
+                    'country': None,
+                    'admin_areas': [],
+                }
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -30,16 +35,15 @@ class BarrierEditLocation(BarrierMixin, FormView):
         metadata = get_metadata()
         country_id = self.request.session['location']['country']
         admin_area_ids = self.request.session['location'].get('admin_areas')
-        if admin_area_ids is None:
-            admin_area_ids = []
 
-        context_data.update({
-            'country': {
-                'id': country_id,
-                'name': metadata.get_country(country_id)['name'],
-            },
-            'admin_areas': metadata.get_admin_areas(admin_area_ids)
-        })
+        if country_id:
+            context_data.update({
+                'country': {
+                    'id': country_id,
+                    'name': metadata.get_country(country_id)['name'],
+                },
+                'admin_areas': metadata.get_admin_areas(admin_area_ids)
+            })
         return context_data
 
     def get_initial(self):
@@ -73,7 +77,7 @@ class BarrierEditLocation(BarrierMixin, FormView):
         ]
         kwargs['admin_areas'] = admin_area_choices
 
-        kwargs['barrier_id'] = self.kwargs.get('barrier_id')
+        kwargs['barrier_id'] = str(self.kwargs.get('barrier_id'))
         kwargs['token'] = self.request.session.get('sso_token')
         return kwargs
 

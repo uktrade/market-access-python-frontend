@@ -24,7 +24,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert 'form' in response.context
         form = response.context['form']
         assert form.initial['sectors'] == self.barrier['sectors']
-        assert form.initial['all_sectors'] == False
+        assert form.initial['all_sectors'] is False
         assert self.client.session['sectors'] == self.barrier['sectors']
         assert self.client.session['all_sectors'] is False
 
@@ -95,7 +95,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert form.initial['sectors'] == (
             self.barrier['sectors'] + [self.new_sector_id]
         )
-        assert form.initial['all_sectors'] == False
+        assert form.initial['all_sectors'] is False
 
     def test_edit_sectors_confirmation_form_all_sectors(self):
         """
@@ -115,7 +115,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         form = response.context['form']
         assert form.initial['sectors'] == []
-        assert form.initial['all_sectors'] == True
+        assert form.initial['all_sectors'] is True
 
     @patch("utils.api_client.Resource.patch")
     def test_edit_sectors_confirm(self, mock_patch):

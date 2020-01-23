@@ -10,8 +10,6 @@
 
     <h3> Exports to which country are affected by this issue?</h3>
 
-    {{ form.errors }}
-
     <div class="selection-list restrict-width">
         <h3 class="selection-list__heading">Selected country</h3>
         <p>{{ country.name }}</p>
@@ -45,7 +43,8 @@
 
     <form action="" method="POST">
         {% csrf_token %}
-        {{ form }}
+        {{ form.country }}
+        {{ form.admin_areas }}
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
         <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
