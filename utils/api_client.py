@@ -102,7 +102,7 @@ class Resource:
     def __init__(self, client):
         self.client = client
 
-    def list(self, with_pagination=True, **kwargs):
+    def list(self, **kwargs):
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
             model=self.model,

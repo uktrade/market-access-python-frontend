@@ -42,5 +42,95 @@
         "created_on": "2019-10-28T11:36:39.469000Z",
         "modified_by": "Test-user",
         "modified_on": "2020-01-21T15:39:34.137208Z"
+    },
+    {
+        "id": "8152467a-a59b-4481-aea9-deba8f0f397a",
+        "code": "B-19-SV8",
+        "reported_on": "2019-11-14T18:34:34.880000Z",
+        "problem_status": 2,
+        "is_resolved": false,
+        "resolved_date": null,
+        "barrier_title": "Big barrier to trade 2",
+        "sectors_affected": true,
+        "all_sectors": true,
+        "sectors": [],
+        "export_country": "62af72a6-5d95-e211-a939-e4115bead28a",
+        "country_admin_areas": ["d21ea723-13cf-4cba-a36c-2577b2f2e309", "a5a2d421-5274-49ca-9c33-ea3282f5c618"],
+        "eu_exit_related": 3,
+        "status": {
+            "id": 3,
+            "sub_status": null,
+            "sub_status_text": null,
+            "date": "2018-04-01",
+            "summary": "aaa"
+        },
+        "priority": {
+            "code": "UNKNOWN",
+            "name": "Unknown",
+            "order": 0
+        },
+        "barrier_types": [111, 115, 130, 141],
+        "created_on": "2019-11-14T18:32:34.384000Z",
+        "modified_on": "2020-01-23T09:21:25.371626Z"
+    },
+    {
+        "id": "cf983d1e-4391-409f-8a32-495f8abdbdd1",
+        "code": "B-19-6F5",
+        "reported_on": "2019-03-20T15:27:33.359000Z",
+        "problem_status": 1,
+        "is_resolved": false,
+        "resolved_date": null,
+        "barrier_title": "Cats and dogs",
+        "sectors_affected": true,
+        "all_sectors": null,
+        "sectors": ["9638cecc-5f95-e211-a939-e4115bead28a"],
+        "export_country": "5361b8be-5d95-e211-a939-e4115bead28a",
+        "country_admin_areas": null,
+        "eu_exit_related": 1,
+        "status": {
+            "id": 2,
+            "sub_status": null,
+            "sub_status_text": null,
+            "date": "2019-03-20",
+            "summary": null
+        },
+        "priority": {
+            "code": "UNKNOWN",
+            "name": "Unknown",
+            "order": 0
+        },
+        "barrier_types": [129],
+        "created_on": "2019-03-20T15:25:59.033000Z",
+        "modified_on": "2019-04-10T11:33:09.851000Z"
+    },
+    {
+        "id": "47121200-4c8e-4736-a789-e396428caed0",
+        "code": "B-19-VYG",
+        "reported_on": "2019-06-19T15:18:26.242000Z",
+        "problem_status": 2,
+        "is_resolved": true,
+        "resolved_date": "2018-03-01",
+        "barrier_title": "Testing chile",
+        "sectors_affected": true,
+        "all_sectors": false,
+        "sectors": ["9738cecc-5f95-e211-a939-e4115bead28a", "9838cecc-5f95-e211-a939-e4115bead28a"],
+        "export_country": "62af72a6-5d95-e211-a939-e4115bead28a",
+        "country_admin_areas": ["322545fd-9b3d-42de-9654-9bbb30451de3", "84699c34-b663-45d8-89c1-db0f04310d0e"],
+        "eu_exit_related": 1,
+        "status": {
+            "id": 4,
+            "sub_status": null,
+            "sub_status_text": null,
+            "date": "2018-05-01",
+            "summary": "I was of great help, indeed"
+        },
+        "priority": {
+            "code": "UNKNOWN",
+            "name": "Unknown",
+            "order": 0
+        },
+        "barrier_types": [],
+        "created_on": "2019-06-19T15:17:23.776000Z",
+        "modified_on": "2019-07-24T18:29:37.083000Z"
     }
 ]

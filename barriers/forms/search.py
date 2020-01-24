@@ -158,10 +158,10 @@ class BarrierSearchForm(forms.Form):
         params['priority'] = ",".join(self.cleaned_data.get('priority', []))
         params['status'] = ",".join(self.cleaned_data.get('status', []))
 
-        if '1' in self.cleaned_data.get('created_by', []):
+        if '2' in self.cleaned_data.get('created_by', []):
+            params['team'] = '1'
+        elif '1' in self.cleaned_data.get('created_by', []):
             params['user'] = '1'
-        elif '2' in self.cleaned_data.get('created_by', []):
-            params['team'] = '2'
         return {k: v for k, v in params.items() if v}
 
     def get_raw_filters(self):

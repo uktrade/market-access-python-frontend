@@ -101,9 +101,9 @@ class Barrier(APIModel):
     @property
     def status(self):
         if self._status is None:
-            self. _status = self.data['status']
-            status_id = str(self._status['id'])
-            self._status.update(self.metadata.get_status(status_id))
+            status_id = str(self.data['status']['id'])
+            self._status = self.metadata.get_status(status_id)
+            self._status.update(self.data['status'])
             self._status['date'] = dateutil.parser.parse(self._status['date'])
         return self._status
 
