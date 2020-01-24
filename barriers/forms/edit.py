@@ -1,11 +1,9 @@
-import datetime
-
 from django import forms
 
 from .mixins import APIFormMixin
 
 from utils.api_client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText, MonthYearField
+from utils.forms import ChoiceFieldWithHelpText
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -173,47 +171,3 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
             id=self.id,
             problem_status=self.cleaned_data['problem_status']
         )
-
-
-class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
-    status_date = MonthYearField(required=False)
-    status_summary = forms.CharField(
-        label='Provide a summary of why this barrier is dormant',
-        widget=forms.Textarea,
-    )
-
-    def __init__(self, is_resolved, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.is_resolved = is_resolved
-        if is_resolved:
-            self.fields['status_summary'].label = (
-                "Provide a summary of how this barrier was resolved"
-            )
-            self.fields['status_date'].required = True
-
-    def validate_status_date(self):
-        status_date = datetime.date(
-            self.cleaned_data.get("year"),
-            self.cleaned_data.get("month"),
-            1,
-        )
-        if status_date > datetime.date.today():
-            self.add_error(
-                "month",
-                "Resolution date must be this month or in the past"
-            )
-            self.add_error(
-                "year",
-                "Resolution date must be this month or in the past"
-            )
-        else:
-            self.cleaned_data['status_date'] = status_date
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        data = {'status_summary': self.cleaned_data['status_summary']}
-
-        if self.is_resolved:
-            data['status_date'] = self.cleaned_data['status_date'].isoformat()
-
-        client.barriers.patch(id=self.id, **data)

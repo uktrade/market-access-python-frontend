@@ -35,8 +35,6 @@ from .views.edit import (
     BarrierEditPriority,
     BarrierEditEUExitRelated,
     BarrierEditProblemStatus,
-    BarrierEditStatus,
-    BarrierStatus,
 )
 from .views.location import (
     BarrierEditLocation,
@@ -59,6 +57,10 @@ from .views.sectors import (
     BarrierEditSectors,
     BarrierEditSectorsSession,
     BarrierRemoveSector,
+)
+from .views.statuses import (
+    BarrierChangeStatus,
+    BarrierEditStatus,
 )
 from .views.teams import (
     AddTeamMember,
@@ -118,7 +120,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/location/add-admin-area/", AddAdminArea.as_view(), name="add_admin_area"),
     path("barriers/<uuid:barrier_id>/location/remove-admin-area/", RemoveAdminArea.as_view(), name="remove_admin_area"),
 
-    path("barriers/<uuid:barrier_id>/status/", BarrierStatus.as_view(), name="status"),
+    path("barriers/<uuid:barrier_id>/status/", BarrierChangeStatus.as_view(), name="change_status"),
 
     path("barriers/<uuid:barrier_id>/types/", BarrierEditTypesSession.as_view(), name="edit_types_session"),
     path("barriers/<uuid:barrier_id>/types/edit/", BarrierEditTypes.as_view(), name="edit_types"),

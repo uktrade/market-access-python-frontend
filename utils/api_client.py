@@ -187,7 +187,7 @@ class BarriersResource(Resource):
     def set_status(self, barrier_id, status, **kwargs):
         if status == UNKNOWN:
             url = f"barriers/{barrier_id}/unknown"
-        if status == OPEN_PENDING_ACTION:
+        elif status == OPEN_PENDING_ACTION:
             url = f"barriers/{barrier_id}/open-action_required"
         elif status == OPEN_IN_PROGRESS:
             url = f"barriers/{barrier_id}/open-in-progress"
