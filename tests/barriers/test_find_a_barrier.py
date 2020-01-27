@@ -11,6 +11,7 @@ from utils.models import ModelList
 from mock import patch
 
 
+@override_settings(API_RESULTS_LIMIT=10)
 class FindABarrierTestCase(MarketAccessTestCase):
     @patch("utils.api_client.Resource.list")
     def test_empty_search(self, mock_list):
@@ -85,6 +86,26 @@ class FindABarrierTestCase(MarketAccessTestCase):
             }
         )
         assert response.status_code == HTTPStatus.OK
+
+        form = response.context['form']
+        assert form.cleaned_data['search'] == "Test search"
+        assert form.cleaned_data['country'] == [
+            '9f5f66a0-5d95-e211-a939-e4115bead28a',
+            '83756b9a-5d95-e211-a939-e4115bead28a',
+        ]
+        assert form.cleaned_data['sector'] == [
+            '9538cecc-5f95-e211-a939-e4115bead28a',
+            'aa22c9d2-5f95-e211-a939-e4115bead28a',
+        ]
+        assert form.cleaned_data['type'] == ['130', '141']
+        assert form.cleaned_data['region'] == [
+            '3e6809d6-89f6-4590-8458-1d0dab73ad1a',
+            '5616ccf5-ab4a-4c2c-9624-13c69be3c46b',
+        ]
+        assert form.cleaned_data['priority'] == ['HIGH', 'MEDIUM']
+        assert form.cleaned_data['status'] == ['1', '2', '7']
+        assert form.cleaned_data['created_by'] == ['1']
+
         mock_list.assert_called_with(
             ordering="-reported_on",
             limit=settings.API_RESULTS_LIMIT,
@@ -105,7 +126,6 @@ class FindABarrierTestCase(MarketAccessTestCase):
             status='1,2,7',
             user='1',
         )
-        # TODO: test inital data
 
     @patch("utils.api_client.Resource.list")
     def test_created_by_fitler(self, mock_list):
@@ -152,17 +172,16 @@ class FindABarrierTestCase(MarketAccessTestCase):
             data=[self.barrier] * 10,
             total_count=123,
         )
-        # TODO: overridng settings not working
-        with self.settings(API_RESULTS_LIMIT=10):
-            response = self.client.get(
-                reverse('barriers:find_a_barrier'),
-                data={'status': ['1', '2', '3', '4', '5'], 'page': '3'},
-            )
+
+        response = self.client.get(
+            reverse('barriers:find_a_barrier'),
+            data={'status': ['1', '2', '3', '4', '5'], 'page': '6'},
+        )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
             ordering="-reported_on",
             limit=10,
-            offset=20,
+            offset=50,
             status='1,2,3,4,5',
         )
         barriers = response.context['barriers']
@@ -170,8 +189,10 @@ class FindABarrierTestCase(MarketAccessTestCase):
         assert barriers.total_count == 123
 
         pagination = response.context['pagination']
-        # assert pagination['total_pages'] == 13
+        assert pagination['total_pages'] == 13
         assert pagination['pages'][0]['label'] == 1
         assert pagination['pages'][0]['url'] == (
             "status=1&status=2&status=3&status=4&status=5&page=1"
         )
+        page_labels = [page['label'] for page in pagination['pages']]
+        assert page_labels == [1, '...', 5, 6, 7, 8, '...', 13]
