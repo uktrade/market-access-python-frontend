@@ -68,7 +68,7 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data['modified_on'])
 
     @property
-    def problem_status(self):
+    def problem_status_text(self):
         return self.metadata.get_problem_status(self.data['problem_status'])
 
     @property
