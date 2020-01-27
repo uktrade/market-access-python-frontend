@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+
+    <section class="restrict-width">
+
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+
+        <div class="selection-list">
+            <h3 class="selection-list__heading">{{ form.fields.sectors.label }}</h3>
+                <ul class="selection-list__list">
+                    {% for sector_id, sector_name in form.fields.sectors.choices %}
+                    <li class="selection-list__list__item">
+                        <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ sector_name }}
+                        <form action="{{ urls.remove_sector }}" class="selection-list__list__item__remove-form" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="sector" value="{{ sector_id }}">
+                            <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+            <a href="{{ urls.add_sector }}" class="govuk-button button--secondary selection-list__add-button">Add specific sectors</a>
+            <form action="{{ urls.add_all }}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="govuk-button button--secondary selection-list__add-button" name="action" value="select_all">Select all sectors</button>
+            </form>
+
+        </div>
+
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Save and continue" class="govuk-button">
+            <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
+        </form>
+
+	</section>
+
+
+{% endblock %}

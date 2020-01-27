@@ -170,6 +170,19 @@ class Metadata:
             if sector['id'] == sector_id:
                 return sector
 
+    def get_sectors(self, sector_ids):
+        """
+        Helper to get sectors data in bulk.
+
+        :param sector_ids: either a list or a comma separated string of UUIDs
+        :return: GENERATOR - data of sectors
+        """
+        sec_ids = sector_ids or []
+        if type(sec_ids) == str:
+            sec_ids = sector_ids.replace(" ", "").split(",")
+        sectors = (self.get_sector(sector_id) for sector_id in sec_ids)
+        return sectors
+
     def get_sectors_by_ids(self, sector_ids):
         return [
             sector

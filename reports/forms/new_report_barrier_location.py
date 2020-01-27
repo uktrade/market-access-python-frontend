@@ -42,7 +42,6 @@ class NewReportBarrierLocationAddAdminAreasForm(forms.Form):
     )
 
     def __init__(self, admin_areas, *args, **kwargs):
-        # self.token = kwargs.pop('token')
         super().__init__(*args, **kwargs)
         self.fields['admin_areas'].choices = admin_areas
 
@@ -60,6 +59,5 @@ class NewReportBarrierLocationAdminAreasForm(forms.Form):
     )
 
     def __init__(self, admin_areas, *args, **kwargs):
-        # self.token = kwargs.pop('token')
         super().__init__(*args, **kwargs)
         self.fields['admin_areas'].choices = admin_areas

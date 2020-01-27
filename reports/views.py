@@ -10,8 +10,15 @@ from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_location import (
     NewReportBarrierLocationForm,
     NewReportBarrierLocationHasAdminAreasForm,
-    HasAdminAreas, NewReportBarrierLocationAddAdminAreasForm, NewReportBarrierLocationAdminAreasForm)
-from reports.forms.new_report_barrier_sectors import NewReportBarrierSectorsForm
+    HasAdminAreas, NewReportBarrierLocationAddAdminAreasForm,
+    NewReportBarrierLocationAdminAreasForm,
+)
+from reports.forms.new_report_barrier_sectors import (
+    NewReportBarrierHasSectorsForm,
+    SectorsAffected,
+    NewReportBarrierSectorsForm,
+    NewReportBarrierAddSectorsForm,
+)
 from reports.forms.new_report_barrier_status import (
     BarrierStatuses,
     NewReportBarrierProblemStatusForm,
@@ -224,6 +231,7 @@ class NewReportBarrierLocationView(ReportsFormView):
             self.success_path = "reports:barrier_has_admin_areas"
         else:
             self.success_path = "reports:barrier_has_sectors"
+            self.form_group.selected_admin_areas = ""
             self.form_group.save()
 
         return super().form_valid(form)
@@ -274,10 +282,9 @@ class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
         :return: TUPLE, (BOOL|has selected admin areas, GENERATOR|selected admin areas)
         """
         area_ids = self.form_group.selected_admin_areas
-        admin_areas = (a["id"] for a in self.metadata.get_admin_areas(area_ids))
         choices = (
             (area["id"], area["name"])
-            for area in self.metadata.get_admin_areas(admin_areas)
+            for area in self.metadata.get_admin_areas(area_ids)
         )
         return (area_ids != ""), choices
 
@@ -297,7 +304,7 @@ class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
         kwargs = super().get_form_kwargs()
         available_admin_areas = []
         admin_areas = self.metadata.get_admin_area_choices(self.country_id)
-        selected_admin_areas = self.form_group.selected_admin_areas or ()
+        selected_admin_areas = self.form_group.selected_admin_areas
 
         for area in admin_areas:
             # expecting area to be a tuple - (area_id, area_name)
@@ -330,11 +337,9 @@ class NewReportBarrierAdminAreasView(ReportsFormView):
 
     @property
     def selected_admin_areas(self):
-        area_ids = self.form_group.selected_admin_areas
-        admin_areas = (a["id"] for a in self.metadata.get_admin_areas(area_ids))
         choices = (
             (area["id"], area["name"])
-            for area in self.metadata.get_admin_areas(admin_areas)
+            for area in self.metadata.get_admin_areas(self.form_group.selected_admin_areas)
         )
         return choices
 
@@ -366,12 +371,114 @@ class NewReportBarrierLocationRemoveAdminAreasView(ReportsFormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class NewReportBarrierSectorsView(ReportsFormView):
+class NewReportBarrierHasSectorsView(ReportsFormView):
     """Does it affect the entire country?"""
     heading_text = "Sectors affected by the barrier"
-    template_name = "reports/new_report_barrier_sectors.html"
-    form_class = NewReportBarrierSectorsForm
+    template_name = "reports/new_report_barrier_sectors_main.html"
+    form_class = NewReportBarrierHasSectorsForm
     extra_paths = {'back': 'reports:barrier_location'}
+    form_session_key = FormSessionKeys.SECTORS_AFFECTED
+
+    def set_success_path(self):
+        action = self.request.POST.get("action")
+        if action == "exit":
+            self.success_path = "reports:draft_barrier_details"
+        else:
+            if self.form_group.sectors_affected["sectors_affected"] == SectorsAffected.YES:
+                self.success_path = "reports:barrier_sectors"
+            else:
+                self.success_path = "reports:barrier_about"
+
+    def success(self):
+        self.form_group.save(payload=self.form_group.prepare_payload_sectors())
+        self.set_success_path()
+
+
+class NewReportBarrierSectorsView(ReportsFormView):
+    heading_text = "Sectors affected by the barrier"
+    template_name = "reports/new_report_barrier_sectors_manage.html"
+    form_class = NewReportBarrierSectorsForm
+    success_path = 'reports:barrier_about'
+    extra_paths = {
+        'back': 'reports:barrier_has_sectors',
+        'add_sector': 'reports:barrier_add_sectors',
+        'add_all': 'reports:barrier_add_all_sectors',
+        'remove_sector': 'reports:barrier_remove_sector'
+    }
+    metadata = get_metadata()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        _, selected_sectors = self.form_group.selected_sectors_generator(self.metadata)
+        kwargs["sectors"] = selected_sectors
+        return kwargs
+
+    def success(self):
+        self.form_group.save(payload=self.form_group.prepare_payload_sectors())
+
+
+class NewReportBarrierSectorsAddView(ReportsFormView):
+    heading_text = "Sectors affected by the barrier"
+    template_name = "reports/new_report_barrier_sectors_add.html"
+    form_class = NewReportBarrierAddSectorsForm
+    success_path = 'reports:barrier_sectors'
+    extra_paths = {
+        'back': 'reports:barrier_sectors',
+    }
+    metadata = get_metadata()
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        has_selected_sectors, selected_sectors = self.form_group.selected_sectors_generator(self.metadata)
+        context_data["has_selected_sectors"] = has_selected_sectors
+        context_data["selected_sectors"] = selected_sectors
+        return context_data
+
+    def get_form_kwargs(self):
+        """Add available sector choices to form"""
+        kwargs = super().get_form_kwargs()
+        selected_sectors = self.form_group.selected_sectors or ""
+        available_sectors = (
+            (sector["id"], sector["name"])
+            for sector in self.metadata.get_sector_list(level=0)
+            if sector["id"] not in selected_sectors
+        )
+        kwargs["sectors"] = available_sectors
+        return kwargs
+
+    def form_valid(self, form):
+        selected_sectors = self.form_group.selected_sectors
+        if not selected_sectors or selected_sectors == "all":
+            data = form.cleaned_data["sectors"]
+        else:
+            data = f"{selected_sectors}, {form.cleaned_data['sectors']}"
+        self.form_group.selected_sectors = data
+        return super().form_valid(form)
+
+
+class NewReportBarrierSectorsAddAllView(ReportsFormView):
+    http_method_names = 'post'
+    success_path = 'reports:barrier_sectors'
+    metadata = get_metadata()
+
+    def post(self, request, *args, **kwargs):
+        self.init_view(request, **kwargs)
+        self.form_group.selected_sectors = "all"
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class NewReportBarrierSectorsRemoveView(ReportsFormView):
+    http_method_names = 'post'
+    success_path = 'reports:barrier_sectors'
+
+    def post(self, request, *args, **kwargs):
+        self.init_view(request, **kwargs)
+        sector_id = request.POST.get("sector")
+        if sector_id == "all":
+            self.form_group.selected_sectors = ""
+        else:
+            self.form_group.remove_selected_sector(sector_id)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class DraftBarriers(TemplateView):
