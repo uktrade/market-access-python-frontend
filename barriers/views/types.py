@@ -71,7 +71,7 @@ class BarrierEditTypes(BarrierMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         if not self.use_session_types:
-            request.session['barrier_types'] = self.barrier.get_barrier_types()
+            request.session['barrier_types'] = self.barrier.types
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -89,9 +89,10 @@ class BarrierEditTypes(BarrierMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['barrier_id'] = self.kwargs.get('barrier_id')
+        kwargs['barrier_id'] = str(self.kwargs.get('barrier_id'))
         kwargs['token'] = self.request.session.get('sso_token')
-        kwargs['barrier_types'] = self.request.session.get('barrier_types', [])
+        metadata = get_metadata()
+        kwargs['barrier_types'] = metadata.get_barrier_type_list()
         return kwargs
 
     def form_valid(self, form):

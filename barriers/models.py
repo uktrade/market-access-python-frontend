@@ -120,13 +120,6 @@ class Barrier(APIModel):
             ]
         return self._types
 
-    def get_barrier_types(self):
-        metadata = get_metadata()
-        return [
-            metadata.get_barrier_type(barrier_type)
-            for barrier_type in self.data['barrier_types']
-        ]
-
     @property
     def is_resolved(self):
         return self.status['id'] == '4'
