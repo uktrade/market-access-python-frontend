@@ -6,8 +6,8 @@
 
     <section class="restrict-width">
 
-        <a href="{% url 'reports:barrier_problem_status' %}" class="govuk-back-link">Back</a>
-        {% include 'partials/heading.html' with caption='Add a barrier' text='Barrier status' %}
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
         {% form_error_banner form %}
 
         <form action="" method="POST">

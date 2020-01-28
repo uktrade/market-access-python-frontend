@@ -121,6 +121,14 @@ class Metadata:
     def get_country_list(self):
         return self.data['countries']
 
+    def get_country_choices(self):
+        countries = self.get_country_list()
+        choices = (
+            (country['id'], country['name'])
+            for country in countries
+        )
+        return choices
+
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data['country_admin_areas']:
             if (
@@ -130,7 +138,25 @@ class Metadata:
                 return admin_area
 
     def get_admin_areas(self, admin_area_ids):
-        return [self.get_admin_area(id) for id in admin_area_ids]
+        """
+        Helper to get admin areas data in bulk.
+
+        :param admin_area_ids: either a list or a comma separated string of UUIDs
+        :return: GENERATOR - data of admin areas
+        """
+        area_ids = admin_area_ids or []
+        if type(area_ids) == str:
+            area_ids = admin_area_ids.replace(" ", "").split(",")
+        admin_areas = (self.get_admin_area(area_id) for area_id in area_ids)
+        return admin_areas
+
+    def get_admin_area_choices(self, country_id):
+        areas = self.get_admin_areas_by_country(country_id)
+        choices = (
+            (areas['id'], areas['name'])
+            for areas in areas
+        )
+        return choices
 
     def get_admin_areas_by_country(self, country_id):
         return [

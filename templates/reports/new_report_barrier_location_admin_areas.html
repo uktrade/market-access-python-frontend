@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+
+    <section class="restrict-width">
+
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+
+        <div class="selection-list restrict-width">
+            <h3 class="selection-list__heading">{{ form.fields.admin_areas.label }}</h3>
+                <ul class="selection-list__list">
+                    {% for area_id, area_name in form.fields.admin_areas.choices %}
+                    <li class="selection-list__list__item">
+                        <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ area_name }}
+                        <form action="{{ urls.remove_admin_area }}" class="selection-list__list__item__remove-form" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="admin_area" value="{{ area_id }}">
+                            <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+            <a href="{{ urls.back }}" class="govuk-button button--secondary selection-list__add-button">Add another admin area</a>
+        </div>
+
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Save and continue" class="govuk-button">
+            <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
+        </form>
+
+	</section>
+
+
+{% endblock %}
