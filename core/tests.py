@@ -2,7 +2,7 @@ import json
 
 from django.test import TestCase
 
-from utils.api_client import BarriersResource
+from utils.api_client import BarriersResource, InteractionsResource
 
 from mock import patch
 
@@ -53,7 +53,7 @@ class MarketAccessTestCase(TestCase):
     def init_get_interactions_patcher(self):
         self.get_interactions_patcher = patch("utils.api_client.InteractionsResource.list")
         self.mock_get_interactions = self.get_interactions_patcher.start()
-        self.mock_get_interactions.return_value = []
+        self.mock_get_interactions.return_value = self.notes
         self.addCleanup(self.get_interactions_patcher.stop)
 
     def update_session(self, data):
@@ -78,3 +78,41 @@ class MarketAccessTestCase(TestCase):
     @property
     def barrier(self):
         return self.barriers[0]
+
+    @property
+    def notes(self):
+        return [
+            InteractionsResource.model({
+                'id': 1,
+                'kind': 'Comment',
+                'text': 'Comment with document',
+                'pinned': False,
+                'is_active': True,
+                'documents': [
+                    {
+                        'id': 'cd5ada56-53ee-4324-a2fa-b2f90f47ccbd',
+                        'name': 'test.jpeg',
+                        'size': 5159,
+                        'status': 'virus_scanned'
+                    },
+                ],
+                'created_on': '2020-01-20T12:00:00.683297Z',
+                'created_by': {
+                    'id': 1,
+                    'name': 'Test-user'
+                }
+            }),
+            InteractionsResource.model({
+                'id': 2,
+                'kind': 'Comment',
+                'text': 'Comment without document',
+                'pinned': False,
+                'is_active': True,
+                'documents': [],
+                'created_on': '2020-01-21T09:30:00.714208Z',
+                'created_by': {
+                    'id': 1,
+                    'name': 'Test-user'
+                }
+            }),
+        ]

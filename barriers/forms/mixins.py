@@ -1,7 +1,7 @@
 import requests
 
 from utils.api_client import MarketAccessAPIClient
-from utils.exceptions import FileUploadError
+from utils.exceptions import FileUploadError, ScanError
 
 
 class APIFormMixin:
@@ -25,6 +25,22 @@ class DocumentMixin:
     def __init__(self, *args, **kwargs):
         self.token = kwargs.pop('token')
         super().__init__(*args, **kwargs)
+
+    def validate_document(self):
+        document = self.cleaned_data.get('document')
+
+        if document:
+            try:
+                uploaded_document = self.upload_document()
+                document_ids = self.cleaned_data.get('document_ids', [])
+                document_ids.append(uploaded_document['id'])
+                self.cleaned_data['document_ids'] = document_ids
+            except FileUploadError as e:
+                self.add_error("document", str(e))
+            except ScanError as e:
+                self.add_error("document", str(e))
+
+        return document
 
     def upload_document(self):
         document = self.cleaned_data['document']

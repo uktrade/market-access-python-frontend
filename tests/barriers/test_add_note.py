@@ -297,3 +297,31 @@ class NotesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
         response_data = response.json()
         assert response_data['message'] == "Upload failed"
+
+    @patch("utils.api_client.DocumentsResource.check_scan_status")
+    @patch("utils.api_client.DocumentsResource.complete_upload")
+    @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
+    @patch("utils.api_client.DocumentsResource.create")
+    @patch("utils.api_client.NotesResource.create")
+    def test_cancel_note_document_ajax(
+        self,
+        mock_create_note,
+        mock_create_document,
+        mock_upload_to_s3,
+        mock_complete_upload,
+        mock_check_scan_status,
+    ):
+        session_key = f"barrier:{self.barrier['id']}:note:new:documents"
+        self.update_session({session_key: [{'id': '1'}]})
+
+        assert session_key in self.client.session
+
+        self.client.post(
+            reverse(
+                'barriers:cancel_note_document',
+                kwargs={'barrier_id': self.barrier['id']}
+            ),
+            xhr=True,
+        )
+
+        assert session_key not in self.client.session
