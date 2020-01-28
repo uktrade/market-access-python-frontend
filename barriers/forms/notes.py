@@ -4,6 +4,7 @@ from django.conf import settings
 from .mixins import DocumentMixin
 
 from utils.api_client import MarketAccessAPIClient
+from utils.exceptions import FileUploadError, ScanError
 from utils.forms import MultipleValueField, RestrictedFileField
 
 
@@ -26,19 +27,26 @@ class AddNoteForm(DocumentMixin, forms.Form):
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
 
+    def clean_document(self):
+        document = self.cleaned_data['document']
+        if document:
+            try:
+                uploaded_document = self.upload_document()
+                self.cleaned_data['document_ids'].append(
+                    uploaded_document['id']
+                )
+            except FileUploadError as e:
+                self.add_error("document", str(e))
+            except ScanError as e:
+                self.add_error("document", str(e))
+        return document
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
-
-        document_ids = self.cleaned_data.get('document_ids')
-
-        if self.cleaned_data.get('document'):
-            document = self.upload_document()
-            document_ids.append(document['id'])
-
         client.notes.create(
             barrier_id=self.barrier_id,
             text=self.cleaned_data['note'],
-            documents=document_ids,
+            documents=self.cleaned_data.get('document_ids'),
         )
 
 
