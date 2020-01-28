@@ -54,7 +54,7 @@ class BarrierEditSectors(BarrierMixin, FormView):
         metadata = get_metadata()
         kwargs['sectors'] = [
             (sector['id'], sector['name'])
-            for sector in metadata.get_sector_list()
+            for sector in metadata.get_sector_list(level=0)
         ]
         kwargs['barrier_id'] = str(self.kwargs.get('barrier_id'))
         kwargs['token'] = self.request.session.get('sso_token')

@@ -11,9 +11,10 @@ from reports.views import (
     NewReportBarrierLocationAddAdminAreasView,
     NewReportBarrierAdminAreasView,
     NewReportBarrierLocationRemoveAdminAreasView,
-    NewReportBarrierSectorsView,
+    NewReportBarrierHasSectorsView,
     ReportDetail,
-)
+    NewReportBarrierSectorsView, NewReportBarrierSectorsAddView, NewReportBarrierSectorsAddAllView,
+    NewReportBarrierSectorsRemoveView)
 
 app_name = "reports"
 
@@ -41,7 +42,14 @@ urlpatterns = [
     path("reports/new/country/admin-areas/remove/", NewReportBarrierLocationRemoveAdminAreasView.as_view(), name="barrier_remove_admin_areas"),
     path("reports/<uuid:barrier_id>/country/admin-areas/remove/", NewReportBarrierLocationRemoveAdminAreasView.as_view(), name="barrier_remove_admin_areas_uuid"),
     # Sectors
-    path("reports/<uuid:barrier_id>/has-sectors/", NewReportBarrierSectorsView.as_view(), name="barrier_has_sectors_uuid"),
+    path("reports/<uuid:barrier_id>/has-sectors/", NewReportBarrierHasSectorsView.as_view(), name="barrier_has_sectors_uuid"),
+    path("reports/<uuid:barrier_id>/sectors/", NewReportBarrierSectorsView.as_view(), name="barrier_sectors_uuid"),
+    path("reports/<uuid:barrier_id>/sectors/add/", NewReportBarrierSectorsAddView.as_view(), name="barrier_add_sectors_uuid"),
+    path("reports/<uuid:barrier_id>/sectors/add/all/", NewReportBarrierSectorsAddAllView.as_view(), name="barrier_add_all_sectors_uuid"),
+    path("reports/<uuid:barrier_id>/sectors/remove/", NewReportBarrierSectorsRemoveView.as_view(), name="barrier_remove_sector_uuid"),
+    # About
+    path("reports/<uuid:barrier_id>/problem/", ReportDetail.as_view(), name="barrier_about_uuid"),
+
 
     # path("barriers/<uuid:id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
 

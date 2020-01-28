@@ -5,6 +5,7 @@ import requests
 
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_location import HasAdminAreas
+from reports.forms.new_report_barrier_sectors import SectorsAffected
 from reports.forms.new_report_barrier_status import BarrierStatuses
 from reports.models import Report
 from utils.api_client import MarketAccessAPIClient
@@ -53,6 +54,8 @@ class SessionKeys:
         FormSessionKeys.HAS_ADMIN_AREAS: "has_admin_areas_form_data",
         FormSessionKeys.ADMIN_AREAS: "admin_areas_form_data",
         FormSessionKeys.SELECTED_ADMIN_AREAS: "selected_admin_areas",
+        FormSessionKeys.SECTORS_AFFECTED: "sectors_affected",
+        FormSessionKeys.SECTORS: "sectors",
     }
     attr_mapping = {}
 
@@ -78,14 +81,6 @@ class ReportFormGroup:
      - session key naming pattern for DRAFT barriers: "draft_barrier_<UUID>_session_key"
      - session key naming pattern for UNSAVED barriers: "draft_barrier__session_key"
     """
-    # _aggregated_data = {
-    #     "problem_status": None,
-    #     "is_resolved": None,
-    #     "resolved_date": None,
-    #     "resolved_status": None,
-    #     "export_country": None,
-    #     "country_admin_areas": []
-    # }
     def __init__(self, session, barrier_id=None):
         self.session = session
         self.session_keys = None
@@ -94,6 +89,8 @@ class ReportFormGroup:
         self.client = MarketAccessAPIClient(session.get("sso_token"))
         self.init_session_keys()
 
+    # STATUS
+    # ==================================
     @property
     def problem_status_form(self):
         return self.get(FormSessionKeys.PROBLEM_STATUS, {})
@@ -101,13 +98,6 @@ class ReportFormGroup:
     @problem_status_form.setter
     def problem_status_form(self, value):
         self.set(FormSessionKeys.PROBLEM_STATUS, value)
-
-
-    # Don't think setters are needed as ReportsFormView will take care of saving form data
-    # @problem_status_form.setter
-    # def problem_status_form(self, cleaned_data):
-    #     """Expecting a form.cleaned_data DICT"""
-    #     self.session[self.session_keys.PROBLEM_STATUS] = cleaned_data
 
     @property
     def status_form(self):
@@ -117,6 +107,8 @@ class ReportFormGroup:
     def status_form(self, value):
         self.set(FormSessionKeys.STATUS, value)
 
+    # LOCATION
+    # ==================================
     @property
     def location_form(self):
         return self.get(FormSessionKeys.LOCATION, {})
@@ -157,6 +149,59 @@ class ReportFormGroup:
         admin_areas.remove(admin_area_id)
         self.selected_admin_areas = ', '.join(admin_areas)
 
+    # SECTORS
+    # ==================================
+    @property
+    def sectors_affected(self):
+        return self.get(FormSessionKeys.SECTORS_AFFECTED, {})
+
+    @sectors_affected.setter
+    def sectors_affected(self, value):
+        self.set(FormSessionKeys.SECTORS_AFFECTED, value)
+
+    @property
+    def selected_sectors(self):
+        """
+        Selected sectors
+        :return: STR - comma separated UUIDs
+        """
+        return self.get(FormSessionKeys.SECTORS, "")
+
+    @selected_sectors.setter
+    def selected_sectors(self, value):
+        self.set(FormSessionKeys.SECTORS, value)
+
+    @property
+    def selected_sectors_as_list(self):
+        sectors = self.selected_sectors
+        if sectors:
+            sectors = sectors.replace(" ", "").split(",")
+        return sectors or []
+
+    def selected_sectors_generator(self, metadata):
+        """
+        Returns selected sectors if any as a GENERATOR.
+
+        :metadata: data from utils.metadata.get_metadata()
+        :return: TUPLE, (BOOL|has selected sectors, GENERATOR|selected sectors)
+        """
+        sector_ids = self.selected_sectors
+        if sector_ids == "all":
+            sectors = (("all", "All sectors"),)
+        else:
+            sectors = (
+                (sector["id"], sector["name"])
+                for sector in metadata.get_sectors(sector_ids)
+            )
+        return (sector_ids != ""), sectors
+
+    def remove_selected_sector(self, sector_id):
+        sectors = self.selected_sectors_as_list
+        sectors.remove(sector_id)
+        self.selected_sectors = ', '.join(sectors)
+
+    # UTILS
+    # ==================================
     @property
     def session_key_infix(self):
         infix = ""
@@ -184,10 +229,6 @@ class ReportFormGroup:
         key = getattr(self.session_keys, session_key)
         if key:
             self.session[key] = value
-
-    # def get_aggregated_data(self):
-    #     # TODO: update data
-    #     return self._aggregated_data
 
     def init_session_keys(self):
         if self.session_keys:
@@ -244,6 +285,24 @@ class ReportFormGroup:
             data["has_admin_areas"] = HasAdminAreas.YES
         return data
 
+    def get_sectors_affected_form_data(self):
+        data = {"sectors_affected": None}
+        # TODO, only set this if progress is not "NOT STARTED" for "Sectors affected"
+        if self.barrier.data["sectors_affected"]:
+            data["sectors_affected"] = SectorsAffected.YES
+        else:
+            data["sectors_affected"] = SectorsAffected.NO
+        return data
+
+    def get_selected_sectors(self):
+        """Helper to extract selected sectors from barrier data and preload the form."""
+        all_sectors = (self.barrier.data.get("all_sectors") is True)
+        if all_sectors:
+            selected_sectors = "all"
+        else:
+            selected_sectors = ', '.join(self.barrier.data.get("sectors"))
+        return selected_sectors
+
     def update_session_keys(self):
         """
         Update value of each session key, based on data from self.barrier.data
@@ -253,6 +312,8 @@ class ReportFormGroup:
         self.location_form = self.get_location_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
         self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas"))
+        self.sectors_affected = self.get_sectors_affected_form_data()
+        self.selected_sectors = self.get_selected_sectors()
 
     def update_context(self, barrier):
         self.barrier = barrier
@@ -261,6 +322,7 @@ class ReportFormGroup:
         self.update_session_keys()
 
     def prepare_payload(self):
+        """Combined payload of multiple steps (Status & Location)"""
         payload = {
             "problem_status": self.problem_status_form.get("status"),
             "is_resolved": self.status_form.get("is_resolved"),
@@ -274,6 +336,25 @@ class ReportFormGroup:
             payload["is_resolved"] = False
             payload["resolved_status"] = None
             payload["resolved_date"] = None
+
+        return payload
+
+    def prepare_payload_sectors(self):
+        all_sectors = (self.selected_sectors == "all")
+        sectors = ()
+        sectors_affected = self.sectors_affected.get("sectors_affected")
+
+        if sectors_affected == SectorsAffected.YES:
+            if not all_sectors:
+                sectors = self.selected_sectors_as_list
+        else:
+            all_sectors = False
+
+        payload = {
+            "sectors_affected": sectors_affected,
+            "all_sectors": all_sectors,
+            "sectors": sectors,
+        }
 
         return payload
 
