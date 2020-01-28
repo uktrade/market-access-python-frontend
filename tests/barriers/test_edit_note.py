@@ -154,31 +154,38 @@ class NotesTestCase(MarketAccessTestCase):
         assert mock_check_scan_status.called is True
         assert mock_update_note.called is False
 
-    @patch("utils.api_client.DocumentsResource.check_scan_status")
-    @patch("utils.api_client.DocumentsResource.complete_upload")
-    @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
-    @patch("utils.api_client.DocumentsResource.create")
-    @patch("utils.api_client.NotesResource.create")
-    def test_cancel_note_document_ajax(
-        self,
-        mock_create_note,
-        mock_create_document,
-        mock_upload_to_s3,
-        mock_complete_upload,
-        mock_check_scan_status,
-    ):
-        session_key = f"barrier:{self.barrier['id']}:note:1:documents"
-        self.update_session({session_key: [{'id': '1'}]})
-
-        assert session_key in self.client.session
-
-        self.client.get(
+    @patch("utils.api_client.InteractionsResource.delete_note")
+    def test_delete_note_confirmation_ajax(self, mock_delete_note):
+        response = self.client.get(
             reverse(
-                'barriers:cancel_note_document',
-                kwargs={'barrier_id': self.barrier['id']}
+                'barriers:delete_note',
+                kwargs={'barrier_id': self.barrier['id'], 'note_id': 1}
             ),
-            data={'note_id': '1'},
             xhr=True,
         )
+        assert response.status_code == HTTPStatus.OK
+        mock_delete_note.called is False
+        assert 'note' in response.context
 
-        assert session_key not in self.client.session
+    @patch("utils.api_client.InteractionsResource.delete_note")
+    def test_delete_note_confirmation_non_ajax(self, mock_delete_note):
+        response = self.client.get(
+            reverse(
+                'barriers:delete_note',
+                kwargs={'barrier_id': self.barrier['id'], 'note_id': 1}
+            ),
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_delete_note.called is False
+        assert 'note' in response.context
+
+    @patch("utils.api_client.InteractionsResource.delete_note")
+    def test_delete_note_success(self, mock_delete_note):
+        response = self.client.post(
+            reverse(
+                'barriers:delete_note',
+                kwargs={'barrier_id': self.barrier['id'], 'note_id': 1}
+            ),
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        mock_delete_note.assert_called_with(1)
