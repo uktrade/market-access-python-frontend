@@ -6,7 +6,7 @@ from .mixins import BarrierMixin, SessionDocumentMixin
 from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
 from ..forms.notes import AddNoteForm, EditNoteForm, NoteDocumentForm
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 
 
 class NoteSessionDocumentMixin(SessionDocumentMixin):

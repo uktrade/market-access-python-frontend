@@ -8,7 +8,7 @@ from mock import patch
 
 
 class EditStatusTestCase(MarketAccessTestCase):
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_empty_errors(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -24,7 +24,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert 'status_date' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_future_date_error(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -45,7 +45,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert 'status_date' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_bad_date_error(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -66,7 +66,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert 'status_date' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_success(self, mock_patch):
         response = self.client.post(
             reverse(

@@ -61,7 +61,7 @@ class EditLocationTestCase(MarketAccessTestCase):
         country_list = metadata.get_country_list()
         assert len(form.fields['country'].choices) == len(country_list)
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_country(self, mock_patch):
         """
         Edit country should change the country in the session, not call the API
@@ -112,7 +112,7 @@ class EditLocationTestCase(MarketAccessTestCase):
         admin_areas = metadata.get_admin_areas_by_country(self.new_country_id)
         assert len(form.fields['admin_area'].choices) == len(admin_areas)
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_add_admin_area(self, mock_patch):
         """
         Add admin area should change the session, not call the API
@@ -137,7 +137,7 @@ class EditLocationTestCase(MarketAccessTestCase):
         assert location['admin_areas'] == [self.new_admin_area_ids[0]]
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_remove_admin_area(self, mock_patch):
         """
         Removing admin area should remove it from the session, not call the API
@@ -184,7 +184,7 @@ class EditLocationTestCase(MarketAccessTestCase):
         assert form.initial['country'] == self.new_country_id
         assert form.initial['admin_areas'] == self.new_admin_area_ids
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_location_confirm(self, mock_patch):
         """
         Saving location should call the API

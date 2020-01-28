@@ -5,7 +5,7 @@ from django.views.generic import FormView, TemplateView, View
 from ..forms.search import BarrierSearchForm
 from .mixins import BarrierMixin
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 from utils.tools import nested_sort

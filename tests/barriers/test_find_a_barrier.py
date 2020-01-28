@@ -14,7 +14,7 @@ from mock import patch
 
 @override_settings(API_RESULTS_LIMIT=10)
 class FindABarrierTestCase(MarketAccessTestCase):
-    @patch("utils.api_client.Resource.list")
+    @patch("utils.api.resources.APIResource.list")
     def test_empty_search(self, mock_list):
         response = self.client.get(reverse('barriers:find_a_barrier'))
         assert response.status_code == HTTPStatus.OK
@@ -24,7 +24,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
             offset=0,
         )
 
-    @patch("utils.api_client.Resource.list")
+    @patch("utils.api.resources.APIResource.list")
     def test_search_form_choices(self, mock_list):
         response = self.client.get(reverse('barriers:find_a_barrier'))
         assert response.status_code == HTTPStatus.OK
@@ -62,7 +62,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
         created_by_choices = form.fields['created_by'].choices
         assert len(created_by_choices) == 2
 
-    @patch("utils.api_client.Resource.list")
+    @patch("utils.api.resources.APIResource.list")
     def test_search_filters(self, mock_list):
         response = self.client.get(
             reverse('barriers:find_a_barrier'),
@@ -128,7 +128,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
             user='1',
         )
 
-    @patch("utils.api_client.Resource.list")
+    @patch("utils.api.resources.APIResource.list")
     def test_created_by_fitler(self, mock_list):
         response = self.client.get(
             reverse('barriers:find_a_barrier'),
@@ -166,7 +166,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
             team='1',
         )
 
-    @patch("utils.api_client.Resource.list")
+    @patch("utils.api.resources.APIResource.list")
     def test_pagination(self, mock_list):
         mock_list.return_value = ModelList(
             model=Barrier,

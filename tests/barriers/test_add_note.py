@@ -22,7 +22,7 @@ class NotesTestCase(MarketAccessTestCase):
         assert 'form' in response.context
         assert response.context['form'].initial == {}
 
-    @patch("utils.api_client.NotesResource.create")
+    @patch("utils.api.client.NotesResource.create")
     def test_note_cannot_be_empty(self, mock_create):
         response = self.client.post(
             reverse(
@@ -37,7 +37,7 @@ class NotesTestCase(MarketAccessTestCase):
         assert 'note' in form.errors
         assert mock_create.called is False
 
-    @patch("utils.api_client.NotesResource.create")
+    @patch("utils.api.client.NotesResource.create")
     def test_add_note_success(self, mock_create):
         response = self.client.post(
             reverse(
@@ -53,7 +53,7 @@ class NotesTestCase(MarketAccessTestCase):
             documents=[],
         )
 
-    @patch("utils.api_client.NotesResource.create")
+    @patch("utils.api.client.NotesResource.create")
     def test_add_note_success_with_ajax_document(self, mock_create):
         document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
         response = self.client.post(
@@ -70,11 +70,11 @@ class NotesTestCase(MarketAccessTestCase):
             documents=[document_id],
         )
 
-    @patch("utils.api_client.DocumentsResource.check_scan_status")
-    @patch("utils.api_client.DocumentsResource.complete_upload")
+    @patch("utils.api.client.DocumentsResource.check_scan_status")
+    @patch("utils.api.client.DocumentsResource.complete_upload")
     @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
-    @patch("utils.api_client.DocumentsResource.create")
-    @patch("utils.api_client.NotesResource.create")
+    @patch("utils.api.client.DocumentsResource.create")
+    @patch("utils.api.client.NotesResource.create")
     def test_add_note_success_with_non_ajax_document(
         self,
         mock_create_note,
@@ -109,11 +109,11 @@ class NotesTestCase(MarketAccessTestCase):
         mock_complete_upload.assert_called_with(document_id)
         mock_check_scan_status.assert_called_with(document_id)
 
-    @patch("utils.api_client.DocumentsResource.check_scan_status")
-    @patch("utils.api_client.DocumentsResource.complete_upload")
+    @patch("utils.api.client.DocumentsResource.check_scan_status")
+    @patch("utils.api.client.DocumentsResource.complete_upload")
     @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
-    @patch("utils.api_client.DocumentsResource.create")
-    @patch("utils.api_client.NotesResource.create")
+    @patch("utils.api.client.DocumentsResource.create")
+    @patch("utils.api.client.NotesResource.create")
     def test_add_note_with_document_non_ajax_scan_fail(
         self,
         mock_create_note,
@@ -149,11 +149,11 @@ class NotesTestCase(MarketAccessTestCase):
         assert mock_check_scan_status.called is True
         assert mock_create_note.called is False
 
-    @patch("utils.api_client.DocumentsResource.check_scan_status")
-    @patch("utils.api_client.DocumentsResource.complete_upload")
+    @patch("utils.api.client.DocumentsResource.check_scan_status")
+    @patch("utils.api.client.DocumentsResource.complete_upload")
     @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
-    @patch("utils.api_client.DocumentsResource.create")
-    @patch("utils.api_client.NotesResource.create")
+    @patch("utils.api.client.DocumentsResource.create")
+    @patch("utils.api.client.NotesResource.create")
     def test_add_note_fail_with_non_ajax_text_document(
         self,
         mock_create_note,

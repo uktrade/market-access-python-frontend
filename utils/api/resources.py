@@ -18,7 +18,7 @@ from utils.metadata import (
 from utils.models import ModelList
 
 
-class Resource:
+class APIResource:
     resource_name = None
     model = None
 
@@ -53,7 +53,7 @@ class Resource:
         return self.client.delete(url)
 
 
-class BarriersResource(Resource):
+class BarriersResource(APIResource):
     resource_name = "barriers"
     model = Barrier
 
@@ -123,7 +123,7 @@ class BarriersResource(Resource):
         return self.client.put(url, json=kwargs)
 
 
-class InteractionsResource(Resource):
+class InteractionsResource(APIResource):
     resource_name = "interactions"
     model = Interaction
 
@@ -138,7 +138,7 @@ class InteractionsResource(Resource):
         return self.client.delete(f"barriers/interactions/{note_id}")
 
 
-class NotesResource(Resource):
+class NotesResource(APIResource):
     resource_name = "notes"
     model = Interaction
 
@@ -151,7 +151,7 @@ class NotesResource(Resource):
         return self.model(self.client.patch(url, json=kwargs))
 
 
-class DocumentsResource(Resource):
+class DocumentsResource(APIResource):
     def create(self, filename, filesize):
         return self.client.post(
             "documents",
@@ -193,7 +193,7 @@ class DocumentsResource(Resource):
         return self.client.get(f"documents/{document_id}/download")
 
 
-class UsersResource(Resource):
+class UsersResource(APIResource):
     resource_name = "whoami"
 
     def patch(self, *args, **kwargs):
@@ -201,6 +201,6 @@ class UsersResource(Resource):
         return self.client.patch(url, json=kwargs)
 
 
-class ReportsResource(Resource):
+class ReportsResource(APIResource):
     resource_name = "reports"
     model = Report

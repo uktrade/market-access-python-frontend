@@ -1,6 +1,6 @@
 import requests
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
 
 

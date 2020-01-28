@@ -94,7 +94,7 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         assert response.context['company'].id == self.company_id
         assert response.context['company'].name == self.company_name
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     @patch("barriers.views.companies.DatahubClient.get_company")
     def test_add_company(self, mock_get_company, mock_patch):
         """
@@ -119,7 +119,7 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         assert new_company in self.client.session['companies']
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_remove_company(self, mock_patch):
         """
         Removing a company should remove it from the session, not call the API
@@ -151,7 +151,7 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         assert self.barrier['companies'][0] in self.client.session['companies']
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_confirm_companies(self, mock_patch):
         """
         Saving should call the API

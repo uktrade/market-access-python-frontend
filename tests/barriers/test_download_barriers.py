@@ -8,7 +8,7 @@ from mock import patch
 
 
 class DownloadBarriersTestCase(MarketAccessTestCase):
-    @patch("utils.api_client.BarriersResource.get_csv")
+    @patch("utils.api.client.BarriersResource.get_csv")
     def test_download_barriers(self, mock_get_csv):
         response = self.client.get(
             reverse('barriers:download'),

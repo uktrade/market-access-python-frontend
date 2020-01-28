@@ -26,7 +26,7 @@ from reports.forms.new_report_barrier_status import (
 )
 from reports.helpers import ReportFormGroup
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
 

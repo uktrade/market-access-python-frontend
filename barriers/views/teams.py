@@ -5,7 +5,7 @@ from django.views.generic import FormView, TemplateView
 from ..forms.teams import AddTeamMemberForm, UserSearchForm
 from .mixins import BarrierMixin, TeamMembersContextMixin
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.sso import SSOClient
 
 

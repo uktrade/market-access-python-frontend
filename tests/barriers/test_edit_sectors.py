@@ -51,7 +51,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         for sector_id in self.barrier['sectors']:
             assert sector_id not in choice_values
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_add_sector(self, mock_patch):
         """
         Add Sector page should add a sector to the session, not call the API
@@ -117,7 +117,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert form.initial['sectors'] == []
         assert form.initial['all_sectors'] is True
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_sectors_confirm(self, mock_patch):
         """
         Saving sectors should call the API
@@ -138,7 +138,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_remove_sector(self, mock_patch):
         """
         Removing a sector should remove it from the session, not call the API
@@ -160,7 +160,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert self.client.session['all_sectors'] is False
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_add_all_sectors(self, mock_patch):
         """
         Adding all sectors should update the session, not call the API
@@ -181,7 +181,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert self.client.session['all_sectors'] is True
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_all_sectors_confirm(self, mock_patch):
         """
         Saving 'all sectors' should call the API

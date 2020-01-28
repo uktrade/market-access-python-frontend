@@ -20,7 +20,7 @@ class EditTitleTestCase(MarketAccessTestCase):
         form = response.context['form']
         assert form.initial['title'] == self.barrier['barrier_title']
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_title_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -35,7 +35,7 @@ class EditTitleTestCase(MarketAccessTestCase):
         assert 'title' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_title_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -67,7 +67,7 @@ class EditDescriptionTestCase(MarketAccessTestCase):
             form.initial['description'] == self.barrier['problem_description']
         )
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_description_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -82,7 +82,7 @@ class EditDescriptionTestCase(MarketAccessTestCase):
         assert 'description' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_description_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -112,7 +112,7 @@ class EditProductTestCase(MarketAccessTestCase):
         form = response.context['form']
         assert form.initial['product'] == self.barrier['product']
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_product_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -127,7 +127,7 @@ class EditProductTestCase(MarketAccessTestCase):
         assert 'product' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_product_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -157,7 +157,7 @@ class EditSourceTestCase(MarketAccessTestCase):
         form = response.context['form']
         assert form.initial['source'] == self.barrier['source']
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_source_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -173,7 +173,7 @@ class EditSourceTestCase(MarketAccessTestCase):
         assert 'other_source' not in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_other_source_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -189,7 +189,7 @@ class EditSourceTestCase(MarketAccessTestCase):
         assert 'other_source' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_bad_source_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -205,7 +205,7 @@ class EditSourceTestCase(MarketAccessTestCase):
         assert 'other_source' not in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_source_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -222,7 +222,7 @@ class EditSourceTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_source_calls_api_with_other_source(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -253,7 +253,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         form = response.context['form']
         assert form.initial['priority'] == self.barrier['priority']['code']
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_priority_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -269,7 +269,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert 'priority_summary' not in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_bad_priority_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -285,7 +285,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert 'priority_summary' not in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_priority_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -302,7 +302,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_priority_calls_api_with_summary(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -335,7 +335,7 @@ class EditEUExitRelatedTestCase(MarketAccessTestCase):
             self.barrier['eu_exit_related']
         )
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_eu_exit_related_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -350,7 +350,7 @@ class EditEUExitRelatedTestCase(MarketAccessTestCase):
         assert 'eu_exit_related' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_bad_data_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -365,7 +365,7 @@ class EditEUExitRelatedTestCase(MarketAccessTestCase):
         assert 'eu_exit_related' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_eu_exit_related_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -395,7 +395,7 @@ class EditProblemStatusTestCase(MarketAccessTestCase):
         form = response.context['form']
         assert form.initial['problem_status'] == self.barrier['problem_status']
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_problem_status_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -410,7 +410,7 @@ class EditProblemStatusTestCase(MarketAccessTestCase):
         assert 'problem_status' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_bad_data_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -425,7 +425,7 @@ class EditProblemStatusTestCase(MarketAccessTestCase):
         assert 'problem_status' in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_problem_status_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(

@@ -7,7 +7,7 @@ from core.tests import MarketAccessTestCase
 from mock import patch
 
 
-class EditStatusTestCase(MarketAccessTestCase):
+class ChangeStatusTestCase(MarketAccessTestCase):
     def test_existing_status_not_in_choices(self):
         response = self.client.get(
             reverse(
@@ -23,7 +23,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         ]
         assert str(self.barrier['status']['id']) not in status_choice_values
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_no_status_gets_error(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -39,7 +39,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_unknown_status_errors(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -57,7 +57,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_unknown_status_success(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -73,7 +73,7 @@ class EditStatusTestCase(MarketAccessTestCase):
             status_summary="Test unknown summary",
         )
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_pending_errors(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -93,7 +93,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 2
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_pending_success(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -114,7 +114,7 @@ class EditStatusTestCase(MarketAccessTestCase):
             status_summary="Test pending summary",
         )
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_pending_errors_other(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -138,7 +138,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_pending_success_other(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -161,7 +161,7 @@ class EditStatusTestCase(MarketAccessTestCase):
             status_summary="Test pending summary",
         )
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_in_progress_errors(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -179,7 +179,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_in_progress_success(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -198,7 +198,7 @@ class EditStatusTestCase(MarketAccessTestCase):
             status_summary="Test reopen summary",
         )
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_partially_resolved_errors(self, mock_set_status):
         self.barrier['status']['id'] = 1
         response = self.client.post(
@@ -218,7 +218,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 2
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_partially_resolved_future_date_error(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -242,7 +242,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_partially_resolved_bad_date_error(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -266,7 +266,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_partially_resolved_success(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -288,7 +288,7 @@ class EditStatusTestCase(MarketAccessTestCase):
             status_summary="Part resolved summary",
         )
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_errors(self, mock_set_status):
         self.barrier['status']['id'] = 1
         response = self.client.post(
@@ -308,7 +308,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 2
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_future_date_error(self, mock_set_status):
         self.barrier['status']['id'] = 1
         response = self.client.post(
@@ -333,7 +333,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_bad_date_error(self, mock_set_status):
         self.barrier['status']['id'] = 1
         response = self.client.post(
@@ -358,7 +358,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_success(self, mock_set_status):
         self.barrier['status']['id'] = 1
         response = self.client.post(
@@ -381,7 +381,7 @@ class EditStatusTestCase(MarketAccessTestCase):
             status_summary="Test resolved summary",
         )
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_dormant_status_errors(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -399,7 +399,7 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
-    @patch("utils.api_client.BarriersResource.set_status")
+    @patch("utils.api.client.BarriersResource.set_status")
     def test_dormant_status_success(self, mock_set_status):
         response = self.client.post(
             reverse(

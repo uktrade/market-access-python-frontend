@@ -1,6 +1,6 @@
 from django import forms
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 
 
 class AddTypeForm(forms.Form):

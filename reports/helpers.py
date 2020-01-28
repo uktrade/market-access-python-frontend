@@ -8,7 +8,7 @@ from reports.forms.new_report_barrier_location import HasAdminAreas
 from reports.forms.new_report_barrier_sectors import SectorsAffected
 from reports.forms.new_report_barrier_status import BarrierStatuses
 from reports.models import Report
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 
 from django.conf import settings
 

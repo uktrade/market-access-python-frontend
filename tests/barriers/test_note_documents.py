@@ -11,11 +11,11 @@ from mock import patch
 
 
 class NoteDocumentsTestCase(MarketAccessTestCase):
-    @patch("utils.api_client.DocumentsResource.check_scan_status")
-    @patch("utils.api_client.DocumentsResource.complete_upload")
+    @patch("utils.api.client.DocumentsResource.check_scan_status")
+    @patch("utils.api.client.DocumentsResource.complete_upload")
     @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
-    @patch("utils.api_client.DocumentsResource.create")
-    @patch("utils.api_client.NotesResource.create")
+    @patch("utils.api.client.DocumentsResource.create")
+    @patch("utils.api.client.NotesResource.create")
     def test_add_note_document_ajax(
         self,
         mock_create_note,
@@ -55,10 +55,10 @@ class NoteDocumentsTestCase(MarketAccessTestCase):
         mock_complete_upload.assert_called_with(document_id)
         mock_check_scan_status.assert_called_with(document_id)
 
-    @patch("utils.api_client.DocumentsResource.check_scan_status")
-    @patch("utils.api_client.DocumentsResource.complete_upload")
+    @patch("utils.api.client.DocumentsResource.check_scan_status")
+    @patch("utils.api.client.DocumentsResource.complete_upload")
     @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
-    @patch("utils.api_client.DocumentsResource.create")
+    @patch("utils.api.client.DocumentsResource.create")
     def test_add_note_document_ajax_scan_fail(
         self,
         mock_create_document,
@@ -88,10 +88,10 @@ class NoteDocumentsTestCase(MarketAccessTestCase):
         response_data = response.json()
         assert response_data['message'] == "Scan failed"
 
-    @patch("utils.api_client.DocumentsResource.check_scan_status")
-    @patch("utils.api_client.DocumentsResource.complete_upload")
+    @patch("utils.api.client.DocumentsResource.check_scan_status")
+    @patch("utils.api.client.DocumentsResource.complete_upload")
     @patch("barriers.forms.mixins.DocumentMixin.upload_to_s3")
-    @patch("utils.api_client.DocumentsResource.create")
+    @patch("utils.api.client.DocumentsResource.create")
     def test_add_note_document_ajax_upload_fail(
         self,
         mock_create_document,

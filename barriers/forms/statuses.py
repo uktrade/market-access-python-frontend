@@ -4,7 +4,7 @@ from django import forms
 from django.template.loader import render_to_string
 
 from .mixins import APIFormMixin
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.forms import ChoiceFieldWithHelpText, MonthYearField
 from utils.metadata import (
     OPEN_PENDING_ACTION,

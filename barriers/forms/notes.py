@@ -3,7 +3,7 @@ from django.conf import settings
 
 from .mixins import DocumentMixin
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.forms import MultipleValueField, RestrictedFileField
 
 

@@ -55,7 +55,7 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
         for type_id in self.barrier['barrier_types']:
             assert type_id not in choice_values
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_add_type(self, mock_patch):
         """
         Add type page should add a type to the session, not call the API
@@ -111,7 +111,7 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
             self.barrier['barrier_types'] + [117]
         )
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_types_confirm(self, mock_patch):
         """
         Saving barrier types should call the API
@@ -141,7 +141,7 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
 
-    @patch("utils.api_client.Resource.patch")
+    @patch("utils.api.resources.APIResource.patch")
     def test_remove_type(self, mock_patch):
         """
         Removing a type should remove it from the session, not call the API

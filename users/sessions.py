@@ -2,7 +2,7 @@ from django.contrib.sessions.backends.db import SessionStore as DBStore
 
 from barriers.models import Watchlist
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 
 
 class SessionStore(DBStore):

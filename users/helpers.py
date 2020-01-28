@@ -1,4 +1,4 @@
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 
 
 def sync_user(session):

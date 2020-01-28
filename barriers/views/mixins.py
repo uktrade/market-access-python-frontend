@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 
 
 class BarrierMixin:

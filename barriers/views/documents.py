@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.template.defaultfilters import filesizeformat
 from django.views.generic import FormView, RedirectView
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
 
 

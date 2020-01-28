@@ -2,7 +2,7 @@ import json
 
 from django.test import TestCase
 
-from utils.api_client import BarriersResource, InteractionsResource
+from utils.api.client import BarriersResource, InteractionsResource
 
 from mock import patch
 
@@ -33,25 +33,25 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.metadata_patcher.stop)
 
     def init_get_barrier_patcher(self):
-        self.get_barrier_patcher = patch("utils.api_client.BarriersResource.get")
+        self.get_barrier_patcher = patch("utils.api.resources.BarriersResource.get")
         self.mock_get_barrier = self.get_barrier_patcher.start()
         self.mock_get_barrier.return_value = BarriersResource.model(self.barriers[0])
         self.addCleanup(self.get_barrier_patcher.stop)
 
     def init_get_barrier_patcher(self):
-        self.get_barrier_patcher = patch("utils.api_client.BarriersResource.get")
+        self.get_barrier_patcher = patch("utils.api.resources.BarriersResource.get")
         self.mock_get_barrier = self.get_barrier_patcher.start()
         self.mock_get_barrier.return_value = BarriersResource.model(self.barriers[0])
         self.addCleanup(self.get_barrier_patcher.stop)
 
     def init_get_history_patcher(self):
-        self.get_history_patcher = patch("utils.api_client.BarriersResource.get_history")
+        self.get_history_patcher = patch("utils.api.resources.BarriersResource.get_history")
         self.mock_get_history = self.get_history_patcher.start()
         self.mock_get_history.return_value = []
         self.addCleanup(self.get_history_patcher.stop)
 
     def init_get_interactions_patcher(self):
-        self.get_interactions_patcher = patch("utils.api_client.InteractionsResource.list")
+        self.get_interactions_patcher = patch("utils.api.resources.InteractionsResource.list")
         self.mock_get_interactions = self.get_interactions_patcher.start()
         self.mock_get_interactions.return_value = self.notes
         self.addCleanup(self.get_interactions_patcher.stop)

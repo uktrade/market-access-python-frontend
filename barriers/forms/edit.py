@@ -2,7 +2,7 @@ from django import forms
 
 from .mixins import APIFormMixin
 
-from utils.api_client import MarketAccessAPIClient
+from utils.api.client import MarketAccessAPIClient
 from utils.forms import ChoiceFieldWithHelpText
 
 
