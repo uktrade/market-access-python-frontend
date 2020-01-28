@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic && waitress-serve --port=$PORT config.wsgi:application
+web: ./release-tasks.sh && waitress-serve --port=$PORT config.wsgi:application

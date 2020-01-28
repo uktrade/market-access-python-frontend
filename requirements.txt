@@ -12,5 +12,5 @@ python-dateutil==2.8.1
 python-magic==0.4.15
 redis==3.3.11
 requests==2.22.0
-whitenoise==1.0.6   # manages static assets
+whitenoise==5.0.1   # manages static assets
 waitress==1.4.2     # a pure python WSGI server that is a replacement for gunicorn
