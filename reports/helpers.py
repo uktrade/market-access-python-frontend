@@ -259,9 +259,12 @@ class ReportFormGroup:
         if key:
             self.session[key] = value
 
-    def init_session_keys(self):
+    def flush_session_keys(self):
         if self.session_keys:
             self.session_keys.flush(self.session)
+
+    def init_session_keys(self):
+        self.flush_session_keys()
         self.session_keys = SessionKeys(self.session_key_infix)
 
     def get_problem_status_form_data(self):
@@ -329,16 +332,24 @@ class ReportFormGroup:
         if all_sectors:
             selected_sectors = "all"
         else:
-            selected_sectors = ', '.join(self.barrier.data.get("sectors"))
+            sectors = self.barrier.data.get("sectors") or ""
+            selected_sectors = ', '.join(sectors)
         return selected_sectors
 
     def get_about_form(self):
         data = {
-            "barrier_title": self.barrier.data.get("barrier_title"),
-            "product": self.barrier.data.get("product"),
+            "barrier_title": self.barrier.data.get("barrier_title") or "",
+            "product": self.barrier.data.get("product") or "",
             "source": self.barrier.data.get("source"),
-            "other_source": self.barrier.data.get("other_source"),
+            "other_source": self.barrier.data.get("other_source") or "",
             "eu_exit_related": self.barrier.data.get("eu_exit_related"),
+        }
+        return data
+
+    def get_summary_form(self):
+        data = {
+            "problem_description": self.barrier.data.get("problem_description") or "",
+            "next_steps_summary": self.barrier.data.get("next_steps_summary") or "",
         }
         return data
 
@@ -352,8 +363,9 @@ class ReportFormGroup:
         self.has_admin_areas = self.get_has_admin_areas_form_data()
         self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas"))
         self.sectors_affected = self.get_sectors_affected_form_data()
-        self.selected_sectors = self.get_selected_sectors()
+        self.selected_about_formsectors = self.get_selected_sectors()
         self.about_form = self.get_about_form()
+        self.summary_form = self.get_summary_form()
 
     def update_context(self, barrier):
         self.barrier = barrier
@@ -400,6 +412,8 @@ class ReportFormGroup:
 
     def prepare_payload_about(self):
         payload = self.about_form
+        if not payload["other_source"]:
+            payload["other_source"] = None
         return payload
 
     def prepare_payload_summary(self):
@@ -429,3 +443,17 @@ class ReportFormGroup:
         else:
             barrier = self.client.reports.create(**payload)
         self.update_context(barrier)
+
+    def submit(self):
+        """Create a Barrier out of a Draft Barrier"""
+        token = self.session.get("sso_token")
+        url = f'{settings.MARKET_ACCESS_API_URI}reports/{self.barrier_id}/submit'
+        headers = {
+            'Authorization': f"Bearer {token}",
+            'Content-Type': 'application/json',
+            'X-User-Agent': '',
+            'X-Forwarded-For': '',
+        }
+        response = requests.put(url, headers=headers)
+        response.raise_for_status()
+        self.flush_session_keys()
