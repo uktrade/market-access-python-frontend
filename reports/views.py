@@ -7,6 +7,7 @@ from django.views.generic.base import ContextMixin
 
 from partials.callout import Callout, CalloutButton
 from reports.constants import FormSessionKeys
+from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
 from reports.forms.new_report_barrier_location import (
     NewReportBarrierLocationForm,
     NewReportBarrierLocationHasAdminAreasForm,
@@ -176,7 +177,7 @@ class NewReportBarrierProblemStatusView(ReportsFormView):
     """
     Add a barrier - Step 1.1 Select Barrier Type
     """
-    heading_text = "Status of the barrier"
+    heading_text = "Barrier status"
     template_name = "reports/new_report_barrier_problem_status.html"
     form_class = NewReportBarrierProblemStatusForm
     success_path = 'reports:barrier_status'
@@ -187,7 +188,7 @@ class NewReportBarrierStatusView(ReportsFormView):
     """
     Add a barrier - Step 1.2
     """
-    heading_text = "Status of the barrier"
+    heading_text = "Barrier status"
     template_name = "reports/new_report_barrier_status.html"
     form_class = NewReportBarrierStatusForm
     success_path = 'reports:barrier_location'
@@ -413,8 +414,16 @@ class NewReportBarrierSectorsView(ReportsFormView):
         kwargs["sectors"] = selected_sectors
         return kwargs
 
+    def set_success_path(self):
+        action = self.request.POST.get("action")
+        if action == "exit":
+            self.success_path = "reports:draft_barrier_details"
+        else:
+            self.success_path = "reports:barrier_about"
+
     def success(self):
         self.form_group.save(payload=self.form_group.prepare_payload_sectors())
+        self.set_success_path()
 
 
 class NewReportBarrierSectorsAddView(ReportsFormView):
@@ -479,6 +488,34 @@ class NewReportBarrierSectorsRemoveView(ReportsFormView):
         else:
             self.form_group.remove_selected_sector(sector_id)
         return HttpResponseRedirect(self.get_success_url())
+
+
+class NewReportBarrierAboutView(ReportsFormView):
+    heading_text = "About the barrier"
+    template_name = "reports/new_report_barrier_about.html"
+    form_class = NewReportBarrierAboutForm
+    extra_paths = {'back': 'reports:barrier_sectors'}
+    form_session_key = FormSessionKeys.ABOUT
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        source = self.request.POST.get("source")
+        if source == form.BS.OTHER:
+            form.fields["other_source"].required = True
+        else:
+            form.fields["other_source"].required = False
+        return form
+
+    def set_success_path(self):
+        action = self.request.POST.get("action")
+        if action == "exit":
+            self.success_path = "reports:draft_barrier_details"
+        else:
+            self.success_path = "reports:barrier_summary"
+
+    def success(self):
+        self.form_group.save(payload=self.form_group.prepare_payload_about())
+        self.set_success_path()
 
 
 class DraftBarriers(TemplateView):
