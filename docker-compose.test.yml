@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  web-test:
+    build:
+      context: .
+      dockerfile: docker/local/Dockerfile
+    entrypoint: docker/local/entrypoint.sh
+    volumes:
+      - .:/usr/src/app
+    env_file: docker-compose.test.env
+    networks:
+      - market-access-api_webnet
+  chrome:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+    networks:
+      - market-access-api_webnet
+
+networks:
+  market-access-api_webnet:
+    external: true

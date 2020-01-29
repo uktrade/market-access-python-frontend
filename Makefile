@@ -34,6 +34,12 @@ django-collectstatic: ## Collect static files.
 django-test: ## Run django tests.
 	docker-compose exec web bash -c "pytest"
 
+.PHONY: django-ui-test
+django-ui-test: ## Run django ui tests.
+	docker-compose -f docker-compose.test.yml -p market-access-test exec -d web-test bash -c "python3.6 /usr/src/app/manage.py runserver 0:9000"
+	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pytest ui_tests || pkill -f runserver"
+	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pkill -f runserver"
+
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
 	docker-compose exec web bash -c "coverage run --source='.' manage.py test"

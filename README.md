@@ -18,12 +18,12 @@ The docker-compose.yml file provided is meant to be used for running tests and d
     git clone https://github.com/uktrade/market-access-python-frontend.git
     cd market-access-python-frontend
     ```
-4. Copy the env file - `cp docker-compose.local-template.env docker-compose.env`         
+4. Copy the env file - `cp docker-compose.local-template.env docker-compose.env`
 
 #### Install
 1. Build the images and spin up the containers by running - `docker-compose up --build`
 2. Set up git hooks by running - `make git-hooks`
-3. Enter bash within the django container using `docker-compose exec web bash`  
+3. Enter bash within the django container using `docker-compose exec web bash`
 then create a superuser `py3 manage.py createsuperuser --email your@email.here`
 4. To start the dev server run - `make django-run`
 5. The fronted client is now accessible via http://market-access.local:9880
@@ -40,5 +40,18 @@ Now even if you closed your terminal, the server would be still running.
 #### Make commands
 There's a set of make commands that you can utilize straight away. \
 To list all available commands with help text type `make help` in terminal and hit `Enter`.
+
+#### Local End to End Tests
+1. Ensure the API is running locally.
+
+2. Spin up the testing container:
+`docker-compose -f docker-compose.test.yml -p market-access-test up -d`
+This consists of the python frontend and the selenium chrome driver.
+
+3. Run the tests:
+`make django-ui-test`
+This will start the frontend `runserver`, run the tests, then end `runserver`
+
+In theory the tests can be run against different environments by changing the `BASE_URL` and `WEB_DRIVER_URL` environment variables. However, an SSO test user would need to be set up first.
 
 -----
