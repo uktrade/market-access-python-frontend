@@ -4,7 +4,7 @@ ma.pages.report.aboutProblem = function(){
 
 	new ma.components.ConditionalRadioContent({
 		inputContainer: '.barrier-source',
-		inputName: 'barrierSource',
+		inputName: 'source',
 		conditionalElem: '#conditional-OTHER',
 		shouldShow: function( value ){ return ( value === 'OTHER' ); }
 	});

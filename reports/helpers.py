@@ -23,18 +23,21 @@ from django.conf import settings
 #     "status",               # n/a - Barrier status (e.g.: unfinished, open , dormant, etc...)
 #     "status_summary",       # n/a
 #     "status_date",          # n/a
+#     # ==============================
 #     "export_country",       # Step 2 - Location - UUID
 #     "country_admin_areas",  # Step 2 - Location - LIST of UUIDS
+#     # ==============================
 #     "sectors_affected",     # Step 3 - Sectors - BOOL
 #     "all_sectors",          # Step 3 - Sectors - BOOL
 #     "sectors",              # Step 3 - Sectors - LIST of UUIDS
-#     "product",
-#     "source",
-#     "other_source",
-#     "barrier_title",
+#     # ==============================
+#     "product",              # Step 4 - About - STR - Affected product, service, investment
+#     "source",               # Step 4 - About - STR - choices as per metadata.barrier_source
+#     "other_source",         # Step 4 - About - STR - only applicable if the above source filed was "OTHER"
+#     "barrier_title",        # Step 4 - About - STR - name of the barrier
 #     "problem_description",
 #     "next_steps_summary",
-#     "eu_exit_related",
+#     "eu_exit_related",      # Step 4 - About - INT - metadata.get_eu_exit_related_text (TODO: probs need another helper for choices)
 #     "progress",
 #     "created_by",
 #     "created_on",
@@ -56,6 +59,8 @@ class SessionKeys:
         FormSessionKeys.SELECTED_ADMIN_AREAS: "selected_admin_areas",
         FormSessionKeys.SECTORS_AFFECTED: "sectors_affected",
         FormSessionKeys.SECTORS: "sectors",
+        FormSessionKeys.ABOUT: "about",
+
     }
     attr_mapping = {}
 
@@ -200,6 +205,16 @@ class ReportFormGroup:
         sectors.remove(sector_id)
         self.selected_sectors = ', '.join(sectors)
 
+    # ABOUT
+    # ==================================
+    @property
+    def about_form(self):
+        return self.get(FormSessionKeys.ABOUT, {})
+
+    @about_form.setter
+    def about_form(self, value):
+        self.set(FormSessionKeys.ABOUT, value)
+
     # UTILS
     # ==================================
     @property
@@ -303,6 +318,16 @@ class ReportFormGroup:
             selected_sectors = ', '.join(self.barrier.data.get("sectors"))
         return selected_sectors
 
+    def get_about_form(self):
+        data = {
+            "barrier_title": self.barrier.data.get("barrier_title"),
+            "product": self.barrier.data.get("product"),
+            "source": self.barrier.data.get("source"),
+            "other_source": self.barrier.data.get("other_source"),
+            "eu_exit_related": self.barrier.data.get("eu_exit_related"),
+        }
+        return data
+
     def update_session_keys(self):
         """
         Update value of each session key, based on data from self.barrier.data
@@ -314,6 +339,7 @@ class ReportFormGroup:
         self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas"))
         self.sectors_affected = self.get_sectors_affected_form_data()
         self.selected_sectors = self.get_selected_sectors()
+        self.about_form = self.get_about_form()
 
     def update_context(self, barrier):
         self.barrier = barrier
@@ -356,6 +382,10 @@ class ReportFormGroup:
             "sectors": sectors,
         }
 
+        return payload
+
+    def prepare_payload_about(self):
+        payload = self.about_form
         return payload
 
     def _update_barrier(self, payload):

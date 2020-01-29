@@ -13,8 +13,12 @@ from reports.views import (
     NewReportBarrierLocationRemoveAdminAreasView,
     NewReportBarrierHasSectorsView,
     ReportDetail,
-    NewReportBarrierSectorsView, NewReportBarrierSectorsAddView, NewReportBarrierSectorsAddAllView,
-    NewReportBarrierSectorsRemoveView)
+    NewReportBarrierSectorsView,
+    NewReportBarrierSectorsAddView,
+    NewReportBarrierSectorsAddAllView,
+    NewReportBarrierSectorsRemoveView,
+    NewReportBarrierAboutView
+)
 
 app_name = "reports"
 
@@ -48,7 +52,7 @@ urlpatterns = [
     path("reports/<uuid:barrier_id>/sectors/add/all/", NewReportBarrierSectorsAddAllView.as_view(), name="barrier_add_all_sectors_uuid"),
     path("reports/<uuid:barrier_id>/sectors/remove/", NewReportBarrierSectorsRemoveView.as_view(), name="barrier_remove_sector_uuid"),
     # About
-    path("reports/<uuid:barrier_id>/problem/", ReportDetail.as_view(), name="barrier_about_uuid"),
+    path("reports/<uuid:barrier_id>/problem/", NewReportBarrierAboutView.as_view(), name="barrier_about_uuid"),
 
 
     # path("barriers/<uuid:id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),

@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Add - Status of the barrier{% endblock %}
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
 
 {% block page_content %}
 
     <section class="restrict-width">
 
-        {% include 'partials/heading.html' with caption='Add a barrier' text='Barrier status' %}
-
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
         {% form_error_banner form %}
 
         <form action="" method="POST">
