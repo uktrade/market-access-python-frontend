@@ -33,7 +33,7 @@ class EconomicAssessment(
     form_class = EconomicAssessmentForm
 
     def get(self, request, *args, **kwargs):
-        if self.assessment:
+        if self.barrier.has_assessment:
             session_key = self.get_session_key()
             if session_key not in self.request.session:
                 self.set_session_documents(self.assessment.documents)
@@ -46,7 +46,7 @@ class EconomicAssessment(
         return context_data
 
     def get_initial(self):
-        if self.assessment:
+        if self.request.method == "GET" and self.barrier.has_assessment:
             return {
                 'impact': self.assessment.impact,
                 'description': self.assessment.explanation,
