@@ -1,6 +1,6 @@
 import json
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from barriers.models import Assessment
 from utils.api.resources import BarriersResource, InteractionsResource
@@ -8,6 +8,7 @@ from utils.api.resources import BarriersResource, InteractionsResource
 from mock import patch
 
 
+@override_settings(API_RESULTS_LIMIT=10)
 class MarketAccessTestCase(TestCase):
     _assessments = None
     _barriers = None

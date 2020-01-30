@@ -2,7 +2,6 @@ from http import HTTPStatus
 
 from django.conf import settings
 from django.urls import reverse
-from django.test import override_settings
 
 from barriers.models import Barrier
 from core.tests import MarketAccessTestCase
@@ -12,7 +11,6 @@ from utils.models import ModelList
 from mock import patch
 
 
-@override_settings(API_RESULTS_LIMIT=10)
 class FindABarrierTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_empty_search(self, mock_list):
