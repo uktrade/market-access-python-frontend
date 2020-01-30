@@ -1,0 +1,22 @@
+[
+    {
+        "id": 9,
+        "user": {
+            "profile": {
+                "sso_user_id": "3fbe6479-b9bd-4658-81d7-f07c2a73d33d"
+            },
+            "email": "test@test.com",
+            "first_name": "Douglas",
+            "last_name": "Miller",
+            "full_name": "Douglas Miller"
+        },
+        "role": "A role",
+        "is_active": true,
+        "default": false,
+        "created_on": "2020-01-07T12:36:55.684828Z",
+        "created_by": {
+            "id": 48,
+            "name": "Test-user"
+        }
+    }
+]

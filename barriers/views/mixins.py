@@ -85,7 +85,7 @@ class TeamMembersContextMixin:
             )
             self._team_members = client.barriers.get_team_members(
                 barrier_id=self.kwargs.get('barrier_id')
-            ).get('results', [])
+            )
 
         return self._team_members
 

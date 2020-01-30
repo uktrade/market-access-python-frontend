@@ -3,6 +3,7 @@ import json
 from django.test import TestCase, override_settings
 
 from barriers.models import Assessment
+from users.models import User
 from utils.api.resources import BarriersResource, InteractionsResource
 
 from mock import patch
@@ -13,6 +14,8 @@ class MarketAccessTestCase(TestCase):
     _assessments = None
     _barriers = None
     _metadata_json = None
+    _team_members = None
+    _users = None
 
     def setUp(self):
         self.init_session()
@@ -136,3 +139,20 @@ class MarketAccessTestCase(TestCase):
                 }
             }),
         ]
+
+    @property
+    def team_members(self):
+        if self._team_members is None:
+            self._team_members = json.load(
+                open('barriers/fixtures/team_members.json')
+            )
+        return self._team_members
+
+    @property
+    def users(self):
+        if self._users is None:
+            users = json.load(
+                open('barriers/fixtures/users.json')
+            )
+            self._users = [User(user) for user in users]
+        return self._users

@@ -6,6 +6,8 @@ from django.conf import settings
 from barriers.models import Assessment, Barrier
 from interactions.models import HistoryItem, Interaction
 from reports.models import Report
+from users.models import User
+
 from utils.exceptions import ScanError
 from utils.metadata import (
     OPEN_PENDING_ACTION,
@@ -35,6 +37,7 @@ class APIResource:
 
     def get(self, id, *args, **kwargs):
         url = f"{self.resource_name}/{id}"
+        print(self.client.get(url, *args, **kwargs))
         return self.model(self.client.get(url, *args, **kwargs))
 
     def patch(self, id, *args, **kwargs):
@@ -73,7 +76,8 @@ class BarriersResource(APIResource):
 
     def get_team_members(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/members"
-        return self.client.get(url, params=kwargs)
+        response_data = self.client.get(url, params=kwargs)
+        return response_data.get('results', [])
 
     def add_team_member(self, barrier_id, user_id, role, **kwargs):
         url = f"barriers/{barrier_id}/members"
@@ -194,11 +198,11 @@ class DocumentsResource(APIResource):
 
 
 class UsersResource(APIResource):
-    resource_name = "whoami"
+    resource_name = "users"
+    model = User
 
     def patch(self, *args, **kwargs):
-        url = f"{self.resource_name}"
-        return self.client.patch(url, json=kwargs)
+        return self.client.patch("whoami", json=kwargs)
 
 
 class ReportsResource(APIResource):
