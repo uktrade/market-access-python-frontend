@@ -12,7 +12,7 @@ from utils.api.client import MarketAccessAPIClient
 
 from django.conf import settings
 
-# Barrier fields and The corresponding step in add a barrier journey.
+# Barrier fields and the corresponding step in the "Add a barrier" journey.
 # fields = (
 #     "id",
 #     "code",
@@ -20,6 +20,7 @@ from django.conf import settings
 #     "is_resolved",          # Step 1.2 - Status
 #     "resolved_date",        # Step 1.2 - Status
 #     "resolved_status",      # Step 1.2 - Status
+#     # ==============================
 #     "status",               # n/a - Barrier status (e.g.: unfinished, open , dormant, etc...)
 #     "status_summary",       # n/a
 #     "status_date",          # n/a
@@ -31,18 +32,20 @@ from django.conf import settings
 #     "all_sectors",          # Step 3 - Sectors - BOOL
 #     "sectors",              # Step 3 - Sectors - LIST of UUIDS
 #     # ==============================
-#     "product",              # Step 4 - About - STR - Affected product, service, investment
-#     "source",               # Step 4 - About - STR - choices as per metadata.barrier_source
-#     "other_source",         # Step 4 - About - STR - only applicable if the above source filed was "OTHER"
-#     "barrier_title",        # Step 4 - About - STR - name of the barrier
-#     "problem_description",
-#     "next_steps_summary",
-#     "eu_exit_related",      # Step 4 - About - INT - metadata.get_eu_exit_related_text (TODO: probs need another helper for choices)
-#     "progress",
-#     "created_by",
-#     "created_on",
-#     "modified_by",
-#     "modified_on",
+#     "product",              # Step 4 - About - STR
+#     "source",               # Step 4 - About - STR
+#     "other_source",         # Step 4 - About - STR
+#     "barrier_title",        # Step 4 - About - STR
+#     "eu_exit_related",      # Step 4 - About - INT
+#     # ==============================
+#     "problem_description",  # Step 5 - Summary - STR
+#     "next_steps_summary",   # Step 5 - Summary - STR
+#     # ==============================
+#     "progress",             # n/a
+#     "created_by",           # n/a
+#     "created_on",           # n/a
+#     "modified_by",          # n/a
+#     "modified_on",          # n/a
 # )
 
 
@@ -60,6 +63,7 @@ class SessionKeys:
         FormSessionKeys.SECTORS_AFFECTED: "sectors_affected",
         FormSessionKeys.SECTORS: "sectors",
         FormSessionKeys.ABOUT: "about",
+        FormSessionKeys.SUMMARY: "summary",
 
     }
     attr_mapping = {}
@@ -214,6 +218,16 @@ class ReportFormGroup:
     @about_form.setter
     def about_form(self, value):
         self.set(FormSessionKeys.ABOUT, value)
+
+    # SUMMARY
+    # ==================================
+    @property
+    def summary_form(self):
+        return self.get(FormSessionKeys.SUMMARY, {})
+
+    @summary_form.setter
+    def summary_form(self, value):
+        self.set(FormSessionKeys.SUMMARY, value)
 
     # UTILS
     # ==================================
@@ -386,6 +400,10 @@ class ReportFormGroup:
 
     def prepare_payload_about(self):
         payload = self.about_form
+        return payload
+
+    def prepare_payload_summary(self):
+        payload = self.summary_form
         return payload
 
     def _update_barrier(self, payload):

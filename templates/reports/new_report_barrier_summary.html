@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+
+    <section class="restrict-width">
+
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+        {% form_error_banner form %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
+                <div class="{% form_group_classes form.problem_description.errors %}">
+                    <label class="govuk-label govuk-label--s" for="description">
+                        {{ form.problem_description.label }}
+                    </label>
+                    {% form_field_error form "problem_description" %}
+                    <span id="description-hint" class="govuk-hint">
+                        {{ form.problem_description.help_text }}
+                    </span>
+                    <textarea class="govuk-textarea js-character-count"
+                              id="description"
+                              name="{{ form.problem_description.name }}"
+                              rows="5"
+                              aria-describedby="description-hint description-info">{{ form.initial.problem_description }}</textarea>
+                    <span id="description-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+                        You have 300 characters remaining
+                    </span>
+                </div>
+            </div>
+
+            <div class="{% form_group_classes form.next_steps_summary.errors %}">
+                <label class="govuk-label govuk-label--s" for="next-steps">
+                    {{ form.next_steps_summary.label }}
+                </label>
+                {% form_field_error form "next_steps_summary" %}
+                <span id="next-steps-hint" class="govuk-hint">
+                    {{ form.next_steps_summary.help_text }}
+                </span>
+                <textarea class="govuk-textarea"
+                          id="next-steps"
+                          name="{{ form.next_steps_summary.name }}"
+                          rows="5"
+                          aria-describedby="next-steps-hint">{{ form.initial.next_steps_summary }}</textarea>
+            </div>
+
+            <input type="submit" value="Save and continue" class="govuk-button">
+            <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
+
+        </form>
+	</section>
+
+
+{% endblock %}
+
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '.govuk-character-count' );
+        }
+	</script>
+{% endblock %}
+

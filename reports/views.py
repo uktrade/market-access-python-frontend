@@ -25,6 +25,7 @@ from reports.forms.new_report_barrier_status import (
     NewReportBarrierProblemStatusForm,
     NewReportBarrierStatusForm,
 )
+from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
 from reports.helpers import ReportFormGroup
 
 from utils.api.client import MarketAccessAPIClient
@@ -516,6 +517,18 @@ class NewReportBarrierAboutView(ReportsFormView):
     def success(self):
         self.form_group.save(payload=self.form_group.prepare_payload_about())
         self.set_success_path()
+
+
+class NewReportBarrierSummaryView(ReportsFormView):
+    heading_text = "Barrier summary"
+    template_name = "reports/new_report_barrier_summary.html"
+    form_class = NewReportBarrierSummaryForm
+    success_path = 'reports:draft_barrier_details'
+    extra_paths = {'back': 'reports:barrier_about'}
+    form_session_key = FormSessionKeys.SUMMARY
+
+    def success(self):
+        self.form_group.save(payload=self.form_group.prepare_payload_summary())
 
 
 class DraftBarriers(TemplateView):

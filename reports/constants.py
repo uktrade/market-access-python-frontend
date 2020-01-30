@@ -12,3 +12,4 @@ class FormSessionKeys:
     SECTORS_AFFECTED = "SECTORS_AFFECTED"
     SECTORS = "SECTORS"
     ABOUT = "ABOUT"
+    SUMMARY = "SUMMARY"
