@@ -58,6 +58,12 @@ class MarketAccessTestCase(TestCase):
         self.mock_get_interactions.return_value = self.notes
         self.addCleanup(self.get_interactions_patcher.stop)
 
+    def delete_session_key(self, key):
+        try:
+            del self.client.session[key]
+        except KeyError:
+            pass
+
     def update_session(self, data):
         session = self.client.session
         session.update(data)
