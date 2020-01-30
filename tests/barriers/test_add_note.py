@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from core.tests import MarketAccessTestCase
 
-from utils.exceptions import FileUploadError, ScanError
+from utils.exceptions import FileUploadError
 
 import mock
 from mock import patch

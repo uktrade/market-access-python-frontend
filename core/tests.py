@@ -2,12 +2,14 @@ import json
 
 from django.test import TestCase
 
-from utils.api.client import BarriersResource, InteractionsResource
+from barriers.models import Assessment
+from utils.api.resources import BarriersResource, InteractionsResource
 
 from mock import patch
 
 
 class MarketAccessTestCase(TestCase):
+    _assessments = None
     _barriers = None
     _metadata_json = None
 
@@ -78,6 +80,17 @@ class MarketAccessTestCase(TestCase):
     @property
     def barrier(self):
         return self.barriers[0]
+
+    @property
+    def assessments(self):
+        if self._assessments is None:
+            assessments = json.load(
+                open('barriers/fixtures/assessments.json')
+            )
+            self._assessments = [
+                Assessment(assessment) for assessment in assessments
+            ]
+        return self._assessments
 
     @property
     def notes(self):
