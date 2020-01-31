@@ -106,7 +106,6 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.BarriersResource.get_team_members")
     def test_no_user(self, mock_get_team_members, mock_get_user):
         mock_get_team_members.return_value = self.team_members
-        user_id = "c12195ed-bf30-4a67-ba73-e95cfe012f77"
         mock_get_user.return_value = self.users[0]
 
         response = self.client.get(
@@ -131,6 +130,7 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
                 'barriers:add_team_member',
                 kwargs={'barrier_id': self.barrier['id']}
             ),
+            data={"user": user_id}
         )
         assert response.status_code == HTTPStatus.OK
         assert response.context['user'] == self.users[0]
@@ -139,7 +139,12 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.BarriersResource.get_team_members")
     @patch("utils.api.resources.BarriersResource.add_team_member")
-    def test_success(self, mock_add_team_member, mock_get_team_members, mock_get_user):
+    def test_success(
+        self,
+        mock_add_team_member,
+        mock_get_team_members,
+        mock_get_user,
+    ):
         mock_get_team_members.return_value = self.team_members
         user_id = "c12195ed-bf30-4a67-ba73-e95cfe012f77"
         mock_get_user.return_value = self.users[0]
@@ -159,4 +164,41 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
             role="Horse",
         )
         assert mock_get_user.called is False
+        assert mock_get_team_members.called is False
+
+
+class DeleteTeamMemberTestCase(MarketAccessTestCase):
+    @patch("utils.api.resources.BarriersResource.get_team_members")
+    @patch("utils.api.resources.BarriersResource.delete_team_member")
+    def test_get(self, mock_delete_team_member, mock_get_team_members):
+        mock_get_team_members.return_value = self.team_members
+        response = self.client.get(
+            reverse(
+                'barriers:delete_team_member',
+                kwargs={
+                    'barrier_id': self.barrier['id'],
+                    'team_member_id': 9,
+                }
+            ),
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        assert response.context['team_member'] == self.team_members[0]
+        assert mock_delete_team_member.called is False
+
+    @patch("utils.api.resources.BarriersResource.get_team_members")
+    @patch("utils.api.resources.BarriersResource.delete_team_member")
+    def test_post(self, mock_delete_team_member, mock_get_team_members):
+        response = self.client.post(
+            reverse(
+                'barriers:delete_team_member',
+                kwargs={
+                    'barrier_id': self.barrier['id'],
+                    'team_member_id': 37,
+                }
+            ),
+        )
+
+        assert response.status_code == HTTPStatus.FOUND
+        mock_delete_team_member.assert_called_with(37)
         assert mock_get_team_members.called is False
