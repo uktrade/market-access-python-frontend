@@ -147,7 +147,7 @@ class Metadata:
         area_ids = admin_area_ids or []
         if type(area_ids) == str:
             area_ids = admin_area_ids.replace(" ", "").split(",")
-        admin_areas = (self.get_admin_area(area_id) for area_id in area_ids)
+        admin_areas = [self.get_admin_area(area_id) for area_id in area_ids]
         return admin_areas
 
     def get_admin_area_choices(self, country_id):
