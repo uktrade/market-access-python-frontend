@@ -11,12 +11,15 @@ class SessionStore(DBStore):
     """
     def get_watchlists(self):
         try:
-            watchlists = self['user_data']['user_profile']['watchList'].get(
-                'lists', []
-            )
-            return [Watchlist(**watchlist) for watchlist in watchlists]
+            user_profile = self['user_data']['user_profile']
+            if user_profile:
+                watchlist_data = user_profile.get('watchList')
+                if watchlist_data:
+                    watchlists = watchlist_data.get('lists', [])
+                    return [Watchlist(**watchlist) for watchlist in watchlists]
         except KeyError:
-            return []
+            pass
+        return []
 
     def get_watchlist(self, index):
         watchlists = self.get_watchlists()
@@ -26,6 +29,11 @@ class SessionStore(DBStore):
             return None
 
     def set_watchlists(self, watchlists):
+        if self['user_data']['user_profile'] is None:
+            self['user_data']['user_profile'] = {}
+
+        self['user_data']['user_profile'].setdefault('watchList', {})
+
         self['user_data']['user_profile']['watchList']['lists'] = [
             watchlist.to_dict() for watchlist in watchlists
         ]
