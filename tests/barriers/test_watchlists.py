@@ -106,6 +106,34 @@ class WatchlistTestCase(MarketAccessTestCase):
         )
 
     @patch("utils.api.resources.APIResource.list")
+    def test_sort(self, mock_list):
+        self.set_watchlists(self.simple_watchlist)
+
+        response = self.client.get(
+            reverse('barriers:dashboard'),
+            data={'sort': '-status'}
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            priority="MEDIUM",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            ordering='-status',
+        )
+
+        response = self.client.get(
+            reverse('barriers:dashboard'),
+            data={'sort': 'export_country'}
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            priority="MEDIUM",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            ordering='export_country',
+        )
+
+    @patch("utils.api.resources.APIResource.list")
     def test_tabs(self, mock_list):
         self.set_watchlists(self.complex_watchlist, self.simple_watchlist)
 
