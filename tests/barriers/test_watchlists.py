@@ -304,3 +304,138 @@ class WatchlistTestCase(MarketAccessTestCase):
             }
         )
         assert len(self.client.session.get_watchlists()) == 2
+
+    @patch("utils.api.resources.UsersResource.patch")
+    @patch("utils.api.resources.APIResource.list")
+    def test_save_watchlist_no_name(self, mock_list, mock_patch):
+        self.set_watchlists(self.simple_watchlist, self.test_watchlist)
+        assert len(self.client.session.get_watchlists()) == 2
+
+        response = self.client.post(
+            f"{reverse('barriers:save_watchlist')}"
+            "?search=Test&priority=HIGH&status=2",
+            data={'name': '', 'replace_or_new': 'new'},
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.is_valid() is False
+        assert 'name' in form.errors
+        assert 'replace_or_new' not in form.errors
+        assert 'replace_index' not in form.errors
+        assert mock_patch.called is False
+        assert len(self.client.session.get_watchlists()) == 2
+
+    @patch("utils.api.resources.UsersResource.patch")
+    @patch("utils.api.resources.APIResource.list")
+    def test_save_watchlist_no_replace_or_new(self, mock_list, mock_patch):
+        self.set_watchlists(self.simple_watchlist, self.test_watchlist)
+        assert len(self.client.session.get_watchlists()) == 2
+
+        response = self.client.post(
+            f"{reverse('barriers:save_watchlist')}"
+            "?search=Test&priority=HIGH&status=2",
+            data={'name': 'Saved Watchlist'},
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.is_valid() is False
+        assert 'replace_or_new' in form.errors
+        assert 'replace_index' not in form.errors
+        assert mock_patch.called is False
+        assert len(self.client.session.get_watchlists()) == 2
+
+    @patch("utils.api.resources.UsersResource.patch")
+    @patch("utils.api.resources.APIResource.list")
+    def test_save_watchlist_no_replace_index(self, mock_list, mock_patch):
+        self.set_watchlists(self.simple_watchlist, self.test_watchlist)
+        assert len(self.client.session.get_watchlists()) == 2
+
+        response = self.client.post(
+            f"{reverse('barriers:save_watchlist')}"
+            "?search=Test&priority=HIGH&status=2",
+            data={'name': 'Saved Watchlist', 'replace_or_new': 'replace'},
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.is_valid() is False
+        assert 'replace_or_new' not in form.errors
+        assert 'replace_index' in form.errors
+        assert mock_patch.called is False
+        assert len(self.client.session.get_watchlists()) == 2
+
+    @patch("utils.api.resources.UsersResource.patch")
+    @patch("utils.api.resources.APIResource.list")
+    def test_new_watchlist_success(self, mock_list, mock_patch):
+        self.set_watchlists(self.simple_watchlist, self.test_watchlist)
+        assert len(self.client.session.get_watchlists()) == 2
+
+        response = self.client.post(
+            f"{reverse('barriers:save_watchlist')}"
+            "?search=Test&priority=HIGH&status=2",
+            data={'name': 'New Watchlist', 'replace_or_new': 'new'},
+        )
+
+        assert response.status_code == HTTPStatus.FOUND
+
+        mock_patch.assert_called_with(
+            user_profile={
+                'watchList': {
+                    'lists': [
+                        self.simple_watchlist,
+                        self.test_watchlist,
+                        {
+                            'name': 'New Watchlist',
+                            'filters': {
+                                'search': 'Test',
+                                'priority': ['HIGH'],
+                                'status': ['2']
+                            }
+                        }
+                    ]
+                }
+            }
+        )
+        assert len(self.client.session.get_watchlists()) == 3
+
+    @patch("utils.api.resources.UsersResource.patch")
+    @patch("utils.api.resources.APIResource.list")
+    def test_replace_watchlist_success(self, mock_list, mock_patch):
+        self.set_watchlists(self.simple_watchlist, self.test_watchlist)
+        assert len(self.client.session.get_watchlists()) == 2
+
+        response = self.client.post(
+            f"{reverse('barriers:save_watchlist')}"
+            "?search=Test&priority=HIGH&status=2",
+            data={
+                'name': 'Replaced Watchlist',
+                'replace_or_new': 'replace',
+                'replace_index': '0',
+            },
+        )
+
+        assert response.status_code == HTTPStatus.FOUND
+
+        mock_patch.assert_called_with(
+            user_profile={
+                'watchList': {
+                    'lists': [
+                        {
+                            'name': 'Replaced Watchlist',
+                            'filters': {
+                                'search': 'Test',
+                                'priority': ['HIGH'],
+                                'status': ['2']
+                            }
+                        },
+                        self.test_watchlist,
+                    ]
+                }
+            }
+        )
+        assert len(self.client.session.get_watchlists()) == 2
