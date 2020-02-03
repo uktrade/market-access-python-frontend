@@ -2,6 +2,7 @@ black==19.10b0
 mock==3.0.5
 pyOpenSSL==19.1.0   # local SSL support
 pytest==5.3.4
+pytest-cov==2.8.1
 pytest-django==3.8.0
 splinter==0.13.0
 Werkzeug==0.16.0    # local SSL support
