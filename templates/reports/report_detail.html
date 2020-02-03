@@ -12,7 +12,7 @@
             <div class="callout callout--success callout--with-button">
                 <h2 class="callout__heading">All tasks completed for</h2>
                 <p class="callout__text">{{ report.problem_status_text }}{% if report.country %} in {{ report.country.name }}{% endif %}</p>
-                <form action="{% url 'reports:submit' report.id %}" method="POST">
+                <form action="" method="POST">
                     {% csrf_token %}
                     <input type="submit" value="Submit barrier" class="callout__button">
                 </form>
@@ -21,7 +21,7 @@
             <div class="callout callout--warn callout--with-button">
                 <h2 class="callout__heading">Unfinished barrier for</h2>
                 <p class="callout__text">{{ report.problem_status_text }}{% if report.country %} in {{ report.country.name }}{% endif %}</p>
-                <a href="{% report_stage_url report.id report.next_stage.stage_code %}" class="callout__button">Continue</a>
+                <a href="{% report_stage_url urls report.next_stage.stage_code %}" class="callout__button">Continue</a>
             </div>
         {% endif %}
 
@@ -56,7 +56,7 @@
                             <span class="task-list__item__number">{{ forloop.counter }}</span>
 
                             {% if stage.status_id == 3 or stage.status_id == 2 %}
-                                <a class="task-list__item__name" href="{% report_stage_url report.id stage.stage_code %}" aria-describedby="{{ name }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                <a class="task-list__item__name" href="{% report_stage_url urls stage.stage_code %}" aria-describedby="{{ name }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
                                     {{ stage.name }}
                                 </a>
                             {% else %}

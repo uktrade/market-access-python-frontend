@@ -1,6 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import Form
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
@@ -29,6 +30,7 @@ from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
 from reports.helpers import ReportFormGroup
 
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIException
 from utils.metadata import get_metadata
 
 
@@ -583,15 +585,59 @@ class DeleteReport(TemplateView):
         return HttpResponseRedirect(reverse('reports:draft_barriers'))
 
 
-class ReportDetail(TemplateView):
+class ReportDetail(ReportsFormView):
     template_name = "reports/report_detail.html"
+    extra_paths = {
+        "1.1": "reports:barrier_problem_status",
+        "1.2": "reports:barrier_location",
+        "1.3": "reports:barrier_has_sectors",
+        "1.4": "reports:barrier_about",
+        "1.5": "reports:barrier_summary",
+    }
+    _client = None
+    draft_barrier = None
 
-    def get_report(self):
-        client = MarketAccessAPIClient(self.request.session['sso_token'])
-        return client.reports.get(self.kwargs.get('barrier_id'))
+    @property
+    def client(self):
+        if not self._client:
+            self._client = MarketAccessAPIClient(self.request.session['sso_token'])
+        return self._client
+
+    def get_barrier(self, uuid):
+        """Once a report is submitted it becomes a barrier"""
+        barrier = self.client.barriers.get(uuid)
+        return barrier
+
+    def get_draft_barrier(self, uuid):
+        try:
+            return self.client.reports.get(uuid)
+        except APIException as e:
+            if e.status_code == 404:
+                # Once a report is submitted it becomes a barrier
+                # So it can go missing - let's try to find it
+                self.get_barrier(uuid)
+            else:
+                raise APIException(e)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['page'] = "add-a-barrier"
-        context_data['report'] = self.get_report()
+        context_data['report'] = self.draft_barrier
         return context_data
+
+    def get_success_url(self):
+        return reverse_lazy("barriers:barrier_detail", kwargs={"barrier_id": str(self.form_group.barrier_id)})
+
+    def success(self):
+        self.form_group.submit()
+
+    def get(self, request, *args, **kwargs):
+        barrier_id = kwargs.get('barrier_id')
+        self.draft_barrier = self.get_draft_barrier(barrier_id)
+        if self.draft_barrier:
+            self.init_view(request, **kwargs)
+            self.form_group.update_context(self.draft_barrier)
+            return self.render_to_response(self.get_context_data())
+        else:
+            url = reverse_lazy("barriers:barrier_detail", kwargs={"barrier_id": barrier_id})
+            return redirect(url, permanent=True)
