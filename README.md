@@ -41,7 +41,20 @@ Now even if you closed your terminal, the server would be still running.
 There's a set of make commands that you can utilize straight away. \
 To list all available commands with help text type `make help` in terminal and hit `Enter`.
 
-#### Local End to End Tests
+
+## Tests
+Front end tests are grouped under `./test` directory. When writing tests please use the corresponding app name to keep the same folder structure as the main app so it's easy to tell which test belongs to which app.
+
+#### Running Django Tests
+The project's testrunner is pytest - https://docs.pytest.org/en/latest/    
+1. You can run all or a subset of tests via `make django-test`, if you pass in a value in `path` then it will run that subset of tests.  
+Example usage.:
+	- `make django-test` - run all tests 
+	- `make django-test path=barriers` - run a subset of tests just for the barriers app 
+	- `make django-test path=assessments/test_assessment_detail.py::EmptyAssessmentDetailTestCase::test_view` - run a specific test case
+2. To run tests with coverage use `make django-test-coverage` - this will output the report to the console.
+
+#### Running Selenium Tests Locally
 1. Ensure the API is running locally.
 
 2. Spin up the testing container:

@@ -165,6 +165,7 @@ COMPRESS_PRECOMPILERS = (
 TRUSTED_USER_TOKEN = 'ssobypass'
 
 METADATA_CACHE_TIME = "10600"
+MOCK_METADATA = False
 
 # CACHE / REDIS
 # Try to read from PaaS service env vars first

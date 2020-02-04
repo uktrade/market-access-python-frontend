@@ -59,4 +59,5 @@ COPY requirements*.txt ./
 RUN pip3.6 install --upgrade pip
 RUN pip3.6 install --upgrade setuptools
 RUN pip3.6 install -r requirements.txt \
-    && pip3.6 install -r requirements-dev.txt
+    && pip3.6 install -r requirements-dev.txt \
+    && pip3.6 install -r requirements-test.txt
