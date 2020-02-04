@@ -11,15 +11,10 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.description.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.description.name }}" class="govuk-form-group{% if form.description.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="description">{{ form.description.label }}</label>
 
-            {% if form.description.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    {{ form.description.errors.as_text }}
-                </span>
-            {% endif %}
+            {% form_field_error form "description" %}
 
             <textarea class="govuk-textarea" name="description" rows="5" required>{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
         </div>

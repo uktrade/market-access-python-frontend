@@ -27,12 +27,7 @@
                     What is the economic impact of the barrier?
                 </legend>
 
-                {% if form.impact.errors %}
-                    <span class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span>
-                        {{ form.impact.errors }}
-                    </span>
-                {% endif %}
+                {% form_field_error form "impact" %}
 
                 <div class="govuk-radios">
                     {% for value, name in form.fields.impact.choices %}
@@ -50,12 +45,7 @@
                 Explain the assessment
             </label>
 
-            {% if form.description.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    {{ form.description.errors }}
-                </span>
-            {% endif %}
+            {% form_field_error form "description" %}
 
             <textarea class="govuk-textarea" name="description" rows="5">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
         </div>
@@ -82,12 +72,7 @@
         <div id="{{ form.document.name }}" class="govuk-form-group file-upload js-form-group">
             <label class="govuk-label visually-hidden" for="document">Attach a document</label>
 
-            {% if form.document.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    {{ form.document.errors }}
-                </span>
-            {% endif %}
+            {% form_field_error form "document" %}
 
             <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
             (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)

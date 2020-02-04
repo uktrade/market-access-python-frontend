@@ -4,12 +4,7 @@
             Which list would you like to replace?
         </legend>
 
-        {% if form.replace_index.errors %}
-            <span class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span>
-                {{ form.replace_index.errors.as_text }}
-            </span>
-        {% endif %}
+        {% form_field_error form "replace_index" %}
 
         <div class="govuk-radios">
             {% for watchlist_index, watchlist_name in form.fields.replace_index.choices %}

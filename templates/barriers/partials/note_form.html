@@ -4,12 +4,7 @@
     <div id="{{ form.note.name }}" class="govuk-form-group js-note-group{% if form.note.errors %} govuk-form-group--error{% endif %}">
         <label class="govuk-label govuk-!-font-weight-bold" for="{{ form.note.name }}">{{ form.note.label }}</label>
 
-        {% if form.note.errors %}
-            <span class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span>
-                {{ form.note.errors.as_text }}
-            </span>
-        {% endif %}
+        {% form_field_error form "note" %}
 
         <textarea class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
     </div>
@@ -34,12 +29,7 @@
     <div id="{{ form.document.name }}" class="govuk-form-group file-upload js-form-group">
         <label class="govuk-label visually-hidden" for="document">{{ form.document.label }}</label>
 
-        {% if form.document.errors %}
-            <span class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span>
-                {{ form.document.errors.as_text }}
-            </span>
-        {% endif %}
+        {% form_field_error form "document" %}
 
         <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
         (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)

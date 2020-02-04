@@ -11,16 +11,11 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.eu_exit_related.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.eu_exit_related.name }}" class="govuk-form-group{% if form.eu_exit_related.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.eu_exit_related.label }}</legend>
 
-                {% if form.eu_exit_related.errors %}
-                    <span class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span>
-                        {{ form.eu_exit_related.errors.as_text }}
-                    </span>
-                {% endif %}
+                {% form_field_error form "eu_exit_related" %}
 
                 <div class="govuk-radios">
                     {% for value, name in form.fields.eu_exit_related.choices %}

@@ -17,16 +17,11 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.source.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.source.name }}" class="govuk-form-group{% if form.source.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.source.label }}</legend>
 
-                {% if form.source.errors %}
-                    <span class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span>
-                        {{ form.source.errors.as_text }}
-                    </span>
-                {% endif %}
+                {% form_field_error form "source" %}
 
                 <div class="govuk-radios source govuk-radios--conditional">
                     {% for value, name in form.fields.source.choices %}
@@ -40,12 +35,7 @@
                                 <div id="{{ form.other_source.name }}" class="govuk-form-group">
                                     <label class="govuk-label govuk-label--s" for="source-other">{{ form.other_source.label }}</label>
 
-                                    {% if form.other_source.errors %}
-                                        <span class="govuk-error-message">
-                                            <span class="govuk-visually-hidden">Error:</span>
-                                            {{ form.other_source.errors.as_text }}
-                                        </span>
-                                    {% endif %}
+                                    {% form_field_error form "other_source" %}
 
                                     <input class="govuk-input" id="source-other" name="{{ form.other_source.name }}" type="text" value="{% if form.other_source.value %}{{ form.other_source.value }}{% endif %}">
                                 </div>

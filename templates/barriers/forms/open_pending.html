@@ -13,12 +13,7 @@
                     <div id="{{ form.pending_type_other.name }}" class="govuk-form-group">
                         <label class="govuk-label govuk-label--s" for="{{ form.pending_type_other.name }}">{{ form.pending_type_other.label }}</label>
 
-                        {% if form.pending_type_other.errors %}
-                            <span class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span>
-                                {{ form.pending_type_other.errors.as_text }}
-                            </span>
-                        {% endif %}
+                        {% form_field_error form "pending_type_other" %}
 
                         <input class="govuk-input" id="{{ form.pending_type_other.name }}" name="{{ form.pending_type_other.name }}" type="text" value="{% if form.pending_type_other.value %}{{ form.pending_type_other.value }}{% endif %}">
                     </div>

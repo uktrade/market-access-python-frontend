@@ -16,12 +16,7 @@
                 <fieldset class="govuk-fieldset" {% if form.status_date.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date the barrier was resolved</legend>
 
-                    {% if form.status_date.errors %}
-                        <span id="status-date-group-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span>
-                            {{ form.status_date.errors.as_text }}
-                        </span>
-                    {% endif %}
+                    {% form_field_error form "status_date" %}
 
                     <div class="govuk-date-input" id="status-date-group">
                         {{ form.status_date }}
@@ -33,12 +28,7 @@
         <div id="{{ form.status_summary.name }}" class="govuk-form-group{% if form.status_summary.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="status_summary">{{ form.status_summary.label }}</label>
 
-            {% if form.status_summary.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    {{ form.status_summary.errors.as_text }}
-                </span>
-            {% endif %}
+            {% form_field_error form "status_summary" %}
 
             <textarea class="govuk-textarea" id="status_summary" name="status_summary" rows="5" required>{% if form.status_summary.value %}{{ form.status_summary.value }}{% endif %}</textarea>
         </div>

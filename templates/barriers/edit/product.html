@@ -11,15 +11,10 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.product.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.product.name }}" class="govuk-form-group{% if form.product.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="{{ form.product.name }}">{{ form.product.label }}</label>
 
-            {% if form.product.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    {{ form.product.errors.as_text }}
-                </span>
-            {% endif %}
+            {% form_field_error form "product" %}
 
             <input class="govuk-input" id="{{ form.product.name }}" name="{{ form.product.name }}" type="text" value="{% if form.product.value %}{{ form.product.value }}{% endif %}" required>
         </div>

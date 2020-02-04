@@ -28,12 +28,7 @@
             <div id="{{ form.name.name }}" class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
 
-                {% if form.name.errors %}
-                    <span class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span>
-                        {{ form.name.errors.as_text }}
-                    </span>
-                {% endif %}
+                {% form_field_error form "name" %}
 
                 <input class="govuk-input{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
             </div>

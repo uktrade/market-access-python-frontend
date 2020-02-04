@@ -11,16 +11,11 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.problem_status.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.problem_status.name }}" class="govuk-form-group{% if form.problem_status.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.problem_status.label }}</legend>
 
-                {% if form.problem_status.errors %}
-                    <span class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span>
-                        {{ form.problem_status.errors.as_text }}
-                    </span>
-                {% endif %}
+                {% form_field_error form "problem_status" %}
 
                 <div class="govuk-radios">
                     {% for value, name, help_text in form.fields.problem_status.choices %}

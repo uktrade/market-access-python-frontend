@@ -11,17 +11,12 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.admin_area.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.admin_area.name }}" class="govuk-form-group{% if form.admin_area.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="{{ form.admin_area.name }}">{{ form.admin_area.label }}</label>
 
-            {% if form.admin_area.errors %}
-                <span id="{{ form.admin_area.name }}-error" class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    {{ form.admin_area.errors.as_text }}
-                </span>
-            {% endif %}
+            {% form_field_error form "admin_area" %}
 
-            <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.admin_area.name }}" name="{{ form.admin_area.name }}"{% if form.errors %} aria-describedby="{{ form.admin_area.name }}-error"{% endif %}>
+            <select class="govuk-select govuk-!-width-full{% if form.admin_area.errors %} govuk-select--error{% endif %}" id="{{ form.admin_area.name }}" name="{{ form.admin_area.name }}"{% if form.admin_area.errors %} aria-describedby="{{ form.admin_area.name }}-error"{% endif %}>
                 {% for id, name in form.fields.admin_area.choices %}
                 <option value="{{ id }}">{{ name }}</option>
                 {% endfor %}

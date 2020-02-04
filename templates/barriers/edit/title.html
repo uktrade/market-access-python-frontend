@@ -17,17 +17,12 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.title.name }}" class="govuk-form-group{% if form.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.title.name }}" class="govuk-form-group{% if form.title.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">{{ form.title.label }}</label>
 
             <span id="{{ form.title.name }}-hint" class="govuk-hint">{{ form.title.help_text }}</span>
 
-            {% if form.title.errors %}
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    {{ form.title.errors.as_text }}
-                </span>
-            {% endif %}
+            {% form_field_error form "title" %}
 
             <input class="govuk-input" name="{{ form.title.name }}" type="text" value="{% if form.title.value %}{{ form.title.value }}{% endif %}" aria-describedby="{{ form.title.name }}-hint" required>
         </div>

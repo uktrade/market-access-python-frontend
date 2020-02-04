@@ -28,12 +28,7 @@
                     You can search by name, address or company number
                 </span>
 
-                {% if form.errors %}
-                    <span class="govuk-error-message">
-                      <span class="govuk-visually-hidden">Error:</span>
-                      {{ form.errors }}
-                    </span>
-                {% endif %}
+                {% form_field_error form "query" %}
 
                 <div class="search-form__input-group">
                     <input
