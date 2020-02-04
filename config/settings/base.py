@@ -259,7 +259,7 @@ LOGGING = {
     },
 }
 
-if DJANGO_ENV != "local":
+if not DEBUG:
     sentry_sdk.init(
         dsn=os.environ.get('SENTRY_DSN'),
         integrations=[
