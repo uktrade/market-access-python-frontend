@@ -5,6 +5,8 @@ from django.conf import settings
 
 from users.exceptions import SSOException
 
+from utils.exceptions import APIException
+
 
 class SSOClient:
 
@@ -33,7 +35,12 @@ class SSOClient:
         url = f'{self.uri}{path}'
         headers = self.prepare_headers()
         response = requests.get(url=url, params=kwargs, headers=headers)
-        response.raise_for_status()
+
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            raise APIException(e)
+
         return response.json()
 
     def search_users(self, query):

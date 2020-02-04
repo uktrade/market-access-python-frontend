@@ -9,6 +9,7 @@ from barriers.forms.companies import (
     EditCompaniesForm,
 )
 from utils.datahub import DatahubClient
+from utils.exceptions import APIException
 
 
 class BarrierSearchCompany(BarrierMixin, FormView):
@@ -17,9 +18,16 @@ class BarrierSearchCompany(BarrierMixin, FormView):
 
     def form_valid(self, form):
         client = DatahubClient()
-        results = client.search_company(form.cleaned_data['query'], 1, 100)
+        error = None
+
+        try:
+            results = client.search_company(form.cleaned_data['query'], 1, 100)
+        except APIException:
+            error = "There was an error finding the company"
+            results = []
+
         return self.render_to_response(
-            self.get_context_data(form=form, results=results)
+            self.get_context_data(form=form, results=results, error=error)
         )
 
 

@@ -6,6 +6,7 @@ from ..forms.teams import AddTeamMemberForm, UserSearchForm
 from .mixins import BarrierMixin, TeamMembersContextMixin
 
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIException
 from utils.sso import SSOClient
 
 
@@ -19,9 +20,16 @@ class SearchTeamMember(BarrierMixin, FormView):
 
     def form_valid(self, form):
         client = SSOClient()
-        results = client.search_users(form.cleaned_data['query'])
+        error = None
+
+        try:
+            results = client.search_users(form.cleaned_data['query'])
+        except APIException:
+            error = "There was an error searching for users"
+            results = []
+
         return self.render_to_response(
-            self.get_context_data(form=form, results=results)
+            self.get_context_data(form=form, results=results, error=error)
         )
 
 
