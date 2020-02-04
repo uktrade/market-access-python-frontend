@@ -17,6 +17,10 @@ import os
 
 from django.utils.log import DEFAULT_LOGGING
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+
 ROOT_DIR = os.path.abspath(os.path.dirname(__name__))
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -253,3 +257,11 @@ LOGGING = {
         'django.server': DEFAULT_LOGGING['loggers']['django.server'],
     },
 }
+
+if DJANGO_ENV != "local":
+    sentry_sdk.init(
+        dsn=os.environ.get('SENTRY_DSN'),
+        integrations=[
+            DjangoIntegration(),
+        ],
+    )
