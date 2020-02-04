@@ -1,6 +1,7 @@
 import json
 from operator import itemgetter
 
+from core.filecache import memfiles
 from utils.exceptions import HawkException
 
 from django.conf import settings
@@ -19,13 +20,19 @@ ARCHIVED = '6'
 UNKNOWN = '7'
 
 
-redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
+redis_client = None
+if not settings.MOCK_METADATA:
+    redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
 
 
 def get_metadata():
-    metadata = redis_client.get('metadata')
-    if metadata:
-        return Metadata(json.loads(metadata))
+    if settings.MOCK_METADATA:
+        file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
+        return Metadata(json.loads(memfiles.open(file)))
+    else:
+        metadata = redis_client.get('metadata')
+        if metadata:
+            return Metadata(json.loads(metadata))
 
     url = f'{settings.MARKET_ACCESS_API_URI}metadata'
     credentials = {

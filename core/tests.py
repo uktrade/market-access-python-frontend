@@ -1,8 +1,10 @@
 import json
 
-from django.test import TestCase, override_settings
+from django.conf import settings
+from django.test import override_settings, TestCase
 
 from barriers.models import Assessment
+from core.filecache import memfiles
 from users.models import User
 from utils.api.resources import BarriersResource, InteractionsResource
 
@@ -13,13 +15,11 @@ from mock import patch
 class MarketAccessTestCase(TestCase):
     _assessments = None
     _barriers = None
-    _metadata_json = None
     _team_members = None
     _users = None
 
     def setUp(self):
         self.init_session()
-        self.init_metadata_patcher()
         self.init_get_barrier_patcher()
         self.init_get_history_patcher()
         self.init_get_interactions_patcher()
@@ -31,18 +31,6 @@ class MarketAccessTestCase(TestCase):
             "user_data": {'username': 'test user'},
         })
         session.save()
-
-    def init_metadata_patcher(self):
-        self.metadata_patcher = patch("utils.metadata.redis_client.get")
-        self.mock_metadata_get = self.metadata_patcher.start()
-        self.mock_metadata_get.return_value = self.metadata_json
-        self.addCleanup(self.metadata_patcher.stop)
-
-    def init_get_barrier_patcher(self):
-        self.get_barrier_patcher = patch("utils.api.resources.BarriersResource.get")
-        self.mock_get_barrier = self.get_barrier_patcher.start()
-        self.mock_get_barrier.return_value = BarriersResource.model(self.barriers[0])
-        self.addCleanup(self.get_barrier_patcher.stop)
 
     def init_get_barrier_patcher(self):
         self.get_barrier_patcher = patch("utils.api.resources.BarriersResource.get")
@@ -74,17 +62,10 @@ class MarketAccessTestCase(TestCase):
         session.save()
 
     @property
-    def metadata_json(self):
-        if self._metadata_json is None:
-            self._metadata_json = open('core/fixtures/metadata.json').read()
-        return self._metadata_json
-
-    @property
     def barriers(self):
         if self._barriers is None:
-            self._barriers = json.load(
-                open('barriers/fixtures/barriers.json')
-            )
+            file = f"{settings.BASE_DIR}/../barriers/fixtures/barriers.json"
+            self._barriers = json.loads(memfiles.open(file))
         return self._barriers
 
     @property
@@ -94,9 +75,8 @@ class MarketAccessTestCase(TestCase):
     @property
     def assessments(self):
         if self._assessments is None:
-            assessments = json.load(
-                open('barriers/fixtures/assessments.json')
-            )
+            file = f"{settings.BASE_DIR}/../barriers/fixtures/assessments.json"
+            assessments = json.loads(memfiles.open(file))
             self._assessments = [
                 Assessment(assessment) for assessment in assessments
             ]
@@ -143,16 +123,14 @@ class MarketAccessTestCase(TestCase):
     @property
     def team_members(self):
         if self._team_members is None:
-            self._team_members = json.load(
-                open('barriers/fixtures/team_members.json')
-            )
+            file = f"{settings.BASE_DIR}/../barriers/fixtures/team_members.json"
+            self._team_members = json.loads(memfiles.open(file))
         return self._team_members
 
     @property
     def users(self):
         if self._users is None:
-            users = json.load(
-                open('barriers/fixtures/users.json')
-            )
+            file = f"{settings.BASE_DIR}/../barriers/fixtures/users.json"
+            users = json.loads(memfiles.open(file))
             self._users = [User(user) for user in users]
         return self._users

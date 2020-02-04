@@ -14,4 +14,4 @@ redis==3.3.11
 requests==2.22.0
 sentry-sdk==0.14.1
 whitenoise==5.0.1   # manages static assets
-waitress==1.4.2     # a pure python WSGI server that is a replacement for gunicorn
+waitress==1.4.3     # a pure python WSGI server that is a replacement for gunicorn
