@@ -20,10 +20,10 @@
 
                 {% form_field_error form "admin_areas" %}
 
-                <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.admin_areas.name }}" name="{{ form.admin_areas.name }}" {% if form.errors %} aria-describedby="{{ form.admin_areas.name }}-error"{% endif %}>
+                <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.admin_areas.name }}" name="{{ form.admin_areas.name }}"{% if form.errors %} aria-describedby="{{ form.admin_areas.name }}-error"{% endif %}>
                     <option value selected>Select an admin area</option>
                     {% for area_id, area_name in form.fields.admin_areas.choices %}
-                    <option value="{{ area_id }}">{{ area_name }}</option>
+                    <option class="admin_area_option" value="{{ area_id }}">{{ area_name }}</option>
                     {% endfor %}
                 </select>
             </div>

@@ -231,8 +231,8 @@ class NewReportBarrierLocationView(ReportsFormView):
         )
         return kwargs
 
-    def form_valid(self, form):
-        country_id = form.cleaned_data["country"]
+    def success(self):
+        country_id = self.form_group.location_form["country"]
         admin_areas = self.metadata.get_admin_areas_by_country(country_id)
         if admin_areas:
             self.success_path = "reports:barrier_has_admin_areas"
@@ -240,8 +240,6 @@ class NewReportBarrierLocationView(ReportsFormView):
             self.success_path = "reports:barrier_has_sectors"
             self.form_group.selected_admin_areas = ""
             self.form_group.save()
-
-        return super().form_valid(form)
 
 
 class NewReportBarrierLocationHasAdminAreasView(ReportsFormView):
@@ -253,8 +251,8 @@ class NewReportBarrierLocationHasAdminAreasView(ReportsFormView):
     extra_paths = {'back': 'reports:barrier_location'}
     form_session_key = FormSessionKeys.HAS_ADMIN_AREAS
 
-    def form_valid(self, form):
-        has_admin_areas = form.cleaned_data["has_admin_areas"]
+    def success(self):
+        has_admin_areas = self.form_group.has_admin_areas["has_admin_areas"]
         # TODO: perhaps reword "HasAdminAreas" to "AffectsEntireCountry"
         #   aim for something that reads well like "(affects_entire_country == NO)"
         if has_admin_areas is HasAdminAreas.NO:
@@ -266,8 +264,6 @@ class NewReportBarrierLocationHasAdminAreasView(ReportsFormView):
             self.success_path = "reports:barrier_has_sectors"
             self.form_group.selected_admin_areas = ""
             self.form_group.save()
-
-        return super().form_valid(form)
 
 
 class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
@@ -558,7 +554,7 @@ class DeleteReport(TemplateView):
 
     def get_report(self):
         client = MarketAccessAPIClient(self.request.session['sso_token'])
-        return client.reports.get(self.kwargs.get('report_id'))
+        return client.reports.get(self.kwargs.get('barrier_id'))
 
     def get_context_data(self, **kwargs):
         if self.request.is_ajax():
@@ -572,7 +568,7 @@ class DeleteReport(TemplateView):
 
         context_data['reports'] = reports
         for report in reports:
-            if report.id == str(self.kwargs.get('report_id')):
+            if report.id == str(self.kwargs.get('barrier_id')):
                 context_data['report'] = report
 
         return context_data
@@ -582,7 +578,7 @@ class DeleteReport(TemplateView):
 
         if report.created_by['id'] == request.session['user_data']['id']:
             client = MarketAccessAPIClient(request.session.get('sso_token'))
-            client.reports.delete(self.kwargs.get('report_id'))
+            client.reports.delete(self.kwargs.get('barrier_id'))
 
         return HttpResponseRedirect(reverse('reports:draft_barriers'))
 

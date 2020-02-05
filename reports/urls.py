@@ -26,7 +26,7 @@ urlpatterns = [
     path("reports/", DraftBarriers.as_view(), name="draft_barriers"),
     path("reports/new/", NewReport.as_view(), name="new_report"),
     path("reports/<uuid:barrier_id>/", ReportDetail.as_view(), name="draft_barrier_details_uuid"),
-    path("reports/<uuid:report_id>/delete/", DeleteReport.as_view(), name="delete_report"),
+    path("reports/<uuid:barrier_id>/delete/", DeleteReport.as_view(), name="delete_report"),
 
     # Problem Status
     path("reports/new/start/", NewReportBarrierProblemStatusView.as_view(), name="barrier_problem_status"),

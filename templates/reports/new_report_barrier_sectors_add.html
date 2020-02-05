@@ -20,10 +20,10 @@
 
                 {% form_field_error form "sectors" %}
 
-                <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.sectors.name }}" name="{{ form.sectors.name }}" {% if form.errors %} aria-describedby="{{ form.sectors.name }}-error"{% endif %}>
+                <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.sectors.name }}" name="{{ form.sectors.name }}"{% if form.errors %} aria-describedby="{{ form.sectors.name }}-error"{% endif %}>
                     <option value selected>Select a sector</option>
                     {% for sector_id, sector_name in form.fields.sectors.choices %}
-                    <option value="{{ sector_id }}">{{ sector_name }}</option>
+                    <option class="sector_option" value="{{ sector_id }}">{{ sector_name }}</option>
                     {% endfor %}
                 </select>
             </div>

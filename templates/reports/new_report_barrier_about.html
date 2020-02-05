@@ -21,8 +21,7 @@
                 <span id="{{ form.barrier_title.name }}_hint" class="govuk-hint">
                     {{ form.barrier_title.help_text }}
                 </span>
-                <input class="govuk-input"
-                       id="{{ form.barrier_title.name }}"
+                <input class="govuk-input" id="{{ form.barrier_title.name }}"
                        name="{{ form.barrier_title.name }}"
                        type="text"
                        value="{{ form.initial.barrier_title }}"
@@ -34,8 +33,7 @@
                     {{ form.product.label }}
                 </label>
                 {% form_field_error form "product" %}
-                <input class="govuk-input"
-                       id="{{ form.product.name }}"
+                <input class="govuk-input" id="{{ form.product.name }}"
                        name="{{ form.product.name }}"
                        type="text"
                        value="{{ form.initial.product }}">
@@ -51,7 +49,7 @@
                     {% form_field_error form "source" %}
                     <div class="govuk-radios barrier-source govuk-radios--conditional" data-module="radios">
                         {% for choice_id, choice_value in form.fields.source.choices %}
-                        <div class="govuk-radios__item">
+                        <div class="govuk-radios__item barrier-source">
                             <input class="govuk-radios__input"
                                    id="source-{{ forloop.counter }}"
                                    name="source"
@@ -90,7 +88,7 @@
                     {% form_field_error form "eu_exit_related" %}
                     <div class="govuk-radios eu_exit_related">
                         {% for choice_id, choice_value in form.fields.eu_exit_related.choices %}
-                        <div class="govuk-radios__item">
+                        <div class="govuk-radios__item eu_exit_related">
                             <input class="govuk-radios__input"
                                    id="eu_exit_related-{{ forloop.counter }}"
                                    name="eu_exit_related"

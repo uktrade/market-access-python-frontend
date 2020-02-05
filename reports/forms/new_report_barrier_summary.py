@@ -12,5 +12,4 @@ class NewReportBarrierSummaryForm(forms.Form):
     next_steps_summary = forms.CharField(
         label="What steps will be taken to resolve the barrier?",
         help_text="Include all your agreed team actions.",
-        required=False,
     )
