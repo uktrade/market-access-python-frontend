@@ -9,6 +9,8 @@ services:
     volumes:
       - .:/usr/src/app
     env_file: docker-compose.test.env
+    ports:
+      - "9881:9000"
     networks:
       - market-access-api_webnet
   chrome:

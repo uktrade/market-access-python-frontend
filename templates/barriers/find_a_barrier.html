@@ -98,7 +98,7 @@
 
             <ol class="filter-results-list">
                 {% for barrier in barriers %}
-                    <li class='filter-results-list__item'>
+                    <li class='filter-results-list__item' data-barrier-id="{{ barrier.id }}">
                         <div class="filter-results-list__item__main-content">
                             <h3 class='filter-results-list__item__heading'><a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a></h3>
                             <dl class="filter-results-list__item__definitions">

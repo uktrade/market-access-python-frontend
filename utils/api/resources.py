@@ -37,7 +37,6 @@ class APIResource:
 
     def get(self, id, *args, **kwargs):
         url = f"{self.resource_name}/{id}"
-        print(self.client.get(url, *args, **kwargs))
         return self.model(self.client.get(url, *args, **kwargs))
 
     def patch(self, id, *args, **kwargs):
