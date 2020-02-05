@@ -46,11 +46,11 @@ To list all available commands with help text type `make help` in terminal and h
 Front end tests are grouped under `./test` directory. When writing tests please use the corresponding app name to keep the same folder structure as the main app so it's easy to tell which test belongs to which app.
 
 #### Running Django Tests
-The project's testrunner is pytest - https://docs.pytest.org/en/latest/    
-1. You can run all or a subset of tests via `make django-test`, if you pass in a value in `path` then it will run that subset of tests.  
+The project's testrunner is pytest - https://docs.pytest.org/en/latest/
+1. You can run all or a subset of tests via `make django-test`, if you pass in a value in `path` then it will run that subset of tests.
 Example usage.:
-	- `make django-test` - run all tests 
-	- `make django-test path=barriers` - run a subset of tests just for the barriers app 
+	- `make django-test` - run all tests
+	- `make django-test path=barriers` - run a subset of tests just for the barriers app
 	- `make django-test path=assessments/test_assessment_detail.py::EmptyAssessmentDetailTestCase::test_view` - run a specific test case
 2. To run tests with coverage use `make django-test-coverage` - this will output the report to the console.
 
@@ -62,7 +62,7 @@ Example usage.:
 This consists of the python frontend and the selenium chrome driver.
 
 3. Run the tests:
-`make django-ui-test`
+`make django-ui-test-with-server`
 This will start the frontend `runserver`, run the tests, then end `runserver`
 
 In theory the tests can be run against different environments by changing the `BASE_URL` and `WEB_DRIVER_URL` environment variables. However, an SSO test user would need to be set up first.
