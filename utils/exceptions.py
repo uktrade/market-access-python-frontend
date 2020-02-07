@@ -1,6 +1,24 @@
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
 class APIException(Exception):
-    def __init__(self, http_exception):
-        self.status_code = http_exception.response.status_code
+    pass
+
+
+class APIHttpException(APIException):
+    def __init__(self, http_error):
+        self.status_code = http_error.response.status_code
+        self.message = str(http_error)
+        logging.error(f"APIHttpException: {self.message}")
+
+
+class APIJsonException(APIException):
+    def __init__(self, message):
+        self.message = message
+        logging.error(f"APIJsonException: {self.message}")
 
 
 class DataHubException(Exception):

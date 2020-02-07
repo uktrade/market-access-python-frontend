@@ -12,7 +12,7 @@ from .resources import (
     UsersResource,
     ReportsResource,
 )
-from utils.exceptions import APIException
+from utils.exceptions import APIHttpException, APIJsonException
 
 
 logger = logging.getLogger(__name__)
@@ -40,31 +40,23 @@ class MarketAccessAPIClient:
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            raise APIException(e)
+            raise APIHttpException(e)
 
         return response
 
-    def get(self, path, json=True, **kwargs):
+    def get(self, path, raw=False, **kwargs):
         response = self.request('get', path, **kwargs)
-        if response.status_code is 200:
-            if json:
-                json_data = None
-                try:
-                    json_data = response.json()
-                except JSONDecodeError:
-                    # some endpoints might return 200 even if they failed (like /whoami as of 2020/01/06)
-                    # in which case .json() is going to raise a JSONDecodeError
-                    logging.error(
-                        "Unexpected error at URI: %s, response.text: %s",
-                        response.url,
-                        response.text
-                    )
-                return json_data
-            else:
-                return response
-        else:
-            # TODO: The call has failed - investigate if sending back the error messages makes any sense?
-            return None
+
+        if raw:
+            return response
+
+        try:
+            return response.json()
+        except JSONDecodeError:
+            raise APIJsonException(
+                f"Non json response at '{response.url}'. "
+                f"Response text: {response.text}"
+            )
 
     def post(self, path, **kwargs):
         return self.request_with_results('post', path, **kwargs)

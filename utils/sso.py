@@ -5,7 +5,7 @@ from django.conf import settings
 
 from users.exceptions import SSOException
 
-from utils.exceptions import APIException
+from utils.exceptions import APIHttpException
 
 
 class SSOClient:
@@ -39,7 +39,7 @@ class SSOClient:
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            raise APIException(e)
+            raise APIHttpException(e)
 
         return response.json()
 

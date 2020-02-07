@@ -30,7 +30,7 @@ from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
 from reports.helpers import ReportFormGroup
 
 from utils.api.client import MarketAccessAPIClient
-from utils.exceptions import APIException
+from utils.exceptions import APIHttpException
 from utils.metadata import get_metadata
 
 
@@ -611,13 +611,13 @@ class ReportDetail(ReportsFormView):
     def get_draft_barrier(self, uuid):
         try:
             return self.client.reports.get(uuid)
-        except APIException as e:
+        except APIHttpException as e:
             if e.status_code == 404:
                 # Once a report is submitted it becomes a barrier
                 # So it can go missing - let's try to find it
                 self.get_barrier(uuid)
             else:
-                raise APIException(e)
+                raise
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

@@ -4,7 +4,7 @@ import json
 from django.conf import settings
 
 from barriers.models import Company
-from utils.exceptions import APIException, DataHubException
+from utils.exceptions import APIHttpException, DataHubException
 from mohawk import Sender
 
 
@@ -39,7 +39,7 @@ class DatahubClient:
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            raise APIException(e)
+            raise APIHttpException(e)
 
         return response.json()
 

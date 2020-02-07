@@ -3,10 +3,8 @@ from http import HTTPStatus
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
 
-from utils.exceptions import APIException
+from utils.exceptions import APIHttpException
 
 
 class SSOMiddleware:
@@ -39,7 +37,7 @@ class SSOMiddleware:
         return HttpResponseRedirect(reverse('users:login'))
 
     def process_exception(self, request, exception):
-        if isinstance(exception, APIException):
+        if isinstance(exception, APIHttpException):
             if exception.status_code == HTTPStatus.UNAUTHORIZED:
                 try:
                     del request.session['sso_token']

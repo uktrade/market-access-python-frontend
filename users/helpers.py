@@ -1,4 +1,5 @@
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIException
 
 
 def sync_user(session):
@@ -26,7 +27,11 @@ def sync_user(session):
         #       watchList - DICT
         #   permitted_applications - LIST
 
-        user_data = client.get('whoami') or {}
+        try:
+            user_data = client.get('whoami')
+        except APIException:
+            user_data = {}
+
         if user_data:
             synced = True
         session['user_data'] = user_data
