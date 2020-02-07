@@ -199,6 +199,9 @@ class BarrierSearchForm(forms.Form):
 
             if with_remove_links:
                 params = self.cleaned_data.copy()
+                if params.get('edit') is None:
+                    del params['edit']
+
                 del params[name]
                 filters[name]['remove_url'] = urlencode(params, doseq=True)
 
