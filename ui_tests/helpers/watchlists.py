@@ -6,10 +6,10 @@ from splinter.exceptions import ElementDoesNotExist
 def clear_watchlists(browser):
     browser.visit(settings.BASE_URL)
 
-    for i in range(3):
+    for i in range(5):
         try:
             browser.click_link_by_text('Manage list')
-            browser.click_link_by_text('Delete list')
+            browser.click_link_by_text(' Delete list ')
         except ElementDoesNotExist:
             return
 
