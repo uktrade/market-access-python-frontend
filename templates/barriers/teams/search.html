@@ -34,7 +34,8 @@
                         value="{% if form.query.value %}{{ form.query.value }}{% endif %}"
                         placeholder="Search for user"
                         {% if not form.query.value and not form.query.error %}autofocus{% endif %}
-                        aria-describedby="user-hint">
+                        aria-describedby="user-hint"
+                        required>
                     <button type="submit" class="search-form__button govuk-button">Search</button>
                 </div>
             </div>
@@ -44,12 +45,14 @@
             <p class="error-message">{{ error }}</p>
         {% endif %}
 
-        {% if results %}
+        {% if form.is_valid %}
             <h2 class="results-count">
                 <span class="results-count__number">{{ results|length }}</span>
                 users match <span class="highlight">{{ form.query.value }}</span>
             </h2>
+        {% endif %}
 
+        {% if results %}
             <ul class="search-card-list">
                 {% for user in results %}
                     <li class="search-card">
