@@ -32,10 +32,11 @@ class HistoryItem(APIModel):
             self.date = dateutil.parser.parse(data['date'])
             self.event = data['field_info']['event']
             self.state = {
-                'from': metadata.get_status_type(data['old_value']),
-                'to': metadata.get_status_type(
+                'from': metadata.get_status_text(data['old_value']),
+                'to': metadata.get_status_text(
                     data['new_value'],
-                    data['field_info']
+                    data['field_info'].get('sub_status'),
+                    data['field_info'].get('sub_status_other'),
                 ),
                 'date': dateutil.parser.parse(
                     data['field_info']['status_date']

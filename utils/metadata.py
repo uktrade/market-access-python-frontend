@@ -111,22 +111,6 @@ class Metadata:
     def __init__(self, data):
         self.data = data
 
-    def get_country(self, country_id):
-        for country in self.data['countries']:
-            if country['id'] == country_id:
-                return country
-
-    def get_country_list(self):
-        return self.data['countries']
-
-    def get_country_choices(self):
-        countries = self.get_country_list()
-        choices = (
-            (country['id'], country['name'])
-            for country in countries
-        )
-        return choices
-
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data['country_admin_areas']:
             if (
@@ -148,6 +132,13 @@ class Metadata:
         admin_areas = [self.get_admin_area(area_id) for area_id in area_ids]
         return admin_areas
 
+    def get_admin_areas_by_country(self, country_id):
+        return [
+            admin_area
+            for admin_area in self.data['country_admin_areas']
+            if admin_area['country']['id'] == country_id
+        ]
+
     def get_admin_area_choices(self, country_id):
         areas = self.get_admin_areas_by_country(country_id)
         choices = (
@@ -156,11 +147,45 @@ class Metadata:
         )
         return choices
 
-    def get_admin_areas_by_country(self, country_id):
+    def get_country(self, country_id):
+        for country in self.data['countries']:
+            if country['id'] == country_id:
+                return country
+
+    def get_country_list(self):
+        return self.data['countries']
+
+    def get_country_choices(self):
+        countries = self.get_country_list()
+        choices = (
+            (country['id'], country['name'])
+            for country in countries
+        )
+        return choices
+
+    def get_location_text(self, country, admin_areas):
+        country_data = self.get_country(country)
+
+        if country_data:
+            country_name = country_data['name']
+        else:
+            country_name = ""
+
+        if admin_areas:
+            admin_areas_string = ", ".join([
+                self.get_admin_area(admin_area)['name']
+                for admin_area in admin_areas
+            ])
+            return f"{admin_areas_string} ({country_name})"
+
+        return country_name
+
+    def get_overseas_region_list(self):
         return [
-            admin_area
-            for admin_area in self.data['country_admin_areas']
-            if admin_area['country']['id'] == country_id
+            country['overseas_region']
+            for country in self.get_country_list()
+            if country['disabled_on'] is None
+            and country.get('overseas_region') is not None
         ]
 
     def get_sector(self, sector_id):
@@ -204,6 +229,30 @@ class Metadata:
 
         return self.STATUS_INFO[status_id]
 
+    def get_status_text(
+        self,
+        status_id,
+        sub_status=None,
+        sub_status_other=None,
+    ):
+        if status_id in self.STATUS_INFO.keys():
+            name = self.get_status(status_id)['name']
+            if sub_status and status_id == Statuses.OPEN_PENDING_ACTION:
+                sub_status_text = self.get_sub_status_text(
+                    sub_status,
+                    sub_status_other,
+                )
+                return f"{name} ({sub_status_text})"
+            return name
+
+        return status_id
+
+    def get_sub_status_text(self, sub_status, sub_status_other=None):
+        if sub_status == "OTHER":
+            return sub_status_other
+
+        return self.data['barrier_pending'].get(sub_status)
+
     def get_problem_status(self, problem_status_id):
         status_types = self.data['status_types']
         status_types.update({
@@ -212,49 +261,11 @@ class Metadata:
         })
         return status_types.get(str(problem_status_id))
 
-    def get_location(self, country, admin_areas):
-        country_data = self.get_country(country)
-
-        if country_data:
-            country_name = country_data['name']
-        else:
-            country_name = ""
-
-        if admin_areas:
-            admin_areas_string = ", ".join([
-                self.get_admin_area(admin_area)['name']
-                for admin_area in admin_areas
-            ])
-            return f"{admin_areas_string} ({country_name})"
-
-        return country_name
-
     def get_eu_exit_related_text(self, code):
         return self.data['adv_boolean'].get(str(code), 'Unknown')
 
     def get_source(self, source):
         return self.data['barrier_source'].get(source)
-
-    def get_sub_status(self, sub_status):
-        return self.data['barrier_pending'].get(sub_status)
-
-    def get_status_type(self, id, field_info=None):
-        if id in self.STATUS_INFO.keys():
-            name = self.get_status(id)['name']
-            if field_info and id == '1':
-                sub_status = self.get_sub_status_text(field_info)
-                return f"{name}{sub_status}"
-            return name
-
-        return id
-
-    def get_sub_status_text(self, field_info):
-        if field_info['sub_status'] == "OTHER":
-            sub_status = field_info['sub_status_other']
-        else:
-            sub_status = self.get_sub_status(field_info['sub_status'])
-
-        return f" ({sub_status})"
 
     def get_priority(self, priority_code):
         if priority_code == 'None':
@@ -294,17 +305,6 @@ class Metadata:
             if str(barrier_type['id']) == str(type_id):
                 return barrier_type
 
-    def get_overseas_region_list(self):
-        return [
-            country['overseas_region']
-            for country in self.get_country_list()
-            if country['disabled_on'] is None
-            and country.get('overseas_region') is not None
-        ]
-
-    def get_impact_text(self, impact_code):
-        return self.data.get('assessment_impact', {}).get(impact_code)
-
     def get_barrier_types_by_category(self, category):
         return [
             barrier_type
@@ -317,6 +317,9 @@ class Metadata:
 
     def get_services(self):
         return self.get_barrier_types_by_category("SERVICES")
+
+    def get_impact_text(self, impact_code):
+        return self.data.get('assessment_impact', {}).get(impact_code)
 
     def get_report_stages(self):
         stages = self.data.get("report_stages", {})

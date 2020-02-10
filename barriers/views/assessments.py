@@ -140,9 +140,6 @@ class AssessmentValueView(AssessmentMixin, BarrierMixin, FormView):
         kwargs['token'] = self.request.session.get('sso_token')
         return kwargs
 
-    def get_initial(self):
-        return {'value': self.assessment.value_to_economy}
-
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)

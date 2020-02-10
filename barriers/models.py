@@ -57,7 +57,7 @@ class Barrier(APIModel):
     @property
     def location(self):
         if self._location is None:
-            self._location = self.metadata.get_location(
+            self._location = self.metadata.get_location_text(
                 self.data['export_country'],
                 self.data['country_admin_areas']
             )
