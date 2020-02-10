@@ -62,6 +62,9 @@ def get_metadata():
 
 
 class Metadata:
+    """
+    Wrapper around the raw metadata with helper functions
+    """
     STATUS_INFO = {
         Statuses.UNFINISHED: {
             'name': 'Unfinished',
@@ -139,14 +142,6 @@ class Metadata:
             if admin_area['country']['id'] == country_id
         ]
 
-    def get_admin_area_choices(self, country_id):
-        areas = self.get_admin_areas_by_country(country_id)
-        choices = (
-            (areas['id'], areas['name'])
-            for areas in areas
-        )
-        return choices
-
     def get_country(self, country_id):
         for country in self.data['countries']:
             if country['id'] == country_id:
@@ -155,38 +150,33 @@ class Metadata:
     def get_country_list(self):
         return self.data['countries']
 
-    def get_country_choices(self):
-        countries = self.get_country_list()
-        choices = (
-            (country['id'], country['name'])
-            for country in countries
-        )
-        return choices
-
-    def get_location_text(self, country, admin_areas):
-        country_data = self.get_country(country)
+    def get_location_text(self, country_id, admin_area_ids):
+        country_data = self.get_country(country_id)
 
         if country_data:
             country_name = country_data['name']
         else:
             country_name = ""
 
-        if admin_areas:
+        if admin_area_ids:
             admin_areas_string = ", ".join([
-                self.get_admin_area(admin_area)['name']
-                for admin_area in admin_areas
+                self.get_admin_area(admin_area_id)['name']
+                for admin_area_id in admin_area_ids
             ])
             return f"{admin_areas_string} ({country_name})"
 
         return country_name
 
     def get_overseas_region_list(self):
-        return [
-            country['overseas_region']
+        regions = {
+            country['overseas_region']['id']: country['overseas_region']
             for country in self.get_country_list()
             if country['disabled_on'] is None
             and country.get('overseas_region') is not None
-        ]
+        }
+        regions = list(regions.values())
+        regions.sort(key=itemgetter('name'))
+        return regions
 
     def get_sector(self, sector_id):
         for sector in self.data.get('sectors', []):
@@ -262,7 +252,9 @@ class Metadata:
         return status_types.get(str(problem_status_id))
 
     def get_eu_exit_related_text(self, code):
-        return self.data['adv_boolean'].get(str(code), 'Unknown')
+        eu_related = self.data['adv_boolean']
+        eu_related.update({'3': "Don't know"})
+        return eu_related.get(str(code), 'Unknown')
 
     def get_source(self, source):
         return self.data['barrier_source'].get(source)

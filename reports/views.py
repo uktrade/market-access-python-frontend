@@ -225,7 +225,10 @@ class NewReportBarrierLocationView(ReportsFormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["countries"] = self.metadata.get_country_choices()
+        kwargs["countries"] = (
+            (country['id'], country['name'])
+            for country in self.metadata.get_country_list()
+        )
         return kwargs
 
     def form_valid(self, form):
@@ -306,16 +309,15 @@ class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        available_admin_areas = []
-        admin_areas = self.metadata.get_admin_area_choices(self.country_id)
+
+        admin_areas = self.metadata.get_admin_areas_by_country(self.country_id)
         selected_admin_areas = self.form_group.selected_admin_areas
 
-        for area in admin_areas:
-            # expecting area to be a tuple - (area_id, area_name)
-            if area[0] not in selected_admin_areas:
-                available_admin_areas.append(area)
-
-        kwargs["admin_areas"] = available_admin_areas
+        kwargs["admin_areas"] = (
+            (admin_area['id'], admin_area['name'])
+            for admin_area in admin_areas
+            if admin_area['id'] not in selected_admin_areas
+        )
         return kwargs
 
     def form_valid(self, form):

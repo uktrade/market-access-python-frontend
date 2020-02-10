@@ -103,8 +103,6 @@ class BarrierSearchForm(forms.Form):
             (country['id'], country['name'])
             for country in self.metadata.get_overseas_region_list()
         ]
-        choices = list(set(choices))
-        choices.sort(key=itemgetter(1))
         choices = [("", "All regions")] + choices
         self.fields['region'].choices = choices
 
