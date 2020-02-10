@@ -2,12 +2,11 @@ from django.urls import reverse
 from django.views.generic import FormView
 
 from .mixins import APIBarrierFormViewMixin, BarrierMixin
+from barriers.constants import Statuses
 from barriers.forms.statuses import (
     BarrierChangeStatusForm,
     UpdateBarrierStatusForm,
 )
-
-from utils import metadata
 
 
 class BarrierEditStatus(APIBarrierFormViewMixin, FormView):
@@ -39,7 +38,7 @@ class BarrierChangeStatus(BarrierMixin, FormView):
         form = context_data['form']
         context_data.update({
             'barrier': self.barrier,
-            'OPEN_PENDING_ACTION': metadata.OPEN_PENDING_ACTION,
+            'OPEN_PENDING_ACTION': Statuses.OPEN_PENDING_ACTION,
             'valid_status_values': [
                 choice[0] for choice in form.fields['status'].choices
             ],

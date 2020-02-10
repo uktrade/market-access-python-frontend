@@ -3,17 +3,10 @@ import datetime
 from django import forms
 from django.template.loader import render_to_string
 
+from barriers.constants import Statuses
 from .mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import ChoiceFieldWithHelpText, MonthYearField
-from utils.metadata import (
-    OPEN_PENDING_ACTION,
-    OPEN_IN_PROGRESS,
-    RESOLVED_IN_PART,
-    RESOLVED_IN_FULL,
-    DORMANT,
-    UNKNOWN,
-)
 
 
 class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
@@ -214,28 +207,28 @@ class BarrierChangeStatusForm(forms.Form):
     """
     CHOICES = [
         (
-            UNKNOWN,
+            Statuses.UNKNOWN,
             "Unknown",
             "Barrier requires further work for the status to be known"
         ),
         (
-            OPEN_PENDING_ACTION,
+            Statuses.OPEN_PENDING_ACTION,
             "Open: Pending action",
             "Barrier is awaiting action"
         ), (
-            OPEN_IN_PROGRESS,
+            Statuses.OPEN_IN_PROGRESS,
             "Open: In progress",
             "Barrier is being worked on"
         ), (
-            RESOLVED_IN_PART,
+            Statuses.RESOLVED_IN_PART,
             "Resolved: In part",
             "Barrier impact has been significantly reduced but remains in part"
         ), (
-            RESOLVED_IN_FULL,
+            Statuses.RESOLVED_IN_FULL,
             "Resolved: In full",
             "Barrier has been resolved for all UK companies"
         ), (
-            DORMANT,
+            Statuses.DORMANT,
             "Dormant",
             "Barrier is present but not being pursued"
         ),
@@ -246,12 +239,12 @@ class BarrierChangeStatusForm(forms.Form):
         widget=forms.RadioSelect,
     )
     subform_classes = {
-        UNKNOWN: UnknownForm,
-        OPEN_PENDING_ACTION: OpenPendingForm,
-        OPEN_IN_PROGRESS: OpenInProgressForm,
-        RESOLVED_IN_PART: ResolvedInPartForm,
-        RESOLVED_IN_FULL: ResolvedInFullForm,
-        DORMANT: DormantForm,
+        Statuses.UNKNOWN: UnknownForm,
+        Statuses.OPEN_PENDING_ACTION: OpenPendingForm,
+        Statuses.OPEN_IN_PROGRESS: OpenInProgressForm,
+        Statuses.RESOLVED_IN_PART: ResolvedInPartForm,
+        Statuses.RESOLVED_IN_FULL: ResolvedInFullForm,
+        Statuses.DORMANT: DormantForm,
     }
     subforms = {}
 

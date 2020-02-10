@@ -3,20 +3,13 @@ import time
 
 from django.conf import settings
 
+from barriers.constants import Statuses
 from barriers.models import Assessment, Barrier
 from interactions.models import HistoryItem, Interaction
 from reports.models import Report
 from users.models import User
 
 from utils.exceptions import ScanError
-from utils.metadata import (
-    OPEN_PENDING_ACTION,
-    OPEN_IN_PROGRESS,
-    RESOLVED_IN_PART,
-    RESOLVED_IN_FULL,
-    DORMANT,
-    UNKNOWN,
-)
 from utils.models import ModelList
 
 
@@ -111,17 +104,17 @@ class BarriersResource(APIResource):
         return self.client.get(url, params=kwargs, raw=True)
 
     def set_status(self, barrier_id, status, **kwargs):
-        if status == UNKNOWN:
+        if status == Statuses.UNKNOWN:
             url = f"barriers/{barrier_id}/unknown"
-        elif status == OPEN_PENDING_ACTION:
+        elif status == Statuses.OPEN_PENDING_ACTION:
             url = f"barriers/{barrier_id}/open-action_required"
-        elif status == OPEN_IN_PROGRESS:
+        elif status == Statuses.OPEN_IN_PROGRESS:
             url = f"barriers/{barrier_id}/open-in-progress"
-        elif status == RESOLVED_IN_PART:
+        elif status == Statuses.RESOLVED_IN_PART:
             url = f"barriers/{barrier_id}/resolve-in-part"
-        elif status == RESOLVED_IN_FULL:
+        elif status == Statuses.RESOLVED_IN_FULL:
             url = f"barriers/{barrier_id}/resolve-in-full"
-        elif status == DORMANT:
+        elif status == Statuses.DORMANT:
             url = f"barriers/{barrier_id}/hibernate"
         return self.client.put(url, json=kwargs)
 

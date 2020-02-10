@@ -1,6 +1,7 @@
 import json
 from operator import itemgetter
 
+from barriers.constants import Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
 
@@ -8,16 +9,6 @@ from django.conf import settings
 from mohawk import Sender
 import redis
 import requests
-
-
-UNFINISHED = '0'
-OPEN_PENDING_ACTION = '1'
-OPEN_IN_PROGRESS = '2'
-RESOLVED_IN_PART = '3'
-RESOLVED_IN_FULL = '4'
-DORMANT = '5'
-ARCHIVED = '6'
-UNKNOWN = '7'
 
 
 redis_client = None
@@ -72,22 +63,22 @@ def get_metadata():
 
 class Metadata:
     STATUS_INFO = {
-        '0': {
+        Statuses.UNFINISHED: {
             'name': 'Unfinished',
             'modifier': 'unfinished',
             'hint': 'Barrier is unfinished'
         },
-        '1': {
+        Statuses.OPEN_PENDING_ACTION: {
             'name': 'Pending',
             'modifier': 'assessment',
             'hint': 'Barrier is awaiting action'
         },
-        '2': {
+        Statuses.OPEN_IN_PROGRESS: {
             'name': 'Open',
             'modifier': 'assessment',
             'hint': 'Barrier is being worked on'
         },
-        '3': {
+        Statuses.RESOLVED_IN_PART: {
             'name': 'Part resolved',
             'modifier': 'resolved',
             'hint': (
@@ -95,26 +86,26 @@ class Metadata:
                 'in part'
             )
         },
-        '4': {
+        Statuses.RESOLVED_IN_FULL: {
             'name': 'Resolved',
             'modifier': 'resolved',
             'hint': 'Barrier has been resolved for all UK companies'
          },
-        '5': {
+        Statuses.DORMANT: {
             'name': 'Paused',
             'modifier': 'hibernated',
             'hint': 'Barrier is present but not being pursued'
          },
-        '6': {
+        Statuses.ARCHIVED: {
             'name': 'Archived',
             'modifier': 'archived',
             'hint': 'Barrier is archived'
         },
-        '7': {
+        Statuses.UNKNOWN: {
             'name': 'Unknown',
             'modifier': 'hibernated',
             'hint': 'Barrier requires further work for the status to be known'
-         },
+        },
     }
 
     def __init__(self, data):
