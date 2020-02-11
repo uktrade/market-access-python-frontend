@@ -240,7 +240,9 @@ class LocationViewAddAdminAreasTestCase(ReportsTestCase):
 
     def test_add_admin_areas_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - Location of the barrier</title>'
-        expected_dropdown_container = '<select class="govuk-select govuk-!-width-full" id="admin_areas" name="admin_areas">'
+        expected_dropdown_container = (
+            '<select class="govuk-select govuk-!-width-full" id="admin_areas" name="admin_areas">'
+        )
         dropdown_option = '<option class="admin_area_option"'
         expected_add_btn = '<input type="submit" value="Add admin area" class="govuk-button">'
 
@@ -350,7 +352,8 @@ class LocationViewAdminAreasTestCase(ReportsTestCase):
         html = response.content.decode('utf8')
 
         options_count = html.count(admin_area_item)
-        assert expected_admin_areas_count == options_count, f'Expected {expected_admin_areas_count} admin areas, got: {options_count}'
+        assert expected_admin_areas_count == options_count,\
+            f'Expected {expected_admin_areas_count} admin areas, got: {options_count}'
 
     def test_remove_admin_area(self):
         remove_url = reverse('reports:barrier_remove_admin_areas')

@@ -41,7 +41,8 @@ class HasSectorsViewTestCase(ReportsTestCase):
         assert expected_title in html
         assert expected_radio_container in html
         options_count = html.count(radio_item)
-        assert expected_radio_count == options_count, f'Expected {expected_radio_count} admin areas, got: {options_count}'
+        assert expected_radio_count == options_count,\
+            f'Expected {expected_radio_count} admin areas, got: {options_count}'
         assert expected_save_btn in html
         assert expected_exit_btn in html
 
@@ -181,7 +182,8 @@ class SectorsViewTestCase(ReportsTestCase):
         html = response.content.decode('utf8')
 
         options_count = html.count(sector_item)
-        assert expected_sections_count == options_count, f'Expected {expected_sections_count} admin areas, got: {options_count}'
+        assert expected_sections_count == options_count, \
+            f'Expected {expected_sections_count} admin areas, got: {options_count}'
 
     def test_remove_sector(self):
         remove_url = reverse('reports:barrier_remove_sector_uuid', kwargs={"barrier_id": self.draft["id"]})
@@ -325,7 +327,8 @@ class AddSectorsViewTestCase(ReportsTestCase):
         html = response.content.decode('utf8')
 
         options_count = html.count(sector_item)
-        assert expected_sections_count == options_count, f'Expected {expected_sections_count} admin areas, got: {options_count}'
+        assert expected_sections_count == options_count,\
+            f'Expected {expected_sections_count} admin areas, got: {options_count}'
 
     @patch("reports.helpers.ReportFormGroup._update_barrier")
     def test_adding_sector_redirects_to_correct_view(self, mock_update):

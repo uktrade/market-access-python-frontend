@@ -1,7 +1,7 @@
 import json
 
 from django.conf import settings
-from django.test import override_settings, TestCase, RequestFactory
+from django.test import override_settings, TestCase
 
 from barriers.models import Assessment
 from core.filecache import memfiles
