@@ -73,3 +73,37 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
+
+  pep8:
+    docker:
+      - image: circleci/python:3.6.1
+
+    working_directory: ~/market-access-python-frontend
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-flake8-3-7-9
+
+      - run:
+          name: install flake8==3.7.9
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install flake8
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-flake8-3-7-9
+
+      - run: venv/bin/flake8 . --exclude=venv --count --max-line-length=120
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build
+      - pep8
