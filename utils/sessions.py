@@ -11,8 +11,8 @@ def init_session(session, access_token):
     user_synced = False
 
     if access_token:
-        del session["oauth_state_id"]
-        session["sso_token"] = access_token
+        del session['oauth_state_id']
+        session['sso_token'] = access_token
         user_synced = sync_user(session)
 
     return user_synced

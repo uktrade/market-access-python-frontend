@@ -13,7 +13,7 @@ def highlight(value, arg, autoescape=True):
         fr"({arg})",
         r"<span class='highlight'>\1</span>",
         value,
-        flags=re.IGNORECASE,
+        flags=re.IGNORECASE
     )
 
     return mark_safe(result)

@@ -9,6 +9,7 @@ from utils.exceptions import APIHttpException
 
 
 class SSOClient:
+
     def __init__(self):
         # Cannot use the user's access token here as that is missing the introspection scope
         # webops team creates a user with the correct scope and a long lived token
@@ -31,7 +32,7 @@ class SSOClient:
         return headers
 
     def get(self, path, **kwargs):
-        url = f"{self.uri}{path}"
+        url = f'{self.uri}{path}'
         headers = self.prepare_headers()
         response = requests.get(url=url, params=kwargs, headers=headers)
 
@@ -45,5 +46,5 @@ class SSOClient:
     def search_users(self, query):
         path = f"user/search/?autocomplete={quote_plus(query)}"
         response = self.get(path)
-        users = response.get("results", [])
+        users = response.get('results', [])
         return users

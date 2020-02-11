@@ -11,7 +11,7 @@ def test_find_by_title(browser):
     title = get_barrier_title(browser, barrier_id)
 
     browser.visit(f"{settings.BASE_URL}find-a-barrier")
-    browser.fill("search", title)
+    browser.fill('search', title)
     browser.find_by_css(
         'input[type=submit][value="Apply filters"]'
     ).first.click()
@@ -28,7 +28,7 @@ def test_find_by_code(browser):
     code = get_barrier_code(browser, barrier_id)
 
     browser.visit(f"{settings.BASE_URL}find-a-barrier")
-    browser.fill("search", code)
+    browser.fill('search', code)
     browser.find_by_css(
         'input[type=submit][value="Apply filters"]'
     ).first.click()
@@ -46,17 +46,17 @@ def test_priority_search_filter(browser):
     browser.visit(f"{settings.BASE_URL}find-a-barrier")
 
     checkbox = browser.find_by_css("input[name=priority][value='HIGH']")
-    checkbox.find_by_xpath("./following-sibling::label").click()
+    checkbox.find_by_xpath('./following-sibling::label').click()
 
     checkbox = browser.find_by_css("input[name=priority][value='LOW']")
-    checkbox.find_by_xpath("./following-sibling::label").click()
+    checkbox.find_by_xpath('./following-sibling::label').click()
 
     browser.find_by_css(
         'input[type=submit][value="Apply filters"]'
     ).first.click()
 
-    for result in browser.find_by_css(".filter-results-list__item"):
-        priority = result.find_by_css(".priority-marker-wrapper").value
+    for result in browser.find_by_css('.filter-results-list__item'):
+        priority = result.find_by_css('.priority-marker-wrapper').value
         assert priority in ("High priority", "Low priority")
 
 
@@ -70,16 +70,16 @@ def test_status_search_filter(browser):
 
     # Open: In progress
     checkbox = browser.find_by_css("input[name=status][value='2']")
-    checkbox.find_by_xpath("./following-sibling::label").click()
+    checkbox.find_by_xpath('./following-sibling::label').click()
 
     # Resolved: In full
     checkbox = browser.find_by_css("input[name=status][value='4']")
-    checkbox.find_by_xpath("./following-sibling::label").click()
+    checkbox.find_by_xpath('./following-sibling::label').click()
 
     browser.find_by_css(
         'input[type=submit][value="Apply filters"]'
     ).first.click()
 
-    for result in browser.find_by_css(".filter-results-list__item"):
-        status = result.find_by_css(".barrier-status-badge").value
+    for result in browser.find_by_css('.filter-results-list__item'):
+        status = result.find_by_css('.barrier-status-badge').value
         assert status in ("Open: In progress", "Resolved: In full")

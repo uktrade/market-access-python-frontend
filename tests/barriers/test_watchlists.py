@@ -21,20 +21,20 @@ class WatchlistTestCase(MarketAccessTestCase):
         'filters': {'search': 'Test'}
     }
     complex_watchlist = {
-        "name": "Complex",
-        "filters": {
-            "search": "Test",
-            "country": ["9f5f66a0-5d95-e211-a939-e4115bead28a"],
-            "sector": [
-                "9538cecc-5f95-e211-a939-e4115bead28a",
-                "a538cecc-5f95-e211-a939-e4115bead28a",
+        'name': 'Complex',
+        'filters': {
+            'search': 'Test',
+            'country': ['9f5f66a0-5d95-e211-a939-e4115bead28a'],
+            'sector': [
+                '9538cecc-5f95-e211-a939-e4115bead28a',
+                'a538cecc-5f95-e211-a939-e4115bead28a',
             ],
-            "type": ["123"],
-            "region": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
-            "priority": ["HIGH", "MEDIUM"],
-            "status": ["1", "2", "3"],
-            "created_by": ["1"],
-        },
+            'type': ['123'],
+            'region': ['3e6809d6-89f6-4590-8458-1d0dab73ad1a'],
+            'priority': ['HIGH', 'MEDIUM'],
+            'status': ['1', '2', '3'],
+            'created_by': ['1']
+        }
     }
 
     def set_watchlists(self, *args):
@@ -49,25 +49,25 @@ class WatchlistTestCase(MarketAccessTestCase):
         })
 
     def test_empty_watchlists(self):
-        response = self.client.get(reverse("barriers:dashboard"))
+        response = self.client.get(reverse('barriers:dashboard'))
         assert response.status_code == HTTPStatus.OK
-        assert response.context["watchlists"] == []
-        assert response.context["barriers"] == []
-        assert response.context["can_add_watchlist"] is True
+        assert response.context['watchlists'] == []
+        assert response.context['barriers'] == []
+        assert response.context['can_add_watchlist'] is True
 
     @patch("utils.api.resources.APIResource.list")
     def test_simple_watchlist(self, mock_list):
         self.set_watchlists(self.simple_watchlist)
 
-        response = self.client.get(reverse("barriers:dashboard"))
+        response = self.client.get(reverse('barriers:dashboard'))
         assert response.status_code == HTTPStatus.OK
-        assert len(response.context["watchlists"]) == 1
-        assert response.context["watchlists"][0].name == "Simple"
+        assert len(response.context['watchlists']) == 1
+        assert response.context['watchlists'][0].name == "Simple"
         mock_list.assert_called_with(
             priority="MEDIUM",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
-            ordering="-modified_on",
+            ordering='-modified_on',
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -80,28 +80,28 @@ class WatchlistTestCase(MarketAccessTestCase):
         )
         mock_list.return_value = barrier_list
 
-        response = self.client.get(reverse("barriers:dashboard"))
+        response = self.client.get(reverse('barriers:dashboard'))
         assert response.status_code == HTTPStatus.OK
-        assert len(response.context["watchlists"]) == 1
-        assert response.context["watchlists"][0].name == "Complex"
-        assert response.context["barriers"] == barrier_list
-        assert response.context["can_add_watchlist"] is True
+        assert len(response.context['watchlists']) == 1
+        assert response.context['watchlists'][0].name == "Complex"
+        assert response.context['barriers'] == barrier_list
+        assert response.context['can_add_watchlist'] is True
         mock_list.assert_called_with(
             ordering="-modified_on",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
-            text="Test",
+            text='Test',
             location=(
-                "9f5f66a0-5d95-e211-a939-e4115bead28a,"
-                "3e6809d6-89f6-4590-8458-1d0dab73ad1a"
+                '9f5f66a0-5d95-e211-a939-e4115bead28a,'
+                '3e6809d6-89f6-4590-8458-1d0dab73ad1a'
             ),
             sector=(
-                "9538cecc-5f95-e211-a939-e4115bead28a,"
-                "a538cecc-5f95-e211-a939-e4115bead28a"
+                '9538cecc-5f95-e211-a939-e4115bead28a,'
+                'a538cecc-5f95-e211-a939-e4115bead28a'
             ),
-            barrier_type="123",
-            priority="HIGH,MEDIUM",
-            status="1,2,3",
+            barrier_type='123',
+            priority='HIGH,MEDIUM',
+            status='1,2,3',
             user=1,
         )
 
@@ -118,7 +118,7 @@ class WatchlistTestCase(MarketAccessTestCase):
             priority="MEDIUM",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
-            ordering="-status",
+            ordering='-status',
         )
 
         response = self.client.get(
@@ -130,7 +130,7 @@ class WatchlistTestCase(MarketAccessTestCase):
             priority="MEDIUM",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
-            ordering="export_country",
+            ordering='export_country',
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -142,18 +142,18 @@ class WatchlistTestCase(MarketAccessTestCase):
             data={'list': '1'}
         )
         assert response.status_code == HTTPStatus.OK
-        assert len(response.context["watchlists"]) == 2
-        assert response.context["selected_watchlist"].name == "Simple"
-        assert response.context["can_add_watchlist"] is True
+        assert len(response.context['watchlists']) == 2
+        assert response.context['selected_watchlist'].name == "Simple"
+        assert response.context['can_add_watchlist'] is True
 
     @patch("utils.api.resources.APIResource.list")
     def test_can_add_watchlist(self, mock_list):
         self.set_watchlists(*[self.simple_watchlist] * 3)
 
-        response = self.client.get(reverse("barriers:dashboard"))
+        response = self.client.get(reverse('barriers:dashboard'))
         assert response.status_code == HTTPStatus.OK
-        assert len(response.context["watchlists"]) == 3
-        assert response.context["can_add_watchlist"] is False
+        assert len(response.context['watchlists']) == 3
+        assert response.context['can_add_watchlist'] is False
 
     @patch("utils.api.resources.APIResource.list")
     def test_pagination(self, mock_list):
@@ -177,55 +177,55 @@ class WatchlistTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=60,
         )
-        barriers = response.context["barriers"]
+        barriers = response.context['barriers']
         assert len(barriers) == settings.API_RESULTS_LIMIT
         assert barriers.total_count == 87
 
-        pagination = response.context["pagination"]
-        assert pagination["total_pages"] == 9
-        assert pagination["pages"][0]["label"] == 1
-        assert pagination["pages"][0]["url"] == "list=2&page=1"
-        page_labels = [page["label"] for page in pagination["pages"]]
-        assert page_labels == [1, "...", 6, 7, 8, 9]
+        pagination = response.context['pagination']
+        assert pagination['total_pages'] == 9
+        assert pagination['pages'][0]['label'] == 1
+        assert pagination['pages'][0]['url'] == "list=2&page=1"
+        page_labels = [page['label'] for page in pagination['pages']]
+        assert page_labels == [1, '...', 6, 7, 8, 9]
 
     def test_rename_watchlist_initial(self):
         self.set_watchlists(self.complex_watchlist, self.simple_watchlist)
         response = self.client.get(
-            reverse("barriers:rename_watchlist", kwargs={"index": 0}),
+            reverse('barriers:rename_watchlist', kwargs={'index': 0}),
         )
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["name"] == self.complex_watchlist["name"]
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.initial['name'] == self.complex_watchlist['name']
 
     @patch("utils.api.resources.UsersResource.patch")
     def test_rename_watchlist_error(self, mock_patch):
         self.set_watchlists(self.complex_watchlist, self.simple_watchlist)
         response = self.client.post(
-            reverse("barriers:rename_watchlist", kwargs={"index": 0}),
-            data={"name": ""},
+            reverse('barriers:rename_watchlist', kwargs={'index': 0}),
+            data={'name': ''}
         )
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
+        assert 'form' in response.context
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "name" in form.errors
+        assert 'name' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.UsersResource.patch")
     def test_rename_watchlist_success(self, mock_patch):
         self.set_watchlists(self.simple_watchlist, self.test_watchlist)
         response = self.client.post(
-            reverse("barriers:rename_watchlist", kwargs={"index": 1}),
-            data={"name": "New Name"},
+            reverse('barriers:rename_watchlist', kwargs={'index': 1}),
+            data={'name': 'New Name'}
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
             user_profile={
-                "watchList": {
-                    "lists": [
+                'watchList': {
+                    'lists': [
                         self.simple_watchlist,
-                        {"name": "New Name", "filters": {"search": "Test"}},
+                        {'name': 'New Name', 'filters': {'search': 'Test'}},
                     ]
                 }
             }
@@ -236,7 +236,7 @@ class WatchlistTestCase(MarketAccessTestCase):
         self.set_watchlists(self.simple_watchlist, self.test_watchlist)
         assert len(self.client.session.get_watchlists()) == 2
         response = self.client.get(
-            reverse("barriers:remove_watchlist", kwargs={"index": 5}),
+            reverse('barriers:remove_watchlist', kwargs={'index': 5}),
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.called is False
@@ -247,7 +247,7 @@ class WatchlistTestCase(MarketAccessTestCase):
         self.set_watchlists(self.simple_watchlist, self.test_watchlist)
         assert len(self.client.session.get_watchlists()) == 2
         response = self.client.get(
-            reverse("barriers:remove_watchlist", kwargs={"index": 0}),
+            reverse('barriers:remove_watchlist', kwargs={'index': 0}),
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
@@ -263,30 +263,30 @@ class WatchlistTestCase(MarketAccessTestCase):
     def test_edit_watchlist_have_filters_changed(self, mock_list):
         self.set_watchlists(self.simple_watchlist, self.test_watchlist)
         response = self.client.get(
-            reverse("barriers:find_a_barrier"),
-            data={"search": "Test", "edit": 1},
+            reverse('barriers:find_a_barrier'),
+            data={'search': 'Test', 'edit': 1},
         )
         assert response.status_code == HTTPStatus.OK
-        assert response.context["have_filters_changed"] is False
+        assert response.context['have_filters_changed'] is False
 
         response = self.client.get(
-            reverse("barriers:find_a_barrier"),
-            data={"search": "Test", "priority": ["HIGH"], "edit": 1},
+            reverse('barriers:find_a_barrier'),
+            data={'search': 'Test', 'priority': ['HIGH'], 'edit': 1},
         )
         assert response.status_code == HTTPStatus.OK
-        assert response.context["have_filters_changed"] is True
+        assert response.context['have_filters_changed'] is True
 
     @patch("utils.api.resources.APIResource.list")
     def test_edit_watchlist_initial(self, mock_list):
         self.set_watchlists(self.simple_watchlist, self.test_watchlist)
         response = self.client.get(
-            reverse("barriers:edit_watchlist"),
-            data={"search": "Test", "priority": ["HIGH"], "edit": 1},
+            reverse('barriers:edit_watchlist'),
+            data={'search': 'Test', 'priority': ['HIGH'], 'edit': 1},
         )
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["name"] == self.test_watchlist["name"]
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.initial['name'] == self.test_watchlist['name']
 
     @patch("utils.api.resources.UsersResource.patch")
     @patch("utils.api.resources.APIResource.list")
@@ -295,13 +295,13 @@ class WatchlistTestCase(MarketAccessTestCase):
         response = self.client.post(
             f"{reverse('barriers:edit_watchlist')}"
             "?search=Test&priority=HIGH&edit=1",
-            data={"name": ""},
+            data={'name': ''},
         )
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
+        assert 'form' in response.context
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "name" in form.errors
+        assert 'name' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.UsersResource.patch")
@@ -311,22 +311,22 @@ class WatchlistTestCase(MarketAccessTestCase):
         response = self.client.post(
             f"{reverse('barriers:edit_watchlist')}"
             "?search=Test&priority=HIGH&edit=1",
-            data={"name": "Edited Watchlist"},
+            data={'name': 'Edited Watchlist'},
         )
         assert response.status_code == HTTPStatus.FOUND
 
         mock_patch.assert_called_with(
             user_profile={
-                "watchList": {
-                    "lists": [
+                'watchList': {
+                    'lists': [
                         self.simple_watchlist,
                         {
+                            'name': 'Edited Watchlist',
                             'filters': {
                                 'search': 'Test',
                                 'priority': ['HIGH']
                             }
                         }
-                            "name": "Edited Watchlist",
                     ]
                 }
             }
@@ -342,16 +342,16 @@ class WatchlistTestCase(MarketAccessTestCase):
         response = self.client.post(
             f"{reverse('barriers:save_watchlist')}"
             "?search=Test&priority=HIGH&status=2",
-            data={"name": "", "replace_or_new": "new"},
+            data={'name': '', 'replace_or_new': 'new'},
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
+        assert 'form' in response.context
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "name" in form.errors
-        assert "replace_or_new" not in form.errors
-        assert "replace_index" not in form.errors
+        assert 'name' in form.errors
+        assert 'replace_or_new' not in form.errors
+        assert 'replace_index' not in form.errors
         assert mock_patch.called is False
         assert len(self.client.session.get_watchlists()) == 2
 
@@ -364,15 +364,15 @@ class WatchlistTestCase(MarketAccessTestCase):
         response = self.client.post(
             f"{reverse('barriers:save_watchlist')}"
             "?search=Test&priority=HIGH&status=2",
-            data={"name": "Saved Watchlist"},
+            data={'name': 'Saved Watchlist'},
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
+        assert 'form' in response.context
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "replace_or_new" in form.errors
-        assert "replace_index" not in form.errors
+        assert 'replace_or_new' in form.errors
+        assert 'replace_index' not in form.errors
         assert mock_patch.called is False
         assert len(self.client.session.get_watchlists()) == 2
 
@@ -385,15 +385,15 @@ class WatchlistTestCase(MarketAccessTestCase):
         response = self.client.post(
             f"{reverse('barriers:save_watchlist')}"
             "?search=Test&priority=HIGH&status=2",
-            data={"name": "Saved Watchlist", "replace_or_new": "replace"},
+            data={'name': 'Saved Watchlist', 'replace_or_new': 'replace'},
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
+        assert 'form' in response.context
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "replace_or_new" not in form.errors
-        assert "replace_index" in form.errors
+        assert 'replace_or_new' not in form.errors
+        assert 'replace_index' in form.errors
         assert mock_patch.called is False
         assert len(self.client.session.get_watchlists()) == 2
 
@@ -406,25 +406,25 @@ class WatchlistTestCase(MarketAccessTestCase):
         response = self.client.post(
             f"{reverse('barriers:save_watchlist')}"
             "?search=Test&priority=HIGH&status=2",
-            data={"name": "New Watchlist", "replace_or_new": "new"},
+            data={'name': 'New Watchlist', 'replace_or_new': 'new'},
         )
 
         assert response.status_code == HTTPStatus.FOUND
 
         mock_patch.assert_called_with(
             user_profile={
-                "watchList": {
-                    "lists": [
+                'watchList': {
+                    'lists': [
                         self.simple_watchlist,
                         self.test_watchlist,
                         {
-                            "name": "New Watchlist",
-                            "filters": {
-                                "search": "Test",
-                                "priority": ["HIGH"],
-                                "status": ["2"],
-                            },
-                        },
+                            'name': 'New Watchlist',
+                            'filters': {
+                                'search': 'Test',
+                                'priority': ['HIGH'],
+                                'status': ['2']
+                            }
+                        }
                     ]
                 }
             }
@@ -441,9 +441,9 @@ class WatchlistTestCase(MarketAccessTestCase):
             f"{reverse('barriers:save_watchlist')}"
             "?search=Test&priority=HIGH&status=2",
             data={
-                "name": "Replaced Watchlist",
-                "replace_or_new": "replace",
-                "replace_index": "0",
+                'name': 'Replaced Watchlist',
+                'replace_or_new': 'replace',
+                'replace_index': '0',
             },
         )
 
@@ -451,15 +451,15 @@ class WatchlistTestCase(MarketAccessTestCase):
 
         mock_patch.assert_called_with(
             user_profile={
-                "watchList": {
-                    "lists": [
+                'watchList': {
+                    'lists': [
                         {
-                            "name": "Replaced Watchlist",
-                            "filters": {
-                                "search": "Test",
-                                "priority": ["HIGH"],
-                                "status": ["2"],
-                            },
+                            'name': 'Replaced Watchlist',
+                            'filters': {
+                                'search': 'Test',
+                                'priority': ['HIGH'],
+                                'status': ['2']
+                            }
                         },
                         self.test_watchlist,
                     ]

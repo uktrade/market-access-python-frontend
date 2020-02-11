@@ -9,11 +9,11 @@ from mock import patch
 
 class EditEconomyValueTestCase(MarketAccessTestCase):
     def setUp(self):
-        self.barrier["has_assessment"] = True
+        self.barrier['has_assessment'] = True
         super().setUp()
 
     def tearDown(self):
-        self.barrier["has_assessment"] = False
+        self.barrier['has_assessment'] = False
 
     @patch("utils.api.resources.BarriersResource.get_assessment")
     def test_economy_value_has_initial_data(self, mock_get_assessment):
@@ -21,15 +21,15 @@ class EditEconomyValueTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                "barriers:economy_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:economy_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             )
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["value"] == self.assessments[0].value_to_economy
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.initial['value'] == self.assessments[0].value_to_economy
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
@@ -44,10 +44,10 @@ class EditEconomyValueTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                "barriers:economy_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:economy_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "500000"},
+            data={'value': '500000'},
         )
         mock_update.assert_called_with(
             barrier_id=self.barrier['id'],
@@ -62,30 +62,30 @@ class NewEconomyValueTestCase(MarketAccessTestCase):
     def test_economy_value_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:economy_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:economy_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": ""},
+            data={'value': ''},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
     def test_economy_value_bad_data(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:economy_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:economy_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "45xx345"},
+            data={'value': '45xx345'},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
@@ -93,10 +93,10 @@ class NewEconomyValueTestCase(MarketAccessTestCase):
     def test_economy_value_calls_api(self, mock_update, mock_create):
         response = self.client.post(
             reverse(
-                "barriers:economy_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:economy_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "600000"},
+            data={'value': '600000'},
         )
         mock_create.assert_called_with(
             barrier_id=self.barrier['id'],
@@ -108,11 +108,11 @@ class NewEconomyValueTestCase(MarketAccessTestCase):
 
 class EditMarketSizeTestCase(MarketAccessTestCase):
     def setUp(self):
-        self.barrier["has_assessment"] = True
+        self.barrier['has_assessment'] = True
         super().setUp()
 
     def tearDown(self):
-        self.barrier["has_assessment"] = False
+        self.barrier['has_assessment'] = False
 
     @patch("utils.api.resources.BarriersResource.get_assessment")
     def test_market_size_has_initial_data(self, mock_get_assessment):
@@ -120,15 +120,15 @@ class EditMarketSizeTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                "barriers:market_size_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:market_size_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             )
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["value"] == self.assessments[0].import_market_size
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.initial['value'] == self.assessments[0].import_market_size
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
@@ -143,10 +143,10 @@ class EditMarketSizeTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                "barriers:market_size_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:market_size_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "500001"},
+            data={'value': '500001'},
         )
         mock_update.assert_called_with(
             barrier_id=self.barrier['id'],
@@ -161,30 +161,30 @@ class NewMarketSizeTestCase(MarketAccessTestCase):
     def test_market_size_bad_value(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:market_size_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:market_size_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "45xx345"},
+            data={'value': '45xx345'},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
     def test_market_size_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:market_size_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:market_size_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": ""},
+            data={'value': ''},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
@@ -193,10 +193,10 @@ class NewMarketSizeTestCase(MarketAccessTestCase):
         mock_create.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:market_size_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:market_size_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "600001"},
+            data={'value': '600001'},
         )
         mock_create.assert_called_with(
             barrier_id=self.barrier['id'],
@@ -208,11 +208,11 @@ class NewMarketSizeTestCase(MarketAccessTestCase):
 
 class EditExportValueTestCase(MarketAccessTestCase):
     def setUp(self):
-        self.barrier["has_assessment"] = True
+        self.barrier['has_assessment'] = True
         super().setUp()
 
     def tearDown(self):
-        self.barrier["has_assessment"] = False
+        self.barrier['has_assessment'] = False
 
     @patch("utils.api.resources.BarriersResource.get_assessment")
     def test_export_value_has_initial_data(self, mock_get_assessment):
@@ -220,15 +220,15 @@ class EditExportValueTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                "barriers:export_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:export_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             )
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["value"] == self.assessments[0].export_value
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.initial['value'] == self.assessments[0].export_value
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
@@ -243,10 +243,10 @@ class EditExportValueTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                "barriers:export_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:export_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "500002"},
+            data={'value': '500002'},
         )
         mock_update.assert_called_with(
             barrier_id=self.barrier['id'],
@@ -261,30 +261,30 @@ class NewExportValueTestCase(MarketAccessTestCase):
     def test_export_value_bad_value(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:export_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:export_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "4!99"},
+            data={'value': '4!99'},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
     def test_export_value_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:export_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:export_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": ""},
+            data={'value': ''},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
@@ -293,10 +293,10 @@ class NewExportValueTestCase(MarketAccessTestCase):
         mock_create.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:export_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:export_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "600002"},
+            data={'value': '600002'},
         )
         mock_create.assert_called_with(
             barrier_id=self.barrier['id'],
@@ -308,11 +308,11 @@ class NewExportValueTestCase(MarketAccessTestCase):
 
 class EditCommercialValueTestCase(MarketAccessTestCase):
     def setUp(self):
-        self.barrier["has_assessment"] = True
+        self.barrier['has_assessment'] = True
         super().setUp()
 
     def tearDown(self):
-        self.barrier["has_assessment"] = False
+        self.barrier['has_assessment'] = False
 
     @patch("utils.api.resources.BarriersResource.get_assessment")
     def test_commercial_value_has_initial_data(self, mock_get_assessment):
@@ -320,15 +320,15 @@ class EditCommercialValueTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                "barriers:commercial_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:commercial_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             )
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["value"] == self.assessments[0].commercial_value
+        assert 'form' in response.context
+        form = response.context['form']
+        assert form.initial['value'] == self.assessments[0].commercial_value
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
@@ -343,10 +343,10 @@ class EditCommercialValueTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                "barriers:commercial_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:commercial_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "500003"},
+            data={'value': '500003'},
         )
         mock_update.assert_called_with(
             barrier_id=self.barrier['id'],
@@ -361,30 +361,30 @@ class NewCommercialValueTestCase(MarketAccessTestCase):
     def test_commercial_value_bad_value(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:commercial_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:commercial_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "10-0"},
+            data={'value': '10-0'},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
     def test_commercial_value_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:commercial_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:commercial_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": ""},
+            data={'value': ''},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "value" in form.errors
+        assert 'value' in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
@@ -393,10 +393,10 @@ class NewCommercialValueTestCase(MarketAccessTestCase):
         mock_create.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:commercial_value_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
+                'barriers:commercial_value_assessment',
+                kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"value": "600003"},
+            data={'value': '600003'},
         )
         mock_create.assert_called_with(
             barrier_id=self.barrier['id'],

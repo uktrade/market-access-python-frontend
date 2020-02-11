@@ -9,7 +9,7 @@ from .views import (
 app_name = "users"
 
 urlpatterns = [
-    path("login/", Login.as_view(), name="login"),
-    path("login/callback/", LoginCallback.as_view(), name="login_callback"),
-    path("sign-out/", SignOut.as_view(), name="sign-out"),
+    path('login/', Login.as_view(), name="login"),
+    path('login/callback/', LoginCallback.as_view(), name="login_callback"),
+    path('sign-out/', SignOut.as_view(), name="sign-out")
 ]

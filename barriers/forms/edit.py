@@ -13,7 +13,7 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
             "Include both the title or service name and the country being "
             "exported to, for example, Import quotas for steel rods in India."
         ),
-        max_length=255,
+        max_length=255
     )
 
     def save(self):
@@ -41,7 +41,7 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
 class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
     description = forms.CharField(
         label=(
-            "Provide a summary of the problem and how you became aware of it"
+            'Provide a summary of the problem and how you became aware of it'
         ),
         widget=forms.Textarea,
     )
@@ -56,10 +56,10 @@ class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
 
 class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
     CHOICES = [
-        ("COMPANY", "Company"),
-        ("TRADE", "Trade association"),
-        ("GOVT", "Government entity"),
-        ("OTHER", "Other "),
+        ('COMPANY', 'Company'),
+        ('TRADE', 'Trade association'),
+        ('GOVT', 'Government entity'),
+        ('OTHER', 'Other '),
     ]
     source = forms.ChoiceField(
         label="How did you find out about the barrier?",
@@ -80,28 +80,28 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
                     "Enter how you became aware of the barrier"
                 )
         else:
-            cleaned_data["other_source"] = None
+            cleaned_data['other_source'] = None
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            source=self.cleaned_data["source"],
-            other_source=self.cleaned_data["other_source"],
+            source=self.cleaned_data['source'],
+            other_source=self.cleaned_data['other_source'],
         )
 
 
 class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
     CHOICES = [
-        ("UNKNOWN", "<strong>Unknown</strong> priority"),
-        ("HIGH", "<strong>High</strong> priority"),
-        ("MEDIUM", "<strong>Medium</strong> priority"),
-        ("LOW", "<strong>Low</strong> priority"),
+        ('UNKNOWN', '<strong>Unknown</strong> priority'),
+        ('HIGH', '<strong>High</strong> priority'),
+        ('MEDIUM', '<strong>Medium</strong> priority'),
+        ('LOW', '<strong>Low</strong> priority'),
     ]
     priority = forms.ChoiceField(
         label="What is the priority of the barrier?",
         choices=CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect
     )
     priority_summary = forms.CharField(
         label="Why did the priority change? (optional)",
@@ -111,7 +111,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        initial_priority = kwargs.get("initial", {}).get("priority")
+        initial_priority = kwargs.get('initial', {}).get('priority')
         if initial_priority == "UNKNOWN":
             self.fields['priority_summary'].label = (
                 "Why did you choose this priority? (optional)"
@@ -121,21 +121,21 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            priority=self.cleaned_data["priority"],
-            priority_summary=self.cleaned_data["priority_summary"] or None,
+            priority=self.cleaned_data['priority'],
+            priority_summary=self.cleaned_data['priority_summary'] or None,
         )
 
 
 class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
     CHOICES = [
-        (1, "Yes"),
-        (2, "No"),
+        (1, 'Yes'),
+        (2, 'No'),
         (3, "Don't know"),
     ]
     eu_exit_related = forms.ChoiceField(
-        label="Is this issue caused by or related to EU Exit?",
+        label='Is this issue caused by or related to EU Exit?',
         choices=CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect
     )
 
     def save(self):
@@ -160,9 +160,9 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
         ),
     ]
     problem_status = ChoiceFieldWithHelpText(
-        label="What is the scope of the barrier?",
+        label='What is the scope of the barrier?',
         choices=CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect
     )
 
     def save(self):

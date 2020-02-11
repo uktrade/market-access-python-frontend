@@ -19,8 +19,8 @@ class NotesTestCase(MarketAccessTestCase):
             )
         )
         assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        assert response.context["form"].initial == {}
+        assert 'form' in response.context
+        assert response.context['form'].initial == {}
 
     @patch("utils.api.client.NotesResource.create")
     def test_note_cannot_be_empty(self, mock_create):
@@ -29,12 +29,12 @@ class NotesTestCase(MarketAccessTestCase):
                 'barriers:add_note',
                 kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"note": ""},
+            data={'note': ''},
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "note" in form.errors
+        assert 'note' in form.errors
         assert mock_create.called is False
 
     @patch("utils.api.client.NotesResource.create")
@@ -44,7 +44,7 @@ class NotesTestCase(MarketAccessTestCase):
                 'barriers:add_note',
                 kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"note": "New note"},
+            data={'note': 'New note'},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_create.assert_called_with(
@@ -61,11 +61,11 @@ class NotesTestCase(MarketAccessTestCase):
                 'barriers:add_note',
                 kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={"note": "New note", "document_ids": [document_id]},
+            data={'note': 'New note', 'document_ids': [document_id]},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_create.assert_called_with(
-            barrier_id=self.barrier["id"],
+            barrier_id=self.barrier['id'],
             text="New note",
             documents=[document_id],
         )
@@ -85,23 +85,23 @@ class NotesTestCase(MarketAccessTestCase):
     ):
         document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
         mock_create_document.return_value = {
-            "id": document_id,
-            "signed_upload_url": "someurl",
+            'id': document_id,
+            'signed_upload_url': "someurl",
         }
 
-        with open("tests/files/attachment.jpeg", "rb") as document:
+        with open('tests/files/attachment.jpeg', 'rb') as document:
             response = self.client.post(
                 reverse(
-                    "barriers:add_note",
-                    kwargs={"barrier_id": self.barrier["id"]},
+                    'barriers:add_note',
+                    kwargs={'barrier_id': self.barrier['id']}
                 ),
-                data={"note": "New note", "document": document},
+                data={'note': 'New note', 'document': document},
             )
 
         assert response.status_code == HTTPStatus.FOUND
         assert mock_create_document.called is True
         mock_create_note.assert_called_with(
-            barrier_id=self.barrier["id"],
+            barrier_id=self.barrier['id'],
             text="New note",
             documents=[document_id],
         )
@@ -124,25 +124,25 @@ class NotesTestCase(MarketAccessTestCase):
     ):
         document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
         mock_create_document.return_value = {
-            "id": document_id,
-            "signed_upload_url": "someurl",
+            'id': document_id,
+            'signed_upload_url': "someurl",
         }
 
         mock_check_scan_status.side_effect = FileUploadError("Upload failed")
 
-        with open("tests/files/attachment.jpeg", "rb") as document:
+        with open('tests/files/attachment.jpeg', 'rb') as document:
             response = self.client.post(
                 reverse(
-                    "barriers:add_note",
-                    kwargs={"barrier_id": self.barrier["id"]},
+                    'barriers:add_note',
+                    kwargs={'barrier_id': self.barrier['id']}
                 ),
-                data={"note": "New note", "document": document},
+                data={'note': 'New note', 'document': document},
             )
 
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "document" in form.errors
+        assert 'document' in form.errors
         assert mock_create_document.called is True
         assert mock_upload_to_s3.called is True
         assert mock_complete_upload.called is True
@@ -164,24 +164,24 @@ class NotesTestCase(MarketAccessTestCase):
     ):
         document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
         mock_create_document.return_value = {
-            "id": document_id,
-            "signed_upload_url": "someurl",
+            'id': document_id,
+            'signed_upload_url': "someurl",
         }
 
         # Text files not allowed
-        with open("tests/files/attachment.txt", "rb") as document:
+        with open('tests/files/attachment.txt', 'rb') as document:
             response = self.client.post(
                 reverse(
-                    "barriers:add_note",
-                    kwargs={"barrier_id": self.barrier["id"]},
+                    'barriers:add_note',
+                    kwargs={'barrier_id': self.barrier['id']}
                 ),
-                data={"note": "New note", "document": document},
+                data={'note': 'New note', 'document': document},
             )
 
         assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
+        form = response.context['form']
         assert form.is_valid() is False
-        assert "document" in form.errors
+        assert 'document' in form.errors
         assert mock_create_document.called is False
         assert mock_create_note.called is False
         assert mock_upload_to_s3.called is False

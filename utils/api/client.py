@@ -29,11 +29,11 @@ class MarketAccessAPIClient:
         self.reports = ReportsResource(self)
 
     def request(self, method, path, **kwargs):
-        url = f"{settings.MARKET_ACCESS_API_URI}{path}"
+        url = f'{settings.MARKET_ACCESS_API_URI}{path}'
         headers = {
-            "Authorization": f"Bearer {self.token}",
-            "X-User-Agent": "",
-            "X-Forwarded-For": "",
+            'Authorization': f"Bearer {self.token}",
+            'X-User-Agent': '',
+            'X-Forwarded-For': '',
         }
         response = getattr(requests, method)(url, headers=headers, **kwargs)
 
@@ -45,7 +45,7 @@ class MarketAccessAPIClient:
         return response
 
     def get(self, path, raw=False, **kwargs):
-        response = self.request("get", path, **kwargs)
+        response = self.request('get', path, **kwargs)
 
         if raw:
             return response
@@ -59,25 +59,26 @@ class MarketAccessAPIClient:
             )
 
     def post(self, path, **kwargs):
-        return self.request_with_results("post", path, **kwargs)
+        return self.request_with_results('post', path, **kwargs)
 
     def patch(self, path, **kwargs):
-        return self.request_with_results("patch", path, **kwargs)
+        return self.request_with_results('patch', path, **kwargs)
 
     def put(self, path, **kwargs):
-        return self.request_with_results("put", path, **kwargs)
+        return self.request_with_results('put', path, **kwargs)
 
     def delete(self, path, **kwargs):
-        return self.request("delete", path, **kwargs)
+        return self.request('delete', path, **kwargs)
 
     def request_with_results(self, method, path, **kwargs):
         response = self.request(method, path, **kwargs)
         return self.get_results_from_response_data(response.json())
 
     def get_results_from_response_data(self, response_data):
-        if response_data.get("response", {}).get("success"):
-            return response_data["response"].get(
-                "result", response_data["response"].get("results")
+        if response_data.get('response', {}).get('success'):
+            return response_data['response'].get(
+                'result',
+                response_data['response'].get('results')
             )
         else:
             return response_data

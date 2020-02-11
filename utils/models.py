@@ -19,7 +19,6 @@ class ModelList(UserList):
 
     Also stores the count from the API for use in pagination.
     """
-
     def __init__(self, model, data, total_count):
         self.model = model
         self.data = data

@@ -31,13 +31,17 @@ class MonthYearForm(forms.Form):
         label="Month",
         min_value=1,
         max_value=12,
-        error_messages={"required": "Month is required."},
-        required=False,
+        error_messages={
+            "required": "Month is required."
+        },
+        required=False
     )
     year = forms.IntegerField(
         label="Year",
         min_value=2000,
         max_value=date.today().year,
-        error_messages={"required": "Year is required."},
-        required=False,
+        error_messages={
+            "required": "Year is required."
+        },
+        required=False
     )

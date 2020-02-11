@@ -17,7 +17,7 @@ class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierTitleForm
 
     def get_initial(self):
-        return {"title": self.barrier.barrier_title}
+        return {'title': self.barrier.barrier_title}
 
 
 class BarrierEditProduct(APIBarrierFormViewMixin, FormView):
@@ -25,7 +25,7 @@ class BarrierEditProduct(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierProductForm
 
     def get_initial(self):
-        return {"product": self.barrier.product}
+        return {'product': self.barrier.product}
 
 
 class BarrierEditDescription(APIBarrierFormViewMixin, FormView):
@@ -33,7 +33,7 @@ class BarrierEditDescription(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierDescriptionForm
 
     def get_initial(self):
-        return {"description": self.barrier.problem_description}
+        return {'description': self.barrier.problem_description}
 
 
 class BarrierEditSource(APIBarrierFormViewMixin, FormView):
@@ -42,8 +42,8 @@ class BarrierEditSource(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {
-            "source": self.barrier.source,
-            "other_source": self.barrier.other_source,
+            'source': self.barrier.source,
+            'other_source': self.barrier.other_source,
         }
 
 
@@ -52,7 +52,7 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierPriorityForm
 
     def get_initial(self):
-        return {"priority": self.barrier.priority["code"]}
+        return {'priority': self.barrier.priority['code']}
 
 
 class BarrierEditEUExitRelated(APIBarrierFormViewMixin, FormView):
@@ -60,7 +60,7 @@ class BarrierEditEUExitRelated(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierEUExitRelatedForm
 
     def get_initial(self):
-        return {"eu_exit_related": self.barrier.eu_exit_related}
+        return {'eu_exit_related': self.barrier.eu_exit_related}
 
 
 class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
@@ -68,4 +68,4 @@ class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierProblemStatusForm
 
     def get_initial(self):
-        return {"problem_status": self.barrier.problem_status}
+        return {'problem_status': self.barrier.problem_status}

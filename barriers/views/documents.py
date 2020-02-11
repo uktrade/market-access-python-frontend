@@ -10,20 +10,19 @@ from utils.exceptions import FileUploadError, ScanError
 
 class DownloadDocument(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        document_id = self.kwargs.get("document_id")
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
+        document_id = self.kwargs.get('document_id')
         data = client.documents.get_download(document_id)
-        return data["document_url"]
+        return data['document_url']
 
 
 class AddDocumentAjaxView(FormView):
     """
     Base ajax view for uploading documents
     """
-
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs['token'] = self.request.session.get('sso_token')
         return kwargs
 
     def form_valid(self, form):
@@ -68,10 +67,9 @@ class AddDocumentAjaxView(FormView):
         self.request.session[session_key] = documents
 
     def form_invalid(self, form):
-        return JsonResponse(
-            {"message": ", ".join(form.errors.get("document", [])),},
-            status=HTTPStatus.BAD_REQUEST,
-        )
+        return JsonResponse({
+            "message": ", ".join(form.errors.get('document', [])),
+        }, status=HTTPStatus.BAD_REQUEST)
 
 
 class DeleteDocumentAjaxView(RedirectView):
@@ -80,12 +78,11 @@ class DeleteDocumentAjaxView(RedirectView):
 
     Can be called via ajax or as a get request.
     """
-
     def get_session_key(self):
         raise NotImplementedError
 
     def delete_document_from_session(self):
-        document_id = str(self.kwargs.get("document_id"))
+        document_id = str(self.kwargs.get('document_id'))
         session_key = self.get_session_key()
         documents = self.request.session[session_key]
 

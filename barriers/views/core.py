@@ -43,24 +43,24 @@ class Dashboard(PaginationMixin, TemplateView):
         return context_data
 
     def get_barriers(self, watchlist):
-        client = MarketAccessAPIClient(self.request.session["sso_token"])
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
 
         return client.barriers.list(
             ordering=self.get_ordering(),
             limit=settings.API_RESULTS_LIMIT,
             offset=settings.API_RESULTS_LIMIT * (self.get_current_page() - 1),
-            **watchlist.get_api_params(),
+            **watchlist.get_api_params()
         )
 
     def get_ordering(self):
-        return self.request.GET.get("sort", "-modified_on")
+        return self.request.GET.get('sort', '-modified_on')
 
     def get_watchlist_index(self):
         """
         Get list index from querystring and ensure it's a valid number
         """
         try:
-            list_index = int(self.request.GET.get("list", 0))
+            list_index = int(self.request.GET.get('list', 0))
         except ValueError:
             return 0
 
@@ -79,11 +79,10 @@ class SearchFormMixin:
 
     Retrieves search form data from the querystring.
     """
-
     def get_form_kwargs(self):
         return {
-            "metadata": get_metadata(),
-            "data": self.request.GET,
+            'metadata': get_metadata(),
+            'data': self.request.GET,
         }
 
 
@@ -98,7 +97,7 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(form=form, **kwargs)
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
         barriers = client.barriers.list(
             ordering="-reported_on",
             limit=settings.API_RESULTS_LIMIT,
@@ -114,8 +113,8 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
             'page': 'find-a-barrier',
         })
 
-        if form.cleaned_data.get("edit") is not None:
-            watchlist_index = form.cleaned_data.get("edit")
+        if form.cleaned_data.get('edit') is not None:
+            watchlist_index = form.cleaned_data.get('edit')
             watchlist = self.request.session.get_watchlist(watchlist_index)
             form_filters = form.get_raw_filters()
             context_data['have_filters_changed'] = (
@@ -126,7 +125,7 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
 
     def get_pageless_querystring(self):
         params = self.request.GET.copy()
-        params.pop("page", None)
+        params.pop('page', None)
         return params.urlencode()
 
 
@@ -138,14 +137,14 @@ class DownloadBarriers(SearchFormMixin, View):
         form.full_clean()
         search_parameters = form.get_api_search_parameters()
 
-        client = MarketAccessAPIClient(self.request.session["sso_token"])
+        client = MarketAccessAPIClient(self.request.session['sso_token'])
         file = client.barriers.get_csv(**search_parameters)
 
         response = StreamingHttpResponse(
             file.iter_content(),
             content_type=file.headers['Content-Type']
         )
-        response["Content-Disposition"] = file.headers["Content-Disposition"]
+        response['Content-Disposition'] = file.headers['Content-Disposition']
         return response
 
 
@@ -155,7 +154,7 @@ class BarrierDetail(BarrierMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["add_company"] = settings.ADD_COMPANY
+        context_data['add_company'] = settings.ADD_COMPANY
         return context_data
 
 
@@ -165,6 +164,6 @@ class WhatIsABarrier(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         metadata = get_metadata()
-        context_data["goods"] = metadata.get_goods()
-        context_data["services"] = metadata.get_services()
+        context_data['goods'] = metadata.get_goods()
+        context_data['services'] = metadata.get_services()
         return context_data
