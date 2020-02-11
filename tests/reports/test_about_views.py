@@ -40,7 +40,7 @@ class AboutViewTestCase(ReportsTestCase):
         expected_eu_exit_related_radio_count = 3
         expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'
         expected_exit_btn = (
-            '<button type="submit" class="govuk-button button--secondary" ' 
+            '<button type="submit" class="govuk-button button--secondary" '
             'name="action" value="exit">Save and exit</button>'
         )
 
