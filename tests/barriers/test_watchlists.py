@@ -36,6 +36,13 @@ class WatchlistTestCase(MarketAccessTestCase):
             'created_by': ['1']
         }
     }
+    old_watchlist = {
+        'name': 'Node',
+        'filters': {
+            "search": ["old watchlist test"],
+            "createdBy": ["1"],
+        }
+    }
 
     def set_watchlists(self, *args):
         self.update_session({
@@ -102,6 +109,30 @@ class WatchlistTestCase(MarketAccessTestCase):
             barrier_type='123',
             priority='HIGH,MEDIUM',
             status='1,2,3',
+            user=1,
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_old_watchlist(self, mock_list):
+        self.set_watchlists(self.old_watchlist)
+        barrier_list = ModelList(
+            model=Barrier,
+            data=self.barriers,
+            total_count=2,
+        )
+        mock_list.return_value = barrier_list
+
+        response = self.client.get(reverse('barriers:dashboard'))
+        assert response.status_code == HTTPStatus.OK
+        assert len(response.context['watchlists']) == 1
+        assert response.context['watchlists'][0].name == "Node"
+        assert response.context['barriers'] == barrier_list
+        assert response.context['can_add_watchlist'] is True
+        mock_list.assert_called_with(
+            ordering="-modified_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            text="old watchlist test",
             user=1,
         )
 
