@@ -201,16 +201,16 @@ class Metadata:
             sector
             for sector in self.data.get('sectors', [])
             if sector['id'] in sector_ids
+            and sector['disabled_on'] is None
         ]
 
     def get_sector_list(self, level=None):
-        if level is not None:
-            return [
-                sector
-                for sector in self.data['sectors']
-                if sector['level'] == level
-            ]
-        return self.data['sectors']
+        return [
+            sector
+            for sector in self.data['sectors']
+            if (level is None or sector['level'] == level)
+            and sector['disabled_on'] is None
+        ]
 
     def get_status(self, status_id):
         for id, name in self.data['barrier_status'].items():
