@@ -6,4 +6,4 @@ def sso_sign_in(browser):
 
     browser.fill("username", settings.TEST_SSO_EMAIL)
     browser.fill("password", settings.TEST_SSO_PASSWORD)
-    browser.find_by_css('input[type=submit]').first.click()
+    browser.find_by_css("input[type=submit]").first.click()

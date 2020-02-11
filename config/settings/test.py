@@ -1,8 +1,8 @@
 from .base import *
 
-DJANGO_ENV = 'test'
+DJANGO_ENV = "test"
 
-SECRET_KEY = 'nothing secret about this one'
+SECRET_KEY = "nothing secret about this one"
 
 TEST_RUNNER = "config.testrunner.PytestTestRunner"
 

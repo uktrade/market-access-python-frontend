@@ -1,3 +1,3 @@
 from .base import *
 
-DJANGO_ENV = 'local'
+DJANGO_ENV = "local"

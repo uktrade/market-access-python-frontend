@@ -9,10 +9,10 @@ from utils.forms import MultipleValueField, RestrictedFileField
 
 class EconomicAssessmentForm(DocumentMixin, forms.Form):
     IMPACT_CHOICES = (
-        ('HIGH', 'High'),
-        ('MEDIUMHIGH', 'Medium High'),
-        ('MEDIUMLOW', 'Medium Low'),
-        ('LOW', 'Low '),
+        ("HIGH", "High"),
+        ("MEDIUMHIGH", "Medium High"),
+        ("MEDIUMLOW", "Medium Low"),
+        ("LOW", "Low "),
     )
     impact = forms.ChoiceField(
         choices=IMPACT_CHOICES,
@@ -24,7 +24,7 @@ class EconomicAssessmentForm(DocumentMixin, forms.Form):
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
-        content_types=['text/csv', 'image/jpeg'],
+        content_types=["text/csv", "image/jpeg"],
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
@@ -42,22 +42,22 @@ class EconomicAssessmentForm(DocumentMixin, forms.Form):
         if self.barrier.has_assessment:
             client.barriers.update_assessment(
                 barrier_id=self.barrier.id,
-                impact=self.cleaned_data.get('impact'),
-                explanation=self.cleaned_data.get('description'),
-                documents=self.cleaned_data.get('document_ids'),
+                impact=self.cleaned_data.get("impact"),
+                explanation=self.cleaned_data.get("description"),
+                documents=self.cleaned_data.get("document_ids"),
             )
         else:
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id,
-                impact=self.cleaned_data.get('impact'),
-                explanation=self.cleaned_data.get('description'),
-                documents=self.cleaned_data.get('document_ids'),
+                impact=self.cleaned_data.get("impact"),
+                explanation=self.cleaned_data.get("description"),
+                documents=self.cleaned_data.get("document_ids"),
             )
 
 
 class AssessmentDocumentForm(DocumentMixin, forms.Form):
     document = RestrictedFileField(
-        content_types=['text/csv', 'image/jpeg'],
+        content_types=["text/csv", "image/jpeg"],
         max_upload_size=settings.FILE_MAX_SIZE,
     )
 
@@ -75,7 +75,7 @@ class EconomyValueForm(forms.Form):
     )
 
     def __init__(self, barrier, *args, **kwargs):
-        self.token = kwargs.pop('token')
+        self.token = kwargs.pop("token")
         self.barrier = barrier
         super().__init__(*args, **kwargs)
 
@@ -84,12 +84,12 @@ class EconomyValueForm(forms.Form):
         if self.barrier.has_assessment:
             client.barriers.update_assessment(
                 barrier_id=self.barrier.id,
-                value_to_economy=self.cleaned_data.get('value'),
+                value_to_economy=self.cleaned_data.get("value"),
             )
         else:
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id,
-                value_to_economy=self.cleaned_data.get('value'),
+                value_to_economy=self.cleaned_data.get("value"),
             )
 
 
@@ -103,7 +103,7 @@ class MarketSizeForm(forms.Form):
     )
 
     def __init__(self, barrier, *args, **kwargs):
-        self.token = kwargs.pop('token')
+        self.token = kwargs.pop("token")
         self.barrier = barrier
         super().__init__(*args, **kwargs)
 
@@ -112,12 +112,12 @@ class MarketSizeForm(forms.Form):
         if self.barrier.has_assessment:
             client.barriers.update_assessment(
                 barrier_id=self.barrier.id,
-                import_market_size=self.cleaned_data.get('value'),
+                import_market_size=self.cleaned_data.get("value"),
             )
         else:
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id,
-                import_market_size=self.cleaned_data.get('value'),
+                import_market_size=self.cleaned_data.get("value"),
             )
 
 
@@ -131,7 +131,7 @@ class CommercialValueForm(forms.Form):
     )
 
     def __init__(self, barrier, *args, **kwargs):
-        self.token = kwargs.pop('token')
+        self.token = kwargs.pop("token")
         self.barrier = barrier
         super().__init__(*args, **kwargs)
 
@@ -140,12 +140,12 @@ class CommercialValueForm(forms.Form):
         if self.barrier.has_assessment:
             client.barriers.update_assessment(
                 barrier_id=self.barrier.id,
-                commercial_value=self.cleaned_data.get('value'),
+                commercial_value=self.cleaned_data.get("value"),
             )
         else:
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id,
-                commercial_value=self.cleaned_data.get('value'),
+                commercial_value=self.cleaned_data.get("value"),
             )
 
 
@@ -159,7 +159,7 @@ class ExportValueForm(forms.Form):
     )
 
     def __init__(self, barrier, *args, **kwargs):
-        self.token = kwargs.pop('token')
+        self.token = kwargs.pop("token")
         self.barrier = barrier
         super().__init__(*args, **kwargs)
 
@@ -168,10 +168,10 @@ class ExportValueForm(forms.Form):
         if self.barrier.has_assessment:
             client.barriers.update_assessment(
                 barrier_id=self.barrier.id,
-                export_value=self.cleaned_data.get('value'),
+                export_value=self.cleaned_data.get("value"),
             )
         else:
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id,
-                export_value=self.cleaned_data.get('value'),
+                export_value=self.cleaned_data.get("value"),
             )

@@ -48,7 +48,7 @@ class Barrier(APIModel):
 
     @property
     def created_on(self):
-        return dateutil.parser.parse(self.data['created_on'])
+        return dateutil.parser.parse(self.data["created_on"])
 
     @property
     def eu_exit_related_text(self):
@@ -65,15 +65,15 @@ class Barrier(APIModel):
 
     @property
     def modified_on(self):
-        return dateutil.parser.parse(self.data['modified_on'])
+        return dateutil.parser.parse(self.data["modified_on"])
 
     @property
     def problem_status_text(self):
-        return self.metadata.get_problem_status(self.data['problem_status'])
+        return self.metadata.get_problem_status(self.data["problem_status"])
 
     @property
     def reported_on(self):
-        return dateutil.parser.parse(self.data['reported_on'])
+        return dateutil.parser.parse(self.data["reported_on"])
 
     @property
     def sectors(self):
@@ -86,12 +86,12 @@ class Barrier(APIModel):
 
     @property
     def sector_ids(self):
-        return self.data['sectors'] or []
+        return self.data["sectors"] or []
 
     @property
     def sector_names(self):
         if self.sectors:
-            return [sector.get('name', "Unknown") for sector in self.sectors]
+            return [sector.get("name", "Unknown") for sector in self.sectors]
         return ["All sectors"]
 
     @property
@@ -101,10 +101,10 @@ class Barrier(APIModel):
     @property
     def status(self):
         if self._status is None:
-            self.data['status']['id'] = str(self.data['status']['id'])
-            self._status = self.metadata.get_status(self.data['status']['id'])
-            self._status.update(self.data['status'])
-            self._status['date'] = dateutil.parser.parse(self._status['date'])
+            self.data["status"]["id"] = str(self.data["status"]["id"])
+            self._status = self.metadata.get_status(self.data["status"]["id"])
+            self._status.update(self.data["status"])
+            self._status["date"] = dateutil.parser.parse(self._status["date"])
         return self._status
 
     @property
@@ -116,40 +116,40 @@ class Barrier(APIModel):
         if self._types is None:
             self._types = [
                 self.metadata.get_barrier_type(barrier_type)
-                for barrier_type in self.data['barrier_types']
+                for barrier_type in self.data["barrier_types"]
             ]
         return self._types
 
     @property
     def is_resolved(self):
-        return self.status['id'] == '4'
+        return self.status["id"] == "4"
 
     @property
     def is_partially_resolved(self):
-        return self.status['id'] == '3'
+        return self.status["id"] == "3"
 
     @property
     def is_open(self):
-        return self.status['id'] == '2'
+        return self.status["id"] == "2"
 
     @property
     def is_hibernated(self):
-        return self.status['id'] == '5'
+        return self.status["id"] == "5"
 
 
 class Company(APIModel):
     def __init__(self, data):
         self.data = data
-        self.created_on = dateutil.parser.parse(data['created_on'])
+        self.created_on = dateutil.parser.parse(data["created_on"])
 
     def get_address_display(self):
         address_parts = [
-            self.data['address'].get('line_1'),
-            self.data['address'].get('line_2'),
-            self.data['address'].get('town'),
-            self.data['address'].get('county'),
-            self.data['address'].get('postcode'),
-            self.data['address'].get('country', {}).get('name'),
+            self.data["address"].get("line_1"),
+            self.data["address"].get("line_2"),
+            self.data["address"].get("town"),
+            self.data["address"].get("county"),
+            self.data["address"].get("postcode"),
+            self.data["address"].get("country", {}).get("name"),
         ]
         address_parts = [part for part in address_parts if part]
         return ", ".join(address_parts)
@@ -159,8 +159,8 @@ class Assessment(APIModel):
     def __init__(self, data):
         self.data = data
         metadata = get_metadata()
-        self.impact_text = metadata.get_impact_text(self.data.get('impact'))
-        self.documents = [Document(document) for document in data['documents']]
+        self.impact_text = metadata.get_impact_text(self.data.get("impact"))
+        self.documents = [Document(document) for document in data["documents"]]
 
 
 class Watchlist:
@@ -176,19 +176,19 @@ class Watchlist:
 
         We also use created_by instead of createdBy.
         """
-        if 'search' in filters and isinstance(filters['search'], list):
+        if "search" in filters and isinstance(filters["search"], list):
             try:
-                filters['search'] = filters['search'][0]
+                filters["search"] = filters["search"][0]
             except IndexError:
-                filters['search'] = ""
-        if 'createdBy' in filters:
-            filters['created_by'] = filters.pop('createdBy')
+                filters["search"] = ""
+        if "createdBy" in filters:
+            filters["created_by"] = filters.pop("createdBy")
         return filters
 
     def to_dict(self):
         return {
-            'name': self.name,
-            'filters': self.filters,
+            "name": self.name,
+            "filters": self.filters,
         }
 
     @property
@@ -211,23 +211,23 @@ class Watchlist:
         Transform watchlist filters into api parameters
         """
         filters = copy.deepcopy(self.filters)
-        region = filters.pop('region', [])
-        country = filters.pop('country', [])
+        region = filters.pop("region", [])
+        country = filters.pop("country", [])
 
         if country or region:
-            filters['location'] = country + region
+            filters["location"] = country + region
 
         created_by = (
             filters.pop('createdBy', []) + filters.pop('created_by', [])
         )
-        if '1' in created_by:
-            filters['user'] = 1
-        elif '2' in created_by:
-            filters['team'] = 1
+        if "1" in created_by:
+            filters["user"] = 1
+        elif "2" in created_by:
+            filters["team"] = 1
 
         filter_map = {
-            'type': 'barrier_type',
-            'search': 'text',
+            "type": "barrier_type",
+            "search": "text",
         }
 
         api_params = {}

@@ -20,6 +20,6 @@ def test_watchlist_updated_date(browser):
 
     browser.visit(settings.BASE_URL)
     barrier_link = browser.links.find_by_partial_text(title).first
-    table_row = barrier_link.find_by_xpath('../..')
-    last_updated = table_row.find_by_css('td:nth-child(2)').first.value
+    table_row = barrier_link.find_by_xpath("../..")
+    last_updated = table_row.find_by_css("td:nth-child(2)").first.value
     assert last_updated == updated_time.strftime("%-d %B %Y")

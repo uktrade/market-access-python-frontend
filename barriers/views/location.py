@@ -19,22 +19,22 @@ class BarrierEditLocation(BarrierMixin, FormView):
     def get(self, request, *args, **kwargs):
         if not self.use_session_location:
             if self.barrier.country:
-                request.session['location'] = {
-                    'country': self.barrier.country['id'],
-                    'admin_areas': self.barrier.admin_area_ids,
+                request.session["location"] = {
+                    "country": self.barrier.country["id"],
+                    "admin_areas": self.barrier.admin_area_ids,
                 }
             else:
-                request.session['location'] = {
-                    'country': None,
-                    'admin_areas': [],
+                request.session["location"] = {
+                    "country": None,
+                    "admin_areas": [],
                 }
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         metadata = get_metadata()
-        country_id = self.request.session['location']['country']
-        admin_area_ids = self.request.session['location'].get('admin_areas')
+        country_id = self.request.session["location"]["country"]
+        admin_area_ids = self.request.session["location"].get("admin_areas")
 
         if country_id:
             context_data.update({
@@ -47,7 +47,7 @@ class BarrierEditLocation(BarrierMixin, FormView):
         return context_data
 
     def get_initial(self):
-        return self.request.session.get('location', {})
+        return self.request.session.get("location", {})
 
     def form_valid(self, form):
         form.save()
@@ -55,8 +55,8 @@ class BarrierEditLocation(BarrierMixin, FormView):
 
     def get_success_url(self):
         return reverse(
-            'barriers:barrier_detail',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+            "barriers:barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
     def get_form_kwargs(self):
@@ -67,18 +67,18 @@ class BarrierEditLocation(BarrierMixin, FormView):
             (country['id'], country['name'])
             for country in countries
         ]
-        kwargs['countries'] = country_choices
+        kwargs["countries"] = country_choices
 
-        selected_country_id = self.request.session['location']['country']
+        selected_country_id = self.request.session["location"]["country"]
         admin_areas = metadata.get_admin_areas_by_country(selected_country_id)
         admin_area_choices = [
             (admin_area['id'], admin_area['name'])
             for admin_area in admin_areas
         ]
-        kwargs['admin_areas'] = admin_area_choices
+        kwargs["admin_areas"] = admin_area_choices
 
-        kwargs['barrier_id'] = str(self.kwargs.get('barrier_id'))
-        kwargs['token'] = self.request.session.get('sso_token')
+        kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
 
 
@@ -98,29 +98,27 @@ class BarrierEditCountry(BarrierMixin, FormView):
             (country['id'], country['name'])
             for country in countries
         ]
-        kwargs['countries'] = country_choices
+        kwargs["countries"] = country_choices
         return kwargs
 
     def get_initial(self):
-        return {
-            'country': self.request.session['location']['country']
-        }
+        return {"country": self.request.session["location"]["country"]}
 
     def form_valid(self, form):
         if (
-            self.request.session['location']['country']
-            != form.cleaned_data['country']
+            self.request.session["location"]["country"]
+            != form.cleaned_data["country"]
         ):
-            self.request.session['location'] = {
-                'country': form.cleaned_data['country'],
-                'admin_areas': []
+            self.request.session["location"] = {
+                "country": form.cleaned_data["country"],
+                "admin_areas": [],
             }
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse(
-            'barriers:edit_location_session',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+            "barriers:edit_location_session",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
 
@@ -132,15 +130,15 @@ class AddAdminArea(BarrierMixin, FormView):
         kwargs = super().get_form_kwargs()
         metadata = get_metadata()
 
-        selected_country_id = self.request.session['location']['country']
+        selected_country_id = self.request.session["location"]["country"]
         admin_areas = metadata.get_admin_areas_by_country(selected_country_id)
         admin_area_choices = [
-            (admin_area['id'], admin_area['name'])
+            (admin_area["id"], admin_area["name"])
             for admin_area in admin_areas
             if admin_area['id'] not in
             self.request.session['location'].get('admin_areas', [])
         ]
-        kwargs['admin_areas'] = admin_area_choices
+        kwargs["admin_areas"] = admin_area_choices
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -155,28 +153,28 @@ class AddAdminArea(BarrierMixin, FormView):
         return context_data
 
     def form_valid(self, form):
-        location = self.request.session['location']
-        location['admin_areas'].append(form.cleaned_data['admin_area'])
-        self.request.session['location'] = location
+        location = self.request.session["location"]
+        location["admin_areas"].append(form.cleaned_data["admin_area"])
+        self.request.session["location"] = location
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse(
-            'barriers:edit_location_session',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+            "barriers:edit_location_session",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
 
 class RemoveAdminArea(View):
     def post(self, request, *args, **kwargs):
-        location = self.request.session['location']
-        admin_area = request.POST['admin_area']
-        location['admin_areas'].remove(admin_area)
-        self.request.session['location'] = location
+        location = self.request.session["location"]
+        admin_area = request.POST["admin_area"]
+        location["admin_areas"].remove(admin_area)
+        self.request.session["location"] = location
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse(
-            'barriers:edit_location_session',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+            "barriers:edit_location_session",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )

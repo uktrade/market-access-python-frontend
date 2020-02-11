@@ -24,8 +24,8 @@ class APIResource:
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
             model=self.model,
-            data=response_data['results'],
-            total_count=response_data['count'],
+            data=response_data["results"],
+            total_count=response_data["count"],
         )
 
     def get(self, id, *args, **kwargs):
@@ -56,20 +56,20 @@ class BarriersResource(APIResource):
         url = f"barriers/{barrier_id}/history"
         return [
             HistoryItem(result)
-            for result in self.client.get(url, params=kwargs)['history']
+            for result in self.client.get(url, params=kwargs)["history"]
         ]
 
     def get_assessment_history(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/assessment_history"
         return [
             HistoryItem(result)
-            for result in self.client.get(url, params=kwargs)['history']
+            for result in self.client.get(url, params=kwargs)["history"]
         ]
 
     def get_team_members(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/members"
         response_data = self.client.get(url, params=kwargs)
-        return response_data.get('results', [])
+        return response_data.get("results", [])
 
     def add_team_member(self, barrier_id, user_id, role, **kwargs):
         url = f"barriers/{barrier_id}/members"
@@ -127,7 +127,7 @@ class InteractionsResource(APIResource):
         url = f"barriers/{barrier_id}/interactions"
         return [
             self.model(result)
-            for result in self.client.get(url, params=kwargs)['results']
+            for result in self.client.get(url, params=kwargs)["results"]
         ]
 
     def delete_note(self, note_id):
@@ -173,12 +173,12 @@ class DocumentsResource(APIResource):
             except requests.exceptions.HTTPError:
                 raise ScanError("Unable to get scan status")
 
-            if response.get('status') == "virus_scanning_failed":
+            if response.get("status") == "virus_scanning_failed":
                 raise ScanError(
                     "This file may be infected with a virus and will not be "
                     "accepted."
                 )
-            elif response.get('status') == "virus_scanned":
+            elif response.get("status") == "virus_scanned":
                 return
 
             time.sleep(interval / 1000)

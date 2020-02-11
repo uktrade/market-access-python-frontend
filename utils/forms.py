@@ -13,6 +13,7 @@ class MultipleValueField(forms.MultipleChoiceField):
     """
     Allows multiple values, but is not restricted to values in 'choices'
     """
+
     def valid_value(self, value):
         return True
 
@@ -21,17 +22,18 @@ class RestrictedFileField(forms.FileField):
     """
     Custom FileField with restrictions on content types and file size
     """
+
     mime_types = {
-        'image/gif': '.gif',
-        'image/png': '.png',
-        'image/webp': '.webp',
-        'image/jpeg': '.jpg',
-        'text/csv': '.csv',
-        'text/plain': '.txt',
-        'application/rtf': '.rtf',
-        'application/pdf': '.pdf',
-        'application/msword': '.doc',
-        'application/vnd.ms-excel': '.xls',
+        "image/gif": ".gif",
+        "image/png": ".png",
+        "image/webp": ".webp",
+        "image/jpeg": ".jpg",
+        "text/csv": ".csv",
+        "text/plain": ".txt",
+        "application/rtf": ".rtf",
+        "application/pdf": ".pdf",
+        "application/msword": ".doc",
+        "application/vnd.ms-excel": ".xls",
     }
 
     def __init__(self, *args, **kwargs):
@@ -75,6 +77,7 @@ class ChoiceFieldWithHelpText(forms.ChoiceField):
 
     choices should be a three part tuple (value, name, help_text)
     """
+
     def valid_value(self, value):
         """Check to see if the provided value is a valid choice."""
         text_value = str(value)
@@ -114,13 +117,13 @@ class MonthYearField(forms.MultiValueField):
         )
         super().__init__(
             error_messages={
-                'incomplete': (
-                    'Enter resolution date and include a month and year.'
+                "incomplete": (
+                    "Enter resolution date and include a month and year."
                 ),
             },
             fields=fields,
             require_all_fields=True,
-            **kwargs
+            **kwargs,
         )
 
     def compress(self, data_list):

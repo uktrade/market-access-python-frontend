@@ -29,15 +29,15 @@ class SaveWatchlistForm(forms.Form):
         self.watchlists = watchlists
         self.filters = filters
         super().__init__(*args, **kwargs)
-        self.fields['replace_index'].choices = [
+        self.fields["replace_index"].choices = [
             (str(index), watchlist.name)
             for index, watchlist in enumerate(watchlists)
         ]
         if self.has_to_replace():
-            del self.fields['replace_or_new']
-            self.fields['replace_index'].required = True
+            del self.fields["replace_or_new"]
+            self.fields["replace_index"].required = True
         elif self.has_to_create():
-            del self.fields['replace_or_new']
+            del self.fields["replace_or_new"]
 
     def has_to_create(self):
         return len(self.watchlists) == 0
@@ -46,15 +46,15 @@ class SaveWatchlistForm(forms.Form):
         return len(self.watchlists) >= settings.MAX_WATCHLIST_LENGTH
 
     def get_new_watchlist_index(self):
-        replace_index = self.cleaned_data.get('replace_index')
-        if replace_index not in self.fields['replace_index'].empty_values:
+        replace_index = self.cleaned_data.get("replace_index")
+        if replace_index not in self.fields["replace_index"].empty_values:
             return int(replace_index)
         return len(self.watchlists) - 1
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data.get('replace_or_new') == self.REPLACE:
-            if not cleaned_data['replace_index']:
+        if cleaned_data.get("replace_or_new") == self.REPLACE:
+            if not cleaned_data["replace_index"]:
                 self.add_error(
                     "replace_index",
                     "Select which watch list to replace"
@@ -66,15 +66,15 @@ class SaveWatchlistForm(forms.Form):
             filters=self.filters,
         )
 
-        replace_or_new = self.cleaned_data.get('replace_or_new')
+        replace_or_new = self.cleaned_data.get("replace_or_new")
 
         if self.has_to_create() or replace_or_new == self.NEW:
             self.watchlists.append(new_watchlist)
         elif self.has_to_replace() or replace_or_new == self.REPLACE:
-            index = int(self.cleaned_data['replace_index'])
             self.watchlists = self.watchlists[:index] + [
                 new_watchlist
             ] + self.watchlists[index+1:]
+            index = int(self.cleaned_data["replace_index"])
 
         return self.watchlists
 

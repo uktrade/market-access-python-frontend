@@ -23,18 +23,18 @@ class DocumentMixin:
        if it fails the check.
     """
     def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop('token')
+        self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
 
     def validate_document(self):
-        document = self.cleaned_data.get('document')
+        document = self.cleaned_data.get("document")
 
         if document:
             try:
                 uploaded_document = self.upload_document()
-                document_ids = self.cleaned_data.get('document_ids', [])
-                document_ids.append(uploaded_document['id'])
-                self.cleaned_data['document_ids'] = document_ids
+                document_ids = self.cleaned_data.get("document_ids", [])
+                document_ids.append(uploaded_document["id"])
+                self.cleaned_data["document_ids"] = document_ids
             except FileUploadError as e:
                 self.add_error("document", str(e))
             except ScanError as e:
@@ -43,16 +43,16 @@ class DocumentMixin:
         return document
 
     def upload_document(self):
-        document = self.cleaned_data['document']
+        document = self.cleaned_data["document"]
 
         client = MarketAccessAPIClient(self.token)
         data = client.documents.create(
             filename=document.name,
             filesize=document.size,
         )
-        document_id = data['id']
+        document_id = data["id"]
 
-        self.upload_to_s3(url=data['signed_upload_url'], document=document)
+        self.upload_to_s3(url=data["signed_upload_url"], document=document)
 
         client.documents.complete_upload(document_id)
         client.documents.check_scan_status(document_id)

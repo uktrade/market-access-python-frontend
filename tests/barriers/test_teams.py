@@ -27,23 +27,23 @@ class SearchTestCase(MarketAccessTestCase):
     def test_landing_page(self):
         response = self.client.get(
             reverse(
-                'barriers:search_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:search_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             )
         )
         assert response.status_code == HTTPStatus.OK
-        assert 'form' in response.context
+        assert "form" in response.context
 
     @patch("utils.sso.SSOClient.search_users")
     def test_empty_search(self, mock_search_users):
         response = self.client.post(
             reverse(
-                'barriers:search_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:search_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             )
         )
         assert response.status_code == HTTPStatus.OK
-        assert 'query' in response.context['form'].errors
+        assert "query" in response.context["form"].errors
         assert mock_search_users.called is False
 
     @patch("utils.sso.SSOClient.search_users")
@@ -51,15 +51,15 @@ class SearchTestCase(MarketAccessTestCase):
         mock_search_users.return_value = []
         response = self.client.post(
             reverse(
-                'barriers:search_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:search_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"query": "Test search"}
+            data={"query": "Test search"},
         )
         assert response.status_code == HTTPStatus.OK
         assert mock_search_users.called is True
-        assert response.context['form'].is_valid() is True
-        assert response.context['results'] == []
+        assert response.context["form"].is_valid() is True
+        assert response.context["results"] == []
 
     @patch("utils.sso.SSOClient.search_users")
     def test_with_results(self, mock_search_users):
@@ -72,15 +72,15 @@ class SearchTestCase(MarketAccessTestCase):
         mock_search_users.return_value = results
         response = self.client.post(
             reverse(
-                'barriers:search_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:search_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"query": "Test search"}
+            data={"query": "Test search"},
         )
         assert response.status_code == HTTPStatus.OK
         assert mock_search_users.called is True
-        assert response.context['form'].is_valid() is True
-        assert response.context['results'] == results
+        assert response.context["form"].is_valid() is True
+        assert response.context["results"] == results
 
 
 class AddTeamMemberTestCase(MarketAccessTestCase):
@@ -93,14 +93,14 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                'barriers:add_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:add_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"user": user_id}
+            data={"user": user_id},
         )
         assert response.status_code == HTTPStatus.OK
-        assert response.context['user'] == self.users[0]
-        assert response.context['form'].initial['user'] == user_id
+        assert response.context["user"] == self.users[0]
+        assert response.context["form"].initial["user"] == user_id
 
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.BarriersResource.get_team_members")
@@ -110,8 +110,8 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                'barriers:add_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:add_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -127,14 +127,14 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                'barriers:add_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:add_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"user": user_id}
+            data={"user": user_id},
         )
         assert response.status_code == HTTPStatus.OK
-        assert response.context['user'] == self.users[0]
-        assert 'role' in response.context['form'].errors
+        assert response.context["user"] == self.users[0]
+        assert "role" in response.context["form"].errors
 
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.BarriersResource.get_team_members")
@@ -151,10 +151,10 @@ class AddTeamMemberTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                'barriers:add_team_member',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:add_team_member",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"user": user_id, "role": "Horse"}
+            data={"user": user_id, "role": "Horse"},
         )
 
         assert response.status_code == HTTPStatus.FOUND
@@ -174,16 +174,16 @@ class DeleteTeamMemberTestCase(MarketAccessTestCase):
         mock_get_team_members.return_value = self.team_members
         response = self.client.get(
             reverse(
-                'barriers:delete_team_member',
                 kwargs={
                     'barrier_id': self.barrier['id'],
                     'team_member_id': 9,
                 }
+                "barriers:delete_team_member",
             ),
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert response.context['team_member'] == self.team_members[0]
+        assert response.context["team_member"] == self.team_members[0]
         assert mock_delete_team_member.called is False
 
     @patch("utils.api.resources.BarriersResource.get_team_members")
@@ -191,11 +191,11 @@ class DeleteTeamMemberTestCase(MarketAccessTestCase):
     def test_post(self, mock_delete_team_member, mock_get_team_members):
         response = self.client.post(
             reverse(
-                'barriers:delete_team_member',
+                "barriers:delete_team_member",
                 kwargs={
-                    'barrier_id': self.barrier['id'],
-                    'team_member_id': 37,
-                }
+                    "barrier_id": self.barrier["id"],
+                    "team_member_id": 37,
+                },
             ),
         )
 

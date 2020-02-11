@@ -16,12 +16,10 @@ def form_group_classes(*args):
     return " ".join(set(classes))
 
 
-@register.inclusion_tag('partials/forms/field_error.html')
+@register.inclusion_tag("partials/forms/field_error.html")
 def form_field_error(form, field_name):
     error = form.errors.get(field_name)
-    return {
-        'error': error
-    }
+    return {"error": error}
 
 
 def get_custom_errors(errors):
@@ -29,18 +27,16 @@ def get_custom_errors(errors):
     for field_name, errors in errors.items():
         for error in errors:
             custom_errors[field_name] = {
-                'id': field_name,
-                'field_name': field_name.replace("_", " ").title(),
-                'text': error,
+                "id": field_name,
+                "field_name": field_name.replace("_", " ").title(),
+                "text": error,
             }
     return custom_errors
 
 
-@register.inclusion_tag('partials/forms/error_summary.html')
+@register.inclusion_tag("partials/forms/error_summary.html")
 def form_error_banner(form):
-    return {
-        'custom_errors': get_custom_errors(form.errors)
-    }
+    return {"custom_errors": get_custom_errors(form.errors)}
 
 
 @register.filter

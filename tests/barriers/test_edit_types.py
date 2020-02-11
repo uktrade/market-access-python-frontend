@@ -19,14 +19,14 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
             )
         )
         assert response.status_code == HTTPStatus.OK
-        assert 'form' in response.context
-        form = response.context['form']
-        assert form.initial['barrier_types'] == self.barrier['barrier_types']
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["barrier_types"] == self.barrier["barrier_types"]
 
         session_barrier_type_ids = [
-            type['id'] for type in self.client.session['barrier_types']
+            type["id"] for type in self.client.session["barrier_types"]
         ]
-        assert session_barrier_type_ids == self.barrier['barrier_types']
+        assert session_barrier_type_ids == self.barrier["barrier_types"]
 
     def test_add_type_choices(self):
         """
@@ -48,11 +48,11 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
             ),
         )
         assert response.status_code == HTTPStatus.OK
-        assert 'form' in response.context
-        form = response.context['form']
-        choice_values = [k for k, v in form.fields['barrier_type'].choices]
+        assert "form" in response.context
+        form = response.context["form"]
+        choice_values = [k for k, v in form.fields["barrier_type"].choices]
 
-        for type_id in self.barrier['barrier_types']:
+        for type_id in self.barrier["barrier_types"]:
             assert type_id not in choice_values
 
     @patch("utils.api.resources.APIResource.patch")
@@ -74,15 +74,15 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
                 'barriers:add_type',
                 kwargs={'barrier_id': self.barrier['id']}
             ),
-            data={'barrier_type': '117'},
+            data={"barrier_type": "117"},
         )
         assert response.status_code == HTTPStatus.FOUND
 
         session_barrier_type_ids = [
-            type['id'] for type in self.client.session['barrier_types']
+            type["id"] for type in self.client.session["barrier_types"]
         ]
         assert session_barrier_type_ids == (
-            self.barrier['barrier_types'] + [117]
+            self.barrier["barrier_types"] + [117]
         )
         assert mock_patch.called is False
 
@@ -101,14 +101,14 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                'barriers:edit_types_session',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:edit_types_session",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.OK
-        form = response.context['form']
-        assert form.initial['barrier_types'] == (
-            self.barrier['barrier_types'] + [117]
+        form = response.context["form"]
+        assert form.initial["barrier_types"] == (
+            self.barrier["barrier_types"] + [117]
         )
 
     @patch("utils.api.resources.APIResource.patch")
@@ -116,7 +116,7 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
         """
         Saving barrier types should call the API
         """
-        new_types = self.barrier['barrier_types'] + [117]
+        new_types = self.barrier["barrier_types"] + [117]
 
         self.update_session({
             'barrier_types': [
@@ -129,14 +129,14 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                'barriers:edit_types_session',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:edit_types_session",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={'barrier_types': new_types},
+            data={"barrier_types": new_types},
         )
 
         mock_patch.assert_called_with(
-            id=self.barrier['id'],
+            id=self.barrier["id"],
             barrier_types=[str(barrier_type) for barrier_type in new_types],
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -146,7 +146,7 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
         """
         Removing a type should remove it from the session, not call the API
         """
-        new_types = self.barrier['barrier_types'] + [117]
+        new_types = self.barrier["barrier_types"] + [117]
 
         self.update_session({
             'barrier_types': [
@@ -159,17 +159,17 @@ class EditBarrierTypesTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                'barriers:remove_type',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:remove_type",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={'barrier_type_id': self.barrier['barrier_types'][0]},
+            data={"barrier_type_id": self.barrier["barrier_types"][0]},
         )
         assert response.status_code == HTTPStatus.FOUND
 
         session_barrier_type_ids = [
-            type['id'] for type in self.client.session['barrier_types']
+            type["id"] for type in self.client.session["barrier_types"]
         ]
         assert session_barrier_type_ids == (
-            self.barrier['barrier_types'][1:] + [117]
+            self.barrier["barrier_types"][1:] + [117]
         )
         assert mock_patch.called is False
