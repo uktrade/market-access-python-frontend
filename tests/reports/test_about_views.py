@@ -30,15 +30,19 @@ class AboutViewTestCase(ReportsTestCase):
         expected_title = '<title>Market Access - Add - About the barrier</title>'
         name_input_field = '<input class="govuk-input" id="barrier_title"'
         product_input_field = '<input class="govuk-input" id="product"'
-        barrier_source_radio_container = '<div class="govuk-radios barrier-source govuk-radios--conditional" data-module="radios">'
+        barrier_source_radio_container = (
+            '<div class="govuk-radios barrier-source govuk-radios--conditional" data-module="radios">'
+        )
         barrier_source_radio_item = '<div class="govuk-radios__item barrier-source">'
         expected_barrier_source_radio_count = 4
         eu_exit_related_radio_container = '<div class="govuk-radios eu_exit_related">'
         eu_exit_related_radio_item = '<div class="govuk-radios__item eu_exit_related">'
         expected_eu_exit_related_radio_count = 3
         expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'
-        expected_exit_btn = '<button type="submit" class="govuk-button button--secondary" ' \
-                            'name="action" value="exit">Save and exit</button>'
+        expected_exit_btn = (
+            '<button type="submit" class="govuk-button button--secondary" ' 
+            'name="action" value="exit">Save and exit</button>'
+        )
 
         response = self.client.get(self.url)
         html = response.content.decode('utf8')
