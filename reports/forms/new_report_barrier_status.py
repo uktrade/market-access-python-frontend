@@ -98,12 +98,14 @@ class NewReportBarrierStatusForm(SubFormsMixin, forms.Form):
         if self.cleaned_data["status"] == BarrierStatuses.UNRESOLVED:
             return ""
         else:
+            resolved_date = None
             prefix = "resolved"
             if self.cleaned_data["status"] == BarrierStatuses.PARTIALLY_RESOLVED:
                 prefix = f"part_{prefix}"
             month = self.cleaned_data.get(f"{prefix}_month")
             year = self.cleaned_data.get(f"{prefix}_year")
-            resolved_date = f"{year}-{month}-01"
+            if month and year:
+                resolved_date = f"{year}-{month}-01"
             return resolved_date
 
     @property
@@ -115,6 +117,7 @@ class NewReportBarrierStatusForm(SubFormsMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_data["is_resolved"] = self.is_resolved
-        cleaned_data["resolved_date"] = self.resolved_date
+        if cleaned_data.get("status"):
+            cleaned_data["is_resolved"] = self.is_resolved
+            cleaned_data["resolved_date"] = self.resolved_date
         return self.cleaned_data

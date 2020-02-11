@@ -148,10 +148,13 @@ class ReportFormGroup:
 
     @property
     def selected_admin_areas_as_list(self):
+        areas_list = []
         areas = self.selected_admin_areas
+
         if areas:
-            areas = areas.replace(" ", "").split(",")
-        return areas or []
+            areas_list = areas.replace(" ", "").split(",")
+
+        return areas_list
 
     def remove_selected_admin_area(self, admin_area_id):
         admin_areas = self.selected_admin_areas_as_list
@@ -361,7 +364,7 @@ class ReportFormGroup:
         self.status_form = self.get_status_form_data()
         self.location_form = self.get_location_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
-        self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas"))
+        self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas") or ())
         self.sectors_affected = self.get_sectors_affected_form_data()
         self.selected_about_formsectors = self.get_selected_sectors()
         self.about_form = self.get_about_form()
@@ -430,18 +433,21 @@ class ReportFormGroup:
             'X-User-Agent': '',
             'X-Forwarded-For': '',
         }
-        response = requests.put(url, headers=headers, json=payload)
+        response = requests.patch(url, headers=headers, json=payload)
         response.raise_for_status()
         barrier_data = json.loads(response.text)
         return Report(barrier_data)
+
+    def _create_barrier(self, payload):
+        return self.client.reports.create(**payload)
 
     def save(self, payload=None):
         """Create or update a (report) barrier."""
         payload = payload or self.prepare_payload()
         if self.barrier_id:
-            barrier = self._update_barrier(payload=payload)
+            barrier = self._update_barrier(payload)
         else:
-            barrier = self.client.reports.create(**payload)
+            barrier = self._create_barrier(payload)
         self.update_context(barrier)
 
     def submit(self):

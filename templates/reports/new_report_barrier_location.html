@@ -19,10 +19,10 @@
 
                 {% form_field_error form "country" %}
 
-                <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.country.name }}" name="{{ form.country.name }}" {% if form.errors %} aria-describedby="{{ form.country.name }}-error"{% endif %}>
+                <select class="govuk-select govuk-!-width-full{% if form.errors %} govuk-select--error{% endif %}" id="{{ form.country.name }}" name="{{ form.country.name }}"{% if form.errors %} aria-describedby="{{ form.country.name }}-error"{% endif %}>
                     <option value {% if not form.initial.country %} selected{% endif %}>Choose a country</option>
                     {% for id, name in form.fields.country.choices %}
-                    <option value="{{ id }}"{% if id == form.initial.country %} selected{% endif %}>{{ name }}</option>
+                    <option class="country_option" value="{{ id }}"{% if id == form.initial.country %} selected{% endif %}>{{ name }}</option>
                     {% endfor %}
                 </select>
             </div>

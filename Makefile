@@ -31,7 +31,7 @@ django-collectstatic: ## Collect static files.
 	docker-compose exec web bash -c "python3.6 /usr/src/app/manage.py collectstatic --no-input"
 
 .PHONY: django-test
-django-test: ## Run django tests.
+django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down
 	docker-compose exec web pytest tests/$(path)
 
 .PHONY: django-ui-test

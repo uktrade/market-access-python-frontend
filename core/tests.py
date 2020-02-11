@@ -28,7 +28,10 @@ class MarketAccessTestCase(TestCase):
         session = self.client.session
         session.update({
             "sso_token": 'abcd',
-            "user_data": {'username': 'test user'},
+            "user_data": {
+                'username': 'test user',
+                "id": 49,
+            },
         })
         session.save()
 
@@ -134,3 +137,26 @@ class MarketAccessTestCase(TestCase):
             users = json.loads(memfiles.open(file))
             self._users = [User(user) for user in users]
         return self._users
+
+
+class ReportsTestsMixin:
+    _draft_barriers = ()
+
+    @property
+    def draft_barriers(self):
+        if not self._draft_barriers:
+            file = f"{settings.BASE_DIR}/../tests/reports/fixtures/draft_barriers.json"
+            self._draft_barriers = json.loads(memfiles.open(file))
+        return self._draft_barriers
+
+    def draft_barrier(self, step):
+        """
+        Returns the fixture that corresponds with the step number.
+        """
+        for data in self.draft_barriers:
+            if int(data.get("step")) == int(step):
+                return data
+
+
+class ReportsTestCase(ReportsTestsMixin, MarketAccessTestCase):
+    pass
