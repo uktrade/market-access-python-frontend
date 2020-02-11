@@ -4,8 +4,7 @@ import time
 from django.conf import settings
 
 from barriers.constants import Statuses
-from barriers.models import Assessment, Barrier
-from interactions.models import HistoryItem, Interaction
+from barriers.models import Assessment, Barrier, HistoryItem, Interaction
 from reports.models import Report
 from users.models import User
 

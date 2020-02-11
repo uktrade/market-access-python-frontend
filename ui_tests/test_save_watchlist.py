@@ -2,7 +2,7 @@ import random
 
 from ui_tests import settings
 
-from .helpers.watchlists import create_new_watchlist, clear_watchlists
+from .helpers.watchlists import create_new_watchlist
 
 
 def test_save_watchlist(browser):

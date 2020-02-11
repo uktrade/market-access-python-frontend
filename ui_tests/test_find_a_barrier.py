@@ -41,8 +41,6 @@ def test_priority_search_filter(browser):
     """
     Only relevant barriers should show when searching by priority
     """
-    barrier_id = settings.TEST_BARRIER_ID
-
     browser.visit(f"{settings.BASE_URL}find-a-barrier")
 
     checkbox = browser.find_by_css("input[name=priority][value='HIGH']")
@@ -64,8 +62,6 @@ def test_status_search_filter(browser):
     """
     Only relevant barriers should show when searching by status
     """
-    barrier_id = settings.TEST_BARRIER_ID
-
     browser.visit(f"{settings.BASE_URL}find-a-barrier")
 
     # Open: In progress

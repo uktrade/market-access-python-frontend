@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import dj_database_url
-import logging.config
 import json
 import os
 

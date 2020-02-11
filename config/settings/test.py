@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # noqa
 
 DJANGO_ENV = 'test'
 
