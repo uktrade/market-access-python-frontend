@@ -18,9 +18,9 @@ def form_group_classes(*args):
 
 @register.inclusion_tag('partials/forms/field_error.html')
 def form_field_error(form, field_name):
-    error = form.errors.get(field_name)
+    errors = form.errors.get(field_name)
     return {
-        'error': error
+        'errors': errors
     }
 
 
@@ -28,11 +28,12 @@ def get_custom_errors(errors):
     custom_errors = {}
     for field_name, errors in errors.items():
         for error in errors:
-            custom_errors[field_name] = {
+            custom_errors.setdefault(field_name, [])
+            custom_errors[field_name].append({
                 'id': field_name,
                 'field_name': field_name.replace("_", " ").title(),
                 'text': error,
-            }
+            })
     return custom_errors
 
 
