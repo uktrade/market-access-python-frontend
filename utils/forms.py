@@ -109,8 +109,24 @@ class MonthYearField(forms.MultiValueField):
 
     def __init__(self, **kwargs):
         fields = (
-            forms.IntegerField(label="Month", min_value=1, max_value=12),
-            forms.IntegerField(label="Year", min_value=2000, max_value=2100),
+            forms.IntegerField(
+                label="Month",
+                min_value=1,
+                max_value=12,
+                error_messages={
+                    'min_value': "Please enter a valid month",
+                    'max_value': "Please enter a valid month",
+                }
+            ),
+            forms.IntegerField(
+                label="Year",
+                min_value=1990,
+                max_value=2100,
+                error_messages={
+                    'min_value': "Please enter a valid 4-digit year",
+                    'max_value': "Please enter a valid 4-digit year",
+                }
+            ),
         )
         super().__init__(
             error_messages={
