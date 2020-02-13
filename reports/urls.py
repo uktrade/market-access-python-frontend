@@ -27,7 +27,6 @@ urlpatterns = [
     path("reports/new/", NewReport.as_view(), name="new_report"),
     path("reports/<uuid:barrier_id>/", ReportDetail.as_view(), name="draft_barrier_details_uuid"),
     path("reports/<uuid:barrier_id>/delete/", DeleteReport.as_view(), name="delete_report"),
-
     # Problem Status
     path("reports/new/start/", NewReportBarrierProblemStatusView.as_view(), name="barrier_problem_status"),
     path("reports/<uuid:barrier_id>/start/", NewReportBarrierProblemStatusView.as_view(), name="barrier_problem_status_uuid"),
@@ -55,48 +54,4 @@ urlpatterns = [
     path("reports/<uuid:barrier_id>/problem/", NewReportBarrierAboutView.as_view(), name="barrier_about_uuid"),
     # Summary
     path("reports/<uuid:barrier_id>/summary/", NewReportBarrierSummaryView.as_view(), name="barrier_summary_uuid"),
-
-
-    # path("barriers/<uuid:id>/interactions/delete-note/<int:note_id>/", BarrierDeleteNote.as_view(), name="delete_note"),
-
-    # app.get( '/:reportId?/start/', controller.start );
-    # app.post( '/:reportId?/start/', controller.start );
-
-    # app.get( '/:reportId?/is-resolved/', hasStartFormValues, controller.isResolved );
-    # app.post( '/:reportId?/is-resolved/', hasStartFormValues, controller.isResolved );
-
-    # app.get( '/:reportId?/country/', hasStartFormValues, hasResolvedFormValues, controller.country );
-    # app.post( '/:reportId?/country/', hasStartFormValues, hasResolvedFormValues, controller.country );
-
-    # app.get( '/:reportId?/country/:countryId/has-admin-areas/', hasStartFormValues, hasResolvedFormValues, controller.hasAdminAreas );
-    # app.post( '/:reportId?/country/:countryId/has-admin-areas/', hasStartFormValues, hasResolvedFormValues, controller.hasAdminAreas );
-
-    # app.get( '/:reportId?/country/:countryId/admin-areas/', hasStartFormValues, hasResolvedFormValues, controller.adminAreas.list );
-    # app.post( '/:reportId?/country/:countryId/admin-areas/', hasStartFormValues, hasResolvedFormValues, controller.adminAreas.list );
-
-    # app.get( '/:reportId/country/:countryId/admin-areas/add/', controller.adminAreas.add );
-    # app.post( '/:reportId/country/:countryId/admin-areas/add/', controller.adminAreas.add );
-    # app.post( '/:reportId/country/:countryId/admin-areas/remove/', controller.adminAreas.remove );
-
-    # app.get( '/:reportId/has-sectors/', controller.hasSectors );
-    # app.post( '/:reportId/has-sectors/', controller.hasSectors );
-
-    # app.get( '/:reportId/all-sectors/', controller.sectors.allSectors );
-
-    # app.get( '/:reportId/sectors/', controller.sectors.list );
-    # app.post( '/:reportId/sectors/', controller.sectors.list );
-
-    # app.get( '/:reportId/sectors/add/all/', controller.sectors.all.add );
-    # app.post( '/:reportId/sectors/remove/all/', controller.sectors.all.remove );
-    # app.get( '/:reportId/sectors/add/', controller.sectors.add );
-    # app.post( '/:reportId/sectors/add/', controller.sectors.add );
-    # app.post( '/:reportId/sectors/remove/', controller.sectors.remove );
-
-    # app.get( '/:reportId/problem/', controller.aboutProblem );
-    # app.post( '/:reportId/problem/', controller.aboutProblem );
-
-    # app.get( '/:reportId/summary/', controller.summary );
-    # app.post( '/:reportId/summary/', controller.summary );
-
-    # app.post( '/:reportId/submit/', controller.submit );
 ]

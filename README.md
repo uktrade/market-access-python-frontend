@@ -42,6 +42,19 @@ There's a set of make commands that you can utilize straight away. \
 To list all available commands with help text type `make help` in terminal and hit `Enter`.
 
 
+#### Staticfiles
+Staticfiles are compressed offline for most environments, so it makes sense that you could run the same way locally to test things out. 
+To do that, just: 
+1. stop the django development server 
+2. set `DEBUG` to `False` in `config/settings/local.py`
+3. run `make django-static`
+4. start the django development server
+
+**Note:** this is a good way to mimic how files are generated and served in an environment, \
+but please note, lazy loading of static files is also disabled in offline mode, so your changes to templates, js, scss \
+might not take effect unless you run step 3 from above and restart your dev server.
+
+
 ## Tests
 Front end tests are grouped under `./test` directory. When writing tests please use the corresponding app name to keep the same folder structure as the main app so it's easy to tell which test belongs to which app.
 

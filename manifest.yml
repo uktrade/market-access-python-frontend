@@ -1,6 +1,4 @@
 ---
 applications:
-- name: market-access-pyfe-dev
-  memory: 512M
-  buildpack: https://github.com/cloudfoundry/python-buildpack.git#v1.6.28
+- buildpack: https://github.com/cloudfoundry/python-buildpack.git#v1.6.28
   stack: cflinuxfs3
