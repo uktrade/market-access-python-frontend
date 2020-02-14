@@ -36,6 +36,7 @@ class EditCountryForm(forms.Form):
     country = forms.ChoiceField(
         label='Exports to which country are affected by this issue?',
         choices=[],
+        error_messages={'required': "Select a location for this barrier"},
     )
 
     def __init__(self, countries, *args, **kwargs):
@@ -47,6 +48,9 @@ class AddAdminAreaForm(forms.Form):
     admin_area = forms.ChoiceField(
         label='Choose the parts of the country that are affected',
         choices=[],
+        error_messages={
+            'required': "Select a admin area affected by the barrier"
+        },
     )
 
     def __init__(self, admin_areas, *args, **kwargs):

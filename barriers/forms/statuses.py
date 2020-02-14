@@ -10,10 +10,17 @@ from utils.forms import ChoiceFieldWithHelpText, MonthYearField
 
 
 class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
-    status_date = MonthYearField(required=False)
+    status_date = MonthYearField(
+        required=False,
+        error_messages={
+            'required': "Enter resolution date and include a month and year",
+            'incomplete': 'Enter resolution date and include a month and year.'
+        },
+    )
     status_summary = forms.CharField(
         label='Provide a summary of why this barrier is dormant',
         widget=forms.Textarea,
+        error_messages={'required': "Enter a summary"},
     )
 
     def __init__(self, is_resolved, *args, **kwargs):
@@ -60,6 +67,7 @@ class UnknownForm(forms.Form):
     unknown_summary = forms.CharField(
         label="Provide a summary of why this barrier is unknown",
         widget=forms.Textarea,
+        error_messages={'required': "Enter a summary"},
     )
 
     def as_html(self):
@@ -85,7 +93,8 @@ class OpenPendingForm(forms.Form):
     pending_type = forms.ChoiceField(
         label="Who is the action with?",
         choices=CHOICES,
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect,
+        error_messages={'required': "Select a pending action"},
     )
     pending_type_other = forms.CharField(
         label="Please specify",
@@ -94,6 +103,7 @@ class OpenPendingForm(forms.Form):
     pending_summary = forms.CharField(
         label="Provide a summary of why this barrier is pending action",
         widget=forms.Textarea,
+        error_messages={'required': "Enter a summary"},
     )
 
     def as_html(self):
@@ -130,6 +140,7 @@ class OpenInProgressForm(forms.Form):
     reopen_summary = forms.CharField(
         label="Provide a summary of why this barrier is being reopened",
         widget=forms.Textarea,
+        error_messages={'required': "Enter a summary"},
     )
 
     def as_html(self):
@@ -146,10 +157,16 @@ class ResolvedInPartForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
-    part_resolved_date = MonthYearField()
+    part_resolved_date = MonthYearField(
+        error_messages={
+            'required': "Enter resolution date and include a month and year",
+            'incomplete': 'Enter resolution date and include a month and year.'
+        },
+    )
     part_resolved_summary = forms.CharField(
         label="Provide a summary of how this barrier was partially resolved",
         widget=forms.Textarea,
+        error_messages={'required': "Enter a summary"},
     )
 
     def as_html(self):
@@ -167,10 +184,16 @@ class ResolvedInFullForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
-    resolved_date = MonthYearField()
+    resolved_date = MonthYearField(
+        error_messages={
+            'required': "Enter resolution date and include a month and year",
+            'incomplete': 'Enter resolution date and include a month and year.'
+        },
+    )
     resolved_summary = forms.CharField(
         label="Provide a summary of how this barrier was resolved",
         widget=forms.Textarea,
+        error_messages={'required': "Enter a summary"},
     )
 
     def as_html(self):
@@ -191,6 +214,7 @@ class DormantForm(forms.Form):
     dormant_summary = forms.CharField(
         label="Provide a summary of why this barrier is dormant",
         widget=forms.Textarea,
+        error_messages={'required': "Enter a summary"},
     )
 
     def as_html(self):
@@ -237,6 +261,7 @@ class BarrierChangeStatusForm(forms.Form):
         label="Change barrier status",
         choices=CHOICES,
         widget=forms.RadioSelect,
+        error_messages={'required': "Choose a status"},
     )
     subform_classes = {
         Statuses.UNKNOWN: UnknownForm,

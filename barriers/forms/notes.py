@@ -13,6 +13,7 @@ class AddNoteForm(DocumentMixin, forms.Form):
             'Add notes on an interaction or event'
         ),
         widget=forms.Textarea,
+        error_messages={'required': "Add text for the note."},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
@@ -39,7 +40,10 @@ class AddNoteForm(DocumentMixin, forms.Form):
 
 
 class EditNoteForm(DocumentMixin, forms.Form):
-    note = forms.CharField(widget=forms.Textarea)
+    note = forms.CharField(
+        widget=forms.Textarea,
+        error_messages={'required': "Add text for the note."},
+    )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
         label="Attach a document",

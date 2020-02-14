@@ -39,7 +39,11 @@ class EditSectorsForm(forms.Form):
 
 
 class AddSectorsForm(forms.Form):
-    sector = forms.ChoiceField(label='', choices=[])
+    sector = forms.ChoiceField(
+        label='',
+        choices=[],
+        error_messages={'required': "Select a sector affected by the barrier"},
+    )
 
     def __init__(self, sectors, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -14,11 +14,18 @@ class SaveWatchlistForm(forms.Form):
     name = forms.CharField(
         label="Name your watch list",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
+        error_messages={'required': "Enter a name for your watch list"},
     )
     replace_or_new = forms.ChoiceField(
         label="Replace current list or create new?",
         choices=CHOICES,
         widget=forms.RadioSelect,
+        error_messages={
+            'required': (
+                "Select to either create a new watch list or replace "
+                "a current list"
+            )
+        },
     )
     replace_index = forms.ChoiceField(
         label="Which list would you like to replace?",
@@ -83,6 +90,7 @@ class RenameWatchlistForm(forms.Form):
     name = forms.CharField(
         label="Name your watch list",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
+        error_messages={'required': "Enter a name for your watch list"},
     )
 
 
@@ -90,4 +98,5 @@ class EditWatchlistForm(forms.Form):
     name = forms.CharField(
         label="Name your watch list",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
+        error_messages={'required': "Enter a name for your watch list"},
     )

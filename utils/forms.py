@@ -128,16 +128,7 @@ class MonthYearField(forms.MultiValueField):
                 }
             ),
         )
-        super().__init__(
-            error_messages={
-                'incomplete': (
-                    'Enter resolution date and include a month and year.'
-                ),
-            },
-            fields=fields,
-            require_all_fields=True,
-            **kwargs
-        )
+        super().__init__(fields=fields, require_all_fields=True, **kwargs)
 
     def compress(self, data_list):
         if data_list:

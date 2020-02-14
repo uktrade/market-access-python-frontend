@@ -13,7 +13,8 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
             "Include both the title or service name and the country being "
             "exported to, for example, Import quotas for steel rods in India."
         ),
-        max_length=255
+        max_length=255,
+        error_messages={'required': "Enter a title for this barrier"},
     )
 
     def save(self):
@@ -27,7 +28,8 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
 class UpdateBarrierProductForm(APIFormMixin, forms.Form):
     product = forms.CharField(
         label='What product or service is being exported?',
-        max_length=255
+        max_length=255,
+        error_messages={'required': "Enter a product or service"},
     )
 
     def save(self):
@@ -44,6 +46,9 @@ class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
             'Provide a summary of the problem and how you became aware of it'
         ),
         widget=forms.Textarea,
+        error_messages={
+            'required': "Enter a brief description for this barrier"
+        },
     )
 
     def save(self):
@@ -65,6 +70,9 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         label="How did you find out about the barrier?",
         choices=CHOICES,
         widget=forms.RadioSelect,
+        error_messages={
+            'required': "Select how you became aware of the barrier"
+        },
     )
     other_source = forms.CharField(label="Please specify", required=False)
 
@@ -101,7 +109,8 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
     priority = forms.ChoiceField(
         label="What is the priority of the barrier?",
         choices=CHOICES,
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect,
+        error_messages={'required': "Select a barrier priority"},
     )
     priority_summary = forms.CharField(
         label="Why did the priority change? (optional)",
@@ -135,7 +144,10 @@ class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
     eu_exit_related = forms.ChoiceField(
         label='Is this issue caused by or related to EU Exit?',
         choices=CHOICES,
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect,
+        error_messages={
+            'required': "Select whether this is EU exit related or not"
+        },
     )
 
     def save(self):
@@ -162,7 +174,8 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
     problem_status = ChoiceFieldWithHelpText(
         label='What is the scope of the barrier?',
         choices=CHOICES,
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect,
+        error_messages={'required': "Select a barrier scope"},
     )
 
     def save(self):

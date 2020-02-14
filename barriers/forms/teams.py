@@ -2,7 +2,11 @@ from django import forms
 
 
 class UserSearchForm(forms.Form):
-    query = forms.CharField(label='Find a user', max_length=255)
+    query = forms.CharField(
+        label='Find a user',
+        max_length=255,
+        required=False,
+    )
 
 
 class AddTeamMemberForm(forms.Form):
@@ -11,4 +15,8 @@ class AddTeamMemberForm(forms.Form):
         max_length=255,
         widget=forms.HiddenInput(),
     )
-    role = forms.CharField(label='Role', max_length=255)
+    role = forms.CharField(
+        label='Role',
+        max_length=255,
+        error_messages={'required': "Enter a role"},
+    )

@@ -4,7 +4,11 @@ from utils.api.client import MarketAccessAPIClient
 
 
 class AddTypeForm(forms.Form):
-    barrier_type = forms.ChoiceField(label='', choices=[])
+    barrier_type = forms.ChoiceField(
+        label='',
+        choices=[],
+        error_messages={'required': "Select a barrier type"},
+    )
 
     def __init__(self, barrier_types, *args, **kwargs):
         super().__init__(*args, **kwargs)
