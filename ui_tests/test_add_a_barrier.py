@@ -137,9 +137,6 @@ def test_continue_draft_barrier(browser):
 
     browser.find_by_css('input[type=submit][value="Submit barrier"]').click()
 
-    assert "/barriers/" in browser.url
-    barrier_id = browser.url.split('/')[-1]
-
     matches = re.findall(r"/barriers/([A-Za-z0-9\-]+)", browser.url)
     assert len(matches) == 1
     barrier_id = matches[0]

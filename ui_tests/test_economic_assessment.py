@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from ui_tests.helpers.barriers import create_barrier
 from ui_tests import settings
 
 from dateutil import parser
@@ -11,9 +12,12 @@ def test_economic_assessment(browser):
 
     Note: The barrier must not already have an assessment
     """
-    barrier_id = settings.TEST_BARRIER_ID
+    barrier_id = create_barrier(browser)
 
-    browser.visit(f"{settings.BASE_URL}barriers/{barrier_id}")
+    barrier_detail_url = f"{settings.BASE_URL}barriers/{barrier_id}"
+    if browser.url != barrier_detail_url:
+        browser.visit(barrier_detail_url)
+
     browser.click_link_by_text('Assessment')
 
     browser.click_link_by_text('Add economic assessment')
