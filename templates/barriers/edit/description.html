@@ -16,7 +16,7 @@
 
             {% form_field_error form "description" %}
 
-            <textarea class="govuk-textarea" name="description" rows="5" required>{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+            <textarea class="govuk-textarea" name="description" rows="5">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
         </div>
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button">

@@ -16,7 +16,7 @@
 
             {% form_field_error form "product" %}
 
-            <input class="govuk-input" id="{{ form.product.name }}" name="{{ form.product.name }}" type="text" value="{% if form.product.value %}{{ form.product.value }}{% endif %}" required>
+            <input class="govuk-input" id="{{ form.product.name }}" name="{{ form.product.name }}" type="text" value="{% if form.product.value %}{{ form.product.value }}{% endif %}">
         </div>
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button">

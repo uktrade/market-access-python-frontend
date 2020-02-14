@@ -24,7 +24,7 @@
 
             {% form_field_error form "title" %}
 
-            <input class="govuk-input" name="{{ form.title.name }}" type="text" value="{% if form.title.value %}{{ form.title.value }}{% endif %}" aria-describedby="{{ form.title.name }}-hint" required>
+            <input class="govuk-input" name="{{ form.title.name }}" type="text" value="{% if form.title.value %}{{ form.title.value }}{% endif %}" aria-describedby="{{ form.title.name }}-hint">
         </div>
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button">

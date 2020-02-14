@@ -30,7 +30,7 @@
 
             {% form_field_error form "status_summary" %}
 
-            <textarea class="govuk-textarea" id="status_summary" name="status_summary" rows="5" required>{% if form.status_summary.value %}{{ form.status_summary.value }}{% endif %}</textarea>
+            <textarea class="govuk-textarea{% if form.status_summary.errors %} govuk-textarea--error{% endif %}" id="status_summary" name="status_summary" rows="5">{% if form.status_summary.value %}{{ form.status_summary.value }}{% endif %}</textarea>
         </div>
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button">

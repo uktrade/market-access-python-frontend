@@ -38,7 +38,6 @@
                         type="text"
                         value="{% if form.query.value %}{{ form.query.value }}{% endif %}"
                         placeholder="Search for company"
-                        required
                         {% if not form.query.value and not form.query.error %}autofocus{% endif %}
                         aria-describedby="company-hint">
                     <button type="submit" class="search-form__button govuk-button">Search</button>
