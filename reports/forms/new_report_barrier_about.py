@@ -42,15 +42,31 @@ class NewReportBarrierAboutForm(forms.Form):
         label="Name this barrier",
         help_text="Include the name of the product, "
                   "service or investment and the type of problem. "
-                  "For example, Import quotas for steel rods."
+                  "For example, Import quotas for steel rods.",
+        error_messages={'required': "Enter a name for this barrier"},
     )
-    product = forms.CharField(label="What product, service or investment is affected?",)
+    product = forms.CharField(
+        label="What product, service or investment is affected?",
+        error_messages={'required': "Enter a product, service or investment"},
+    )
     source = forms.ChoiceField(
         label="Who told you about the barrier?",
         choices=BS.choices(),
+        error_messages={
+            'required': "Select how you became aware of the barrier"
+        },
     )
-    other_source = forms.CharField(label="Please specify", required=False)
+    other_source = forms.CharField(
+        label="Please specify",
+        required=False,
+        error_messages={
+            'required': "Select how you became aware of the barrier"
+        },
+    )
     eu_exit_related = forms.ChoiceField(
         label="Is this issue caused by or related to Brexit?",
         choices=RelatedToBrexit.choices(),
+        error_messages={
+            'required': "Select whether this is Brexit related or not"
+        },
     )

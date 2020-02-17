@@ -32,7 +32,8 @@ class NewReportBarrierProblemStatusForm(forms.Form):
     """Form to capture Barrier's problem_status"""
     status = forms.ChoiceField(
         label="What type of barrier is it?",
-        choices=BarrierProblemStatuses.choices
+        choices=BarrierProblemStatuses.choices,
+        error_messages={'required': "Select a barrier scope"},
     )
 
 
@@ -82,7 +83,13 @@ class NewReportBarrierStatusForm(SubFormsMixin, forms.Form):
     """Form to capture Barrier's status"""
     status = forms.ChoiceField(
         label="Has the barrier been resolved?",
-        choices=BarrierStatuses.choices
+        choices=BarrierStatuses.choices,
+        error_messages={
+            'required': (
+                "Select if the barrier is fully resolved, partially resolved "
+                "or not resolved"
+            )
+        },
     )
     sub_forms = {
         "resolved": MonthYearForm,

@@ -7,6 +7,7 @@ class NewReportBarrierLocationForm(forms.Form):
         label="Which country has introduced the barrier?",
         choices=[],
         widget=forms.HiddenInput(),
+        error_messages={'required': "Select a location for this barrier"},
     )
 
     def __init__(self, countries, *args, **kwargs):
@@ -32,6 +33,7 @@ class NewReportBarrierLocationHasAdminAreasForm(forms.Form):
     has_admin_areas = forms.ChoiceField(
         label="Does it affect the entire country?",
         choices=HasAdminAreas.choices(),
+        error_messages={'required': "Does it affect the entire country?"},
     )
 
 
@@ -39,6 +41,9 @@ class NewReportBarrierLocationAddAdminAreasForm(forms.Form):
     admin_areas = forms.ChoiceField(
         label="Which admin area is affected by the barrier?",
         choices=[],
+        error_messages={
+            'required': "Select an admin area affected by the barrier"
+        },
     )
 
     def __init__(self, admin_areas, *args, **kwargs):
@@ -55,7 +60,7 @@ class NewReportBarrierLocationAdminAreasForm(forms.Form):
     admin_areas = forms.ChoiceField(
         label="Selected admin areas",
         choices=[],
-        required=False
+        required=False,
     )
 
     def __init__(self, admin_areas, *args, **kwargs):
