@@ -71,6 +71,7 @@ class EconomyValueForm(forms.Form):
     value = forms.IntegerField(
         min_value=0,
         max_value=1000000000000,
+        localize=True,
         label="What is the total value of the barrier to the UK economy?",
         help_text=(
             "The estimated value of resolving the barrier to the UK economy "
@@ -106,6 +107,7 @@ class MarketSizeForm(forms.Form):
     value = forms.IntegerField(
         min_value=0,
         max_value=1000000000000,
+        localize=True,
         label="What is the size of the import market?",
         help_text=(
             "The size of the import market that this barrier is limiting "
@@ -141,6 +143,7 @@ class CommercialValueForm(forms.Form):
     value = forms.IntegerField(
         min_value=0,
         max_value=1000000000000,
+        localize=True,
         label="What is the value of the barrier to the affected business(es)?",
         help_text=(
             "The value of the barrier to the affected business(es) in GBP "
@@ -176,6 +179,7 @@ class ExportValueForm(forms.Form):
     value = forms.IntegerField(
         min_value=0,
         max_value=1000000000000,
+        localize=True,
         label="What is the value of currently affected UK exports?",
         help_text=(
             "The value of UK exports to the partner country that are affected "
