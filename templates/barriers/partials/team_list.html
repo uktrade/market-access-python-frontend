@@ -13,7 +13,7 @@
             {% for member in team_members %}
                 <tr class="standard-table__row">
                     <td class="standard-table__cell">{{ member.user.full_name }}</td>
-                    <td class="standard-table__cell">{{ member.user.email|default:'---' }}</td>
+                    <td class="standard-table__cell">{{ member.user.email }}</td>
                     <td class="standard-table__cell">{{ member.role }}</td>
                     <td class="standard-table__cell">
                         {% if not member.default %}<a class="js-delete-modal" href="{% url 'barriers:delete_team_member' barrier.id member.id %}">Delete</a>{% endif %}
