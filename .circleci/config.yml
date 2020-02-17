@@ -9,7 +9,7 @@ jobs:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: circleci/python:3.6.1
-      - image: postgres:9.6
+      - image: postgres:9.6.16
         environment:
           POSTGRES_DB=market_access_pyfe
       - image: ukti/mock-sso
