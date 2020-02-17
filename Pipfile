@@ -1,0 +1,37 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pyopenssl = "*"
+werkzeug = "*"
+black = "*"
+mock = "*"
+pytest = "*"
+pytest-cov = "*"
+splinter = "*"
+
+[packages]
+django = "==2.2.10"
+dj-database-url = "*"
+django-extensions = "*"
+python-dateutil = "*"
+python-magic = "*"
+redis = "*"
+requests = "*"
+sentry-sdk = "*"
+whitenoise = "*"
+django-settings-export = "*"
+mohawk = "*"
+psycopg2 = "*"
+waitress = "*"
+libsass = "*"
+django-compressor = "*"
+django-sass-processor = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
