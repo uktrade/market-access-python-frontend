@@ -36,6 +36,16 @@ class SearchTestCase(MarketAccessTestCase):
 
     @patch("utils.sso.SSOClient.search_users")
     def test_empty_search(self, mock_search_users):
+        """
+        Empty search should return all users
+        """
+        results = [{
+            'user_id': '3fbe6479-b9bd-4658-81d7-f07c2a73d33d',
+            'first_name': 'Douglas',
+            'last_name': 'Miller',
+            'email': 'Flo_Schultz67@hotmail.com'
+        }]
+        mock_search_users.return_value = results
         response = self.client.post(
             reverse(
                 'barriers:search_team_member',
@@ -43,8 +53,9 @@ class SearchTestCase(MarketAccessTestCase):
             )
         )
         assert response.status_code == HTTPStatus.OK
-        assert 'query' in response.context['form'].errors
-        assert mock_search_users.called is False
+        assert mock_search_users.called is True
+        assert response.context['form'].is_valid() is True
+        assert response.context['results'] == results
 
     @patch("utils.sso.SSOClient.search_users")
     def test_no_results(self, mock_search_users):

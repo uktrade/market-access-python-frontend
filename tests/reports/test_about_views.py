@@ -74,10 +74,10 @@ class AboutViewTestCase(ReportsTestCase):
 
         assert HTTPStatus.OK == response.status_code
         assert form.is_valid() is False
-        self.assertFormError(response, 'form', 'barrier_title', 'This field is required.')
-        self.assertFormError(response, 'form', 'product', 'This field is required.')
-        self.assertFormError(response, 'form', 'source', 'This field is required.')
-        self.assertFormError(response, 'form', 'eu_exit_related', 'This field is required.')
+        self.assertFormError(response, 'form', 'barrier_title', "Enter a name for this barrier")
+        self.assertFormError(response, 'form', 'product', "Enter a product, service or investment")
+        self.assertFormError(response, 'form', 'source', "Select how you became aware of the barrier")
+        self.assertFormError(response, 'form', 'eu_exit_related', "Select whether this is Brexit related or not")
         assert ERROR_HTML.SUMMARY_HEADER in html
         assert ERROR_HTML.REQUIRED_FIELD in html
         assert saved_form_data is None

@@ -56,8 +56,13 @@ class SummaryViewTestCase(ReportsTestCase):
 
         assert HTTPStatus.OK == response.status_code
         assert form.is_valid() is False
-        self.assertFormError(response, "form", "problem_description", "This field is required.")
-        self.assertFormError(response, "form", "next_steps_summary", "This field is required.")
+        self.assertFormError(
+            response,
+            "form",
+            "problem_description",
+            "Enter a brief description for this barrier",
+        )
+
         assert ERROR_HTML.SUMMARY_HEADER in html
         assert ERROR_HTML.REQUIRED_FIELD in html
         assert saved_form_data is None
