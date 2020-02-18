@@ -11,6 +11,8 @@ mock = "*"
 pytest = "*"
 pytest-cov = "*"
 splinter = "*"
+flake8 = "*"
+pytest-django = "*"
 
 [packages]
 django = "==2.2.10"
@@ -29,6 +31,7 @@ waitress = "*"
 libsass = "*"
 django-compressor = "*"
 django-sass-processor = "*"
+django-libsass = "*"
 
 [requires]
 python_version = "3.7"
