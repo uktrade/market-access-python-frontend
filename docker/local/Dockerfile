@@ -25,12 +25,15 @@ RUN yum -y install https://centos7.iuscommunity.org/ius-release.rpm \
 RUN yum -y install \
 	gcc \
 	wget \
-	python36u \
-	python36u-pip \
-	python36u-devel \
 	postgresql \
+    make \
+    zlib-devel \
     && yum -y clean all \
     && rm -rf /var/cache/yum
+
+RUN yum -y --enablerepo=extras install epel-release && yum clean all && yum -y update
+RUN wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz && tar xzf Python-3.7.2.tgz
+RUN cd Python-3.7.2 && ./configure --enable-optimizations && make altinstall
 
 # Set locale to en GB
 RUN localedef -c -i en_GB -f UTF-8 en_GB.UTF-8
@@ -42,22 +45,16 @@ RUN wget --no-verbose https://github.com/jwilder/dockerize/releases/download/$DO
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Add aliases
-RUN echo "alias py3='python3.6'" >> ~/.bashrc
+RUN echo "alias py3='python3.7'" >> ~/.bashrc
 
 # Set PYTHONUNBUFFERED so output is displayed in the Docker log
 ENV PYTHONUNBUFFERED=1
 
-# Create pip cache folder
-ENV PIP_CACHE_FOLDER /pip-cache
-RUN mkdir -p $PIP_CACHE_FOLDER
-
 WORKDIR /usr/src/app
 
-# PIP Requirements
-COPY requirements*.txt ./
+ENV LANG en_GB.utf-8
+ENV LC_ALL en_GB.utf-8
 
-RUN pip3.6 install --upgrade pip
-RUN pip3.6 install --upgrade setuptools
-RUN pip3.6 install -r requirements.txt \
-    && pip3.6 install -r requirements-dev.txt \
-    && pip3.6 install -r requirements-test.txt
+RUN python3.7 -m pip install pipenv
+ADD Pipfile* /usr/src/app/
+RUN pipenv sync --dev
