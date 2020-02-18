@@ -26,12 +26,12 @@ sentry-sdk = "*"
 whitenoise = "*"
 django-settings-export = "*"
 mohawk = "*"
-waitress = "*"
 libsass = "*"
 django-compressor = "*"
 django-sass-processor = "*"
 django-libsass = "*"
 psycopg2-binary = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
