@@ -25,15 +25,26 @@ RUN yum -y install https://centos7.iuscommunity.org/ius-release.rpm \
 RUN yum -y install \
 	gcc \
 	wget \
+    openssl-devel \
+    bzip2-devel \
+    libffi \
+    libffi-devel \
 	postgresql \
     make \
     zlib-devel \
+    which \
+    sqlite-devel \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
-RUN yum -y --enablerepo=extras install epel-release && yum clean all && yum -y update
-RUN wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz && tar xzf Python-3.7.2.tgz
-RUN cd Python-3.7.2 && ./configure --enable-optimizations && make altinstall
+
+ENV PYTHON_VERSION 3.7.2
+RUN wget --no-verbose https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz \
+    && tar -C /usr/local/bin -xzvf Python-$PYTHON_VERSION.tgz \
+    && rm Python-$PYTHON_VERSION.tgz \
+    && cd /usr/local/bin/Python-$PYTHON_VERSION \
+    && ./configure --enable-optimizations \
+    && make altinstall
 
 # Set locale to en GB
 RUN localedef -c -i en_GB -f UTF-8 en_GB.UTF-8
@@ -56,5 +67,5 @@ ENV LANG en_GB.utf-8
 ENV LC_ALL en_GB.utf-8
 
 RUN python3.7 -m pip install pipenv
-ADD Pipfile* /usr/src/app/
+ADD Pipfile* ./
 RUN pipenv sync --dev
