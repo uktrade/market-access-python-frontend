@@ -42,6 +42,31 @@ There's a set of make commands that you can utilize straight away. \
 To list all available commands with help text type `make help` in terminal and hit `Enter`.
 
 
+#### Staticfiles
+Staticfiles are compressed offline for most environments, so it makes sense that you could run the same way locally to test things out. 
+To do that, just: 
+1. stop the django development server 
+2. set `DEBUG` to `False` in `config/settings/local.py`
+3. run `make django-static`
+4. start the django development server
+
+**Note:** this is a good way to mimic how files are generated and served in an environment, \
+but please note, lazy loading of static files is also disabled in offline mode, so your changes to templates, js, scss \
+might not take effect unless you run step 3 from above and restart your dev server.
+
+
+## Builds
+Builds can be initiated from Jenkins or from the command line using `cf` CLI tool (using `cf push <app_name>`).
+To use `cf push` you will need to be in the root of the project.
+
+The preferred way to deploy apps remains Jenkins as of now because Jenkins will set environment variables as part of the flow. 
+
+#### Init Tasks
+Tasks that should be run at app initialisation can be defined in `.profile` file.
+If you would like to check the output of that you can do so via `cf logs <app_name> --recent`, but 
+please note that these logs get trimmed so it's best to check straight after deployment. 
+
+
 ## Tests
 Front end tests are grouped under `./test` directory. When writing tests please use the corresponding app name to keep the same folder structure as the main app so it's easy to tell which test belongs to which app.
 
