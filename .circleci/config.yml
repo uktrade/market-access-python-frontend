@@ -4,11 +4,11 @@
 #
 version: 2
 jobs:
-  build:
+  tests:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.1
+      - image: circleci/python:3.7
       - image: postgres:9.6.16
         environment:
           POSTGRES_DB=market_access_pyfe
@@ -19,6 +19,7 @@ jobs:
           MOCK_SSO_SCOPE: test
 
     environment:
+      PIPENV_VENV_IN_PROJECT: 'enabled'
       SECRET_KEY: "secretkey"
       DEBUG: True
       ALLOWED_HOSTS: "localhost"
@@ -44,31 +45,26 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
       - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-            pip install -r requirements-test.txt
+          command: sudo pip install pipenv
+
+      - run:
+          name: Install dependencies
+          command: pipenv sync --dev
 
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
-            pytest tests
+            pipenv run pytest tests
 
       - store_artifacts:
           path: test-reports
@@ -76,7 +72,7 @@ jobs:
 
   pep8:
     docker:
-      - image: circleci/python:3.6.1
+      - image: circleci/python:3.7
 
     working_directory: ~/market-access-python-frontend
 
@@ -85,25 +81,25 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-flake8-3-7-9
+            - v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
       - run:
-          name: install flake8==3.7.9
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install flake8
+          command: sudo pip install pipenv
+
+      - run:
+          name: Install dependencies
+          command: pipenv sync --dev
 
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-flake8-3-7-9
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
-      - run: venv/bin/flake8 . --exclude=venv --count --max-line-length=120
+      - run: pipenv run flake8 . --exclude=venv --count --max-line-length=120
 
 workflows:
   version: 2
   test:
     jobs:
-      - build
+      - tests
       - pep8

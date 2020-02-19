@@ -4,13 +4,13 @@
 
 echo "---- RUNNING release tasks (.profile) ------"
 echo "---- Apply Migrations ------"
-python3 manage.py migrate
+pipenv run python manage.py migrate
 
 echo "---- Compile SCSS ------"
-python3 manage.py compress -f
+pipenv run python manage.py compress -f
 
 echo "---- Collect Static Files ------"
-OUTPUT=$(python3 manage.py collectstatic --noinput -i *.scss --clear)
+OUTPUT=$(pipenv run python manage.py collectstatic --noinput -i *.scss --clear)
 mkdir -p ~/logs
 echo ${OUTPUT} > ~/logs/collectstatic.txt
 echo ${OUTPUT##*$'\n'}

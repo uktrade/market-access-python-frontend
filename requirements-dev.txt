@@ -1,3 +1,0 @@
-black==19.10b0
-pyOpenSSL==19.1.0   # local SSL support
-Werkzeug==0.16.0    # local SSL support
