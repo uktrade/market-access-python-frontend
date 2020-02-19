@@ -24,7 +24,7 @@ django-run-detached: ## Run django's dev server (silently).
 
 .PHONY: django-shell
 django-shell: ## Drop into django's shell (with iphython).
-	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py shell"
+	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py shell_plus"
 
 .PHONY: django-collectstatic
 django-collectstatic: ## Collect static files.
