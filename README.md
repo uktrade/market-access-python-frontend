@@ -55,6 +55,18 @@ but please note, lazy loading of static files is also disabled in offline mode, 
 might not take effect unless you run step 3 from above and restart your dev server.
 
 
+## Builds
+Builds can be initiated from Jenkins or from the command line using `cf` CLI tool (using `cf push <app_name>`).
+To use `cf push` you will need to be in the root of the project.
+
+The preferred way to deploy apps remains Jenkins as of now because Jenkins will set environment variables as part of the flow. 
+
+#### Init Tasks
+Tasks that should be run at app initialisation can be defined in `.profile` file.
+If you would like to check the output of that you can do so via `cf logs <app_name> --recent`, but 
+please note that these logs get trimmed so it's best to check straight after deployment. 
+
+
 ## Tests
 Front end tests are grouped under `./test` directory. When writing tests please use the corresponding app name to keep the same folder structure as the main app so it's easy to tell which test belongs to which app.
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# This script is being run in the ci-pipeline
-# for more info see https://github.com/uktrade/ci-pipeline-config/pull/158
+# custom initialisation tasks
+# ref - https://docs.cloudfoundry.org/devguide/deploy-apps/deploy-app.html
 
+echo "---- RUNNING release tasks (.profile) ------"
 echo "---- Apply Migrations ------"
 python3 manage.py migrate
 
@@ -9,4 +10,9 @@ echo "---- Compile SCSS ------"
 python3 manage.py compress -f
 
 echo "---- Collect Static Files ------"
-python3 manage.py collectstatic --noinput -i *.scss --clear
+OUTPUT=$(python3 manage.py collectstatic --noinput -i *.scss --clear)
+mkdir -p ~/logs
+echo ${OUTPUT} > ~/logs/collectstatic.txt
+echo ${OUTPUT##*$'\n'}
+echo "NOTE: the full output of collectstatic has been saved to ~/logs/collectstatic.txt"
+echo "---- FINISHED release tasks (.profile) ------"
