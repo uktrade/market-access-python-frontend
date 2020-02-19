@@ -1,0 +1,54 @@
+.env-banner {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 49px;
+  height: 49px;
+  margin-left: 0;
+  padding: 5px 15px;
+  padding-right: 30px;
+  background-color: #cccccc;
+  font-size: 24px;
+  text-align: center;
+  opacity: 0.95;
+  color: white;
+  z-index: 999;
+  box-sizing: border-box;
+
+  &.env-banner-dev {
+    background-color: #3c5cff;
+  }
+
+  &.env-banner-uat {
+    background-color: #FF69B4;
+  }
+
+  .env-banner__dismiss {
+    float: right;
+    color: white !important;
+    text-decoration: none;
+  }
+
+  @media (min-width: 800px ){
+    width: 300px;
+    left: 50%;
+    top: 0;
+    margin-left: -150px;
+  }
+
+  @media (min-width: 1080px ){
+    width: 400px;
+    left: 50%;
+    top: 0;
+    margin-left: -200px;
+  }
+
+  @media (min-width: 1400px ){
+    width: 600px;
+    left: 50%;
+    top: 0;
+    margin-left: -300px;
+  }
+
+}
+

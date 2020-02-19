@@ -30,9 +30,13 @@ django-shell: ## Drop into django's shell (with iphython).
 django-collectstatic: ## Collect static files.
 	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py collectstatic --no-input"
 
+.PHONY: django-static
+django-static: ## Compress SCSS and collect static files, clears staticfiles folder.
+	docker-compose exec web bash -c "python3.6 manage.py compress -f && python3.6 manage.py collectstatic --no-input -i *.scss --clear"
+
 .PHONY: django-test
 django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down
-	docker-compose exec web pipenv run pytest tests/$(path)
+	docker-compose exec web pipenv run pytest -n 6 tests/$(path)
 
 .PHONY: django-ui-test
 django-run-test-server: ## Run django ui test server

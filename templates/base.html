@@ -10,11 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     {% compress css %}
-        {% if settings.DJANGO_ENV == "local" %}
-            <link type="text/x-scss" href="{% static 'css/index.local.scss' %}" rel="stylesheet" media="screen">
-        {% else %}
-            <link type="text/x-scss" href="{% static 'css/index.scss' %}" rel="stylesheet" media="screen">
-        {% endif %}
+        <link type="text/x-scss" href="{% static 'css/index.scss' %}" rel="stylesheet" media="screen">
     {% endcompress %}
 
     {% block headIcons %}
@@ -59,11 +55,11 @@
     {% endblock %}
 
     {% block body_end %}
-      <!-- build:js(src) /public/js/vendor.min.js -->
+      {% compress js %}
+      <!-- Vendor -->
       <script src="{% static 'js/vendor/jessie.js' %}"></script>
       <script src="{% static 'js/vendor/body-scroll-lock.js' %}"></script>
-      <!-- endbuild -->
-      <!-- build:js({src,node_modules/@uktrade}) /public/js/app.min.js -->
+      <!-- GOV -->
       <script src="{% static 'js/datahub-header/component/header.js' %}"></script>
       <script src="{% static 'js/ma.js' %}"></script>
       <script src="{% static 'js/ma.CustomEvent.js' %}"></script>
@@ -91,62 +87,22 @@
       <script src="{% static 'js/pages/barrier/team.js' %}"></script>
       <script src="{% static 'js/pages/barrier/assessment.js' %}"></script>
       <script src="{% static 'js/pages/watch-list.js' %}"></script>
-      <!-- endbuild -->
+      {% endcompress %}
       <script>ma.init();</script>
       {% block body_script %}{% endblock %}
       {% if not user.internal and analytics.enabled and analytics.id %}
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics.id }}"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '{{ analytics.id }}');
-        </script>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics.id }}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ analytics.id }}');
+      </script>
       {% endif %}
 
       {% if settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
-        <style>
-          .env-banner {
-            position: absolute;
-            top:0;
-            left: 0;
-            width: 100%;
-            padding: 5px 15px;
-            background-color: red;
-            font-size: 24px;
-            text-align: center;
-            opacity: 0.95;
-            color: white;
-            padding-right: 30px;
-            z-index: 999;
-            box-sizing: border-box;
-          }
-
-          @media (min-width: 600px ){
-
-            .env-banner {
-              left: 10%;
-              width: 80%;
-            }
-          }
-
-          @media (min-width: 800px ){
-
-            .env-banner {
-              left: 20%;
-              width: 60%;
-            }
-          }
-
-          .env-banner__dismiss {
-            float: right;
-            color: white !important;
-            text-decoration: none;
-          }
-        </style>
-
-        <div class="env-banner">
+        <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
           <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
           <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss">X</a>
         </div>
