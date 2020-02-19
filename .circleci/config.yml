@@ -98,6 +98,9 @@ jobs:
       - run: pipenv run flake8 . --exclude=venv --count --max-line-length=120
 
   ui_tests:
+    docker:
+      - image: circleci/python:3.7
+
     type: approval
 
     working_directory: ~/market-access-python-frontend
