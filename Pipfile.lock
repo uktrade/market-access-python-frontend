@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "831f6f7a38d2f3e78b97cf02b75a218a502d300c8ed6fab5b46f72bb6929b6e3"
+            "sha256": "05b21ba7f0297f98022a132924f9571b79992d930a442ad4b0f18c4cfb8788b3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -58,7 +58,6 @@
                 "sha256:57ac0a696d061e5fc6fbc55381d2050f353b973fb97eee5593f39247bc0f30af",
                 "sha256:d2ed1c6137ddaac5536233ec0a819e14009553fee0a869bea65d03e5285ba74f"
             ],
-            "index": "pypi",
             "version": "==2.4"
         },
         "django-extensions": {
@@ -183,7 +182,6 @@
                 "sha256:fc5f8336750f76f1bfae82f7e9e89ae71438d26fc4597e3ab4c05ca8fcd41d8a",
                 "sha256:fcb7ab4dc81889e5fc99cafbc2017bc76996f9992fc6b175f7a80edac61d71df"
             ],
-            "index": "pypi",
             "version": "==0.19.4"
         },
         "mohawk": {
