@@ -2,7 +2,7 @@ from ui_tests import settings
 
 
 def sso_sign_in(browser):
-    browser.visit("https://sso.trade.uat.uktrade.io/login/")
+    browser.visit(settings.TEST_SSO_LOGIN_URL)
 
     browser.fill("username", settings.TEST_SSO_EMAIL)
     browser.fill("password", settings.TEST_SSO_PASSWORD)

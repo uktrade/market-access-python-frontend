@@ -40,7 +40,7 @@ def test_change_status(browser):
 
     assert browser.find_by_css('.event-list__item__text').first.value == (
         f'Barrier status changed from {old_status} to {new_status} '
-        'by Test-user. Resolved date set as January 2020.'
+        f'by {settings.TEST_SSO_NAME}. Resolved date set as January 2020.'
     )
     assert browser.find_by_css('.barrier-status-badge').first.value == (
         f'Status: {new_status}'
