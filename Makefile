@@ -32,7 +32,7 @@ django-collectstatic: ## Collect static files.
 
 .PHONY: django-static
 django-static: ## Compress SCSS and collect static files, clears staticfiles folder.
-	docker-compose exec web bash -c "python3.6 manage.py compress -f && python3.6 manage.py collectstatic --no-input -i *.scss --clear"
+	docker-compose exec web bash -c "pipenv run python manage.py compress -f && pipenv run python manage.py collectstatic --no-input -i *.scss --clear"
 
 .PHONY: django-test
 django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down
