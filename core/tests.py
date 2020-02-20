@@ -26,13 +26,9 @@ class MarketAccessTestCase(TestCase):
 
     def init_session(self):
         session = self.client.session
-        session.update({
-            "sso_token": 'abcd',
-            "user_data": {
-                'username': 'test user',
-                "id": 49,
-            },
-        })
+        session.update(
+            {"sso_token": "abcd", "user_data": {"username": "test user", "id": 49,},}
+        )
         session.save()
 
     def init_get_barrier_patcher(self):
@@ -42,13 +38,17 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.get_barrier_patcher.stop)
 
     def init_get_history_patcher(self):
-        self.get_history_patcher = patch("utils.api.resources.BarriersResource.get_history")
+        self.get_history_patcher = patch(
+            "utils.api.resources.BarriersResource.get_history"
+        )
         self.mock_get_history = self.get_history_patcher.start()
         self.mock_get_history.return_value = []
         self.addCleanup(self.get_history_patcher.stop)
 
     def init_get_interactions_patcher(self):
-        self.get_interactions_patcher = patch("utils.api.resources.InteractionsResource.list")
+        self.get_interactions_patcher = patch(
+            "utils.api.resources.InteractionsResource.list"
+        )
         self.mock_get_interactions = self.get_interactions_patcher.start()
         self.mock_get_interactions.return_value = self.notes
         self.addCleanup(self.get_interactions_patcher.stop)
@@ -80,47 +80,43 @@ class MarketAccessTestCase(TestCase):
         if self._assessments is None:
             file = f"{settings.BASE_DIR}/../barriers/fixtures/assessments.json"
             assessments = json.loads(memfiles.open(file))
-            self._assessments = [
-                Assessment(assessment) for assessment in assessments
-            ]
+            self._assessments = [Assessment(assessment) for assessment in assessments]
         return self._assessments
 
     @property
     def notes(self):
         return [
-            InteractionsResource.model({
-                'id': 1,
-                'kind': 'Comment',
-                'text': 'Comment with document',
-                'pinned': False,
-                'is_active': True,
-                'documents': [
-                    {
-                        'id': 'cd5ada56-53ee-4324-a2fa-b2f90f47ccbd',
-                        'name': 'test.jpeg',
-                        'size': 5159,
-                        'status': 'virus_scanned'
-                    },
-                ],
-                'created_on': '2020-01-20T12:00:00.683297Z',
-                'created_by': {
-                    'id': 1,
-                    'name': 'Test-user'
+            InteractionsResource.model(
+                {
+                    "id": 1,
+                    "kind": "Comment",
+                    "text": "Comment with document",
+                    "pinned": False,
+                    "is_active": True,
+                    "documents": [
+                        {
+                            "id": "cd5ada56-53ee-4324-a2fa-b2f90f47ccbd",
+                            "name": "test.jpeg",
+                            "size": 5159,
+                            "status": "virus_scanned",
+                        },
+                    ],
+                    "created_on": "2020-01-20T12:00:00.683297Z",
+                    "created_by": {"id": 1, "name": "Test-user"},
                 }
-            }),
-            InteractionsResource.model({
-                'id': 2,
-                'kind': 'Comment',
-                'text': 'Comment without document',
-                'pinned': False,
-                'is_active': True,
-                'documents': [],
-                'created_on': '2020-01-21T09:30:00.714208Z',
-                'created_by': {
-                    'id': 1,
-                    'name': 'Test-user'
+            ),
+            InteractionsResource.model(
+                {
+                    "id": 2,
+                    "kind": "Comment",
+                    "text": "Comment without document",
+                    "pinned": False,
+                    "is_active": True,
+                    "documents": [],
+                    "created_on": "2020-01-21T09:30:00.714208Z",
+                    "created_by": {"id": 1, "name": "Test-user"},
                 }
-            }),
+            ),
         ]
 
     @property

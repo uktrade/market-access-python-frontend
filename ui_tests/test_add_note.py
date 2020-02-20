@@ -12,13 +12,13 @@ def test_add_note(browser):
 
     browser.visit(f"{settings.BASE_URL}barriers/{barrier_id}")
 
-    browser.click_link_by_text('Add note')
+    browser.click_link_by_text("Add note")
 
-    random_string = ''.join(
+    random_string = "".join(
         random.choices(string.ascii_uppercase + string.digits, k=32)
     )
-    browser.fill('note', random_string)
+    browser.fill("note", random_string)
     browser.find_by_css('input[type=submit][value="Save note"]').first.click()
-    note_item = browser.find_by_css('.event_list__item--note').first
-    note_text = note_item.find_by_css('.event-list__item__text').value
+    note_item = browser.find_by_css(".event_list__item--note").first
+    note_text = note_item.find_by_css(".event-list__item__text").value
     assert note_text == random_string

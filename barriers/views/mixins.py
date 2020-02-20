@@ -35,13 +35,13 @@ class BarrierMixin:
         return self._notes
 
     def get_barrier(self):
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
-        barrier_id = self.kwargs.get('barrier_id')
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.kwargs.get("barrier_id")
         return client.barriers.get(id=barrier_id)
 
     def get_interactions(self):
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
-        barrier_id = self.kwargs.get('barrier_id')
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.kwargs.get("barrier_id")
 
         history = client.barriers.get_history(barrier_id=barrier_id)
         interactions = self.notes + history
@@ -56,19 +56,19 @@ class BarrierMixin:
         return interactions
 
     def get_notes(self):
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
-        barrier_id = self.kwargs.get('barrier_id')
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.kwargs.get("barrier_id")
         return client.interactions.list(barrier_id=barrier_id)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['barrier'] = self.barrier
+        context_data["barrier"] = self.barrier
         if self.include_interactions:
-            context_data['interactions'] = self.interactions
+            context_data["interactions"] = self.interactions
         return context_data
 
     def get_note(self):
-        note_id = self.kwargs.get('note_id')
+        note_id = self.kwargs.get("note_id")
 
         for note in self.notes:
             if note.id == note_id:
@@ -80,23 +80,21 @@ class TeamMembersContextMixin:
 
     def get_team_members(self):
         if self._team_members is None:
-            client = MarketAccessAPIClient(
-                self.request.session.get('sso_token')
-            )
+            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             self._team_members = client.barriers.get_team_members(
-                barrier_id=self.kwargs.get('barrier_id')
+                barrier_id=self.kwargs.get("barrier_id")
             )
 
         return self._team_members
 
     def get_team_member(self, team_member_id):
         for member in self.get_team_members():
-            if member['id'] == team_member_id:
+            if member["id"] == team_member_id:
                 return member
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['team_members'] = self.get_team_members()
+        context_data["team_members"] = self.get_team_members()
         return context_data
 
 
@@ -106,19 +104,19 @@ class AssessmentMixin:
     @property
     def assessment(self):
         if not self._assessment:
-            if hasattr(self, '_barrier') and not self.barrier.has_assessment:
+            if hasattr(self, "_barrier") and not self.barrier.has_assessment:
                 return None
             self._assessment = self.get_assessment()
         return self._assessment
 
     def get_assessment(self):
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
-        barrier_id = self.kwargs.get('barrier_id')
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.kwargs.get("barrier_id")
         return client.barriers.get_assessment(barrier_id=barrier_id)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['assessment'] = self.assessment
+        context_data["assessment"] = self.assessment
         return context_data
 
 
@@ -132,16 +130,15 @@ class APIFormViewMixin:
         return self._object
 
     def get_form_kwargs(self, **kwargs):
-        if self.request.method == 'GET':
-            kwargs['initial'] = self.get_initial()
-        elif self.request.method in ('POST', 'PUT'):
-            kwargs.update({
-                'data': self.request.POST,
-                'files': self.request.FILES,
-            })
+        if self.request.method == "GET":
+            kwargs["initial"] = self.get_initial()
+        elif self.request.method in ("POST", "PUT"):
+            kwargs.update(
+                {"data": self.request.POST, "files": self.request.FILES,}
+            )
 
         kwargs.update(self.kwargs)
-        kwargs['token'] = self.request.session.get('sso_token')
+        kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
 
     def form_valid(self, form):
@@ -150,7 +147,7 @@ class APIFormViewMixin:
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['object'] = self.object
+        context_data["object"] = self.object
         return context_data
 
 
@@ -160,13 +157,13 @@ class APIBarrierFormViewMixin(BarrierMixin, APIFormViewMixin):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['id'] = str(kwargs.pop('barrier_id'))
+        kwargs["id"] = str(kwargs.pop("barrier_id"))
         return kwargs
 
     def get_success_url(self):
         return reverse(
-            'barriers:barrier_detail',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+            "barriers:barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
 
@@ -177,6 +174,7 @@ class SessionDocumentMixin:
     The session key can be specific to a particular object, so that multiple
     objects can be edited without interfering with eachother.
     """
+
     def get_session_key(self):
         raise NotImplementedError
 
@@ -186,11 +184,7 @@ class SessionDocumentMixin:
     def set_session_documents(self, documents):
         session_key = self.get_session_key()
         self.request.session[session_key] = [
-            {
-                'id': document.id,
-                'name': document.name,
-                'size': document.size,
-            }
+            {"id": document.id, "name": document.name, "size": document.size,}
             for document in documents
         ]
 

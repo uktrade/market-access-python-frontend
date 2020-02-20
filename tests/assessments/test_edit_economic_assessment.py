@@ -10,11 +10,11 @@ from mock import patch
 
 class EditEconomicAssessmentTestCase(MarketAccessTestCase):
     def setUp(self):
-        self.barrier['has_assessment'] = True
+        self.barrier["has_assessment"] = True
         super().setUp()
 
     def tearDown(self):
-        self.barrier['has_assessment'] = False
+        self.barrier["has_assessment"] = False
 
     @patch("utils.api.resources.BarriersResource.get_assessment")
     def test_initial_data(self, mock_get_assessment):
@@ -22,34 +22,31 @@ class EditEconomicAssessmentTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                'barriers:economic_assessment',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:economic_assessment",
+                kwargs={"barrier_id": self.barrier["id"]},
             )
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert 'form' in response.context
-        form = response.context['form']
-        assert form.initial['impact'] == self.assessments[0].impact
-        assert form.initial['description'] == self.assessments[0].explanation
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["impact"] == self.assessments[0].impact
+        assert form.initial["description"] == self.assessments[0].explanation
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
     def test_success(self, mock_update, mock_create):
-        self.delete_session_key('assessment_documents')
+        self.delete_session_key("assessment_documents")
         response = self.client.post(
             reverse(
-                'barriers:economic_assessment',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:economic_assessment",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={
-                "impact": "HIGH",
-                "description": "Test description",
-            }
+            data={"impact": "HIGH", "description": "Test description",},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_update.assert_called_with(
-            barrier_id=self.barrier['id'],
+            barrier_id=self.barrier["id"],
             impact="HIGH",
             explanation="Test description",
             documents=[],
@@ -59,26 +56,24 @@ class EditEconomicAssessmentTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
     def test_success_with_ajax_document(
-        self,
-        mock_update,
-        mock_create,
+        self, mock_update, mock_create,
     ):
         document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
-        self.delete_session_key('assessment_documents')
+        self.delete_session_key("assessment_documents")
         response = self.client.post(
             reverse(
-                'barriers:economic_assessment',
-                kwargs={'barrier_id': self.barrier['id']}
+                "barriers:economic_assessment",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
                 "impact": "HIGH",
                 "description": "Test description",
                 "document_ids": [document_id],
-            }
+            },
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_update.assert_called_with(
-            barrier_id=self.barrier['id'],
+            barrier_id=self.barrier["id"],
             impact="HIGH",
             explanation="Test description",
             documents=[document_id],
@@ -100,29 +95,29 @@ class EditEconomicAssessmentTestCase(MarketAccessTestCase):
     ):
         document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
         mock_create_document.return_value = {
-            'id': document_id,
-            'signed_upload_url': "someurl",
+            "id": document_id,
+            "signed_upload_url": "someurl",
         }
 
-        self.delete_session_key('assessment_documents')
+        self.delete_session_key("assessment_documents")
 
-        with open('tests/files/attachment.jpeg', 'rb') as document:
+        with open("tests/files/attachment.jpeg", "rb") as document:
             response = self.client.post(
                 reverse(
-                    'barriers:economic_assessment',
-                    kwargs={'barrier_id': self.barrier['id']}
+                    "barriers:economic_assessment",
+                    kwargs={"barrier_id": self.barrier["id"]},
                 ),
                 data={
                     "impact": "HIGH",
                     "description": "Test description",
                     "document": document,
-                }
+                },
             )
 
         assert response.status_code == HTTPStatus.FOUND
         assert mock_create_document.called is True
         mock_update_assessment.assert_called_with(
-            barrier_id=self.barrier['id'],
+            barrier_id=self.barrier["id"],
             impact="HIGH",
             explanation="Test description",
             documents=[document_id],

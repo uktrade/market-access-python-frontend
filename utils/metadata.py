@@ -21,11 +21,11 @@ def get_metadata():
         file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
         return Metadata(json.loads(memfiles.open(file)))
     else:
-        metadata = redis_client.get('metadata')
+        metadata = redis_client.get("metadata")
         if metadata:
             return Metadata(json.loads(metadata))
 
-    url = f'{settings.MARKET_ACCESS_API_URI}metadata'
+    url = f"{settings.MARKET_ACCESS_API_URI}metadata"
     credentials = {
         "id": settings.MARKET_ACCESS_API_HAWK_ID,
         "key": settings.MARKET_ACCESS_API_HAWK_KEY,
@@ -34,7 +34,7 @@ def get_metadata():
     sender = Sender(
         credentials,
         url,
-        'GET',
+        "GET",
         content="",
         content_type="text/plain",
         always_hash_content=False,
@@ -43,18 +43,13 @@ def get_metadata():
     response = requests.get(
         url,
         verify=not settings.DEBUG,
-        headers={
-            'Authorization': sender.request_header,
-            'Content-Type': 'text/plain',
-        }
+        headers={"Authorization": sender.request_header, "Content-Type": "text/plain",},
     )
 
     if response.ok:
         metadata = response.json()
         redis_client.set(
-            'metadata',
-            json.dumps(metadata),
-            ex=settings.METADATA_CACHE_TIME
+            "metadata", json.dumps(metadata), ex=settings.METADATA_CACHE_TIME
         )
         return Metadata(metadata)
 
@@ -65,49 +60,49 @@ class Metadata:
     """
     Wrapper around the raw metadata with helper functions
     """
+
     STATUS_INFO = {
         Statuses.UNFINISHED: {
-            'name': 'Unfinished',
-            'modifier': 'unfinished',
-            'hint': 'Barrier is unfinished'
+            "name": "Unfinished",
+            "modifier": "unfinished",
+            "hint": "Barrier is unfinished",
         },
         Statuses.OPEN_PENDING_ACTION: {
-            'name': 'Pending',
-            'modifier': 'assessment',
-            'hint': 'Barrier is awaiting action'
+            "name": "Pending",
+            "modifier": "assessment",
+            "hint": "Barrier is awaiting action",
         },
         Statuses.OPEN_IN_PROGRESS: {
-            'name': 'Open',
-            'modifier': 'assessment',
-            'hint': 'Barrier is being worked on'
+            "name": "Open",
+            "modifier": "assessment",
+            "hint": "Barrier is being worked on",
         },
         Statuses.RESOLVED_IN_PART: {
-            'name': 'Part resolved',
-            'modifier': 'resolved',
-            'hint': (
-                'Barrier impact has been significantly reduced but remains '
-                'in part'
-            )
+            "name": "Part resolved",
+            "modifier": "resolved",
+            "hint": (
+                "Barrier impact has been significantly reduced but remains " "in part"
+            ),
         },
         Statuses.RESOLVED_IN_FULL: {
-            'name': 'Resolved',
-            'modifier': 'resolved',
-            'hint': 'Barrier has been resolved for all UK companies'
-         },
+            "name": "Resolved",
+            "modifier": "resolved",
+            "hint": "Barrier has been resolved for all UK companies",
+        },
         Statuses.DORMANT: {
-            'name': 'Paused',
-            'modifier': 'hibernated',
-            'hint': 'Barrier is present but not being pursued'
-         },
+            "name": "Paused",
+            "modifier": "hibernated",
+            "hint": "Barrier is present but not being pursued",
+        },
         Statuses.ARCHIVED: {
-            'name': 'Archived',
-            'modifier': 'archived',
-            'hint': 'Barrier is archived'
+            "name": "Archived",
+            "modifier": "archived",
+            "hint": "Barrier is archived",
         },
         Statuses.UNKNOWN: {
-            'name': 'Unknown',
-            'modifier': 'hibernated',
-            'hint': 'Barrier requires further work for the status to be known'
+            "name": "Unknown",
+            "modifier": "hibernated",
+            "hint": "Barrier requires further work for the status to be known",
         },
     }
 
@@ -115,11 +110,8 @@ class Metadata:
         self.data = data
 
     def get_admin_area(self, admin_area_id):
-        for admin_area in self.data['country_admin_areas']:
-            if (
-                admin_area['id'] == admin_area_id
-                and admin_area['disabled_on'] is None
-            ):
+        for admin_area in self.data["country_admin_areas"]:
+            if admin_area["id"] == admin_area_id and admin_area["disabled_on"] is None:
                 return admin_area
 
     def get_admin_areas(self, admin_area_ids):
@@ -138,49 +130,51 @@ class Metadata:
     def get_admin_areas_by_country(self, country_id):
         return [
             admin_area
-            for admin_area in self.data['country_admin_areas']
-            if admin_area['country']['id'] == country_id
+            for admin_area in self.data["country_admin_areas"]
+            if admin_area["country"]["id"] == country_id
         ]
 
     def get_country(self, country_id):
-        for country in self.data['countries']:
-            if country['id'] == country_id:
+        for country in self.data["countries"]:
+            if country["id"] == country_id:
                 return country
 
     def get_country_list(self):
-        return self.data['countries']
+        return self.data["countries"]
 
     def get_location_text(self, country_id, admin_area_ids):
         country_data = self.get_country(country_id)
 
         if country_data:
-            country_name = country_data['name']
+            country_name = country_data["name"]
         else:
             country_name = ""
 
         if admin_area_ids:
-            admin_areas_string = ", ".join([
-                self.get_admin_area(admin_area_id)['name']
-                for admin_area_id in admin_area_ids
-            ])
+            admin_areas_string = ", ".join(
+                [
+                    self.get_admin_area(admin_area_id)["name"]
+                    for admin_area_id in admin_area_ids
+                ]
+            )
             return f"{admin_areas_string} ({country_name})"
 
         return country_name
 
     def get_overseas_region_list(self):
         regions = {
-            country['overseas_region']['id']: country['overseas_region']
+            country["overseas_region"]["id"]: country["overseas_region"]
             for country in self.get_country_list()
-            if country['disabled_on'] is None
-            and country.get('overseas_region') is not None
+            if country["disabled_on"] is None
+            and country.get("overseas_region") is not None
         }
         regions = list(regions.values())
-        regions.sort(key=itemgetter('name'))
+        regions.sort(key=itemgetter("name"))
         return regions
 
     def get_sector(self, sector_id):
-        for sector in self.data.get('sectors', []):
-            if sector['id'] == sector_id:
+        for sector in self.data.get("sectors", []):
+            if sector["id"] == sector_id:
                 return sector
 
     def get_sectors(self, sector_ids):
@@ -199,38 +193,33 @@ class Metadata:
     def get_sectors_by_ids(self, sector_ids):
         return [
             sector
-            for sector in self.data.get('sectors', [])
-            if sector['id'] in sector_ids
-            and sector['disabled_on'] is None
+            for sector in self.data.get("sectors", [])
+            if sector["id"] in sector_ids and sector["disabled_on"] is None
         ]
 
     def get_sector_list(self, level=None):
         return [
             sector
-            for sector in self.data['sectors']
-            if (level is None or sector['level'] == level)
-            and sector['disabled_on'] is None
+            for sector in self.data["sectors"]
+            if (level is None or sector["level"] == level)
+            and sector["disabled_on"] is None
         ]
 
     def get_status(self, status_id):
-        for id, name in self.data['barrier_status'].items():
-            self.STATUS_INFO[id]['id'] = id
-            self.STATUS_INFO[id]['name'] = name
+        for id, name in self.data["barrier_status"].items():
+            self.STATUS_INFO[id]["id"] = id
+            self.STATUS_INFO[id]["name"] = name
 
         return self.STATUS_INFO[status_id]
 
     def get_status_text(
-        self,
-        status_id,
-        sub_status=None,
-        sub_status_other=None,
+        self, status_id, sub_status=None, sub_status_other=None,
     ):
         if status_id in self.STATUS_INFO.keys():
-            name = self.get_status(status_id)['name']
+            name = self.get_status(status_id)["name"]
             if sub_status and status_id == Statuses.OPEN_PENDING_ACTION:
                 sub_status_text = self.get_sub_status_text(
-                    sub_status,
-                    sub_status_other,
+                    sub_status, sub_status_other,
                 )
                 return f"{name} ({sub_status_text})"
             return name
@@ -241,39 +230,41 @@ class Metadata:
         if sub_status == "OTHER":
             return sub_status_other
 
-        return self.data['barrier_pending'].get(sub_status)
+        return self.data["barrier_pending"].get(sub_status)
 
     def get_problem_status(self, problem_status_id):
-        status_types = self.data['status_types']
-        status_types.update({
-            '1': 'A procedural, short-term barrier',
-            '2': 'A long-term strategic barrier',
-        })
+        status_types = self.data["status_types"]
+        status_types.update(
+            {
+                "1": "A procedural, short-term barrier",
+                "2": "A long-term strategic barrier",
+            }
+        )
         return status_types.get(str(problem_status_id))
 
     def get_eu_exit_related_text(self, code):
-        eu_related = self.data['adv_boolean']
-        eu_related.update({'3': "Don't know"})
-        return eu_related.get(str(code), 'Unknown')
+        eu_related = self.data["adv_boolean"]
+        eu_related.update({"3": "Don't know"})
+        return eu_related.get(str(code), "Unknown")
 
     def get_source(self, source):
-        return self.data['barrier_source'].get(source)
+        return self.data["barrier_source"].get(source)
 
     def get_priority(self, priority_code):
-        if priority_code == 'None':
-            priority_code = 'UNKNOWN'
+        if priority_code == "None":
+            priority_code = "UNKNOWN"
 
-        for priority in self.data['barrier_priorities']:
-            if priority['code'] == priority_code:
+        for priority in self.data["barrier_priorities"]:
+            if priority["code"] == priority_code:
                 return priority
 
     def get_assessment_name(self, assessment_code):
         assessment_names = {
-            'impact': 'Economic assessment',
-            'value_to_economy': 'Value to UK Economy',
-            'import_market_size': 'Import Market Size',
-            'export_value': 'Value of currently affected UK exports',
-            'commercial_value': 'Commercial Value',
+            "impact": "Economic assessment",
+            "value_to_economy": "Value to UK Economy",
+            "import_market_size": "Import Market Size",
+            "export_value": "Value of currently affected UK exports",
+            "commercial_value": "Commercial Value",
         }
         return assessment_names.get(assessment_code)
 
@@ -283,25 +274,25 @@ class Metadata:
         """
         ids = []
         unique_barrier_types = []
-        for barrier_type in self.data.get('barrier_types'):
-            if barrier_type['id'] not in ids:
+        for barrier_type in self.data.get("barrier_types"):
+            if barrier_type["id"] not in ids:
                 unique_barrier_types.append(barrier_type)
-                ids.append(barrier_type['id'])
+                ids.append(barrier_type["id"])
 
         if sort:
-            unique_barrier_types.sort(key=itemgetter('title'))
+            unique_barrier_types.sort(key=itemgetter("title"))
         return unique_barrier_types
 
     def get_barrier_type(self, type_id):
-        for barrier_type in self.data['barrier_types']:
-            if str(barrier_type['id']) == str(type_id):
+        for barrier_type in self.data["barrier_types"]:
+            if str(barrier_type["id"]) == str(type_id):
                 return barrier_type
 
     def get_barrier_types_by_category(self, category):
         return [
             barrier_type
             for barrier_type in self.get_barrier_type_list(sort=False)
-            if barrier_type['category'] == category
+            if barrier_type["category"] == category
         ]
 
     def get_goods(self):
@@ -311,7 +302,7 @@ class Metadata:
         return self.get_barrier_types_by_category("SERVICES")
 
     def get_impact_text(self, impact_code):
-        return self.data.get('assessment_impact', {}).get(impact_code)
+        return self.data.get("assessment_impact", {}).get(impact_code)
 
     def get_report_stages(self):
         stages = self.data.get("report_stages", {})

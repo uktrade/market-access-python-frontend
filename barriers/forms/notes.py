@@ -9,16 +9,14 @@ from utils.forms import MultipleValueField, RestrictedFileField
 
 class AddNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
-        label=(
-            'Add notes on an interaction or event'
-        ),
+        label=("Add notes on an interaction or event"),
         widget=forms.Textarea,
-        error_messages={'required': "Add text for the note."},
+        error_messages={"required": "Add text for the note."},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
         label="Attach a document",
-        content_types=['text/csv', 'image/jpeg'],
+        content_types=["text/csv", "image/jpeg"],
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
@@ -34,20 +32,19 @@ class AddNoteForm(DocumentMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.notes.create(
             barrier_id=self.barrier_id,
-            text=self.cleaned_data['note'],
-            documents=self.cleaned_data.get('document_ids'),
+            text=self.cleaned_data["note"],
+            documents=self.cleaned_data.get("document_ids"),
         )
 
 
 class EditNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
-        widget=forms.Textarea,
-        error_messages={'required': "Add text for the note."},
+        widget=forms.Textarea, error_messages={"required": "Add text for the note."},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
         label="Attach a document",
-        content_types=['text/csv', 'image/jpeg'],
+        content_types=["text/csv", "image/jpeg"],
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
@@ -64,14 +61,14 @@ class EditNoteForm(DocumentMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.notes.update(
             id=self.note_id,
-            text=self.cleaned_data['note'],
-            documents=self.cleaned_data.get('document_ids'),
+            text=self.cleaned_data["note"],
+            documents=self.cleaned_data.get("document_ids"),
         )
 
 
 class NoteDocumentForm(DocumentMixin, forms.Form):
     document = RestrictedFileField(
-        content_types=['text/csv', 'image/jpeg'],
+        content_types=["text/csv", "image/jpeg"],
         max_upload_size=settings.FILE_MAX_SIZE,
     )
 

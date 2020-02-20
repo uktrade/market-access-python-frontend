@@ -13,49 +13,41 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
     status_date = MonthYearField(
         required=False,
         error_messages={
-            'required': "Enter resolution date and include a month and year",
-            'incomplete': 'Enter resolution date and include a month and year.'
+            "required": "Enter resolution date and include a month and year",
+            "incomplete": "Enter resolution date and include a month and year.",
         },
     )
     status_summary = forms.CharField(
-        label='Provide a summary of why this barrier is dormant',
+        label="Provide a summary of why this barrier is dormant",
         widget=forms.Textarea,
-        error_messages={'required': "Enter a summary"},
+        error_messages={"required": "Enter a summary"},
     )
 
     def __init__(self, is_resolved, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_resolved = is_resolved
         if is_resolved:
-            self.fields['status_summary'].label = (
-                "Provide a summary of how this barrier was resolved"
-            )
-            self.fields['status_date'].required = True
+            self.fields[
+                "status_summary"
+            ].label = "Provide a summary of how this barrier was resolved"
+            self.fields["status_date"].required = True
 
     def validate_status_date(self):
         status_date = datetime.date(
-            self.cleaned_data.get("year"),
-            self.cleaned_data.get("month"),
-            1,
+            self.cleaned_data.get("year"), self.cleaned_data.get("month"), 1,
         )
         if status_date > datetime.date.today():
-            self.add_error(
-                "month",
-                "Resolution date must be this month or in the past"
-            )
-            self.add_error(
-                "year",
-                "Resolution date must be this month or in the past"
-            )
+            self.add_error("month", "Resolution date must be this month or in the past")
+            self.add_error("year", "Resolution date must be this month or in the past")
         else:
-            self.cleaned_data['status_date'] = status_date
+            self.cleaned_data["status_date"] = status_date
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        data = {'status_summary': self.cleaned_data['status_summary']}
+        data = {"status_summary": self.cleaned_data["status_summary"]}
 
         if self.is_resolved:
-            data['status_date'] = self.cleaned_data['status_date'].isoformat()
+            data["status_date"] = self.cleaned_data["status_date"].isoformat()
 
         client.barriers.patch(id=self.id, **data)
 
@@ -64,19 +56,20 @@ class UnknownForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
+
     unknown_summary = forms.CharField(
         label="Provide a summary of why this barrier is unknown",
         widget=forms.Textarea,
-        error_messages={'required': "Enter a summary"},
+        error_messages={"required": "Enter a summary"},
     )
 
     def as_html(self):
         template_name = "barriers/forms/statuses/unknown.html"
-        return render_to_string(template_name, context={'form': self})
+        return render_to_string(template_name, context={"form": self})
 
     def get_api_params(self):
         return {
-            'status_summary': self.cleaned_data['unknown_summary'],
+            "status_summary": self.cleaned_data["unknown_summary"],
         }
 
 
@@ -84,9 +77,10 @@ class OpenPendingForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
+
     CHOICES = [
-        ("UK_GOVT", 'UK government'),
-        ("FOR_GOVT", 'Foreign government'),
+        ("UK_GOVT", "UK government"),
+        ("FOR_GOVT", "Foreign government"),
         ("BUS", "Affected business"),
         ("OTHER", "Other"),
     ]
@@ -94,21 +88,18 @@ class OpenPendingForm(forms.Form):
         label="Who is the action with?",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={'required': "Select a pending action"},
+        error_messages={"required": "Select a pending action"},
     )
-    pending_type_other = forms.CharField(
-        label="Please specify",
-        required=False,
-    )
+    pending_type_other = forms.CharField(label="Please specify", required=False,)
     pending_summary = forms.CharField(
         label="Provide a summary of why this barrier is pending action",
         widget=forms.Textarea,
-        error_messages={'required': "Enter a summary"},
+        error_messages={"required": "Enter a summary"},
     )
 
     def as_html(self):
         template_name = "barriers/forms/statuses/open_pending.html"
-        return render_to_string(template_name, context={'form': self})
+        return render_to_string(template_name, context={"form": self})
 
     def clean(self):
         cleaned_data = super().clean()
@@ -117,19 +108,16 @@ class OpenPendingForm(forms.Form):
 
         if pending_type == "OTHER" and not pending_type_other:
             self.add_error(
-                "pending_type_other",
-                "Enter a description for the pending action"
+                "pending_type_other", "Enter a description for the pending action"
             )
 
     def get_api_params(self):
         params = {
-            'status_summary': self.cleaned_data['pending_summary'],
-            'sub_status': self.cleaned_data['pending_type'],
+            "status_summary": self.cleaned_data["pending_summary"],
+            "sub_status": self.cleaned_data["pending_type"],
         }
         if self.cleaned_data.get("pending_type") == "OTHER":
-            params.update({
-                'sub_status_other': self.cleaned_data['pending_type_other']
-            })
+            params.update({"sub_status_other": self.cleaned_data["pending_type_other"]})
         return params
 
 
@@ -137,19 +125,20 @@ class OpenInProgressForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
+
     reopen_summary = forms.CharField(
         label="Provide a summary of why this barrier is being reopened",
         widget=forms.Textarea,
-        error_messages={'required': "Enter a summary"},
+        error_messages={"required": "Enter a summary"},
     )
 
     def as_html(self):
         template_name = "barriers/forms/statuses/open_in_progress.html"
-        return render_to_string(template_name, context={'form': self})
+        return render_to_string(template_name, context={"form": self})
 
     def get_api_params(self):
         return {
-            'status_summary': self.cleaned_data['reopen_summary'],
+            "status_summary": self.cleaned_data["reopen_summary"],
         }
 
 
@@ -157,26 +146,27 @@ class ResolvedInPartForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
+
     part_resolved_date = MonthYearField(
         error_messages={
-            'required': "Enter resolution date and include a month and year",
-            'incomplete': 'Enter resolution date and include a month and year.'
+            "required": "Enter resolution date and include a month and year",
+            "incomplete": "Enter resolution date and include a month and year.",
         },
     )
     part_resolved_summary = forms.CharField(
         label="Provide a summary of how this barrier was partially resolved",
         widget=forms.Textarea,
-        error_messages={'required': "Enter a summary"},
+        error_messages={"required": "Enter a summary"},
     )
 
     def as_html(self):
         template_name = "barriers/forms/statuses/resolved_in_part.html"
-        return render_to_string(template_name, context={'form': self})
+        return render_to_string(template_name, context={"form": self})
 
     def get_api_params(self):
         return {
-            'status_summary': self.cleaned_data['part_resolved_summary'],
-            'status_date': self.cleaned_data['part_resolved_date'].isoformat(),
+            "status_summary": self.cleaned_data["part_resolved_summary"],
+            "status_date": self.cleaned_data["part_resolved_date"].isoformat(),
         }
 
 
@@ -184,26 +174,27 @@ class ResolvedInFullForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
+
     resolved_date = MonthYearField(
         error_messages={
-            'required': "Enter resolution date and include a month and year",
-            'incomplete': 'Enter resolution date and include a month and year.'
+            "required": "Enter resolution date and include a month and year",
+            "incomplete": "Enter resolution date and include a month and year.",
         },
     )
     resolved_summary = forms.CharField(
         label="Provide a summary of how this barrier was resolved",
         widget=forms.Textarea,
-        error_messages={'required': "Enter a summary"},
+        error_messages={"required": "Enter a summary"},
     )
 
     def as_html(self):
         template_name = "barriers/forms/statuses/resolved_in_full.html"
-        return render_to_string(template_name, context={'form': self})
+        return render_to_string(template_name, context={"form": self})
 
     def get_api_params(self):
         return {
-            'status_summary': self.cleaned_data['resolved_summary'],
-            'status_date': self.cleaned_data['resolved_date'].isoformat(),
+            "status_summary": self.cleaned_data["resolved_summary"],
+            "status_date": self.cleaned_data["resolved_date"].isoformat(),
         }
 
 
@@ -211,57 +202,55 @@ class DormantForm(forms.Form):
     """
     Subform of BarrierStatusForm
     """
+
     dormant_summary = forms.CharField(
         label="Provide a summary of why this barrier is dormant",
         widget=forms.Textarea,
-        error_messages={'required': "Enter a summary"},
+        error_messages={"required": "Enter a summary"},
     )
 
     def as_html(self):
         template_name = "barriers/forms/statuses/dormant.html"
-        return render_to_string(template_name, context={'form': self})
+        return render_to_string(template_name, context={"form": self})
 
     def get_api_params(self):
-        return {'status_summary': self.cleaned_data['dormant_summary']}
+        return {"status_summary": self.cleaned_data["dormant_summary"]}
 
 
 class BarrierChangeStatusForm(forms.Form):
     """
     Form with subforms depending on the radio button selected
     """
+
     CHOICES = [
         (
             Statuses.UNKNOWN,
             "Unknown",
-            "Barrier requires further work for the status to be known"
+            "Barrier requires further work for the status to be known",
         ),
         (
             Statuses.OPEN_PENDING_ACTION,
             "Open: Pending action",
-            "Barrier is awaiting action"
-        ), (
-            Statuses.OPEN_IN_PROGRESS,
-            "Open: In progress",
-            "Barrier is being worked on"
-        ), (
+            "Barrier is awaiting action",
+        ),
+        (Statuses.OPEN_IN_PROGRESS, "Open: In progress", "Barrier is being worked on"),
+        (
             Statuses.RESOLVED_IN_PART,
             "Resolved: In part",
-            "Barrier impact has been significantly reduced but remains in part"
-        ), (
+            "Barrier impact has been significantly reduced but remains in part",
+        ),
+        (
             Statuses.RESOLVED_IN_FULL,
             "Resolved: In full",
-            "Barrier has been resolved for all UK companies"
-        ), (
-            Statuses.DORMANT,
-            "Dormant",
-            "Barrier is present but not being pursued"
+            "Barrier has been resolved for all UK companies",
         ),
+        (Statuses.DORMANT, "Dormant", "Barrier is present but not being pursued"),
     ]
     status = ChoiceFieldWithHelpText(
         label="Change barrier status",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={'required': "Choose a status"},
+        error_messages={"required": "Choose a status"},
     )
     subform_classes = {
         Statuses.UNKNOWN: UnknownForm,
@@ -278,36 +267,36 @@ class BarrierChangeStatusForm(forms.Form):
         self.token = token
         super().__init__(*args, **kwargs)
         self.remove_current_status_from_choices()
-        data = kwargs.get('data')
+        data = kwargs.get("data")
         for value, subform_class in self.subform_classes.items():
-            if data and data.get('status') == value:
+            if data and data.get("status") == value:
                 self.subforms[value] = subform_class(data)
             else:
                 self.subforms[value] = subform_class()
 
     def remove_current_status_from_choices(self):
-        self.fields['status'].choices = [
+        self.fields["status"].choices = [
             choice
-            for choice in self.fields['status'].choices
-            if choice[0] != self.barrier.status['id']
+            for choice in self.fields["status"].choices
+            if choice[0] != self.barrier.status["id"]
         ]
 
     def status_choices(self):
-        for value, name, help_text in self.fields['status'].choices:
+        for value, name, help_text in self.fields["status"].choices:
             yield {
-                'value': value,
-                'name': name,
-                'help_text': help_text,
-                'subform': self.subforms[value],
+                "value": value,
+                "name": name,
+                "help_text": help_text,
+                "subform": self.subforms[value],
             }
 
     def get_subform(self):
-        return self.subforms.get(self.cleaned_data['status'])
+        return self.subforms.get(self.cleaned_data["status"])
 
     @property
     def errors(self):
         form_errors = super().errors
-        if self.is_bound and 'status' in self.cleaned_data:
+        if self.is_bound and "status" in self.cleaned_data:
             form_errors.update(self.get_subform().errors)
         return form_errors
 
@@ -319,6 +308,6 @@ class BarrierChangeStatusForm(forms.Form):
         subform = self.get_subform()
         client.barriers.set_status(
             barrier_id=self.barrier.id,
-            status=self.cleaned_data['status'],
+            status=self.cleaned_data["status"],
             **subform.get_api_params(),
         )
