@@ -29,7 +29,8 @@ def test_change_priority(browser):
     browser.find_by_css('input[type=submit]').first.click()
 
     assert browser.find_by_css('.event-list__item__text').first.value == (
-        f'Barrier priority set to {new_priority_text} by Test-user.'
+        f'Barrier priority set to {new_priority_text} by '
+        f'{settings.TEST_SSO_NAME}.'
     )
     assert browser.find_by_css('.barrier-summary__priority').first.value == (
         f'{new_priority_text} priority'

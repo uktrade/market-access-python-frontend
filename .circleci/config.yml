@@ -97,6 +97,40 @@ jobs:
 
       - run: pipenv run flake8 . --exclude=venv --count --max-line-length=120
 
+  ui_tests:
+    docker:
+      - image: circleci/python:3.7
+
+    type: approval
+
+    working_directory: ~/market-access-python-frontend
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+
+      - run:
+          command: sudo pip install pipenv
+
+      - run:
+          name: Install dependencies
+          command: pipenv sync --dev
+
+      - save_cache:
+          paths:
+            - "venv"
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+
+      - run:
+          name: Run UI Tests
+          command: pipenv run pytest ui_tests
+
+      - store_artifacts:
+          path: ui-test-reports
+
 workflows:
   version: 2
   test:

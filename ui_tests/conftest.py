@@ -1,6 +1,7 @@
 import pytest
 
 from ui_tests import settings
+from ui_tests.helpers.auth import sso_sign_in
 
 from splinter import Browser
 
@@ -14,3 +15,9 @@ def browser():
     )
     yield browser
     browser.quit()
+
+
+@pytest.fixture(autouse=True)
+def fixture_func(browser):
+    if settings.TEST_SSO_LOGIN_URL:
+        sso_sign_in(browser)

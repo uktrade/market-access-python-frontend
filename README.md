@@ -90,6 +90,26 @@ This consists of the python frontend and the selenium chrome driver.
 `make django-ui-test-with-server`
 This will start the frontend `runserver`, run the tests, then end `runserver`
 
-In theory the tests can be run against different environments by changing the `BASE_URL` and `WEB_DRIVER_URL` environment variables. However, an SSO test user would need to be set up first.
+#### Running Selenium Tests Against UAT
+1. Ensure you are on the VPN.
+
+2. Edit docker-compose.test.env:
+WEB_DRIVER_URL=http://chrome:4444/wd/hub
+TEST_BASE_URL=https://market-access-pyfe-uat.london.cloudapps.digital/
+TEST_BARRIER_ID=0e78b943-df63-4fa7-9620-23fdf972286e
+TEST_SSO_LOGIN_URL=https://sso.trade.uat.uktrade.io/login/
+TEST_SSO_EMAIL=lite-team-1@digital.trade.gov.uk
+TEST_SSO_PASSWORD=See lite-e2e-internal-frontend job on Jenkins
+TEST_SSO_NAME=1 Lite-team
+
+Note that webops have told us to use the lite team's test SSO user for now.
+
+3. Spin up the testing container:
+`docker-compose -f docker-compose.test.yml -p market-access-test up -d`
+
+4. Run the tests:
+`make django-ui-test`
+
+Ideally we would be able to run this from CircleCI and change WEB_DRIVER_URL to point to BrowserStack (https://USERNAME:API_KEY@hub-cloud.browserstack.com/wd/hub). However this presents a few difficulties, such as getting around the VPN, so for now we can just run the end to end tests from our local machines against UAT.
 
 -----

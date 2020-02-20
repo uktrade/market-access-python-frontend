@@ -22,6 +22,8 @@ services:
     extra_hosts:
       - "market-access-api-dev.london.cloudapps.digital:35.178.70.89"
       - "market-access-pyfe-dev.london.cloudapps.digital:35.178.70.89"
+      - "market-access-api-uat.london.cloudapps.digital:35.178.70.89"
+      - "market-access-pyfe-uat.london.cloudapps.digital:35.178.70.89"
 
 networks:
   market-access-api_webnet:
