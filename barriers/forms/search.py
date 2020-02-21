@@ -14,11 +14,9 @@ class BarrierSearchForm(forms.Form):
     region = forms.MultipleChoiceField(label="Overseas region", required=False,)
     priority = forms.MultipleChoiceField(label="Barrier priority", required=False,)
     status = forms.MultipleChoiceField(label="Barrier status", required=False,)
-    created_by = forms.MultipleChoiceField(
-        label="Show only",
-        choices=[("1", "My barriers"), ("2", "My team barriers"),],
-        required=False,
-    )
+    user = forms.BooleanField(label="My barriers", required=False,)
+    team = forms.BooleanField(label="My team barriers", required=False,)
+    only_archived = forms.BooleanField(label="Only archived barriers", required=False,)
 
     def __init__(self, metadata, *args, **kwargs):
         self.metadata = metadata
@@ -47,7 +45,9 @@ class BarrierSearchForm(forms.Form):
             "region": data.getlist("region"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
-            "created_by": data.getlist("created_by"),
+            "user": data.get("user"),
+            "team": data.get("team"),
+            "only_archived": data.get("only_archived"),
         }
         return {k: v for k, v in cleaned_data.items() if v}
 
@@ -129,11 +129,15 @@ class BarrierSearchForm(forms.Form):
         params["barrier_type"] = ",".join(self.cleaned_data.get("type", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
-
-        if "2" in self.cleaned_data.get("created_by", []):
+        params["team"] = self.cleaned_data.get("team")
+        if self.cleaned_data.get("team"):
             params["team"] = "1"
-        elif "1" in self.cleaned_data.get("created_by", []):
+        if self.cleaned_data.get("user"):
             params["user"] = "1"
+        if self.cleaned_data.get("only_archived"):
+            params["archived"] = "True"
+        else:
+            params["archived"] = "False"
         return {k: v for k, v in params.items() if v}
 
     def get_raw_filters(self):
