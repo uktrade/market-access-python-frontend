@@ -42,6 +42,10 @@ class Barrier(APIModel):
         return self._admin_areas
 
     @property
+    def archived_on(self):
+        return dateutil.parser.parse(self.data["archived_on"])
+
+    @property
     def country(self):
         if self._country is None and self.export_country:
             self._country = self.metadata.get_country(self.export_country)

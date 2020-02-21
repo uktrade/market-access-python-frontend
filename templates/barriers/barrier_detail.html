@@ -140,6 +140,8 @@
                 {{ barrier.reported_by }}
             </dd>
         </dl>
+
+        <a href="{% url 'barriers:archive' barrier.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive this barrier</a>
     </section>
 
     <section class="barrier-content">
