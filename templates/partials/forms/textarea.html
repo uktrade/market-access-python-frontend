@@ -1,0 +1,5 @@
+<div id="{{ field.name }}" class="govuk-form-group{% if field.errors %} govuk-form-group--error{% endif %}">
+    <label class="govuk-label govuk-label--s" for="{{ field.name }}">{{ field.label }}</label>
+
+    <textarea class="govuk-textarea{% if field.errors %} govuk-textarea--error{% endif %}" id="{{ field.name }}" name="{{ field.name }}" rows="5"></textarea>
+</div>
