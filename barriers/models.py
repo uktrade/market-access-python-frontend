@@ -13,6 +13,7 @@ class Barrier(APIModel):
     """
     Wrapper around API barrier data
     """
+
     _admin_areas = None
     _country = None
     _location = None
@@ -32,14 +33,12 @@ class Barrier(APIModel):
 
     @property
     def admin_area_ids(self):
-        return self.data['country_admin_areas']
+        return self.data["country_admin_areas"]
 
     @property
     def admin_areas(self):
         if self._admin_areas is None:
-            self._admin_areas = self.metadata.get_admin_areas(
-                self.admin_area_ids
-            )
+            self._admin_areas = self.metadata.get_admin_areas(self.admin_area_ids)
         return self._admin_areas
 
     @property
@@ -50,7 +49,7 @@ class Barrier(APIModel):
 
     @property
     def created_on(self):
-        return dateutil.parser.parse(self.data['created_on'])
+        return dateutil.parser.parse(self.data["created_on"])
 
     @property
     def eu_exit_related_text(self):
@@ -60,40 +59,38 @@ class Barrier(APIModel):
     def location(self):
         if self._location is None:
             self._location = self.metadata.get_location_text(
-                self.data['export_country'],
-                self.data['country_admin_areas']
+                self.data["export_country"], self.data["country_admin_areas"]
             )
         return self._location
 
     @property
     def modified_on(self):
-        return dateutil.parser.parse(self.data['modified_on'])
+        return dateutil.parser.parse(self.data["modified_on"])
 
     @property
     def problem_status_text(self):
-        return self.metadata.get_problem_status(self.data['problem_status'])
+        return self.metadata.get_problem_status(self.data["problem_status"])
 
     @property
     def reported_on(self):
-        return dateutil.parser.parse(self.data['reported_on'])
+        return dateutil.parser.parse(self.data["reported_on"])
 
     @property
     def sectors(self):
         if self._sectors is None:
             self._sectors = [
-                self.metadata.get_sector(sector_id)
-                for sector_id in self.sector_ids
+                self.metadata.get_sector(sector_id) for sector_id in self.sector_ids
             ]
         return self._sectors
 
     @property
     def sector_ids(self):
-        return self.data['sectors'] or []
+        return self.data["sectors"] or []
 
     @property
     def sector_names(self):
         if self.sectors:
-            return [sector.get('name', "Unknown") for sector in self.sectors]
+            return [sector.get("name", "Unknown") for sector in self.sectors]
         return ["All sectors"]
 
     @property
@@ -103,10 +100,10 @@ class Barrier(APIModel):
     @property
     def status(self):
         if self._status is None:
-            self.data['status']['id'] = str(self.data['status']['id'])
-            self._status = self.metadata.get_status(self.data['status']['id'])
-            self._status.update(self.data['status'])
-            self._status['date'] = dateutil.parser.parse(self._status['date'])
+            self.data["status"]["id"] = str(self.data["status"]["id"])
+            self._status = self.metadata.get_status(self.data["status"]["id"])
+            self._status.update(self.data["status"])
+            self._status["date"] = dateutil.parser.parse(self._status["date"])
         return self._status
 
     @property
@@ -118,43 +115,44 @@ class Barrier(APIModel):
         if self._types is None:
             self._types = [
                 self.metadata.get_barrier_type(barrier_type)
-                for barrier_type in self.data['barrier_types']
+                for barrier_type in self.data["barrier_types"]
             ]
         return self._types
 
     @property
     def is_resolved(self):
-        return self.status['id'] == '4'
+        return self.status["id"] == "4"
 
     @property
     def is_partially_resolved(self):
-        return self.status['id'] == '3'
+        return self.status["id"] == "3"
 
     @property
     def is_open(self):
-        return self.status['id'] == '2'
+        return self.status["id"] == "2"
 
     @property
     def is_hibernated(self):
-        return self.status['id'] == '5'
+        return self.status["id"] == "5"
 
 
 class Company(APIModel):
     """
     Wrapper around API company data
     """
+
     def __init__(self, data):
         self.data = data
-        self.created_on = dateutil.parser.parse(data['created_on'])
+        self.created_on = dateutil.parser.parse(data["created_on"])
 
     def get_address_display(self):
         address_parts = [
-            self.data['address'].get('line_1'),
-            self.data['address'].get('line_2'),
-            self.data['address'].get('town'),
-            self.data['address'].get('county'),
-            self.data['address'].get('postcode'),
-            self.data['address'].get('country', {}).get('name'),
+            self.data["address"].get("line_1"),
+            self.data["address"].get("line_2"),
+            self.data["address"].get("town"),
+            self.data["address"].get("county"),
+            self.data["address"].get("postcode"),
+            self.data["address"].get("country", {}).get("name"),
         ]
         address_parts = [part for part in address_parts if part]
         return ", ".join(address_parts)
@@ -164,17 +162,19 @@ class Assessment(APIModel):
     """
     Wrapper around API assessment data
     """
+
     def __init__(self, data):
         self.data = data
         metadata = get_metadata()
-        self.impact_text = metadata.get_impact_text(self.data.get('impact'))
-        self.documents = [Document(document) for document in data['documents']]
+        self.impact_text = metadata.get_impact_text(self.data.get("impact"))
+        self.documents = [Document(document) for document in data["documents"]]
 
 
 class Watchlist:
     """
     Wrapper around user watchlist data
     """
+
     _readable_filters = None
 
     def __init__(self, name, filters, *args, **kwargs):
@@ -187,28 +187,25 @@ class Watchlist:
 
         We also use created_by instead of createdBy.
         """
-        if 'search' in filters and isinstance(filters['search'], list):
+        if "search" in filters and isinstance(filters["search"], list):
             try:
-                filters['search'] = filters['search'][0]
+                filters["search"] = filters["search"][0]
             except IndexError:
-                filters['search'] = ""
-        if 'createdBy' in filters:
-            filters['created_by'] = filters.pop('createdBy')
+                filters["search"] = ""
+        if "createdBy" in filters:
+            filters["created_by"] = filters.pop("createdBy")
         return filters
 
     def to_dict(self):
         return {
-            'name': self.name,
-            'filters': self.filters,
+            "name": self.name,
+            "filters": self.filters,
         }
 
     @property
     def readable_filters(self):
         if self._readable_filters is None:
-            search_form = BarrierSearchForm(
-                metadata=get_metadata(),
-                data=self.filters,
-            )
+            search_form = BarrierSearchForm(metadata=get_metadata(), data=self.filters,)
             search_form.full_clean()
             self._readable_filters = search_form.get_readable_filters()
         return self._readable_filters
@@ -222,23 +219,21 @@ class Watchlist:
         Transform watchlist filters into api parameters
         """
         filters = copy.deepcopy(self.filters)
-        region = filters.pop('region', [])
-        country = filters.pop('country', [])
+        region = filters.pop("region", [])
+        country = filters.pop("country", [])
 
         if country or region:
-            filters['location'] = country + region
+            filters["location"] = country + region
 
-        created_by = (
-            filters.pop('createdBy', []) + filters.pop('created_by', [])
-        )
-        if '1' in created_by:
-            filters['user'] = 1
-        elif '2' in created_by:
-            filters['team'] = 1
+        created_by = filters.pop("createdBy", []) + filters.pop("created_by", [])
+        if "1" in created_by:
+            filters["user"] = 1
+        elif "2" in created_by:
+            filters["team"] = 1
 
         filter_map = {
-            'type': 'barrier_type',
-            'search': 'text',
+            "type": "barrier_type",
+            "search": "text",
         }
 
         api_params = {}
@@ -256,19 +251,20 @@ class Interaction(APIModel):
     """
     Wrapper around API interaction data
     """
+
     def __init__(self, data):
         self.data = data
         self.is_note = True
-        self.modifier = 'note'
-        self.date = dateutil.parser.parse(data['created_on'])
-        self.text = data['text']
-        self.user = data['created_by']
-        self.documents = [Document(document) for document in data['documents']]
+        self.modifier = "note"
+        self.date = dateutil.parser.parse(data["created_on"])
+        self.text = data["text"]
+        self.user = data["created_by"]
+        self.documents = [Document(document) for document in data["documents"]]
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'text': self.text,
+            "id": self.id,
+            "text": self.text,
         }
 
 
@@ -276,71 +272,70 @@ class HistoryItem(APIModel):
     """
     Wrapper around API history item data
     """
+
     def __init__(self, data):
         self.data = data
         metadata = get_metadata()
 
-        if data['field'] == 'status':
-            self.is_status = True,
-            self.modifier = 'status'
-            self.date = dateutil.parser.parse(data['date'])
-            self.event = data['field_info']['event']
+        if data["field"] == "status":
+            self.is_status = (True,)
+            self.modifier = "status"
+            self.date = dateutil.parser.parse(data["date"])
+            self.event = data["field_info"]["event"]
             self.state = {
-                'from': metadata.get_status_text(data['old_value']),
-                'to': metadata.get_status_text(
-                    data['new_value'],
-                    data['field_info'].get('sub_status'),
-                    data['field_info'].get('sub_status_other'),
+                "from": metadata.get_status_text(data["old_value"]),
+                "to": metadata.get_status_text(
+                    data["new_value"],
+                    data["field_info"].get("sub_status"),
+                    data["field_info"].get("sub_status_other"),
                 ),
-                'date': dateutil.parser.parse(
-                    data['field_info']['status_date']
-                ),
-                'is_resolved': data['new_value'] in (
-                    Statuses.RESOLVED_IN_PART,
-                    Statuses.RESOLVED_IN_FULL,
-                ),
-                'show_summary': data['new_value'] in (
+                "date": dateutil.parser.parse(data["field_info"]["status_date"]),
+                "is_resolved": data["new_value"]
+                in (Statuses.RESOLVED_IN_PART, Statuses.RESOLVED_IN_FULL,),
+                "show_summary": data["new_value"]
+                in (
                     Statuses.OPEN_IN_PROGRESS,
                     Statuses.UNKNOWN,
                     Statuses.OPEN_PENDING_ACTION,
                 ),
             }
-            self.text = data['field_info']['status_summary']
-            self.user = data['user']
-        elif data['field'] == 'priority':
+            self.text = data["field_info"]["status_summary"]
+            self.user = data["user"]
+        elif data["field"] == "priority":
             self.is_priority = True
-            self.modifier = 'priority'
-            self.date = dateutil.parser.parse(data['date'])
-            self.priority = metadata.get_priority(data['new_value'])
-            self.text = data['field_info']['priority_summary']
-            self.user = data['user']
+            self.modifier = "priority"
+            self.date = dateutil.parser.parse(data["date"])
+            self.priority = metadata.get_priority(data["new_value"])
+            self.text = data["field_info"]["priority_summary"]
+            self.user = data["user"]
         else:
             self.is_assessment = True
-            self.is_edit = data['old_value'] is not None
-            self.name = metadata.get_assessment_name(data['field'])
-            self.date = dateutil.parser.parse(data['date'])
-            self.user = data['user']
+            self.is_edit = data["old_value"] is not None
+            self.name = metadata.get_assessment_name(data["field"])
+            self.date = dateutil.parser.parse(data["date"])
+            self.user = data["user"]
 
 
 class Document(APIModel):
     """
     Wrapper around API document data
     """
+
     def __init__(self, data):
         self.data = data
-        self.id = data['id']
-        self.name = data['name']
-        self.size = data['size']
-        self.can_download = data['status'] == 'virus_scanned'
-        self.status = data['status']
+        self.id = data["id"]
+        self.name = data["name"]
+        self.size = data["size"]
+        self.can_download = data["status"] == "virus_scanned"
+        self.status = data["status"]
 
     @property
     def readable_status(self):
         return {
-            'not_virus_scanned': 'Not virus scanned',
-            'virus_scanning_scheduled': 'Virus scanning scheduled',
-            'virus_scanning_in_progress': 'Virus scanning in progress',
-            'virus_scanning_failed': 'Virus scanning failed.',
-            'virus_scanned': 'Virus scanned',
-            'deletion_pending': 'Deletion pending',
+            "not_virus_scanned": "Not virus scanned",
+            "virus_scanning_scheduled": "Virus scanning scheduled",
+            "virus_scanning_in_progress": "Virus scanning in progress",
+            "virus_scanning_failed": "Virus scanning failed.",
+            "virus_scanned": "Virus scanned",
+            "deletion_pending": "Deletion pending",
         }.get(self.status)

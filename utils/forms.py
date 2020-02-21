@@ -13,6 +13,7 @@ class MultipleValueField(forms.MultipleChoiceField):
     """
     Allows multiple values, but is not restricted to values in 'choices'
     """
+
     def valid_value(self, value):
         return True
 
@@ -21,17 +22,18 @@ class RestrictedFileField(forms.FileField):
     """
     Custom FileField with restrictions on content types and file size
     """
+
     mime_types = {
-        'image/gif': '.gif',
-        'image/png': '.png',
-        'image/webp': '.webp',
-        'image/jpeg': '.jpg',
-        'text/csv': '.csv',
-        'text/plain': '.txt',
-        'application/rtf': '.rtf',
-        'application/pdf': '.pdf',
-        'application/msword': '.doc',
-        'application/vnd.ms-excel': '.xls',
+        "image/gif": ".gif",
+        "image/png": ".png",
+        "image/webp": ".webp",
+        "image/jpeg": ".jpg",
+        "text/csv": ".csv",
+        "text/plain": ".txt",
+        "application/rtf": ".rtf",
+        "application/pdf": ".pdf",
+        "application/msword": ".doc",
+        "application/vnd.ms-excel": ".xls",
     }
 
     def __init__(self, *args, **kwargs):
@@ -41,8 +43,7 @@ class RestrictedFileField(forms.FileField):
 
     def get_allowed_types(self):
         return [
-            self.mime_types.get(content_type)
-            for content_type in self.content_types
+            self.mime_types.get(content_type) for content_type in self.content_types
         ]
 
     def clean(self, *args, **kwargs):
@@ -75,6 +76,7 @@ class ChoiceFieldWithHelpText(forms.ChoiceField):
 
     choices should be a three part tuple (value, name, help_text)
     """
+
     def valid_value(self, value):
         """Check to see if the provided value is a valid choice."""
         text_value = str(value)
@@ -114,18 +116,18 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1,
                 max_value=12,
                 error_messages={
-                    'min_value': "Please enter a valid month",
-                    'max_value': "Please enter a valid month",
-                }
+                    "min_value": "Please enter a valid month",
+                    "max_value": "Please enter a valid month",
+                },
             ),
             forms.IntegerField(
                 label="Year",
                 min_value=1990,
                 max_value=2100,
                 error_messages={
-                    'min_value': "Please enter a valid 4-digit year",
-                    'max_value': "Please enter a valid 4-digit year",
-                }
+                    "min_value": "Please enter a valid 4-digit year",
+                    "max_value": "Please enter a valid 4-digit year",
+                },
             ),
         )
         super().__init__(fields=fields, require_all_fields=True, **kwargs)
@@ -135,13 +137,11 @@ class MonthYearField(forms.MultiValueField):
             month, year = data_list
             if month in self.empty_values:
                 raise ValidationError(
-                    self.error_messages['invalid_month'],
-                    code='invalid_month'
+                    self.error_messages["invalid_month"], code="invalid_month"
                 )
             if year in self.empty_values:
                 raise ValidationError(
-                    self.error_messages['invalid_year'],
-                    code='invalid_year'
+                    self.error_messages["invalid_year"], code="invalid_year"
                 )
 
             return datetime.date(year, month, 1)

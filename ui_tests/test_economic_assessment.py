@@ -18,23 +18,21 @@ def test_economic_assessment(browser):
     if browser.url != barrier_detail_url:
         browser.visit(barrier_detail_url)
 
-    browser.click_link_by_text('Assessment')
+    browser.click_link_by_text("Assessment")
 
-    browser.click_link_by_text('Add economic assessment')
+    browser.click_link_by_text("Add economic assessment")
     browser.choose("impact", "MEDIUMHIGH")
     browser.fill("description", "Test description")
     submitted_time = datetime.now(timezone.utc)
-    browser.find_by_css('input[type=submit]').first.click()
+    browser.find_by_css("input[type=submit]").first.click()
 
-    browser.click_link_by_text('Barrier information')
-    event_list = browser.find_by_css('.event-list').first
-    event_item = event_list.find_by_text(
-        'Economic assessment'
-    ).find_by_xpath('../..')
-    event_text = event_item.find_by_tag('.event-list__item__text').value
+    browser.click_link_by_text("Barrier information")
+    event_list = browser.find_by_css(".event-list").first
+    event_item = event_list.find_by_text("Economic assessment").find_by_xpath("../..")
+    event_text = event_item.find_by_tag(".event-list__item__text").value
     assert event_text.endswith(f"added by {settings.TEST_SSO_NAME}.")
 
-    event_time = event_item.find_by_tag('h4').value
+    event_time = event_item.find_by_tag("h4").value
     created_time = parser.parse(event_time, fuzzy=True)
 
     # Time on page does not include seconds, so allow ~minute difference

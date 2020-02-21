@@ -23,7 +23,7 @@ class SearchTeamMember(BarrierMixin, FormView):
         error = None
 
         try:
-            results = client.search_users(form.cleaned_data['query'])
+            results = client.search_users(form.cleaned_data["query"])
         except APIException:
             error = "There was an error searching for users"
             results = []
@@ -38,7 +38,7 @@ class AddTeamMember(TeamMembersContextMixin, BarrierMixin, FormView):
     form_class = AddTeamMemberForm
 
     def get(self, request, *args, **kwargs):
-        user_id = self.request.GET.get('user')
+        user_id = self.request.GET.get("user")
         if not user_id:
             return HttpResponseRedirect(self.get_success_url())
         context = self.get_context_data(user_id, **kwargs)
@@ -46,57 +46,53 @@ class AddTeamMember(TeamMembersContextMixin, BarrierMixin, FormView):
 
     def get_context_data(self, user_id, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
-        context_data['user'] = client.users.get(user_id)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        context_data["user"] = client.users.get(user_id)
         return context_data
 
     def get_initial(self):
-        return {'user': self.request.GET.get('user')}
+        return {"user": self.request.GET.get("user")}
 
     def form_invalid(self, form):
-        user_id = self.request.GET.get('user')
+        user_id = self.request.GET.get("user")
         return self.render_to_response(
             self.get_context_data(user_id=user_id, form=form)
         )
 
     def form_valid(self, form):
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         client.barriers.add_team_member(
-            barrier_id=str(self.kwargs.get('barrier_id')),
-            user_id=form.cleaned_data['user'],
-            role=form.cleaned_data['role'],
+            barrier_id=str(self.kwargs.get("barrier_id")),
+            user_id=form.cleaned_data["user"],
+            role=form.cleaned_data["role"],
         )
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse(
-            'barriers:team',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+            "barriers:team", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
 
 
 class DeleteTeamMember(
-    TeamMembersContextMixin,
-    BarrierMixin,
-    TemplateView,
+    TeamMembersContextMixin, BarrierMixin, TemplateView,
 ):
     template_name = "barriers/teams/delete_member.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['team_member'] = self.get_team_member(
-            self.kwargs.get('team_member_id')
+        context_data["team_member"] = self.get_team_member(
+            self.kwargs.get("team_member_id")
         )
         return context_data
 
     def post(self, request, *args, **kwargs):
-        team_member_id = self.kwargs.get('team_member_id')
-        client = MarketAccessAPIClient(self.request.session.get('sso_token'))
+        team_member_id = self.kwargs.get("team_member_id")
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         client.barriers.delete_team_member(team_member_id)
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse(
-            'barriers:team',
-            kwargs={'barrier_id': self.kwargs.get('barrier_id')}
+            "barriers:team", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
