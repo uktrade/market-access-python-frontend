@@ -56,14 +56,18 @@
             <dt class="summary-group__list__key">Barrier summary</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.problem_description|escape|linebreaksbr }}
+                {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_description' barrier.id %}">Edit</a>
+                {% endif %}
             </dd>
 
             <div class="summary-group__list-item-50">
                 <dt class="summary-group__list__key">Barrier type</dt>
                 <dd class="summary-group__list__value">
                     {{ barrier.problem_status_text }}
+                    {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_problem_status' barrier.id %}">Edit</a>
+                    {% endif %}
                 </dd>
             </div>
 
@@ -71,7 +75,9 @@
                 <dt class="summary-group__list__key">Related to Brexit</dt>
                 <dd class="summary-group__list__value">
                     {{ barrier.eu_exit_related_text }}
+                    {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_eu_exit_related' barrier.id %}">Edit</a>
+                    {% endif %}
                 </dd>
             </div>
 
@@ -84,9 +90,15 @@
                             <li class="summary-group__list__value__list__item">{{ item.name }}</li>
                             {% endfor %}
                         </ul>
+                        {% if not barrier.archived %}
                         <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_companies' barrier.id %}">Edit</a>
+                        {% endif %}
                     {% else %}
-                        <a href="{% url 'barriers:search_company' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
+                        {% if barrier.archived %}
+                            <span class="summary-group__list__value__none">No companies</span>
+                        {% else %}
+                            <a href="{% url 'barriers:search_company' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
+                        {% endif %}
                     {% endif %}
                 </dd>
             {% endif %}
@@ -103,9 +115,15 @@
                             {% endfor %}
                         {% endif %}
                     </ul>
+                    {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_sectors' barrier.id %}">Edit</a>
+                    {% endif %}
                 {% else %}
-                    <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="summary-group__list__value__add">Add one or more sectors</a>
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No sectors</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="summary-group__list__value__add">Add one or more sectors</a>
+                    {% endif %}
                 {% endif %}
             </dd>
 
@@ -117,22 +135,32 @@
                         <li class="summary-group__list__value__list__item">{{ item.title }}</li>
                         {% endfor %}
                     </ul>
+                    {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_types' barrier.id %}">Edit</a>
+                    {% endif %}
                 {% else %}
-                    <a href="{% url 'barriers:add_type' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No barrier categories</span>
+                    {% else %}
+                        <a href="{% url 'barriers:add_type' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
+                    {% endif %}
                 {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Product, service or investment affected</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.product }}
+                {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_product' barrier.id %}">Edit</a>
+                {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Information source</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.source_name }}{% if barrier.other_source %}<br>{{ barrier.other_source }}{% endif %}
+                {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_source' barrier.id %}">Edit</a>
+                {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Barrier added by</dt>
@@ -141,7 +169,9 @@
             </dd>
         </dl>
 
+        {% if not barrier.archived %}
         <a href="{% url 'barriers:archive' barrier.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive this barrier</a>
+        {% endif %}
     </section>
 
     <section class="barrier-content">
@@ -177,7 +207,9 @@
         </h2>
 
         {% block note_form %}
-            <a class="govuk-button button--primary" href="{% url 'barriers:add_note' barrier.id %}">Add note</a>
+            {% if not barrier.archived %}
+                <a class="govuk-button button--primary" href="{% url 'barriers:add_note' barrier.id %}">Add note</a>
+            {% endif %}
         {% endblock %}
 
         <ol class="event-list js-delete-modal-container">
@@ -197,9 +229,11 @@
                         {% include 'barriers/partials/note_form.html' %}
                     {% else %}
                         <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
-                        <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
-                        {% if item.user.id == user.id %}
-                            <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:delete_note' barrier.id item.id %}">Delete</a>
+                        {% if not barrier.archived %}
+                            <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
+                            {% if item.user.id == user.id %}
+                                <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:delete_note' barrier.id item.id %}">Delete</a>
+                            {% endif %}
                         {% endif %}
 
                         {% if item.documents %}
