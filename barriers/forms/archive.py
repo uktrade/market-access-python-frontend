@@ -110,19 +110,22 @@ class ArchiveBarrierForm(forms.Form):
                 "subform": self.subforms[value],
             }
 
+    def get_subform(self):
+        return self.subforms.get(self.cleaned_data["reason"])
+
+    @property
+    def errors(self):
+        form_errors = super().errors
+        if self.is_bound and "reason" in self.cleaned_data:
+            form_errors.update(self.get_subform().errors)
+        return form_errors
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
+        subform = self.get_subform()
         client.barriers.patch(
-            id=self.id,
-            archived_on="",
+            id=self.barrier_id,
+            archived=True,
             archived_reason=self.cleaned_data.get("reason"),
-            archived_text=self.get_reason_text(),
+            archived_explanation=subform.get_explanation(),
         )
-
-    def get_reason_text(self):
-        if self.cleaned_data.get("reason") == "DUPLICATE":
-            return self.cleaned_data["duplicate_text"]
-        if self.cleaned_data.get("reason") == "NOTABARRIER":
-            return self.cleaned_data["not_a_barrier_text"]
-        if self.cleaned_data.get("reason") == "OTHER":
-            return self.cleaned_data["other_text"]
