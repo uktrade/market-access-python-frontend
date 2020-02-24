@@ -1,0 +1,27 @@
+.archived-banner {
+    color: #fff;
+    padding: 1px 30px;
+}
+
+.archived-banner__summary {
+    float: left;
+    width: 65%;
+}
+
+.archived-banner__text {
+    margin: govuk-em( 10, 16 ) 0 govuk-em( 3, 16 );
+}
+
+.archived-banner__reason {
+    margin: govuk-em( 3, 16 ) 0 govuk-em( 10, 16 ) 0;
+}
+
+.archived-banner__unarchive {
+    margin: govuk-em( 16, 16 ) 0 govuk-em( -32, 16 );
+
+    @include mq( $from: tablet ){
+        float: right;
+        text-align: right;
+        width: govuk-em( 240, 16 );
+    }
+}

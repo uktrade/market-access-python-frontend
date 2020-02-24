@@ -62,6 +62,18 @@
 	margin-top: govuk-em( 5, 16 );
 }
 
+.summary-group__list__value__none {
+	border: 2px dashed $govuk-grey-2;
+	background-color: $govuk-grey-4;
+	width: 100%;
+	padding: govuk-em( 15, 16 );
+	display: block;
+	box-sizing: border-box;
+	margin-top: govuk-em( 5, 16 );
+	text-align: center;
+	color: $govuk-secondary-text-colour;
+}
+
 .summary-group__list__value__edit {
 	display: block;
 }
