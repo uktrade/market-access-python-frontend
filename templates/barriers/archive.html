@@ -5,6 +5,11 @@
 {% block body_script %}
     <script>
         ma.pages.barrier.archive();
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#conditional-DUPLICATE .govuk-character-count' );
+            new ma.components.CharacterCount( '#conditional-NOT_A_BARRIER .govuk-character-count' );
+            new ma.components.CharacterCount( '#conditional-OTHER .govuk-character-count' );
+        }
     </script>
 {% endblock %}
 

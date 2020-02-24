@@ -8,11 +8,18 @@ from utils.forms import ChoiceFieldWithHelpText
 
 
 class DuplicateBarrierForm(forms.Form):
-    duplicate_text = forms.CharField(
+    duplicate_explanation = forms.CharField(
         label="Please specify",
         widget=forms.Textarea,
+        max_length=999,
         required=False,
+        error_messages={
+            'max_length': 'Explanation should be %(limit_value)d characters or fewer'
+        }
     )
+
+    def get_explanation(self):
+        return self.cleaned_data["duplicate_explanation"]
 
     def as_html(self):
         template_name = "barriers/forms/archive/duplicate.html"
@@ -23,11 +30,15 @@ class DuplicateBarrierForm(forms.Form):
 
 
 class NotABarrierForm(forms.Form):
-    not_a_barrier_text = forms.CharField(
+    not_a_barrier_explanation = forms.CharField(
         label="Please specify",
         widget=forms.Textarea,
+        max_length=999,
         required=False,
     )
+
+    def get_explanation(self):
+        return self.cleaned_data["not_a_barrier_explanation"]
 
     def as_html(self):
         template_name = "barriers/forms/archive/not_a_barrier.html"
@@ -38,11 +49,15 @@ class NotABarrierForm(forms.Form):
 
 
 class OtherForm(forms.Form):
-    other_text = forms.CharField(
+    other_explanation = forms.CharField(
         label="Please specify",
         widget=forms.Textarea,
+        max_length=999,
         required=False,
     )
+
+    def get_explanation(self):
+        return self.cleaned_data["other_explanation"]
 
     def as_html(self):
         template_name = "barriers/forms/archive/other.html"
@@ -55,7 +70,7 @@ class OtherForm(forms.Form):
 class ArchiveBarrierForm(forms.Form):
     CHOICES = [
         ("DUPLICATE", "Duplicate"),
-        ("NOTABARRIER", "Not a barrier"),
+        ("NOT_A_BARRIER", "Not a barrier"),
         ("OTHER", "Other"),
     ]
     reason = forms.ChoiceField(
@@ -70,7 +85,7 @@ class ArchiveBarrierForm(forms.Form):
     )
     subform_classes = {
         "DUPLICATE": DuplicateBarrierForm,
-        "NOTABARRIER": NotABarrierForm,
+        "NOT_A_BARRIER": NotABarrierForm,
         "OTHER": OtherForm,
     }
     subforms = {}

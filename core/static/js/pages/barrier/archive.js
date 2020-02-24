@@ -12,8 +12,8 @@ ma.pages.barrier.archive = function(){
     new ma.components.ConditionalRadioContent({
         inputContainer: '.reason',
         inputName: 'reason',
-        conditionalElem: '#conditional-NOTABARRIER',
-        shouldShow: function( value ){ return ( value === 'NOTABARRIER' ); }
+        conditionalElem: '#conditional-NOT_A_BARRIER',
+        shouldShow: function( value ){ return ( value === 'NOT_A_BARRIER' ); }
     });
 
     new ma.components.ConditionalRadioContent({
