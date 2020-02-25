@@ -278,6 +278,7 @@ LOGGING = {
 if not DEBUG:
     sentry_sdk.init(
         dsn=os.environ.get('SENTRY_DSN'),
+        environment=os.environ.get('SENTRY_ENVIRONMENT'),
         integrations=[
             DjangoIntegration(),
         ],
