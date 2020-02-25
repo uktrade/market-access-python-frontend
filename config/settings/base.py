@@ -10,12 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import dj_database_url
 import json
 import os
 
 from django.utils.log import DEFAULT_LOGGING
 
+from environ import Env
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -25,19 +25,28 @@ ROOT_DIR = os.path.abspath(os.path.dirname(__name__))
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+ENV_FILE = os.path.join(BASE_DIR, ".env")
+
+if os.path.exists(ENV_FILE):
+    Env.read_env(ENV_FILE)
+
+env = Env(
+    DEBUG=(bool, False)
+)
+
 # Load PaaS Service env vars
-VCAP_SERVICES = json.loads(os.environ.get('VCAP_SERVICES', "{}"))
+VCAP_SERVICES = env.json('VCAP_SERVICES', default={})
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.environ.get("DEBUG", "false").lower() == 'true')
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 # Application definition
 
 BASE_APPS = [
@@ -117,7 +126,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    "default": dj_database_url.config(env="DATABASE_URL", default="")
+    "default": env.db("DATABASE_URL"),
 }
 
 
@@ -189,17 +198,17 @@ MOCK_METADATA = False
 
 # CACHE / REDIS
 # Try to read from PaaS service env vars first
-REDIS_DB = os.environ.get("REDIS_DB", 4)
+REDIS_DB = env("REDIS_DB", 4)
 if "redis" in VCAP_SERVICES:
     REDIS_URI = VCAP_SERVICES["redis"][0]["credentials"]["uri"]
 else:
-    REDIS_URI = os.environ.get("REDIS_URI")
+    REDIS_URI = env("REDIS_URI")
 REDIS_URI = f"{REDIS_URI}/{REDIS_DB}"
 
 # Market access API
-MARKET_ACCESS_API_URI = os.environ.get("MARKET_ACCESS_API_URI", "unset")
-MARKET_ACCESS_API_HAWK_ID = os.environ.get("MARKET_ACCESS_API_HAWK_ID")
-MARKET_ACCESS_API_HAWK_KEY = os.environ.get("MARKET_ACCESS_API_HAWK_KEY")
+MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI", "unset")
+MARKET_ACCESS_API_HAWK_ID = env("MARKET_ACCESS_API_HAWK_ID")
+MARKET_ACCESS_API_HAWK_KEY = env("MARKET_ACCESS_API_HAWK_KEY")
 
 SETTINGS_EXPORT = [
     'DJANGO_ENV',
@@ -207,39 +216,35 @@ SETTINGS_EXPORT = [
     'DATAHUB_DOMAIN',
 ]
 
-SSO_CLIENT = os.environ.get("SSO_CLIENT")
-SSO_SECRET = os.environ.get("SSO_SECRET")
-SSO_API_URI = os.environ.get("SSO_API_URI")
-SSO_API_TOKEN = os.environ.get("SSO_API_TOKEN")
-SSO_AUTHORIZE_URI = os.environ.get("SSO_AUTHORIZE_URI")
-SSO_BASE_URI = os.environ.get("SSO_BASE_URI")
-SSO_TOKEN_URI = os.environ.get("SSO_TOKEN_URI")
-SSO_MOCK_CODE = os.environ.get("SSO_MOCK_CODE")
-OAUTH_PARAM_LENGTH = os.environ.get("OAUTH_PARAM_LENGTH", 75)
+SSO_CLIENT = env("SSO_CLIENT")
+SSO_SECRET = env("SSO_SECRET")
+SSO_API_URI = env("SSO_API_URI")
+SSO_API_TOKEN = env("SSO_API_TOKEN")
+SSO_AUTHORIZE_URI = env("SSO_AUTHORIZE_URI")
+SSO_BASE_URI = env("SSO_BASE_URI")
+SSO_TOKEN_URI = env("SSO_TOKEN_URI")
+SSO_MOCK_CODE = env("SSO_MOCK_CODE")
+OAUTH_PARAM_LENGTH = env("OAUTH_PARAM_LENGTH", 75)
 
+DATAHUB_DOMAIN = env("DATAHUB_DOMAIN", "https://www.datahub.trade.gov.uk")
+DATAHUB_URL = env("DATAHUB_URL")
+DATAHUB_HAWK_ID = env("DATAHUB_HAWK_ID", "")
+DATAHUB_HAWK_KEY = env("DATAHUB_HAWK_KEY", "")
 
-DATAHUB_DOMAIN = os.environ.get(
-    "DATAHUB_DOMAIN",
-    "https://www.datahub.trade.gov.uk"
-)
-DATAHUB_URL = os.environ.get("DATAHUB_URL")
-DATAHUB_HAWK_ID = os.environ.get("DATAHUB_HAWK_ID", "")
-DATAHUB_HAWK_KEY = os.environ.get("DATAHUB_HAWK_KEY", "")
-
-FILE_MAX_SIZE = os.environ.get("FILE_MAX_SIZE", (5 * 1024 * 1024))
-FILE_SCAN_MAX_WAIT_TIME = os.environ.get("FILE_SCAN_MAX_WAIT_TIME", 30000)
-FILE_SCAN_STATUS_CHECK_INTERVAL = os.environ.get(
+FILE_MAX_SIZE = env.int("FILE_MAX_SIZE", (5 * 1024 * 1024))
+FILE_SCAN_MAX_WAIT_TIME = env.int("FILE_SCAN_MAX_WAIT_TIME", 30000)
+FILE_SCAN_STATUS_CHECK_INTERVAL = env.int(
     "FILE_SCAN_STATUS_CHECK_INTERVAL",
     500
 )
 
-API_RESULTS_LIMIT = os.environ.get('API_RESULTS_LIMIT', 100)
-MAX_WATCHLIST_LENGTH = os.environ.get('MAX_WATCHLIST_LENGTH', 3)
-MAX_WATCHLIST_NAME_LENGTH = os.environ.get('MAX_WATCHLIST_NAME_LENGTH', 25)
+API_RESULTS_LIMIT = env.int('API_RESULTS_LIMIT', 100)
+MAX_WATCHLIST_LENGTH = env.int('MAX_WATCHLIST_LENGTH', 3)
+MAX_WATCHLIST_NAME_LENGTH = env.int('MAX_WATCHLIST_NAME_LENGTH', 25)
 
 # Logging
 # ============================================
-DJANGO_LOG_LEVEL = os.environ.get("DJANGO_LOG_LEVEL", "info").upper()
+DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", "info").upper()
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -276,8 +281,8 @@ LOGGING = {
 
 if not DEBUG:
     sentry_sdk.init(
-        dsn=os.environ.get('SENTRY_DSN'),
-        environment=os.environ.get('SENTRY_ENVIRONMENT'),
+        dsn=env('SENTRY_DSN'),
+        environment=env('SENTRY_ENVIRONMENT'),
         integrations=[
             DjangoIntegration(),
         ],
