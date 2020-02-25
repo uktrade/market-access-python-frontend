@@ -75,21 +75,19 @@
                 </dd>
             </div>
 
-            {% if add_company %}
-                <dt class="summary-group__list__key">Companies known to be affected</dt>
-                <dd class="summary-group__list__value">
-                    {% if barrier.companies %}
-                        <ul class="summary-group__list__value__list">
-                            {% for item in barrier.companies %}
-                            <li class="summary-group__list__value__list__item">{{ item.name }}</li>
-                            {% endfor %}
-                        </ul>
-                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_companies' barrier.id %}">Edit</a>
-                    {% else %}
-                        <a href="{% url 'barriers:search_company' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
-                    {% endif %}
-                </dd>
-            {% endif %}
+            <dt class="summary-group__list__key">Companies known to be affected</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.companies %}
+                    <ul class="summary-group__list__value__list">
+                        {% for item in barrier.companies %}
+                        <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_companies' barrier.id %}">Edit</a>
+                {% else %}
+                    <a href="{% url 'barriers:search_company' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
+                {% endif %}
+            </dd>
 
             <dt class="summary-group__list__key">Sector{{ barrier.sectors|pluralize }} affected</dt>
             <dd class="summary-group__list__value">

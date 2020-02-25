@@ -217,7 +217,6 @@ SSO_TOKEN_URI = os.environ.get("SSO_TOKEN_URI")
 SSO_MOCK_CODE = os.environ.get("SSO_MOCK_CODE")
 OAUTH_PARAM_LENGTH = os.environ.get("OAUTH_PARAM_LENGTH", 75)
 
-ADD_COMPANY = os.environ.get("ADD_COMPANY", True)
 
 DATAHUB_DOMAIN = os.environ.get(
     "DATAHUB_DOMAIN",
