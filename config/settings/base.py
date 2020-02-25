@@ -198,7 +198,7 @@ MOCK_METADATA = False
 
 # CACHE / REDIS
 # Try to read from PaaS service env vars first
-REDIS_DB = env("REDIS_DB", 4)
+REDIS_DB = env.int("REDIS_DB", default=4)
 if "redis" in VCAP_SERVICES:
     REDIS_URI = VCAP_SERVICES["redis"][0]["credentials"]["uri"]
 else:
@@ -206,7 +206,7 @@ else:
 REDIS_URI = f"{REDIS_URI}/{REDIS_DB}"
 
 # Market access API
-MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI", "unset")
+MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI")
 MARKET_ACCESS_API_HAWK_ID = env("MARKET_ACCESS_API_HAWK_ID")
 MARKET_ACCESS_API_HAWK_KEY = env("MARKET_ACCESS_API_HAWK_KEY")
 
@@ -224,28 +224,28 @@ SSO_AUTHORIZE_URI = env("SSO_AUTHORIZE_URI")
 SSO_BASE_URI = env("SSO_BASE_URI")
 SSO_TOKEN_URI = env("SSO_TOKEN_URI")
 SSO_MOCK_CODE = env("SSO_MOCK_CODE")
-OAUTH_PARAM_LENGTH = env("OAUTH_PARAM_LENGTH", 75)
+OAUTH_PARAM_LENGTH = env("OAUTH_PARAM_LENGTH", default=75)
 
-DATAHUB_DOMAIN = env("DATAHUB_DOMAIN", "https://www.datahub.trade.gov.uk")
+DATAHUB_DOMAIN = env("DATAHUB_DOMAIN", default="https://www.datahub.trade.gov.uk")
 DATAHUB_URL = env("DATAHUB_URL")
-DATAHUB_HAWK_ID = env("DATAHUB_HAWK_ID", "")
-DATAHUB_HAWK_KEY = env("DATAHUB_HAWK_KEY", "")
+DATAHUB_HAWK_ID = env("DATAHUB_HAWK_ID")
+DATAHUB_HAWK_KEY = env("DATAHUB_HAWK_KEY")
 
-FILE_MAX_SIZE = env.int("FILE_MAX_SIZE", (5 * 1024 * 1024))
-FILE_SCAN_MAX_WAIT_TIME = env.int("FILE_SCAN_MAX_WAIT_TIME", 30000)
+FILE_MAX_SIZE = env.int("FILE_MAX_SIZE", default=(5 * 1024 * 1024))
+FILE_SCAN_MAX_WAIT_TIME = env.int("FILE_SCAN_MAX_WAIT_TIME", default=30000)
 FILE_SCAN_STATUS_CHECK_INTERVAL = env.int(
     "FILE_SCAN_STATUS_CHECK_INTERVAL",
-    500
+    default=500
 )
-ALLOWED_FILE_TYPES = env.list("ALLOWED_FILE_TYPES", ["text/csv", "image/jpeg"])
+ALLOWED_FILE_TYPES = env.list("ALLOWED_FILE_TYPES", default=["text/csv", "image/jpeg"])
 
-API_RESULTS_LIMIT = env.int('API_RESULTS_LIMIT', 100)
-MAX_WATCHLIST_LENGTH = env.int('MAX_WATCHLIST_LENGTH', 3)
-MAX_WATCHLIST_NAME_LENGTH = env.int('MAX_WATCHLIST_NAME_LENGTH', 25)
+API_RESULTS_LIMIT = env.int('API_RESULTS_LIMIT', default=100)
+MAX_WATCHLIST_LENGTH = env.int('MAX_WATCHLIST_LENGTH', default=3)
+MAX_WATCHLIST_NAME_LENGTH = env.int('MAX_WATCHLIST_NAME_LENGTH', default=25)
 
 # Logging
 # ============================================
-DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", "info").upper()
+DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="info").upper()
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
