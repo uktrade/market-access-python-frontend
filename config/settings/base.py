@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import json
 import os
 
 from django.utils.log import DEFAULT_LOGGING
