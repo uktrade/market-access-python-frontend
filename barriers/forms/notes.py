@@ -16,7 +16,7 @@ class AddNoteForm(DocumentMixin, forms.Form):
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
         label="Attach a document",
-        content_types=["text/csv", "image/jpeg"],
+        content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
@@ -44,7 +44,7 @@ class EditNoteForm(DocumentMixin, forms.Form):
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
         label="Attach a document",
-        content_types=["text/csv", "image/jpeg"],
+        content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
@@ -68,7 +68,7 @@ class EditNoteForm(DocumentMixin, forms.Form):
 
 class NoteDocumentForm(DocumentMixin, forms.Form):
     document = RestrictedFileField(
-        content_types=["text/csv", "image/jpeg"],
+        content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
     )
 

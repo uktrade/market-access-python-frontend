@@ -33,8 +33,15 @@ class RestrictedFileField(forms.FileField):
         "text/plain": ".txt",
         "application/rtf": ".rtf",
         "application/pdf": ".pdf",
+        "application/vnd.oasis.opendocument.text": ".odt",
         "application/msword": ".doc",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+        "application/vnd.oasis.opendocument.presentation": ".odp",
+        "application/vnd.ms-powerpoint": ".ppt",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": ".pptx",
+        "application/vnd.oasis.opendocument.spreadsheet": ".ods",
         "application/vnd.ms-excel": ".xls",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
     }
 
     def __init__(self, *args, **kwargs):
