@@ -68,16 +68,17 @@ class SummaryViewTestCase(ReportsTestCase):
         assert saved_form_data is None
         assert mock_save.called is False
 
+    @patch("utils.api.client.ReportsResource.submit")
     @patch("utils.api.client.ReportsResource.get")
-    @patch("reports.helpers.ReportFormGroup._update_barrier")
-    def test_save_and_continue_redirects_to_correct_view(self, mock_update, mock_get):
+    @patch("utils.api.resources.APIResource.patch")
+    def test_save_and_continue_redirects_to_correct_view(self, mock_update, mock_get, mock_submit):
         """
         Clicking on `Save and continue` button should update the draft barrier
         and redirect the user to the draft barrier details view
         """
         mock_update.return_value = Report(self.draft)
         mock_get.return_value = Report(self.draft)
-        redirect_url = reverse("reports:draft_barrier_details_uuid", kwargs={"barrier_id": self.draft["id"]})
+        redirect_url = reverse("barriers:barrier_detail", kwargs={"barrier_id": self.draft["id"]})
         data = {
             "problem_description": "wibble wobble",
             "next_steps_summary": "step 1 - wobble, step 2 - wibble",
@@ -87,10 +88,12 @@ class SummaryViewTestCase(ReportsTestCase):
 
         self.assertRedirects(response, redirect_url)
         assert mock_update.called is True
+        assert mock_submit.called is True
 
+    @patch("utils.api.client.ReportsResource.submit")
     @patch("utils.api.client.ReportsResource.get")
-    @patch("reports.helpers.ReportFormGroup._update_barrier")
-    def test_button_save_and_exit_redirects_to_correct_view(self, mock_update, mock_get):
+    @patch("utils.api.resources.APIResource.patch")
+    def test_button_save_and_exit_redirects_to_correct_view(self, mock_update, mock_get, mock_submit):
         """
         Clicking on `Save and exit` button should update the draft barrier
         and redirect the user to the draft barrier details view
@@ -108,3 +111,4 @@ class SummaryViewTestCase(ReportsTestCase):
 
         self.assertRedirects(response, redirect_url)
         assert mock_update.called is True
+        assert mock_submit.called is False

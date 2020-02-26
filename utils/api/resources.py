@@ -192,3 +192,6 @@ class UsersResource(APIResource):
 class ReportsResource(APIResource):
     resource_name = "reports"
     model = Report
+
+    def submit(self, barrier_id):
+        return self.client.put(f"reports/{barrier_id}/submit")
