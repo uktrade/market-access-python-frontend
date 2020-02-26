@@ -26,7 +26,7 @@ class EconomicAssessmentForm(DocumentMixin, forms.Form):
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
-        content_types=["text/csv", "image/jpeg"],
+        content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
@@ -59,7 +59,7 @@ class EconomicAssessmentForm(DocumentMixin, forms.Form):
 
 class AssessmentDocumentForm(DocumentMixin, forms.Form):
     document = RestrictedFileField(
-        content_types=["text/csv", "image/jpeg"],
+        content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
     )
 

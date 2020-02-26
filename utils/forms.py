@@ -1,5 +1,6 @@
 import datetime
 import magic
+import os
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -32,8 +33,15 @@ class RestrictedFileField(forms.FileField):
         "text/plain": ".txt",
         "application/rtf": ".rtf",
         "application/pdf": ".pdf",
+        "application/vnd.oasis.opendocument.text": ".odt",
         "application/msword": ".doc",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+        "application/vnd.oasis.opendocument.presentation": ".odp",
+        "application/vnd.ms-powerpoint": ".ppt",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": ".pptx",
+        "application/vnd.oasis.opendocument.spreadsheet": ".ods",
         "application/vnd.ms-excel": ".xls",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
     }
 
     def __init__(self, *args, **kwargs):
@@ -41,24 +49,34 @@ class RestrictedFileField(forms.FileField):
         self.max_upload_size = kwargs.pop("max_upload_size")
         super().__init__(*args, **kwargs)
 
-    def get_allowed_types(self):
+    def get_allowed_extensions(self):
         return [
             self.mime_types.get(content_type) for content_type in self.content_types
         ]
 
     def clean(self, *args, **kwargs):
+        """
+        Raise an error if file type or size is not allowed
+
+        Note that the mimetype of csv files will not always be text/csv, so we
+        also look at the file extension.
+        """
         data = super().clean(*args, **kwargs)
 
         if not data:
             return
 
         content_type = magic.from_buffer(data.file.read(), mime=True)
+        extension = os.path.splitext(data.name)[1]
+        allowed_extensions = self.get_allowed_extensions()
 
-        if content_type not in self.content_types:
-            allowed_types = self.get_allowed_types()
+        if (
+            content_type not in self.content_types
+            and extension not in allowed_extensions
+        ):
             raise forms.ValidationError(
                 f"Unsupported file format. The following file formats are "
-                f"accepted {', '.join(allowed_types)}"
+                f"accepted {', '.join(allowed_extensions)}"
             )
 
         if data.size > self.max_upload_size:

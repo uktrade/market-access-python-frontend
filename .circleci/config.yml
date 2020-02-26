@@ -33,6 +33,7 @@ jobs:
       SSO_SECRET: ""
       SSO_API_URI: "http://localhost:5000/api/v1/"
       SSO_AUTHORIZE_URI: "http://localhost:5000/o/authorize/"
+      SSO_BASE_URI: "http://localhost:5000/"
       SSO_TOKEN_URI: "http://localhost:5000/o/token/"
       SSO_MOCK_CODE: ""
       SSO_API_TOKEN: "token"

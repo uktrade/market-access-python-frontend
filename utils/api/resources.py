@@ -165,12 +165,13 @@ class DocumentsResource(APIResource):
                 raise ScanError("Unable to get scan status")
 
             if response.get("status") == "virus_scanning_failed":
-                raise ScanError(
-                    "This file may be infected with a virus and will not be "
-                    "accepted."
-                )
+                raise ScanError("Unable to virus scan the file")
             elif response.get("status") == "virus_scanned":
-                return
+                if 'av_clean' not in response or response.get('av_clean') is True:
+                    return
+                raise ScanError(
+                    "This file may be infected with a virus and will not be accepted."
+                )
 
             time.sleep(interval / 1000)
 
@@ -191,3 +192,6 @@ class UsersResource(APIResource):
 class ReportsResource(APIResource):
     resource_name = "reports"
     model = Report
+
+    def submit(self, barrier_id):
+        return self.client.put(f"reports/{barrier_id}/submit")
