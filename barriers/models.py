@@ -317,6 +317,16 @@ class HistoryItem(APIModel):
             self.priority = metadata.get_priority(data["new_value"])
             self.text = data["field_info"]["priority_summary"]
             self.user = data["user"]
+        elif data["field"] == "archived":
+            self.is_archived = True
+            self.modifier = "archived"
+            self.date = dateutil.parser.parse(data["date"])
+            self.archived = data["new_value"]
+            self.archived_reason = ARCHIVED_REASON[
+                data["field_info"]["archived_reason"]
+            ]
+            self.archived_explanation = data["field_info"]["archived_explanation"]
+            self.user = data["user"]
         else:
             self.is_assessment = True
             self.is_edit = data["old_value"] is not None

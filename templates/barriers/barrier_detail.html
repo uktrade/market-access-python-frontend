@@ -311,6 +311,17 @@
                     <p class="event-list__item__text">
                         <a href="{% url 'barriers:assessment_detail' barrier.id %}">{{ item.name }}</a> {% if item.is_edit %}edited{% else %}added{% endif %}{% if item.user.name %} by {{ item.user.name }}{% endif %}.
                     </p>
+
+                {% elif item.is_archived %}
+
+                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+                    {% if item.archived %}
+                    <p class="event-list__item__text">This barrier was archived by {{ item.user.name }}.</p>
+                    <p class="event-list__item__text">Reason: {{ item.archived_reason }} - {{ item.archived_explanation }}</p>
+                    {% else %}
+                    <p class="event-list__item__text">This barrier was unarchived by {{ item.user.name }}.</p>
+                    {% endif %}
                 {% endif %}
 
             </li>
