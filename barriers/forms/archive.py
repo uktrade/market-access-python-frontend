@@ -1,6 +1,7 @@
 from django import forms
 from django.template.loader import render_to_string
 
+from barriers.constants import ARCHIVED_REASON
 from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
@@ -77,18 +78,13 @@ class OtherForm(forms.Form):
 
 
 class ArchiveBarrierForm(forms.Form):
-    CHOICES = [
-        ("DUPLICATE", "Duplicate"),
-        ("NOT_A_BARRIER", "Not a barrier"),
-        ("OTHER", "Other"),
-    ]
     reason = forms.ChoiceField(
         label="You must tell us why you are archiving this barrier",
         help_text=(
             "Archived barriers will only appear in search when the "
             "‘Show archived barriers’ filters is enabled."
         ),
-        choices=CHOICES,
+        choices=ARCHIVED_REASON,
         widget=forms.RadioSelect,
         error_messages={"required": "Select a reason for archiving this barrier"},
     )

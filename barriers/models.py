@@ -1,6 +1,7 @@
 import copy
 from urllib.parse import urlencode
 
+from .constants import ARCHIVED_REASON
 from .forms.search import BarrierSearchForm
 
 from utils.metadata import get_metadata, Statuses
@@ -44,6 +45,10 @@ class Barrier(APIModel):
     @property
     def archived_on(self):
         return dateutil.parser.parse(self.data["archived_on"])
+
+    @property
+    def archived_reason(self):
+        return ARCHIVED_REASON[self.data["archived_reason"]]
 
     @property
     def country(self):

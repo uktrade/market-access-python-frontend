@@ -1,3 +1,6 @@
+from model_utils import Choices
+
+
 class Statuses:
     UNFINISHED = "0"
     OPEN_PENDING_ACTION = "1"
@@ -7,3 +10,10 @@ class Statuses:
     DORMANT = "5"
     ARCHIVED = "6"
     UNKNOWN = "7"
+
+
+ARCHIVED_REASON = Choices(
+    ("DUPLICATE", "Duplicate"),
+    ("NOT_A_BARRIER", "Not a barrier"),
+    ("OTHER", "Other"),
+)
