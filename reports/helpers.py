@@ -415,6 +415,8 @@ class ReportFormGroup:
 
     def prepare_payload_summary(self):
         payload = self.summary_form
+        if not payload["next_steps_summary"]:
+            del payload["next_steps_summary"]
         return payload
 
     def _update_barrier(self, payload):
