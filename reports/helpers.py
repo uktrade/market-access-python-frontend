@@ -322,10 +322,9 @@ class ReportFormGroup:
 
     def get_sectors_affected_form_data(self):
         data = {"sectors_affected": None}
-        # TODO, only set this if progress is not "NOT STARTED" for "Sectors affected"
-        if self.barrier.data["sectors_affected"]:
+        if self.barrier.data["sectors_affected"] is True:
             data["sectors_affected"] = SectorsAffected.YES
-        else:
+        elif self.barrier.data["sectors_affected"] is False:
             data["sectors_affected"] = SectorsAffected.NO
         return data
 
