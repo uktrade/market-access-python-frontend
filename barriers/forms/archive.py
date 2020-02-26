@@ -11,10 +11,11 @@ class DuplicateBarrierForm(forms.Form):
     duplicate_explanation = forms.CharField(
         label="Please specify",
         widget=forms.Textarea,
-        max_length=999,
-        required=False,
+        max_length=1000,
+        required=True,
         error_messages={
-            'max_length': 'Explanation should be %(limit_value)d characters or fewer'
+            'max_length': 'Explanation should be %(limit_value)d characters or fewer',
+            'required': "Enter an explanation",
         }
     )
 
@@ -33,8 +34,12 @@ class NotABarrierForm(forms.Form):
     not_a_barrier_explanation = forms.CharField(
         label="Please specify",
         widget=forms.Textarea,
-        max_length=999,
-        required=False,
+        max_length=1000,
+        required=True,
+        error_messages={
+            'max_length': 'Explanation should be %(limit_value)d characters or fewer',
+            'required': "Enter an explanation",
+        }
     )
 
     def get_explanation(self):
@@ -52,8 +57,12 @@ class OtherForm(forms.Form):
     other_explanation = forms.CharField(
         label="Please specify",
         widget=forms.Textarea,
-        max_length=999,
-        required=False,
+        max_length=1000,
+        required=True,
+        error_messages={
+            'max_length': 'Explanation should be %(limit_value)d characters or fewer',
+            'required': "Enter an explanation",
+        }
     )
 
     def get_explanation(self):
