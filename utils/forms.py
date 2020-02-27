@@ -163,3 +163,81 @@ class MonthYearField(forms.MultiValueField):
                 )
 
             return datetime.date(year, month, 1)
+
+
+class SubformChoiceField(forms.ChoiceField):
+    """
+    ChoiceField where each choice includes a subform.
+
+    Example usage:
+
+    reason = SubformChoiceField(
+        choices=(
+            ("DUPLICATE", "Duplicate"),
+            ("NOT_A_BARRIER", "Not a barrier"),
+        ),
+        subform_classes={
+            "DUPLICATE": DuplicateBarrierForm,
+            "NOT_A_BARRIER": NotABarrierForm,
+        }
+    )
+
+    Template snippet:
+
+    {% for choice in form.fields.reason.enhanced_choices %}
+      <div class="govuk-radios__item">
+        <input name="{{ form.reason.name }}" type="radio" value="{{ choice.value }}">
+        <label>{{ choice.name }}</label>
+      </div>
+
+      <div id="conditional-{{ choice.value }}">
+        {{ choice.subform.as_html }}
+      </div>
+    {% endfor %}
+    """
+    subforms = {}
+
+    def __init__(self, *, subform_classes={}, **kwargs):
+        super().__init__(**kwargs)
+        self.subform_classes = subform_classes
+
+    @property
+    def enhanced_choices(self):
+        for value, name in self.choices:
+            yield {
+                "value": value,
+                "name": name,
+                "subform": self.subforms[value],
+            }
+
+
+class SubformMixin:
+    """
+    A form mixin to be used for forms with SubformChoiceField
+    """
+    subform_fields = {}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        data = kwargs.get("data")
+
+        for name, field in self.fields.items():
+            if isinstance(field, SubformChoiceField):
+                self.subform_fields[name] = field
+
+                for value, subform_class in field.subform_classes.items():
+                    if data and data.get(name) == value:
+                        subform = subform_class(data)
+                        field.subform = subform
+                        field.subforms[value] = subform
+                    else:
+                        field.subforms[value] = subform_class()
+
+    @property
+    def errors(self):
+        form_errors = super().errors
+        if self.is_bound:
+            for name, field in self.subform_fields.items():
+                if name in self.cleaned_data:
+                    form_errors.update(field.subform.errors)
+        return form_errors
