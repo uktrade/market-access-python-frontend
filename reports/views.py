@@ -529,6 +529,17 @@ class NewReportBarrierSummaryView(ReportsFormView):
 
     def success(self):
         self.form_group.save(payload=self.form_group.prepare_payload_summary())
+        if self.request.POST.get("action") != "exit":
+            self.form_group.submit()
+
+    def get_success_url(self):
+        if self.request.POST.get("action") == "exit":
+            return super().get_success_url()
+
+        return reverse(
+            "barriers:barrier_detail",
+            kwargs={"barrier_id": self.form_group.barrier_id},
+        )
 
 
 class DraftBarriers(TemplateView):
