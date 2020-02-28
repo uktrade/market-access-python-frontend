@@ -72,7 +72,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.priority %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.status %}
-                        {% include 'barriers/partials/active_filter.html' with filter=filters.created_by %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
                     </ul>
 
                     <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">

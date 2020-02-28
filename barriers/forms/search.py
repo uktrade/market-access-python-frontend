@@ -18,6 +18,13 @@ class BarrierSearchForm(forms.Form):
     team = forms.BooleanField(label="My team barriers", required=False,)
     only_archived = forms.BooleanField(label="Only archived barriers", required=False,)
 
+    filter_groups = {
+        'show': {
+            'label': "Show",
+            'fields': ('user', 'team', 'only_archived')
+        }
+    }
+
     def __init__(self, metadata, *args, **kwargs):
         self.metadata = metadata
 
@@ -31,6 +38,7 @@ class BarrierSearchForm(forms.Form):
         self.set_region_choices()
         self.set_priority_choices()
         self.set_status_choices()
+        self.index_filter_groups()
 
     def get_data_from_querydict(self, data):
         """
@@ -119,6 +127,54 @@ class BarrierSearchForm(forms.Form):
             data.remove("")
         return data
 
+    def clean_user(self):
+        if self.cleaned_data["user"] is True:
+            return 1
+
+    def clean_team(self):
+        if self.cleaned_data["team"] is True:
+            return 1
+
+    def clean_only_archived(self):
+        if self.cleaned_data["only_archived"] is True:
+            return 1
+
+    def index_filter_groups(self):
+        self.filter_group_lookup = {}
+        for key, info in self.filter_groups.items():
+            for field in info['fields']:
+                self.filter_group_lookup[field] = {
+                    'key': key,
+                    'label': info['label'],
+                    'fields': info['fields']
+                }
+
+    def get_filter_key(self, field_name):
+        if field_name in self.filter_group_lookup:
+            return self.filter_group_lookup[field_name]['key']
+        return field_name
+
+    def get_filter_label(self, field_name):
+        if field_name in self.filter_group_lookup:
+            return self.filter_group_lookup[field_name]['label']
+        return self.fields[field_name].label
+
+    def get_filter_value(self, field_name, value):
+        if field_name in self.filter_group_lookup:
+            return [value]
+        return value
+
+    def get_remove_url(self, field_name):
+        params = {k: v for k, v in self.cleaned_data.items() if v}
+
+        if field_name in self.filter_group_lookup:
+            for field in self.filter_group_lookup[field_name]['fields']:
+                if field in params:
+                    del params[field]
+        else:
+            del params[field_name]
+        return urlencode(params, doseq=True)
+
     def get_api_search_parameters(self):
         params = {}
         params["text"] = self.cleaned_data.get("search")
@@ -150,11 +206,13 @@ class BarrierSearchForm(forms.Form):
             if value and not self.fields[key].widget.is_hidden
         }
 
-    def get_readable_value(self, field_name, value):
+    def get_filter_readable_value(self, field_name, value):
         field = self.fields[field_name]
         if hasattr(field, "choices"):
             field_lookup = dict(field.choices)
             return ", ".join([field_lookup.get(x) for x in value])
+        elif isinstance(field, forms.BooleanField):
+            return field.label
         return value
 
     def get_readable_filters(self, with_remove_links=False):
@@ -167,18 +225,22 @@ class BarrierSearchForm(forms.Form):
         filters = {}
 
         for name, value in self.get_raw_filters().items():
-            filters[name] = {
-                "label": self.fields[name].label,
-                "value": value,
-                "readable_value": self.get_readable_value(name, value),
-            }
+            key = self.get_filter_key(name)
+            if key not in filters:
+                filters[key] = {
+                    "label": self.get_filter_label(name),
+                    "value": self.get_filter_value(name, value),
+                    "readable_value": self.get_filter_readable_value(name, value),
+                }
 
-            if with_remove_links:
-                params = self.cleaned_data.copy()
-                if params.get("edit") is None:
-                    del params["edit"]
-
-                del params[name]
-                filters[name]["remove_url"] = urlencode(params, doseq=True)
+                if with_remove_links:
+                    filters[key]["remove_url"] = self.get_remove_url(name)
+            else:
+                existing_readable_value = filters[key]['readable_value']
+                this_readable_value = self.get_filter_readable_value(name, value)
+                filters[key]["readable_value"] = (
+                    f"{existing_readable_value}, {this_readable_value}"
+                )
+                filters[key]["value"].append(value)
 
         return filters
