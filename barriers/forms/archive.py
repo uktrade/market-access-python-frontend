@@ -15,9 +15,9 @@ class DuplicateBarrierForm(forms.Form):
         max_length=1000,
         required=True,
         error_messages={
-            'max_length': 'Explanation should be %(limit_value)d characters or fewer',
-            'required': "Enter an explanation",
-        }
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
     )
 
     def get_explanation(self):
@@ -35,9 +35,9 @@ class NotABarrierForm(forms.Form):
         max_length=1000,
         required=True,
         error_messages={
-            'max_length': 'Explanation should be %(limit_value)d characters or fewer',
-            'required': "Enter an explanation",
-        }
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
     )
 
     def get_explanation(self):
@@ -55,9 +55,9 @@ class OtherForm(forms.Form):
         max_length=1000,
         required=True,
         error_messages={
-            'max_length': 'Explanation should be %(limit_value)d characters or fewer',
-            'required': "Enter an explanation",
-        }
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
     )
 
     def get_explanation(self):
@@ -96,7 +96,7 @@ class ArchiveBarrierForm(SubformMixin, forms.Form):
             id=self.barrier_id,
             archived=True,
             archived_reason=self.cleaned_data.get("reason"),
-            archived_explanation=self.fields['reason'].subform.get_explanation(),
+            archived_explanation=self.fields["reason"].subform.get_explanation(),
         )
 
 
@@ -107,9 +107,9 @@ class UnarchiveBarrierForm(forms.Form):
         max_length=1000,
         required=True,
         error_messages={
-            'max_length': 'Reason should be %(limit_value)d characters or fewer',
-            'required': "Enter a reason",
-        }
+            "max_length": "Reason should be %(limit_value)d characters or fewer",
+            "required": "Enter a reason",
+        },
     )
 
     def __init__(self, id, token, *args, **kwargs):

@@ -19,10 +19,7 @@ class BarrierSearchForm(forms.Form):
     only_archived = forms.BooleanField(label="Only archived barriers", required=False,)
 
     filter_groups = {
-        'show': {
-            'label': "Show",
-            'fields': ('user', 'team', 'only_archived')
-        }
+        "show": {"label": "Show", "fields": ("user", "team", "only_archived")}
     }
 
     def __init__(self, metadata, *args, **kwargs):
@@ -142,21 +139,21 @@ class BarrierSearchForm(forms.Form):
     def index_filter_groups(self):
         self.filter_group_lookup = {}
         for key, info in self.filter_groups.items():
-            for field in info['fields']:
+            for field in info["fields"]:
                 self.filter_group_lookup[field] = {
-                    'key': key,
-                    'label': info['label'],
-                    'fields': info['fields']
+                    "key": key,
+                    "label": info["label"],
+                    "fields": info["fields"],
                 }
 
     def get_filter_key(self, field_name):
         if field_name in self.filter_group_lookup:
-            return self.filter_group_lookup[field_name]['key']
+            return self.filter_group_lookup[field_name]["key"]
         return field_name
 
     def get_filter_label(self, field_name):
         if field_name in self.filter_group_lookup:
-            return self.filter_group_lookup[field_name]['label']
+            return self.filter_group_lookup[field_name]["label"]
         return self.fields[field_name].label
 
     def get_filter_value(self, field_name, value):
@@ -168,7 +165,7 @@ class BarrierSearchForm(forms.Form):
         params = {k: v for k, v in self.cleaned_data.items() if v}
 
         if field_name in self.filter_group_lookup:
-            for field in self.filter_group_lookup[field_name]['fields']:
+            for field in self.filter_group_lookup[field_name]["fields"]:
                 if field in params:
                     del params[field]
         else:
@@ -236,11 +233,11 @@ class BarrierSearchForm(forms.Form):
                 if with_remove_links:
                     filters[key]["remove_url"] = self.get_remove_url(name)
             else:
-                existing_readable_value = filters[key]['readable_value']
+                existing_readable_value = filters[key]["readable_value"]
                 this_readable_value = self.get_filter_readable_value(name, value)
-                filters[key]["readable_value"] = (
-                    f"{existing_readable_value}, {this_readable_value}"
-                )
+                filters[key][
+                    "readable_value"
+                ] = f"{existing_readable_value}, {this_readable_value}"
                 filters[key]["value"].append(value)
 
         return filters

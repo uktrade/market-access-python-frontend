@@ -13,7 +13,5 @@ class Statuses:
 
 
 ARCHIVED_REASON = Choices(
-    ("DUPLICATE", "Duplicate"),
-    ("NOT_A_BARRIER", "Not a barrier"),
-    ("OTHER", "Other"),
+    ("DUPLICATE", "Duplicate"), ("NOT_A_BARRIER", "Not a barrier"), ("OTHER", "Other"),
 )

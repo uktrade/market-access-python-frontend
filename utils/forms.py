@@ -197,6 +197,7 @@ class SubformChoiceField(forms.ChoiceField):
       </div>
     {% endfor %}
     """
+
     subforms = {}
 
     def __init__(self, *, subform_classes={}, **kwargs):
@@ -226,6 +227,7 @@ class SubformMixin:
     """
     A form mixin to be used for forms with SubformChoiceField
     """
+
     subform_fields = {}
 
     def __init__(self, *args, **kwargs):
