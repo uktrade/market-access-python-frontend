@@ -169,6 +169,8 @@ class SubformChoiceField(forms.ChoiceField):
     """
     ChoiceField where each choice includes a subform.
 
+    The main form will need to use SubformMixin.
+
     Example usage:
 
     reason = SubformChoiceField(
@@ -210,6 +212,15 @@ class SubformChoiceField(forms.ChoiceField):
                 "subform": self.subforms[value],
             }
 
+    def init_subforms(self, data, selected_value=None):
+        for value, subform_class in self.subform_classes.items():
+            if value == selected_value:
+                subform = subform_class(data)
+                self.subform = subform
+                self.subforms[value] = subform
+            else:
+                self.subforms[value] = subform_class()
+
 
 class SubformMixin:
     """
@@ -224,14 +235,10 @@ class SubformMixin:
         for name, field in self.fields.items():
             if isinstance(field, SubformChoiceField):
                 self.subform_fields[name] = field
-
-                for value, subform_class in field.subform_classes.items():
-                    if data and data.get(name) == value:
-                        subform = subform_class(data)
-                        field.subform = subform
-                        field.subforms[value] = subform
-                    else:
-                        field.subforms[value] = subform_class()
+                field.init_subforms(
+                    data=kwargs.get("data"),
+                    selected_value=kwargs.get("data", {}).get(name),
+                )
 
     @property
     def errors(self):
