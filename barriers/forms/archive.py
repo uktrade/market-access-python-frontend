@@ -98,3 +98,29 @@ class ArchiveBarrierForm(SubformMixin, forms.Form):
             archived_reason=self.cleaned_data.get("reason"),
             archived_explanation=self.fields['reason'].subform.get_explanation(),
         )
+
+
+class UnarchiveBarrierForm(forms.Form):
+    reason = forms.CharField(
+        label="You must give a reason why you are unarchiving this barrier",
+        widget=forms.Textarea,
+        max_length=1000,
+        required=True,
+        error_messages={
+            'max_length': 'Reason should be %(limit_value)d characters or fewer',
+            'required': "Enter a reason",
+        }
+    )
+
+    def __init__(self, id, token, *args, **kwargs):
+        self.barrier_id = id
+        self.token = token
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(
+            id=self.barrier_id,
+            archived=False,
+            unarchived_reason=self.cleaned_data.get("reason"),
+        )

@@ -319,14 +319,19 @@ class HistoryItem(APIModel):
             self.user = data["user"]
         elif data["field"] == "archived":
             self.is_archived = True
-            self.modifier = "archived"
             self.date = dateutil.parser.parse(data["date"])
             self.archived = data["new_value"]
-            self.archived_reason = ARCHIVED_REASON[
-                data["field_info"]["archived_reason"]
-            ]
-            self.archived_explanation = data["field_info"]["archived_explanation"]
             self.user = data["user"]
+            if self.archived:
+                self.modifier = "archived"
+                archived_reason_code = data["field_info"].get("archived_reason")
+                if archived_reason_code:
+                    self.archived_reason = ARCHIVED_REASON[archived_reason_code]
+
+                self.archived_explanation = data["field_info"]["archived_explanation"]
+            else:
+                self.modifier = "unarchived"
+                self.unarchived_reason = data["field_info"]["unarchived_reason"]
         else:
             self.is_assessment = True
             self.is_edit = data["old_value"] is not None

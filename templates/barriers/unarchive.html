@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Unarchive{% endblock %}
+
+{% block body_script %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
+{% block outside_content %}
+    {% include 'barriers/partials/archived_banner.html' %}
+{% endblock %}
+
+{% block page_content %}
+
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link">Back</a>
+    {% include 'partials/heading.html' with caption=object.barrier_title text='You are about to unarchive this barrier' %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.reason.name }}" class="govuk-form-group{% if form.reason.errors %} govuk-form-group--error{% endif %}">
+            {% include "partials/forms/textarea.html" with field=form.reason max_length=form.reason.field.max_length|safe %}
+        </div>
+
+        <input type="submit" class="govuk-button" value="Confirm">
+        <a href="" class="govuk-button button--secondary">Cancel</a>
+    </form>
+
+{% endblock %}
