@@ -279,6 +279,11 @@ LOGGING = {
     },
 }
 
+
+# Google Analytics
+GA_ENABLED = env('GA_ENABLED', None)
+GA_ID = env('GA_ID', None)
+
 if not DEBUG:
     sentry_sdk.init(
         dsn=env('SENTRY_DSN'),
