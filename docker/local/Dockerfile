@@ -66,6 +66,9 @@ WORKDIR /usr/src/app
 ENV LANG en_GB.utf-8
 ENV LC_ALL en_GB.utf-8
 
+# create virtualenv directory in WORKDIR called ".venv"
+ENV PIPENV_VENV_IN_PROJECT="enabled"
+
 RUN python3.7 -m pip install pipenv
 ADD Pipfile* ./
 RUN pipenv sync --dev
