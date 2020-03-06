@@ -1,9 +1,14 @@
+import json
 from datetime import datetime
+
+from django.conf import settings
+import requests
 
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_location import HasAdminAreas
 from reports.forms.new_report_barrier_sectors import SectorsAffected
 from reports.forms.new_report_barrier_status import BarrierStatuses
+from reports.models import Report
 from utils.api.client import MarketAccessAPIClient
 
 
@@ -17,7 +22,7 @@ from utils.api.client import MarketAccessAPIClient
 #     "resolved_status",      # Step 1.2 - Status
 #     # ==============================
 #     "status",               # n/a - Barrier status (e.g.: unfinished, open , dormant, etc...)
-#     "status_summary",       # n/a
+#     "status_summary",       # this is set in step 5 - without this the draft barrier cannot be submitted (MAR-221)
 #     "status_date",          # n/a
 #     # ==============================
 #     "export_country",       # Step 2 - Location - UUID
@@ -416,11 +421,28 @@ class ReportFormGroup:
     def prepare_payload_summary(self):
         payload = self.summary_form
         if not payload["next_steps_summary"]:
-            del payload["next_steps_summary"]
+            payload["next_steps_summary"] = None
+            payload["status_summary"] = "n/a"
+        else:
+            payload["status_summary"] = payload["next_steps_summary"]
         return payload
 
     def _update_barrier(self, payload):
-        return self.client.reports.patch(id=self.barrier_id, **payload)
+        # TODO: this really should be in the client, but that doesn't handle JSON strings :/
+        #       the current flow in the client currently converts None to "None" rather then None to null
+        token = self.session.get("sso_token")
+        url = f'{settings.MARKET_ACCESS_API_URI}reports/{self.barrier_id}'
+        headers = {
+            'Authorization': f"Bearer {token}",
+            'Content-Type': 'application/json',
+            'X-User-Agent': '',
+            'X-Forwarded-For': '',
+        }
+        data = json.dumps(payload)
+        response = requests.patch(url, headers=headers, data=data)
+        response.raise_for_status()
+        barrier_data = json.loads(response.text)
+        return Report(barrier_data)
 
     def _create_barrier(self, payload):
         return self.client.reports.create(**payload)
