@@ -70,7 +70,7 @@ class SummaryViewTestCase(ReportsTestCase):
 
     @patch("utils.api.client.ReportsResource.submit")
     @patch("utils.api.client.ReportsResource.get")
-    @patch("utils.api.resources.APIResource.patch")
+    @patch("reports.helpers.ReportFormGroup._update_barrier")
     def test_save_and_continue_redirects_to_correct_view(self, mock_update, mock_get, mock_submit):
         """
         Clicking on `Save and continue` button should update the draft barrier
@@ -92,7 +92,7 @@ class SummaryViewTestCase(ReportsTestCase):
 
     @patch("utils.api.client.ReportsResource.submit")
     @patch("utils.api.client.ReportsResource.get")
-    @patch("utils.api.resources.APIResource.patch")
+    @patch("reports.helpers.ReportFormGroup._update_barrier")
     def test_button_save_and_exit_redirects_to_correct_view(self, mock_update, mock_get, mock_submit):
         """
         Clicking on `Save and exit` button should update the draft barrier
