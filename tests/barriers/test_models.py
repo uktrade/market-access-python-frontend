@@ -50,9 +50,13 @@ class CompanyModelTestCase(MarketAccessTestCase):
 
 
 class WatchlistModelTestCase(MarketAccessTestCase):
-    old_watchlist = {
-        "name": "Old watchlist",
+    old_user_watchlist = {
+        "name": "Old user watchlist",
         "filters": {"search": ["Test"], "createdBy": ["1"]},
+    }
+    old_team_watchlist = {
+        "name": "Old team watchlist",
+        "filters": {"search": ["Test"], "createdBy": ["2"]},
     }
     complex_watchlist = {
         "name": "Complex",
@@ -67,13 +71,17 @@ class WatchlistModelTestCase(MarketAccessTestCase):
             "region": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
             "priority": ["HIGH", "MEDIUM"],
             "status": ["2", "3"],
-            "created_by": ["1"],
+            "user": 1,
         },
     }
 
-    def test_field_conversion(self):
-        watchlist = Watchlist(**self.old_watchlist)
-        assert watchlist.filters == {"search": "Test", "created_by": ["1"]}
+    def test_field_conversion_user(self):
+        watchlist = Watchlist(**self.old_user_watchlist)
+        assert watchlist.filters == {"search": "Test", "user": 1}
+
+    def test_field_conversion_team(self):
+        watchlist = Watchlist(**self.old_team_watchlist)
+        assert watchlist.filters == {"search": "Test", "team": 1}
 
     def test_readable_filters(self):
         watchlist = Watchlist(**self.complex_watchlist)
@@ -120,10 +128,10 @@ class WatchlistModelTestCase(MarketAccessTestCase):
             "readable_value": "Open: In progress, Resolved: In part",
             "value": ["2", "3"],
         }
-        assert watchlist.readable_filters["created_by"] == {
-            "label": "Show only",
+        assert watchlist.readable_filters["show"] == {
+            "label": "Show",
             "readable_value": "My barriers",
-            "value": ["1"],
+            "value": [1],
         }
 
     def test_get_api_params(self):

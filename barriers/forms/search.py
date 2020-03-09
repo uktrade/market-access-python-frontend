@@ -188,9 +188,9 @@ class BarrierSearchForm(forms.Form):
         if self.cleaned_data.get("user"):
             params["user"] = "1"
         if self.cleaned_data.get("only_archived"):
-            params["archived"] = "True"
+            params["archived"] = "1"
         else:
-            params["archived"] = "False"
+            params["archived"] = "0"
         return {k: v for k, v in params.items() if v}
 
     def get_raw_filters(self):

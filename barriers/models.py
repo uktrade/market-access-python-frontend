@@ -194,15 +194,19 @@ class Watchlist:
         """
         Node saves the watchlist search term as a list for some reason.
 
-        We also use created_by instead of createdBy.
+        We now use user=1 and team=1 instead of created_by=[1,2] (or createdBy).
         """
         if "search" in filters and isinstance(filters["search"], list):
             try:
                 filters["search"] = filters["search"][0]
             except IndexError:
                 filters["search"] = ""
-        if "createdBy" in filters:
-            filters["created_by"] = filters.pop("createdBy")
+
+        created_by = filters.pop("createdBy", filters.pop("created_by", []))
+        if "1" in created_by:
+            filters["user"] = 1
+        if "2" in created_by:
+            filters["team"] = 1
         return filters
 
     def to_dict(self):
