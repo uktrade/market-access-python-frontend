@@ -59,8 +59,10 @@ class NewReportBarrierAboutForm(forms.Form):
     other_source = forms.CharField(
         label="Please specify",
         required=False,
+        max_length=255,
         error_messages={
-            'required': "Select how you became aware of the barrier"
+            'required': "Select how you became aware of the barrier",
+            "max_length": "Other source should be %(limit_value)d characters or fewer",
         },
     )
     eu_exit_related = forms.ChoiceField(
