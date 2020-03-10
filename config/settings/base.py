@@ -209,12 +209,6 @@ MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI")
 MARKET_ACCESS_API_HAWK_ID = env("MARKET_ACCESS_API_HAWK_ID")
 MARKET_ACCESS_API_HAWK_KEY = env("MARKET_ACCESS_API_HAWK_KEY")
 
-SETTINGS_EXPORT = [
-    'DJANGO_ENV',
-    'MAX_WATCHLIST_LENGTH',
-    'DATAHUB_DOMAIN',
-]
-
 SSO_CLIENT = env("SSO_CLIENT")
 SSO_SECRET = env("SSO_SECRET")
 SSO_API_URI = env("SSO_API_URI")
@@ -281,7 +275,7 @@ LOGGING = {
 
 
 # Google Tag Manager
-GTM_ENABLED = env('GTM_ENABLED', default=False)
+GTM_ENABLED = env.bool('GTM_ENABLED', default=False)
 GTM_ID = env('GTM_ID', default=None)
 GTM_AUTH = env('GTM_AUTH', default=None)
 GTM_PREVIEW = env('GTM_PREVIEW', default=None)
@@ -294,3 +288,14 @@ if not DEBUG:
             DjangoIntegration(),
         ],
     )
+
+# Settings made available in templates
+SETTINGS_EXPORT = (
+    'DJANGO_ENV',
+    'MAX_WATCHLIST_LENGTH',
+    'DATAHUB_DOMAIN',
+    'GTM_ENABLED',
+    'GTM_ID',
+    'GTM_AUTH',
+    'GTM_PREVIEW',
+)
