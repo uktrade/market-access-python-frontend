@@ -416,7 +416,7 @@ class ReportFormGroup:
 
     def prepare_payload_summary(self):
         payload = self.summary_form
-        if self.status_form["is_resolved"]:
+        if self.status_form.get("is_resolved"):
             payload["next_steps_summary"] = None
         else:
             payload["status_summary"] = None
