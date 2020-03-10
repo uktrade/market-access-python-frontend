@@ -131,7 +131,7 @@ class WatchlistModelTestCase(MarketAccessTestCase):
         assert watchlist.readable_filters["show"] == {
             "label": "Show",
             "readable_value": "My barriers",
-            "value": [1],
+            "value": ["1"],
         }
 
     def test_get_api_params(self):

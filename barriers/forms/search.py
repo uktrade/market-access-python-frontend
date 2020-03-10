@@ -126,15 +126,15 @@ class BarrierSearchForm(forms.Form):
 
     def clean_user(self):
         if self.cleaned_data["user"] is True:
-            return 1
+            return "1"
 
     def clean_team(self):
         if self.cleaned_data["team"] is True:
-            return 1
+            return "1"
 
     def clean_only_archived(self):
         if self.cleaned_data["only_archived"] is True:
-            return 1
+            return "1"
 
     def index_filter_groups(self):
         self.filter_group_lookup = {}

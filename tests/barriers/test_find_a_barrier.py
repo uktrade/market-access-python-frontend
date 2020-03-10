@@ -99,7 +99,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
         ]
         assert form.cleaned_data["priority"] == ["HIGH", "MEDIUM"]
         assert form.cleaned_data["status"] == ["1", "2", "7"]
-        assert form.cleaned_data["user"] == True
+        assert form.cleaned_data["user"] == "1"
 
         mock_list.assert_called_with(
             ordering="-reported_on",
