@@ -61,7 +61,14 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         widget=forms.RadioSelect,
         error_messages={"required": "Select how you became aware of the barrier"},
     )
-    other_source = forms.CharField(label="Please specify", required=False)
+    other_source = forms.CharField(
+        label="Please specify",
+        required=False,
+        max_length=255,
+        error_messages={
+            "max_length": "Other source should be %(limit_value)d characters or fewer",
+        }
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -69,7 +76,7 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         other_source = cleaned_data.get("other_source")
 
         if source == "OTHER":
-            if not other_source:
+            if not other_source and "other_source" not in self.errors:
                 self.add_error(
                     "other_source", "Enter how you became aware of the barrier"
                 )

@@ -17,7 +17,7 @@ from utils.api.client import MarketAccessAPIClient
 #     "resolved_status",      # Step 1.2 - Status
 #     # ==============================
 #     "status",               # n/a - Barrier status (e.g.: unfinished, open , dormant, etc...)
-#     "status_summary",       # n/a
+#     "status_summary",       # this is set in step 5 - without this the draft barrier cannot be submitted (MAR-221)
 #     "status_date",          # n/a
 #     # ==============================
 #     "export_country",       # Step 2 - Location - UUID
@@ -347,6 +347,7 @@ class ReportFormGroup:
         data = {
             "problem_description": self.barrier.data.get("problem_description") or "",
             "next_steps_summary": self.barrier.data.get("next_steps_summary") or "",
+            "status_summary": self.barrier.data.get("status_summary") or "",
         }
         return data
 
@@ -415,8 +416,12 @@ class ReportFormGroup:
 
     def prepare_payload_summary(self):
         payload = self.summary_form
-        if not payload["next_steps_summary"]:
-            del payload["next_steps_summary"]
+        if self.status_form.get("is_resolved"):
+            payload["next_steps_summary"] = None
+        else:
+            payload["status_summary"] = None
+            if not payload["next_steps_summary"]:
+                payload["next_steps_summary"] = None
         return payload
 
     def _update_barrier(self, payload):

@@ -91,14 +91,14 @@
       {% endcompress %}
       <script>ma.init();</script>
       {% block body_script %}{% endblock %}
-      {% if not user.internal and analytics.enabled and analytics.id %}
+      {% if not user.internal and settings.GA_ENABLED and settings.GA_ID %}
       <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics.id }}"></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.GA_ID }}"></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '{{ analytics.id }}');
+        gtag('config', '{{ settings.GA_ID }}');
       </script>
       {% endif %}
 
