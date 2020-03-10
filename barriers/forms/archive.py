@@ -73,7 +73,7 @@ class ArchiveBarrierForm(SubformMixin, forms.Form):
         label="You must tell us why you are archiving this barrier",
         help_text=(
             "Archived barriers will only appear in search when the "
-            "‘Show archived barriers’ filters is enabled."
+            "'Show only archived barriers' filter is enabled."
         ),
         choices=ARCHIVED_REASON,
         subform_classes={

@@ -124,7 +124,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
         )
 
     @patch("utils.api.resources.APIResource.list")
-    def test_created_by_fitler(self, mock_list):
+    def test_my_barriers_filter(self, mock_list):
         response = self.client.get(
             reverse("barriers:find_a_barrier"), data={"user": "1"},
         )
@@ -137,6 +137,8 @@ class FindABarrierTestCase(MarketAccessTestCase):
             archived="0",
         )
 
+    @patch("utils.api.resources.APIResource.list")
+    def test_my_team_barriers_filter(self, mock_list):
         response = self.client.get(
             reverse("barriers:find_a_barrier"), data={"team": "1"},
         )
@@ -160,6 +162,19 @@ class FindABarrierTestCase(MarketAccessTestCase):
             team="1",
             user="1",
             archived="0",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_archived_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:find_a_barrier"), data={"only_archived": "1"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="1",
         )
 
     @patch("utils.api.resources.APIResource.list")
