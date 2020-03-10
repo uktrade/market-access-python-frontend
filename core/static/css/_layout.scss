@@ -57,7 +57,7 @@ a {
 .archived-banner {
 	max-width: 100%;
 	padding: govuk-em( 5, 5 ) govuk-em( 30, 16 ) govuk-em( 5, 5 ) govuk-em( 30, 16 );
-	background: $govuk-grey-2;
+	background: govuk-colour("dark-grey");
 
 	&:after {
 		content: "";
