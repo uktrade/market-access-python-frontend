@@ -280,9 +280,11 @@ LOGGING = {
 }
 
 
-# Google Analytics
-GA_ENABLED = env('GA_ENABLED', default=None)
-GA_ID = env('GA_ID', default=None)
+# Google Tag Manager
+GTM_ENABLED = env('GTM_ENABLED', default=False)
+GTM_ID = env('GTM_ID', default=None)
+GTM_AUTH = env('GTM_AUTH', default=None)
+GTM_PREVIEW = env('GTM_PREVIEW', default=None)
 
 if not DEBUG:
     sentry_sdk.init(
