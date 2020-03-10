@@ -5,7 +5,12 @@
 
 .archived-banner__summary {
     float: left;
-    width: 65%;
+    width: 100%;
+
+    @include mq( $from: tablet ){
+        width: 60%;
+        margin-right: govuk-em( 16, 16 );
+    }
 }
 
 .archived-banner__text {
@@ -17,11 +22,10 @@
 }
 
 .archived-banner__unarchive {
-    margin: govuk-em( 16, 16 ) 0 govuk-em( -32, 16 );
+    margin: govuk-em( 16, 16 ) 0;
 
     @include mq( $from: tablet ){
         float: right;
         text-align: right;
-        width: govuk-em( 240, 16 );
     }
 }
