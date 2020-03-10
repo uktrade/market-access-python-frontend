@@ -96,7 +96,7 @@ def test_continue_draft_barrier(browser):
 
     browser.fill("problem_description", "Test description")
     browser.fill("next_steps_summary", "Test next steps")
-    browser.find_by_css("input[type=submit]").click()
+    browser.find_by_css('button[value="exit"]').click()
 
     # Check completion status for each section
     sections = browser.find_by_css(".task-list__item")
