@@ -282,7 +282,7 @@
 
             <li class="event-list__item">
 
-                {% if barrier.is_resolved %}
+                {% if barrier.is_resolved or barrier.is_partially_resolved %}
 
                     <h4 class="event-list__item__heading">Attach any useful documents</h4>
                     <p class="event-list__item__text">

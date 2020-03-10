@@ -17,3 +17,7 @@ class NewReportBarrierSummaryForm(forms.Form):
         help_text="Include all your agreed team actions.",
         required=False,
     )
+    status_summary = forms.CharField(
+        label="How did you resolve the problem?",
+        required=False,
+    )
