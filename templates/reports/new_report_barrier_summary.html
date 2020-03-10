@@ -31,7 +31,21 @@
                     </span>
                 </div>
             </div>
-
+            {% if is_resolved %}
+            <div class="{% form_group_classes form.status_summary.errors %}">
+                <label class="govuk-label govuk-label--s" for="next-steps">
+                    {{ form.status_summary.label }}
+                </label>
+                {% form_field_error form "status_summary" %}
+                <span id="next-steps-hint" class="govuk-hint">
+                    {{ form.status_summary.help_text }}
+                </span>
+                <textarea class="govuk-textarea" id="next-steps"
+                          name="{{ form.status_summary.name }}"
+                          rows="5"
+                          aria-describedby="next-steps-hint">{{ form.initial.status_summary }}</textarea>
+            </div>
+            {% else %}
             <div class="{% form_group_classes form.next_steps_summary.errors %}">
                 <label class="govuk-label govuk-label--s" for="next-steps">
                     {{ form.next_steps_summary.label }}
@@ -45,6 +59,8 @@
                           rows="5"
                           aria-describedby="next-steps-hint">{{ form.initial.next_steps_summary }}</textarea>
             </div>
+            {% endif %}
+
 
             <input type="submit" value="Save and continue" class="govuk-button">
             <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
