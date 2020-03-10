@@ -2,10 +2,9 @@ from django import forms
 from django.template.loader import render_to_string
 
 from barriers.constants import ARCHIVED_REASON
-from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText, SubformChoiceField, SubformMixin
+from utils.forms import SubformChoiceField, SubformMixin
 
 
 class DuplicateBarrierForm(forms.Form):

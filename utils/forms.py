@@ -232,7 +232,6 @@ class SubformMixin:
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        data = kwargs.get("data")
 
         for name, field in self.fields.items():
             if isinstance(field, SubformChoiceField):
