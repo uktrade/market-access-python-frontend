@@ -46,22 +46,22 @@
                             <div class="{% form_group_classes form.errors month_field.errors year_field.errors %}">
                                 <fieldset class="govuk-fieldset" role="group">
                                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                                        {{ choice_data.sf_attr.legend }}
+                                        {{ sf_attr.legend }}
                                     </legend>
 
                                     {% form_field_error form month_fieldname %}
                                     {% form_field_error form year_fieldname %}
 
-                                    <div class="govuk-date-input" id="{{ choice_data.sf_name }}-date-group">
+                                    <div class="govuk-date-input" id="{{ sf_name }}-date-group">
                                         {% if month_field %}
                                         <div class="govuk-date-input__item">
                                             <div class="govuk-form-group">
-                                                <label class="govuk-label govuk-date-input__label" for="{{ choice_data.sf_name }}-date">
+                                                <label class="govuk-label govuk-date-input__label" for="{{ sf_name }}-date">
                                                     {{ month_field.label }}
                                                 </label>
                                                 <input class="govuk-input govuk-date-input__input govuk-input--width-2"
-                                                       id="{{ choice_data.sf_name }}-date"
-                                                       value="{{ month_field.value }}"
+                                                       id="{{ sf_name }}-date"
+                                                       value="{{ month_field.value|lower }}"
                                                        name="{{ month_fieldname }}"
                                                        type="number"
                                                        pattern="[0-9]*">
@@ -71,12 +71,12 @@
                                         {% if year_field %}
                                         <div class="govuk-date-input__item">
                                             <div class="govuk-form-group">
-                                                <label class="govuk-label govuk-date-input__label" for="{{ choice_data.sf_name }}-date-group-partYear">
+                                                <label class="govuk-label govuk-date-input__label" for="{{ sf_name }}-date-group-partYear">
                                                 {{ year_field.label }}
                                                 </label>
                                                 <input class="govuk-input govuk-date-input__input govuk-input--width-4"
-                                                       id="{{ choice_data.sf_name }}-date-group-partYear"
-                                                       value="{{ year_field.value }}"
+                                                       id="{{ sf_name }}-date-group-partYear"
+                                                       value="{{ year_field.value|lower }}"
                                                        name="{{ year_fieldname }}"
                                                        type="number"
                                                        pattern="[0-9]*">
