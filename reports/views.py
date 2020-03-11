@@ -154,6 +154,12 @@ class ReportsFormView(ReportBarrierContextMixin, FormView):
         self.success()
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form."""
+        self.form_group.set(self.form_session_key, form.cleaned_data)
+        form.initial = self.get_initial()
+        return self.render_to_response(self.get_context_data(form=form))
+
 
 class NewReport(ReportsTemplateView):
     """
