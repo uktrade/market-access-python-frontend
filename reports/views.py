@@ -154,6 +154,10 @@ class ReportsFormView(ReportBarrierContextMixin, FormView):
         self.success()
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        form.initial = form.cleaned_data
+        return super().form_invalid(form)
+
 
 class NewReport(ReportsTemplateView):
     """
