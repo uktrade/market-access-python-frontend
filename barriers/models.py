@@ -282,8 +282,24 @@ class Interaction(APIModel):
 
 
 class BaseHistoryItem:
+
     def __init__(self, data):
         self.data = data
+        self.date = dateutil.parser.parse(data["date"])
+        self.field = data["field"]
+        if not self.field_name:
+            self.field_name = data["field"]
+        self.old_value = data["old_value"] or ""
+        self.new_value = data["new_value"] or ""
+        self.user = data["user"]
+
+    @property
+    def diff(self):
+        from utils.diff import diff_match_patch
+        dmp = diff_match_patch()
+        diffs = dmp.diff_main(self.old_value, self.new_value)
+        dmp.diff_cleanupSemantic(diffs)
+        return dmp.diff_prettyHtml(diffs)
 
 
 class TitleHistoryItem(BaseHistoryItem):
@@ -303,6 +319,8 @@ class ArchivedHistoryItem(BaseHistoryItem):
 
     def __init__(self, data):
         self.is_archived = True
+        self.old_value = data["old_value"]
+        self.new_value = data["new_value"]
         self.date = dateutil.parser.parse(data["date"])
         self.archived = data["new_value"]
         self.user = data["user"]
@@ -383,6 +401,23 @@ class AssessmentHistoryItem(BaseHistoryItem):
         self.user = data["user"]
 
 
+class EUExitRelatedHistoryItem(BaseHistoryItem):
+    field = "eu_exit_related"
+    field_name = "Related to EU exit"
+
+    def __init__(self, data):
+        self.date = dateutil.parser.parse(data["date"])
+        self.user = data["user"]
+        metadata = get_metadata()
+        self.old_value = metadata.get_eu_exit_related_text(data["old_value"])
+        self.new_value = metadata.get_eu_exit_related_text(data["new_value"])
+
+
+class DescriptionHistoryItem(BaseHistoryItem):
+    field = "problem_description"
+    field_name = "Description"
+
+
 class HistoryItem:
     """
     Polymorphic wrapper for HistoryItem classes
@@ -390,7 +425,7 @@ class HistoryItem:
 
     history_item_classes = (
         TitleHistoryItem, StatusHistoryItem, PriorityHistoryItem, ArchivedHistoryItem,
-        AssessmentHistoryItem,
+        AssessmentHistoryItem, EUExitRelatedHistoryItem, DescriptionHistoryItem,
     )
     class_lookup = {}
 

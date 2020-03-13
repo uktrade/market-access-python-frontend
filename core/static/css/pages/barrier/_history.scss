@@ -25,5 +25,18 @@
 }
 
 .history-item__old-value {
-    margin-bottom: govuk-em( 16, 16 )
+    margin-bottom: govuk-em( 16, 16 );
+}
+
+.diff__ins {
+    text-decoration: none;
+    background-color: rgba(0, 112, 60, 0.25);
+    color: #00703c;
+    padding: govuk-em( 2, 16 );
+}
+
+
+.diff__del {
+    text-decoration: line-through;
+    color: #d4351c;
 }

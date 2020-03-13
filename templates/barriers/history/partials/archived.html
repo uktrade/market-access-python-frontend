@@ -1,0 +1,23 @@
+{% if item.old_value is True %}
+    <div class="history-item__old-value">
+        Archived
+        {{ item.archived_reason }} - {{ item.archived_explanation }}
+    </div>
+{% else %}
+    <div class="history-item__old-value">
+        Unarchived
+        {{ unarchived_reason }}
+    </div>
+{% endif %}
+
+{% if item.new_value is True %}
+    <div class="history-item__new-value">
+        Archived
+        {{ item.archived_reason }} - {{ item.archived_explanation }}
+    </div>
+{% else %}
+    <div class="history-item__new-value">
+        Unarchived
+        {{ unarchived_reason }}
+    </div>
+{% endif %}
