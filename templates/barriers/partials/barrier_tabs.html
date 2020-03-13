@@ -28,4 +28,14 @@
             <a class="page-tabs__tab__text" href="{% url 'barriers:assessment_detail' barrier.id %}">Assessment</a>
         </li>
     {% endif %}
+
+    {% if active == 'history' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">History</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:history' barrier.id %}">History</a>
+        </li>
+    {% endif %}
 </ul>

@@ -58,6 +58,13 @@ class BarriersResource(APIResource):
             for result in self.client.get(url, params=kwargs)["history"]
         ]
 
+    def get_full_history(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/full_history"
+        return [
+            HistoryItem(result)
+            for result in self.client.get(url, params=kwargs)["history"]
+        ]
+
     def get_assessment_history(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/assessment_history"
         return [

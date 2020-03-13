@@ -1,0 +1,29 @@
+.history-item {
+    border-top: 2px solid govuk-colour( 'grey-1' );
+    margin-bottom: govuk-em( 48, 16 );
+}
+
+.history-item__date {
+    margin: govuk-em( 8, 16 ) 0 govuk-em( 16, 16 );
+    font-size: 0.9em;
+    color: $secondary-text-colour;
+}
+
+.history-item__container {
+    @include govuk-clearfix;
+}
+
+.history-item__field {
+    float: left;
+    width: 20%;
+    margin: 0;
+}
+
+.history-item__change {
+    float: right;
+    width: 80%;
+}
+
+.history-item__old-value {
+    margin-bottom: govuk-em( 16, 16 )
+}

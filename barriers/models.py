@@ -268,52 +268,130 @@ class Interaction(APIModel):
         }
 
 
-class HistoryItem(APIModel):
-    """
-    Wrapper around API history item data
-    """
+class BaseHistoryItem:
+    def __init__(self, data):
+        self.data = data
+
+
+class TitleHistoryItem(BaseHistoryItem):
+    field = "barrier_title"
+    field_name = "Title"
+
+    def __init__(self, data):
+        self.old_value = data["old_value"]
+        self.new_value = data["new_value"]
+        self.date = dateutil.parser.parse(data["date"])
+        self.user = data["user"]
+
+
+class ArchivedHistoryItem(BaseHistoryItem):
+    field = "archived"
+    field_name = "Archived"
+
+    def __init__(self, data):
+        self.is_archived = True
+        self.date = dateutil.parser.parse(data["date"])
+        self.archived = data["new_value"]
+        self.user = data["user"]
+        if self.archived:
+            self.modifier = "archived"
+            archived_reason_code = data["field_info"].get("archived_reason")
+            if archived_reason_code:
+                self.archived_reason = ARCHIVED_REASON[archived_reason_code]
+
+            self.archived_explanation = data["field_info"]["archived_explanation"]
+        else:
+            self.modifier = "unarchived"
+            self.unarchived_reason = data["field_info"]["unarchived_reason"]
+
+
+class StatusHistoryItem(BaseHistoryItem):
+    field = "status"
+    field_name = "Status"
+
+    def __init__(self, data):
+        metadata = get_metadata()
+        self.old_value = metadata.get_status_text(data["old_value"])
+        self.new_value = metadata.get_status_text(data["new_value"])
+
+        self.is_status = (True,)
+        self.modifier = "status"
+        self.date = dateutil.parser.parse(data["date"])
+        self.event = data["field_info"].get("event")
+        self.state = {
+            "from": metadata.get_status_text(data["old_value"]),
+            "to": metadata.get_status_text(
+                data["new_value"],
+                data["field_info"].get("sub_status"),
+                data["field_info"].get("sub_status_other"),
+            ),
+            "date": dateutil.parser.parse(data["field_info"]["status_date"]),
+            "is_resolved": data["new_value"]
+            in (Statuses.RESOLVED_IN_PART, Statuses.RESOLVED_IN_FULL,),
+            "show_summary": data["new_value"]
+            in (
+                Statuses.OPEN_IN_PROGRESS,
+                Statuses.UNKNOWN,
+                Statuses.OPEN_PENDING_ACTION,
+            ),
+        }
+        self.text = data["field_info"]["status_summary"]
+        self.user = data["user"]
+
+
+class PriorityHistoryItem(BaseHistoryItem):
+    field = "priority"
+    field_name = "Priority"
 
     def __init__(self, data):
         self.data = data
         metadata = get_metadata()
+        self.old_value = metadata.get_priority(data["old_value"])
+        self.new_value = metadata.get_priority(data["new_value"])
+        self.is_priority = True
+        self.modifier = "priority"
+        self.date = dateutil.parser.parse(data["date"])
+        self.priority = metadata.get_priority(data["new_value"])
+        self.text = data["field_info"]["priority_summary"]
+        self.user = data["user"]
 
-        if data["field"] == "status":
-            self.is_status = (True,)
-            self.modifier = "status"
-            self.date = dateutil.parser.parse(data["date"])
-            self.event = data["field_info"]["event"]
-            self.state = {
-                "from": metadata.get_status_text(data["old_value"]),
-                "to": metadata.get_status_text(
-                    data["new_value"],
-                    data["field_info"].get("sub_status"),
-                    data["field_info"].get("sub_status_other"),
-                ),
-                "date": dateutil.parser.parse(data["field_info"]["status_date"]),
-                "is_resolved": data["new_value"]
-                in (Statuses.RESOLVED_IN_PART, Statuses.RESOLVED_IN_FULL,),
-                "show_summary": data["new_value"]
-                in (
-                    Statuses.OPEN_IN_PROGRESS,
-                    Statuses.UNKNOWN,
-                    Statuses.OPEN_PENDING_ACTION,
-                ),
-            }
-            self.text = data["field_info"]["status_summary"]
-            self.user = data["user"]
-        elif data["field"] == "priority":
-            self.is_priority = True
-            self.modifier = "priority"
-            self.date = dateutil.parser.parse(data["date"])
-            self.priority = metadata.get_priority(data["new_value"])
-            self.text = data["field_info"]["priority_summary"]
-            self.user = data["user"]
-        else:
-            self.is_assessment = True
-            self.is_edit = data["old_value"] is not None
-            self.name = metadata.get_assessment_name(data["field"])
-            self.date = dateutil.parser.parse(data["date"])
-            self.user = data["user"]
+
+class AssessmentHistoryItem(BaseHistoryItem):
+    field = "assessment"
+    field_name = "Assessment"
+
+    def __init__(self, data):
+        self.data = data
+        metadata = get_metadata()
+        self.is_assessment = True
+        self.is_edit = data["old_value"] is not None
+        self.name = metadata.get_assessment_name(data["field"])
+        self.date = dateutil.parser.parse(data["date"])
+        self.user = data["user"]
+
+
+class HistoryItem:
+    """
+    Polymorphic wrapper for HistoryItem classes
+    """
+
+    history_item_classes = (
+        TitleHistoryItem, StatusHistoryItem, PriorityHistoryItem, ArchivedHistoryItem,
+        AssessmentHistoryItem,
+    )
+    class_lookup = {}
+
+    def __new__(cls, data):
+        if not cls.class_lookup:
+            cls.init_class_lookup()
+
+        history_item_class = cls.class_lookup.get(data["field"], BaseHistoryItem)
+        return history_item_class(data)
+
+    @classmethod
+    def init_class_lookup(cls):
+        for history_item_class in cls.history_item_classes:
+            cls.class_lookup[history_item_class.field] = history_item_class
 
 
 class Document(APIModel):
