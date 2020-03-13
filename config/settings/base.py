@@ -287,10 +287,9 @@ LOGGING = {
 
 
 # Google Tag Manager
-GTM_ENABLED = env.bool('GTM_ENABLED', default=False)
-GTM_ID = env('GTM_ID', default=None)
-GTM_AUTH = env('GTM_AUTH', default=None)
-GTM_PREVIEW = env('GTM_PREVIEW', default=None)
+GTM_ID = env('GTM_ID')
+GTM_AUTH = env('GTM_AUTH')
+GTM_PREVIEW = env('GTM_PREVIEW')
 
 if not DEBUG:
     sentry_sdk.init(
@@ -306,7 +305,6 @@ SETTINGS_EXPORT = (
     'DJANGO_ENV',
     'MAX_WATCHLIST_LENGTH',
     'DATAHUB_DOMAIN',
-    'GTM_ENABLED',
     'GTM_ID',
     'GTM_AUTH',
     'GTM_PREVIEW',
