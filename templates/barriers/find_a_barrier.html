@@ -37,7 +37,18 @@
                 {% include 'partials/forms/typeahead.html' with placeholder='Search regions' field=form.region extra_classes='js-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.created_by %}
+
+                <div id="show" class="govuk-form-group filter-group">
+                    <fieldset class="govuk-fieldset filter-group__inner">
+                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Show</legend>
+
+                        <div class="checkbox-filter govuk-!-width-full">
+                            {% include 'partials/forms/checkbox.html' with field=form.user %}
+                            {% include 'partials/forms/checkbox.html' with field=form.team %}
+                            {% include 'partials/forms/checkbox.html' with field=form.only_archived %}
+                        </div>
+                    </fieldset>
+                </div>
 
                 {% if filters %}
                 <a class="filter-items__clear" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
@@ -61,7 +72,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.priority %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.status %}
-                        {% include 'barriers/partials/active_filter.html' with filter=filters.created_by %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
                     </ul>
 
                     <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">
@@ -102,6 +113,15 @@
                 {% for barrier in barriers %}
                     <li class='filter-results-list__item' data-barrier-id="{{ barrier.id }}">
                         <div class="filter-results-list__item__main-content">
+                            {% if barrier.archived %}
+                                <div class="govuk-warning-text govuk-!-margin-bottom-2">
+                                    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                                    <strong class="govuk-warning-text__text">
+                                        <span class="govuk-warning-text__assistive">Warning</span>
+                                        This barrier was archived on {{ barrier.archived_on|date:"j F Y" }}
+                                    </strong>
+                                </div>
+                            {% endif %}
                             <h3 class='filter-results-list__item__heading'><a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a></h3>
                             <dl class="filter-results-list__item__definitions">
 

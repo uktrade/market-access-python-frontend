@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments import (
     AddAssessmentDocument,
     AssessmentDetail,
@@ -106,6 +107,8 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/eu-exit-related/", BarrierEditEUExitRelated.as_view(), name="edit_eu_exit_related"),
     path("barriers/<uuid:barrier_id>/edit/problem-status/", BarrierEditProblemStatus.as_view(), name="edit_problem_status"),
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
+    path("barriers/<uuid:barrier_id>/archive/", ArchiveBarrier.as_view(), name="archive"),
+    path("barriers/<uuid:barrier_id>/unarchive/", UnarchiveBarrier.as_view(), name="unarchive"),
 
     path("barriers/<uuid:barrier_id>/history/", BarrierHistory.as_view(), name="history"),
 

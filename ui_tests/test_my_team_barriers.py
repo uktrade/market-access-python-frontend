@@ -41,7 +41,7 @@ def test_my_team_barriers(browser):
     browser.find_by_css("input[type=submit]").first.click()
 
     browser.visit(f"{settings.BASE_URL}find-a-barrier")
-    browser.find_by_css('label[for="created_by-2"]').first.click()
+    browser.find_by_css('label[for="team"]').first.click()
     browser.find_by_css('input[type=submit][value="Apply filters"]').first.click()
 
     assert browser.is_element_present_by_css(f'[data-barrier-id="{barrier_id}"]')

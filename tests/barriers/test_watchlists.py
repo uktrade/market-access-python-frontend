@@ -27,7 +27,7 @@ class WatchlistTestCase(MarketAccessTestCase):
             "region": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
             "priority": ["HIGH", "MEDIUM"],
             "status": ["1", "2", "3"],
-            "created_by": ["1"],
+            "user": "1",
         },
     }
     old_watchlist = {
@@ -90,7 +90,7 @@ class WatchlistTestCase(MarketAccessTestCase):
             barrier_type="123",
             priority="HIGH,MEDIUM",
             status="1,2,3",
-            user=1,
+            user="1",
         )
 
     @patch("utils.api.resources.APIResource.list")
