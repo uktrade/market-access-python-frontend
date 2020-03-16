@@ -255,33 +255,22 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "console": {
-            "format": "[%(asctime)s] %(name)s %(levelname)5s - %(message)s"
-        },
-        "django.server": {
-            "()": "django.utils.log.ServerFormatter",
-            "format": "[%(asctime)s] %(message)s",
-        },
+        "json": {
+            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": "(asctime)(levelname)(message)(filename)(lineno)(threadName)(name)(thread)(created)(process)(processName)(relativeCreated)(module)(funcName)(levelno)(msecs)(pathname)",  # noqa
+        }
     },
     "handlers": {
-        "console": {"class": "logging.StreamHandler", "formatter": "console"},
-        "django.server": DEFAULT_LOGGING['handlers']['django.server']
-
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json"
+        }
     },
     "loggers": {
-        # default for all undefined Python modules
-        '': {
-            'level': DJANGO_LOG_LEVEL,
-            'handlers': ['console'],
-        },
-        # application code
-        "app": {
-            "level": DJANGO_LOG_LEVEL,
+        "": {
             "handlers": ["console"],
-            "propagate": True,
-        },
-        # Default runserver request logging
-        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
+            "level": DJANGO_LOG_LEVEL
+        }
     },
 }
 
