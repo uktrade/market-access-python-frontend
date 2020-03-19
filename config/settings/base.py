@@ -71,8 +71,10 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    'authentication',
     'barriers',
     'core',
+    'healthcheck',
     'reports',
     'users',
 ]
@@ -80,6 +82,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = BASE_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    'healthcheck.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -88,7 +91,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'users.middleware.SSOMiddleware',
+    'authentication.middleware.SSOMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
