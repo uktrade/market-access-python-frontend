@@ -40,6 +40,9 @@ jobs:
       DATAHUB_URL: ""
       DATAHUB_HAWK_ID: ""
       DATAHUB_HAWK_KEY: ""
+      GTM_ID: ""
+      GTM_AUTH: ""
+      GTM_PREVIEW: ""
 
     working_directory: ~/market-access-python-frontend
 
