@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-from django.utils.log import DEFAULT_LOGGING
-
 from environ import Env
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration

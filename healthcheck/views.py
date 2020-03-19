@@ -11,6 +11,7 @@ class HealthStatus:
     OK = "OK"
     FAIL = "FAIL"
 
+
 @public_view
 class HealthCheckView(TemplateView):
     template_name = "healthcheck.html"
