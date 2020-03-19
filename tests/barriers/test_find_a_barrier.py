@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from django.conf import settings
+from django.test import override_settings
 from django.urls import reverse
 
 from barriers.models import Barrier
@@ -157,6 +158,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
             team="1",
         )
 
+    @override_settings(API_RESULTS_LIMIT=10)
     @patch("utils.api.resources.APIResource.list")
     def test_pagination(self, mock_list):
         mock_list.return_value = ModelList(
