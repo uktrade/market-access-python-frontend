@@ -6,7 +6,7 @@ from django.test import override_settings, TestCase
 from barriers.models import Assessment
 from core.filecache import memfiles
 from users.models import User
-from utils.api.resources import BarriersResource, InteractionsResource
+from utils.api.resources import BarriersResource, NotesResource
 
 from mock import patch
 
@@ -47,7 +47,7 @@ class MarketAccessTestCase(TestCase):
 
     def init_get_interactions_patcher(self):
         self.get_interactions_patcher = patch(
-            "utils.api.resources.InteractionsResource.list"
+            "utils.api.resources.NotesResource.list"
         )
         self.mock_get_interactions = self.get_interactions_patcher.start()
         self.mock_get_interactions.return_value = self.notes
@@ -86,7 +86,7 @@ class MarketAccessTestCase(TestCase):
     @property
     def notes(self):
         return [
-            InteractionsResource.model(
+            NotesResource.model(
                 {
                     "id": 1,
                     "kind": "Comment",
@@ -105,7 +105,7 @@ class MarketAccessTestCase(TestCase):
                     "created_by": {"id": 1, "name": "Test-user"},
                 }
             ),
-            InteractionsResource.model(
+            NotesResource.model(
                 {
                     "id": 2,
                     "kind": "Comment",
