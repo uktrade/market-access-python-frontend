@@ -1,6 +1,10 @@
-#!/usr/bin/python3
+import re
+import sys
+import time
+import urllib.parse
 
-"""Diff Match and Patch
+"""
+Diff Match and Patch
 Copyright 2018 The diff-match-patch Authors.
 https://github.com/google/diff-match-patch
 
@@ -17,18 +21,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-"""Functions for diff, match and patch.
+"""
+Functions for diff, match and patch.
 
 Computes the difference between two texts to create a patch.
 Applies the patch onto another text, allowing for errors.
 """
 
-__author__ = "fraser@google.com (Neil Fraser)"
 
-import re
-import sys
-import time
-import urllib.parse
+__author__ = "fraser@google.com (Neil Fraser)"
 
 
 class diff_match_patch:
@@ -92,7 +93,7 @@ class diff_match_patch:
       Array of changes.
     """
         # Set a deadline by which time the diff must be complete.
-        if deadline == None:
+        if deadline is None:
             # Unlike in most languages, Python counts time in seconds.
             if self.Diff_Timeout <= 0:
                 deadline = sys.maxsize
@@ -100,7 +101,7 @@ class diff_match_patch:
                 deadline = time.time() + self.Diff_Timeout
 
         # Check for null inputs.
-        if text1 == None or text2 == None:
+        if text1 is None or text2 is None:
             raise ValueError("Null inputs. (diff_main)")
 
         # Check for equality (speedup).
