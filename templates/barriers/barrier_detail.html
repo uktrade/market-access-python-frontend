@@ -215,7 +215,7 @@
 
         <ol class="event-list js-delete-modal-container">
             {% for item in interactions %}
-                <li class="event-list__item event_list__item--{{ item.field }}">
+                <li class="event-list__item{% if item.modifier %} event_list__item--{{ item.modifier }}{% endif %}">
                     {% activity_item item %}
                 </li>
             {% empty %}

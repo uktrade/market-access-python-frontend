@@ -8,7 +8,9 @@ class Note(APIModel):
     """
     Wrapper around API interaction data
     """
-    field = "note"
+
+    model = "note"
+    field = "text"
     modifier = "note"
 
     def __init__(self, data):

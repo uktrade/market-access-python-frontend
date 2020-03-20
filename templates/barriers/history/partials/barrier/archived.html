@@ -2,14 +2,14 @@
     <div class="history-item__old-value">
         <span class="diff__del">
             Archived
-            {{ item.old_value.archived_reason }}{% if item.old_value.archived_explanation %} - {{ item.old_value.archived_explanation }}{% endif %}
+            ({{ item.old_value.archived_reason }}{% if item.old_value.archived_explanation %} - {{ item.old_value.archived_explanation }}{% endif %})
         </span>
     </div>
 {% else %}
     <div class="history-item__old-value">
         <span class="diff__del">
             Unarchived
-            {% if item.old_value.unarchived_reason %} - {{ item.old_value.unarchived_reason }}{% endif %}
+            {% if item.old_value.unarchived_reason %}({{ item.old_value.unarchived_reason }}){% endif %}
         </span>
     </div>
 {% endif %}
@@ -18,14 +18,14 @@
     <div class="history-item__new-value">
         <span class="diff__ins">
             Archived
-            {{ item.new_value.archived_reason }}{% if item.new_value.archived_explanation %} - {{ item.new_value.archived_explanation }}{% endif %}
+            ({{ item.new_value.archived_reason }}{% if item.new_value.archived_explanation %} - {{ item.new_value.archived_explanation }}{% endif %})
         </span>
     </div>
 {% else %}
     <div class="history-item__new-value">
         <span class="diff__ins">
             Unarchived
-            {% if item.new_value.unarchived_reason %} - {{ item.new_value.unarchived_reason }}{% endif %}
+            {% if item.new_value.unarchived_reason %}({{ item.new_value.unarchived_reason }}){% endif %}
         </span>
     </div>
 {% endif %}
