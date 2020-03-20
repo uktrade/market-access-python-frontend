@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load activity %}
+
 {% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
 
 {% block body_script %}
@@ -213,143 +215,25 @@
 
         <ol class="event-list js-delete-modal-container">
             {% for item in interactions %}
-
-            <li class="event-list__item event_list__item--{{ item.modifier }}">
-
-                {% if item.is_note %}
-
-                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span>
-                        {% if item.user.name %}
-                        <span class="event-list__item__heading__recede"> by </span>{{ item.user.name }}
-                        {% endif %}
-                    </h4>
-
-                    {% if form.note_id == item.id %}
-                        {% include 'barriers/partials/note_form.html' %}
-                    {% else %}
-                        <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
-                        {% if not barrier.archived %}
-                            <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
-                            {% if item.user.id == user.id %}
-                                <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:delete_note' barrier.id item.id %}">Delete</a>
-                            {% endif %}
-                        {% endif %}
-
-                        {% if item.documents %}
-
-                            <div class="event-list__item__document">
-                                <ul class="event-list__item__document__list">
-                                    {% for doc in item.documents %}
-
-                                        <li class="event-list__item__document__list__item">
-
-                                            {% if doc.can_download %}
-
-                                                <a class="event-list__item__document__list__item__name" href="{% url 'barriers:download_document' doc.id %}">{{ doc.name }}</a> - {{ doc.size|filesizeformat }}
-
-                                            {% else %}
-
-                                                <span class="event-list__item__document__list__item__name">{{ doc.name }}</span>
-                                                <span class="event-list__item__document__list__item__status">({{ doc.readable_status }})</span>
-
-                                            {% endif %}
-                                        </li>
-
-                                    {% endfor %}
-                                </ul>
-                            </div>
-
-                        {% endif %}
-                    {% endif %}
-
-                {% elif item.is_status %}
-
-                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
-
-                    <p class="event-list__item__text">
-
-                    {% if item.event == 'REPORT_CREATED' %}
-
-                        Barrier started{% if item.user.name %} by <strong>{{ item.user.name }}</strong>{% endif %}
-
-                    {% elif item.event == 'BARRIER_CREATED' %}
-
-                        Barrier added to the service{% if item.user.name %} by <strong>{{ item.user.name }}</strong>{% endif %}
-
-                    {% elif item.event == 'BARRIER_STATUS_CHANGE' %}
-
-                        Barrier status changed from <strong>{{ item.state.from }}</strong> to <strong>{{ item.state.to }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
-
-                        {% if item.state.is_resolved %}
-                             Resolved date set as <strong>{{ item.state.date|date:"F Y" }}</strong>.
-                        {% endif %}
-                    {% endif %}
-                    </p>
-
-                    {% if item.event == 'BARRIER_STATUS_CHANGE' and item.state.show_summary %}
-                        <p class="event-list__item__text">{{ item.text|escape|linebreaksbr  }}</p>
-                    {% endif %}
-
-                {% elif item.is_priority %}
-
-                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
-
-                    <p class="event-list__item__text">
-                        <span class="priority-marker priority-marker--{{ item.priority.code|lower }}"></span> Barrier priority set to <strong>{{ item.priority.name }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
-                    </p>
-
-                    {% if item.text %}
-                        <p class="event-list__item__text">
-                             {{ item.text }}
-                        </p>
-                        {% endif %}
-
-                {% elif item.is_assessment %}
-
-                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
-
-                    <p class="event-list__item__text">
-                        <a href="{% url 'barriers:assessment_detail' barrier.id %}">{{ item.name }}</a> {% if item.is_edit %}edited{% else %}added{% endif %}{% if item.user.name %} by {{ item.user.name }}{% endif %}.
-                    </p>
-
-                {% elif item.is_archived %}
-
-                    <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
-
-                    {% if item.archived %}
-                        <p class="event-list__item__text">This barrier was archived by {{ item.user.name }}.</p>
-                        <p class="event-list__item__text">Reason: {{ item.archived_reason }} - {{ item.archived_explanation }}</p>
-                    {% else %}
-                        <p class="event-list__item__text">This barrier was unarchived by {{ item.user.name }}.</p>
-                        <p class="event-list__item__text">Reason: {{ item.unarchived_reason }}</p>
-                    {% endif %}
-                {% endif %}
-
-            </li>
-
+                <li class="event-list__item event_list__item--{{ item.field }}">
+                    {% activity_item item %}
+                </li>
             {% empty %}
+                <li class="event-list__item">
+                    {% if barrier.is_resolved or barrier.is_partially_resolved %}
+                        <h4 class="event-list__item__heading">Attach any useful documents</h4>
+                        <p class="event-list__item__text">
+                            You can attach any useful documents associated with the resolution of this barrier.
+                        </p>
+                    {% else %}
+                        <h4 class="event-list__item__heading">You have not stated any next steps or progress</h4>
+                        <p class="event-list__item__text">
+                            Record agreed team actions and any progress made on resolving it. You can also upload documents, for example relevant emails or meeting readouts.
+                        </p>
+                    {% endif %}
 
-            <li class="event-list__item">
-
-                {% if barrier.is_resolved or barrier.is_partially_resolved %}
-
-                    <h4 class="event-list__item__heading">Attach any useful documents</h4>
-                    <p class="event-list__item__text">
-                        You can attach any useful documents associated with the resolution of this barrier.
-                    </p>
-
-                {% else %}
-
-                    <h4 class="event-list__item__heading">You have not stated any next steps or progress</h4>
-                    <p class="event-list__item__text">
-                        Record agreed team actions and any progress made on resolving it. You can also upload documents, for example relevant emails or meeting readouts.
-                    </p>
-
-                {% endif %}
-
-                <a href="{% url 'barriers:add_note' barrier.id %}">Add your first note</a>
-            </li>
-
+                    <a href="{% url 'barriers:add_note' barrier.id %}">Add your first note</a>
+                </li>
             {% endfor %}
         </ol>
     </section>

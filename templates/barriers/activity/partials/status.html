@@ -1,0 +1,19 @@
+<h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+<p class="event-list__item__text">
+    {% if item.event == 'REPORT_CREATED' %}
+        Barrier started{% if item.user.name %} by <strong>{{ item.user.name }}</strong>{% endif %}
+    {% elif item.event == 'BARRIER_CREATED' %}
+        Barrier added to the service{% if item.user.name %} by <strong>{{ item.user.name }}</strong>{% endif %}
+    {% elif item.event == 'BARRIER_STATUS_CHANGE' %}
+        Barrier status changed from <strong>{{ item.state.from }}</strong> to <strong>{{ item.state.to }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
+
+        {% if item.state.is_resolved %}
+             Resolved date set as <strong>{{ item.state.date|date:"F Y" }}</strong>.
+        {% endif %}
+    {% endif %}
+</p>
+
+{% if item.event == 'BARRIER_STATUS_CHANGE' and item.state.show_summary %}
+    <p class="event-list__item__text">{{ item.text|escape|linebreaksbr  }}</p>
+{% endif %}
