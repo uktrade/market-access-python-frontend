@@ -159,7 +159,6 @@ class WatchlistTestCase(MarketAccessTestCase):
         assert len(response.context["watchlists"]) == 3
         assert response.context["can_add_watchlist"] is False
 
-    @override_settings(API_RESULTS_LIMIT=10)
     @patch("utils.api.resources.APIResource.list")
     def test_pagination(self, mock_list):
         self.set_watchlists(*[self.simple_watchlist] * 3)

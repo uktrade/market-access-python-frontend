@@ -158,7 +158,6 @@ class FindABarrierTestCase(MarketAccessTestCase):
             team="1",
         )
 
-    @override_settings(API_RESULTS_LIMIT=10)
     @patch("utils.api.resources.APIResource.list")
     def test_pagination(self, mock_list):
         mock_list.return_value = ModelList(
