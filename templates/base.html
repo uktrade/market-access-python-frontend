@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="{{ htmlLang | default:'en' }}" class="govuk-template {{ htmlClasses }}">
   <head>
-    {% if not user.internal and settings.GTM_ENABLED %}
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -11,7 +10,6 @@
     f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','{{ settings.GTM_ID }}');</script>
     <!-- End Google Tag Manager -->
-    {% endif %}
     <meta charset="utf-8" />
     <title>{% block page_title %}Market Access{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -38,12 +36,10 @@
     <meta property="og:image" content="{{ assetUrl | default:'/assets' }}/images/govuk-opengraph-image.png">
   </head>
   <body class="govuk-template__body {{ bodyClasses }}">
-    {% if not user.internal and settings.GTM_ENABLED %}
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.GTM_ID }}&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    {% endif %}
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
 
