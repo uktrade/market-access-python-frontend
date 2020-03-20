@@ -28,6 +28,38 @@
     margin-bottom: govuk-em( 16, 16 );
 }
 
+.history-item__link {
+    &--existing {
+        color: black;
+        padding: govuk-em( 2, 16 );
+
+        &:link, &:visited {
+            color: black;
+        }
+    }
+
+    &--new {
+        background-color: rgba(0, 112, 60, 0.25);
+        text-decoration: underline;
+        color: #00703c;
+        padding: govuk-em( 2, 16 );
+
+        &:link, &:visited {
+            color: #00703c;
+        }
+    }
+
+    &--old {
+        text-decoration: line-through;
+        color: #d4351c;
+        padding: govuk-em( 2, 16 );
+
+        &:link, &:visited {
+            color: #d4351c;
+        }
+    }
+}
+
 .diff__ins {
     text-decoration: none;
     background-color: rgba(0, 112, 60, 0.25);
