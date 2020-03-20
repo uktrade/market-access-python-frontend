@@ -47,3 +47,10 @@
 	padding: govuk-em( 15, 16 );
 	margin-bottom: govuk-em( 30, 16 );
 }
+
+.unseen__event-list__item {
+	&:before {
+		border: 5px solid #00823b;
+		background: #00823b;
+	}
+}
