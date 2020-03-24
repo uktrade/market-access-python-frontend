@@ -15,6 +15,7 @@ from mock import patch
 class MarketAccessTestCase(TestCase):
     _assessments = None
     _barriers = None
+    _history = None
     _team_members = None
     _users = None
 
@@ -67,18 +68,30 @@ class MarketAccessTestCase(TestCase):
     @property
     def barriers(self):
         if self._barriers is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/barriers.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/barriers.json"
             self._barriers = json.loads(memfiles.open(file))
         return self._barriers
+
+    @property
+    def all_history(self):
+        if self._history is None:
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/history.json"
+            self._history = json.loads(memfiles.open(file))
+        return self._history
 
     @property
     def barrier(self):
         return self.barriers[0]
 
     @property
+    def history(self):
+        # goes hand in hand with self.barriers
+        return self.all_history[0]
+
+    @property
     def assessments(self):
         if self._assessments is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/assessments.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/assessments.json"
             assessments = json.loads(memfiles.open(file))
             self._assessments = [Assessment(assessment) for assessment in assessments]
         return self._assessments
@@ -122,14 +135,14 @@ class MarketAccessTestCase(TestCase):
     @property
     def team_members(self):
         if self._team_members is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/team_members.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/team_members.json"
             self._team_members = json.loads(memfiles.open(file))
         return self._team_members
 
     @property
     def users(self):
         if self._users is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/users.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/users.json"
             users = json.loads(memfiles.open(file))
             self._users = [User(user) for user in users]
         return self._users

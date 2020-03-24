@@ -1,0 +1,63 @@
+[
+    [
+        {
+            "date": "2020-03-19T12:01:01.591474Z",
+            "field": "status",
+            "old_value": "7",
+            "new_value": "2",
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            },
+            "field_info": {
+                "status_date": "2020-03-19",
+                "status_summary": "wibble wobble",
+                "sub_status": null,
+                "sub_status_other": null,
+                "event": "BARRIER_STATUS_CHANGE"
+            }
+        },
+        {
+            "date": "2020-03-19T12:15:15.197767Z",
+            "field": "priority",
+            "old_value": "None",
+            "new_value": "LOW",
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            },
+            "field_info": {
+                "priority_date": "2020-03-19T12:15:15.178202Z",
+                "priority_summary": "I like lots of things that are yellow. Low priority is yellow."
+            }
+        },
+        {
+            "date": "2020-03-20T12:45:45.446472Z",
+            "field": "priority",
+            "old_value": "LOW",
+            "new_value": "UNKNOWN",
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            },
+            "field_info": {
+                "priority_date": "2020-03-20T12:45:45.430672Z",
+                "priority_summary": "grey grey"
+            }
+        },
+        {
+            "date": "2020-03-20T13:01:01.630015Z",
+            "field": "priority",
+            "old_value": "UNKNOWN",
+            "new_value": "LOW",
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            },
+            "field_info": {
+                "priority_date": "2020-03-20T13:01:01.619448Z",
+                "priority_summary": "yellow is better"
+            }
+        }
+    ]
+]
