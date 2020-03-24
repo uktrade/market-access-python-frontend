@@ -48,9 +48,9 @@
 	margin-bottom: govuk-em( 30, 16 );
 }
 
-.unseen__event-list__item {
+.event-list__item--unseen {
 	&:before {
-		border: 5px solid #00823b;
-		background: #00823b;
+		border: 5px solid $govuk-green;
+		background: $govuk-green;
 	}
 }

@@ -179,7 +179,7 @@
         <ol class="event-list js-delete-modal-container">
             {% for item in interactions %}
 
-            <li class="event-list__item event_list__item--{{ item.modifier }}{% if item.date > barrier.last_seen_on %} unseen__event-list__item{% endif %}">
+            <li class="event-list__item event_list__item--{{ item.modifier }}{% if item.date > barrier.last_seen_on %} event-list__item--unseen{% endif %}">
 
                 {% if item.is_note %}
 
