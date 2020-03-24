@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ block.super }} - Not Found{% endblock %}
+
+{% block page_content %}
+    <p class="govuk-form-group--error">The requested resource was not found. Please make sure the URL is typed correctly.</p>
+{% endblock %}
