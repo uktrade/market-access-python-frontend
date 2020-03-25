@@ -46,7 +46,7 @@
         </div>
 
         <input type="submit" class="govuk-button" value="Confirm">
-        <a href="" class="govuk-button button--secondary">Cancel</a>
+        <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 
 {% endblock %}
