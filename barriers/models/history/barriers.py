@@ -28,10 +28,12 @@ class CategoriesHistoryItem(BaseHistoryItem):
     field_name = "Barrier categories"
 
     def get_value(self, value):
-        return [
+        category_names = [
             self.metadata.get_barrier_type(category).get("title")
             for category in value or []
         ]
+        category_names.sort()
+        return category_names
 
 
 class CompaniesHistoryItem(BaseHistoryItem):
