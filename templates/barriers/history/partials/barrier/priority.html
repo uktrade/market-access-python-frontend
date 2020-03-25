@@ -1,10 +1,18 @@
-{% if item.old_value %}
+{% if item.old_value.priority != None %}
     <div class="history-item__old-value">
-        <span class="diff__del">{{ item.old_value.name }}</span>
+        <span class="diff__del">
+            {{ item.old_value.priority.name }}
+            <br/>
+            {% if item.old_value.priority_summary %}{{ item.old_value.priority_summary }}{% endif %}
+        </span>
     </div>
 {% endif %}
-{% if item.new_value %}
+{% if item.new_value.priority != None %}
     <div class="history-item__new-value">
-        <span class="diff__ins">{{ item.new_value.name }}</span>
+        <span class="diff__ins">
+            {{ item.new_value.priority.name }}
+            <br/>
+            {% if item.new_value.priority_summary %}{{ item.new_value.priority_summary }}{% endif %}
+        </span>
     </div>
 {% endif %}

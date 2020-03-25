@@ -7,12 +7,12 @@
 {% block body_script %}
     {{ block.super }}
     <script>
-        ma.pages.barrier.history( {
-            toggleLinks: {
+        if( ma.components.ToggleLinks ){
+            new ma.components.ToggleLinks( {
                 text: 'Update the barrier',
                 linkClass: 'js-barrier-summary-link'
-            }
-        } );
+            } );
+        }
     </script>
 {% endblock %}
 

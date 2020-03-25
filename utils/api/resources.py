@@ -51,6 +51,13 @@ class BarriersResource(APIResource):
     resource_name = "barriers"
     model = Barrier
 
+    def get_activity(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/activity"
+        return [
+            HistoryItem(result)
+            for result in self.client.get(url, params=kwargs)["history"]
+        ]
+
     def get_history(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/history"
         return [

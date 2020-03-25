@@ -1,6 +1,18 @@
-<div class="history-item__old-value">
-    <span class="diff__del">{{ item.old_value }}</span>
-</div>
-<div class="history-item__new-value">
-    <span class="diff__ins">{{ item.new_value }}</span>
-</div>
+{% if item.old_value.status != None %}
+    <div class="history-item__old-value">
+        <span class="diff__del">
+            {{ item.old_value.status_text }} {% if item.old_value.is_resolved and item.old_value.status_date %}({{ item.old_value.status_date|date:"F Y" }}){% endif %}
+            <br/>
+            {% if item.old_value.status_summary %}{{ item.old_value.status_summary }}{% endif %}
+        </span>
+    </div>
+{% endif %}
+{% if item.new_value.status != None %}
+    <div class="history-item__new-value">
+        <span class="diff__ins">
+            {{ item.new_value.status_text }} {% if item.new_value.is_resolved and item.new_value.status_date %}({{ item.new_value.status_date|date:"F Y" }}){% endif %}
+            <br/>
+            {% if item.new_value.status_summary %}{{ item.new_value.status_summary }}{% endif %}
+        </span>
+    </div>
+{% endif %}

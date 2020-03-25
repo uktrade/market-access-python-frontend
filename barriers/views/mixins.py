@@ -42,17 +42,9 @@ class BarrierMixin:
     def get_interactions(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         barrier_id = self.kwargs.get("barrier_id")
-
-        history = client.barriers.get_history(barrier_id=barrier_id)
-        interactions = self.notes + history
-
-        if self.barrier.has_assessment:
-            interactions += client.barriers.get_assessment_history(
-                barrier_id=barrier_id
-            )
-
+        activity = client.barriers.get_activity(barrier_id=barrier_id)
+        interactions = self.notes + activity
         interactions.sort(key=lambda object: object.date, reverse=True)
-
         return interactions
 
     def get_notes(self):

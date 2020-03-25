@@ -1,9 +1,9 @@
 <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
 
 <p class="event-list__item__text">
-    <span class="priority-marker priority-marker--{{ item.priority.code|lower }}"></span> Barrier priority set to <strong>{{ item.priority.name }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
+    <span class="priority-marker priority-marker--{{ item.new_value.priority.code|lower }}"></span> Barrier priority set to <strong>{{ item.new_value.priority.name }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
 </p>
 
-{% if item.text %}
-    <p class="event-list__item__text">{{ item.text }}</p>
+{% if item.new_value.priority_summary %}
+    <p class="event-list__item__text">{{ item.new_value.priority_summary }}</p>
 {% endif %}

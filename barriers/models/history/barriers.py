@@ -9,21 +9,13 @@ import dateutil.parser
 class ArchivedHistoryItem(BaseHistoryItem):
     field = "archived"
     field_name = "Archived"
+    modifier = "archived"
 
     def __init__(self, data):
         super().__init__(data)
-        self.archived = data["new_value"]
 
-        if self.archived:
-            self.modifier = "archived"
-            archived_reason_code = data["field_info"].get("archived_reason")
-            if archived_reason_code:
-                self.archived_reason = ARCHIVED_REASON[archived_reason_code]
-
-            self.archived_explanation = data["field_info"].get("archived_explanation")
-        else:
+        if not self.new_value["archived"]:
             self.modifier = "unarchived"
-            self.unarchived_reason = data["field_info"].get("unarchived_reason")
 
     def get_value(self, value):
         if "archived_reason" in value:
@@ -79,16 +71,9 @@ class PriorityHistoryItem(BaseHistoryItem):
     field_name = "Priority"
     modifier = "priority"
 
-    @property
-    def priority(self):
-        return self.new_value
-
-    @property
-    def text(self):
-        return self.data["field_info"]["priority_summary"]
-
     def get_value(self, value):
-        return self.metadata.get_priority(value)
+        value["priority"] = self.metadata.get_priority(value["priority"])
+        return value
 
 
 class ProductHistoryItem(BaseHistoryItem):
@@ -120,7 +105,10 @@ class SourceHistoryItem(BaseHistoryItem):
     field_name = "Information source"
 
     def get_value(self, value):
-        return self.metadata.get_source(value)
+        source = self.metadata.get_source(value["source"])
+        if value["other_source"]:
+            return f"{source} - {value['other_source']}"
+        return source
 
 
 class StatusHistoryItem(BaseHistoryItem):
@@ -128,36 +116,24 @@ class StatusHistoryItem(BaseHistoryItem):
     field_name = "Status"
     modifier = "status"
 
-    @property
-    def event(self):
-        return self.data["field_info"].get("event")
-
-    @property
-    def state(self):
-        return {
-            "from": self.metadata.get_status_text(self.data["old_value"]),
-            "to": self.metadata.get_status_text(
-                self.data["new_value"],
-                self.data["field_info"].get("sub_status"),
-                self.data["field_info"].get("sub_status_other"),
-            ),
-            "date": dateutil.parser.parse(self.data["field_info"]["status_date"]),
-            "is_resolved": self.data["new_value"]
-            in (Statuses.RESOLVED_IN_PART, Statuses.RESOLVED_IN_FULL,),
-            "show_summary": self.data["new_value"]
-            in (
-                Statuses.OPEN_IN_PROGRESS,
-                Statuses.UNKNOWN,
-                Statuses.OPEN_PENDING_ACTION,
-            ),
-        }
-
-    @property
-    def text(self):
-        return self.data["field_info"]["status_summary"]
-
     def get_value(self, value):
-        return self.metadata.get_status_text(value)
+        value["status_date"] = dateutil.parser.parse(value["status_date"])
+        value["status_short_text"] = self.metadata.get_status_text(value["status"])
+        value["status_text"] = self.metadata.get_status_text(
+            status_id=value["status"],
+            sub_status=value["sub_status"],
+            sub_status_other=value["sub_status_other"],
+        )
+        value["is_resolved"] = value["status"] in (
+            Statuses.RESOLVED_IN_PART,
+            Statuses.RESOLVED_IN_FULL,
+        )
+        value["show_summary"] = value["status"] in (
+            Statuses.OPEN_IN_PROGRESS,
+            Statuses.UNKNOWN,
+            Statuses.OPEN_PENDING_ACTION,
+        )
+        return value
 
 
 class TitleHistoryItem(BaseHistoryItem):
