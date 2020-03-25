@@ -250,7 +250,7 @@
                     </p>
 
                     {% if item.event == 'BARRIER_STATUS_CHANGE' and item.state.show_summary %}
-                        <p class="event-list__item__text">Reason: {{ item.text|escape|linebreaksbr  }}</p>
+                        <p class="event-list__item__text">Reason: {{ item.text|escape|linebreaksbr }}</p>
                     {% endif %}
 
                 {% elif item.is_priority %}
@@ -262,7 +262,7 @@
                     </p>
 
                     {% if item.text %}
-                    <p class="event-list__item__text">Reason: {{ item.text }}</p>
+                        <p class="event-list__item__text">Reason: {{ item.text }}</p>
                     {% endif %}
 
                 {% elif item.is_assessment %}
