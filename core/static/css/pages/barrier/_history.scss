@@ -1,5 +1,10 @@
+.history-heading {
+    padding-bottom: govuk-em( 4, 32 );
+    border-bottom: 4px solid $govuk-black;
+}
+
 .history-item {
-    border-top: 2px solid govuk-colour( 'grey-1' );
+    border-top: 2px solid $govuk-grey-1;
     margin-bottom: govuk-em( 48, 16 );
 }
 
@@ -14,14 +19,21 @@
 }
 
 .history-item__field {
-    float: left;
-    width: 20%;
-    margin: 0;
+
+    @include mq( $from: tablet ){
+        float: left;
+        width: 20%;
+        margin: 0;
+        padding-right: govuk-em( 8, 16 );
+        box-sizing: border-box;
+    }
 }
 
 .history-item__change {
-    float: right;
-    width: 80%;
+    @include mq( $from: tablet ){
+        float: right;
+        width: 80%;
+    }
 }
 
 .history-item__old-value {
@@ -30,45 +42,45 @@
 
 .history-item__link {
     &--existing {
-        color: black;
+        color: $govuk-black;
         padding: govuk-em( 2, 16 );
 
         &:link, &:visited {
-            color: black;
+            color: $govuk-black;
         }
     }
 
     &--new {
-        background-color: rgba(0, 112, 60, 0.25);
+        background-color: $govuk-green-25;
         text-decoration: underline;
-        color: #00703c;
+        color: $govuk-green;
         padding: govuk-em( 2, 16 );
 
         &:link, &:visited {
-            color: #00703c;
+            color: $govuk-green;
         }
     }
 
     &--old {
         text-decoration: line-through;
-        color: #d4351c;
+        color: $govuk-red;
         padding: govuk-em( 2, 16 );
 
         &:link, &:visited {
-            color: #d4351c;
+            color: $govuk-red;
         }
     }
 }
 
 .diff__ins {
     text-decoration: none;
-    background-color: rgba(0, 112, 60, 0.25);
-    color: #00703c;
+    background-color: $govuk-green-25;
+    color: $govuk-green;
     padding: govuk-em( 2, 16 );
 }
 
 
 .diff__del {
     text-decoration: line-through;
-    color: #d4351c;
+    color: $govuk-red;
 }
