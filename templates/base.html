@@ -2,6 +2,14 @@
 <!DOCTYPE html>
 <html lang="{{ htmlLang | default:'en' }}" class="govuk-template {{ htmlClasses }}">
   <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl+'&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x';
+    f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','{{ settings.GTM_ID }}');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="utf-8" />
     <title>{% block page_title %}Market Access{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -28,6 +36,10 @@
     <meta property="og:image" content="{{ assetUrl | default:'/assets' }}/images/govuk-opengraph-image.png">
   </head>
   <body class="govuk-template__body {{ bodyClasses }}">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.GTM_ID }}&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
 
@@ -91,17 +103,6 @@
       {% endcompress %}
       <script>ma.init();</script>
       {% block body_script %}{% endblock %}
-      {% if not user.internal and settings.GA_ENABLED and settings.GA_ID %}
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.GA_ID }}"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '{{ settings.GA_ID }}');
-      </script>
-      {% endif %}
-
       {% if settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
         <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
           <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment

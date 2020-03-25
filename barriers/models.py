@@ -61,6 +61,10 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["created_on"])
 
     @property
+    def last_seen_on(self):
+        return dateutil.parser.parse(self.data["last_seen_on"])
+
+    @property
     def eu_exit_related_text(self):
         return self.metadata.get_eu_exit_related_text(self.eu_exit_related)
 

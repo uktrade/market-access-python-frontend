@@ -81,6 +81,11 @@ django-showmigrations: ## Show django migrations.
 
 # UTIL COMMANDS
 # ==================================================
+.PHONY: flake8
+flake8: ## Run pep8 checks on the project
+	@echo "$$(tput setaf 3)🙈  Running flake8  🙈"
+	@docker-compose exec web bash -c "pipenv run flake8 . --exclude=./.venv --count --max-line-length=120"
+
 .PHONY: pip-install
 pip-install: ## Install pip requirements inside the container.
 	@echo "$$(tput setaf 3)🙈  Installing Pip Packages  🙈"

@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-from django.utils.log import DEFAULT_LOGGING
-
 from environ import Env
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -71,8 +69,10 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    'authentication',
     'barriers',
     'core',
+    'healthcheck',
     'reports',
     'users',
 ]
@@ -80,6 +80,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = BASE_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    'healthcheck.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -88,7 +89,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'users.middleware.SSOMiddleware',
+    'authentication.middleware.SSOMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -163,6 +164,18 @@ USE_TZ = True
 
 USE_THOUSAND_SEPARATOR = True
 
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_BROWSER_XSS_FILTER = True
+
+X_FRAME_OPTIONS = "DENY"
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
+
+CSRF_COOKIE_HTTPONLY = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 COMPRESS_PRECOMPILERS = (
@@ -209,12 +222,6 @@ MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI")
 MARKET_ACCESS_API_HAWK_ID = env("MARKET_ACCESS_API_HAWK_ID")
 MARKET_ACCESS_API_HAWK_KEY = env("MARKET_ACCESS_API_HAWK_KEY")
 
-SETTINGS_EXPORT = [
-    'DJANGO_ENV',
-    'MAX_WATCHLIST_LENGTH',
-    'DATAHUB_DOMAIN',
-]
-
 SSO_CLIENT = env("SSO_CLIENT")
 SSO_SECRET = env("SSO_SECRET")
 SSO_API_URI = env("SSO_API_URI")
@@ -249,40 +256,30 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "console": {
-            "format": "[%(asctime)s] %(name)s %(levelname)5s - %(message)s"
-        },
-        "django.server": {
-            "()": "django.utils.log.ServerFormatter",
-            "format": "[%(asctime)s] %(message)s",
-        },
+        "json": {
+            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": "(asctime)(levelname)(message)(filename)(lineno)(threadName)(name)(thread)(created)(process)(processName)(relativeCreated)(module)(funcName)(levelno)(msecs)(pathname)",  # noqa
+        }
     },
     "handlers": {
-        "console": {"class": "logging.StreamHandler", "formatter": "console"},
-        "django.server": DEFAULT_LOGGING['handlers']['django.server']
-
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json"
+        }
     },
     "loggers": {
-        # default for all undefined Python modules
-        '': {
-            'level': DJANGO_LOG_LEVEL,
-            'handlers': ['console'],
-        },
-        # application code
-        "app": {
-            "level": DJANGO_LOG_LEVEL,
+        "": {
             "handlers": ["console"],
-            "propagate": True,
-        },
-        # Default runserver request logging
-        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
+            "level": DJANGO_LOG_LEVEL
+        }
     },
 }
 
 
-# Google Analytics
-GA_ENABLED = env('GA_ENABLED', default=None)
-GA_ID = env('GA_ID', default=None)
+# Google Tag Manager
+GTM_ID = env('GTM_ID')
+GTM_AUTH = env('GTM_AUTH')
+GTM_PREVIEW = env('GTM_PREVIEW')
 
 if not DEBUG:
     sentry_sdk.init(
@@ -292,3 +289,13 @@ if not DEBUG:
             DjangoIntegration(),
         ],
     )
+
+# Settings made available in templates
+SETTINGS_EXPORT = (
+    'DJANGO_ENV',
+    'MAX_WATCHLIST_LENGTH',
+    'DATAHUB_DOMAIN',
+    'GTM_ID',
+    'GTM_AUTH',
+    'GTM_PREVIEW',
+)
