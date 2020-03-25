@@ -5,11 +5,7 @@
 {% block page_title %}{{ block.super }} - Find a barrier{% endblock %}
 
 {% block body_script %}
-    {% if settings.DJANGO_ENV == "prod" %}
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-    {% else %}
     <script src="{% static 'js/vue/vue-bundle.js' %}"></script>
-    {% endif %}
 {% endblock %}
 
 {% block page_content %}

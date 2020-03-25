@@ -30,7 +30,10 @@ class Dashboard(PaginationMixin, TemplateView):
                     "watchlist_index": watchlist_index,
                     "sort_field": sort.lstrip("-"),
                     "sort_descending": sort.startswith("-"),
-                    "pagination": self.get_pagination_data(object_list=barriers),
+                    "pagination": self.get_pagination_data(
+                        object_list=barriers,
+                        limit=settings.API_RESULTS_LIMIT,
+                    ),
                 }
             )
 
@@ -112,7 +115,10 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
             {
                 "barriers": barriers,
                 "filters": form.get_readable_filters(with_remove_links=True),
-                "pagination": self.get_pagination_data(object_list=barriers),
+                "pagination": self.get_pagination_data(
+                    object_list=barriers,
+                    limit=settings.API_RESULTS_LIMIT,
+                ),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "find-a-barrier",
             }

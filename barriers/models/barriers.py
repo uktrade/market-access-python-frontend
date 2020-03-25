@@ -61,6 +61,10 @@ class Barrier(APIModel):
         return self.metadata.get_eu_exit_related_text(self.eu_exit_related)
 
     @property
+    def last_seen_on(self):
+        return dateutil.parser.parse(self.data["last_seen_on"])
+
+    @property
     def location(self):
         if self._location is None:
             self._location = self.metadata.get_location_text(

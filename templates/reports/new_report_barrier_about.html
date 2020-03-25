@@ -94,7 +94,7 @@
                                    name="eu_exit_related"
                                    type="radio"
                                    value="{{ choice_id }}"
-                                   {% if form.initial.eu_exit_related == choice_id %}checked="checked"{% endif %}>
+                                   {% if form.initial.eu_exit_related|lower == choice_id|lower %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-radios__label" for="eu_exit_related-{{ forloop.counter }}">
                                 {{ choice_value }}
                             </label>
