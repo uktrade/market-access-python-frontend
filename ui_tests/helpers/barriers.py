@@ -60,8 +60,6 @@ def create_barrier(browser):
     browser.fill("next_steps_summary", "Test note")
     browser.find_by_css("input[type=submit]").click()
 
-    browser.find_by_css('input[type=submit][value="Submit barrier"]').click()
-
     matches = re.findall(r"/barriers/([A-Za-z0-9\-]+)", browser.url)
     barrier_id = matches[0]
     return barrier_id

@@ -167,7 +167,7 @@ class DocumentsResource(APIResource):
             if response.get("status") == "virus_scanning_failed":
                 raise ScanError("Unable to virus scan the file")
             elif response.get("status") == "virus_scanned":
-                if 'av_clean' not in response or response.get('av_clean') is True:
+                if "av_clean" not in response or response.get("av_clean") is True:
                     return
                 raise ScanError(
                     "This file may be infected with a virus and will not be accepted."
