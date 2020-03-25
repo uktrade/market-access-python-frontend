@@ -54,6 +54,9 @@ class DescriptionHistoryItem(BaseHistoryItem):
     field = "problem_description"
     field_name = "Summary"
 
+    def get_value(self, value):
+        return value or ""
+
 
 class EUExitRelatedHistoryItem(BaseHistoryItem):
     field = "eu_exit_related"
@@ -68,7 +71,7 @@ class LocationHistoryItem(BaseHistoryItem):
     field_name = "Location"
 
     def get_value(self, value):
-        return self.metadata.get_location_text(value['country'], value['admin_areas'])
+        return self.metadata.get_location_text(value["country"], value["admin_areas"])
 
 
 class PriorityHistoryItem(BaseHistoryItem):
@@ -95,7 +98,7 @@ class ProductHistoryItem(BaseHistoryItem):
 
 class ScopeHistoryItem(BaseHistoryItem):
     field = "problem_status"
-    field_name = "Scope"
+    field_name = "Type"
 
     def get_value(self, value):
         return self.metadata.get_problem_status(value)

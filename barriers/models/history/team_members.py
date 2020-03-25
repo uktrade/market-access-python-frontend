@@ -14,7 +14,5 @@ class TeamMemberHistoryItem(PolymorphicBase):
 
     model = "team_member"
     key = "field"
-    subclasses = (
-        UserHistoryItem,
-    )
+    subclasses = (UserHistoryItem,)
     class_lookup = {}

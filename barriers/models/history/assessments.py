@@ -4,7 +4,6 @@ from .utils import PolymorphicBase
 
 
 class BaseAssessmentHistoryItem(BaseHistoryItem):
-
     @property
     def is_edit(self):
         return self.data["old_value"] is not None

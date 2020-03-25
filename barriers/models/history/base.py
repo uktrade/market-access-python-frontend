@@ -23,13 +23,13 @@ class BaseHistoryItem(APIModel):
     @property
     def new_value(self):
         if self._new_value is None:
-            self._new_value = self.get_value(self.data["new_value"]) or ""
+            self._new_value = self.get_value(self.data["new_value"])
         return self._new_value
 
     @property
     def old_value(self):
         if self._old_value is None:
-            self._old_value = self.get_value(self.data["old_value"]) or ""
+            self._old_value = self.get_value(self.data["old_value"])
         return self._old_value
 
     @property

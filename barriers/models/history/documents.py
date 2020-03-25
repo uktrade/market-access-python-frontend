@@ -5,20 +5,29 @@ class BaseDocumentsHistoryItem(BaseHistoryItem):
     field = "documents"
     field_name = "Documents"
 
+    @property
+    def new_document_ids(self):
+        return set([document["id"] for document in self.new_value])
+
+    @property
+    def old_document_ids(self):
+        return set([document["id"] for document in self.old_value])
+
+    @property
     def deleted_documents(self):
-        new_documents = {v['id']: v for v in self.new_value}
-        old_documents = {v['id']: v for v in self.old_value}
-        deleted_ids = set(old_documents.keys()).difference(set(new_documents.keys()))
-        return [old_documents[document_id] for document_id in deleted_ids]
+        deleted_ids = self.old_document_ids.difference(self.new_document_ids)
+        return [
+            document for document in self.old_value if document["id"] in deleted_ids
+        ]
 
+    @property
     def added_documents(self):
-        new_documents = {v['id']:v for v in self.new_value}
-        old_documents = {v['id']:v for v in self.old_value}
-        added_ids = set(new_documents.keys()).difference(set(old_documents.keys()))
-        return [new_documents[document_id] for document_id in added_ids]
+        added_ids = self.new_document_ids.difference(self.old_document_ids)
+        return [document for document in self.new_value if document["id"] in added_ids]
 
+    @property
     def unchanged_documents(self):
-        new_documents = {v['id']:v for v in self.new_value}
-        old_documents = {v['id']:v for v in self.old_value}
-        unchanged_ids = set(new_documents.keys()).intersection(set(old_documents.keys()))
-        return [new_documents[document_id] for document_id in unchanged_ids]
+        unchanged_ids = self.new_document_ids.intersection(self.old_document_ids)
+        return [
+            document for document in self.new_value if document["id"] in unchanged_ids
+        ]
