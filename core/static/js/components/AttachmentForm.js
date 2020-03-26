@@ -18,22 +18,6 @@ ma.components.AttachmentForm = (function( jessie ){
 		attachments.events.delete.subscribe( bind( this.deleteDocument, this ) );
 	}
 
-	function getCookie(name) {
-		var cookieValue = null;
-		if (document.cookie && document.cookie !== '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = cookies[i].trim();
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) === (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
-		}
-		return cookieValue;
-	}
-
 	AttachmentForm.prototype.showError = function( message ){
 
 		this.submitButton.disabled = false;
@@ -130,8 +114,6 @@ ma.components.AttachmentForm = (function( jessie ){
 		xhr2.addEventListener( 'abort', bind( this.transferCanceled, this ), false );
 		xhr2.addEventListener( 'load', bind( this.loaded, this ), false );
 
-		var csrftoken = getCookie('csrftoken');
-
 		xhr2.open( 'POST', this.fileUpload.action, true );
 		xhr2.setRequestHeader("X-CSRFToken", csrftoken);
 		xhr2.send( formData );
@@ -143,7 +125,6 @@ ma.components.AttachmentForm = (function( jessie ){
 		if( !documentId ){ return; }
 
 		var xhr = ma.xhr2();
-		var csrftoken = getCookie('csrftoken');
 
 		xhr.open( 'POST', deleteUrl, true );
 		xhr.setRequestHeader("X-CSRFToken", csrftoken);
