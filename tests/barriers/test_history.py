@@ -129,18 +129,26 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "date": "2019-10-28T11:47:13.451000Z",
                 "model": "barrier",
                 "field": "priority",
-                "old_value": "LOW",
-                "new_value": "MEDIUM",
-                "user": {"id": 48, "name": "Test-user"},
-                "field_info": {
-                    "priority_date": "2019-10-28T11:47:13.448000Z",
-                    "priority_summary": None,
+                "old_value": {
+                    "priority": "LOW",
+                    "priority_summary": "",
                 },
+                "new_value": {
+                    "priority": "MEDIUM",
+                    "priority_summary": "Summary",
+                },
+                "user": {"id": 48, "name": "Test-user"},
             }
         )
         assert item.field_name == "Priority"
-        assert item.old_value == {"code": "LOW", "name": "Low", "order": 3}
-        assert item.new_value == {"code": "MEDIUM", "name": "Medium", "order": 2}
+        assert item.old_value == {
+            "priority": {"code": "LOW", "name": "Low", "order": 3},
+            "priority_summary": "",
+        }
+        assert item.new_value == {
+            "priority": {"code": "MEDIUM", "name": "Medium", "order": 2},
+            "priority_summary": "Summary",
+        }
 
     def test_product(self):
         item = HistoryItem(
@@ -193,13 +201,19 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "date": "2019-08-15T09:53:02.531000Z",
                 "model": "barrier",
                 "field": "source",
-                "old_value": "OTHER",
-                "new_value": "TRADE",
+                "old_value": {
+                    "source": "OTHER",
+                    "other_source": "Horse",
+                },
+                "new_value": {
+                    "source": "TRADE",
+                    "other_source": None,
+                },
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
         assert item.field_name == "Information source"
-        assert item.old_value == "Other"
+        assert item.old_value == "Other - Horse"
         assert item.new_value == "Trade association"
 
     def test_status(self):
@@ -208,20 +222,26 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "date": "2019-10-28T11:47:51.875000Z",
                 "model": "barrier",
                 "field": "status",
-                "old_value": "7",
-                "new_value": "1",
-                "user": {"id": 48, "name": "Test-user"},
-                "field_info": {
+                "old_value": {
+                    "status": "7",
+                    "status_date": "2019-10-28T11:47:51.875000Z",
+                    "status_summary": "Summary",
+                    "sub_status": None,
+                    "sub_status_other": None,
+                },
+                "new_value": {
+                    "status": "1",
                     "status_date": "2019-10-28",
                     "status_summary": "It's pending action.",
                     "sub_status": "UK_GOVT",
                     "sub_status_other": None,
                 },
+                "user": {"id": 48, "name": "Test-user"},
             }
         )
         assert item.field_name == "Status"
-        assert item.old_value == "Unknown"
-        assert item.new_value == "Open: Pending action"
+        assert item.old_value["status_text"] == "Unknown"
+        assert item.new_value["status_text"] == "Open: Pending action (UK government)"
 
     def test_title(self):
         item = HistoryItem(
