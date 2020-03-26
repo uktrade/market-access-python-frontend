@@ -43,7 +43,7 @@
         </div>
 
         <input type="submit" class="govuk-button" value="Change barrier status">
-        <a href="" class="govuk-button button--secondary">Cancel</a>
+        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 
 {% endblock %}

@@ -8,6 +8,7 @@
     {{ block.super }}
     <script>
         ma.pages.barrier.assessment();
+        var csrftoken = ma.get_csrf_token();
     </script>
 {% endblock %}
 

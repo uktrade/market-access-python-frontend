@@ -109,7 +109,6 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
     path("barriers/<uuid:barrier_id>/archive/", ArchiveBarrier.as_view(), name="archive"),
     path("barriers/<uuid:barrier_id>/unarchive/", UnarchiveBarrier.as_view(), name="unarchive"),
-
     path("barriers/<uuid:barrier_id>/history/", BarrierHistory.as_view(), name="history"),
 
     path("barriers/<uuid:barrier_id>/interactions/add-note/", BarrierAddNote.as_view(), name="add_note"),

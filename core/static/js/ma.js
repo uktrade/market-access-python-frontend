@@ -26,5 +26,14 @@ var ma = {
 
 			new ma.components.Toast( '.toast' );
 		}
+
+
+	},
+
+	get_csrf_token: function() {
+		csrftoken_elements = document.getElementsByName("csrfmiddlewaretoken");
+		if (csrftoken_elements.length) {
+			return csrftoken_elements[0].value;
+		}
 	}
 };
