@@ -128,26 +128,6 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
-    CHOICES = [
-        (1, "Yes"),
-        (2, "No"),
-        (3, "Don't know"),
-    ]
-    eu_exit_related = forms.ChoiceField(
-        label="Is this issue caused by or related to EU Exit?",
-        choices=CHOICES,
-        widget=forms.RadioSelect,
-        error_messages={"required": "Select whether this is EU exit related or not"},
-    )
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id, eu_exit_related=self.cleaned_data["eu_exit_related"]
-        )
-
-
 class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
     CHOICES = [
         (

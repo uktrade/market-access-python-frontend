@@ -14,11 +14,6 @@
         "2": "IN PROGRESS",
         "3": "COMPLETED"
     },
-    "adv_boolean": {
-        "1": "Yes",
-        "2": "No",
-        "3": "Dont know"
-    },
     "govt_response": {
         "1": "None, this is for our information only at this stage",
         "2": "In-country support from post",
@@ -7666,6 +7661,22 @@
         "BUS": "Affected business",
         "OTHER": "Other"
     },
+    "barrier_tags": [
+        {
+            "id": 1,
+            "title": "covid-19",
+            "show_at_reporting": "True"
+        },
+        {
+            "id": 2,
+            "title": "brexit",
+            "show_at_reporting": "True"},
+        {
+            "id": 3,
+            "title": "wibble",
+            "show_at_reporting": "False"
+        }
+    ],
     "barrier_type_categories": {
         "GOODS": "Goods",
         "SERVICES": "Services"

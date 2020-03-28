@@ -7,7 +7,6 @@ from barriers.forms.edit import (
     UpdateBarrierDescriptionForm,
     UpdateBarrierSourceForm,
     UpdateBarrierPriorityForm,
-    UpdateBarrierEUExitRelatedForm,
     UpdateBarrierProblemStatusForm,
 )
 
@@ -53,14 +52,6 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {"priority": self.barrier.priority["code"]}
-
-
-class BarrierEditEUExitRelated(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/eu_exit_related.html"
-    form_class = UpdateBarrierEUExitRelatedForm
-
-    def get_initial(self):
-        return {"eu_exit_related": self.barrier.eu_exit_related}
 
 
 class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):

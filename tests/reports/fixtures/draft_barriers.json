@@ -21,7 +21,6 @@
     "barrier_title": null,
     "problem_description": null,
     "next_steps_summary": null,
-    "eu_exit_related": null,
     "progress": [
       {
         "stage_code": "1.1",
@@ -84,7 +83,6 @@
     "barrier_title": null,
     "problem_description": null,
     "next_steps_summary": null,
-    "eu_exit_related": null,
     "progress": [
         {
             "stage_code": "1.1",
@@ -147,7 +145,6 @@
     "barrier_title": null,
     "problem_description": null,
     "next_steps_summary": null,
-    "eu_exit_related": null,
     "progress": [
         {
             "stage_code": "1.1",
@@ -210,7 +207,6 @@
     "barrier_title": null,
     "problem_description": null,
     "next_steps_summary": null,
-    "eu_exit_related": null,
     "progress": [
         {
             "stage_code": "1.1",
@@ -273,7 +269,6 @@
     "barrier_title": null,
     "problem_description": null,
     "next_steps_summary": null,
-    "eu_exit_related": null,
     "progress": [
         {
             "stage_code": "1.1",
@@ -338,7 +333,6 @@
     "barrier_title": null,
     "problem_description": null,
     "next_steps_summary": null,
-    "eu_exit_related": null,
     "progress": [
         {
             "stage_code": "1.1",
@@ -403,7 +397,6 @@
     "barrier_title": "wibble",
     "problem_description": null,
     "next_steps_summary": null,
-    "eu_exit_related": 3,
     "progress": [
         {
             "stage_code": "1.1",
@@ -468,7 +461,6 @@
     "barrier_title": "wibble",
     "problem_description": "wibble",
     "next_steps_summary": "wobble",
-    "eu_exit_related": 3,
     "progress": [
         {
             "stage_code": "1.1",

@@ -65,10 +65,6 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["last_seen_on"])
 
     @property
-    def eu_exit_related_text(self):
-        return self.metadata.get_eu_exit_related_text(self.eu_exit_related)
-
-    @property
     def location(self):
         if self._location is None:
             self._location = self.metadata.get_location_text(
@@ -147,6 +143,10 @@ class Barrier(APIModel):
     @property
     def is_hibernated(self):
         return self.status["id"] == "5"
+
+    @property
+    def tags(self):
+        return self.data.get("tags") or ()
 
 
 class Company(APIModel):

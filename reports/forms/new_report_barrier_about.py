@@ -1,5 +1,7 @@
 from django import forms
 
+from utils.metadata import get_metadata
+
 
 class BarrierSource:
     """
@@ -37,6 +39,7 @@ class RelatedToBrexit:
 
 
 class NewReportBarrierAboutForm(forms.Form):
+    metadata = get_metadata()
     BS = BarrierSource()
     barrier_title = forms.CharField(
         label="Name this barrier",
@@ -65,10 +68,9 @@ class NewReportBarrierAboutForm(forms.Form):
             "max_length": "Other source should be %(limit_value)d characters or fewer",
         },
     )
-    eu_exit_related = forms.ChoiceField(
-        label="Is this issue caused by or related to Brexit?",
-        choices=RelatedToBrexit.choices(),
-        error_messages={
-            'required': "Select whether this is Brexit related or not"
-        },
+    tags = forms.MultipleChoiceField(
+        choices=metadata.get_barrier_tag_report_choices(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Is this issue caused by or related to any of the following?"
     )
+

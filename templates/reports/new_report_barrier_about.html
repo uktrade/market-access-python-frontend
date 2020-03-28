@@ -80,30 +80,6 @@
                 </fieldset>
             </div>
 
-            <div class="{% form_group_classes form.eu_exit_related.errors %}">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                        {{ form.fields.eu_exit_related.label }}
-                    </legend>
-                    {% form_field_error form "eu_exit_related" %}
-                    <div class="govuk-radios eu_exit_related">
-                        {% for choice_id, choice_value in form.fields.eu_exit_related.choices %}
-                        <div class="govuk-radios__item eu_exit_related">
-                            <input class="govuk-radios__input"
-                                   id="eu_exit_related-{{ forloop.counter }}"
-                                   name="eu_exit_related"
-                                   type="radio"
-                                   value="{{ choice_id }}"
-                                   {% if form.initial.eu_exit_related|lower == choice_id|lower %}checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="eu_exit_related-{{ forloop.counter }}">
-                                {{ choice_value }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </fieldset>
-            </div>
-
             <input type="submit" value="Save and continue" class="govuk-button">
             <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
 

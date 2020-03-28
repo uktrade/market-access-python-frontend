@@ -65,25 +65,13 @@
                 {% endif %}
             </dd>
 
-            <div class="summary-group__list-item-50">
-                <dt class="summary-group__list__key">Barrier type</dt>
-                <dd class="summary-group__list__value">
-                    {{ barrier.problem_status_text }}
-                    {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_problem_status' barrier.id %}">Edit</a>
-                    {% endif %}
-                </dd>
-            </div>
-
-            <div class="summary-group__list-item-50">
-                <dt class="summary-group__list__key">Related to Brexit</dt>
-                <dd class="summary-group__list__value">
-                    {{ barrier.eu_exit_related_text }}
-                    {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_eu_exit_related' barrier.id %}">Edit</a>
-                    {% endif %}
-                </dd>
-            </div>
+            <dt class="summary-group__list__key">Barrier type</dt>
+            <dd class="summary-group__list__value">
+                {{ barrier.problem_status_text }}
+                {% if not barrier.archived %}
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_problem_status' barrier.id %}">Edit</a>
+                {% endif %}
+            </dd>
 
             <dt class="summary-group__list__key">Companies known to be affected</dt>
             <dd class="summary-group__list__value">
