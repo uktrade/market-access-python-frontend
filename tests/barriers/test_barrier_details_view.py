@@ -10,7 +10,7 @@ from core.tests import MarketAccessTestCase
 
 class BarrierViewTestCase(MarketAccessTestCase):
 
-    @patch('utils.api.resources.BarriersResource.get_history')
+    @patch('utils.api.resources.BarriersResource.get_activity')
     def test_barrier_view_has_highlighted_event_list_items(self, mock_history):
         mock_history.return_value = [HistoryItem(result) for result in self.history]
         css_class = 'event-list__item--unseen'
@@ -27,7 +27,7 @@ class BarrierViewTestCase(MarketAccessTestCase):
         assert expected_css_class_count == unseen_events_count, \
             f'Expected {expected_css_class_count} unseen events, got: {unseen_events_count}'
 
-    @patch('utils.api.resources.BarriersResource.get_history')
+    @patch('utils.api.resources.BarriersResource.get_activity')
     def test_barrier_view_without_highlighted_event_list_items(self, mock_history):
         mock_history.return_value = [HistoryItem(result) for result in self.history]
         css_class = 'event-list__item--unseen'

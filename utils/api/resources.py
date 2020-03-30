@@ -4,7 +4,7 @@ import time
 from django.conf import settings
 
 from barriers.constants import Statuses
-from barriers.models import Assessment, Barrier, HistoryItem, Interaction
+from barriers.models import Assessment, Barrier, HistoryItem, Note
 from reports.models import Report
 from users.models import User
 
@@ -51,8 +51,22 @@ class BarriersResource(APIResource):
     resource_name = "barriers"
     model = Barrier
 
+    def get_activity(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/activity"
+        return [
+            HistoryItem(result)
+            for result in self.client.get(url, params=kwargs)["history"]
+        ]
+
     def get_history(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/history"
+        return [
+            HistoryItem(result)
+            for result in self.client.get(url, params=kwargs)["history"]
+        ]
+
+    def get_full_history(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/full_history"
         return [
             HistoryItem(result)
             for result in self.client.get(url, params=kwargs)["history"]
@@ -114,9 +128,16 @@ class BarriersResource(APIResource):
         return self.client.put(url, json=kwargs)
 
 
-class InteractionsResource(APIResource):
+class NotesResource(APIResource):
     resource_name = "interactions"
-    model = Interaction
+    model = Note
+
+    def create(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/interactions"
+        return self.model(self.client.post(url, json=kwargs))
+
+    def delete(self, note_id):
+        return self.client.delete(f"barriers/interactions/{note_id}")
 
     def list(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/interactions"
@@ -124,18 +145,6 @@ class InteractionsResource(APIResource):
             self.model(result)
             for result in self.client.get(url, params=kwargs)["results"]
         ]
-
-    def delete_note(self, note_id):
-        return self.client.delete(f"barriers/interactions/{note_id}")
-
-
-class NotesResource(APIResource):
-    resource_name = "notes"
-    model = Interaction
-
-    def create(self, barrier_id, *args, **kwargs):
-        url = f"barriers/{barrier_id}/interactions"
-        return self.model(self.client.post(url, json=kwargs))
 
     def update(self, id, *args, **kwargs):
         url = f"barriers/interactions/{id}"
