@@ -20,6 +20,10 @@
     </div>
 {% endblock %}
 
+{% block back_link %}
+    <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
 {% block page_content %}
     {% include 'barriers/partials/barrier_tabs.html' with active='team' %}
     {% include 'barriers/partials/team_list.html' %}
