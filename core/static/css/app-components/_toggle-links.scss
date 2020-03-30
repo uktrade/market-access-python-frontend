@@ -1,15 +1,15 @@
 .toggle-links-toggle {
-
+	display: block;
 	position: relative;
-	padding-right: govuk-em( 25, 16 );
+	padding-left: govuk-em( 20, 16 );
 	margin-top: govuk-em( 10, 16 );
 
-	&:after {
+	&:before {
 		content: '';
 		position: absolute;
 		top: 0.25em;
-		right: 0;
-		@include govuk-shape-arrow($direction: down, $base: 14px);
+		left: 0;
+		@include govuk-shape-arrow($direction: right, $base: 14px);
 	}
 }
 
