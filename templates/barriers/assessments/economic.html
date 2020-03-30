@@ -12,10 +12,13 @@
     </script>
 {% endblock %}
 
+{% block back_link %}
+    <a href="{% url 'barriers:cancel_assessment_document' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
 {% block page_content %}
 
-    <a href="{% url 'barriers:cancel_assessment_document' barrier.id %}" class="govuk-back-link">Back</a>
-    {% include 'partials/heading.html' with caption=barrier.barrier_title text='Economic assessment' %}
+    {% include 'partials/heading.html' with text='Economic assessment' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_assessment_document' barrier.id %}">

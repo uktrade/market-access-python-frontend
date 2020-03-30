@@ -2,10 +2,13 @@
 
 {% block page_title %}{{ block.super }} - Barrier Assessment - Commercial value{% endblock %}
 
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
 {% block page_content %}
 
-    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link">Back</a>
-    {% include 'partials/heading.html' with caption=barrier.barrier_title text='Commercial value' %}
+    {% include 'partials/heading.html' with text='Commercial value' %}
     {% form_error_banner form %}
 
     {% include 'barriers/assessments/partials/value_form.html' %}

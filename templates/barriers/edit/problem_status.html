@@ -2,10 +2,13 @@
 
 {% block page_title %}{{ block.super }} - Edit barrier scope{% endblock %}
 
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
 {% block page_content %}
 
-    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link">Back</a>
-    {% include 'partials/heading.html' with caption=object.barrier_title text='Edit barrier scope' %}
+    {% include 'partials/heading.html' with text='Edit barrier scope' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">

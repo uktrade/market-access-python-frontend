@@ -2,7 +2,9 @@
 	padding-top: govuk-em( 30, 16 );
 	padding-bottom: govuk-em( 30, 16 );
 }
-
+.ma-back-link {
+	margin-bottom: 0;
+}
 .barrier-summary:after {
 	content: "";
 	clear: both;
@@ -26,6 +28,12 @@
 	}
 }
 
+.barrier-summary__code {
+	font-size: 16px;
+	color: $govuk-grey-1;
+	margin: 0;
+}
+
 .barrier-summary__heading__link {
 	display: block;
 	margin-top: govuk-em( 25, 27 );
@@ -40,6 +48,10 @@
 .barrier-summary__heading__country {
 	margin: 0;
 	@include govuk-font( $size: 19 );
+}
+
+.barrier-summary__edit-links {
+	margin-bottom: 0;
 }
 
 .barrier-summary__status {

@@ -1,11 +1,12 @@
 <section class="barrier-summary">
+
     <div class="barrier-summary__heading">
-        {{ barrier.code }}
+        <p class="barrier-summary__code">{{ barrier.code }}</p>
         <h1 class="barrier-summary__heading__text">{{ barrier.title }}</h1>
         <p class="barrier-summary__heading__country"> in {{ barrier.location }}</p>
 
         {% if not hide_links and not barrier.archived %}
-            <p>
+            <p class="barrier-summary__edit-links">
                 <a href="{% url 'barriers:edit_title' barrier.id %}">Edit title</a>
                 or
                 <a href="{% url 'barriers:edit_location' barrier.id %}">location</a>
