@@ -5,10 +5,10 @@ from .mixins import APIBarrierFormViewMixin
 
 
 class ArchiveBarrier(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/archive.html"
+    template_name = "barriers/edit/archive.html"
     form_class = ArchiveBarrierForm
 
 
 class UnarchiveBarrier(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/unarchive.html"
+    template_name = "barriers/edit/unarchive.html"
     form_class = UnarchiveBarrierForm
