@@ -1,24 +1,32 @@
 .barrier-status-badge {
-	border: 4px solid $govuk-blue;
-	background-color: $govuk-blue;
+	background-color: $govuk-grey-1;
 	display: inline-block;
-	padding: govuk-em( 3, 16 ) govuk-em( 15, 16 );
+	padding: govuk-em( 10, 16 );
 	line-height: 1.5;
 	color: white;
 	box-sizing: border-box;
 }
 
 .barrier-status-badge--compact {
-	padding: govuk-em( 2, 16 ) govuk-em( 10, 16 );
 	line-height: 1.25;
 }
 
+.barrier-status-badge--open-in-progress {
+	background-color: $govuk-blue;
+}
+
+.barrier-status-badge--open-pending-action {
+	background-color: $govuk-blue;
+}
+
 .barrier-status-badge--resolved {
-	border-color: $govuk-green;
 	background-color: $govuk-green;
 }
 
 .barrier-status-badge--hibernated {
-	border-color: $govuk-grey-1;
+	background-color: $govuk-grey-1;
+}
+
+.barrier-status-badge--unknown {
 	background-color: $govuk-grey-1;
 }
