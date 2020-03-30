@@ -151,7 +151,7 @@ class BarrierDeleteNote(NoteSessionDocumentMixin, BarrierMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        client.interactions.delete_note(self.kwargs.get("note_id"))
+        client.notes.delete(self.kwargs.get("note_id"))
         self.delete_session_documents()
         url = reverse(
             "barriers:barrier_detail",

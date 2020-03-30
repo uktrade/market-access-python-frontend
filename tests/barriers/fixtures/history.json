@@ -2,61 +2,76 @@
     [
         {
             "date": "2020-03-19T12:01:01.591474Z",
+            "model": "barrier",
             "field": "status",
-            "old_value": "7",
-            "new_value": "2",
+            "old_value": {
+                "status": "7",
+                "status_date": "2019-10-28T11:47:51.875000Z",
+                "status_summary": "Summary",
+                "sub_status": null,
+                "sub_status_other": null
+            },
+            "new_value": {
+                "status": "2",
+                "status_date": "2019-10-28",
+                "status_summary": "It's pending action.",
+                "sub_status": "UK_GOVT",
+                "sub_status_other": null
+            },
             "user": {
                 "id": 11,
                 "name": "Vyvyan Holland"
-            },
-            "field_info": {
-                "status_date": "2020-03-19",
-                "status_summary": "wibble wobble",
-                "sub_status": null,
-                "sub_status_other": null,
-                "event": "BARRIER_STATUS_CHANGE"
             }
         },
         {
             "date": "2020-03-19T12:15:15.197767Z",
+            "model": "barrier",
             "field": "priority",
-            "old_value": "None",
-            "new_value": "LOW",
+            "old_value": {
+                "priority": null,
+                "priority_summary": ""
+            },
+            "new_value": {
+                "priority": "LOW",
+                "priority_summary": "Summary"
+            },
             "user": {
                 "id": 11,
                 "name": "Vyvyan Holland"
-            },
-            "field_info": {
-                "priority_date": "2020-03-19T12:15:15.178202Z",
-                "priority_summary": "I like lots of things that are yellow. Low priority is yellow."
             }
         },
         {
             "date": "2020-03-20T12:45:45.446472Z",
+            "model": "barrier",
             "field": "priority",
-            "old_value": "LOW",
-            "new_value": "UNKNOWN",
+            "old_value": {
+                "priority": "LOW",
+                "priority_summary": ""
+            },
+            "new_value": {
+                "priority": "UNKNOWN",
+                "priority_summary": "Summary"
+            },
             "user": {
                 "id": 11,
                 "name": "Vyvyan Holland"
-            },
-            "field_info": {
-                "priority_date": "2020-03-20T12:45:45.430672Z",
-                "priority_summary": "grey grey"
             }
         },
         {
             "date": "2020-03-20T13:01:01.630015Z",
+            "model": "barrier",
             "field": "priority",
-            "old_value": "UNKNOWN",
-            "new_value": "LOW",
+            "old_value": {
+                "priority": "UNKNOWN",
+                "priority_summary": ""
+            },
+            "new_value": {
+                "priority": "LOW",
+                "priority_summary": "Summary"
+            },
             "user": {
                 "id": 11,
                 "name": "Vyvyan Holland"
-            },
-            "field_info": {
-                "priority_date": "2020-03-20T13:01:01.619448Z",
-                "priority_summary": "yellow is better"
             }
         }
     ]

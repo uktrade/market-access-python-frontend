@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load history %}
+
+{% block page_title %}{{ block.super }} - Barrier history{% endblock %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        if( ma.components.ToggleLinks ){
+            new ma.components.ToggleLinks( {
+                text: 'Update the barrier',
+                linkClass: 'js-barrier-summary-link'
+            } );
+        }
+    </script>
+{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' %}
+    </div>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='history' %}
+
+    <h1 class="history-heading">History</h1>
+
+    <h2 class="history-count">{{ history_items|length }} change{{ history_items|pluralize }}</h2>
+
+    <div class="edit-history">
+        {% for item in history_items %}
+            <div class="history-item">
+
+                <p class="history-item__date">
+                    Updated on {{ item.date|date:"j M Y" }}, {{ item.date|time:"g:iA"|lower }}{% if item.user.name %} by {{ item.user.name }}{% endif %}
+                </p>
+
+                <div class="history-item__container">
+                    <h4 class="history-item__field">{{ item.field_name }}</h4>
+                    <div class="history-item__change">
+                        {% history_item item %}
+                    </div>
+                </div>
+
+            </div>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}

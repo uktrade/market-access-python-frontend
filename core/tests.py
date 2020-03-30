@@ -6,7 +6,7 @@ from django.test import override_settings, TestCase
 from barriers.models import Assessment
 from core.filecache import memfiles
 from users.models import User
-from utils.api.resources import BarriersResource, InteractionsResource
+from utils.api.resources import BarriersResource, NotesResource
 
 from mock import patch
 
@@ -22,7 +22,7 @@ class MarketAccessTestCase(TestCase):
     def setUp(self):
         self.init_session()
         self.init_get_barrier_patcher()
-        self.init_get_history_patcher()
+        self.init_get_activity_patcher()
         self.init_get_interactions_patcher()
 
     def init_session(self):
@@ -38,17 +38,17 @@ class MarketAccessTestCase(TestCase):
         self.mock_get_barrier.return_value = BarriersResource.model(self.barriers[0])
         self.addCleanup(self.get_barrier_patcher.stop)
 
-    def init_get_history_patcher(self):
-        self.get_history_patcher = patch(
-            "utils.api.resources.BarriersResource.get_history"
+    def init_get_activity_patcher(self):
+        self.get_activity_patcher = patch(
+            "utils.api.resources.BarriersResource.get_activity"
         )
-        self.mock_get_history = self.get_history_patcher.start()
-        self.mock_get_history.return_value = []
-        self.addCleanup(self.get_history_patcher.stop)
+        self.mock_get_activity = self.get_activity_patcher.start()
+        self.mock_get_activity.return_value = []
+        self.addCleanup(self.get_activity_patcher.stop)
 
     def init_get_interactions_patcher(self):
         self.get_interactions_patcher = patch(
-            "utils.api.resources.InteractionsResource.list"
+            "utils.api.resources.NotesResource.list"
         )
         self.mock_get_interactions = self.get_interactions_patcher.start()
         self.mock_get_interactions.return_value = self.notes
@@ -99,7 +99,7 @@ class MarketAccessTestCase(TestCase):
     @property
     def notes(self):
         return [
-            InteractionsResource.model(
+            NotesResource.model(
                 {
                     "id": 1,
                     "kind": "Comment",
@@ -118,7 +118,7 @@ class MarketAccessTestCase(TestCase):
                     "created_by": {"id": 1, "name": "Test-user"},
                 }
             ),
-            InteractionsResource.model(
+            NotesResource.model(
                 {
                     "id": 2,
                     "kind": "Comment",

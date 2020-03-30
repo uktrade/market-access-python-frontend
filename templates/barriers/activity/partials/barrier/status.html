@@ -1,0 +1,13 @@
+<h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+<p class="event-list__item__text">
+    Barrier status changed from <strong>{{ item.old_value.status_short_text }}</strong> to <strong>{{ item.new_value.status_text }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}.
+
+    {% if item.new_value.is_resolved %}
+         Resolved date set as <strong>{{ item.new_value.status_date|date:"F Y" }}</strong>.
+    {% endif %}
+</p>
+
+{% if item.new_value.show_summary %}
+    <p class="event-list__item__text">{{ item.new_record.status_summary|escape|linebreaksbr  }}</p>
+{% endif %}
