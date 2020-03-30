@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' with hide_priority=True hide_links=True %}
+    </div>
+{% endblock %}
