@@ -51,4 +51,5 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
             status="1,2,7",
             user="1",
             archived="0",
+            ordering="-reported_on",
         )
