@@ -54,7 +54,7 @@ class CalloutMixin(ContextMixin):
 
 
 class ReportBarrierContextMixin(CalloutMixin):
-    heading_caption = "Add a barrier"
+    heading_caption = "Report a barrier"
     heading_text = ""
     back_url = ""
     urls = {}
@@ -161,7 +161,7 @@ class ReportsFormView(ReportBarrierContextMixin, FormView):
 
 class NewReport(ReportsTemplateView):
     """
-    Landing page where users can initiate to add a barrier.
+    Landing page where users can initiate to report a barrier.
     """
     template_name = "reports/new_report.html"
     callout = Callout(
@@ -182,7 +182,7 @@ class NewReport(ReportsTemplateView):
 
 class NewReportBarrierProblemStatusView(ReportsFormView):
     """
-    Add a barrier - Step 1.1 Select Barrier Type
+    Report a barrier - Step 1.1 Select Barrier Type
     """
     heading_text = "Barrier status"
     template_name = "reports/new_report_barrier_problem_status.html"
@@ -193,7 +193,7 @@ class NewReportBarrierProblemStatusView(ReportsFormView):
 
 class NewReportBarrierStatusView(ReportsFormView):
     """
-    Add a barrier - Step 1.2
+    Report a barrier - Step 1.2
     """
     heading_text = "Barrier status"
     template_name = "reports/new_report_barrier_status.html"

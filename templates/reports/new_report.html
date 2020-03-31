@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Add a barrier{% endblock %}
+{% block page_title %}{{ block.super }} - Report a barrier{% endblock %}
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with caption='Market access barriers' text='Add a barrier' %}
+    {% include 'partials/heading.html' with caption='Market access barriers' text='Report a barrier' %}
 
     <section class="restrict-width">
 
         {% include 'partials/callout.html' with callout=callout %}
 
         <div class="task-list">
-            <h2 class="task-list__section-heading">Add a barrier</h2>
+            <h2 class="task-list__section-heading">Report a barrier</h2>
             <ul class="task-list__items">
             {% for key, stage_name in stages.items %}
                 <li class="task-list__item">
