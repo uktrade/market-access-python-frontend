@@ -1,6 +1,7 @@
 import copy
 from urllib.parse import urlencode
 
+from .constants import ARCHIVED_REASON
 from .forms.search import BarrierSearchForm
 
 from utils.metadata import get_metadata, Statuses
@@ -42,6 +43,14 @@ class Barrier(APIModel):
         return self._admin_areas
 
     @property
+    def archived_on(self):
+        return dateutil.parser.parse(self.data["archived_on"])
+
+    @property
+    def archived_reason(self):
+        return ARCHIVED_REASON[self.data["archived_reason"]]
+
+    @property
     def country(self):
         if self._country is None and self.export_country:
             self._country = self.metadata.get_country(self.export_country)
@@ -50,6 +59,10 @@ class Barrier(APIModel):
     @property
     def created_on(self):
         return dateutil.parser.parse(self.data["created_on"])
+
+    @property
+    def last_seen_on(self):
+        return dateutil.parser.parse(self.data["last_seen_on"])
 
     @property
     def eu_exit_related_text(self):
@@ -185,15 +198,19 @@ class Watchlist:
         """
         Node saves the watchlist search term as a list for some reason.
 
-        We also use created_by instead of createdBy.
+        We now use user=1 and team=1 instead of created_by=[1,2] (or createdBy).
         """
         if "search" in filters and isinstance(filters["search"], list):
             try:
                 filters["search"] = filters["search"][0]
             except IndexError:
                 filters["search"] = ""
-        if "createdBy" in filters:
-            filters["created_by"] = filters.pop("createdBy")
+
+        created_by = filters.pop("createdBy", filters.pop("created_by", []))
+        if "1" in created_by:
+            filters["user"] = 1
+        if "2" in created_by:
+            filters["team"] = 1
         return filters
 
     def to_dict(self):
@@ -308,6 +325,21 @@ class HistoryItem(APIModel):
             self.priority = metadata.get_priority(data["new_value"])
             self.text = data["field_info"]["priority_summary"]
             self.user = data["user"]
+        elif data["field"] == "archived":
+            self.is_archived = True
+            self.date = dateutil.parser.parse(data["date"])
+            self.archived = data["new_value"]
+            self.user = data["user"]
+            if self.archived:
+                self.modifier = "archived"
+                archived_reason_code = data["field_info"].get("archived_reason")
+                if archived_reason_code:
+                    self.archived_reason = ARCHIVED_REASON[archived_reason_code]
+
+                self.archived_explanation = data["field_info"]["archived_explanation"]
+            else:
+                self.modifier = "unarchived"
+                self.unarchived_reason = data["field_info"]["unarchived_reason"]
         else:
             self.is_assessment = True
             self.is_edit = data["old_value"] is not None

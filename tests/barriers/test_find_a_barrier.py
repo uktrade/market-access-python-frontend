@@ -17,7 +17,10 @@ class FindABarrierTestCase(MarketAccessTestCase):
         response = self.client.get(reverse("barriers:find_a_barrier"))
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on", limit=settings.API_RESULTS_LIMIT, offset=0,
+            ordering="-reported_on",
+            archived="0",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -53,9 +56,6 @@ class FindABarrierTestCase(MarketAccessTestCase):
         status_choices = form.fields["status"].choices
         assert len(status_choices) == 6
 
-        created_by_choices = form.fields["created_by"].choices
-        assert len(created_by_choices) == 2
-
     @patch("utils.api.resources.APIResource.list")
     def test_search_filters(self, mock_list):
         response = self.client.get(
@@ -77,7 +77,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
                 ],
                 "priority": ["HIGH", "MEDIUM"],
                 "status": ["1", "2", "7"],
-                "created_by": [1],
+                "user": "1",
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -99,7 +99,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
         ]
         assert form.cleaned_data["priority"] == ["HIGH", "MEDIUM"]
         assert form.cleaned_data["status"] == ["1", "2", "7"]
-        assert form.cleaned_data["created_by"] == ["1"]
+        assert form.cleaned_data["user"] == "1"
 
         mock_list.assert_called_with(
             ordering="-reported_on",
@@ -120,12 +120,13 @@ class FindABarrierTestCase(MarketAccessTestCase):
             priority="HIGH,MEDIUM",
             status="1,2,7",
             user="1",
+            archived="0",
         )
 
     @patch("utils.api.resources.APIResource.list")
-    def test_created_by_fitler(self, mock_list):
+    def test_my_barriers_filter(self, mock_list):
         response = self.client.get(
-            reverse("barriers:find_a_barrier"), data={"created_by": ["1"]},
+            reverse("barriers:find_a_barrier"), data={"user": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -133,10 +134,13 @@ class FindABarrierTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             user="1",
+            archived="0",
         )
 
+    @patch("utils.api.resources.APIResource.list")
+    def test_my_team_barriers_filter(self, mock_list):
         response = self.client.get(
-            reverse("barriers:find_a_barrier"), data={"created_by": ["2"]},
+            reverse("barriers:find_a_barrier"), data={"team": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -144,10 +148,11 @@ class FindABarrierTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             team="1",
+            archived="0",
         )
 
         response = self.client.get(
-            reverse("barriers:find_a_barrier"), data={"created_by": ["1", "2"]},
+            reverse("barriers:find_a_barrier"), data={"user": "1", "team": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -155,6 +160,21 @@ class FindABarrierTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             team="1",
+            user="1",
+            archived="0",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_archived_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:find_a_barrier"), data={"only_archived": "1"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="1",
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -169,7 +189,11 @@ class FindABarrierTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on", limit=10, offset=50, status="1,2,3,4,5",
+            ordering="-reported_on",
+            archived="0",
+            status="1,2,3,4,5",
+            limit=10,
+            offset=50,
         )
         barriers = response.context["barriers"]
         assert len(barriers) == 10

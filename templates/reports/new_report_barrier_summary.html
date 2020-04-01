@@ -26,9 +26,6 @@
                               name="{{ form.problem_description.name }}"
                               rows="5"
                               aria-describedby="description-hint description-info">{{ form.initial.problem_description }}</textarea>
-                    <span id="description-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
-                        You have 300 characters remaining
-                    </span>
                 </div>
             </div>
             {% if is_resolved %}
@@ -70,14 +67,3 @@
 
 
 {% endblock %}
-
-
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '.govuk-character-count' );
-        }
-	</script>
-{% endblock %}
-

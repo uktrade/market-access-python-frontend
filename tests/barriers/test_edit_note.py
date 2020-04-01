@@ -144,7 +144,7 @@ class NotesTestCase(MarketAccessTestCase):
         assert mock_check_scan_status.called is True
         assert mock_update_note.called is False
 
-    @patch("utils.api.client.InteractionsResource.delete_note")
+    @patch("utils.api.client.NotesResource.delete")
     def test_delete_note_confirmation_ajax(self, mock_delete_note):
         response = self.client.get(
             reverse(
@@ -157,7 +157,7 @@ class NotesTestCase(MarketAccessTestCase):
         mock_delete_note.called is False
         assert "note" in response.context
 
-    @patch("utils.api.client.InteractionsResource.delete_note")
+    @patch("utils.api.client.NotesResource.delete")
     def test_delete_note_confirmation_non_ajax(self, mock_delete_note):
         response = self.client.get(
             reverse(
@@ -169,7 +169,7 @@ class NotesTestCase(MarketAccessTestCase):
         mock_delete_note.called is False
         assert "note" in response.context
 
-    @patch("utils.api.client.InteractionsResource.delete_note")
+    @patch("utils.api.client.NotesResource.delete")
     def test_delete_note_success(self, mock_delete_note):
         response = self.client.post(
             reverse(

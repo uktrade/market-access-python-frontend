@@ -6,7 +6,7 @@ from django.test import override_settings, TestCase
 from barriers.models import Assessment
 from core.filecache import memfiles
 from users.models import User
-from utils.api.resources import BarriersResource, InteractionsResource
+from utils.api.resources import BarriersResource, NotesResource
 
 from mock import patch
 
@@ -15,13 +15,14 @@ from mock import patch
 class MarketAccessTestCase(TestCase):
     _assessments = None
     _barriers = None
+    _history = None
     _team_members = None
     _users = None
 
     def setUp(self):
         self.init_session()
         self.init_get_barrier_patcher()
-        self.init_get_history_patcher()
+        self.init_get_activity_patcher()
         self.init_get_interactions_patcher()
 
     def init_session(self):
@@ -37,17 +38,17 @@ class MarketAccessTestCase(TestCase):
         self.mock_get_barrier.return_value = BarriersResource.model(self.barriers[0])
         self.addCleanup(self.get_barrier_patcher.stop)
 
-    def init_get_history_patcher(self):
-        self.get_history_patcher = patch(
-            "utils.api.resources.BarriersResource.get_history"
+    def init_get_activity_patcher(self):
+        self.get_activity_patcher = patch(
+            "utils.api.resources.BarriersResource.get_activity"
         )
-        self.mock_get_history = self.get_history_patcher.start()
-        self.mock_get_history.return_value = []
-        self.addCleanup(self.get_history_patcher.stop)
+        self.mock_get_activity = self.get_activity_patcher.start()
+        self.mock_get_activity.return_value = []
+        self.addCleanup(self.get_activity_patcher.stop)
 
     def init_get_interactions_patcher(self):
         self.get_interactions_patcher = patch(
-            "utils.api.resources.InteractionsResource.list"
+            "utils.api.resources.NotesResource.list"
         )
         self.mock_get_interactions = self.get_interactions_patcher.start()
         self.mock_get_interactions.return_value = self.notes
@@ -67,18 +68,30 @@ class MarketAccessTestCase(TestCase):
     @property
     def barriers(self):
         if self._barriers is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/barriers.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/barriers.json"
             self._barriers = json.loads(memfiles.open(file))
         return self._barriers
+
+    @property
+    def all_history(self):
+        if self._history is None:
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/history.json"
+            self._history = json.loads(memfiles.open(file))
+        return self._history
 
     @property
     def barrier(self):
         return self.barriers[0]
 
     @property
+    def history(self):
+        # goes hand in hand with self.barriers
+        return self.all_history[0]
+
+    @property
     def assessments(self):
         if self._assessments is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/assessments.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/assessments.json"
             assessments = json.loads(memfiles.open(file))
             self._assessments = [Assessment(assessment) for assessment in assessments]
         return self._assessments
@@ -86,7 +99,7 @@ class MarketAccessTestCase(TestCase):
     @property
     def notes(self):
         return [
-            InteractionsResource.model(
+            NotesResource.model(
                 {
                     "id": 1,
                     "kind": "Comment",
@@ -105,7 +118,7 @@ class MarketAccessTestCase(TestCase):
                     "created_by": {"id": 1, "name": "Test-user"},
                 }
             ),
-            InteractionsResource.model(
+            NotesResource.model(
                 {
                     "id": 2,
                     "kind": "Comment",
@@ -122,14 +135,14 @@ class MarketAccessTestCase(TestCase):
     @property
     def team_members(self):
         if self._team_members is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/team_members.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/team_members.json"
             self._team_members = json.loads(memfiles.open(file))
         return self._team_members
 
     @property
     def users(self):
         if self._users is None:
-            file = f"{settings.BASE_DIR}/../barriers/fixtures/users.json"
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/users.json"
             users = json.loads(memfiles.open(file))
             self._users = [User(user) for user in users]
         return self._users

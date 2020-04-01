@@ -1,0 +1,9 @@
+<h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+{% if item.new_value.archived %}
+    <p class="event-list__item__text">This barrier was archived by {{ item.user.name }}.</p>
+    <p class="event-list__item__text">Reason: {{ item.new_value.archived_reason }} - {{ item.new_value.archived_explanation }}</p>
+{% else %}
+    <p class="event-list__item__text">This barrier was unarchived by {{ item.user.name }}.</p>
+    <p class="event-list__item__text">Reason: {{ item.new_value.unarchived_reason }}</p>
+{% endif %}

@@ -96,7 +96,7 @@ def test_continue_draft_barrier(browser):
 
     browser.fill("problem_description", "Test description")
     browser.fill("next_steps_summary", "Test next steps")
-    browser.find_by_css("input[type=submit]").click()
+    browser.find_by_css('button[value="exit"]').click()
 
     # Check completion status for each section
     sections = browser.find_by_css(".task-list__item")
@@ -116,6 +116,6 @@ def test_continue_draft_barrier(browser):
 
     # Check barrier appears in 'My barriers' search
     browser.visit(f"{settings.BASE_URL}find-a-barrier")
-    browser.find_by_css('label[for="created_by-1"]').first.click()
+    browser.find_by_css('label[for="user"]').first.click()
     browser.find_by_css('input[type=submit][value="Apply filters"]').first.click()
     assert browser.is_element_present_by_css(f'[data-barrier-id="{barrier_id}"]')

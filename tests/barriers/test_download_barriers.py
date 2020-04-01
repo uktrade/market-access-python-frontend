@@ -29,7 +29,7 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
                 ],
                 "priority": ["HIGH", "MEDIUM"],
                 "status": ["1", "2", "7"],
-                "created_by": [1],
+                "user": "1",
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -50,4 +50,6 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
             priority="HIGH,MEDIUM",
             status="1,2,7",
             user="1",
+            archived="0",
+            ordering="-reported_on",
         )
