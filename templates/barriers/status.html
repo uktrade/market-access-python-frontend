@@ -27,7 +27,7 @@
                 {% form_field_error form "status" %}
 
                 <div class="govuk-radios status govuk-radios--conditional" data-module="radios">
-                    {% for choice in form.status_choices %}
+                    {% for choice in form.fields.status.enhanced_choices %}
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input" id="{{ choice.value }}" name="{{ form.status.name }}" type="radio" value="{{ choice.value }}" {% if form.status.value == choice.value %}checked="checked"{% endif %} data-aria-controls="conditional-{{ choice.value }}" aria-describedby="{{ choice.value }}-item-hint">
                             <label class="govuk-label govuk-radios__label" for="{{ choice.value }}">{{ choice.name }}</label>

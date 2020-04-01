@@ -3,10 +3,12 @@ import datetime
 from django import forms
 from django.template.loader import render_to_string
 
-from barriers.constants import Statuses
+from barriers.constants import STATUSES, STATUSES_HELP_TEXT
 from .mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText, MonthYearField
+from utils.forms import (
+    ChoiceFieldWithHelpText, MonthYearField, SubformChoiceField, SubformMixin,
+)
 
 
 class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
@@ -217,62 +219,32 @@ class DormantForm(forms.Form):
         return {"status_summary": self.cleaned_data["dormant_summary"]}
 
 
-class BarrierChangeStatusForm(forms.Form):
+class BarrierChangeStatusForm(SubformMixin, forms.Form):
     """
     Form with subforms depending on the radio button selected
     """
 
-    CHOICES = [
-        (
-            Statuses.UNKNOWN,
-            "Unknown",
-            "Barrier requires further work for the status to be known",
-        ),
-        (
-            Statuses.OPEN_PENDING_ACTION,
-            "Open: Pending action",
-            "Barrier is awaiting action",
-        ),
-        (Statuses.OPEN_IN_PROGRESS, "Open: In progress", "Barrier is being worked on"),
-        (
-            Statuses.RESOLVED_IN_PART,
-            "Resolved: In part",
-            "Barrier impact has been significantly reduced but remains in part",
-        ),
-        (
-            Statuses.RESOLVED_IN_FULL,
-            "Resolved: In full",
-            "Barrier has been resolved for all UK companies",
-        ),
-        (Statuses.DORMANT, "Dormant", "Barrier is present but not being pursued"),
-    ]
-    status = ChoiceFieldWithHelpText(
+    status = SubformChoiceField(
         label="Change barrier status",
-        choices=CHOICES,
+        choices=STATUSES,
+        choices_help_text=STATUSES_HELP_TEXT,
         widget=forms.RadioSelect,
         error_messages={"required": "Choose a status"},
+        subform_classes={
+            STATUSES.UNKNOWN: UnknownForm,
+            STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
+            STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
+            STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
+            STATUSES.RESOLVED_IN_FULL: ResolvedInFullForm,
+            STATUSES.DORMANT: DormantForm,
+        },
     )
-    subform_classes = {
-        Statuses.UNKNOWN: UnknownForm,
-        Statuses.OPEN_PENDING_ACTION: OpenPendingForm,
-        Statuses.OPEN_IN_PROGRESS: OpenInProgressForm,
-        Statuses.RESOLVED_IN_PART: ResolvedInPartForm,
-        Statuses.RESOLVED_IN_FULL: ResolvedInFullForm,
-        Statuses.DORMANT: DormantForm,
-    }
-    subforms = {}
 
     def __init__(self, barrier, token, *args, **kwargs):
         self.barrier = barrier
         self.token = token
         super().__init__(*args, **kwargs)
         self.remove_current_status_from_choices()
-        data = kwargs.get("data")
-        for value, subform_class in self.subform_classes.items():
-            if data and data.get("status") == value:
-                self.subforms[value] = subform_class(data)
-            else:
-                self.subforms[value] = subform_class()
 
     def remove_current_status_from_choices(self):
         self.fields["status"].choices = [
@@ -281,31 +253,9 @@ class BarrierChangeStatusForm(forms.Form):
             if choice[0] != self.barrier.status["id"]
         ]
 
-    def status_choices(self):
-        for value, name, help_text in self.fields["status"].choices:
-            yield {
-                "value": value,
-                "name": name,
-                "help_text": help_text,
-                "subform": self.subforms[value],
-            }
-
-    def get_subform(self):
-        return self.subforms.get(self.cleaned_data["status"])
-
-    @property
-    def errors(self):
-        form_errors = super().errors
-        if self.is_bound and "status" in self.cleaned_data:
-            form_errors.update(self.get_subform().errors)
-        return form_errors
-
-    def is_valid(self):
-        return super().is_valid() and self.get_subform().is_valid()
-
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        subform = self.get_subform()
+        subform = self.fields["status"].subform
         client.barriers.set_status(
             barrier_id=self.barrier.id,
             status=self.cleaned_data["status"],

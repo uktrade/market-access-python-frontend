@@ -200,9 +200,10 @@ class SubformChoiceField(forms.ChoiceField):
 
     subforms = {}
 
-    def __init__(self, *, subform_classes={}, **kwargs):
+    def __init__(self, *, subform_classes={}, choices_help_text={}, **kwargs):
         super().__init__(**kwargs)
         self.subform_classes = subform_classes
+        self.choices_help_text = choices_help_text
 
     @property
     def enhanced_choices(self):
@@ -211,6 +212,7 @@ class SubformChoiceField(forms.ChoiceField):
                 "value": value,
                 "name": name,
                 "subform": self.subforms[value],
+                "help_text": self.choices_help_text[value],
             }
 
     def init_subforms(self, data, selected_value=None):
