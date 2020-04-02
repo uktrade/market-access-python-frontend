@@ -54,7 +54,28 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
         client.barriers.patch(id=self.id, **data)
 
 
-class UnknownForm(forms.Form):
+class APIMappingMixin:
+    api_mapping = {}
+
+    def __init__(self, *args, **kwargs):
+        initial = kwargs.get("initial")
+        if initial:
+            for form_field, api_field in self.api_mapping.items():
+                if api_field in initial:
+                    initial[form_field] = initial.pop(api_field)
+        return super().__init__(*args, **kwargs)
+
+    def get_api_params(self):
+        params = {}
+        for form_field, api_field in self.api_mapping.items():
+            value = self.cleaned_data.get(form_field)
+            if isinstance(value, datetime.date):
+                value = value.isoformat()
+            params[api_field] = value
+        return params
+
+
+class UnknownForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -64,18 +85,14 @@ class UnknownForm(forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a summary"},
     )
+    api_mapping = {"unknown_summary": "status_summary"}
 
     def as_html(self):
         template_name = "barriers/forms/statuses/unknown.html"
         return render_to_string(template_name, context={"form": self})
 
-    def get_api_params(self):
-        return {
-            "status_summary": self.cleaned_data["unknown_summary"],
-        }
 
-
-class OpenPendingForm(forms.Form):
+class OpenPendingForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -98,6 +115,11 @@ class OpenPendingForm(forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a summary"},
     )
+    api_mapping = {
+        "pending_type": "sub_status",
+        "pending_type_other": "sub_status_other",
+        "pending_summary": "status_summary",
+    }
 
     def as_html(self):
         template_name = "barriers/forms/statuses/open_pending.html"
@@ -114,16 +136,13 @@ class OpenPendingForm(forms.Form):
             )
 
     def get_api_params(self):
-        params = {
-            "status_summary": self.cleaned_data["pending_summary"],
-            "sub_status": self.cleaned_data["pending_type"],
-        }
-        if self.cleaned_data.get("pending_type") == "OTHER":
-            params.update({"sub_status_other": self.cleaned_data["pending_type_other"]})
+        params = super().get_api_params()
+        if params["sub_status"] != "OTHER":
+            del params["sub_status_other"]
         return params
 
 
-class OpenInProgressForm(forms.Form):
+class OpenInProgressForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -133,18 +152,14 @@ class OpenInProgressForm(forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a summary"},
     )
+    api_mapping = {"reopen_summary": "status_summary"}
 
     def as_html(self):
         template_name = "barriers/forms/statuses/open_in_progress.html"
         return render_to_string(template_name, context={"form": self})
 
-    def get_api_params(self):
-        return {
-            "status_summary": self.cleaned_data["reopen_summary"],
-        }
 
-
-class ResolvedInPartForm(forms.Form):
+class ResolvedInPartForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -160,19 +175,17 @@ class ResolvedInPartForm(forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a summary"},
     )
+    api_mapping = {
+        "part_resolved_summary": "status_summary",
+        "part_resolved_date": "status_date",
+    }
 
     def as_html(self):
         template_name = "barriers/forms/statuses/resolved_in_part.html"
         return render_to_string(template_name, context={"form": self})
 
-    def get_api_params(self):
-        return {
-            "status_summary": self.cleaned_data["part_resolved_summary"],
-            "status_date": self.cleaned_data["part_resolved_date"].isoformat(),
-        }
 
-
-class ResolvedInFullForm(forms.Form):
+class ResolvedInFullForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -188,19 +201,17 @@ class ResolvedInFullForm(forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a summary"},
     )
+    api_mapping = {
+        "resolved_summary": "status_summary",
+        "resolved_date": "status_date",
+    }
 
     def as_html(self):
         template_name = "barriers/forms/statuses/resolved_in_full.html"
         return render_to_string(template_name, context={"form": self})
 
-    def get_api_params(self):
-        return {
-            "status_summary": self.cleaned_data["resolved_summary"],
-            "status_date": self.cleaned_data["resolved_date"].isoformat(),
-        }
 
-
-class DormantForm(forms.Form):
+class DormantForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
@@ -210,13 +221,13 @@ class DormantForm(forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a summary"},
     )
+    api_mapping = {
+        "dormant_summary": "status_summary",
+    }
 
     def as_html(self):
         template_name = "barriers/forms/statuses/dormant.html"
         return render_to_string(template_name, context={"form": self})
-
-    def get_api_params(self):
-        return {"status_summary": self.cleaned_data["dormant_summary"]}
 
 
 class BarrierChangeStatusForm(SubformMixin, forms.Form):
