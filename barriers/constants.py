@@ -18,7 +18,6 @@ ARCHIVED_REASON = Choices(
 
 
 STATUSES = Choices(
-    ("7", "UNKNOWN", "Unknown"),
     ("1", "OPEN_PENDING_ACTION", "Open: Pending action"),
     ("2", "OPEN_IN_PROGRESS", "Open: In progress"),
     ("3", "RESOLVED_IN_PART", "Resolved: In part"),
@@ -27,8 +26,10 @@ STATUSES = Choices(
 )
 
 
+ALL_STATUSES = Choices(("7", "UNKNOWN", "Unknown"),) + STATUSES
+
+
 STATUSES_HELP_TEXT = Choices(
-    (STATUSES.UNKNOWN, "Barrier requires further work for the status to be known"),
     (STATUSES.OPEN_PENDING_ACTION, "Barrier is awaiting action"),
     (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on"),
     (
