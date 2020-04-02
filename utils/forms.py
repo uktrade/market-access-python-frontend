@@ -215,10 +215,10 @@ class SubformChoiceField(forms.ChoiceField):
                 "help_text": self.choices_help_text[value],
             }
 
-    def init_subforms(self, data, selected_value=None):
+    def init_subforms(self, initial, data, selected_value=None):
         for value, subform_class in self.subform_classes.items():
             if value == selected_value:
-                subform = subform_class(data)
+                subform = subform_class(initial=initial, data=data)
                 self.subform = subform
                 self.subforms[value] = subform
             else:
@@ -237,10 +237,15 @@ class SubformMixin:
 
         for name, field in self.fields.items():
             if isinstance(field, SubformChoiceField):
+                if "data" in kwargs:
+                    selected_value = kwargs.get("data", {}).get(name)
+                else:
+                    selected_value = kwargs.get("initial", {}).get(name)
                 self.subform_fields[name] = field
                 field.init_subforms(
+                    initial=kwargs.get("initial"),
                     data=kwargs.get("data"),
-                    selected_value=kwargs.get("data", {}).get(name),
+                    selected_value=selected_value,
                 )
 
     @property
