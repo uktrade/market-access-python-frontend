@@ -10,9 +10,10 @@ The docker-compose.yml file provided is meant to be used for running tests and d
 #### Prerequisites
 1. Install `docker` & `docker compose` - https://docs.docker.com/install/
 2. Add the following to your `hosts` file:
-
-        # Market Access Frontend Client (Python)
-        127.0.0.1               market-access.local
+    ```
+    # Market Access Frontend Client (Python)
+    127.0.0.1               market-access.local
+    ```
 3. Clone the repository:
     ```shell
     git clone https://github.com/uktrade/market-access-python-frontend.git
