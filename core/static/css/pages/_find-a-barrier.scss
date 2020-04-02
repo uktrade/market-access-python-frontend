@@ -177,15 +177,15 @@
 
 	@include mq( $from: 550px ){
 		float: left;
-		width: 70%;
-	}
-
-	@include mq( $from: tablet ){
 		width: 60%;
 	}
 
+	@include mq( $from: tablet ){
+		width: 55%;
+	}
+
 	@include mq( $from: 1024px ){
-		width: 76%;
+		width: 72%;
 	}
 }
 
@@ -199,20 +199,19 @@
 	@include mq( $from: 550px ){
 		margin-top: 0;
 		float: right;
-		width: 25%;
-	}
-
-	@include mq( $from: tablet ){
 		width: 35%;
 	}
 
+	@include mq( $from: tablet ){
+		width: 30%;
+	}
+
 	@include mq( $from: 1024px ){
-		width: 21%;
+		width: 25%;
 	}
 
 	.barrier-status-badge {
 		width: 100%;
-		text-align: center;
 		display: inline-block;
 	}
 }

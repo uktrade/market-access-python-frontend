@@ -138,18 +138,14 @@
                             </dl>
                         </div>
 
-                        <ul class="filter-results-list__item__sub-content">
-                            <li class="filter-results-list__item__sub-content__item">
-                                <span class="barrier-status-badge barrier-status-badge--compact barrier-status-badge--{{ barrier.status.modifier }}">
-                                    <strong>{{ barrier.status.name }}</strong>
-                                </span>
-                            </li>
-                            <li class="filter-results-list__item__sub-content__item">
-                                <span class="priority-marker-wrapper">
+                        <div class="filter-results-list__item__sub-content">
+                            <div class="barrier-status-badge barrier-status-badge--compact barrier-status-badge--{{ barrier.status.modifier }}">
+                                <strong>{{ barrier.status.name }}</strong>
+                                <div class="priority-marker-wrapper">
                                     <span class="priority-marker priority-marker--{{ barrier.priority.code|lower }}"></span><strong>{{ barrier.priority.name }}</strong> priority
-                                </span>
-                            </li>
-                        </ul>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 {% endfor %}
             </ol>
