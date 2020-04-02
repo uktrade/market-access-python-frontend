@@ -1,6 +1,7 @@
 # Market Access Python Frontend
 
 This repository provides a frontend client to consume the Market Access API.
+It's built with python django. 
 
 ## Installation with Docker (preferred)
 
@@ -22,6 +23,8 @@ The docker-compose.yml file provided is meant to be used for running tests and d
 4. Copy the env file - `cp docker-compose.local-template.env docker-compose.env`
 
 #### Install
+Please note that as of Jan 2020 you will need to run the containers from https://github.com/uktrade/market-access-api/ first \
+as they currently share some dependencies (this only applies for local development).  
 1. Build the images and spin up the containers by running - `docker-compose up --build`
 2. Set up git hooks by running - `make git-hooks`
 3. Enter bash within the django container using `docker-compose exec web bash`
