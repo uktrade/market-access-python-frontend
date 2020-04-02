@@ -2,8 +2,8 @@ from datetime import datetime
 
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_location import HasAdminAreas
+from reports.forms.new_report_barrier_status import NewReportBarrierStatusForm
 from reports.forms.new_report_barrier_sectors import SectorsAffected
-from reports.forms.new_report_barrier_status import BarrierStatuses
 from utils.api.client import MarketAccessAPIClient
 
 
@@ -272,35 +272,15 @@ class ReportFormGroup:
 
     def get_status_form_data(self):
         """Returns DICT - extract status form data from barrier.data"""
-        data = {
-            "status": "",
-            "resolved_month": None,
-            "resolved_year": None,
-            "part_resolved_month": None,
-            "part_resolved_year": None,
-            "is_resolved": None,
-        }
-
-        if not self.barrier:
-            return data
-
-        data["is_resolved"] = self.barrier.data.get("is_resolved")
-        data["status"] = str(self.barrier.data.get("resolved_status"))
-
-        if data["status"] in (BarrierStatuses.RESOLVED, BarrierStatuses.PARTIALLY_RESOLVED):
-            date_string = self.barrier.data.get("resolved_date")
-            if date_string:
-                date = datetime.strptime(date_string, '%Y-%m-%d')
-                if data["status"] == BarrierStatuses.RESOLVED:
-                    data["resolved_month"] = date.month
-                    data["resolved_year"] = date.year
-                elif data["status"] == BarrierStatuses.PARTIALLY_RESOLVED:
-                    data["part_resolved_month"] = date.month
-                    data["part_resolved_year"] = date.year
-        else:
-            data["status"] = BarrierStatuses.UNRESOLVED
-
-        return data
+        if self.barrier:
+            return {
+                "status": str(self.barrier.status),
+                "status_date": self.barrier.status_date,
+                "status_summary": self.barrier.status_summary,
+                "sub_status": self.barrier.sub_status,
+                "sub_status_other": self.barrier.sub_status_other,
+            }
+        return {}
 
     def get_location_form_data(self):
         return {
@@ -375,17 +355,13 @@ class ReportFormGroup:
         """Combined payload of multiple steps (Status & Location)"""
         payload = {
             "problem_status": self.problem_status_form.get("status"),
-            "is_resolved": self.status_form.get("is_resolved"),
-            "resolved_date": self.status_form.get("resolved_date"),
-            "resolved_status": self.status_form.get("status"),
             "export_country": self.location_form.get("country"),
             "country_admin_areas": self.selected_admin_areas_as_list,
         }
 
-        if payload["resolved_status"] == BarrierStatuses.UNRESOLVED:
-            payload["is_resolved"] = False
-            payload["resolved_status"] = None
-            payload["resolved_date"] = None
+        status_form = NewReportBarrierStatusForm(data=self.status_form)
+        status_form.is_valid()
+        payload.update(status_form.get_api_params())
 
         return payload
 
