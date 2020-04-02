@@ -242,7 +242,6 @@ class BarrierChangeStatusForm(SubformMixin, forms.Form):
         widget=forms.RadioSelect,
         error_messages={"required": "Choose a status"},
         subform_classes={
-            STATUSES.UNKNOWN: UnknownForm,
             STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
             STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
             STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
