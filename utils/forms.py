@@ -9,6 +9,8 @@ from django.template.defaultfilters import filesizeformat
 
 from .validators import validate_date_not_in_future
 
+import dateutil.parser
+
 
 class MultipleValueField(forms.MultipleChoiceField):
     """
@@ -119,8 +121,18 @@ class MonthYearWidget(forms.MultiWidget):
 
     def decompress(self, value):
         if value:
+            if isinstance(value, str):
+                try:
+                    value = dateutil.parser.parse(value)
+                except ValueError:
+                    return [None, None]
             return [value.month, value.year]
         return [None, None]
+
+    def value_from_datadict(self, data, files, name):
+        if name in data:
+            return self.decompress(data.get(name))
+        return super().value_from_datadict(data, files, name)
 
 
 class MonthYearField(forms.MultiValueField):
