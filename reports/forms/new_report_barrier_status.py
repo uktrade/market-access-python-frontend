@@ -1,6 +1,16 @@
+import datetime
+
 from django import forms
 
-from core.forms import SubFormsMixin, MonthYearForm
+from barriers.constants import STATUSES, STATUSES_HELP_TEXT
+from barriers.forms.statuses import (
+    OpenPendingForm,
+    OpenInProgressForm,
+    ResolvedInPartForm,
+    ResolvedInFullForm,
+    DormantForm,
+)
+from utils.forms import SubformChoiceField, SubformMixin
 
 
 class BarrierProblemStatuses:
@@ -37,94 +47,43 @@ class NewReportBarrierProblemStatusForm(forms.Form):
     )
 
 
-class BarrierStatuses:
-    RESOLVED = "4"
-    PARTIALLY_RESOLVED = "3"
-    UNRESOLVED = "UNRESOLVED"
+class NewReportBarrierStatusForm(SubformMixin, forms.Form):
+    """
+    Form with subforms depending on the radio button selected
+    """
 
-    @classmethod
-    def choices(cls):
-        choices = (
-            (
-                cls.RESOLVED,
-                {
-                    "label": "Yes, fully",
-                    "hint": "It's still important to log resolved barriers",
-                    "subforms": {
-                        "resolved": {
-                            "legend": "When was the barrier resolved?",
-                        }
-                    }
-                }
-            ),
-            (
-                cls.PARTIALLY_RESOLVED,
-                {
-                    "label": "Yes, partially",
-                    "hint": "It's still important to log partially resolved barriers",
-                    "subforms": {
-                        "part_resolved": {
-                            "legend": "When was the barrier partially resolved?",
-                        }
-                    }
-                }
-            ),
-            (
-                cls.UNRESOLVED,
-                {
-                    "label": "No",
-                }
-            ),
-        )
-        return choices
-
-
-class NewReportBarrierStatusForm(SubFormsMixin, forms.Form):
-    """Form to capture Barrier's status"""
-    status = forms.ChoiceField(
-        label="Has the barrier been resolved?",
-        choices=BarrierStatuses.choices,
-        error_messages={
-            'required': (
-                "Select if the barrier is fully resolved, partially resolved "
-                "or not resolved"
-            )
+    status = SubformChoiceField(
+        label="Change barrier status",
+        choices=STATUSES,
+        choices_help_text=STATUSES_HELP_TEXT,
+        widget=forms.RadioSelect,
+        error_messages={"required": "Choose a status"},
+        subform_classes={
+            STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
+            STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
+            STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
+            STATUSES.RESOLVED_IN_FULL: ResolvedInFullForm,
+            STATUSES.DORMANT: DormantForm,
         },
     )
-    sub_forms = {
-        "resolved": MonthYearForm,
-        "part_resolved": MonthYearForm
-    }
-    ma_mapping = {
-        "RESOLVED": BarrierStatuses.RESOLVED,
-        "PART_RESOLVED": BarrierStatuses.PARTIALLY_RESOLVED
-    }
 
-    @property
-    def resolved_date(self):
-        if self.cleaned_data["status"] == BarrierStatuses.UNRESOLVED:
-            return ""
-        else:
-            resolved_date = None
-            prefix = "resolved"
-            if self.cleaned_data["status"] == BarrierStatuses.PARTIALLY_RESOLVED:
-                prefix = f"part_{prefix}"
-            month = self.cleaned_data.get(f"{prefix}_month")
-            year = self.cleaned_data.get(f"{prefix}_year")
-            if month and year:
-                resolved_date = f"{year}-{month}-01"
-            return resolved_date
+    def serialize_data(self, data):
+        serialized_data = {}
+        for key, value in data.items():
+            if isinstance(value, datetime.date):
+                value = value.isoformat()
+            serialized_data[key] = value
+        return serialized_data
 
-    @property
-    def is_resolved(self):
-        if self.cleaned_data["status"] == BarrierStatuses.UNRESOLVED:
-            return False
-        else:
-            return True
+    def get_data(self):
+        if self.is_bound:
+            data = self.cleaned_data
+            subform = self.fields["status"].subform
+            data.update(subform.cleaned_data)
+            return self.serialize_data(data)
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get("status"):
-            cleaned_data["is_resolved"] = self.is_resolved
-            cleaned_data["resolved_date"] = self.resolved_date
-        return self.cleaned_data
+    def get_api_params(self):
+        subform = self.fields["status"].subform
+        params = {"status": self.cleaned_data["status"]}
+        params.update(**subform.get_api_params())
+        return params
