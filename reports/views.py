@@ -536,14 +536,12 @@ class NewReportBarrierSummaryView(ReportsFormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["is_resolved"] = self.form_group.status_form.get("is_resolved")
+        status = self.form_group.status_form.get("status")
+        context_data["is_resolved"] = status in (
+            STATUSES.RESOLVED_IN_PART,
+            STATUSES.RESOLVED_IN_FULL,
+        )
         return context_data
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        if self.form_group.status_form.get("is_resolved"):
-            form.fields["status_summary"].required = True
-        return form
 
     def success(self):
         self.form_group.save(payload=self.form_group.prepare_payload_summary())
