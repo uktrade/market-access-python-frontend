@@ -39,7 +39,6 @@ class RelatedToBrexit:
 
 
 class NewReportBarrierAboutForm(forms.Form):
-    metadata = get_metadata()
     BS = BarrierSource()
     barrier_title = forms.CharField(
         label="Name this barrier",
@@ -69,8 +68,12 @@ class NewReportBarrierAboutForm(forms.Form):
         },
     )
     tags = forms.MultipleChoiceField(
-        choices=metadata.get_barrier_tag_report_choices(),
+        choices=[],
         widget=forms.CheckboxSelectMultiple,
         label="Is this issue caused by or related to any of the following?"
     )
 
+    def __init__(self, tags, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        metadata = get_metadata()
+        self.fields["tags"].choices = metadata.get_barrier_tag_report_choices()
