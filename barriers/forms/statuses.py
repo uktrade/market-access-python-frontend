@@ -147,12 +147,12 @@ class OpenInProgressForm(APIMappingMixin, forms.Form):
     Subform of BarrierStatusForm
     """
 
-    reopen_summary = forms.CharField(
-        label="Provide a summary of why this barrier is being reopened",
+    open_in_progress_summary = forms.CharField(
+        label="Provide a summary of why this barrier is in progress",
         widget=forms.Textarea,
         error_messages={"required": "Enter a summary"},
     )
-    api_mapping = {"reopen_summary": "status_summary"}
+    api_mapping = {"open_in_progress_summary": "status_summary"}
 
     def as_html(self):
         template_name = "barriers/forms/statuses/open_in_progress.html"
