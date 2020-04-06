@@ -220,12 +220,14 @@ class SubformChoiceField(forms.ChoiceField):
     @property
     def enhanced_choices(self):
         for value, name in self.choices:
-            yield {
+            choice = {
                 "value": value,
                 "name": name,
                 "subform": self.subforms[value],
-                "help_text": self.choices_help_text[value],
             }
+            if value in self.choices_help_text:
+                choice["help_text"] = self.choices_help_text[value]
+            yield choice
 
     def init_subforms(self, initial, data, selected_value=None):
         for value, subform_class in self.subform_classes.items():
