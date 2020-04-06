@@ -67,21 +67,6 @@ class NewReportBarrierStatusForm(SubformMixin, forms.Form):
         },
     )
 
-    def serialize_data(self, data):
-        serialized_data = {}
-        for key, value in data.items():
-            if isinstance(value, datetime.date):
-                value = value.isoformat()
-            serialized_data[key] = value
-        return serialized_data
-
-    def get_data(self):
-        if self.is_bound:
-            data = self.cleaned_data
-            subform = self.fields["status"].subform
-            data.update(subform.cleaned_data)
-            return self.serialize_data(data)
-
     def get_api_params(self):
         subform = self.fields["status"].subform
         params = {"status": self.cleaned_data["status"]}

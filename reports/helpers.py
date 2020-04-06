@@ -2,7 +2,6 @@ from datetime import datetime
 
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_location import HasAdminAreas
-from reports.forms.new_report_barrier_status import NewReportBarrierStatusForm
 from reports.forms.new_report_barrier_sectors import SectorsAffected
 from utils.api.client import MarketAccessAPIClient
 
@@ -358,11 +357,7 @@ class ReportFormGroup:
             "export_country": self.location_form.get("country"),
             "country_admin_areas": self.selected_admin_areas_as_list,
         }
-
-        status_form = NewReportBarrierStatusForm(data=self.status_form)
-        status_form.is_valid()
-        payload.update(status_form.get_api_params())
-
+        payload.update(self.status_form)
         return payload
 
     def prepare_payload_sectors(self):

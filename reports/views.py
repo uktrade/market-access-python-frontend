@@ -150,8 +150,8 @@ class ReportsFormView(ReportBarrierContextMixin, FormView):
         return str(url)
 
     def form_valid(self, form):
-        if hasattr(form, "get_data"):
-            data = form.get_data()
+        if hasattr(form, "get_api_params"):
+            data = form.get_api_params()
         else:
             data = form.cleaned_data
 
