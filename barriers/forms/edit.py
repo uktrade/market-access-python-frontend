@@ -3,7 +3,7 @@ from django import forms
 from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText
+from utils.forms import ChoiceFieldWithHelpText, MultipleChoiceFieldWithHelpText
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -149,3 +149,22 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
         client.barriers.patch(
             id=self.id, problem_status=self.cleaned_data["problem_status"]
         )
+
+
+class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
+    tags = MultipleChoiceFieldWithHelpText(
+        label="Is this issue caused by or related to any of the following?",
+        choices=[],
+        required=False,
+    )
+
+    def __init__(self, tags, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["tags"].choices = [
+            (tag["id"], tag["title"], tag["description"])
+            for tag in tags
+        ]
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(id=self.id, tags=self.cleaned_data["tags"])

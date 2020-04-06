@@ -116,6 +116,10 @@ class Barrier(APIModel):
         return self._status
 
     @property
+    def tags(self):
+        return self.data.get("tags") or ()
+
+    @property
     def title(self):
         return self.barrier_title
 

@@ -1,3 +1,9 @@
+.barrier-tag-banner {
+    color: $govuk-white;
+    padding: govuk-em( 16, 16 ) govuk-em( 30, 16 );;
+    border-bottom: 1px solid $govuk-grey-3;
+}
+
 .barrier-tag-list {
     list-style: none;
     padding: 0;
