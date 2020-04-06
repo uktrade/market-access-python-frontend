@@ -387,12 +387,8 @@ class ReportFormGroup:
 
     def prepare_payload_summary(self):
         payload = self.summary_form
-        if self.status_form.get("is_resolved"):
+        if not self.status_form.get("next_steps_summary"):
             payload["next_steps_summary"] = None
-        else:
-            payload["status_summary"] = None
-            if not payload["next_steps_summary"]:
-                payload["next_steps_summary"] = None
         return payload
 
     def _update_barrier(self, payload):
