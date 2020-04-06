@@ -11,7 +11,7 @@ from utils.metadata import get_metadata
 
 
 class AddBarrierType(BarrierMixin, FormView):
-    template_name = "barriers/types/add_type.html"
+    template_name = "barriers/edit/categories/add.html"
     form_class = AddTypeForm
 
     def get_context_data(self, **kwargs):
@@ -60,7 +60,7 @@ class AddBarrierType(BarrierMixin, FormView):
 
 
 class BarrierEditTypes(BarrierMixin, FormView):
-    template_name = "barriers/types/edit.html"
+    template_name = "barriers/edit/categories/edit.html"
     form_class = EditTypesForm
     use_session_types = False
 

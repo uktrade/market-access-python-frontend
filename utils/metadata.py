@@ -69,12 +69,12 @@ class Metadata:
         },
         Statuses.OPEN_PENDING_ACTION: {
             "name": "Pending",
-            "modifier": "assessment",
+            "modifier": "open-pending-action",
             "hint": "Barrier is awaiting action",
         },
         Statuses.OPEN_IN_PROGRESS: {
             "name": "Open",
-            "modifier": "assessment",
+            "modifier": "open-in-progress",
             "hint": "Barrier is being worked on",
         },
         Statuses.RESOLVED_IN_PART: {
@@ -101,7 +101,7 @@ class Metadata:
         },
         Statuses.UNKNOWN: {
             "name": "Unknown",
-            "modifier": "hibernated",
+            "modifier": "unknown",
             "hint": "Barrier requires further work for the status to be known",
         },
     }

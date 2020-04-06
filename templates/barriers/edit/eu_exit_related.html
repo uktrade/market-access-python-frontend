@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+{% extends "barriers/edit/base.html" %}
 
 {% block page_title %}{{ block.super }} - Edit EU exit related{% endblock %}
 
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
 {% block page_content %}
 
-    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link">Back</a>
-    {% include 'partials/heading.html' with caption=object.barrier_title text='Related to the EU Exit' %}
+    {% include 'partials/heading.html' with text='Related to the EU Exit' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">

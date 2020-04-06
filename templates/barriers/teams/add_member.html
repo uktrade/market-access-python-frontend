@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "barriers/edit/base.html" %}
 
 {% block page_title %}{% if form.errors %}Error: {% endif %}{{ block.super }} - Barrier team - Add a member{% endblock %}
 
@@ -18,6 +18,10 @@
     <div class="ma-masthead">
         {% include 'barriers/partials/barrier_summary.html' %}
     </div>
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}

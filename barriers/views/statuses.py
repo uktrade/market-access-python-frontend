@@ -10,7 +10,7 @@ from barriers.forms.statuses import (
 
 
 class BarrierEditStatus(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/status.html"
+    template_name = "barriers/edit/status/edit.html"
     form_class = UpdateBarrierStatusForm
 
     def is_barrier_resolved(self):
@@ -30,7 +30,7 @@ class BarrierEditStatus(APIBarrierFormViewMixin, FormView):
 
 
 class BarrierChangeStatus(BarrierMixin, FormView):
-    template_name = "barriers/status.html"
+    template_name = "barriers/edit/status/change.html"
     form_class = BarrierChangeStatusForm
 
     def get_context_data(self, **kwargs):
