@@ -32,38 +32,6 @@ class ChangeStatusTestCase(MarketAccessTestCase):
         assert mock_set_status.called is False
 
     @patch("utils.api.client.BarriersResource.set_status")
-    def test_unknown_status_errors(self, mock_set_status):
-        response = self.client.post(
-            reverse(
-                "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={"status": "7"},
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "status" not in form.errors
-        assert "unknown_summary" in form.errors
-        assert len(form.errors) == 1
-        assert mock_set_status.called is False
-
-    @patch("utils.api.client.BarriersResource.set_status")
-    def test_unknown_status_success(self, mock_set_status):
-        response = self.client.post(
-            reverse(
-                "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={"status": "7", "unknown_summary": "Test unknown summary"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        mock_set_status.assert_called_with(
-            barrier_id=self.barrier["id"],
-            status="7",
-            status_summary="Test unknown summary",
-        )
-
-    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_pending_errors(self, mock_set_status):
         response = self.client.post(
             reverse(
