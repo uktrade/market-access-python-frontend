@@ -7664,17 +7664,15 @@
     "barrier_tags": [
         {
             "id": 1,
-            "title": "covid-19",
+            "title": "Brexit",
+            "description": "",
             "show_at_reporting": "True"
         },
         {
             "id": 2,
-            "title": "brexit",
-            "show_at_reporting": "True"},
-        {
-            "id": 3,
-            "title": "wibble",
-            "show_at_reporting": "False"
+            "title": "Covid-19",
+            "description": "Use to indicate any barrier or measure taken in response to the Covid-19 crisis. For example restrictions related to medical supplies or food supply chains.",
+            "show_at_reporting": "True"
         }
     ],
     "barrier_type_categories": {
