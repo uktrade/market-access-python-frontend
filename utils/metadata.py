@@ -314,7 +314,7 @@ class Metadata:
         return stages
 
     def get_barrier_tags(self):
-        tags = self.data.get("tags", [])
+        tags = self.data.get("barrier_tags", [])
         return tags
 
     def get_barrier_tag_choices(self):

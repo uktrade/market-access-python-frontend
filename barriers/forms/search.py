@@ -14,6 +14,7 @@ class BarrierSearchForm(forms.Form):
     region = forms.MultipleChoiceField(label="Overseas region", required=False,)
     priority = forms.MultipleChoiceField(label="Barrier priority", required=False,)
     status = forms.MultipleChoiceField(label="Barrier status", required=False,)
+    tags = forms.MultipleChoiceField(label="Tags", required=False,)
     user = forms.BooleanField(label="My barriers", required=False,)
     team = forms.BooleanField(label="My team barriers", required=False,)
     only_archived = forms.BooleanField(label="Only archived barriers", required=False,)
@@ -35,6 +36,7 @@ class BarrierSearchForm(forms.Form):
         self.set_region_choices()
         self.set_priority_choices()
         self.set_status_choices()
+        self.set_tags_choices()
         self.index_filter_groups()
 
     def get_data_from_querydict(self, data):
@@ -50,6 +52,7 @@ class BarrierSearchForm(forms.Form):
             "region": data.getlist("region"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
+            "tags": data.getlist("tags"),
             "user": data.get("user"),
             "team": data.get("team"),
             "only_archived": data.get("only_archived"),
@@ -111,6 +114,14 @@ class BarrierSearchForm(forms.Form):
         ]
         choices.sort(key=itemgetter(0))
         self.fields["status"].choices = choices
+
+    def set_tags_choices(self):
+        choices = [
+            (tag['title'], tag['title'].title())
+            for tag in self.metadata.get_barrier_tags()
+        ]
+        choices.sort(key=itemgetter(0))
+        self.fields["tags"].choices = choices
 
     def clean_country(self):
         data = self.cleaned_data["country"]
@@ -182,6 +193,7 @@ class BarrierSearchForm(forms.Form):
         params["barrier_type"] = ",".join(self.cleaned_data.get("type", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
+        params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
