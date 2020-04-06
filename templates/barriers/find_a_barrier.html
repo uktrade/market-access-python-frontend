@@ -147,6 +147,16 @@
                                     <span class="priority-marker priority-marker--{{ barrier.priority.code|lower }}"></span><strong>{{ barrier.priority.name }}</strong> priority
                                 </div>
                             </div>
+
+                            {% if barrier.tags %}
+                                <ul class="barrier-tag-list">
+                                    {% spaceless %}
+                                        {% for tag in barrier.tags %}
+                                        <li class="barrier-tag-list__tag">{{ tag.title|title }}</li>
+                                        {% endfor %}
+                                    {% endspaceless %}
+                                </ul>
+                            {% endif %}
                         </div>
                     </li>
                 {% endfor %}
