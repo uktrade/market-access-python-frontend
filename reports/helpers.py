@@ -385,7 +385,8 @@ class ReportFormGroup:
 
     def prepare_payload_summary(self):
         payload = self.summary_form
-        if not self.status_form.get("next_steps_summary"):
+
+        if not self.summary_form.get("next_steps_summary"):
             payload["next_steps_summary"] = None
         return payload
 
