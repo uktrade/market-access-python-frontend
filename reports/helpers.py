@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_location import HasAdminAreas
 from reports.forms.new_report_barrier_sectors import SectorsAffected

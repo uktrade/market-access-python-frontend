@@ -125,7 +125,6 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_status_open_pending_saved_in_session(self, mock_save):
-        field_name = 'status'
         session_key = 'draft_barrier__status_form_data'
         expected_form_data = {
             "status": "1",
@@ -151,7 +150,6 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_status_open_in_progress_saved_in_session(self, mock_save):
-        field_name = 'status'
         session_key = 'draft_barrier__status_form_data'
         expected_form_data = {
             "status": "2",
@@ -229,7 +227,6 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_status_resolved__saved_in_session(self, mock_save):
-        field_name = 'status'
         session_key = 'draft_barrier__status_form_data'
         expected_form_data = {
             'status': '4',

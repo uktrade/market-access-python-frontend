@@ -7,7 +7,7 @@ from barriers.constants import STATUSES, STATUSES_HELP_TEXT
 from .mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
-    ChoiceFieldWithHelpText, MonthYearField, SubformChoiceField, SubformMixin,
+    MonthYearField, SubformChoiceField, SubformMixin,
 )
 
 

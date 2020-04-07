@@ -1,5 +1,3 @@
-import datetime
-
 from django import forms
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
