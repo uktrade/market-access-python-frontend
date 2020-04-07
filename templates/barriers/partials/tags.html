@@ -1,6 +1,6 @@
 <div class="barrier-tag-banner">
     {% if barrier.tags %}
-        <ul class="barrier-tag-list">
+        <ul class="barrier-tag-list barrier-tag-list--in-banner">
             {% spaceless %}
                 {% for tag in barrier.tags %}
                 <li class="barrier-tag-list__tag">{{ tag.title|title }}</li>

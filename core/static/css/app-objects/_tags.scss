@@ -1,4 +1,5 @@
 .barrier-tag-banner {
+    @include govuk-clearfix;
     color: $govuk-white;
     padding: govuk-em( 16, 16 ) govuk-em( 30, 16 );;
     border-bottom: 1px solid $govuk-grey-3;
@@ -7,7 +8,12 @@
 .barrier-tag-list {
     list-style: none;
     padding: 0;
-    margin: govuk-em( 16, 16 ) 0 govuk-em( -8, 16 );
+    margin: 0 0 govuk-em( -8, 16 );
+    float: left;
+
+    &--in-banner {
+        margin-right: govuk-em( 16, 16 );
+    }
 }
 
 .barrier-tag-list__tag {
