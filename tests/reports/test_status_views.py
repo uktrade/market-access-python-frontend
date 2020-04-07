@@ -92,11 +92,11 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     def test_status_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - Barrier status</title>'
-        expected_radio_container = '<div class="govuk-radios is-resolved govuk-radios--conditional" '\
+        expected_radio_container = '<div class="govuk-radios status govuk-radios--conditional" '\
                                    'data-module="radios">'
         radio_item = '<div class="govuk-radios__item">'
-        expected_radio_count = 3
-        expected_continue_btn = '<input type="submit" value="Continue" class="govuk-button">'
+        expected_radio_count = 9
+        expected_continue_btn = '<input type="submit" class="govuk-button" value="Continue">'
 
         response = self.client.get(self.url)
         html = response.content.decode('utf8')
@@ -124,20 +124,47 @@ class StatusViewTestCase(MarketAccessTestCase):
         assert mock_save.called is False
 
     @patch("reports.helpers.ReportFormGroup.save")
-    def test_status_unresolved__saved_in_session(self, mock_save):
+    def test_status_open_pending_saved_in_session(self, mock_save):
         field_name = 'status'
         session_key = 'draft_barrier__status_form_data'
         expected_form_data = {
-            'status': 'UNRESOLVED',
-            'resolved_month': None,
-            'resolved_year': None,
-            'part_resolved_month': None,
-            'part_resolved_year': None,
-            'is_resolved': False,
-            'resolved_date': ''
+            "status": "1",
+            "sub_status": "OTHER",
+            "sub_status_other": "test",
+            "status_summary": "Pending summary",
         }
 
-        response = self.client.post(self.url, data={field_name: 'UNRESOLVED'})
+        response = self.client.post(
+            self.url,
+            data={
+                "status": "1",
+                "pending_type": "OTHER",
+                "pending_type_other": "test",
+                "pending_summary": "Pending summary",
+            }
+        )
+        saved_form_data = self.client.session.get(session_key)
+
+        assert HTTPStatus.FOUND == response.status_code
+        assert expected_form_data == saved_form_data
+        assert mock_save.called is False
+
+    @patch("reports.helpers.ReportFormGroup.save")
+    def test_status_open_in_progress_saved_in_session(self, mock_save):
+        field_name = 'status'
+        session_key = 'draft_barrier__status_form_data'
+        expected_form_data = {
+            "status": "2",
+            "status_summary": "In progress summary",
+        }
+
+        response = self.client.post(
+            self.url,
+            data={
+                "status": "2",
+                "open_in_progress_summary": "In progress summary",
+            }
+        )
         saved_form_data = self.client.session.get(session_key)
 
         assert HTTPStatus.FOUND == response.status_code
@@ -146,8 +173,6 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_status_partially_resolved__requires_date(self, mock_save):
-        month_field_name = 'part_resolved_month'
-        year_field_name = 'part_resolved_year'
         session_key = 'draft_barrier__status_form_data'
 
         response = self.client.post(self.url, data={'status': '3'})
@@ -156,8 +181,7 @@ class StatusViewTestCase(MarketAccessTestCase):
         form = response.context['form']
 
         assert form.is_valid() is False
-        assert month_field_name in form.errors
-        assert year_field_name in form.errors
+        assert "part_resolved_date" in form.errors
         assert ERROR_HTML.SUMMARY_HEADER in html
         assert ERROR_HTML.REQUIRED_FIELD in html
         assert saved_form_data is None
@@ -165,24 +189,20 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_status_partially_resolved__saved_in_session(self, mock_save):
-        field_name = 'status'
         session_key = 'draft_barrier__status_form_data'
         expected_form_data = {
             'status': '3',
-            'resolved_month': None,
-            'resolved_year': None,
-            'part_resolved_month': 12,
-            'part_resolved_year': 2019,
-            'is_resolved': True,
-            'resolved_date': '2019-12-01'
+            'status_date': '2019-12-01',
+            'status_summary': 'Part resolved summary',
         }
 
         response = self.client.post(
             self.url,
             data={
-                field_name: '3',
-                'part_resolved_month': 12,
-                'part_resolved_year': 2019,
+                'status': '3',
+                'part_resolved_date_0': 12,
+                'part_resolved_date_1': 2019,
+                'part_resolved_summary': 'Part resolved summary',
             }
         )
         saved_form_data = self.client.session.get(session_key)
@@ -193,8 +213,6 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_status_fully_resolved__requires_date(self, mock_save):
-        month_field_name = 'resolved_month'
-        year_field_name = 'resolved_year'
         session_key = 'draft_barrier__status_form_data'
 
         response = self.client.post(self.url, data={'status': '4'})
@@ -203,8 +221,7 @@ class StatusViewTestCase(MarketAccessTestCase):
         form = response.context['form']
 
         assert form.is_valid() is False
-        assert month_field_name in form.errors
-        assert year_field_name in form.errors
+        assert "resolved_date" in form.errors
         assert ERROR_HTML.SUMMARY_HEADER in html
         assert ERROR_HTML.REQUIRED_FIELD in html
         assert saved_form_data is None
@@ -216,20 +233,17 @@ class StatusViewTestCase(MarketAccessTestCase):
         session_key = 'draft_barrier__status_form_data'
         expected_form_data = {
             'status': '4',
-            'resolved_month': 12,
-            'resolved_year': 2019,
-            'part_resolved_month': None,
-            'part_resolved_year': None,
-            'is_resolved': True,
-            'resolved_date': '2019-12-01',
+            'status_date': '2019-12-01',
+            'status_summary': 'Resolved summary',
         }
 
         response = self.client.post(
             self.url,
             data={
-                field_name: '4',
-                'resolved_month': 12,
-                'resolved_year': 2019,
+                'status': '4',
+                'resolved_date_0': 12,
+                'resolved_date_1': 2019,
+                'resolved_summary': 'Resolved summary',
             },
             follow=True,
         )
@@ -241,15 +255,15 @@ class StatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_success_redirects_to_correct_view(self, mock_save):
-        field_name = 'status'
         redirect_url = reverse('reports:barrier_location')
 
         response = self.client.post(
             self.url,
             data={
-                field_name: '4',
-                'resolved_month': 12,
-                'resolved_year': 2019,
+                'status': '4',
+                'resolved_date_0': 12,
+                'resolved_date_1': 2019,
+                'resolved_summary': 'Resolved summary',
             },
             follow=True,
         )

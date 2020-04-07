@@ -128,7 +128,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.is_valid() is False
         assert "status" not in form.errors
-        assert "reopen_summary" in form.errors
+        assert "open_in_progress_summary" in form.errors
         assert len(form.errors) == 1
         assert mock_set_status.called is False
 
@@ -138,13 +138,13 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"status": "2", "reopen_summary": "Test reopen summary",},
+            data={"status": "2", "open_in_progress_summary": "Test summary",},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_set_status.assert_called_with(
             barrier_id=self.barrier["id"],
             status="2",
-            status_summary="Test reopen summary",
+            status_summary="Test summary",
         )
 
     @patch("utils.api.client.BarriersResource.set_status")
