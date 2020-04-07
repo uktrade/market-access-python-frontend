@@ -7670,8 +7670,8 @@
         },
         {
             "id": 2,
-            "title": "Covid-19",
-            "description": "Use to indicate any barrier or measure taken in response to the Covid-19 crisis. For example restrictions related to medical supplies or food supply chains.",
+            "title": "COVID-19",
+            "description": "Barrier imposed because of the COVID-19 (coronavirus) pandemic. For example restrictions related to medical supplies or food supply chains.",
             "show_at_reporting": "True"
         }
     ],
