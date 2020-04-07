@@ -9,5 +9,5 @@
 </p>
 
 {% if item.new_value.show_summary %}
-    <p class="event-list__item__text">{{ item.new_record.status_summary|escape|linebreaksbr  }}</p>
+    <p class="event-list__item__text">Reason: {{ item.new_value.status_summary|escape|linebreaksbr  }}</p>
 {% endif %}
