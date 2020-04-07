@@ -313,6 +313,11 @@ class Metadata:
 
         return stages
 
+    def get_barrier_tag(self, tag_id):
+        for tag in self.get_barrier_tags():
+            if str(tag["id"]) == str(tag_id):
+                return tag
+
     def get_barrier_tags(self):
         tags = self.data.get("barrier_tags", [])
         return tags
