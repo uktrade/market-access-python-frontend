@@ -1,5 +1,4 @@
 from .base import *     # noqa
-import logging.config
 from django.utils.log import DEFAULT_LOGGING
 
 DJANGO_ENV = 'local'
@@ -39,7 +38,7 @@ LOGGING = {
             'handlers': ['console'],
         },
         'market-access-python-frontend': {
-            'level': DJANGO_LOG_LEVEL,
+            'level': DJANGO_LOG_LEVEL,      # noqa
             'handlers': ['console'],
             # required to avoid double logging with root logger
             'propagate': False,

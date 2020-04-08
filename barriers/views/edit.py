@@ -1,5 +1,3 @@
-import operator
-
 from django.views.generic import FormView
 
 from .mixins import APIBarrierFormViewMixin

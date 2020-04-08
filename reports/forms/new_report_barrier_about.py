@@ -1,7 +1,6 @@
 from django import forms
 
 from utils.forms import MultipleChoiceFieldWithHelpText
-from utils.metadata import get_metadata
 
 
 class BarrierSource:

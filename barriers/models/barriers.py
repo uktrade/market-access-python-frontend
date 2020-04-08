@@ -1,5 +1,3 @@
-import operator
-
 from barriers.constants import ARCHIVED_REASON
 
 from utils.metadata import get_metadata
