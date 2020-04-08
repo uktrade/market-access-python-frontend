@@ -234,14 +234,14 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "date": "2019-08-15T09:53:02.531000Z",
                 "model": "barrier",
                 "field": "tags",
-                "old_value": [2],
+                "old_value": [1],
                 "new_value": [1, 2],
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
         assert item.field_name == "Barrier tags"
         assert item.old_value == ["COVID-19"]
-        assert item.new_value == ["Brexit", "COVID-19"]
+        assert item.new_value == ["COVID-19", "Brexit"]
 
     def test_title(self):
         item = HistoryItem(

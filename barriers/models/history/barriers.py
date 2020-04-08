@@ -143,10 +143,9 @@ class TagsHistoryItem(BaseHistoryItem):
     field_name = "Barrier tags"
 
     def get_value(self, value):
-        tag_names = [
-            self.metadata.get_barrier_tag(tag).get("title") for tag in value or []
-        ]
-        tag_names.sort()
+        tags = [self.metadata.get_barrier_tag(tag) for tag in value or ()]
+        sorted_tags = sorted(tags, key=lambda k: k['order'])
+        tag_names = [t["title"] for t in sorted_tags]
         return tag_names
 
 
