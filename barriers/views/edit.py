@@ -1,3 +1,5 @@
+import operator
+
 from django.views.generic import FormView
 
 from .mixins import APIBarrierFormViewMixin
@@ -8,7 +10,9 @@ from barriers.forms.edit import (
     UpdateBarrierSourceForm,
     UpdateBarrierPriorityForm,
     UpdateBarrierProblemStatusForm,
+    UpdateBarrierTagsForm,
 )
+from utils.metadata import get_metadata
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
@@ -60,3 +64,19 @@ class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {"problem_status": self.barrier.problem_status}
+
+
+class BarrierEditTags(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/tags.html"
+    form_class = UpdateBarrierTagsForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        metadata = get_metadata()
+        tags = metadata.get_barrier_tags()
+        tags.sort(key=operator.itemgetter('title'), reverse=True)
+        kwargs["tags"] = tags
+        return kwargs
+
+    def get_initial(self):
+        return {"tags": [tag["id"] for tag in self.barrier.tags]}

@@ -33,6 +33,7 @@
                 {% include 'partials/forms/typeahead.html' with placeholder='Search regions' field=form.region extra_classes='js-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
@@ -68,6 +69,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.priority %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.status %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
                     </ul>
 
@@ -145,6 +147,16 @@
                                     <span class="priority-marker priority-marker--{{ barrier.priority.code|lower }}"></span><strong>{{ barrier.priority.name }}</strong> priority
                                 </div>
                             </div>
+
+                            {% if barrier.tags %}
+                                <ul class="barrier-tag-list">
+                                    {% spaceless %}
+                                        {% for tag in barrier.tags %}
+                                        <li class="barrier-tag-list__tag">{{ tag.title|title }}</li>
+                                        {% endfor %}
+                                    {% endspaceless %}
+                                </ul>
+                            {% endif %}
                         </div>
                     </li>
                 {% endfor %}

@@ -7664,17 +7664,15 @@
     "barrier_tags": [
         {
             "id": 1,
-            "title": "covid-19",
+            "title": "Brexit",
+            "description": "",
             "show_at_reporting": "True"
         },
         {
             "id": 2,
-            "title": "brexit",
-            "show_at_reporting": "True"},
-        {
-            "id": 3,
-            "title": "wibble",
-            "show_at_reporting": "False"
+            "title": "COVID-19",
+            "description": "Barrier imposed because of the COVID-19 (coronavirus) pandemic. For example restrictions related to medical supplies or food supply chains.",
+            "show_at_reporting": "True"
         }
     ],
     "barrier_type_categories": {

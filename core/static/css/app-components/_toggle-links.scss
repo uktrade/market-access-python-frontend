@@ -1,12 +1,11 @@
 .toggle-links-toggle {
-	display: block;
 	position: relative;
 	padding-left: govuk-em( 20, 16 );
 
 	&:before {
 		content: '';
 		position: absolute;
-		top: 0.25em;
+		top: govuk-em( 1, 16 );
 		left: 0;
 		@include govuk-shape-arrow($direction: right, $base: 14px);
 	}

@@ -1,3 +1,5 @@
+import operator
+
 from barriers.constants import ARCHIVED_REASON
 
 from utils.metadata import get_metadata
@@ -114,6 +116,12 @@ class Barrier(APIModel):
             self._status.update(self.data["status"])
             self._status["date"] = dateutil.parser.parse(self._status["date"])
         return self._status
+
+    @property
+    def tags(self):
+        tags = self.data.get("tags") or ()
+        tags.sort(key=operator.itemgetter('title'), reverse=True)
+        return tags
 
     @property
     def title(self):
