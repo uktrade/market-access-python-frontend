@@ -132,7 +132,7 @@ class OpenPendingForm(APIMappingMixin, forms.Form):
 
         if pending_type == "OTHER" and not pending_type_other:
             self.add_error(
-                "pending_type_other", "Enter a description for the pending action"
+                "pending_type_other", "Enter who will be taking action"
             )
 
     def get_api_params(self):
@@ -166,8 +166,8 @@ class ResolvedInPartForm(APIMappingMixin, forms.Form):
 
     part_resolved_date = MonthYearField(
         error_messages={
-            "required": "Enter resolution date and include a month and year",
-            "incomplete": "Enter resolution date and include a month and year.",
+            "required": "Enter a month and year.",
+            "incomplete": "Enter a month and year.",
         },
     )
     part_resolved_summary = forms.CharField(
@@ -192,8 +192,8 @@ class ResolvedInFullForm(APIMappingMixin, forms.Form):
 
     resolved_date = MonthYearField(
         error_messages={
-            "required": "Enter resolution date and include a month and year",
-            "incomplete": "Enter resolution date and include a month and year.",
+            "required": "Enter a month and year.",
+            "incomplete": "Enter a month and year.",
         },
     )
     resolved_summary = forms.CharField(
