@@ -3,5 +3,5 @@
 
     {% form_field_error form "unknown_summary" %}
 
-    <textarea class="govuk-textarea{% if form.unknown_summary.errors %} govuk-textarea--error{% endif %}" id="{{ form.unknown_summary.name }}" name="{{ form.unknown_summary.name }}" rows="5"></textarea>
+    <textarea class="govuk-textarea{% if form.unknown_summary.errors %} govuk-textarea--error{% endif %}" id="{{ form.unknown_summary.name }}" name="{{ form.unknown_summary.name }}" rows="5">{% if form.unknown_summary.value %}{{ form.unknown_summary.value }}{% endif %}</textarea>
 </div>

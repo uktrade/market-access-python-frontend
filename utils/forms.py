@@ -9,6 +9,8 @@ from django.template.defaultfilters import filesizeformat
 
 from .validators import validate_date_not_in_future
 
+import dateutil.parser
+
 
 class MultipleValueField(forms.MultipleChoiceField):
     """
@@ -126,8 +128,18 @@ class MonthYearWidget(forms.MultiWidget):
 
     def decompress(self, value):
         if value:
+            if isinstance(value, str):
+                try:
+                    value = dateutil.parser.parse(value)
+                except ValueError:
+                    return [None, None]
             return [value.month, value.year]
         return [None, None]
+
+    def value_from_datadict(self, data, files, name):
+        if name in data:
+            return self.decompress(data.get(name))
+        return super().value_from_datadict(data, files, name)
 
 
 class MonthYearField(forms.MultiValueField):
@@ -207,23 +219,27 @@ class SubformChoiceField(forms.ChoiceField):
 
     subforms = {}
 
-    def __init__(self, *, subform_classes={}, **kwargs):
+    def __init__(self, *, subform_classes={}, choices_help_text={}, **kwargs):
         super().__init__(**kwargs)
         self.subform_classes = subform_classes
+        self.choices_help_text = choices_help_text
 
     @property
     def enhanced_choices(self):
         for value, name in self.choices:
-            yield {
+            choice = {
                 "value": value,
                 "name": name,
                 "subform": self.subforms[value],
             }
+            if value in self.choices_help_text:
+                choice["help_text"] = self.choices_help_text[value]
+            yield choice
 
-    def init_subforms(self, data, selected_value=None):
+    def init_subforms(self, initial, data, selected_value=None):
         for value, subform_class in self.subform_classes.items():
             if value == selected_value:
-                subform = subform_class(data)
+                subform = subform_class(initial=initial, data=data)
                 self.subform = subform
                 self.subforms[value] = subform
             else:
@@ -242,10 +258,15 @@ class SubformMixin:
 
         for name, field in self.fields.items():
             if isinstance(field, SubformChoiceField):
+                if "data" in kwargs:
+                    selected_value = kwargs.get("data", {}).get(name)
+                else:
+                    selected_value = kwargs.get("initial", {}).get(name)
                 self.subform_fields[name] = field
                 field.init_subforms(
+                    initial=kwargs.get("initial"),
                     data=kwargs.get("data"),
-                    selected_value=kwargs.get("data", {}).get(name),
+                    selected_value=selected_value,
                 )
 
     @property

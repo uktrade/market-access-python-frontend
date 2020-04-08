@@ -119,7 +119,8 @@ class StatusHistoryItem(BaseHistoryItem):
     modifier = "status"
 
     def get_value(self, value):
-        value["status_date"] = dateutil.parser.parse(value["status_date"])
+        if value["status_date"]:
+            value["status_date"] = dateutil.parser.parse(value["status_date"])
         value["status_short_text"] = self.metadata.get_status_text(value["status"])
         value["status_text"] = self.metadata.get_status_text(
             status_id=value["status"],
