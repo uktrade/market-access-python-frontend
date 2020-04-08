@@ -120,6 +120,7 @@ class Barrier(APIModel):
         tags = self.data.get("tags") or ()
         return sorted(tags, key=lambda k: k['order'])
 
+    @property
     def title(self):
         return self.barrier_title
 
