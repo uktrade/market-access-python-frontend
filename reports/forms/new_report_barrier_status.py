@@ -51,7 +51,7 @@ class NewReportBarrierStatusForm(SubformMixin, forms.Form):
     """
 
     status = SubformChoiceField(
-        label="Change barrier status",
+        label="Choose barrier status",
         choices=STATUSES,
         choices_help_text=STATUSES_HELP_TEXT,
         widget=forms.RadioSelect,
