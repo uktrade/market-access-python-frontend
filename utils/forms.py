@@ -232,7 +232,6 @@ class SubformChoiceField(forms.ChoiceField):
                 "name": name,
                 "subform": self.subforms[value],
             }
-
             if value in self.choices_help_text:
                 choice["help_text"] = self.choices_help_text[value]
             yield choice
