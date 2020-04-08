@@ -114,12 +114,6 @@ class MetadataTestCase(MarketAccessTestCase):
         assert metadata.get_problem_status("1") == "A procedural, short-term barrier"
         assert metadata.get_problem_status("2") == "A long-term strategic barrier"
 
-    def test_get_eu_exit_related_text(self):
-        metadata = get_metadata()
-        assert metadata.get_eu_exit_related_text("1") == "Yes"
-        assert metadata.get_eu_exit_related_text("2") == "No"
-        assert metadata.get_eu_exit_related_text("3") == "Don't know"
-
     def test_get_source(self):
         metadata = get_metadata()
         assert metadata.get_source("COMPANY") == "Company"

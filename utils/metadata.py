@@ -242,11 +242,6 @@ class Metadata:
         )
         return status_types.get(str(problem_status_id))
 
-    def get_eu_exit_related_text(self, code):
-        eu_related = self.data["adv_boolean"]
-        eu_related.update({"3": "Don't know"})
-        return eu_related.get(str(code), "Unknown")
-
     def get_source(self, source):
         return self.data["barrier_source"].get(source)
 
@@ -317,3 +312,33 @@ class Metadata:
             stages.pop(key)
 
         return stages
+
+    def get_barrier_tag(self, tag_id):
+        for tag in self.get_barrier_tags():
+            if str(tag["id"]) == str(tag_id):
+                return tag
+
+    def get_barrier_tags(self):
+        tags = self.data.get("barrier_tags", [])
+        return sorted(tags, key=lambda k: k['order'])
+
+    def get_barrier_tag_choices(self):
+        """
+        Generates tag choices.
+        Includes all tags that are available.
+        """
+        return (
+            (tag["id"], tag["title"], tag["description"])
+            for tag in self.get_barrier_tags()
+        )
+
+    def get_report_tag_choices(self):
+        """
+        Generates tag choices.
+        Only returns a subset of tags when reporting a barrier.
+        """
+        return (
+            (tag["id"], tag["title"], tag["description"])
+            for tag in self.get_barrier_tags()
+            if tag["show_at_reporting"] is True
+        )

@@ -261,65 +261,6 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
-class EditEUExitRelatedTestCase(MarketAccessTestCase):
-    def test_edit_eu_exit_related_has_initial_data(self):
-        response = self.client.get(
-            reverse(
-                "barriers:edit_eu_exit_related",
-                kwargs={"barrier_id": self.barrier["id"]},
-            )
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["eu_exit_related"] == (self.barrier["eu_exit_related"])
-
-    @patch("utils.api.resources.APIResource.patch")
-    def test_eu_exit_related_cannot_be_empty(self, mock_patch):
-        response = self.client.post(
-            reverse(
-                "barriers:edit_eu_exit_related",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"eu_exit_related": ""},
-        )
-        assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "eu_exit_related" in form.errors
-        assert mock_patch.called is False
-
-    @patch("utils.api.resources.APIResource.patch")
-    def test_bad_data_gets_error(self, mock_patch):
-        response = self.client.post(
-            reverse(
-                "barriers:edit_eu_exit_related",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"eu_exit_related": "WOOF"},
-        )
-        assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "eu_exit_related" in form.errors
-        assert mock_patch.called is False
-
-    @patch("utils.api.resources.APIResource.patch")
-    def test_edit_eu_exit_related_calls_api(self, mock_patch):
-        mock_patch.return_value = self.barrier
-        response = self.client.post(
-            reverse(
-                "barriers:edit_eu_exit_related",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"eu_exit_related": "3"},
-        )
-        mock_patch.assert_called_with(
-            id=self.barrier["id"], eu_exit_related="3",
-        )
-        assert response.status_code == HTTPStatus.FOUND
-
-
 class EditProblemStatusTestCase(MarketAccessTestCase):
     def test_edit_problem_status_has_initial_data(self):
         response = self.client.get(

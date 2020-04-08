@@ -504,6 +504,12 @@ class NewReportBarrierAboutView(ReportsFormView):
     form_class = NewReportBarrierAboutForm
     extra_paths = {'back': 'reports:barrier_sectors'}
     form_session_key = FormSessionKeys.ABOUT
+    metadata = get_metadata()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["tags"] = self.metadata.get_report_tag_choices()
+        return kwargs
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)

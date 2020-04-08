@@ -7,9 +7,10 @@ from barriers.forms.edit import (
     UpdateBarrierDescriptionForm,
     UpdateBarrierSourceForm,
     UpdateBarrierPriorityForm,
-    UpdateBarrierEUExitRelatedForm,
     UpdateBarrierProblemStatusForm,
+    UpdateBarrierTagsForm,
 )
+from utils.metadata import get_metadata
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
@@ -55,17 +56,23 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         return {"priority": self.barrier.priority["code"]}
 
 
-class BarrierEditEUExitRelated(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/eu_exit_related.html"
-    form_class = UpdateBarrierEUExitRelatedForm
-
-    def get_initial(self):
-        return {"eu_exit_related": self.barrier.eu_exit_related}
-
-
 class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/problem_status.html"
     form_class = UpdateBarrierProblemStatusForm
 
     def get_initial(self):
         return {"problem_status": self.barrier.problem_status}
+
+
+class BarrierEditTags(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/tags.html"
+    form_class = UpdateBarrierTagsForm
+    metadata = get_metadata()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["tags"] = self.metadata.get_barrier_tag_choices()
+        return kwargs
+
+    def get_initial(self):
+        return {"tags": [tag["id"] for tag in self.barrier.tags]}

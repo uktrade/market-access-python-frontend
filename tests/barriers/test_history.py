@@ -84,21 +84,6 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         assert item.old_value == "Old description"
         assert item.new_value == "New description"
 
-    def test_eu_exit_related(self):
-        item = HistoryItem(
-            {
-                "date": "2019-08-15T09:53:02.531000Z",
-                "model": "barrier",
-                "field": "eu_exit_related",
-                "old_value": 2,
-                "new_value": 1,
-                "user": {"id": 48, "name": "Test-user"},
-            }
-        )
-        assert item.field_name == "Related to EU exit"
-        assert item.old_value == "No"
-        assert item.new_value == "Yes"
-
     def test_location(self):
         item = HistoryItem(
             {
@@ -242,6 +227,21 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         assert item.field_name == "Status"
         assert item.old_value["status_text"] == "Unknown"
         assert item.new_value["status_text"] == "Open: Pending action (UK government)"
+
+    def test_tags(self):
+        item = HistoryItem(
+            {
+                "date": "2019-08-15T09:53:02.531000Z",
+                "model": "barrier",
+                "field": "tags",
+                "old_value": [1],
+                "new_value": [1, 2],
+                "user": {"id": 48, "name": "Test-user"},
+            }
+        )
+        assert item.field_name == "Barrier tags"
+        assert item.old_value == ["COVID-19"]
+        assert item.new_value == ["COVID-19", "Brexit"]
 
     def test_title(self):
         item = HistoryItem(

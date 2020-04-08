@@ -90,13 +90,12 @@ class RestrictedFileField(forms.FileField):
         return data
 
 
-class ChoiceFieldWithHelpText(forms.ChoiceField):
+class HelpTextMixin:
     """
-    ChoiceField where help text can be provided for each choice
+    Allow ChoiceFields to include help text for each choice
 
     choices should be a three part tuple (value, name, help_text)
     """
-
     def valid_value(self, value):
         """Check to see if the provided value is a valid choice."""
         text_value = str(value)
@@ -110,6 +109,14 @@ class ChoiceFieldWithHelpText(forms.ChoiceField):
                 if value == k or text_value == str(k):
                     return True
         return False
+
+
+class ChoiceFieldWithHelpText(HelpTextMixin, forms.ChoiceField):
+    pass
+
+
+class MultipleChoiceFieldWithHelpText(HelpTextMixin, forms.MultipleChoiceField):
+    pass
 
 
 class MonthYearWidget(forms.MultiWidget):
