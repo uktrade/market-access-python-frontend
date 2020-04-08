@@ -31,6 +31,7 @@ from utils.api.client import MarketAccessAPIClient
 #     "source",               # Step 4 - About - STR
 #     "other_source",         # Step 4 - About - STR
 #     "barrier_title",        # Step 4 - About - STR
+#     "tags"                  # Step 4 - About - LIST of IDS
 #     # ==============================
 #     "problem_description",  # Step 5 - Summary - STR
 #     "next_steps_summary",   # Step 5 - Summary - STR
@@ -338,6 +339,7 @@ class ReportFormGroup:
             "product": self.barrier.data.get("product") or "",
             "source": self.barrier.data.get("source"),
             "other_source": self.barrier.data.get("other_source") or "",
+            "tags": [t["id"] for t in self.barrier.data.get("tags", ())],
         }
         return data
 

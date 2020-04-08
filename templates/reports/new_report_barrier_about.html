@@ -39,8 +39,6 @@
                        value="{{ form.initial.product }}">
             </div>
 
-
-
             <div class="{% form_group_classes form.source.errors %}">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
@@ -75,6 +73,27 @@
                             </div>
                         </div>
                         {% endif %}
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="{% form_group_classes form.source.errors %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.fields.tags.label }}
+                    </legend>
+                    {% form_field_error form "tags" %}
+
+                    <div class="govuk-checkboxes" id="tags">
+                        {% for value, name, help_text in form.fields.tags.choices %}
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input" id="tag-{{ value }}" name="{{ form.tags.name }}" type="checkbox" value="{{ value }}"  {% if value in form.tags.value %}checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-checkboxes__label" for="tag-{{ value }}">{{ name }}</label>
+                                <span id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
+                                  {{ help_text }}
+                                </span>
+                            </div>
                         {% endfor %}
                     </div>
                 </fieldset>

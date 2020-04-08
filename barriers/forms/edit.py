@@ -160,10 +160,7 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
 
     def __init__(self, tags, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["tags"].choices = [
-            (tag["id"], tag["title"], tag["description"])
-            for tag in tags
-        ]
+        self.fields["tags"].choices = tags
 
     def save(self):
         client = MarketAccessAPIClient(self.token)

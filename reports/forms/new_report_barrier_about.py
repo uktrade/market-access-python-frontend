@@ -1,5 +1,6 @@
 from django import forms
 
+from utils.forms import MultipleChoiceFieldWithHelpText
 from utils.metadata import get_metadata
 
 
@@ -67,13 +68,13 @@ class NewReportBarrierAboutForm(forms.Form):
             "max_length": "Other source should be %(limit_value)d characters or fewer",
         },
     )
-    tags = forms.MultipleChoiceField(
+    tags = MultipleChoiceFieldWithHelpText(
         choices=[],
         widget=forms.CheckboxSelectMultiple,
-        label="Is this issue caused by or related to any of the following?"
+        label="Is this issue caused by or related to any of the following?",
+        required=False
     )
 
     def __init__(self, tags, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        metadata = get_metadata()
-        self.fields["tags"].choices = metadata.get_barrier_tag_report_choices()
+        self.fields["tags"].choices = tags

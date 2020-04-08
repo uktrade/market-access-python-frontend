@@ -320,19 +320,25 @@ class Metadata:
 
     def get_barrier_tags(self):
         tags = self.data.get("barrier_tags", [])
-        return tags
+        return sorted(tags, key=lambda k: k['order'])
 
     def get_barrier_tag_choices(self):
-        for tag_id, title, _show_at_reporting in self.get_barrier_tags():
-            yield {
-                "id": tag_id,
-                "title": title,
-            }
+        """
+        Generates tag choices.
+        Includes all tags that are available.
+        """
+        return (
+            (tag["id"], tag["title"], tag["description"])
+            for tag in self.get_barrier_tags()
+        )
 
-    def get_barrier_tag_report_choices(self):
-        for tag_id, title, show_at_reporting in self.get_barrier_tags():
-            if show_at_reporting:
-                yield {
-                    "id": tag_id,
-                    "title": title,
-                }
+    def get_report_tag_choices(self):
+        """
+        Generates tag choices.
+        Only returns a subset of tags when reporting a barrier.
+        """
+        return (
+            (tag["id"], tag["title"], tag["description"])
+            for tag in self.get_barrier_tags()
+            if tag["show_at_reporting"] is True
+        )

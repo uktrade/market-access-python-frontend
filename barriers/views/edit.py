@@ -69,13 +69,11 @@ class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
 class BarrierEditTags(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/tags.html"
     form_class = UpdateBarrierTagsForm
+    metadata = get_metadata()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        metadata = get_metadata()
-        tags = metadata.get_barrier_tags()
-        tags.sort(key=operator.itemgetter('title'), reverse=True)
-        kwargs["tags"] = tags
+        kwargs["tags"] = self.metadata.get_barrier_tag_choices()
         return kwargs
 
     def get_initial(self):

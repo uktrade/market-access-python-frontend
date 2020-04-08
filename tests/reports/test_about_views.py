@@ -35,6 +35,7 @@ class AboutViewTestCase(ReportsTestCase):
         )
         barrier_source_radio_item = '<div class="govuk-radios__item barrier-source">'
         expected_barrier_source_radio_count = 4
+        tags_container = '<div class="govuk-checkboxes" id="tags">'
         expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'
         expected_exit_btn = (
             '<button type="submit" class="govuk-button button--secondary" '
@@ -49,6 +50,7 @@ class AboutViewTestCase(ReportsTestCase):
         assert name_input_field in html
         assert product_input_field in html
         assert barrier_source_radio_container in html
+        assert tags_container in html
         # Barrier source radios
         bs_options_count = html.count(barrier_source_radio_item)
         assert expected_barrier_source_radio_count == bs_options_count, \
