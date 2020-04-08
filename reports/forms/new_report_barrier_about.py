@@ -1,5 +1,7 @@
 from django import forms
 
+from utils.forms import MultipleChoiceFieldWithHelpText
+
 
 class BarrierSource:
     """
@@ -65,10 +67,13 @@ class NewReportBarrierAboutForm(forms.Form):
             "max_length": "Other source should be %(limit_value)d characters or fewer",
         },
     )
-    eu_exit_related = forms.ChoiceField(
-        label="Is this issue caused by or related to Brexit?",
-        choices=RelatedToBrexit.choices(),
-        error_messages={
-            'required': "Select whether this is Brexit related or not"
-        },
+    tags = MultipleChoiceFieldWithHelpText(
+        choices=[],
+        widget=forms.CheckboxSelectMultiple,
+        label="Is this issue caused by or related to any of the following?",
+        required=False
     )
+
+    def __init__(self, tags, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["tags"].choices = tags

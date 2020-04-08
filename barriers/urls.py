@@ -34,8 +34,8 @@ from .views.edit import (
     BarrierEditDescription,
     BarrierEditSource,
     BarrierEditPriority,
-    BarrierEditEUExitRelated,
     BarrierEditProblemStatus,
+    BarrierEditTags,
 )
 from .views.history import BarrierHistory
 from .views.location import (
@@ -104,9 +104,9 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/description/", BarrierEditDescription.as_view(), name="edit_description"),
     path("barriers/<uuid:barrier_id>/edit/source/", BarrierEditSource.as_view(), name="edit_source"),
     path("barriers/<uuid:barrier_id>/edit/priority/", BarrierEditPriority.as_view(), name="edit_priority"),
-    path("barriers/<uuid:barrier_id>/edit/eu-exit-related/", BarrierEditEUExitRelated.as_view(), name="edit_eu_exit_related"),
     path("barriers/<uuid:barrier_id>/edit/problem-status/", BarrierEditProblemStatus.as_view(), name="edit_problem_status"),
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
+    path("barriers/<uuid:barrier_id>/edit/tags/", BarrierEditTags.as_view(), name="edit_tags"),
     path("barriers/<uuid:barrier_id>/archive/", ArchiveBarrier.as_view(), name="archive"),
     path("barriers/<uuid:barrier_id>/unarchive/", UnarchiveBarrier.as_view(), name="unarchive"),
     path("barriers/<uuid:barrier_id>/history/", BarrierHistory.as_view(), name="history"),

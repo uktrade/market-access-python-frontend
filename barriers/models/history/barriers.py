@@ -119,7 +119,8 @@ class StatusHistoryItem(BaseHistoryItem):
     modifier = "status"
 
     def get_value(self, value):
-        value["status_date"] = dateutil.parser.parse(value["status_date"])
+        if value["status_date"]:
+            value["status_date"] = dateutil.parser.parse(value["status_date"])
         value["status_short_text"] = self.metadata.get_status_text(value["status"])
         value["status_text"] = self.metadata.get_status_text(
             status_id=value["status"],
@@ -136,6 +137,17 @@ class StatusHistoryItem(BaseHistoryItem):
             Statuses.OPEN_PENDING_ACTION,
         )
         return value
+
+
+class TagsHistoryItem(BaseHistoryItem):
+    field = "tags"
+    field_name = "Barrier tags"
+
+    def get_value(self, value):
+        tags = [self.metadata.get_barrier_tag(tag) for tag in value or ()]
+        sorted_tags = sorted(tags, key=lambda k: k['order'])
+        tag_names = [t["title"] for t in sorted_tags]
+        return tag_names
 
 
 class TitleHistoryItem(BaseHistoryItem):
@@ -163,6 +175,7 @@ class BarrierHistoryItem(PolymorphicBase):
         SectorsHistoryItem,
         SourceHistoryItem,
         StatusHistoryItem,
+        TagsHistoryItem,
         TitleHistoryItem,
     )
     class_lookup = {}

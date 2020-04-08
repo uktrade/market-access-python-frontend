@@ -53,7 +53,6 @@ def create_barrier(browser):
     browser.fill("barrier_title", title)
     browser.fill("product", "Product name")
     browser.choose("source", "COMPANY")
-    browser.choose("eu_exit_related", "2")
     browser.find_by_css("input[type=submit]").click()
 
     browser.fill("problem_description", "Test description")

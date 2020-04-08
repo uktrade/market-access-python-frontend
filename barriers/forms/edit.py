@@ -3,7 +3,7 @@ from django import forms
 from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText
+from utils.forms import ChoiceFieldWithHelpText, MultipleChoiceFieldWithHelpText
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -128,26 +128,6 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierEUExitRelatedForm(APIFormMixin, forms.Form):
-    CHOICES = [
-        (1, "Yes"),
-        (2, "No"),
-        (3, "Don't know"),
-    ]
-    eu_exit_related = forms.ChoiceField(
-        label="Is this issue caused by or related to EU Exit?",
-        choices=CHOICES,
-        widget=forms.RadioSelect,
-        error_messages={"required": "Select whether this is EU exit related or not"},
-    )
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id, eu_exit_related=self.cleaned_data["eu_exit_related"]
-        )
-
-
 class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
     CHOICES = [
         (
@@ -169,3 +149,19 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
         client.barriers.patch(
             id=self.id, problem_status=self.cleaned_data["problem_status"]
         )
+
+
+class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
+    tags = MultipleChoiceFieldWithHelpText(
+        label="Is this issue caused by or related to any of the following?",
+        choices=[],
+        required=False,
+    )
+
+    def __init__(self, tags, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["tags"].choices = tags
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(id=self.id, tags=self.cleaned_data["tags"])

@@ -1,13 +1,17 @@
-{% extends 'base.html' %}
+{% extends "barriers/edit/base.html" %}
 
 {% load highlight %}
 
 {% block page_title %}{{ block.super }} - Barrier team - Find user{% endblock %}
 
+{% block back_link %}
+    <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
 {% block page_content %}
 
-    <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link">Back</a>
-    {% include 'partials/heading.html' with caption=barrier.barrier_title text='Name of user' %}
+    {% include 'partials/heading.html' with text='Name of user' %}
+
     {% form_error_banner form %}
 
     <div class="restrict-width">

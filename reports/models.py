@@ -1,5 +1,7 @@
 import operator
 
+from barriers.constants import STATUSES
+
 from utils.metadata import get_metadata
 from utils.models import APIModel
 
@@ -23,9 +25,9 @@ class Report(APIModel):
 
     @property
     def resolved_text(self):
-        if self.is_resolved:
-            if self.resolved_status == "RESOLVED":
-                return "In full"
+        if str(self.status) == STATUSES.RESOLVED_IN_FULL:
+            return "In full"
+        elif str(self.status) == STATUSES.RESOLVED_IN_PART:
             return "In part"
         return "No"
 

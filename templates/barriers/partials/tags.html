@@ -1,0 +1,12 @@
+<div class="barrier-tag-banner">
+    {% if barrier.tags %}
+        <ul class="barrier-tag-list barrier-tag-list--in-banner">
+            {% spaceless %}
+                {% for tag in barrier.tags %}
+                <li class="barrier-tag-list__tag">{{ tag.title|title }}</li>
+                {% endfor %}
+            {% endspaceless %}
+        </ul>
+    {% endif %}
+    <a class="barrier-tag-edit" href="{% url 'barriers:edit_tags' barrier.id %}">Edit tags</a>
+</div>

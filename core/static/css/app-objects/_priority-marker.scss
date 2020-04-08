@@ -1,13 +1,13 @@
 .priority-marker-wrapper {
 	@include govuk-font( 14 );
-	border: 3px solid $govuk-grey-1;
 	display: block;
 	background: white;
-	padding: govuk-em( 4, 16 ) govuk-em( 5, 16 );
+	padding: govuk-em( 8, 16 );
 	width: 100%;
 	text-align: left;
 	box-sizing: border-box;
-	margin-bottom: govuk-em( 10, 16 );
+	margin-top: govuk-em( 8, 16 );
+	color: $govuk-black;
 }
 
 .priority-marker {

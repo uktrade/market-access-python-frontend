@@ -6,6 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
 
+from barriers.constants import STATUSES
 from partials.callout import Callout, CalloutButton
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
@@ -22,7 +23,6 @@ from reports.forms.new_report_barrier_sectors import (
     NewReportBarrierAddSectorsForm,
 )
 from reports.forms.new_report_barrier_status import (
-    BarrierStatuses,
     NewReportBarrierProblemStatusForm,
     NewReportBarrierStatusForm,
 )
@@ -150,7 +150,12 @@ class ReportsFormView(ReportBarrierContextMixin, FormView):
         return str(url)
 
     def form_valid(self, form):
-        self.form_group.set(self.form_session_key, form.cleaned_data)
+        if hasattr(form, "get_api_params"):
+            data = form.get_api_params()
+        else:
+            data = form.cleaned_data
+
+        self.form_group.set(self.form_session_key, data)
         self.success()
         return super().form_valid(form)
 
@@ -202,20 +207,18 @@ class NewReportBarrierStatusView(ReportsFormView):
     extra_paths = {'back': 'reports:barrier_problem_status'}
     form_session_key = FormSessionKeys.STATUS
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        status = self.request.POST.get("status")
-        if status == BarrierStatuses.RESOLVED:
-            form.fields["resolved_month"].required = True
-            form.fields["resolved_year"].required = True
-            form.fields["part_resolved_month"].required = False
-            form.fields["part_resolved_year"].required = False
-        if status == BarrierStatuses.PARTIALLY_RESOLVED:
-            form.fields["part_resolved_month"].required = True
-            form.fields["part_resolved_year"].required = True
-            form.fields["resolved_month"].required = False
-            form.fields["resolved_year"].required = False
-        return form
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        form = context_data["form"]
+        context_data.update(
+            {
+                "OPEN_PENDING_ACTION": STATUSES.OPEN_PENDING_ACTION,
+                "valid_status_values": [
+                    choice[0] for choice in form.fields["status"].choices
+                ],
+            }
+        )
+        return context_data
 
 
 class NewReportBarrierLocationView(ReportsFormView):
@@ -501,6 +504,12 @@ class NewReportBarrierAboutView(ReportsFormView):
     form_class = NewReportBarrierAboutForm
     extra_paths = {'back': 'reports:barrier_sectors'}
     form_session_key = FormSessionKeys.ABOUT
+    metadata = get_metadata()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["tags"] = self.metadata.get_report_tag_choices()
+        return kwargs
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -533,14 +542,12 @@ class NewReportBarrierSummaryView(ReportsFormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["is_resolved"] = self.form_group.status_form.get("is_resolved")
+        status = self.form_group.status_form.get("status")
+        context_data["is_resolved"] = status in (
+            STATUSES.RESOLVED_IN_PART,
+            STATUSES.RESOLVED_IN_FULL,
+        )
         return context_data
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        if self.form_group.status_form.get("is_resolved"):
-            form.fields["status_summary"].required = True
-        return form
 
     def success(self):
         self.form_group.save(payload=self.form_group.prepare_payload_summary())

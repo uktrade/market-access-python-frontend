@@ -1,7 +1,7 @@
-<div id="{{ form.reopen_summary.name }}" class="govuk-form-group{% if form.reopen_summary.errors %} govuk-form-group--error{% endif %}">
-    <label class="govuk-label govuk-label--s" for="{{ form.reopen_summary.name }}">{{ form.reopen_summary.label }}</label>
+<div id="{{ form.open_in_progress_summary.name }}" class="govuk-form-group{% if form.open_in_progress_summary.errors %} govuk-form-group--error{% endif %}">
+    <label class="govuk-label govuk-label--s" for="{{ form.open_in_progress_summary.name }}">{{ form.open_in_progress_summary.label }}</label>
 
-    {% form_field_error form "reopen_summary" %}
+    {% form_field_error form "open_in_progress_summary" %}
 
-    <textarea class="govuk-textarea{% if form.reopen_summary.errors %} govuk-textarea--error{% endif %}" id="{{ form.reopen_summary.name }}" name="{{ form.reopen_summary.name }}" rows="5"></textarea>
+    <textarea class="govuk-textarea{% if form.open_in_progress_summary.errors %} govuk-textarea--error{% endif %}" id="{{ form.open_in_progress_summary.name }}" name="{{ form.open_in_progress_summary.name }}" rows="5">{% if form.open_in_progress_summary.value %}{{ form.open_in_progress_summary.value }}{% endif %}</textarea>
 </div>

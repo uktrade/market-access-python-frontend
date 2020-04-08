@@ -14,11 +14,6 @@
         "2": "IN PROGRESS",
         "3": "COMPLETED"
     },
-    "adv_boolean": {
-        "1": "Yes",
-        "2": "No",
-        "3": "Dont know"
-    },
     "govt_response": {
         "1": "None, this is for our information only at this stage",
         "2": "In-country support from post",
@@ -7666,6 +7661,22 @@
         "BUS": "Affected business",
         "OTHER": "Other"
     },
+    "barrier_tags": [
+        {
+            "id": 1,
+            "title": "COVID-19",
+            "description": "Barrier imposed because of the COVID-19 (coronavirus) pandemic. For example restrictions related to medical supplies or food supply chains.",
+            "show_at_reporting": "True",
+            "order": 1
+        },
+        {
+            "id": 2,
+            "title": "Brexit",
+            "description": "",
+            "show_at_reporting": "True",
+            "order": 2
+        }
+    ],
     "barrier_type_categories": {
         "GOODS": "Goods",
         "SERVICES": "Services"
