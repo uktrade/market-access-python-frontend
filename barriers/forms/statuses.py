@@ -20,9 +20,9 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
         },
     )
     status_summary = forms.CharField(
-        label="Provide a summary of why this barrier is dormant",
+        label="Describe briefly why this barrier is dormant",
         widget=forms.Textarea,
-        error_messages={"required": "Enter a summary"},
+        error_messages={"required": "Enter a description"},
     )
 
     def __init__(self, is_resolved, *args, **kwargs):
@@ -31,7 +31,7 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
         if is_resolved:
             self.fields[
                 "status_summary"
-            ].label = "Provide a summary of how this barrier was resolved"
+            ].label = "Describe briefly how this barrier was resolved"
             self.fields["status_date"].required = True
 
     def validate_status_date(self):
@@ -81,9 +81,9 @@ class UnknownForm(APIMappingMixin, forms.Form):
     """
 
     unknown_summary = forms.CharField(
-        label="Provide a summary of why this barrier is unknown",
+        label="Describe briefly why this barrier status is unknown",
         widget=forms.Textarea,
-        error_messages={"required": "Enter a summary"},
+        error_messages={"required": "Enter a description"},
     )
     api_mapping = {"unknown_summary": "status_summary"}
 
@@ -104,16 +104,16 @@ class OpenPendingForm(APIMappingMixin, forms.Form):
         ("OTHER", "Other"),
     ]
     pending_type = forms.ChoiceField(
-        label="Who is the action with?",
+        label="Who is due to take action?",
         choices=CHOICES,
         widget=forms.RadioSelect,
         error_messages={"required": "Select a pending action"},
     )
     pending_type_other = forms.CharField(label="Please specify", required=False,)
     pending_summary = forms.CharField(
-        label="Provide a summary of why this barrier is pending action",
+        label="Describe briefly why this barrier is pending action",
         widget=forms.Textarea,
-        error_messages={"required": "Enter a summary"},
+        error_messages={"required": "Enter a description"},
     )
     api_mapping = {
         "pending_type": "sub_status",
@@ -148,9 +148,9 @@ class OpenInProgressForm(APIMappingMixin, forms.Form):
     """
 
     open_in_progress_summary = forms.CharField(
-        label="Provide a summary of why this barrier is in progress",
+        label="Describe briefly why work on this barrier is in progress",
         widget=forms.Textarea,
-        error_messages={"required": "Enter a summary"},
+        error_messages={"required": "Enter a description"},
     )
     api_mapping = {"open_in_progress_summary": "status_summary"}
 
@@ -171,9 +171,9 @@ class ResolvedInPartForm(APIMappingMixin, forms.Form):
         },
     )
     part_resolved_summary = forms.CharField(
-        label="Provide a summary of how this barrier was partially resolved",
+        label="Describe briefly how this barrier was partially resolved",
         widget=forms.Textarea,
-        error_messages={"required": "Enter a summary"},
+        error_messages={"required": "Enter a description"},
     )
     api_mapping = {
         "part_resolved_summary": "status_summary",
@@ -197,9 +197,9 @@ class ResolvedInFullForm(APIMappingMixin, forms.Form):
         },
     )
     resolved_summary = forms.CharField(
-        label="Provide a summary of how this barrier was resolved",
+        label="Describe briefly how this barrier was fully resolved",
         widget=forms.Textarea,
-        error_messages={"required": "Enter a summary"},
+        error_messages={"required": "Enter a description"},
     )
     api_mapping = {
         "resolved_summary": "status_summary",
@@ -217,9 +217,9 @@ class DormantForm(APIMappingMixin, forms.Form):
     """
 
     dormant_summary = forms.CharField(
-        label="Provide a summary of why this barrier is dormant",
+        label="Describe briefly why this barrier is dormant",
         widget=forms.Textarea,
-        error_messages={"required": "Enter a summary"},
+        error_messages={"required": "Enter a description"},
     )
     api_mapping = {
         "dormant_summary": "status_summary",
