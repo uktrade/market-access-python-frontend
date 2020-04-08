@@ -1,0 +1,40 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Barrier - Edit tags{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Tags' %}
+    {% form_error_banner form %}
+
+    <form method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <h3>{{ form.tags.label }}</h3>
+
+        <div id="{{ form.tags.name }}" class="govuk-form-group {% if form.tags.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                {% form_field_error form "tags" %}
+
+                <div class="govuk-checkboxes">
+                    {% for value, name, help_text in form.fields.tags.choices %}
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="tag-{{ value }}" name="{{ form.tags.name }}" type="checkbox" value="{{ value }}"  {% if value in form.tags.value %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="tag-{{ value }}">{{ name }}</label>
+                            <span id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
+                              {{ help_text }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
+        <input type="submit" value="Save changes" class="govuk-button">
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+    </form>
+{% endblock %}

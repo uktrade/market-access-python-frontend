@@ -138,6 +138,17 @@ class StatusHistoryItem(BaseHistoryItem):
         return value
 
 
+class TagsHistoryItem(BaseHistoryItem):
+    field = "tags"
+    field_name = "Barrier tags"
+
+    def get_value(self, value):
+        tags = [self.metadata.get_barrier_tag(tag) for tag in value or ()]
+        sorted_tags = sorted(tags, key=lambda k: k['order'])
+        tag_names = [t["title"] for t in sorted_tags]
+        return tag_names
+
+
 class TitleHistoryItem(BaseHistoryItem):
     field = "barrier_title"
     field_name = "Title"
@@ -163,6 +174,7 @@ class BarrierHistoryItem(PolymorphicBase):
         SectorsHistoryItem,
         SourceHistoryItem,
         StatusHistoryItem,
+        TagsHistoryItem,
         TitleHistoryItem,
     )
     class_lookup = {}

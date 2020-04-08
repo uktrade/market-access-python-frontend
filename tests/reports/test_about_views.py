@@ -35,9 +35,7 @@ class AboutViewTestCase(ReportsTestCase):
         )
         barrier_source_radio_item = '<div class="govuk-radios__item barrier-source">'
         expected_barrier_source_radio_count = 4
-        eu_exit_related_radio_container = '<div class="govuk-radios eu_exit_related">'
-        eu_exit_related_radio_item = '<div class="govuk-radios__item eu_exit_related">'
-        expected_eu_exit_related_radio_count = 3
+        tags_container = '<div class="govuk-checkboxes" id="tags">'
         expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'
         expected_exit_btn = (
             '<button type="submit" class="govuk-button button--secondary" '
@@ -52,15 +50,11 @@ class AboutViewTestCase(ReportsTestCase):
         assert name_input_field in html
         assert product_input_field in html
         assert barrier_source_radio_container in html
+        assert tags_container in html
         # Barrier source radios
         bs_options_count = html.count(barrier_source_radio_item)
         assert expected_barrier_source_radio_count == bs_options_count, \
             f'Expected {expected_barrier_source_radio_count} barrier source radio buttons, got: {bs_options_count}'
-        # Eu Exit related radios
-        assert eu_exit_related_radio_container in html
-        eer_options_count = html.count(eu_exit_related_radio_item)
-        assert expected_eu_exit_related_radio_count == eer_options_count, \
-            f'Expected {expected_eu_exit_related_radio_count} eu exit related radio buttons, got: {eer_options_count}'
         # Main Buttons
         assert expected_save_btn in html
         assert expected_exit_btn in html
@@ -77,7 +71,6 @@ class AboutViewTestCase(ReportsTestCase):
         self.assertFormError(response, 'form', 'barrier_title', "Enter a name for this barrier")
         self.assertFormError(response, 'form', 'product', "Enter a product, service or investment")
         self.assertFormError(response, 'form', 'source', "Select how you became aware of the barrier")
-        self.assertFormError(response, 'form', 'eu_exit_related', "Select whether this is Brexit related or not")
         assert ERROR_HTML.SUMMARY_HEADER in html
         assert ERROR_HTML.REQUIRED_FIELD in html
         assert saved_form_data is None
@@ -94,7 +87,6 @@ class AboutViewTestCase(ReportsTestCase):
             "barrier_title": "wibble",
             "product": "wobble",
             "source": "COMPANY",
-            "eu_exit_related": "3"
         }
 
         response = self.client.post(self.url, data)
@@ -117,7 +109,6 @@ class AboutViewTestCase(ReportsTestCase):
             "barrier_title": "wibble",
             "product": "wobble",
             "source": "COMPANY",
-            "eu_exit_related": "3"
         }
 
         response = self.client.post(self.url, data)
