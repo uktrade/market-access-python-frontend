@@ -40,11 +40,29 @@ class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
     )
+    is_summary_sensitive = forms.ChoiceField(
+        label="Does the summary contain OFFICIAL-SENSITIVE information?",
+        choices=(
+            ("yes", "Yes"),
+            ("no", "No"),
+        ),
+        error_messages={"required": "Select whether the summary is sensitive"},
+    )
+
+    def clean_is_summary_sensitive(self):
+        value = self.cleaned_data["is_summary_sensitive"]
+        if value == "yes":
+            return True
+        elif value == "no":
+            return False
+        raise forms.ValidationError("Select whether the summary is sensitive")
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
-            id=self.id, problem_description=self.cleaned_data["description"]
+            id=self.id,
+            problem_description=self.cleaned_data["description"],
+            is_summary_sensitive=self.cleaned_data["is_summary_sensitive"],
         )
 
 

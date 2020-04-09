@@ -22,6 +22,54 @@
             <textarea class="govuk-textarea" name="description" rows="5">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
         </div>
 
+        <div id="{{ form.is_summary_sensitive.name }}" class="govuk-form-group{% if form.is_summary_sensitive.errors %} govuk-form-group--error{% endif %}">
+
+            {% form_field_error form "is_summary_sensitive" %}
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.is_summary_sensitive.label }}
+                    </legend>
+
+                    <a>What is OFFICIAL-SENSITIVE information?</a>
+
+                    <div class="govuk-inset-text">
+                        <p>The OFFICIAL classification is used for most Government business and public service delivery. OFFICIAL-SENSITIVE applies where loss or disclosure would:
+
+                            <ul>
+                                <li>have damaging consequences for DIT and the government</li>
+                                <li>cause significant distress for an individual or group of people, such as sensitive personal information</li>
+                            </ul>
+                        </p>
+
+                        <p>OFFICIAL-SENSITIVE includes:
+                            <ul>
+                                <li>sensitive or damaging contractual issues</li>
+                                <li>sensitive diplomatic business or international trade negotiations</li>
+                                <li>sensitive personal information, such as grievance cases</li>
+                                <li>sensitive corporate information such as organisational restructuring, negotiations and major security or business continuity issues</li>
+                                <li>information relating to sensitive trade negotiations</li>
+                                <li>corporate information relating to contract negotiations and tender exercises</li>
+                                <li>company accounts</li>
+                                <li>procurement relating specifically to the security of DIT</li>
+                                <li>policy development and advice to ministers on contentious or sensitive issues</li>
+                            </ul>
+                        </p>
+                    </div>
+
+                    <div class="govuk-radios">
+                        {% for value, name in form.fields.is_summary_sensitive.choices %}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="{{ form.is_summary_sensitive.name }}-{{ value }}" name="{{ form.is_summary_sensitive.name }}" type="radio" value="{{ value }}"{% if form.is_summary_sensitive.value == value %} checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="{{ form.is_summary_sensitive.name }}-{{ value }}">{{ name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
     </form>
 

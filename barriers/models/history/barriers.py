@@ -52,12 +52,9 @@ class DescriptionHistoryItem(BaseHistoryItem):
         return value or ""
 
 
-class EUExitRelatedHistoryItem(BaseHistoryItem):
-    field = "eu_exit_related"
-    field_name = "Related to EU exit"
-
-    def get_value(self, value):
-        return self.metadata.get_eu_exit_related_text(value)
+class IsSummarySensitiveHistoryItem(BaseHistoryItem):
+    field = "is_summary_sensitive"
+    field_name = "Summary status"
 
 
 class LocationHistoryItem(BaseHistoryItem):
@@ -167,7 +164,7 @@ class BarrierHistoryItem(PolymorphicBase):
         CategoriesHistoryItem,
         CompaniesHistoryItem,
         DescriptionHistoryItem,
-        EUExitRelatedHistoryItem,
+        IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
         ProductHistoryItem,
         PriorityHistoryItem,

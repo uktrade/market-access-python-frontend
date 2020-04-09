@@ -64,6 +64,20 @@
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_description' barrier.id %}">Edit</a>
                 {% endif %}
+
+                {% if barrier.is_summary_sensitive is not False %}
+                    <div class="govuk-warning-text govuk-!-margin-bottom-2">
+                        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                        <strong class="govuk-warning-text__text">
+                            <span class="govuk-warning-text__assistive">Warning</span>
+                            {% if barrier.is_summary_sensitive is True %}
+                                This summary contains OFFICIAL-SENSITIVE information.
+                            {% else %}
+                                This summary has not been given a security classification.
+                            {% endif %}
+                        </strong>
+                    </div>
+                {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Barrier type</dt>

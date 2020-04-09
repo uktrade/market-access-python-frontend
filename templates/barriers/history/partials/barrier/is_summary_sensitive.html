@@ -1,0 +1,9 @@
+{% if item.new_value is True %}
+    <div class="history-item__new-value">
+        Marked as including OFFICIAL-SENSITIVE information.
+    </div>
+{% elif item.new_value is False %}
+    <div class="history-item__new-value">
+        Marked as not including OFFICIAL-SENSITIVE information.
+    </div>
+{% endif %}
