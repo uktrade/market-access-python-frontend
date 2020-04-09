@@ -71,7 +71,7 @@ class Report(APIModel):
         Example output:
             {
                 '1': {
-                    'name': 'Add a barrier,
+                    'name': 'Report a barrier,
                     'stages': [
                         {
                             'name': 'Barrier status',

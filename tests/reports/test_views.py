@@ -22,7 +22,7 @@ class NewReportsViewTestCase(MarketAccessTestCase):
 
     def test_new_report_returns_correct_html(self):
         url = reverse('reports:new_report')
-        expected_title = '<title>Market Access - Add a barrier</title>'
+        expected_title = '<title>Market Access - Report a barrier</title>'
         expected_callout = '<a href="/reports/new/start/" class="callout__button callout__button--start">Start now</a>'
         task_item = '<li class="task-list__item">'
         expected_tasks_count = 5
