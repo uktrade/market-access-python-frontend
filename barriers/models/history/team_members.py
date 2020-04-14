@@ -1,4 +1,4 @@
-from .base import BaseHistoryItem
+from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
 
 
@@ -15,4 +15,5 @@ class TeamMemberHistoryItem(PolymorphicBase):
     model = "team_member"
     key = "field"
     subclasses = (UserHistoryItem,)
+    default_subclass = GenericHistoryItem
     class_lookup = {}

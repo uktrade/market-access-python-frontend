@@ -8,12 +8,13 @@ class PolymorphicBase:
     key = None
     class_lookup = {}
     subclasses = tuple()
+    default_subclass = None
 
     def __new__(cls, data):
         if not cls.class_lookup:
             cls.init_class_lookup()
 
-        subclass = cls.class_lookup.get(data[cls.key])
+        subclass = cls.class_lookup.get(data[cls.key], cls.default_subclass)
         return subclass(data)
 
     @classmethod

@@ -41,3 +41,13 @@ class BaseHistoryItem(APIModel):
 
     def get_value(self, value):
         return value
+
+
+class GenericHistoryItem(BaseHistoryItem):
+    """
+    HistoryItem class used when unable to find a match for the model and field
+    """
+
+    @property
+    def field_name(self):
+        return self.field.title()

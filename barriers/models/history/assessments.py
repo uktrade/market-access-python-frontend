@@ -1,4 +1,4 @@
-from .base import BaseHistoryItem
+from .base import BaseHistoryItem, GenericHistoryItem
 from .documents import BaseDocumentsHistoryItem
 from .utils import PolymorphicBase
 
@@ -67,4 +67,5 @@ class AssessmentHistoryItem(PolymorphicBase):
         ImportMarketSizeHistoryItem,
         ValueToEconomyHistoryItem,
     )
+    default_subclass = GenericHistoryItem
     class_lookup = {}
