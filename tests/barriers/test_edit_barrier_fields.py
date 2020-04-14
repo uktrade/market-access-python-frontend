@@ -52,7 +52,7 @@ class EditSummaryTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["summary"] == self.barrier["problem_description"]
+        assert form.initial["summary"] == self.barrier["summary"]
 
     @patch("utils.api.resources.APIResource.patch")
     def test_summary_cannot_be_empty(self, mock_patch):
@@ -82,7 +82,7 @@ class EditSummaryTestCase(MarketAccessTestCase):
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            problem_description="New summary",
+            summary="New summary",
             is_summary_sensitive=True,
         )
         assert response.status_code == HTTPStatus.FOUND

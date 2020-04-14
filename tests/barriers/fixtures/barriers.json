@@ -18,7 +18,7 @@
         "source": "GOVT",
         "other_source": null,
         "barrier_title": "Import quota for sports cars",
-        "problem_description": "Because of laws for pollution reduction, which Parlament imposed under pressure from EU, they are limiting the imports of sports cars.",
+        "summary": "Because of laws for pollution reduction, which Parlament imposed under pressure from EU, they are limiting the imports of sports cars.",
         "is_summary_sensitive": false,
         "barrier_types": [115, 141],
         "reported_on": "2019-10-28T11:45:44.720000Z",

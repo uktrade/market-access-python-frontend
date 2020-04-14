@@ -93,7 +93,7 @@ def test_continue_draft_barrier(browser):
     browser.choose("source", "COMPANY")
     browser.find_by_css("input[type=submit]").click()
 
-    browser.fill("problem_description", "Test description")
+    browser.fill("summary", "Test description")
     browser.fill("next_steps_summary", "Test next steps")
     browser.find_by_css('button[value="exit"]').click()
 

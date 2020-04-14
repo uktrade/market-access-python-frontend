@@ -129,7 +129,7 @@ class StatusHistoryItem(BaseHistoryItem):
 
 
 class SummaryHistoryItem(BaseHistoryItem):
-    field = "problem_description"
+    field = "summary"
     field_name = "Summary"
 
     def get_value(self, value):

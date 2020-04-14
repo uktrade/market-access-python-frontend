@@ -2,7 +2,7 @@ from django import forms
 
 
 class NewReportBarrierSummaryForm(forms.Form):
-    problem_description = forms.CharField(
+    summary = forms.CharField(
         label="Describe the barrier",
         help_text="Include how the barrier is affecting the export or investment "
                   "and why the barrier exists. For example, because of specific "

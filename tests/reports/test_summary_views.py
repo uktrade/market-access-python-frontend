@@ -59,7 +59,7 @@ class SummaryViewTestCase(ReportsTestCase):
         self.assertFormError(
             response,
             "form",
-            "problem_description",
+            "summary",
             "Enter a brief description for this barrier",
         )
 
@@ -80,7 +80,7 @@ class SummaryViewTestCase(ReportsTestCase):
         mock_get.return_value = Report(self.draft)
         redirect_url = reverse("barriers:barrier_detail", kwargs={"barrier_id": self.draft["id"]})
         data = {
-            "problem_description": "wibble wobble",
+            "summary": "wibble wobble",
             "next_steps_summary": "step 1 - wobble, step 2 - wibble",
         }
 
@@ -103,7 +103,7 @@ class SummaryViewTestCase(ReportsTestCase):
         redirect_url = reverse("reports:draft_barrier_details_uuid", kwargs={"barrier_id": self.draft["id"]})
         data = {
             "action": "exit",
-            "problem_description": "wibble wobble",
+            "summary": "wibble wobble",
             "next_steps_summary": "step 1 - wobble, step 2 - wibble",
         }
 

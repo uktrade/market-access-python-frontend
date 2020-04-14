@@ -74,7 +74,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
             {
                 "date": "2019-08-15T09:54:05.222000Z",
                 "model": "barrier",
-                "field": "problem_description",
+                "field": "summary",
                 "old_value": "Old summary",
                 "new_value": "New summary",
                 "user": {"id": 48, "name": "Test-user"},

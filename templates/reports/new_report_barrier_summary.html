@@ -14,18 +14,18 @@
             {% csrf_token %}
 
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
-                <div class="{% form_group_classes form.problem_description.errors %}">
+                <div class="{% form_group_classes form.summary.errors %}">
                     <label class="govuk-label govuk-label--s" for="description">
-                        {{ form.problem_description.label }}
+                        {{ form.summary.label }}
                     </label>
-                    {% form_field_error form "problem_description" %}
+                    {% form_field_error form "summary" %}
                     <span id="description-hint" class="govuk-hint">
-                        {{ form.problem_description.help_text }}
+                        {{ form.summary.help_text }}
                     </span>
                     <textarea class="govuk-textarea js-character-count" id="description"
-                              name="{{ form.problem_description.name }}"
+                              name="{{ form.summary.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.initial.problem_description }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.initial.summary }}</textarea>
                 </div>
             </div>
             {% if not is_resolved %}

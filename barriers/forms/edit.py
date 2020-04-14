@@ -61,7 +61,7 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            problem_description=self.cleaned_data["summary"],
+            summary=self.cleaned_data["summary"],
             is_summary_sensitive=self.cleaned_data["is_summary_sensitive"],
         )
 

@@ -60,7 +60,7 @@
 
             <dt class="summary-group__list__key">Barrier summary</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.problem_description|escape|linebreaksbr }}
+                {{ barrier.summary|escape|linebreaksbr }}
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_summary' barrier.id %}">Edit</a>
                 {% endif %}

@@ -35,7 +35,7 @@ class BarrierEditSummary(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         initial = {
-            "summary": self.barrier.problem_description,
+            "summary": self.barrier.summary,
             "is_summary_sensitive": None,
         }
         if self.barrier.is_summary_sensitive is True:
