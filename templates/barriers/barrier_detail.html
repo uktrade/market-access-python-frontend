@@ -66,9 +66,9 @@
                 {% endif %}
 
                 {% if barrier.is_summary_sensitive is not False %}
-                    <div class="govuk-warning-text govuk-!-margin-bottom-2">
-                        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                        <strong class="govuk-warning-text__text">
+                    <div class="govuk-warning-text govuk-!-margin-bottom-0 govuk-!-margin-top-2">
+                        <span class="govuk-warning-text__icon govuk-warning-text__icon--small" aria-hidden="true">!</span>
+                        <strong class="govuk-warning-text__text govuk-warning-text__text--small">
                             <span class="govuk-warning-text__assistive">Warning</span>
                             {% if barrier.is_summary_sensitive is True %}
                                 This summary contains OFFICIAL-SENSITIVE information.
