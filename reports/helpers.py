@@ -323,6 +323,7 @@ class ReportFormGroup:
     def get_summary_form(self):
         data = {
             "summary": self.barrier.data.get("summary") or "",
+            "is_summary_sensitive": self.barrier.data.get("is_summary_sensitive"),
             "next_steps_summary": self.barrier.data.get("next_steps_summary") or "",
             "status_summary": self.barrier.data.get("status_summary") or "",
         }
