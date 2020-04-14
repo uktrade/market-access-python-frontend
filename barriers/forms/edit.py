@@ -3,7 +3,11 @@ from django import forms
 from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText, MultipleChoiceFieldWithHelpText
+from utils.forms import (
+    ChoiceFieldWithHelpText,
+    MultipleChoiceFieldWithHelpText,
+    YesNoBooleanField,
+)
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -40,28 +44,14 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
     )
-    is_summary_sensitive = forms.ChoiceField(
+    is_summary_sensitive = YesNoBooleanField(
         label="Does the summary contain OFFICIAL-SENSITIVE information?",
-        choices=(
-            ("yes", "Yes"),
-            ("no", "No"),
-        ),
         error_messages={
             "required": (
                 "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
             )
         },
     )
-
-    def clean_is_summary_sensitive(self):
-        value = self.cleaned_data["is_summary_sensitive"]
-        if value == "yes":
-            return True
-        elif value == "no":
-            return False
-        raise forms.ValidationError(
-            "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
-        )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
