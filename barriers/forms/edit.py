@@ -46,7 +46,11 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
             ("yes", "Yes"),
             ("no", "No"),
         ),
-        error_messages={"required": "Select whether the summary is sensitive"},
+        error_messages={
+            "required": (
+                "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
+            )
+        },
     )
 
     def clean_is_summary_sensitive(self):
@@ -55,7 +59,9 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
             return True
         elif value == "no":
             return False
-        raise forms.ValidationError("Select whether the summary is sensitive")
+        raise forms.ValidationError(
+            "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
+        )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
