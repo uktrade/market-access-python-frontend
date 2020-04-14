@@ -34,8 +34,8 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
         client.barriers.patch(id=self.id, product=self.cleaned_data["product"])
 
 
-class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
-    description = forms.CharField(
+class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
+    summary = forms.CharField(
         label=("Provide a summary of the problem and how you became aware of it"),
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
@@ -61,7 +61,7 @@ class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            problem_description=self.cleaned_data["description"],
+            problem_description=self.cleaned_data["summary"],
             is_summary_sensitive=self.cleaned_data["is_summary_sensitive"],
         )
 

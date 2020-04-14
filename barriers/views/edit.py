@@ -4,8 +4,8 @@ from .mixins import APIBarrierFormViewMixin
 from barriers.forms.edit import (
     UpdateBarrierTitleForm,
     UpdateBarrierProductForm,
-    UpdateBarrierDescriptionForm,
     UpdateBarrierSourceForm,
+    UpdateBarrierSummaryForm,
     UpdateBarrierPriorityForm,
     UpdateBarrierProblemStatusForm,
     UpdateBarrierTagsForm,
@@ -29,13 +29,13 @@ class BarrierEditProduct(APIBarrierFormViewMixin, FormView):
         return {"product": self.barrier.product}
 
 
-class BarrierEditDescription(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/description.html"
-    form_class = UpdateBarrierDescriptionForm
+class BarrierEditSummary(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/summary.html"
+    form_class = UpdateBarrierSummaryForm
 
     def get_initial(self):
         initial = {
-            "description": self.barrier.problem_description,
+            "summary": self.barrier.problem_description,
             "is_summary_sensitive": None,
         }
         if self.barrier.is_summary_sensitive is True:

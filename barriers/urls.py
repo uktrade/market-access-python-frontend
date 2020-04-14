@@ -31,8 +31,8 @@ from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditTitle,
     BarrierEditProduct,
-    BarrierEditDescription,
     BarrierEditSource,
+    BarrierEditSummary,
     BarrierEditPriority,
     BarrierEditProblemStatus,
     BarrierEditTags,
@@ -101,7 +101,9 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/edit/title/", BarrierEditTitle.as_view(), name="edit_title"),
     path("barriers/<uuid:barrier_id>/edit/product/", BarrierEditProduct.as_view(), name="edit_product"),
-    path("barriers/<uuid:barrier_id>/edit/description/", BarrierEditDescription.as_view(), name="edit_description"),
+    # TODO: deprecate description url
+    path("barriers/<uuid:barrier_id>/edit/description/", BarrierEditSummary.as_view(), name="edit_description"),
+    path("barriers/<uuid:barrier_id>/edit/summary/", BarrierEditSummary.as_view(), name="edit_summary"),
     path("barriers/<uuid:barrier_id>/edit/source/", BarrierEditSource.as_view(), name="edit_source"),
     path("barriers/<uuid:barrier_id>/edit/priority/", BarrierEditPriority.as_view(), name="edit_priority"),
     path("barriers/<uuid:barrier_id>/edit/problem-status/", BarrierEditProblemStatus.as_view(), name="edit_problem_status"),

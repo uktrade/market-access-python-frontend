@@ -44,14 +44,6 @@ class CompaniesHistoryItem(BaseHistoryItem):
         return [company["name"] for company in value or []]
 
 
-class DescriptionHistoryItem(BaseHistoryItem):
-    field = "problem_description"
-    field_name = "Summary"
-
-    def get_value(self, value):
-        return value or ""
-
-
 class IsSummarySensitiveHistoryItem(BaseHistoryItem):
     field = "is_summary_sensitive"
     field_name = "Summary status"
@@ -136,6 +128,14 @@ class StatusHistoryItem(BaseHistoryItem):
         return value
 
 
+class SummaryHistoryItem(BaseHistoryItem):
+    field = "problem_description"
+    field_name = "Summary"
+
+    def get_value(self, value):
+        return value or ""
+
+
 class TagsHistoryItem(BaseHistoryItem):
     field = "tags"
     field_name = "Barrier tags"
@@ -163,7 +163,6 @@ class BarrierHistoryItem(PolymorphicBase):
         ArchivedHistoryItem,
         CategoriesHistoryItem,
         CompaniesHistoryItem,
-        DescriptionHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
         ProductHistoryItem,
@@ -172,6 +171,7 @@ class BarrierHistoryItem(PolymorphicBase):
         SectorsHistoryItem,
         SourceHistoryItem,
         StatusHistoryItem,
+        SummaryHistoryItem,
         TagsHistoryItem,
         TitleHistoryItem,
     )

@@ -14,12 +14,12 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.description.name }}" class="govuk-form-group{% if form.description.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="description">{{ form.description.label }}</label>
+        <div id="{{ form.summary.name }}" class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="summary">{{ form.summary.label }}</label>
 
-            {% form_field_error form "description" %}
+            {% form_field_error form "summary" %}
 
-            <textarea class="govuk-textarea" name="description" rows="5">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+            <textarea class="govuk-textarea" name="summary" rows="5">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
         </div>
 
         <div id="{{ form.is_summary_sensitive.name }}" class="govuk-form-group{% if form.is_summary_sensitive.errors %} govuk-form-group--error{% endif %}">

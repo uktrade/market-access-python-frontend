@@ -69,20 +69,20 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         assert item.old_value == ["Mercury Ltd"]
         assert item.new_value == []
 
-    def test_description(self):
+    def test_summary(self):
         item = HistoryItem(
             {
                 "date": "2019-08-15T09:54:05.222000Z",
                 "model": "barrier",
                 "field": "problem_description",
-                "old_value": "Old description",
-                "new_value": "New description",
+                "old_value": "Old summary",
+                "new_value": "New summary",
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
         assert item.field_name == "Summary"
-        assert item.old_value == "Old description"
-        assert item.new_value == "New description"
+        assert item.old_value == "Old summary"
+        assert item.new_value == "New summary"
 
     def test_location(self):
         item = HistoryItem(
