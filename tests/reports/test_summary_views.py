@@ -63,6 +63,13 @@ class SummaryViewTestCase(ReportsTestCase):
             "Enter a brief description for this barrier",
         )
 
+        self.assertFormError(
+            response,
+            "form",
+            "is_summary_sensitive",
+            "Indicate if summary contains OFFICIAL-SENSITIVE information or not",
+        )
+
         assert ERROR_HTML.SUMMARY_HEADER in html
         assert ERROR_HTML.REQUIRED_FIELD in html
         assert saved_form_data is None
@@ -81,6 +88,7 @@ class SummaryViewTestCase(ReportsTestCase):
         redirect_url = reverse("barriers:barrier_detail", kwargs={"barrier_id": self.draft["id"]})
         data = {
             "summary": "wibble wobble",
+            "is_summary_sensitive": "no",
             "next_steps_summary": "step 1 - wobble, step 2 - wibble",
         }
 
@@ -104,6 +112,7 @@ class SummaryViewTestCase(ReportsTestCase):
         data = {
             "action": "exit",
             "summary": "wibble wobble",
+            "is_summary_sensitive": "no",
             "next_steps_summary": "step 1 - wobble, step 2 - wibble",
         }
 
