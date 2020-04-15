@@ -40,7 +40,7 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
 
 class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
-        label=("Provide a summary of the problem and how you became aware of it"),
+        label="Give us a summary of the barrier and how you found out about it",
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
     )

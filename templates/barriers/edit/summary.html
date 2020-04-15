@@ -19,6 +19,20 @@
 
             {% form_field_error form "summary" %}
 
+            {% if barrier.is_summary_sensitive is not False %}
+                <div class="govuk-warning-text govuk-!-margin-bottom-4 govuk-!-margin-top-4">
+                    <span class="govuk-warning-text__icon govuk-warning-text__icon--small" aria-hidden="true">!</span>
+                    <strong class="govuk-warning-text__text govuk-warning-text__text--small">
+                        <span class="govuk-warning-text__assistive">Warning</span>
+                        {% if barrier.is_summary_sensitive is True %}
+                            This summary contains OFFICIAL-SENSITIVE information.
+                        {% else %}
+                            This summary has not been given a security classification.
+                        {% endif %}
+                    </strong>
+                </div>
+            {% endif %}
+
             <textarea class="govuk-textarea" name="summary" rows="5">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
         </div>
 
