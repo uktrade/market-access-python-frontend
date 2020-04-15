@@ -30,7 +30,7 @@ from utils.api.client import MarketAccessAPIClient
 #     "barrier_title",        # Step 4 - About - STR
 #     "tags"                  # Step 4 - About - LIST of IDS
 #     # ==============================
-#     "problem_description",  # Step 5 - Summary - STR
+#     "summary",  # Step 5 - Summary - STR
 #     "next_steps_summary",   # Step 5 - Summary - STR
 #     # ==============================
 #     "progress",             # n/a
@@ -322,7 +322,8 @@ class ReportFormGroup:
 
     def get_summary_form(self):
         data = {
-            "problem_description": self.barrier.data.get("problem_description") or "",
+            "summary": self.barrier.data.get("summary") or "",
+            "is_summary_sensitive": self.barrier.data.get("is_summary_sensitive"),
             "next_steps_summary": self.barrier.data.get("next_steps_summary") or "",
             "status_summary": self.barrier.data.get("status_summary") or "",
         }

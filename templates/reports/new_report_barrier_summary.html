@@ -14,20 +14,43 @@
             {% csrf_token %}
 
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
-                <div class="{% form_group_classes form.problem_description.errors %}">
+                <div class="{% form_group_classes form.summary.errors %}">
                     <label class="govuk-label govuk-label--s" for="description">
-                        {{ form.problem_description.label }}
+                        {{ form.summary.label }}
                     </label>
-                    {% form_field_error form "problem_description" %}
+                    {% form_field_error form "summary" %}
                     <span id="description-hint" class="govuk-hint">
-                        {{ form.problem_description.help_text }}
+                        {{ form.summary.help_text }}
                     </span>
                     <textarea class="govuk-textarea js-character-count" id="description"
-                              name="{{ form.problem_description.name }}"
+                              name="{{ form.summary.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.initial.problem_description }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.initial.summary }}</textarea>
                 </div>
             </div>
+
+            <div id="{{ form.is_summary_sensitive.name }}" class="{% form_group_classes form.is_summary_sensitive.errors %}">
+
+                {% form_field_error form "is_summary_sensitive" %}
+
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.is_summary_sensitive.label }}
+                    </legend>
+
+                    {% include "partials/official_sensitive.html" %}
+
+                    <div class="govuk-radios">
+                        {% for value, name in form.fields.is_summary_sensitive.choices %}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="{{ form.is_summary_sensitive.name }}-{{ value }}" name="{{ form.is_summary_sensitive.name }}" type="radio" value="{{ value }}"{% if form.is_summary_sensitive.value == value %} checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="{{ form.is_summary_sensitive.name }}-{{ value }}">{{ name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
             {% if not is_resolved %}
             <div class="{% form_group_classes form.next_steps_summary.errors %}">
                 <label class="govuk-label govuk-label--s" for="next-steps">

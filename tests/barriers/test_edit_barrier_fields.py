@@ -42,43 +42,62 @@ class EditTitleTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
-class EditDescriptionTestCase(MarketAccessTestCase):
-    def test_edit_description_has_initial_data(self):
+class EditSummaryTestCase(MarketAccessTestCase):
+    def test_edit_summary_has_initial_data(self):
         response = self.client.get(
             reverse(
-                "barriers:edit_description", kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
             )
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["description"] == self.barrier["problem_description"]
+        assert form.initial["summary"] == self.barrier["summary"]
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_description_cannot_be_empty(self, mock_patch):
+    def test_summary_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_description", kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"description": ""},
+            data={"summary": ""},
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "description" in form.errors
+        assert "summary" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_description_calls_api(self, mock_patch):
+    def test_is_summary_sensitive_is_required(self, mock_patch):
+        response = self.client.post(
+            reverse(
+                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
+            ),
+            data={"summary": "This is a summary"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        form = response.context["form"]
+        assert form.is_valid() is False
+        assert "is_summary_sensitive" in form.errors
+        assert mock_patch.called is False
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_edit_summary_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:edit_description", kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"description": "New description"},
+            data={
+                "summary": "New summary",
+                "is_summary_sensitive": "yes",
+            },
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], problem_description="New description",
+            id=self.barrier["id"],
+            summary="New summary",
+            is_summary_sensitive=True,
         )
         assert response.status_code == HTTPStatus.FOUND
 

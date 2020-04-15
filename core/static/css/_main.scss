@@ -42,6 +42,10 @@ $govuk-font-family-tabular: Arial,'Helvetica Neue',Helvetica,sans-serif;
 @import 'govuk-frontend/components/date-input/date-input';
 @import 'govuk-frontend/components/file-upload/file-upload';
 @import 'govuk-frontend/components/character-count/character-count';
+@import 'govuk-frontend/components/details/details';
+
+@import 'govuk-custom/components/details/details';
+@import 'govuk-custom/components/warning-text/warning-text';
 
 @import 'app-settings/colours';
 

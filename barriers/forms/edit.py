@@ -3,7 +3,11 @@ from django import forms
 from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ChoiceFieldWithHelpText, MultipleChoiceFieldWithHelpText
+from utils.forms import (
+    ChoiceFieldWithHelpText,
+    MultipleChoiceFieldWithHelpText,
+    YesNoBooleanField,
+)
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
@@ -34,17 +38,27 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
         client.barriers.patch(id=self.id, product=self.cleaned_data["product"])
 
 
-class UpdateBarrierDescriptionForm(APIFormMixin, forms.Form):
-    description = forms.CharField(
-        label=("Provide a summary of the problem and how you became aware of it"),
+class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
+    summary = forms.CharField(
+        label="Give us a summary of the barrier and how you found out about it",
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
+    )
+    is_summary_sensitive = YesNoBooleanField(
+        label="Does the summary contain OFFICIAL-SENSITIVE information?",
+        error_messages={
+            "required": (
+                "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
+            )
+        },
     )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
-            id=self.id, problem_description=self.cleaned_data["description"]
+            id=self.id,
+            summary=self.cleaned_data["summary"],
+            is_summary_sensitive=self.cleaned_data["is_summary_sensitive"],
         )
 
 

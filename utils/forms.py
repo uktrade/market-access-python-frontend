@@ -142,6 +142,36 @@ class MonthYearWidget(forms.MultiWidget):
         return super().value_from_datadict(data, files, name)
 
 
+class YesNoBooleanField(forms.ChoiceField):
+    """
+    Display a BooleanField as Yes and No radio buttons
+    """
+
+    def __init__(self, **kwargs):
+        choices = (
+            ("yes", "Yes"),
+            ("no", "No"),
+        )
+        super().__init__(choices=choices, **kwargs)
+
+    def prepare_value(self, data):
+        if data is True:
+            return "yes"
+        elif data is False:
+            return "no"
+        return data
+
+    def to_python(self, value):
+        if value == "yes":
+            return True
+        elif value == "no":
+            return False
+
+    def valid_value(self, value):
+        value = self.prepare_value(value)
+        return super().valid_value(value)
+
+
 class MonthYearField(forms.MultiValueField):
     widget = MonthYearWidget
     default_validators = [validate_date_not_in_future]

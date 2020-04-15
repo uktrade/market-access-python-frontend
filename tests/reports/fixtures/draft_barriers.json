@@ -19,7 +19,7 @@
     "source": null,
     "other_source": null,
     "barrier_title": null,
-    "problem_description": null,
+    "summary": null,
     "next_steps_summary": null,
     "progress": [
       {
@@ -81,7 +81,7 @@
     "source": null,
     "other_source": null,
     "barrier_title": null,
-    "problem_description": null,
+    "summary": null,
     "next_steps_summary": null,
     "progress": [
         {
@@ -143,7 +143,7 @@
     "source": null,
     "other_source": null,
     "barrier_title": null,
-    "problem_description": null,
+    "summary": null,
     "next_steps_summary": null,
     "progress": [
         {
@@ -205,7 +205,7 @@
     "source": null,
     "other_source": null,
     "barrier_title": null,
-    "problem_description": null,
+    "summary": null,
     "next_steps_summary": null,
     "progress": [
         {
@@ -267,7 +267,7 @@
     "source": null,
     "other_source": null,
     "barrier_title": null,
-    "problem_description": null,
+    "summary": null,
     "next_steps_summary": null,
     "progress": [
         {
@@ -331,7 +331,7 @@
     "source": null,
     "other_source": null,
     "barrier_title": null,
-    "problem_description": null,
+    "summary": null,
     "next_steps_summary": null,
     "progress": [
         {
@@ -395,7 +395,7 @@
     "source": "COMPANY",
     "other_source": null,
     "barrier_title": "wibble",
-    "problem_description": null,
+    "summary": null,
     "next_steps_summary": null,
     "progress": [
         {
@@ -459,7 +459,7 @@
     "source": "COMPANY",
     "other_source": null,
     "barrier_title": "wibble",
-    "problem_description": "wibble",
+    "summary": "wibble",
     "next_steps_summary": "wobble",
     "progress": [
         {

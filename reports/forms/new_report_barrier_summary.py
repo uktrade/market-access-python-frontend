@@ -1,8 +1,10 @@
 from django import forms
 
+from utils.forms import YesNoBooleanField
+
 
 class NewReportBarrierSummaryForm(forms.Form):
-    problem_description = forms.CharField(
+    summary = forms.CharField(
         label="Describe the barrier",
         help_text="Include how the barrier is affecting the export or investment "
                   "and why the barrier exists. For example, because of specific "
@@ -10,6 +12,14 @@ class NewReportBarrierSummaryForm(forms.Form):
                   "political context; the HS code; and when the problem started.",
         error_messages={
             'required': "Enter a brief description for this barrier"
+        },
+    )
+    is_summary_sensitive = YesNoBooleanField(
+        label="Does the summary contain OFFICIAL-SENSITIVE information?",
+        error_messages={
+            "required": (
+                "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
+            )
         },
     )
     next_steps_summary = forms.CharField(
