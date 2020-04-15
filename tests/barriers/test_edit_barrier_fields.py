@@ -69,6 +69,20 @@ class EditSummaryTestCase(MarketAccessTestCase):
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
+    def test_is_summary_sensitive_is_required(self, mock_patch):
+        response = self.client.post(
+            reverse(
+                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
+            ),
+            data={"summary": "This is a summary"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        form = response.context["form"]
+        assert form.is_valid() is False
+        assert "is_summary_sensitive" in form.errors
+        assert mock_patch.called is False
+
+    @patch("utils.api.resources.APIResource.patch")
     def test_edit_summary_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
