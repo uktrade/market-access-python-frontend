@@ -1,5 +1,5 @@
 from barriers.constants import ARCHIVED_REASON
-from .base import BaseHistoryItem
+from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
 from utils.metadata import Statuses
 
@@ -175,4 +175,5 @@ class BarrierHistoryItem(PolymorphicBase):
         TagsHistoryItem,
         TitleHistoryItem,
     )
+    default_subclass = GenericHistoryItem
     class_lookup = {}
