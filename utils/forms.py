@@ -159,6 +159,7 @@ class YesNoBooleanField(forms.ChoiceField):
             return "yes"
         elif data is False:
             return "no"
+        return data
 
     def to_python(self, value):
         if value == "yes":
