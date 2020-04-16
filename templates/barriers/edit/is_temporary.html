@@ -1,0 +1,60 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Barrier edit end date{% endblock %}
+
+{% block body_script %}
+    <script>
+        new ma.components.ConditionalRadioContent({
+            inputContainer: '.is_temporary',
+            inputName: 'is_temporary',
+            conditionalElem: '#conditional-yes',
+            shouldShow: function( value ){ return ( value === 'yes' ); }
+        });
+        new ma.components.ConditionalRadioContent({
+            inputContainer: '.has_end_date',
+            inputName: 'has_end_date',
+            conditionalElem: '#conditional-has_end_date-yes',
+            shouldShow: function( value ){ return ( value === 'yes' ); }
+        });
+    </script>
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Update the Barrier' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div id="{{ form.is_temporary.name }}" class="govuk-form-group{% if form.is_temporary.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.is_temporary.label }}</legend>
+
+                {% form_field_error form "is_temporary" %}
+
+                <div class="govuk-radios is_temporary govuk-radios--conditional" data-module="radios">
+                    {% for choice in form.fields.is_temporary.enhanced_choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="{{ choice.value }}" name="{{ form.is_temporary.name }}" type="radio" value="{{ choice.value }}" {% if form.is_temporary.value == choice.value %}checked="checked"{% endif %} data-aria-controls="conditional-{{ choice.value }}" aria-describedby="{{ choice.value }}-item-hint">
+                            <label class="govuk-label govuk-radios__label" for="{{ choice.value }}">{{ choice.name }}</label>
+                            <span id="{{ choice.value }}-item-hint" class="govuk-hint govuk-radios__hint">{{ choice.help_text }}</span>
+                        </div>
+
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ choice.value }}">
+                            {{ choice.subform.as_html }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
+        <input type="submit" class="govuk-button" value="Save and exit to barrier">
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+    </form>
+
+{% endblock %}

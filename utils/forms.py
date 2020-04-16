@@ -260,8 +260,9 @@ class SubformChoiceField(forms.ChoiceField):
             choice = {
                 "value": value,
                 "name": name,
-                "subform": self.subforms[value],
             }
+            if value in self.subforms:
+                choice["subform"] = self.subforms[value]
             if value in self.choices_help_text:
                 choice["help_text"] = self.choices_help_text[value]
             yield choice
@@ -304,6 +305,6 @@ class SubformMixin:
         form_errors = super().errors
         if self.is_bound:
             for name, field in self.subform_fields.items():
-                if name in self.cleaned_data:
+                if name in self.cleaned_data and hasattr(field, "subform"):
                     form_errors.update(field.subform.errors)
         return form_errors

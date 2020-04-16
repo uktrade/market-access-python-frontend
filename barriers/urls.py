@@ -70,6 +70,7 @@ from .views.teams import (
     DeleteTeamMember,
     SearchTeamMember,
 )
+from .views.is_temporary import BarrierEditIsTemporary
 from .views.types import (
     AddBarrierType,
     BarrierEditTypes,
@@ -107,6 +108,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/problem-status/", BarrierEditProblemStatus.as_view(), name="edit_problem_status"),
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
     path("barriers/<uuid:barrier_id>/edit/tags/", BarrierEditTags.as_view(), name="edit_tags"),
+    path("barriers/<uuid:barrier_id>/edit/is-temporary/", BarrierEditIsTemporary.as_view(), name="edit_is_temporary"),
     path("barriers/<uuid:barrier_id>/archive/", ArchiveBarrier.as_view(), name="archive"),
     path("barriers/<uuid:barrier_id>/unarchive/", UnarchiveBarrier.as_view(), name="unarchive"),
     path("barriers/<uuid:barrier_id>/history/", BarrierHistory.as_view(), name="history"),
