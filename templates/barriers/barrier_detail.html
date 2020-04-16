@@ -88,22 +88,19 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Is the barrier temporary?</dt>
+            <dt class="summary-group__list__key">End date</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.is_temporary is True %}
-                    {% if barrier.end_date %}
-                        Yes - end date is {{ barrier.end_date|date:"j F Y" }}
-                    {% else %}
-                        Yes - end date is not known
+                {% if barrier.end_date %}
+                    {{ barrier.end_date|date:"j F Y" }}
+                    {% if not barrier.archived %}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_end_date' barrier.id %}">Edit</a>
                     {% endif %}
-                {% elif barrier.is_temporary is False %}
-                    No
                 {% else %}
-                    Not known
-                {% endif %}
-
-                {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_is_temporary' barrier.id %}">Edit</a>
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No end date</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_end_date' barrier.id %}" class="summary-group__list__value__add">Add end date if applicable</a>
+                    {% endif %}
                 {% endif %}
             </dd>
 

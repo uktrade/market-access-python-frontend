@@ -5,6 +5,7 @@ from .mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ChoiceFieldWithHelpText,
+    MonthYearField,
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
 )
@@ -162,6 +163,27 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id, problem_status=self.cleaned_data["problem_status"]
+        )
+
+
+class UpdateBarrierEndDateForm(APIFormMixin, forms.Form):
+    end_date = MonthYearField(
+        label="End date",
+        help_text=(
+            "For example, 30 11 2020. If you don't know the day, please enter 1 for "
+            "the first of the month."
+        ),
+        error_messages={
+            "required": "Enter a month and year.",
+            "incomplete": "Enter a month and year.",
+        },
+    )
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(
+            id=self.id,
+            end_date=self.cleaned_data["end_date"].isoformat(),
         )
 
 

@@ -2,6 +2,7 @@ from django.views.generic import FormView
 
 from .mixins import APIBarrierFormViewMixin
 from barriers.forms.edit import (
+    UpdateBarrierEndDateForm,
     UpdateBarrierTitleForm,
     UpdateBarrierProductForm,
     UpdateBarrierSourceForm,
@@ -65,6 +66,14 @@ class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {"problem_status": self.barrier.problem_status}
+
+
+class BarrierEditEndDate(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/end_date.html"
+    form_class = UpdateBarrierEndDateForm
+
+    def get_initial(self):
+        return {"end_date": self.barrier.end_date}
 
 
 class BarrierEditTags(APIBarrierFormViewMixin, FormView):
