@@ -1,6 +1,10 @@
+from http import HTTPStatus
+
+from django.http import Http404
 from django.urls import reverse
 
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIHttpException
 
 
 class BarrierMixin:
@@ -37,20 +41,23 @@ class BarrierMixin:
     def get_barrier(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         barrier_id = self.kwargs.get("barrier_id")
-        return client.barriers.get(id=barrier_id)
+        try:
+            return client.barriers.get(id=barrier_id)
+        except APIHttpException as e:
+            if e.status_code == HTTPStatus.NOT_FOUND:
+                raise Http404()
+            raise
 
     def get_interactions(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        barrier_id = self.kwargs.get("barrier_id")
-        activity = client.barriers.get_activity(barrier_id=barrier_id)
+        activity = client.barriers.get_activity(barrier_id=self.barrier.id)
         interactions = self.notes + activity
         interactions.sort(key=lambda object: object.date, reverse=True)
         return interactions
 
     def get_notes(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        barrier_id = self.kwargs.get("barrier_id")
-        return client.notes.list(barrier_id=barrier_id)
+        return client.notes.list(barrier_id=self.barrier.id)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
