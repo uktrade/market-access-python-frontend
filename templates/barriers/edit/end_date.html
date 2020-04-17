@@ -9,6 +9,11 @@
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Update the Barrier' %}
+
+    {% if barrier.end_date %}
+        <div class="govuk-inset-text">Current end date is <strong>{{ barrier.end_date|date:"j F Y" }}</strong></div>
+    {% endif %}
+
     {% form_error_banner form %}
 
     <form action="" method="POST">
