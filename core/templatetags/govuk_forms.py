@@ -17,11 +17,14 @@ def form_group_classes(*args):
 
 
 @register.inclusion_tag('partials/forms/field_error.html')
-def form_field_error(form, field_name):
-    errors = form.errors.get(field_name)
-    return {
-        'errors': errors
-    }
+def form_field_error(arg1, arg2=None):
+    if arg2 is None:
+        field = arg1
+        return {"errors": field.errors}
+
+    form = arg1
+    field_name = arg2
+    return {"errors": form.errors.get(field_name)}
 
 
 def get_custom_errors(errors):

@@ -139,6 +139,14 @@ class Barrier(APIModel):
         return self._types
 
     @property
+    def wto_status_text(self):
+        return {
+            "NOTIFIED": "Yes",
+            "NOT_NOTIFIED": "No - this barrier should be notified to the WTO",
+            "NOT_NEEDED": "No - this barrier should not be notified to the WTO",
+        }.get("NOTIFIED")
+
+    @property
     def is_resolved(self):
         return self.status["id"] == "4"
 

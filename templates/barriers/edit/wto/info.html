@@ -1,0 +1,26 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Edit WTO information{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='About the barrier' %}
+    {% form_error_banner form %}
+
+    <div class="govuk-inset-text">
+        Leave items blank if you do not know the answer
+    </div>
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        {% include "partials/forms/select_input.html" with field=form.committee_notified %}
+        {% include "partials/forms/select_input.html" with field=form.committee_raised_in %}
+        {% include "partials/forms/date_input.html" with field=form.wto_raised_date %}
+    </form>
+
+{% endblock %}

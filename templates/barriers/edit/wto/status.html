@@ -1,0 +1,74 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Barrier edit WTO information{% endblock %}
+
+{% block body_script %}
+    <script>
+        new ma.components.ConditionalRadioContent({
+            inputContainer: '.wto_notified',
+            inputName: 'wto_notified',
+            conditionalElem: '#conditional-no',
+            shouldShow: function( value ){ return ( value === 'no' ); }
+        });
+    </script>
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='About the Barrier' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div class="{% form_group_classes form.wto_notified.errors %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                    {{ form.wto_notified.label }}
+                </legend>
+
+                {% form_field_error form "wto_notified" %}
+
+                <div class="govuk-radios {{ form.wto_notified.name }}">
+                    {% for value, name in form.fields.wto_notified.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="{{ form.wto_notified.name }}-{{ value }}" name="{{ form.wto_notified.name }}" type="radio" value="{{ value }}"{% if form.wto_notified.value == value %} checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="{{ form.wto_notified.name }}-{{ value }}">{{ name }}</label>
+                        </div>
+
+                        {% if value == "no" %}
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ value }}">
+                                <div class="{% form_group_classes form.wto_should_be_notified.errors %}">
+                                    <fieldset class="govuk-fieldset">
+                                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                                            {{ form.wto_should_be_notified.label }}
+                                        </legend>
+
+                                        {% form_field_error form "wto_should_be_notified" %}
+
+                                        <div class="govuk-radios">
+                                            {% for value, name in form.fields.wto_should_be_notified.choices %}
+                                                <div class="govuk-radios__item">
+                                                    <input class="govuk-radios__input" id="{{ form.wto_should_be_notified.name }}-{{ value }}" name="{{ form.wto_should_be_notified.name }}" type="radio" value="{{ value }}"{% if form.wto_should_be_notified.value == value %} checked="checked"{% endif %}>
+                                                    <label class="govuk-label govuk-radios__label" for="{{ form.wto_should_be_notified.name }}-{{ value }}">{{ name }}</label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
+        <button class="govuk-button">Continue</button>
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+    </form>
+
+{% endblock %}

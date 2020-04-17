@@ -184,6 +184,14 @@
                 {% endif %}
             </dd>
 
+            <dt class="summary-group__list__key">Has this barrier been notified to the WTO?</dt>
+            <dd class="summary-group__list__value">
+                {{ barrier.wto_status_text }}
+                {% if not barrier.archived %}
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_wto_status' barrier.id %}">Edit</a>
+                {% endif %}
+            </dd>
+
             <dt class="summary-group__list__key">Barrier reported by</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.reported_by }}
