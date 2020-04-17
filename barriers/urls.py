@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments import (
@@ -99,6 +99,7 @@ urlpatterns = [
     path("watch-list/remove/<int:index>/", RemoveWatchlist.as_view(), name="remove_watchlist"),
 
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
+    re_path("barriers/(?P<barrier_id>[A-Z]-[0-9]{2}-[A-Z0-9]{3})/", BarrierDetail.as_view(), name="barrier_detail_by_code"),
 
     path("barriers/<uuid:barrier_id>/edit/title/", BarrierEditTitle.as_view(), name="edit_title"),
     path("barriers/<uuid:barrier_id>/edit/product/", BarrierEditProduct.as_view(), name="edit_product"),
