@@ -14,15 +14,15 @@
     <form action="" method="POST">
         {% csrf_token %}
 
-        <div id="{{ form.end_date.name }}" class="govuk-form-group{% if form.end_date.errors %} govuk-form-group--error{% endif %}">
-            <fieldset class="govuk-fieldset" {% if form.end_date.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
+        <div id="{{ form.end_date.name }}" class="{% form_group_classes form.end_date.errors %}">
+            <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.end_date.label }}</legend>
 
                 <span class="govuk-hint">{{ form.end_date.help_text }}</span>
 
                 {% form_field_error form "end_date" %}
 
-                <div class="govuk-date-input" id="status-date-group">
+                <div class="govuk-date-input">
                     {{ form.end_date }}
                 </div>
             </fieldset>
