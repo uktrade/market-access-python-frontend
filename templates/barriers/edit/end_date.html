@@ -28,7 +28,15 @@
             </fieldset>
         </div>
 
-        <input type="submit" class="govuk-button" value="Save and exit to barrier">
+        {% if barrier.end_date %}
+            <div>
+                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" name="clear" value="1">
+                    Remove end date and exit to barrier
+                </button>
+            </div>
+        {% endif %}
+
+        <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
 
