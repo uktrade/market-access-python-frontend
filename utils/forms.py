@@ -119,29 +119,6 @@ class MultipleChoiceFieldWithHelpText(HelpTextMixin, forms.MultipleChoiceField):
     pass
 
 
-class MonthYearWidget(forms.MultiWidget):
-    template_name = "partials/forms/widgets/month_year_widget.html"
-
-    def __init__(self, attrs=None):
-        widget = (widgets.NumberInput(), widgets.NumberInput())
-        super().__init__(widget, attrs=attrs)
-
-    def decompress(self, value):
-        if value:
-            if isinstance(value, str):
-                try:
-                    value = dateutil.parser.parse(value)
-                except ValueError:
-                    return [None, None]
-            return [value.month, value.year]
-        return [None, None]
-
-    def value_from_datadict(self, data, files, name):
-        if name in data:
-            return self.decompress(data.get(name))
-        return super().value_from_datadict(data, files, name)
-
-
 class YesNoBooleanField(forms.ChoiceField):
     """
     Display a BooleanField as Yes and No radio buttons
@@ -172,6 +149,29 @@ class YesNoBooleanField(forms.ChoiceField):
         return super().valid_value(value)
 
 
+class MonthYearWidget(forms.MultiWidget):
+    template_name = "partials/forms/widgets/month_year_widget.html"
+
+    def __init__(self, attrs=None):
+        widget = (widgets.NumberInput(), widgets.NumberInput())
+        super().__init__(widget, attrs=attrs)
+
+    def decompress(self, value):
+        if value:
+            if isinstance(value, str):
+                try:
+                    value = dateutil.parser.parse(value)
+                except ValueError:
+                    return [None, None]
+            return [value.month, value.year]
+        return [None, None]
+
+    def value_from_datadict(self, data, files, name):
+        if name in data:
+            return self.decompress(data.get(name))
+        return super().value_from_datadict(data, files, name)
+
+
 class MonthYearField(forms.MultiValueField):
     widget = MonthYearWidget
     default_validators = [validate_date_not_in_future]
@@ -183,8 +183,9 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1,
                 max_value=12,
                 error_messages={
-                    "min_value": "Please enter a valid month",
-                    "max_value": "Please enter a valid month",
+                    "min_value": "Enter a real month",
+                    "max_value": "Enter a real month",
+                    "incomplete": "Enter a month",
                 },
             ),
             forms.IntegerField(
@@ -192,8 +193,9 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1990,
                 max_value=2100,
                 error_messages={
-                    "min_value": "Please enter a valid 4-digit year",
-                    "max_value": "Please enter a valid 4-digit year",
+                    "min_value": "Enter a real year",
+                    "max_value": "Enter a real year",
+                    "incomplete": "Enter a year",
                 },
             ),
         )
@@ -212,6 +214,93 @@ class MonthYearField(forms.MultiValueField):
                 )
 
             return datetime.date(year, month, 1)
+
+
+class DayMonthYearWidget(forms.MultiWidget):
+    template_name = "partials/forms/widgets/day_month_year_widget.html"
+
+    def __init__(self, attrs=None):
+        widget = (widgets.NumberInput(), widgets.NumberInput(), widgets.NumberInput())
+        super().__init__(widget, attrs=attrs)
+
+    def decompress(self, value):
+        if value:
+            if isinstance(value, str):
+                try:
+                    value = dateutil.parser.parse(value)
+                except ValueError:
+                    return [None, None, None]
+            return [value.day, value.month, value.year]
+        return [None, None, None]
+
+    def value_from_datadict(self, data, files, name):
+        if name in data:
+            return self.decompress(data.get(name))
+        return super().value_from_datadict(data, files, name)
+
+
+class DayMonthYearField(forms.MultiValueField):
+    widget = DayMonthYearWidget
+    default_error_messages = {
+        "required": "Enter a day, month and year",
+        "invalid": "Enter a real date",
+    }
+
+    def __init__(self, **kwargs):
+        fields = (
+            forms.IntegerField(
+                label="Day",
+                min_value=1,
+                max_value=31,
+                error_messages={
+                    "min_value": "Enter a real day",
+                    "max_value": "Enter a real day",
+                    "incomplete": "Enter a day",
+                },
+            ),
+            forms.IntegerField(
+                label="Month",
+                min_value=1,
+                max_value=12,
+                error_messages={
+                    "min_value": "Enter a real month",
+                    "max_value": "Enter a real month",
+                    "incomplete": "Enter a month",
+                },
+            ),
+            forms.IntegerField(
+                label="Year",
+                min_value=1990,
+                max_value=2100,
+                error_messages={
+                    "min_value": "Enter a real year",
+                    "max_value": "Enter a real year",
+                    "incomplete": "Enter a year",
+                },
+            ),
+        )
+        super().__init__(fields=fields, require_all_fields=False, **kwargs)
+
+    def compress(self, data_list):
+        if data_list:
+            day, month, year = data_list
+            if day in self.empty_values:
+                raise ValidationError(
+                    self.error_messages["invalid_day"], code="invalid_day"
+                )
+            if month in self.empty_values:
+                raise ValidationError(
+                    self.error_messages["invalid_month"], code="invalid_month"
+                )
+            if year in self.empty_values:
+                raise ValidationError(
+                    self.error_messages["invalid_year"], code="invalid_year"
+                )
+
+            try:
+                return datetime.date(year, month, day)
+            except ValueError:
+                raise ValidationError(self.error_messages["invalid"], code="invalid")
 
 
 class SubformChoiceField(forms.ChoiceField):
@@ -260,8 +349,9 @@ class SubformChoiceField(forms.ChoiceField):
             choice = {
                 "value": value,
                 "name": name,
-                "subform": self.subforms[value],
             }
+            if value in self.subforms:
+                choice["subform"] = self.subforms[value]
             if value in self.choices_help_text:
                 choice["help_text"] = self.choices_help_text[value]
             yield choice
@@ -304,6 +394,16 @@ class SubformMixin:
         form_errors = super().errors
         if self.is_bound:
             for name, field in self.subform_fields.items():
-                if name in self.cleaned_data:
+                if name in self.cleaned_data and hasattr(field, "subform"):
                     form_errors.update(field.subform.errors)
         return form_errors
+
+
+class ClearableMixin:
+    """
+    Bypass form validation if 'clear' button was pressed
+    """
+
+    def _clean_fields(self):
+        if "clear" not in self.data:
+            return super()._clean_fields()

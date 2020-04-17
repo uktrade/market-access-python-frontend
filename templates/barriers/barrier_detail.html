@@ -88,6 +88,22 @@
                 {% endif %}
             </dd>
 
+            <dt class="summary-group__list__key">End date</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.end_date %}
+                    {{ barrier.end_date|date:"j F Y" }}
+                    {% if not barrier.archived %}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_end_date' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No end date</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_end_date' barrier.id %}" class="summary-group__list__value__add">Add end date if applicable</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
+
             <dt class="summary-group__list__key">Companies known to be affected</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.companies %}

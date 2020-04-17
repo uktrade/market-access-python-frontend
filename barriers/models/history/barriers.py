@@ -44,6 +44,15 @@ class CompaniesHistoryItem(BaseHistoryItem):
         return [company["name"] for company in value or []]
 
 
+class EndDateHistoryItem(BaseHistoryItem):
+    field = "end_date"
+    field_name = "End date"
+
+    def get_value(self, value):
+        if value:
+            return dateutil.parser.parse(value)
+
+
 class IsSummarySensitiveHistoryItem(BaseHistoryItem):
     field = "is_summary_sensitive"
     field_name = "Summary status"
@@ -163,6 +172,7 @@ class BarrierHistoryItem(PolymorphicBase):
         ArchivedHistoryItem,
         CategoriesHistoryItem,
         CompaniesHistoryItem,
+        EndDateHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
         ProductHistoryItem,

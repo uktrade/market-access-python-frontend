@@ -3,6 +3,7 @@
         "id": "3e12dd72-8b51-43ec-8269-a173031a0eee",
         "code": "B-19-9DD",
         "problem_status": 2,
+        "end_date": "2022-08-31",
         "is_resolved": false,
         "resolved_date": null,
         "export_country": "b05f66a0-5d95-e211-a939-e4115bead28a",
