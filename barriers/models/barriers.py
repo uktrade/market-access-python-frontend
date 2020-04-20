@@ -58,7 +58,7 @@ class Barrier(APIModel):
 
     @property
     def end_date(self):
-        if self.data["end_date"]:
+        if self.data.get("end_date"):
             return dateutil.parser.parse(self.data["end_date"])
 
     @property
@@ -124,6 +124,14 @@ class Barrier(APIModel):
     def tags(self):
         tags = self.data.get("tags") or ()
         return sorted(tags, key=lambda k: k['order'])
+
+    @property
+    def trade_direction(self):
+        return str(self.data.get("trade_direction", ""))
+
+    @property
+    def trade_direction_text(self):
+        return self.metadata.get_trade_direction(self.trade_direction)
 
     @property
     def title(self):

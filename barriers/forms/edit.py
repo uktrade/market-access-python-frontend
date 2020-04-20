@@ -208,3 +208,22 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(id=self.id, tags=self.cleaned_data["tags"])
+
+
+class UpdateTradeDirectionForm(APIFormMixin, forms.Form):
+    trade_direction = forms.ChoiceField(
+        label="Which trade direction does this barrier affect?",
+        choices=[],
+        widget=forms.RadioSelect,
+        error_messages={"required": "Select a trade direction"},
+    )
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(
+            id=self.id, trade_direction=self.cleaned_data["trade_direction"]
+        )
+
+    def __init__(self, trade_direction_choices, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["trade_direction"].choices = trade_direction_choices

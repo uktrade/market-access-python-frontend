@@ -7701,6 +7701,10 @@
         "BARRIER_CREATED": "Barrier Created",
         "BARRIER_STATUS_CHANGE": "Barrier Status Change"
     },
+    "trade_direction": {
+        "1": "Exporting from the UK",
+        "2": "Importing into the UK"
+    },
     "barrier_priorities": [{
         "code": "UNKNOWN",
         "name": "Unknown",

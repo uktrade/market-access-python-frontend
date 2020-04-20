@@ -342,3 +342,14 @@ class Metadata:
             for tag in self.get_barrier_tags()
             if tag["show_at_reporting"] is True
         )
+
+    def get_trade_direction(self, key=None):
+        # Returns ether all items in the dict or just the specific one
+        trade_directions = self.data.get("trade_direction", {})
+        if key:
+            return trade_directions.get(key)
+        else:
+            return trade_directions.items()
+
+    def get_trade_direction_choices(self):
+        return (td for td in self.get_trade_direction())
