@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views.generic import FormView
 
 from .mixins import APIBarrierFormViewMixin
-from barriers.forms.wto import WTOInfoForm, WTOStatusForm
+from barriers.forms.wto import WTOProfileForm, WTOStatusForm
 
 from utils.metadata import get_metadata
 
@@ -23,7 +23,7 @@ class EditWTOStatus(APIBarrierFormViewMixin, FormView):
 
     def get_continue_url(self):
         return reverse(
-            "barriers:edit_wto_info",
+            "barriers:edit_wto_profile",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
@@ -42,9 +42,9 @@ class EditWTOStatus(APIBarrierFormViewMixin, FormView):
             }
 
 
-class EditWTOInfo(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/wto/info.html"
-    form_class = WTOInfoForm
+class EditWTOProfile(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/wto/profile.html"
+    form_class = WTOProfileForm
 
     def get_initial(self):
         if self.barrier.wto_profile:

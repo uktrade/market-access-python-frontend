@@ -41,7 +41,7 @@ class WTOStatusForm(APIFormMixin, forms.Form):
         client.barriers.patch(id=self.id, **self.get_api_params())
 
 
-class WTOInfoForm(APIFormMixin, forms.Form):
+class WTOProfileForm(APIFormMixin, forms.Form):
     committee_notified = forms.ChoiceField(
         label="Which committee should be notified of the barrier?",
         choices=(),
@@ -78,7 +78,8 @@ class WTOInfoForm(APIFormMixin, forms.Form):
     )
 
     def clean_raised_date(self):
-        return self.cleaned_data["raised_date"].isoformat()
+        if self.cleaned_data.get("raised_date"):
+            return self.cleaned_data["raised_date"].isoformat()
 
     def get_api_params(self):
         return {"wto_profile": self.cleaned_data}
