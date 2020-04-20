@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views.generic import FormView
 
 from .mixins import APIBarrierFormViewMixin
@@ -12,11 +13,13 @@ class EditWTOStatus(APIBarrierFormViewMixin, FormView):
     form_class = WTOStatusForm
 
     def form_valid(self, form):
+        form.save()
         if (
-            form.cleaned_data.get("wto_notified") is True or
+            form.cleaned_data.get("wto_has_been_notified") is True or
             form.cleaned_data.get("wto_should_be_notified") is True
         ):
             return HttpResponseRedirect(self.get_continue_url())
+        return HttpResponseRedirect(self.get_detail_url())
 
     def get_continue_url(self):
         return reverse(
@@ -24,10 +27,34 @@ class EditWTOStatus(APIBarrierFormViewMixin, FormView):
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
-    # def get_initial(self):
-    #     return {"wto_status": self.barrier.barrier_title}
+    def get_detail_url(self):
+        return reverse(
+            "barriers:barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+    def get_initial(self):
+        if self.barrier.wto_profile:
+            wto_profile = self.barrier.wto_profile
+            return {
+                "wto_has_been_notified": wto_profile.wto_has_been_notified,
+                "wto_should_be_notified": wto_profile.wto_should_be_notified,
+            }
 
 
 class EditWTOInfo(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/wto/info.html"
     form_class = WTOInfoForm
+
+    def get_initial(self):
+        if self.barrier.wto_profile:
+            fields = (
+                "committee_notified",
+                "committee_notification_link",
+                "member_states",
+                "committee_raised_in",
+                "committee_meeting_minutes",
+                "raised_date",
+                "case_number",
+            )
+            return {field: self.barrier.wto_profile.data.get(field) for field in fields}

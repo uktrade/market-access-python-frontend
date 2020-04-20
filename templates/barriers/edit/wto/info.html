@@ -19,8 +19,13 @@
         {% csrf_token %}
 
         {% include "partials/forms/select_input.html" with field=form.committee_notified %}
+        {% include "partials/forms/text_input.html" with field=form.committee_notification_link %}
         {% include "partials/forms/select_input.html" with field=form.committee_raised_in %}
-        {% include "partials/forms/date_input.html" with field=form.wto_raised_date %}
+        {% include "partials/forms/date_input.html" with field=form.raised_date %}
+        {% include "partials/forms/text_input.html" with field=form.case_number %}
+
+        <button class="govuk-button" data-module="govuk-button">Save and return to barrier</button>
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
 
 {% endblock %}

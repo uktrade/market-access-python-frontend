@@ -5,8 +5,8 @@
 {% block body_script %}
     <script>
         new ma.components.ConditionalRadioContent({
-            inputContainer: '.wto_notified',
-            inputName: 'wto_notified',
+            inputContainer: '.wto_has_been_notified',
+            inputName: 'wto_has_been_notified',
             conditionalElem: '#conditional-no',
             shouldShow: function( value ){ return ( value === 'no' ); }
         });
@@ -25,19 +25,19 @@
     <form action="" method="POST">
         {% csrf_token %}
 
-        <div class="{% form_group_classes form.wto_notified.errors %}">
+        <div class="{% form_group_classes form.wto_has_been_notified.errors %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                    {{ form.wto_notified.label }}
+                    {{ form.wto_has_been_notified.label }}
                 </legend>
 
-                {% form_field_error form "wto_notified" %}
+                {% form_field_error form "wto_has_been_notified" %}
 
-                <div class="govuk-radios {{ form.wto_notified.name }}">
-                    {% for value, name in form.fields.wto_notified.choices %}
+                <div class="govuk-radios {{ form.wto_has_been_notified.name }}">
+                    {% for value, name in form.fields.wto_has_been_notified.choices %}
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="{{ form.wto_notified.name }}-{{ value }}" name="{{ form.wto_notified.name }}" type="radio" value="{{ value }}"{% if form.wto_notified.value == value %} checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="{{ form.wto_notified.name }}-{{ value }}">{{ name }}</label>
+                            <input class="govuk-radios__input" id="{{ form.wto_has_been_notified.name }}-{{ value }}" name="{{ form.wto_has_been_notified.name }}" type="radio" value="{{ value }}"{% if form.wto_has_been_notified.value == value %} checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="{{ form.wto_has_been_notified.name }}-{{ value }}">{{ name }}</label>
                         </div>
 
                         {% if value == "no" %}

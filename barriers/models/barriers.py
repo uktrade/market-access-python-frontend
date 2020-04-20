@@ -1,4 +1,5 @@
 from barriers.constants import ARCHIVED_REASON
+from barriers.models.wto import WTOProfile
 
 from utils.metadata import get_metadata
 from utils.models import APIModel
@@ -18,6 +19,7 @@ class Barrier(APIModel):
     _sectors = None
     _status = None
     _types = None
+    _wto_profile = None
 
     def __init__(self, data):
         self.data = data
@@ -139,12 +141,11 @@ class Barrier(APIModel):
         return self._types
 
     @property
-    def wto_status_text(self):
-        return {
-            "NOTIFIED": "Yes",
-            "NOT_NOTIFIED": "No - this barrier should be notified to the WTO",
-            "NOT_NEEDED": "No - this barrier should not be notified to the WTO",
-        }.get("NOTIFIED")
+    def wto_profile(self):
+        if self._wto_profile is None:
+            if self.data.get("wto_profile") is not None:
+                self._wto_profile = WTOProfile(self.data.get("wto_profile"))
+        return self._wto_profile
 
     @property
     def is_resolved(self):

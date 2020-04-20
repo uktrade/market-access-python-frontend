@@ -12,7 +12,7 @@ from utils.forms import (
 
 
 class WTOStatusForm(APIFormMixin, forms.Form):
-    wto_notified = YesNoBooleanField(
+    wto_has_been_notified = YesNoBooleanField(
         label="Has this measure been notified to the WTO?",
         error_messages={"required": "Enter yes or no"},
     )
@@ -23,22 +23,22 @@ class WTOStatusForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data.get("wto_notified") is False:
+        if cleaned_data.get("wto_has_been_notified") is False:
             if cleaned_data.get("wto_should_be_notified") is None:
                 self.add_error(
                     "wto_should_be_notified", "Enter yes or no"
                 )
 
-    def get_wto_status(self):
-        if self.cleaned_data.get("wto_notified") is True:
-            return "NOTIFIED"
-        elif self.cleaned_data.get("wto_should_be_notified") is True:
-            return "NOT_NOTIFIED"
-        return "NO_NEED"
+    def get_api_params(self):
+        wto_profile = {
+            "wto_has_been_notified": self.cleaned_data.get("wto_has_been_notified"),
+            "wto_should_be_notified": self.cleaned_data.get("wto_should_be_notified"),
+        }
+        return {"wto_profile": wto_profile}
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, wto_status=self.get_wto_status())
+        client.barriers.patch(id=self.id, **self.get_api_params())
 
 
 class WTOInfoForm(APIFormMixin, forms.Form):
@@ -47,7 +47,12 @@ class WTOInfoForm(APIFormMixin, forms.Form):
         choices=(),
         required=False,
     )
-    wto_should_be_notified = forms.MultipleChoiceField(
+    committee_notification_link = forms.URLField(
+        label="Committee notification",
+        help_text="Enter a web link to the notification or attach a committee notification document",
+        required=False,
+    )
+    member_states = forms.MultipleChoiceField(
         label="Member state(s) that raised the barrier in a WTO committee",
         required=False,
     )
@@ -62,10 +67,22 @@ class WTOInfoForm(APIFormMixin, forms.Form):
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
-    wto_raised_date = DayMonthYearField(
+    raised_date = DayMonthYearField(
         label="Date the barrier was raised in a bilateral meeting in Geneva",
-        help_text="For example 30 11 2020"
+        help_text="For example 30 11 2020",
+        required=False,
     )
-    wto_case_number = forms.CharField(
+    case_number = forms.CharField(
         label="WTO dispute settlement case number for the barrier",
+        required=False,
     )
+
+    def clean_raised_date(self):
+        return self.cleaned_data["raised_date"].isoformat()
+
+    def get_api_params(self):
+        return {"wto_profile": self.cleaned_data}
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(id=self.id, **self.get_api_params())
