@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+
+    <section class="restrict-width">
+
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+        {% form_error_banner form %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div id="trade_direction" class="{% form_group_classes form.errors %}">
+                <fieldset class="govuk-fieldset">
+                    <label class="govuk-label govuk-label--s" for="trade_direction">
+                        {{ form.trade_direction.label }}
+                    </label>
+
+                    {% form_field_error form "trade_direction" %}
+
+                    <div class="govuk-radios trade-direction">
+                    {% for choice_id, choice_label in form.fields.trade_direction.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                   name="trade_direction"
+                                   type="radio"
+                                   id="trade-direction-{{ choice_id }}"
+                                   value="{{ choice_id }}"
+                                   aria-describedby="{{ choice_id }}-item-hint"
+                                   {% if form.initial.trade_direction|lower == choice_id|lower %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="trade-direction-{{ choice_id }}">
+                                {{ choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            <input type="submit" value="Save and continue" class="govuk-button">
+            <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
+
+        </form>
+	</section>
+
+
+{% endblock %}

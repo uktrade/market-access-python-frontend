@@ -342,3 +342,20 @@ class Metadata:
             for tag in self.get_barrier_tags()
             if tag["show_at_reporting"] is True
         )
+
+    def get_trade_direction(self, key=None, all_items=False):
+        """
+        Helper to get either a value or all items for trade_direction.
+
+        :param key:         STR  - dict key
+        :param all_items:   BOOL
+        :return: Returns either all items in the dict or the value of a specific key
+        """
+        trade_directions = self.data.get("trade_direction", {})
+        if all_items:
+            return trade_directions.items()
+        else:
+            return trade_directions.get(key)
+
+    def get_trade_direction_choices(self):
+        return (td for td in self.get_trade_direction(all_items=True))

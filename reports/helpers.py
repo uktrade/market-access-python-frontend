@@ -19,6 +19,7 @@ from utils.api.client import MarketAccessAPIClient
 #     # ==============================
 #     "export_country",       # Step 2 - Location - UUID
 #     "country_admin_areas",  # Step 2 - Location - LIST of UUIDS
+#     "trade_direction",      # Step 2 - Location - INT
 #     # ==============================
 #     "sectors_affected",     # Step 3 - Sectors - BOOL
 #     "all_sectors",          # Step 3 - Sectors - BOOL
@@ -51,6 +52,7 @@ class SessionKeys:
         FormSessionKeys.LOCATION: "location_form_data",
         FormSessionKeys.HAS_ADMIN_AREAS: "has_admin_areas_form_data",
         FormSessionKeys.ADMIN_AREAS: "admin_areas_form_data",
+        FormSessionKeys.TRADE_DIRECTION: "trade_direction_form_data",
         FormSessionKeys.SELECTED_ADMIN_AREAS: "selected_admin_areas",
         FormSessionKeys.SECTORS_AFFECTED: "sectors_affected",
         FormSessionKeys.SECTORS: "sectors",
@@ -152,6 +154,14 @@ class ReportFormGroup:
         admin_areas = self.selected_admin_areas_as_list
         admin_areas.remove(admin_area_id)
         self.selected_admin_areas = ', '.join(admin_areas)
+
+    @property
+    def trade_direction_form(self):
+        return self.get(FormSessionKeys.TRADE_DIRECTION, {})
+
+    @trade_direction_form.setter
+    def trade_direction_form(self, value):
+        self.set(FormSessionKeys.TRADE_DIRECTION, value)
 
     # SECTORS
     # ==================================
@@ -292,6 +302,11 @@ class ReportFormGroup:
             data["has_admin_areas"] = HasAdminAreas.YES
         return data
 
+    def get_trade_direction_form_data(self):
+        return {
+            "trade_direction": self.barrier.data.get("trade_direction")
+        }
+
     def get_sectors_affected_form_data(self):
         data = {"sectors_affected": None}
         if self.barrier.data["sectors_affected"] is True:
@@ -337,6 +352,7 @@ class ReportFormGroup:
         self.status_form = self.get_status_form_data()
         self.location_form = self.get_location_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
+        self.trade_direction_form = self.get_trade_direction_form_data()
         self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas") or ())
         self.sectors_affected = self.get_sectors_affected_form_data()
         self.selected_about_formsectors = self.get_selected_sectors()
@@ -355,6 +371,7 @@ class ReportFormGroup:
             "problem_status": self.problem_status_form.get("status"),
             "export_country": self.location_form.get("country"),
             "country_admin_areas": self.selected_admin_areas_as_list,
+            "trade_direction": self.trade_direction_form.get("trade_direction"),
         }
         payload.update(self.status_form)
         return payload

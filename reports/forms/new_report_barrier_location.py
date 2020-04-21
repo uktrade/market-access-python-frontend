@@ -66,3 +66,16 @@ class NewReportBarrierLocationAdminAreasForm(forms.Form):
     def __init__(self, admin_areas, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['admin_areas'].choices = admin_areas
+
+
+class NewReportBarrierTradeDirectionForm(forms.Form):
+    trade_direction = forms.ChoiceField(
+        label="Which trade direction does this barrier affect?",
+        choices=(),
+        widget=forms.RadioSelect,
+        error_messages={"required": "Select a trade direction"},
+    )
+
+    def __init__(self, trade_direction_choices, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["trade_direction"].choices = trade_direction_choices

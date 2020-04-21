@@ -161,6 +161,14 @@ class TitleHistoryItem(BaseHistoryItem):
     field_name = "Title"
 
 
+class TradeDirectionHistoryItem(BaseHistoryItem):
+    field = "trade_direction"
+    field_name = "Trade direction"
+
+    def get_value(self, value):
+        return self.metadata.get_trade_direction(str(value))
+
+
 class BarrierHistoryItem(PolymorphicBase):
     """
     Polymorphic wrapper for HistoryItem classes
@@ -184,6 +192,7 @@ class BarrierHistoryItem(PolymorphicBase):
         SummaryHistoryItem,
         TagsHistoryItem,
         TitleHistoryItem,
+        TradeDirectionHistoryItem,
     )
     default_subclass = GenericHistoryItem
     class_lookup = {}
