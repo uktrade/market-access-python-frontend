@@ -1,6 +1,12 @@
 {% extends "barriers/edit/base.html" %}
 
+{% load static %}
+
 {% block page_title %}{{ block.super }} - Edit WTO information{% endblock %}
+
+{% block body_script %}
+    <script src="{% static 'js/vue/vue-bundle.js' %}"></script>
+{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -18,11 +24,12 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        {% include "partials/forms/select_input.html" with field=form.committee_notified %}
+        {% include "partials/forms/select_input.html" with field=form.committee_notified field_classes="govuk-!-width-one-half" %}
         {% include "partials/forms/text_input.html" with field=form.committee_notification_link %}
-        {% include "partials/forms/select_input.html" with field=form.committee_raised_in %}
+        {% include 'partials/forms/typeahead.html' with placeholder='Search member states' field=form.member_states %}
+        {% include "partials/forms/select_input.html" with field=form.committee_raised_in field_classes="govuk-!-width-one-half" %}
         {% include "partials/forms/date_input.html" with field=form.raised_date %}
-        {% include "partials/forms/text_input.html" with field=form.case_number %}
+        {% include "partials/forms/text_input.html" with field=form.case_number field_classes="govuk-!-width-one-half" %}
 
         <button class="govuk-button" data-module="govuk-button">Save and return to barrier</button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>

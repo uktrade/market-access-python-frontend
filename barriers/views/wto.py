@@ -58,3 +58,8 @@ class EditWTOProfile(APIBarrierFormViewMixin, FormView):
                 "case_number",
             )
             return {field: self.barrier.wto_profile.data.get(field) for field in fields}
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["metadata"] = get_metadata()
+        return kwargs

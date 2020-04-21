@@ -342,3 +342,6 @@ class Metadata:
             for tag in self.get_barrier_tags()
             if tag["show_at_reporting"] is True
         )
+
+    def get_wto_committee_groups(self):
+        return self.data.get("wto_committee_groups", [])

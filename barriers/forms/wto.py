@@ -77,6 +77,34 @@ class WTOProfileForm(APIFormMixin, forms.Form):
         required=False,
     )
 
+    def __init__(self, metadata, *args, **kwargs):
+        self.metadata = metadata
+        super().__init__(*args, **kwargs)
+        self.set_committee_notified_choices()
+        self.set_member_states_choices()
+        self.set_committee_raised_in_choices()
+
+    def get_committee_choices(self):
+        return (("", "Select a committee"), ) + tuple(
+            (
+                group["name"],
+                tuple((committee["id"], committee["name"]) for committee in group["wto_committees"]),
+            )
+            for group in self.metadata.get_wto_committee_groups()
+        )
+
+    def set_member_states_choices(self):
+        self.fields["member_states"].choices = [
+            (country["id"], country["name"])
+            for country in self.metadata.get_country_list()
+        ]
+
+    def set_committee_notified_choices(self):
+        self.fields["committee_notified"].choices = self.get_committee_choices()
+
+    def set_committee_raised_in_choices(self):
+        self.fields["committee_raised_in"].choices = self.get_committee_choices()
+
     def clean_raised_date(self):
         if self.cleaned_data.get("raised_date"):
             return self.cleaned_data["raised_date"].isoformat()

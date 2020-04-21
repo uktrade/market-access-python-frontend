@@ -7723,5 +7723,213 @@
         "MEDIUMHIGH": "Medium High",
         "MEDIUMLOW": "Medium Low",
         "LOW": "Low"
-    }
+    },
+    "wto_committee_groups": [
+        {
+            "id": "33049400-2811-418a-863b-2de59f254bda",
+            "name": "Bodies established under the Trade Negotiations Committee",
+            "wto_committees": [
+                {
+                    "id": "ae1c694e-0ad3-4314-a6e9-deabdbfdf402",
+                    "name": "Committee on Agriculture, Special Session"
+                },
+                {
+                    "id": "51c71d79-68b5-44c4-b8f1-ea2595e63495",
+                    "name": "Committee on Trade and Development, Special Session"
+                },
+                {
+                    "id": "39958209-e3f7-4603-99f4-20c4073d71b5",
+                    "name": "Committee on Trade and Environment, Special Session"
+                },
+                {
+                    "id": "7d49958c-59de-439f-9270-e1ab02b64898",
+                    "name": "Council for Trade in Services, Special Session"
+                },
+                {
+                    "id": "e4d87062-6a33-4a4a-8793-d6e946f4345e",
+                    "name": "Council for Trade-Related Aspects of Intellectual Property Rights, Special Session"
+                },
+                {
+                    "id": "91c9a28e-a4fd-4706-bf48-8d794a5a57c2",
+                    "name": "Dispute Settlement Body, Special Session"
+                },
+                {
+                    "id": "2667fab0-c8bc-4f9d-a035-0db211510708",
+                    "name": "Negotiating Group on Market Access"
+                },
+                {
+                    "id": "b3319f62-84a2-4712-b52f-bb5e896df739",
+                    "name": "Negotiating Group on Rules"
+                },
+                {
+                    "id": "5b6f2027-9ca2-40d4-b673-342fcf86108d",
+                    "name": "Sub-Committee on Cotton"
+                }
+            ]
+        },
+        {
+            "id": "2cb189d4-b57f-4869-b7e3-4d898b637b6b",
+            "name": "Committees of Plurilateral Agreements",
+            "wto_committees": [
+                {
+                    "id": "c42571c6-8e98-4197-9899-eb6bf53d7215",
+                    "name": "Committee on Government Procurement"
+                },
+                {
+                    "id": "6448e88f-bf12-481f-873d-ac1199825743",
+                    "name": "Committee on Trade in Civil Aircraft"
+                }
+            ]
+        },
+        {
+            "id": "0a8b978c-efaa-427f-bcaa-18021b3be424",
+            "name": "General Council and bodies reporting to it",
+            "wto_committees": [
+                {
+                    "id": "47e98a68-f0cd-4db3-9935-d19f6864e2e8",
+                    "name": "Committee on Balance-of-Payments Restrictions"
+                },
+                {
+                    "id": "384ee883-5143-43b5-a909-452b6d8076ea",
+                    "name": "Committee on Budget, Finance and Administration"
+                },
+                {
+                    "id": "0fba8aa2-c63c-44b6-a4e1-2f190460b143",
+                    "name": "Committee on Regional Trade Agreements"
+                },
+                {
+                    "id": "31e180da-e6d7-41b9-9bd9-4ebb4bd8beed",
+                    "name": "Committee on Trade and Development"
+                },
+                {
+                    "id": "f044e1f1-a4a6-4315-a44b-b21d63842d4c",
+                    "name": "Committee on Trade and Environment"
+                },
+                {
+                    "id": "b1d88dcf-3054-4692-9cba-e896276a8d64",
+                    "name": "Committee on Trade Facilitation"
+                },
+                {
+                    "id": "50fe4100-3788-473b-ab13-b5d828791ed1",
+                    "name": "Council for Trade in Goods"
+                },
+                {
+                    "id": "17044bdc-4506-4eb0-a1a3-39bb257b5657",
+                    "name": "Council for Trade in Services"
+                },
+                {
+                    "id": "2b9851b9-08d7-4b44-b271-f729303262be",
+                    "name": "Council for Trade-Related Aspects of Intellectual Property Rights"
+                },
+                {
+                    "id": "29ca2460-2e5a-4914-bcea-c6074a54d47d",
+                    "name": "Dispute Settlement Body"
+                },
+                {
+                    "id": "949cb0ed-5d24-408c-9b3b-35b865933854",
+                    "name": "General Council"
+                },
+                {
+                    "id": "3f209e66-775f-42f9-91b5-07087f11e251",
+                    "name": "Sub-Committee on Least-Developed Countries"
+                },
+                {
+                    "id": "9e1395c6-e506-4ea3-aabe-5f0fc439c2d4",
+                    "name": "Trade Negotiations Committee"
+                },
+                {
+                    "id": "57971d42-0373-419e-827d-c6148f5aed0a",
+                    "name": "Trade Policy Review Body"
+                },
+                {
+                    "id": "f941441a-a1c2-4f0d-accd-ef7092100df1",
+                    "name": "Working Group on Trade and Transfer of Technology"
+                },
+                {
+                    "id": "d30b6fca-4d0e-4543-bfb9-b4cf1192629f",
+                    "name": "Working Group on Trade, Debt and Finance"
+                }
+            ]
+        },
+        {
+            "id": "f2db8548-64cf-4c2c-82d0-4d6f8fb35e26",
+            "name": "Subsidiary bodies of the Council for Trade in Goods",
+            "wto_committees": [
+                {
+                    "id": "f66dd5e8-07e6-4fdf-af4d-621869d3227c",
+                    "name": "Committee of Participants on the Expansion of Trade in Information Technology Products"
+                },
+                {
+                    "id": "b3a7b11a-12b5-4f0f-8d50-6a48f6adfdda",
+                    "name": "Committee on Agriculture"
+                },
+                {
+                    "id": "c9d6b5f3-dd94-4c46-9691-b5c2e428cc0b",
+                    "name": "Committee on Anti-Dumping Practices"
+                },
+                {
+                    "id": "b5073e1d-e456-414e-afd6-28c2ed6f1078",
+                    "name": "Committee on Customs Valuation"
+                },
+                {
+                    "id": "664d6d42-9dc1-4e34-aac5-f3e28682036f",
+                    "name": "Committee on Import Licensing"
+                },
+                {
+                    "id": "5bce7467-6281-4b91-97f0-a9533924ba26",
+                    "name": "Committee on Market Access"
+                },
+                {
+                    "id": "ca436f37-589c-4010-864f-70de54138deb",
+                    "name": "Committee on Rules of Origin"
+                },
+                {
+                    "id": "6ac006d5-2b41-4eb1-a943-6585ad8c1696",
+                    "name": "Committee on Safeguards"
+                },
+                {
+                    "id": "8b71d1b8-bfa8-426f-a2e6-793d8311ce4d",
+                    "name": "Committee on Sanitary and Phytosanitary Measures"
+                },
+                {
+                    "id": "2ef1e89a-a0bf-4b59-8c84-0df66bf28fab",
+                    "name": "Committee on Subsidies and Countervailing Measures"
+                },
+                {
+                    "id": "7e0d6a1d-bba6-438b-a782-38c964edef01",
+                    "name": "Committee on Technical Barriers to Trade"
+                },
+                {
+                    "id": "3f99b224-58fa-4cde-ac05-2e9203742ac4",
+                    "name": "Committee on Trade-Related Investment Measures"
+                },
+                {
+                    "id": "f88fb335-0cbd-40a9-b33f-735c6278123b",
+                    "name": "Working Party on State Trading Enterprises"
+                }
+            ]
+        },
+        {
+            "id": "5aeb6715-d472-4a1b-8498-f3e44a877ca4",
+            "name": "Subsidiary bodies of the Council for Trade in Services",
+            "wto_committees": [
+                {
+                    "id": "7e40bcd0-35ba-482d-af77-106d272d0af6",
+                    "name": "Committee on Specific Commitments"
+                },
+                {
+                    "id": "2de5a9e3-0040-4463-8d9f-e88074142b4d",
+                    "name": "Committee on Trade in Financial Services"
+                },
+                {
+                    "id": "8dc080f0-c5c7-4a2b-90c0-ff3506d6e70e",
+                    "name": "Working Party on Domestic Regulation"
+                },
+                {
+                    "id": "0d4876ab-e125-4167-9449-9f89f843921c",
+                    "name": "Working Party on GATS Rules"
+                }
+            ]
+        }
+    ]
 }
