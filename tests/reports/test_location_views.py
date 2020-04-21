@@ -10,6 +10,7 @@ from reports.views import (
     NewReportBarrierLocationHasAdminAreasView,
     NewReportBarrierLocationAddAdminAreasView,
     NewReportBarrierAdminAreasView,
+    NewReportBarrierTradeDirectionView,
 )
 from tests.constants import ERROR_HTML
 
@@ -67,7 +68,7 @@ class LocationViewTestCase(ReportsTestCase):
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
         field_name = 'country'
-        session_key = f'draft_barrier_{draft_barrier["id"]}_location_form_data'
+        session_key = f'draft_barrier__location_form_data'
         fiji_uuid = 'd9f682ac-5d95-e211-a939-e4115bead28a'
         expected_form_data = {'country': fiji_uuid}
 
@@ -76,7 +77,7 @@ class LocationViewTestCase(ReportsTestCase):
 
         assert HTTPStatus.OK == response.status_code
         assert expected_form_data == saved_form_data
-        assert mock_create.called is True
+        assert mock_create.called is False
 
     @patch("reports.helpers.ReportFormGroup._create_barrier")
     def test_saving_location_redirects_to_correct_view(self, mock_create):
@@ -84,12 +85,12 @@ class LocationViewTestCase(ReportsTestCase):
         mock_create.return_value = Report(draft_barrier)
         field_name = 'country'
         fiji_uuid = 'd9f682ac-5d95-e211-a939-e4115bead28a'
-        redirect_url = reverse('reports:barrier_has_sectors_uuid', kwargs={"barrier_id": draft_barrier["id"]})
+        redirect_url = reverse('reports:barrier_trade_direction')
 
         response = self.client.post(self.url, data={field_name: fiji_uuid})
 
         self.assertRedirects(response, redirect_url)
-        assert mock_create.called is True
+        assert mock_create.called is False
 
 
 class LocationViewHasAdminAreasTestCase(ReportsTestCase):
@@ -153,13 +154,13 @@ class LocationViewHasAdminAreasTestCase(ReportsTestCase):
         """
         Question:   Does this affect the entire country?
         Answer:     Yes.
-        Behaviour:  No need to add admin areas, the draft barrier gets saved.
+        Behaviour:  No need to add admin areas, the draft barrier does not get saved.
         """
         url = reverse('reports:barrier_has_admin_areas')
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
         field_name = 'has_admin_areas'
-        session_key = f'draft_barrier_{draft_barrier["id"]}_has_admin_areas_form_data'
+        session_key = f'draft_barrier__has_admin_areas_form_data'
         expected_form_data = {'has_admin_areas': '1'}
 
         response = self.client.post(url, data={field_name: '1'}, follow=True)
@@ -167,25 +168,25 @@ class LocationViewHasAdminAreasTestCase(ReportsTestCase):
 
         assert HTTPStatus.OK == response.status_code
         assert expected_form_data == saved_form_data
-        assert mock_create.called is True
+        assert mock_create.called is False
 
     @patch("reports.helpers.ReportFormGroup._create_barrier")
     def test_has_admin_areas__option_yes_redirects_to_correct_view(self, mock_create):
         """
         Question:   Does this affect the entire country?
         Answer:     Yes.
-        Behaviour:  The form is valid, the user gets redirected to the next step (sectors).
+        Behaviour:  The form is valid, the user gets redirected to the next step (trade direction).
         """
         url = reverse('reports:barrier_has_admin_areas')
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
         field_name = 'has_admin_areas'
-        redirect_url = reverse('reports:barrier_has_sectors_uuid', kwargs={"barrier_id": draft_barrier["id"]})
+        redirect_url = reverse('reports:barrier_trade_direction')
 
         response = self.client.post(url, data={field_name: '1'})
 
         self.assertRedirects(response, redirect_url)
-        assert mock_create.called is True
+        assert mock_create.called is False
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_has_admin_areas__option_no_saved_in_session(self, mock_save):
@@ -321,7 +322,7 @@ class LocationViewAdminAreasTestCase(ReportsTestCase):
         expected_title = '<title>Market Access - Add - Location of the barrier</title>'
         expected_header_text = '<h3 class="selection-list__heading">Selected admin areas</h3>'
         admin_area_item = '<li class="selection-list__list__item">'
-        expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'
+        expected_continue_btn = '<input type="submit" value="Continue" class="govuk-button">'
         add_another_btn = '<a href="/reports/new/country/admin-areas/add/" '\
                           'class="govuk-button button--secondary '\
                           'selection-list__add-button">Add another admin area</a>'
@@ -335,7 +336,7 @@ class LocationViewAdminAreasTestCase(ReportsTestCase):
         assert add_another_btn in html
         options_count = html.count(admin_area_item)
         assert 0 == options_count, f'Expected 0 admin areas, got: {options_count}'
-        assert expected_save_btn in html
+        assert expected_continue_btn in html
 
     def test_admin_areas_view_displays_selected_admin_areas(self):
         # set up the session so 2 admin areas were already added
@@ -373,15 +374,95 @@ class LocationViewAdminAreasTestCase(ReportsTestCase):
         assert bahia_uuid == selected_admin_areas
 
     @patch("reports.helpers.ReportFormGroup._create_barrier")
+    def test_button_continue_redirects_to_correct_view(self, mock_create):
+        """
+        Clicking on `Continue` button should proceed to trade directions without saving the barrier
+        """
+        draft_barrier = self.draft_barrier(2)
+        mock_create.return_value = Report(draft_barrier)
+        redirect_url = reverse('reports:barrier_trade_direction')
+
+        response = self.client.post(self.url, data={})
+
+        self.assertRedirects(response, redirect_url)
+        assert mock_create.called is False
+
+
+class TradeDirectionViewTestCase(ReportsTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('reports:barrier_trade_direction')
+
+    def test_trade_direction_url_resolves_to_correct_view(self):
+        match = resolve('/reports/new/trade-direction/')
+        assert match.func.view_class == NewReportBarrierTradeDirectionView
+
+    def test_trade_direction_view_returns_correct_html(self):
+        expected_title = '<title>Market Access - Add - Location of the barrier</title>'
+        expected_radio_container = '<div class="govuk-radios trade-direction">'
+        radio_item = '<div class="govuk-radios__item">'
+        expected_radio_count = 2
+        expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'
+        expected_exit_btn = '<button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>'
+
+        response = self.client.get(self.url)
+        html = response.content.decode('utf8')
+
+        assert HTTPStatus.OK == response.status_code
+        assert expected_title in html
+        assert expected_radio_container in html
+        radio_count = html.count(radio_item)
+        assert expected_radio_count is radio_count, f'Expected {expected_radio_count} radio items, got: {radio_count}'
+        assert expected_save_btn in html
+        assert expected_exit_btn in html
+
+    @patch("reports.helpers.ReportFormGroup.save")
+    def test_trade_direction_cannot_be_empty(self, mock_save):
+        field_name = 'trade_direction'
+        session_key = 'draft_barrier__trade_direction_form_data'
+
+        response = self.client.post(self.url, data={field_name: ''})
+        saved_form_data = self.client.session.get(session_key)
+        html = response.content.decode('utf8')
+        form = response.context['form']
+
+        assert HTTPStatus.OK == response.status_code
+        assert form.is_valid() is False
+        assert field_name in form.errors
+        assert ERROR_HTML.SUMMARY_HEADER in html
+        assert ERROR_HTML.REQUIRED_FIELD in html
+        assert saved_form_data is None
+        assert mock_save.called is False
+
+    @patch("reports.helpers.ReportFormGroup._create_barrier")
+    def test_trade_direction_gets_saved_in_session(self, mock_create):
+        draft_barrier = self.draft_barrier(2)
+        mock_create.return_value = Report(draft_barrier)
+        field_name = 'trade_direction'
+        export = 1
+        session_key = f'draft_barrier_{draft_barrier["id"]}_trade_direction_form_data'
+        expected_form_data = {'trade_direction': export}
+
+        response = self.client.post(self.url, data={field_name: "1"}, follow=True)
+        saved_form_data = self.client.session.get(session_key)
+
+        assert HTTPStatus.OK == response.status_code
+        assert expected_form_data == saved_form_data
+        assert mock_create.called is True
+
+    @patch("reports.helpers.ReportFormGroup._create_barrier")
     def test_button_save_and_continue_redirects_to_correct_view(self, mock_create):
         """
         Clicking on `Save and continue` button should create a draft barrier
         """
+        field_name = 'trade_direction'
+        export = "1"
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
         redirect_url = reverse('reports:barrier_has_sectors_uuid', kwargs={"barrier_id": draft_barrier["id"]})
 
-        response = self.client.post(self.url, data={})
+        response = self.client.post(self.url, data={field_name: export})
 
         self.assertRedirects(response, redirect_url)
         assert mock_create.called is True
@@ -393,12 +474,18 @@ class LocationViewAdminAreasTestCase(ReportsTestCase):
         Clicking on `Save and exit` button should create a draft barrier
         and redirect the user to the draft barrier details view
         """
+        field_name = 'trade_direction'
+        export = "1"
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
         mock_get.return_value = Report(draft_barrier)
         redirect_url = reverse('reports:draft_barrier_details_uuid', kwargs={"barrier_id": draft_barrier["id"]})
 
-        response = self.client.post(self.url, data={"action": "exit"})
+        payload = {
+            field_name: export,
+            "action": "exit"
+        }
+        response = self.client.post(self.url, data=payload)
 
         self.assertRedirects(response, redirect_url)
         assert mock_create.called is True
