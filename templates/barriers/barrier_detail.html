@@ -126,7 +126,7 @@
 
             <dt class="summary-group__list__key">Trade direction</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.trade_direction %}
+                {% if barrier.trade_direction_text %}
                     {{ barrier.trade_direction_text }}
                     {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_trade_direction' barrier.id %}">Edit</a>

@@ -127,7 +127,7 @@ class Barrier(APIModel):
 
     @property
     def trade_direction(self):
-        return str(self.data.get("trade_direction", ""))
+        return str(self.data.get("trade_direction"))
 
     @property
     def trade_direction_text(self):
