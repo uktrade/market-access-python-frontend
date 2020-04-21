@@ -404,7 +404,8 @@ class TradeDirectionViewTestCase(ReportsTestCase):
         radio_item = '<div class="govuk-radios__item">'
         expected_radio_count = 2
         expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'
-        expected_exit_btn = '<button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>'
+        expected_exit_btn = '<button type="submit" class="govuk-button button--secondary" '\
+                            'name="action" value="exit">Save and exit</button>'
 
         response = self.client.get(self.url)
         html = response.content.decode('utf8')
