@@ -62,4 +62,5 @@ class EditWTOProfile(APIBarrierFormViewMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["metadata"] = get_metadata()
+        kwargs["wto_profile"] = self.barrier.wto_profile
         return kwargs

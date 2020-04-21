@@ -43,13 +43,22 @@ class WTOStatusForm(APIFormMixin, forms.Form):
 
 class WTOProfileForm(APIFormMixin, forms.Form):
     committee_notified = forms.ChoiceField(
-        label="Which committee should be notified of the barrier?",
+        label="Committee notified of the barrier",
         choices=(),
         required=False,
     )
     committee_notification_link = forms.URLField(
         label="Committee notification",
-        help_text="Enter a web link to the notification or attach a committee notification document",
+        help_text=(
+            "Enter a web link to the notification or attach a committee notification "
+            "document"
+        ),
+        required=False,
+    )
+    committee_notification_document = RestrictedFileField(
+        label="Committee meeting minutes",
+        content_types=settings.ALLOWED_FILE_TYPES,
+        max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
     )
     member_states = forms.MultipleChoiceField(
@@ -77,18 +86,29 @@ class WTOProfileForm(APIFormMixin, forms.Form):
         required=False,
     )
 
-    def __init__(self, metadata, *args, **kwargs):
+    def __init__(self, metadata, wto_profile, *args, **kwargs):
         self.metadata = metadata
         super().__init__(*args, **kwargs)
         self.set_committee_notified_choices()
         self.set_member_states_choices()
         self.set_committee_raised_in_choices()
 
+        if not wto_profile.wto_has_been_notified:
+            self.fields["committee_notified"].label = (
+                "Which committee should be notified of the barrier?"
+            )
+            del self.fields["committee_notification_link"]
+            del self.fields["committee_meeting_minutes"]
+
     def get_committee_choices(self):
+        """
+        Grouped committee choices by committee group
+        """
         return (("", "Select a committee"), ) + tuple(
             (
                 group["name"],
-                tuple((committee["id"], committee["name"]) for committee in group["wto_committees"]),
+                tuple((committee["id"], committee["name"])
+                for committee in group["wto_committees"]),
             )
             for group in self.metadata.get_wto_committee_groups()
         )
