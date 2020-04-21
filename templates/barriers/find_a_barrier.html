@@ -27,10 +27,10 @@
                     <input class="govuk-input" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
                 </div>
 
-                {% include 'partials/forms/typeahead.html' with placeholder='Search locations' field=form.country %}
-                {% include 'partials/forms/typeahead.html' with placeholder='Search sector' field=form.sector %}
-                {% include 'partials/forms/typeahead.html' with placeholder='Search type' field=form.type %}
-                {% include 'partials/forms/typeahead.html' with placeholder='Search regions' field=form.region extra_classes='js-filter' %}
+                {% include "partials/forms/typeahead.html" with placeholder='Search locations' field=form.country classes="filter-items-group" label_classes="filter-items__label" %}
+                {% include "partials/forms/typeahead.html" with placeholder='Search sector' field=form.sector classes="filter-items-group" label_classes="filter-items__label" %}
+                {% include "partials/forms/typeahead.html" with placeholder='Search type' field=form.type classes="filter-items-group" label_classes="filter-items__label" %}
+                {% include "partials/forms/typeahead.html" with placeholder='Search regions' field=form.region classes="filter-items-group" label_classes="filter-items__label" extra_classes='js-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}

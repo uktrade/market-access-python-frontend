@@ -1,7 +1,7 @@
 <template>
 	<div v-bind:class="classes" v-bind:id="name+'__typeahead'">
 
-		<label class="govuk-label filter-items__label" :for="id">
+		<label class="govuk-label" :class="label_classes" :for="id">
 			{{ label }}
 		</label>
 
@@ -21,6 +21,7 @@
 			:showLabels="false"
 			:searchable="true"
 			:id="id"
+			:class="field_classes"
 			@search-change="search">
 
 			<template slot="clear" slot-scope="props">
@@ -107,6 +108,14 @@
 				default: ''
 			},
 			classes: {
+				type: String,
+				required: false,
+			},
+			label_classes: {
+				type: String,
+				required: false,
+			},
+			field_classes: {
 				type: String,
 				required: false,
 			},

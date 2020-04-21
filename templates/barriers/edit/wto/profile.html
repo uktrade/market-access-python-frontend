@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block back_link %}
+    <a href="{% url 'barriers:edit_wto_status' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
@@ -24,12 +25,12 @@
         {% csrf_token %}
 
         {% include "partials/forms/select_input.html" with field=form.committee_notified field_classes="govuk-!-width-one-half" %}
-        {% include 'partials/forms/typeahead.html' with placeholder='Search member states' field=form.member_states %}
 
         {% if form.committee_notification_link %}
             {% include "partials/forms/text_input.html" with field=form.committee_notification_link %}
         {% endif %}
 
+        {% include 'partials/forms/typeahead.html' with placeholder='Search member states' field=form.member_states field_classes="govuk-!-width-two-thirds" %}
         {% include "partials/forms/select_input.html" with field=form.committee_raised_in field_classes="govuk-!-width-one-half" %}
         {% include "partials/forms/date_input.html" with field=form.raised_date %}
         {% include "partials/forms/text_input.html" with field=form.case_number field_classes="govuk-!-width-one-half" %}
