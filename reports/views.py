@@ -13,8 +13,10 @@ from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
 from reports.forms.new_report_barrier_location import (
     NewReportBarrierLocationForm,
     NewReportBarrierLocationHasAdminAreasForm,
-    HasAdminAreas, NewReportBarrierLocationAddAdminAreasForm,
+    HasAdminAreas,
+    NewReportBarrierLocationAddAdminAreasForm,
     NewReportBarrierLocationAdminAreasForm,
+    NewReportBarrierTradeDirectionForm,
 )
 from reports.forms.new_report_barrier_sectors import (
     NewReportBarrierHasSectorsForm,
@@ -244,9 +246,8 @@ class NewReportBarrierLocationView(ReportsFormView):
         if admin_areas:
             self.success_path = "reports:barrier_has_admin_areas"
         else:
-            self.success_path = "reports:barrier_has_sectors"
+            self.success_path = "reports:barrier_trade_direction"
             self.form_group.selected_admin_areas = ""
-            self.form_group.save()
 
 
 class NewReportBarrierLocationHasAdminAreasView(ReportsFormView):
@@ -268,9 +269,8 @@ class NewReportBarrierLocationHasAdminAreasView(ReportsFormView):
             else:
                 self.success_path = "reports:barrier_add_admin_areas"
         else:
-            self.success_path = "reports:barrier_has_sectors"
+            self.success_path = "reports:barrier_trade_direction"
             self.form_group.selected_admin_areas = ""
-            self.form_group.save()
 
 
 class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
@@ -337,6 +337,7 @@ class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
 class NewReportBarrierAdminAreasView(ReportsFormView):
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_barrier_location_admin_areas.html"
+    success_path = "reports:barrier_trade_direction"
     extra_paths = {
         'back': 'reports:barrier_add_admin_areas',
         'remove_admin_area': 'reports:barrier_remove_admin_areas'
@@ -357,17 +358,6 @@ class NewReportBarrierAdminAreasView(ReportsFormView):
         kwargs["admin_areas"] = self.selected_admin_areas
         return kwargs
 
-    def set_success_path(self):
-        action = self.request.POST.get("action")
-        if action == "exit":
-            self.success_path = "reports:draft_barrier_details"
-        else:
-            self.success_path = "reports:barrier_has_sectors"
-
-    def success(self):
-        self.form_group.save()
-        self.set_success_path()
-
 
 class NewReportBarrierLocationRemoveAdminAreasView(ReportsFormView):
     http_method_names = 'post'
@@ -380,12 +370,37 @@ class NewReportBarrierLocationRemoveAdminAreasView(ReportsFormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
+class NewReportBarrierTradeDirectionView(ReportsFormView):
+    heading_text = "Location of the barrier"
+    template_name = "reports/new_report_barrier_trade_direction.html"
+    form_class = NewReportBarrierTradeDirectionForm
+    extra_paths = {'back': 'reports:barrier_location'}
+    form_session_key = FormSessionKeys.TRADE_DIRECTION
+    metadata = get_metadata()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["trade_direction_choices"] = self.metadata.get_trade_direction_choices()
+        return kwargs
+
+    def set_success_path(self):
+        action = self.request.POST.get("action")
+        if action == "exit":
+            self.success_path = "reports:draft_barrier_details"
+        else:
+            self.success_path = "reports:barrier_has_sectors"
+
+    def success(self):
+        self.form_group.save()
+        self.set_success_path()
+
+
 class NewReportBarrierHasSectorsView(ReportsFormView):
     """Does it affect the entire country?"""
     heading_text = "Sectors affected by the barrier"
     template_name = "reports/new_report_barrier_sectors_main.html"
     form_class = NewReportBarrierHasSectorsForm
-    extra_paths = {'back': 'reports:barrier_location'}
+    extra_paths = {'back': 'reports:barrier_trade_direction'}
     form_session_key = FormSessionKeys.SECTORS_AFFECTED
 
     def set_success_path(self):

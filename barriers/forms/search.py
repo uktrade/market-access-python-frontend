@@ -9,6 +9,7 @@ class BarrierSearchForm(forms.Form):
     edit = forms.IntegerField(required=False, widget=forms.HiddenInput())
     search = forms.CharField(label="Search", max_length=255, required=False)
     country = forms.MultipleChoiceField(label="Barrier location", required=False,)
+    trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
     sector = forms.MultipleChoiceField(label="Sector", required=False,)
     type = forms.MultipleChoiceField(label="Barrier type", required=False,)
     region = forms.MultipleChoiceField(label="Overseas region", required=False,)
@@ -48,6 +49,7 @@ class BarrierSearchForm(forms.Form):
 
         super().__init__(*args, **kwargs)
         self.set_country_choices()
+        self.set_trade_direction_choices()
         self.set_sector_choices()
         self.set_barrier_type_choices()
         self.set_region_choices()
@@ -64,6 +66,7 @@ class BarrierSearchForm(forms.Form):
             "edit": data.get("edit"),
             "search": data.get("search"),
             "country": data.getlist("country"),
+            "trade_direction": data.getlist("trade_direction"),
             "sector": data.getlist("sector"),
             "type": data.getlist("type"),
             "region": data.getlist("region"),
@@ -87,6 +90,9 @@ class BarrierSearchForm(forms.Form):
             (country["id"], country["name"])
             for country in self.metadata.get_country_list()
         ]
+
+    def set_trade_direction_choices(self):
+        self.fields["trade_direction"].choices = self.metadata.get_trade_direction_choices()
 
     def set_sector_choices(self):
         self.fields["sector"].choices = [("", "All sectors")] + [
@@ -212,6 +218,7 @@ class BarrierSearchForm(forms.Form):
         params["location"] = ",".join(
             self.cleaned_data.get("country", []) + self.cleaned_data.get("region", [])
         )
+        params["trade_direction"] = ",".join(self.cleaned_data.get("trade_direction", []))
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
         params["barrier_type"] = ",".join(self.cleaned_data.get("type", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))

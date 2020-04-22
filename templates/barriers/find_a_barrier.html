@@ -28,6 +28,7 @@
                 </div>
 
                 {% include "partials/forms/typeahead.html" with placeholder='Search locations' field=form.country classes="filter-items-group" label_classes="filter-items__label" %}
+                {% include "partials/forms/checkbox_filter.html" with field=form.trade_direction %}
                 {% include "partials/forms/typeahead.html" with placeholder='Search sector' field=form.sector classes="filter-items-group" label_classes="filter-items__label" %}
                 {% include "partials/forms/typeahead.html" with placeholder='Search type' field=form.type classes="filter-items-group" label_classes="filter-items__label" %}
                 {% include "partials/forms/typeahead.html" with placeholder='Search regions' field=form.region classes="filter-items-group" label_classes="filter-items__label" extra_classes='js-filter' %}
@@ -79,6 +80,7 @@
                     <h3 class="visually-hidden">Active filters:</h3>
                     <ul class="active-filters">
                         {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.trade_direction %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.type %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.search %}

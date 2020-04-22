@@ -10,7 +10,7 @@ from barriers.forms.edit import (
     UpdateBarrierPriorityForm,
     UpdateBarrierProblemStatusForm,
     UpdateBarrierTagsForm,
-)
+    UpdateTradeDirectionForm)
 from utils.metadata import get_metadata
 
 
@@ -88,3 +88,17 @@ class BarrierEditTags(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {"tags": [tag["id"] for tag in self.barrier.tags]}
+
+
+class BarrierEditTradeDirection(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/trade_direction.html"
+    form_class = UpdateTradeDirectionForm
+    metadata = get_metadata()
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["trade_direction_choices"] = self.metadata.get_trade_direction_choices()
+        return kwargs
+
+    def get_initial(self):
+        return {"trade_direction": self.barrier.trade_direction}

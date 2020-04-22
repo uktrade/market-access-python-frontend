@@ -124,6 +124,22 @@
                 {% endif %}
             </dd>
 
+            <dt class="summary-group__list__key">Trade direction</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.trade_direction_text %}
+                    {{ barrier.trade_direction_text }}
+                    {% if not barrier.archived %}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_trade_direction' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No trade direction</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_trade_direction' barrier.id %}" class="summary-group__list__value__add">Add the trade direction</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
+
             <dt class="summary-group__list__key">Sector{{ barrier.sectors|pluralize }} affected</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.sectors or barrier.all_sectors %}
