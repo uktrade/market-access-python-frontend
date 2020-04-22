@@ -56,7 +56,7 @@ class WTOProfileForm(APIFormMixin, forms.Form):
         required=False,
     )
     committee_notification_document = RestrictedFileField(
-        label="Committee meeting minutes",
+        label="Committee notification document",
         content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,

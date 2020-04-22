@@ -3,6 +3,7 @@ from .barriers import BarrierHistoryItem
 from .notes import NoteHistoryItem
 from .team_members import TeamMemberHistoryItem
 from .utils import PolymorphicBase
+from .wto import WTOHistoryItem
 
 
 class HistoryItem(PolymorphicBase):
@@ -19,5 +20,6 @@ class HistoryItem(PolymorphicBase):
         BarrierHistoryItem,
         NoteHistoryItem,
         TeamMemberHistoryItem,
+        WTOHistoryItem,
     )
     class_lookup = {}
