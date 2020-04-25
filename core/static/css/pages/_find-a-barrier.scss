@@ -30,11 +30,16 @@
 	position: relative;
 }
 
-.filter-results-title {
+.filter-results-title,
+.search-title {
 	@include govuk-font( 36, $weight: bold );
 	padding: 0 0 govuk-em( 5, 36 ) 0;
 	margin: govuk-em( 10, 36 ) govuk-em( 10, 36 ) govuk-em( 5, 36 ) 0;
 	display: inline-block;
+}
+
+.search-title {
+	display: block;
 }
 
 .filter-results-title__caption {

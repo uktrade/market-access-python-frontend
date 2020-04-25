@@ -70,6 +70,7 @@ from .views.teams import (
     BarrierTeam,
     DeleteTeamMember,
     SearchTeamMember,
+    ChangeOwnerView,
 )
 from .views.types import (
     AddBarrierType,
@@ -165,6 +166,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/team/add/", AddTeamMember.as_view(), name="add_team_member"),
     path("barriers/<uuid:barrier_id>/team/add/search/", SearchTeamMember.as_view(), name="search_team_member"),
     path("barriers/<uuid:barrier_id>/team/delete/<int:team_member_id>", DeleteTeamMember.as_view(), name="delete_team_member"),
+    path("barriers/<uuid:barrier_id>/team/change-owner/<int:team_member_id>", ChangeOwnerView.as_view(), name="team_change_owner"),
 
     path("barriers/<uuid:barrier_id>/assessment/", AssessmentDetail.as_view(), name="assessment_detail"),
     path("barriers/<uuid:barrier_id>/assessment/economic/", EconomicAssessment.as_view(), name="economic_assessment"),

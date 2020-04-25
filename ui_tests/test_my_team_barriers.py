@@ -7,7 +7,7 @@ def remove_all_team_members(browser, barrier_id):
     for i in range(10):
         try:
             browser.find_by_css(
-                ".standard-table--barrier-team .js-delete-modal"
+                ".standard-table__barrier-team .js-delete-modal"
             ).first.click()
             browser.find_by_css('input[type=submit][value="Yes, delete"]').first.click()
         except ElementDoesNotExist:

@@ -195,3 +195,65 @@ class DeleteTeamMemberTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
         mock_delete_team_member.assert_called_with(37)
         assert mock_get_team_members.called is False
+
+
+class ChangeOwnerTestCase(MarketAccessTestCase):
+
+    @patch("utils.api.resources.BarriersResource.get_team_member")
+    def test_get(self, mock_get_team_member):
+        """
+        Details of owner should be added to context so the name can be displayed.
+        """
+        mock_get_team_member.return_value = self.team_members[0]
+
+        url = reverse(
+            "barriers:team_change_owner",
+            kwargs={"barrier_id": self.barrier["id"], "team_member_id": 9},
+        )
+        response = self.client.get(url)
+
+        assert HTTPStatus.OK == response.status_code
+        assert response.context["owner"] == self.team_members[0]
+        assert mock_get_team_member.called is True
+
+    @patch("utils.sso.SSOClient.search_users")
+    @patch("utils.api.resources.BarriersResource.get_team_member")
+    def test_search(self, mock_get_team_member, mock_search_users):
+        """
+        When posting without an action it should attempt to search.
+        """
+        mock_get_team_member.return_value = self.team_members[0]
+        url = reverse(
+            "barriers:team_change_owner",
+            kwargs={"barrier_id": self.barrier["id"], "team_member_id": 9},
+        )
+        form_data = {"query": "wobble",}
+
+        response = self.client.post(url, data=form_data)
+
+        assert HTTPStatus.OK == response.status_code
+        assert mock_search_users.called is True
+
+    @patch("utils.api.resources.BarriersResource.get_team_members")
+    @patch("utils.api.resources.BarriersResource.patch_team_member")
+    @patch("utils.api.resources.BarriersResource.get_team_member")
+    def test_add_new_owner(self, mock_get_team_member, mock_patch_team_member, mock_get_team_members):
+        """
+        Should redirect to team page once the owner has been changed.
+        """
+        mock_get_team_member.return_value = self.team_members[0]
+        redirect_url = reverse("barriers:team", kwargs={"barrier_id": self.barrier["id"]})
+        url = reverse(
+            "barriers:team_change_owner",
+            kwargs={"barrier_id": self.barrier["id"], "team_member_id": 9},
+        )
+        form_data = {
+            "action": "add",
+            "user_id": "wibble",
+            "user_full_name": "wobble",
+        }
+
+        response = self.client.post(url, data=form_data)
+
+        self.assertRedirects(response, redirect_url)
+        assert mock_patch_team_member.called is True

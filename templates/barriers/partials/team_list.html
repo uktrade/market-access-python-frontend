@@ -1,5 +1,5 @@
 {% if team_members %}
-    <table class="standard-table standard-table--barrier-team">
+    <table class="standard-table standard-table__barrier-team">
         <caption class="visually-hidden">List of team members for this barrier</caption>
         <thead>
             <tr class="standard-table__heading-row">
@@ -12,11 +12,19 @@
         <tbody class="js-delete-modal-container">
             {% for member in team_members %}
                 <tr class="standard-table__row">
-                    <td class="standard-table__cell">{{ member.user.full_name }}</td>
+                    <td class="standard-table__cell">
+                        <a href="{% url 'barriers:find_a_barrier' %}?member={{ member.id }}">
+                            <span class="team-member__full-name">{{ member.user.full_name }}</span>
+                        </a>
+                        {% if member.created_by %}
+                        <span class="team-member__added-by">Added by {{ member.created_by.name }}</span>
+                        {% endif %}
+                    </td>
                     <td class="standard-table__cell">{{ member.user.email }}</td>
                     <td class="standard-table__cell">{{ member.role }}</td>
                     <td class="standard-table__cell">
-                        {% if not member.default %}<a class="js-delete-modal" href="{% url 'barriers:delete_team_member' barrier.id member.id %}">Delete</a>{% endif %}
+                        {% if member.role == "Owner" %}<a href="{% url 'barriers:team_change_owner' barrier.id member.id %}">Change</a>{% endif %}
+                        {% if member.role == "Contributor" %}<a class="js-delete-modal" href="{% url 'barriers:delete_team_member' barrier.id member.id %}">Delete</a>{% endif %}
                     </td>
                 </tr>
             {% endfor %}
