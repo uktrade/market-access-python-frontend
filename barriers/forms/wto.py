@@ -1,14 +1,10 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import APIFormMixin
+from .mixins import APIFormMixin, DocumentMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (
-    DayMonthYearField,
-    YesNoBooleanField,
-    RestrictedFileField,
-)
+from utils.forms import DayMonthYearField, YesNoBooleanField, RestrictedFileField
 
 
 class WTOStatusForm(APIFormMixin, forms.Form):
@@ -41,7 +37,7 @@ class WTOStatusForm(APIFormMixin, forms.Form):
         client.barriers.patch(id=self.id, **self.get_api_params())
 
 
-class WTOProfileForm(APIFormMixin, forms.Form):
+class WTOProfileForm(DocumentMixin, forms.Form):
     committee_notified = forms.ChoiceField(
         label="Committee notified of the barrier",
         choices=(),
@@ -55,8 +51,9 @@ class WTOProfileForm(APIFormMixin, forms.Form):
         ),
         required=False,
     )
+    committee_notification_document_id = forms.CharField(required=False)
     committee_notification_document = RestrictedFileField(
-        label="Committee notification document",
+        label="Attach committee notification document",
         content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
         required=False,
@@ -70,7 +67,8 @@ class WTOProfileForm(APIFormMixin, forms.Form):
         choices=(),
         required=False,
     )
-    committee_meeting_minutes = RestrictedFileField(
+    meeting_minutes_id = forms.CharField(required=False)
+    meeting_minutes = RestrictedFileField(
         label="Committee meeting minutes",
         content_types=settings.ALLOWED_FILE_TYPES,
         max_upload_size=settings.FILE_MAX_SIZE,
@@ -86,7 +84,8 @@ class WTOProfileForm(APIFormMixin, forms.Form):
         required=False,
     )
 
-    def __init__(self, metadata, wto_profile, *args, **kwargs):
+    def __init__(self, id, metadata, wto_profile, *args, **kwargs):
+        self.id = id
         self.metadata = metadata
         super().__init__(*args, **kwargs)
         self.set_committee_notified_choices()
@@ -125,13 +124,55 @@ class WTOProfileForm(APIFormMixin, forms.Form):
     def set_committee_raised_in_choices(self):
         self.fields["committee_raised_in"].choices = self.get_committee_choices()
 
+    def clean_committee_notification_document(self):
+        return self.validate_document("committee_notification_document")
+
     def clean_raised_date(self):
         if self.cleaned_data.get("raised_date"):
             return self.cleaned_data["raised_date"].isoformat()
 
-    def get_api_params(self):
-        return {"wto_profile": self.cleaned_data}
-
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, **self.get_api_params())
+        client.barriers.patch(
+            id=self.id,
+            wto_profile={
+                "committee_notified": self.cleaned_data.get("committee_notified"),
+                "committee_notification_link": self.cleaned_data.get(
+                    "committee_notification_link"
+                ),
+                "committee_notification_document": self.cleaned_data.get(
+                    "committee_notification_document_id"
+                ),
+                "member_states": self.cleaned_data.get("member_states"),
+                "committee_raised_in ": self.cleaned_data.get("committee_raised_in"),
+                "meeting_minutes": self.cleaned_data.get("meeting_minutes_id"),
+                "raised_date": self.cleaned_data.get("raised_date"),
+                "case_number": self.cleaned_data.get("case_number"),
+            }
+        )
+
+
+class WTODocumentForm(DocumentMixin, forms.Form):
+    """
+    Form used to add documents via ajax. Only one field will be populated at a time.
+    """
+    committee_notification_document = RestrictedFileField(
+        label="Attach committee notification document",
+        content_types=settings.ALLOWED_FILE_TYPES,
+        max_upload_size=settings.FILE_MAX_SIZE,
+        required=False,
+        multi_document=False,
+    )
+    meeting_minutes = RestrictedFileField(
+        label="Committee meeting minutes",
+        content_types=settings.ALLOWED_FILE_TYPES,
+        max_upload_size=settings.FILE_MAX_SIZE,
+        required=False,
+        multi_document=False,
+    )
+
+    def save(self):
+        if self.cleaned_data.get("committee_notification_document"):
+            return self.upload_document("committee_notification_document")
+        if self.cleaned_data.get("meeting_minutes"):
+            return self.upload_document("meeting_minutes")

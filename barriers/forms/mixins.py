@@ -27,24 +27,37 @@ class DocumentMixin:
         self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
 
-    def validate_document(self):
-        document = self.cleaned_data.get("document")
+    def validate_document(self, field_name="document"):
+        """
+        Only uploads files when javascript is disabled
+        """
+        document = self.cleaned_data.get(field_name)
+        document_id_field_name = self.get_document_id_field_name(field_name)
+        multi_value = hasattr(self.fields.get(document_id_field_name), "choices")
 
         if document:
             try:
-                uploaded_document = self.upload_document()
-                document_ids = self.cleaned_data.get("document_ids", [])
-                document_ids.append(uploaded_document["id"])
-                self.cleaned_data["document_ids"] = document_ids
+                uploaded_document = self.upload_document(field_name)
+                if multi_value:
+                    document_ids = self.cleaned_data.get(document_id_field_name, [])
+                    document_ids.append(uploaded_document["id"])
+                    self.cleaned_data[document_id_field_name] = document_ids
+                else:
+                    self.cleaned_data[document_id_field_name] = uploaded_document["id"]
             except FileUploadError as e:
-                self.add_error("document", str(e))
+                self.add_error(field_name, str(e))
             except ScanError as e:
-                self.add_error("document", str(e))
-
+                self.add_error(field_name, str(e))
         return document
 
-    def upload_document(self):
-        document = self.cleaned_data["document"]
+    def get_document_id_field_name(self, field_name):
+        if f"{field_name}_id" in self.fields:
+            return f"{field_name}_id"
+        elif f"{field_name}_ids" in self.fields:
+            return f"{field_name}_ids"
+
+    def upload_document(self, field_name="document"):
+        document = self.cleaned_data[field_name]
 
         client = MarketAccessAPIClient(self.token)
         data = client.documents.create(filename=document.name, filesize=document.size,)
@@ -72,3 +85,11 @@ class DocumentMixin:
                 "A system error has occured, so the file has not been "
                 "uploaded. Try again."
             )
+
+    def is_multi_document(self):
+        """
+        Is the submitted field a multi document field
+        """
+        for field_name, field in self.fields.items():
+            if self.cleaned_data.get(field_name):
+                return field.multi_document

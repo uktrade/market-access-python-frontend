@@ -49,6 +49,7 @@ class RestrictedFileField(forms.FileField):
     def __init__(self, *args, **kwargs):
         self.content_types = kwargs.pop("content_types")
         self.max_upload_size = kwargs.pop("max_upload_size")
+        self.multi_document = kwargs.pop("multi_document", True)
         super().__init__(*args, **kwargs)
 
     def get_allowed_extensions(self):

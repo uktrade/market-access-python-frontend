@@ -177,8 +177,22 @@ class SessionDocumentMixin:
     def get_session_key(self):
         raise NotImplementedError
 
+    def get_session_document(self, session_key=None):
+        if session_key is None:
+            session_key = self.get_session_key()
+        return self.request.session.get(session_key)
+
     def get_session_documents(self):
         return self.request.session.get(self.get_session_key(), [])
+
+    def set_session_document(self, document, session_key=None):
+        if session_key is None:
+            session_key = self.get_session_key()
+        self.request.session[session_key] = {
+            "id": document.id,
+            "name": document.name,
+            "size": document.size,
+        }
 
     def set_session_documents(self, documents):
         session_key = self.get_session_key()
@@ -187,8 +201,12 @@ class SessionDocumentMixin:
             for document in documents
         ]
 
-    def delete_session_documents(self):
-        try:
-            del self.request.session[self.get_session_key()]
-        except KeyError:
-            pass
+    def delete_session_documents(self, session_keys=()):
+        if not session_keys:
+            session_keys = [self.get_session_key()]
+
+        for session_key in session_keys:
+            try:
+                del self.request.session[session_key]
+            except KeyError:
+                pass
