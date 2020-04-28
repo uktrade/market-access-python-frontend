@@ -42,10 +42,13 @@
         {% include 'partials/forms/typeahead.html' with placeholder='Search member states' field=form.member_states field_classes="govuk-!-width-two-thirds" %}
         {% include "partials/forms/select_input.html" with field=form.committee_raised_in field_classes="govuk-!-width-one-half" %}
 
-        {% url 'barriers:delete_wto_document' barrier.id meeting_minutes.id as delete_document_url %}
-        <div class="meeting_minutes_container">
-            {% include "partials/forms/file_input.html" with document=meeting_minutes field=form.meeting_minutes delete_url=delete_document_url %}
-        </div>
+        {% if form.meeting_minutes %}
+            {% url 'barriers:delete_wto_document' barrier.id meeting_minutes.id as delete_document_url %}
+            <div class="meeting_minutes_container">
+                <label class="govuk-label govuk-label--s" for="{{ field.name }}">{{ form.meeting_minutes.label }}</label>
+                {% include "partials/forms/file_input.html" with document=meeting_minutes field=form.meeting_minutes delete_url=delete_document_url %}
+            </div>
+        {% endif %}
 
         {% include "partials/forms/date_input.html" with field=form.raised_date %}
         {% include "partials/forms/text_input.html" with field=form.case_number field_classes="govuk-!-width-one-half" %}

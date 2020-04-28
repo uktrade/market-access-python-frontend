@@ -66,9 +66,9 @@ class WTONotifiedStatusHistoryItem(BaseHistoryItem):
     field_name = "WTO notified"
 
     def get_value(self, value):
-        wto_profile = WTOProfile(value)
-        return wto_profile.status_text
-
+        if value.get("wto_has_been_notified") is not None:
+            wto_profile = WTOProfile(value)
+            return wto_profile.status_text
 
 
 class WTOHistoryItem(PolymorphicBase):

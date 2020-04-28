@@ -97,7 +97,7 @@ class WTOProfileForm(DocumentMixin, forms.Form):
                 "Which committee should be notified of the barrier?"
             )
             del self.fields["committee_notification_link"]
-            del self.fields["committee_meeting_minutes"]
+            del self.fields["meeting_minutes"]
 
     def get_committee_choices(self):
         """
@@ -127,6 +127,9 @@ class WTOProfileForm(DocumentMixin, forms.Form):
     def clean_committee_notification_document(self):
         return self.validate_document("committee_notification_document")
 
+    def clean_meeting_minutes(self):
+        return self.validate_document("meeting_minutes")
+
     def clean_raised_date(self):
         if self.cleaned_data.get("raised_date"):
             return self.cleaned_data["raised_date"].isoformat()
@@ -138,16 +141,16 @@ class WTOProfileForm(DocumentMixin, forms.Form):
             wto_profile={
                 "committee_notified": self.cleaned_data.get("committee_notified"),
                 "committee_notification_link": self.cleaned_data.get(
-                    "committee_notification_link"
+                    "committee_notification_link", ""
                 ),
                 "committee_notification_document": self.cleaned_data.get(
                     "committee_notification_document_id"
                 ),
                 "member_states": self.cleaned_data.get("member_states"),
-                "committee_raised_in ": self.cleaned_data.get("committee_raised_in"),
+                "committee_raised_in": self.cleaned_data.get("committee_raised_in"),
                 "meeting_minutes": self.cleaned_data.get("meeting_minutes_id"),
                 "raised_date": self.cleaned_data.get("raised_date"),
-                "case_number": self.cleaned_data.get("case_number"),
+                "case_number": self.cleaned_data.get("case_number", ""),
             }
         )
 

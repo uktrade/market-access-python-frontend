@@ -1,6 +1,6 @@
 ma.pages.barrier.wto = (function(){
 
-    function setupAttachments(selector, fieldName){
+    function setupAttachments(selector, fieldName, attachText="Attach document"){
 
         if( !( ma.components.FileUpload && ma.components.Attachments && ma.components.AttachmentForm && ma.components.TextArea && jessie.hasFeatures(
             'queryOne', 'cancelDefault', 'getElementData'
@@ -14,7 +14,8 @@ ma.pages.barrier.wto = (function(){
             fileUpload = new ma.components.FileUpload( {
                 group: selector + ' .js-form-group',
                 input: selector + ' .js-file-input',
-                limitText: selector + ' .js-max-file-size'
+                limitText: selector + ' .js-max-file-size',
+                attachText: attachText,
             } );
         } catch( e ) { return; }
 
@@ -26,7 +27,7 @@ ma.pages.barrier.wto = (function(){
 
         try {
 
-            attachments = new ma.components.Attachments( fileUpload, selector, fieldName );
+            attachments = new ma.components.Attachments( fileUpload, selector, fieldName);
             new ma.components.AttachmentForm( fileUpload, attachments, submitButton, false );
 
         } catch( e ){ return; }
@@ -35,9 +36,16 @@ ma.pages.barrier.wto = (function(){
     }
 
     return function(){
-
-        setupAttachments(".committee_notification_document_container", "committee_notification_document_id");
-        setupAttachments(".meeting_minutes_container", "meeting_minutes_id");
+        setupAttachments(
+            selector=".committee_notification_document_container",
+            fieldName="committee_notification_document_id",
+            attachText="Attach committee notification document",
+        );
+        setupAttachments(
+            selector=".meeting_minutes_container",
+            fieldName="meeting_minutes_id",
+            attachText="Attach committee meeting minutes document",
+        );
 
         if( ma.components.DeleteModal ){
             new ma.components.DeleteModal();

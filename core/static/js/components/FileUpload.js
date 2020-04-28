@@ -20,6 +20,7 @@ ma.components.FileUpload = (function( doc, jessie ){
 		this.formGroup = queryOne( opts.group );
 		this.input = queryOne( opts.input );
 		this.limitText = queryOne( opts.limitText );
+		this.attachText = opts.attachText || 'Attach document';
 
 		if( !this.formGroup ){ throw new Error( 'No form group found' ); }
 		if( !this.input ){ throw new Error( 'no input found' ); }
@@ -57,7 +58,7 @@ ma.components.FileUpload = (function( doc, jessie ){
 
 		var link = doc.createElement( 'a' );
 
-		link.innerText = 'Attach document';
+		link.innerText = this.attachText;
 		link.className = 'file-upload__link';
 		link.style.display = 'none';
 		link.href = '#';
