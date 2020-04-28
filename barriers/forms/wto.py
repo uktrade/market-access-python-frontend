@@ -97,6 +97,8 @@ class WTOProfileForm(DocumentMixin, forms.Form):
                 "Which committee should be notified of the barrier?"
             )
             del self.fields["committee_notification_link"]
+            del self.fields["committee_notification_document"]
+            del self.fields["committee_notification_document_id"]
             del self.fields["meeting_minutes"]
 
     def get_committee_choices(self):
@@ -136,23 +138,24 @@ class WTOProfileForm(DocumentMixin, forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id,
-            wto_profile={
-                "committee_notified": self.cleaned_data.get("committee_notified"),
-                "committee_notification_link": self.cleaned_data.get(
-                    "committee_notification_link", ""
-                ),
-                "committee_notification_document": self.cleaned_data.get(
-                    "committee_notification_document_id"
-                ),
-                "member_states": self.cleaned_data.get("member_states"),
-                "committee_raised_in": self.cleaned_data.get("committee_raised_in"),
-                "meeting_minutes": self.cleaned_data.get("meeting_minutes_id"),
-                "raised_date": self.cleaned_data.get("raised_date"),
-                "case_number": self.cleaned_data.get("case_number", ""),
-            }
-        )
+        wto_profile = {
+            "committee_notified": self.cleaned_data.get("committee_notified"),
+            "member_states": self.cleaned_data.get("member_states"),
+            "committee_raised_in": self.cleaned_data.get("committee_raised_in"),
+            "raised_date": self.cleaned_data.get("raised_date"),
+            "case_number": self.cleaned_data.get("case_number", ""),
+        }
+        if "committee_notification_link" in self.fields:
+            wto_profile["committee_notification_link"] = self.cleaned_data.get(
+                "committee_notification_link", ""
+            )
+        if "committee_notification_document" in self.fields:
+            wto_profile["committee_notification_document"] = self.cleaned_data.get(
+                "committee_notification_document_id"
+            )
+        if "meeting_minutes" in self.fields:
+            wto_profile["meeting_minutes"] = self.cleaned_data.get("meeting_minutes_id")
+        client.barriers.patch(id=self.id, wto_profile=wto_profile)
 
 
 class WTODocumentForm(DocumentMixin, forms.Form):

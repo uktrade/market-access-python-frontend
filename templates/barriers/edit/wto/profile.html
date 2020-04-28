@@ -34,10 +34,12 @@
             {% include "partials/forms/text_input.html" with field=form.committee_notification_link %}
         {% endif %}
 
-        {% url 'barriers:delete_wto_document' barrier.id committee_notification_document.id as delete_document_url %}
-        <div class="committee_notification_document_container">
-            {% include "partials/forms/file_input.html" with document=committee_notification_document field=form.committee_notification_document  delete_url=delete_document_url %}
-        </div>
+        {% if form.committee_notification_document %}
+            {% url 'barriers:delete_wto_document' barrier.id committee_notification_document.id as delete_document_url %}
+            <div class="committee_notification_document_container">
+                {% include "partials/forms/file_input.html" with document=committee_notification_document field=form.committee_notification_document  delete_url=delete_document_url %}
+            </div>
+        {% endif %}
 
         {% include 'partials/forms/typeahead.html' with placeholder='Search member states' field=form.member_states field_classes="govuk-!-width-two-thirds" %}
         {% include "partials/forms/select_input.html" with field=form.committee_raised_in field_classes="govuk-!-width-one-half" %}
