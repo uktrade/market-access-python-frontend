@@ -207,3 +207,30 @@ class FindABarrierTestCase(MarketAccessTestCase):
         )
         page_labels = [page["label"] for page in pagination["pages"]]
         assert page_labels == [1, "...", 5, 6, 7, 8, "...", 13]
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_wto_filters(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:find_a_barrier"),
+            data={
+                "wto_has_been_notified": "1",
+                "wto_should_be_notified": "1",
+                "has_wto_raised_date": "1",
+                "has_wto_committee_raised_in": "1",
+                "has_wto_case_number": "1",
+                "has_no_wto_information": "1",
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            wto_has_been_notified=True,
+            wto_should_be_notified=True,
+            has_wto_raised_date=True,
+            has_wto_committee_raised_in=True,
+            has_wto_case_number=True,
+            has_wto_profile="0",
+        )
