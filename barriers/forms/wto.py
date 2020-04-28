@@ -13,17 +13,14 @@ class WTOStatusForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter yes or no"},
     )
     wto_should_be_notified = YesNoBooleanField(
-        label="Should the measure be notified to the WTO?",
-        required=False,
+        label="Should the measure be notified to the WTO?", required=False,
     )
 
     def clean(self):
         cleaned_data = super().clean()
         if cleaned_data.get("wto_has_been_notified") is False:
             if cleaned_data.get("wto_should_be_notified") is None:
-                self.add_error(
-                    "wto_should_be_notified", "Enter yes or no"
-                )
+                self.add_error("wto_should_be_notified", "Enter yes or no")
 
     def get_api_params(self):
         wto_profile = {
@@ -39,9 +36,7 @@ class WTOStatusForm(APIFormMixin, forms.Form):
 
 class WTOProfileForm(DocumentMixin, forms.Form):
     committee_notified = forms.ChoiceField(
-        label="Committee notified of the barrier",
-        choices=(),
-        required=False,
+        label="Committee notified of the barrier", choices=(), required=False,
     )
     committee_notification_link = forms.URLField(
         label="Committee notification",
@@ -63,9 +58,7 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         required=False,
     )
     committee_raised_in = forms.ChoiceField(
-        label="WTO committee the barrier was raised in",
-        choices=(),
-        required=False,
+        label="WTO committee the barrier was raised in", choices=(), required=False,
     )
     meeting_minutes_id = forms.CharField(required=False)
     meeting_minutes = RestrictedFileField(
@@ -80,8 +73,7 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         required=False,
     )
     case_number = forms.CharField(
-        label="WTO dispute settlement case number for the barrier",
-        required=False,
+        label="WTO dispute settlement case number for the barrier", required=False,
     )
 
     def __init__(self, id, metadata, wto_profile, *args, **kwargs):
@@ -93,9 +85,9 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         self.set_committee_raised_in_choices()
 
         if not wto_profile.wto_has_been_notified:
-            self.fields["committee_notified"].label = (
-                "Which committee should be notified of the barrier?"
-            )
+            self.fields[
+                "committee_notified"
+            ].label = "Which committee should be notified of the barrier?"
             del self.fields["committee_notification_link"]
             del self.fields["committee_notification_document"]
             del self.fields["committee_notification_document_id"]
@@ -105,11 +97,13 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         """
         Grouped committee choices by committee group
         """
-        return (("", "Select a committee"), ) + tuple(
+        return (("", "Select a committee"),) + tuple(
             (
                 group["name"],
-                tuple((committee["id"], committee["name"])
-                for committee in group["wto_committees"]),
+                tuple(
+                    (committee["id"], committee["name"])
+                    for committee in group["wto_committees"]
+                ),
             )
             for group in self.metadata.get_wto_committee_groups()
         )
@@ -162,6 +156,7 @@ class WTODocumentForm(DocumentMixin, forms.Form):
     """
     Form used to add documents via ajax. Only one field will be populated at a time.
     """
+
     committee_notification_document = RestrictedFileField(
         label="Attach committee notification document",
         content_types=settings.ALLOWED_FILE_TYPES,

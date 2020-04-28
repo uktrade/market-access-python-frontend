@@ -16,8 +16,8 @@ class EditWTOStatus(APIBarrierFormViewMixin, FormView):
     def form_valid(self, form):
         form.save()
         if (
-            form.cleaned_data.get("wto_has_been_notified") is True or
-            form.cleaned_data.get("wto_should_be_notified") is True
+            form.cleaned_data.get("wto_has_been_notified") is True
+            or form.cleaned_data.get("wto_should_be_notified") is True
         ):
             return HttpResponseRedirect(self.get_continue_url())
         return HttpResponseRedirect(self.get_detail_url())
