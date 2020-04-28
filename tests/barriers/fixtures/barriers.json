@@ -40,6 +40,10 @@
         },
         "priority_summary": null,
         "has_assessment": false,
+        "wto_profile": {
+            "wto_has_been_notified": true,
+            "wto_should_be_notified": null
+        },
         "created_on": "2019-10-28T11:36:39.469000Z",
         "modified_by": "Test-user",
         "modified_on": "2020-01-21T15:39:34.137208Z"
