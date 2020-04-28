@@ -83,7 +83,13 @@ from .views.watchlist import (
     RenameWatchlist,
     SaveWatchlist,
 )
-from .views.wto import EditWTOProfile, EditWTOStatus
+from .views.wto import (
+    AddWTODocument,
+    CancelWTODocuments,
+    DeleteWTODocument,
+    EditWTOProfile,
+    EditWTOStatus,
+)
 
 app_name = "barriers"
 
@@ -114,6 +120,9 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/trade-direction/", BarrierEditTradeDirection.as_view(), name="edit_trade_direction"),
     path("barriers/<uuid:barrier_id>/edit/wto-status/", EditWTOStatus.as_view(), name="edit_wto_status"),
     path("barriers/<uuid:barrier_id>/edit/wto/", EditWTOProfile.as_view(), name="edit_wto_profile"),
+    path("barriers/<uuid:barrier_id>/wto/documents/add/", AddWTODocument.as_view(), name="add_wto_document"),
+    path("barriers/<uuid:barrier_id>/wto/documents/cancel/", CancelWTODocuments.as_view(), name="cancel_wto_documents"),
+    path("barriers/<uuid:barrier_id>/wto/documents/<uuid:document_id>/delete/", DeleteWTODocument.as_view(), name="delete_wto_document"),
 
     path("barriers/<uuid:barrier_id>/archive/", ArchiveBarrier.as_view(), name="archive"),
     path("barriers/<uuid:barrier_id>/unarchive/", UnarchiveBarrier.as_view(), name="unarchive"),

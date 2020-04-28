@@ -131,7 +131,7 @@ ma.components.FileUpload = (function( doc, jessie ){
 
 		if( file ){
 
-			this.events.file.publish( file );
+			this.events.file.publish( this.input.name, file );
 		}
 	};
 
