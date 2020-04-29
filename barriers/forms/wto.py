@@ -21,6 +21,8 @@ class WTOStatusForm(APIFormMixin, forms.Form):
         if cleaned_data.get("wto_has_been_notified") is False:
             if cleaned_data.get("wto_should_be_notified") is None:
                 self.add_error("wto_should_be_notified", "Enter yes or no")
+        elif cleaned_data.get("wto_has_been_notified") is True:
+            cleaned_data["wto_should_be_notified"] = None
 
     def get_api_params(self):
         wto_profile = {
