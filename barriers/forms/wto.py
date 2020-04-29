@@ -44,7 +44,13 @@ class WTOProfileForm(DocumentMixin, forms.Form):
             "Enter a web link to the notification or attach a committee notification "
             "document"
         ),
+        max_length=2048,
         required=False,
+        error_messages={
+            "max_length": (
+                "Notification link should be %(limit_value)d characters or fewer",
+            )
+        },
     )
     committee_notification_document_id = forms.CharField(required=False)
     committee_notification_document = RestrictedFileField(
@@ -73,7 +79,12 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         required=False,
     )
     case_number = forms.CharField(
-        label="WTO dispute settlement case number for the barrier", required=False,
+        label="WTO dispute settlement case number for the barrier",
+        max_length=255,
+        required=False,
+        error_messages={
+            "max_length": "Case number should be %(limit_value)d characters or fewer",
+        },
     )
 
     def __init__(self, id, metadata, wto_profile, *args, **kwargs):
