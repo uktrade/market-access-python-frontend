@@ -359,3 +359,6 @@ class Metadata:
 
     def get_trade_direction_choices(self):
         return (td for td in self.get_trade_direction(all_items=True))
+
+    def get_wto_committee_groups(self):
+        return self.data.get("wto_committee_groups", [])

@@ -36,7 +36,7 @@ class AddDocumentAjaxView(FormView):
         except ScanError as e:
             return JsonResponse({"message": str(e)}, status=HTTPStatus.UNAUTHORIZED,)
 
-        self.add_document_to_session(document)
+        self.add_document_to_session(document, form.is_multi_document())
 
         return JsonResponse(
             {
@@ -55,17 +55,19 @@ class AddDocumentAjaxView(FormView):
     def get_delete_url(self, document):
         raise NotImplementedError
 
-    def add_document_to_session(self, document):
+    def add_document_to_session(self, document, multi_document):
         session_key = self.get_session_key()
-        documents = self.request.session.get(session_key, [])
-        documents.append(
-            {
-                "id": document["id"],
-                "name": document["file"]["name"],
-                "size": document["file"]["size"],
-            }
-        )
-        self.request.session[session_key] = documents
+        flat_document = {
+            "id": document["id"],
+            "name": document["file"]["name"],
+            "size": document["file"]["size"],
+        }
+        if multi_document:
+            documents = self.request.session.get(session_key, [])
+            documents.append(flat_document)
+            self.request.session[session_key] = documents
+        else:
+            self.request.session[session_key] = flat_document
 
     def form_invalid(self, form):
         return JsonResponse(

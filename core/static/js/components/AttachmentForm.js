@@ -4,7 +4,7 @@ ma.components.AttachmentForm = (function( jessie ){
 
 	var bind = jessie.bind;
 
-	function AttachmentForm( fileUpload, attachments, submitButton ){
+	function AttachmentForm( fileUpload, attachments, submitButton, multiDocument=true ){
 
 		if( !fileUpload ){ throw new Error( 'fileUpload is required' ); }
 		if( !attachments ){ throw new Error( 'attachments is required' ); }
@@ -13,6 +13,7 @@ ma.components.AttachmentForm = (function( jessie ){
 		this.fileUpload = fileUpload;
 		this.attachments = attachments;
 		this.submitButton = submitButton;
+		this.multiDocument = multiDocument;
 
 		fileUpload.events.file.subscribe( bind( this.newFile, this ) );
 		attachments.events.delete.subscribe( bind( this.deleteDocument, this ) );
@@ -74,12 +75,13 @@ ma.components.AttachmentForm = (function( jessie ){
 
 				this.submitButton.disabled = false;
 				this.fileUpload.showLink();
-				this.attachments.addItem( {
+				var item = {
 					id: documentId,
 					delete_url: data.delete_url,
 					name: file.name,
 					size: file.size
-				} );
+				};
+				this.attachments.addItem( item, this.multiDocument );
 
 			} else {
 
@@ -97,13 +99,12 @@ ma.components.AttachmentForm = (function( jessie ){
 		}
 	};
 
-	AttachmentForm.prototype.newFile = function( file ){
-
+	AttachmentForm.prototype.newFile = function( fieldName, file ){
 		var xhr2 = ma.xhr2();
 		var formData = new FormData();
 
 		this.submitButton.disabled = true;
-		formData.append( 'document', file );
+		formData.append( fieldName, file );
 
 		if( xhr2.upload ){
 

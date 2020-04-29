@@ -50,4 +50,4 @@ class GenericHistoryItem(BaseHistoryItem):
 
     @property
     def field_name(self):
-        return self.field.title()
+        return self.field.replace("_", " ").title()

@@ -1,0 +1,24 @@
+{% if document %}
+    <div class="attachments">
+        <h3 class="attachments__heading">Attached documents</h3>
+        <ul class="attachments__list js-documents-list">
+            <li class="attachments__list__item">
+                <span class="attachments__list__item__file-name">{{ document.name }} - {{ document.size|filesizeformat }}</span>
+                <a href="{{ delete_url }}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
+                <input type="hidden" name="{{ field.name }}_id" value="{{ document.id }}">
+            </li>
+        </ul>
+    </div>
+{% endif %}
+
+<div class="govuk-form-group file-upload js-form-group">
+    <label class="govuk-label visually-hidden" for="document">Attach a document</label>
+
+    {% form_field_error field %}
+
+    <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
+    (file size limit <strong>{{ field.field.max_upload_size|filesizeformat }}</strong>)
+    </span>
+
+    <input class="govuk-file-upload file-upload__input js-file-input" id="{{ field.name }}" name="{{ field.name }}" type="file" aria-describedby="document-hint">
+</div>

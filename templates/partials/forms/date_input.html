@@ -1,0 +1,13 @@
+<div id="{{ field.name }}" class="{% form_group_classes field.errors %}">
+    <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ field.label }}</legend>
+
+        <span class="govuk-hint">{{ field.help_text }}</span>
+
+        {% form_field_error field %}
+
+        <div class="govuk-date-input">
+            {{ field }}
+        </div>
+    </fieldset>
+</div>

@@ -20,12 +20,13 @@ ma.components.Attachments = (function( doc ){
 	var FILE_NAME_CLASS = 'attachments__list__item__file-name';
 	var DELETE_CLASS = 'attachments__list__item__delete';
 
-	function Attachments( fileUpload ){
+	function Attachments( fileUpload, selector='', fieldName='document_ids' ){
 
 		if( !fileUpload ){ throw new Error( 'fileUpload is required' ); }
 
 		this.fileUpload = fileUpload;
-		this.list = jessie.queryOne( '.' + JS_LIST_CLASS ) || this.createList();
+		this.fieldName = fieldName;
+		this.list = jessie.queryOne( selector + ' .' + JS_LIST_CLASS ) || this.createList();
 		this.documents = this.list.parentNode;
 
 		this.events = {
@@ -66,7 +67,7 @@ ma.components.Attachments = (function( doc ){
 		return list;
 	};
 
-	Attachments.prototype.addItem = function( document ){
+	Attachments.prototype.addItem = function( document, multiDocument=true ){
 
 		var item = doc.createElement( 'li' );
 		var file = doc.createElement( 'span' );
@@ -84,13 +85,14 @@ ma.components.Attachments = (function( doc ){
 		jessie.setElementData( deleteLink, DATA_KEY, document.id );
 
 		input.type = 'hidden';
-		input.name = 'document_ids';
+		input.name = this.fieldName;
 		input.value = document.id;
 
 		item.appendChild( file );
 		item.appendChild( deleteLink );
 		item.appendChild( input );
 
+		if (!multiDocument) { this.list.innerHTML = ""; }
 		this.list.appendChild( item );
 
 		if( !this.documents.parentNode ){
