@@ -24,10 +24,10 @@ class BarrierSearchForm(forms.Form):
         choices=(
             ("wto_has_been_notified", "Notified"),
             ("wto_should_be_notified", "Not notified but should be"),
-            ("has_wto_committee_raised_in", "Raised"),
-            ("has_wto_raised_date", "Discussed bilaterally"),
-            ("has_wto_case_number", "Subject to a dispute settlement"),
-            ("has_no_wto_information", "No WTO information provided"),
+            ("has_committee_raised_in", "Raised"),
+            ("has_raised_date", "Discussed bilaterally"),
+            ("has_case_number", "Subject to a dispute settlement"),
+            ("has_no_information", "No WTO information provided"),
         ),
         required=False,
     )
