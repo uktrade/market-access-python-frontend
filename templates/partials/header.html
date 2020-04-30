@@ -30,10 +30,10 @@
     <button role="button" class="datahub-header__menu-button js-datahub-header-toggle" aria-controls="navigation sub-navigation logo-navigation" aria-label="Show or hide navigation">Menu</button>
     <div class="datahub-header__navigation-container">
         <nav class="datahub-header__navigation-wrapper" aria-labelledby="navigation">
-            <ul id="navigation" class="datahub-header__navigation{% if params.navigationClasses %} params.navigationClasses{% endif %}" aria-label="Top Level Navigation">
+            <ul id="navigation" class="datahub-header__navigation" aria-label="Top Level Navigation">
             {% for item in apps %}
                 <li class="datahub-header__navigation__item">
-                    <a class="datahub-header__navigation__item__link{% if item.activeKey == params.active %} datahub-header__navigation__item__link--active{% endif %}" href="{{ item.href }}">
+                    <a class="datahub-header__navigation__item__link{% if item.activeKey == 'market-access' %} datahub-header__navigation__item__link--active{% endif %}" href="{{ item.href }}">
                         {{ item.name }}
                     </a>
                 </li>
@@ -51,6 +51,9 @@
                 </li>
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link{% if page == 'find-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:find_a_barrier' %}">Find a barrier</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>
                 </li>
             </ul>
         </nav>
