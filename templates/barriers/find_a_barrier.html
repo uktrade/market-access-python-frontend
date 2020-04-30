@@ -35,20 +35,7 @@
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
 
-                <div id="show" class="govuk-form-group filter-group">
-                    <fieldset class="govuk-fieldset filter-group__inner">
-                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">WTO</legend>
-
-                        <div class="checkbox-filter govuk-!-width-full">
-                            {% include 'partials/forms/checkbox.html' with field=form.wto_has_been_notified %}
-                            {% include 'partials/forms/checkbox.html' with field=form.wto_should_be_notified %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_wto_raised_date %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_wto_committee_raised_in %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_wto_case_number %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_no_wto_information %}
-                        </div>
-                    </fieldset>
-                </div>
+                {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
 
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
