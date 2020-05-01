@@ -1,0 +1,22 @@
+.saved-search-heading {
+    border-bottom: 5px solid $govuk-black;
+    padding: govuk-em( 16, 16 ) 0;
+}
+
+.saved-search__title {
+    margin: 0 0 govuk-em( 8, 16 );
+}
+.saved-search__filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+.saved-search__filter-list-item {
+    background-color: $govuk-light-grey;
+    display: inline-block;
+    margin-bottom: govuk-em( 8, 16 );
+    margin-right: govuk-em( 8, 16 );
+    padding: govuk-em( 12, 16 );
+    line-height: 1;
+}

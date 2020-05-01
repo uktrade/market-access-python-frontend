@@ -11,71 +11,19 @@ from utils.pagination import PaginationMixin
 from utils.tools import nested_sort
 
 
-class Dashboard(PaginationMixin, TemplateView):
+class Dashboard(TemplateView):
     template_name = "barriers/dashboard.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        barriers = []
         watchlists = self.request.session.get_watchlists()
-
-        if watchlists:
-            watchlist_index = self.get_watchlist_index()
-            selected_watchlist = watchlists[watchlist_index]
-            sort = self.get_ordering()
-            barriers = self.get_barriers(selected_watchlist)
-            context_data.update(
-                {
-                    "selected_watchlist": selected_watchlist,
-                    "watchlist_index": watchlist_index,
-                    "sort_field": sort.lstrip("-"),
-                    "sort_descending": sort.startswith("-"),
-                    "pagination": self.get_pagination_data(
-                        object_list=barriers,
-                        limit=settings.API_RESULTS_LIMIT,
-                    ),
-                }
-            )
-
         context_data.update(
             {
                 "page": "dashboard",
                 "watchlists": watchlists,
-                "barriers": barriers,
-                "can_add_watchlist": (len(watchlists) < settings.MAX_WATCHLIST_LENGTH),
             }
         )
         return context_data
-
-    def get_barriers(self, watchlist):
-        client = MarketAccessAPIClient(self.request.session["sso_token"])
-
-        return client.barriers.list(
-            ordering=self.get_ordering(),
-            limit=settings.API_RESULTS_LIMIT,
-            offset=settings.API_RESULTS_LIMIT * (self.get_current_page() - 1),
-            **watchlist.get_api_params(),
-        )
-
-    def get_ordering(self):
-        return self.request.GET.get("sort", "-modified_on")
-
-    def get_watchlist_index(self):
-        """
-        Get list index from querystring and ensure it's a valid number
-        """
-        try:
-            list_index = int(self.request.GET.get("list", 0))
-        except ValueError:
-            return 0
-
-        if list_index not in range(0, settings.MAX_WATCHLIST_LENGTH):
-            return 0
-
-        return list_index
-
-    def get_search_form_data(self):
-        return self.watchlist.filters
 
 
 class SearchFormMixin:

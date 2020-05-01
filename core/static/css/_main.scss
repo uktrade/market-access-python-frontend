@@ -69,6 +69,8 @@ $govuk-font-family-tabular: Arial,'Helvetica Neue',Helvetica,sans-serif;
 @import 'app-objects/document-list';
 @import 'app-objects/tags';
 
+@import 'app-components/card-list';
+@import 'app-components/badges';
 @import 'app-components/dash-button';
 @import 'app-components/dash-card';
 @import 'app-components/task-list';
@@ -95,6 +97,7 @@ $govuk-font-family-tabular: Arial,'Helvetica Neue',Helvetica,sans-serif;
 @import 'app-components/pagination';
 @import 'app-components/env-banner';
 @import 'app-components/archived-banner';
+@import 'app-components/saved-searches';
 
 
 @import 'pages/index';
