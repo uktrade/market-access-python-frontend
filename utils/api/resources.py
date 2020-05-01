@@ -110,7 +110,7 @@ class BarriersResource(APIResource):
 
     def get_csv(self, *args, **kwargs):
         url = f"barriers/export"
-        return self.client.get(url, params=kwargs, raw=True)
+        return self.client.get(url, params=kwargs, stream=True, raw=True)
 
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
