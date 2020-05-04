@@ -15,22 +15,11 @@ class EditWTOStatus(APIBarrierFormViewMixin, FormView):
 
     def form_valid(self, form):
         form.save()
-        if (
-            form.cleaned_data.get("wto_has_been_notified") is True
-            or form.cleaned_data.get("wto_should_be_notified") is True
-        ):
-            return HttpResponseRedirect(self.get_continue_url())
-        return HttpResponseRedirect(self.get_detail_url())
+        return super().form_valid(form)
 
-    def get_continue_url(self):
+    def get_success_url(self):
         return reverse(
             "barriers:edit_wto_profile",
-            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
-        )
-
-    def get_detail_url(self):
-        return reverse(
-            "barriers:barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 

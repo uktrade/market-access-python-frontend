@@ -28,7 +28,9 @@
     <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_wto_document' barrier.id %}">
         {% csrf_token %}
 
-        {% include "partials/forms/select_input.html" with field=form.committee_notified field_classes="govuk-!-width-one-half" %}
+        {% if form.committee_notified %}
+            {% include "partials/forms/select_input.html" with field=form.committee_notified field_classes="govuk-!-width-one-half" %}
+        {% endif %}
 
         {% if form.committee_notification_link %}
             {% include "partials/forms/text_input.html" with field=form.committee_notification_link %}

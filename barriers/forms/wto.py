@@ -97,7 +97,7 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         self.set_member_states_choices()
         self.set_committee_raised_in_choices()
 
-        if not wto_profile.wto_has_been_notified:
+        if wto_profile.wto_has_been_notified is False:
             self.fields[
                 "committee_notified"
             ].label = "Which committee should be notified of the barrier?"
@@ -105,6 +105,8 @@ class WTOProfileForm(DocumentMixin, forms.Form):
             del self.fields["committee_notification_document"]
             del self.fields["committee_notification_document_id"]
             del self.fields["meeting_minutes"]
+        if wto_profile.wto_should_be_notified is False:
+            del self.fields["committee_notified"]
 
     def get_committee_choices(self):
         """
