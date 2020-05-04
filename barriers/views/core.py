@@ -16,11 +16,13 @@ class Dashboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        watchlists = self.request.session.get_watchlists()
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_searches = client.saved_searches.list()
+
         context_data.update(
             {
                 "page": "dashboard",
-                "watchlists": watchlists,
+                "saved_searches": saved_searches,
             }
         )
         return context_data
@@ -72,13 +74,14 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
             }
         )
 
-        if form.cleaned_data.get("edit") is not None:
-            watchlist_index = form.cleaned_data.get("edit")
-            watchlist = self.request.session.get_watchlist(watchlist_index)
+        if form.cleaned_data.get("search_id") is not None:
+            saved_search_id = form.cleaned_data.get("search_id")
+            saved_search = client.saved_searches.get(saved_search_id)
+            context_data["saved_search"] = saved_search
             form_filters = form.get_raw_filters()
             context_data["have_filters_changed"] = nested_sort(
                 form_filters
-            ) != nested_sort(watchlist.filters)
+            ) != nested_sort(saved_search.filters)
 
         return context_data
 

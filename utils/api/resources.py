@@ -4,7 +4,7 @@ import time
 from django.conf import settings
 
 from barriers.constants import Statuses
-from barriers.models import Assessment, Barrier, HistoryItem, Note
+from barriers.models import Assessment, Barrier, HistoryItem, Note, SavedSearch
 from reports.models import Report
 from users.models import User
 
@@ -204,3 +204,8 @@ class ReportsResource(APIResource):
 
     def submit(self, barrier_id):
         return self.client.put(f"reports/{barrier_id}/submit")
+
+
+class SavedSearchesResource(APIResource):
+    resource_name = "saved-searches"
+    model = SavedSearch

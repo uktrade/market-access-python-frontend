@@ -74,6 +74,10 @@
         <div class="govuk-grid-column-three-quarters">
 
             <div class="filter-results-header">
+                {% if saved_search %}
+                    <h1>{{ saved_search.name }}</h1>
+                {% endif %}
+
                 <h2 class="filter-results-title">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
 
                 {% if filters %}

@@ -1,7 +1,18 @@
 .ma-badge {
     padding: govuk-em( 8, 16 );
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     background-color: $govuk-dark-grey;
     color: $govuk-white;
+    display: inline-block;
+    margin-right: govuk-em( 4, 16 );
+    font-weight: bold;
+
+    &--new {
+        background-color: $govuk-green;
+    }
+
+    &--updated {
+        background-color: $govuk-orange;
+    }
 }

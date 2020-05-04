@@ -11,7 +11,6 @@
 {% block page_content %}
     {% include 'barriers/partials/dashboard_heading.html' %}
 
-
     <section>
         <ul class="ma-card-list">
             <li class="ma-card-list__item">
@@ -30,17 +29,29 @@
     </section>
 
     <section>
-        <h2 class="saved-search-heading">{{ watchlists|length }}<span class="dashboard-results-header__title__caption"> saved search{{ watchlists|length|pluralize:"es" }}</span></h2>
+        <h2 class="saved-search-heading">{{ saved_searches|length }}<span class="dashboard-results-header__title__caption"> saved search{{ saved_searches|length|pluralize:"es" }}</span></h2>
 
         <ul class="ma-card-list">
-            {% for watchlist in watchlists %}
+            {% for saved_search in saved_searches %}
                 <li class="ma-card-list__item saved-search">
-                    <h3 class="saved-search__title"><a href="{% url 'barriers:find_a_barrier' %}?{{ watchlist.querystring }}&edit={{ forloop.counter }}">{{ watchlist.name }}</a></h3>
+                    <h3 class="saved-search__title"><a href="{% url 'barriers:find_a_barrier' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a></h3>
 
-                    <p><span class="ma-badge">6 barriers</span> in total</p>
-                    {% if watchlist.filters %}
+                    <p><span class="ma-badge">{{ saved_search.barrier_count }} barrier{{ saved_search.barrier_count|pluralize }}</span> in total</p>
+                    <p>
+                        {% if saved_search.new_count > 0 %}
+                            <span class="ma-badge ma-badge--new">{{ saved_search.new_count }} new</span>
+                        {% endif %}
+                        {% if saved_search.updated_count > 0 %}
+                            <span class="ma-badge ma-badge--updated">{{ saved_search.updated_count }} updated</span>
+                        {% endif %}
+                        {% if saved_search.new_count > 0 or saved_search.updated_count > 0 %}
+                            since you last viewed this saved search
+                        {% endif %}
+                    </p>
+
+                    {% if saved_search.filters %}
                         <ul class="saved-search__filter-list">
-                            {% for name, value in watchlist.readable_filters.items %}
+                            {% for name, value in saved_search.readable_filters.items %}
                                 <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
                             {% endfor %}
                         </ul>

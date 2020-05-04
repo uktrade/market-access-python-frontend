@@ -6,7 +6,7 @@ from django.http import QueryDict
 
 
 class BarrierSearchForm(forms.Form):
-    edit = forms.IntegerField(required=False, widget=forms.HiddenInput())
+    search_id = forms.UUIDField(required=False, widget=forms.HiddenInput())
     search = forms.CharField(label="Search", max_length=255, required=False)
     country = forms.MultipleChoiceField(label="Barrier location", required=False,)
     trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
@@ -63,7 +63,7 @@ class BarrierSearchForm(forms.Form):
         Get form data from the GET parameters.
         """
         cleaned_data = {
-            "edit": data.get("edit"),
+            "search_id": data.get("search_id"),
             "search": data.get("search"),
             "country": data.getlist("country"),
             "trade_direction": data.getlist("trade_direction"),
@@ -214,6 +214,7 @@ class BarrierSearchForm(forms.Form):
 
     def get_api_search_parameters(self):
         params = {}
+        params["search_id"] = self.cleaned_data.get("search_id")
         params["text"] = self.cleaned_data.get("search")
         params["location"] = ",".join(
             self.cleaned_data.get("country", []) + self.cleaned_data.get("region", [])
