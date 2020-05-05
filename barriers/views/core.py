@@ -82,10 +82,18 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
                 ),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "find-a-barrier",
+                "search_title": self.get_search_title(form),
             }
         )
 
         return context_data
+
+    def get_search_title(self, form):
+        filters = form.get_raw_filters()
+        if filters == {"user": "1"}:
+            return "My barriers"
+        elif filters == {"team": "1"}:
+            return "Team barriers"
 
     def get_pageless_querystring(self):
         params = self.request.GET.copy()
