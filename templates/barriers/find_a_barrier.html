@@ -143,7 +143,16 @@
                                     </strong>
                                 </div>
                             {% endif %}
-                            <h3 class='filter-results-list__item__heading'><a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a></h3>
+                            <h3 class='filter-results-list__item__heading'>
+                                {% if saved_search %}
+                                    {% if barrier.id in saved_search.new_barrier_ids %}
+                                        <span class="ma-badge ma-badge--new">New</span>
+                                    {% elif barrier.id in saved_search.updated_barrier_ids %}
+                                        <span class="ma-badge ma-badge--updated">Updated</span>
+                                    {% endif %}
+                                {% endif %}
+                                <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a>
+                            </h3>
                             <dl class="filter-results-list__item__definitions">
 
                                 <dt class="filter-results-list__item__definitions__key visually-hidden">ID:</dt>

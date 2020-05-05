@@ -53,7 +53,18 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(form=form, **kwargs)
+
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        if form.cleaned_data.get("search_id") is not None:
+            saved_search_id = form.cleaned_data.get("search_id")
+            saved_search = client.saved_searches.get(saved_search_id)
+            context_data["saved_search"] = saved_search
+            form_filters = form.get_raw_filters()
+            context_data["have_filters_changed"] = nested_sort(
+                form_filters
+            ) != nested_sort(saved_search.filters)
+
         barriers = client.barriers.list(
             ordering="-reported_on",
             limit=settings.API_RESULTS_LIMIT,
@@ -73,15 +84,6 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
                 "page": "find-a-barrier",
             }
         )
-
-        if form.cleaned_data.get("search_id") is not None:
-            saved_search_id = form.cleaned_data.get("search_id")
-            saved_search = client.saved_searches.get(saved_search_id)
-            context_data["saved_search"] = saved_search
-            form_filters = form.get_raw_filters()
-            context_data["have_filters_changed"] = nested_sort(
-                form_filters
-            ) != nested_sort(saved_search.filters)
 
         return context_data
 
