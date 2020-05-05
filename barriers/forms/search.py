@@ -216,7 +216,7 @@ class BarrierSearchForm(forms.Form):
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
-        params["wto"] = self.cleaned_data.get("wto")
+        params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
 
         return {k: v for k, v in params.items() if v}
