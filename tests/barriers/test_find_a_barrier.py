@@ -213,12 +213,14 @@ class FindABarrierTestCase(MarketAccessTestCase):
         response = self.client.get(
             reverse("barriers:find_a_barrier"),
             data={
-                "wto_has_been_notified": "1",
-                "wto_should_be_notified": "1",
-                "has_wto_raised_date": "1",
-                "has_wto_committee_raised_in": "1",
-                "has_wto_case_number": "1",
-                "has_no_wto_information": "1",
+                "wto": [
+                    "wto_has_been_notified",
+                    "wto_should_be_notified",
+                    "has_raised_date",
+                    "has_committee_raised_in",
+                    "has_case_number",
+                    "has_no_information",
+                ]
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -227,10 +229,12 @@ class FindABarrierTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
-            wto_has_been_notified=True,
-            wto_should_be_notified=True,
-            has_wto_raised_date=True,
-            has_wto_committee_raised_in=True,
-            has_wto_case_number=True,
-            has_wto_profile="0",
+            wto=(
+                "wto_has_been_notified,"
+                "wto_should_be_notified,"
+                "has_raised_date,"
+                "has_committee_raised_in,"
+                "has_case_number,"
+                "has_no_information"
+            ),
         )
