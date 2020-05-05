@@ -92,6 +92,20 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
         params.pop("page", None)
         return params.urlencode()
 
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        form.full_clean()
+
+        if "update_search" in request.POST and form.cleaned_data.get("search_id"):
+            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+            client.saved_searches.patch(
+                id=form.cleaned_data.get("search_id"),
+                filters=form.get_raw_filters(),
+            )
+        return self.render_to_response(
+            self.get_context_data(form=form, saved_search_updated=True)
+        )
+
 
 class DownloadBarriers(SearchFormMixin, View):
     form_class = BarrierSearchForm

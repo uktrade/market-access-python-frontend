@@ -17,7 +17,7 @@
             <h2 class="filter-list-title">Filter barriers by:</h2>
             <form action="" method="GET" class="filter-items">
 
-                {% if form.edit.value %}{{ form.edit }}{% endif %}
+                {% if form.search_id.value %}{{ form.search_id }}{% endif %}
 
                 <div id="{{ form.search.name }}" class="govuk-form-group filter-items-group">
                     <label class="govuk-label filter-items__label" for="search">
@@ -76,6 +76,14 @@
             <div class="filter-results-header">
                 {% if saved_search %}
                     <h1>{{ saved_search.name }}</h1>
+
+                    {% if have_filters_changed %}
+                        <p>You have unsaved changes.</p>
+                    {% endif %}
+
+                    {% if saved_search_updated %}
+                        <p>Your search has been successfully saved.</p>
+                    {% endif %}
                 {% endif %}
 
                 <h2 class="filter-results-title">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
@@ -97,14 +105,18 @@
                     </ul>
 
                     <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">
-                        <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
-                        {% if form.edit.value is not None %}
+                        {% if form.search_id.value is not None %}
                             {% if have_filters_changed %}
-                            <a href="{% url 'barriers:edit_watchlist' %}?{{ pageless_querystring }}" class="govuk-button govuk-button--watch-list">Edit watch list</a>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <button class="govuk-button" name="update_search" value="1">Update saved search</button>
+                                </form>
+                                <a href="{% url 'barriers:edit_watchlist' %}?{{ pageless_querystring }}" class="govuk-button govuk-button--watch-list">Save as new search</a>
                             {% endif %}
-                        {% elif filters %}
+                        {% elif filters and not search_title %}
                             <a href="{% url 'barriers:save_watchlist' %}?{{ pageless_querystring }}" class="govuk-button govuk-button--watch-list">Save watch list</a>
                         {% endif %}
+                        <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
                     </div>
                 {% endif %}
             </div>
