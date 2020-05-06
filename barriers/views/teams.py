@@ -121,48 +121,6 @@ class ChangeOwnerView(BarrierMixin, FormView):
         )
 
 
-# TODO: retire this as a separate PR so it's easy to restore
-class AddTeamMember(TeamMembersContextMixin, BarrierMixin, FormView):
-    template_name = "barriers/teams/add_member.html"
-    form_class = AddTeamMemberForm
-
-    def get(self, request, *args, **kwargs):
-        user_id = self.request.GET.get("user")
-        if not user_id:
-            return HttpResponseRedirect(self.get_success_url())
-        context = self.get_context_data(user_id, **kwargs)
-        return self.render_to_response(context)
-
-    def get_context_data(self, user_id, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        context_data["user"] = client.users.get(user_id)
-        return context_data
-
-    def get_initial(self):
-        return {"user": self.request.GET.get("user")}
-
-    def form_invalid(self, form):
-        user_id = self.request.GET.get("user")
-        return self.render_to_response(
-            self.get_context_data(user_id=user_id, form=form)
-        )
-
-    def form_valid(self, form):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        client.barriers.add_team_member(
-            barrier_id=str(self.kwargs.get("barrier_id")),
-            user_id=form.cleaned_data["user"],
-            role=form.cleaned_data["role"],
-        )
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse(
-            "barriers:team", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
-        )
-
-
 class DeleteTeamMember(
     TeamMembersContextMixin, BarrierMixin, TemplateView,
 ):
