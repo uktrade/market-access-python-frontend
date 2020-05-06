@@ -61,11 +61,15 @@
         <div class="govuk-grid-column-three-quarters">
 
             <div class="filter-results-header">
+                {% if member %}
+                <h2 class="search-title">{{ member.user.full_name }}</h2>
+                {% endif %}
                 <h2 class="filter-results-title">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
 
                 {% if filters %}
                     <h3 class="visually-hidden">Active filters:</h3>
                     <ul class="active-filters">
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.member %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.trade_direction %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}

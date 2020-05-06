@@ -104,6 +104,14 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(form=form, **kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        # Fetch member details
+        member = None
+        member_id = form.cleaned_data.get("member")
+        if member_id:
+            member = client.barriers.get_team_member(member_id)
+
+        # Fetch barrier list
         barriers = client.barriers.list(
             ordering="-reported_on",
             limit=settings.API_RESULTS_LIMIT,
@@ -115,6 +123,7 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
             {
                 "barriers": barriers,
                 "filters": form.get_readable_filters(with_remove_links=True),
+                "member": member,
                 "pagination": self.get_pagination_data(
                     object_list=barriers,
                     limit=settings.API_RESULTS_LIMIT,
@@ -123,6 +132,9 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
                 "page": "find-a-barrier",
             }
         )
+
+        if member:
+            context_data["filters"]["member"]["readable_value"] = member["user"]["full_name"]
 
         if form.cleaned_data.get("edit") is not None:
             watchlist_index = form.cleaned_data.get("edit")

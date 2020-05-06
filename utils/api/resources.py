@@ -84,6 +84,16 @@ class BarriersResource(APIResource):
         response_data = self.client.get(url, params=kwargs)
         return response_data.get("results", [])
 
+    def get_team_member(self, member_id):
+        url = f"barriers/members/{member_id}"
+        response_data = self.client.get(url)
+        return response_data
+
+    def patch_team_member(self, member_id, payload):
+        url = f"barriers/members/{member_id}"
+        response_data = self.client.patch(url, json=payload)
+        return response_data
+
     def add_team_member(self, barrier_id, user_id, role, **kwargs):
         url = f"barriers/{barrier_id}/members"
         data = {

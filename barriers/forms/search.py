@@ -18,6 +18,7 @@ class BarrierSearchForm(forms.Form):
     tags = forms.MultipleChoiceField(label="Tags", required=False,)
     user = forms.BooleanField(label="My barriers", required=False,)
     team = forms.BooleanField(label="My team barriers", required=False,)
+    member = forms.IntegerField(label="People", required=False)
     only_archived = forms.BooleanField(label="Only archived barriers", required=False,)
     wto = forms.MultipleChoiceField(
         label="WTO",
@@ -70,6 +71,7 @@ class BarrierSearchForm(forms.Form):
             "tags": data.getlist("tags"),
             "user": data.get("user"),
             "team": data.get("team"),
+            "member": data.get("member"),
             "only_archived": data.get("only_archived"),
             "wto": data.getlist("wto"),
         }
@@ -216,6 +218,7 @@ class BarrierSearchForm(forms.Form):
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
+        params["member"] = self.cleaned_data.get("member")
         params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
 
