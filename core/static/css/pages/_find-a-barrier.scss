@@ -30,6 +30,34 @@
 	position: relative;
 }
 
+.filter-results-header__row {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: govuk-em( 10, 16 );
+}
+
+.filter-results-header__row-item {
+	align-self: center;
+}
+
+.filter-results-header__info {
+	margin-top: 0;
+}
+
+.filter-results-header__update_form {
+	float: left;
+}
+
+.filter-results-header__update-button {
+	padding-top: govuk-em( 12, 16 );
+	padding-bottom: govuk-em( 6, 16 );
+}
+
+.filter-results-header__save-button {
+	margin-left: govuk-em( 32, 16 );
+	margin-bottom: 0;
+}
+
 .filter-results-title {
 	@include govuk-font( 36, $weight: bold );
 	padding: 0 0 govuk-em( 5, 36 ) 0;
@@ -41,48 +69,12 @@
 	@include govuk-font( 24 );
 }
 
-.filter-results-action-buttons {
-
-	display: block;
-	width: 100%;
-	padding-bottom: govuk-em( 10, 16 );
-
-	@include mq( $from: tablet ){
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: auto;
-		padding-top: govuk-em( 20, 16 );
-	}
-
-	& > * {
-		margin-bottom: 10px;
-	}
-
-	.govuk-button--watch-list {
-
-		vertical-align: bottom;
-		margin-top: govuk-em( 10, 16 );
-
-		@include mq( $from: tablet ){
-
-			margin-bottom: 0;
-			margin-left: govuk-em( 15, 16 );
-		}
-	}
-}
-
 .filter-results-action-buttons--save {
 	padding-top: 0;
 }
 
 .filter-results-clear-link {
-	@include mq( $from: tablet ){
-		position: relative;
-		top: govuk-em( 6, 16 );
-		display: inline-block;
-		vertical-align: bottom;
-	}
+	margin-left: govuk-em( 32, 16 );
 }
 
 .active-filters {
