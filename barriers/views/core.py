@@ -69,6 +69,11 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
             ) != nested_sort(saved_search.filters)
             context_data["search_title"] = saved_search.name
 
+        member = None
+        member_id = form.cleaned_data.get("member")
+        if member_id:
+            member = client.barriers.get_team_member(member_id)
+
         barriers = client.barriers.list(
             ordering="-reported_on",
             limit=settings.API_RESULTS_LIMIT,
@@ -80,6 +85,7 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
             {
                 "barriers": barriers,
                 "filters": form.get_readable_filters(with_remove_links=True),
+                "member": member,
                 "pagination": self.get_pagination_data(
                     object_list=barriers,
                     limit=settings.API_RESULTS_LIMIT,
@@ -88,6 +94,9 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
                 "page": "find-a-barrier",
             }
         )
+
+        if member:
+            context_data["filters"]["member"]["readable_value"] = member["user"]["full_name"]
 
         return context_data
 

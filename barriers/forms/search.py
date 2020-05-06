@@ -18,27 +18,23 @@ class BarrierSearchForm(forms.Form):
     tags = forms.MultipleChoiceField(label="Tags", required=False,)
     user = forms.BooleanField(label="My barriers", required=False,)
     team = forms.BooleanField(label="My team barriers", required=False,)
+    member = forms.IntegerField(label="People", required=False)
     only_archived = forms.BooleanField(label="Only archived barriers", required=False,)
-    wto_has_been_notified = forms.BooleanField(label="Notified", required=False,)
-    wto_should_be_notified = forms.BooleanField(label="Not notified but should be", required=False,)
-    has_wto_raised_date = forms.BooleanField(label="Raised", required=False,)
-    has_wto_committee_raised_in = forms.BooleanField(label="Discussed bilaterally", required=False,)
-    has_wto_case_number = forms.BooleanField(label="Subject to a dispute settlement", required=False,)
-    has_no_wto_information = forms.BooleanField(label="No WTO information provided", required=False,)
+    wto = forms.MultipleChoiceField(
+        label="WTO",
+        choices=(
+            ("wto_has_been_notified", "Notified"),
+            ("wto_should_be_notified", "Not notified but should be"),
+            ("has_committee_raised_in", "Raised"),
+            ("has_raised_date", "Discussed bilaterally"),
+            ("has_case_number", "Subject to a dispute settlement"),
+            ("has_no_information", "No WTO information provided"),
+        ),
+        required=False,
+    )
 
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
-        "wto": {
-            "label": "WTO",
-            "fields": (
-                "wto_has_been_notified",
-                "wto_should_be_notified",
-                "has_wto_raised_date",
-                "has_wto_committee_raised_in",
-                "has_wto_case_number",
-                "has_no_wto_information",
-            )
-        }
     }
 
     def __init__(self, metadata, *args, **kwargs):
@@ -75,13 +71,9 @@ class BarrierSearchForm(forms.Form):
             "tags": data.getlist("tags"),
             "user": data.get("user"),
             "team": data.get("team"),
+            "member": data.get("member"),
             "only_archived": data.get("only_archived"),
-            "wto_has_been_notified": data.get("wto_has_been_notified"),
-            "wto_should_be_notified": data.get("wto_should_be_notified"),
-            "has_wto_raised_date": data.get("has_wto_raised_date"),
-            "has_wto_committee_raised_in": data.get("has_wto_committee_raised_in"),
-            "has_wto_case_number": data.get("has_wto_case_number"),
-            "has_no_wto_information": data.get("has_no_wto_information"),
+            "wto": data.getlist("wto"),
         }
         return {k: v for k, v in cleaned_data.items() if v}
 
@@ -227,20 +219,9 @@ class BarrierSearchForm(forms.Form):
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
+        params["member"] = self.cleaned_data.get("member")
+        params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
-
-        params["wto_has_been_notified"] = self.cleaned_data.get("wto_has_been_notified")
-        params["wto_should_be_notified"] = self.cleaned_data.get(
-            "wto_should_be_notified"
-        )
-        params["has_wto_raised_date"] = self.cleaned_data.get("has_wto_raised_date")
-        params["has_wto_committee_raised_in"] = self.cleaned_data.get(
-            "has_wto_committee_raised_in"
-        )
-        params["has_wto_case_number"] = self.cleaned_data.get("has_wto_case_number")
-
-        if self.cleaned_data.get("has_no_wto_information"):
-            params["has_wto_profile"] = "0"
 
         return {k: v for k, v in params.items() if v}
 

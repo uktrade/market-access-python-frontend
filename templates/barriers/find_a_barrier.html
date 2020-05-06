@@ -35,20 +35,7 @@
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
 
-                <div id="show" class="govuk-form-group filter-group">
-                    <fieldset class="govuk-fieldset filter-group__inner">
-                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">WTO</legend>
-
-                        <div class="checkbox-filter govuk-!-width-full">
-                            {% include 'partials/forms/checkbox.html' with field=form.wto_has_been_notified %}
-                            {% include 'partials/forms/checkbox.html' with field=form.wto_should_be_notified %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_wto_raised_date %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_wto_committee_raised_in %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_wto_case_number %}
-                            {% include 'partials/forms/checkbox.html' with field=form.has_no_wto_information %}
-                        </div>
-                    </fieldset>
-                </div>
+                {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
 
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
@@ -75,9 +62,11 @@
 
             <div class="filter-results-header">
                 {% if saved_search %}
-                    <h1 class="search-title">{{ saved_search.name }}</h1>
+                    <h2 class="search-title">{{ saved_search.name }}</h2>
                 {% elif search_title %}
-                    <h1 class="search-title">{{ search_title }}</h1>
+                    <h2 class="search-title">{{ search_title }}</h2>
+                {% elif member %}
+                    <h2 class="search-title">{{ member.user.full_name }}</h2>
                 {% endif %}
 
                 {% if filters %}
@@ -127,6 +116,7 @@
                 {% if filters %}
                     <h3 class="visually-hidden">Active filters:</h3>
                     <ul class="active-filters">
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.member %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.trade_direction %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}

@@ -2,7 +2,7 @@
 
 {% load highlight %}
 
-{% block page_title %}{{ block.super }} - Barrier team - Find user{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier team - Change owner{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -10,18 +10,27 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add a team member' %}
+    {% include 'partials/heading.html' with text='Change owner' %}
 
     {% form_error_banner form %}
 
-    <div class="restrict-width">
+    <div class="restrict-width team-member__change-owner">
 
-        <form action="" method="POST" role="search" class="search-form">
+        <h3 class="modal__content__title" id="modal-label">Current owner</h3>
+
+        <dl class="details-list">
+            <div class="details-list__group">
+                <dt class="details-list__key">Name</dt>
+                <dd class="details-list__value">{{ owner.user.full_name }}</dd>
+            </div>
+        </dl>
+
+        <form action="" method="POST" role="search" class="change-owner-form">
             {% csrf_token %}
 
             <div id="{{ form.query.name }}" class="govuk-form-group">
                 <label class="govuk-label govuk-!-font-size-19 govuk-!-font-weight-bold" for="user">
-                    {{ form.query.label }}
+                    Find a user to add as the new owner
                 </label>
 
                 <span id="user-hint" class="govuk-hint">
