@@ -1,0 +1,12 @@
+<p><span class="ma-badge">{{ saved_search.barrier_count }} barrier{{ saved_search.barrier_count|pluralize }}</span> in total</p>
+<p>
+    {% if saved_search.new_count > 0 %}
+        <span class="ma-badge ma-badge--new">{{ saved_search.new_count }} new</span>
+    {% endif %}
+    {% if saved_search.updated_count > 0 %}
+        <span class="ma-badge ma-badge--updated">{{ saved_search.updated_count }} updated</span>
+    {% endif %}
+    {% if saved_search.new_count > 0 or saved_search.updated_count > 0 %}
+        since you last viewed this saved search
+    {% endif %}
+</p>

@@ -14,12 +14,12 @@
     <section>
         <ul class="ma-card-list">
             <li class="ma-card-list__item">
-                <h3 class="saved-search__title"><a href="{% url 'barriers:find_a_barrier' %}?user=1">My barriers</a></h3>
-                <p><span class="ma-badge">6 barriers</span></p>
+                <h3 class="saved-search__title"><a href="{% url 'barriers:find_a_barrier' %}?user=1">{{ my_barriers_saved_search.name }}</a></h3>
+                {% include "barriers/partials/saved_search_badges.html" with saved_search=my_barriers_saved_search %}
             </li>
             <li class="ma-card-list__item">
                 <h3 class="saved-search__title"><a href="{% url 'barriers:find_a_barrier' %}?team=1">Team barriers</a></h3>
-                <p><span class="ma-badge">6 barriers</span></p>
+                {% include "barriers/partials/saved_search_badges.html" with saved_search=team_barriers_saved_search %}
             </li>
             <li class="ma-card-list__item">
                 <h3 class="saved-search__title"><a href="">Draft barriers</a></h3>
@@ -36,18 +36,7 @@
                 <li class="ma-card-list__item saved-search">
                     <h3 class="saved-search__title"><a href="{% url 'barriers:find_a_barrier' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a></h3>
 
-                    <p><span class="ma-badge">{{ saved_search.barrier_count }} barrier{{ saved_search.barrier_count|pluralize }}</span> in total</p>
-                    <p>
-                        {% if saved_search.new_count > 0 %}
-                            <span class="ma-badge ma-badge--new">{{ saved_search.new_count }} new</span>
-                        {% endif %}
-                        {% if saved_search.updated_count > 0 %}
-                            <span class="ma-badge ma-badge--updated">{{ saved_search.updated_count }} updated</span>
-                        {% endif %}
-                        {% if saved_search.new_count > 0 or saved_search.updated_count > 0 %}
-                            since you last viewed this saved search
-                        {% endif %}
-                    </p>
+                    {% include "barriers/partials/saved_search_badges.html" %}
 
                     {% if saved_search.filters %}
                         <ul class="saved-search__filter-list">
