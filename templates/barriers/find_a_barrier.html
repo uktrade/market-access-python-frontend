@@ -170,7 +170,8 @@
                                 {% if saved_search %}
                                     {% if barrier.id in saved_search.new_barrier_ids %}
                                         <span class="ma-badge ma-badge--new">New</span>
-                                    {% elif barrier.id in saved_search.updated_barrier_ids %}
+                                    {% endif %}
+                                    {% if barrier.id in saved_search.updated_barrier_ids %}
                                         <span class="ma-badge ma-badge--updated">Updated</span>
                                     {% endif %}
                                 {% endif %}
