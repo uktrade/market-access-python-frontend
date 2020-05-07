@@ -5,11 +5,12 @@ from django.views.generic import FormView, View
 from ..forms.search import BarrierSearchForm
 from ..forms.watchlist import (
     EditWatchlistForm,
-    RenameWatchlistForm,
-    SaveWatchlistForm,
+    RenameSavedSearchForm,
+    NewSavedSearchForm,
 )
 from ..models import Watchlist
 
+from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
 
@@ -40,114 +41,71 @@ class SearchFiltersMixin:
         return self.request.GET
 
 
-class SaveWatchlist(SearchFiltersMixin, FormView):
-    """
-    Save a watchlist either as a new watchlist or by replacing an existing one.
-
-    Cleans the search parameters using BarrierSearchForm.
-    """
-
-    template_name = "barriers/watchlist/save.html"
-    form_class = SaveWatchlistForm
+class NewSavedSearch(SearchFiltersMixin, FormView):
+    template_name = "barriers/saved_searches/save.html"
+    form_class = NewSavedSearchForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         search_form = self.get_search_form()
-        kwargs.update(
-            {
-                "watchlists": self.request.session.get_watchlists(),
-                "filters": search_form.get_raw_filters(),
-            }
-        )
+        kwargs["filters"] = search_form.get_raw_filters()
+        kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
 
     def form_valid(self, form):
-        watchlists = form.save()
-        self.request.session.set_watchlists(watchlists)
-        index = form.get_new_watchlist_index()
-        return HttpResponseRedirect(self.get_success_url(index=index))
+        saved_search = form.save()
+        return HttpResponseRedirect(self.get_success_url(saved_search=saved_search))
 
-    def get_success_url(self, index=0):
-        if index:
-            return f"{reverse('barriers:dashboard')}?list={index}"
-        return reverse("barriers:dashboard")
+    def get_success_url(self, saved_search):
+        return f"{reverse('barriers:find_a_barrier')}?search_id={saved_search.id}"
 
 
-class EditWatchlist(SearchFiltersMixin, FormView):
-    template_name = "barriers/watchlist/edit.html"
-    form_class = EditWatchlistForm
-
+class DeleteSavedSearch(View):
     def get(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
-            return HttpResponseRedirect(reverse("barriers:dashboard"))
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
-            return HttpResponseRedirect(reverse("barriers:dashboard"))
-        return super().post(request, *args, **kwargs)
-
-    def get_watchlist(self):
-        index = self.request.GET.get("edit")
-        return self.request.session.get_watchlist(index)
-
-    def get_initial(self):
-        return {"name": self.watchlist.name}
-
-    def form_valid(self, form):
-        search_form = self.get_search_form()
-
-        self.request.session.update_watchlist(
-            index=int(self.request.GET.get("edit")),
-            watchlist=Watchlist(
-                name=form.cleaned_data.get("name"),
-                filters=search_form.get_raw_filters(),
-            ),
-        )
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("barriers:dashboard")
-
-
-class RemoveWatchlist(View):
-    def get(self, request, *args, **kwargs):
-        index = self.kwargs.get("index")
-        request.session.delete_watchlist(index)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_search_id = self.kwargs.get("saved_search_id")
+        client.saved_searches.delete(saved_search_id)
         return HttpResponseRedirect(reverse("barriers:dashboard"))
 
 
-class RenameWatchlist(SearchFiltersMixin, FormView):
-    template_name = "barriers/watchlist/rename.html"
-    form_class = RenameWatchlistForm
+class RenameSavedSearch(SearchFiltersMixin, FormView):
+    template_name = "barriers/saved_searches/rename.html"
+    form_class = RenameSavedSearchForm
 
     def get(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
+        self.saved_search = self.get_saved_search()
+        if not self.saved_search:
             return HttpResponseRedirect(reverse("barriers:dashboard"))
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
+        self.saved_search = self.get_saved_search()
+        if not self.saved_search:
             return HttpResponseRedirect(reverse("barriers:dashboard"))
         return super().post(request, *args, **kwargs)
 
-    def get_watchlist(self):
-        index = self.kwargs.get("index")
-        return self.request.session.get_watchlist(index)
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["saved_search"] = self.saved_search
+        return context_data
+
+    def get_saved_search(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_search_id = self.kwargs.get("saved_search_id")
+        return client.saved_searches.get(saved_search_id)
 
     def get_initial(self):
-        return {"name": self.watchlist.name}
+        return {"name": self.saved_search.name}
 
     def get_search_form_data(self):
-        return self.watchlist.filters
+        return self.saved_search.filters
 
     def form_valid(self, form):
-        self.request.session.rename_watchlist(
-            index=self.kwargs.get("index"), name=form.cleaned_data.get("name"),
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_search_id = self.kwargs.get("saved_search_id")
+        client.saved_searches.patch(
+            id=saved_search_id,
+            name=form.cleaned_data.get("name"),
         )
         return super().form_valid(form)
 

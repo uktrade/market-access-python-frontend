@@ -79,10 +79,9 @@ from .views.types import (
     BarrierRemoveType,
 )
 from .views.watchlist import (
-    EditWatchlist,
-    RemoveWatchlist,
-    RenameWatchlist,
-    SaveWatchlist,
+    DeleteSavedSearch,
+    NewSavedSearch,
+    RenameSavedSearch,
 )
 from .views.wto import (
     AddWTODocument,
@@ -101,10 +100,9 @@ urlpatterns = [
     path("what-is-a-barrier/", WhatIsABarrier.as_view(), name="what_is_a_barrier"),
     path("documents/<uuid:document_id>/download/", DownloadDocument.as_view(), name="download_document"),
 
-    path("watch-list/save/", SaveWatchlist.as_view(), name="save_watchlist"),
-    path("watch-list/edit/", EditWatchlist.as_view(), name="edit_watchlist"),
-    path("watch-list/rename/<int:index>/", RenameWatchlist.as_view(), name="rename_watchlist"),
-    path("watch-list/remove/<int:index>/", RemoveWatchlist.as_view(), name="remove_watchlist"),
+    path("saved-searches/new/", NewSavedSearch.as_view(), name="new_saved_search"),
+    path("saved-searches/<uuid:saved_search_id>/rename/", RenameSavedSearch.as_view(), name="rename_saved_search"),
+    path("saved-searches/<uuid:saved_search_id>/delete/", DeleteSavedSearch.as_view(), name="delete_saved_search"),
 
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
     re_path("barriers/(?P<barrier_id>[A-Z]-[0-9]{2}-[A-Z0-9]{3})/", BarrierDetail.as_view(), name="barrier_detail_by_code"),

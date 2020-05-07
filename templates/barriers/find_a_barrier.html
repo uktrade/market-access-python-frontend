@@ -93,7 +93,7 @@
                                     <a href="{% url 'barriers:edit_watchlist' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>
                                 {% endif %}
                             {% elif filters and not search_title %}
-                                <a href="{% url 'barriers:save_watchlist' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>
+                                <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>
                             {% endif %}
                         </div>
                     </div>

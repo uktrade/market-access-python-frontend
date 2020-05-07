@@ -36,7 +36,7 @@ class APIResource:
         return self.model(self.client.patch(url, json=kwargs))
 
     def create(self, *args, **kwargs):
-        return self.model(self.client.post(self.resource_name, data=kwargs))
+        return self.model(self.client.post(self.resource_name, json=kwargs))
 
     def update(self, id, *args, **kwargs):
         url = f"{self.resource_name}/{id}"
