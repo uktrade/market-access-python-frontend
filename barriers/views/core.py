@@ -92,6 +92,10 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
                 ),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "find-a-barrier",
+                "saved_search_created": self.request.session.pop(
+                    "saved_search_created",
+                    None,
+                )
             }
         )
 

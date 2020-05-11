@@ -213,7 +213,7 @@ class BarrierSearchForm(forms.Form):
         )
         params["trade_direction"] = ",".join(self.cleaned_data.get("trade_direction", []))
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
-        params["barrier_type"] = ",".join(self.cleaned_data.get("type", []))
+        params["category"] = ",".join(self.cleaned_data.get("type", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
@@ -234,6 +234,9 @@ class BarrierSearchForm(forms.Form):
             for key, value in self.cleaned_data.items()
             if value and not self.fields[key].widget.is_hidden
         }
+
+    def get_raw_filters_querystring(self):
+        return urlencode(self.get_raw_filters(), doseq=True)
 
     def get_filter_readable_value(self, field_name, value):
         field = self.fields[field_name]

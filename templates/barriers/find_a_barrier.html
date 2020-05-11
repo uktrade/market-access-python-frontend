@@ -77,20 +77,20 @@
                             </div>
                         {% endif %}
 
-                        {% if saved_search_updated %}
+                        {% if saved_search_updated or saved_search_created %}
                             <div class="filter-results-header__row-item">
                                 <p class="filter-results-header__info">Your search has been successfully saved.</p>
                             </div>
                         {% endif %}
 
-                        <div class="filter-results-header__row-item">
+                        <div class="filter-results-header__row-item filter-results-header__row-item--right">
                             {% if form.search_id.value is not None %}
                                 {% if have_filters_changed %}
                                     <form class="filter-results-header__update_form" method="post">
                                         {% csrf_token %}
                                         <button class="govuk-button button-as-link filter-results-header__update-button" name="update_search" value="1">Update saved search</button>
                                     </form>
-                                    <a href="{% url 'barriers:edit_watchlist' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>
+                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>
                                 {% endif %}
                             {% elif filters and not search_title %}
                                 <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>

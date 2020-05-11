@@ -12,7 +12,10 @@ class NewSavedSearchForm(forms.Form):
     name = forms.CharField(
         label="Name",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
-        error_messages={"required": "Enter a name for your saved search"},
+        error_messages={
+            "required": "Enter a name for your saved search",
+            "max_length": "Name should be %(limit_value)d characters or fewer",
+        },
     )
 
     def __init__(self, token, filters, *args, **kwargs):
@@ -33,15 +36,7 @@ class RenameSavedSearchForm(forms.Form):
         label="New name",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
         error_messages={
-            "required": "Enter a name for your watch list",
+            "required": "Enter a name for your saved search",
             "max_length": "Name should be %(limit_value)d characters or fewer",
         },
-    )
-
-
-class EditWatchlistForm(forms.Form):
-    name = forms.CharField(
-        label="Name your watch list",
-        max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
-        error_messages={"required": "Enter a name for your watch list"},
     )

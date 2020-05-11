@@ -4,7 +4,6 @@ from django.views.generic import FormView, TemplateView, View
 
 from ..forms.search import BarrierSearchForm
 from ..forms.watchlist import (
-    EditWatchlistForm,
     RenameSavedSearchForm,
     NewSavedSearchForm,
 )
@@ -25,11 +24,11 @@ class SearchFiltersMixin:
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        search_form = self.get_search_form()
-        context_data["filters"] = search_form.get_readable_filters()
+        context_data["filters"] = self.search_form.get_readable_filters()
         return context_data
 
-    def get_search_form(self):
+    @property
+    def search_form(self):
         if not self._search_form:
             self._search_form = BarrierSearchForm(
                 metadata=get_metadata(), data=self.get_search_form_data()
@@ -67,17 +66,23 @@ class NewSavedSearch(SearchFiltersMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        search_form = self.get_search_form()
-        kwargs["filters"] = search_form.get_raw_filters()
+        kwargs["filters"] = self.search_form.get_raw_filters()
         kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
 
     def form_valid(self, form):
         saved_search = form.save()
-        return HttpResponseRedirect(self.get_success_url(saved_search=saved_search))
+        self.request.session["saved_search_created"] = saved_search.id
+        return HttpResponseRedirect(
+            self.get_success_url(saved_search=saved_search)
+        )
 
     def get_success_url(self, saved_search):
-        return f"{reverse('barriers:find_a_barrier')}?search_id={saved_search.id}"
+        querystring = self.search_form.get_raw_filters_querystring()
+        return (
+            f"{reverse('barriers:find_a_barrier')}"
+            f"?search_id={saved_search.id}&{querystring}"
+        )
 
 
 class DeleteSavedSearch(SavedSearchMixin, TemplateView):

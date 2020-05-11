@@ -38,6 +38,9 @@
 
 .filter-results-header__row-item {
 	align-self: center;
+	&--right {
+		margin-left: auto;
+	}
 }
 
 .search-title {
