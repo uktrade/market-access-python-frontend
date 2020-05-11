@@ -46,6 +46,14 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 # Application definition
 
+if not DEBUG:
+    ELASTIC_APM = {
+        "SERVICE_NAME": "market-access-pyfe",
+        "SECRET_TOKEN": env("ELASTIC_APM_SECRET_TOKEN"),
+        "SERVER_URL": env("ELASTIC_APM_URL"),
+        "ENVIRONMENT": env("ENVIRONMENT", default="dev"),
+    }
+
 BASE_APPS = [
     # apps that need to load first
     'whitenoise.runserver_nostatic',
@@ -78,6 +86,9 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = BASE_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+if not DEBUG:
+    INSTALLED_APPS.append('elasticapm.contrib.django')
 
 MIDDLEWARE = [
     'healthcheck.middleware.HealthCheckMiddleware',
