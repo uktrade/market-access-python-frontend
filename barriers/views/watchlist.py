@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, View
+from django.views.generic import FormView, TemplateView, View
 
 from ..forms.search import BarrierSearchForm
 from ..forms.watchlist import (
@@ -41,6 +41,26 @@ class SearchFiltersMixin:
         return self.request.GET
 
 
+class SavedSearchMixin:
+    _saved_search = None
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["saved_search"] = self.saved_search
+        return context_data
+
+    def get_saved_search(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_search_id = self.kwargs.get("saved_search_id")
+        return client.saved_searches.get(saved_search_id)
+
+    @property
+    def saved_search(self):
+        if not self._saved_search:
+            self._saved_search = self.get_saved_search()
+        return self._saved_search
+
+
 class NewSavedSearch(SearchFiltersMixin, FormView):
     template_name = "barriers/saved_searches/save.html"
     form_class = NewSavedSearchForm
@@ -60,39 +80,29 @@ class NewSavedSearch(SearchFiltersMixin, FormView):
         return f"{reverse('barriers:find_a_barrier')}?search_id={saved_search.id}"
 
 
-class DeleteSavedSearch(View):
-    def get(self, request, *args, **kwargs):
+class DeleteSavedSearch(SavedSearchMixin, TemplateView):
+    template_name = "barriers/saved_searches/delete.html"
+
+    def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         saved_search_id = self.kwargs.get("saved_search_id")
         client.saved_searches.delete(saved_search_id)
         return HttpResponseRedirect(reverse("barriers:dashboard"))
 
 
-class RenameSavedSearch(SearchFiltersMixin, FormView):
+class RenameSavedSearch(SavedSearchMixin, SearchFiltersMixin, FormView):
     template_name = "barriers/saved_searches/rename.html"
     form_class = RenameSavedSearchForm
 
     def get(self, request, *args, **kwargs):
-        self.saved_search = self.get_saved_search()
         if not self.saved_search:
             return HttpResponseRedirect(reverse("barriers:dashboard"))
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.saved_search = self.get_saved_search()
         if not self.saved_search:
             return HttpResponseRedirect(reverse("barriers:dashboard"))
         return super().post(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data["saved_search"] = self.saved_search
-        return context_data
-
-    def get_saved_search(self):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        saved_search_id = self.kwargs.get("saved_search_id")
-        return client.saved_searches.get(saved_search_id)
 
     def get_initial(self):
         return {"name": self.saved_search.name}

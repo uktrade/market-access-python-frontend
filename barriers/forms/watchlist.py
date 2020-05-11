@@ -32,7 +32,10 @@ class RenameSavedSearchForm(forms.Form):
     name = forms.CharField(
         label="New name",
         max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
-        error_messages={"required": "Enter a name for your watch list"},
+        error_messages={
+            "required": "Enter a name for your watch list",
+            "max_length": "Name should be %(limit_value)d characters or fewer",
+        },
     )
 
 

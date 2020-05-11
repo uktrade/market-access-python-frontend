@@ -3,6 +3,12 @@
     padding: govuk-em( 16, 16 ) 0;
 }
 .saved-search {
+    &--compact {
+        border-top: 1px solid $govuk-mid-grey;
+        border-bottom: 1px solid $govuk-mid-grey;
+        padding: govuk-em( 16, 16 ) 0;
+        margin-bottom: govuk-em( 32, 16 );
+    }
 }
 .saved-search__content {
     @include govuk-clearfix;
@@ -18,6 +24,9 @@
 }
 .saved-search__title {
     margin: 0 0 govuk-em( 8, 16 );
+    &--compact {
+        margin-bottom: govuk-em( 4, 16 );
+    }
 }
 .saved-search__notifications {
     float: left;
@@ -36,7 +45,7 @@
 .saved-search__filter-list {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 govuk-em( -8, 16 );
 }
 .saved-search__filter-list-item {
     background-color: $govuk-light-grey;

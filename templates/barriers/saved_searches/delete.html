@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Delete saved search{% endblock %}
+
+{% block page_content %}
+
+    <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+
+    {% include 'partials/heading.html' with text='Delete saved search' %}
+
+    <section class="restrict-width">
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <h3>Are you sure you want to delete the following saved search?</h3>
+
+            <div class="saved-search saved-search--compact">
+                <h4 class="saved-search__title saved-search__title--compact">{{ saved_search.name }}</h4>
+
+                {% if saved_search.filters %}
+                    <ul class="saved-search__filter-list">
+                        {% for name, value in saved_search.readable_filters.items %}
+                            <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <button class="govuk-button" data-module="govuk-button">Confirm</button>
+            <a href="{% url 'barriers:dashboard' %}" class="form-cancel">Cancel</a>
+        </form>
+    </section>
+
+{% endblock %}

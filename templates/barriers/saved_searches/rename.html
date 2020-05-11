@@ -1,24 +1,27 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Rename watch list{% endblock %}
+{% block page_title %}{{ block.super }} - Rename saved search{% endblock %}
 
 {% block page_content %}
 
-    <a href="{% url 'barriers:dashboard' %}{% if view.kwargs.index %}?list={{ view.kwargs.index }}{% endif %}" class="govuk-back-link">Back</a>
-    {% include 'partials/heading.html' with text='Rename watch list' %}
+    <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+    {% include 'partials/heading.html' with text='Rename saved search' %}
     {% form_error_banner form %}
 
     <section class="restrict-width">
-        <h2>Current name and details</h2>
+        <h3>Current name and details</h3>
 
-        <h3>{{ saved_search.name }}</h3>
-        {% if saved_search.filters %}
-            <ul class="saved-search__filter-list">
-                {% for name, value in saved_search.readable_filters.items %}
-                    <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <div class="saved-search saved-search--compact">
+            <h4 class="saved-search__title saved-search__title--compact">{{ saved_search.name }}</h4>
+
+            {% if saved_search.filters %}
+                <ul class="saved-search__filter-list">
+                    {% for name, value in saved_search.readable_filters.items %}
+                        <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
 
         <form action="" method="POST">
             {% csrf_token %}
@@ -32,7 +35,7 @@
             </div>
 
             <input type="submit" value="Save" class="govuk-button">
-            <a href="{% url 'barriers:dashboard' %}{% if view.kwargs.index %}?list={{ view.kwargs.index }}{% endif %}" class="govuk-button button--secondary">Cancel</a>
+            <a href="{% url 'barriers:dashboard' %}" class="form-cancel">Cancel</a>
         </form>
     </section>
 
