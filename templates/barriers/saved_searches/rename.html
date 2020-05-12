@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Rename saved search{% endblock %}
+
+{% block page_content %}
+
+    <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+    {% include 'partials/heading.html' with text='Rename saved search' %}
+    {% form_error_banner form %}
+
+    <section class="restrict-width">
+        <h3>Current name and details</h3>
+
+        <div class="saved-search saved-search--compact">
+            <h4 class="saved-search__title saved-search__title--compact">{{ saved_search.name }}</h4>
+
+            {% if saved_search.filters %}
+                <ul class="saved-search__filter-list">
+                    {% for name, value in saved_search.readable_filters.items %}
+                        <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <div id="{{ form.name.name }}" class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
+
+                {% form_field_error form "name" %}
+
+                <input class="govuk-input{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
+            </div>
+
+            <input type="submit" value="Save" class="govuk-button">
+            <a href="{% url 'barriers:dashboard' %}" class="form-cancel">Cancel</a>
+        </form>
+    </section>
+
+{% endblock %}

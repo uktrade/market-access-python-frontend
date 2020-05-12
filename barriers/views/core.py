@@ -11,71 +11,25 @@ from utils.pagination import PaginationMixin
 from utils.tools import nested_sort
 
 
-class Dashboard(PaginationMixin, TemplateView):
+class Dashboard(TemplateView):
     template_name = "barriers/dashboard.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        barriers = []
-        watchlists = self.request.session.get_watchlists()
-
-        if watchlists:
-            watchlist_index = self.get_watchlist_index()
-            selected_watchlist = watchlists[watchlist_index]
-            sort = self.get_ordering()
-            barriers = self.get_barriers(selected_watchlist)
-            context_data.update(
-                {
-                    "selected_watchlist": selected_watchlist,
-                    "watchlist_index": watchlist_index,
-                    "sort_field": sort.lstrip("-"),
-                    "sort_descending": sort.startswith("-"),
-                    "pagination": self.get_pagination_data(
-                        object_list=barriers,
-                        limit=settings.API_RESULTS_LIMIT,
-                    ),
-                }
-            )
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        my_barriers_saved_search = client.saved_searches.get("my-barriers")
+        team_barriers_saved_search = client.saved_searches.get("team-barriers")
+        saved_searches = client.saved_searches.list()
 
         context_data.update(
             {
                 "page": "dashboard",
-                "watchlists": watchlists,
-                "barriers": barriers,
-                "can_add_watchlist": (len(watchlists) < settings.MAX_WATCHLIST_LENGTH),
+                "my_barriers_saved_search": my_barriers_saved_search,
+                "team_barriers_saved_search": team_barriers_saved_search,
+                "saved_searches": saved_searches,
             }
         )
         return context_data
-
-    def get_barriers(self, watchlist):
-        client = MarketAccessAPIClient(self.request.session["sso_token"])
-
-        return client.barriers.list(
-            ordering=self.get_ordering(),
-            limit=settings.API_RESULTS_LIMIT,
-            offset=settings.API_RESULTS_LIMIT * (self.get_current_page() - 1),
-            **watchlist.get_api_params(),
-        )
-
-    def get_ordering(self):
-        return self.request.GET.get("sort", "-modified_on")
-
-    def get_watchlist_index(self):
-        """
-        Get list index from querystring and ensure it's a valid number
-        """
-        try:
-            list_index = int(self.request.GET.get("list", 0))
-        except ValueError:
-            return 0
-
-        if list_index not in range(0, settings.MAX_WATCHLIST_LENGTH):
-            return 0
-
-        return list_index
-
-    def get_search_form_data(self):
-        return self.watchlist.filters
 
 
 class SearchFormMixin:
@@ -103,15 +57,23 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(form=form, **kwargs)
+
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
-        # Fetch member details
+        saved_search = self.get_saved_search(form)
+        if saved_search:
+            context_data["saved_search"] = saved_search
+            form_filters = form.get_raw_filters()
+            context_data["have_filters_changed"] = nested_sort(
+                form_filters
+            ) != nested_sort(saved_search.filters)
+            context_data["search_title"] = saved_search.name
+
         member = None
         member_id = form.cleaned_data.get("member")
         if member_id:
             member = client.barriers.get_team_member(member_id)
 
-        # Fetch barrier list
         barriers = client.barriers.list(
             ordering="-reported_on",
             limit=settings.API_RESULTS_LIMIT,
@@ -130,26 +92,50 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
                 ),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "find-a-barrier",
+                "saved_search_created": self.request.session.pop(
+                    "saved_search_created",
+                    None,
+                )
             }
         )
 
         if member:
             context_data["filters"]["member"]["readable_value"] = member["user"]["full_name"]
 
-        if form.cleaned_data.get("edit") is not None:
-            watchlist_index = form.cleaned_data.get("edit")
-            watchlist = self.request.session.get_watchlist(watchlist_index)
-            form_filters = form.get_raw_filters()
-            context_data["have_filters_changed"] = nested_sort(
-                form_filters
-            ) != nested_sort(watchlist.filters)
-
         return context_data
+
+    def get_saved_search(self, form):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        if form.cleaned_data.get("search_id") is not None:
+            saved_search_id = form.cleaned_data.get("search_id")
+            return client.saved_searches.get(saved_search_id)
+
+        filters = form.get_raw_filters()
+
+        if filters == {"user": "1"}:
+            return client.saved_searches.get("my-barriers")
+        elif filters == {"team": "1"}:
+            return client.saved_searches.get("team-barriers")
 
     def get_pageless_querystring(self):
         params = self.request.GET.copy()
         params.pop("page", None)
         return params.urlencode()
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        form.full_clean()
+
+        if "update_search" in request.POST and form.cleaned_data.get("search_id"):
+            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+            client.saved_searches.patch(
+                id=form.cleaned_data.get("search_id"),
+                filters=form.get_raw_filters(),
+            )
+        return self.render_to_response(
+            self.get_context_data(form=form, saved_search_updated=True)
+        )
 
 
 class DownloadBarriers(SearchFormMixin, View):

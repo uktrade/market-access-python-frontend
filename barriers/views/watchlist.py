@@ -1,15 +1,14 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, View
+from django.views.generic import FormView, TemplateView
 
 from ..forms.search import BarrierSearchForm
 from ..forms.watchlist import (
-    EditWatchlistForm,
-    RenameWatchlistForm,
-    SaveWatchlistForm,
+    RenameSavedSearchForm,
+    NewSavedSearchForm,
 )
-from ..models import Watchlist
 
+from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
 
@@ -24,11 +23,11 @@ class SearchFiltersMixin:
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        search_form = self.get_search_form()
-        context_data["filters"] = search_form.get_readable_filters()
+        context_data["filters"] = self.search_form.get_readable_filters()
         return context_data
 
-    def get_search_form(self):
+    @property
+    def search_form(self):
         if not self._search_form:
             self._search_form = BarrierSearchForm(
                 metadata=get_metadata(), data=self.get_search_form_data()
@@ -40,114 +39,87 @@ class SearchFiltersMixin:
         return self.request.GET
 
 
-class SaveWatchlist(SearchFiltersMixin, FormView):
-    """
-    Save a watchlist either as a new watchlist or by replacing an existing one.
+class SavedSearchMixin:
+    _saved_search = None
 
-    Cleans the search parameters using BarrierSearchForm.
-    """
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["saved_search"] = self.saved_search
+        return context_data
 
-    template_name = "barriers/watchlist/save.html"
-    form_class = SaveWatchlistForm
+    def get_saved_search(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_search_id = self.kwargs.get("saved_search_id")
+        return client.saved_searches.get(saved_search_id)
+
+    @property
+    def saved_search(self):
+        if not self._saved_search:
+            self._saved_search = self.get_saved_search()
+        return self._saved_search
+
+
+class NewSavedSearch(SearchFiltersMixin, FormView):
+    template_name = "barriers/saved_searches/save.html"
+    form_class = NewSavedSearchForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        search_form = self.get_search_form()
-        kwargs.update(
-            {
-                "watchlists": self.request.session.get_watchlists(),
-                "filters": search_form.get_raw_filters(),
-            }
-        )
+        kwargs["filters"] = self.search_form.get_raw_filters()
+        kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
 
     def form_valid(self, form):
-        watchlists = form.save()
-        self.request.session.set_watchlists(watchlists)
-        index = form.get_new_watchlist_index()
-        return HttpResponseRedirect(self.get_success_url(index=index))
+        saved_search = form.save()
+        self.request.session["saved_search_created"] = saved_search.id
+        return HttpResponseRedirect(
+            self.get_success_url(saved_search=saved_search)
+        )
 
-    def get_success_url(self, index=0):
-        if index:
-            return f"{reverse('barriers:dashboard')}?list={index}"
-        return reverse("barriers:dashboard")
+    def get_success_url(self, saved_search):
+        querystring = self.search_form.get_raw_filters_querystring()
+        return (
+            f"{reverse('barriers:find_a_barrier')}"
+            f"?search_id={saved_search.id}&{querystring}"
+        )
 
 
-class EditWatchlist(SearchFiltersMixin, FormView):
-    template_name = "barriers/watchlist/edit.html"
-    form_class = EditWatchlistForm
-
-    def get(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
-            return HttpResponseRedirect(reverse("barriers:dashboard"))
-        return super().get(request, *args, **kwargs)
+class DeleteSavedSearch(SavedSearchMixin, TemplateView):
+    template_name = "barriers/saved_searches/delete.html"
 
     def post(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
-            return HttpResponseRedirect(reverse("barriers:dashboard"))
-        return super().post(request, *args, **kwargs)
-
-    def get_watchlist(self):
-        index = self.request.GET.get("edit")
-        return self.request.session.get_watchlist(index)
-
-    def get_initial(self):
-        return {"name": self.watchlist.name}
-
-    def form_valid(self, form):
-        search_form = self.get_search_form()
-
-        self.request.session.update_watchlist(
-            index=int(self.request.GET.get("edit")),
-            watchlist=Watchlist(
-                name=form.cleaned_data.get("name"),
-                filters=search_form.get_raw_filters(),
-            ),
-        )
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("barriers:dashboard")
-
-
-class RemoveWatchlist(View):
-    def get(self, request, *args, **kwargs):
-        index = self.kwargs.get("index")
-        request.session.delete_watchlist(index)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_search_id = self.kwargs.get("saved_search_id")
+        client.saved_searches.delete(saved_search_id)
         return HttpResponseRedirect(reverse("barriers:dashboard"))
 
 
-class RenameWatchlist(SearchFiltersMixin, FormView):
-    template_name = "barriers/watchlist/rename.html"
-    form_class = RenameWatchlistForm
+class RenameSavedSearch(SavedSearchMixin, SearchFiltersMixin, FormView):
+    template_name = "barriers/saved_searches/rename.html"
+    form_class = RenameSavedSearchForm
 
     def get(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
+        if not self.saved_search:
             return HttpResponseRedirect(reverse("barriers:dashboard"))
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.watchlist = self.get_watchlist()
-        if not self.watchlist:
+        if not self.saved_search:
             return HttpResponseRedirect(reverse("barriers:dashboard"))
         return super().post(request, *args, **kwargs)
 
-    def get_watchlist(self):
-        index = self.kwargs.get("index")
-        return self.request.session.get_watchlist(index)
-
     def get_initial(self):
-        return {"name": self.watchlist.name}
+        return {"name": self.saved_search.name}
 
     def get_search_form_data(self):
-        return self.watchlist.filters
+        return self.saved_search.filters
 
     def form_valid(self, form):
-        self.request.session.rename_watchlist(
-            index=self.kwargs.get("index"), name=form.cleaned_data.get("name"),
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_search_id = self.kwargs.get("saved_search_id")
+        client.saved_searches.patch(
+            id=saved_search_id,
+            name=form.cleaned_data.get("name"),
         )
         return super().form_valid(form)
 

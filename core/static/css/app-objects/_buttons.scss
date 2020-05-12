@@ -39,4 +39,11 @@
 	border: 0;
 	background: inherit;
 	overflow: visible;
+	box-shadow: none;
+	&:hover {
+		color: $govuk-link-hover-colour;
+		box-shadow: none;
+		text-decoration: underline;
+		background: none;
+	}
 }

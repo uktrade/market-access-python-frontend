@@ -587,7 +587,6 @@ class DraftBarriers(TemplateView):
         client = MarketAccessAPIClient(self.request.session['sso_token'])
         reports = client.reports.list(ordering="-created_on")
         context_data['page'] = "draft-barriers"
-        context_data['watchlists'] = self.request.session.get_watchlists()
         context_data['reports'] = reports
         return context_data
 

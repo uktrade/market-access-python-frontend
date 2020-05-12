@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Save as a new search{% endblock %}
+
+{% block page_content %}
+
+    <a href="{% url 'barriers:find_a_barrier' %}?{{ request.GET.urlencode }}" class="govuk-back-link">Back</a>
+
+    {% include 'partials/heading.html' with text='Save as a new search' %}
+    {% form_error_banner form %}
+
+    <section class="restrict-width">
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <div id="{{ form.name.name }}" class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
+
+                {% form_field_error form "name" %}
+
+                <input class="govuk-input govuk-!-width-one-half{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
+            </div>
+
+            <input type="submit" value="Save" class="govuk-button">
+            <a href="{% url 'barriers:find_a_barrier' %}?{{ request.GET.urlencode }}" class="form-cancel">Cancel</a>
+        </form>
+    </section>
+
+{% endblock %}
