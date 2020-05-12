@@ -8,11 +8,12 @@ from utils.models import APIModel
 
 
 class SavedSearch(APIModel):
+    _filters = None
     _readable_filters = None
 
     def clean_filters(self, filters):
         """
-        Node saves the watchlist search term as a list for some reason.
+        Node saves the search term as a list for some reason.
 
         We now use user=1 and team=1 instead of created_by=[1,2] (or createdBy).
         """
@@ -55,7 +56,7 @@ class SavedSearch(APIModel):
 
     def get_api_params(self):
         """
-        Transform watchlist filters into api parameters
+        Transform search filters into api parameters
         """
         filters = copy.deepcopy(self.filters)
         region = filters.pop("region", [])

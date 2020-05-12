@@ -1,5 +1,4 @@
 from django import forms
-from django.conf import settings
 
 from utils.api.client import MarketAccessAPIClient
 
@@ -7,7 +6,7 @@ from utils.api.client import MarketAccessAPIClient
 class NewSavedSearchForm(forms.Form):
     name = forms.CharField(
         label="Name",
-        max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
+        max_length=25,
         error_messages={
             "required": "Enter a name for your saved search",
             "max_length": "Name should be %(limit_value)d characters or fewer",
@@ -30,7 +29,7 @@ class NewSavedSearchForm(forms.Form):
 class RenameSavedSearchForm(forms.Form):
     name = forms.CharField(
         label="New name",
-        max_length=settings.MAX_WATCHLIST_NAME_LENGTH,
+        max_length=25,
         error_messages={
             "required": "Enter a name for your saved search",
             "max_length": "Name should be %(limit_value)d characters or fewer",

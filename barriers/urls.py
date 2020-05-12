@@ -78,7 +78,7 @@ from .views.types import (
     BarrierEditTypesSession,
     BarrierRemoveType,
 )
-from .views.watchlist import (
+from .views.saved_searches import (
     DeleteSavedSearch,
     NewSavedSearch,
     RenameSavedSearch,
