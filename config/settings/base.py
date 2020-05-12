@@ -96,8 +96,6 @@ ROOT_URLCONF = 'config.urls'
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
-SESSION_ENGINE = "users.sessions"
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
