@@ -1,10 +1,6 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import APIFormMixin
-
-from ..models import Watchlist
-
 from utils.api.client import MarketAccessAPIClient
 
 
