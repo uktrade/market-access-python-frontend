@@ -13,7 +13,7 @@
             {% for member in team_members %}
                 <tr class="standard-table__row">
                     <td class="standard-table__cell">
-                        <a href="{% url 'barriers:find_a_barrier' %}?member={{ member.id }}">
+                        <a href="{% url 'barriers:search' %}?member={{ member.id }}">
                             <span class="team-member__full-name">{{ member.user.full_name }}</span>
                         </a>
                         {% if member.created_by %}

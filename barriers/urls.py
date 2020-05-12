@@ -24,7 +24,7 @@ from .views.core import (
     BarrierDetail,
     Dashboard,
     DownloadBarriers,
-    FindABarrier,
+    BarrierSearch,
     WhatIsABarrier,
 )
 from .views.documents import DownloadDocument
@@ -95,8 +95,9 @@ app_name = "barriers"
 
 urlpatterns = [
     path("", Dashboard.as_view(), name="dashboard"),
-    path("find-a-barrier/", FindABarrier.as_view(), name="find_a_barrier"),
-    path("find-a-barrier/download/", DownloadBarriers.as_view(), name="download"),
+    path("search/", BarrierSearch.as_view(), name="search"),
+    path("find-a-barrier/", BarrierSearch.as_view(), name="find_a_barrier"),
+    path("search/download/", DownloadBarriers.as_view(), name="download"),
     path("what-is-a-barrier/", WhatIsABarrier.as_view(), name="what_is_a_barrier"),
     path("documents/<uuid:document_id>/download/", DownloadDocument.as_view(), name="download_document"),
 

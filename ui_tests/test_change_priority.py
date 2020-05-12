@@ -7,7 +7,7 @@ def test_change_priority(browser):
 
     Checks the new priority is displayed on the barrier detail page.
     Checks the activity stream shows the change.
-    Check the Find a Barrier page shows the change.
+    Check the Search page shows the change.
     """
     barrier_id = settings.TEST_BARRIER_ID
 
@@ -35,7 +35,7 @@ def test_change_priority(browser):
         f"{new_priority_text} priority"
     )
 
-    browser.visit(f"{settings.BASE_URL}find-a-barrier/?search={title}")
+    browser.visit(f"{settings.BASE_URL}search/?search={title}")
 
     barrier_item = browser.find_by_css(f'[data-barrier-id="{barrier_id}"]').first
     assert (

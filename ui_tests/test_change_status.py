@@ -9,7 +9,7 @@ def test_change_status(browser):
 
     Checks the new status is displayed on the barrier detail page.
     Checks the activity stream shows the change.
-    Checks the Find a Barrier page shows the change.
+    Checks the Search page shows the change.
     """
     barrier_id = settings.TEST_BARRIER_ID
 
@@ -46,7 +46,7 @@ def test_change_status(browser):
         f"Status: {new_status}"
     )
 
-    browser.visit(f"{settings.BASE_URL}find-a-barrier/?search={title}")
+    browser.visit(f"{settings.BASE_URL}search/?search={title}")
 
     barrier_item = browser.find_by_css(f'[data-barrier-id="{barrier_id}"]').first
     assert barrier_item.find_by_css(".barrier-status-badge").first.value == new_status
