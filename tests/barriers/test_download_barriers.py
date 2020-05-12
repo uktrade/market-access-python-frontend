@@ -46,7 +46,7 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a,"
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
-            barrier_type="130,141",
+            category="130,141",
             priority="HIGH,MEDIUM",
             status="1,2,7",
             user="1",

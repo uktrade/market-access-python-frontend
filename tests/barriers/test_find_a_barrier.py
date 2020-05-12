@@ -116,15 +116,16 @@ class FindABarrierTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a,"
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
-            barrier_type="130,141",
+            category="130,141",
             priority="HIGH,MEDIUM",
             status="1,2,7",
             user="1",
             archived="0",
         )
 
+    @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
-    def test_my_barriers_filter(self, mock_list):
+    def test_my_barriers_filter(self, mock_list, mock_get):
         response = self.client.get(
             reverse("barriers:find_a_barrier"), data={"user": "1"},
         )
@@ -137,8 +138,9 @@ class FindABarrierTestCase(MarketAccessTestCase):
             archived="0",
         )
 
+    @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
-    def test_my_team_barriers_filter(self, mock_list):
+    def test_my_team_barriers_filter(self, mock_list, mock_get):
         response = self.client.get(
             reverse("barriers:find_a_barrier"), data={"team": "1"},
         )
