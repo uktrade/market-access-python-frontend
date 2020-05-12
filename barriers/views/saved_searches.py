@@ -79,7 +79,7 @@ class NewSavedSearch(SearchFiltersMixin, FormView):
     def get_success_url(self, saved_search):
         querystring = self.search_form.get_raw_filters_querystring()
         return (
-            f"{reverse('barriers:find_a_barrier')}"
+            f"{reverse('barriers:search')}"
             f"?search_id={saved_search.id}&{querystring}"
         )
 

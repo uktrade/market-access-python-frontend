@@ -11,10 +11,10 @@ from utils.models import ModelList
 from mock import patch
 
 
-class FindABarrierTestCase(MarketAccessTestCase):
+class SearchTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_empty_search(self, mock_list):
-        response = self.client.get(reverse("barriers:find_a_barrier"))
+        response = self.client.get(reverse("barriers:search"))
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
             ordering="-reported_on",
@@ -25,7 +25,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
 
     @patch("utils.api.resources.APIResource.list")
     def test_search_form_choices(self, mock_list):
-        response = self.client.get(reverse("barriers:find_a_barrier"))
+        response = self.client.get(reverse("barriers:search"))
         assert response.status_code == HTTPStatus.OK
 
         form = response.context["form"]
@@ -59,7 +59,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_search_filters(self, mock_list):
         response = self.client.get(
-            reverse("barriers:find_a_barrier"),
+            reverse("barriers:search"),
             data={
                 "search": "Test search",
                 "country": [
@@ -127,7 +127,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_my_barriers_filter(self, mock_list, mock_get):
         response = self.client.get(
-            reverse("barriers:find_a_barrier"), data={"user": "1"},
+            reverse("barriers:search"), data={"user": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -142,7 +142,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_my_team_barriers_filter(self, mock_list, mock_get):
         response = self.client.get(
-            reverse("barriers:find_a_barrier"), data={"team": "1"},
+            reverse("barriers:search"), data={"team": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -154,7 +154,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
         )
 
         response = self.client.get(
-            reverse("barriers:find_a_barrier"), data={"user": "1", "team": "1"},
+            reverse("barriers:search"), data={"user": "1", "team": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -169,7 +169,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_archived_filter(self, mock_list):
         response = self.client.get(
-            reverse("barriers:find_a_barrier"), data={"only_archived": "1"},
+            reverse("barriers:search"), data={"only_archived": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -186,7 +186,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
         )
 
         response = self.client.get(
-            reverse("barriers:find_a_barrier"),
+            reverse("barriers:search"),
             data={"status": ["1", "2", "3", "4", "5"], "page": "6"},
         )
         assert response.status_code == HTTPStatus.OK
@@ -213,7 +213,7 @@ class FindABarrierTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_wto_filters(self, mock_list):
         response = self.client.get(
-            reverse("barriers:find_a_barrier"),
+            reverse("barriers:search"),
             data={
                 "wto": [
                     "wto_has_been_notified",

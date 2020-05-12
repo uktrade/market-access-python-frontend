@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block page_title %}{{ block.super }} - Find a barrier{% endblock %}
+{% block page_title %}{{ block.super }} - Search{% endblock %}
 
 {% block body_script %}
     <script src="{% static 'js/vue/vue-bundle.js' %}"></script>
@@ -10,7 +10,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with caption='Market access barriers' text='Find a barrier' %}
+    {% include 'partials/heading.html' with caption='Market access barriers' text='Search' %}
 
     <section class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
@@ -52,7 +52,7 @@
                 </div>
 
                 {% if filters %}
-                <a class="filter-items__clear" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
+                <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
                 {% endif %}
 
                 <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
@@ -108,7 +108,7 @@
                         {% endif %}
 
                         {% if filters %}
-                            <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
+                            <a class="filter-results-clear-link" href="{% url 'barriers:search' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
                         {% endif %}
                     </div>
                 </div>

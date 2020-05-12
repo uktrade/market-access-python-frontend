@@ -15,7 +15,7 @@ def clear_watchlists(browser):
 
 
 def add_watchlist_for_search_term(browser, search_term):
-    browser.visit(f"{settings.BASE_URL}find-a-barrier/?search={search_term}")
+    browser.visit(f"{settings.BASE_URL}search/?search={search_term}")
 
     browser.click_link_by_text("Save watch list")
 
@@ -24,7 +24,7 @@ def add_watchlist_for_search_term(browser, search_term):
 
 
 def create_new_watchlist(browser, name):
-    browser.visit(f"{settings.BASE_URL}find-a-barrier/?search=test")
+    browser.visit(f"{settings.BASE_URL}search/?search=test")
 
     browser.click_link_by_text("Save watch list")
 

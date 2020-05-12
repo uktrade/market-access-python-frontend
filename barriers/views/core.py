@@ -46,8 +46,8 @@ class SearchFormMixin:
         }
 
 
-class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
-    template_name = "barriers/find_a_barrier.html"
+class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
+    template_name = "barriers/search.html"
     form_class = BarrierSearchForm
 
     def get(self, request, *args, **kwargs):
@@ -91,7 +91,7 @@ class FindABarrier(PaginationMixin, SearchFormMixin, FormView):
                     limit=settings.API_RESULTS_LIMIT,
                 ),
                 "pageless_querystring": self.get_pageless_querystring(),
-                "page": "find-a-barrier",
+                "page": "search",
                 "saved_search_created": self.request.session.pop(
                     "saved_search_created",
                     None,
