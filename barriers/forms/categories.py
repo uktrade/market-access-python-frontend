@@ -5,7 +5,7 @@ from utils.api.client import MarketAccessAPIClient
 
 class AddCategoryForm(forms.Form):
     category = forms.ChoiceField(
-        label="", choices=[], error_messages={"required": "Select a barrier type"},
+        label="", choices=[], error_messages={"required": "Select a category"},
     )
 
     def __init__(self, categories, *args, **kwargs):
