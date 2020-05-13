@@ -44,7 +44,7 @@ class DraftBarriersViewTestCase(ReportsTestCase):
         self.url = reverse('reports:draft_barriers')
 
     def test_draft_barrier_url_resolves_to_correct_view(self):
-        match = resolve('/reports/')
+        match = resolve('/draft-barriers/')
         assert match.func.view_class == DraftBarriers
 
     @patch("utils.api.client.ReportsResource.list")
