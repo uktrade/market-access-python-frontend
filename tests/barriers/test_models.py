@@ -132,21 +132,3 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
             "readable_value": "My barriers",
             "value": ["1"],
         }
-
-    def test_get_api_params(self):
-        saved_search = SavedSearch(self.complex_saved_search)
-        assert saved_search.get_api_params() == {
-            "text": "Test",
-            "location": (
-                "9f5f66a0-5d95-e211-a939-e4115bead28a,"
-                "3e6809d6-89f6-4590-8458-1d0dab73ad1a"
-            ),
-            "sector": (
-                "9538cecc-5f95-e211-a939-e4115bead28a,"
-                "a538cecc-5f95-e211-a939-e4115bead28a"
-            ),
-            "barrier_type": "127",
-            "priority": "HIGH,MEDIUM",
-            "status": "2,3",
-            "user": 1,
-        }
