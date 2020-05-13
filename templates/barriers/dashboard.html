@@ -30,14 +30,14 @@
                 <a class="saved-search__notifications" href="">Notifications: Off</a>
             </li>
             <li class="ma-card-list__item">
-                <h3 class="saved-search__title"><a href="">Draft barriers</a></h3>
-                <p><span class="ma-badge">6 draft barriers</span></p>
+                <h3 class="saved-search__title"><a href="{% url 'reports:draft_barriers' %}">Draft barriers</a></h3>
+                <p><span class="ma-badge">{{ draft_barriers|length }} draft barrier{{ draft_barriers|pluralize }}</span></p>
             </li>
         </ul>
     </section>
 
     <section>
-        <h2 class="saved-search-heading">{{ saved_searches|length }}<span class="dashboard-results-header__title__caption"> saved search{{ saved_searches|length|pluralize:"es" }}</span></h2>
+        <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ saved_searches|length }}</span> saved search{{ saved_searches|length|pluralize:"es" }}</h2>
 
         <ul class="ma-card-list">
             {% for saved_search in saved_searches %}

@@ -16,7 +16,11 @@
 
 {% block page_content %}
 
-    {% include 'barriers/partials/dashboard_heading.html' %}
+    <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+
+    {% include 'partials/heading.html' with text='Draft barriers' %}
+
+    <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ reports|length }}</span> draft barrier{{ reports|pluralize }}</h2>
 
     {% if reports %}
 
