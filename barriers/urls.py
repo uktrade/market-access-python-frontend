@@ -23,8 +23,6 @@ from .views.companies import (
 from .views.core import (
     BarrierDetail,
     Dashboard,
-    DownloadBarriers,
-    BarrierSearch,
     WhatIsABarrier,
 )
 from .views.documents import DownloadDocument
@@ -53,6 +51,10 @@ from .views.notes import (
     BarrierAddNote,
     BarrierEditNote,
     BarrierDeleteNote,
+)
+from .views.search import (
+    DownloadBarriers,
+    BarrierSearch,
 )
 from .views.sectors import (
     BarrierAddAllSectors,
