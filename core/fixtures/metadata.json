@@ -43,7 +43,7 @@
         "1": "Market access team to provide support on next steps",
         "2": "None, I\\u2019m going to handle next steps myself as the lead coordinator"
     },
-    "barrier_types": [{
+    "categories": [{
         "id": 109,
         "title": "Locally produced material in goods",
         "description": "<p>The requirement that goods contain a high proportion of locally produced material.</p>",

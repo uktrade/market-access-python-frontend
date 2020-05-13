@@ -1,4 +1,3 @@
-import copy
 from urllib.parse import urlencode
 
 from barriers.forms.search import BarrierSearchForm
@@ -8,39 +7,7 @@ from utils.models import APIModel
 
 
 class SavedSearch(APIModel):
-    _filters = None
     _readable_filters = None
-
-    def clean_filters(self, filters):
-        """
-        Node saves the search term as a list for some reason.
-
-        We now use user=1 and team=1 instead of created_by=[1,2] (or createdBy).
-        """
-        if "search" in filters and isinstance(filters["search"], list):
-            try:
-                filters["search"] = filters["search"][0]
-            except IndexError:
-                filters["search"] = ""
-
-        created_by = filters.pop("createdBy", filters.pop("created_by", []))
-        if "1" in created_by:
-            filters["user"] = 1
-        if "2" in created_by:
-            filters["team"] = 1
-        return filters
-
-    def to_dict(self):
-        return {
-            "name": self.name,
-            "filters": self.filters,
-        }
-
-    @property
-    def filters(self):
-        if self._filters is None:
-            self._filters = self.clean_filters(self.data.get("filters"))
-        return self._filters
 
     @property
     def readable_filters(self):
@@ -53,35 +20,3 @@ class SavedSearch(APIModel):
     @property
     def querystring(self):
         return urlencode(self.filters, doseq=True)
-
-    def get_api_params(self):
-        """
-        Transform search filters into api parameters
-        """
-        filters = copy.deepcopy(self.filters)
-        region = filters.pop("region", [])
-        country = filters.pop("country", [])
-
-        if country or region:
-            filters["location"] = country + region
-
-        created_by = filters.pop("createdBy", []) + filters.pop("created_by", [])
-        if "1" in created_by:
-            filters["user"] = 1
-        elif "2" in created_by:
-            filters["team"] = 1
-
-        filter_map = {
-            "type": "barrier_type",
-            "search": "text",
-        }
-
-        api_params = {}
-        for name, value in filters.items():
-            mapped_name = filter_map.get(name, name)
-            if isinstance(value, list):
-                api_params[mapped_name] = ",".join(value)
-            else:
-                api_params[mapped_name] = value
-
-        return api_params

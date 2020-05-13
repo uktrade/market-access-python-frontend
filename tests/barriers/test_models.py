@@ -21,8 +21,8 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.source_name == "Government entity"
         assert barrier.status["name"] == "Resolved: In full"
         assert barrier.title == "Import quota for sports cars"
-        assert barrier.types[0]["title"] == "Import quotas"
-        assert barrier.types[1]["title"] == "Tariffs or import duties"
+        assert barrier.categories[0]["title"] == "Import quotas"
+        assert barrier.categories[1]["title"] == "Tariffs or import duties"
 
         assert barrier.is_resolved is True
         assert barrier.is_partially_resolved is False
@@ -49,14 +49,6 @@ class CompanyModelTestCase(MarketAccessTestCase):
 
 
 class SavedSearchModelTestCase(MarketAccessTestCase):
-    old_user_saved_search = {
-        "name": "Old user saved search",
-        "filters": {"search": ["Test"], "createdBy": ["1"]},
-    }
-    old_team_saved_search = {
-        "name": "Old team saved search",
-        "filters": {"search": ["Test"], "createdBy": ["2"]},
-    }
     complex_saved_search = {
         "name": "Complex",
         "filters": {
@@ -66,21 +58,13 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
-            "type": ["127"],
+            "category": ["127"],
             "region": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
             "priority": ["HIGH", "MEDIUM"],
             "status": ["2", "3"],
             "user": 1,
         },
     }
-
-    def test_field_conversion_user(self):
-        saved_search = SavedSearch(self.old_user_saved_search)
-        assert saved_search.filters == {"search": "Test", "user": 1}
-
-    def test_field_conversion_team(self):
-        saved_search = SavedSearch(self.old_team_saved_search)
-        assert saved_search.filters == {"search": "Test", "team": 1}
 
     def test_readable_filters(self):
         saved_search = SavedSearch(self.complex_saved_search)
@@ -102,8 +86,8 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
         }
-        assert saved_search.readable_filters["type"] == {
-            "label": "Barrier type",
+        assert saved_search.readable_filters["category"] == {
+            "label": "Category",
             "readable_value": "Government subsidies",
             "value": ["127"],
         }
@@ -131,22 +115,4 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
             "label": "Show",
             "readable_value": "My barriers",
             "value": ["1"],
-        }
-
-    def test_get_api_params(self):
-        saved_search = SavedSearch(self.complex_saved_search)
-        assert saved_search.get_api_params() == {
-            "text": "Test",
-            "location": (
-                "9f5f66a0-5d95-e211-a939-e4115bead28a,"
-                "3e6809d6-89f6-4590-8458-1d0dab73ad1a"
-            ),
-            "sector": (
-                "9538cecc-5f95-e211-a939-e4115bead28a,"
-                "a538cecc-5f95-e211-a939-e4115bead28a"
-            ),
-            "barrier_type": "127",
-            "priority": "HIGH,MEDIUM",
-            "status": "2,3",
-            "user": 1,
         }

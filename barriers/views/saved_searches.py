@@ -94,7 +94,7 @@ class DeleteSavedSearch(SavedSearchMixin, TemplateView):
         return HttpResponseRedirect(reverse("barriers:dashboard"))
 
 
-class RenameSavedSearch(SavedSearchMixin, SearchFiltersMixin, FormView):
+class RenameSavedSearch(SavedSearchMixin, FormView):
     template_name = "barriers/saved_searches/rename.html"
     form_class = RenameSavedSearchForm
 
@@ -108,19 +108,17 @@ class RenameSavedSearch(SavedSearchMixin, SearchFiltersMixin, FormView):
             return HttpResponseRedirect(reverse("barriers:dashboard"))
         return super().post(request, *args, **kwargs)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["saved_search_id"] = self.kwargs.get("saved_search_id")
+        return kwargs
+
     def get_initial(self):
         return {"name": self.saved_search.name}
 
-    def get_search_form_data(self):
-        return self.saved_search.filters
-
     def form_valid(self, form):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        saved_search_id = self.kwargs.get("saved_search_id")
-        client.saved_searches.patch(
-            id=saved_search_id,
-            name=form.cleaned_data.get("name"),
-        )
+        form.save()
         return super().form_valid(form)
 
     def get_success_url(self):
