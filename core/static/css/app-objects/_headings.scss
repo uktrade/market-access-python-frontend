@@ -9,3 +9,14 @@
 	@include govuk-font( 19 );
 	margin: govuk-em( 30, 19 ) 0;
 }
+.ma-list-heading {
+    @include govuk-font( $size: 19 );
+    border-bottom: 5px solid $govuk-black;
+    padding: 0 0 govuk-em( 16, 16 );
+    margin: govuk-em( 28, 16 ) 0 govuk-em( 20, 16 );
+
+    &__count {
+        font-size: 32px;
+        font-weight: bold;
+    }
+}

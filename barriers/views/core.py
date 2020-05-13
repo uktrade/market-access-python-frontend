@@ -19,6 +19,7 @@ class Dashboard(TemplateView):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         my_barriers_saved_search = client.saved_searches.get("my-barriers")
         team_barriers_saved_search = client.saved_searches.get("team-barriers")
+        draft_barriers = client.reports.list()
         saved_searches = client.saved_searches.list()
 
         context_data.update(
@@ -26,6 +27,7 @@ class Dashboard(TemplateView):
                 "page": "dashboard",
                 "my_barriers_saved_search": my_barriers_saved_search,
                 "team_barriers_saved_search": team_barriers_saved_search,
+                "draft_barriers": draft_barriers,
                 "saved_searches": saved_searches,
             }
         )
