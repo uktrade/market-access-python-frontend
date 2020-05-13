@@ -166,9 +166,9 @@
 
             <dt class="summary-group__list__key">Barrier categories</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.types %}
+                {% if barrier.categories %}
                     <ul class="summary-group__list__value__list">
-                        {% for item in barrier.types %}
+                        {% for item in barrier.categories %}
                         <li class="summary-group__list__value__list__item">{{ item.title }}</li>
                         {% endfor %}
                     </ul>

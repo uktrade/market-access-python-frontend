@@ -13,12 +13,12 @@ class Barrier(APIModel):
     """
 
     _admin_areas = None
+    _categories = None
     _country = None
     _location = None
     _metadata = None
     _sectors = None
     _status = None
-    _types = None
     _wto_profile = None
 
     def __init__(self, data):
@@ -47,6 +47,15 @@ class Barrier(APIModel):
     @property
     def archived_reason(self):
         return ARCHIVED_REASON[self.data["archived_reason"]]
+
+    @property
+    def categories(self):
+        if self._categories is None:
+            self._categories = [
+                self.metadata.get_category(category)
+                for category in self.data["categories"]
+            ]
+        return self._categories
 
     @property
     def country(self):
@@ -138,15 +147,6 @@ class Barrier(APIModel):
     @property
     def title(self):
         return self.barrier_title
-
-    @property
-    def types(self):
-        if self._types is None:
-            self._types = [
-                self.metadata.get_barrier_type(barrier_type)
-                for barrier_type in self.data["barrier_types"]
-            ]
-        return self._types
 
     @property
     def wto_profile(self):
