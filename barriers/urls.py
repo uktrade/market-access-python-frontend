@@ -13,6 +13,12 @@ from .views.assessments import (
     MarketSizeAssessment,
     NewEconomicAssessment,
 )
+from .views.categories import (
+    AddCategory,
+    BarrierEditCategories,
+    BarrierEditCategoriesSession,
+    BarrierRemoveCategory,
+)
 from .views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
@@ -73,12 +79,6 @@ from .views.teams import (
     DeleteTeamMember,
     SearchTeamMember,
     ChangeOwnerView,
-)
-from .views.types import (
-    AddBarrierType,
-    BarrierEditTypes,
-    BarrierEditTypesSession,
-    BarrierRemoveType,
 )
 from .views.saved_searches import (
     DeleteSavedSearch,
@@ -146,10 +146,10 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/status/", BarrierChangeStatus.as_view(), name="change_status"),
 
-    path("barriers/<uuid:barrier_id>/types/", BarrierEditTypesSession.as_view(), name="edit_types_session"),
-    path("barriers/<uuid:barrier_id>/types/edit/", BarrierEditTypes.as_view(), name="edit_types"),
-    path("barriers/<uuid:barrier_id>/types/remove/", BarrierRemoveType.as_view(), name="remove_type"),
-    path("barriers/<uuid:barrier_id>/types/add/", AddBarrierType.as_view(), name="add_type"),
+    path("barriers/<uuid:barrier_id>/types/", BarrierEditCategoriesSession.as_view(), name="edit_categories_session"),
+    path("barriers/<uuid:barrier_id>/types/edit/", BarrierEditCategories.as_view(), name="edit_categories"),
+    path("barriers/<uuid:barrier_id>/types/remove/", BarrierRemoveCategory.as_view(), name="remove_category"),
+    path("barriers/<uuid:barrier_id>/types/add/", AddCategory.as_view(), name="add_category"),
 
     path("barriers/<uuid:barrier_id>/sectors/", BarrierEditSectorsSession.as_view(), name="edit_sectors_session"),
     path("barriers/<uuid:barrier_id>/sectors/edit/", BarrierEditSectors.as_view(), name="edit_sectors"),

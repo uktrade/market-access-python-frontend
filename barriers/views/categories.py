@@ -3,35 +3,35 @@ from django.urls import reverse
 from django.views.generic import FormView, View
 
 from .mixins import BarrierMixin
-from ..forms.types import (
-    AddTypeForm,
-    EditTypesForm,
+from ..forms.categories import (
+    AddCategoryForm,
+    EditCategoriesForm,
 )
 from utils.metadata import get_metadata
 
 
-class AddBarrierType(BarrierMixin, FormView):
+class AddCategory(BarrierMixin, FormView):
     template_name = "barriers/edit/categories/add.html"
-    form_class = AddTypeForm
+    form_class = AddCategoryForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data.update({"barrier_types": self.get_category_list()})
+        context_data.update({"categories": self.get_category_list()})
         return context_data
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["barrier_types"] = self.get_category_list()
+        kwargs["categories"] = self.get_category_list()
         return kwargs
 
     def get_category_list(self):
         """
-        Get a list of all barrier types excluding any already selected
+        Get a list of all categories excluding any already selected
         """
         metadata = get_metadata()
         selected_category_ids = [
             str(category["id"])
-            for category in self.request.session.get("barrier_types", [])
+            for category in self.request.session.get("categories", [])
         ]
         return [
             category
@@ -41,45 +41,45 @@ class AddBarrierType(BarrierMixin, FormView):
 
     def form_valid(self, form):
         """
-        Add the new barrier type to the session and redirect
+        Add the new category to the session and redirect
         """
         metadata = get_metadata()
-        category = metadata.get_category(form.cleaned_data["barrier_type"])
-        categories = self.request.session.get("barrier_types", [])
+        category = metadata.get_category(form.cleaned_data["category"])
+        categories = self.request.session.get("categories", [])
         categories.append(
             {"id": category["id"], "title": category["title"],}
         )
-        self.request.session["barrier_types"] = categories
+        self.request.session["categories"] = categories
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse(
-            "barriers:edit_types_session",
+            "barriers:edit_categories_session",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
 
-class BarrierEditTypes(BarrierMixin, FormView):
+class BarrierEditCategories(BarrierMixin, FormView):
     template_name = "barriers/edit/categories/edit.html"
-    form_class = EditTypesForm
-    use_session_types = False
+    form_class = EditCategoriesForm
+    use_session_categories = False
 
     def get(self, request, *args, **kwargs):
-        if not self.use_session_types:
-            request.session["barrier_types"] = self.barrier.categories
+        if not self.use_session_categories:
+            request.session["categories"] = self.barrier.categories
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data.update(
-            {"barrier_types": self.request.session.get("barrier_types", [])}
+            {"categories": self.request.session.get("categories", [])}
         )
         return context_data
 
     def get_initial(self):
-        barrier_types = self.request.session.get("barrier_types", [])
+        categories = self.request.session.get("categories", [])
         return {
-            "barrier_types": [type["id"] for type in barrier_types],
+            "categories": [category["id"] for category in categories],
         }
 
     def get_form_kwargs(self):
@@ -87,12 +87,12 @@ class BarrierEditTypes(BarrierMixin, FormView):
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
         kwargs["token"] = self.request.session.get("sso_token")
         metadata = get_metadata()
-        kwargs["barrier_types"] = metadata.get_category_list()
+        kwargs["categories"] = metadata.get_category_list()
         return kwargs
 
     def form_valid(self, form):
         form.save()
-        del self.request.session["barrier_types"]
+        del self.request.session["categories"]
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -102,28 +102,28 @@ class BarrierEditTypes(BarrierMixin, FormView):
         )
 
 
-class BarrierEditTypesSession(BarrierEditTypes):
-    use_session_types = True
+class BarrierEditCategoriesSession(BarrierEditCategories):
+    use_session_categories = True
 
 
-class BarrierRemoveType(View):
+class BarrierRemoveCategory(View):
     """
-    Remove the barrier type from the session and redirect
+    Remove the category from the session and redirect
     """
 
     def post(self, request, *args, **kwargs):
-        barrier_types = self.request.session.get("barrier_types", [])
-        barrier_type_id = request.POST.get("barrier_type_id")
+        categories = self.request.session.get("categories", [])
+        category_id = request.POST.get("category_id")
 
-        self.request.session["barrier_types"] = [
-            barrier_type
-            for barrier_type in barrier_types
-            if barrier_type_id != str(barrier_type["id"])
+        self.request.session["categories"] = [
+            category
+            for category in categories
+            if category_id != str(category["id"])
         ]
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse(
-            "barriers:edit_types_session",
+            "barriers:edit_categories_session",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )

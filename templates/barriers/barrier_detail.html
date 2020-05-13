@@ -173,13 +173,13 @@
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_types' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_categories' barrier.id %}">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No barrier categories</span>
                     {% else %}
-                        <a href="{% url 'barriers:add_type' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
+                        <a href="{% url 'barriers:add_category' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
                     {% endif %}
                 {% endif %}
             </dd>
