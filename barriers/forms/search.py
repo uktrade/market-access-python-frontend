@@ -11,7 +11,7 @@ class BarrierSearchForm(forms.Form):
     country = forms.MultipleChoiceField(label="Barrier location", required=False,)
     trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
     sector = forms.MultipleChoiceField(label="Sector", required=False,)
-    type = forms.MultipleChoiceField(label="Barrier type", required=False,)
+    category = forms.MultipleChoiceField(label="Category", required=False,)
     region = forms.MultipleChoiceField(label="Overseas region", required=False,)
     priority = forms.MultipleChoiceField(label="Barrier priority", required=False,)
     status = forms.MultipleChoiceField(label="Barrier status", required=False,)
@@ -47,7 +47,7 @@ class BarrierSearchForm(forms.Form):
         self.set_country_choices()
         self.set_trade_direction_choices()
         self.set_sector_choices()
-        self.set_barrier_type_choices()
+        self.set_category_choices()
         self.set_region_choices()
         self.set_priority_choices()
         self.set_status_choices()
@@ -64,7 +64,7 @@ class BarrierSearchForm(forms.Form):
             "country": data.getlist("country"),
             "trade_direction": data.getlist("trade_direction"),
             "sector": data.getlist("sector"),
-            "type": data.getlist("type"),
+            "category": data.getlist("category"),
             "region": data.getlist("region"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
@@ -92,15 +92,15 @@ class BarrierSearchForm(forms.Form):
             for sector in self.metadata.get_sector_list(level=0)
         ]
 
-    def set_barrier_type_choices(self):
+    def set_category_choices(self):
         choices = [
-            (str(barrier_type["id"]), barrier_type["title"])
-            for barrier_type in self.metadata.data["barrier_types"]
+            (str(category["id"]), category["title"])
+            for category in self.metadata.data["categories"]
         ]
         choices = list(set(choices))
         choices.sort(key=itemgetter(1))
-        choices = [("", "All barrier types")] + choices
-        self.fields["type"].choices = choices
+        choices = [("", "All categories")] + choices
+        self.fields["category"].choices = choices
 
     def set_region_choices(self):
         choices = [
@@ -213,7 +213,7 @@ class BarrierSearchForm(forms.Form):
         )
         params["trade_direction"] = ",".join(self.cleaned_data.get("trade_direction", []))
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
-        params["category"] = ",".join(self.cleaned_data.get("type", []))
+        params["category"] = ",".join(self.cleaned_data.get("category", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
