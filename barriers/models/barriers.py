@@ -53,7 +53,7 @@ class Barrier(APIModel):
         if self._categories is None:
             self._categories = [
                 self.metadata.get_category(category)
-                for category in self.data["categories"]
+                for category in self.data.get("categories", [])
             ]
         return self._categories
 

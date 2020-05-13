@@ -39,9 +39,9 @@ class SearchTestCase(MarketAccessTestCase):
         sector_choices = form.fields["sector"].choices
         assert len(sector_choices) == len(sector_list) + 1
 
-        type_list = set([type["id"] for type in metadata.data["barrier_types"]])
-        type_choices = form.fields["type"].choices
-        assert len(type_choices) == len(type_list) + 1
+        category_list = set([category["id"] for category in metadata.data["categories"]])
+        category_choices = form.fields["category"].choices
+        assert len(category_choices) == len(category_list) + 1
 
         region_list = set(
             [region["id"] for region in metadata.get_overseas_region_list()]
@@ -70,7 +70,7 @@ class SearchTestCase(MarketAccessTestCase):
                     "9538cecc-5f95-e211-a939-e4115bead28a",
                     "aa22c9d2-5f95-e211-a939-e4115bead28a",
                 ],
-                "type": ["130", "141"],
+                "category": ["130", "141"],
                 "region": [
                     "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
                     "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
@@ -92,7 +92,7 @@ class SearchTestCase(MarketAccessTestCase):
             "9538cecc-5f95-e211-a939-e4115bead28a",
             "aa22c9d2-5f95-e211-a939-e4115bead28a",
         ]
-        assert form.cleaned_data["type"] == ["130", "141"]
+        assert form.cleaned_data["category"] == ["130", "141"]
         assert form.cleaned_data["region"] == [
             "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
             "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
@@ -105,7 +105,7 @@ class SearchTestCase(MarketAccessTestCase):
             ordering="-reported_on",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
-            text="Test search",
+            search="Test search",
             location=(
                 "9f5f66a0-5d95-e211-a939-e4115bead28a,"
                 "83756b9a-5d95-e211-a939-e4115bead28a,"
