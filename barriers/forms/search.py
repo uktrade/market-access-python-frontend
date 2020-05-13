@@ -207,7 +207,7 @@ class BarrierSearchForm(forms.Form):
     def get_api_search_parameters(self):
         params = {}
         params["search_id"] = self.cleaned_data.get("search_id")
-        params["text"] = self.cleaned_data.get("search")
+        params["search"] = self.cleaned_data.get("search")
         params["location"] = ",".join(
             self.cleaned_data.get("country", []) + self.cleaned_data.get("region", [])
         )
