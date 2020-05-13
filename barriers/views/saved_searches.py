@@ -3,8 +3,9 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
 from ..forms.saved_searches import (
-    RenameSavedSearchForm,
     NewSavedSearchForm,
+    RenameSavedSearchForm,
+    SavedSearchNotificationsForm,
 )
 from ..forms.search import BarrierSearchForm
 
@@ -122,4 +123,32 @@ class RenameSavedSearch(SavedSearchMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        return reverse("barriers:dashboard")
+
+
+class SavedSearchNotifications(SavedSearchMixin, FormView):
+    template_name = "barriers/saved_searches/notifications.html"
+    form_class = SavedSearchNotificationsForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["saved_search_id"] = self.kwargs.get("saved_search_id")
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
+    def get_initial(self):
+        return {
+            "notify_about_additions": self.saved_search.notify_about_additions,
+            "notify_about_updates": self.saved_search.notify_about_updates,
+        }
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        if self.request.GET.get('next') == "search":
+            search_url = reverse("barriers:search")
+            qs = f"{self.saved_search.querystring}&search_id={self.saved_search.id}"
+            return f"{search_url}?{qs}"
         return reverse("barriers:dashboard")

@@ -84,6 +84,7 @@ from .views.saved_searches import (
     DeleteSavedSearch,
     NewSavedSearch,
     RenameSavedSearch,
+    SavedSearchNotifications,
 )
 from .views.wto import (
     AddWTODocument,
@@ -106,6 +107,8 @@ urlpatterns = [
     path("saved-searches/new/", NewSavedSearch.as_view(), name="new_saved_search"),
     path("saved-searches/<uuid:saved_search_id>/rename/", RenameSavedSearch.as_view(), name="rename_saved_search"),
     path("saved-searches/<uuid:saved_search_id>/delete/", DeleteSavedSearch.as_view(), name="delete_saved_search"),
+    path("saved-searches/<uuid:saved_search_id>/notifications/", SavedSearchNotifications.as_view(), name="saved_search_notifications"),
+    re_path("saved-searches/(?P<saved_search_id>(my|team)-barriers)/notifications/", SavedSearchNotifications.as_view(), name="saved_search_notifications"),
 
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
     re_path("barriers/(?P<barrier_id>[A-Z]-[0-9]{2}-[A-Z0-9]{3})/", BarrierDetail.as_view(), name="barrier_detail_by_code"),
