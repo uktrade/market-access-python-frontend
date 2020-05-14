@@ -18,6 +18,7 @@
             <form action="" method="GET" class="filter-items">
 
                 {% if form.search_id.value %}{{ form.search_id }}{% endif %}
+                {% if form.member.value %}<input type="hidden" name="{{ form.member.name }}" value="{{ form.member.value }}" />{% endif %}
 
                 <div id="{{ form.search.name }}" class="govuk-form-group filter-items-group">
                     <label class="govuk-label filter-items__label" for="search">
