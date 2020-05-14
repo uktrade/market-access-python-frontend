@@ -108,7 +108,7 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
         if "update_search" in request.POST and form.cleaned_data.get("search_id"):
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             client.saved_searches.patch(
-                id=form.cleaned_data.get("search_id"),
+                id=str(form.cleaned_data.get("search_id")),
                 filters=form.get_raw_filters(),
             )
         return self.render_to_response(

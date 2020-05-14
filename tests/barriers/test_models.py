@@ -49,8 +49,8 @@ class CompanyModelTestCase(MarketAccessTestCase):
 
 
 class SavedSearchModelTestCase(MarketAccessTestCase):
-    complex_saved_search = {
-        "name": "Complex",
+    saved_search_data = {
+        "name": "Saved Search",
         "filters": {
             "search": "Test",
             "country": ["9f5f66a0-5d95-e211-a939-e4115bead28a"],
@@ -67,7 +67,7 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
     }
 
     def test_readable_filters(self):
-        saved_search = SavedSearch(self.complex_saved_search)
+        saved_search = SavedSearch(self.saved_search_data)
         assert saved_search.readable_filters["search"] == {
             "label": "Search",
             "readable_value": "Test",
@@ -116,3 +116,16 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
             "readable_value": "My barriers",
             "value": ["1"],
         }
+
+    @property
+    def test_notifications_text(self):
+        saved_search = SavedSearch(self.saved_search_data)
+        saved_search.notify_about_additions = False
+        saved_search.notify_about_updates = False
+        assert saved_search.notifications_text == "Off"
+        saved_search.notify_about_additions = True
+        assert saved_search.notifications_text == "New"
+        saved_search.notify_about_updates = True
+        assert saved_search.notifications_text == "New and updated"
+        saved_search.notify_about_additions = False
+        assert saved_search.notifications_text ==  "Updated"

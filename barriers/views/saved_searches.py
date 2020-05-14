@@ -90,7 +90,7 @@ class DeleteSavedSearch(SavedSearchMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        saved_search_id = self.kwargs.get("saved_search_id")
+        saved_search_id = str(self.kwargs.get("saved_search_id"))
         client.saved_searches.delete(saved_search_id)
         return HttpResponseRedirect(reverse("barriers:dashboard"))
 
@@ -112,7 +112,7 @@ class RenameSavedSearch(SavedSearchMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["saved_search_id"] = self.kwargs.get("saved_search_id")
+        kwargs["saved_search_id"] = str(self.kwargs.get("saved_search_id"))
         return kwargs
 
     def get_initial(self):
@@ -132,7 +132,7 @@ class SavedSearchNotifications(SavedSearchMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["saved_search_id"] = self.kwargs.get("saved_search_id")
+        kwargs["saved_search_id"] = str(self.kwargs.get("saved_search_id"))
         kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
 
