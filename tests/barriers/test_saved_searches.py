@@ -189,3 +189,45 @@ class SavedSearchTestCase(MarketAccessTestCase):
             }
         )
         assert response.context["saved_search_updated"] is True
+
+
+class NotificationsTestCase(MarketAccessTestCase):
+    saved_search_data = {
+        "id": "a18f6ddc-d4fe-48cc-afbe-8fb2e5de806f",
+        "name": "Search Name",
+        "filters": {"priority": ["MEDIUM"]},
+        "notify_about_additions": True,
+        "notify_about_updates": False,
+    }
+
+    def get_url(self):
+        return reverse(
+            "barriers:saved_search_notifications",
+            kwargs={"saved_search_id": self.saved_search_data["id"]}
+        )
+
+    @patch("utils.api.resources.APIResource.get")
+    def test_notifications_initial(self, mock_get):
+        mock_get.return_value = SavedSearch(self.saved_search_data)
+
+        response = self.client.get(self.get_url())
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["notify_about_additions"] is True
+        assert form.initial["notify_about_updates"] is False
+
+    @patch("utils.api.resources.APIResource.patch")
+    @patch("utils.api.resources.APIResource.get")
+    def test_notifications_change(self, mock_get, mock_patch):
+        mock_get.return_value = SavedSearch(self.saved_search_data)
+
+        response = self.client.post(
+            self.get_url(), data={"notify_about_updates": "1"},
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        mock_patch.assert_called_with(
+            id=self.saved_search_data["id"],
+            notify_about_additions=False,
+            notify_about_updates=True,
+        )
