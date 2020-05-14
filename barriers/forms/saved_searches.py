@@ -50,3 +50,27 @@ class RenameSavedSearchForm(BaseSavedSearchForm):
             id=self.saved_search_id,
             name=self.cleaned_data["name"],
         )
+
+
+class SavedSearchNotificationsForm(forms.Form):
+    notify_about_additions = forms.BooleanField(
+        label="Notify me when a new barrier is added",
+        required=False,
+    )
+    notify_about_updates = forms.BooleanField(
+        label="Notify me when a barrier is updated",
+        required=False,
+    )
+
+    def __init__(self, token, saved_search_id, *args, **kwargs):
+        self.token = token
+        self.saved_search_id = saved_search_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        return client.saved_searches.patch(
+            id=self.saved_search_id,
+            notify_about_additions=self.cleaned_data["notify_about_additions"],
+            notify_about_updates=self.cleaned_data["notify_about_updates"],
+        )

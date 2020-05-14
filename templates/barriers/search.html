@@ -103,8 +103,8 @@
                     <h2 class="filter-results-title filter-results-header__row-item">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
 
                     <div class="filter-results-header__row-item">
-                        {% if form.search_id.value is not None %}
-                            <a class="" href="">Notifications: off</a>
+                        {% if saved_search %}
+                            <a class="" href="{% url 'barriers:saved_search_notifications' saved_search.id %}?next=search">Notifications: {{ saved_search.notifications_text }}</a>
                         {% endif %}
 
                         {% if filters %}

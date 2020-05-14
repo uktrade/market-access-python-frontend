@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Notifications{% endblock %}
+
+{% block page_content %}
+
+    <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+    {% include 'partials/heading.html' with text='Notifications' %}
+    {% form_error_banner form %}
+
+    <section class="restrict-width">
+        <div class="saved-search saved-search--compact">
+            <h4 class="saved-search__title saved-search__title--compact">{{ saved_search.name }}</h4>
+
+            {% if saved_search.filters %}
+                <ul class="saved-search__filter-list">
+                    {% for name, value in saved_search.readable_filters.items %}
+                        <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    {% form_field_error form "notify_about_additions" %}
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1 class="govuk-fieldset__heading">Choose notifications</h1>
+                    </legend>
+                    <span class="govuk-hint">
+                        You will receive an email notification for each notification you select.
+                    </span>
+                    <div class="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="{{ form.notify_about_additions.name }}" name="{{ form.notify_about_additions.name }}" type="checkbox" value="1" {% if form.notify_about_additions.value %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="{{ form.notify_about_additions.name }}">{{ form.notify_about_additions.label }}</label>
+                        </div>
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="{{ form.notify_about_updates.name }}" name="{{ form.notify_about_updates.name }}" type="checkbox" value="1" {% if form.notify_about_updates.value %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="{{ form.notify_about_updates.name }}">{{ form.notify_about_updates.label }}</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <button class="govuk-button" data-module="govuk-button">Confirm</button>
+            <a href="{% url 'barriers:dashboard' %}" class="form-cancel">Cancel</a>
+        </form>
+    </section>
+
+{% endblock %}
