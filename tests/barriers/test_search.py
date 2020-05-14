@@ -3,7 +3,7 @@ from http import HTTPStatus
 from django.conf import settings
 from django.urls import reverse
 
-from barriers.models import Barrier
+from barriers.models import Barrier, SavedSearch
 from core.tests import MarketAccessTestCase
 from utils.metadata import get_metadata
 from utils.models import ModelList
@@ -126,6 +126,14 @@ class SearchTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
     def test_my_barriers_filter(self, mock_list, mock_get):
+        mock_get.return_value = SavedSearch(
+            data={
+                "name": "My barriers",
+                "filters": {"user": "1"},
+                "notify_about_additions": True,
+                "notify_about_updates": False,
+            }
+        )
         response = self.client.get(
             reverse("barriers:search"), data={"user": "1"},
         )
@@ -141,6 +149,14 @@ class SearchTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
     def test_my_team_barriers_filter(self, mock_list, mock_get):
+        mock_get.return_value = SavedSearch(
+            data={
+                "name": "Team barriers",
+                "filters": {"team": "1"},
+                "notify_about_additions": True,
+                "notify_about_updates": False,
+            }
+        )
         response = self.client.get(
             reverse("barriers:search"), data={"team": "1"},
         )
