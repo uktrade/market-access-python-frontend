@@ -12,6 +12,14 @@ from mock import patch
 
 
 class SearchTestCase(MarketAccessTestCase):
+    saved_search_data = {
+        "id": "a18f6ddc-d4fe-48cc-afbe-8fb2e5de806f",
+        "name": "Search Name",
+        "filters": {"priority": ["MEDIUM"]},
+        "notify_about_additions": True,
+        "notify_about_updates": False,
+    }
+
     @patch("utils.api.resources.APIResource.list")
     def test_empty_search(self, mock_list):
         response = self.client.get(reverse("barriers:search"))
@@ -145,6 +153,8 @@ class SearchTestCase(MarketAccessTestCase):
             user="1",
             archived="0",
         )
+        mock_get.assert_called_with("my-barriers")
+        assert response.context["search_title"] == "My barriers"
 
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
@@ -168,6 +178,8 @@ class SearchTestCase(MarketAccessTestCase):
             team="1",
             archived="0",
         )
+        mock_get.assert_called_with("team-barriers")
+        assert response.context["search_title"] == "Team barriers"
 
         response = self.client.get(
             reverse("barriers:search"), data={"user": "1", "team": "1"},
@@ -181,6 +193,36 @@ class SearchTestCase(MarketAccessTestCase):
             user="1",
             archived="0",
         )
+
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
+    def test_saved_search(self, mock_list, mock_get):
+        saved_search = SavedSearch(self.saved_search_data)
+        mock_get.return_value = saved_search
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"priority": "MEDIUM", "search_id": saved_search.id},
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert response.context["saved_search"].id == saved_search.id
+        assert response.context["have_filters_changed"] is False
+        assert response.context["search_title"] is saved_search.name
+
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
+    def test_saved_search_with_changed_filters(self, mock_list, mock_get):
+        saved_search = SavedSearch(self.saved_search_data)
+        mock_get.return_value = saved_search
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"priority": "MEDIUM", "search": "yo", "search_id": saved_search.id},
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert response.context["saved_search"].id == saved_search.id
+        assert response.context["have_filters_changed"] is True
+        assert response.context["search_title"] is saved_search.name
 
     @patch("utils.api.resources.APIResource.list")
     def test_archived_filter(self, mock_list):

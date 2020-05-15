@@ -16,15 +16,15 @@
             <li class="ma-card-list__item">
                 <div class="saved-search__content">
                     <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?user=1">My barriers</a></h3>
-                    {% include "barriers/partials/saved_search_badges.html" with saved_search=my_barriers_saved_search %}
+                    {% include "barriers/partials/saved_search_badges.html" with saved_search=my_barriers_saved_search my_barriers=True %}
                 </div>
 
                 <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'my-barriers' %}">Notifications: {{ my_barriers_saved_search.notifications_text }}</a>
             </li>
             <li class="ma-card-list__item">
                 <div class="saved-search__content">
-                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?team=1">Team barriers</a></h3>
-                    {% include "barriers/partials/saved_search_badges.html" with saved_search=team_barriers_saved_search %}
+                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?team=1">My team barriers</a></h3>
+                    {% include "barriers/partials/saved_search_badges.html" with saved_search=team_barriers_saved_search team_barriers=True %}
                 </div>
 
                 <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'team-barriers' %}">Notifications: {{ team_barriers_saved_search.notifications_text }}</a>

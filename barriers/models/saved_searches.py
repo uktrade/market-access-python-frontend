@@ -33,8 +33,8 @@ class SavedSearch(APIModel):
     def notifications_text(self):
         if self.notify_about_additions:
             if self.notify_about_updates:
-                return "New and updated"
-            return "New"
+                return "NEW and UPDATED"
+            return "NEW"
         elif self.notify_about_updates:
-            return "Updated"
+            return "UPDATED"
         return "Off"
