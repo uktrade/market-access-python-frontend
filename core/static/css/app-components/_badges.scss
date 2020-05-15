@@ -7,6 +7,18 @@
     display: inline-block;
     margin-right: govuk-em( 4, 16 );
     font-weight: bold;
+    text-decoration: none;
+    &:link,
+    &:visited,
+    &:active,
+    &:hover {
+      color: $govuk-white;
+      background-color: $govuk-dark-grey;
+      text-decoration: none;
+    }
+    &:focus {
+      outline: none;
+    }
 
     &--new {
         background-color: $govuk-green;

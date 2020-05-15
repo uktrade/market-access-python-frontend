@@ -1,4 +1,4 @@
-<p><span class="ma-badge">{{ saved_search.barrier_count }} barrier{{ saved_search.barrier_count|pluralize }}</span> in total</p>
+<p><a class="ma-badge" href="{% url 'barriers:search' %}?{{ saved_search.querystring }}{% if not my_barriers and not team_barriers %}&search_id={{ saved_search.id }}{% endif %}">{{ saved_search.barrier_count }} barrier{{ saved_search.barrier_count|pluralize }}</a></p>
 <p>
     {% if saved_search.new_count > 0 %}
         <span class="ma-badge ma-badge--new">{{ saved_search.new_count }} new</span>
