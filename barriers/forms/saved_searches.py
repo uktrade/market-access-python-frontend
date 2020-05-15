@@ -6,7 +6,7 @@ from utils.api.client import MarketAccessAPIClient
 class BaseSavedSearchForm(forms.Form):
     name = forms.CharField(
         label="Saved search name",
-        max_length=25,
+        max_length=50,
         error_messages={
             "required": "Enter a name for this search",
             "max_length": "Name should be %(limit_value)d characters or fewer",

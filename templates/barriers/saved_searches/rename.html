@@ -2,6 +2,14 @@
 
 {% block page_title %}{{ block.super }} - Rename saved search{% endblock %}
 
+{% block body_script %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
 {% block page_content %}
 
     <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
@@ -26,12 +34,18 @@
         <form action="" method="POST">
             {% csrf_token %}
 
-            <div id="{{ form.name.name }}" class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
-                <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
+            <div class="govuk-character-count" data-module="character-count" data-maxlength="{{ form.name.field.max_length }}">
+                <div id="{{ form.name.name }}" class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
+                    <label class="govuk-label govuk-label--s" for="name">{{ form.name.label }}</label>
 
-                {% form_field_error form "name" %}
+                    {% form_field_error form "name" %}
 
-                <input class="govuk-input{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
+                    <input class="govuk-input js-character-count{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
+
+                    <span id="{{ form.name.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+                        You can enter up to {{ form.name.field.max_length }} characters
+                    </span>
+                </div>
             </div>
 
             <input type="submit" value="Save" class="govuk-button">
