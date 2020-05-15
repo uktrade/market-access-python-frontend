@@ -42,6 +42,7 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(form=form, **kwargs)
+        context_data.update(self.get_saved_search_context_data(form))
         barriers = self.get_barriers(form)
         context_data.update(
             {
@@ -56,7 +57,6 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)
-        context_data = self.update_context_data_for_saved_search(context_data, form)
         return context_data
 
     def get_barriers(self, form):
@@ -79,7 +79,8 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
         elif filters == {"team": "1"}:
             return self.client.saved_searches.get("team-barriers")
 
-    def update_context_data_for_saved_search(self, context_data, form):
+    def get_saved_search_context_data(self, form):
+        context_data = {}
         saved_search = self.get_saved_search(form)
         if saved_search:
             context_data["saved_search"] = saved_search
