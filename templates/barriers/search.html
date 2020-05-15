@@ -62,12 +62,8 @@
         <div class="govuk-grid-column-three-quarters">
 
             <div class="filter-results-header">
-                {% if saved_search %}
-                    <h2 class="search-title">{{ saved_search.name }}</h2>
-                {% elif search_title %}
+                {% if search_title %}
                     <h2 class="search-title">{{ search_title }}</h2>
-                {% elif member %}
-                    <h2 class="search-title">{{ member.user.full_name }}</h2>
                 {% endif %}
 
                 {% if filters %}

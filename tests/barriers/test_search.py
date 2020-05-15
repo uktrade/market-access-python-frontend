@@ -153,6 +153,7 @@ class SearchTestCase(MarketAccessTestCase):
             user="1",
             archived="0",
         )
+        mock_get.assert_called_with("my-barriers")
         assert response.context["search_title"] == "My barriers"
 
     @patch("utils.api.resources.APIResource.get")
@@ -177,6 +178,8 @@ class SearchTestCase(MarketAccessTestCase):
             team="1",
             archived="0",
         )
+        mock_get.assert_called_with("team-barriers")
+        assert response.context["search_title"] == "Team barriers"
 
         response = self.client.get(
             reverse("barriers:search"), data={"user": "1", "team": "1"},
@@ -190,7 +193,6 @@ class SearchTestCase(MarketAccessTestCase):
             user="1",
             archived="0",
         )
-        assert response.context["search_title"] == "Team barriers"
 
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
