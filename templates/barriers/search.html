@@ -101,7 +101,7 @@
 
                     <div class="filter-results-header__row-item">
                         {% if saved_search %}
-                            <a class="" href="{% url 'barriers:saved_search_notifications' saved_search.id %}?next=search">Notifications: {{ saved_search.notifications_text }}</a>
+                            <a class="filter-results-notifications-link" href="{% url 'barriers:saved_search_notifications' saved_search.id %}?next=search">Notifications: {{ saved_search.notifications_text }}</a>
                         {% endif %}
 
                         {% if filters %}
