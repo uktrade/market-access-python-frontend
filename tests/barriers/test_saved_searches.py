@@ -1,12 +1,9 @@
 from http import HTTPStatus
 
-from django.conf import settings
 from django.urls import reverse
 
 from barriers.models import SavedSearch
 from core.tests import MarketAccessTestCase
-
-from utils.models import ModelList
 
 from mock import patch
 
