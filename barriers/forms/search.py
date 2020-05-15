@@ -6,12 +6,12 @@ from django.http import QueryDict
 
 
 class BarrierSearchForm(forms.Form):
-    edit = forms.IntegerField(required=False, widget=forms.HiddenInput())
+    search_id = forms.UUIDField(required=False, widget=forms.HiddenInput())
     search = forms.CharField(label="Search", max_length=255, required=False)
     country = forms.MultipleChoiceField(label="Barrier location", required=False,)
     trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
     sector = forms.MultipleChoiceField(label="Sector", required=False,)
-    type = forms.MultipleChoiceField(label="Barrier type", required=False,)
+    category = forms.MultipleChoiceField(label="Category", required=False,)
     region = forms.MultipleChoiceField(label="Overseas region", required=False,)
     priority = forms.MultipleChoiceField(label="Barrier priority", required=False,)
     status = forms.MultipleChoiceField(label="Barrier status", required=False,)
@@ -47,7 +47,7 @@ class BarrierSearchForm(forms.Form):
         self.set_country_choices()
         self.set_trade_direction_choices()
         self.set_sector_choices()
-        self.set_barrier_type_choices()
+        self.set_category_choices()
         self.set_region_choices()
         self.set_priority_choices()
         self.set_status_choices()
@@ -59,12 +59,12 @@ class BarrierSearchForm(forms.Form):
         Get form data from the GET parameters.
         """
         cleaned_data = {
-            "edit": data.get("edit"),
+            "search_id": data.get("search_id"),
             "search": data.get("search"),
             "country": data.getlist("country"),
             "trade_direction": data.getlist("trade_direction"),
             "sector": data.getlist("sector"),
-            "type": data.getlist("type"),
+            "category": data.getlist("category"),
             "region": data.getlist("region"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
@@ -92,15 +92,15 @@ class BarrierSearchForm(forms.Form):
             for sector in self.metadata.get_sector_list(level=0)
         ]
 
-    def set_barrier_type_choices(self):
+    def set_category_choices(self):
         choices = [
-            (str(barrier_type["id"]), barrier_type["title"])
-            for barrier_type in self.metadata.data["barrier_types"]
+            (str(category["id"]), category["title"])
+            for category in self.metadata.data["categories"]
         ]
         choices = list(set(choices))
         choices.sort(key=itemgetter(1))
-        choices = [("", "All barrier types")] + choices
-        self.fields["type"].choices = choices
+        choices = [("", "All categories")] + choices
+        self.fields["category"].choices = choices
 
     def set_region_choices(self):
         choices = [
@@ -206,13 +206,14 @@ class BarrierSearchForm(forms.Form):
 
     def get_api_search_parameters(self):
         params = {}
-        params["text"] = self.cleaned_data.get("search")
+        params["search_id"] = self.cleaned_data.get("search_id")
+        params["search"] = self.cleaned_data.get("search")
         params["location"] = ",".join(
             self.cleaned_data.get("country", []) + self.cleaned_data.get("region", [])
         )
         params["trade_direction"] = ",".join(self.cleaned_data.get("trade_direction", []))
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
-        params["barrier_type"] = ",".join(self.cleaned_data.get("type", []))
+        params["category"] = ",".join(self.cleaned_data.get("category", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
@@ -233,6 +234,9 @@ class BarrierSearchForm(forms.Form):
             for key, value in self.cleaned_data.items()
             if value and not self.fields[key].widget.is_hidden
         }
+
+    def get_raw_filters_querystring(self):
+        return urlencode(self.get_raw_filters(), doseq=True)
 
     def get_filter_readable_value(self, field_name, value):
         field = self.fields[field_name]

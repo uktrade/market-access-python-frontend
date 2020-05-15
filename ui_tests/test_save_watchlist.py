@@ -9,7 +9,7 @@ def test_save_watchlist(browser):
     """
     A saved watchlist should show the same results on the dashboard
     """
-    browser.visit(f"{settings.BASE_URL}find-a-barrier")
+    browser.visit(f"{settings.BASE_URL}search")
 
     checkbox = browser.find_by_css("input[name=priority][value='UNKNOWN']")
     checkbox.find_by_xpath("./following-sibling::label").click()
@@ -58,7 +58,7 @@ def test_watchlist_limit(browser):
         create_new_watchlist(browser, name=f"Watchlist {i}")
 
     # Save a watchlist
-    browser.visit(f"{settings.BASE_URL}find-a-barrier")
+    browser.visit(f"{settings.BASE_URL}search")
     checkbox = browser.find_by_css("input[name=priority][value='HIGH']")
     checkbox.find_by_xpath("./following-sibling::label").click()
     browser.find_by_css('input[type=submit][value="Apply filters"]').first.click()

@@ -44,13 +44,13 @@
         <nav class="datahub-header__navigation-wrapper datahub-header__navigation-wrapper--sub" aria-labelledby="sub-navigation">
             <ul id="sub-navigation" class="datahub-header__navigation" aria-label="Second Level Navigation">
                 <li class="datahub-header__navigation__item">
-                    <a class="datahub-header__navigation__item__link{% if page == 'dashboard' or page == 'draft-barriers' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
+                    <a class="datahub-header__navigation__item__link{% if page == 'dashboard' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
                 </li>
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link{% if page == 'add-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'reports:new_report' %}">Report a barrier</a>
                 </li>
                 <li class="datahub-header__navigation__item">
-                    <a class="datahub-header__navigation__item__link{% if page == 'find-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:find_a_barrier' %}">Find a barrier</a>
+                    <a class="datahub-header__navigation__item__link{% if page == 'search' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:search' %}">Search</a>
                 </li>
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>

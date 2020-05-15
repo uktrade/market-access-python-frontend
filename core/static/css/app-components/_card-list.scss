@@ -1,0 +1,16 @@
+.ma-card-list {
+    @extend .govuk-list;
+    font-size: 16px;
+    > li {
+        margin: 0;
+    }
+}
+
+.ma-card-list__item {
+    @include govuk-clearfix;
+    border-bottom: 1px solid $govuk-grey-3;
+    padding: govuk-em( 24, 16 ) 0;
+    &:first-child {
+        border-top: 1px solid $govuk-grey-3;
+    }
+}

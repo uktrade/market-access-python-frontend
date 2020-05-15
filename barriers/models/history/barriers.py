@@ -29,7 +29,7 @@ class CategoriesHistoryItem(BaseHistoryItem):
 
     def get_value(self, value):
         category_names = [
-            self.metadata.get_barrier_type(category).get("title")
+            self.metadata.get_category(category).get("title")
             for category in value or []
         ]
         category_names.sort()

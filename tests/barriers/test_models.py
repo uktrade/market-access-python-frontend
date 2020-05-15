@@ -1,7 +1,7 @@
 import datetime
 from core.tests import MarketAccessTestCase
 
-from barriers.models import Barrier, Company, Watchlist
+from barriers.models import Barrier, Company, SavedSearch
 
 
 class BarrierModelTestCase(MarketAccessTestCase):
@@ -21,8 +21,8 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.source_name == "Government entity"
         assert barrier.status["name"] == "Resolved: In full"
         assert barrier.title == "Import quota for sports cars"
-        assert barrier.types[0]["title"] == "Import quotas"
-        assert barrier.types[1]["title"] == "Tariffs or import duties"
+        assert barrier.categories[0]["title"] == "Import quotas"
+        assert barrier.categories[1]["title"] == "Tariffs or import duties"
 
         assert barrier.is_resolved is True
         assert barrier.is_partially_resolved is False
@@ -48,17 +48,9 @@ class CompanyModelTestCase(MarketAccessTestCase):
         assert company.created_on.date() == datetime.date(2020, 1, 1)
 
 
-class WatchlistModelTestCase(MarketAccessTestCase):
-    old_user_watchlist = {
-        "name": "Old user watchlist",
-        "filters": {"search": ["Test"], "createdBy": ["1"]},
-    }
-    old_team_watchlist = {
-        "name": "Old team watchlist",
-        "filters": {"search": ["Test"], "createdBy": ["2"]},
-    }
-    complex_watchlist = {
-        "name": "Complex",
+class SavedSearchModelTestCase(MarketAccessTestCase):
+    saved_search_data = {
+        "name": "Saved Search",
         "filters": {
             "search": "Test",
             "country": ["9f5f66a0-5d95-e211-a939-e4115bead28a"],
@@ -66,7 +58,7 @@ class WatchlistModelTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
-            "type": ["127"],
+            "category": ["127"],
             "region": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
             "priority": ["HIGH", "MEDIUM"],
             "status": ["2", "3"],
@@ -74,27 +66,19 @@ class WatchlistModelTestCase(MarketAccessTestCase):
         },
     }
 
-    def test_field_conversion_user(self):
-        watchlist = Watchlist(**self.old_user_watchlist)
-        assert watchlist.filters == {"search": "Test", "user": 1}
-
-    def test_field_conversion_team(self):
-        watchlist = Watchlist(**self.old_team_watchlist)
-        assert watchlist.filters == {"search": "Test", "team": 1}
-
     def test_readable_filters(self):
-        watchlist = Watchlist(**self.complex_watchlist)
-        assert watchlist.readable_filters["search"] == {
+        saved_search = SavedSearch(self.saved_search_data)
+        assert saved_search.readable_filters["search"] == {
             "label": "Search",
             "readable_value": "Test",
             "value": "Test",
         }
-        assert watchlist.readable_filters["country"] == {
+        assert saved_search.readable_filters["country"] == {
             "label": "Barrier location",
             "readable_value": "Australia",
             "value": ["9f5f66a0-5d95-e211-a939-e4115bead28a"],
         }
-        assert watchlist.readable_filters["sector"] == {
+        assert saved_search.readable_filters["sector"] == {
             "label": "Sector",
             "readable_value": "Aerospace, Food and Drink",
             "value": [
@@ -102,17 +86,17 @@ class WatchlistModelTestCase(MarketAccessTestCase):
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
         }
-        assert watchlist.readable_filters["type"] == {
-            "label": "Barrier type",
+        assert saved_search.readable_filters["category"] == {
+            "label": "Category",
             "readable_value": "Government subsidies",
             "value": ["127"],
         }
-        assert watchlist.readable_filters["region"] == {
+        assert saved_search.readable_filters["region"] == {
             "label": "Overseas region",
             "readable_value": "Europe",
             "value": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
         }
-        assert watchlist.readable_filters["priority"] == {
+        assert saved_search.readable_filters["priority"] == {
             "label": "Barrier priority",
             "readable_value": (
                 "<span class='priority-marker priority-marker--high'>"
@@ -122,31 +106,26 @@ class WatchlistModelTestCase(MarketAccessTestCase):
             ),
             "value": ["HIGH", "MEDIUM"],
         }
-        assert watchlist.readable_filters["status"] == {
+        assert saved_search.readable_filters["status"] == {
             "label": "Barrier status",
             "readable_value": "Open: In progress, Resolved: In part",
             "value": ["2", "3"],
         }
-        assert watchlist.readable_filters["show"] == {
+        assert saved_search.readable_filters["show"] == {
             "label": "Show",
             "readable_value": "My barriers",
             "value": ["1"],
         }
 
-    def test_get_api_params(self):
-        watchlist = Watchlist(**self.complex_watchlist)
-        assert watchlist.get_api_params() == {
-            "text": "Test",
-            "location": (
-                "9f5f66a0-5d95-e211-a939-e4115bead28a,"
-                "3e6809d6-89f6-4590-8458-1d0dab73ad1a"
-            ),
-            "sector": (
-                "9538cecc-5f95-e211-a939-e4115bead28a,"
-                "a538cecc-5f95-e211-a939-e4115bead28a"
-            ),
-            "barrier_type": "127",
-            "priority": "HIGH,MEDIUM",
-            "status": "2,3",
-            "user": 1,
-        }
+    @property
+    def test_notifications_text(self):
+        saved_search = SavedSearch(self.saved_search_data)
+        saved_search.notify_about_additions = False
+        saved_search.notify_about_updates = False
+        assert saved_search.notifications_text == "Off"
+        saved_search.notify_about_additions = True
+        assert saved_search.notifications_text == "NEW"
+        saved_search.notify_about_updates = True
+        assert saved_search.notifications_text == "NEW and UPDATED"
+        saved_search.notify_about_additions = False
+        assert saved_search.notifications_text == "UPDATED"

@@ -8,22 +8,22 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Define barrier category' %}
+    {% include 'partials/heading.html' with text='Define category' %}
     {% form_error_banner form %}
 
     <h3 class="report-sectors-heading">Save or add another category</h3>
 
     <div class="selection-list restrict-width">
-        <h3 class="selection-list__heading">Selected barrier categories</h3>
-            {% if barrier_types %}
+        <h3 class="selection-list__heading">Selected categories</h3>
+            {% if categories %}
                 <ul class="selection-list__list">
-                    {% for item in barrier_types %}
+                    {% for item in categories %}
                         <li class="selection-list__list__item">
                             <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.title }}
 
-                            <form action="{% url 'barriers:remove_type' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
+                            <form action="{% url 'barriers:remove_category' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
                                 {% csrf_token %}
-                                <input type="hidden" name="barrier_type_id" value="{{ item.id }}">
+                                <input type="hidden" name="category_id" value="{{ item.id }}">
                                 <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
                             </form>
                         </li>
@@ -31,7 +31,7 @@
                 </ul>
             {% endif %}
 
-        <a href="{% url 'barriers:add_type' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another category</a>
+        <a href="{% url 'barriers:add_category' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another category</a>
     </div>
 
     <form action="" method="POST">

@@ -21,7 +21,7 @@
         "barrier_title": "Import quota for sports cars",
         "summary": "Because of laws for pollution reduction, which Parlament imposed under pressure from EU, they are limiting the imports of sports cars.",
         "is_summary_sensitive": false,
-        "barrier_types": [115, 141],
+        "categories": [115, 141],
         "reported_on": "2019-10-28T11:45:44.720000Z",
         "reported_by": "Boris Karaberberov",
         "status": {
@@ -74,7 +74,7 @@
             "order": 0
         },
         "is_summary_sensitive": false,
-        "barrier_types": [111, 115, 130, 141],
+        "categories": [111, 115, 130, 141],
         "created_on": "2019-11-14T18:32:34.384000Z",
         "modified_on": "2020-01-23T09:21:25.371626Z"
     },
@@ -104,7 +104,7 @@
             "order": 0
         },
         "is_summary_sensitive": false,
-        "barrier_types": [129],
+        "categories": [129],
         "created_on": "2019-03-20T15:25:59.033000Z",
         "modified_on": "2019-04-10T11:33:09.851000Z"
     },
@@ -134,7 +134,7 @@
             "order": 0
         },
         "is_summary_sensitive": false,
-        "barrier_types": [],
+        "categories": [],
         "created_on": "2019-06-19T15:17:23.776000Z",
         "modified_on": "2019-07-24T18:29:37.083000Z"
     }
