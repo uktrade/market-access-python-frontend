@@ -7,6 +7,6 @@
         <span class="ma-badge ma-badge--updated">{{ saved_search.updated_count }} updated</span>
     {% endif %}
     {% if saved_search.new_count > 0 or saved_search.updated_count > 0 %}
-        since you last viewed this saved search
+        since you last viewed {% if my_barriers %}My barriers{% elif team_barriers %}My team barriers{% else %}this saved search{% endif%}
     {% endif %}
 </p>

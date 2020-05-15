@@ -5,10 +5,10 @@ from utils.api.client import MarketAccessAPIClient
 
 class BaseSavedSearchForm(forms.Form):
     name = forms.CharField(
-        label="Name",
+        label="Saved search name",
         max_length=25,
         error_messages={
-            "required": "Enter a name for your saved search",
+            "required": "Enter a name for this search",
             "max_length": "Name should be %(limit_value)d characters or fewer",
         },
     )
@@ -22,7 +22,9 @@ class BaseSavedSearchForm(forms.Form):
         client = MarketAccessAPIClient(self.token)
         saved_searches = client.saved_searches.list(name=name)
         if saved_searches:
-            raise forms.ValidationError("Name already in use. Choose a new name.")
+            raise forms.ValidationError(
+                "Search name already in use - please use another name"
+            )
         return name
 
 
@@ -54,11 +56,11 @@ class RenameSavedSearchForm(BaseSavedSearchForm):
 
 class SavedSearchNotificationsForm(forms.Form):
     notify_about_additions = forms.BooleanField(
-        label="Notify me when a new barrier is added",
+        label="Notify me when a new or existing barrier meets the search criteria",
         required=False,
     )
     notify_about_updates = forms.BooleanField(
-        label="Notify me when a barrier is updated",
+        label="Notify me when a barrier that meets the search criteria is updated",
         required=False,
     )
 

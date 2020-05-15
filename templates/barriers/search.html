@@ -70,13 +70,13 @@
                     <div class="filter-results-header__row">
                         {% if have_filters_changed %}
                             <div class="filter-results-header__row-item">
-                                <p class="filter-results-header__info">You have unsaved changes.</p>
+                                <p class="filter-results-header__info">You have changed this search but not saved it</p>
                             </div>
                         {% endif %}
 
                         {% if saved_search_updated or saved_search_created %}
                             <div class="filter-results-header__row-item">
-                                <p class="filter-results-header__info">Your search has been successfully saved.</p>
+                                <p class="filter-results-header__info">Your search has been successfully saved</p>
                             </div>
                         {% endif %}
 
@@ -87,10 +87,10 @@
                                         {% csrf_token %}
                                         <button class="govuk-button button-as-link filter-results-header__update-button" name="update_search" value="1">Update saved search</button>
                                     </form>
-                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>
+                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as a new search</a>
                                 {% endif %}
                             {% elif filters and not search_title %}
-                                <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as new search</a>
+                                <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save search</a>
                             {% endif %}
                         </div>
                     </div>
@@ -139,9 +139,9 @@
                 {% if barriers %}
                     <span class="filter-results-download__text">
                     {% if barriers.total_count == 1 %}
-                        You can download this barrier
+                        Download this barrier to a spreadsheet
                     {% else %}
-                        You can download these {{ barriers.total_count }} barriers
+                        Download these {{ barriers.total_count }} barriers to a spreadsheet
                     {% endif %}
                     </span>
                     <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">Download</a>

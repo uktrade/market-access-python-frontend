@@ -124,8 +124,8 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
         saved_search.notify_about_updates = False
         assert saved_search.notifications_text == "Off"
         saved_search.notify_about_additions = True
-        assert saved_search.notifications_text == "New"
+        assert saved_search.notifications_text == "NEW"
         saved_search.notify_about_updates = True
-        assert saved_search.notifications_text == "New and updated"
+        assert saved_search.notifications_text == "NEW and UPDATED"
         saved_search.notify_about_additions = False
-        assert saved_search.notifications_text == "Updated"
+        assert saved_search.notifications_text == "UPDATED"
