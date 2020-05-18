@@ -46,7 +46,9 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 # Application definition
 
-if not DEBUG:
+ELASTIC_APM_ENABLED = env("ELASTIC_APM_ENABLED", default=not DEBUG)
+
+if ELASTIC_APM_ENABLED:
     ELASTIC_APM = {
         "SERVICE_NAME": "market-access-pyfe",
         "SECRET_TOKEN": env("ELASTIC_APM_SECRET_TOKEN"),
@@ -87,7 +89,7 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = BASE_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-if not DEBUG:
+if ELASTIC_APM_ENABLED:
     INSTALLED_APPS.append('elasticapm.contrib.django')
 
 MIDDLEWARE = [
