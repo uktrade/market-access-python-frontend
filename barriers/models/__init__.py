@@ -4,5 +4,5 @@ from .companies import Company  # noqa
 from .documents import Document  # noqa
 from .history import HistoryItem  # noqa
 from .notes import Note  # noqa
-from .watchlists import Watchlist  # noqa
+from .saved_searches import SavedSearch  # noqa
 from .wto import WTOProfile  # noqa

@@ -107,8 +107,6 @@ ROOT_URLCONF = 'config.urls'
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
-SESSION_ENGINE = "users.sessions"
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -255,8 +253,6 @@ FILE_SCAN_STATUS_CHECK_INTERVAL = env.int(
 ALLOWED_FILE_TYPES = env.list("ALLOWED_FILE_TYPES", default=["text/csv", "image/jpeg"])
 
 API_RESULTS_LIMIT = env.int('API_RESULTS_LIMIT', default=100)
-MAX_WATCHLIST_LENGTH = env.int('MAX_WATCHLIST_LENGTH', default=3)
-MAX_WATCHLIST_NAME_LENGTH = env.int('MAX_WATCHLIST_NAME_LENGTH', default=25)
 
 # Logging
 # ============================================
@@ -302,7 +298,6 @@ if not DEBUG:
 # Settings made available in templates
 SETTINGS_EXPORT = (
     'DJANGO_ENV',
-    'MAX_WATCHLIST_LENGTH',
     'DATAHUB_DOMAIN',
     'GTM_ID',
     'GTM_AUTH',

@@ -4,7 +4,7 @@ import time
 from django.conf import settings
 
 from barriers.constants import Statuses
-from barriers.models import Assessment, Barrier, HistoryItem, Note
+from barriers.models import Assessment, Barrier, HistoryItem, Note, SavedSearch
 from reports.models import Report
 from users.models import User
 
@@ -36,7 +36,7 @@ class APIResource:
         return self.model(self.client.patch(url, json=kwargs))
 
     def create(self, *args, **kwargs):
-        return self.model(self.client.post(self.resource_name, data=kwargs))
+        return self.model(self.client.post(self.resource_name, json=kwargs))
 
     def update(self, id, *args, **kwargs):
         url = f"{self.resource_name}/{id}"
@@ -214,3 +214,8 @@ class ReportsResource(APIResource):
 
     def submit(self, barrier_id):
         return self.client.put(f"reports/{barrier_id}/submit")
+
+
+class SavedSearchesResource(APIResource):
+    resource_name = "saved-searches"
+    model = SavedSearch

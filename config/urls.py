@@ -31,8 +31,4 @@ urlpatterns += [
     path("", include("barriers.urls", namespace="barriers")),
     path("", include("reports.urls", namespace="reports")),
     path("", include("healthcheck.urls", namespace="healthcheck")),
-    # path("documents/<uuid:uuid>/download/", DownloadDocument.as_view(), name="download_document"),
-    # path("watch-list/save/", SaveWatchList.as_view(), name="save_watch_list"),
-    # path("watch-list/rename/<int:index>/", RenameWatchList.as_view(), name="rename_watch_list"),
-    # path("watch-list/remove/<int:index>/", RemoveWatchList.as_view(), name="remove_watch_list"),
 ]

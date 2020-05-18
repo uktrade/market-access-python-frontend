@@ -40,7 +40,7 @@ def test_my_team_barriers(browser):
     browser.fill("role", "Test Role")
     browser.find_by_css("input[type=submit]").first.click()
 
-    browser.visit(f"{settings.BASE_URL}find-a-barrier")
+    browser.visit(f"{settings.BASE_URL}search")
     browser.find_by_css('label[for="team"]').first.click()
     browser.find_by_css('input[type=submit][value="Apply filters"]').first.click()
 

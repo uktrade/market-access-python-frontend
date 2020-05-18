@@ -263,38 +263,38 @@ class Metadata:
         }
         return assessment_names.get(assessment_code)
 
-    def get_barrier_type_list(self, sort=True):
+    def get_category_list(self, sort=True):
         """
         Dedupe and sort the barrier types
         """
         ids = []
-        unique_barrier_types = []
-        for barrier_type in self.data.get("barrier_types"):
-            if barrier_type["id"] not in ids:
-                unique_barrier_types.append(barrier_type)
-                ids.append(barrier_type["id"])
+        unique_categories = []
+        for category in self.data.get("categories"):
+            if category["id"] not in ids:
+                unique_categories.append(category)
+                ids.append(category["id"])
 
         if sort:
-            unique_barrier_types.sort(key=itemgetter("title"))
-        return unique_barrier_types
+            unique_categories.sort(key=itemgetter("title"))
+        return unique_categories
 
-    def get_barrier_type(self, type_id):
-        for barrier_type in self.data["barrier_types"]:
-            if str(barrier_type["id"]) == str(type_id):
-                return barrier_type
+    def get_category(self, category_id):
+        for category in self.data["categories"]:
+            if str(category["id"]) == str(category_id):
+                return category
 
-    def get_barrier_types_by_category(self, category):
+    def get_categories_by_group(self, group):
         return [
             barrier_type
-            for barrier_type in self.get_barrier_type_list(sort=False)
-            if barrier_type["category"] == category
+            for barrier_type in self.get_category_list(sort=False)
+            if barrier_type["category"] == group
         ]
 
     def get_goods(self):
-        return self.get_barrier_types_by_category("GOODS")
+        return self.get_categories_by_group("GOODS")
 
     def get_services(self):
-        return self.get_barrier_types_by_category("SERVICES")
+        return self.get_categories_by_group("SERVICES")
 
     def get_impact_text(self, impact_code):
         return self.data.get("assessment_impact", {}).get(impact_code)

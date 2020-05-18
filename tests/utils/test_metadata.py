@@ -132,23 +132,23 @@ class MetadataTestCase(MarketAccessTestCase):
         metadata = get_metadata()
         assert metadata.get_assessment_name("impact") == "Economic assessment"
 
-    def test_get_barrier_type_list(self):
+    def test_get_category_list(self):
         metadata = get_metadata()
-        barrier_types = metadata.get_barrier_type_list()
-        titles = [barrier_type["title"] for barrier_type in barrier_types]
+        categories = metadata.get_category_list()
+        titles = [category["title"] for category in categories]
 
         assert "Customs procedures" in titles
         assert "Government subsidies" in titles
         assert "Rules of origin" in titles
         assert "Tariffs or import duties" in titles
 
-    def test_get_barrier_type(self):
+    def test_get_category(self):
         metadata = get_metadata()
 
-        barrier_type = metadata.get_barrier_type("130")
+        category = metadata.get_category("130")
 
-        assert barrier_type["title"] == "Price controls"
-        assert barrier_type["category"] == "GOODS"
+        assert category["title"] == "Price controls"
+        assert category["category"] == "GOODS"
 
     def test_get_goods(self):
         metadata = get_metadata()

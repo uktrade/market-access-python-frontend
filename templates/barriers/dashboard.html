@@ -11,84 +11,60 @@
 {% block page_content %}
     {% include 'barriers/partials/dashboard_heading.html' %}
 
-    {% if selected_watchlist %}
-        <div class="dashboard-results-header">
-            <h2 class="dashboard-results-header__title">{{ barriers.total_count }}<span class="dashboard-results-header__title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
-            <div class="dashboard-results-header__link-wrapper js-toggle-box-control">
-                <a class="dashboard-results-header__link js-list-link js-only" href="{% url 'barriers:find_a_barrier' %}?{{ selected_watchlist.querystring }}&edit={{ watchlist_index }}"> Edit list filters </a>
-                <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:rename_watchlist' watchlist_index %}"> Rename list </a>
-                <a class="dashboard-results-header__link js-list-link" href="{% url 'barriers:remove_watchlist' watchlist_index %}"> Delete list </a>
-            </div>
-            <div class="toggle-box">
-                {% if selected_watchlist.filters %}
-                    <ul>
-                        {% for name, value in selected_watchlist.readable_filters.items %}
-                            <li>{{ value.label }}: <strong>{{ value.readable_value|striptags }}</strong></li>
-                        {% endfor %}
-                    </ul>
-                    <a href="{% url 'barriers:find_a_barrier' %}?{{ selected_watchlist.querystring }}&edit={{ watchlist_index }}">Edit list filters</a>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
+    <section>
+        <ul class="ma-card-list">
+            <li class="ma-card-list__item">
+                <div class="saved-search__content">
+                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?user=1">My barriers</a></h3>
+                    {% include "barriers/partials/saved_search_badges.html" with saved_search=my_barriers_saved_search my_barriers=True %}
+                </div>
 
-    {% if barriers %}
+                <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'my-barriers' %}">Notifications: {{ my_barriers_saved_search.notifications_text }}</a>
+            </li>
+            <li class="ma-card-list__item">
+                <div class="saved-search__content">
+                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?team=1">My team barriers</a></h3>
+                    {% include "barriers/partials/saved_search_badges.html" with saved_search=team_barriers_saved_search team_barriers=True %}
+                </div>
 
-        {% if pagination.total_pages > 1 %}
-        <p class="filter-results-pagination-summary">
-            Page {{ pagination.current_page }} of {{ pagination.total_pages }}
-        </p>
-        {% endif %}
+                <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'team-barriers' %}">Notifications: {{ team_barriers_saved_search.notifications_text }}</a>
+            </li>
+            <li class="ma-card-list__item">
+                <h3 class="saved-search__title"><a href="{% url 'reports:draft_barriers' %}">Draft barriers</a></h3>
+                <p><span class="ma-badge">{{ draft_barriers|length }} draft barrier{{ draft_barriers|pluralize }}</span></p>
+            </li>
+        </ul>
+    </section>
 
-        <div class="overflow-wrapper">
-        <table class="standard-table standard-table--barriers">
-            <thead>
-                <tr class="standard-table__heading-row">
-                    {% include 'partials/table_heading.html' with text="Priority" field='priority' %}
-                    {% include 'partials/table_heading.html' with text="Last updated" field='modified_on' %}
-                    {% include 'partials/table_heading.html' with text="Barrier title" %}
-                    {% include 'partials/table_heading.html' with text="Sectors affected" %}
-                    {% include 'partials/table_heading.html' with text="Barrier location" field='export_country' %}
-                    {% include 'partials/table_heading.html' with text="Status" field='status' %}
-                    {% include 'partials/table_heading.html' with text="Date reported" field='reported_on' %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for barrier in barriers %}
-                <tr class="standard-table__row">
-                    <td class="standard-table__cell"><span class="priority-marker priority-marker--{{ barrier.priority.code|lower }}"></span>{{ barrier.priority.name }}</td>
-                    <td class="standard-table__cell">{{ barrier.modified_on|date:"j F Y" }}</td>
-                    <td class="standard-table__cell">
-                        <a class="dashboard-table__barrier-title" href="{% url 'barriers:barrier_detail' barrier.id %}">
-                            {{ barrier.title }}
-                        </a>
-                        {{ barrier.code }}
-                    </td>
-                    <td class="standard-table__cell">
-                        {% include 'partials/collapsible.html' with items=barrier.sector_names %}
-                    </td>
-                    <td class="standard-table__cell">{{ barrier.country.name }}</td>
-                    <td class="standard-table__cell"><span class="barrier-status-table-badge barrier-status-table-badge--{{ barrier.status.modifier }}">{{ barrier.status.name }}</span></td>
-                    <td class="standard-table__cell">{{ barrier.reported_on|date:"j F Y" }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        </div>
+    <section>
+        <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ saved_searches|length }}</span> saved search{{ saved_searches|length|pluralize:"es" }}</h2>
 
-        {% include 'partials/pagination.html' %}
+        <ul class="ma-card-list">
+            {% for saved_search in saved_searches %}
+                <li class="ma-card-list__item saved-search">
+                    <div class="saved-search__content">
+                        <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a></h3>
 
-    {% elif selected_watchlist %}
-        <div class="no-results-box">
-            <p><strong>There are no barriers for your search yet</strong></p>
-            <p> We'll update your watch list if you get a match. Or you can <a href="{% url 'barriers:find_a_barrier' %}?{{ selected_watchlist.querystring }}&edit={{ watchlist_index }}"> edit your search </a></p>
-        </div>
-    {% else %}
-        <div class="no-results-box">
-            <p><strong>Your watch list</strong></p>
-            <p> You can create your own list of existing barriers to watch. For example, all barriers in a certain country, or all barriers in a specific sector. </p>
-            <a href="{% url 'barriers:find_a_barrier' %}"> Create your watch list </a>
-        </div>
-    {% endif %}
+                        {% include "barriers/partials/saved_search_badges.html" %}
+
+                        {% if saved_search.filters %}
+                            <ul class="saved-search__filter-list">
+                                {% for name, value in saved_search.readable_filters.items %}
+                                    <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' saved_search.id %}">Notifications: {{ saved_search.notifications_text }}</a>
+
+                    <div class="saved-search__actions">
+                        <a class="saved-search__action-item" href="{% url 'barriers:rename_saved_search' saved_search.id %}">Rename</a>
+                        <a class="saved-search__action-item" href="{% url 'barriers:delete_saved_search' saved_search.id %}">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
 
 {% endblock %}

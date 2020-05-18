@@ -10,6 +10,7 @@ from .resources import (
     NotesResource,
     UsersResource,
     ReportsResource,
+    SavedSearchesResource,
 )
 from utils.exceptions import APIHttpException, APIJsonException
 
@@ -25,6 +26,7 @@ class MarketAccessAPIClient:
         self.notes = NotesResource(self)
         self.users = UsersResource(self)
         self.reports = ReportsResource(self)
+        self.saved_searches = SavedSearchesResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

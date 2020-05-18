@@ -114,7 +114,7 @@ def test_continue_draft_barrier(browser):
     assert browser.find_by_tag("h1").first.value == title
 
     # Check barrier appears in 'My barriers' search
-    browser.visit(f"{settings.BASE_URL}find-a-barrier")
+    browser.visit(f"{settings.BASE_URL}search")
     browser.find_by_css('label[for="user"]').first.click()
     browser.find_by_css('input[type=submit][value="Apply filters"]').first.click()
     assert browser.is_element_present_by_css(f'[data-barrier-id="{barrier_id}"]')

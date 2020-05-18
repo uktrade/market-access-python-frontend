@@ -13,6 +13,12 @@ from .views.assessments import (
     MarketSizeAssessment,
     NewEconomicAssessment,
 )
+from .views.categories import (
+    AddCategory,
+    BarrierEditCategories,
+    BarrierEditCategoriesSession,
+    BarrierRemoveCategory,
+)
 from .views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
@@ -23,8 +29,6 @@ from .views.companies import (
 from .views.core import (
     BarrierDetail,
     Dashboard,
-    DownloadBarriers,
-    FindABarrier,
     WhatIsABarrier,
 )
 from .views.documents import DownloadDocument
@@ -54,6 +58,10 @@ from .views.notes import (
     BarrierEditNote,
     BarrierDeleteNote,
 )
+from .views.search import (
+    DownloadBarriers,
+    BarrierSearch,
+)
 from .views.sectors import (
     BarrierAddAllSectors,
     BarrierAddSectors,
@@ -72,17 +80,11 @@ from .views.teams import (
     SearchTeamMember,
     ChangeOwnerView,
 )
-from .views.types import (
-    AddBarrierType,
-    BarrierEditTypes,
-    BarrierEditTypesSession,
-    BarrierRemoveType,
-)
-from .views.watchlist import (
-    EditWatchlist,
-    RemoveWatchlist,
-    RenameWatchlist,
-    SaveWatchlist,
+from .views.saved_searches import (
+    DeleteSavedSearch,
+    NewSavedSearch,
+    RenameSavedSearch,
+    SavedSearchNotifications,
 )
 from .views.wto import (
     AddWTODocument,
@@ -96,15 +98,17 @@ app_name = "barriers"
 
 urlpatterns = [
     path("", Dashboard.as_view(), name="dashboard"),
-    path("find-a-barrier/", FindABarrier.as_view(), name="find_a_barrier"),
-    path("find-a-barrier/download/", DownloadBarriers.as_view(), name="download"),
+    path("search/", BarrierSearch.as_view(), name="search"),
+    path("find-a-barrier/", BarrierSearch.as_view(), name="find_a_barrier"),
+    path("search/download/", DownloadBarriers.as_view(), name="download"),
     path("what-is-a-barrier/", WhatIsABarrier.as_view(), name="what_is_a_barrier"),
     path("documents/<uuid:document_id>/download/", DownloadDocument.as_view(), name="download_document"),
 
-    path("watch-list/save/", SaveWatchlist.as_view(), name="save_watchlist"),
-    path("watch-list/edit/", EditWatchlist.as_view(), name="edit_watchlist"),
-    path("watch-list/rename/<int:index>/", RenameWatchlist.as_view(), name="rename_watchlist"),
-    path("watch-list/remove/<int:index>/", RemoveWatchlist.as_view(), name="remove_watchlist"),
+    path("saved-searches/new/", NewSavedSearch.as_view(), name="new_saved_search"),
+    path("saved-searches/<uuid:saved_search_id>/rename/", RenameSavedSearch.as_view(), name="rename_saved_search"),
+    path("saved-searches/<uuid:saved_search_id>/delete/", DeleteSavedSearch.as_view(), name="delete_saved_search"),
+    path("saved-searches/<uuid:saved_search_id>/notifications/", SavedSearchNotifications.as_view(), name="saved_search_notifications"),
+    re_path("saved-searches/(?P<saved_search_id>(my|team)-barriers)/notifications/", SavedSearchNotifications.as_view(), name="saved_search_notifications"),
 
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
     re_path("barriers/(?P<barrier_id>[A-Z]-[0-9]{2}-[A-Z0-9]{3})/", BarrierDetail.as_view(), name="barrier_detail_by_code"),
@@ -145,10 +149,10 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/status/", BarrierChangeStatus.as_view(), name="change_status"),
 
-    path("barriers/<uuid:barrier_id>/types/", BarrierEditTypesSession.as_view(), name="edit_types_session"),
-    path("barriers/<uuid:barrier_id>/types/edit/", BarrierEditTypes.as_view(), name="edit_types"),
-    path("barriers/<uuid:barrier_id>/types/remove/", BarrierRemoveType.as_view(), name="remove_type"),
-    path("barriers/<uuid:barrier_id>/types/add/", AddBarrierType.as_view(), name="add_type"),
+    path("barriers/<uuid:barrier_id>/types/", BarrierEditCategoriesSession.as_view(), name="edit_categories_session"),
+    path("barriers/<uuid:barrier_id>/types/edit/", BarrierEditCategories.as_view(), name="edit_categories"),
+    path("barriers/<uuid:barrier_id>/types/remove/", BarrierRemoveCategory.as_view(), name="remove_category"),
+    path("barriers/<uuid:barrier_id>/types/add/", AddCategory.as_view(), name="add_category"),
 
     path("barriers/<uuid:barrier_id>/sectors/", BarrierEditSectorsSession.as_view(), name="edit_sectors_session"),
     path("barriers/<uuid:barrier_id>/sectors/edit/", BarrierEditSectors.as_view(), name="edit_sectors"),

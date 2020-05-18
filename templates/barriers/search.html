@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block page_title %}{{ block.super }} - Find a barrier{% endblock %}
+{% block page_title %}{{ block.super }} - Search{% endblock %}
 
 {% block body_script %}
     <script src="{% static 'js/vue/vue-bundle.js' %}"></script>
@@ -10,14 +10,15 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with caption='Market access barriers' text='Find a barrier' %}
+    {% include 'partials/heading.html' with caption='Market access barriers' text='Search' %}
 
     <section class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
             <h2 class="filter-list-title">Filter barriers by:</h2>
             <form action="" method="GET" class="filter-items">
 
-                {% if form.edit.value %}{{ form.edit }}{% endif %}
+                {% if form.search_id.value %}{{ form.search_id }}{% endif %}
+                {% if form.member.value %}<input type="hidden" name="{{ form.member.name }}" value="{{ form.member.value }}" />{% endif %}
 
                 <div id="{{ form.search.name }}" class="govuk-form-group filter-items-group">
                     <label class="govuk-label filter-items__label" for="search">
@@ -30,7 +31,7 @@
                 {% include "partials/forms/search_typeahead.html" with placeholder='Search locations' field=form.country %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.trade_direction %}
                 {% include "partials/forms/search_typeahead.html" with placeholder='Search sector' field=form.sector %}
-                {% include "partials/forms/search_typeahead.html" with placeholder='Search type' field=form.type %}
+                {% include "partials/forms/search_typeahead.html" with placeholder='Search category' field=form.category %}
                 {% include "partials/forms/search_typeahead.html" with placeholder='Search regions' field=form.region extra_classes='js-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
@@ -52,7 +53,7 @@
                 </div>
 
                 {% if filters %}
-                <a class="filter-items__clear" href="{% url 'barriers:find_a_barrier' %}">Remove all filters</a>
+                <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
                 {% endif %}
 
                 <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
@@ -61,10 +62,53 @@
         <div class="govuk-grid-column-three-quarters">
 
             <div class="filter-results-header">
-                {% if member %}
-                <h2 class="search-title">{{ member.user.full_name }}</h2>
+                {% if search_title %}
+                    <h2 class="search-title">{{ search_title }}</h2>
                 {% endif %}
-                <h2 class="filter-results-title">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
+
+                {% if filters %}
+                    <div class="filter-results-header__row">
+                        {% if have_filters_changed %}
+                            <div class="filter-results-header__row-item">
+                                <p class="filter-results-header__info">You have changed this search but not saved it</p>
+                            </div>
+                        {% endif %}
+
+                        {% if saved_search_updated or saved_search_created %}
+                            <div class="filter-results-header__row-item">
+                                <p class="filter-results-header__info">Your search has been successfully saved</p>
+                            </div>
+                        {% endif %}
+
+                        <div class="filter-results-header__row-item filter-results-header__row-item--right">
+                            {% if form.search_id.value is not None %}
+                                {% if have_filters_changed %}
+                                    <form class="filter-results-header__update_form" method="post">
+                                        {% csrf_token %}
+                                        <button class="govuk-button button-as-link filter-results-header__update-button" name="update_search" value="1">Update saved search</button>
+                                    </form>
+                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as a new search</a>
+                                {% endif %}
+                            {% elif filters and not search_title %}
+                                <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save search</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="filter-results-header__row">
+                    <h2 class="filter-results-title filter-results-header__row-item">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
+
+                    <div class="filter-results-header__row-item">
+                        {% if saved_search %}
+                            <a class="filter-results-notifications-link" href="{% url 'barriers:saved_search_notifications' saved_search.id %}?next=search">Notifications: {{ saved_search.notifications_text }}</a>
+                        {% endif %}
+
+                        {% if filters %}
+                            <a class="filter-results-clear-link" href="{% url 'barriers:search' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
+                        {% endif %}
+                    </div>
+                </div>
 
                 {% if filters %}
                     <h3 class="visually-hidden">Active filters:</h3>
@@ -73,7 +117,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.trade_direction %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
-                        {% include 'barriers/partials/active_filter.html' with filter=filters.type %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.category %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.search %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.priority %}
@@ -82,17 +126,6 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
                     </ul>
-
-                    <div class="filter-results-action-buttons{% if not editWatchList %} filter-results-action-buttons--save{% endif %}">
-                        <a class="filter-results-clear-link" href="{% url 'barriers:find_a_barrier' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
-                        {% if form.edit.value is not None %}
-                            {% if have_filters_changed %}
-                            <a href="{% url 'barriers:edit_watchlist' %}?{{ pageless_querystring }}" class="govuk-button govuk-button--watch-list">Edit watch list</a>
-                            {% endif %}
-                        {% elif filters %}
-                            <a href="{% url 'barriers:save_watchlist' %}?{{ pageless_querystring }}" class="govuk-button govuk-button--watch-list">Save watch list</a>
-                        {% endif %}
-                    </div>
                 {% endif %}
             </div>
 
@@ -106,9 +139,9 @@
                 {% if barriers %}
                     <span class="filter-results-download__text">
                     {% if barriers.total_count == 1 %}
-                        You can download this barrier
+                        Download this barrier to a spreadsheet
                     {% else %}
-                        You can download these {{ barriers.total_count }} barriers
+                        Download these {{ barriers.total_count }} barriers to a spreadsheet
                     {% endif %}
                     </span>
                     <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">Download</a>
@@ -130,7 +163,17 @@
                                     </strong>
                                 </div>
                             {% endif %}
-                            <h3 class='filter-results-list__item__heading'><a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a></h3>
+                            <h3 class='filter-results-list__item__heading'>
+                                {% if saved_search %}
+                                    {% if barrier.id in saved_search.new_barrier_ids %}
+                                        <span class="ma-badge ma-badge--new">New</span>
+                                    {% endif %}
+                                    {% if barrier.id in saved_search.updated_barrier_ids %}
+                                        <span class="ma-badge ma-badge--updated">Updated</span>
+                                    {% endif %}
+                                {% endif %}
+                                <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a>
+                            </h3>
                             <dl class="filter-results-list__item__definitions">
 
                                 <dt class="filter-results-list__item__definitions__key visually-hidden">ID:</dt>
