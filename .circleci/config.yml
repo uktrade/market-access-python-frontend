@@ -19,7 +19,6 @@ jobs:
           MOCK_SSO_SCOPE: test
 
     environment:
-      PIPENV_VENV_IN_PROJECT: 'enabled'
       SECRET_KEY: "secretkey"
       DEBUG: True
       ALLOWED_HOSTS: "localhost"
@@ -51,24 +50,24 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
       - run:
-          command: sudo pip install pipenv
+          command: sudo pip install poetry
 
       - run:
           name: Install dependencies
-          command: pipenv sync --dev
+          command: poetry install
 
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
       - run:
           name: run tests
           command: |
-            pipenv run pytest tests
+            poetry run pytest tests
 
       - store_artifacts:
           path: test-reports
@@ -85,19 +84,19 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
       - run:
-          command: sudo pip install pipenv
+          command: sudo pip install poetry
 
       - run:
           name: Install dependencies
-          command: pipenv sync --dev
+          command: poetry install
 
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
       - run: pipenv run flake8 . --exclude=venv --count --max-line-length=120
 

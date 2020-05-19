@@ -4,36 +4,16 @@ RUN dnf -y update \
  && dnf -y install \
     gcc \
 	wget \
+    python3 \
     postgresql \
-    # packages so python can be compiled
-	make \
-	which \
-    openssl-devel \
-    bzip2-devel \
-	zlib-devel \
-    libffi \
-	libffi-devel \
-    # packages for pytest
-    sqlite-devel \
     # packages for localdef
     glibc-locale-source \
     glibc-langpack-en \
     # packages for ssh server
     openssh-server \
     openssh-clients \
- && dnf -y clean all \
+ && dnf -y clean all\
  && rm -rf /var/cache/dnf
-
-ENV PYTHON_VERSION 3.7.6
-RUN wget --no-verbose https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz \
-    && tar -C /usr/local/bin -xzvf Python-$PYTHON_VERSION.tgz \
-    && rm Python-$PYTHON_VERSION.tgz \
-    && cd /usr/local/bin/Python-$PYTHON_VERSION \
-    && ./configure --enable-optimizations \
-    && make altinstall
-
-RUN ln -s /usr/local/bin/python3.7 /usr/bin/python \
- && ln -s /usr/local/bin/pip3.7 /usr/bin/pip
 
 # SSH
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
@@ -61,23 +41,13 @@ ENV LANG en_GB.utf-8
 ENV LC_ALL en_GB.utf-8
 
 # Set PYTHONUNBUFFERED so output is displayed in the Docker log
-ENV PYTHONUNBUFFERED=1 \
-    POETRY_VERSION=1.0.0
+RUN alternatives --set python /usr/bin/python3
+ENV PYTHONUNBUFFERED=1
+# create virtualenv directory in WORKDIR called ".venv"
+ENV PIPENV_VENV_IN_PROJECT="enabled"
 
 WORKDIR /usr/src/app
 
-# Poetry commands reference https://python-poetry.org/docs/cli/#run
-# Without virtualenv (.venv)
-#COPY pyproject.toml poetry.lock ./
-#RUN pip install --upgrade pip \
-# && pip install poetry \
-# && poetry lock \
-# && poetry export --dev -f requirements.txt -o requirements.txt \
-# && pip install -r requirements.txt
-
-# With a virtualenv (.venv) in project root
-RUN pip install --upgrade pip \
- && pip install "poetry==$POETRY_VERSION"
-
-COPY *.toml poetry.lock ./
-RUN poetry install --no-interaction --no-ansi
+ADD Pipfile* ./
+RUN python -m pip install pipenv \
+ && pipenv sync --dev
