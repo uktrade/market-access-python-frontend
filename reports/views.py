@@ -172,7 +172,10 @@ class NewReport(ReportsTemplateView):
     """
     template_name = "reports/new_report.html"
     callout = Callout(
-        heading="Let us know about a non-tariff barrier to a UK business overseas",
+        heading=(
+            "Let us know about a barrier that's affecting a UK business exporting "
+            "or importing"
+        ),
         text="You can save your information and come back later to complete.",
         button=CalloutButton(
             href=reverse_lazy("reports:barrier_problem_status"),
