@@ -263,6 +263,26 @@ version = "1.2.1"
 django = "*"
 
 [[package]]
+category = "main"
+description = "The official Python module for Elastic APM"
+name = "elastic-apm"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
+version = "5.6.0"
+
+[package.dependencies]
+certifi = "*"
+urllib3 = "*"
+
+[package.extras]
+aiohttp = ["aiohttp"]
+flask = ["blinker"]
+opentracing = ["opentracing (>=2.0.0)"]
+starlette = ["flask", "requests", "starlette"]
+tests = ["Flask (>=0.8)", "twisted", "aiohttp", "apipkg", "blinker (>=1.1)", "celery", "django-celery", "execnet", "isort", "jinja2", "logbook", "mock", "pep8", "py (>=1.4.26)", "pytest (>=2.6.4)", "pytest-asyncio", "pytest-benchmark", "pytest-cache", "pytest-capturelog (>=0.7)", "pytest-django (2.8.0)", "pytest-isort", "pytest-mock", "python-memcached", "python3-memcached", "pytz", "redis", "requests", "starlette", "tornado", "unittest2", "urllib3-mock", "webob"]
+tornado = ["tornado"]
+
+[[package]]
 category = "dev"
 description = "Discover and load entry points from installed packages."
 name = "entrypoints"
@@ -588,6 +608,7 @@ version = "2.5.0"
 [[package]]
 category = "main"
 description = "C parser in Python"
+marker = "platform_python_implementation == \"CPython\" and sys_platform == \"win32\""
 name = "pycparser"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -965,7 +986,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "7b6eb25b9f138d5e781af6ab35b116e918a605012ff4c9f2ca3445b26308f18c"
+content-hash = "67f0ddd28156a0150bceb32f83ca6d16f723cc31b26b0d2c36aa49658786375c"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1134,6 +1155,35 @@ django-sass-processor = [
 ]
 django-settings-export = [
     {file = "django-settings-export-1.2.1.tar.gz", hash = "sha256:fceeae49fc597f654c1217415d8e049fc81c930b7154f5d8f28c432db738ff79"},
+]
+elastic-apm = [
+    {file = "elastic-apm-5.6.0.tar.gz", hash = "sha256:f219cc57dde27a47b8c0233893ae33762eefe69b79d235ae25ea3f4b0be14dfd"},
+    {file = "elastic_apm-5.6.0-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:0a4f331583919858fb4d56713431a3664e8594d74f6c33675312351544470932"},
+    {file = "elastic_apm-5.6.0-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:bbdeeca5612de1c9daa9a674ee121f91c5b828f6a8c2331f36a8444e116b41a1"},
+    {file = "elastic_apm-5.6.0-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:3bf2ae4a29bf06de0f14294a71e2443abfeaaae10e3449b136c78f26b208d5e4"},
+    {file = "elastic_apm-5.6.0-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:0b99684e0e603bf281a657fa1f390eb6893647726be602efa31cf8fecbe275d1"},
+    {file = "elastic_apm-5.6.0-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:78803c7044b6aa7dc1e7c0233a070ef9c86561116850524eed0f168a3f882fa1"},
+    {file = "elastic_apm-5.6.0-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:daff3508d2f64b17638dc0675d8cfdcbf8f1a91be12853ca6b6ef9f75dbd9a4e"},
+    {file = "elastic_apm-5.6.0-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:724094e9a941bbd958ce9d0e70453014ee516aaef0e2be7566d4c2f8fd53d8b8"},
+    {file = "elastic_apm-5.6.0-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:c33160b29648d229dda2250cdc73fe2c9948f44a2ddd1270f76e8273ebaa1da4"},
+    {file = "elastic_apm-5.6.0-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:778b25ed1a5420b9bb996069d187a952df20d18b5b61d773059139369a2fa0ba"},
+    {file = "elastic_apm-5.6.0-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:d69d286744719429ab05b3a0a5b1894d47e31f3c5c821414a947e44887a83bdd"},
+    {file = "elastic_apm-5.6.0-cp35-cp35m-manylinux2010_i686.whl", hash = "sha256:e60415da243bf22df5a317d8d985bab3ff39e632b7c0bed32618bd2f9031b658"},
+    {file = "elastic_apm-5.6.0-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:f0407f34922e09b0be6db8713863c2ccfc6ba2855bc4401c464c146028b4c44a"},
+    {file = "elastic_apm-5.6.0-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:3a90c6f69967442f487a2f9f65fd8acb4fab90918da57f26ade2df331b8f0710"},
+    {file = "elastic_apm-5.6.0-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:6d9bdf8f230a3c39b486c7877ba5c97fb754c8a618edf5e7aef86d3db8d6fce8"},
+    {file = "elastic_apm-5.6.0-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:966c31469d844ef5690f038956117a241c9c83a933a54303b95737d57d37b231"},
+    {file = "elastic_apm-5.6.0-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:ad07a3c839aec7e861669151ba29ffbe98ff4cbdcd1587215fc7a09d8cc39e5d"},
+    {file = "elastic_apm-5.6.0-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:35a7389ecae40dded38e117a898174486ea949ed6599550e24d7ab3e93aa58a6"},
+    {file = "elastic_apm-5.6.0-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:f72e5ca429b56dd055d194f6621b48d2887df7d2417b54bf8adb8fd51a88cc3b"},
+    {file = "elastic_apm-5.6.0-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:b9e98fbfe6d47e0e03d3b889c8f849073b30d8d6704d0e418eb88bd04df17cbb"},
+    {file = "elastic_apm-5.6.0-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:3334ac3f1a82cc061c73225306fecd3e46e418b07ca0f89863e91a4d129ad3b1"},
+    {file = "elastic_apm-5.6.0-cp38-cp38-manylinux1_i686.whl", hash = "sha256:b0454116711fc3e2060b54cc15762cab31c13e3e34f21872a08756398b231aa2"},
+    {file = "elastic_apm-5.6.0-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:12fd299d9d3f61e0c67b7b351c6d7960c4e40897197bb3bca44cd7ce9b1eaa4c"},
+    {file = "elastic_apm-5.6.0-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:522fab30bf4c0c6e96ac046efa9651991b5b4edb71a2b8d86b800583a349cb61"},
+    {file = "elastic_apm-5.6.0-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:15582743693d486fb865e4a2cfbef8f5c25143d908b72f849dd420f24cce4ed4"},
+    {file = "elastic_apm-5.6.0-py2-none-any.whl", hash = "sha256:28233a36c64443d24ed67bf0039b561274fe0a7c522c2459ff185391ac352f13"},
+    {file = "elastic_apm-5.6.0-py3-none-any.whl", hash = "sha256:29bbad84785512351f1a4c6c1aada2449af14bfc9196179618a7711d5663a96b"},
 ]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},

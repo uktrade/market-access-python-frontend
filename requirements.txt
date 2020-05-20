@@ -1,6 +1,6 @@
 # ======
 # DO NOT EDIT - use pyproject.toml instead!
-# Generated: 2020-05-20_17-49
+# Generated: 2020-05-20_18-10
 # ======
 certifi==2020.4.5.1
 cffi==1.14.0
@@ -14,6 +14,7 @@ django-libsass==0.8
 django-model-utils==4.0.0
 django-sass-processor==0.8
 django-settings-export==1.2.1
+elastic-apm==5.6.0
 gevent==1.5a3
 greenlet==0.4.15; platform_python_implementation == "CPython"
 gunicorn==20.0.4
@@ -21,7 +22,7 @@ idna==2.8
 libsass==0.20.0
 mohawk==1.1.0
 psycopg2-binary==2.8.4
-pycparser==2.20
+pycparser==2.20; platform_python_implementation == "CPython" and sys_platform == "win32"
 python-dateutil==2.8.1
 python-json-logger==0.1.10
 python-magic==0.4.15
