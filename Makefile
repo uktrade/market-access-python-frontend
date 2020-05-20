@@ -84,12 +84,12 @@ django-showmigrations: ## Show django migrations.
 .PHONY: flake8
 flake8: ## Run pep8 checks on the project
 	@echo "$$(tput setaf 3)🙈  Running flake8  🙈"
-	@docker-compose exec web bash -c "pipenv run flake8 . --exclude=./.venv --count --max-line-length=120"
+	@docker-compose exec web bash -c "flake8 . --exclude=./.venv --count --max-line-length=120"
 
 .PHONY: pip-install
 pip-install: ## Install pip requirements inside the container.
 	@echo "$$(tput setaf 3)🙈  Installing Pip Packages  🙈"
-	@docker-compose exec web bash -c "pipenv sync --dev"
+	@docker-compose exec web bash -c "poetry lock && poetry export --dev -f requirements.txt -o requirements.txt && pip install -r requirements.txt"
 
 .PHONY: pip-deptree
 pip-deptree: ## Output pip dependecy tree.
