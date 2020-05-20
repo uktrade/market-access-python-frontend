@@ -38,10 +38,6 @@ pytest-django = "~=3.8.0"
 pytest-xdist = "~=1.31.0"
 ipython = "~=7.12.0"
 
-[virtualenvs]
-create = true
-in-project = true
-
 [build-system]
-requires = ["poetry>=1.0.0"]
+requires = ["poetry>=1.0.5"]
 build-backend = "poetry.masonry.api"

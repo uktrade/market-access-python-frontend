@@ -53,16 +53,17 @@ jobs:
             - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
       - run:
-          command: sudo pip install poetry
+          command: sudo pip install poetry==1.0.5
 
       - run:
           name: Install dependencies
-          command: poetry install
+          command: |
+            poetry install
 
       - save_cache:
-          paths:
-            - ./venv
           key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
 
       - run:
           name: run tests
@@ -91,14 +92,15 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: poetry install
+          command: |
+            poetry install
 
       - save_cache:
-          paths:
-            - ./venv
           key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
 
-      - run: pipenv run flake8 . --exclude=venv --count --max-line-length=120
+      - run: poetry run flake8 . --exclude=venv --count --max-line-length=120
 
   ui_tests:
     docker:
@@ -113,23 +115,25 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
       - run:
-          command: sudo pip install pipenv
+          command: sudo pip install poetry
 
       - run:
           name: Install dependencies
-          command: pipenv sync --dev
+          command: |
+            poetry install
 
       - save_cache:
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
           paths:
-            - "venv"
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            - /home/circleci/.cache/pypoetry/virtualenvs
 
       - run:
           name: Run UI Tests
-          command: pipenv run pytest ui_tests
+          command: |
+            poetry run pytest ui_tests
 
       - store_artifacts:
           path: ui-test-reports

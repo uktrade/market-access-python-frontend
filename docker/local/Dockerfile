@@ -6,6 +6,7 @@ RUN dnf -y update \
 	wget \
     postgresql \
     # packages so python can be compiled
+	nano \
 	make \
 	which \
     openssl-devel \
@@ -62,22 +63,14 @@ ENV LC_ALL en_GB.utf-8
 
 # Set PYTHONUNBUFFERED so output is displayed in the Docker log
 ENV PYTHONUNBUFFERED=1 \
-    POETRY_VERSION=1.0.0
+    POETRY_VERSION=1.0.5
 
 WORKDIR /usr/src/app
 
 # Poetry commands reference https://python-poetry.org/docs/cli/#run
-# Without virtualenv (.venv)
-#COPY pyproject.toml poetry.lock ./
-#RUN pip install --upgrade pip \
-# && pip install poetry \
-# && poetry lock \
-# && poetry export --dev -f requirements.txt -o requirements.txt \
-# && pip install -r requirements.txt
-
-# With a virtualenv (.venv) in project root
+COPY pyproject.toml poetry.lock ./
 RUN pip install --upgrade pip \
- && pip install "poetry==$POETRY_VERSION"
-
-COPY *.toml poetry.lock ./
-RUN poetry install --no-interaction --no-ansi
+ && pip install poetry==$POETRY_VERSION \
+ && poetry lock \
+ && poetry export --dev -f requirements.txt -o requirements.txt \
+ && pip install -r requirements.txt
