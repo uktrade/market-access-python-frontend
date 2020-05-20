@@ -86,6 +86,7 @@ flake8: ## Run pep8 checks on the project
 	@echo "$$(tput setaf 3)🙈  Running flake8  🙈"
 	@docker-compose exec web bash -c "flake8 . --exclude=./.venv --count --max-line-length=120"
 
+__timestamp = $(shell date +%F_%H-%M)
 .PHONY: pip-install
 pip-install: ## Install pip requirements inside the container.
 	@echo "$$(tput setaf 3)🙈  Installing Pip Packages  🙈$$(tput sgr 0)"
@@ -93,6 +94,8 @@ pip-install: ## Install pip requirements inside the container.
 	@docker-compose exec web poetry export --without-hashes -f requirements.txt -o requirements.txt
 	@docker-compose exec web poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt
 	@docker-compose exec web pip install -r requirements-dev.txt
+	@docker-compose exec web sed -i '1i# ======\n# DO NOT EDIT - use pyproject.toml instead!\n# Generated: $(__timestamp)\n# ======' requirements.txt
+	@docker-compose exec web sed -i '1i# ======\n# DO NOT EDIT - use pyproject.toml instead!\n# Generated: $(__timestamp)\n# ======' requirements-dev.txt
 
 .PHONY: pip-deptree
 pip-deptree: ## Output pip dependecy tree.
