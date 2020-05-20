@@ -88,8 +88,11 @@ flake8: ## Run pep8 checks on the project
 
 .PHONY: pip-install
 pip-install: ## Install pip requirements inside the container.
-	@echo "$$(tput setaf 3)🙈  Installing Pip Packages  🙈"
-	@docker-compose exec web bash -c "poetry lock && poetry export --dev -f requirements.txt -o requirements.txt && pip install -r requirements.txt"
+	@echo "$$(tput setaf 3)🙈  Installing Pip Packages  🙈$$(tput sgr 0)"
+	@docker-compose exec web poetry lock
+	@docker-compose exec web poetry export --without-hashes -f requirements.txt -o requirements.txt
+	@docker-compose exec web poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt
+	@docker-compose exec web pip install -r requirements-dev.txt
 
 .PHONY: pip-deptree
 pip-deptree: ## Output pip dependecy tree.
@@ -98,7 +101,7 @@ pip-deptree: ## Output pip dependecy tree.
 
 .PHONY: pip-updates
 pip-updates: ## Output available updates for packages.
-	@echo "$$(tput setaf 0)$$(tput setab 2)  📦  Available Updates  📦   $$(tput sgr 0)"
+	@echo "$$(tput setaf 2)  📦  Available Updates  📦   $$(tput sgr 0)"
 	@docker-compose exec web bash -c "poetry show -o"
 
 .PHONY: gen-secretkey

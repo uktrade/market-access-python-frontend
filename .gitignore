@@ -112,9 +112,6 @@ db.sqlite3
 
 # VS Code
 .vscode/
-docker-compose.dev.env
-docker-compose.env
-config/settings/static/
 
 # PyCharm
 .idea/
@@ -125,3 +122,9 @@ src/
 # Static files
 core/static/CACHE
 staticfiles/
+
+docker-compose.dev.env
+docker-compose.env
+config/settings/static/
+
+requirements-dev.txt
