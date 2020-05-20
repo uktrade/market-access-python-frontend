@@ -13,11 +13,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 from environ import Env
+from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
-ROOT_DIR = os.path.abspath(os.path.dirname(__name__))
+ROOT_DIR = Path(__file__).parents[2]
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -74,8 +75,6 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "django_extensions",
-    'compressor',
-    'sass_processor',
 ]
 
 LOCAL_APPS = [
@@ -112,7 +111,7 @@ FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(ROOT_DIR, "templates")],
+        'DIRS': [str(ROOT_DIR / "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -185,32 +184,21 @@ CSRF_COOKIE_SECURE = True
 
 CSRF_COOKIE_HTTPONLY = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-)
-
+CORE_DIR = ROOT_DIR / "core"
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(ROOT_DIR, "staticfiles")
+STATIC_ROOT = ROOT_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    str(CORE_DIR / "static/build"),
+    str(CORE_DIR / "static/js/pages"),
+    str(CORE_DIR / "static/govuk-public"),
+    str(CORE_DIR / "static/img"),
+    str(CORE_DIR / "static/CACHE"),
+]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
 )
-
-COMPRESS_ROOT = os.path.join(ROOT_DIR, "core/static/")
-COMPRESS_FILTERS = {
-    'css': [
-        'compressor.filters.css_default.CssAbsoluteFilter',
-        'compressor.filters.cssmin.rCSSMinFilter',
-    ],
-    'js': [
-        'compressor.filters.jsmin.JSMinFilter',
-    ]
-}
-
 
 TRUSTED_USER_TOKEN = 'ssobypass'
 

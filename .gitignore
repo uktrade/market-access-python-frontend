@@ -122,6 +122,7 @@ src/
 # Static files
 core/static/CACHE
 staticfiles/
+node_modules/
 
 docker-compose.dev.env
 docker-compose.env

@@ -7,13 +7,6 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 DEBUG = True
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-from .compress_offline import *     # noqa
-
-if not DEBUG:
-    # offline compressing
-    from .compress_offline import *     # noqa
-
 # Remove VPN dependency
 # metadata is pulled by the API from DataHub which is behind the VPN
 MOCK_METADATA = True

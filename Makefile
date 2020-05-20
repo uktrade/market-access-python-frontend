@@ -111,6 +111,16 @@ pip-updates: ## Output available updates for packages.
 gen-secretkey: ## Generates a secret key (using django's util function)
 	@docker-compose exec web bash -c "./tools/secret_keygen.py"
 
+.PHONY: dev
+dev: django-debug ## Runs the ssh server on docker and gulp dev
+	@echo "$$(tput setaf 3)🙈  Dev dev...  🙈$$(tput sgr 0)"
+	@echo "$$(tput setaf 10)=========="
+	@echo "$$(tput setaf 10)Hints:"
+	@echo "$$(tput setaf 10)  - you may need to run [npm install] prior to this command"
+	@echo "$$(tput setaf 10)==========$$(tput sgr 0)"
+	@npm run dev
+
+
 
 # SSH COMMANDS (to debug via ssh)
 # ==================================================

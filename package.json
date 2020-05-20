@@ -1,0 +1,33 @@
+{
+  "name": "market-access-pyfe-static-builder",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Ferenc Csepregi",
+  "license": "ISC",
+  "scripts": {
+    "dev": "gulp",
+    "build": "gulp build",
+    "heroku-prebuild": "",
+    "heroku-postbuild": "npm run build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-cli": "^2.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-if": "^3.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": "12.x"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ]
+}
