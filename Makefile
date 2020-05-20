@@ -20,41 +20,41 @@ django-run: ## Run django's dev server (tailing).
 
 .PHONY: django-run-detached
 django-run-detached: ## Run django's dev server (silently).
-	docker-compose exec -d web bash -c "pipenv run python /usr/src/app/manage.py runserver 0:9000"
+	docker-compose exec -d web bash -c "./manage.py runserver 0:9000"
 
 .PHONY: django-shell
 django-shell: ## Drop into django's shell (with iphython).
-	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py shell_plus"
+	docker-compose exec web bash -c "./manage.py shell_plus"
 
 .PHONY: django-collectstatic
 django-collectstatic: ## Collect static files.
-	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py collectstatic --no-input"
+	docker-compose exec web bash -c "./manage.py collectstatic --no-input"
 
 .PHONY: django-static
 django-static: ## Compress SCSS and collect static files, clears staticfiles folder.
-	docker-compose exec web bash -c "pipenv run python manage.py compress -f && pipenv run python manage.py collectstatic --no-input -i *.scss --clear"
+	docker-compose exec web bash -c "./manage.py compress -f && ./manage.py collectstatic --no-input -i *.scss --clear"
 
 .PHONY: django-test
 django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down
-	docker-compose exec web pipenv run pytest -n 6 tests/$(path)
+	docker-compose exec web pytest -n 6 tests/$(path)
 
 .PHONY: django-ui-test
 django-run-test-server: ## Run django ui test server
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pipenv run python /usr/src/app/manage.py runserver 0:9000"
+	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "./manage.py runserver 0:9000"
 
 .PHONY: django-ui-test
 django-ui-test: ## Run django ui tests.
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pipenv run pytest ui_tests"
+	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pytest ui_tests"
 
 .PHONY: django-ui-test
 django-ui-test-with-server: ## Run locla server and run django ui tests against it.
-	docker-compose -f docker-compose.test.yml -p market-access-test exec -d web-test bash -c "pipenv run python /usr/src/app/manage.py runserver 0:9000"
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pipenv run pytest ui_tests || pkill -f runserver"
+	docker-compose -f docker-compose.test.yml -p market-access-test exec -d web-test bash -c "./manage.py runserver 0:9000"
+	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pytest ui_tests || pkill -f runserver"
 	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pkill -f runserver"
 
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
-	docker-compose exec web bash -c "pipenv run pytest tests --cov=. --cov-report html"
+	docker-compose exec web bash -c "pytest tests --cov=. --cov-report html"
 
 .PHONY: git-hooks
 git-hooks: ## Set up hooks for git.
@@ -67,15 +67,15 @@ git-hooks: ## Set up hooks for git.
 # ==================================================
 .PHONY: django-makemigrations
 django-makemigrations: ## Create django migrations
-	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py makemigrations"
+	docker-compose exec web bash -c "./manage.py makemigrations"
 
 .PHONY: django-migrate
 django-migrate: ## Apply django migrations.
-	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py migrate"
+	docker-compose exec web bash -c "./manage.py migrate"
 
 .PHONY: django-showmigrations
 django-showmigrations: ## Show django migrations.
-	docker-compose exec web bash -c "pipenv run python /usr/src/app/manage.py showmigrations"
+	docker-compose exec web bash -c "./manage.py showmigrations"
 # ==================================================
 
 
@@ -94,11 +94,16 @@ pip-install: ## Install pip requirements inside the container.
 .PHONY: pip-deptree
 pip-deptree: ## Output pip dependecy tree.
 	@echo "$$(tput setaf 0)$$(tput setab 2)  🌳  Pip Dependency Tree  🌳   $$(tput sgr 0)"
-	@docker-compose exec web bash -c "pipenv graph"
+	@docker-compose exec web bash -c "poetry show --tree"
+
+.PHONY: pip-updates
+pip-updates: ## Output available updates for packages.
+	@echo "$$(tput setaf 0)$$(tput setab 2)  📦  Available Updates  📦   $$(tput sgr 0)"
+	@docker-compose exec web bash -c "poetry show -o"
 
 .PHONY: gen-secretkey
 gen-secretkey: ## Generates a secret key (using django's util function)
-	@docker-compose exec web bash -c "pipenv run python tools/secret_keygen.py"
+	@docker-compose exec web bash -c "./tools/secret_keygen.py"
 
 
 # SSH COMMANDS (to debug via ssh)

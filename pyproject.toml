@@ -6,6 +6,8 @@ authors = ["Ferenc Csepregi <feri@31.digital>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+setuptools = "==46.4.0"
+pycparser = "==2.20"
 django = "==2.2.10"
 django-extensions = "==2.2.8"
 python-dateutil = "==2.8.1"
@@ -24,7 +26,6 @@ gevent = "==1.5a3"
 django-environ = "==0.4.5"
 django-model-utils = "==4.0.0"
 python-json-logger = "==0.1.10"
-pycparser = "==2.20"
 
 [tool.poetry.dev-dependencies]
 pyopenssl = "~=19.1.0"
