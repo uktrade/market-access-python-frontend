@@ -120,11 +120,11 @@ const main_js = () => {
 const watchFiles = () => {
     browserSyncInit();
     // gulp.watch('**/*.html').on('change', () => browserSync.reload());
-    gulp.watch('robo/static/scss/**/*.scss').on('change', () => {
+    gulp.watch('core/static/css/**/*.scss').on('change', () => {
         main_css();
         browserSync.reload();
     });
-    gulp.watch('robo/static/js/**/*.js').on('change', () => {
+    gulp.watch('core/static/js/**/*.js').on('change', () => {
         main_js();
         browserSync.reload();
     });
@@ -132,7 +132,7 @@ const watchFiles = () => {
 };
 
 const watchCss = () => {
-    gulp.watch('robo/static/scss/**/*.scss').on('change', () => {
+    gulp.watch('core/static/css/**/*.scss').on('change', () => {
         main_css();
     });
 };
