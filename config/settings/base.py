@@ -188,12 +188,7 @@ CORE_DIR = ROOT_DIR / "core"
 STATIC_URL = '/static/'
 STATIC_ROOT = ROOT_DIR / "staticfiles"
 STATICFILES_DIRS = [
-    str(CORE_DIR / "static/build"),
-    str(CORE_DIR / "static/js/pages"),
-    str(CORE_DIR / "static/govuk-public"),
-    str(CORE_DIR / "static/govuk-public/images"),
-    str(CORE_DIR / "static/img"),
-    str(CORE_DIR / "static/CACHE"),
+    str(CORE_DIR / "static/dist"),
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 STATICFILES_FINDERS = (

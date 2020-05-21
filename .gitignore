@@ -116,9 +116,6 @@ db.sqlite3
 # PyCharm
 .idea/
 
-# SSO src commit pip install folder
-src/
-
 # Static files
 core/static/CACHE
 staticfiles/

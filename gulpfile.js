@@ -15,20 +15,23 @@ const
 // Useful tips for uglifying - https://stackoverflow.com/questions/24591854/using-gulp-to-concatenate-and-uglify-files
 
 
-const production = ((process.env.NODE_ENV || 'dev').trim().toLowerCase() === 'prod');
+const production = ((process.env.NODE_ENV || 'dev').trim().toLowerCase() === 'production');
 
 // Source paths
 const
-    assetsSrcPath = 'core/static/',
-    scssEntryFile = assetsSrcPath + 'css/index.scss';
+    assetsSrcPath = 'core/static/src/',
+    scssEntryFile = `${assetsSrcPath}css/index.scss`;
 
-// Build paths
+// Build / Distribution paths
 const
-    assetsBuildPath = 'core/static/build/',
-    cssBuildPath = assetsBuildPath + 'css',
+    assetsBuildPath = 'core/static/dist/',
+    cssBuildPath = `${assetsBuildPath}css`,
     cssBuildFileName = 'main.css',
-    jsBuildPath = assetsBuildPath + 'js';
+    jsBuildPath = `${assetsBuildPath}js`,
+    jsBuildFileName = 'main.js';
 
+const
+    jsLicensingInfo = '/* Licensing info */';
 
 // BrowserSync Init
 const browserSyncInit = () => {
@@ -42,7 +45,6 @@ const browserSyncInit = () => {
     });
 };
 
-
 // Prepare Main CSS
 const main_css = () => {
     return gulp.src([scssEntryFile])
@@ -54,39 +56,39 @@ const main_css = () => {
         .pipe(browserSync.stream());
 };
 
-
+// Prepare Main JS
 const main_js = () => {
     return gulp.src([
-        'core/static/js/vendor/jessie.js',
-        'core/static/js/vendor/body-scroll-lock.js',
-        'core/static/js/datahub-header/component/header.js',
-        'core/static/js/ma.js',
-        'core/static/js/ma.CustomEvent.js',
-        'core/static/js/ma.xhr2.js',
-        'core/static/js/components/ConditionalRadioContent.js',
-        'core/static/js/components/FileUpload.js',
-        'core/static/js/components/Collapsible.js',
-        'core/static/js/components/TextArea.js',
-        'core/static/js/components/ToggleLinks.js',
-        'core/static/js/components/Toast.js',
-        'core/static/js/components/CharacterCount.js',
-        'core/static/js/components/Attachments.js',
-        'core/static/js/components/Modal.js',
-        'core/static/js/components/DeleteModal.js',
-        'core/static/js/components/ToggleBox.js',
-        'core/static/js/components/AttachmentForm.js',
-        'core/static/js/pages/index.js',
-        'core/static/js/pages/report/index.js',
-        'core/static/js/pages/report/is-resolved.js',
-        'core/static/js/pages/report/about-problem.js',
-        'core/static/js/pages/barrier/status.js',
-        'core/static/js/pages/barrier/type.js',
-        'core/static/js/pages/barrier/edit.js',
-        'core/static/js/pages/barrier/detail.js',
-        'core/static/js/pages/barrier/team.js',
-        'core/static/js/pages/barrier/assessment.js',
-        'core/static/js/pages/barrier/archive.js',
-        'core/static/js/pages/barrier/wto.js',
+        `${assetsSrcPath}js/vendor/jessie.js`,
+        `${assetsSrcPath}js/vendor/body-scroll-lock.js`,
+        `${assetsSrcPath}js/datahub-header/component/header.js`,
+        `${assetsSrcPath}js/ma.js`,
+        `${assetsSrcPath}js/ma.CustomEvent.js`,
+        `${assetsSrcPath}js/ma.xhr2.js`,
+        `${assetsSrcPath}js/components/ConditionalRadioContent.js`,
+        `${assetsSrcPath}js/components/FileUpload.js`,
+        `${assetsSrcPath}js/components/Collapsible.js`,
+        `${assetsSrcPath}js/components/TextArea.js`,
+        `${assetsSrcPath}js/components/ToggleLinks.js`,
+        `${assetsSrcPath}js/components/Toast.js`,
+        `${assetsSrcPath}js/components/CharacterCount.js`,
+        `${assetsSrcPath}js/components/Attachments.js`,
+        `${assetsSrcPath}js/components/Modal.js`,
+        `${assetsSrcPath}js/components/DeleteModal.js`,
+        `${assetsSrcPath}js/components/ToggleBox.js`,
+        `${assetsSrcPath}js/components/AttachmentForm.js`,
+        `${assetsSrcPath}js/pages/index.js`,
+        `${assetsSrcPath}js/pages/report/index.js`,
+        `${assetsSrcPath}js/pages/report/is-resolved.js`,
+        `${assetsSrcPath}js/pages/report/about-problem.js`,
+        `${assetsSrcPath}js/pages/barrier/status.js`,
+        `${assetsSrcPath}js/pages/barrier/type.js`,
+        `${assetsSrcPath}js/pages/barrier/edit.js`,
+        `${assetsSrcPath}js/pages/barrier/detail.js`,
+        `${assetsSrcPath}js/pages/barrier/team.js`,
+        `${assetsSrcPath}js/pages/barrier/assessment.js`,
+        `${assetsSrcPath}js/pages/barrier/archive.js`,
+        `${assetsSrcPath}js/pages/barrier/wto.js`,
     ])
         .pipe(gulpif(!production, sourcemaps.init()))
         .pipe(babel({
@@ -108,23 +110,33 @@ const main_js = () => {
             // https://github.com/mishoo/UglifyJS#output-options
             output: {
                 beautify: !production,
-                preamble: "/* Licensing info */"
+                preamble: jsLicensingInfo
             }
         }))
-        .pipe(concat('main.js'))
+        .pipe(concat(jsBuildFileName))
         .pipe(gulpif(!production, sourcemaps.write('.')))
         .pipe(gulp.dest(jsBuildPath))
         .pipe(browserSync.stream());
 };
 
+// Move files to dist
+const prepDist = () => {
+    // Move JS bundles to dist
+    return gulp.src([
+        `${assetsSrcPath}js/vue/vue-bundle.js`
+    ])
+        .pipe(gulp.dest(jsBuildPath));
+};
+
+// File watchers
 const watchFiles = () => {
     browserSyncInit();
     // gulp.watch('**/*.html').on('change', () => browserSync.reload());
-    gulp.watch('core/static/css/**/*.scss').on('change', () => {
+    gulp.watch(`${assetsSrcPath}css/**/*.scss`).on('change', () => {
         main_css();
         browserSync.reload();
     });
-    gulp.watch('core/static/js/**/*.js').on('change', () => {
+    gulp.watch(`${assetsSrcPath}js/**/*.js`).on('change', () => {
         main_js();
         browserSync.reload();
     });
@@ -132,16 +144,17 @@ const watchFiles = () => {
 };
 
 const watchCss = () => {
-    gulp.watch('core/static/css/**/*.scss').on('change', () => {
+    gulp.watch(`${assetsSrcPath}css/**/*.scss`).on('change', () => {
         main_css();
     });
 };
 
+// Command definitions
 const watch = watchFiles;
 const watchcss = watchCss;
 const css = main_css;
 const js = main_js;
-const build = gulp.parallel(css, js);
+const build = gulp.parallel(css, js, prepDist);
 const fe = gulp.series(build, watch);
 
 // Export Commands
