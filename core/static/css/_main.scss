@@ -2,7 +2,7 @@ $govuk-font-family: Arial,'Helvetica Neue',Helvetica,sans-serif;
 $govuk-font-family-tabular: Arial,'Helvetica Neue',Helvetica,sans-serif;
 
 @import 'vendor/vue-multiselect.min';
-@import 'vendor/datahub-header.css';
+@import 'vendor/datahub-header';
 
 @import 'govuk-frontend/settings/all';
 @import 'govuk-frontend/helpers/all';
