@@ -191,6 +191,7 @@ STATICFILES_DIRS = [
     str(CORE_DIR / "static/build"),
     str(CORE_DIR / "static/js/pages"),
     str(CORE_DIR / "static/govuk-public"),
+    str(CORE_DIR / "static/govuk-public/images"),
     str(CORE_DIR / "static/img"),
     str(CORE_DIR / "static/CACHE"),
 ]
