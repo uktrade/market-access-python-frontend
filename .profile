@@ -7,7 +7,7 @@ echo "---- Apply Migrations ------"
 python manage.py migrate
 
 echo "---- Collect Static Files ------"
-OUTPUT=$(python manage.py collectstatic --noinput -i *.scss --clear)
+OUTPUT=$(python manage.py collectstatic --noinput --clear)
 mkdir -p ~/logs
 echo ${OUTPUT} > ~/logs/collectstatic.txt
 echo ${OUTPUT##*$'\n'}
