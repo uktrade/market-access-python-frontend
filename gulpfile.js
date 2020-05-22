@@ -24,7 +24,7 @@ const
 
 // Build / Distribution paths
 const
-    assetsBuildPath = 'core/static/dist/',
+    assetsBuildPath = 'core/frontend/dist/',
     cssBuildPath = `${assetsBuildPath}css`,
     cssBuildFileName = 'main.css',
     jsBuildPath = `${assetsBuildPath}js`,
