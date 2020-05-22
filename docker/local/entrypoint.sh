@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Django Migrations
-pipenv run python manage.py makemigrations
-pipenv run python manage.py migrate
-pipenv run python manage.py collectstatic --no-input
+python manage.py makemigrations
+python manage.py migrate
+python manage.py collectstatic --no-input
 
 echo -e "╔══════════════════════════════════════════════════════╗"
 echo -e "                👏  Ready to roll!  👏                 "

@@ -28,9 +28,14 @@ as they currently share some dependencies (this only applies for local developme
 1. Build the images and spin up the containers by running - `docker-compose up --build`
 2. Set up git hooks by running - `make git-hooks`
 3. Enter bash within the django container using `docker-compose exec web bash`
-then create a superuser `py3 manage.py createsuperuser --email your@email.here`
+then create a superuser `py3 manage.py createsuperuser --email your@email.here` then `exit` the container
 4. To start the dev server run - `make django-run`
 5. The fronted client is now accessible via http://market-access.local:9880
+6. run `make dev` - this will run the relevant gulp tasks (compile & watch CSS and JS files) and launch BrowserSync
+
+##### BrowserSync auto-reload:
+When you visit the site via http://127.0.0.1:9881 BrowserSync will automatically reload the page when you modify scss or js files. 
+
 
 #### Running in detached mode
 The installation steps above will require 2 terminal windows to be open to run the processes.

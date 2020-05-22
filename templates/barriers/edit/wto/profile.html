@@ -5,7 +5,7 @@
 {% block page_title %}{{ block.super }} - Edit WTO information{% endblock %}
 
 {% block body_script %}
-    <script src="{% static 'js/vue/vue-bundle.js' %}"></script>
+    <script src="{% static 'js/vue-bundle.js' %}"></script>
     <script>
         ma.pages.barrier.wto();
         var csrftoken = ma.get_csrf_token();

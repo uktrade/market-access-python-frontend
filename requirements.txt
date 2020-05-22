@@ -1,0 +1,31 @@
+# ======
+# DO NOT EDIT - use pyproject.toml instead!
+# Generated: 2020-05-21_00-48
+# ======
+certifi==2020.4.5.1
+cffi==1.14.0
+chardet==3.0.4
+django==2.2.10
+django-environ==0.4.5
+django-extensions==2.2.8
+django-model-utils==4.0.0
+django-settings-export==1.2.1
+elastic-apm==5.6.0
+gevent==1.5a3
+greenlet==0.4.15; platform_python_implementation == "CPython"
+gunicorn==20.0.4
+idna==2.8
+mohawk==1.1.0
+psycopg2-binary==2.8.4
+pycparser==2.20; platform_python_implementation == "CPython" and sys_platform == "win32"
+python-dateutil==2.8.1
+python-json-logger==0.1.10
+python-magic==0.4.15
+pytz==2020.1
+redis==3.4.1
+requests==2.22.0
+sentry-sdk==0.14.1
+six==1.14.0
+sqlparse==0.3.1
+urllib3==1.25.9
+whitenoise==5.0.1
