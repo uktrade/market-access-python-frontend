@@ -19,7 +19,7 @@ const production = ((process.env.NODE_ENV || 'dev').trim().toLowerCase() === 'pr
 
 // Source paths
 const
-    assetsSrcPath = 'core/static/src/',
+    assetsSrcPath = 'core/frontend/src/',
     scssEntryFile = `${assetsSrcPath}css/index.scss`;
 
 // Build / Distribution paths

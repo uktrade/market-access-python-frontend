@@ -184,11 +184,10 @@ CSRF_COOKIE_SECURE = True
 
 CSRF_COOKIE_HTTPONLY = True
 
-CORE_DIR = ROOT_DIR / "core"
 STATIC_URL = '/static/'
 STATIC_ROOT = ROOT_DIR / "staticfiles"
 STATICFILES_DIRS = [
-    str(CORE_DIR / "static/dist"),
+    str(ROOT_DIR / "core/static/dist/"),
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 STATICFILES_FINDERS = (
