@@ -1,5 +1,5 @@
 ---
 applications:
 - buildpacks:
-  - https://github.com/cloudfoundry/nodejs-buildpack.git#v1.7.17
-  - https://github.com/cloudfoundry/python-buildpack.git#v1.7.12
+  - https://github.com/cloudfoundry/nodejs-buildpack.git#v1.7.18
+  - https://github.com/cloudfoundry/python-buildpack.git#v1.7.13
