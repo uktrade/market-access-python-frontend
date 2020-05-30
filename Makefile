@@ -84,7 +84,7 @@ django-showmigrations: ## Show django migrations.
 .PHONY: flake8
 flake8: ## Run pep8 checks on the project
 	@echo "$$(tput setaf 3)🙈  Running flake8  🙈"
-	@docker-compose exec web bash -c "flake8 . --exclude=./.venv --count --max-line-length=120"
+	@docker-compose exec web flake8 --count
 
 __timestamp = $(shell date +%F_%H-%M)
 .PHONY: pip-install

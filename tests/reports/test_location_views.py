@@ -68,7 +68,7 @@ class LocationViewTestCase(ReportsTestCase):
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
         field_name = 'country'
-        session_key = f'draft_barrier__location_form_data'
+        session_key = 'draft_barrier__location_form_data'
         fiji_uuid = 'd9f682ac-5d95-e211-a939-e4115bead28a'
         expected_form_data = {'country': fiji_uuid}
 
@@ -160,7 +160,7 @@ class LocationViewHasAdminAreasTestCase(ReportsTestCase):
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
         field_name = 'has_admin_areas'
-        session_key = f'draft_barrier__has_admin_areas_form_data'
+        session_key = 'draft_barrier__has_admin_areas_form_data'
         expected_form_data = {'has_admin_areas': '1'}
 
         response = self.client.post(url, data={field_name: '1'}, follow=True)
