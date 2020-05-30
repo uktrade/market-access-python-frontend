@@ -6,11 +6,8 @@ echo "---- RUNNING release tasks (.profile) ------"
 echo "---- Apply Migrations ------"
 python manage.py migrate
 
-echo "---- Compile SCSS ------"
-python manage.py compress -f
-
 echo "---- Collect Static Files ------"
-OUTPUT=$(python manage.py collectstatic --noinput -i *.scss --clear)
+OUTPUT=$(python manage.py collectstatic --noinput --clear)
 mkdir -p ~/logs
 echo ${OUTPUT} > ~/logs/collectstatic.txt
 echo ${OUTPUT##*$'\n'}

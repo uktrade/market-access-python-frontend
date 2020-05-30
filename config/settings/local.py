@@ -1,14 +1,11 @@
 from .base import *     # noqa
+
 from django.utils.log import DEFAULT_LOGGING
 
 DJANGO_ENV = 'local'
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 DEBUG = True
-
-if not DEBUG:
-    # offline compressing
-    from .compress_offline import *     # noqa
 
 # Remove VPN dependency
 # metadata is pulled by the API from DataHub which is behind the VPN

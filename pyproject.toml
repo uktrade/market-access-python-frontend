@@ -1,3 +1,41 @@
-[tool.black]
-target-version = ['py36', 'py37', 'py38']
-exclude = '.*\/urls\.py'
+[tool.poetry]
+name = "market-access-python-frontend"
+version = "0.1.0"
+description = "Hello"
+authors = ["Ferenc Csepregi <feri@31.digital>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+django = "==2.2.12"
+django-environ = "==0.4.5"
+django-extensions = "==2.2.9"
+django-model-utils = "==4.0.0"
+django-settings-export = "==1.2.1"
+elastic-apm = "~=5.6.0"
+gunicorn = "==20.0.4"
+gevent = "==20.5.2"
+mohawk = "==1.1.0"
+psycopg2-binary = "==2.8.5"
+python-json-logger = "==0.1.11"
+python-dateutil = "==2.8.1"
+python-magic = "==0.4.18"
+redis = "==3.5.2"
+requests = "==2.23.0"
+sentry-sdk = "==0.14.4"
+whitenoise = "==5.1.0"
+
+[tool.poetry.dev-dependencies]
+black = "~=19.10b0"
+flake8 = "~=3.8.2"
+ipython = "~=7.15.0"
+mock = "~=4.0.1"
+pyopenssl = "~=19.1.0"
+pytest-cov = "~=2.9.0"
+pytest-django = "~=3.9.0"
+pytest-xdist = "~=1.32.0"
+splinter = "~=0.13.0"
+werkzeug = "~=1.0.0"
+
+[build-system]
+requires = ["poetry>=1.0.5"]
+build-backend = "poetry.masonry.api"

@@ -74,7 +74,6 @@ from .views.statuses import (
     BarrierEditStatus,
 )
 from .views.teams import (
-    AddTeamMember,
     BarrierTeam,
     DeleteTeamMember,
     SearchTeamMember,
@@ -167,7 +166,6 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/companies/<uuid:company_id>/", CompanyDetail.as_view(), name="company_detail"),
 
     path("barriers/<uuid:barrier_id>/team/", BarrierTeam.as_view(), name="team"),
-    path("barriers/<uuid:barrier_id>/team/add/", AddTeamMember.as_view(), name="add_team_member"),
     path("barriers/<uuid:barrier_id>/team/add/search/", SearchTeamMember.as_view(), name="search_team_member"),
     path("barriers/<uuid:barrier_id>/team/delete/<int:team_member_id>", DeleteTeamMember.as_view(), name="delete_team_member"),
     path("barriers/<uuid:barrier_id>/team/change-owner/<int:team_member_id>", ChangeOwnerView.as_view(), name="team_change_owner"),

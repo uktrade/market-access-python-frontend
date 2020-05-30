@@ -1,4 +1,35 @@
 [flake8]
+
+ignore =
+    E203,
+    E231,
+    # F841 - Local variable is assigned but never used
+    # Ignoring the rule since it also flags variable names that starts with _
+    #   PR to ignore only single '_' - https://github.com/PyCQA/pyflakes/pull/335
+    #   rather than startswith('_') - https://github.com/PyCQA/pyflakes/pull/334
+    F841,
+    W503,
+    # W504 - line break after binary operator
+    W504
+
 per-file-ignores =
+    # Common imports for all files in api/barriers/history
+    ./api/barriers/history/__init__.py:F401
+    ./config/settings/*:F401,F403,F405
     */urls.py:E501
-ignore = E203,E231,W503
+
+# flake8-quotes - https://pypi.org/project/flake8-quotes/
+# as per Black the project is using double quotes
+inline-quotes = double
+docstring-quotes = "
+multiline-quotes = "
+
+max-complexity = 10
+max-line-length = 120
+
+exclude =
+    src,
+    migrations,
+    __pycache__,
+    env,
+    venv
