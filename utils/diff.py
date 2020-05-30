@@ -255,7 +255,7 @@ class diff_match_patch:
 
         return diffs
 
-    def diff_bisect(self, text1, text2, deadline):
+    def diff_bisect(self, text1, text2, deadline):      # noqa: C901
         """Find the 'middle snake' of a diff, split the problem in two
       and return the recursively constructed diff.
       See Myers 1986 paper: An O(ND) Difference Algorithm and Its Variations.
@@ -562,7 +562,7 @@ class diff_match_patch:
                 best = length
                 length += 1
 
-    def diff_halfMatch(self, text1, text2):
+    def diff_halfMatch(self, text1, text2):     # noqa: C901
         """Do the two texts share a substring which is at least half the length of
     the longer text?
     This speedup can produce non-minimal diffs.
@@ -653,7 +653,7 @@ class diff_match_patch:
             (text2_a, text2_b, text1_a, text1_b, mid_common) = hm
         return (text1_a, text1_b, text2_a, text2_b, mid_common)
 
-    def diff_cleanupSemantic(self, diffs):
+    def diff_cleanupSemantic(self, diffs):      # noqa: C901
         """Reduce the number of edits by eliminating semantically trivial
     equalities.
 
@@ -774,7 +774,7 @@ class diff_match_patch:
                 pointer += 1
             pointer += 1
 
-    def diff_cleanupSemanticLossless(self, diffs):
+    def diff_cleanupSemanticLossless(self, diffs):      # noqa: C901
         """Look for single edits surrounded on both sides by equalities
     which can be shifted sideways to align the edit to a word boundary.
     e.g: The c<ins>at c</ins>ame. -> The <ins>cat </ins>came.
@@ -971,7 +971,7 @@ class diff_match_patch:
         if changes:
             self.diff_cleanupMerge(diffs)
 
-    def diff_cleanupMerge(self, diffs):
+    def diff_cleanupMerge(self, diffs):     # noqa: C901
         """Reorder and merge like edit sections.  Merge equalities.
     Any edit section can move as long as it doesn't cross an equality.
 
