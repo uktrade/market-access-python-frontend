@@ -45,10 +45,12 @@ class NewReportBarrierAboutForm(forms.Form):
         help_text="Include the name of the product, "
                   "service or investment and the type of problem. "
                   "For example, Import quotas for steel rods.",
+        max_length=255,
         error_messages={'required': "Enter a name for this barrier"},
     )
     product = forms.CharField(
         label="What product, service or investment is affected?",
+        max_length=255,
         error_messages={'required': "Enter a product, service or investment"},
     )
     source = forms.ChoiceField(
