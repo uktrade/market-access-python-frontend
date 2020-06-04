@@ -11,14 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import sys
 
 from environ import Env
 from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-
-from django_log_formatter_ecs import ECSFormatter
 
 
 ROOT_DIR = Path(__file__).parents[2]
@@ -251,20 +248,20 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "ecs_formatter": {
-            "()": ECSFormatter,
-        },
+        "json": {
+            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": "(asctime)(levelname)(message)(filename)(lineno)(threadName)(name)(thread)(created)(process)(processName)(relativeCreated)(module)(funcName)(levelno)(msecs)(pathname)",  # noqa
+        }
     },
     "handlers": {
-        "ecs": {
-            "formatter": "ecs_formatter",
+        "console": {
             "class": "logging.StreamHandler",
-            "stream": sys.stdout,
-        },
+            "formatter": "json"
+        }
     },
     "loggers": {
         "": {
-            "handlers": ["ecs"],
+            "handlers": ["console"],
             "level": DJANGO_LOG_LEVEL
         }
     },
