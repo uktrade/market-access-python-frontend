@@ -7666,14 +7666,14 @@
             "id": 1,
             "title": "COVID-19",
             "description": "Barrier imposed because of the COVID-19 (coronavirus) pandemic. For example restrictions related to medical supplies or food supply chains.",
-            "show_at_reporting": "True",
+            "show_at_reporting": true,
             "order": 1
         },
         {
             "id": 2,
             "title": "Brexit",
             "description": "",
-            "show_at_reporting": "True",
+            "show_at_reporting": true,
             "order": 2
         }
     ],
