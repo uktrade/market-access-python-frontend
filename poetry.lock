@@ -193,6 +193,26 @@ six = ">=1.2"
 
 [[package]]
 category = "main"
+description = "A Django utility application that returns client's real IP address"
+name = "django-ipware"
+optional = false
+python-versions = "*"
+version = "2.1.0"
+
+[[package]]
+category = "main"
+description = "ECS log formatter for Django"
+name = "django-log-formatter-ecs"
+optional = false
+python-versions = ">=3.6"
+version = "0.0.2"
+
+[package.dependencies]
+django-ipware = ">=2.1.0"
+kubi-ecs-logger = ">=0.0.6"
+
+[[package]]
+category = "main"
 description = "Django model mixins and utilities"
 name = "django-model-utils"
 optional = false
@@ -390,6 +410,31 @@ parso = ">=0.7.0"
 [package.extras]
 qa = ["flake8 (3.7.9)"]
 testing = ["colorama", "docopt", "pytest (>=3.9.0,<5.0.0)"]
+
+[[package]]
+category = "main"
+description = "Logger based on Elasticsearch Common Schema."
+name = "kubi-ecs-logger"
+optional = false
+python-versions = ">=3.6, <4"
+version = "0.0.6"
+
+[package.dependencies]
+marshmallow = "2.19.2"
+
+[[package]]
+category = "main"
+description = "A lightweight library for converting complex datatypes to and from native Python datatypes."
+name = "marshmallow"
+optional = false
+python-versions = "*"
+version = "2.19.2"
+
+[package.extras]
+dev = ["python-dateutil", "simplejson", "pytest", "pytz", "flake8 (3.7.4)", "tox"]
+lint = ["flake8 (3.7.4)"]
+reco = ["python-dateutil", "simplejson"]
+tests = ["pytest", "pytz"]
 
 [[package]]
 category = "dev"
@@ -938,7 +983,7 @@ test = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [metadata]
-content-hash = "91de554457c416ebe760e409e686265e5b39ad634a33623f9813cc2f9a672980"
+content-hash = "3bbb79b4852a8f6c8c48960134092d32c4871d76ad1104a82f2e4a66dadc51e4"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1086,6 +1131,13 @@ django-extensions = [
     {file = "django-extensions-2.2.9.tar.gz", hash = "sha256:2f81b618ba4d1b0e58603e25012e5c74f88a4b706e0022a3b21f24f0322a6ce6"},
     {file = "django_extensions-2.2.9-py2.py3-none-any.whl", hash = "sha256:b19182d101a441fe001c5753553a901e2ef3ff60e8fbbe38881eb4a61fdd17c4"},
 ]
+django-ipware = [
+    {file = "django-ipware-2.1.0.tar.gz", hash = "sha256:a7c7a8fd019dbdc9c357e6e582f65034e897572fc79a7e467674efa8aef9d00b"},
+]
+django-log-formatter-ecs = [
+    {file = "django_log_formatter_ecs-0.0.2-py3-none-any.whl", hash = "sha256:4052d492c4972a97ccc18aa832cc84e0514fde6560de422b21d8b0c99fe01c5f"},
+    {file = "django_log_formatter_ecs-0.0.2.tar.gz", hash = "sha256:22cbc12fbb0aa8b5be99b18b732601c6fa26e9c28edb14c62e1b35fb2dbc0730"},
+]
 django-model-utils = [
     {file = "django-model-utils-4.0.0.tar.gz", hash = "sha256:adf09e5be15122a7f4e372cb5a6dd512bbf8d78a23a90770ad0983ee9d909061"},
     {file = "django_model_utils-4.0.0-py2.py3-none-any.whl", hash = "sha256:9cf882e5b604421b62dbe57ad2b18464dc9c8f963fc3f9831badccae66c1139c"},
@@ -1201,6 +1253,13 @@ ipython-genutils = [
 jedi = [
     {file = "jedi-0.17.0-py2.py3-none-any.whl", hash = "sha256:cd60c93b71944d628ccac47df9a60fec53150de53d42dc10a7fc4b5ba6aae798"},
     {file = "jedi-0.17.0.tar.gz", hash = "sha256:df40c97641cb943661d2db4c33c2e1ff75d491189423249e989bcea4464f3030"},
+]
+kubi-ecs-logger = [
+    {file = "kubi_ecs_logger-0.0.6.tar.gz", hash = "sha256:65ffd11860e06c0c68e17a508f37d76b28780dc8b4811ffc4316aae75375f673"},
+]
+marshmallow = [
+    {file = "marshmallow-2.19.2-py2.py3-none-any.whl", hash = "sha256:0e497a6447ffaad55578138ca512752de7a48d12f444996ededc3d6bf8a09ca2"},
+    {file = "marshmallow-2.19.2.tar.gz", hash = "sha256:e21a4dea20deb167c723e0ffb13f4cf33bcbbeb8a334e92406a3308cedea2826"},
 ]
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
