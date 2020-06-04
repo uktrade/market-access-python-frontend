@@ -340,7 +340,7 @@ class Metadata:
         return (
             (tag["id"], tag["title"], tag["description"])
             for tag in self.get_barrier_tags()
-            if tag["show_at_reporting"] in (True, "True")
+            if tag["show_at_reporting"] is True
         )
 
     def get_trade_direction(self, key=None, all_items=False):
