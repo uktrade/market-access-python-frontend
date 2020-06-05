@@ -244,28 +244,6 @@ API_RESULTS_LIMIT = env.int('API_RESULTS_LIMIT', default=100)
 # Logging
 # ============================================
 DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="info").upper()
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "json": {
-            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
-            "format": "(asctime)(levelname)(message)(filename)(lineno)(threadName)(name)(thread)(created)(process)(processName)(relativeCreated)(module)(funcName)(levelno)(msecs)(pathname)",  # noqa
-        }
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "json"
-        }
-    },
-    "loggers": {
-        "": {
-            "handlers": ["console"],
-            "level": DJANGO_LOG_LEVEL
-        }
-    },
-}
 
 
 # Google Tag Manager
