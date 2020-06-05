@@ -8,6 +8,7 @@ DJANGO_ENV = 'prod'
 
 DEBUG = False
 
+# Unable to put this in base.py because of circular import problem with ECSFormatter
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
