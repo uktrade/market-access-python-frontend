@@ -7,7 +7,7 @@ from django.http import QueryDict
 
 class BarrierSearchForm(forms.Form):
     search_id = forms.UUIDField(required=False, widget=forms.HiddenInput())
-    search = forms.CharField(label="Search", max_length=255, required=False)
+    search = forms.CharField(label="Search barrier title, summary or code", max_length=255, required=False)
     country = forms.MultipleChoiceField(label="Barrier location", required=False,)
     trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
     sector = forms.MultipleChoiceField(label="Sector", required=False,)
