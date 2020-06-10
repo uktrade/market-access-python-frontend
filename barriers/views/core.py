@@ -1,13 +1,20 @@
 from django.views.generic import TemplateView
 
-from .mixins import BarrierMixin
+from .mixins import AnalyticsMixin, BarrierMixin
 
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
 
-class Dashboard(TemplateView):
+class Dashboard(AnalyticsMixin, TemplateView):
     template_name = "barriers/dashboard.html"
+    utm_tags = {
+        "en": {
+            "utm_source": "notification-email",
+            "utm_medium": "email",
+            "utm_campaign": "dashboard",
+        }
+    }
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -29,9 +36,19 @@ class Dashboard(TemplateView):
         return context_data
 
 
-class BarrierDetail(BarrierMixin, TemplateView):
+class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
     include_interactions = True
+    utm_tags = {
+        "en": {
+            "utm_source": "notification-email",
+            "utm_medium": "email",
+            "utm_campaign": {
+                "n": "new-barriers",
+                "u": "updated-barriers",
+            }
+        }
+    }
 
 
 class WhatIsABarrier(TemplateView):

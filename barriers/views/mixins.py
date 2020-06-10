@@ -1,6 +1,7 @@
 from http import HTTPStatus
+import urllib.parse
 
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 
 from utils.api.client import MarketAccessAPIClient
@@ -210,3 +211,42 @@ class SessionDocumentMixin:
                 del self.request.session[session_key]
             except KeyError:
                 pass
+
+
+class AnalyticsMixin:
+    """
+    Redirects a short querystring to the full GA querystring with utm tags.
+
+    See example below to redirect ?en=u to the full GA querystring.
+    Each tag value can either be a string or a dictionary lookup.
+
+    utm_tags = {
+        "en": {
+            "utm_source": "notification-email",
+            "utm_medium": "email",
+            "utm_campaign": {
+                "n": "new-barriers",
+                "u": "updated-barriers",
+            }
+        }
+    }
+    """
+    utm_tags = {}
+
+    def get_utm_querystring(self):
+        for key, tag_data in self.utm_tags.items():
+            if key in self.request.GET:
+                params = {}
+                for tag_name, tag_value in tag_data.items():
+                    if isinstance(tag_value, dict):
+                        value = self.request.GET.get(key)
+                        params[tag_name] = tag_value.get(value, "")
+                    else:
+                        params[tag_name] = tag_value
+                return urllib.parse.urlencode(params)
+
+    def dispatch(self, request, *args, **kwargs):
+        utm_querystring = self.get_utm_querystring()
+        if utm_querystring is not None:
+            return HttpResponseRedirect(f"{request.path_info}?{utm_querystring}")
+        return super().dispatch(request, *args, **kwargs)
