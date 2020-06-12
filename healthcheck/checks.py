@@ -21,10 +21,12 @@ def db_check():
 
 
 def api_check():
-    # TODO: figure why it works with metadata (200)
-    #       but when calling check it comes back with (401)
-    url = f"{settings.MARKET_ACCESS_API_URI}metadata"
-    # url = f"{settings.MARKET_ACCESS_API_URI}check"
+    data = {
+        "status": HealthStatus.FAIL,
+        "respose_time": None
+    }
+    # trailing / is important here
+    url = f"{settings.MARKET_ACCESS_API_URI}check/"
     sender = Sender(
         settings.MARKET_ACCESS_API_HAWK_CREDS,
         url,
@@ -34,11 +36,18 @@ def api_check():
         always_hash_content=False,
     )
 
-    response = requests.get(
-        url,
-        verify=not settings.DEBUG,
-        headers={"Authorization": sender.request_header, "Content-Type": "text/plain", },
-    )
+    try:
+        response = requests.get(
+            url,
+            verify=not settings.DEBUG,
+            headers={"Authorization": sender.request_header, "Content-Type": "text/plain", },
+        )
+        response.raise_for_status()
+        response_data = response.json()
+    except Exception:
+        pass
+    else:
+        data["status"] = response_data["status"]
+        data["duration"] = response_data.get("duration")
 
-    # TODO: wrap up return, return data from API if 200, FAIL if anything else
-    return True
+    return data

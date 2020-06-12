@@ -3,6 +3,7 @@ import time
 from django.views.generic import TemplateView
 
 from authentication.decorators import public_view
+from healthcheck.constants import HealthStatus
 from .checks import db_check, api_check
 
 
@@ -25,9 +26,9 @@ class APIHealthCheckView(TemplateView):
 
     def get_context_data(self, **kwargs):
         """ Adds status and response time to response context """
-
         context = super().get_context_data(**kwargs)
+        fe_response_time = time.time() - self.request.start_time
         data = api_check()
-        context["status"] = data
-        context["response_time"] = data
+        context["status"] = data.get("status") or HealthStatus.FAIL
+        context["response_time"] = data.get("duration") or fe_response_time
         return context
