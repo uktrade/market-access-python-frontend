@@ -1,19 +1,19 @@
-{% if max_length %}
-<div class="govuk-character-count" data-module="character-count" data-maxlength="{{ max_length }}">
+{% if character_count %}
+<div class="govuk-character-count" data-module="character-count" data-maxlength="{{ field.field.max_length }}">
 {% endif %}
 
     <div id="{{ field.name }}" class="govuk-form-group{% if field.errors %} govuk-form-group--error{% endif %}">
-        <label class="govuk-label govuk-label--s" for="{{ field.name }}">{{ field.label }}</label>
+        <label class="govuk-label{% if label_classes %} {{ label_classes }}{% else %} govuk-label--s{% endif %}" for="{{ field.name }}">{{ field.label }}</label>
 
-        <textarea class="govuk-textarea{% if max_length %} js-character-count{% endif %}{% if field.errors %} govuk-textarea--error{% endif %}" id="{{ field.name }}" name="{{ field.name }}" rows="5">{% if field.value %}{{ field.value }}{% endif %}</textarea>
+        <textarea class="govuk-textarea{% if character_count %} js-character-count{% endif %}{% if field.errors %} govuk-textarea--error{% endif %}" id="{{ field.name }}" name="{{ field.name }}" rows="5">{% if field.value %}{{ field.value }}{% endif %}</textarea>
 
-        {% if max_length %}
+        {% if character_count %}
         <span id="{{ field.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
-            You can enter up to {{ max_length }} characters
+            You can enter up to {{ field.field.max_length }} characters
         </span>
         {% endif %}
     </div>
 
-{% if max_length %}
+{% if character_count %}
 </div>
 {% endif %}
