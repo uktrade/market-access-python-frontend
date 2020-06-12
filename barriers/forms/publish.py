@@ -1,5 +1,4 @@
 from django import forms
-from django.conf import settings
 
 from .mixins import APIFormMixin
 
@@ -10,7 +9,7 @@ from utils.forms import YesNoBooleanField
 class PublishEligibilityForm(APIFormMixin, forms.Form):
     is_publishable = YesNoBooleanField(
         label="Is this barrier eligible for public view?",
-        choices = (
+        choices=(
             ("no", "No, this barrier is ineligible"),
             ("yes", "Yes, this barrier is eligible"),
         ),

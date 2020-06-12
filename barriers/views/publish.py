@@ -1,7 +1,7 @@
 from django.urls import reverse
-from django.views.generic import FormView, RedirectView, TemplateView
+from django.views.generic import FormView
 
-from .mixins import APIBarrierFormViewMixin, BarrierMixin
+from .mixins import APIBarrierFormViewMixin
 from barriers.forms.publish import (
     MarkAsReadyForm,
     PublishEligibilityForm,
@@ -9,8 +9,6 @@ from barriers.forms.publish import (
     PublishSummaryForm,
     PublishTitleForm,
 )
-
-from utils.metadata import get_metadata
 
 
 class PublishBarrier(APIBarrierFormViewMixin, FormView):
