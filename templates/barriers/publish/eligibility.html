@@ -1,0 +1,22 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Edit Publish Eligibility{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        {% include "partials/forms/radio_input.html" with field=form.is_publishable %}
+
+        <button class="govuk-button">Confirm</button>
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+    </form>
+
+{% endblock %}

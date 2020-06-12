@@ -1,0 +1,78 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Publish Barrier{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Prepare barrier for public view' %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Title</dt>
+                <dd class="govuk-summary-list__value">
+                    {% if has_data %}
+                        {{ barrier.title }}
+                    {% else %}
+                        <a class="govuk-link" href="{% url 'barriers:edit_publish_title' barrier.id %}">Add</a>
+                    {% endif %}
+                </dd>
+                {% if has_data %}
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="{% url 'barriers:edit_publish_title' barrier.id %}">Change</a>
+                </dd>
+                {% endif %}
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Summary</dt>
+                <dd class="govuk-summary-list__value">
+                    {% if has_data %}
+                        {{ barrier.summary }}
+                    {% else %}
+                        <a class="govuk-link" href="{% url 'barriers:edit_publish_summary' barrier.id %}">Add</a>
+                    {% endif %}
+                </dd>
+                {% if has_data %}
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="{% url 'barriers:edit_publish_summary' barrier.id %}">Change</a>
+                </dd>
+                {% endif %}
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Status</dt>
+                <dd class="govuk-summary-list__value">{{ barrier.status.name }}</dd>
+                {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Country</dt>
+                <dd class="govuk-summary-list__value">{{ barrier.country.name }}</dd>
+                {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Sector</dt>
+                <dd class="govuk-summary-list__value">{{ barrier.sector_names|join:", " }}</dd>
+                {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Category</dt>
+                <dd class="govuk-summary-list__value">{{ barrier.category_titles|join:", " }}</dd>
+                {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
+            </div>
+        </dl>
+
+        {% if not is_ready %}
+            <button class="govuk-button{% if not has_data %} govuk-button--disabled{% endif %}"{% if not has_data %} disabled="disabled" aria-disabled="true"{% endif %}>Mark as ready</button>
+        {% else %}
+            {% include 'partials/forms/boolean_checkbox.html' with field=form.not_sensitive %}
+            <button class="govuk-button">Publish</button>
+        {% endif %}
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Publish title{% endblock %}
+
+{% block body_script %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        {% include "partials/forms/text_input.html" with field=form.title label_classes="govuk-label--l" %}
+
+        <input type="submit" value="Save" class="govuk-button">
+        <a href="{% url 'barriers:publish_barrier' object.id %}" class="form-cancel">Cancel</a>
+    </form>
+
+{% endblock %}

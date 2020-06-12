@@ -58,6 +58,10 @@ class Barrier(APIModel):
         return self._categories
 
     @property
+    def category_titles(self):
+        return [category["title"] for category in self.categories]
+
+    @property
     def country(self):
         if self._country is None and self.export_country:
             self._country = self.metadata.get_country(self.export_country)
