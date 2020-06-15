@@ -26,6 +26,7 @@ class PublishBarrier(APIBarrierFormViewMixin, FormView):
         context_data = super().get_context_data(**kwargs)
         context_data["has_data"] = self.has_data
         context_data["is_ready"] = self.is_ready
+        context_data["public_barrier"] = self.barrier
         return context_data
 
 

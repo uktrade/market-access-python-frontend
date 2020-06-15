@@ -18,6 +18,9 @@
                 <dt class="govuk-summary-list__key">Title</dt>
                 <dd class="govuk-summary-list__value">
                     {% if has_data %}
+                        {% if public_barrier.title != barrier.title %}
+                            <span>Internal title has changed</span>
+                        {% endif %}
                         {{ barrier.title }}
                     {% else %}
                         <a class="govuk-link" href="{% url 'barriers:edit_publish_title' barrier.id %}">Add</a>
@@ -33,6 +36,9 @@
                 <dt class="govuk-summary-list__key">Summary</dt>
                 <dd class="govuk-summary-list__value">
                     {% if has_data %}
+                        {% if public_barrier.summary != barrier.summary %}
+                            <span>Internal summary has changed</span>
+                        {% endif %}
                         {{ barrier.summary }}
                     {% else %}
                         <a class="govuk-link" href="{% url 'barriers:edit_publish_summary' barrier.id %}">Add</a>
@@ -46,22 +52,50 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Status</dt>
-                <dd class="govuk-summary-list__value">{{ barrier.status.name }}</dd>
+                <dd class="govuk-summary-list__value">
+                    {% if public_barrier.status != barrier.status %}
+                        <span class="diff__del">{{ public_barrier.status.name }}</span>
+                        <span class="diff__ins">{{ barrier.status.name }}</span>
+                    {% else %}
+                        {{ barrier.status.name }}
+                    {% endif %}
+                </dd>
                 {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Country</dt>
-                <dd class="govuk-summary-list__value">{{ barrier.country.name }}</dd>
+                <dd class="govuk-summary-list__value">
+                    {% if public_barrier.country != barrier.country %}
+                        <span class="diff__del">{{ public_barrier.country.name }}</span>
+                        <span class="diff__ins">{{ barrier.country.name }}</span>
+                    {% else %}
+                        {{ barrier.country.name }}
+                    {% endif %}
+                </dd>
                 {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Sector</dt>
-                <dd class="govuk-summary-list__value">{{ barrier.sector_names|join:", " }}</dd>
+                <dd class="govuk-summary-list__value">
+                    {% if public_barrier.country != barrier.country %}
+                        <span class="diff__del">{{ public_barrier.sector_names|join:", " }}</span>
+                        <span class="diff__ins">{{ barrier.sector_names|join:", " }}</span>
+                    {% else %}
+                        {{ barrier.sector_names|join:", " }}
+                    {% endif %}
+                </dd>
                 {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Category</dt>
-                <dd class="govuk-summary-list__value">{{ barrier.category_titles|join:", " }}</dd>
+                <dd class="govuk-summary-list__value">
+                    {% if public_barrier.country != barrier.country %}
+                        <span class="diff__del">{{ public_barrier.category_titles|join:", " }}</span>
+                        <span class="diff__ins">{{ barrier.category_titles|join:", " }}</span>
+                    {% else %}
+                        {{ barrier.category_titles|join:", " }}
+                    {% endif %}
+                </dd>
                 {% if has_data %}<dd class="govuk-summary-list__actions"></dd>{% endif %}
             </div>
         </dl>
