@@ -52,6 +52,8 @@
                     </fieldset>
                 </div>
 
+                {% include 'partials/forms/checkbox_filter.html' with field=form.published %}
+
                 {% if filters %}
                 <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
                 {% endif %}
