@@ -5,16 +5,12 @@ from healthcheck.models import HealthCheck
 import xml.etree.ElementTree as ET
 
 
-class TestViews(TestCase):
-    """
-    Test Healthcheck views
-    """
-
+class TestHealthcheckViews(TestCase):
     def setUp(self):
         self.anonymous_client = Client()
 
     def test_check_view(self):
-        response = self.anonymous_client.get("/check/")
+        response = self.anonymous_client.get("/check-fe/")
         tree = ET.fromstring(response.content)
         pingdom_status = tree[0].text
         pingdom_response_time = float(tree[1].text)
@@ -25,7 +21,7 @@ class TestViews(TestCase):
 
     def test_check_view_no_data_fail(self):
         HealthCheck.objects.all().delete()
-        response = self.anonymous_client.get("/check/")
+        response = self.anonymous_client.get("/check-fe/")
         tree = ET.fromstring(response.content)
         pingdom_status = tree[0].text
         pingdom_response_time = float(tree[1].text)
