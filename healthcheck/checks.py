@@ -23,7 +23,7 @@ def db_check():
 def api_check():
     data = {
         "status": HealthStatus.FAIL,
-        "respose_time": None
+        "duration": None
     }
     # trailing / is important here
     url = f"{settings.MARKET_ACCESS_API_URI}check/"
