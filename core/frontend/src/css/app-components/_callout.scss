@@ -1,6 +1,5 @@
 .callout {
-
-	background-color: $govuk-grey-3;
+	background-color: $govuk-light-grey;
 	padding: govuk-em( 15, 16 );
 	position: relative;
 	margin-bottom: govuk-em( 30, 16 );
@@ -27,9 +26,19 @@
 }
 
 .callout__button {
-
 	@extend .govuk-button;
 	margin-bottom: 2px;
+
+	background-image: govuk-image-url("icon-pointer.png");
+	background-repeat: no-repeat;
+	background-position: 100% 50%;
+	padding-right: govuk-em( 45, 24 );
+	display: table;
+
+	@include govuk-device-pixel-ratio {
+		background-image: govuk-image-url("icon-pointer-2x.png");
+		background-size: 30px 19px;
+	}
 
 	@include mq( $from: tablet ){
 

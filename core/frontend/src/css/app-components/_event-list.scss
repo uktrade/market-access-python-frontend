@@ -5,7 +5,7 @@
 
 .event-list__item {
 
-	border: 2px solid $govuk-grey-3;
+	border: 2px solid $govuk-light-grey;
 	padding: govuk-em( 15, 16 );
 	margin-bottom: govuk-em( 15, 16 );
 	position: relative;
@@ -17,7 +17,7 @@
 		top: govuk-em( 17, 16 );
 		left: govuk-em( -35, 16 );
 		display: inline-block;
-		border: 5px solid $govuk-grey-3;
+		border: 5px solid $govuk-light-grey;
 		border-radius: 50%;
 		width: 10px;
 		height: 10px;
@@ -27,7 +27,7 @@
 
 	&:after {
 		content: '';
-		border-left: 3px solid $govuk-grey-3;
+		border-left: 3px solid $govuk-light-grey;
 		height: 120%;
 		display: inline-block;
 		position: absolute;

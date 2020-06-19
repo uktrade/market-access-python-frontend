@@ -1,5 +1,5 @@
 .barrier-status-badge {
-	background-color: $govuk-grey-1;
+	background-color: $govuk-dark-grey;
 	display: inline-block;
 	padding: govuk-em( 10, 16 );
 	line-height: 1.5;
@@ -25,9 +25,9 @@
 }
 
 .barrier-status-badge--hibernated {
-	background-color: $govuk-grey-1;
+	background-color: $govuk-dark-grey;
 }
 
 .barrier-status-badge--unknown {
-	background-color: $govuk-grey-1;
+	background-color: $govuk-dark-grey;
 }

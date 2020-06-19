@@ -8,9 +8,9 @@
 
 .ma-card-list__item {
     @include govuk-clearfix;
-    border-bottom: 1px solid $govuk-grey-3;
+    border-bottom: 1px solid $govuk-light-grey;
     padding: govuk-em( 24, 16 ) 0;
     &:first-child {
-        border-top: 1px solid $govuk-grey-3;
+        border-top: 1px solid $govuk-light-grey;
     }
 }

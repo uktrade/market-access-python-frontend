@@ -39,9 +39,9 @@ a {
 
 	max-width: 100%;
 	padding: 0 govuk-em( 30, 16 ) 0 govuk-em( 30, 16 );
-	background: $govuk-grey-4;
+	background: $govuk-light-grey;
 	//margin-top: govuk-em( -40, 16 );
-	border-bottom: 1px solid $govuk-grey-3;
+	border-bottom: 1px solid $govuk-light-grey;
 
 	&:after {
 		content: "";

@@ -52,17 +52,27 @@ To list all available commands with help text type `make help` in terminal and h
 
 
 #### Staticfiles
+The project is using CSS and fonts from `govuk-frontend` npm package.
+
+Resources for GOV.UK Frontend:
+- https://frontend.design-system.service.gov.uk/#gov-uk-frontend
+- https://github.com/alphagov/govuk-frontend/tree/master/src/govuk
+
+Fonts are copied while css is imported from node modules.
+To prepare staticfiles for local run `make dev`
+
 Staticfiles are compressed offline for most environments, so it makes sense that you could run the same way locally to test things out. 
 To do that, just: 
-1. stop the django development server 
+1. stop the django development server (if it's running) 
 2. set `DEBUG` to `False` in `config/settings/local.py`
+3. run `npm run build` for a one off run (or `make dev` if you want to recompile css and js real time when changes are saved)
 3. run `make django-static`
-4. start the django development server
+4. start the django development server 
 
 **Note:** this is a good way to mimic how files are generated and served in an environment, \
 but please note, lazy loading of static files is also disabled in offline mode, so your changes to templates, js, scss \
 might not take effect unless you run step 3 from above and restart your dev server.
-
+To keep watching and recompiling css and js file use `make dev` from step 3.
 
 ## Builds
 Builds can be initiated from Jenkins or from the command line using `cf` CLI tool (using `cf push <app_name>`).
