@@ -1,0 +1,41 @@
+<form action="" method="POST" role="search" class="search-form">
+    {% csrf_token %}
+
+    <div id="{{ form.query.name }}" class="govuk-form-group">
+        <label class="govuk-label govuk-!-font-size-19 govuk-!-font-weight-bold" for="user">
+            {{ form.query.label }}
+        </label>
+
+        <span id="user-hint" class="govuk-hint">
+        </span>
+
+        {% form_field_error form "query" %}
+
+        <div class="search-form__input-group">
+            <input
+                class="govuk-input search-form__input{% if form.query.error %} govuk-input--error{% endif %}"
+                id="user"
+                name="query"
+                type="text"
+                value="{% if form.query.value %}{{ form.query.value }}{% endif %}"
+                placeholder="Search for user"
+                {% if not form.query.value and not form.query.error %}autofocus{% endif %}
+                aria-describedby="user-hint"
+                >
+        </div>
+    </div>
+
+    <button type="submit" class="search-form__button govuk-button">Search</button>
+    {% if cancel_url %}<a href="{{ cancel_url }}" class="form-cancel">Cancel</a>{% endif %}
+</form>
+
+{% if error %}
+    <p class="error-message">{{ error }}</p>
+{% endif %}
+
+{% if form.is_valid %}
+    <h2 class="results-count">
+        <span class="results-count__number">{{ results|length }}</span>
+        users match <span class="highlight">{{ form.query.value }}</span>
+    </h2>
+{% endif %}

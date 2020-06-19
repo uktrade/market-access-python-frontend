@@ -1,7 +1,5 @@
 {% extends "barriers/edit/base.html" %}
 
-{% load highlight %}
-
 {% block page_title %}{{ block.super }} - Barrier team - Find user{% endblock %}
 
 {% block back_link %}
@@ -15,67 +13,9 @@
     {% form_error_banner form %}
 
     <div class="restrict-width">
-
-        <form action="" method="POST" role="search" class="search-form">
-            {% csrf_token %}
-
-            <div id="{{ form.query.name }}" class="govuk-form-group">
-                <label class="govuk-label govuk-!-font-size-19 govuk-!-font-weight-bold" for="user">
-                    {{ form.query.label }}
-                </label>
-
-                <span id="user-hint" class="govuk-hint">
-                </span>
-
-                {% form_field_error form "query" %}
-
-                <div class="search-form__input-group">
-                    <input
-                        class="govuk-input search-form__input{% if form.query.error %} govuk-input--error{% endif %}"
-                        id="user"
-                        name="query"
-                        type="text"
-                        value="{% if form.query.value %}{{ form.query.value }}{% endif %}"
-                        placeholder="Search for user"
-                        {% if not form.query.value and not form.query.error %}autofocus{% endif %}
-                        aria-describedby="user-hint"
-                        >
-                </div>
-            </div>
-
-            <button type="submit" class="search-form__button govuk-button">Search</button>
-            <a href="{% url 'barriers:team' barrier.id %}" class="form-cancel">Cancel</a>
-
-        </form>
-
-        {% if error %}
-            <p class="error-message">{{ error }}</p>
-        {% endif %}
-
-        {% if form.is_valid %}
-            <h2 class="results-count">
-                <span class="results-count__number">{{ results|length }}</span>
-                users match <span class="highlight">{{ form.query.value }}</span>
-            </h2>
-        {% endif %}
-
-        {% if results %}
-            <ul class="search-card-list">
-                {% for user in results %}
-                    <form action="" method="POST" role="add" class="add-form">
-                        {% csrf_token %}
-                        <li class="search-card">
-                            <input name="user_id" id="add_user_id" value="{{ user.user_id }}" hidden aria-hidden="true">
-                            <input name="user_full_name" id="add_user_full_name" value="{{ user.first_name }} {{ user.last_name }}" hidden aria-hidden="true">
-                            <button type="submit" name="action" value="add" class="search-card__button">
-                                <h3 class="search-card__heading">Add {{ user.first_name|highlight:form.query.value }} {{ user.last_name|highlight:form.query.value }}</h3>
-                            </button>
-                        </li>
-                    </form>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
+        {% url 'barriers:team' barrier.id as team_url %}
+        {% include "users/partials/user_search_form.html" with cancel_url=team_url %}
+        {% include "users/partials/user_search_results.html" %}
     </div>
 
 {% endblock %}
