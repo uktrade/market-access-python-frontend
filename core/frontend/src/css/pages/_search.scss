@@ -6,12 +6,12 @@
 
 .filter-list-title {
 	@include govuk-font( $size: 19, $line-height: 1 );
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 }
 
 .filter-items-group {
 	padding: govuk-em( 10, 16 ) govuk-em( 8, 16 );
-	background: $govuk-grey-3;
+	background: $govuk-light-grey;
 	margin-bottom: govuk-em( 10, 16 );
 }
 
@@ -99,7 +99,7 @@
 
 .active-filters__item {
 	display: inline;
-	background: $govuk-grey-4;
+	background: $govuk-light-grey;
 	margin-right: govuk-em( 5, 16 );
 	padding: govuk-em( 2, 16 ) govuk-em( 5, 16 );
 }
@@ -107,7 +107,7 @@
 .active-filter__heading {
 	display: inline;
 	font-weight: normal;
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 }
 
 .active-filter__text {
@@ -118,14 +118,14 @@
 }
 
 .filter-results-pagination-summary {
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 }
 
 .filter-results-download {
 	overflow: hidden;
 	margin: govuk-em( 10, 16 ) 0 govuk-em( 5, 16 ) 0;
 	padding: govuk-em( 10, 16 ) 0 0 0;
-	border-top: 1px solid $govuk-grey-2;
+	border-top: 1px solid $govuk-mid-grey;
 }
 
 .filter-results-download__text {
@@ -155,12 +155,12 @@
 
 .filter-results-list__item {
 
-	border-bottom: 1px solid $govuk-grey-2;
+	border-bottom: 1px solid $govuk-mid-grey;
 	padding: govuk-em( 15, 16 ) 0;
 	overflow: hidden;
 
 	&:first-of-type {
-		border-top: 1px solid $govuk-grey-2;
+		border-top: 1px solid $govuk-mid-grey;
 	}
 }
 
@@ -249,7 +249,7 @@
 
 .filter-results-list__item__definitions__key {
 
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 	display: inline;
 
 	@include mq( $from: tablet ){

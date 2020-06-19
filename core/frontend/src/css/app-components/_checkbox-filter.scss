@@ -3,7 +3,7 @@ $default-spacing-unit: 5px;
 .checkbox-filter {
 
 	transform: translateZ(0); // Enforcing GPU acceleration fixes overflow cropping caused by CSS columns
-	border-bottom: 1px solid $govuk-grey-2;
+	border-bottom: 1px solid $govuk-mid-grey;
 	max-height: govuk-em( 200, 16 );
 	overflow-y: auto;
 
@@ -20,14 +20,14 @@ $default-spacing-unit: 5px;
 
 	position: relative;
 	background-color: white;
-	border-bottom: 1px solid $govuk-grey-2;
+	border-bottom: 1px solid $govuk-mid-grey;
 
 	&:last-of-type {
 		border-bottom: none;
 	}
 
 	&:hover {
-		background-color: $govuk-grey-4;
+		background-color: $govuk-light-grey;
 	}
 }
 
@@ -129,7 +129,7 @@ $default-spacing-unit: 5px;
 	@include govuk-font(16);
 	display: block;
 	margin-top: 5px;
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 
 	a {
 		&,
@@ -137,7 +137,7 @@ $default-spacing-unit: 5px;
 		&:link,
 		&:hover,
 		&:visited {
-			color: $govuk-grey-1;
+			color: $govuk-dark-grey;
 		}
 	}
 }

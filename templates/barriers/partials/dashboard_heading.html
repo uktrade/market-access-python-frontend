@@ -2,25 +2,27 @@
     <span class="govuk-caption-m">Market access barriers</span> Dashboard
 </h1>
 
-<a href="{% url 'reports:new_report' %}" role="button" class="dash-button">
-    <span class="dash-button__heading">Report a barrier</span>
-    <span class="dash-button__text">
-        Add a market barrier that is affecting a UK business exporting or importing.
-    </span>
-</a>
+<section class="dash-buttons-cards-container">
+    <a href="{% url 'reports:new_report' %}" role="button" class="dash-button">
+        <span class="dash-button__heading">Report a barrier</span>
+        <span class="dash-button__text">
+            Add a market barrier that is affecting a UK business exporting or importing.
+        </span>
+    </a>
 
-<a href="{% url 'barriers:search' %}" role="button" class="dash-button">
-    <span class="dash-button__heading">Search</span>
-    <span class="dash-button__text">
-        Search and filter barriers.
-    </span>
-</a>
+    <a href="{% url 'barriers:search' %}" role="button" class="dash-button">
+        <span class="dash-button__heading">Search</span>
+        <span class="dash-button__text">
+            Search and filter barriers.
+        </span>
+    </a>
 
-<div class="dash-card">
-    <h2 class="dash-card__heading">
-        Help centre
-    </h2>
-    <p class="dash-card__text">
-        <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/">How-to guides</a>, <a href="https://data-services-help.trade.gov.uk/market-access/about-barriers-and-market-access/">about market access</a> and <a href="https://data-services-help.trade.gov.uk/market-access/updates/">updates</a> to the service.
-    </p>
-</div>
+    <div class="dash-card">
+        <h2 class="dash-card__heading">
+            Help centre
+        </h2>
+        <p class="dash-card__text">
+            <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/">How-to guides</a>, <a href="https://data-services-help.trade.gov.uk/market-access/about-barriers-and-market-access/">about market access</a> and <a href="https://data-services-help.trade.gov.uk/market-access/updates/">updates</a> to the service.
+        </p>
+    </div>
+</section>

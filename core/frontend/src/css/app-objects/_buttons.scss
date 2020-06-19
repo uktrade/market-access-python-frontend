@@ -4,21 +4,21 @@
 
 .button--secondary {
 
-	background-color: $govuk-grey-3;
-	box-shadow: 0 2px 0 $govuk-grey-1;
-	color: $govuk-grey-1;
+	background-color: $govuk-light-grey;
+	box-shadow: 0 2px 0 $govuk-dark-grey;
+	color: $govuk-dark-grey;
 	display: inline-block;
 
 	&:link,
 	&:visited,
 	&:active,
 	&:hover {
-		color: $govuk-grey-1;
+		color: $govuk-dark-grey;
 	}
 
 	&:focus,
 	&:hover {
-		background-color: $govuk-grey-4;
+		background-color: $govuk-light-grey;
 	}
 }
 

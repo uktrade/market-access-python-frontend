@@ -20,7 +20,8 @@ const production = ((process.env.NODE_ENV || 'dev').trim().toLowerCase() === 'pr
 // Source paths
 const
     assetsSrcPath = 'core/frontend/src/',
-    scssEntryFile = `${assetsSrcPath}css/index.scss`;
+    scssEntryFile = `${assetsSrcPath}css/index.scss`,
+    govukAssets = 'node_modules/govuk-frontend/govuk/assets/';
 
 // Build / Distribution paths
 const
@@ -128,6 +129,11 @@ const prepDist = () => {
         .pipe(gulp.dest(jsBuildPath));
 };
 
+const copyFonts = () => {
+    return gulp.src(`${govukAssets}fonts/*`)
+        .pipe(gulp.dest('core/static/govuk-public/fonts'));
+};
+
 // File watchers
 const watchFiles = () => {
     browserSyncInit();
@@ -154,7 +160,7 @@ const watch = watchFiles;
 const watchcss = watchCss;
 const css = main_css;
 const js = main_js;
-const build = gulp.parallel(css, js, prepDist);
+const build = gulp.parallel(css, js, prepDist, copyFonts);
 const fe = gulp.series(build, watch);
 
 // Export Commands

@@ -1,7 +1,7 @@
 .details-list {
 	display: table;
 	width: 100%;
-	border-top: 1px solid $govuk-grey-2;
+	border-top: 1px solid $govuk-mid-grey;
 }
 
 .details-list__group {
@@ -10,7 +10,7 @@
 	@include govuk-font( $size: 14 );
 
 	&:nth-of-type( odd ){
-		background-color: $govuk-grey-4;
+		background-color: $govuk-light-grey;
 	}
 }
 
@@ -26,5 +26,5 @@
 	width: 50%;
 	padding: govuk-em( 10, 14 );
 	margin: 0;
-	border-bottom: 1px solid $govuk-grey-2;
+	border-bottom: 1px solid $govuk-mid-grey;
 }

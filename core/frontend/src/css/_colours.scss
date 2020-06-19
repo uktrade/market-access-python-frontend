@@ -1,0 +1,46 @@
+@function tint( $color, $percentage ){
+	@return mix( white, $color, $percentage );
+}
+
+@function shade( $color, $percentage ){
+	@return mix( black, $color, $percentage );
+}
+
+$govuk-red: govuk-colour( 'red' );
+$govuk-red-5: tint( govuk-colour( 'red' ), 95 );
+$govuk-yellow: (govuk-colour( 'yellow' ));
+$govuk-yellow-25: tint( govuk-colour( 'yellow' ), 75 );
+$govuk-yellow-10: tint( govuk-colour( 'yellow' ), 90 );
+$govuk-green: govuk-colour( 'green' );
+$govuk-green-10: tint( $govuk-green, 90 );
+$govuk-green-15: tint( $govuk-green, 85 );
+$govuk-green-25: tint( $govuk-green, 75 );
+$govuk-blue: govuk-colour( 'blue' );
+$govuk-blue-15: tint( $govuk-blue, 85 );
+$govuk-dark-blue: govuk-colour( 'dark-blue' );
+$govuk-light-blue: govuk-colour( 'light-blue' );
+$govuk-purple: govuk-colour( 'purple' );
+
+$govuk-black: govuk-colour( 'black' );
+$govuk-dark-grey: govuk-colour( 'dark-grey' );
+$govuk-mid-grey: govuk-colour( 'mid-grey' );
+$govuk-light-grey: govuk-colour( 'light-grey' );
+$govuk-white: govuk-colour( 'white' );
+
+$govuk-light-purple: govuk-colour( 'light-purple' );
+$govuk-bright-purple: govuk-colour( 'bright-purple' );
+$govuk-pink: govuk-colour( 'pink' );
+$govuk-light-pink: govuk-colour( 'light-pink' );
+$govuk-orange: govuk-colour( 'orange' );
+$govuk-orange-10: tint( $govuk-orange, 90 );
+$govuk-brown: govuk-colour( 'brown' );
+$govuk-light-green: govuk-colour( 'light-green' );
+$govuk-turquoise: govuk-colour( 'turquoise' );
+
+$priority-high: govuk-colour( 'red' );
+$priority-medium: govuk-colour( 'orange' );
+$priority-low: govuk-colour( 'yellow' );
+$priority-unknown: $govuk-mid-grey;
+
+$focus-colour: $govuk-yellow;
+$secondary-text-colour: tint( $govuk-black, 25 );

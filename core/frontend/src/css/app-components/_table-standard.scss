@@ -12,7 +12,7 @@
 
 	padding: govuk-em( 10, 16 );
 	font-weight: normal;
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 
 	&--active {
 		font-weight: bold;
@@ -82,14 +82,14 @@
 	&:nth-of-type( odd ) {
 
 		.standard-table__cell {
-			background-color: $govuk-grey-4;
+			background-color: $govuk-light-grey;
 		}
 	}
 }
 
 .standard-table__cell {
 	padding: govuk-em( 10, 16 );
-	border-bottom: 1px solid $govuk-grey-2;
+	border-bottom: 1px solid $govuk-mid-grey;
 	vertical-align: top;
 
 	.table__link {
