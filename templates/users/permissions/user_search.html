@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - User search{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Add a user' %}
+
+    {% form_error_banner form %}
+
+    <div class="restrict-width">
+        {% url 'users:user_permissions' as permissions_url %}
+        {% include "users/partials/user_search_form.html" with cancel_url=permissions_url %}
+        {% include "users/partials/user_search_results.html" %}
+    </div>
+
+{% endblock %}

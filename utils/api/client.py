@@ -9,6 +9,7 @@ from .resources import (
     DocumentsResource,
     NotesResource,
     UsersResource,
+    PermissionGroupsResource,
     ReportsResource,
     SavedSearchesResource,
 )
@@ -24,9 +25,10 @@ class MarketAccessAPIClient:
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
         self.notes = NotesResource(self)
-        self.users = UsersResource(self)
+        self.permission_groups = PermissionGroupsResource(self)
         self.reports = ReportsResource(self)
         self.saved_searches = SavedSearchesResource(self)
+        self.users = UsersResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

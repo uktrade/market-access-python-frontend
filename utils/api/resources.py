@@ -6,7 +6,7 @@ from django.conf import settings
 from barriers.constants import Statuses
 from barriers.models import Assessment, Barrier, HistoryItem, Note, SavedSearch
 from reports.models import Report
-from users.models import User
+from users.models import PermissionGroup, User
 
 from utils.exceptions import ScanError
 from utils.models import ModelList
@@ -204,9 +204,6 @@ class UsersResource(APIResource):
     resource_name = "users"
     model = User
 
-    def patch(self, *args, **kwargs):
-        return self.client.patch("whoami", json=kwargs)
-
 
 class ReportsResource(APIResource):
     resource_name = "reports"
@@ -219,3 +216,8 @@ class ReportsResource(APIResource):
 class SavedSearchesResource(APIResource):
     resource_name = "saved-searches"
     model = SavedSearch
+
+
+class PermissionGroupsResource(APIResource):
+    resource_name = "permission-groups"
+    model = PermissionGroup

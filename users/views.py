@@ -1,6 +1,7 @@
 import logging
 
 import re
+import requests
 from urllib.parse import urlencode
 import uuid
 
@@ -8,10 +9,12 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import RedirectView
+from django.views.generic import FormView, RedirectView, TemplateView
 
-import requests
+from .forms import UserPermissionGroupForm
+from .mixins import UserSearchMixin
 
+from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.sessions import init_session
 
@@ -110,3 +113,55 @@ class SignOut(RedirectView):
         uri = f"{settings.SSO_BASE_URI}logout/"
         request.session.flush()
         return HttpResponseRedirect(uri)
+
+
+class UserPermissions(TemplateView):
+    template_name = "users/permissions.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        permission_groups = client.permission_groups.list()
+
+        context_data["permission_groups"] = permission_groups
+        context_data["permission_group_id"] = int(self.request.GET.get("group", 1))
+        return context_data
+
+
+class PermissionsUserSearch(UserSearchMixin, FormView):
+    template_name = "users/permissions/user_search.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        for result in context_data.get("results", []):
+            result["link"] = reverse(
+                "users:add_user_to_group", kwargs={"user_id": result["user_id"]}
+            )
+        return context_data
+
+
+class AddUserToGroup(FormView):
+    template_name = "users/permissions/add_user_to_group.html"
+    form_class = UserPermissionGroupForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        user_id = self.kwargs.get("user_id")
+        context_data["user"] = client.users.get(user_id)
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        kwargs["id"] = str(self.kwargs.get("user_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["permission_groups"] = client.permission_groups.list()
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("users:user_permissions")
