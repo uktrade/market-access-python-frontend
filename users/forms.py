@@ -30,5 +30,5 @@ class UserPermissionGroupForm(APIFormMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.users.patch(
             id=self.id,
-            groups=[self.cleaned_data["permission_group"]],
+            groups=[{"id": self.cleaned_data["permission_group"]}],
         )

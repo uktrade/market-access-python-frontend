@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - User permissions{% endblock %}
+
+{% block page_content %}
+
+    <h1 class="govuk-heading-l">Manage users and groups</h1>
+
+    <ul class="page-tabs page-tabs--no-margin">
+        {% if permission_group_id %}
+            <li class="page-tabs__tab">
+                <a class="page-tabs__tab__text" href="{% url 'users:manage_users' %}">All users</a>
+            </li>
+        {% else %}
+            <li class="page-tabs__tab page-tabs__tab--active">
+                <span class="page-tabs__tab__text">All users</span>
+            </li>
+        {% endif %}
+
+        {% for permission_group in permission_groups %}
+            {% if permission_group_id == permission_group.id %}
+                <li class="page-tabs__tab page-tabs__tab--active">
+                    <span class="page-tabs__tab__text">{{ permission_group.tab_name }}</span>
+                </li>
+            {% else %}
+                <li class="page-tabs__tab">
+                    <a class="page-tabs__tab__text" href="?group={{ permission_group.id }}">{{ permission_group.tab_name }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <a class="govuk-button button--primary" href="{% url 'users:add_user' %}{% if permission_group_id %}?group={{ permission_group_id }}{% endif %}">Add a user to this group</a>
+
+    <table class="standard-table standard-table__barrier-team">
+        <caption class="visually-hidden">List of team members for this barrier</caption>
+        <thead>
+            <tr class="standard-table__heading-row">
+                <th class="standard-table__heading">Name</th>
+                <th class="standard-table__heading">Email</th>
+                {% if not permission_group_id %}
+                    <th class="standard-table__heading">Role</th>
+                {% endif %}
+                <th class="standard-table__heading"></th>
+            </tr>
+        </thead>
+        <tbody class="js-delete-modal-container">
+            {% if permission_group_id %}
+                {% for permission_group in permission_groups %}
+                    {% if permission_group_id == permission_group.id %}
+                        {% for user in permission_group.users %}
+                            <tr class="standard-table__row">
+                                <td class="standard-table__cell">
+                                    <a href="{% url 'barriers:search' %}?user_id={{ user.id }}">
+                                        <span class="team-member__full-name">{{ user.full_name }}</span>
+                                    </a>
+                                </td>
+                                <td class="standard-table__cell">{{ user.email }}</td>
+                                <td class="standard-table__cell">
+                                    <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                                    <a class="js-delete-modal" href="">Remove</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for user in users %}
+                    <tr class="standard-table__row">
+                        <td class="standard-table__cell">
+                            <a href="{% url 'barriers:search' %}?user_id={{ user.id }}">
+                                <span class="team-member__full-name">{{ user.full_name }}</span>
+                            </a>
+                        </td>
+                        <td class="standard-table__cell">{{ user.email }}</td>
+                        <td class="standard-table__cell">{% for group in user.groups %}{{ group.name }}{% endfor %}</td>
+                        <td class="standard-table__cell">
+                            <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}

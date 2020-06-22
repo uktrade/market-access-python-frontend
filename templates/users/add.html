@@ -9,8 +9,8 @@
     {% form_error_banner form %}
 
     <div class="restrict-width">
-        {% url 'users:user_permissions' as permissions_url %}
-        {% include "users/partials/user_search_form.html" with cancel_url=permissions_url %}
+        {% url 'users:manage_users' as manage_users_url %}
+        {% include "users/partials/user_search_form.html" with cancel_url=manage_users_url %}
         {% include "users/partials/user_search_results.html" %}
     </div>
 

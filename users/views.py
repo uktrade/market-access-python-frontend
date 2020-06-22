@@ -12,9 +12,10 @@ from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
 from .forms import UserPermissionGroupForm
-from .mixins import UserSearchMixin
+from .mixins import UserMixin, UserSearchMixin
 
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIException
 from utils.helpers import build_absolute_uri
 from utils.sessions import init_session
 
@@ -115,41 +116,68 @@ class SignOut(RedirectView):
         return HttpResponseRedirect(uri)
 
 
-class UserPermissions(TemplateView):
-    template_name = "users/permissions.html"
+class ManageUsers(TemplateView):
+    template_name = "users/manage.html"
+
+    def get_tab_name(self, group_name):
+        return f"{group_name}s"
+
+    def get_group_id(self):
+        if "group" in self.request.GET:
+            try:
+                return int(self.request.GET.get("group"))
+            except ValueError:
+                return None
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         permission_groups = client.permission_groups.list()
 
+        for group in permission_groups:
+            group.data["tab_name"] = self.get_tab_name(group.name)
+
         context_data["permission_groups"] = permission_groups
-        context_data["permission_group_id"] = int(self.request.GET.get("group", 1))
+
+        group_id = self.get_group_id()
+        if group_id is None:
+            context_data["users"] = client.users.list()
+        else:
+            context_data["permission_group_id"] = group_id
         return context_data
 
 
-class PermissionsUserSearch(UserSearchMixin, FormView):
-    template_name = "users/permissions/user_search.html"
+class AddUser(UserSearchMixin, FormView):
+    template_name = "users/add.html"
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        for result in context_data.get("results", []):
-            result["link"] = reverse(
-                "users:add_user_to_group", kwargs={"user_id": result["user_id"]}
-            )
-        return context_data
-
-
-class AddUserToGroup(FormView):
-    template_name = "users/permissions/add_user_to_group.html"
-    form_class = UserPermissionGroupForm
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
+    def select_user(self, form):
+        sso_user_id = form.data["user_id"]
+        full_name = form.data["user_full_name"]
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        user_id = self.kwargs.get("user_id")
-        context_data["user"] = client.users.get(user_id)
-        return context_data
+        try:
+            group_id = self.request.GET.get("group")
+            if group_id:
+                client.users.patch(id=sso_user_id, groups=[{"id": group_id}])
+            else:
+                client.users.patch(id=sso_user_id, groups=[])
+            return HttpResponseRedirect(self.get_success_url())
+        except APIException:
+            error = f"There was an error adding {full_name} to the group."
+            return self.render_to_response(
+                self.get_context_data(form=form, results=(), error=error)
+            )
+
+    def get_success_url(self):
+        success_url = reverse("users:manage_users")
+        group = self.request.GET.get("group")
+        if group:
+            return f"{success_url}?group={group}"
+        return success_url
+
+
+class EditUser(UserMixin, FormView):
+    template_name = "users/edit.html"
+    form_class = UserPermissionGroupForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -159,9 +187,13 @@ class AddUserToGroup(FormView):
         kwargs["permission_groups"] = client.permission_groups.list()
         return kwargs
 
+    def get_initial(self):
+        for group in self.user.groups:
+            return {"permission_group": group["id"]}
+
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("users:user_permissions")
+        return reverse("users:manage_users")
