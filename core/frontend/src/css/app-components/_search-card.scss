@@ -17,7 +17,7 @@
 }
 
 .search-card__values__key {
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 	display: inline-block;
 	padding: govuk-em( 5, 14 ) 0 govuk-em( 5, 14 ) 0;
 }
@@ -37,12 +37,12 @@
 
 	text-decoration: none;
 	display: inline-block;
-	border: 1px solid $govuk-grey-2;
+	border: 1px solid $govuk-mid-grey;
 	padding: govuk-em( 15, 16 ) govuk-em( 15, 16 ) 0 govuk-em( 15, 16 );
 	width: 100%;
 	box-sizing: border-box;
 
 	&:focus {
-		background-color: $govuk-grey-4;
+		background-color: $govuk-light-grey;
 	}
 }

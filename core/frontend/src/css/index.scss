@@ -1,3 +1,15 @@
 $govuk-images-path: '/static/govuk-public/images/';
+$govuk-fonts-path: '/static/govuk-public/fonts/';
 
-@import 'main';
+@import "../../../../node_modules/govuk-frontend/govuk/all";
+@import 'colours';
+@import 'layout';
+@import 'error';
+
+@import 'vendor/all';
+@import 'govuk-custom/all';
+@import 'app-objects/all';
+@import 'app-components/all';
+@import 'pages/all';
+
+@import 'global';
