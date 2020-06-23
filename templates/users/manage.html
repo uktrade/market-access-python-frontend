@@ -51,14 +51,13 @@
                         {% for user in permission_group.users %}
                             <tr class="standard-table__row">
                                 <td class="standard-table__cell">
-                                    <a href="{% url 'barriers:search' %}?user_id={{ user.id }}">
+                                    <a href="{% url 'users:user_detail' user.id %}">
                                         <span class="team-member__full-name">{{ user.full_name }}</span>
                                     </a>
                                 </td>
                                 <td class="standard-table__cell">{{ user.email }}</td>
                                 <td class="standard-table__cell">
                                     <a href="{% url 'users:edit_user' user.id %}">Change role</a>
-                                    <a class="js-delete-modal" href="">Remove</a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -68,7 +67,7 @@
                 {% for user in users %}
                     <tr class="standard-table__row">
                         <td class="standard-table__cell">
-                            <a href="{% url 'barriers:search' %}?user_id={{ user.id }}">
+                            <a href="{% url 'users:user_detail' user.id %}">
                                 <span class="team-member__full-name">{{ user.full_name }}</span>
                             </a>
                         </td>

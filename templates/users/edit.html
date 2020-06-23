@@ -27,7 +27,7 @@
             <p>All the information on your profile will be visible to DIT staff and contractors registered to use Market Access</p>
 
             <button class="govuk-button">Save</button>
-            <a class="form-cancel" href="{% url 'users:manage_users' %}">Cancel</a>
+            <a class="form-cancel" href="{% url 'users:user_detail' user.id %}">Cancel</a>
         </form>
     </div>
 

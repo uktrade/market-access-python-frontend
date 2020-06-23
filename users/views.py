@@ -197,3 +197,7 @@ class EditUser(UserMixin, FormView):
 
     def get_success_url(self):
         return reverse("users:manage_users")
+
+
+class UserDetail(UserMixin, TemplateView):
+    template_name = "users/detail.html"

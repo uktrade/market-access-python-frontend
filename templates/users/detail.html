@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add user{% endblock %}
+
+{% block page_content %}
+
+    <a href="{% url 'users:manage_users' %}" class="govuk-back-link ma-back-link">Back</a>
+
+    {% include 'partials/heading.html' with text='User profile' %}
+
+    {{ user.full_name }}
+    <a  href="mailto:{{ user.email }}">{{ user.email }}</a>
+    <strong>Role:</strong> {{ user.groups_display }}
+
+    <a href="{% url 'users:edit_user' user.id %}" class="govuk-button">Edit profile</a>
+
+{% endblock %}
