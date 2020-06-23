@@ -190,6 +190,7 @@ class EditUser(UserMixin, FormView):
     def get_initial(self):
         for group in self.user.groups:
             return {"permission_group": group["id"]}
+        return {"permission_group": 0}
 
     def form_valid(self, form):
         form.save()

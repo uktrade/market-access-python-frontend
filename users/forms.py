@@ -16,19 +16,20 @@ class UserSearchForm(forms.Form):
 class UserPermissionGroupForm(APIFormMixin, forms.Form):
     permission_group = forms.ChoiceField(
         label="Role",
-        choices=[],
+        choices=[(0, "General user")],
         error_messages={"required": "Select a role"},
     )
 
     def __init__(self, permission_groups, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["permission_group"].choices = (
+        self.fields["permission_group"].choices += (
             (group.id, group.name) for group in permission_groups
         )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.users.patch(
-            id=self.id,
-            groups=[{"id": self.cleaned_data["permission_group"]}],
-        )
+        if self.cleaned_data.get("permission_group") == 0:
+            groups = []
+        else:
+            groups = [{"id": self.cleaned_data["permission_group"]}]
+        client.users.patch(id=self.id, groups=groups)
