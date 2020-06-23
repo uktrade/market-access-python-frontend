@@ -1,3 +1,5 @@
+from django.http import HttpResponseRedirect
+
 from .forms import UserSearchForm
 
 from utils.api.client import MarketAccessAPIClient
@@ -27,9 +29,11 @@ class UserMixin:
 
 class UserSearchMixin:
     form_class = UserSearchForm
+    error_message = "There was an error adding {full_name}"
 
-    def select_user(self, form):
-        raise NotImplementedError
+    @property
+    def client(self):
+        return MarketAccessAPIClient(self.request.session.get("sso_token"))
 
     def form_valid(self, form):
         if self.request.POST.get("action") == "add":
@@ -40,10 +44,26 @@ class UserSearchMixin:
 
         try:
             results = client.search_users(form.cleaned_data["query"])
-        except APIException:
+        except APIException as e:
             error = "There was an error searching for users"
             results = []
 
         return self.render_to_response(
             self.get_context_data(form=form, results=results, error=error)
         )
+
+    def select_user(self, form):
+        user_id = form.data["user_id"]
+        full_name = form.data["user_full_name"]
+        try:
+            raise APIException
+            self.select_user_api_call(user_id)
+            return HttpResponseRedirect(self.get_success_url())
+        except APIException:
+            error = self.error_message.format(full_name=full_name)
+            return self.render_to_response(
+                self.get_context_data(form=form, results=(), error=error)
+            )
+
+    def select_user_api_call(self, *args, **kwargs):
+        raise NotImplementedError

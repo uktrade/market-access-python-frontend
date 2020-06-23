@@ -149,23 +149,14 @@ class ManageUsers(TemplateView):
 
 class AddUser(UserSearchMixin, FormView):
     template_name = "users/add.html"
+    error_message = "There was an error adding {full_name} to the group."
 
-    def select_user(self, form):
-        sso_user_id = form.data["user_id"]
-        full_name = form.data["user_full_name"]
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        try:
-            group_id = self.request.GET.get("group")
-            if group_id:
-                client.users.patch(id=sso_user_id, groups=[{"id": group_id}])
-            else:
-                client.users.patch(id=sso_user_id, groups=[])
-            return HttpResponseRedirect(self.get_success_url())
-        except APIException:
-            error = f"There was an error adding {full_name} to the group."
-            return self.render_to_response(
-                self.get_context_data(form=form, results=(), error=error)
-            )
+    def select_user_api_call(self, user_id):
+        group_id = self.request.GET.get("group")
+        if group_id:
+            client.users.patch(id=user_id, groups=[{"id": group_id}])
+        else:
+            client.users.patch(id=user_id, groups=[])
 
     def get_success_url(self):
         success_url = reverse("users:manage_users")
