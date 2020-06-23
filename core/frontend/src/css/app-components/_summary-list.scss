@@ -1,0 +1,10 @@
+.ma-summary-list {
+    font-size: 19px;
+    &__key {
+        font-weight: bold;
+    }
+    &__value {
+        margin-left: 0;
+        margin-bottom: govuk-em( 24, 16 );
+    }
+}

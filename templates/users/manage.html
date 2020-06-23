@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - User permissions{% endblock %}
+{% block page_title %}{{ block.super }} - Manage users{% endblock %}
 
 {% block page_content %}
 
@@ -30,33 +30,33 @@
         {% endfor %}
     </ul>
 
-    <a class="govuk-button button--primary" href="{% url 'users:add_user' %}{% if permission_group_id %}?group={{ permission_group_id }}{% endif %}">Add a user to this group</a>
+    <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:add_user' %}{% if permission_group_id %}?group={{ permission_group_id }}{% endif %}">Add a user to this group</a>
 
-    <table class="standard-table standard-table__barrier-team">
-        <caption class="visually-hidden">List of team members for this barrier</caption>
+    <table class="govuk-table">
+        <caption class="govuk-table__caption visually-hidden">List of all users</caption>
         <thead>
-            <tr class="standard-table__heading-row">
-                <th class="standard-table__heading">Name</th>
-                <th class="standard-table__heading">Email</th>
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Name</th>
+                <th scope="col" class="govuk-table__header">Email</th>
                 {% if not permission_group_id %}
-                    <th class="standard-table__heading">Role</th>
+                    <th scope="col" class="govuk-table__header">Role</th>
                 {% endif %}
-                <th class="standard-table__heading"></th>
+                <th scope="col" class="govuk-table__header"></th>
             </tr>
         </thead>
-        <tbody class="js-delete-modal-container">
+        <tbody class="govuk-table__body">
             {% if permission_group_id %}
                 {% for permission_group in permission_groups %}
                     {% if permission_group_id == permission_group.id %}
                         {% for user in permission_group.users %}
-                            <tr class="standard-table__row">
-                                <td class="standard-table__cell">
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">
                                     <a href="{% url 'users:user_detail' user.id %}">
                                         <span class="team-member__full-name">{{ user.full_name }}</span>
                                     </a>
                                 </td>
-                                <td class="standard-table__cell">{{ user.email }}</td>
-                                <td class="standard-table__cell">
+                                <td class="govuk-table__cell">{{ user.email }}</td>
+                                <td class="govuk-table__cell">
                                     <a href="{% url 'users:edit_user' user.id %}">Change role</a>
                                 </td>
                             </tr>
@@ -65,15 +65,15 @@
                 {% endfor %}
             {% else %}
                 {% for user in users %}
-                    <tr class="standard-table__row">
-                        <td class="standard-table__cell">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
                             <a href="{% url 'users:user_detail' user.id %}">
                                 <span class="team-member__full-name">{{ user.full_name }}</span>
                             </a>
                         </td>
-                        <td class="standard-table__cell">{{ user.email }}</td>
-                        <td class="standard-table__cell">{% for group in user.groups %}{{ group.name }}{% endfor %}</td>
-                        <td class="standard-table__cell">
+                        <td class="govuk-table__cell">{{ user.email }}</td>
+                        <td class="govuk-table__cell">{% for group in user.groups %}{{ group.name }}{% endfor %}</td>
+                        <td class="govuk-table__cell">
                             <a href="{% url 'users:edit_user' user.id %}">Change role</a>
                         </td>
                     </tr>

@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Add user{% endblock %}
+{% block page_title %}{{ block.super }} - Edit user{% endblock %}
+
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% url 'users:manage_users' %}" class="govuk-back-link ma-back-link">Back</a>
+    </div>
+{% endblock %}
 
 {% block page_content %}
-
-    <a href="{% url 'users:manage_users' %}" class="govuk-back-link ma-back-link">Back</a>
 
     {% include 'partials/heading.html' with text='Edit profile' %}
 
@@ -14,8 +18,10 @@
         <dt class="ma-summary-list__key">Name</dt>
         <dd class="ma-summary-list__value">{{ user.full_name }}</dd>
 
-        <dt class="ma-summary-list__key">Email</dt>
-        <dd class="ma-summary-list__value">{{ user.email }}</dd>
+        {% if user.email %}
+            <dt class="ma-summary-list__key">Email</dt>
+            <dd class="ma-summary-list__value">{{ user.email }}</dd>
+        {% endif %}
     </dl>
 
     <div class="restrict-width">
@@ -24,10 +30,10 @@
 
             {% include "partials/forms/radio_input.html" with field=form.permission_group %}
 
-            <p>All the information on your profile will be visible to DIT staff and contractors registered to use Market Access</p>
+            <p class="govuk-body">All the information on your profile will be visible to DIT staff and contractors registered to use Market Access.</p>
 
             <button class="govuk-button">Save</button>
-            <a class="form-cancel" href="{% url 'users:user_detail' user.id %}">Cancel</a>
+            <a class="form-cancel govuk-link" href="{% url 'users:user_detail' user.id %}">Cancel</a>
         </form>
     </div>
 
