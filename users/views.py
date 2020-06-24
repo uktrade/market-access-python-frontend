@@ -13,6 +13,7 @@ from django.views.generic import FormView, RedirectView, TemplateView
 
 from .forms import UserGroupForm
 from .mixins import GroupMixin, UserMixin, UserSearchMixin
+from .permissions import APIPermissionMixin
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIException
@@ -116,8 +117,9 @@ class SignOut(RedirectView):
         return HttpResponseRedirect(uri)
 
 
-class ManageUsers(GroupMixin, TemplateView):
+class ManageUsers(APIPermissionMixin, GroupMixin, TemplateView):
     template_name = "users/manage.html"
+    permission_required = "list_users"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -134,9 +136,10 @@ class ManageUsers(GroupMixin, TemplateView):
         return context_data
 
 
-class AddUser(UserSearchMixin, GroupMixin, FormView):
+class AddUser(APIPermissionMixin, UserSearchMixin, GroupMixin, FormView):
     template_name = "users/add.html"
     error_message = "There was an error adding {full_name} to the group."
+    permission_required = "change_user"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -159,9 +162,10 @@ class AddUser(UserSearchMixin, GroupMixin, FormView):
         return success_url
 
 
-class EditUser(UserMixin, FormView):
+class EditUser(APIPermissionMixin, UserMixin, FormView):
     template_name = "users/edit.html"
     form_class = UserGroupForm
+    permission_required = "change_user"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

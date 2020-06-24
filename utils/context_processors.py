@@ -1,3 +1,6 @@
+from utils.api.client import MarketAccessAPIClient
+
+
 class Domains:
     DATA_HUB = "https://www.datahub.trade.gov.uk/"
     MI = "https://mi.exportwins.service.trade.gov.uk/"
@@ -81,6 +84,23 @@ def apps(user):
     return visible_apps
 
 
+class LazyPermissionsFetcher:
+    _permissions = None
+
+    def __init__(self, token):
+        self.token = token
+
+    def permissions(self):
+        if self._permissions is None:
+            self._permissions = self.get_permissions()
+        return self._permissions
+
+    def get_permissions(self):
+        client = MarketAccessAPIClient(self.token)
+        user_data = client.get("whoami")
+        return user_data.get("permissions", [])
+
+
 def user_scope(request):
     user = request.session.get("user_data", {})
     visible_apps = apps(user)
@@ -90,9 +110,11 @@ def user_scope(request):
     else:
         user['has_crm_permission'] = False
 
+    token = request.session.get("sso_token")
     extra_context = {
         'user': user,
         'apps': visible_apps,
+        'user_permissions': LazyPermissionsFetcher(token).permissions
     }
 
     return extra_context
