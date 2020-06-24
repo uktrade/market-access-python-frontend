@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
-from .forms import UserPermissionGroupForm
+from .forms import UserGroupForm
 from .mixins import GroupMixin, UserMixin, UserSearchMixin
 
 from utils.api.client import MarketAccessAPIClient
@@ -122,15 +122,15 @@ class ManageUsers(GroupMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        permission_groups = client.permission_groups.list()
+        groups = client.groups.list()
 
-        context_data["permission_groups"] = permission_groups
+        context_data["groups"] = groups
 
         group_id = self.get_group_id()
         if group_id is None:
             context_data["users"] = client.users.list()
         else:
-            context_data["permission_group_id"] = group_id
+            context_data["group_id"] = group_id
         return context_data
 
 
@@ -160,20 +160,20 @@ class AddUser(UserSearchMixin, GroupMixin, FormView):
 
 class EditUser(UserMixin, FormView):
     template_name = "users/edit.html"
-    form_class = UserPermissionGroupForm
+    form_class = UserGroupForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         kwargs["id"] = str(self.kwargs.get("user_id"))
         kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["permission_groups"] = client.permission_groups.list()
+        kwargs["groups"] = client.groups.list()
         return kwargs
 
     def get_initial(self):
         for group in self.user.groups:
-            return {"permission_group": str(group["id"])}
-        return {"permission_group": "0"}
+            return {"group": str(group["id"])}
+        return {"group": "0"}
 
     def form_valid(self, form):
         form.save()

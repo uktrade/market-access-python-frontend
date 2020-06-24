@@ -7,7 +7,7 @@
     <h1 class="govuk-heading-l">Manage users and groups</h1>
 
     <ul class="page-tabs page-tabs--no-margin">
-        {% if permission_group_id %}
+        {% if group_id %}
             <li class="page-tabs__tab">
                 <a class="page-tabs__tab__text" href="{% url 'users:manage_users' %}">All users</a>
             </li>
@@ -17,20 +17,20 @@
             </li>
         {% endif %}
 
-        {% for permission_group in permission_groups %}
-            {% if permission_group_id == permission_group.id %}
+        {% for group in groups %}
+            {% if group_id == group.id %}
                 <li class="page-tabs__tab page-tabs__tab--active">
-                    <span class="page-tabs__tab__text">{{ permission_group.plural_name }}</span>
+                    <span class="page-tabs__tab__text">{{ group.plural_name }}</span>
                 </li>
             {% else %}
                 <li class="page-tabs__tab">
-                    <a class="page-tabs__tab__text" href="?group={{ permission_group.id }}">{{ permission_group.plural_name }}</a>
+                    <a class="page-tabs__tab__text" href="?group={{ group.id }}">{{ group.plural_name }}</a>
                 </li>
             {% endif %}
         {% endfor %}
     </ul>
 
-    <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:add_user' %}{% if permission_group_id %}?group={{ permission_group_id }}{% endif %}">Add a user to this group</a>
+    <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:add_user' %}{% if group_id %}?group={{ group_id }}{% endif %}">Add a user to this group</a>
 
     <table class="govuk-table">
         <caption class="govuk-table__caption visually-hidden">List of all users</caption>
@@ -38,17 +38,17 @@
             <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header">Name</th>
                 <th scope="col" class="govuk-table__header">Email</th>
-                {% if not permission_group_id %}
+                {% if not group_id %}
                     <th scope="col" class="govuk-table__header">Role</th>
                 {% endif %}
                 <th scope="col" class="govuk-table__header"></th>
             </tr>
         </thead>
         <tbody class="govuk-table__body">
-            {% if permission_group_id %}
-                {% for permission_group in permission_groups %}
-                    {% if permission_group_id == permission_group.id %}
-                        {% for user in permission_group.users %}
+            {% if group_id %}
+                {% for group in groups %}
+                    {% if group_id == group.id %}
+                        {% for user in group.users %}
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">
                                     <a href="{% url 'users:user_detail' user.id %}">

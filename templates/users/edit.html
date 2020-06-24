@@ -28,7 +28,7 @@
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
 
-            {% include "partials/forms/radio_input.html" with field=form.permission_group %}
+            {% include "partials/forms/radio_input.html" with field=form.group %}
 
             <p class="govuk-body">All the information on your profile will be visible to DIT staff and contractors registered to use Market Access.</p>
 

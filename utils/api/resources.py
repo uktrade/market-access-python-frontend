@@ -6,7 +6,7 @@ from django.conf import settings
 from barriers.constants import Statuses
 from barriers.models import Assessment, Barrier, HistoryItem, Note, SavedSearch
 from reports.models import Report
-from users.models import PermissionGroup, User
+from users.models import Group, User
 
 from utils.exceptions import ScanError
 from utils.models import ModelList
@@ -218,6 +218,6 @@ class SavedSearchesResource(APIResource):
     model = SavedSearch
 
 
-class PermissionGroupsResource(APIResource):
+class GroupsResource(APIResource):
     resource_name = "groups"
-    model = PermissionGroup
+    model = Group

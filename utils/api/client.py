@@ -7,9 +7,9 @@ from django.conf import settings
 from .resources import (
     BarriersResource,
     DocumentsResource,
+    GroupsResource,
     NotesResource,
     UsersResource,
-    PermissionGroupsResource,
     ReportsResource,
     SavedSearchesResource,
 )
@@ -24,8 +24,8 @@ class MarketAccessAPIClient:
         self.token = token or settings.TRUSTED_USER_TOKEN
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
+        self.groups = GroupsResource(self)
         self.notes = NotesResource(self)
-        self.permission_groups = PermissionGroupsResource(self)
         self.reports = ReportsResource(self)
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)

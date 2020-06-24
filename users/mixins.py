@@ -88,4 +88,4 @@ class GroupMixin:
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         group_id = self.get_group_id()
         if group_id:
-            return client.permission_groups.get(group_id)
+            return client.groups.get(group_id)
