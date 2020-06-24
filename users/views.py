@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
 from .forms import UserPermissionGroupForm
-from .mixins import UserMixin, UserSearchMixin
+from .mixins import GroupMixin, UserMixin, UserSearchMixin
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIException
@@ -116,26 +116,13 @@ class SignOut(RedirectView):
         return HttpResponseRedirect(uri)
 
 
-class ManageUsers(TemplateView):
+class ManageUsers(GroupMixin, TemplateView):
     template_name = "users/manage.html"
-
-    def get_tab_name(self, group_name):
-        return f"{group_name}s"
-
-    def get_group_id(self):
-        if "group" in self.request.GET:
-            try:
-                return int(self.request.GET.get("group"))
-            except ValueError:
-                return None
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         permission_groups = client.permission_groups.list()
-
-        for group in permission_groups:
-            group.data["tab_name"] = self.get_tab_name(group.name)
 
         context_data["permission_groups"] = permission_groups
 
@@ -147,12 +134,17 @@ class ManageUsers(TemplateView):
         return context_data
 
 
-class AddUser(UserSearchMixin, FormView):
+class AddUser(UserSearchMixin, GroupMixin, FormView):
     template_name = "users/add.html"
     error_message = "There was an error adding {full_name} to the group."
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["group"] = self.group
+        return context_data
+
     def select_user_api_call(self, user_id):
-        group_id = self.request.GET.get("group")
+        group_id = self.get_group_id()
         if group_id:
             self.client.users.patch(id=user_id, groups=[{"id": group_id}])
         else:
@@ -160,9 +152,9 @@ class AddUser(UserSearchMixin, FormView):
 
     def get_success_url(self):
         success_url = reverse("users:manage_users")
-        group = self.request.GET.get("group")
-        if group:
-            return f"{success_url}?group={group}"
+        group_id = self.get_group_id()
+        if group_id:
+            return f"{success_url}?group={group_id}"
         return success_url
 
 

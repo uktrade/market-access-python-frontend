@@ -2,7 +2,9 @@ from utils.models import APIModel
 
 
 class PermissionGroup(APIModel):
-    pass
+    @property
+    def plural_name(self):
+        return f"{self.name}s"
 
 
 class User(APIModel):

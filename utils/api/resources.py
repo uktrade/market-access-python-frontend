@@ -219,5 +219,5 @@ class SavedSearchesResource(APIResource):
 
 
 class PermissionGroupsResource(APIResource):
-    resource_name = "permission-groups"
+    resource_name = "groups"
     model = PermissionGroup

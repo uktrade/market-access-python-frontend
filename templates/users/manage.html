@@ -20,11 +20,11 @@
         {% for permission_group in permission_groups %}
             {% if permission_group_id == permission_group.id %}
                 <li class="page-tabs__tab page-tabs__tab--active">
-                    <span class="page-tabs__tab__text">{{ permission_group.tab_name }}</span>
+                    <span class="page-tabs__tab__text">{{ permission_group.plural_name }}</span>
                 </li>
             {% else %}
                 <li class="page-tabs__tab">
-                    <a class="page-tabs__tab__text" href="?group={{ permission_group.id }}">{{ permission_group.tab_name }}</a>
+                    <a class="page-tabs__tab__text" href="?group={{ permission_group.id }}">{{ permission_group.plural_name }}</a>
                 </li>
             {% endif %}
         {% endfor %}

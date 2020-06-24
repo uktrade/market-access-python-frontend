@@ -66,3 +66,26 @@ class UserSearchMixin:
 
     def select_user_api_call(self, *args, **kwargs):
         raise NotImplementedError
+
+
+class GroupMixin:
+    _group = None
+
+    def get_group_id(self):
+        if "group" in self.request.GET:
+            try:
+                return int(self.request.GET.get("group"))
+            except ValueError:
+                return None
+
+    @property
+    def group(self):
+        if not self._group:
+            self._group = self.get_group()
+        return self._group
+
+    def get_group(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        group_id = self.get_group_id()
+        if group_id:
+            return client.permission_groups.get(group_id)

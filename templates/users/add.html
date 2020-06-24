@@ -4,7 +4,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add a user' %}
+    <h1 class="govuk-heading-l">Add a user{% if group %} to {{ group.plural_name|lower }}{% endif %}</h1>
 
     {% form_error_banner form %}
 
