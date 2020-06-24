@@ -154,9 +154,9 @@ class AddUser(UserSearchMixin, FormView):
     def select_user_api_call(self, user_id):
         group_id = self.request.GET.get("group")
         if group_id:
-            client.users.patch(id=user_id, groups=[{"id": group_id}])
+            self.client.users.patch(id=user_id, groups=[{"id": group_id}])
         else:
-            client.users.patch(id=user_id, groups=[])
+            self.client.users.patch(id=user_id, groups=[])
 
     def get_success_url(self):
         success_url = reverse("users:manage_users")
