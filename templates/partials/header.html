@@ -55,6 +55,9 @@
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>
                 </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'manage-users' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:manage_users' %}">Administer users</a>
+                </li>
             </ul>
         </nav>
     </div>

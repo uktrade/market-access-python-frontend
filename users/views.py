@@ -121,10 +121,10 @@ class ManageUsers(GroupMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        groups = client.groups.list()
+        context_data["page"] = "manage-users"
 
-        context_data["groups"] = groups
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        context_data["groups"] = client.groups.list()
 
         group_id = self.get_group_id()
         if group_id is None:
@@ -141,6 +141,7 @@ class AddUser(UserSearchMixin, GroupMixin, FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["group"] = self.group
+        context_data["page"] = "manage-users"
         return context_data
 
     def select_user_api_call(self, user_id):
@@ -161,6 +162,11 @@ class AddUser(UserSearchMixin, GroupMixin, FormView):
 class EditUser(UserMixin, FormView):
     template_name = "users/edit.html"
     form_class = UserGroupForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["page"] = "manage-users"
+        return context_data
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
