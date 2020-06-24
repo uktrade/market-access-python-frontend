@@ -7,7 +7,7 @@ from utils.api.client import MarketAccessAPIClient
 
 class UserSearchForm(forms.Form):
     query = forms.CharField(
-        label="Find a user to add as a contributor",
+        label="Find a user to add",
         max_length=255,
         required=False,
     )

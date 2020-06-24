@@ -26,7 +26,7 @@
         </dl>
 
         {% url 'barriers:team' barrier.id as team_url %}
-        {% include "users/partials/user_search_form.html" with cancel_url=team_url %}
+        {% include "users/partials/user_search_form.html" with query_label="Find a user to add as the new owner" cancel_url=team_url %}
         {% include "users/partials/user_search_results.html" %}
 
     </div>

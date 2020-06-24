@@ -3,7 +3,7 @@
 
     <div id="{{ form.query.name }}" class="govuk-form-group">
         <label class="govuk-label govuk-!-font-size-19 govuk-!-font-weight-bold" for="user">
-            {{ form.query.label }}
+            {% if query_label %}{{ query_label }}{% else %}{{ form.query.label }}{% endif %}
         </label>
 
         <span id="user-hint" class="govuk-hint">
