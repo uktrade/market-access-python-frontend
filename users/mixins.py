@@ -56,7 +56,6 @@ class UserSearchMixin:
         user_id = form.data["user_id"]
         full_name = form.data["user_full_name"]
         try:
-            raise APIException
             self.select_user_api_call(user_id)
             return HttpResponseRedirect(self.get_success_url())
         except APIException:
