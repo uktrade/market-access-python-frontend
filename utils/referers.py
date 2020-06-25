@@ -1,4 +1,4 @@
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlparse
 
 from django.http import Http404
 from django.urls import resolve
