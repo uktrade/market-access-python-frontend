@@ -56,7 +56,7 @@
                     <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>
                 </li>
 
-                {% if "change_user" in user_permissions %}
+                {% if current_user|has_permission:"change_user" %}
                     <li class="datahub-header__navigation__item">
                         <a class="datahub-header__navigation__item__link{% if page == 'manage-users' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:manage_users' %}">Administer users</a>
                     </li>

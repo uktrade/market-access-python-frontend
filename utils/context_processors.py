@@ -1,3 +1,5 @@
+from users.models import User
+
 from utils.api.client import MarketAccessAPIClient
 
 
@@ -76,45 +78,30 @@ def apps(user):
     ]
 
     # Find out which of the apps the user have access to
-    permitted_applications = user.get("permitted_applications", [])
-    permitted_keys = [app["key"] for app in permitted_applications]
+    permitted_keys = [app["key"] for app in user.permitted_applications]
 
     visible_apps = [app for app in apps if app["permittedKey"] in permitted_keys and app["canShow"]]
 
     return visible_apps
 
 
-class LazyPermissionsFetcher:
-    _permissions = None
-
-    def __init__(self, token):
-        self.token = token
-
-    def permissions(self):
-        if self._permissions is None:
-            self._permissions = self.get_permissions()
-        return self._permissions
-
-    def get_permissions(self):
-        client = MarketAccessAPIClient(self.token)
-        user_data = client.get("whoami")
-        return user_data.get("permissions", [])
-
-
 def user_scope(request):
-    user = request.session.get("user_data", {})
+    client = MarketAccessAPIClient(request.session.get("sso_token"))
+
+    user = User(request.session.get("user_data", {}))
+    user.is_stale = True
+    user.set_client(client)
+
     visible_apps = apps(user)
     permitted_keys = [app['permittedKey'] for app in visible_apps]
     if 'datahub-crm' in permitted_keys:
-        user['has_crm_permission'] = True
+        user.has_crm_permission = True
     else:
-        user['has_crm_permission'] = False
+        user.has_crm_permission = False
 
-    token = request.session.get("sso_token")
     extra_context = {
         'current_user': user,
         'apps': visible_apps,
-        'user_permissions': LazyPermissionsFetcher(token).permissions
     }
 
     return extra_context

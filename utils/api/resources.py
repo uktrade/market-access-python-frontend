@@ -204,6 +204,9 @@ class UsersResource(APIResource):
     resource_name = "users"
     model = User
 
+    def get_current(self):
+        return self.model(self.client.get("whoami"))
+
 
 class ReportsResource(APIResource):
     resource_name = "reports"

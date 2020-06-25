@@ -122,7 +122,8 @@ TEMPLATES = [
                 'django_settings_export.settings_export',
             ],
             'builtins':[
-                'core.templatetags.govuk_forms'
+                'core.templatetags.govuk_forms',
+                'users.templatetags.permissions',
             ],
         },
     },
