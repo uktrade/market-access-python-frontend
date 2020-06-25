@@ -16,7 +16,6 @@ from .mixins import GroupMixin, UserMixin, UserSearchMixin
 from .permissions import APIPermissionMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.exceptions import APIException
 from utils.helpers import build_absolute_uri
 from utils.sessions import init_session
 

@@ -3,7 +3,7 @@ from http import HTTPStatus
 from django.urls import reverse
 
 from core.tests import MarketAccessTestCase
-from users.models import PermissionGroup, User
+from users.models import Group, User
 
 from mock import patch
 
@@ -83,9 +83,9 @@ class ManageUsersTestCase(MarketAccessTestCase):
             "groups": [{"id": 2, "name": "Editor"}]
         })
         mock_list.return_value = [
-            PermissionGroup({"id": 1, "name": "Sifter"}),
-            PermissionGroup({"id": 2, "name": "Editor"}),
-            PermissionGroup({"id": 3, "name": "Publisher"}),
+            Group({"id": 1, "name": "Sifter"}),
+            Group({"id": 2, "name": "Editor"}),
+            Group({"id": 3, "name": "Publisher"}),
         ]
         response = self.client.post(
             reverse("users:edit_user", kwargs={"user_id": 75}),
@@ -107,9 +107,9 @@ class ManageUsersTestCase(MarketAccessTestCase):
             "groups": [{"id": 2, "name": "Editor"}]
         })
         mock_list.return_value = [
-            PermissionGroup({"id": 1, "name": "Sifter"}),
-            PermissionGroup({"id": 2, "name": "Editor"}),
-            PermissionGroup({"id": 3, "name": "Publisher"}),
+            Group({"id": 1, "name": "Sifter"}),
+            Group({"id": 2, "name": "Editor"}),
+            Group({"id": 3, "name": "Publisher"}),
         ]
         response = self.client.post(
             reverse("users:edit_user", kwargs={"user_id": 75}),

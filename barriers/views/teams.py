@@ -6,7 +6,6 @@ from .mixins import BarrierMixin, TeamMembersContextMixin
 from users.mixins import UserSearchMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.exceptions import APIException
 
 
 class BarrierTeam(TeamMembersContextMixin, BarrierMixin, TemplateView):
