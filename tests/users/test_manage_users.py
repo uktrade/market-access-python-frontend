@@ -70,7 +70,7 @@ class ManageUsersTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
             id="3fbe6479-b9bd-4658-81d7-f07c2a73d33d",
-            groups=[{"id": "2"}]
+            groups=[{"id": 2}]
         )
 
     @patch("utils.api.resources.APIResource.get")
@@ -89,7 +89,7 @@ class ManageUsersTestCase(MarketAccessTestCase):
         ]
         response = self.client.post(
             reverse("users:edit_user", kwargs={"user_id": 75}),
-            data={"permission_group": "3"},
+            data={"group": "3"},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
@@ -113,7 +113,7 @@ class ManageUsersTestCase(MarketAccessTestCase):
         ]
         response = self.client.post(
             reverse("users:edit_user", kwargs={"user_id": 75}),
-            data={"permission_group": "0"},
+            data={"group": "0"},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
