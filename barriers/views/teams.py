@@ -22,7 +22,6 @@ class SearchTeamMember(BarrierMixin, UserSearchMixin, FormView):
             user_id=user_id,
             role="Contributor",
         )
-        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse(

@@ -68,7 +68,7 @@ class UserSearchMixin:
         raise NotImplementedError
 
 
-class GroupMixin:
+class GroupQuerystringMixin:
     _group = None
 
     def get_group_id(self):

@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
 from .forms import UserGroupForm
-from .mixins import GroupMixin, UserMixin, UserSearchMixin
+from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
 from .permissions import APIPermissionMixin
 
 from utils.api.client import MarketAccessAPIClient
@@ -117,7 +117,7 @@ class SignOut(RedirectView):
         return HttpResponseRedirect(uri)
 
 
-class ManageUsers(APIPermissionMixin, GroupMixin, TemplateView):
+class ManageUsers(APIPermissionMixin, GroupQuerystringMixin, TemplateView):
     template_name = "users/manage.html"
     permission_required = "list_users"
 
@@ -136,7 +136,7 @@ class ManageUsers(APIPermissionMixin, GroupMixin, TemplateView):
         return context_data
 
 
-class AddUser(APIPermissionMixin, UserSearchMixin, GroupMixin, FormView):
+class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormView):
     template_name = "users/add.html"
     error_message = "There was an error adding {full_name} to the group."
     permission_required = "change_user"
