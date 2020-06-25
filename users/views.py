@@ -207,3 +207,8 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
 
 class UserDetail(UserMixin, TemplateView):
     template_name = "users/detail.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["page"] = "manage-users"
+        return context_data

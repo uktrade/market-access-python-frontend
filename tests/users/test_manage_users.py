@@ -8,6 +8,61 @@ from users.models import Group, User
 from mock import patch
 
 
+class ManageUsersPermissionsTestCase(MarketAccessTestCase):
+    administrator = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": ["change_user", "list_users"],
+        }
+    )
+    general_user = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": [],
+        }
+    )
+
+    def test_link_appears_for_superuser(self):
+        response = self.client.get(reverse("reports:new_report"))
+        assert response.status_code == HTTPStatus.OK
+        html = response.content.decode('utf8')
+        assert "Administer users" in html
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_link_appears_for_administrator(self, mock_user):
+        mock_user.return_value = self.administrator
+        response = self.client.get(reverse("reports:new_report"))
+        assert response.status_code == HTTPStatus.OK
+        html = response.content.decode('utf8')
+        assert "Administer users" in html
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_link_does_not_appear_for_general_user(self, mock_user):
+        mock_user.return_value = self.general_user
+        response = self.client.get(reverse("reports:new_report"))
+        assert response.status_code == HTTPStatus.OK
+        html = response.content.decode('utf8')
+        assert "Administer users" not in html
+
+    def test_superuser_can_access_manage_users(self):
+        response = self.client.get(reverse("users:manage_users"))
+        assert response.status_code == HTTPStatus.OK
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_administrator_can_access_manage_users(self, mock_user):
+        mock_user.return_value = self.administrator
+        response = self.client.get(reverse("users:manage_users"))
+        assert response.status_code == HTTPStatus.OK
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_general_user_cannot_access_manage_users(self, mock_user):
+        mock_user.return_value = self.general_user
+        response = self.client.get(reverse("users:manage_users"))
+        assert response.status_code == HTTPStatus.FORBIDDEN
+
+
 class ManageUsersTestCase(MarketAccessTestCase):
     @patch("utils.sso.SSOClient.search_users")
     def test_no_results(self, mock_search_users):
