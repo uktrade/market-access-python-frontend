@@ -17,6 +17,7 @@ from .permissions import APIPermissionMixin
 
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
+from utils.referers import RefererMixin
 from utils.sessions import init_session
 
 logger = logging.getLogger(__name__)
@@ -161,7 +162,7 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupMixin, FormView):
         return success_url
 
 
-class EditUser(APIPermissionMixin, UserMixin, FormView):
+class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
     template_name = "users/edit.html"
     form_class = UserGroupForm
     permission_required = "change_user"
@@ -186,10 +187,22 @@ class EditUser(APIPermissionMixin, UserMixin, FormView):
 
     def form_valid(self, form):
         form.save()
-        return super().form_valid(form)
+        return HttpResponseRedirect(
+            self.get_success_url(new_group_id=form.cleaned_data.get("group"))
+        )
 
-    def get_success_url(self):
-        return reverse("users:manage_users")
+    def get_success_url(self, new_group_id):
+        if self.referer.path:
+            if self.referer.url_name == "manage_users":
+                manage_users_url = reverse("users:manage_users")
+                if new_group_id == "0":
+                    return manage_users_url
+                return f"{manage_users_url}?group={new_group_id}"
+            return self.referer.path
+        return reverse(
+            "users:user_detail",
+            kwargs={"user_id": self.kwargs.get("user_id")}
+        )
 
 
 class UserDetail(UserMixin, TemplateView):

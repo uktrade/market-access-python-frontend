@@ -4,7 +4,7 @@
 
 {% block outside_content %}
     <div class="govuk-width-container ma-container-full">
-        <a href="{% url 'users:manage_users' %}" class="govuk-back-link ma-back-link">Back</a>
+        <a href="{% if referer.path %}{{ referer.path }}{% else %}{% url 'users:user_detail' user.id %}{% endif %}" class="govuk-back-link ma-back-link">Back</a>
     </div>
 {% endblock %}
 
@@ -28,12 +28,13 @@
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
 
+            {% if referer.path %}<input type="hidden" name="referer_path" value="{{ referer.path }}" />{% endif %}
             {% include "partials/forms/radio_input.html" with field=form.group %}
 
             <p class="govuk-body">All the information on your profile will be visible to DIT staff and contractors registered to use Market Access.</p>
 
             <button class="govuk-button">Save</button>
-            <a class="form-cancel govuk-link" href="{% url 'users:user_detail' user.id %}">Cancel</a>
+            <a class="form-cancel govuk-link" href="{% if referer.path %}{{ referer.path }}{% else %}{% url 'users:user_detail' user.id %}{% endif %}">Cancel</a>
         </form>
     </div>
 
