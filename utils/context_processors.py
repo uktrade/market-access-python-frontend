@@ -112,7 +112,7 @@ def user_scope(request):
 
     token = request.session.get("sso_token")
     extra_context = {
-        'user': user,
+        'current_user': user,
         'apps': visible_apps,
         'user_permissions': LazyPermissionsFetcher(token).permissions
     }

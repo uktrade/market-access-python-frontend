@@ -2,7 +2,7 @@
     <div class="datahub-header__logo-container">
         <div class="datahub-header__logo">
             <span class="datahub-header__logo__site-name">Department for International Trade</span>
-            {% if user.has_crm_permission %}
+            {% if current_user.has_crm_permission %}
                 <a href="{{ settings.DATAHUB_DOMAIN }}" class="datahub-header__logo__link">
                     <span class="datahub-header__logo__text">Data Hub</span>
                 </a>
@@ -16,10 +16,10 @@
                 <a class="datahub-header__links__item__text" href="{{ settings.DATAHUB_DOMAIN }}/support">Support</a>
             </li>
             <li class="datahub-header__links__item">
-                {% if user.has_crm_permission %}
-                    <a class="datahub-header__links__item__text" href="{{ settings.DATAHUB_DOMAIN }}/profile">{{ user.username }}</a>
+                {% if current_user.has_crm_permission %}
+                    <a class="datahub-header__links__item__text" href="{{ settings.DATAHUB_DOMAIN }}/profile">{{ current_user.username }}</a>
                 {% else %}
-                    <span class="datahub-header__links__item__text">{{ user.username }}</span>
+                    <span class="datahub-header__links__item__text">{{ current_user.username }}</span>
                 {% endif %}
             </li>
             <li class="datahub-header__links__item visually-hidden">
