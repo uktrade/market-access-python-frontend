@@ -1,5 +1,5 @@
 .selection-list {
-	border: 1px solid $govuk-grey-2;
+	border: 1px solid $govuk-mid-grey;
 	padding: govuk-em( 15, 16 );
 	margin-bottom: govuk-em( 30, 16 );
 }
@@ -21,7 +21,7 @@
 	list-style: none;
 	line-height: 1.5;
 	padding: govuk-em( 10, 16 ) govuk-em( 55, 16 ) govuk-em( 10, 16 ) govuk-em( 30, 16 );
-	border-bottom: 1px solid $govuk-grey-3;
+	border-bottom: 1px solid $govuk-light-grey;
 	position: relative;
 
 	&:last-of-type {

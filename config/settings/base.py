@@ -92,7 +92,6 @@ if ELASTIC_APM_ENABLED:
     INSTALLED_APPS.append('elasticapm.contrib.django')
 
 MIDDLEWARE = [
-    'healthcheck.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -215,6 +214,11 @@ REDIS_URI = f"{REDIS_URI}/{REDIS_DB}"
 MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI")
 MARKET_ACCESS_API_HAWK_ID = env("MARKET_ACCESS_API_HAWK_ID")
 MARKET_ACCESS_API_HAWK_KEY = env("MARKET_ACCESS_API_HAWK_KEY")
+MARKET_ACCESS_API_HAWK_CREDS = {
+    "id": MARKET_ACCESS_API_HAWK_ID,
+    "key": MARKET_ACCESS_API_HAWK_KEY,
+    "algorithm": "sha256",
+}
 
 SSO_CLIENT = env("SSO_CLIENT")
 SSO_SECRET = env("SSO_SECRET")

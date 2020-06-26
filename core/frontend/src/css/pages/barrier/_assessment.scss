@@ -22,7 +22,7 @@
 }
 
 .assessment-item-content {
-	border: 2px dashed $govuk-grey-3;
+	border: 2px dashed $govuk-light-grey;
 	padding: govuk-em( 15, 16 );
 	max-width: 600px;
 	box-sizing: border-box;
@@ -33,12 +33,12 @@
 } */
 
 .assessment-item-content__hint {
-	color: $govuk-grey-1;
+	color: $govuk-dark-grey;
 	margin: 0;
 }
 
 .assessment-item-content__restriction {
-	background: $govuk-grey-4;
+	background: $govuk-light-grey;
 	padding: govuk-em( 10, 16 );
 	margin: govuk-em( 10, 16 ) 0 0 0;
 	@include govuk-font( 16 );

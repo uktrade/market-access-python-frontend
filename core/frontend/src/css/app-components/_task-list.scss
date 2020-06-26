@@ -35,14 +35,14 @@ $gutter: 30px;
 
 .task-list__item {
 	@include govuk-font( $size: 16 );
-	border-bottom: 1px solid $govuk-grey-2;
+	border-bottom: 1px solid $govuk-mid-grey;
 	padding-top: ( $gutter / 3 );
 	padding-bottom: ( $gutter / 3 );
 	overflow: hidden;
 }
 
 .task-list__item:first-child {
-	border-top: 1px solid $govuk-grey-2;
+	border-top: 1px solid $govuk-mid-grey;
 }
 
 .task-list__item__name {
@@ -67,9 +67,9 @@ $gutter: 30px;
 }
 
 .task-list__item__banner--in-progress {
-	background-color: $govuk-orange-aa;
+	background-color: $govuk-orange;
 }
 
 .task-list__item__banner--not-started {
-	background-color: $govuk-grey-1;
+	background-color: $govuk-dark-grey;
 }

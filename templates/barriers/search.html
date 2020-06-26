@@ -182,8 +182,10 @@
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.code }}</dd>
 
                                 <dt class="filter-results-list__item__definitions__key">Reported:</dt>
-
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.reported_on|date:"j F Y" }}</dd>
+
+                                <dt class="filter-results-list__item__definitions__key">Updated:</dt>
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
 
                                 {% if barrier.sectors %}
                                 <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>

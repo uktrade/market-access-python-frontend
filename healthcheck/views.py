@@ -1,37 +1,34 @@
 import time
 
 from django.views.generic import TemplateView
-from sentry_sdk import capture_exception
 
 from authentication.decorators import public_view
-from healthcheck.models import HealthCheck
-
-
-class HealthStatus:
-    OK = "OK"
-    FAIL = "FAIL"
+from healthcheck.constants import HealthStatus
+from .checks import db_check, api_check
 
 
 @public_view
 class HealthCheckView(TemplateView):
     template_name = "healthcheck.html"
 
-    def _db_check(self):
-        """
-        Performs a basic check on the database by performing a select query on a simple table
-        :return: True or False according to successful retrieval
-        """
-        try:
-            HealthCheck.objects.get(health_check_field=True)
-            return HealthStatus.OK
-        except Exception as e:
-            capture_exception(e)
-            return HealthStatus.FAIL
-
     def get_context_data(self, **kwargs):
-        """ Adds status and response time to response context"""
+        """ Adds status and response time to response context """
         context = super().get_context_data(**kwargs)
-        context["status"] = self._db_check()
+        context["status"] = db_check()
         # nearest approximation of a response time
         context["response_time"] = time.time() - self.request.start_time
+        return context
+
+
+@public_view
+class APIHealthCheckView(TemplateView):
+    template_name = "healthcheck.html"
+
+    def get_context_data(self, **kwargs):
+        """ Adds status and response time to response context """
+        context = super().get_context_data(**kwargs)
+        fe_response_time = time.time() - self.request.start_time
+        data = api_check()
+        context["status"] = data.get("status") or HealthStatus.FAIL
+        context["response_time"] = data.get("duration") or fe_response_time
         return context
