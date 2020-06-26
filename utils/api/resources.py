@@ -210,8 +210,8 @@ class UsersResource(APIResource):
         self.update_cached_user_data(user_data)
         return self.model(user_data)
 
-    def patch(self, id, *args, **kwargs):
-        user = super().patch(id, *args, **kwargs)
+    def patch(self, *args, **kwargs):
+        user = super().patch(*args, **kwargs)
         self.update_cached_user_data(user.data)
         return user
 

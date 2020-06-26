@@ -28,9 +28,13 @@ class MarketAccessTestCase(TestCase):
 
     def init_session(self):
         session = self.client.session
-        session.update(
-            {"sso_token": "abcd", "user_data": {"username": "test user", "id": 49,},}
-        )
+        session.update({
+            "sso_token": "abcd",
+            "user_data": {
+                "id": 49,
+                "username": "test user",
+            }
+        })
         session.save()
 
     def init_get_barrier_patcher(self):

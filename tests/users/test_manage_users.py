@@ -23,7 +23,6 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
             "permissions": [],
         }
     )
-
     def test_link_appears_for_superuser(self):
         response = self.client.get(reverse("reports:new_report"))
         assert response.status_code == HTTPStatus.OK
@@ -46,12 +45,14 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
         html = response.content.decode('utf8')
         assert "Administer users" not in html
 
-    def test_superuser_can_access_manage_users(self):
+    @patch("utils.api.resources.APIResource.list")
+    def test_superuser_can_access_manage_users(self, mock_list):
         response = self.client.get(reverse("users:manage_users"))
         assert response.status_code == HTTPStatus.OK
 
+    @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.UsersResource.get_current")
-    def test_administrator_can_access_manage_users(self, mock_user):
+    def test_administrator_can_access_manage_users(self, mock_user, mock_list):
         mock_user.return_value = self.administrator
         response = self.client.get(reverse("users:manage_users"))
         assert response.status_code == HTTPStatus.OK
@@ -64,6 +65,12 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
 
 
 class ManageUsersTestCase(MarketAccessTestCase):
+    editor = User({
+        "id": 75,
+        "first_name": "Dave",
+        "groups": [{"id": 2, "name": "Editor"}]
+    })
+
     @patch("utils.sso.SSOClient.search_users")
     def test_no_results(self, mock_search_users):
         mock_search_users.return_value = []
@@ -93,9 +100,11 @@ class ManageUsersTestCase(MarketAccessTestCase):
         assert response.context["form"].is_valid() is True
         assert response.context["results"] == results
 
+    @patch("utils.api.resources.APIResource.get")
     @patch("utils.sso.SSOClient.search_users")
     @patch("utils.api.resources.APIResource.patch")
-    def test_add_user(self, mock_patch, mock_search_users):
+    def test_add_user(self, mock_patch, mock_search_users, mock_get):
+        mock_get.return_value = self.editor
         response = self.client.post(
             reverse("users:add_user"),
             data={
@@ -105,14 +114,15 @@ class ManageUsersTestCase(MarketAccessTestCase):
             },
         )
         assert response.status_code == HTTPStatus.FOUND
-        mock_patch.assert_called_with(
+        mock_get.assert_called_with(
             id="3fbe6479-b9bd-4658-81d7-f07c2a73d33d",
-            groups=[]
         )
+        assert mock_patch.called is False
 
     @patch("utils.sso.SSOClient.search_users")
     @patch("utils.api.resources.APIResource.patch")
     def test_add_user_to_group(self, mock_patch, mock_search_users):
+        mock_patch.return_value = self.editor
         add_user_url = reverse("users:add_user")
         response = self.client.post(
             f"{add_user_url}?group=2",
@@ -132,11 +142,8 @@ class ManageUsersTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.patch")
     def test_change_role(self, mock_patch, mock_list, mock_get):
-        mock_get.return_value = User({
-            "id": 75,
-            "first_name": "Dave",
-            "groups": [{"id": 2, "name": "Editor"}]
-        })
+        mock_patch.return_value = self.editor
+        mock_get.return_value = self.editor
         mock_list.return_value = [
             Group({"id": 1, "name": "Sifter"}),
             Group({"id": 2, "name": "Editor"}),
@@ -156,11 +163,8 @@ class ManageUsersTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.patch")
     def test_remove_role(self, mock_patch, mock_list, mock_get):
-        mock_get.return_value = User({
-            "id": 75,
-            "first_name": "Dave",
-            "groups": [{"id": 2, "name": "Editor"}]
-        })
+        mock_patch.return_value = self.editor
+        mock_get.return_value = self.editor
         mock_list.return_value = [
             Group({"id": 1, "name": "Sifter"}),
             Group({"id": 2, "name": "Editor"}),
@@ -171,7 +175,4 @@ class ManageUsersTestCase(MarketAccessTestCase):
             data={"group": "0"},
         )
         assert response.status_code == HTTPStatus.FOUND
-        mock_patch.assert_called_with(
-            id="75",
-            groups=[]
-        )
+        mock_patch.assert_called_with(id="75", groups=[])
