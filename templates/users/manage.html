@@ -30,7 +30,9 @@
         {% endfor %}
     </ul>
 
-    <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:add_user' %}{% if group_id %}?group={{ group_id }}{% endif %}">Add a user to this group</a>
+    {% if group_id %}
+        <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:add_user' %}{% if group_id %}?group={{ group_id }}{% endif %}">Add a user to this group</a>
+    {% endif %}
 
     <table class="govuk-table">
         <caption class="govuk-table__caption visually-hidden">List of all users</caption>
