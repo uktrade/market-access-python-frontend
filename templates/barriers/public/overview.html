@@ -1,0 +1,62 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Public barrier{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='public' %}
+
+    {% include 'partials/heading.html' with text='Prepare barrier for public view' %}
+
+    <section class="summary-group">
+        <h2 class="summary-group__heading">Publish status: Ready</h2>
+
+        <div>
+            <a class="" href="{% url 'barriers:public_barrier_changes' barrier.id %}">View changes</a>
+        </div>
+
+        <dl class="summary-group__list">
+            <dt class="summary-group__list__key">Public title</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.title }}
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+            </dd>
+
+            <dt class="summary-group__list__key">Public summary</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.summary }}
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
+            </dd>
+
+            <dt class="summary-group__list__key">Status</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.status.name }}
+            </dd>
+
+            <dt class="summary-group__list__key">Country</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.country.name }}
+            </dd>
+
+            <dt class="summary-group__list__key">Sector</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.sector_names|join:", " }}
+            </dd>
+
+            <dt class="summary-group__list__key">Category</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.category_titles|join:", " }}
+            </dd>
+        </dl>
+
+    </section>
+
+    <section class="barrier-content">
+
+    </section>
+
+{% endblock %}

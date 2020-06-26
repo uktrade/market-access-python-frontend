@@ -31,30 +31,6 @@
 
 {% block page_content %}
 
-    {% if toast and toast.heading %}
-        {% include 'partials/toast.html' %}
-    {% endif %}
-
-    <div class="publish-info">
-        {% if barrier.is_publishable is False %}
-            This barrier is ineligible for public view
-            <a href="{% url 'barriers:publish_barrier' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Manage</a>
-        {% elif barrier.is_publishable is True %}
-            {% if barrier.public_barrier.is_ready %}
-                {% if barrier.public_barrier.published_on %}
-                    Public barrier published on {{ barrier.public_barrier.published_on }}
-                    <a href="{% url 'barriers:publish_barrier' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Manage</a>
-                {% else %}
-                    <a href="{% url 'barriers:publish_barrier' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Ready to publish to public view</a>
-                {% endif %}
-            {% else %}
-                <a href="{% url 'barriers:publish_barrier' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Prepare barrier for public view</a>
-            {% endif %}
-        {% else %}
-            <a href="{% url 'barriers:publish_barrier' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Is this barrier eligible for public view?</a>
-        {% endif %}
-    </div>
-
     {% include 'barriers/partials/barrier_tabs.html' with active='detail' %}
 
     <section class="summary-group">

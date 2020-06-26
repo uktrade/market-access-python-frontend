@@ -59,7 +59,8 @@ from .views.notes import (
     BarrierDeleteNote,
 )
 from .views.publish import (
-    PublishBarrier,
+    PublicBarrier,
+    PublicBarrierChanges,
     EditPublishEligibility,
     EditPublishTitle,
     EditPublishSummary,
@@ -187,8 +188,9 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name="cancel_assessment_document"),
     path("barriers/<uuid:barrier_id>/assessment/documents/<uuid:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
 
-    path("barriers/<uuid:barrier_id>/publish/", PublishBarrier.as_view(), name="publish_barrier"),
-    path("barriers/<uuid:barrier_id>/publish/eligibility/", EditPublishEligibility.as_view(), name="edit_publish_eligibility"),
-    path("barriers/<uuid:barrier_id>/publish/title/", EditPublishTitle.as_view(), name="edit_publish_title"),
-    path("barriers/<uuid:barrier_id>/publish/summary/", EditPublishSummary.as_view(), name="edit_publish_summary"),
+    path("barriers/<uuid:barrier_id>/public/", PublicBarrier.as_view(), name="public_barrier"),
+    path("barriers/<uuid:barrier_id>/public/changes/", PublicBarrierChanges.as_view(), name="public_barrier_changes"),
+    path("barriers/<uuid:barrier_id>/public/eligibility/", EditPublishEligibility.as_view(), name="edit_publish_eligibility"),
+    path("barriers/<uuid:barrier_id>/public/title/", EditPublishTitle.as_view(), name="edit_public_barrier_title"),
+    path("barriers/<uuid:barrier_id>/public/summary/", EditPublishSummary.as_view(), name="edit_public_barrier_summary"),
 ]

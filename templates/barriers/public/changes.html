@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Publish Barrier{% endblock %}
+{% block page_title %}{{ block.super }} - Public barrier changes{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Prepare barrier for public view' %}
+    {% include 'partials/heading.html' with text='Changes needed' %}
 
     <form action="" method="POST">
         {% csrf_token %}
@@ -23,12 +23,12 @@
                         {% endif %}
                         {{ barrier.title }}
                     {% else %}
-                        <a class="govuk-link" href="{% url 'barriers:edit_publish_title' barrier.id %}">Add</a>
+                        <a class="govuk-link" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Add</a>
                     {% endif %}
                 </dd>
                 {% if has_data %}
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'barriers:edit_publish_title' barrier.id %}">Change</a>
+                    <a class="govuk-link" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Change</a>
                 </dd>
                 {% endif %}
             </div>
@@ -41,12 +41,12 @@
                         {% endif %}
                         {{ barrier.summary }}
                     {% else %}
-                        <a class="govuk-link" href="{% url 'barriers:edit_publish_summary' barrier.id %}">Add</a>
+                        <a class="govuk-link" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Add</a>
                     {% endif %}
                 </dd>
                 {% if has_data %}
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'barriers:edit_publish_summary' barrier.id %}">Change</a>
+                    <a class="govuk-link" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Change</a>
                 </dd>
                 {% endif %}
             </div>
@@ -106,7 +106,7 @@
             {% include 'partials/forms/boolean_checkbox.html' with field=form.not_sensitive %}
             <button class="govuk-button">Publish</button>
         {% endif %}
-        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+        <a class="form-cancel" href="{% url 'barriers:public_barrier' barrier.id %}">Cancel</a>
     </form>
 
 {% endblock %}

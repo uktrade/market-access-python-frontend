@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:public_barrier' object.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
@@ -35,7 +35,7 @@
         </details>
 
         <input type="submit" value="Save" class="govuk-button">
-        <a href="{% url 'barriers:publish_barrier' object.id %}" class="form-cancel">Cancel</a>
+        <a href="{% url 'barriers:public_barrier' object.id %}" class="form-cancel">Cancel</a>
     </form>
 
 {% endblock %}
