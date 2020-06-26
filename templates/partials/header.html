@@ -31,7 +31,7 @@
     <div class="datahub-header__navigation-container">
         <nav class="datahub-header__navigation-wrapper" aria-labelledby="navigation">
             <ul id="navigation" class="datahub-header__navigation" aria-label="Top Level Navigation">
-            {% for item in apps %}
+            {% for item in current_user.apps %}
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link{% if item.activeKey == 'market-access' %} datahub-header__navigation__item__link--active{% endif %}" href="{{ item.href }}">
                         {{ item.name }}
