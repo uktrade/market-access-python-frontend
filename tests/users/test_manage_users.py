@@ -23,6 +23,7 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
             "permissions": [],
         }
     )
+
     def test_link_appears_for_superuser(self):
         response = self.client.get(reverse("reports:new_report"))
         assert response.status_code == HTTPStatus.OK
