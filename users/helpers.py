@@ -28,7 +28,8 @@ def sync_user(session):
         #   permitted_applications - LIST
 
         try:
-            user_data = client.get('whoami')
+            user = client.users.get_current()
+            user_data = user.data
         except APIException:
             user_data = {}
 

@@ -152,7 +152,8 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
         if group_id:
             self.client.users.patch(id=user_id, groups=[{"id": group_id}])
         else:
-            self.client.users.patch(id=user_id, groups=[])
+            # This call creates a user if they don't exist
+            self.client.users.get(id=user_id)
 
     def get_success_url(self):
         success_url = reverse("users:manage_users")

@@ -1,3 +1,5 @@
+from django.core.cache import cache
+
 from users.models import User
 
 from utils.api.client import MarketAccessAPIClient
@@ -85,12 +87,20 @@ def apps(user):
     return visible_apps
 
 
-def user_scope(request):
-    client = MarketAccessAPIClient(request.session.get("sso_token"))
+def get_user(request):
+    user_id = request.session.get("user_data", {}).get("id")
+    cache_key = f"user_data:{user_id}"
+    user_data = cache.get(cache_key)
 
-    user = User(request.session.get("user_data", {}))
-    user.is_stale = True
-    user.set_client(client)
+    if user_data is not None:
+        return User(user_data)
+
+    client = MarketAccessAPIClient(request.session.get("sso_token"))
+    return client.users.get_current()
+
+
+def user_scope(request):
+    user = get_user(request)
 
     visible_apps = apps(user)
     permitted_keys = [app['permittedKey'] for app in visible_apps]
