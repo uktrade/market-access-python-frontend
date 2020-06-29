@@ -2,11 +2,12 @@ import requests
 import time
 
 from django.conf import settings
+from django.core.cache import cache
 
 from barriers.constants import Statuses
 from barriers.models import Assessment, Barrier, HistoryItem, Note, SavedSearch
 from reports.models import Report
-from users.models import User
+from users.models import Group, User
 
 from utils.exceptions import ScanError
 from utils.models import ModelList
@@ -204,8 +205,22 @@ class UsersResource(APIResource):
     resource_name = "users"
     model = User
 
+    def get_current(self):
+        user_data = self.client.get("whoami")
+        self.update_cached_user_data(user_data)
+        return self.model(user_data)
+
     def patch(self, *args, **kwargs):
-        return self.client.patch("whoami", json=kwargs)
+        user = super().patch(*args, **kwargs)
+        self.update_cached_user_data(user.data)
+        return user
+
+    def update_cached_user_data(self, user_data):
+        user_id = user_data.get("id")
+        cache_key = f"user_data:{user_id}"
+        cached_data = cache.get(cache_key, user_data)
+        cached_data.update(user_data)
+        cache.set(cache_key, cached_data, settings.USER_DATA_CACHE_TIME)
 
 
 class ReportsResource(APIResource):
@@ -219,3 +234,8 @@ class ReportsResource(APIResource):
 class SavedSearchesResource(APIResource):
     resource_name = "saved-searches"
     model = SavedSearch
+
+
+class GroupsResource(APIResource):
+    resource_name = "groups"
+    model = Group

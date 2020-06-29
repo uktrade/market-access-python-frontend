@@ -6,7 +6,7 @@ from django.test import override_settings, TestCase
 from barriers.models import Assessment
 from core.filecache import memfiles
 from users.models import User
-from utils.api.resources import BarriersResource, NotesResource
+from utils.api.resources import BarriersResource, NotesResource, UsersResource
 
 from mock import patch
 
@@ -24,12 +24,17 @@ class MarketAccessTestCase(TestCase):
         self.init_get_barrier_patcher()
         self.init_get_activity_patcher()
         self.init_get_interactions_patcher()
+        self.init_get_current_user_patcher()
 
     def init_session(self):
         session = self.client.session
-        session.update(
-            {"sso_token": "abcd", "user_data": {"username": "test user", "id": 49,},}
-        )
+        session.update({
+            "sso_token": "abcd",
+            "user_data": {
+                "id": 49,
+                "username": "test user",
+            }
+        })
         session.save()
 
     def init_get_barrier_patcher(self):
@@ -53,6 +58,14 @@ class MarketAccessTestCase(TestCase):
         self.mock_get_interactions = self.get_interactions_patcher.start()
         self.mock_get_interactions.return_value = self.notes
         self.addCleanup(self.get_interactions_patcher.stop)
+
+    def init_get_current_user_patcher(self):
+        self.get_current_user_patcher = patch(
+            "utils.api.resources.UsersResource.get_current"
+        )
+        self.get_current_user = self.get_current_user_patcher.start()
+        self.get_current_user.return_value = self.current_user
+        self.addCleanup(self.get_current_user_patcher.stop)
 
     def delete_session_key(self, key):
         try:
@@ -95,6 +108,25 @@ class MarketAccessTestCase(TestCase):
             assessments = json.loads(memfiles.open(file))
             self._assessments = [Assessment(assessment) for assessment in assessments]
         return self._assessments
+
+    @property
+    def current_user(self):
+        return UsersResource.model(
+            {
+                "id": 49,
+                "username": "test user",
+                "profile": {
+                    "sso_user_id": "c12195ed-bf30-4a67-ba73-e95cfe012f77"
+                },
+                "email": "test@test.com",
+                "first_name": "Geraldine",
+                "last_name": "Kshlerin",
+                "full_name": "Geraldine Kshlerin",
+                "is_superuser": True,
+                "is_active": True,
+                "permissions": [],
+            }
+        )
 
     @property
     def notes(self):

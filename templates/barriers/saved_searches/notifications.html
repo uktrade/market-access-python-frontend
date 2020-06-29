@@ -2,10 +2,16 @@
 
 {% block page_title %}{{ block.super }} - Notifications{% endblock %}
 
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link ma-back-link">Back</a>
+    </div>
+{% endblock %}
+
 {% block page_content %}
 
-    <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
     {% include 'partials/heading.html' with text='Notifications' %}
+
     {% form_error_banner form %}
 
     <section class="restrict-width">

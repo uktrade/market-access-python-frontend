@@ -2,9 +2,13 @@
 
 {% block page_title %}{{ block.super }} - Delete saved search{% endblock %}
 
-{% block page_content %}
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+    </div>
+{% endblock %}
 
-    <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+{% block page_content %}
 
     {% include 'partials/heading.html' with text='Delete saved search' %}
 

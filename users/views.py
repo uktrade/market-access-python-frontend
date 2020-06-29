@@ -1,6 +1,7 @@
 import logging
 
 import re
+import requests
 from urllib.parse import urlencode
 import uuid
 
@@ -8,11 +9,15 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import RedirectView
+from django.views.generic import FormView, RedirectView, TemplateView
 
-import requests
+from .forms import UserGroupForm
+from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
+from .permissions import APIPermissionMixin
 
+from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
+from utils.referers import RefererMixin
 from utils.sessions import init_session
 
 logger = logging.getLogger(__name__)
@@ -110,3 +115,101 @@ class SignOut(RedirectView):
         uri = f"{settings.SSO_BASE_URI}logout/"
         request.session.flush()
         return HttpResponseRedirect(uri)
+
+
+class ManageUsers(APIPermissionMixin, GroupQuerystringMixin, TemplateView):
+    template_name = "users/manage.html"
+    permission_required = "list_users"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["page"] = "manage-users"
+
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        context_data["groups"] = client.groups.list()
+
+        group_id = self.get_group_id()
+        if group_id is None:
+            context_data["users"] = client.users.list()
+        else:
+            context_data["group_id"] = group_id
+        return context_data
+
+
+class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormView):
+    template_name = "users/add.html"
+    error_message = "There was an error adding {full_name} to the group."
+    permission_required = "change_user"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["group"] = self.group
+        context_data["page"] = "manage-users"
+        return context_data
+
+    def select_user_api_call(self, user_id):
+        group_id = self.get_group_id()
+        if group_id:
+            self.client.users.patch(id=user_id, groups=[{"id": group_id}])
+        else:
+            # This call creates a user if they don't exist
+            self.client.users.get(id=user_id)
+
+    def get_success_url(self):
+        success_url = reverse("users:manage_users")
+        group_id = self.get_group_id()
+        if group_id:
+            return f"{success_url}?group={group_id}"
+        return success_url
+
+
+class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
+    template_name = "users/edit.html"
+    form_class = UserGroupForm
+    permission_required = "change_user"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["page"] = "manage-users"
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        kwargs["id"] = str(self.kwargs.get("user_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["groups"] = client.groups.list()
+        return kwargs
+
+    def get_initial(self):
+        for group in self.user.groups:
+            return {"group": str(group["id"])}
+        return {"group": "0"}
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(
+            self.get_success_url(new_group_id=form.cleaned_data.get("group"))
+        )
+
+    def get_success_url(self, new_group_id):
+        if self.referer.path:
+            if self.referer.url_name == "manage_users":
+                manage_users_url = reverse("users:manage_users")
+                if new_group_id == "0":
+                    return manage_users_url
+                return f"{manage_users_url}?group={new_group_id}"
+            return self.referer.path
+        return reverse(
+            "users:user_detail",
+            kwargs={"user_id": self.kwargs.get("user_id")}
+        )
+
+
+class UserDetail(UserMixin, TemplateView):
+    template_name = "users/detail.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["page"] = "manage-users"
+        return context_data

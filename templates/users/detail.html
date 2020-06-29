@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - User profile{% endblock %}
+
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% url 'users:manage_users' %}" class="govuk-back-link ma-back-link">Back</a>
+    </div>
+{% endblock %}
+
+{% block page_content %}
+    <h1 class="govuk-heading-xl">User profile</h1>
+    <h2 class="govuk-heading-l">{{ user.full_name }}</h2>
+
+    <p class="govuk-body"><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+    <p class="govuk-body"><strong>Role:</strong> {{ user.groups_display }}</p>
+
+    <a href="{% url 'users:edit_user' user.id %}" class="govuk-button">Edit profile</a>
+{% endblock %}

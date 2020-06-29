@@ -122,7 +122,8 @@ TEMPLATES = [
                 'django_settings_export.settings_export',
             ],
             'builtins':[
-                'core.templatetags.govuk_forms'
+                'core.templatetags.govuk_forms',
+                'users.templatetags.permissions',
             ],
         },
     },
@@ -198,6 +199,7 @@ STATICFILES_FINDERS = (
 
 TRUSTED_USER_TOKEN = 'ssobypass'
 
+USER_DATA_CACHE_TIME = 3600
 METADATA_CACHE_TIME = "10600"
 MOCK_METADATA = False
 

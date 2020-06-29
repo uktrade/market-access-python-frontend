@@ -1,7 +1,7 @@
 <div class="{% form_group_classes field.errors %}">
     <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            {{ field.label }}
+        <legend class="govuk-fieldset__legend{% if label_classes %} {{ label_classes }}{% endif %}">
+            <strong>{{ field.label }}</strong>
         </legend>
 
         {% form_field_error field %}
