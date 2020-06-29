@@ -7,6 +7,7 @@ from django.conf import settings
 from .resources import (
     BarriersResource,
     DocumentsResource,
+    GroupsResource,
     NotesResource,
     UsersResource,
     ReportsResource,
@@ -23,10 +24,11 @@ class MarketAccessAPIClient:
         self.token = token or settings.TRUSTED_USER_TOKEN
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
+        self.groups = GroupsResource(self)
         self.notes = NotesResource(self)
-        self.users = UsersResource(self)
         self.reports = ReportsResource(self)
         self.saved_searches = SavedSearchesResource(self)
+        self.users = UsersResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

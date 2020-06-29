@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - User search{% endblock %}
+
+{% block page_content %}
+
+    <h1 class="govuk-heading-l">Add a user{% if group %} to {{ group.plural_name|lower }}{% endif %}</h1>
+
+    {% form_error_banner form %}
+
+    <div class="restrict-width">
+        {% url 'users:manage_users' as manage_users_url %}
+        {% include "users/partials/user_search_form.html" with cancel_url=manage_users_url %}
+        {% include "users/partials/user_search_results.html" %}
+    </div>
+
+{% endblock %}

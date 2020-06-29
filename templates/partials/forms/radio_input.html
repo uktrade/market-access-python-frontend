@@ -1,0 +1,18 @@
+<div class="{% form_group_classes field.errors %}">
+    <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend{% if label_classes %} {{ label_classes }}{% endif %}">
+            <strong>{{ field.label }}</strong>
+        </legend>
+
+        {% form_field_error field %}
+
+        <div class="govuk-radios {{ field.name }} govuk-radios--conditional" data-module="radios">
+            {% for value, name in field.field.choices %}
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="{{ field.name }}-{{ value }}" name="{{ field.name }}" type="radio" value="{{ value }}"{% if field.value == value %} checked="checked"{% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="{{ field.name }}-{{ value }}">{{ name }}</label>
+                </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+</div>

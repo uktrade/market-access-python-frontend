@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Manage users{% endblock %}
+
+{% block page_content %}
+
+    <h1 class="govuk-heading-l">Manage users and groups</h1>
+
+    <ul class="page-tabs page-tabs--no-margin">
+        {% if group_id %}
+            <li class="page-tabs__tab">
+                <a class="page-tabs__tab__text" href="{% url 'users:manage_users' %}">All users</a>
+            </li>
+        {% else %}
+            <li class="page-tabs__tab page-tabs__tab--active">
+                <span class="page-tabs__tab__text">All users</span>
+            </li>
+        {% endif %}
+
+        {% for group in groups %}
+            {% if group_id == group.id %}
+                <li class="page-tabs__tab page-tabs__tab--active">
+                    <span class="page-tabs__tab__text">{{ group.plural_name }}</span>
+                </li>
+            {% else %}
+                <li class="page-tabs__tab">
+                    <a class="page-tabs__tab__text" href="?group={{ group.id }}">{{ group.plural_name }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    {% if group_id %}
+        <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:add_user' %}{% if group_id %}?group={{ group_id }}{% endif %}">Add a user to this group</a>
+    {% endif %}
+
+    <table class="govuk-table">
+        <caption class="govuk-table__caption visually-hidden">List of all users</caption>
+        <thead>
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Name</th>
+                <th scope="col" class="govuk-table__header">Email</th>
+                {% if not group_id %}
+                    <th scope="col" class="govuk-table__header">Role</th>
+                {% endif %}
+                <th scope="col" class="govuk-table__header"></th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            {% if group_id %}
+                {% for group in groups %}
+                    {% if group_id == group.id %}
+                        {% for user in group.users %}
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">
+                                    <a href="{% url 'users:user_detail' user.id %}">
+                                        <span class="team-member__full-name">{{ user.full_name }}</span>
+                                    </a>
+                                </td>
+                                <td class="govuk-table__cell">{{ user.email }}</td>
+                                <td class="govuk-table__cell">
+                                    <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for user in users %}
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a href="{% url 'users:user_detail' user.id %}">
+                                <span class="team-member__full-name">{{ user.full_name }}</span>
+                            </a>
+                        </td>
+                        <td class="govuk-table__cell">{{ user.email }}</td>
+                        <td class="govuk-table__cell">{% for group in user.groups %}{{ group.name }}{% endfor %}</td>
+                        <td class="govuk-table__cell">
+                            <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}

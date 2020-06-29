@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Edit user{% endblock %}
+
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% if referer.path %}{{ referer.path }}{% else %}{% url 'users:user_detail' user.id %}{% endif %}" class="govuk-back-link ma-back-link">Back</a>
+    </div>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Edit profile' %}
+
+    {% form_error_banner form %}
+
+    <dl class="ma-summary-list">
+        <dt class="ma-summary-list__key">Name</dt>
+        <dd class="ma-summary-list__value">{{ user.full_name }}</dd>
+
+        {% if user.email %}
+            <dt class="ma-summary-list__key">Email</dt>
+            <dd class="ma-summary-list__value">{{ user.email }}</dd>
+        {% endif %}
+    </dl>
+
+    <div class="restrict-width">
+        <form action="" method="POST" class="restrict-width">
+            {% csrf_token %}
+
+            {% if referer.path %}<input type="hidden" name="referer_path" value="{{ referer.path }}" />{% endif %}
+            {% include "partials/forms/radio_input.html" with field=form.group %}
+
+            <p class="govuk-body">All the information on your profile will be visible to DIT staff and contractors registered to use Market Access.</p>
+
+            <button class="govuk-button">Save</button>
+            <a class="form-cancel govuk-link" href="{% if referer.path %}{{ referer.path }}{% else %}{% url 'users:user_detail' user.id %}{% endif %}">Cancel</a>
+        </form>
+    </div>
+
+{% endblock %}
