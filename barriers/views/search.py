@@ -47,10 +47,7 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
             {
                 "barriers": barriers,
                 "filters": form.get_readable_filters(with_remove_links=True),
-                "pagination": self.get_pagination_data(
-                    object_list=barriers,
-                    limit=self.get_pagination_limit(),
-                ),
+                "pagination": self.get_pagination_data(object_list=barriers),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "search",
             }

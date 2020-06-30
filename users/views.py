@@ -142,10 +142,7 @@ class ManageUsers(
                 offset=self.get_pagination_offset(),
             )
             context_data["users"] = users
-            context_data["pagination"] = self.get_pagination_data(
-                object_list=users,
-                limit=self.get_pagination_limit(),
-            )
+            context_data["pagination"] = self.get_pagination_data(object_list=users)
         else:
             context_data["group_id"] = group_id
         return context_data

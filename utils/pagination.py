@@ -22,7 +22,8 @@ class PaginationMixin:
         params.update(kwargs)
         return params.urlencode()
 
-    def get_pagination_data(self, object_list, limit=settings.API_RESULTS_LIMIT):
+    def get_pagination_data(self, object_list):
+        limit = self.get_pagination_limit()
         total_pages = math.ceil(object_list.total_count / limit)
         current_page = self.get_current_page()
         pagination_data = {
