@@ -7,6 +7,7 @@ class PaginationMixin:
     """
     Allows views to get pagination data
     """
+    pagination_limit = settings.API_RESULTS_LIMIT
 
     def get_current_page(self):
         page = self.request.GET.get("page", 1)
@@ -39,6 +40,12 @@ class PaginationMixin:
             pagination_data["next"] = self.update_querystring(page=current_page + 1)
 
         return self.truncate_pagination_data(pagination_data)
+
+    def get_pagination_limit(self):
+        return self.pagination_limit
+
+    def get_pagination_offset(self):
+        return self.get_pagination_limit() * (self.get_current_page() - 1)
 
     def truncate_pagination_data(self, pagination_data, block_size=4):
         """

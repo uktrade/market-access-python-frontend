@@ -17,6 +17,7 @@ from .permissions import APIPermissionMixin
 
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
+from utils.pagination import PaginationMixin
 from utils.referers import RefererMixin
 from utils.sessions import init_session
 
@@ -117,9 +118,15 @@ class SignOut(RedirectView):
         return HttpResponseRedirect(uri)
 
 
-class ManageUsers(APIPermissionMixin, GroupQuerystringMixin, TemplateView):
+class ManageUsers(
+    APIPermissionMixin,
+    PaginationMixin,
+    GroupQuerystringMixin,
+    TemplateView,
+):
     template_name = "users/manage.html"
     permission_required = "list_users"
+    pagination_limit = 400
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -130,7 +137,15 @@ class ManageUsers(APIPermissionMixin, GroupQuerystringMixin, TemplateView):
 
         group_id = self.get_group_id()
         if group_id is None:
-            context_data["users"] = client.users.list()
+            users = client.users.list(
+                limit=self.get_pagination_limit(),
+                offset=self.get_pagination_offset(),
+            )
+            context_data["users"] = users
+            context_data["pagination"] = self.get_pagination_data(
+                object_list=users,
+                limit=self.get_pagination_limit(),
+            )
         else:
             context_data["group_id"] = group_id
         return context_data

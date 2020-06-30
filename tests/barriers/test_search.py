@@ -11,6 +11,7 @@ from utils.models import ModelList
 from mock import patch
 
 
+@patch("utils.pagination.PaginationMixin.pagination_limit", 10)
 class SearchTestCase(MarketAccessTestCase):
     saved_search_data = {
         "id": "a18f6ddc-d4fe-48cc-afbe-8fb2e5de806f",

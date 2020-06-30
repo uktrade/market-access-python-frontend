@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.http import StreamingHttpResponse
 from django.views.generic import FormView, View
 
@@ -50,7 +49,7 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
                 "filters": form.get_readable_filters(with_remove_links=True),
                 "pagination": self.get_pagination_data(
                     object_list=barriers,
-                    limit=settings.API_RESULTS_LIMIT,
+                    limit=self.get_pagination_limit(),
                 ),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "search",
@@ -62,8 +61,8 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
     def get_barriers(self, form):
         return self.client.barriers.list(
             ordering="-reported_on",
-            limit=settings.API_RESULTS_LIMIT,
-            offset=settings.API_RESULTS_LIMIT * (self.get_current_page() - 1),
+            limit=self.get_pagination_limit(),
+            offset=self.get_pagination_offset(),
             **form.get_api_search_parameters(),
         )
 
