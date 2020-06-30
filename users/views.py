@@ -126,7 +126,7 @@ class ManageUsers(
 ):
     template_name = "users/manage.html"
     permission_required = "list_users"
-    pagination_limit = 400
+    pagination_limit = 500
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
