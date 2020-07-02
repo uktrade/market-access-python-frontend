@@ -174,3 +174,66 @@ class Barrier(APIModel):
     @property
     def is_hibernated(self):
         return self.status["id"] == "5"
+
+
+class PublicBarrier(APIModel):
+    _country = None
+    _metadata = None
+    _sectors = None
+    _status = None
+
+    @property
+    def metadata(self):
+        if self._metadata is None:
+            self._metadata = get_metadata()
+        return self._metadata
+
+    @property
+    def country(self):
+        if self._country is None and self.data.get("country"):
+            country_id = self.data.get("country")
+            self._country = self.metadata.get_country(country_id)
+        return self._country
+
+    @property
+    def public_status_text(self):
+        return {
+            "0": "To be decided",
+            "10": "Not for public view",
+            "20": "Allowed - yet to be published",
+            "30": "Allowed - yet to be published",
+            "40": "Published",
+            "50": "Unpublished",
+        }.get(str(self.public_view_status))
+
+    @property
+    def ready_text(self):
+        return {
+            "0": "Not ready to publish",
+            "10": "",
+            "20": "Not ready to publish",
+            "30": "Ready to publish",
+            "40": "",
+            "50": "",
+        }.get(str(self.public_view_status))
+
+    @property
+    def status(self):
+        if self._status is None:
+            status_id = str(self.data["status"])
+            self._status = self.metadata.get_status(status_id)
+        return self._status
+
+    @property
+    def sectors(self):
+        if self._sectors is None:
+            self._sectors = [
+                self.metadata.get_sector(sector_id) for sector_id in self.data.get("sectors")
+            ]
+        return self._sectors
+
+    @property
+    def sector_names(self):
+        if self.sectors:
+            return [sector.get("name", "Unknown") for sector in self.sectors]
+        return ["All sectors"]
