@@ -2,34 +2,53 @@
 
 {% block page_title %}{{ block.super }} - Public barrier{% endblock %}
 
-{% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
-{% endblock %}
-
 {% block page_content %}
 
     {% include 'barriers/partials/barrier_tabs.html' with active='public' %}
 
-    {% include 'partials/heading.html' with text='Prepare barrier for public view' %}
-
     <section class="summary-group">
-        <h2 class="summary-group__heading">Publish status: Ready</h2>
+        <h2 class="summary-group__heading">
+            {{ barrier.public_eligibility_summary }}
+            Public view: {{ public_barrier.public_status_text }}
+            {% if public_barrier.ready_text %}<span class="summary-group__subheading">{{ public_barrier.ready_text }}</span>{% endif %}
+        </h2>
 
-        <div>
-            <a class="" href="{% url 'barriers:public_barrier_changes' barrier.id %}">View changes</a>
-        </div>
+        {% if current_user|has_permission:"change_barrier_public_eligibility" and not current_user|has_permission:"change_publicbarrier" %}
+            <a href="{% url 'barriers:edit_publish_eligibility' barrier.id %}" class="govuk-button button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Change public view status</a>
+        {% endif %}
 
         <dl class="summary-group__list">
             <dt class="summary-group__list__key">Public title</dt>
             <dd class="summary-group__list__value">
-                {{ public_barrier.title }}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                {% if public_barrier.title.public %}
+                    {{ public_barrier.title.public }}
+                    {% if current_user|has_permission:"change_publicbarrier" %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if current_user|has_permission:"change_publicbarrier" %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Add public title</a>
+                    {% else %}
+                        {% include "partials/warning.html" with warning_text="Public title has not been created" modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-margin-top-2" %}
+                    {% endif %}
+                {% endif %}
+
             </dd>
 
             <dt class="summary-group__list__key">Public summary</dt>
             <dd class="summary-group__list__value">
-                {{ public_barrier.summary }}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
+                {% if public_barrier.summary.public %}
+                    {{ public_barrier.summary.public }}
+                    {% if current_user|has_permission:"change_publicbarrier" %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if current_user|has_permission:"change_publicbarrier" %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Add public summary</a>
+                    {% else %}
+                        {% include "partials/warning.html" with warning_text="Public summary has not been created" modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-margin-top-2" %}
+                    {% endif %}
+                {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Status</dt>
@@ -39,20 +58,50 @@
 
             <dt class="summary-group__list__key">Country</dt>
             <dd class="summary-group__list__value">
-                {{ public_barrier.country.name }}
+                {% if public_barrier.country != barrier.country %}
+                    <span class="diff__del">{{ public_barrier.country.name }}</span>
+                    <span class="diff__ins">{{ barrier.country.name }}</span>
+                {% else %}
+                    {{ public_barrier.country.name }}
+                {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Sector</dt>
             <dd class="summary-group__list__value">
-                {{ public_barrier.sector_names|join:", " }}
+                {% if public_barrier.sector_names != barrier.sector_names %}
+                    <span class="diff__del">{{ public_barrier.sector_names|join:", " }}</span>
+                    <span class="diff__ins">{{ barrier.sector_names|join:", " }}</span>
+                {% else %}
+                    {{ barrier.sector_names|join:", " }}
+                {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Category</dt>
             <dd class="summary-group__list__value">
-                {{ public_barrier.category_titles|join:", " }}
+                {% if public_barrier.categories != barrier.category_titles %}
+                    <span class="diff__del">{{ public_barrier.categories|join:", " }}</span>
+                    <span class="diff__ins">{{ barrier.category_titles|join:", " }}</span>
+                {% else %}
+                    {{ public_barrier.categories|join:", " }}
+                {% endif %}
             </dd>
         </dl>
 
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {% if current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
+                <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
+            {% endif %}
+
+            {% if current_user|has_permission:"publish_barrier" %}
+                <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="publish">Publish</button>
+            {% endif %}
+        </form>
+
+        {% if current_user|has_permission:"change_publicbarrier" %}
+            <a href="{% url 'barriers:edit_publish_eligibility' barrier.id %}" class="govuk-button button--secondary">Change public view status</a>
+        {% endif %}
     </section>
 
     <section class="barrier-content">

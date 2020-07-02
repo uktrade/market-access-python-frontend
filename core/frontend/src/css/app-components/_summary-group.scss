@@ -20,8 +20,10 @@
 	border-bottom: 4px solid $govuk-black;
 }
 
-.summary-group__heading--sub {
-	@include govuk-font( $size: 19, $weight: bold );
+.summary-group__subheading {
+	display: block;
+	@include govuk-font( $size: 16, $weight: bold );
+	margin-top: govuk-em( 8, 16 );
 }
 
 .summary-group__list__key {

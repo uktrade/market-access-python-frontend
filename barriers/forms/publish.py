@@ -53,7 +53,10 @@ class PublishTitleForm(APIFormMixin, forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        # TODO: Patch the public barrier
+        client.public_barriers.patch(
+            id=self.id,
+            title=self.cleaned_data.get("title"),
+        )
 
 
 class PublishSummaryForm(APIFormMixin, forms.Form):
@@ -66,31 +69,7 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        # TODO: Patch the public barrier
-
-
-class MarkAsReadyForm(APIFormMixin, forms.Form):
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        print("Marking as ready")
-        # TODO: Patch the public barrier
-
-
-class PublishForm(APIFormMixin, forms.Form):
-    not_sensitive = forms.BooleanField(
-        label=(
-            "I confirm this barrier does not contain OFFICIAL-SENSITIVE information "
-            "and is suitable for public view"
-        ),
-        error_messages={
-            "required": (
-                "Confirm that this barrier does not contain OFFICIAL-SENSITIVE "
-                "information"
-            )
-        },
-    )
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        print("Publishing")
-        # TODO: Patch the public barrier
+        client.public_barriers.patch(
+            id=self.id,
+            summary=self.cleaned_data.get("summary"),
+        )
