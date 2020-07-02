@@ -6,21 +6,41 @@ from utils.api.client import MarketAccessAPIClient
 from utils.forms import YesNoBooleanField
 
 
-class PublishEligibilityForm(APIFormMixin, forms.Form):
-    is_publishable = YesNoBooleanField(
-        label="Is this barrier eligible for public view?",
+class PublicEligibilityForm(APIFormMixin, forms.Form):
+    public_eligibility = YesNoBooleanField(
+        label="Can this barrier be made public?",
         choices=(
-            ("no", "No, this barrier is ineligible"),
-            ("yes", "Yes, this barrier is eligible"),
+            ("yes", "Yes, it can be viewed by the public"),
+            ("no", "No"),
         ),
         error_messages={"required": "Enter yes or no"},
     )
+    allowed_summary = forms.CharField(
+        label="Why is it allowed to be public? (optional)",
+        widget=forms.Textarea,
+        max_length=250,
+        required=False,
+    )
+    not_allowed_summary = forms.CharField(
+        label="Why is it not allowed to be public? (optional)",
+        widget=forms.Textarea,
+        max_length=250,
+        required=False,
+    )
+
+    def get_summary(self):
+        if self.cleaned_data.get("public_eligibility") is True:
+            return self.cleaned_data.get("allowed_summary")
+        elif self.cleaned_data.get("public_eligibility") is False:
+            return self.cleaned_data.get("not_allowed_summary")
+        return ""
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            is_publishable=self.cleaned_data.get("is_publishable"),
+            public_eligibility=self.cleaned_data.get("public_eligibility"),
+            public_eligibility_summary=self.get_summary(),
         )
 
 

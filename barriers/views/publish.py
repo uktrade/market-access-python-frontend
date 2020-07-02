@@ -4,8 +4,8 @@ from django.views.generic import FormView
 from .mixins import APIBarrierFormViewMixin
 from barriers.forms.publish import (
     MarkAsReadyForm,
-    PublishEligibilityForm,
     PublishForm,
+    PublicEligibilityForm,
     PublishSummaryForm,
     PublishTitleForm,
 )
@@ -51,13 +51,21 @@ class PublicBarrierChanges(APIBarrierFormViewMixin, FormView):
 
 class EditPublishEligibility(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/public/eligibility.html"
-    form_class = PublishEligibilityForm
+    form_class = PublicEligibilityForm
 
     def get_initial(self):
-        return {
-            "is_publishable": False,
-        }
+        initial = {"public_eligibility": self.barrier.public_eligibility}
+        if self.barrier.public_eligibility is True:
+            initial["allowed_summary"] = self.barrier.public_eligibility_summary
+        elif self.barrier.public_eligibility is False:
+            initial["not_allowed_summary"] = self.barrier.public_eligibility_summary
+        return initial
 
+    def get_success_url(self):
+        return reverse(
+            "barriers:public_barrier",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
 
 class EditPublishTitle(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/public/title.html"
