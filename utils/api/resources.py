@@ -245,6 +245,13 @@ class PublicBarriersResource(APIResource):
     resource_name = "public-barriers"
     model = PublicBarrier
 
+    def get_activity(self, barrier_id, **kwargs):
+        url = f"public-barriers/{barrier_id}/activity"
+        return [
+            HistoryItem(result)
+            for result in self.client.get(url, params=kwargs)["history"]
+        ]
+
     def mark_as_in_progress(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unprepared")
 

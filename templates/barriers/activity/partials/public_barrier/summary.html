@@ -1,0 +1,5 @@
+<h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+
+<p class="event-list__item__text">
+    Barrier public summary was updated{% if item.user.name %} by {{ item.user.name }}{% endif %}
+</p>

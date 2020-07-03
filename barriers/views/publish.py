@@ -35,6 +35,17 @@ class PublicBarrierMixin:
 class PublicBarrier(PublicBarrierMixin, BarrierMixin, TemplateView):
     template_name = "barriers/public/overview.html"
 
+    def get_activity(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        activity_items = client.public_barriers.get_activity(barrier_id=self.barrier.id)
+        activity_items.sort(key=lambda object: object.date, reverse=True)
+        return activity_items
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["activity_items"] = self.get_activity()
+        return context_data
+
     def post(self, request, *args, **kwargs):
         action = self.request.POST.get("action")
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
