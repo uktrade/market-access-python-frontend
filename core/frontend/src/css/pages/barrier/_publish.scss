@@ -11,5 +11,11 @@
 
 .publish-update-warning {
     padding: govuk-em( 24, 16 ) 0;
-    border-bottom: 1px solid $govuk-light-grey;;
+    border-bottom: 1px solid $govuk-light-grey;
+    margin-bottom: 0;
+}
+
+.publishing-button {
+    display: block;
+    margin-bottom: govuk-em( 16, 16 );
 }
