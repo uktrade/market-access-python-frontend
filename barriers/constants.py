@@ -39,3 +39,12 @@ STATUSES_HELP_TEXT = Choices(
     (STATUSES.RESOLVED_IN_FULL, "Barrier has been resolved for all UK companies"),
     (STATUSES.DORMANT, "Barrier is present but not being pursued"),
 )
+
+PUBLIC_BARRIER_STATUSES = Choices(
+    (0,  "UNKNOWN", "To be decided"),
+    (10, "INELIGIBLE", "Not for public view"),
+    (20, "ELIGIBLE", "Allowed"),
+    (30, "READY", "Ready"),
+    (40, "PUBLISHED", "Published"),
+    (50, "UNPUBLISHED", "Unpublished")
+)

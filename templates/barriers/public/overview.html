@@ -13,15 +13,38 @@
             {% if public_barrier.ready_text %}<span class="summary-group__subheading">{{ public_barrier.ready_text }}</span>{% endif %}
         </h2>
 
+        {% if public_barrier.first_published_on %}
+            <div class="publish-dates">
+                {% if public_barrier.last_published_on == public_barrier.first_published_on %}
+                    <p class="publish-dates__date">Published on {{ public_barrier.last_published_on|date:"j F Y" }} at {{ public_barrier.last_published_on|time:"g:iA"|lower }} (GMT)</p>
+                {% else %}
+                    <p class="publish-dates__date publish-dates__date--first">First published on {{ public_barrier.first_published_on|date:"j F Y" }} at {{ public_barrier.first_published_on|time:"g:iA"|lower }} (GMT)</p>
+                    {% if not public_barrier.unpublished_on %}
+                        <p class="publish-dates__date">Last published on {{ public_barrier.last_published_on|date:"j F Y" }} at {{ public_barrier.last_published_on|time:"g:iA"|lower }} (GMT)</p>
+                    {% endif %}
+                {% endif %}
+                {% if public_barrier.unpublished_on %}
+                    <p class="publish-dates__date">Unpublished on {{ public_barrier.unpublished_on|date:"j F Y" }} at {{ public_barrier.unpublished_on|time:"g:iA"|lower }} (GMT)</p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if 0 %}
+            {% include "partials/warning.html" with warning_text="The public barrier needs updating" modifier="small" extra_classes="publish-update-warning govuk-!-margin-bottom-0" %}
+        {% endif %}
+
         {% if current_user|has_permission:"change_barrier_public_eligibility" and not current_user|has_permission:"change_publicbarrier" %}
-            <a href="{% url 'barriers:edit_publish_eligibility' barrier.id %}" class="govuk-button button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Change public view status</a>
+            <a href="{% url 'barriers:edit_publish_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Change public view status</a>
         {% endif %}
 
         <dl class="summary-group__list">
             <dt class="summary-group__list__key">Public title</dt>
             <dd class="summary-group__list__value">
-                {% if public_barrier.title.public %}
-                    {{ public_barrier.title.public }}
+                {% if public_barrier.internal_title_changed %}
+                    {% include "partials/warning.html" with warning_text="Internal title has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
+                {% endif %}
+                {% if public_barrier.title %}
+                    {{ public_barrier.title }}
                     {% if current_user|has_permission:"change_publicbarrier" %}
                         <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
                     {% endif %}
@@ -37,8 +60,11 @@
 
             <dt class="summary-group__list__key">Public summary</dt>
             <dd class="summary-group__list__value">
-                {% if public_barrier.summary.public %}
-                    {{ public_barrier.summary.public }}
+                {% if public_barrier.internal_summary_changed %}
+                    {% include "partials/warning.html" with warning_text="Internal summary has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
+                {% endif %}
+                {% if public_barrier.summary %}
+                    {{ public_barrier.summary }}
                     {% if current_user|has_permission:"change_publicbarrier" %}
                         <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
                     {% endif %}
@@ -90,17 +116,35 @@
         <form action="" method="post">
             {% csrf_token %}
 
-            {% if current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
-                <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
+            {% if public_barrier.is_eligible and current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
+                {% if public_barrier.title and public_barrier.summary %}
+                    {% if True %}
+                        <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
+                        <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
+                    {% else %}
+                        <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
+                    {% endif %}
+                {% else %}
+                    <button disabled="disabled" aria-disabled="true" class="govuk-button govuk-!-margin-bottom-3 disabled" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
+                {% endif %}
             {% endif %}
 
-            {% if current_user|has_permission:"publish_barrier" %}
-                <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="publish">Publish</button>
+            {% if public_barrier.is_ready or public_barrier.is_unpublished %}
+                {% if current_user|has_permission:"publish_barrier" %}
+                    <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="publish">Publish{% if False %} update{% endif %}</button>
+                {% endif %}
+                {% if current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
+                    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3" data-module="govuk-button" name="action" value="mark-as-in-progress">Mark as in progress</button>
+                {% endif %}
+            {% endif %}
+
+            {% if public_barrier.is_published and current_user|has_permission:"publish_barrier" %}
+                <button class="govuk-button govuk-!-margin-bottom-3" data-module="govuk-button govuk-button--secondary" name="action" value="unpublish">Unpublish</button>
             {% endif %}
         </form>
 
-        {% if current_user|has_permission:"change_publicbarrier" %}
-            <a href="{% url 'barriers:edit_publish_eligibility' barrier.id %}" class="govuk-button button--secondary">Change public view status</a>
+        {% if not public_barrier.is_published and current_user|has_permission:"change_publicbarrier" %}
+            <a href="{% url 'barriers:edit_publish_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary">Change public view status</a>
         {% endif %}
     </section>
 

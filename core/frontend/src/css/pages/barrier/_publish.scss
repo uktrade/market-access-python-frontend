@@ -1,0 +1,15 @@
+.publish-dates {
+    border-bottom: 1px solid $govuk-light-grey;;
+    padding: govuk-em( 4, 16 ) 0;
+    &__date {
+        margin: govuk-em( 4, 16 ) 0;
+        &--first {
+            color: $govuk-secondary-text-colour;
+        }
+    }
+}
+
+.publish-update-warning {
+    padding: govuk-em( 24, 16 ) 0;
+    border-bottom: 1px solid $govuk-light-grey;;
+}

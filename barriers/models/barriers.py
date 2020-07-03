@@ -1,4 +1,4 @@
-from barriers.constants import ARCHIVED_REASON
+from barriers.constants import ARCHIVED_REASON, PUBLIC_BARRIER_STATUSES
 from barriers.models.wto import WTOProfile
 
 from utils.metadata import get_metadata
@@ -196,26 +196,54 @@ class PublicBarrier(APIModel):
         return self._country
 
     @property
+    def first_published_on(self):
+        return dateutil.parser.parse(self.data["first_published_on"])
+
+    @property
+    def last_published_on(self):
+        return dateutil.parser.parse(self.data["last_published_on"])
+
+    @property
+    def unpublished_on(self):
+        return dateutil.parser.parse(self.data["unpublished_on"])
+
+    @property
+    def is_eligible(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE
+
+    @property
+    def is_published(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED
+
+    @property
+    def is_ready(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.READY
+
+    @property
+    def is_unpublished(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.UNPUBLISHED
+
+    @property
     def public_status_text(self):
         return {
-            "0": "To be decided",
-            "10": "Not for public view",
-            "20": "Allowed - yet to be published",
-            "30": "Allowed - yet to be published",
-            "40": "Published",
-            "50": "Unpublished",
-        }.get(str(self.public_view_status))
+            PUBLIC_BARRIER_STATUSES.UNKNOWN: "To be decided",
+            PUBLIC_BARRIER_STATUSES.INELIGIBLE: "Not for public view",
+            PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Allowed - yet to be published",
+            PUBLIC_BARRIER_STATUSES.READY: "Allowed - yet to be published",
+            PUBLIC_BARRIER_STATUSES.PUBLISHED: "Published",
+            PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "Unpublished",
+        }.get(self.public_view_status)
 
     @property
     def ready_text(self):
         return {
-            "0": "Not ready to publish",
-            "10": "",
-            "20": "Not ready to publish",
-            "30": "Ready to publish",
-            "40": "",
-            "50": "",
-        }.get(str(self.public_view_status))
+            PUBLIC_BARRIER_STATUSES.UNKNOWN: "Not ready to publish",
+            PUBLIC_BARRIER_STATUSES.INELIGIBLE: "",
+            PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Not ready to publish",
+            PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
+            PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
+            PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
+        }.get(self.public_view_status)
 
     @property
     def status(self):

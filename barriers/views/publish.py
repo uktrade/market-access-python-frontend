@@ -45,6 +45,10 @@ class PublicBarrier(PublicBarrierMixin, BarrierMixin, TemplateView):
                 client.public_barriers.mark_as_ready(id=barrier_id)
             elif action == "publish":
                 client.public_barriers.publish(id=barrier_id)
+            elif action == "mark-as-in-progress":
+                client.public_barriers.mark_as_in_progress(id=barrier_id)
+            elif action == "unpublish":
+                client.public_barriers.unpublish(id=barrier_id)
             return HttpResponseRedirect(self.get_success_url())
         return self.render_to_response(self.get_context_data())
 
@@ -88,7 +92,7 @@ class EditPublishTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     form_class = PublishTitleForm
 
     def get_initial(self):
-        return {"title": self.public_barrier.title["public"]}
+        return {"title": self.public_barrier.title}
 
     def get_success_url(self):
         return reverse(
@@ -102,7 +106,7 @@ class EditPublishSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     form_class = PublishSummaryForm
 
     def get_initial(self):
-        return {"summary": self.public_barrier.summary["public"]}
+        return {"summary": self.public_barrier.summary}
 
     def get_success_url(self):
         return reverse(

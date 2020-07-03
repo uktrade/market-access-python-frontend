@@ -245,8 +245,14 @@ class PublicBarriersResource(APIResource):
     resource_name = "public-barriers"
     model = PublicBarrier
 
+    def mark_as_in_progress(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/unprepared")
+
     def mark_as_ready(self, id):
         return self.client.post(f"{self.resource_name}/{id}/ready")
 
     def publish(self, id):
         return self.client.post(f"{self.resource_name}/{id}/publish")
+
+    def unpublish(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/unpublish")
