@@ -121,7 +121,7 @@
 
         {% if assessment.commercial_value %}
             <p class="assessment-item__value">&pound; {{ assessment.commercial_value|intcomma }}</p>
-            <p class="assessment-item__value">{{ assessment.commercial_value_explanation }}</p>
+            <p class="assessment-item__value">{{ assessment.commercial_value_explanation|linebreaksbr }}</p>
             <a class="assessment-item__edit" href="{% url 'barriers:commercial_value_assessment' barrier.id %}">Edit</a>
         {% else %}
             <div class="assessment-item-content">
