@@ -1,4 +1,4 @@
-from barriers.constants import ARCHIVED_REASON
+from barriers.constants import ARCHIVED_REASON, PUBLIC_BARRIER_STATUSES
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
 from utils.metadata import Statuses
@@ -8,7 +8,7 @@ import dateutil.parser
 
 class CategoriesHistoryItem(BaseHistoryItem):
     field = "categories"
-    field_name = "Barrier categories"
+    field_name = "Public categories"
 
     def get_value(self, value):
         category_names = [
@@ -27,9 +27,20 @@ class LocationHistoryItem(BaseHistoryItem):
         return self.metadata.get_location_text(value["country"], value["admin_areas"])
 
 
+class PublicViewStatusHistoryItem(BaseHistoryItem):
+    field = "_public_view_status"
+    field_name = "Publish status"
+
+    def get_value(self, value):
+        try:
+            return PUBLIC_BARRIER_STATUSES[value]
+        except KeyError:
+            return ""
+
+
 class SectorsHistoryItem(BaseHistoryItem):
     field = "sectors"
-    field_name = "Sectors affected"
+    field_name = "Public sectors"
 
     def get_value(self, value):
         return [
@@ -40,33 +51,19 @@ class SectorsHistoryItem(BaseHistoryItem):
 
 class StatusHistoryItem(BaseHistoryItem):
     field = "status"
-    field_name = "Status"
+    field_name = "Public status"
     modifier = "status"
 
     def get_value(self, value):
-        if value["status_date"]:
-            value["status_date"] = dateutil.parser.parse(value["status_date"])
-        value["status_short_text"] = self.metadata.get_status_text(value["status"])
         value["status_text"] = self.metadata.get_status_text(
             status_id=value["status"],
-            sub_status=value["sub_status"],
-            sub_status_other=value["sub_status_other"],
-        )
-        value["is_resolved"] = value["status"] in (
-            Statuses.RESOLVED_IN_PART,
-            Statuses.RESOLVED_IN_FULL,
-        )
-        value["show_summary"] = value["status"] in (
-            Statuses.OPEN_IN_PROGRESS,
-            Statuses.UNKNOWN,
-            Statuses.OPEN_PENDING_ACTION,
         )
         return value
 
 
 class SummaryHistoryItem(BaseHistoryItem):
     field = "summary"
-    field_name = "Summary"
+    field_name = "Public summary"
 
     def get_value(self, value):
         return value or ""
@@ -74,7 +71,7 @@ class SummaryHistoryItem(BaseHistoryItem):
 
 class TitleHistoryItem(BaseHistoryItem):
     field = "title"
-    field_name = "Title"
+    field_name = "Public title"
 
 
 class PublicBarrierHistoryItem(PolymorphicBase):
@@ -83,6 +80,7 @@ class PublicBarrierHistoryItem(PolymorphicBase):
     subclasses = (
         CategoriesHistoryItem,
         LocationHistoryItem,
+        PublicViewStatusHistoryItem,
         SectorsHistoryItem,
         StatusHistoryItem,
         SummaryHistoryItem,

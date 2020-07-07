@@ -197,15 +197,18 @@ class PublicBarrier(APIModel):
 
     @property
     def first_published_on(self):
-        return dateutil.parser.parse(self.data["first_published_on"])
+        if self.data.get("first_published_on") is not None:
+            return dateutil.parser.parse(self.data["first_published_on"])
 
     @property
     def last_published_on(self):
-        return dateutil.parser.parse(self.data["last_published_on"])
+        if self.data.get("last_published_on") is not None:
+            return dateutil.parser.parse(self.data["last_published_on"])
 
     @property
     def unpublished_on(self):
-        return dateutil.parser.parse(self.data["unpublished_on"])
+        if self.data.get("unpublished_on") is not None:
+            return dateutil.parser.parse(self.data["unpublished_on"])
 
     @property
     def is_eligible(self):
