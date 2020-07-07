@@ -144,15 +144,16 @@ class CommercialValueForm(forms.Form):
         min_value=0,
         max_value=1000000000000,
         localize=True,
-        label="What is the value of the barrier to the affected business(es)?",
-        help_text=(
-            "The value of the barrier to the affected business(es) in GBP per year."
-        ),
+        label="What is the value of the barrier to the affected business(es) in GBP?",
         error_messages={
             "required": "Enter a value",
             "min_value": "Enter a valid number",
             "max_value": "Enter a valid number",
         },
+    )
+    value_explanation = forms.CharField(
+        widget=forms.Textarea,
+        error_messages={"required": "Enter an explanation for the estimated value"},
     )
 
     def __init__(self, barrier, *args, **kwargs):
@@ -162,16 +163,14 @@ class CommercialValueForm(forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
+        payload = {
+            "commercial_value": self.cleaned_data.get("value"),
+            "commercial_value_explanation": self.cleaned_data.get("value_explanation")
+        }
         if self.barrier.has_assessment:
-            client.barriers.update_assessment(
-                barrier_id=self.barrier.id,
-                commercial_value=self.cleaned_data.get("value"),
-            )
+            client.barriers.update_assessment(barrier_id=self.barrier.id, **payload)
         else:
-            client.barriers.create_assessment(
-                barrier_id=self.barrier.id,
-                commercial_value=self.cleaned_data.get("value"),
-            )
+            client.barriers.create_assessment(barrier_id=self.barrier.id, **payload)
 
 
 class ExportValueForm(forms.Form):

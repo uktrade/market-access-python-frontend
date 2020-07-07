@@ -173,7 +173,10 @@ class CommercialValueAssessment(AssessmentValueView):
 
     def get_initial(self):
         if self.assessment:
-            return {"value": self.assessment.commercial_value}
+            return {
+                "value": self.assessment.commercial_value,
+                "value_explanation": self.assessment.commercial_value_explanation or ""
+            }
 
 
 class ExportValueAssessment(AssessmentValueView):
