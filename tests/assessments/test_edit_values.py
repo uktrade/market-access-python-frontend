@@ -378,16 +378,22 @@ class NewCommercialValueTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
     def test_commercial_value_calls_api(self, mock_update, mock_create):
+        """ Both commercial_value and commercial_value_explanation are required """
         mock_create.return_value = self.barrier
         response = self.client.post(
             reverse(
                 "barriers:commercial_value_assessment",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"value": "600003"},
+            data={
+                "value": "600003",
+                "value_explanation": "Wibble, wobble."
+            },
         )
         mock_create.assert_called_with(
-            barrier_id=self.barrier["id"], commercial_value=600003,
+            barrier_id=self.barrier["id"],
+            commercial_value=600003,
+            commercial_value_explanation="Wibble, wobble."
         )
         assert mock_update.called is False
         assert response.status_code == HTTPStatus.FOUND
