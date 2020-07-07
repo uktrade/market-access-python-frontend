@@ -5,7 +5,15 @@ from django.conf import settings
 from django.core.cache import cache
 
 from barriers.constants import Statuses
-from barriers.models import Assessment, Barrier, HistoryItem, Note, PublicBarrier, SavedSearch
+from barriers.models import (
+    Assessment,
+    Barrier,
+    HistoryItem,
+    Note,
+    PublicBarrier,
+    PublicBarrierNote,
+    SavedSearch,
+)
 from reports.models import Report
 from users.models import Group, User
 
@@ -241,6 +249,11 @@ class GroupsResource(APIResource):
     model = Group
 
 
+class PublicBarrierNotesResource(APIResource):
+    resource_name = "public-barrier-notes"
+    model = PublicBarrierNote
+
+
 class PublicBarriersResource(APIResource):
     resource_name = "public-barriers"
     model = PublicBarrier
@@ -250,6 +263,15 @@ class PublicBarriersResource(APIResource):
         return [
             HistoryItem(result)
             for result in self.client.get(url, params=kwargs)["history"]
+        ]
+
+    def create_note(self, id, *args, **kwargs):
+        return self.client.post(f"{self.resource_name}/{id}/notes", json=kwargs)
+
+    def get_notes(self, id, *args, **kwargs):
+        return [
+            PublicBarrierNote(note)
+            for note in self.client.get(f"{self.resource_name}/{id}/notes")["results"]
         ]
 
     def mark_as_in_progress(self, id):

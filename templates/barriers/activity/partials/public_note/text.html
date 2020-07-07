@@ -1,0 +1,16 @@
+<h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span>
+    {% if item.user.name %}
+    <span class="event-list__item__heading__recede"> by </span>{{ item.user.name }}
+    {% endif %}
+</h4>
+
+{% if form.note_id == item.id %}
+    {% include 'barriers/partials/note_form_no_documents.html' %}
+{% else %}
+    <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
+
+    <a class="event-list__item__edit-link" href="{% url 'barriers:public_barrier' barrier.id %}?edit-note={{ item.id }}">Edit</a>
+    {% if item.user.id == current_user.id %}
+        <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:public_barrier' barrier.id %}?delete-note={{ item.id }}">Delete</a>
+    {% endif %}
+{% endif %}
