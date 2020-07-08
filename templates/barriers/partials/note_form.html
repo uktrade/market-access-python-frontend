@@ -38,6 +38,6 @@
         <input class="govuk-file-upload file-upload__input js-file-input" name="document" type="file" aria-describedby="document-hint">
     </div>
 
-    <input type="submit" value="Save note" class="govuk-button js-submit-button">
+    <button class="govuk-button js-submit-button govuk-!-margin-bottom-0">Save note</button>
     <a class="button-cancel" href="{% url 'barriers:cancel_note_document' barrier.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}">Cancel</a>
 </form>

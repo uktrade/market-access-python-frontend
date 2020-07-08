@@ -9,6 +9,6 @@
         <textarea class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
     </div>
 
-    <input type="submit" value="Save note" class="govuk-button js-submit-button">
+    <button class="govuk-button js-submit-button govuk-!-margin-bottom-0">Save note</button>
     <a class="button-cancel" href="{% url 'barriers:public_barrier' barrier.id %}">Cancel</a>
 </form>
