@@ -268,3 +268,12 @@ class PublicBarrier(APIModel):
         if self.sectors:
             return [sector.get("name", "Unknown") for sector in self.sectors]
         return ["All sectors"]
+
+    @property
+    def tab_badge(self):
+        if self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
+            return "Eligible"
+        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.READY:
+            return "Ready"
+        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:
+            return "Published"
