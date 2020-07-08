@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from .mixins import APIBarrierFormViewMixin, BarrierMixin
+from .mixins import APIBarrierFormViewMixin, BarrierMixin, PublicBarrierMixin
 from barriers.forms.public_barriers import (
     PublicEligibilityForm,
     PublishSummaryForm,
@@ -11,26 +11,6 @@ from barriers.forms.public_barriers import (
 from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNoteForm
 
 from utils.api.client import MarketAccessAPIClient
-
-
-class PublicBarrierMixin:
-    _public_barrier = None
-
-    @property
-    def public_barrier(self):
-        if not self._public_barrier:
-            self._public_barrier = self.get_public_barrier()
-        return self._public_barrier
-
-    def get_public_barrier(self):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        barrier_id = self.kwargs.get("barrier_id")
-        return client.public_barriers.get(id=barrier_id)
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data["public_barrier"] = self.public_barrier
-        return context_data
 
 
 class PublicBarrier(PublicBarrierMixin, BarrierMixin, FormView):
