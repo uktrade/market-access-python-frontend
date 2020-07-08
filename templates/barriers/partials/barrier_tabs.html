@@ -41,7 +41,7 @@
 
     {% if active == 'public' %}
         <li class="page-tabs__tab page-tabs__tab--active">
-            <span class="page-tabs__tab__text">Public view</span>
+            <span class="page-tabs__tab__text">Public view{% if public_barrier.is_published %} <span class="ma-badge ma-badge--published">Published</span>{% endif %}</span>
         </li>
     {% else %}
         <li class="page-tabs__tab">
