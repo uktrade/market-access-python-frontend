@@ -5,7 +5,7 @@
 </h4>
 
 {% if form.note_id == item.id %}
-    {% include 'barriers/partials/note_form_no_documents.html' %}
+    {% include 'barriers/partials/public_barrier_note_form.html' %}
 {% else %}
     <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
 
