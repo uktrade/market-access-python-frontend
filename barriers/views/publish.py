@@ -100,6 +100,8 @@ class PublicBarrier(PublicBarrierMixin, BarrierMixin, FormView):
                 client.public_barriers.mark_as_in_progress(id=barrier_id)
             elif action == "unpublish":
                 client.public_barriers.unpublish(id=barrier_id)
+            elif action == "ignore-changes":
+                client.public_barriers.ignore_all_changes(id=barrier_id)
             elif action == "delete-note":
                 note_id = self.request.POST.get("note_id")
                 client.public_barrier_notes.delete(id=note_id)

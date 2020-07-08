@@ -274,6 +274,9 @@ class PublicBarriersResource(APIResource):
             for note in self.client.get(f"{self.resource_name}/{id}/notes")["results"]
         ]
 
+    def ignore_all_changes(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/ignore-all-changes")
+
     def mark_as_in_progress(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unprepared")
 
