@@ -71,9 +71,21 @@
                     {% include "partials/warning.html" with warning_text="Internal title has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.title %}
-                    {{ public_barrier.title }}
-                    {% if current_user|has_permission:"change_publicbarrier" %}
-                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                    {% if 1 or public_barrier.internal_title_changed %}
+                        <div class="public-barrier__published-value">{{ public_barrier.title }}</div>
+
+                        <div class="public-barrier__current-value-container">
+                            <h3 class="public-barrier__current-value-heading">New public title - not yet published</h3>
+                            <p class="public-barrier__current-value">{{ public_barrier.title }}</p>
+                            {% if current_user|has_permission:"change_publicbarrier" %}
+                                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        {{ public_barrier.title }}
+                        {% if current_user|has_permission:"change_publicbarrier" %}
+                            <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                        {% endif %}
                     {% endif %}
                 {% else %}
                     {% if current_user|has_permission:"change_publicbarrier" %}
@@ -91,9 +103,21 @@
                     {% include "partials/warning.html" with warning_text="Internal summary has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.summary %}
-                    {{ public_barrier.summary }}
-                    {% if current_user|has_permission:"change_publicbarrier" %}
-                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
+                    {% if 1 or public_barrier.internal_summary_changed %}
+                        <div class="public-barrier__published-value">{{ public_barrier.summary|linebreaksbr }}</div>
+
+                        <div class="public-barrier__current-value-container">
+                            <h3 class="public-barrier__current-value-heading">New public summary - not yet published</h3>
+                            <p class="public-barrier__current-value">{{ public_barrier.summary|linebreaksbr }}</p>
+                            {% if current_user|has_permission:"change_publicbarrier" %}
+                                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        {{ public_barrier.summary|linebreaksbr }}
+                        {% if current_user|has_permission:"change_publicbarrier" %}
+                            <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
+                        {% endif %}
                     {% endif %}
                 {% else %}
                     {% if current_user|has_permission:"change_publicbarrier" %}
@@ -112,8 +136,8 @@
             <dt class="summary-group__list__key">Country</dt>
             <dd class="summary-group__list__value">
                 {% if public_barrier.country != barrier.country %}
-                    <span class="diff__del">{{ public_barrier.country.name }}</span>
-                    <span class="diff__ins">{{ barrier.country.name }}</span>
+                    <span class="diff__del diff__del--block">{{ public_barrier.country.name }}</span>
+                    <span class="diff__ins diff__ins--block">{{ barrier.country.name }}</span>
                 {% else %}
                     {{ public_barrier.country.name }}
                 {% endif %}

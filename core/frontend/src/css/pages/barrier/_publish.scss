@@ -19,3 +19,22 @@
     display: block;
     margin-bottom: govuk-em( 16, 16 );
 }
+
+.public-barrier {
+    &__published-value {
+        color: $govuk-red;
+        margin-bottom: govuk-em( 8, 16 );
+    }
+    &__current-value-container {
+        border: 1px solid $govuk-light-grey;
+        padding: govuk-em( 16, 16 );
+    }
+    &__current-value-heading {
+        margin: 0;
+        font-size: 16px;
+    }
+    &__current-value {
+        color: $govuk-green;
+        margin: govuk-em( 8, 16 ) 0;
+    }
+}
