@@ -28,7 +28,7 @@ class Note(APIModel):
 
 
 class PublicBarrierNote(APIModel):
-    model = "public_note"
+    model = "public_barrier_note"
     field = "text"
     modifier = "note"
 
