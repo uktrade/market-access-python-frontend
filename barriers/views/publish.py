@@ -119,15 +119,6 @@ class PublicBarrier(PublicBarrierMixin, BarrierMixin, FormView):
         )
 
 
-class PublicBarrierChanges(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
-    template_name = "barriers/public/changes.html"
-
-    def get_form_class(self):
-        if self.is_ready:
-            return PublishForm
-        return MarkAsReadyForm
-
-
 class EditPublishEligibility(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/public/eligibility.html"
     form_class = PublicEligibilityForm
