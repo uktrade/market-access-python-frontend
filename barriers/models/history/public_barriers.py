@@ -19,12 +19,12 @@ class CategoriesHistoryItem(BaseHistoryItem):
         return category_names
 
 
-class LocationHistoryItem(BaseHistoryItem):
-    field = "location"
-    field_name = "Location"
+class CountryHistoryItem(BaseHistoryItem):
+    field = "country"
+    field_name = "Public country"
 
     def get_value(self, value):
-        return self.metadata.get_location_text(value["country"], value["admin_areas"])
+        return self.metadata.get_country(value)
 
 
 class PublicViewStatusHistoryItem(BaseHistoryItem):
@@ -79,7 +79,7 @@ class PublicBarrierHistoryItem(PolymorphicBase):
     key = "field"
     subclasses = (
         CategoriesHistoryItem,
-        LocationHistoryItem,
+        CountryHistoryItem,
         PublicViewStatusHistoryItem,
         SectorsHistoryItem,
         StatusHistoryItem,
