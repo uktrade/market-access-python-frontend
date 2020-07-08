@@ -130,7 +130,12 @@
 
             <dt class="summary-group__list__key">Status</dt>
             <dd class="summary-group__list__value">
-                {{ public_barrier.status.name }}
+                {% if public_barrier.status != barrier.status %}
+                    <span class="diff__del diff__del--block">{{ public_barrier.status.name }}</span>
+                    <span class="diff__ins diff__ins--block">{{ barrier.status.name }}</span>
+                {% else %}
+                    {{ public_barrier.status.name }}
+                {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Country</dt>
@@ -146,8 +151,8 @@
             <dt class="summary-group__list__key">Sector</dt>
             <dd class="summary-group__list__value">
                 {% if public_barrier.sector_names != barrier.sector_names %}
-                    <span class="diff__del">{{ public_barrier.sector_names|join:", " }}</span>
-                    <span class="diff__ins">{{ barrier.sector_names|join:", " }}</span>
+                    <span class="diff__del diff__del--block">{{ public_barrier.sector_names|join:", " }}</span>
+                    <span class="diff__ins diff__ins--block">{{ barrier.sector_names|join:", " }}</span>
                 {% else %}
                     {{ barrier.sector_names|join:", " }}
                 {% endif %}
@@ -156,8 +161,8 @@
             <dt class="summary-group__list__key">Category</dt>
             <dd class="summary-group__list__value">
                 {% if public_barrier.categories != barrier.category_titles %}
-                    <span class="diff__del">{{ public_barrier.categories|join:", " }}</span>
-                    <span class="diff__ins">{{ barrier.category_titles|join:", " }}</span>
+                    <span class="diff__del diff__del--block">{{ public_barrier.categories|join:", " }}</span>
+                    <span class="diff__ins diff__ins--block">{{ barrier.category_titles|join:", " }}</span>
                 {% else %}
                     {{ public_barrier.categories|join:", " }}
                 {% endif %}
