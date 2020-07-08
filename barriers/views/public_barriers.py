@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
 from .mixins import APIBarrierFormViewMixin, BarrierMixin
-from barriers.forms.publish import (
+from barriers.forms.public_barriers import (
     PublicEligibilityForm,
     PublishSummaryForm,
     PublishTitleForm,
@@ -34,7 +34,7 @@ class PublicBarrierMixin:
 
 
 class PublicBarrier(PublicBarrierMixin, BarrierMixin, FormView):
-    template_name = "barriers/public/overview.html"
+    template_name = "barriers/public_barriers/overview.html"
 
     def get_activity(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
@@ -120,7 +120,7 @@ class PublicBarrier(PublicBarrierMixin, BarrierMixin, FormView):
 
 
 class EditPublishEligibility(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/public/eligibility.html"
+    template_name = "barriers/public_barriers/eligibility.html"
     form_class = PublicEligibilityForm
 
     def get_initial(self):
@@ -139,7 +139,7 @@ class EditPublishEligibility(APIBarrierFormViewMixin, FormView):
 
 
 class EditPublishTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
-    template_name = "barriers/public/title.html"
+    template_name = "barriers/public_barriers/title.html"
     form_class = PublishTitleForm
 
     def get_initial(self):
@@ -153,7 +153,7 @@ class EditPublishTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
 
 
 class EditPublishSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
-    template_name = "barriers/public/summary.html"
+    template_name = "barriers/public_barriers/summary.html"
     form_class = PublishSummaryForm
 
     def get_initial(self):

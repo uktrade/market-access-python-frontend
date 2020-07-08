@@ -58,7 +58,7 @@ from .views.notes import (
     BarrierEditNote,
     BarrierDeleteNote,
 )
-from .views.publish import (
+from .views.public_barriers import (
     PublicBarrier,
     EditPublishEligibility,
     EditPublishTitle,
