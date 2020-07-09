@@ -2,6 +2,7 @@ from .assessments import AssessmentHistoryItem
 from .barriers import BarrierHistoryItem
 from .notes import NoteHistoryItem
 from .public_barriers import PublicBarrierHistoryItem
+from .public_barrier_notes import PublicBarrierNoteHistoryItem
 from .team_members import TeamMemberHistoryItem
 from .utils import PolymorphicBase
 from .wto import WTOHistoryItem
@@ -21,6 +22,7 @@ class HistoryItem(PolymorphicBase):
         BarrierHistoryItem,
         NoteHistoryItem,
         PublicBarrierHistoryItem,
+        PublicBarrierNoteHistoryItem,
         TeamMemberHistoryItem,
         WTOHistoryItem,
     )
