@@ -118,9 +118,11 @@ class Barrier(APIModel):
 
     @property
     def sector_names(self):
+        if self.all_sectors:
+            return ["All sectors"]
         if self.sectors:
             return [sector.get("name", "Unknown") for sector in self.sectors]
-        return ["All sectors"]
+        return []
 
     @property
     def source_name(self):
@@ -265,9 +267,11 @@ class PublicBarrier(APIModel):
 
     @property
     def sector_names(self):
+        if self.all_sectors:
+            return ["All sectors"]
         if self.sectors:
             return [sector.get("name", "Unknown") for sector in self.sectors]
-        return ["All sectors"]
+        return []
 
     @property
     def tab_badge(self):
