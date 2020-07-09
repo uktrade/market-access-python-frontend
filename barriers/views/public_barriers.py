@@ -99,7 +99,7 @@ class PublicBarrierDetail(PublicBarrierMixin, BarrierMixin, FormView):
         )
 
 
-class EditPublishEligibility(APIBarrierFormViewMixin, FormView):
+class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/public_barriers/eligibility.html"
     form_class = PublicEligibilityForm
 
@@ -118,7 +118,7 @@ class EditPublishEligibility(APIBarrierFormViewMixin, FormView):
         )
 
 
-class EditPublishTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
+class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     template_name = "barriers/public_barriers/title.html"
     form_class = PublishTitleForm
 
@@ -132,7 +132,7 @@ class EditPublishTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         )
 
 
-class EditPublishSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
+class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     template_name = "barriers/public_barriers/summary.html"
     form_class = PublishSummaryForm
 

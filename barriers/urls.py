@@ -60,9 +60,9 @@ from .views.notes import (
 )
 from .views.public_barriers import (
     PublicBarrierDetail,
-    EditPublishEligibility,
-    EditPublishTitle,
-    EditPublishSummary,
+    EditPublicEligibility,
+    EditPublicTitle,
+    EditPublicSummary,
 )
 from .views.search import (
     DownloadBarriers,
@@ -188,7 +188,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/assessment/documents/<uuid:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
 
     path("barriers/<uuid:barrier_id>/public/", PublicBarrierDetail.as_view(), name="public_barrier_detail"),
-    path("barriers/<uuid:barrier_id>/public/eligibility/", EditPublishEligibility.as_view(), name="edit_publish_eligibility"),
-    path("barriers/<uuid:barrier_id>/public/title/", EditPublishTitle.as_view(), name="edit_public_barrier_title"),
-    path("barriers/<uuid:barrier_id>/public/summary/", EditPublishSummary.as_view(), name="edit_public_barrier_summary"),
+    path("barriers/<uuid:barrier_id>/public/eligibility/", EditPublicEligibility.as_view(), name="edit_public_eligibility"),
+    path("barriers/<uuid:barrier_id>/public/title/", EditPublicTitle.as_view(), name="edit_public_barrier_title"),
+    path("barriers/<uuid:barrier_id>/public/summary/", EditPublicSummary.as_view(), name="edit_public_barrier_summary"),
 ]
