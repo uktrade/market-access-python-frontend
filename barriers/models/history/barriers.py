@@ -94,10 +94,13 @@ class SectorsHistoryItem(BaseHistoryItem):
     field_name = "Sectors affected"
 
     def get_value(self, value):
-        return [
-            self.metadata.get_sector(sector_id).get("name", "Unknown")
-            for sector_id in value or []
-        ]
+        return {
+            "all_sectors": value["all_sectors"],
+            "sectors": [
+                self.metadata.get_sector(sector_id).get("name", "Unknown")
+                for sector_id in value["sectors"] or []
+            ],
+        }
 
 
 class SourceHistoryItem(BaseHistoryItem):

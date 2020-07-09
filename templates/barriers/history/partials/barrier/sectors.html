@@ -1,14 +1,22 @@
-{% if item.old_value %}
+{% if item.old_value.sectors or item.old_value.all_sectors %}
     <div class="history-item__old-value">
         <span class="diff__del">
-            {{ item.old_value|join:", " }}
+            {% if item.old_value.all_sectors %}
+                All sectors
+            {% elif item.old_value.sectors %}
+                {{ item.old_value.sectors|join:", " }}
+            {% endif %}
         </span>
     </div>
 {% endif %}
-{% if item.new_value %}
+{% if item.new_value.sectors or item.new_value.all_sectors %}
     <div class="history-item__new-value">
         <span class="diff__ins">
-            {{ item.new_value|join:", " }}
+            {% if item.new_value.all_sectors %}
+                All sectors
+            {% elif item.new_value.sectors %}
+                {{ item.new_value.sectors|join:", " }}
+            {% endif %}
         </span>
     </div>
 {% endif %}
