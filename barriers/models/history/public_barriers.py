@@ -1,9 +1,6 @@
-from barriers.constants import ARCHIVED_REASON, PUBLIC_BARRIER_STATUSES
+from barriers.constants import PUBLIC_BARRIER_STATUSES
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
-from utils.metadata import Statuses
-
-import dateutil.parser
 
 
 class CategoriesHistoryItem(BaseHistoryItem):

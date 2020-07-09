@@ -41,10 +41,10 @@ STATUSES_HELP_TEXT = Choices(
 )
 
 PUBLIC_BARRIER_STATUSES = Choices(
-    (0,  "UNKNOWN", "To be decided"),
+    (0, "UNKNOWN", "To be decided"),
     (10, "INELIGIBLE", "Not for public view"),
     (20, "ELIGIBLE", "Allowed"),
     (30, "READY", "Ready"),
     (40, "PUBLISHED", "Published"),
-    (50, "UNPUBLISHED", "Unpublished")
+    (50, "UNPUBLISHED", "Unpublished"),
 )

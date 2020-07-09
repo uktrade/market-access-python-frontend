@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
 
 from .mixins import APIBarrierFormViewMixin, BarrierMixin, PublicBarrierMixin
 from barriers.forms.public_barriers import (
