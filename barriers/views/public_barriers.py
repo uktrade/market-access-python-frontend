@@ -13,8 +13,8 @@ from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNote
 from utils.api.client import MarketAccessAPIClient
 
 
-class PublicBarrier(PublicBarrierMixin, BarrierMixin, FormView):
-    template_name = "barriers/public_barriers/overview.html"
+class PublicBarrierDetail(PublicBarrierMixin, BarrierMixin, FormView):
+    template_name = "barriers/public_barriers/detail.html"
 
     def get_activity(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
@@ -94,7 +94,7 @@ class PublicBarrier(PublicBarrierMixin, BarrierMixin, FormView):
 
     def get_success_url(self):
         return reverse(
-            "barriers:public_barrier",
+            "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
@@ -113,7 +113,7 @@ class EditPublishEligibility(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         return reverse(
-            "barriers:public_barrier",
+            "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
@@ -127,7 +127,7 @@ class EditPublishTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
 
     def get_success_url(self):
         return reverse(
-            "barriers:public_barrier",
+            "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
@@ -141,6 +141,6 @@ class EditPublishSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
 
     def get_success_url(self):
         return reverse(
-            "barriers:public_barrier",
+            "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )

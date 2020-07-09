@@ -22,7 +22,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="note_id" value="{{ delete_note }}" />
                     <button name="action" value="delete-note" class="govuk-button" tabindex="2">Yes, delete</button>
-                    <a href="{% url 'barriers:public_barrier' barrier.id %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">No, cancel</a>
+                    <a href="{% url 'barriers:public_barrier_detail' barrier.id %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">No, cancel</a>
                 </form>
             </div>
         </div>
@@ -110,7 +110,7 @@
                             <h3 class="public-barrier__current-value-heading">New public summary - not yet published</h3>
                             <p class="public-barrier__current-value">{{ public_barrier.summary|linebreaksbr }}</p>
                             {% if current_user|has_permission:"change_publicbarrier" %}
-                                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
                             {% endif %}
                         </div>
                     {% else %}

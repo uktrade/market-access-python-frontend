@@ -24,7 +24,7 @@
 {% block page_title %}{{ block.super }} - Edit Publish Eligibility{% endblock %}
 
 {% block back_link %}
-    <a href="{% url 'barriers:public_barrier' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:public_barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
@@ -62,7 +62,7 @@
         </div>
 
         <button class="govuk-button">Confirm</button>
-        <a class="form-cancel" href="{% url 'barriers:public_barrier' barrier.id %}">Cancel</a>
+        <a class="form-cancel" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Cancel</a>
     </form>
 
 {% endblock %}

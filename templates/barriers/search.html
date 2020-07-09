@@ -187,7 +187,7 @@
                                 <dt class="filter-results-list__item__definitions__key">Updated:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
 
-                                {% if barrier.sectors %}
+                                {% if barrier.sector_names %}
                                 <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
                                 {% endif %}

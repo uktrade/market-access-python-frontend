@@ -9,8 +9,8 @@
 {% else %}
     <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
 
-    <a class="event-list__item__edit-link" href="{% url 'barriers:public_barrier' barrier.id %}?edit-note={{ item.id }}">Edit</a>
+    <a class="event-list__item__edit-link" href="{% url 'barriers:public_barrier_detail' barrier.id %}?edit-note={{ item.id }}">Edit</a>
     {% if item.user.id == current_user.id %}
-        <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:public_barrier' barrier.id %}?delete-note={{ item.id }}">Delete</a>
+        <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:public_barrier_detail' barrier.id %}?delete-note={{ item.id }}">Delete</a>
     {% endif %}
 {% endif %}
