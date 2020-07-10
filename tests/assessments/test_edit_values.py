@@ -314,6 +314,7 @@ class EditCommercialValueTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["value"] == self.assessments[0].commercial_value
+        assert form.initial["value_explanation"] == self.assessments[0].commercial_value_explanation
 
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
@@ -321,6 +322,7 @@ class EditCommercialValueTestCase(MarketAccessTestCase):
     def test_commercial_value_calls_api(
         self, mock_get_assessment, mock_update, mock_create,
     ):
+        """ Both commercial_value and commercial_value_explanation are required """
         mock_get_assessment.return_value = self.assessments[0]
 
         response = self.client.post(
@@ -328,10 +330,15 @@ class EditCommercialValueTestCase(MarketAccessTestCase):
                 "barriers:commercial_value_assessment",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"value": "500003"},
+            data={
+                "value": "500003",
+                "value_explanation": "Wibble, wobble."
+            },
         )
         mock_update.assert_called_with(
-            barrier_id=self.barrier["id"], commercial_value=500003,
+            barrier_id=self.barrier["id"],
+            commercial_value=500003,
+            commercial_value_explanation="Wibble, wobble."
         )
         assert mock_create.called is False
         assert response.status_code == HTTPStatus.FOUND
@@ -371,16 +378,22 @@ class NewCommercialValueTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.BarriersResource.create_assessment")
     @patch("utils.api.resources.BarriersResource.update_assessment")
     def test_commercial_value_calls_api(self, mock_update, mock_create):
+        """ Both commercial_value and commercial_value_explanation are required """
         mock_create.return_value = self.barrier
         response = self.client.post(
             reverse(
                 "barriers:commercial_value_assessment",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"value": "600003"},
+            data={
+                "value": "600003",
+                "value_explanation": "Wibble, wobble."
+            },
         )
         mock_create.assert_called_with(
-            barrier_id=self.barrier["id"], commercial_value=600003,
+            barrier_id=self.barrier["id"],
+            commercial_value=600003,
+            commercial_value_explanation="Wibble, wobble."
         )
         assert mock_update.called is False
         assert response.status_code == HTTPStatus.FOUND
