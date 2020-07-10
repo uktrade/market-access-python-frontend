@@ -25,7 +25,7 @@ class CountryHistoryItem(BaseHistoryItem):
 
 
 class PublicViewStatusHistoryItem(BaseHistoryItem):
-    field = "_public_view_status"
+    field = "public_view_status"
     field_name = "Publish status"
 
     def get_value(self, value):
