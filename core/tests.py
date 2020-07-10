@@ -117,6 +117,8 @@ class MarketAccessTestCase(TestCase):
         return {
             "title": "Public Title",
             "summary": "Public summary",
+            "public_view_status": 20,
+            "status": 0,
         }
 
     @property
