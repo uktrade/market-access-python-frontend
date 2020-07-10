@@ -18,6 +18,14 @@ class CommercialValueHistoryItem(BaseAssessmentHistoryItem):
     field_name = "Commercial value"
 
 
+class CommercialValueExplanationHistoryItem(BaseHistoryItem):
+    field = "commercial_value_explanation"
+    field_name = "Commercial value explanation"
+
+    def get_value(self, value):
+        return value or ""
+
+
 class ExplanationHistoryItem(BaseAssessmentHistoryItem):
     field = "explanation"
     field_name = "Economic assessment - explanation"
@@ -60,6 +68,7 @@ class AssessmentHistoryItem(PolymorphicBase):
     key = "field"
     subclasses = (
         CommercialValueHistoryItem,
+        CommercialValueExplanationHistoryItem,
         DocumentsHistoryItem,
         ExplanationHistoryItem,
         ExportValueHistoryItem,
