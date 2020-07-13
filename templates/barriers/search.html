@@ -52,7 +52,7 @@
                     </fieldset>
                 </div>
 
-                {% include 'partials/forms/checkbox_filter.html' with field=form.published %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
 
                 {% if filters %}
                 <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
@@ -127,6 +127,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.wto %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.public_view %}
                     </ul>
                 {% endif %}
             </div>

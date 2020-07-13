@@ -32,10 +32,11 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
-    published = forms.MultipleChoiceField(
+    public_view = forms.MultipleChoiceField(
         label="Public view",
         choices=(
-            ("authorised", "Authorised for publish"),
+            ("eligible", "Eligible to publish"),
+            ("ineligible", "Ineligible to publish"),
             ("ready", "Ready to publish"),
             ("published", "Published"),
             ("changed", "Barriers that have changed internally since being published"),
@@ -85,7 +86,7 @@ class BarrierSearchForm(forms.Form):
             "member": data.get("member"),
             "only_archived": data.get("only_archived"),
             "wto": data.getlist("wto"),
-            "published": data.getlist("published"),
+            "public_view": data.getlist("public_view"),
         }
         return {k: v for k, v in cleaned_data.items() if v}
 
@@ -234,7 +235,7 @@ class BarrierSearchForm(forms.Form):
         params["member"] = self.cleaned_data.get("member")
         params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
-        params["published"] = ",".join(self.cleaned_data.get("published", []))
+        params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
 
         return {k: v for k, v in params.items() if v}
 
