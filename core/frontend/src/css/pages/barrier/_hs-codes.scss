@@ -1,0 +1,45 @@
+.hs-code-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: govuk-em( 32, 16 );
+
+    &__item {
+        display: flex;
+        padding: govuk-em( 10, 16 );
+        border-top: 1px solid $govuk-mid-grey;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $govuk-light-grey;
+        &:last-child {
+            border-bottom: 1px solid $govuk-mid-grey;
+        }
+    }
+    &__code {
+        font-weight: bold;
+        min-width: 90px;
+        margin-right: govuk-em( 32, 16 );
+    }
+    &__name {
+        flex: 1;
+    }
+}
+
+
+.hs-code-input {
+    text-align: center;
+    background-color: #c7e8e5;
+    &:nth-child(1) {
+        background-color: #dbdcea;
+    }
+    &:nth-child(2) {
+        background-color: #c8e1ee;
+    }
+    &:nth-child(3) {
+        background-color: #c7e8e5;
+    }
+}
+
+.hs-code-form-group {
+    float: left;
+    margin-right: govuk-em( 8, 16 );
+}

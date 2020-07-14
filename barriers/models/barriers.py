@@ -1,4 +1,5 @@
 from barriers.constants import ARCHIVED_REASON
+from barriers.models.hs_codes import HSCode
 from barriers.models.wto import WTOProfile
 
 from utils.metadata import get_metadata
@@ -75,6 +76,10 @@ class Barrier(APIModel):
     @property
     def eu_exit_related_text(self):
         return self.metadata.get_eu_exit_related_text(self.eu_exit_related)
+
+    @property
+    def hs_codes(self):
+        return [HSCode(hs_code) for hs_code in self.data.get("hs_codes", [])]
 
     @property
     def last_seen_on(self):

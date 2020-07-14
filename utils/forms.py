@@ -408,3 +408,22 @@ class ClearableMixin:
     def _clean_fields(self):
         if "clear" not in self.data:
             return super()._clean_fields()
+
+
+class HSCodeWidget(forms.MultiWidget):
+    template_name = "partials/forms/widgets/hs_code_widget.html"
+    box_count = 6
+
+    def __init__(self, attrs=None):
+        widget = (widgets.TextInput(), ) * self.box_count
+        super().__init__(widget, attrs=attrs)
+
+    def decompress(self, value):
+        if value:
+            pairs = [value[i:i+2] for i in range(0, len(value), 2)]
+            pairs += [""] * self.box_count
+            return pairs[:self.box_count]
+        return [""] * self.box_count
+
+    def value_from_datadict(self, data, files, name):
+        return "".join(super().value_from_datadict(data, files, name))

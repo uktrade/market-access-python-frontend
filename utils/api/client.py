@@ -8,6 +8,7 @@ from .resources import (
     BarriersResource,
     DocumentsResource,
     GroupsResource,
+    HSCodesResource,
     NotesResource,
     UsersResource,
     ReportsResource,
@@ -25,6 +26,7 @@ class MarketAccessAPIClient:
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
         self.groups = GroupsResource(self)
+        self.hs_codes = HSCodesResource(self)
         self.notes = NotesResource(self)
         self.reports = ReportsResource(self)
         self.saved_searches = SavedSearchesResource(self)

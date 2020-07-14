@@ -1,0 +1,5 @@
+<div class="govuk-form-group hs-code-form-group">
+    {% for widget in widget.subwidgets %}
+        <input class="govuk-input govuk-input--width-2 hs-code-input" name="{{ widget.name }}" type="number" pattern="[0-9]{2}" {% if widget.value %}value="{{ widget.value }}"{% endif %}>
+    {% endfor %}
+</div>
