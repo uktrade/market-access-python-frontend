@@ -180,6 +180,9 @@ class Barrier(APIModel):
 
 class PublicBarrier(APIModel):
     _country = None
+    _internal_country = None
+    _internal_sectors = None
+    _internal_status = None
     _metadata = None
     _sectors = None
     _status = None
@@ -191,10 +194,31 @@ class PublicBarrier(APIModel):
         return self._metadata
 
     @property
+    def any_internal_sectors_changed(self):
+        return (
+            self.data.get("internal_sectors_changed")
+            or self.data.get("internal_all_sectors_changed")
+        )
+
+    @property
+    def category_titles(self):
+        return [category["title"] for category in self.categories]
+
+    @property
+    def internal_country(self):
+        if self._internal_country is None and self.data.get("country"):
+            country_id = self.data.get("internal_country")
+            self._internal_country = self.metadata.get_country(country_id)
+        return self._internal_country
+
+    @property
     def country(self):
         if self._country is None and self.data.get("country"):
             country_id = self.data.get("country")
-            self._country = self.metadata.get_country(country_id)
+            if type(country_id) == dict:
+                self._country = country_id
+            else:
+                self._country = self.metadata.get_country(country_id)
         return self._country
 
     @property
@@ -229,6 +253,11 @@ class PublicBarrier(APIModel):
         return self.public_view_status == PUBLIC_BARRIER_STATUSES.UNPUBLISHED
 
     @property
+    def latest_published_version(self):
+        if self.data.get("latest_published_version") is not None:
+            return PublicBarrier(self.data["latest_published_version"])
+
+    @property
     def public_status_text(self):
         return {
             PUBLIC_BARRIER_STATUSES.UNKNOWN: "To be decided",
@@ -251,11 +280,49 @@ class PublicBarrier(APIModel):
         }.get(self.public_view_status)
 
     @property
+    def internal_status(self):
+        if self._internal_status is None:
+            status_id = str(self.data["internal_status"])
+            self._internal_status = self.metadata.get_status(status_id)
+        return self._internal_status
+
+    @property
     def status(self):
         if self._status is None:
             status_id = str(self.data["status"])
-            self._status = self.metadata.get_status(status_id)
+            if len(status_id) > 1:
+                self._status = status_id
+            else:
+                self._status = self.metadata.get_status(status_id)
         return self._status
+
+    @property
+    def has_changes(self):
+        return (
+            self.internal_title_changed
+            or self.internal_summary_changed
+            or self.internal_status_changed
+            or self.internal_country_changed
+            or self.internal_sectors_changed
+            or self.internal_all_sectors_changed
+            or self.internal_categories_changed
+        )
+
+    @property
+    def internal_sectors(self):
+        if self._internal_sectors is None:
+            self._internal_sectors = [
+                self.metadata.get_sector(sector_id) for sector_id in self.data.get("internal_sectors")
+            ]
+        return self._internal_sectors
+
+    @property
+    def internal_sector_names(self):
+        if self.internal_all_sectors:
+            return ["All sectors"]
+        if self.internal_sectors:
+            return [sector.get("name", "Unknown") for sector in self.internal_sectors]
+        return []
 
     @property
     def sectors(self):
