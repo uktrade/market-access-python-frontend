@@ -11,6 +11,63 @@
     {% include 'partials/heading.html' with text='Commercial value' %}
     {% form_error_banner form %}
 
-    {% include 'barriers/assessments/partials/value_form.html' %}
+    <form action="" method="POST" class="restrict-width">
+
+        {% csrf_token %}
+
+        <div class="{% form_group_classes form.value.errors %}">
+            <label class="govuk-label govuk-label--s" for="value">
+                {{ form.value.label }}
+            </label>
+
+            {% if form.value.help_text %}
+                <span id="value-hint" class="govuk-hint">
+                    {{ form.value.help_text }}
+                </span>
+            {% endif %}
+
+            {% form_field_error form "value" %}
+
+            <div class="currency-input">
+                <span class="currency-input__prefix" title="GBP">&pound;</span>
+                <div class="currency-input__value">
+                    <input class="currency-input__value__input govuk-input govuk-input--currency{% if form.value.errors %} govuk-input--error{% endif %}"
+                           name="value" type="text" aria-describedby="value-hint"
+                           {% if form.value.value %}value="{{ form.value.value }}"{% endif %}>
+                </div>
+            </div>
+        </div>
+
+        <div class="{% form_group_classes form.value_explanation.errors %}">
+            <div class="govuk-label__container">
+                <p class="govuk-label govuk-label--s">Give details of the estimated value. Please include:</p>
+                <ul>
+                    <li>if it covers an individual or all potential UK exports/investment/procurement contracts</li>
+                    <li>any increased exports/investment from the UK</li>
+                    <li>any increased revenues/ profits for affected companies</li>
+                    <li>any increased exports for a UK company from a third country</li>
+                    <li>actual or anticipated exports</li>
+                    <li>ODI wins</li>
+                    <li>a 5 year timescale - if the estimate varies within 5 years, please give a breakdown - if 5 years
+                        is
+                        not possible, list the time period
+                    </li>
+                </ul>
+            </div>
+            {% if form.value_explanation.help_text %}
+                <span id="value_explanation-hint" class="govuk-hint">
+                {{ form.value_explanation.help_text }}
+            </span>
+            {% endif %}
+            {% form_field_error form "value_explanation" %}
+            <textarea class="govuk-textarea" id="value_explanation"
+                      name="{{ form.value_explanation.name }}"
+                      rows="5"
+                      aria-describedby="value_explanation-hint">{{ form.initial.value_explanation }}</textarea>
+        </div>
+
+        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+    </form>
 
 {% endblock %}
