@@ -297,18 +297,6 @@ class PublicBarrier(APIModel):
         return self._status
 
     @property
-    def has_changes(self):
-        return (
-            self.internal_title_changed
-            or self.internal_summary_changed
-            or self.internal_status_changed
-            or self.internal_country_changed
-            or self.internal_sectors_changed
-            or self.internal_all_sectors_changed
-            or self.internal_categories_changed
-        )
-
-    @property
     def internal_sectors(self):
         if self._internal_sectors is None:
             self._internal_sectors = [

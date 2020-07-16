@@ -49,13 +49,13 @@
                         <p class="publish-dates__date">Last published on {{ public_barrier.last_published_on|date:"j F Y" }} at {{ public_barrier.last_published_on|time:"g:iA"|lower }} (GMT)</p>
                     {% endif %}
                 {% endif %}
-                {% if public_barrier.unpublished_on %}
+                {% if not public_barrier.is_published and public_barrier.unpublished_on %}
                     <p class="publish-dates__date">Unpublished on {{ public_barrier.unpublished_on|date:"j F Y" }} at {{ public_barrier.unpublished_on|time:"g:iA"|lower }} (GMT)</p>
                 {% endif %}
             </div>
         {% endif %}
 
-        {% if public_barrier.has_changes %}
+        {% if public_barrier.unpublished_changes %}
             {% include "partials/warning.html" with warning_text="The public barrier needs updating" modifier="small" extra_classes="publish-update-warning" %}
         {% endif %}
 
@@ -142,7 +142,7 @@
                     <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.country.name }}</span>
                     <span class="diff__ins diff__ins--block">{{ public_barrier.internal_country.name }}</span>
                 {% else %}
-                    {{ public_barrier.internal_country }}
+                    {{ public_barrier.internal_country.name }}
                 {% endif %}
             </dd>
 
@@ -188,7 +188,7 @@
 
             {% if public_barrier.is_eligible and current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
                 {% if public_barrier.title and public_barrier.summary %}
-                    {% if public_barrier.has_changes %}
+                    {% if public_barrier.unpublished_changes %}
                         <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
                         {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
                             <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
@@ -211,7 +211,7 @@
             {% endif %}
 
             {% if public_barrier.is_published and current_user|has_permission:"publish_barrier" %}
-                {% if public_barrier.has_changes %}
+                {% if public_barrier.unpublished_changes %}
                     <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
                     {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
                         <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
