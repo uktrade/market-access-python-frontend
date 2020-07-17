@@ -17,11 +17,13 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         context_data["confirmed_commodities"] = self.get_confirmed_commodities()
         return context_data
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
     def form_valid(self, form):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        code = form.cleaned_data.get("code")
-        commodity = client.commodities.get(id=code)
-        return self.render_to_response(self.get_context_data(form=form, commodity=commodity))
+        return self.render_to_response(self.get_context_data(form=form, commodity=form.commodity))
 
     def add_confirmed_code(self, code):
         session_key = self.get_session_key()
@@ -66,7 +68,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         return f"barrier:{barrier_id}:commodities"
 
     def post(self, request, *args, **kwargs):
-        empty_form = self.form_class()
+        empty_form = self.form_class(token=self.request.session.get("sso_token"))
 
         if "confirm-commodity" in request.POST:
             code = request.POST.get("confirm-commodity")

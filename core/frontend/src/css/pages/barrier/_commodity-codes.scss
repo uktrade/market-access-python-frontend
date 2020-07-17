@@ -9,7 +9,7 @@
         border-top: 1px solid $govuk-mid-grey;
         justify-content: space-between;
         align-items: center;
-        background-color: $govuk-light-grey;
+        background-color: $govuk-light-grey-25;
         &:last-child {
             border-bottom: 1px solid $govuk-mid-grey;
         }
@@ -21,6 +21,7 @@
     }
     &__name {
         flex: 1;
+        margin-right: govuk-em( 16, 16 );
     }
 }
 
