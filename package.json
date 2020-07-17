@@ -11,8 +11,10 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/preset-env": "^7.2.0",
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
     "browser-sync": "^2.26.7",
     "govuk-frontend": "^3.7.0",
     "gulp": "^4.0.2",
@@ -22,7 +24,10 @@
     "gulp-if": "^3.0.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2"
+    "gulp-uglify": "^3.0.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "webpack-stream": "^5.2.1"
   },
   "devDependencies": {
     "browser-sync": "^2.26.7"

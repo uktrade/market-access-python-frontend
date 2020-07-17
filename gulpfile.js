@@ -8,7 +8,8 @@ const
     babel = require('gulp-babel'),
     browserSync = require('browser-sync').create(),
     sourcemaps = require('gulp-sourcemaps'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify'),
+    webpack = require('webpack-stream');
 
 
 // NOTES
@@ -120,6 +121,14 @@ const main_js = () => {
         .pipe(browserSync.stream());
 };
 
+// Prepare React
+const main_react = () => {
+    return gulp.src("js/react/*")
+    .pipe(webpack(require('./webpack.config.js')))
+    .pipe(gulp.dest(jsBuildPath));
+};
+
+
 // Move files to dist
 const prepDist = () => {
     // Move JS bundles to dist
@@ -146,7 +155,10 @@ const watchFiles = () => {
         main_js();
         browserSync.reload();
     });
-
+    gulp.watch(`${assetsSrcPath}js/react/**/*.js`).on('change', () => {
+        main_react();
+        browserSync.reload();
+    });
 };
 
 const watchCss = () => {
@@ -160,12 +172,14 @@ const watch = watchFiles;
 const watchcss = watchCss;
 const css = main_css;
 const js = main_js;
-const build = gulp.parallel(css, js, prepDist, copyFonts);
+const react = main_react;
+const build = gulp.parallel(css, js, react, prepDist, copyFonts);
 const fe = gulp.series(build, watch);
 
 // Export Commands
 exports.css = css;
 exports.js = js;
+exports.react = react;
 exports.watch = watch;
 exports.watchcss = watchcss;
 exports.build = build;

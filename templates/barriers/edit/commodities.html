@@ -1,5 +1,16 @@
 {% extends "barriers/edit/base.html" %}
 
+{% load static %}
+
+{% block head %}
+  <script src="{% static 'js/react.js' %}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        ReactApp.renderCommodities()
+    })
+  </script>
+{% endblock %}
+
 {% block page_title %}{{ block.super }} - Edit HS codes{% endblock %}
 
 {% block back_link %}
@@ -10,60 +21,63 @@
 
     {% include 'partials/heading.html' with text='Add HS commodity codes' %}
 
-    {% form_error_banner form %}
+    <div id="react-app">
 
-    <form action="" method="POST" class="restrict-width">
-        {% csrf_token %}
+        {% form_error_banner form %}
 
-        <div id="{{ form.code.description }}" class="{% form_group_classes form.code.errors %}">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.code.label }}</legend>
-                <span class="govuk-hint">{{ form.code.help_text }}</span>
+        <form action="" method="POST" class="restrict-width">
+            {% csrf_token %}
 
-                {% form_field_error form.code %}
+            <div id="{{ form.code.description }}" class="{% form_group_classes form.code.errors %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.code.label }}</legend>
+                    <span class="govuk-hint">{{ form.code.help_text }}</span>
 
-                {{ form.code }}
-                <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Search</button>
-            </fieldset>
-        </div>
-    </form>
+                    {% form_field_error form.code %}
 
-    <p class="govuk-body">Need help? <a href="">Look up codes</a></p>
+                    {{ form.code }}
+                    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Search</button>
+                </fieldset>
+            </div>
+        </form>
 
-    {% if commodity %}
+        <p class="govuk-body">Need help? <a href="">Look up codes</a></p>
+
+        {% if commodity %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <ul class="commodities-list restrict-width">
+                    <li class="commodities-list__item">
+                        <div class="commodities-list__code">{{ commodity.code_display }}</div>
+                        <div class="commodities-list__name">{{ commodity.full_description }}</div>
+                        <button name="confirm-commodity" value="{{ commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
+                    </li>
+                </ul>
+            </form>
+        {% endif %}
+
+        {% if confirmed_commodities %}
+            <h3>HS commodity codes to add to this barrier</h3>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <ul class="commodities-list restrict-width">
+                    {% for confirmed_commodity in confirmed_commodities %}
+                    <li class="commodities-list__item">
+                        <div class="commodities-list__code">{{ confirmed_commodity.code_display }}</div>
+                        <div class="commodities-list__name">{{ confirmed_commodity.full_description }}</div>
+                        <button name="remove-commodity" value="{{ confirmed_commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link" data-module="govuk-button">Remove</button>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </form>
+        {% endif %}
+
         <form action="" method="POST">
             {% csrf_token %}
-            <ul class="commodities-list restrict-width">
-                <li class="commodities-list__item">
-                    <div class="commodities-list__code">{{ commodity.code_display }}</div>
-                    <div class="commodities-list__name">{{ commodity.full_description }}</div>
-                    <button name="confirm-commodity" value="{{ commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
-                </li>
-            </ul>
+            <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
+            <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
+
         </form>
-    {% endif %}
-
-    {% if confirmed_commodities %}
-        <h3>HS commodity codes to add to this barrier</h3>
-        <form action="" method="POST">
-            {% csrf_token %}
-            <ul class="commodities-list restrict-width">
-                {% for confirmed_commodity in confirmed_commodities %}
-                <li class="commodities-list__item">
-                    <div class="commodities-list__code">{{ confirmed_commodity.code_display }}</div>
-                    <div class="commodities-list__name">{{ confirmed_commodity.full_description }}</div>
-                    <button name="remove-commodity" value="{{ confirmed_commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link" data-module="govuk-button">Remove</button>
-                </li>
-                {% endfor %}
-            </ul>
-        </form>
-    {% endif %}
-
-    <form action="" method="POST">
-        {% csrf_token %}
-        <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
-        <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
-
-    </form>
+    </div>
 
 {% endblock %}
