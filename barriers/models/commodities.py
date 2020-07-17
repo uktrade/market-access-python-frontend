@@ -1,7 +1,7 @@
 from utils.models import APIModel
 
 
-class HSCode(APIModel):
+class Commodity(APIModel):
 
     @property
     def code_display(self):

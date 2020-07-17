@@ -1,4 +1,4 @@
-.hs-code-list {
+.commodities-list {
     list-style: none;
     padding: 0;
     margin-bottom: govuk-em( 32, 16 );
@@ -24,8 +24,7 @@
     }
 }
 
-
-.hs-code-input {
+.commodity-code-input {
     text-align: center;
     background-color: #c7e8e5;
     &:nth-child(1) {
@@ -39,7 +38,7 @@
     }
 }
 
-.hs-code-form-group {
+.commodity-code-form-group {
     float: left;
     margin-right: govuk-em( 8, 16 );
 }

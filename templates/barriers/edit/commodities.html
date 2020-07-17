@@ -30,29 +30,29 @@
 
     <p class="govuk-body">Need help? <a href="">Look up codes</a></p>
 
-    {% if hs_code %}
+    {% if commodity %}
         <form action="" method="POST">
             {% csrf_token %}
-            <ul class="hs-code-list restrict-width">
-                <li class="hs-code-list__item">
-                    <div class="hs-code-list__code">{{ hs_code.code_display }}</div>
-                    <div class="hs-code-list__name">{{ hs_code.full_name }}</div>
-                    <button name="confirm-hs-code" value="{{ hs_code.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
+            <ul class="commodities-list restrict-width">
+                <li class="commodities-list__item">
+                    <div class="commodities-list__code">{{ commodity.code_display }}</div>
+                    <div class="commodities-list__name">{{ commodity.full_name }}</div>
+                    <button name="confirm-commodity" value="{{ commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
                 </li>
             </ul>
         </form>
     {% endif %}
 
-    {% if confirmed_hs_codes %}
+    {% if confirmed_commodities %}
         <h3>HS commodity codes to add to this barrier</h3>
         <form action="" method="POST">
             {% csrf_token %}
-            <ul class="hs-code-list restrict-width">
-                {% for confirmed_hs_code in confirmed_hs_codes %}
-                <li class="hs-code-list__item">
-                    <div class="hs-code-list__code">{{ confirmed_hs_code.code_display }}</div>
-                    <div class="hs-code-list__name">{{ confirmed_hs_code.full_name }}</div>
-                    <button name="remove-hs-code" value="{{ confirmed_hs_code.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link" data-module="govuk-button">Remove</button>
+            <ul class="commodities-list restrict-width">
+                {% for confirmed_commodity in confirmed_commodities %}
+                <li class="commodities-list__item">
+                    <div class="commodities-list__code">{{ confirmed_commodity.code_display }}</div>
+                    <div class="commodities-list__name">{{ confirmed_commodity.full_name }}</div>
+                    <button name="remove-commodity" value="{{ confirmed_commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link" data-module="govuk-button">Remove</button>
                 </li>
                 {% endfor %}
             </ul>

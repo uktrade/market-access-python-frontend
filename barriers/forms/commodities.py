@@ -3,10 +3,10 @@ from django import forms
 from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import HSCodeWidget
+from utils.forms import CommodityCodeWidget
 
 
-class UpdateBarrierHSCodesForm(forms.Form):
+class UpdateBarrierCommoditiesForm(forms.Form):
     code = forms.CharField(
         label="Enter one or more HS commodity codes",
         help_text=(
@@ -15,5 +15,5 @@ class UpdateBarrierHSCodesForm(forms.Form):
             "into the first box (there is no limit). Only numbers and commas "
             "will be recognised, all other punctuation and characters will be ignored."
         ),
-        widget=HSCodeWidget,
+        widget=CommodityCodeWidget,
     )

@@ -126,20 +126,20 @@
 
             <dt class="summary-group__list__key">HS commodity codes of affected goods</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.hs_codes %}
+                {% if barrier.commodities %}
                     <ul class="summary-group__list__value__list">
-                        {% for item in barrier.hs_codes %}
+                        {% for item in barrier.commodities %}
                         <li class="summary-group__list__value__list__item">{{ item.full_name }}</li>
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_hs_codes' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_commodities' barrier.id %}">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No HS codes</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_hs_codes' barrier.id %}" class="summary-group__list__value__add">Add one or more HS commodity codes</a>
+                        <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="summary-group__list__value__add">Add one or more HS commodity codes</a>
                     {% endif %}
                 {% endif %}
             </dd>

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from barriers.constants import Statuses
-from barriers.models import Assessment, Barrier, HistoryItem, HSCode, Note, SavedSearch
+from barriers.models import Assessment, Barrier, Commodity, HistoryItem, Note, SavedSearch
 from reports.models import Report
 from users.models import Group, User
 
@@ -241,6 +241,6 @@ class GroupsResource(APIResource):
     model = Group
 
 
-class HSCodesResource(APIResource):
-    resource_name = "hs-codes"
-    model = HSCode
+class CommoditiesResource(APIResource):
+    resource_name = "commodities"
+    model = Commodity

@@ -410,8 +410,8 @@ class ClearableMixin:
             return super()._clean_fields()
 
 
-class HSCodeWidget(forms.MultiWidget):
-    template_name = "partials/forms/widgets/hs_code_widget.html"
+class CommodityCodeWidget(forms.MultiWidget):
+    template_name = "partials/forms/widgets/commodity_code_widget.html"
     box_count = 6
 
     def __init__(self, attrs=None):
