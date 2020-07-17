@@ -55,7 +55,7 @@
             </div>
         {% endif %}
 
-        {% if public_barrier.unpublished_changes %}
+        {% if barrier.public_eligibility and public_barrier.unpublished_changes %}
             {% include "partials/warning.html" with warning_text="The public barrier needs updating" modifier="small" extra_classes="publish-update-warning" %}
         {% endif %}
 
@@ -66,28 +66,28 @@
         <dl class="summary-group__list">
             <dt class="summary-group__list__key">Public title</dt>
             <dd class="summary-group__list__value">
-                {% if public_barrier.internal_title_changed %}
+                {% if barrier.public_eligibility and public_barrier.internal_title_changed %}
                     {% include "partials/warning.html" with warning_text="Internal title has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.title %}
-                    {% if public_barrier.internal_title_changed %}
+                    {% if barrier.public_eligibility and public_barrier.internal_title_changed %}
                         <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.title }}</div>
 
                         <div class="public-barrier__current-value-container">
                             <h3 class="public-barrier__current-value-heading">New public title - not yet published</h3>
                             <p class="public-barrier__current-value">{{ public_barrier.title }}</p>
-                            {% if current_user|has_permission:"change_publicbarrier" %}
+                            {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
                                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
                             {% endif %}
                         </div>
                     {% else %}
                         {{ public_barrier.title }}
-                        {% if current_user|has_permission:"change_publicbarrier" %}
+                        {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
                             <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
                         {% endif %}
                     {% endif %}
                 {% else %}
-                    {% if current_user|has_permission:"change_publicbarrier" %}
+                    {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
                         <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Add public title</a>
                     {% else %}
                         {% include "partials/warning.html" with warning_text="Public title has not been created" modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-margin-top-2" %}
@@ -97,28 +97,28 @@
 
             <dt class="summary-group__list__key">Public summary</dt>
             <dd class="summary-group__list__value">
-                {% if public_barrier.internal_summary_changed %}
+                {% if barrier.public_eligibility and public_barrier.internal_summary_changed %}
                     {% include "partials/warning.html" with warning_text="Internal summary has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.summary %}
-                    {% if public_barrier.internal_summary_changed %}
+                    {% if barrier.public_eligibility and public_barrier.internal_summary_changed %}
                         <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.summary|linebreaksbr }}</div>
 
                         <div class="public-barrier__current-value-container">
                             <h3 class="public-barrier__current-value-heading">New public summary - not yet published</h3>
                             <p class="public-barrier__current-value">{{ public_barrier.summary|linebreaksbr }}</p>
-                            {% if current_user|has_permission:"change_publicbarrier" %}
+                            {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
                                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
                             {% endif %}
                         </div>
                     {% else %}
                         {{ public_barrier.summary|linebreaksbr }}
-                        {% if current_user|has_permission:"change_publicbarrier" %}
+                        {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
                             <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
                         {% endif %}
                     {% endif %}
                 {% else %}
-                    {% if current_user|has_permission:"change_publicbarrier" %}
+                    {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
                         <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Add public summary</a>
                     {% else %}
                         {% include "partials/warning.html" with warning_text="Public summary has not been created" modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-margin-top-2" %}
