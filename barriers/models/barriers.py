@@ -188,12 +188,6 @@ class PublicBarrier(APIModel):
     _status = None
 
     @property
-    def metadata(self):
-        if self._metadata is None:
-            self._metadata = get_metadata()
-        return self._metadata
-
-    @property
     def any_internal_sectors_changed(self):
         return (
             self.data.get("internal_sectors_changed")
@@ -205,21 +199,8 @@ class PublicBarrier(APIModel):
         return [category["title"] for category in self.categories]
 
     @property
-    def internal_country(self):
-        if self._internal_country is None and self.data.get("country"):
-            country_id = self.data.get("internal_country")
-            self._internal_country = self.metadata.get_country(country_id)
-        return self._internal_country
-
-    @property
-    def country(self):
-        if self._country is None and self.data.get("country"):
-            country_id = self.data.get("country")
-            if type(country_id) == dict:
-                self._country = country_id
-            else:
-                self._country = self.metadata.get_country(country_id)
-        return self._country
+    def internal_category_titles(self):
+        return [category["title"] for category in self.internal_categories]
 
     @property
     def first_published_on(self):
@@ -280,45 +261,12 @@ class PublicBarrier(APIModel):
         }.get(self.public_view_status)
 
     @property
-    def internal_status(self):
-        if self._internal_status is None:
-            status_id = str(self.data["internal_status"])
-            self._internal_status = self.metadata.get_status(status_id)
-        return self._internal_status
-
-    @property
-    def status(self):
-        if self._status is None:
-            status_id = str(self.data["status"])
-            if len(status_id) > 1:
-                self._status = status_id
-            else:
-                self._status = self.metadata.get_status(status_id)
-        return self._status
-
-    @property
-    def internal_sectors(self):
-        if self._internal_sectors is None:
-            self._internal_sectors = [
-                self.metadata.get_sector(sector_id) for sector_id in self.data.get("internal_sectors")
-            ]
-        return self._internal_sectors
-
-    @property
     def internal_sector_names(self):
         if self.internal_all_sectors:
             return ["All sectors"]
         if self.internal_sectors:
             return [sector.get("name", "Unknown") for sector in self.internal_sectors]
         return []
-
-    @property
-    def sectors(self):
-        if self._sectors is None:
-            self._sectors = [
-                self.metadata.get_sector(sector_id) for sector_id in self.data.get("sectors")
-            ]
-        return self._sectors
 
     @property
     def sector_names(self):
