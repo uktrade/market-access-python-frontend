@@ -6,7 +6,8 @@
   <script src="{% static 'js/react.js' %}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function(event) {
-        ReactApp.renderCommodities()
+      var csrfToken = ma.get_csrf_token();
+      ReactApp.renderCommodities(csrfToken=csrfToken)
     })
   </script>
 {% endblock %}
@@ -35,8 +36,8 @@
 
                     {% form_field_error form.code %}
 
-                    {{ form.code }}
-                    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Search</button>
+                    {% spaceless %}{{ form.code }}{% endspaceless %}
+                    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Verify</button>
                 </fieldset>
             </div>
         </form>
@@ -76,7 +77,6 @@
             {% csrf_token %}
             <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
             <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
-
         </form>
     </div>
 

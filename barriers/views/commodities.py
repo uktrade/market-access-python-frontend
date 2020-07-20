@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.generic import FormView
 
@@ -11,6 +11,24 @@ from utils.api.client import MarketAccessAPIClient
 class BarrierEditCommodities(BarrierMixin, FormView):
     template_name = "barriers/edit/commodities.html"
     form_class = UpdateBarrierCommoditiesForm
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            form = self.form_class(
+                data={"code": request.GET.get("code")},
+                token=self.request.session.get("sso_token"),
+            )
+            if form.is_valid():
+                return JsonResponse({
+                    "status": "ok",
+                    "data": form.commodity.to_dict(),
+                })
+            else:
+                return JsonResponse({
+                    "status": "error",
+                    "message": "Code not found",
+                })
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

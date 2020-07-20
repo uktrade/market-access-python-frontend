@@ -426,4 +426,6 @@ class CommodityCodeWidget(forms.MultiWidget):
         return [""] * self.box_count
 
     def value_from_datadict(self, data, files, name):
+        if data.get("code"):
+            return data.get("code")
         return "".join(super().value_from_datadict(data, files, name))
