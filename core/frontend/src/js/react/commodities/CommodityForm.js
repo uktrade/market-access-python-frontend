@@ -4,6 +4,15 @@ import CommodityList from "./CommodityList"
 import ErrorBanner from "../forms/ErrorBanner"
 
 
+function TextArea(props) {
+  return (
+    <div className="govuk-form-group">
+      <textarea className="govuk-textarea govuk-!-margin-bottom-0" name={props.fieldName} rows="5" defaultValue={props.value} onChange={props.onChange}></textarea>
+    </div>
+  )
+}
+
+
 function CodePairInput(props) {
   return (
     <input
@@ -15,6 +24,7 @@ function CodePairInput(props) {
       onChange={event => {
         props.onChange(event, props.index)
       }}
+      onPaste={props.onPaste}
       disabled={props.disabled}
     />
   )
@@ -25,6 +35,7 @@ function CommodityForm(props) {
   const [codePairs, setCodePairs] = useState(["", "", "", "", "", ""])
   const [confirmedCommodities, setConfirmedCommodities] = useState(props.confirmedCommodities)
   const [unconfirmedCommodities, setUnconfirmedCommodities] = useState([])
+  const [pastedCodes, setPastedCodes] = useState("")
   const [codeLookupError, setCodeLookupError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const boxCount = 6
@@ -35,12 +46,22 @@ function CommodityForm(props) {
     newCodePairs[index] = event.target.value
     setCodePairs(newCodePairs)
     let code = getCode()
-    lookupCode(code)
+    lookupCodes(code)
 
     if (event.target.value.length >=2 && (index + 1) < boxCount) {
       inputRefContainer.current[index + 1].removeAttribute("disabled")
       inputRefContainer.current[index + 1].focus()
     }
+  }
+
+  const onCodePaste = (event, index) => {
+    let codes = event.clipboardData.getData("Text")
+    setPastedCodes(codes)
+    lookupCodes(codes)
+  }
+
+  const onTextAreaChange = (event, index) => {
+    lookupCodes(event.target.value)
   }
 
   const isBoxDisabled = (index) => {
@@ -64,14 +85,20 @@ function CommodityForm(props) {
     setUnconfirmedCommodities([...unconfirmedCommodities])
   }
 
+  const confirmAll = (event) => {
+    setConfirmedCommodities(confirmedCommodities.concat(unconfirmedCommodities))
+    setUnconfirmedCommodities([])
+  }
+
   const removeCommodity = (event, index) => {
     confirmedCommodities.splice(index, 1)
     setConfirmedCommodities([...confirmedCommodities])
   }
 
-  async function lookupCode(code) {
+  async function lookupCodes(codes) {
     setIsLoading(true);
-    let url = window.location.href + "?code=" + code
+    codes = codes.replace(/[^\d+,;]/g, '').replace(";", ",")
+    let url = "?codes=" + codes
     const response = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
@@ -82,7 +109,10 @@ function CommodityForm(props) {
       (result) => {
         setIsLoading(false);
         if (result["status"] == "ok") {
-          setUnconfirmedCommodities([result.data]);
+          let filteredCommodities = result.data.filter(item => {
+            return !confirmedCommodities.some(commodity => commodity.code === item.code)
+          })
+          setUnconfirmedCommodities(filteredCommodities);
           setCodeLookupError(null);
         } else {
           setUnconfirmedCommodities([]);
@@ -117,11 +147,21 @@ function CommodityForm(props) {
               </span>
             ) : null}
 
-            <div className="govuk-form-group commodity-code-form-group">
-              {[...Array(boxCount)].map((x, index) =>
-                <CodePairInput index={index} onChange={handleCodeChange} refContainer={inputRefContainer} disabled={isBoxDisabled(index)} />
-              )}
-            </div>
+            {pastedCodes ? (
+              <TextArea fieldName="codes" value={pastedCodes} onChange={onTextAreaChange} />
+            ) : (
+              <div className="govuk-form-group commodity-code-form-group">
+                {[...Array(boxCount)].map((x, index) =>
+                  <CodePairInput
+                    index={index}
+                    onChange={handleCodeChange}
+                    onPaste={onCodePaste}
+                    refContainer={inputRefContainer}
+                    disabled={isBoxDisabled(index)}
+                  />
+                )}
+              </div>
+            )}
           </fieldset>
         </div>
       </form>
@@ -130,6 +170,16 @@ function CommodityForm(props) {
 
       {unconfirmedCommodities.length ? (
         <CommodityList confirmed={false} commodities={unconfirmedCommodities} onClick={confirmCommodity} />
+      ) : null}
+
+      {unconfirmedCommodities.length > 1 ? (
+          <button
+            name="confirm-all"
+            className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+            data-module="govuk-button"
+            onClick={confirmAll}>
+            Confirm all
+          </button>
       ) : null}
 
       {confirmedCommodities.length ? (

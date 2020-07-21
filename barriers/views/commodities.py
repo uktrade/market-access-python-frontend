@@ -3,8 +3,11 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
 from .mixins import BarrierMixin
-from barriers.forms.commodities import CommodityLookupForm, UpdateBarrierCommoditiesForm
-
+from barriers.forms.commodities import (
+    CommodityLookupForm,
+    MultiCommodityLookupForm,
+    UpdateBarrierCommoditiesForm,
+)
 from utils.api.client import MarketAccessAPIClient
 
 
@@ -14,25 +17,33 @@ class BarrierEditCommodities(BarrierMixin, TemplateView):
     update_form_class = UpdateBarrierCommoditiesForm
 
     def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return self.ajax(request, *args, **kwargs)
+
         lookup_form = self.lookup_form_class(
             data=request.GET.dict() or None,
             token=self.request.session.get("sso_token"),
         )
-        if request.is_ajax():
-            if lookup_form.is_valid():
-                return JsonResponse({
-                    "status": "ok",
-                    "data": lookup_form.commodity.to_dict(),
-                })
-            else:
-                return JsonResponse({
-                    "status": "error",
-                    "message": "Code not found",
-                })
-        elif lookup_form.is_bound:
+        if lookup_form.is_bound:
             lookup_form.full_clean()
 
         return self.render_to_response(self.get_context_data(lookup_form=lookup_form))
+
+    def ajax(self, request, *args, **kwargs):
+        lookup_form = MultiCommodityLookupForm(
+            data=request.GET.dict() or None,
+            token=self.request.session.get("sso_token"),
+        )
+        if lookup_form.is_valid():
+            return JsonResponse({
+                "status": "ok",
+                "data": [commodity.to_dict() for commodity in lookup_form.commodities],
+            })
+        else:
+            return JsonResponse({
+                "status": "error",
+                "message": "Code not found",
+            })
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

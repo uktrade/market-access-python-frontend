@@ -3,17 +3,17 @@ import React from "react";
 
 function CommodityList(props) {
   return (
-    <ul class="commodities-list restrict-width">
+    <ul className="commodities-list restrict-width">
       {props.commodities.map((commodity, index) => {
-        return <li class="commodities-list__item">
-            <div class="commodities-list__code">{ commodity.code_display }</div>
-            <div class="commodities-list__name">{ commodity.full_description }</div>
+        return <li className="commodities-list__item">
+            <div className="commodities-list__code">{ commodity.code_display }</div>
+            <div className="commodities-list__name">{ commodity.full_description }</div>
 
             {props.confirmed ? (
               <button
                 name="remove-commodity"
                 value="{ commodity.code }"
-                class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link"
+                className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link"
                 data-module="govuk-button"
                 onClick={event => {
                   props.onClick(event, index)
@@ -24,7 +24,7 @@ function CommodityList(props) {
               <button
                 name="confirm-commodity"
                 value="{ commodity.code }"
-                class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+                className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
                 data-module="govuk-button"
                 onClick={event => {
                   props.onClick(event, index)

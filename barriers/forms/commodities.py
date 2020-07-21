@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 
 from .mixins import APIFormMixin
@@ -32,6 +34,25 @@ class CommodityLookupForm(forms.Form):
         except APIHttpException:
             raise forms.ValidationError("Code not found")
         return code
+
+
+class MultiCommodityLookupForm(forms.Form):
+    codes = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        self.token = kwargs.pop("token")
+        super().__init__(*args, **kwargs)
+
+    def clean_codes(self):
+        codes = self.cleaned_data["codes"]
+        codes = re.sub('[^/\d,;]', '', codes).replace(";", ",")
+
+        client = MarketAccessAPIClient(self.token)
+        try:
+            self.commodities = client.commodities.list(codes=codes)
+        except APIHttpException:
+            raise forms.ValidationError("Code not found")
+        return codes
 
 
 class UpdateBarrierCommoditiesForm(forms.Form):
