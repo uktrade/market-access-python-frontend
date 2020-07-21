@@ -4,10 +4,12 @@
 
 {% block head %}
   <script src="{% static 'js/react.js' %}"></script>
+  {{ confirmed_commodities_data|json_script:"confirmed-commodities-data" }}
   <script>
     document.addEventListener("DOMContentLoaded", function(event) {
       var csrfToken = ma.get_csrf_token();
-      ReactApp.renderCommodities(csrfToken=csrfToken)
+      let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
+      ReactApp.renderCommodities(csrfToken=csrfToken, confirmedCommodities=confirmedCommodities)
     })
   </script>
 {% endblock %}
@@ -24,19 +26,17 @@
 
     <div id="react-app">
 
-        {% form_error_banner form %}
+        {% form_error_banner lookup_form %}
 
-        <form action="" method="POST" class="restrict-width">
-            {% csrf_token %}
-
-            <div id="{{ form.code.description }}" class="{% form_group_classes form.code.errors %}">
+        <form action="" method="GET" class="restrict-width">
+            <div id="{{ lookup_form.code.description }}" class="{% form_group_classes lookup_form.code.errors %}">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.code.label }}</legend>
-                    <span class="govuk-hint">{{ form.code.help_text }}</span>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ lookup_form.code.label }}</legend>
+                    <span class="govuk-hint">{{ lookup_form.code.help_text }}</span>
 
-                    {% form_field_error form.code %}
+                    {% form_field_error lookup_form.code %}
 
-                    {% spaceless %}{{ form.code }}{% endspaceless %}
+                    {% spaceless %}{{ lookup_form.code }}{% endspaceless %}
                     <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Verify</button>
                 </fieldset>
             </div>
@@ -44,14 +44,14 @@
 
         <p class="govuk-body">Need help? <a href="">Look up codes</a></p>
 
-        {% if commodity %}
+        {% if lookup_form.commodity %}
             <form action="" method="POST">
                 {% csrf_token %}
                 <ul class="commodities-list restrict-width">
                     <li class="commodities-list__item">
-                        <div class="commodities-list__code">{{ commodity.code_display }}</div>
-                        <div class="commodities-list__name">{{ commodity.full_description }}</div>
-                        <button name="confirm-commodity" value="{{ commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
+                        <div class="commodities-list__code">{{ lookup_form.commodity.code_display }}</div>
+                        <div class="commodities-list__name">{{ lookup_form.commodity.full_description }}</div>
+                        <button name="confirm-commodity" value="{{ lookup_form.commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
                     </li>
                 </ul>
             </form>
@@ -75,6 +75,9 @@
 
         <form action="" method="POST">
             {% csrf_token %}
+            {% for confirmed_commodity in confirmed_commodities %}
+                <input type="hidden" name="codes" value="{{ confirmed_commodity.code }}" />
+            {% endfor %}
             <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
             <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
         </form>

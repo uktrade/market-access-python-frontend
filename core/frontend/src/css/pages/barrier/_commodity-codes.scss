@@ -29,6 +29,9 @@
     text-align: center;
     background-color: #c7e8e5;
     margin-right: govuk-em( 5, 16 );
+    &:disabled {
+        opacity: 0.5;
+    }
     &:nth-child(1) {
         background-color: #dbdcea;
     }

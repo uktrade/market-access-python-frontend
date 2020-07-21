@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom'
 import CommodityForm from "./commodities/CommodityForm"
 
 
-function renderCommodities(csrfToken) {
-    ReactDOM.render(<CommodityForm csrfToken={csrfToken} />, document.getElementById('react-app'));
+function renderCommodities(csrfToken, confirmedCommodities) {
+    ReactDOM.render(<CommodityForm csrfToken={csrfToken} confirmedCommodities={confirmedCommodities} />, document.getElementById('react-app'));
 }
 
 export {renderCommodities}

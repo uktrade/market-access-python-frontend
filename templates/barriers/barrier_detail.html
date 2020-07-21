@@ -129,7 +129,7 @@
                 {% if barrier.commodities %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.commodities %}
-                        <li class="summary-group__list__value__list__item">{{ item.full_name }}</li>
+                        <li class="summary-group__list__value__list__item">{{ item.full_description }}</li>
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}

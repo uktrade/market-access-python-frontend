@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import CommodityList from "./CommodityList"
 import ErrorBanner from "../forms/ErrorBanner"
@@ -6,26 +6,49 @@ import ErrorBanner from "../forms/ErrorBanner"
 
 function CodePairInput(props) {
   return (
-    <input className="govuk-input govuk-input--width-2 commodity-code-input" name={"code_" + props.index} type="number" pattern="[0-9]{2}" onChange={event => {
-      props.onChange(event, props.index)
-    }} />
+    <input
+      className="govuk-input govuk-input--width-2 commodity-code-input"
+      name={"code_" + props.index}
+      type="number"
+      maxlength="2"
+      ref={el => props.refContainer.current[props.index] = el}
+      onChange={event => {
+        props.onChange(event, props.index)
+      }}
+      disabled={props.disabled}
+    />
   )
 }
 
 
 function CommodityForm(props) {
   const [codePairs, setCodePairs] = useState(["", "", "", "", "", ""])
-  const [confirmedCommodities, setConfirmedCommodities] = useState([]);
-  const [unconfirmedCommodities, setUnconfirmedCommodities] = useState([]);
-  const [codeLookupError, setCodeLookupError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirmedCommodities, setConfirmedCommodities] = useState(props.confirmedCommodities)
+  const [unconfirmedCommodities, setUnconfirmedCommodities] = useState([])
+  const [codeLookupError, setCodeLookupError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const boxCount = 6
+  const inputRefContainer = useRef(new Array(boxCount))
 
-  const handleChange = (event, index) => {
+  const handleCodeChange = (event, index) => {
     let newCodePairs = codePairs
     newCodePairs[index] = event.target.value
     setCodePairs(newCodePairs)
     let code = getCode()
     lookupCode(code)
+
+    if (event.target.value.length >=2 && (index + 1) < boxCount) {
+      inputRefContainer.current[index + 1].removeAttribute("disabled")
+      inputRefContainer.current[index + 1].focus()
+    }
+  }
+
+  const isBoxDisabled = (index) => {
+    if (index == 0) return false
+    for (let i = index - 1; i >= 0; i--) {
+      if (codePairs[i] == "") return true
+    }
+    return false
   }
 
   const getCode = () => {
@@ -95,8 +118,8 @@ function CommodityForm(props) {
             ) : null}
 
             <div className="govuk-form-group commodity-code-form-group">
-              {[...Array(6)].map((x, i) =>
-                <CodePairInput index={i} onChange={handleChange} />
+              {[...Array(boxCount)].map((x, index) =>
+                <CodePairInput index={index} onChange={handleCodeChange} refContainer={inputRefContainer} disabled={isBoxDisabled(index)} />
               )}
             </div>
           </fieldset>
@@ -119,6 +142,9 @@ function CommodityForm(props) {
 
       <form action="" method="POST">
         <input type="hidden" name="csrfmiddlewaretoken" value={props.csrfToken} />
+        {confirmedCommodities.map((commodity, index) =>
+          <input type="hidden" name="codes" value={commodity.code} />
+        )}
         <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
         <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
       </form>

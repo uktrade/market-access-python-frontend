@@ -4,10 +4,10 @@ from .mixins import APIFormMixin
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
-from utils.forms import CommodityCodeWidget
+from utils.forms import CommodityCodeWidget, MultipleValueField
 
 
-class UpdateBarrierCommoditiesForm(forms.Form):
+class CommodityLookupForm(forms.Form):
     code = forms.CharField(
         label="Enter one or more HS commodity codes",
         help_text=(
@@ -32,3 +32,17 @@ class UpdateBarrierCommoditiesForm(forms.Form):
         except APIHttpException:
             raise forms.ValidationError("Code not found")
         return code
+
+
+class UpdateBarrierCommoditiesForm(forms.Form):
+    codes = MultipleValueField(required=False)
+
+    def __init__(self, barrier_id, token, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.token = token
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        commodities = [{"code": code} for code in self.cleaned_data.get("codes")]
+        client.barriers.patch(id=self.barrier_id, commodities=commodities)
