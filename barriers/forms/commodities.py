@@ -35,6 +35,9 @@ class CommodityLookupForm(forms.Form):
             raise forms.ValidationError("Code not found")
         return code
 
+    def get_commodity_data(self):
+        return self.commodity.to_dict()
+
 
 class MultiCommodityLookupForm(forms.Form):
     codes = forms.CharField()
@@ -53,6 +56,9 @@ class MultiCommodityLookupForm(forms.Form):
         except APIHttpException:
             raise forms.ValidationError("Code not found")
         return codes
+
+    def get_commodity_data(self):
+        return [commodity.to_dict() for commodity in self.commodities]
 
 
 class UpdateBarrierCommoditiesForm(forms.Form):

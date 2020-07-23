@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from "react"
 
 import CommodityList from "./CommodityList"
 import ErrorBanner from "../forms/ErrorBanner"
@@ -7,7 +7,7 @@ import ErrorBanner from "../forms/ErrorBanner"
 function TextArea(props) {
   return (
     <div className="govuk-form-group">
-      <textarea className="govuk-textarea govuk-!-margin-bottom-0" name={props.fieldName} rows="5" defaultValue={props.value} onChange={props.onChange}></textarea>
+      <textarea className="govuk-textarea govuk-!-margin-bottom-0" name={props.fieldName} rows="5" defaultValue={props.defaultValue} onChange={props.onChange}></textarea>
     </div>
   )
 }
@@ -46,7 +46,7 @@ function CommodityForm(props) {
     newCodePairs[index] = event.target.value
     setCodePairs(newCodePairs)
     let code = getCode()
-    lookupCodes(code)
+    lookupCode(code)
 
     if (event.target.value.length >=2 && (index + 1) < boxCount) {
       inputRefContainer.current[index + 1].removeAttribute("disabled")
@@ -57,11 +57,11 @@ function CommodityForm(props) {
   const onCodePaste = (event, index) => {
     let codes = event.clipboardData.getData("Text")
     setPastedCodes(codes)
-    lookupCodes(codes)
+    lookupMultipleCodes(codes)
   }
 
   const onTextAreaChange = (event, index) => {
-    lookupCodes(event.target.value)
+    lookupMultipleCodes(event.target.value)
   }
 
   const isBoxDisabled = (index) => {
@@ -81,7 +81,7 @@ function CommodityForm(props) {
   const confirmCommodity = (event, index) => {
     confirmedCommodities.push(unconfirmedCommodities[index])
     setConfirmedCommodities([...confirmedCommodities])
-    unconfirmedCommodities.splice(index, 1);
+    unconfirmedCommodities.splice(index, 1)
     setUnconfirmedCommodities([...unconfirmedCommodities])
   }
 
@@ -95,8 +95,49 @@ function CommodityForm(props) {
     setConfirmedCommodities([...confirmedCommodities])
   }
 
-  async function lookupCodes(codes) {
-    setIsLoading(true);
+  async function lookupCode(code) {
+    setIsLoading(true)
+    let url = "?code=" + code
+    const response = await fetch(url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setIsLoading(false)
+        if (result["status"] == "ok") {
+          let zeroPaddedCode = code.padEnd(10, "0")
+          if (confirmedCommodities.some(commodity => commodity.code === zeroPaddedCode)) {
+            setUnconfirmedCommodities([])
+          } else {
+            setUnconfirmedCommodities([
+              {
+                "code": zeroPaddedCode,
+                "code_display": zeroPaddedCode.match(/.{1,2}/g).join("."),
+                "hs6_code": result.data.code,
+                "description": result.data.description,
+                "full_description": result.data.full_description,
+              }
+            ])
+          }
+          setCodeLookupError(null)
+        } else {
+          setUnconfirmedCommodities([])
+          setCodeLookupError(result.message)
+        }
+      },
+      (error) => {
+        setIsLoading(false)
+        setUnconfirmedCommodities([])
+        setCodeLookupError(error)
+      }
+    )
+  }
+
+  async function lookupMultipleCodes(codes) {
+    setIsLoading(true)
     codes = codes.replace(/[^\d+,;]/g, '').replace(";", ",")
     let url = "?codes=" + codes
     const response = await fetch(url, {
@@ -107,22 +148,40 @@ function CommodityForm(props) {
     .then(res => res.json())
     .then(
       (result) => {
-        setIsLoading(false);
+        setIsLoading(false)
         if (result["status"] == "ok") {
-          let filteredCommodities = result.data.filter(item => {
-            return !confirmedCommodities.some(commodity => commodity.code === item.code)
+          let codeLookup = result.data.reduce((output, item) => {
+            output[item.code.slice(0, 6)] = item
+            return output
+          }, {})
+
+          let matchedCodes = codes.split(",").map((code) => {
+            let codeObj = codeLookup[code.slice(0, 6)]
+            if (typeof codeObj !== 'undefined') {
+              let zeroPaddedCode = code.padEnd(10, "0")
+              return {
+                "code": zeroPaddedCode,
+                "code_display": zeroPaddedCode.match(/.{1,2}/g).join("."),
+                "hs6_code": codeObj.code,
+                "description": codeObj.description,
+                "full_description": codeObj.full_description,
+              }
+            }
           })
-          setUnconfirmedCommodities(filteredCommodities);
-          setCodeLookupError(null);
+          let filteredCommodities = matchedCodes.filter(item => {
+            return item && !confirmedCommodities.some(commodity => commodity.code === item.code)
+          })
+          setUnconfirmedCommodities(filteredCommodities)
+          setCodeLookupError(null)
         } else {
-          setUnconfirmedCommodities([]);
+          setUnconfirmedCommodities([])
           setCodeLookupError(result.message)
         }
       },
       (error) => {
-        setIsLoading(false);
-        setUnconfirmedCommodities([]);
-        setCodeLookupError(error);
+        setIsLoading(false)
+        setUnconfirmedCommodities([])
+        setCodeLookupError(error)
       }
     )
   }
@@ -134,7 +193,6 @@ function CommodityForm(props) {
       ) : null}
 
       <form action="" method="POST" className="restrict-width">
-
         <div id="" className={codeLookupError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
           <fieldset className="govuk-fieldset">
             <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">Enter one or more HS commodity codes</legend>
@@ -148,7 +206,7 @@ function CommodityForm(props) {
             ) : null}
 
             {pastedCodes ? (
-              <TextArea fieldName="codes" value={pastedCodes} onChange={onTextAreaChange} />
+              <TextArea fieldName="codes" defaultValue={pastedCodes} onChange={onTextAreaChange} />
             ) : (
               <div className="govuk-form-group commodity-code-form-group">
                 {[...Array(boxCount)].map((x, index) =>
@@ -204,4 +262,4 @@ function CommodityForm(props) {
 }
 
 
-export default CommodityForm;
+export default CommodityForm

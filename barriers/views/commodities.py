@@ -30,20 +30,24 @@ class BarrierEditCommodities(BarrierMixin, TemplateView):
         return self.render_to_response(self.get_context_data(lookup_form=lookup_form))
 
     def ajax(self, request, *args, **kwargs):
-        lookup_form = MultiCommodityLookupForm(
+        if request.GET.get("code"):
+            form_class = CommodityLookupForm
+        elif request.GET.get("codes"):
+            form_class = MultiCommodityLookupForm
+        else:
+            return JsonResponse({"status": "error", "message": "Bad request"})
+
+        lookup_form = form_class(
             data=request.GET.dict() or None,
             token=self.request.session.get("sso_token"),
         )
         if lookup_form.is_valid():
             return JsonResponse({
                 "status": "ok",
-                "data": [commodity.to_dict() for commodity in lookup_form.commodities],
+                "data": lookup_form.get_commodity_data(),
             })
         else:
-            return JsonResponse({
-                "status": "error",
-                "message": "Code not found",
-            })
+            return JsonResponse({"status": "error", "message": "Code not found"})
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
