@@ -46,7 +46,6 @@ class CommodityLookupForm(forms.Form):
             self.commodity = commodity.create_barrier_commodity(code=code, country_id=country)
         except APIHttpException:
             raise forms.ValidationError("Code not found")
-        return code
 
     def get_commodity_data(self):
         return self.commodity.to_dict()
@@ -54,21 +53,41 @@ class CommodityLookupForm(forms.Form):
 
 class MultiCommodityLookupForm(forms.Form):
     codes = forms.CharField()
+    country = forms.ChoiceField(
+        label="Which location are the HS commodity codes from?",
+        choices=[],
+        error_messages={"required": "Select a location"},
+    )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, countries, *args, **kwargs):
         self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
+        self.fields["country"].choices = tuple([
+            (country["id"], country["name"]) for country in countries
+        ])
 
-    def clean_codes(self):
-        codes = self.cleaned_data["codes"]
+    def clean(self):
+        cleaned_data = super().clean()
+        codes = cleaned_data["codes"]
+        country = cleaned_data["country"]
         codes = re.sub('[^/\d,;]', '', codes).replace(";", ",")
 
         client = MarketAccessAPIClient(self.token)
         try:
-            self.commodities = client.commodities.list(codes=codes)
+            commodity_lookup = {
+                commodity.code[:6].ljust(10, "0"): commodity
+                for commodity in client.commodities.list(codes=codes)
+            }
         except APIHttpException:
             raise forms.ValidationError("Code not found")
-        return codes
+
+        self.commodities = []
+        for code in codes.split(","):
+            commodity = commodity_lookup.get(code[:6].ljust(10, "0"))
+            if not commodity:
+                continue
+            barrier_commodity = commodity.create_barrier_commodity(code=code, country_id=country)
+            self.commodities.append(barrier_commodity)
 
     def get_commodity_data(self):
         return [commodity.to_dict() for commodity in self.commodities]

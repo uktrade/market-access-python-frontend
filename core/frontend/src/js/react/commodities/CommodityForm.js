@@ -61,8 +61,12 @@ function CommodityForm(props) {
   }
 
   useEffect(() => {
-    let code = getCode()
-    lookupCode(code)
+    if (pastedCodes) {
+      lookupMultipleCodes(pastedCodes)
+    } else {
+      let code = getCode()
+      lookupCode(code)
+    }
   }, [countryId]);
 
   const onCodePaste = (event, index) => {
@@ -142,8 +146,9 @@ function CommodityForm(props) {
 
   async function lookupMultipleCodes(codes) {
     setIsLoading(true)
-    codes = codes.replace(/[^\d+,;]/g, '').replace(";", ",")
-    let url = "?codes=" + codes
+    codes = codes.replace(/[^\d+,;]/g, '').replace(";", ",").replace(/,+$/g, '').replace(/^,+/g, '')
+    if (codes == "") return
+    let url = "?codes=" + codes + "&country=" + countryId
     const response = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
@@ -154,25 +159,7 @@ function CommodityForm(props) {
       (result) => {
         setIsLoading(false)
         if (result["status"] == "ok") {
-          let codeLookup = result.data.reduce((output, item) => {
-            output[item.code.slice(0, 6)] = item
-            return output
-          }, {})
-
-          let matchedCodes = codes.split(",").map((code) => {
-            let codeObj = codeLookup[code.slice(0, 6)]
-            if (typeof codeObj !== 'undefined') {
-              let zeroPaddedCode = code.padEnd(10, "0")
-              return {
-                "code": zeroPaddedCode,
-                "code_display": zeroPaddedCode.match(/.{1,2}/g).join("."),
-                "hs6_code": codeObj.code,
-                "description": codeObj.description,
-                "full_description": codeObj.full_description,
-              }
-            }
-          })
-          let filteredCommodities = matchedCodes.filter(item => {
+          let filteredCommodities = result.data.filter(item => {
             return item && !confirmedCommodities.some(commodity => commodity.code === item.code)
           })
           setUnconfirmedCommodities(filteredCommodities)
