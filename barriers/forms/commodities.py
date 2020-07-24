@@ -21,16 +21,29 @@ class CommodityLookupForm(forms.Form):
         error_messages={"required": "Enter an HS code"},
         widget=CommodityCodeWidget,
     )
+    country = forms.ChoiceField(
+        label="Which location are the HS commodity codes from?",
+        choices=[],
+        error_messages={"required": "Select a location"},
+    )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, countries, *args, **kwargs):
         self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
+        self.fields["country"].choices = tuple([
+            (country["id"], country["name"]) for country in countries
+        ])
 
-    def clean_code(self):
-        code = self.cleaned_data["code"]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        code = cleaned_data["code"]
+        country = cleaned_data["country"]
+
         client = MarketAccessAPIClient(self.token)
         try:
-            self.commodity = client.commodities.get(id=code)
+            commodity = client.commodities.get(id=code)
+            self.commodity = commodity.create_barrier_commodity(code=code, country_id=country)
         except APIHttpException:
             raise forms.ValidationError("Code not found")
         return code
@@ -63,13 +76,28 @@ class MultiCommodityLookupForm(forms.Form):
 
 class UpdateBarrierCommoditiesForm(forms.Form):
     codes = MultipleValueField(required=False)
+    countries = MultipleValueField(required=False)
 
     def __init__(self, barrier_id, token, *args, **kwargs):
         self.barrier_id = barrier_id
         self.token = token
         super().__init__(*args, **kwargs)
 
+    def clean(self):
+        cleaned_data = super().clean()
+        codes = cleaned_data["codes"]
+        countries = cleaned_data["countries"]
+        self.commodities = []
+        for index, code in enumerate(codes):
+            try:
+                self.commodities.append({
+                    "code": code,
+                    "country": countries[index],
+                })
+            except IndexError:
+                raise forms.ValidationError("Code/country mismatch")
+        return codes
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        commodities = [{"code": code} for code in self.cleaned_data.get("codes")]
-        client.barriers.patch(id=self.barrier_id, commodities=commodities)
+        client.barriers.patch(id=self.barrier_id, commodities=self.commodities)

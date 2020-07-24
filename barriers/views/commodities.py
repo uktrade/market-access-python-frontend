@@ -1,3 +1,5 @@
+import copy
+
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
@@ -8,22 +10,20 @@ from barriers.forms.commodities import (
     MultiCommodityLookupForm,
     UpdateBarrierCommoditiesForm,
 )
+from barriers.models import Commodity
 from utils.api.client import MarketAccessAPIClient
 
 
-class BarrierEditCommodities(BarrierMixin, TemplateView):
+class BarrierEditCommodities(BarrierMixin, FormView):
     template_name = "barriers/edit/commodities.html"
     lookup_form_class = CommodityLookupForm
-    update_form_class = UpdateBarrierCommoditiesForm
+    form_class = UpdateBarrierCommoditiesForm
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             return self.ajax(request, *args, **kwargs)
 
-        lookup_form = self.lookup_form_class(
-            data=request.GET.dict() or None,
-            token=self.request.session.get("sso_token"),
-        )
+        lookup_form = self.get_lookup_form()
         if lookup_form.is_bound:
             lookup_form.full_clean()
 
@@ -57,13 +57,53 @@ class BarrierEditCommodities(BarrierMixin, TemplateView):
         ]
         return context_data
 
-    def add_confirmed_code(self, code):
+    def get_lookup_form(self):
+        return self.lookup_form_class(
+            initial={"country": self.barrier.country["id"]},
+            data=self.request.GET.dict() or None,
+            token=self.request.session.get("sso_token"),
+            countries=self.get_countries(),
+        )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
+    def get_countries(self):
+        return (
+            self.barrier.country,
+            {"id": "80756b9a-5d95-e211-a939-e4115bead28a", "name": "United Kingdom"},
+        )
+
+    def add_confirmed_commodity(self, code, country):
         session_key = self.get_session_key()
-        session_codes = self.request.session.get(session_key)
-        if session_codes is None:
-            session_codes = [commodity.code for commodity in self.barrier.commodities]
-        session_codes.append(code)
-        self.request.session[session_key] = list(set(session_codes))
+        session_commodities = self.get_session_commodities()
+        existing_codes = [commodity["code"] for commodity in session_commodities]
+        code = code.ljust(10, "0")
+
+        if code not in existing_codes:
+            session_commodities.append({"code": code, "country": country})
+        self.request.session[session_key] = session_commodities
+
+    def remove_confirmed_commodity(self, code):
+        session_key = self.get_session_key()
+        session_commodities = self.get_session_commodities()
+        self.request.session[session_key] = [
+            commodity for commodity in session_commodities if commodity["code"] != code
+        ]
+
+    def get_session_commodities(self):
+        session_key = self.get_session_key()
+        session_commodities = self.request.session.get(session_key)
+        if session_commodities is None:
+            session_commodities = [
+                {"code": commodity.code, "country": commodity.country["id"]}
+                for commodity in self.barrier.commodities
+            ]
+            self.request.session[session_key] = session_commodities
+        return session_commodities
 
     def clear_session_codes(self):
         session_key = self.get_session_key()
@@ -73,56 +113,58 @@ class BarrierEditCommodities(BarrierMixin, TemplateView):
         except KeyError:
             pass
 
-    def get_confirmed_codes_from_session(self):
-        session_key = self.get_session_key()
-        return self.request.session.get(session_key)
-
     def get_confirmed_commodities(self):
-        session_codes = self.get_confirmed_codes_from_session()
-
-        if session_codes is None:
-            return self.barrier.commodities
-        if session_codes != []:
-            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-            return client.commodities.list(codes=",".join(session_codes))
-        return []
-
-    def remove_confirmed_code(self, code):
         session_key = self.get_session_key()
-        session_codes = self.request.session.get(session_key)
-        if session_codes is None:
-            session_codes = [commodity.code for commodity in self.barrier.commodities]
-        session_codes.remove(code)
-        self.request.session[session_key] = session_codes
+        session_commodities = self.request.session.get(session_key)
+
+        if session_commodities is None:
+            return self.barrier.commodities
+
+        if session_commodities != []:
+            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+            session_codes = [commodity["code"] for commodity in session_commodities]
+            commodity_lookup = {
+                commodity.code: commodity
+                for commodity in client.commodities.list(codes=",".join(session_codes))
+            }
+            commodities = []
+
+            for commodity_data in session_commodities:
+                code = commodity_data.get("code")
+                country = commodity_data.get("country")
+                hs6_code = code[:6].ljust(10, "0")
+                commodity = commodity_lookup.get(hs6_code)
+                barrier_commodity = commodity.create_barrier_commodity(
+                    code=code,
+                    country_id=country,
+                )
+                commodities.append(barrier_commodity)
+            return commodities
+
+        return []
 
     def get_session_key(self):
         barrier_id = self.kwargs.get("barrier_id")
         return f"barrier:{barrier_id}:commodities"
 
     def post(self, request, *args, **kwargs):
-        empty_form = self.lookup_form_class(token=self.request.session.get("sso_token"))
-
         if "confirm-commodity" in request.POST:
-            code = request.POST.get("confirm-commodity")
-            self.add_confirmed_code(code)
-            return self.render_to_response(self.get_context_data(lookup_form=empty_form))
+            code = request.POST.get("code")
+            country = request.POST.get("country")
+            self.add_confirmed_commodity(code, country)
+            return HttpResponseRedirect(self.request.path_info)
         elif "remove-commodity" in request.POST:
             code = request.POST.get("remove-commodity")
-            self.remove_confirmed_code(code)
-            return self.render_to_response(self.get_context_data(lookup_form=empty_form))
+            self.remove_confirmed_commodity(code)
+            return self.render_to_response(self.get_context_data(lookup_form=self.get_lookup_form()))
         elif request.POST.get("action") == "save":
-            form = self.update_form_class(
-                barrier_id=self.kwargs.get("barrier_id"),
-                token=request.session.get("sso_token"),
-                data=request.POST,
-            )
+            form = self.get_form()
             if form.is_valid():
                 form.save()
                 self.clear_session_codes()
                 return HttpResponseRedirect(self.get_success_url())
             else:
                 return self.form_invalid(form)
-
         elif request.POST.get("action") == "cancel":
             self.clear_session_codes()
             return HttpResponseRedirect(self.get_success_url())

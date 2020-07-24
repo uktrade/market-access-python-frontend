@@ -127,13 +127,16 @@
             <dt class="summary-group__list__key">HS commodity codes of affected goods</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.commodities %}
-                    <ul class="summary-group__list__value__list">
-                        {% for item in barrier.commodities %}
-                        <li class="summary-group__list__value__list__item">{{ item.full_description }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% for country_id, commodity_list in barrier.commodities_grouped_by_country.items %}
+                        These codes are for {{ commodity_list.0.country.name }}
+                        <ul class="summary-group__list__value__list">
+                            {% for commodity in commodity_list %}
+                                <li class="summary-group__list__value__list__item">{{ commodity.code }} {{ commodity.commodity.full_description }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_commodities' barrier.id %}">Edit</a>
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_commodities' barrier.id %}">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}

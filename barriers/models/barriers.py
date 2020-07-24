@@ -1,5 +1,5 @@
 from barriers.constants import ARCHIVED_REASON
-from barriers.models.commodities import Commodity
+from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
 
 from utils.metadata import get_metadata
@@ -79,7 +79,15 @@ class Barrier(APIModel):
 
     @property
     def commodities(self):
-        return [Commodity(commodity) for commodity in self.data.get("commodities", [])]
+        return [BarrierCommodity(commodity) for commodity in self.data.get("commodities", [])]
+
+    @property
+    def commodities_grouped_by_country(self):
+        grouped_commodities = {}
+        for commodity in self.commodities:
+            grouped_commodities.setdefault(commodity.country["id"], [])
+            grouped_commodities[commodity.country["id"]].append(commodity)
+        return grouped_commodities
 
     @property
     def last_seen_on(self):
