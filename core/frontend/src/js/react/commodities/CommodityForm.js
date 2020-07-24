@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 
 import CommodityList from "./CommodityList"
+import CountryInput from "./CountryInput"
 import ErrorBanner from "../forms/ErrorBanner"
 
 
@@ -33,6 +34,7 @@ function CodePairInput(props) {
 
 function CommodityForm(props) {
   const [codePairs, setCodePairs] = useState(["", "", "", "", "", ""])
+  const [countryId, setCountryId] = useState(props.countries[0]["id"])
   const [confirmedCommodities, setConfirmedCommodities] = useState(props.confirmedCommodities)
   const [unconfirmedCommodities, setUnconfirmedCommodities] = useState([])
   const [pastedCodes, setPastedCodes] = useState("")
@@ -53,6 +55,15 @@ function CommodityForm(props) {
       inputRefContainer.current[index + 1].focus()
     }
   }
+
+  const handleCountryChange = (event) => {
+    setCountryId(event.target.value)
+  }
+
+  useEffect(() => {
+    let code = getCode()
+    lookupCode(code)
+  }, [countryId]);
 
   const onCodePaste = (event, index) => {
     let codes = event.clipboardData.getData("Text")
@@ -75,7 +86,7 @@ function CommodityForm(props) {
   const getCode = () => {
     let cleanedCodePairs = codePairs.map((element) => ("00" + element).slice(-2))
     let zeroPaddedCode = cleanedCodePairs.slice(0, 10).join("")
-    return zeroPaddedCode.replace(/^|0+$/g, '')
+    return zeroPaddedCode.replace(/0+$/g, '')
   }
 
   const confirmCommodity = (event, index) => {
@@ -96,8 +107,9 @@ function CommodityForm(props) {
   }
 
   async function lookupCode(code) {
+    if (code == "") return
     setIsLoading(true)
-    let url = "?code=" + code
+    let url = "?code=" + code + "&country=" + countryId
     const response = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
@@ -112,15 +124,7 @@ function CommodityForm(props) {
           if (confirmedCommodities.some(commodity => commodity.code === zeroPaddedCode)) {
             setUnconfirmedCommodities([])
           } else {
-            setUnconfirmedCommodities([
-              {
-                "code": zeroPaddedCode,
-                "code_display": zeroPaddedCode.match(/.{1,2}/g).join("."),
-                "hs6_code": result.data.code,
-                "description": result.data.description,
-                "full_description": result.data.full_description,
-              }
-            ])
+            setUnconfirmedCommodities([result.data])
           }
           setCodeLookupError(null)
         } else {
@@ -198,6 +202,8 @@ function CommodityForm(props) {
             <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">Enter one or more HS commodity codes</legend>
             <span className="govuk-hint">Enter your HS code below ignoring any spaces or full stops. You can also copy and paste multiple codes separated by commas into the first box (there is no limit). Only numbers and commas will be recognised, all other punctuation and characters will be ignored.</span>
 
+            <CountryInput countries={props.countries} countryId={countryId} onChange={handleCountryChange} />
+
             {codeLookupError ? (
               <span class="govuk-error-message">
                 <span class="govuk-visually-hidden">Error:</span>
@@ -252,6 +258,9 @@ function CommodityForm(props) {
         <input type="hidden" name="csrfmiddlewaretoken" value={props.csrfToken} />
         {confirmedCommodities.map((commodity, index) =>
           <input type="hidden" name="codes" value={commodity.code} />
+        )}
+        {confirmedCommodities.map((commodity, index) =>
+          <input type="hidden" name="countries" value={commodity.country.id} />
         )}
         <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
         <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>

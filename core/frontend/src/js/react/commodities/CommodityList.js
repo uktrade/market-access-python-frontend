@@ -7,12 +7,12 @@ function CommodityList(props) {
       {props.commodities.map((commodity, index) => {
         return <li className="commodities-list__item">
             <div className="commodities-list__code">{ commodity.code_display }</div>
-            <div className="commodities-list__name">{ commodity.full_description }</div>
+            <div className="commodities-list__name">{ commodity.commodity.full_description }</div>
 
             {props.confirmed ? (
               <button
                 name="remove-commodity"
-                value="{ commodity.code }"
+                value={ commodity.code }
                 className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link"
                 data-module="govuk-button"
                 onClick={event => {
@@ -23,7 +23,7 @@ function CommodityList(props) {
             ): (
               <button
                 name="confirm-commodity"
-                value="{ commodity.code }"
+                value={ commodity.code }
                 className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
                 data-module="govuk-button"
                 onClick={event => {

@@ -37,10 +37,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         else:
             return JsonResponse({"status": "error", "message": "Bad request"})
 
-        lookup_form = form_class(
-            data=request.GET.dict() or None,
-            token=self.request.session.get("sso_token"),
-        )
+        lookup_form = self.get_lookup_form(form_class)
         if lookup_form.is_valid():
             return JsonResponse({
                 "status": "ok",
@@ -57,8 +54,10 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         ]
         return context_data
 
-    def get_lookup_form(self):
-        return self.lookup_form_class(
+    def get_lookup_form(self, form_class=None):
+        if form_class is None:
+            form_class = CommodityLookupForm
+        return form_class(
             initial={"country": self.barrier.country["id"]},
             data=self.request.GET.dict() or None,
             token=self.request.session.get("sso_token"),
