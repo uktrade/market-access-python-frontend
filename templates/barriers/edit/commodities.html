@@ -12,7 +12,12 @@
         {"id": "{{ lookup_form.country.field.choices.0.0 }}", "name": "{{ lookup_form.country.field.choices.0.1 }}"},
         {"id": "{{ lookup_form.country.field.choices.1.0 }}", "name": "{{ lookup_form.country.field.choices.1.1 }}"},
       ]
-      ReactApp.renderCommodities(confirmedCommodities=confirmedCommodities, countries=countries)
+      ReactApp.renderCommodities(
+        confirmedCommodities=confirmedCommodities,
+        countries=countries,
+        label="{{ lookup_form.code.label }}",
+        helpText="{{ lookup_form.code.help_text }}",
+      )
     })
   </script>
 {% endblock %}
@@ -25,7 +30,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add HS commodity codes' %}
+    {% include 'partials/heading.html' with text='Add commodity codes' %}
 
     <div id="react-app">
 
@@ -42,7 +47,7 @@
                     {% form_field_error lookup_form.code %}
 
                     {% spaceless %}{{ lookup_form.code }}{% endspaceless %}
-                    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Verify</button>
+                    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Verify code</button>
                 </fieldset>
             </div>
         </form>
@@ -58,7 +63,7 @@
                 <ul class="commodities-list restrict-width">
                     <li class="commodities-list__item">
                         <div class="commodities-list__code">{{ lookup_form.commodity.code_display }}</div>
-                        <div class="commodities-list__name">{{ lookup_form.commodity.commodity.full_description }}</div>
+                        <div class="commodities-list__description">{{ lookup_form.commodity.commodity.full_description }}</div>
                         <button name="confirm-commodity" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
                     </li>
                 </ul>

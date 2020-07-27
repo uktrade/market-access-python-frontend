@@ -11,18 +11,18 @@ from utils.forms import CommodityCodeWidget, MultipleValueField
 
 class CommodityLookupForm(forms.Form):
     code = forms.CharField(
-        label="Enter one or more HS commodity codes",
+        label="Enter a commodity code (also known as an HS code)",
         help_text=(
-            "Enter your HS code below ignoring any spaces or full stops. "
+            "Enter your commodity code below ignoring any spaces or full stops. "
             "You can also copy and paste multiple codes separated by commas "
             "into the first box (there is no limit). Only numbers and commas "
             "will be recognised, all other punctuation and characters will be ignored."
         ),
-        error_messages={"required": "Enter an HS code"},
+        error_messages={"required": "Enter a commodity code"},
         widget=CommodityCodeWidget,
     )
     country = forms.ChoiceField(
-        label="Which location are the HS commodity codes from?",
+        label="Which location are the commodity codes from?",
         choices=[],
         error_messages={"required": "Select a location"},
     )

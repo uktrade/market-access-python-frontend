@@ -186,8 +186,8 @@ function CommodityForm(props) {
       <form action="" method="POST">
         <div id="" className={codeLookupError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
           <fieldset className="govuk-fieldset">
-            <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">Enter one or more HS commodity codes</legend>
-            <span className="govuk-hint">Enter your HS code below ignoring any spaces or full stops. You can also copy and paste multiple codes separated by commas into the first box (there is no limit). Only numbers and commas will be recognised, all other punctuation and characters will be ignored.</span>
+            <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">{props.label}</legend>
+            <span className="govuk-hint">{props.helpText}</span>
 
             <CountryInput countries={props.countries} countryId={countryId} onChange={handleCountryChange} />
 

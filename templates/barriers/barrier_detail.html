@@ -124,7 +124,7 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">HS commodity codes of affected goods</dt>
+            <dt class="summary-group__list__key">Commodity codes</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.commodities %}
                     {% for country_id, commodity_list in barrier.commodities_grouped_by_country.items %}
@@ -144,9 +144,9 @@
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
-                        <span class="summary-group__list__value__none">No HS codes</span>
+                        <span class="summary-group__list__value__none">No commodity codes</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="summary-group__list__value__add">Add one or more HS commodity codes</a>
+                        <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="summary-group__list__value__add">Add commodity codes</a>
                     {% endif %}
                 {% endif %}
             </dd>
