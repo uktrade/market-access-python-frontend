@@ -1,7 +1,7 @@
 from utils.models import APIModel
 
 
-def format_hs_code(code):
+def format_commodity_code(code):
     code = code.rstrip("0")
     if len(code) % 2:
         code = f"{code}0"
@@ -24,7 +24,7 @@ class Commodity(APIModel):
 
     @property
     def code_display(self):
-        return format_hs_code(self.code)
+        return format_commodity_code(self.code)
 
     def to_dict(self):
         return {
@@ -49,7 +49,7 @@ class BarrierCommodity(APIModel):
 
     @property
     def code_display(self):
-        return format_hs_code(self.code)
+        return format_commodity_code(self.code)
 
     def to_dict(self):
         return {

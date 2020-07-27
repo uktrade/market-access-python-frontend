@@ -1,0 +1,25 @@
+{% for country_name, commodities in item.diff.items %}
+    <span class="commodity-summary__country">{{ country_name }}</span>
+    <ul class="commodity-summary">
+        {% for commodity in commodities.removed %}
+            <li class="commodity-summary__item diff__del">
+                <span class="commodity-summary__code">{{ commodity.code_display }}</span>
+                <span class="commodity-summary__description">{{ commodity.commodity.full_description }}</span>
+            </li>
+        {% endfor %}
+
+        {% for commodity in commodities.unchanged %}
+            <li class="commodity-summary__item">
+                <span class="commodity-summary__code">{{ commodity.code_display }}</span>
+                <span class="commodity-summary__description">{{ commodity.commodity.full_description }}</span>
+            </li>
+        {% endfor %}
+
+        {% for commodity in commodities.added %}
+            <li class="commodity-summary__item diff__ins">
+                <span class="commodity-summary__code">{{ commodity.code_display }}</span>
+                <span class="commodity-summary__description">{{ commodity.commodity.full_description }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
