@@ -213,6 +213,12 @@ class PublicBarrier(APIModel):
             return dateutil.parser.parse(self.data["last_published_on"])
 
     @property
+    def unpublished_changes(self):
+        if self.data.get("last_published_on") is None:
+            return False
+        return self.data.get("unpublished_changes")
+
+    @property
     def unpublished_on(self):
         if self.data.get("unpublished_on") is not None:
             return dateutil.parser.parse(self.data["unpublished_on"])

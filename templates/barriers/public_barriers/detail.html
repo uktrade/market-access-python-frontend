@@ -56,7 +56,7 @@
         {% endif %}
 
         {% if barrier.public_eligibility and public_barrier.unpublished_changes %}
-            {% include "partials/warning.html" with warning_text="The public barrier needs updating" modifier="small" extra_classes="publish-update-warning" %}
+            {% include "partials/warning.html" with warning_text="There are unpublished changes" modifier="small" extra_classes="publish-update-warning" %}
         {% endif %}
 
         {% if current_user|has_permission:"change_barrier_public_eligibility" and not current_user|has_permission:"change_publicbarrier" %}
@@ -70,7 +70,7 @@
                     {% include "partials/warning.html" with warning_text="Internal title has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.title %}
-                    {% if barrier.public_eligibility and public_barrier.internal_title_changed %}
+                    {% if barrier.public_eligibility and public_barrier.latest_published_version.title != public_barrier.title %}
                         <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.title }}</div>
 
                         <div class="public-barrier__current-value-container">
@@ -101,7 +101,7 @@
                     {% include "partials/warning.html" with warning_text="Internal summary has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.summary %}
-                    {% if barrier.public_eligibility and public_barrier.internal_summary_changed %}
+                    {% if barrier.public_eligibility and public_barrier.latest_published_version.summary != public_barrier.summary %}
                         <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.summary|linebreaksbr }}</div>
 
                         <div class="public-barrier__current-value-container">
@@ -148,6 +148,9 @@
 
             <dt class="summary-group__list__key">Sector</dt>
             <dd class="summary-group__list__value">
+                {{ public_barrier.internal_sector_names }}<br/>
+                {{ public_barrier.latest_published_version.data }}<br/>
+
                 {% if public_barrier.internal_sectors_changed and public_barrier.first_published_on %}
                     {% if public_barrier.latest_published_version.sector_names %}
                         <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.sector_names|join:", " }}</span>
@@ -211,13 +214,13 @@
             {% endif %}
 
             {% if public_barrier.is_published and current_user|has_permission:"publish_barrier" %}
-                {% if public_barrier.unpublished_changes %}
+                {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
+                    <button disabled="disabled" aria-disabled="true"  class="govuk-button publishing-button" data-module="govuk-button" name="action" value="publish">Publish update</button>
+                    <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
+                {% elif public_barrier.unpublished_changes %}
                     <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
-                    {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
-                        <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
-                    {% endif %}
                 {% endif %}
-                <button class="govuk-button publishing-button" data-module="govuk-button govuk-button--secondary" name="action" value="unpublish">Unpublish</button>
+                <button class="govuk-button govuk-button--secondary publishing-button" data-module="govuk-button" name="action" value="unpublish">Unpublish</button>
             {% endif %}
         </form>
 
