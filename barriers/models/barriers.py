@@ -199,6 +199,10 @@ class PublicBarrier(APIModel):
         return [category["title"] for category in self.categories]
 
     @property
+    def internal_categories(self):
+        return self.data.get("internal_categories", [])
+
+    @property
     def internal_category_titles(self):
         return [category["title"] for category in self.internal_categories]
 
@@ -265,6 +269,14 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
         }.get(self.public_view_status)
+
+    @property
+    def internal_all_sectors(self):
+        return self.data.get("internal_all_sectors")
+
+    @property
+    def internal_sectors(self):
+        return self.data.get("internal_sectors", [])
 
     @property
     def internal_sector_names(self):
