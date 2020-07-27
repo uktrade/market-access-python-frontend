@@ -88,5 +88,7 @@
         {% include 'barriers/partials/analyst_warning.html' %}
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button js-submit-button">
+        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
     </form>
+
 {% endblock %}
