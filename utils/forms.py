@@ -412,7 +412,7 @@ class ClearableMixin:
 
 class CommodityCodeWidget(forms.MultiWidget):
     template_name = "partials/forms/widgets/commodity_code_widget.html"
-    box_count = 6
+    box_count = 5
 
     def __init__(self, attrs=None):
         widget = (widgets.TextInput(), ) * self.box_count

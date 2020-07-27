@@ -40,7 +40,7 @@ function CommodityForm(props) {
   const [pastedCodes, setPastedCodes] = useState("")
   const [codeLookupError, setCodeLookupError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const boxCount = 6
+  const boxCount = 5
   const inputRefContainer = useRef(new Array(boxCount))
 
   const handleCodeChange = (event, index) => {
