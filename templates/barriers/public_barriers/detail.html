@@ -70,7 +70,7 @@
                     {% include "partials/warning.html" with warning_text="Internal title has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.title %}
-                    {% if barrier.public_eligibility and public_barrier.latest_published_version.title != public_barrier.title %}
+                    {% if barrier.public_eligibility and public_barrier.latest_published_version.title and public_barrier.latest_published_version.title != public_barrier.title %}
                         <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.title }}</div>
 
                         <div class="public-barrier__current-value-container">
@@ -101,7 +101,7 @@
                     {% include "partials/warning.html" with warning_text="Internal summary has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
                 {% endif %}
                 {% if public_barrier.summary %}
-                    {% if barrier.public_eligibility and public_barrier.latest_published_version.summary != public_barrier.summary %}
+                    {% if barrier.public_eligibility and public_barrier.latest_published_version.summary and public_barrier.latest_published_version.summary != public_barrier.summary %}
                         <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.summary|linebreaksbr }}</div>
 
                         <div class="public-barrier__current-value-container">
