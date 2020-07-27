@@ -66,24 +66,31 @@ class MultiCommodityLookupForm(forms.Form):
             (country["id"], country["name"]) for country in countries
         ])
 
+    def clean_codes(self):
+        codes = self.cleaned_data["codes"]
+        codes = re.sub('[^/\d,;]', '', codes).replace(";", ",")
+        cleaned_codes = [code[:10].ljust(10, "0") for code in codes.split(",")]
+        return list(set(cleaned_codes))
+
     def clean(self):
         cleaned_data = super().clean()
         codes = cleaned_data["codes"]
         country = cleaned_data["country"]
-        codes = re.sub('[^/\d,;]', '', codes).replace(";", ",")
+        hs6_codes = [code[:6].ljust(10, "0") for code in codes]
 
         client = MarketAccessAPIClient(self.token)
         try:
             commodity_lookup = {
-                commodity.code[:6].ljust(10, "0"): commodity
-                for commodity in client.commodities.list(codes=codes)
+                commodity.code: commodity
+                for commodity in client.commodities.list(codes=",".join(hs6_codes))
             }
         except APIHttpException:
             raise forms.ValidationError("Code not found")
 
         self.commodities = []
-        for code in codes.split(","):
-            commodity = commodity_lookup.get(code[:6].ljust(10, "0"))
+        for code in codes:
+            hs6_code = code[:6].ljust(10, "0")
+            commodity = commodity_lookup.get(hs6_code)
             if not commodity:
                 continue
             barrier_commodity = commodity.create_barrier_commodity(code=code, country_id=country)
