@@ -37,7 +37,7 @@
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ lookup_form.code.label }}</legend>
                     <span class="govuk-hint">{{ lookup_form.code.help_text }}</span>
 
-                    {% include "partials/forms/radio_input.html" with field=lookup_form.country radio_classes="govuk-radios--inline" %}
+                    {% include "partials/forms/radio_input.html" with field=lookup_form.country radio_classes="govuk-radios--inline" classes="govuk-!-margin-top-5" strong=False %}
 
                     {% form_field_error lookup_form.code %}
 
@@ -73,13 +73,15 @@
                     {% for confirmed_commodity in confirmed_commodities %}
                     <li class="commodities-list__item">
                         <div class="commodities-list__code">{{ confirmed_commodity.code_display }}</div>
-                        <div class="commodities-list__name">{{ confirmed_commodity.commodity.full_description }}</div>
+                        <div class="commodities-list__description">{{ confirmed_commodity.commodity.full_description }}</div>
                         <button name="remove-commodity" value="{{ confirmed_commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link" data-module="govuk-button">Remove</button>
                     </li>
                     {% endfor %}
                 </ul>
             </form>
         {% endif %}
+
+        <span class="govuk-hint govuk-!-margin-bottom-6">Descriptions are only shown for codes up to HS6.</span>
 
         <form action="" method="POST">
             {% csrf_token %}

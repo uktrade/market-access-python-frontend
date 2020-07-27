@@ -3,10 +3,10 @@ import React from "react";
 
 function CountryInput(props) {
   return (
-    <div className="govuk-form-group">
+    <div className="govuk-form-group govuk-!-margin-top-5">
       <fieldset className="govuk-fieldset">
         <legend className="govuk-fieldset__legend">
-          <strong>Which location are the HS commodity codes from?</strong>
+          Which location are the HS commodity codes from?
         </legend>
 
         <div className="govuk-radios country govuk-radios--inline" data-module="radios">

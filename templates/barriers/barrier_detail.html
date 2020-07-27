@@ -128,13 +128,17 @@
             <dd class="summary-group__list__value">
                 {% if barrier.commodities %}
                     {% for country_id, commodity_list in barrier.commodities_grouped_by_country.items %}
-                        These codes are for {{ commodity_list.0.country.name }}
-                        <ul class="summary-group__list__value__list">
+                        <span class="commodity-summary__country">These codes are for {{ commodity_list.0.country.name }}</span>
+                        <ul class="commodity-summary">
                             {% for commodity in commodity_list %}
-                                <li class="summary-group__list__value__list__item">{{ commodity.code }} {{ commodity.commodity.full_description }}</li>
+                                <li class="commodity-summary__item">
+                                    <span class="commodity-summary__code">{{ commodity.code_display }}</span>
+                                    <span class="commodity-summary__description">{{ commodity.commodity.full_description }}</span>
+                                </li>
                             {% endfor %}
                         </ul>
                     {% endfor %}
+
                     {% if not barrier.archived %}
                         <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_commodities' barrier.id %}">Edit</a>
                     {% endif %}

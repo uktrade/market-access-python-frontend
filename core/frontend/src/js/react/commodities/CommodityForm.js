@@ -178,12 +178,12 @@ function CommodityForm(props) {
   }
 
   return (
-    <div>
+    <div className="restrict-width">
       {codeLookupError ? (
         <ErrorBanner message={codeLookupError} />
       ) : null}
 
-      <form action="" method="POST" className="restrict-width">
+      <form action="" method="POST">
         <div id="" className={codeLookupError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
           <fieldset className="govuk-fieldset">
             <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">Enter one or more HS commodity codes</legend>
@@ -226,7 +226,7 @@ function CommodityForm(props) {
       {unconfirmedCommodities.length > 1 ? (
           <button
             name="confirm-all"
-            className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+            className="commodities-list__confirm-all govuk-button govuk-button--secondary"
             data-module="govuk-button"
             onClick={confirmAll}>
             Confirm all
@@ -234,12 +234,14 @@ function CommodityForm(props) {
       ) : null}
 
       {confirmedCommodities.length ? (
-        <h3>HS commodity codes to add to this barrier</h3>
+        <h3 className="commodities-list__title">HS commodity codes to add to this barrier</h3>
       ) : null}
 
       {confirmedCommodities.length ? (
         <CommodityList confirmed={true} commodities={confirmedCommodities} onClick={removeCommodity} />
       ) : null}
+
+      <span className="govuk-hint govuk-!-margin-bottom-6">Descriptions are only shown for codes up to HS6.</span>
 
       <form action="" method="POST">
         <input type="hidden" name="csrfmiddlewaretoken" value={props.csrfToken} />
