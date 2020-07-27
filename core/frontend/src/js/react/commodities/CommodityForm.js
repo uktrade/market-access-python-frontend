@@ -217,7 +217,7 @@ function CommodityForm(props) {
         </div>
       </form>
 
-      <p class="govuk-body">Need help? <a href="">Look up codes</a></p>
+      <p class="govuk-body">Need help? <a href="https://www.gov.uk/check-duties-customs-exporting">Look up codes</a></p>
 
       {unconfirmedCommodities.length ? (
         <CommodityList confirmed={false} commodities={unconfirmedCommodities} onClick={confirmCommodity} />
@@ -234,7 +234,7 @@ function CommodityForm(props) {
       ) : null}
 
       {confirmedCommodities.length ? (
-        <h3 className="commodities-list__title">HS commodity codes to add to this barrier</h3>
+        <h3 className="commodities-list__title">Commodity codes to add to this barrier</h3>
       ) : null}
 
       {confirmedCommodities.length ? (

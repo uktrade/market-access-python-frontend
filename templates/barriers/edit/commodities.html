@@ -22,7 +22,7 @@
   </script>
 {% endblock %}
 
-{% block page_title %}{{ block.super }} - Edit HS codes{% endblock %}
+{% block page_title %}{{ block.super }} - Edit commodity codes{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -52,7 +52,7 @@
             </div>
         </form>
 
-        <p class="govuk-body">Need help? <a href="">Look up codes</a></p>
+        <p class="govuk-body">Need help? <a href="https://www.gov.uk/check-duties-customs-exporting">Look up codes</a></p>
 
         {% if lookup_form.commodity %}
             <form action="" method="POST">
@@ -71,7 +71,7 @@
         {% endif %}
 
         {% if confirmed_commodities %}
-            <h3>HS commodity codes to add to this barrier</h3>
+            <h3>Commodity codes to add to this barrier</h3>
             <form action="" method="POST">
                 {% csrf_token %}
                 <ul class="commodities-list restrict-width">
