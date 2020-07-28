@@ -153,7 +153,7 @@ class CommercialValueForm(forms.Form):
     )
     value_explanation = forms.CharField(
         widget=forms.Textarea,
-        error_messages={"required": "Enter an explanation for the estimated value"},
+        error_messages={"required": "Enter a value description and timescale"},
     )
 
     def __init__(self, barrier, *args, **kwargs):
