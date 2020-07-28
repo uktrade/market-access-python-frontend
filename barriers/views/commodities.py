@@ -101,7 +101,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
             self.request.session[session_key] = session_commodities
         return session_commodities
 
-    def clear_session_codes(self):
+    def clear_session_commodities(self):
         session_key = self.get_session_key()
         try:
             del self.request.session[session_key]
@@ -118,13 +118,14 @@ class BarrierEditCommodities(BarrierMixin, FormView):
 
         if session_commodities != []:
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-            session_codes = [commodity["code"] for commodity in session_commodities]
+            hs6_session_codes = [
+                commodity["code"][:6].ljust(10, "0") for commodity in session_commodities
+            ]
             commodity_lookup = {
                 commodity.code: commodity
-                for commodity in client.commodities.list(codes=",".join(session_codes))
+                for commodity in client.commodities.list(codes=",".join(hs6_session_codes))
             }
-            commodities = []
-
+            barrier_commodities = []
             for commodity_data in session_commodities:
                 code = commodity_data.get("code")
                 country = commodity_data.get("country")
@@ -134,8 +135,8 @@ class BarrierEditCommodities(BarrierMixin, FormView):
                     code=code,
                     country_id=country,
                 )
-                commodities.append(barrier_commodity)
-            return commodities
+                barrier_commodities.append(barrier_commodity)
+            return barrier_commodities
 
         return []
 
@@ -157,12 +158,12 @@ class BarrierEditCommodities(BarrierMixin, FormView):
             form = self.get_form()
             if form.is_valid():
                 form.save()
-                self.clear_session_codes()
+                self.clear_session_commodities()
                 return HttpResponseRedirect(self.get_success_url())
             else:
                 return self.form_invalid(form)
         elif request.POST.get("action") == "cancel":
-            self.clear_session_codes()
+            self.clear_session_commodities()
             return HttpResponseRedirect(self.get_success_url())
 
         return super().post(request, *args, **kwargs)

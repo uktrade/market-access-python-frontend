@@ -86,7 +86,10 @@ function CommodityForm(props) {
   }
 
   async function lookupCode(code) {
-    if (code == "") return
+    if (code == "") {
+      setUnconfirmedCommodities([])
+      return
+    }
     setIsLoading(true)
     const url = "?code=" + code + "&country=" + countryId
     const response = await fetch(url, {
@@ -122,7 +125,10 @@ function CommodityForm(props) {
   async function lookupMultipleCodes(codes) {
     setIsLoading(true)
     codes = codes.replace(/[^\d+,;]/g, '').replace(";", ",").replace(/,+$/g, '').replace(/^,+/g, '')
-    if (codes == "") return
+    if (codes == "") {
+      setUnconfirmedCommodities([])
+      return
+    }
     const url = "?codes=" + codes + "&country=" + countryId
     const response = await fetch(url, {
       headers: {

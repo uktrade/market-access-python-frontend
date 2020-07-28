@@ -6,7 +6,7 @@ function CountryInput(props) {
     <div className="govuk-form-group govuk-!-margin-top-5">
       <fieldset className="govuk-fieldset">
         <legend className="govuk-fieldset__legend">
-          Which location are the HS commodity codes from?
+          Which location are the commodity codes from?
         </legend>
 
         <div className="govuk-radios country govuk-radios--inline" data-module="radios">

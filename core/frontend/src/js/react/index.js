@@ -5,7 +5,7 @@ import CommodityForm from "./commodities/CommodityForm"
 import {getCSRFToken} from "./utils"
 
 
-function renderCommodities(confirmedCommodities, countries, label, helpText) {
+function renderCommodityForm(confirmedCommodities, countries, label, helpText) {
   const csrfToken = getCSRFToken()
   ReactDOM.render(
     <CommodityForm

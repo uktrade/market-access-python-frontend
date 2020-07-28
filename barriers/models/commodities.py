@@ -5,10 +5,10 @@ def format_commodity_code(code):
     code = code.rstrip("0")
     if len(code) % 2:
         code = f"{code}0"
-    pairs = [code[i:i + 2] for i in range(0, len(code), 2)]
-    if len(pairs) > 2:
-        pairs = [pairs[0] + pairs[1]] + pairs[2:]
-    return ".".join(pairs)
+    code_split = [code[i:i + 2] for i in range(0, len(code), 2)]
+    if len(code_split) > 2:
+        code_split = [code_split[0] + code_split[1]] + code_split[2:]
+    return ".".join(code_split)
 
 
 class Commodity(APIModel):
