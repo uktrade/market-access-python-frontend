@@ -17,6 +17,7 @@ class Barrier(APIModel):
     _country = None
     _location = None
     _metadata = None
+    _public_barrier = None
     _sectors = None
     _status = None
     _wto_profile = None
@@ -95,6 +96,12 @@ class Barrier(APIModel):
     @property
     def modified_on(self):
         return dateutil.parser.parse(self.data["modified_on"])
+
+    @property
+    def public_barrier(self):
+        if self._public_barrier is None and self.data.get("public_barrier"):
+            self._public_barrier = PublicBarrier(self.data.get("public_barrier"))
+        return self._public_barrier
 
     @property
     def problem_status_text(self):
