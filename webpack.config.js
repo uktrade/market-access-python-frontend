@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
     entry: path.resolve(__dirname, 'core/frontend/src/js/react'),
     output: {
         path: path.resolve(__dirname, 'core/frontend/dist/js/'),

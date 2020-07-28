@@ -20,4 +20,4 @@ function renderCommodityForm(confirmedCommodities, countries, label, helpText) {
 }
 
 
-export {renderCommodities}
+export {renderCommodityForm}

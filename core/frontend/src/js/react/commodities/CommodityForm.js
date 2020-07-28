@@ -54,6 +54,13 @@ function CommodityForm(props) {
     }
   }, [countryId]);
 
+  const clearCodeInput = () => {
+    for (var input of inputRefContainer.current) {
+      input.value = ""
+    }
+    setCodeArray(["", "", "", "", ""])
+  }
+
   const isBoxDisabled = (index) => {
     if (index == 0) return false
     for (let i = index - 1; i >= 0; i--) {
@@ -73,6 +80,7 @@ function CommodityForm(props) {
     setConfirmedCommodities([...confirmedCommodities])
     unconfirmedCommodities.splice(index, 1)
     setUnconfirmedCommodities([...unconfirmedCommodities])
+    clearCodeInput()
   }
 
   const confirmAll = (event) => {
