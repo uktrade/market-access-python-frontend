@@ -1,39 +1,14 @@
 import React, { useEffect, useRef, useState } from "react"
 
+import CodeInput from "./CodeInput"
+import CodeTextArea from "./CodeTextArea"
 import CommodityList from "./CommodityList"
 import CountryInput from "./CountryInput"
 import ErrorBanner from "../forms/ErrorBanner"
 
 
-function TextArea(props) {
-  return (
-    <div className="govuk-form-group">
-      <textarea className="govuk-textarea govuk-!-margin-bottom-0" name={props.fieldName} rows="5" defaultValue={props.defaultValue} onChange={props.onChange}></textarea>
-    </div>
-  )
-}
-
-
-function CodePairInput(props) {
-  return (
-    <input
-      className="govuk-input govuk-input--width-2 commodity-code-input"
-      name={"code_" + props.index}
-      type="number"
-      maxlength="2"
-      ref={el => props.refContainer.current[props.index] = el}
-      onChange={event => {
-        props.onChange(event, props.index)
-      }}
-      onPaste={props.onPaste}
-      disabled={props.disabled}
-    />
-  )
-}
-
-
 function CommodityForm(props) {
-  const [codePairs, setCodePairs] = useState(["", "", "", "", "", ""])
+  const [codeArray, setCodeArray] = useState(["", "", "", "", ""])
   const [countryId, setCountryId] = useState(props.countries[0]["id"])
   const [confirmedCommodities, setConfirmedCommodities] = useState(props.confirmedCommodities)
   const [unconfirmedCommodities, setUnconfirmedCommodities] = useState([])
@@ -43,10 +18,14 @@ function CommodityForm(props) {
   const boxCount = 5
   const inputRefContainer = useRef(new Array(boxCount))
 
+  const handleCountryChange = (event) => {
+    setCountryId(event.target.value)
+  }
+
   const handleCodeChange = (event, index) => {
-    let newCodePairs = codePairs
-    newCodePairs[index] = event.target.value
-    setCodePairs(newCodePairs)
+    let newCodeArray = codeArray
+    newCodeArray[index] = event.target.value
+    setCodeArray(newCodeArray)
     let code = getCode()
     lookupCode(code)
 
@@ -56,8 +35,14 @@ function CommodityForm(props) {
     }
   }
 
-  const handleCountryChange = (event) => {
-    setCountryId(event.target.value)
+  const handleCodePaste = (event, index) => {
+    let codes = event.clipboardData.getData("Text")
+    setPastedCodes(codes)
+    lookupMultipleCodes(codes)
+  }
+
+  const handleTextAreaChange = (event, index) => {
+    lookupMultipleCodes(event.target.value)
   }
 
   useEffect(() => {
@@ -69,27 +54,17 @@ function CommodityForm(props) {
     }
   }, [countryId]);
 
-  const onCodePaste = (event, index) => {
-    let codes = event.clipboardData.getData("Text")
-    setPastedCodes(codes)
-    lookupMultipleCodes(codes)
-  }
-
-  const onTextAreaChange = (event, index) => {
-    lookupMultipleCodes(event.target.value)
-  }
-
   const isBoxDisabled = (index) => {
     if (index == 0) return false
     for (let i = index - 1; i >= 0; i--) {
-      if (codePairs[i] == "") return true
+      if (codeArray[i] == "") return true
     }
     return false
   }
 
   const getCode = () => {
-    let cleanedCodePairs = codePairs.map((element) => ("00" + element).slice(-2))
-    let zeroPaddedCode = cleanedCodePairs.slice(0, 10).join("")
+    let cleanedCodeArray = codeArray.map((element) => ("00" + element).slice(-2))
+    let zeroPaddedCode = cleanedCodeArray.slice(0, 10).join("")
     return zeroPaddedCode.replace(/0+$/g, '')
   }
 
@@ -113,7 +88,7 @@ function CommodityForm(props) {
   async function lookupCode(code) {
     if (code == "") return
     setIsLoading(true)
-    let url = "?code=" + code + "&country=" + countryId
+    const url = "?code=" + code + "&country=" + countryId
     const response = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
@@ -148,7 +123,7 @@ function CommodityForm(props) {
     setIsLoading(true)
     codes = codes.replace(/[^\d+,;]/g, '').replace(";", ",").replace(/,+$/g, '').replace(/^,+/g, '')
     if (codes == "") return
-    let url = "?codes=" + codes + "&country=" + countryId
+    const url = "?codes=" + codes + "&country=" + countryId
     const response = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
@@ -159,10 +134,10 @@ function CommodityForm(props) {
       (result) => {
         setIsLoading(false)
         if (result["status"] == "ok") {
-          let filteredCommodities = result.data.filter(item => {
-            return item && !confirmedCommodities.some(commodity => commodity.code === item.code)
+          let newCommodities = result.data.filter(item => {
+            return !confirmedCommodities.some(commodity => commodity.code === item.code)
           })
-          setUnconfirmedCommodities(filteredCommodities)
+          setUnconfirmedCommodities(newCommodities)
           setCodeLookupError(null)
         } else {
           setUnconfirmedCommodities([])
@@ -199,19 +174,14 @@ function CommodityForm(props) {
             ) : null}
 
             {pastedCodes ? (
-              <TextArea fieldName="codes" defaultValue={pastedCodes} onChange={onTextAreaChange} />
+              <CodeTextArea fieldName="codes" defaultValue={pastedCodes} onChange={handleTextAreaChange} />
             ) : (
-              <div className="govuk-form-group commodity-code-form-group">
-                {[...Array(boxCount)].map((x, index) =>
-                  <CodePairInput
-                    index={index}
-                    onChange={handleCodeChange}
-                    onPaste={onCodePaste}
-                    refContainer={inputRefContainer}
-                    disabled={isBoxDisabled(index)}
-                  />
-                )}
-              </div>
+              <CodeInput
+                onChange={handleCodeChange}
+                onPaste={handleCodePaste}
+                refContainer={inputRefContainer}
+                disabled={isBoxDisabled}
+              />
             )}
           </fieldset>
         </div>

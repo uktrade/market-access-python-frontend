@@ -34,6 +34,9 @@ class CommodityLookupForm(forms.Form):
             (country["id"], country["name"]) for country in countries
         ])
 
+    def clean_code(self):
+        code = self.cleaned_data["code"]
+        return code[:10].ljust(10, "0")
 
     def clean(self):
         cleaned_data = super().clean()
