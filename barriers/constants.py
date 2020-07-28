@@ -39,3 +39,5 @@ STATUSES_HELP_TEXT = Choices(
     (STATUSES.RESOLVED_IN_FULL, "Barrier has been resolved for all UK companies"),
     (STATUSES.DORMANT, "Barrier is present but not being pursued"),
 )
+
+UK_COUNTRY_ID = "80756b9a-5d95-e211-a939-e4115bead28a"

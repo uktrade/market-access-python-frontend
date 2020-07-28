@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views.generic import FormView
 
 from .mixins import BarrierMixin
+from barriers.constants import UK_COUNTRY_ID
 from barriers.forms.commodities import (
     CommodityLookupForm,
     MultiCommodityLookupForm,
@@ -70,7 +71,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
     def get_countries(self):
         return (
             self.barrier.country,
-            {"id": "80756b9a-5d95-e211-a939-e4115bead28a", "name": "United Kingdom"},
+            {"id": UK_COUNTRY_ID, "name": "United Kingdom"},
         )
 
     def add_confirmed_commodity(self, code, country):
