@@ -420,7 +420,7 @@ class CommodityCodeWidget(forms.MultiWidget):
 
     def decompress(self, value):
         if value:
-            pairs = [value[i:i+2] for i in range(0, len(value), 2)]
+            pairs = [value[i:i + 2] for i in range(0, len(value), 2)]
             pairs += [""] * self.box_count
             return pairs[:self.box_count]
         return [""] * self.box_count

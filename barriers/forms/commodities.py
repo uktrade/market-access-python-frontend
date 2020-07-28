@@ -2,8 +2,6 @@ import re
 
 from django import forms
 
-from .mixins import APIFormMixin
-
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 from utils.forms import CommodityCodeWidget, MultipleValueField
@@ -45,7 +43,7 @@ class CommodityLookupForm(forms.Form):
 
         client = MarketAccessAPIClient(self.token)
         try:
-            commodity = client.commodities.get(id=code)
+            commodity = client.commodities.get(id=code[:6].ljust(10, "0"))
             self.commodity = commodity.create_barrier_commodity(code=code, country_id=country)
         except APIHttpException:
             raise forms.ValidationError("Code not found")
@@ -71,7 +69,7 @@ class MultiCommodityLookupForm(forms.Form):
 
     def clean_codes(self):
         codes = self.cleaned_data["codes"]
-        codes = re.sub('[^/\d,;]', '', codes).replace(";", ",")
+        codes = re.sub(r"[^/\d,;]", "", codes).replace(";", ",")
         cleaned_codes = [code[:10].ljust(10, "0") for code in codes.split(",")]
         return list(set(cleaned_codes))
 

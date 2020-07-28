@@ -1,8 +1,6 @@
-import copy
-
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
 
 from .mixins import BarrierMixin
 from barriers.forms.commodities import (
@@ -10,7 +8,6 @@ from barriers.forms.commodities import (
     MultiCommodityLookupForm,
     UpdateBarrierCommoditiesForm,
 )
-from barriers.models import Commodity
 from utils.api.client import MarketAccessAPIClient
 
 
