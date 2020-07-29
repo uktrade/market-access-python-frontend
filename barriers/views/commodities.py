@@ -132,11 +132,12 @@ class BarrierEditCommodities(BarrierMixin, FormView):
                 country = commodity_data.get("country")
                 hs6_code = code[:6].ljust(10, "0")
                 commodity = commodity_lookup.get(hs6_code)
-                barrier_commodity = commodity.create_barrier_commodity(
-                    code=code,
-                    country_id=country,
-                )
-                barrier_commodities.append(barrier_commodity)
+                if commodity:
+                    barrier_commodity = commodity.create_barrier_commodity(
+                        code=code,
+                        country_id=country,
+                    )
+                    barrier_commodities.append(barrier_commodity)
             return barrier_commodities
 
         return []

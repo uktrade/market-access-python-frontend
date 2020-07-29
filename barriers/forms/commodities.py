@@ -38,8 +38,11 @@ class CommodityLookupForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        code = cleaned_data["code"]
-        country = cleaned_data["country"]
+        code = cleaned_data.get("code")
+        country = cleaned_data.get("country")
+
+        if not code or not country:
+            return
 
         client = MarketAccessAPIClient(self.token)
         try:
@@ -76,8 +79,12 @@ class MultiCommodityLookupForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        codes = cleaned_data["codes"]
-        country = cleaned_data["country"]
+        codes = cleaned_data.get("codes")
+        country = cleaned_data.get("country")
+
+        if not codes or not country:
+            return
+
         hs6_codes = [code[:6].ljust(10, "0") for code in codes]
 
         client = MarketAccessAPIClient(self.token)
@@ -107,7 +114,7 @@ class UpdateBarrierCommoditiesForm(forms.Form):
     countries = MultipleValueField(required=False)
 
     def __init__(self, barrier_id, token, *args, **kwargs):
-        self.barrier_id = barrier_id
+        self.barrier_id = str(barrier_id)
         self.token = token
         super().__init__(*args, **kwargs)
 
