@@ -186,24 +186,26 @@
         <form action="" method="post">
             {% csrf_token %}
 
-            {% if public_barrier.is_eligible and current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
-                {% if public_barrier.title and public_barrier.summary %}
-                    {% if public_barrier.unpublished_changes %}
-                        <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
-                        {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
-                            <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
+            {% if public_barrier.is_eligible or public_barrier.is_unpublished %}
+                {% if current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
+                    {% if public_barrier.title and public_barrier.summary %}
+                        {% if public_barrier.unpublished_changes %}
+                            <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
+                            {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
+                                <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
+                            {% endif %}
+                        {% else %}
+                            <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
                         {% endif %}
                     {% else %}
-                        <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
+                        <button disabled="disabled" aria-disabled="true" class="govuk-button publishing-button disabled" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
                     {% endif %}
-                {% else %}
-                    <button disabled="disabled" aria-disabled="true" class="govuk-button publishing-button disabled" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
                 {% endif %}
             {% endif %}
 
-            {% if public_barrier.is_ready or public_barrier.is_unpublished %}
+            {% if public_barrier.is_ready %}
                 {% if current_user|has_permission:"publish_barrier" %}
-                    <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="publish">Publish{% if public_barrier.first_published_on %} update{% endif %}</button>
+                    <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="publish">Publish{% if public_barrier.first_published_on and not public_barrier.unpublished_on %} update{% endif %}</button>
                 {% endif %}
                 {% if current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
                     <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="mark-as-in-progress">Mark as in progress</button>
