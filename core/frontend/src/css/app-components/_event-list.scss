@@ -63,6 +63,9 @@
 	@include govuk-font( $size: 19 );
 	margin: 0 0 govuk-em( 15, 19 ) 0;
 	overflow: hidden;
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 
 .event-list__item__document__list {
