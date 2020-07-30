@@ -81,6 +81,12 @@ class ProductHistoryItem(BaseHistoryItem):
     field_name = "Product, service or investment affected"
 
 
+class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
+    field = "public_eligibility_summary"
+    field_name = "Public eligibility summary"
+    modifier = "note"
+
+
 class ScopeHistoryItem(BaseHistoryItem):
     field = "problem_status"
     field_name = "Type"
@@ -188,6 +194,7 @@ class BarrierHistoryItem(PolymorphicBase):
         LocationHistoryItem,
         ProductHistoryItem,
         PriorityHistoryItem,
+        PublicEligibilitySummaryHistoryItem,
         ScopeHistoryItem,
         SectorsHistoryItem,
         SourceHistoryItem,
