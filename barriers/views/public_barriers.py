@@ -19,6 +19,11 @@ class PublicBarrierDetail(PublicBarrierMixin, BarrierMixin, FormView):
     def get_activity(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         activity_items = client.public_barriers.get_activity(barrier_id=self.barrier.id)
+        activity_items = [
+            item
+            for item in activity_items
+            if not (item.field == "public_eligibility_summary" and item.new_value == "")
+        ]
         activity_items += self.notes
         activity_items.sort(key=lambda object: object.date, reverse=True)
         return activity_items
