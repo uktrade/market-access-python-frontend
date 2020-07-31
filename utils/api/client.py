@@ -6,6 +6,7 @@ from django.conf import settings
 
 from .resources import (
     BarriersResource,
+    CommoditiesResource,
     DocumentsResource,
     GroupsResource,
     NotesResource,
@@ -27,6 +28,7 @@ class MarketAccessAPIClient:
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
         self.groups = GroupsResource(self)
+        self.commodities = CommoditiesResource(self)
         self.notes = NotesResource(self)
         self.public_barrier_notes = PublicBarrierNotesResource(self)
         self.public_barriers = PublicBarriersResource(self)

@@ -1,0 +1,92 @@
+.commodities-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: govuk-em( 32, 16 );
+
+    &__title {
+        clear: both;
+    }
+    &__item {
+        display: flex;
+        border-top: 1px solid $govuk-mid-grey;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $govuk-light-grey-25;
+        &:last-child {
+            border-bottom: 1px solid $govuk-mid-grey;
+        }
+    }
+    &__code {
+        padding: govuk-em( 10, 16 );
+        font-weight: bold;
+        min-width: 110px;
+        margin-right: govuk-em( 16, 16 );
+    }
+    &__description {
+        flex: 1;
+        padding: govuk-em( 10, 16 );
+    }
+    &__remove {
+        padding: govuk-em( 8, 16 );
+        margin-bottom: 0;
+    }
+    &__confirm {
+        margin: govuk-em( 8, 16 );
+    }
+    &__confirm-all {
+        @include govuk-clearfix;
+        float: right;
+        margin-right: govuk-em( 8, 16 );
+        margin-top: govuk-em( -16, 16 );
+    }
+}
+
+.commodity-code-input {
+    text-align: center;
+    background-color: #c7e8e5;
+    margin-right: govuk-em( 5, 16 );
+    &:disabled {
+        opacity: 0.5;
+    }
+    &:nth-child(1) {
+        background-color: #dbdcea;
+    }
+    &:nth-child(2) {
+        background-color: #c8e1ee;
+    }
+    &:nth-child(3) {
+        background-color: #c7e8e5;
+    }
+}
+
+.commodity-code-form-group {
+    float: left;
+    margin-right: govuk-em( 8, 16 );
+}
+
+.commodity-summary {
+    list-style: none;
+    padding: 0;
+    margin-top: govuk-em( 4, 16 );
+
+    &__country {
+        display: block;
+        margin-bottom: govuk-em( 4, 16 );
+    }
+    &__item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: govuk-em( 4, 16 );
+    }
+    &__code {
+        min-width: 110px;
+        margin-right: govuk-em( 16, 16 );
+    }
+    &__description {
+        flex: 1;
+    }
+    + .commodity-summary {
+        margin-top: govuk-em( 16, 16 );
+    }
+
+}

@@ -120,6 +120,33 @@
                 {% endif %}
             </dd>
 
+            <dt class="summary-group__list__key">Commodity codes</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.commodities %}
+                    {% for country_id, commodity_list in barrier.commodities_grouped_by_country.items %}
+                        <span class="commodity-summary__country">These codes are for {{ commodity_list.0.country.name }}</span>
+                        <ul class="commodity-summary">
+                            {% for commodity in commodity_list %}
+                                <li class="commodity-summary__item">
+                                    <span class="commodity-summary__code">{{ commodity.code_display }}</span>
+                                    <span class="commodity-summary__description">{{ commodity.commodity.full_description }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+
+                    {% if not barrier.archived %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_commodities' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No commodity codes</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="summary-group__list__value__add">Add commodity codes</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
+
             <dt class="summary-group__list__key">Trade direction</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.trade_direction_text %}

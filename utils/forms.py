@@ -409,3 +409,31 @@ class ClearableMixin:
     def _clean_fields(self):
         if "clear" not in self.data:
             return super()._clean_fields()
+
+
+class CommodityCodeWidget(forms.MultiWidget):
+    template_name = "partials/forms/widgets/commodity_code_widget.html"
+    box_count = 5
+
+    def __init__(self, attrs=None):
+        widget = (widgets.TextInput(), ) * self.box_count
+        super().__init__(widget, attrs=attrs)
+
+    def decompress(self, value):
+        if value:
+            pairs = [value[i:i + 2] for i in range(0, len(value), 2)]
+            pairs += [""] * self.box_count
+            return pairs[:self.box_count]
+        return [""] * self.box_count
+
+    def value_from_datadict(self, data, files, name):
+        if data.get(name):
+            return data.get(name)
+        values = super().value_from_datadict(data, files, name)
+        formatted_values = []
+        has_values = False
+        for value in reversed(values):
+            if has_values or value:
+                has_values = True
+                formatted_values.insert(0, value.zfill(2))
+        return "".join(formatted_values)

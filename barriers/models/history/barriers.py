@@ -1,4 +1,5 @@
 from barriers.constants import ARCHIVED_REASON
+from barriers.models.commodities import format_commodity_code
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
 from utils.metadata import Statuses
@@ -34,6 +35,51 @@ class CategoriesHistoryItem(BaseHistoryItem):
         ]
         category_names.sort()
         return category_names
+
+
+class CommoditiesHistoryItem(BaseHistoryItem):
+    field = "commodities"
+    field_name = "Commodities"
+
+    @property
+    def diff(self):
+        grouped = self.get_values_grouped_by_country()
+        diff = {}
+        for country_name, item in grouped.items():
+            old_codes = set([value["code"] for value in item["old_value"]])
+            new_codes = set([value["code"] for value in item["new_value"]])
+            added_codes = new_codes.difference(old_codes)
+            removed_codes = old_codes.difference(new_codes)
+            unchanged_codes = new_codes.intersection(old_codes)
+            diff[country_name] = {"removed": [], "unchanged": [], "added": []}
+            for value in item.get("old_value"):
+                if value["code"] in removed_codes:
+                    diff[country_name]["removed"].append(value)
+            for value in item.get("new_value"):
+                if value["code"] in added_codes:
+                    diff[country_name]["added"].append(value)
+                if value["code"] in unchanged_codes:
+                    diff[country_name]["unchanged"].append(value)
+
+        return diff
+
+    def get_values_grouped_by_country(self):
+        grouped = {}
+
+        for value in self.old_value:
+            grouped.setdefault(value["country"]["name"], {"old_value": [], "new_value": []})
+            grouped[value["country"]["name"]]["old_value"].append(value)
+
+        for value in self.new_value:
+            grouped.setdefault(value["country"]["name"], {"old_value": [], "new_value": []})
+            grouped[value["country"]["name"]]["new_value"].append(value)
+
+        return grouped
+
+    def get_value(self, value):
+        for item in value:
+            item["code_display"] = format_commodity_code(item["code"])
+        return value
 
 
 class CompaniesHistoryItem(BaseHistoryItem):
@@ -188,6 +234,7 @@ class BarrierHistoryItem(PolymorphicBase):
     subclasses = (
         ArchivedHistoryItem,
         CategoriesHistoryItem,
+        CommoditiesHistoryItem,
         CompaniesHistoryItem,
         EndDateHistoryItem,
         IsSummarySensitiveHistoryItem,

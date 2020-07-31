@@ -40,6 +40,10 @@ STATUSES_HELP_TEXT = Choices(
     (STATUSES.DORMANT, "Barrier is present but not being pursued"),
 )
 
+
+UK_COUNTRY_ID = "80756b9a-5d95-e211-a939-e4115bead28a"
+
+
 PUBLIC_BARRIER_STATUSES = Choices(
     (0, "UNKNOWN", "To be decided"),
     (10, "INELIGIBLE", "Not for public view"),

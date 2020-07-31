@@ -8,6 +8,7 @@ from barriers.constants import Statuses
 from barriers.models import (
     Assessment,
     Barrier,
+    Commodity,
     HistoryItem,
     Note,
     PublicBarrier,
@@ -247,6 +248,11 @@ class SavedSearchesResource(APIResource):
 class GroupsResource(APIResource):
     resource_name = "groups"
     model = Group
+
+
+class CommoditiesResource(APIResource):
+    resource_name = "commodities"
+    model = Commodity
 
 
 class PublicBarrierNotesResource(APIResource):
