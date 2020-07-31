@@ -1,5 +1,5 @@
 <div id="{{ field.name }}" class="{% form_group_classes field.errors %}">
-    <label class="govuk-label govuk-label--s" for="{{ field.name }}">{{ field.label }}</label>
+    <label class="govuk-label{% if label_classes %} {{ label_classes }}{% else %} govuk-label--s{% endif %}" for="{{ field.name }}">{{ field.label }}</label>
 
     {% if field.help_text %}
     <span class="govuk-hint">{{ field.help_text }}</span>

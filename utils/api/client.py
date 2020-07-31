@@ -11,6 +11,8 @@ from .resources import (
     GroupsResource,
     NotesResource,
     UsersResource,
+    PublicBarrierNotesResource,
+    PublicBarriersResource,
     ReportsResource,
     SavedSearchesResource,
 )
@@ -28,6 +30,8 @@ class MarketAccessAPIClient:
         self.groups = GroupsResource(self)
         self.commodities = CommoditiesResource(self)
         self.notes = NotesResource(self)
+        self.public_barrier_notes = PublicBarrierNotesResource(self)
+        self.public_barriers = PublicBarriersResource(self)
         self.reports = ReportsResource(self)
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)

@@ -25,3 +25,15 @@ class Note(APIModel):
             "id": self.id,
             "text": self.text,
         }
+
+
+class PublicBarrierNote(APIModel):
+    model = "public_barrier_note"
+    field = "text"
+    modifier = "note"
+
+    def __init__(self, data):
+        self.data = data
+        self.date = dateutil.parser.parse(data["created_on"])
+        self.text = data["text"]
+        self.user = data["created_by"]

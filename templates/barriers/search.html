@@ -52,6 +52,8 @@
                     </fieldset>
                 </div>
 
+                {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
+
                 {% if filters %}
                 <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
                 {% endif %}
@@ -125,6 +127,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.wto %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.public_view %}
                     </ul>
                 {% endif %}
             </div>
@@ -185,7 +188,7 @@
                                 <dt class="filter-results-list__item__definitions__key">Updated:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
 
-                                {% if barrier.sectors %}
+                                {% if barrier.sector_names %}
                                 <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
                                 {% endif %}

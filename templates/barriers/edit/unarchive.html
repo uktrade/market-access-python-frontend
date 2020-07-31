@@ -28,7 +28,7 @@
         {% csrf_token %}
 
         <div id="{{ form.reason.name }}" class="govuk-form-group{% if form.reason.errors %} govuk-form-group--error{% endif %}">
-            {% include "partials/forms/textarea.html" with field=form.reason max_length=form.reason.field.max_length|safe %}
+            {% include "partials/forms/textarea.html" with field=form.reason character_count=True %}
         </div>
 
         <input type="submit" class="govuk-button" value="Confirm">

@@ -31,10 +31,6 @@
 
 {% block page_content %}
 
-    {% if toast and toast.heading %}
-        {% include 'partials/toast.html' %}
-    {% endif %}
-
     {% include 'barriers/partials/barrier_tabs.html' with active='detail' %}
 
     <section class="summary-group">

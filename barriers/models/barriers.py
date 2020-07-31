@@ -1,4 +1,4 @@
-from barriers.constants import ARCHIVED_REASON
+from barriers.constants import ARCHIVED_REASON, PUBLIC_BARRIER_STATUSES
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
 
@@ -18,6 +18,7 @@ class Barrier(APIModel):
     _country = None
     _location = None
     _metadata = None
+    _public_barrier = None
     _sectors = None
     _status = None
     _wto_profile = None
@@ -57,6 +58,10 @@ class Barrier(APIModel):
                 for category in self.data.get("categories", [])
             ]
         return self._categories
+
+    @property
+    def category_titles(self):
+        return [category["title"] for category in self.categories]
 
     @property
     def country(self):
@@ -106,6 +111,12 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["modified_on"])
 
     @property
+    def public_barrier(self):
+        if self._public_barrier is None and self.data.get("public_barrier"):
+            self._public_barrier = PublicBarrier(self.data.get("public_barrier"))
+        return self._public_barrier
+
+    @property
     def problem_status_text(self):
         return self.metadata.get_problem_status(self.data["problem_status"])
 
@@ -127,9 +138,11 @@ class Barrier(APIModel):
 
     @property
     def sector_names(self):
+        if self.all_sectors:
+            return ["All sectors"]
         if self.sectors:
             return [sector.get("name", "Unknown") for sector in self.sectors]
-        return ["All sectors"]
+        return []
 
     @property
     def source_name(self):
@@ -183,3 +196,129 @@ class Barrier(APIModel):
     @property
     def is_hibernated(self):
         return self.status["id"] == "5"
+
+
+class PublicBarrier(APIModel):
+    _country = None
+    _internal_country = None
+    _internal_sectors = None
+    _internal_status = None
+    _metadata = None
+    _sectors = None
+    _status = None
+
+    @property
+    def any_internal_sectors_changed(self):
+        return (
+            self.data.get("internal_sectors_changed")
+            or self.data.get("internal_all_sectors_changed")
+        )
+
+    @property
+    def category_titles(self):
+        return [category["title"] for category in self.categories]
+
+    @property
+    def internal_categories(self):
+        return self.data.get("internal_categories", [])
+
+    @property
+    def internal_category_titles(self):
+        return [category["title"] for category in self.internal_categories]
+
+    @property
+    def first_published_on(self):
+        if self.data.get("first_published_on") is not None:
+            return dateutil.parser.parse(self.data["first_published_on"])
+
+    @property
+    def last_published_on(self):
+        if self.data.get("last_published_on") is not None:
+            return dateutil.parser.parse(self.data["last_published_on"])
+
+    @property
+    def unpublished_changes(self):
+        if self.data.get("last_published_on") is None:
+            return False
+        return self.data.get("unpublished_changes")
+
+    @property
+    def unpublished_on(self):
+        if self.data.get("unpublished_on") is not None:
+            return dateutil.parser.parse(self.data["unpublished_on"])
+
+    @property
+    def is_eligible(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE
+
+    @property
+    def is_published(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED
+
+    @property
+    def is_ready(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.READY
+
+    @property
+    def is_unpublished(self):
+        return self.public_view_status == PUBLIC_BARRIER_STATUSES.UNPUBLISHED
+
+    @property
+    def latest_published_version(self):
+        if self.data.get("latest_published_version") is not None:
+            return PublicBarrier(self.data["latest_published_version"])
+
+    @property
+    def public_status_text(self):
+        return {
+            PUBLIC_BARRIER_STATUSES.UNKNOWN: "To be decided",
+            PUBLIC_BARRIER_STATUSES.INELIGIBLE: "Not for public view",
+            PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Allowed - yet to be published",
+            PUBLIC_BARRIER_STATUSES.READY: "Allowed - yet to be published",
+            PUBLIC_BARRIER_STATUSES.PUBLISHED: "Published",
+            PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "Unpublished",
+        }.get(self.public_view_status)
+
+    @property
+    def ready_text(self):
+        return {
+            PUBLIC_BARRIER_STATUSES.UNKNOWN: "Not ready to publish",
+            PUBLIC_BARRIER_STATUSES.INELIGIBLE: "",
+            PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Not ready to publish",
+            PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
+            PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
+            PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
+        }.get(self.public_view_status)
+
+    @property
+    def internal_all_sectors(self):
+        return self.data.get("internal_all_sectors")
+
+    @property
+    def internal_sectors(self):
+        return self.data.get("internal_sectors", [])
+
+    @property
+    def internal_sector_names(self):
+        if self.internal_all_sectors:
+            return ["All sectors"]
+        if self.internal_sectors:
+            return [sector.get("name", "Unknown") for sector in self.internal_sectors]
+        return []
+
+    @property
+    def sector_names(self):
+        if self.all_sectors:
+            return ["All sectors"]
+        if self.sectors:
+            return [sector.get("name", "Unknown") for sector in self.sectors]
+        return []
+
+    @property
+    def tab_badge(self):
+        if self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
+            return "Eligible"
+        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.READY:
+            return "Ready"
+        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:
+            return "Published"

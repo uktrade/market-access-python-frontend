@@ -125,11 +125,12 @@ class YesNoBooleanField(forms.ChoiceField):
     Display a BooleanField as Yes and No radio buttons
     """
 
-    def __init__(self, **kwargs):
-        choices = (
-            ("yes", "Yes"),
-            ("no", "No"),
-        )
+    def __init__(self, choices=None, **kwargs):
+        if not choices:
+            choices = (
+                ("yes", "Yes"),
+                ("no", "No"),
+            )
         super().__init__(choices=choices, **kwargs)
 
     def prepare_value(self, data):

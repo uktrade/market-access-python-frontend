@@ -1,0 +1,12 @@
+<div class="govuk-form-group{% if field.errors %} govuk-form-group--error{% endif %}">
+    <fieldset class="govuk-fieldset">
+        {% form_field_error field %}
+
+        <div class="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="{{ field.name }}" name="{{ field.name }}" type="checkbox">
+                <label class="govuk-label govuk-checkboxes__label" for="{{ field.name }}">{{ field.label }}</label>
+            </div>
+        </div>
+    </fieldset>
+</div>

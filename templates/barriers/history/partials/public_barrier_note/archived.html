@@ -1,0 +1,9 @@
+{% if item.old_value.archived is True and item.new_value.archived is False %}
+    <div class="history-item__old-value">
+        <span class="diff__ins">{{ item.old_value.text|linebreaksbr }}</span>
+    </div>
+{% elif item.old_value.archived is False and item.new_value.archived is True %}
+    <div class="history-item__old-value">
+        <span class="diff__del">{{ item.new_value.text|linebreaksbr }}</span>
+    </div>
+{% endif %}
