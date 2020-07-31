@@ -10,7 +10,8 @@
     <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
     {% if not barrier.archived %}
         <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
-        {% if item.user.id == user.id %}
+
+        {% if item.user.id == current_user.id %}
             <a class="event-list__item__delete-link js-delete-modal" href="{% url 'barriers:delete_note' barrier.id item.id %}">Delete</a>
         {% endif %}
     {% endif %}

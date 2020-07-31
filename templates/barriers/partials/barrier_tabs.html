@@ -38,4 +38,14 @@
             <a class="page-tabs__tab__text" href="{% url 'barriers:history' barrier.id %}">History</a>
         </li>
     {% endif %}
+
+    {% if active == 'public' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Public view{% if public_barrier.tab_badge %} <span class="ma-badge ma-badge--in-tab">{{ public_barrier.tab_badge }}</span>{% endif %}</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Public view{% if barrier.public_barrier.tab_badge %} <span class="ma-badge ma-badge--in-tab">{{ barrier.public_barrier.tab_badge }}</span>{% endif %}</a>
+        </li>
+    {% endif %}
 </ul>

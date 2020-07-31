@@ -1,0 +1,7 @@
+<div class="govuk-warning-text{% if extra_classes %} {{ extra_classes }}{% endif %}">
+    <span class="govuk-warning-text__icon{% if modifier %} govuk-warning-text__icon--{{ modifier }}{% endif %}" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text{% if modifier %} govuk-warning-text__text--{{ modifier }}{% endif %}">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        {{ warning_text }}
+    </strong>
+</div>

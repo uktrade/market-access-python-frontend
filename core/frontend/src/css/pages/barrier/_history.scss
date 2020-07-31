@@ -77,10 +77,24 @@
     background-color: $govuk-green-25;
     color: $govuk-green;
     padding: govuk-em( 2, 16 );
+    &--block {
+        display: block;
+        float: left;
+        clear: both;
+        line-height: 1;
+        margin-top: govuk-em( 8, 16 );
+    }
 }
 
 
 .diff__del {
     text-decoration: line-through;
     color: $govuk-red;
+    &--block {
+        display: block;
+        float: left;
+        clear: both;
+        line-height: 1;
+        margin-top: govuk-em( 8, 16 );
+    }
 }

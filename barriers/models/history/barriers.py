@@ -81,6 +81,12 @@ class ProductHistoryItem(BaseHistoryItem):
     field_name = "Product, service or investment affected"
 
 
+class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
+    field = "public_eligibility_summary"
+    field_name = "Public eligibility summary"
+    modifier = "note"
+
+
 class ScopeHistoryItem(BaseHistoryItem):
     field = "problem_status"
     field_name = "Type"
@@ -94,10 +100,13 @@ class SectorsHistoryItem(BaseHistoryItem):
     field_name = "Sectors affected"
 
     def get_value(self, value):
-        return [
-            self.metadata.get_sector(sector_id).get("name", "Unknown")
-            for sector_id in value or []
-        ]
+        return {
+            "all_sectors": value["all_sectors"],
+            "sectors": [
+                self.metadata.get_sector(sector_id).get("name", "Unknown")
+                for sector_id in value["sectors"] or []
+            ],
+        }
 
 
 class SourceHistoryItem(BaseHistoryItem):
@@ -185,6 +194,7 @@ class BarrierHistoryItem(PolymorphicBase):
         LocationHistoryItem,
         ProductHistoryItem,
         PriorityHistoryItem,
+        PublicEligibilitySummaryHistoryItem,
         ScopeHistoryItem,
         SectorsHistoryItem,
         SourceHistoryItem,

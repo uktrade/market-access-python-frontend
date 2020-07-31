@@ -22,6 +22,8 @@
         "summary": "Because of laws for pollution reduction, which Parlament imposed under pressure from EU, they are limiting the imports of sports cars.",
         "is_summary_sensitive": false,
         "categories": [115, 141],
+        "public_eligibility": true,
+        "public_eligibility_summary": "Eligible",
         "reported_on": "2019-10-28T11:45:44.720000Z",
         "reported_by": "Boris Karaberberov",
         "status": {

@@ -171,14 +171,20 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "date": "2019-10-28T11:36:55.767000Z",
                 "model": "barrier",
                 "field": "sectors",
-                "old_value": [],
-                "new_value": ["9838cecc-5f95-e211-a939-e4115bead28a"],
+                "old_value": {
+                    "all_sectors": False,
+                    "sectors": [],
+                },
+                "new_value": {
+                    "all_sectors": False,
+                    "sectors": ["9838cecc-5f95-e211-a939-e4115bead28a"],
+                },
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
         assert item.field_name == "Sectors affected"
-        assert item.old_value == []
-        assert item.new_value == ["Automotive"]
+        assert item.old_value["sectors"] == []
+        assert item.new_value["sectors"] == ["Automotive"]
 
     def test_source(self):
         item = HistoryItem(

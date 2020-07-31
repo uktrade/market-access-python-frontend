@@ -6,7 +6,12 @@ from django.test import override_settings, TestCase
 from barriers.models import Assessment
 from core.filecache import memfiles
 from users.models import User
-from utils.api.resources import BarriersResource, NotesResource, UsersResource
+from utils.api.resources import (
+    BarriersResource,
+    NotesResource,
+    PublicBarriersResource,
+    UsersResource,
+)
 
 from mock import patch
 
@@ -25,6 +30,7 @@ class MarketAccessTestCase(TestCase):
         self.init_get_activity_patcher()
         self.init_get_interactions_patcher()
         self.init_get_current_user_patcher()
+        self.init_get_public_barrier_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -67,6 +73,16 @@ class MarketAccessTestCase(TestCase):
         self.get_current_user.return_value = self.current_user
         self.addCleanup(self.get_current_user_patcher.stop)
 
+    def init_get_public_barrier_patcher(self):
+        self.get_public_barrier_patcher = patch(
+            "utils.api.resources.PublicBarriersResource.get"
+        )
+        self.mock_get_public_barrier = self.get_public_barrier_patcher.start()
+        self.mock_get_public_barrier.return_value = PublicBarriersResource.model(
+            self.public_barrier
+        )
+        self.addCleanup(self.get_public_barrier_patcher.stop)
+
     def delete_session_key(self, key):
         try:
             del self.client.session[key]
@@ -95,6 +111,15 @@ class MarketAccessTestCase(TestCase):
     @property
     def barrier(self):
         return self.barriers[0]
+
+    @property
+    def public_barrier(self):
+        return {
+            "title": "Public Title",
+            "summary": "Public summary",
+            "public_view_status": 20,
+            "status": 0,
+        }
 
     @property
     def history(self):

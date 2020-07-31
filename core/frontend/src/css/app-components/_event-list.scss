@@ -46,6 +46,7 @@
 }
 
 .event-list__item__document {
+	margin-top: govuk-em( 16, 16 );
 }
 
 .event-list__item__heading {
@@ -59,12 +60,10 @@
 }
 
 .event-list__item__text {
-
 	@include govuk-font( $size: 19 );
 	margin: 0 0 govuk-em( 15, 19 ) 0;
 	overflow: hidden;
-
-	&:last-of-type {
+	&:last-child {
 		margin-bottom: 0;
 	}
 }
@@ -83,7 +82,7 @@
 
 .event-list__item__edit-link {
 	display: inline-block;
-	margin-bottom: govuk-em( 30, 19 );
+	margin-right: govuk-em( 8, 16 );
 }
 
 .event-list__item__document__list__item__status {
