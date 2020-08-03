@@ -246,9 +246,15 @@
             </dd>
         </dl>
 
-        {% if not barrier.archived %}
-        <a href="{% url 'barriers:archive' barrier.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive this barrier</a>
+        {% if not barrier.archived and not barrier.public_barrier.is_published %}
+            <a href="{% url 'barriers:archive' barrier.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive this barrier</a>
         {% endif %}
+
+        {% if not barrier.archived and barrier.public_barrier.is_published %}
+            <p>Archiving is disabled. Please remove the barrier from <a href="{% url 'barriers:public_barrier_detail' barrier.id %}">Public View</a> prior to archiving.</p>
+            <a class="govuk-button govuk-button--secondary" data-module="govuk-button" disabled="true">Archive this barrier</a>
+        {% endif %}
+
     </section>
 
     <section class="barrier-content">
