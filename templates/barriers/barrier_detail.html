@@ -246,7 +246,7 @@
             </dd>
         </dl>
 
-        {% if not barrier.archived and not barrier.public_barrier.is_published%}
+        {% if not barrier.archived and not barrier.public_barrier.is_published %}
             <a href="{% url 'barriers:archive' barrier.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive this barrier</a>
         {% endif %}
 
