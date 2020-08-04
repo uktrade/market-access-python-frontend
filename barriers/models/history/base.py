@@ -9,6 +9,7 @@ class BaseHistoryItem(APIModel):
     _metadata = None
     _new_value = None
     _old_value = None
+    modifier = ""
 
     @property
     def date(self):

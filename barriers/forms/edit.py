@@ -25,7 +25,7 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, barrier_title=self.cleaned_data["title"])
+        client.barriers.patch(id=self.id, title=self.cleaned_data["title"])
 
 
 class UpdateBarrierProductForm(APIFormMixin, forms.Form):

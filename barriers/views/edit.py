@@ -19,7 +19,7 @@ class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierTitleForm
 
     def get_initial(self):
-        return {"title": self.barrier.barrier_title}
+        return {"title": self.barrier.title}
 
 
 class BarrierEditProduct(APIBarrierFormViewMixin, FormView):
@@ -47,7 +47,7 @@ class BarrierEditSource(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {
-            "source": self.barrier.source,
+            "source": self.barrier.source.get("code"),
             "other_source": self.barrier.other_source,
         }
 

@@ -45,7 +45,7 @@ class EconomicAssessment(
     def get_initial(self):
         if self.request.method == "GET" and self.barrier.has_assessment:
             return {
-                "impact": self.assessment.impact,
+                "impact": self.assessment.impact.get("code"),
                 "description": self.assessment.explanation,
             }
 

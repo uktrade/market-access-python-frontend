@@ -16,7 +16,7 @@ class EditTitleTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["title"] == self.barrier["barrier_title"]
+        assert form.initial["title"] == self.barrier["title"]
 
     @patch("utils.api.resources.APIResource.patch")
     def test_title_cannot_be_empty(self, mock_patch):
@@ -38,7 +38,7 @@ class EditTitleTestCase(MarketAccessTestCase):
             data={"title": "New Title"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], barrier_title="New Title",
+            id=self.barrier["id"], title="New Title",
         )
         assert response.status_code == HTTPStatus.FOUND
 

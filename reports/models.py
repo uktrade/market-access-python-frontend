@@ -32,10 +32,6 @@ class Report(APIModel):
         return "No"
 
     @property
-    def country(self):
-        return self.metadata.get_country(self.export_country)
-
-    @property
     def problem_status_text(self):
         return self.metadata.get_problem_status(self.problem_status)
 

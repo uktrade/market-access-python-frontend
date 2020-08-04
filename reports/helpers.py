@@ -17,8 +17,8 @@ from utils.api.client import MarketAccessAPIClient
 #     "status_summary",       # this is set in step 5 - without this the draft barrier cannot be submitted (MAR-221)
 #     "status_date",          # n/a
 #     # ==============================
-#     "export_country",       # Step 2 - Location - UUID
-#     "country_admin_areas",  # Step 2 - Location - LIST of UUIDS
+#     "country",              # Step 2 - Location - UUID
+#     "admin_areas",          # Step 2 - Location - LIST of UUIDS
 #     "trade_direction",      # Step 2 - Location - INT
 #     # ==============================
 #     "sectors_affected",     # Step 3 - Sectors - BOOL
@@ -28,7 +28,7 @@ from utils.api.client import MarketAccessAPIClient
 #     "product",              # Step 4 - About - STR
 #     "source",               # Step 4 - About - STR
 #     "other_source",         # Step 4 - About - STR
-#     "barrier_title",        # Step 4 - About - STR
+#     "title",                # Step 4 - About - STR
 #     "tags"                  # Step 4 - About - LIST of IDS
 #     # ==============================
 #     "summary",  # Step 5 - Summary - STR
@@ -291,12 +291,12 @@ class ReportFormGroup:
 
     def get_location_form_data(self):
         return {
-            "country": self.barrier.data.get("export_country")
+            "country": self.barrier.data.get("country")
         }
 
     def get_has_admin_areas_form_data(self):
         data = {"has_admin_areas": None}
-        if self.barrier.data["country_admin_areas"]:
+        if self.barrier.data["admin_areas"]:
             data["has_admin_areas"] = HasAdminAreas.NO
         else:
             data["has_admin_areas"] = HasAdminAreas.YES
@@ -327,7 +327,7 @@ class ReportFormGroup:
 
     def get_about_form(self):
         data = {
-            "barrier_title": self.barrier.data.get("barrier_title") or "",
+            "title": self.barrier.data.get("title") or "",
             "product": self.barrier.data.get("product") or "",
             "source": self.barrier.data.get("source"),
             "other_source": self.barrier.data.get("other_source") or "",
@@ -353,7 +353,11 @@ class ReportFormGroup:
         self.location_form = self.get_location_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
         self.trade_direction_form = self.get_trade_direction_form_data()
-        self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas") or ())
+        admin_area_ids = [
+            admin_area["id"]
+            for admin_area in self.barrier.data.get("admin_areas", [])
+        ]
+        self.selected_admin_areas = ', '.join(admin_area_ids)
         self.sectors_affected = self.get_sectors_affected_form_data()
         self.selected_about_formsectors = self.get_selected_sectors()
         self.about_form = self.get_about_form()
@@ -369,8 +373,8 @@ class ReportFormGroup:
         """Combined payload of multiple steps (Status & Location)"""
         payload = {
             "problem_status": self.problem_status_form.get("status"),
-            "export_country": self.location_form.get("country"),
-            "country_admin_areas": self.selected_admin_areas_as_list,
+            "country": self.location_form.get("country"),
+            "admin_areas": self.selected_admin_areas_as_list,
             "trade_direction": self.trade_direction_form.get("trade_direction"),
         }
         payload.update(self.status_form)

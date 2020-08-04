@@ -27,8 +27,8 @@ class EditLocationForm(forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.barrier_id,
-            export_country=self.cleaned_data["country"],
-            country_admin_areas=self.cleaned_data["admin_areas"],
+            country=self.cleaned_data["country"],
+            admin_areas=self.cleaned_data["admin_areas"],
         )
 
 

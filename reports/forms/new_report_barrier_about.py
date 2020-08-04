@@ -40,7 +40,7 @@ class RelatedToBrexit:
 
 class NewReportBarrierAboutForm(forms.Form):
     BS = BarrierSource()
-    barrier_title = forms.CharField(
+    title = forms.CharField(
         label="Name this barrier",
         help_text="Include the name of the product, "
                   "service or investment and the type of problem. "

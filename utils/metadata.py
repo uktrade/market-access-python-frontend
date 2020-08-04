@@ -280,9 +280,9 @@ class Metadata:
 
     def get_categories_by_group(self, group):
         return [
-            barrier_type
-            for barrier_type in self.get_category_list(sort=False)
-            if barrier_type["category"] == group
+            category
+            for category in self.get_category_list(sort=False)
+            if category["category"] == group
         ]
 
     def get_goods(self):

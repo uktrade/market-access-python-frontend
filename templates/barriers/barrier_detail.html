@@ -217,7 +217,7 @@
 
             <dt class="summary-group__list__key">Information source</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.source_name }}{% if barrier.other_source %}<br>{{ barrier.other_source }}{% endif %}
+                {{ barrier.source.name }}{% if barrier.other_source %}<br>{{ barrier.other_source }}{% endif %}
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_source' barrier.id %}">Edit</a>
                 {% endif %}
@@ -242,7 +242,7 @@
 
             <dt class="summary-group__list__key">Barrier reported by</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.reported_by }}
+                {{ barrier.reported_by.name }}
             </dd>
         </dl>
 
@@ -271,7 +271,7 @@
 
                     {% endif %}
                 </span>
-                <h2 class="barrier-status-details__heading">Barrier {% if barrier.is_partially_resolved %}partially resolved{% elif barrier.is_resolved %}resolved{% else %}dormant{% endif %} <span class="barrier-status-details__heading__caption">in {{ barrier.status.date|date:"F Y" }}</span></h2>
+                <h2 class="barrier-status-details__heading">Barrier {% if barrier.is_partially_resolved %}partially resolved{% elif barrier.is_resolved %}resolved{% else %}dormant{% endif %} <span class="barrier-status-details__heading__caption">in {{ barrier.status_date|date:"F Y" }}</span></h2>
                 <h3 class="barrier-status-details__sub-heading">Summary {% if barrier.is_resolved or barrier.is_partially_resolved %} of resolution{% endif %}</h3>
                 <p class="barrier-status-details__text">{{ barrier.status_summary|linebreaksbr }}</p>
                 <a href="{% url 'barriers:edit_status' barrier.id %}"> Edit</a>

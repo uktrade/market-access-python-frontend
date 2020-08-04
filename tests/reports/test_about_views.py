@@ -28,7 +28,7 @@ class AboutViewTestCase(ReportsTestCase):
 
     def test_about_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - About the barrier</title>'
-        name_input_field = '<input class="govuk-input" id="barrier_title"'
+        name_input_field = '<input class="govuk-input" id="title"'
         product_input_field = '<input class="govuk-input" id="product"'
         barrier_source_radio_container = (
             '<div class="govuk-radios barrier-source govuk-radios--conditional" data-module="radios">'
@@ -68,7 +68,7 @@ class AboutViewTestCase(ReportsTestCase):
 
         assert HTTPStatus.OK == response.status_code
         assert form.is_valid() is False
-        self.assertFormError(response, 'form', 'barrier_title', "Enter a name for this barrier")
+        self.assertFormError(response, 'form', 'title', "Enter a name for this barrier")
         self.assertFormError(response, 'form', 'product', "Enter a product, service or investment")
         self.assertFormError(response, 'form', 'source', "Select how you became aware of the barrier")
         assert ERROR_HTML.SUMMARY_HEADER in html
@@ -84,7 +84,7 @@ class AboutViewTestCase(ReportsTestCase):
         mock_update.return_value = Report(self.draft)
         redirect_url = reverse('reports:barrier_summary_uuid', kwargs={"barrier_id": self.draft["id"]})
         data = {
-            "barrier_title": "wibble",
+            "title": "wibble",
             "product": "wobble",
             "source": "COMPANY",
         }
@@ -106,7 +106,7 @@ class AboutViewTestCase(ReportsTestCase):
         redirect_url = reverse('reports:draft_barrier_details_uuid', kwargs={"barrier_id": self.draft["id"]})
         data = {
             "action": "exit",
-            "barrier_title": "wibble",
+            "title": "wibble",
             "product": "wobble",
             "source": "COMPANY",
         }
