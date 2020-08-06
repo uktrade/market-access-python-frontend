@@ -102,10 +102,6 @@ class Barrier(APIModel):
         return self._public_barrier
 
     @property
-    def created_on(self):
-        return dateutil.parser.parse(self.data["created_on"])
-
-    @property
     def reported_by(self):
         return self.created_by
 
