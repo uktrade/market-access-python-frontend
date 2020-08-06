@@ -3,19 +3,25 @@
     "step": "1",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
     "status_summary": null,
     "country": null,
-    "admin_areas": null,
+    "admin_areas": [],
     "trade_direction": null,
     "sectors_affected": null,
     "all_sectors": null,
-    "sectors": null,
+    "sectors": [],
     "product": null,
     "source": null,
     "other_source": null,
@@ -66,19 +72,31 @@
     "step": "2",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_summary": null,
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
-    "country": "d9f682ac-5d95-e211-a939-e4115bead28a",
-    "admin_areas": null,
-    "trade_direction": 1,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
     "sectors_affected": null,
     "all_sectors": null,
-    "sectors": null,
+    "sectors": [],
     "product": null,
     "source": null,
     "other_source": null,
@@ -129,16 +147,28 @@
     "step": "30",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_summary": null,
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
-    "country": "d9f682ac-5d95-e211-a939-e4115bead28a",
-    "admin_areas": null,
-    "trade_direction": 1,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trade_direction": {
+        "id": 1,
+        "name": "Exporting from the UK"
+    },
     "sectors_affected": false,
     "all_sectors": false,
     "sectors": [],
@@ -192,16 +222,28 @@
     "step": "31",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_summary": null,
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
-    "country": "d9f682ac-5d95-e211-a939-e4115bead28a",
-    "admin_areas": null,
-    "trade_direction": 1,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
     "sectors_affected": true,
     "all_sectors": false,
     "sectors": [],
@@ -255,16 +297,28 @@
     "step": "310",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_summary": null,
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
-    "country": "d9f682ac-5d95-e211-a939-e4115bead28a",
-    "admin_areas": null,
-    "trade_direction": 1,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
     "sectors_affected": true,
     "all_sectors": false,
     "sectors": [],
@@ -318,20 +372,35 @@
     "step": "4",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_summary": null,
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
-    "country": "d9f682ac-5d95-e211-a939-e4115bead28a",
-    "admin_areas": null,
-    "trade_direction": 1,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
     "sectors_affected": true,
     "all_sectors": false,
     "sectors": [
-        "9538cecc-5f95-e211-a939-e4115bead28a"
+      {
+        "id": "9538cecc-5f95-e211-a939-e4115bead28a",
+        "name": "Sector name"
+      }
     ],
     "product": null,
     "source": null,
@@ -383,23 +452,41 @@
     "step": "5",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_summary": null,
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
-    "country": "d9f682ac-5d95-e211-a939-e4115bead28a",
-    "admin_areas": null,
-    "trade_direction": 1,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
     "sectors_affected": true,
     "all_sectors": false,
     "sectors": [
-        "9538cecc-5f95-e211-a939-e4115bead28a"
+      {
+        "id": "9538cecc-5f95-e211-a939-e4115bead28a",
+        "name": "Sector name"
+      }
     ],
     "product": "wobble",
-    "source": "COMPANY",
+    "source": {
+      "code": "COMPANY",
+      "name": "Company"
+    },
     "other_source": null,
     "title": "wibble",
     "summary": null,
@@ -448,23 +535,41 @@
     "step": "6",
     "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
     "code": "B-20-PKF",
-    "problem_status": 2,
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
     "draft": true,
-    "status": 1,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
     "status_summary": null,
     "status_date": null,
     "sub_status": null,
     "sub_status_other": null,
-    "country": "d9f682ac-5d95-e211-a939-e4115bead28a",
-    "admin_areas": null,
-    "trade_direction": 1,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
     "sectors_affected": true,
     "all_sectors": false,
     "sectors": [
-        "9538cecc-5f95-e211-a939-e4115bead28a"
+      {
+        "id": "9538cecc-5f95-e211-a939-e4115bead28a",
+        "name": "Sector name"
+      }
     ],
     "product": "wobble",
-    "source": "COMPANY",
+    "source": {
+      "code": "COMPANY",
+      "name": "Company"
+    },
     "other_source": null,
     "title": "wibble",
     "summary": "wibble",

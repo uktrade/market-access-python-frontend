@@ -146,7 +146,7 @@ class EditSourceTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["source"] == self.barrier["source"]
+        assert form.initial["source"] == self.barrier["source"]["code"]
 
     @patch("utils.api.resources.APIResource.patch")
     def test_source_cannot_be_empty(self, mock_patch):
@@ -292,7 +292,7 @@ class EditProblemStatusTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["problem_status"] == self.barrier["problem_status"]
+        assert form.initial["problem_status"] == self.barrier["term"]["id"]
 
     @patch("utils.api.resources.APIResource.patch")
     def test_problem_status_cannot_be_empty(self, mock_patch):
@@ -335,7 +335,7 @@ class EditProblemStatusTestCase(MarketAccessTestCase):
             data={"problem_status": "1"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], problem_status="1",
+            id=self.barrier["id"], term="1",
         )
         assert response.status_code == HTTPStatus.FOUND
 

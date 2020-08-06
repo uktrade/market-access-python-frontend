@@ -163,7 +163,7 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
-            id=self.id, problem_status=self.cleaned_data["problem_status"]
+            id=self.id, term=self.cleaned_data["problem_status"]
         )
 
 

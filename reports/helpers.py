@@ -274,14 +274,14 @@ class ReportFormGroup:
 
     def get_problem_status_form_data(self):
         return {
-            "status": str(self.barrier.data.get("problem_status"))
+            "status": str(self.barrier.term["id"])
         }
 
     def get_status_form_data(self):
         """Returns DICT - extract status form data from barrier.data"""
         if self.barrier:
             return {
-                "status": str(self.barrier.status),
+                "status": str(self.barrier.status["id"]),
                 "status_date": self.barrier.status_date,
                 "status_summary": self.barrier.status_summary,
                 "sub_status": self.barrier.sub_status,
@@ -290,9 +290,9 @@ class ReportFormGroup:
         return {}
 
     def get_location_form_data(self):
-        return {
-            "country": self.barrier.data.get("country")
-        }
+        if self.barrier.country:
+            return {"country": self.barrier.country["id"]}
+        return {"country": None}
 
     def get_has_admin_areas_form_data(self):
         data = {"has_admin_areas": None}
@@ -303,9 +303,9 @@ class ReportFormGroup:
         return data
 
     def get_trade_direction_form_data(self):
-        return {
-            "trade_direction": self.barrier.data.get("trade_direction")
-        }
+        if self.barrier.trade_direction:
+            return {"trade_direction": self.barrier.trade_direction["id"]}
+        return {"trade_direction": None}
 
     def get_sectors_affected_form_data(self):
         data = {"sectors_affected": None}
@@ -321,7 +321,10 @@ class ReportFormGroup:
         if all_sectors:
             selected_sectors = "all"
         else:
-            sectors = self.barrier.data.get("sectors") or ""
+            sectors = [
+                sector.get("id", "")
+                for sector in self.barrier.data.get("sectors") or []
+            ]
             selected_sectors = ', '.join(sectors)
         return selected_sectors
 
@@ -372,7 +375,7 @@ class ReportFormGroup:
     def prepare_payload(self):
         """Combined payload of multiple steps (Status & Location)"""
         payload = {
-            "problem_status": self.problem_status_form.get("status"),
+            "term": self.problem_status_form.get("status"),
             "country": self.location_form.get("country"),
             "admin_areas": self.selected_admin_areas_as_list,
             "trade_direction": self.trade_direction_form.get("trade_direction"),

@@ -102,10 +102,6 @@ class Barrier(APIModel):
         return self._public_barrier
 
     @property
-    def problem_status_text(self):
-        return self.metadata.get_problem_status(self.data["problem_status"])
-
-    @property
     def created_on(self):
         return dateutil.parser.parse(self.data["created_on"])
 
@@ -145,14 +141,6 @@ class Barrier(APIModel):
     def tags(self):
         tags = self.data.get("tags") or ()
         return sorted(tags, key=lambda k: k['order'])
-
-    @property
-    def trade_direction(self):
-        return str(self.data.get("trade_direction"))
-
-    @property
-    def trade_direction_text(self):
-        return self.metadata.get_trade_direction(self.trade_direction)
 
     @property
     def wto_profile(self):

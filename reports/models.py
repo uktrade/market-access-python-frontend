@@ -25,15 +25,15 @@ class Report(APIModel):
 
     @property
     def resolved_text(self):
-        if str(self.status) == STATUSES.RESOLVED_IN_FULL:
+        if str(self.status["id"]) == STATUSES.RESOLVED_IN_FULL:
             return "In full"
-        elif str(self.status) == STATUSES.RESOLVED_IN_PART:
+        elif str(self.status["id"]) == STATUSES.RESOLVED_IN_PART:
             return "In part"
         return "No"
 
     @property
-    def problem_status_text(self):
-        return self.metadata.get_problem_status(self.problem_status)
+    def problem_status(self):
+        return self.term
 
     @property
     def created_on(self):

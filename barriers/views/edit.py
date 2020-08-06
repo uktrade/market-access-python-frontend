@@ -65,7 +65,7 @@ class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierProblemStatusForm
 
     def get_initial(self):
-        return {"problem_status": self.barrier.problem_status}
+        return {"problem_status": self.barrier.term["id"]}
 
 
 class BarrierEditEndDate(APIBarrierFormViewMixin, FormView):
@@ -101,4 +101,4 @@ class BarrierEditTradeDirection(APIBarrierFormViewMixin, FormView):
         return kwargs
 
     def get_initial(self):
-        return {"trade_direction": self.barrier.trade_direction}
+        return {"trade_direction": str(self.barrier.trade_direction["id"])}

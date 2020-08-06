@@ -78,7 +78,7 @@
 
             <dt class="summary-group__list__key">Barrier type</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.problem_status_text }}
+                {{ barrier.term.name }}
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_problem_status' barrier.id %}">Edit</a>
                 {% endif %}
@@ -149,8 +149,8 @@
 
             <dt class="summary-group__list__key">Trade direction</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.trade_direction_text %}
-                    {{ barrier.trade_direction_text }}
+                {% if barrier.trade_direction.name %}
+                    {{ barrier.trade_direction.name }}
                     {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_trade_direction' barrier.id %}">Edit</a>
                     {% endif %}

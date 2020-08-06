@@ -25,11 +25,15 @@ class EditLocationTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["country"] == self.barrier["country"]
-        assert form.initial["admin_areas"] == self.barrier.admin_area_ids
+        assert form.initial["country"] == self.barrier["country"]["id"]
+        assert form.initial["admin_areas"] == [
+            admin_area["id"] for admin_area in self.barrier["admin_areas"]
+        ]
         location = self.client.session["location"]
-        assert location["country"] == self.barrier["country"]
-        assert location["admin_areas"] == self.barrier.admin_area_ids
+        assert location["country"] == self.barrier["country"]["id"]
+        assert location["admin_areas"] == [
+            admin_area["id"] for admin_area in self.barrier["admin_areas"]
+        ]
 
     def test_edit_country_choices(self):
         """
@@ -39,7 +43,9 @@ class EditLocationTestCase(MarketAccessTestCase):
             {
                 "location": {
                     "country": self.barrier["country"],
-                    "admin_areas": self.barrier.admin_area_ids,
+                    "admin_areas": [
+                        admin_area["id"] for admin_area in self.barrier["admin_areas"]
+                    ]
                 }
             }
         )
@@ -64,7 +70,9 @@ class EditLocationTestCase(MarketAccessTestCase):
             {
                 "location": {
                     "country": self.barrier["country"],
-                    "admin_areas": self.barrier.admin_area_ids,
+                    "admin_areas": [
+                        admin_area["id"] for admin_area in self.barrier["admin_areas"]
+                    ]
                 }
             }
         )
