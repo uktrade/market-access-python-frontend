@@ -39,10 +39,6 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["archived_on"])
 
     @property
-    def archived_reason(self):
-        return ARCHIVED_REASON[self.data["archived_reason"]]
-
-    @property
     def category_titles(self):
         return [category["title"] for category in self.categories]
 
