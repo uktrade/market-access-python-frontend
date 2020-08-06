@@ -1,4 +1,4 @@
-from barriers.constants import ARCHIVED_REASON, PUBLIC_BARRIER_STATUSES
+from barriers.constants import PUBLIC_BARRIER_STATUSES
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
 
