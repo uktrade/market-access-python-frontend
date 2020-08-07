@@ -322,8 +322,7 @@ class ReportFormGroup:
             selected_sectors = "all"
         else:
             sectors = [
-                sector.get("id", "")
-                for sector in self.barrier.data.get("sectors") or []
+                sector["id"] for sector in self.barrier.data.get("sectors") or []
             ]
             selected_sectors = ', '.join(sectors)
         return selected_sectors
