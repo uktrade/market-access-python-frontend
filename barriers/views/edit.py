@@ -8,8 +8,8 @@ from barriers.forms.edit import (
     UpdateBarrierSourceForm,
     UpdateBarrierSummaryForm,
     UpdateBarrierPriorityForm,
-    UpdateBarrierProblemStatusForm,
     UpdateBarrierTagsForm,
+    UpdateBarrierTermForm,
     UpdateTradeDirectionForm)
 from utils.metadata import get_metadata
 
@@ -61,13 +61,13 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         return {"priority": self.barrier.priority["code"]}
 
 
-class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/problem_status.html"
-    form_class = UpdateBarrierProblemStatusForm
+class BarrierEditTerm(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/term.html"
+    form_class = UpdateBarrierTermForm
 
     def get_initial(self):
         if self.barrier.term:
-            return {"problem_status": self.barrier.term["id"]}
+            return {"term": self.barrier.term["id"]}
 
 
 class BarrierEditEndDate(APIBarrierFormViewMixin, FormView):

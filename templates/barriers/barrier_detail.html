@@ -80,7 +80,7 @@
             <dd class="summary-group__list__value">
                 {{ barrier.term.name }}
                 {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_problem_status' barrier.id %}">Edit</a>
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_term' barrier.id %}">Edit</a>
                 {% endif %}
             </dd>
 
