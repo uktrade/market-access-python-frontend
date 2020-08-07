@@ -23,7 +23,7 @@ class TermViewTestCase(MarketAccessTestCase):
 
     def test_term_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - Barrier status</title>'
-        expected_radio_container = '<div class="govuk-radios problem-status">'
+        expected_radio_container = '<div class="govuk-radios term">'
         radio_item = '<div class="govuk-radios__item">'
         expected_radio_count = 2
         expected_continue_btn = '<input type="submit" value="Continue" class="govuk-button">'
@@ -40,7 +40,7 @@ class TermViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_term_cannot_be_empty(self, mock_save):
-        field_name = 'status'
+        field_name = 'term'
         session_key = 'draft_barrier__term_form_data'
 
         response = self.client.post(self.url, data={field_name: ''})
@@ -58,9 +58,9 @@ class TermViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_term_saved_in_session(self, mock_save):
-        field_name = 'status'
+        field_name = 'term'
         session_key = 'draft_barrier__term_form_data'
-        expected_form_data = {'status': '1'}
+        expected_form_data = {'term': '1'}
 
         response = self.client.post(self.url, data={field_name: '1'}, follow=True)
         saved_form_data = self.client.session.get(session_key)
@@ -71,7 +71,7 @@ class TermViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_success_redirects_to_correct_view(self, mock_save):
-        field_name = 'status'
+        field_name = 'term'
         redirect_url = reverse('reports:barrier_status')
 
         response = self.client.post(self.url, data={field_name: '1'})
