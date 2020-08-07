@@ -25,7 +25,7 @@ from reports.forms.new_report_barrier_sectors import (
     NewReportBarrierAddSectorsForm,
 )
 from reports.forms.new_report_barrier_status import (
-    NewReportBarrierProblemStatusForm,
+    NewReportBarrierTermForm,
     NewReportBarrierStatusForm,
 )
 from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
@@ -178,7 +178,7 @@ class NewReport(ReportsTemplateView):
         ),
         text="You can save your information and come back later to complete.",
         button=CalloutButton(
-            href=reverse_lazy("reports:barrier_problem_status"),
+            href=reverse_lazy("reports:barrier_term"),
             text="Start now",
             button_type="start",
         )
@@ -190,15 +190,15 @@ class NewReport(ReportsTemplateView):
     }
 
 
-class NewReportBarrierProblemStatusView(ReportsFormView):
+class NewReportBarrierTermView(ReportsFormView):
     """
-    Report a barrier - Step 1.1 Select Barrier Type
+    Report a barrier - Step 1.1 Select Barrier Term
     """
     heading_text = "Barrier status"
-    template_name = "reports/new_report_barrier_problem_status.html"
-    form_class = NewReportBarrierProblemStatusForm
+    template_name = "reports/new_report_barrier_term.html"
+    form_class = NewReportBarrierTermForm
     success_path = 'reports:barrier_status'
-    form_session_key = FormSessionKeys.PROBLEM_STATUS
+    form_session_key = FormSessionKeys.TERM
 
 
 class NewReportBarrierStatusView(ReportsFormView):
@@ -209,7 +209,7 @@ class NewReportBarrierStatusView(ReportsFormView):
     template_name = "reports/new_report_barrier_status.html"
     form_class = NewReportBarrierStatusForm
     success_path = 'reports:barrier_location'
-    extra_paths = {'back': 'reports:barrier_problem_status'}
+    extra_paths = {'back': 'reports:barrier_term'}
     form_session_key = FormSessionKeys.STATUS
 
     def get_context_data(self, **kwargs):
@@ -635,7 +635,7 @@ class DeleteReport(TemplateView):
 class ReportDetail(ReportsFormView):
     template_name = "reports/report_detail.html"
     extra_paths = {
-        "1.1": "reports:barrier_problem_status",
+        "1.1": "reports:barrier_term",
         "1.2": "reports:barrier_location",
         "1.3": "reports:barrier_has_sectors",
         "1.4": "reports:barrier_about",

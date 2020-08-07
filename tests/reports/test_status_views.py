@@ -5,23 +5,23 @@ from mock import patch
 
 from core.tests import MarketAccessTestCase
 from reports.views import (
-    NewReportBarrierProblemStatusView,
+    NewReportBarrierTermView,
     NewReportBarrierStatusView,
 )
 from tests.constants import ERROR_HTML
 
 
-class ProblemStatusViewTestCase(MarketAccessTestCase):
+class TermViewTestCase(MarketAccessTestCase):
 
     def setUp(self):
         super().setUp()
-        self.url = reverse('reports:barrier_problem_status')
+        self.url = reverse('reports:barrier_term')
 
-    def test_start_url_resolves_to_problem_status_view(self):
+    def test_start_url_resolves_to_term_view(self):
         match = resolve('/reports/new/start/')
-        assert match.func.view_class == NewReportBarrierProblemStatusView
+        assert match.func.view_class == NewReportBarrierTermView
 
-    def test_problem_status_view_returns_correct_html(self):
+    def test_term_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - Barrier status</title>'
         expected_radio_container = '<div class="govuk-radios problem-status">'
         radio_item = '<div class="govuk-radios__item">'
@@ -39,9 +39,9 @@ class ProblemStatusViewTestCase(MarketAccessTestCase):
         assert expected_continue_btn in html
 
     @patch("reports.helpers.ReportFormGroup.save")
-    def test_problem_status_cannot_be_empty(self, mock_save):
+    def test_term_cannot_be_empty(self, mock_save):
         field_name = 'status'
-        session_key = 'draft_barrier__problem_status_form_data'
+        session_key = 'draft_barrier__term_form_data'
 
         response = self.client.post(self.url, data={field_name: ''})
         saved_form_data = self.client.session.get(session_key)
@@ -57,9 +57,9 @@ class ProblemStatusViewTestCase(MarketAccessTestCase):
         assert mock_save.called is False
 
     @patch("reports.helpers.ReportFormGroup.save")
-    def test_problem_status_saved_in_session(self, mock_save):
+    def test_term_saved_in_session(self, mock_save):
         field_name = 'status'
-        session_key = 'draft_barrier__problem_status_form_data'
+        session_key = 'draft_barrier__term_form_data'
         expected_form_data = {'status': '1'}
 
         response = self.client.post(self.url, data={field_name: '1'}, follow=True)

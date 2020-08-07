@@ -11,7 +11,7 @@ from barriers.forms.statuses import (
 from utils.forms import SubformChoiceField, SubformMixin
 
 
-class BarrierProblemStatuses:
+class BarrierTerms:
     SHORT_TERM = "1"
     LONG_TERM = "2"
 
@@ -36,11 +36,11 @@ class BarrierProblemStatuses:
         return choices
 
 
-class NewReportBarrierProblemStatusForm(forms.Form):
-    """Form to capture Barrier's problem_status"""
-    status = forms.ChoiceField(
+class NewReportBarrierTermForm(forms.Form):
+    """Form to capture Barrier's term"""
+    term = forms.ChoiceField(
         label="What type of barrier is it?",
-        choices=BarrierProblemStatuses.choices,
+        choices=BarrierTerms.choices,
         error_messages={'required': "Select a barrier scope"},
     )
 

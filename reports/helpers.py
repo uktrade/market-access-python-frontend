@@ -8,7 +8,7 @@ from utils.api.client import MarketAccessAPIClient
 # fields = (
 #     "id",
 #     "code",
-#     "problem_status",       # Step 1.1 - Status
+#     "term",                 # Step 1.1 - Status
 #     "is_resolved",          # Step 1.2 - Status
 #     "resolved_date",        # Step 1.2 - Status
 #     "resolved_status",      # Step 1.2 - Status
@@ -47,7 +47,7 @@ class SessionKeys:
     Set of session keys to be used at report forms to help with draft barrier data management.
     """
     meta_mapping = {
-        FormSessionKeys.PROBLEM_STATUS: "problem_status_form_data",
+        FormSessionKeys.TERM: "term_form_data",
         FormSessionKeys.STATUS: "status_form_data",
         FormSessionKeys.LOCATION: "location_form_data",
         FormSessionKeys.HAS_ADMIN_AREAS: "has_admin_areas_form_data",
@@ -95,12 +95,12 @@ class ReportFormGroup:
     # STATUS
     # ==================================
     @property
-    def problem_status_form(self):
-        return self.get(FormSessionKeys.PROBLEM_STATUS, {})
+    def term_form(self):
+        return self.get(FormSessionKeys.TERM, {})
 
-    @problem_status_form.setter
-    def problem_status_form(self, value):
-        self.set(FormSessionKeys.PROBLEM_STATUS, value)
+    @term_form.setter
+    def term_form(self, value):
+        self.set(FormSessionKeys.TERM, value)
 
     @property
     def status_form(self):
@@ -272,9 +272,9 @@ class ReportFormGroup:
         self.flush_session_keys()
         self.session_keys = SessionKeys(self.session_key_infix)
 
-    def get_problem_status_form_data(self):
+    def get_term_form_data(self):
         return {
-            "status": str(self.barrier.term["id"])
+            "term": str(self.barrier.term["id"])
         }
 
     def get_status_form_data(self):
@@ -350,7 +350,7 @@ class ReportFormGroup:
         """
         Update value of each session key, based on data from self.barrier.data
         """
-        self.problem_status_form = self.get_problem_status_form_data()
+        self.term_form = self.get_term_form_data()
         self.status_form = self.get_status_form_data()
         self.location_form = self.get_location_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
@@ -374,7 +374,7 @@ class ReportFormGroup:
     def prepare_payload(self):
         """Combined payload of multiple steps (Status & Location)"""
         payload = {
-            "term": self.problem_status_form.get("status"),
+            "term": self.term_form.get("term"),
             "country": self.location_form.get("country"),
             "admin_areas": self.selected_admin_areas_as_list,
             "trade_direction": self.trade_direction_form.get("trade_direction"),

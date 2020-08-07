@@ -227,15 +227,10 @@ class Metadata:
 
         return self.data["barrier_pending"].get(sub_status)
 
-    def get_problem_status(self, problem_status_id):
-        status_types = self.data["status_types"]
-        status_types.update(
-            {
-                "1": "A procedural, short-term barrier",
-                "2": "A long-term strategic barrier",
-            }
-        )
-        return status_types.get(str(problem_status_id))
+    def get_term(self, term_id):
+        # TODO: read it from terms once status_types has been retired
+        terms = self.data["status_types"]
+        return terms.get(str(term_id))
 
     def get_source(self, source):
         return self.data["barrier_source"].get(source)

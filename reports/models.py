@@ -32,10 +32,6 @@ class Report(APIModel):
         return "No"
 
     @property
-    def problem_status(self):
-        return self.term
-
-    @property
     def created_on(self):
         return dateutil.parser.parse(self.data['created_on'])
 

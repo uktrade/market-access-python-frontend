@@ -281,7 +281,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
-class EditProblemStatusTestCase(MarketAccessTestCase):
+class EditTermTestCase(MarketAccessTestCase):
     def test_edit_term_has_initial_data(self):
         response = self.client.get(
             reverse(
