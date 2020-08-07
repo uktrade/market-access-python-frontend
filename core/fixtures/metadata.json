@@ -7702,8 +7702,8 @@
         "BARRIER_STATUS_CHANGE": "Barrier Status Change"
     },
     "trade_direction": {
-        "1": "Exporting from the UK",
-        "2": "Importing into the UK"
+        "1": "Exporting from the UK or investing overseas",
+        "2": "Importing or investing into the UK"
     },
     "barrier_priorities": [{
         "code": "UNKNOWN",
