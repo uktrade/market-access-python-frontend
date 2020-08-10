@@ -30,7 +30,7 @@ class EditEconomicAssessmentTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["impact"] == self.assessments[0].impact
+        assert form.initial["impact"] == self.assessments[0].impact["code"]
         assert form.initial["description"] == self.assessments[0].explanation
 
     @patch("utils.api.resources.BarriersResource.create_assessment")

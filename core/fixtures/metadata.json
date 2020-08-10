@@ -1,7 +1,7 @@
 {
     "status_types": {
-        "1": "A problem that is blocking a specific export or investment",
-        "2": "A strategic barrier likely to affect multiple exports or sectors"
+        "1": "A procedural, short-term barrier",
+        "2": "A long-term strategic barrier"
     },
     "loss_range": {
         "1": "Less than \\u00a31m",

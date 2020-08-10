@@ -227,15 +227,10 @@ class Metadata:
 
         return self.data["barrier_pending"].get(sub_status)
 
-    def get_problem_status(self, problem_status_id):
-        status_types = self.data["status_types"]
-        status_types.update(
-            {
-                "1": "A procedural, short-term barrier",
-                "2": "A long-term strategic barrier",
-            }
-        )
-        return status_types.get(str(problem_status_id))
+    def get_term(self, term_id):
+        # TODO: read it from terms once status_types has been retired
+        terms = self.data["status_types"]
+        return terms.get(str(term_id))
 
     def get_source(self, source):
         return self.data["barrier_source"].get(source)
@@ -280,9 +275,9 @@ class Metadata:
 
     def get_categories_by_group(self, group):
         return [
-            barrier_type
-            for barrier_type in self.get_category_list(sort=False)
-            if barrier_type["category"] == group
+            category
+            for category in self.get_category_list(sort=False)
+            if category["category"] == group
         ]
 
     def get_goods(self):

@@ -53,16 +53,21 @@ class EditWTOProfile(SessionDocumentMixin, APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         if self.barrier.wto_profile:
-            fields = (
-                "committee_notified",
-                "committee_notification_link",
-                "member_states",
-                "committee_raised_in",
-                "committee_meeting_minutes",
-                "raised_date",
-                "case_number",
-            )
-            return {field: self.barrier.wto_profile.data.get(field) for field in fields}
+            wto_profile = self.barrier.wto_profile
+            initial_data = {
+                "committee_notification_link": wto_profile.committee_notification_link,
+                "member_states": [
+                    country["id"] for country in wto_profile.member_states
+                ],
+                "meeting_minutes": wto_profile.meeting_minutes,
+                "raised_date": wto_profile.raised_date,
+                "case_number": wto_profile.case_number,
+            }
+            if wto_profile.committee_notified:
+                initial_data["committee_notified"] = wto_profile.committee_notified.get("id")
+            if wto_profile.committee_raised_in:
+                initial_data["committee_raised_in"] = wto_profile.committee_raised_in.get("id")
+            return initial_data
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

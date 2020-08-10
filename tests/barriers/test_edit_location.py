@@ -25,11 +25,15 @@ class EditLocationTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["country"] == self.barrier["export_country"]
-        assert form.initial["admin_areas"] == self.barrier["country_admin_areas"]
+        assert form.initial["country"] == self.barrier["country"]["id"]
+        assert form.initial["admin_areas"] == [
+            admin_area["id"] for admin_area in self.barrier["admin_areas"]
+        ]
         location = self.client.session["location"]
-        assert location["country"] == self.barrier["export_country"]
-        assert location["admin_areas"] == self.barrier["country_admin_areas"]
+        assert location["country"] == self.barrier["country"]["id"]
+        assert location["admin_areas"] == [
+            admin_area["id"] for admin_area in self.barrier["admin_areas"]
+        ]
 
     def test_edit_country_choices(self):
         """
@@ -38,8 +42,10 @@ class EditLocationTestCase(MarketAccessTestCase):
         self.update_session(
             {
                 "location": {
-                    "country": self.barrier["export_country"],
-                    "admin_areas": self.barrier["country_admin_areas"],
+                    "country": self.barrier["country"],
+                    "admin_areas": [
+                        admin_area["id"] for admin_area in self.barrier["admin_areas"]
+                    ]
                 }
             }
         )
@@ -63,8 +69,10 @@ class EditLocationTestCase(MarketAccessTestCase):
         self.update_session(
             {
                 "location": {
-                    "country": self.barrier["export_country"],
-                    "admin_areas": self.barrier["country_admin_areas"],
+                    "country": self.barrier["country"],
+                    "admin_areas": [
+                        admin_area["id"] for admin_area in self.barrier["admin_areas"]
+                    ]
                 }
             }
         )
@@ -195,7 +203,7 @@ class EditLocationTestCase(MarketAccessTestCase):
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            export_country=self.new_country_id,
-            country_admin_areas=self.new_admin_area_ids,
+            country=self.new_country_id,
+            admin_areas=self.new_admin_area_ids,
         )
         assert response.status_code == HTTPStatus.FOUND

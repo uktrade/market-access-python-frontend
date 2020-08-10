@@ -33,7 +33,7 @@
 
             <h3 class="assessment-item__sub-heading">Impact</h3>
             <span class="barrier-impact-value">
-                {{ assessment.impact_text }}
+                {{ assessment.impact.name }}
             </span>
 
             <h3 class="assessment-item__sub-heading">Assessment explanation</h3>
@@ -55,7 +55,7 @@
                 </ul>
             {% endif %}
 
-            <h3 class="assessment-item__sub-heading">Inital assessment made by</h3>
+            <h3 class="assessment-item__sub-heading">Initial assessment made by</h3>
             <p class="assessment-item__value">{{ assessment.created_by.name }}</p>
 
             <a class="assessment-item__edit" href="{% url 'barriers:economic_assessment' barrier.id %}">Edit</a>

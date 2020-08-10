@@ -13,19 +13,19 @@
         <form action="" method="POST">
             {% csrf_token %}
 
-            <div class="{% form_group_classes form.barrier_title.errors %}">
-                <label class="govuk-label govuk-label--s" for="{{ form.barrier_title.name }}">
-                    {{ form.barrier_title.label }}
+            <div class="{% form_group_classes form.title.errors %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">
+                    {{ form.title.label }}
                 </label>
-                {% form_field_error form "barrier_title" %}
-                <span id="{{ form.barrier_title.name }}_hint" class="govuk-hint">
-                    {{ form.barrier_title.help_text }}
+                {% form_field_error form "title" %}
+                <span id="{{ form.title.name }}_hint" class="govuk-hint">
+                    {{ form.title.help_text }}
                 </span>
-                <input class="govuk-input" id="{{ form.barrier_title.name }}"
-                       name="{{ form.barrier_title.name }}"
+                <input class="govuk-input" id="{{ form.title.name }}"
+                       name="{{ form.title.name }}"
                        type="text"
-                       value="{{ form.initial.barrier_title }}"
-                       aria-describedby="{{ form.barrier_title.name }}_hint">
+                       value="{{ form.initial.title }}"
+                       aria-describedby="{{ form.title.name }}_hint">
             </div>
 
             <div class="{% form_group_classes form.product.errors %}">

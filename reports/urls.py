@@ -4,8 +4,8 @@ from reports.views import (
     DraftBarriers,
     DeleteReport,
     NewReport,
-    NewReportBarrierProblemStatusView,
     NewReportBarrierStatusView,
+    NewReportBarrierTermView,
     NewReportBarrierLocationView,
     NewReportBarrierLocationHasAdminAreasView,
     NewReportBarrierLocationAddAdminAreasView,
@@ -30,8 +30,8 @@ urlpatterns = [
     path("reports/<uuid:barrier_id>/", ReportDetail.as_view(), name="draft_barrier_details_uuid"),
     path("reports/<uuid:barrier_id>/delete/", DeleteReport.as_view(), name="delete_report"),
     # Problem Status
-    path("reports/new/start/", NewReportBarrierProblemStatusView.as_view(), name="barrier_problem_status"),
-    path("reports/<uuid:barrier_id>/start/", NewReportBarrierProblemStatusView.as_view(), name="barrier_problem_status_uuid"),
+    path("reports/new/start/", NewReportBarrierTermView.as_view(), name="barrier_term"),
+    path("reports/<uuid:barrier_id>/start/", NewReportBarrierTermView.as_view(), name="barrier_term_uuid"),
     # Status
     path("reports/new/start/is-resolved/", NewReportBarrierStatusView.as_view(), name="barrier_status"),
     path("reports/<uuid:barrier_id>/is-resolved/", NewReportBarrierStatusView.as_view(), name="barrier_status_uuid"),

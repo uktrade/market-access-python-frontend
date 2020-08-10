@@ -8,7 +8,7 @@ from utils.api.client import MarketAccessAPIClient
 # fields = (
 #     "id",
 #     "code",
-#     "problem_status",       # Step 1.1 - Status
+#     "term",                 # Step 1.1 - Status
 #     "is_resolved",          # Step 1.2 - Status
 #     "resolved_date",        # Step 1.2 - Status
 #     "resolved_status",      # Step 1.2 - Status
@@ -17,8 +17,8 @@ from utils.api.client import MarketAccessAPIClient
 #     "status_summary",       # this is set in step 5 - without this the draft barrier cannot be submitted (MAR-221)
 #     "status_date",          # n/a
 #     # ==============================
-#     "export_country",       # Step 2 - Location - UUID
-#     "country_admin_areas",  # Step 2 - Location - LIST of UUIDS
+#     "country",              # Step 2 - Location - UUID
+#     "admin_areas",          # Step 2 - Location - LIST of UUIDS
 #     "trade_direction",      # Step 2 - Location - INT
 #     # ==============================
 #     "sectors_affected",     # Step 3 - Sectors - BOOL
@@ -28,7 +28,7 @@ from utils.api.client import MarketAccessAPIClient
 #     "product",              # Step 4 - About - STR
 #     "source",               # Step 4 - About - STR
 #     "other_source",         # Step 4 - About - STR
-#     "barrier_title",        # Step 4 - About - STR
+#     "title",                # Step 4 - About - STR
 #     "tags"                  # Step 4 - About - LIST of IDS
 #     # ==============================
 #     "summary",  # Step 5 - Summary - STR
@@ -47,7 +47,7 @@ class SessionKeys:
     Set of session keys to be used at report forms to help with draft barrier data management.
     """
     meta_mapping = {
-        FormSessionKeys.PROBLEM_STATUS: "problem_status_form_data",
+        FormSessionKeys.TERM: "term_form_data",
         FormSessionKeys.STATUS: "status_form_data",
         FormSessionKeys.LOCATION: "location_form_data",
         FormSessionKeys.HAS_ADMIN_AREAS: "has_admin_areas_form_data",
@@ -95,12 +95,12 @@ class ReportFormGroup:
     # STATUS
     # ==================================
     @property
-    def problem_status_form(self):
-        return self.get(FormSessionKeys.PROBLEM_STATUS, {})
+    def term_form(self):
+        return self.get(FormSessionKeys.TERM, {})
 
-    @problem_status_form.setter
-    def problem_status_form(self, value):
-        self.set(FormSessionKeys.PROBLEM_STATUS, value)
+    @term_form.setter
+    def term_form(self, value):
+        self.set(FormSessionKeys.TERM, value)
 
     @property
     def status_form(self):
@@ -272,16 +272,16 @@ class ReportFormGroup:
         self.flush_session_keys()
         self.session_keys = SessionKeys(self.session_key_infix)
 
-    def get_problem_status_form_data(self):
+    def get_term_form_data(self):
         return {
-            "status": str(self.barrier.data.get("problem_status"))
+            "term": str(self.barrier.term["id"])
         }
 
     def get_status_form_data(self):
         """Returns DICT - extract status form data from barrier.data"""
         if self.barrier:
             return {
-                "status": str(self.barrier.status),
+                "status": str(self.barrier.status["id"]),
                 "status_date": self.barrier.status_date,
                 "status_summary": self.barrier.status_summary,
                 "sub_status": self.barrier.sub_status,
@@ -290,22 +290,22 @@ class ReportFormGroup:
         return {}
 
     def get_location_form_data(self):
-        return {
-            "country": self.barrier.data.get("export_country")
-        }
+        if self.barrier.country:
+            return {"country": self.barrier.country["id"]}
+        return {"country": None}
 
     def get_has_admin_areas_form_data(self):
         data = {"has_admin_areas": None}
-        if self.barrier.data["country_admin_areas"]:
+        if self.barrier.data["admin_areas"]:
             data["has_admin_areas"] = HasAdminAreas.NO
         else:
             data["has_admin_areas"] = HasAdminAreas.YES
         return data
 
     def get_trade_direction_form_data(self):
-        return {
-            "trade_direction": self.barrier.data.get("trade_direction")
-        }
+        if self.barrier.trade_direction:
+            return {"trade_direction": self.barrier.trade_direction["id"]}
+        return {"trade_direction": None}
 
     def get_sectors_affected_form_data(self):
         data = {"sectors_affected": None}
@@ -321,13 +321,15 @@ class ReportFormGroup:
         if all_sectors:
             selected_sectors = "all"
         else:
-            sectors = self.barrier.data.get("sectors") or ""
+            sectors = [
+                sector["id"] for sector in self.barrier.data.get("sectors") or []
+            ]
             selected_sectors = ', '.join(sectors)
         return selected_sectors
 
     def get_about_form(self):
         data = {
-            "barrier_title": self.barrier.data.get("barrier_title") or "",
+            "title": self.barrier.data.get("title") or "",
             "product": self.barrier.data.get("product") or "",
             "source": self.barrier.data.get("source"),
             "other_source": self.barrier.data.get("other_source") or "",
@@ -348,12 +350,16 @@ class ReportFormGroup:
         """
         Update value of each session key, based on data from self.barrier.data
         """
-        self.problem_status_form = self.get_problem_status_form_data()
+        self.term_form = self.get_term_form_data()
         self.status_form = self.get_status_form_data()
         self.location_form = self.get_location_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
         self.trade_direction_form = self.get_trade_direction_form_data()
-        self.selected_admin_areas = ', '.join(self.barrier.data.get("country_admin_areas") or ())
+        admin_area_ids = [
+            admin_area["id"]
+            for admin_area in self.barrier.data.get("admin_areas", [])
+        ]
+        self.selected_admin_areas = ', '.join(admin_area_ids)
         self.sectors_affected = self.get_sectors_affected_form_data()
         self.selected_about_formsectors = self.get_selected_sectors()
         self.about_form = self.get_about_form()
@@ -368,9 +374,9 @@ class ReportFormGroup:
     def prepare_payload(self):
         """Combined payload of multiple steps (Status & Location)"""
         payload = {
-            "problem_status": self.problem_status_form.get("status"),
-            "export_country": self.location_form.get("country"),
-            "country_admin_areas": self.selected_admin_areas_as_list,
+            "term": self.term_form.get("term"),
+            "country": self.location_form.get("country"),
+            "admin_areas": self.selected_admin_areas_as_list,
             "trade_direction": self.trade_direction_form.get("trade_direction"),
         }
         payload.update(self.status_form)

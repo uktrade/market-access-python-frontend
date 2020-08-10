@@ -134,11 +134,11 @@ class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
 
 
 class ScopeHistoryItem(BaseHistoryItem):
-    field = "problem_status"
+    field = "term"
     field_name = "Type"
 
     def get_value(self, value):
-        return self.metadata.get_problem_status(value)
+        return self.metadata.get_term(value)
 
 
 class SectorsHistoryItem(BaseHistoryItem):

@@ -18,12 +18,16 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["categories"] == self.barrier["categories"]
+        assert form.initial["categories"] == [
+            category["id"] for category in self.barrier["categories"]
+        ]
 
         session_category_ids = [
             category["id"] for category in self.client.session["categories"]
         ]
-        assert session_category_ids == self.barrier["categories"]
+        assert session_category_ids == [
+            category["id"] for category in self.barrier["categories"]
+        ]
 
     def test_add_category_choices(self):
         """
@@ -102,7 +106,7 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         """
         Saving barrier categories should call the API
         """
-        new_categories = self.barrier["categories"] + [117]
+        new_categories = [category["id"] for category in self.barrier["categories"]] + [117]
 
         self.update_session(
             {
@@ -130,24 +134,27 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         """
         Removing a category should remove it from the session, not call the API
         """
-        new_categories = self.barrier["categories"] + [117]
+        new_categories = [category["id"] for category in self.barrier["categories"]] + [117]
 
         self.update_session(
             {
                 "categories": [
-                    {"id": category_id, "title": "Title",} for category_id in new_categories
+                    {"id": category_id, "title": "Title"} for category_id in new_categories
                 ],
             }
         )
 
         response = self.client.post(
             reverse("barriers:remove_category", kwargs={"barrier_id": self.barrier["id"]}),
-            data={"category_id": self.barrier["categories"][0]},
+            data={"category_id": self.barrier["categories"][0]["id"]},
         )
         assert response.status_code == HTTPStatus.FOUND
 
         session_category_ids = [
             category["id"] for category in self.client.session["categories"]
         ]
-        assert session_category_ids == (self.barrier["categories"][1:] + [117])
+
+        assert session_category_ids == (
+            [category["id"] for category in self.barrier["categories"][1:]] + [117]
+        )
         assert mock_patch.called is False

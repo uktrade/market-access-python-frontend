@@ -15,10 +15,9 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.modified_on.date() == datetime.date(2020, 1, 21)
 
         assert barrier.location == "Rio de Janeiro, Sao Paulo (Brazil)"
-        assert barrier.problem_status_text == "A long-term strategic barrier"
         assert barrier.sectors[0]["name"] == "Automotive"
         assert barrier.sector_names == ["Automotive"]
-        assert barrier.source_name == "Government entity"
+        assert barrier.source["name"] == "UK government"
         assert barrier.status["name"] == "Resolved: In full"
         assert barrier.title == "Import quota for sports cars"
         assert barrier.categories[0]["title"] == "Import quotas"
