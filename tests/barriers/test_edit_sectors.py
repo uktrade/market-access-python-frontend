@@ -20,18 +20,23 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["sectors"] == self.barrier["sectors"]
+        assert form.initial["sectors"] == [
+            sector["id"] for sector in self.barrier["sectors"]
+        ]
         assert form.initial["all_sectors"] is False
-        assert self.client.session["sectors"] == self.barrier["sectors"]
+        assert self.client.session["sectors"] == [
+            sector["id"] for sector in self.barrier["sectors"]
+        ]
         assert self.client.session["all_sectors"] is False
 
     def test_add_sector_choices(self):
         """
         Add Sector page should not include current sectors in choices
         """
-        self.update_session(
-            {"sectors": self.barrier["sectors"], "all_sectors": False,}
-        )
+        self.update_session({
+            "sectors": [sector["id"] for sector in self.barrier["sectors"]],
+            "all_sectors": False
+        })
 
         response = self.client.get(
             reverse("barriers:add_sectors", kwargs={"barrier_id": self.barrier["id"]}),
@@ -41,8 +46,8 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         form = response.context["form"]
 
         choice_values = [k for k, v in form.fields["sector"].choices]
-        for sector_id in self.barrier["sectors"]:
-            assert sector_id not in choice_values
+        for sector in self.barrier["sectors"]:
+            assert sector["id"] not in choice_values
 
     @patch("utils.api.resources.APIResource.patch")
     def test_add_sector(self, mock_patch):
@@ -50,7 +55,10 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         Add Sector page should add a sector to the session, not call the API
         """
         self.update_session(
-            {"sectors": self.barrier["sectors"], "all_sectors": False,}
+            {
+                "sectors": [sector["id"] for sector in self.barrier["sectors"]],
+                "all_sectors": False,
+            }
         )
 
         response = self.client.post(
@@ -59,7 +67,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         assert self.client.session["sectors"] == (
-            self.barrier["sectors"] + [self.new_sector_id]
+            [sector["id"] for sector in self.barrier["sectors"]] + [self.new_sector_id]
         )
         assert self.client.session["all_sectors"] is False
         assert mock_patch.called is False
@@ -70,7 +78,9 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         self.update_session(
             {
-                "sectors": self.barrier["sectors"] + [self.new_sector_id],
+                "sectors": [
+                    sector["id"] for sector in self.barrier["sectors"]
+                ] + [self.new_sector_id],
                 "all_sectors": False,
             }
         )
@@ -84,7 +94,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.initial["sectors"] == (
-            self.barrier["sectors"] + [self.new_sector_id]
+            [sector["id"] for sector in self.barrier["sectors"]] + [self.new_sector_id]
         )
         assert form.initial["all_sectors"] is False
 
@@ -93,7 +103,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         Edit Sectors form should match the sectors in the session
         """
         self.update_session(
-            {"sectors": [], "all_sectors": True,}
+            {"sectors": [], "all_sectors": True}
         )
 
         response = self.client.get(
@@ -112,7 +122,9 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         Saving sectors should call the API
         """
-        new_sectors = self.barrier["sectors"] + [self.new_sector_id]
+        new_sectors = [
+            sector["id"] for sector in self.barrier["sectors"]
+        ] + [self.new_sector_id]
         response = self.client.post(
             reverse(
                 "barriers:edit_sectors_session",
@@ -135,7 +147,9 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         self.update_session(
             {
-                "sectors": self.barrier["sectors"] + [self.new_sector_id],
+                "sectors": [
+                    sector["id"] for sector in self.barrier["sectors"]
+                ] + [self.new_sector_id],
                 "all_sectors": False,
             }
         )
@@ -144,7 +158,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:remove_sector", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"sector": self.barrier["sectors"][0]},
+            data={"sector": self.barrier["sectors"][0]["id"]},
         )
         assert response.status_code == HTTPStatus.FOUND
         assert self.client.session["sectors"] == [self.new_sector_id]

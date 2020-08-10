@@ -50,7 +50,7 @@ def create_barrier(browser):
     browser.find_by_css("input[type=submit]").click()
 
     title = f"Test barrier {random.randint(10000, 99999)}"
-    browser.fill("barrier_title", title)
+    browser.fill("title", title)
     browser.fill("product", "Product name")
     browser.choose("source", "COMPANY")
     browser.find_by_css("input[type=submit]").click()

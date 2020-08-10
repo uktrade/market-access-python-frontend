@@ -5,25 +5,25 @@ from mock import patch
 
 from core.tests import MarketAccessTestCase
 from reports.views import (
-    NewReportBarrierProblemStatusView,
+    NewReportBarrierTermView,
     NewReportBarrierStatusView,
 )
 from tests.constants import ERROR_HTML
 
 
-class ProblemStatusViewTestCase(MarketAccessTestCase):
+class TermViewTestCase(MarketAccessTestCase):
 
     def setUp(self):
         super().setUp()
-        self.url = reverse('reports:barrier_problem_status')
+        self.url = reverse('reports:barrier_term')
 
-    def test_start_url_resolves_to_problem_status_view(self):
+    def test_start_url_resolves_to_term_view(self):
         match = resolve('/reports/new/start/')
-        assert match.func.view_class == NewReportBarrierProblemStatusView
+        assert match.func.view_class == NewReportBarrierTermView
 
-    def test_problem_status_view_returns_correct_html(self):
+    def test_term_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - Barrier status</title>'
-        expected_radio_container = '<div class="govuk-radios problem-status">'
+        expected_radio_container = '<div class="govuk-radios term">'
         radio_item = '<div class="govuk-radios__item">'
         expected_radio_count = 2
         expected_continue_btn = '<input type="submit" value="Continue" class="govuk-button">'
@@ -39,9 +39,9 @@ class ProblemStatusViewTestCase(MarketAccessTestCase):
         assert expected_continue_btn in html
 
     @patch("reports.helpers.ReportFormGroup.save")
-    def test_problem_status_cannot_be_empty(self, mock_save):
-        field_name = 'status'
-        session_key = 'draft_barrier__problem_status_form_data'
+    def test_term_cannot_be_empty(self, mock_save):
+        field_name = 'term'
+        session_key = 'draft_barrier__term_form_data'
 
         response = self.client.post(self.url, data={field_name: ''})
         saved_form_data = self.client.session.get(session_key)
@@ -57,10 +57,10 @@ class ProblemStatusViewTestCase(MarketAccessTestCase):
         assert mock_save.called is False
 
     @patch("reports.helpers.ReportFormGroup.save")
-    def test_problem_status_saved_in_session(self, mock_save):
-        field_name = 'status'
-        session_key = 'draft_barrier__problem_status_form_data'
-        expected_form_data = {'status': '1'}
+    def test_term_saved_in_session(self, mock_save):
+        field_name = 'term'
+        session_key = 'draft_barrier__term_form_data'
+        expected_form_data = {'term': '1'}
 
         response = self.client.post(self.url, data={field_name: '1'}, follow=True)
         saved_form_data = self.client.session.get(session_key)
@@ -71,7 +71,7 @@ class ProblemStatusViewTestCase(MarketAccessTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_success_redirects_to_correct_view(self, mock_save):
-        field_name = 'status'
+        field_name = 'term'
         redirect_url = reverse('reports:barrier_status')
 
         response = self.client.post(self.url, data={field_name: '1'})

@@ -109,10 +109,10 @@ class MetadataTestCase(MarketAccessTestCase):
             "Open: Pending action (Pending other)"
         )
 
-    def test_get_problem_status(self):
+    def test_get_term(self):
         metadata = get_metadata()
-        assert metadata.get_problem_status("1") == "A procedural, short-term barrier"
-        assert metadata.get_problem_status("2") == "A long-term strategic barrier"
+        assert metadata.get_term("1") == "A procedural, short-term barrier"
+        assert metadata.get_term("2") == "A long-term strategic barrier"
 
     def test_get_source(self):
         metadata = get_metadata()

@@ -8,8 +8,8 @@ from barriers.forms.edit import (
     UpdateBarrierSourceForm,
     UpdateBarrierSummaryForm,
     UpdateBarrierPriorityForm,
-    UpdateBarrierProblemStatusForm,
     UpdateBarrierTagsForm,
+    UpdateBarrierTermForm,
     UpdateTradeDirectionForm)
 from utils.metadata import get_metadata
 
@@ -19,7 +19,7 @@ class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierTitleForm
 
     def get_initial(self):
-        return {"title": self.barrier.barrier_title}
+        return {"title": self.barrier.title}
 
 
 class BarrierEditProduct(APIBarrierFormViewMixin, FormView):
@@ -46,10 +46,11 @@ class BarrierEditSource(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierSourceForm
 
     def get_initial(self):
-        return {
-            "source": self.barrier.source,
-            "other_source": self.barrier.other_source,
-        }
+        if self.barrier.source:
+            return {
+                "source": self.barrier.source.get("code"),
+                "other_source": self.barrier.other_source,
+            }
 
 
 class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
@@ -60,12 +61,13 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         return {"priority": self.barrier.priority["code"]}
 
 
-class BarrierEditProblemStatus(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/problem_status.html"
-    form_class = UpdateBarrierProblemStatusForm
+class BarrierEditTerm(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/term.html"
+    form_class = UpdateBarrierTermForm
 
     def get_initial(self):
-        return {"problem_status": self.barrier.problem_status}
+        if self.barrier.term:
+            return {"term": self.barrier.term["id"]}
 
 
 class BarrierEditEndDate(APIBarrierFormViewMixin, FormView):
@@ -101,4 +103,5 @@ class BarrierEditTradeDirection(APIBarrierFormViewMixin, FormView):
         return kwargs
 
     def get_initial(self):
-        return {"trade_direction": self.barrier.trade_direction}
+        if self.barrier.trade_direction:
+            return {"trade_direction": str(self.barrier.trade_direction["id"])}

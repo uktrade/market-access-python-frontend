@@ -1,4 +1,4 @@
-from barriers.constants import ARCHIVED_REASON, PUBLIC_BARRIER_STATUSES
+from barriers.constants import PUBLIC_BARRIER_STATUSES
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
 
@@ -14,12 +14,10 @@ class Barrier(APIModel):
     """
 
     _admin_areas = None
-    _categories = None
     _country = None
     _location = None
     _metadata = None
     _public_barrier = None
-    _sectors = None
     _status = None
     _wto_profile = None
 
@@ -34,40 +32,15 @@ class Barrier(APIModel):
 
     @property
     def admin_area_ids(self):
-        return self.data["country_admin_areas"]
-
-    @property
-    def admin_areas(self):
-        if self._admin_areas is None:
-            self._admin_areas = self.metadata.get_admin_areas(self.admin_area_ids)
-        return self._admin_areas
+        return [admin_area["id"] for admin_area in self.data.get("admin_areas", [])]
 
     @property
     def archived_on(self):
         return dateutil.parser.parse(self.data["archived_on"])
 
     @property
-    def archived_reason(self):
-        return ARCHIVED_REASON[self.data["archived_reason"]]
-
-    @property
-    def categories(self):
-        if self._categories is None:
-            self._categories = [
-                self.metadata.get_category(category)
-                for category in self.data.get("categories", [])
-            ]
-        return self._categories
-
-    @property
     def category_titles(self):
         return [category["title"] for category in self.categories]
-
-    @property
-    def country(self):
-        if self._country is None and self.export_country:
-            self._country = self.metadata.get_country(self.export_country)
-        return self._country
 
     @property
     def created_on(self):
@@ -77,10 +50,6 @@ class Barrier(APIModel):
     def end_date(self):
         if self.data.get("end_date"):
             return dateutil.parser.parse(self.data["end_date"])
-
-    @property
-    def eu_exit_related_text(self):
-        return self.metadata.get_eu_exit_related_text(self.eu_exit_related)
 
     @property
     def commodities(self):
@@ -98,12 +67,24 @@ class Barrier(APIModel):
     def last_seen_on(self):
         return dateutil.parser.parse(self.data["last_seen_on"])
 
+    def get_location_text(self):
+        if not self.country:
+            return ""
+
+        country_name = self.country.get("name", "")
+
+        if self.admin_areas:
+            admin_areas_string = ", ".join(
+                [admin_area.get("name", "") for admin_area in self.admin_areas]
+            )
+            return f"{admin_areas_string} ({country_name})"
+
+        return country_name
+
     @property
     def location(self):
         if self._location is None:
-            self._location = self.metadata.get_location_text(
-                self.data["export_country"], self.data["country_admin_areas"]
-            )
+            self._location = self.get_location_text()
         return self._location
 
     @property
@@ -117,24 +98,16 @@ class Barrier(APIModel):
         return self._public_barrier
 
     @property
-    def problem_status_text(self):
-        return self.metadata.get_problem_status(self.data["problem_status"])
+    def reported_by(self):
+        return self.created_by
 
     @property
     def reported_on(self):
-        return dateutil.parser.parse(self.data["reported_on"])
-
-    @property
-    def sectors(self):
-        if self._sectors is None:
-            self._sectors = [
-                self.metadata.get_sector(sector_id) for sector_id in self.sector_ids
-            ]
-        return self._sectors
+        return self.created_on
 
     @property
     def sector_ids(self):
-        return self.data["sectors"] or []
+        return [sector["id"] for sector in self.data.get("sectors", [])]
 
     @property
     def sector_names(self):
@@ -145,34 +118,21 @@ class Barrier(APIModel):
         return []
 
     @property
-    def source_name(self):
-        return self.metadata.get_source(self.source)
-
-    @property
     def status(self):
         if self._status is None:
             self.data["status"]["id"] = str(self.data["status"]["id"])
             self._status = self.metadata.get_status(self.data["status"]["id"])
             self._status.update(self.data["status"])
-            self._status["date"] = dateutil.parser.parse(self._status["date"])
         return self._status
+
+    @property
+    def status_date(self):
+        return dateutil.parser.parse(self.data.get("status_date"))
 
     @property
     def tags(self):
         tags = self.data.get("tags") or ()
         return sorted(tags, key=lambda k: k['order'])
-
-    @property
-    def trade_direction(self):
-        return str(self.data.get("trade_direction"))
-
-    @property
-    def trade_direction_text(self):
-        return self.metadata.get_trade_direction(self.trade_direction)
-
-    @property
-    def title(self):
-        return self.barrier_title
 
     @property
     def wto_profile(self):

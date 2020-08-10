@@ -25,7 +25,7 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, barrier_title=self.cleaned_data["title"])
+        client.barriers.patch(id=self.id, title=self.cleaned_data["title"])
 
 
 class UpdateBarrierProductForm(APIFormMixin, forms.Form):
@@ -144,7 +144,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
+class UpdateBarrierTermForm(APIFormMixin, forms.Form):
     CHOICES = [
         (
             1,
@@ -153,7 +153,7 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
         ),
         (2, "A long-term strategic barrier", "for example, a change of regulation",),
     ]
-    problem_status = ChoiceFieldWithHelpText(
+    term = ChoiceFieldWithHelpText(
         label="What is the scope of the barrier?",
         choices=CHOICES,
         widget=forms.RadioSelect,
@@ -163,7 +163,7 @@ class UpdateBarrierProblemStatusForm(APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
-            id=self.id, problem_status=self.cleaned_data["problem_status"]
+            id=self.id, term=self.cleaned_data["term"]
         )
 
 

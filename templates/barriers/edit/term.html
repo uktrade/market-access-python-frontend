@@ -14,16 +14,16 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.problem_status.name }}" class="govuk-form-group{% if form.problem_status.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.term.name }}" class="govuk-form-group{% if form.term.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.problem_status.label }}</legend>
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.term.label }}</legend>
 
-                {% form_field_error form "problem_status" %}
+                {% form_field_error form "term" %}
 
                 <div class="govuk-radios">
-                    {% for value, name, help_text in form.fields.problem_status.choices %}
+                    {% for value, name, help_text in form.fields.term.choices %}
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="{{ forloop.counter }}" name="{{ form.problem_status.name }}" type="radio" value="{{ value }}" {% if form.problem_status.value == value %}checked="checked"{% endif %}>
+                        <input class="govuk-radios__input" id="{{ forloop.counter }}" name="{{ form.term.name }}" type="radio" value="{{ value }}" {% if form.term.value == value %}checked="checked"{% endif %}>
                         <label class="govuk-label govuk-radios__label" for="{{ forloop.counter }}">{{ name }}</label>
                         <span id="{{ forloop.counter }}-item-hint" class="govuk-hint govuk-radios__hint">{{ help_text }}</span>
                     </div>

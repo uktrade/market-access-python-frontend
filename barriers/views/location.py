@@ -21,7 +21,7 @@ class BarrierEditLocation(BarrierMixin, FormView):
             if self.barrier.country:
                 request.session["location"] = {
                     "country": self.barrier.country["id"],
-                    "admin_areas": self.barrier.admin_area_ids,
+                    "admin_areas": [admin_area["id"] for admin_area in self.barrier.admin_areas],
                 }
             else:
                 request.session["location"] = {

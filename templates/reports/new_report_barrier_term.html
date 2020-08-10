@@ -14,22 +14,22 @@
             <div class="{% form_group_classes form.errors %}">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                        {{ form.fields.status.label }}
+                        {{ form.fields.term.label }}
                     </legend>
 
-                    {% form_field_error form "status" %}
+                    {% form_field_error form "term" %}
 
-                    <div class="govuk-radios problem-status">
-                    {% for choice_id, choice_data in form.fields.status.choices %}
+                    <div class="govuk-radios term">
+                    {% for choice_id, choice_data in form.fields.term.choices %}
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input"
-                                   name="status"
+                                   name="term"
                                    type="radio"
-                                   id="status-{{ choice_id }}"
+                                   id="term-{{ choice_id }}"
                                    value="{{ choice_id }}"
                                    aria-describedby="{{ choice_id }}-item-hint"
-                                   {% if form.initial.status == choice_id %}checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="status-{{ choice_id }}">
+                                   {% if form.initial.term == choice_id %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="term-{{ choice_id }}">
                                 {{ choice_data.label }}
                             </label>
                             <span id="{{ choice_id }}-item-hint" class="govuk-hint govuk-radios__hint">

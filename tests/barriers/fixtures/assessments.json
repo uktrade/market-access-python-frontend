@@ -1,7 +1,10 @@
 [
     {
         "id": 1,
-        "impact": "MEDIUMLOW",
+        "impact": {
+            "code": "MEDIUMLOW",
+            "name": "Medium Low"
+        },
         "explanation": "some description",
         "value_to_economy": 59,
         "import_market_size": 61000,

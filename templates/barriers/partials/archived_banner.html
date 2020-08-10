@@ -1,8 +1,8 @@
 {% if barrier.archived %}
     <section class="archived-banner">
         <div class="archived-banner__summary">
-            <p class="archived-banner__text">This barrier was archived on {{ barrier.archived_on|date:"j F Y" }} by {{ barrier.archived_by }}</p>
-            <p class="archived-banner__reason"><strong>Reason:</strong> {{ barrier.archived_reason }} - {{ barrier.archived_explanation }}</p>
+            <p class="archived-banner__text">This barrier was archived on {{ barrier.archived_on|date:"j F Y" }} by {{ barrier.archived_by.name }}</p>
+            <p class="archived-banner__reason"><strong>Reason:</strong> {{ barrier.archived_reason.name }} - {{ barrier.archived_explanation }}</p>
         </div>
 
         {% if show_unarchive_button %}

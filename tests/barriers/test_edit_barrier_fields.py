@@ -16,7 +16,7 @@ class EditTitleTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["title"] == self.barrier["barrier_title"]
+        assert form.initial["title"] == self.barrier["title"]
 
     @patch("utils.api.resources.APIResource.patch")
     def test_title_cannot_be_empty(self, mock_patch):
@@ -38,7 +38,7 @@ class EditTitleTestCase(MarketAccessTestCase):
             data={"title": "New Title"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], barrier_title="New Title",
+            id=self.barrier["id"], title="New Title",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -146,7 +146,7 @@ class EditSourceTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["source"] == self.barrier["source"]
+        assert form.initial["source"] == self.barrier["source"]["code"]
 
     @patch("utils.api.resources.APIResource.patch")
     def test_source_cannot_be_empty(self, mock_patch):
@@ -281,61 +281,61 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
-class EditProblemStatusTestCase(MarketAccessTestCase):
-    def test_edit_problem_status_has_initial_data(self):
+class EditTermTestCase(MarketAccessTestCase):
+    def test_edit_term_has_initial_data(self):
         response = self.client.get(
             reverse(
-                "barriers:edit_problem_status",
+                "barriers:edit_term",
                 kwargs={"barrier_id": self.barrier["id"]},
             )
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["problem_status"] == self.barrier["problem_status"]
+        assert form.initial["term"] == self.barrier["term"]["id"]
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_problem_status_cannot_be_empty(self, mock_patch):
+    def test_term_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_problem_status",
+                "barriers:edit_term",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"problem_status": ""},
+            data={"term": ""},
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "problem_status" in form.errors
+        assert "term" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
     def test_bad_data_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_problem_status",
+                "barriers:edit_term",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"problem_status": "3"},
+            data={"term": "3"},
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "problem_status" in form.errors
+        assert "term" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_problem_status_calls_api(self, mock_patch):
+    def test_edit_term_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:edit_problem_status",
+                "barriers:edit_term",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"problem_status": "1"},
+            data={"term": "1"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], problem_status="1",
+            id=self.barrier["id"], term="1",
         )
         assert response.status_code == HTTPStatus.FOUND
 
