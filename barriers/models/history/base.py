@@ -36,7 +36,7 @@ class BaseHistoryItem(APIModel):
     @property
     def diff(self):
         dmp = diff_match_patch()
-        diffs = dmp.diff_main(self.old_value, self.new_value)
+        diffs = dmp.diff_main(self.old_value or "", self.new_value or "")
         dmp.diff_cleanupSemantic(diffs)
         return dmp.diff_prettyHtml(diffs)
 

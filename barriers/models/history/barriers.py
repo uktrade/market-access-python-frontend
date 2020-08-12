@@ -133,8 +133,8 @@ class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
     modifier = "note"
 
 
-class ScopeHistoryItem(BaseHistoryItem):
-    field = "term"
+class TermHistoryItem(BaseHistoryItem):
+    field = "problem_status"
     field_name = "Type"
 
     def get_value(self, value):
@@ -242,12 +242,12 @@ class BarrierHistoryItem(PolymorphicBase):
         ProductHistoryItem,
         PriorityHistoryItem,
         PublicEligibilitySummaryHistoryItem,
-        ScopeHistoryItem,
         SectorsHistoryItem,
         SourceHistoryItem,
         StatusHistoryItem,
         SummaryHistoryItem,
         TagsHistoryItem,
+        TermHistoryItem,
         TitleHistoryItem,
         TradeDirectionHistoryItem,
     )
