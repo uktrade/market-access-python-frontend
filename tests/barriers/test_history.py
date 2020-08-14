@@ -150,12 +150,12 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         assert item.old_value is None
         assert item.new_value == "Product Name"
 
-    def test_scope(self):
+    def test_term(self):
         item = HistoryItem(
             {
                 "date": "2020-03-19T15:03:03.599763Z",
                 "model": "barrier",
-                "field": "term",
+                "field": "problem_status",
                 "old_value": 1,
                 "new_value": 2,
                 "user": {"id": 48, "name": "Test-user"},
