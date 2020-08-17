@@ -39,6 +39,7 @@ class BarrierSearchForm(forms.Form):
             ("ineligible", "Ineligible to publish"),
             ("ready", "Ready to publish"),
             ("published", "Published"),
+            ("changed", "Barriers changed internally since being made public"),
             ("unpublished", "Unpublished"),
         ),
         required=False,
