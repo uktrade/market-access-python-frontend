@@ -5,7 +5,7 @@ from django.views.generic import FormView, View
 from .mixins import BarrierMixin
 from barriers.forms.location import (
     AddAdminAreaForm,
-    EditCountryForm,
+    EditCountryOrTradingBlocForm,
     EditLocationForm,
 )
 from utils.metadata import get_metadata
@@ -23,6 +23,10 @@ class BarrierEditLocation(BarrierMixin, FormView):
                     "country": self.barrier.country["id"],
                     "admin_areas": [admin_area["id"] for admin_area in self.barrier.admin_areas],
                 }
+            elif self.barrier.trading_bloc:
+                request.session["location"] = {
+                    "trading_bloc": self.barrier.trading_bloc["code"],
+                }
             else:
                 request.session["location"] = {
                     "country": None,
@@ -33,8 +37,9 @@ class BarrierEditLocation(BarrierMixin, FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         metadata = get_metadata()
-        country_id = self.request.session["location"]["country"]
+        country_id = self.request.session["location"].get("country")
         admin_area_ids = self.request.session["location"].get("admin_areas")
+        trading_bloc_code = self.request.session["location"].get("trading_bloc")
 
         if country_id:
             context_data.update(
@@ -46,6 +51,8 @@ class BarrierEditLocation(BarrierMixin, FormView):
                     "admin_areas": metadata.get_admin_areas(admin_area_ids),
                 }
             )
+        elif trading_bloc_code:
+            context_data["trading_bloc"] = metadata.get_trading_bloc(trading_bloc_code)
         return context_data
 
     def get_initial(self):
@@ -64,16 +71,16 @@ class BarrierEditLocation(BarrierMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         metadata = get_metadata()
-        countries = metadata.get_country_list()
-        country_choices = [(country["id"], country["name"]) for country in countries]
-        kwargs["countries"] = country_choices
 
-        selected_country_id = self.request.session["location"]["country"]
-        admin_areas = metadata.get_admin_areas_by_country(selected_country_id)
-        admin_area_choices = [
-            (admin_area["id"], admin_area["name"]) for admin_area in admin_areas
-        ]
-        kwargs["admin_areas"] = admin_area_choices
+        kwargs["countries"] = metadata.get_country_list()
+
+        selected_country_id = self.request.session["location"].get("country")
+        if selected_country_id:
+            kwargs["admin_areas"] = metadata.get_admin_areas_by_country(selected_country_id)
+            kwargs["trading_blocs"] = []
+        else:
+            kwargs["admin_areas"] = []
+            kwargs["trading_blocs"] = metadata.get_trading_bloc_list()
 
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
         kwargs["token"] = self.request.session.get("sso_token")

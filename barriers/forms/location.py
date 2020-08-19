@@ -5,30 +5,42 @@ from utils.api.client import MarketAccessAPIClient
 
 class EditLocationForm(forms.Form):
     country = forms.ChoiceField(
-        label="Exports to which country are affected by this issue?",
         choices=[],
         widget=forms.HiddenInput(),
+        required=False,
+    )
+    trading_bloc = forms.ChoiceField(
+        choices=[],
+        widget=forms.HiddenInput(),
+        required=False,
     )
     admin_areas = forms.MultipleChoiceField(
-        label="Exports to which country are affected by this issue?",
         choices=[],
         widget=forms.MultipleHiddenInput(),
         required=False,
     )
 
-    def __init__(self, barrier_id, countries, admin_areas, *args, **kwargs):
+    def __init__(self, barrier_id, countries, admin_areas, trading_blocs, *args, **kwargs):
         self.token = kwargs.pop("token")
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
-        self.fields["country"].choices = countries
-        self.fields["admin_areas"].choices = admin_areas
+        self.fields["country"].choices = [
+            (country["id"], country["name"]) for country in countries
+        ]
+        self.fields["admin_areas"].choices = [
+            (admin_area["id"], admin_area["name"]) for admin_area in admin_areas
+        ]
+        self.fields["trading_bloc"].choices = [
+            (trading_bloc["code"], trading_bloc["name"]) for trading_bloc in trading_blocs
+        ]
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.barrier_id,
-            country=self.cleaned_data["country"],
+            country=self.cleaned_data["country"] or None,
             admin_areas=self.cleaned_data["admin_areas"],
+            trading_bloc=self.cleaned_data["trading_bloc"],
         )
 
 
