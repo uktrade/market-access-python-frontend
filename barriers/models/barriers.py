@@ -69,9 +69,15 @@ class Barrier(APIModel):
 
     def get_location_text(self):
         if not self.country:
+            if self.trading_bloc:
+                return self.trading_bloc.get("name")
             return ""
 
         country_name = self.country.get("name", "")
+
+        if self.caused_by_trading_bloc and self.country.get("trading_bloc"):
+            trading_bloc = self.country["trading_bloc"].get("name")
+            return f"{trading_bloc} ({country_name})"
 
         if self.admin_areas:
             admin_areas_string = ", ".join(
