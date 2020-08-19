@@ -84,25 +84,32 @@ class BarrierEditLocationSession(BarrierEditLocation):
     use_session_location = True
 
 
-class BarrierEditCountry(BarrierMixin, FormView):
+class BarrierEditCountryOrTradingBloc(BarrierMixin, FormView):
     template_name = "barriers/edit/country.html"
-    form_class = EditCountryForm
+    form_class = EditCountryOrTradingBlocForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         metadata = get_metadata()
-        countries = metadata.get_country_list()
-        country_choices = [(country["id"], country["name"]) for country in countries]
-        kwargs["countries"] = country_choices
+        kwargs["countries"] = metadata.get_country_list()
+        kwargs["trading_blocs"] = metadata.get_trading_bloc_list()
         return kwargs
 
     def get_initial(self):
-        return {"country": self.request.session["location"]["country"]}
+        if self.request.session["location"].get("country"):
+            return {"location": self.request.session["location"]["country"]}
+        elif self.request.session["location"].get("trading_bloc"):
+            return {"location": self.request.session["location"]["trading_bloc"]}
 
     def form_valid(self, form):
-        if self.request.session["location"]["country"] != form.cleaned_data["country"]:
+        location = self.request.session["location"]
+        if (
+            location.get("country") != form.cleaned_data["country"]
+            or location.get("trading_bloc") != form.cleaned_data["trading_bloc"]
+        ):
             self.request.session["location"] = {
                 "country": form.cleaned_data["country"],
+                "trading_bloc": form.cleaned_data["trading_bloc"],
                 "admin_areas": [],
             }
         return super().form_valid(form)

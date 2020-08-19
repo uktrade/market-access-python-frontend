@@ -49,7 +49,7 @@ from .views.history import BarrierHistory
 from .views.location import (
     BarrierEditLocation,
     BarrierEditLocationSession,
-    BarrierEditCountry,
+    BarrierEditCountryOrTradingBloc,
     AddAdminArea,
     RemoveAdminArea,
 )
@@ -153,7 +153,7 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/location/", BarrierEditLocationSession.as_view(), name="edit_location_session"),
     path("barriers/<uuid:barrier_id>/location/edit/", BarrierEditLocation.as_view(), name="edit_location"),
-    path("barriers/<uuid:barrier_id>/location/country/", BarrierEditCountry.as_view(), name="edit_country"),
+    path("barriers/<uuid:barrier_id>/location/country/", BarrierEditCountryOrTradingBloc.as_view(), name="edit_country"),
     path("barriers/<uuid:barrier_id>/location/add-admin-area/", AddAdminArea.as_view(), name="add_admin_area"),
     path("barriers/<uuid:barrier_id>/location/remove-admin-area/", RemoveAdminArea.as_view(), name="remove_admin_area"),
 

@@ -32,16 +32,36 @@ class EditLocationForm(forms.Form):
         )
 
 
-class EditCountryForm(forms.Form):
-    country = forms.ChoiceField(
-        label="Exports to which country are affected by this issue?",
+class EditCountryOrTradingBlocForm(forms.Form):
+    location = forms.ChoiceField(
+        label="Which location is affected by this issue?",
         choices=[],
         error_messages={"required": "Select a location for this barrier"},
     )
 
-    def __init__(self, countries, *args, **kwargs):
+    def __init__(self, countries, trading_blocs, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["country"].choices = countries
+        self.trading_blocs = trading_blocs
+        self.fields["location"].choices = (
+            (
+                "Trading blocs",
+                tuple([(bloc["code"], bloc["name"]) for bloc in trading_blocs]),
+            ),
+            (
+                "Countries",
+                tuple((country["id"], country["name"]) for country in countries),
+            ),
+        )
+
+    def clean_location(self):
+        location = self.cleaned_data["location"]
+        trading_bloc_codes = [trading_bloc["code"] for trading_bloc in self.trading_blocs]
+        if location in trading_bloc_codes:
+            self.cleaned_data["country"] = None
+            self.cleaned_data["trading_bloc"] = location
+        else:
+            self.cleaned_data["country"] = location
+            self.cleaned_data["trading_bloc"] = None
 
 
 class AddAdminAreaForm(forms.Form):

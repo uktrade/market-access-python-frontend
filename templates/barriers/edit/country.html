@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier - Edit Country{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier - Edit Location{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:edit_location_session' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,25 +8,15 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit barrier country' %}
+    {% include 'partials/heading.html' with text='Edit barrier location' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.country.name }}" class="govuk-form-group{% if form.country.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="{{ form.country.name }}">{{ form.country.label }}</label>
+        {% include "partials/forms/select_input.html" with field=form.location %}
 
-            {% form_field_error form "country" %}
-
-            <select class="govuk-select govuk-!-width-full{% if form.country.errors %} govuk-select--error{% endif %}" id="{{ form.country.name }}" name="{{ form.country.name }}"{% if form.country.errors %} aria-describedby="{{ form.country.name }}-error"{% endif %}>
-                {% for id, name in form.fields.country.choices %}
-                <option value="{{ id }}">{{ name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <input type="submit" value="Change country" class="govuk-button">
+        <input type="submit" value="Change location" class="govuk-button">
         <a href="{% url 'barriers:edit_location_session' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 

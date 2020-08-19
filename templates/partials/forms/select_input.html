@@ -5,7 +5,7 @@
 
     <select class="govuk-select{% if field_classes %} {{ field_classes }}{% endif %}{% if field.errors %} govuk-select--error{% endif %}" id="{{ field.name }}" name="{{ field.name }}"{% if field.errors %} aria-describedby="{{ field.name }}-error"{% endif %}>
         {% for value, label in field.field.choices %}
-            {% if label.1|length == 2 %}
+            {% if label.0|add:"x" == "" %}
                 {% with group_name=value group_choices=label %}
                     <optgroup label="{{ group_name }}">
                         {% for value, label in group_choices %}
