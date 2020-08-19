@@ -34,6 +34,7 @@ from .views.core import (
 )
 from .views.documents import DownloadDocument
 from .views.edit import (
+    BarrierEditCausedByTradingBloc,
     BarrierEditEndDate,
     BarrierEditTitle,
     BarrierEditProduct,
@@ -131,6 +132,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
     path("barriers/<uuid:barrier_id>/edit/tags/", BarrierEditTags.as_view(), name="edit_tags"),
     path("barriers/<uuid:barrier_id>/edit/trade-direction/", BarrierEditTradeDirection.as_view(), name="edit_trade_direction"),
+    path("barriers/<uuid:barrier_id>/edit/trading-bloc/", BarrierEditCausedByTradingBloc.as_view(), name="edit_trading_bloc"),
     path("barriers/<uuid:barrier_id>/edit/wto-status/", EditWTOStatus.as_view(), name="edit_wto_status"),
     path("barriers/<uuid:barrier_id>/edit/wto/", EditWTOProfile.as_view(), name="edit_wto_profile"),
     path("barriers/<uuid:barrier_id>/wto/documents/add/", AddWTODocument.as_view(), name="add_wto_document"),
