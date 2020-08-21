@@ -9,6 +9,7 @@ class BarrierSearchForm(forms.Form):
     search_id = forms.UUIDField(required=False, widget=forms.HiddenInput())
     search = forms.CharField(label="Search barrier title, summary or code", max_length=255, required=False)
     country = forms.MultipleChoiceField(label="Barrier location", required=False,)
+    country_trading_bloc = forms.MultipleChoiceField(label="Country trading blocs", required=False,)
     trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
     sector = forms.MultipleChoiceField(label="Sector", required=False,)
     category = forms.MultipleChoiceField(label="Category", required=False,)
@@ -57,6 +58,7 @@ class BarrierSearchForm(forms.Form):
 
         super().__init__(*args, **kwargs)
         self.set_country_choices()
+        self.set_country_trading_bloc_choices()
         self.set_trade_direction_choices()
         self.set_sector_choices()
         self.set_category_choices()
@@ -74,6 +76,7 @@ class BarrierSearchForm(forms.Form):
             "search_id": data.get("search_id"),
             "search": data.get("search"),
             "country": data.getlist("country"),
+            "country_trading_bloc": data.getlist("country_trading_bloc"),
             "trade_direction": data.getlist("trade_direction"),
             "sector": data.getlist("sector"),
             "category": data.getlist("category"),
@@ -91,9 +94,24 @@ class BarrierSearchForm(forms.Form):
         return {k: v for k, v in cleaned_data.items() if v}
 
     def set_country_choices(self):
-        self.fields["country"].choices = [("", "All locations")] + [
+        location_choices = [("", "All locations")] + [
+            (trading_bloc["code"], trading_bloc["name"])
+            for trading_bloc in self.metadata.get_trading_bloc_list()
+        ] + [
             (country["id"], country["name"])
             for country in self.metadata.get_country_list()
+        ]
+        self.fields["country"].choices = location_choices
+
+    def set_country_trading_bloc_choices(self):
+        trading_bloc_labels = {
+            "TB00016": "Include country specific implementations of EU regulations"
+        }
+        self.fields["country_trading_bloc"].choices = [
+            (
+                trading_bloc["code"],
+                trading_bloc_labels.get(trading_bloc["code"], trading_bloc["name"])
+            ) for trading_bloc in self.metadata.get_trading_bloc_list()
         ]
 
     def set_trade_direction_choices(self):
@@ -236,6 +254,7 @@ class BarrierSearchForm(forms.Form):
         params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
         params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
+        params["country_trading_bloc"] = ",".join(self.cleaned_data.get("country_trading_bloc", []))
 
         return {k: v for k, v in params.items() if v}
 
