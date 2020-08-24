@@ -74,7 +74,7 @@ function LocationFilter(props) {
   return (
     <div className="govuk-form-group">
       <fieldset className="govuk-fieldset">
-        <legend className="govuk-label govuk-label--s">
+        <legend className="govuk-fieldset__legend filter-items__label filter-group__label">
           {props.label}
         </legend>
 
