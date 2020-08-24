@@ -2,27 +2,38 @@ import React from "react"
 
 import Select from 'react-select'
 
+import {GDS_TRANSPORT_FONT} from "../styles"
+import {
+  BLACK,
+  BLUE,
+  GREY_2,
+  GREY_3,
+  RED,
+  WHITE,
+  YELLOW,
+} from 'govuk-colours'
+
 
 const customStyles = {
   option: (provided, state) => ({
-    "border-bottom": "1px solid #b1b4b6",
+    "border-bottom": `1px solid ${GREY_2}`,
     "padding": "12px",
     ":hover": {
-      "background-color": "#006eb1",
-      "color": "#fff",
+      "background-color": BLUE,
+      "color": WHITE,
     },
   }),
   control: (provided, state) => {
     return {
       ...provided,
-      "border": "2px solid black",
+      "border": `2px solid ${BLACK}`,
       "border-radius": 0,
       "boxShadow": "none",
       ":focus": {
-        "outline": "3px solid #fd0 !important",
+        "outline": `3px solid ${YELLOW} !important`,
       },
       ":hover": {
-        "border": "2px solid black",
+        "border": `2px solid ${BLACK}`,
       },
     }
   },
@@ -36,21 +47,21 @@ const customStyles = {
     return {
       ...provided,
       "font-size": "16px",
-      "background-color": "#f3f2f1",
+      "background-color": GREY_3,
       "border-radius": 0,
-      "font-family": '"GDS Transport",Arial,sans-serif'
-    };
+      "font-family": GDS_TRANSPORT_FONT,
+    }
   },
   multiValueRemove: (provided, state) => {
     return {
       ...provided,
       ":hover": {
-        "color": "#d4351c",
-        "background-color": "#b1b4b6",
+        "color": RED,
+        "background-color": GREY_2,
         "border-radius": 0,
         "cursor": "pointer",
       },
-    };
+    }
   },
   menu: (provided, state) => {
     return {
@@ -61,14 +72,15 @@ const customStyles = {
   menuList: (provided, state) => {
     return {
       ...provided,
-      "border": "1px solid black",
+      "border": `1px solid ${BLACK}`,
       "padding": 0,
+      "margin-top": "-1px",
     }
   },
   placeholder: (provided, state) => {
     return {
       ...provided,
-      "font-family": '"GDS Transport",Arial,sans-serif',
+      "font-family": GDS_TRANSPORT_FONT,
       "font-size": "19px !important",
     }
   },
