@@ -13,8 +13,8 @@ export const getCheckboxValues = (element) => {
   for (let i = 0; i < filterItems.length; i++) {
     let item = filterItems[i]
     values.push({
-      "id": item.querySelector('input').value,
-      "name": item.querySelector('label').textContent.trim(),
+      "value": item.querySelector('input').value,
+      "label": item.querySelector('label').textContent.trim(),
       "checked": item.querySelector('input').checked,
     })
   }

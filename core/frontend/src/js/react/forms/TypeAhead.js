@@ -26,6 +26,12 @@ const customStyles = {
       },
     }
   },
+  valueContainer: (provided, state) => {
+    return {
+      ...provided,
+      "padding": "4px 4px 2px",
+    }
+  },
   multiValue: (provided, state) => {
     return {
       ...provided,
@@ -75,6 +81,7 @@ function TypeAhead(props) {
       {...props}
       isMulti={true}
       isClearable={false}
+      className="multiselect"
       styles={customStyles}
       components={{
         IndicatorSeparator: () => null

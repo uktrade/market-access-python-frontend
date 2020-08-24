@@ -5,7 +5,7 @@ import TypeAhead from "../forms/TypeAhead"
 
 function TradingBlocFilter(props) {
   const selectedTradingBlocs = props.tradingBlocs.reduce((selected, tradingBloc) => {
-    if (props.selectedTradingBlocIds.includes(tradingBloc.id)) selected.push(tradingBloc)
+    if (props.selectedTradingBlocIds.includes(tradingBloc.value)) selected.push(tradingBloc)
     return selected;
   }, []);
 
@@ -18,11 +18,11 @@ function TradingBlocFilter(props) {
               id={"country_trading_bloc-" + index}
               name="country_trading_bloc"
               type="checkbox"
-              value={tradingBloc.id}
+              value={tradingBloc.value}
               defaultChecked={tradingBloc.checked}
             />
             <label className="govuk-label checkbox-filter__label" for={"country_trading_bloc-" + index}>
-              {tradingBloc.name}
+              {tradingBloc.label}
             </label>
           </div>
         )}
@@ -33,42 +33,42 @@ function TradingBlocFilter(props) {
 
 
 function LocationFilter(props) {
-  const tradingBlocIds = props.tradingBlocs.reduce((ids, tradingBloc) => {
-    ids.push(tradingBloc.id)
-    return ids;
-  }, []);
+  const tradingBlocIds = props.tradingBlocs.map(tradingBloc => tradingBloc.value)
   const initialSelectedLocations = props.countries.reduce((selected, location) => {
-    if (location.checked) selected.push(location.id)
-    return selected;
+    if (location.checked) selected.push(location)
+    return selected
   }, []);
-  const [selectedLocations, setSelectedLocations] = useState(initialSelectedLocations)
+  const initialSelectedLocationIds = initialSelectedLocations.map(location => location.value)
+  const [selectedLocationIds, setSelectedLocationIds] = useState(initialSelectedLocationIds)
 
   const handleLocationSelect = (value, meta) => {
     if (meta.action == "select-option") {
       let location = meta.option.value
-      setSelectedLocations(selectedLocations.concat(location))
+      setSelectedLocationIds(selectedLocationIds.concat(location))
     } else {
       let location = meta.removedValue.value
-      setSelectedLocations(
-        selectedLocations.filter(item => item !== location)
+      setSelectedLocationIds(
+        selectedLocationIds.filter(item => item !== location)
       )
     }
   }
 
-  const selectedTradingBlocIds = selectedLocations.reduce((selected, location) => {
+  const getTradingBlocLabel = (tradingBloc) => {
+    return {
+      "TB00016": "Include EU-wide barriers"
+    }[tradingBloc.code] || "Include " + tradingBloc.name + " barriers"
+  }
+
+  const selectedTradingBlocIds = selectedLocationIds.reduce((selected, location) => {
     if (tradingBlocIds.includes(location)) selected.push(location)
     return selected;
   }, []);
 
   const selectedCountryTradingBlocs = props.tradingBlocData.reduce((selected, tradingBloc) => {
-    if (selectedLocations.some(item => tradingBloc.country_ids.includes(item))) selected.push(tradingBloc)
+    if (selectedLocationIds.some(item => tradingBloc.country_ids.includes(item))) selected.push(tradingBloc)
     return selected;
   }, []);
 
-  const options = props.countries.reduce((options, country) => {
-    options.push({"value": country.id, "label": country.name})
-    return options;
-  }, []);
 
   return (
     <div className="govuk-form-group">
@@ -78,32 +78,39 @@ function LocationFilter(props) {
         </legend>
 
         <TypeAhead
-          options={options}
-          className="multiselect"
+          options={props.countries}
+          name="country"
           onChange={handleLocationSelect}
           placeholder="Search locations"
+          defaultValue={initialSelectedLocations}
         />
 
-        {selectedTradingBlocIds ? (
+        {selectedTradingBlocIds.length ? (
           <TradingBlocFilter tradingBlocs={props.tradingBlocs} selectedTradingBlocIds={selectedTradingBlocIds} />
         ) : (
           null
         )}
 
-        {selectedCountryTradingBlocs.map((tradingBloc, index) =>
-          <div className="checkbox-filter__item">
-            <input
-              className="checkbox-filter__input"
-              id={"country-extra" + index}
-              name="country"
-              type="checkbox"
-              value={tradingBloc.code}
-              defaultChecked={tradingBloc.checked}
-            />
-            <label className="govuk-label checkbox-filter__label" for={"country-extra" + index}>
-              {tradingBloc.name}
-            </label>
+        {selectedCountryTradingBlocs.length ? (
+          <div className="checkbox-filter govuk-!-width-full">
+            {selectedCountryTradingBlocs.map((tradingBloc, index) =>
+              <div className="checkbox-filter__item">
+                <input
+                  className="checkbox-filter__input"
+                  id={"extra_location" + index}
+                  name="extra_location"
+                  type="checkbox"
+                  value={tradingBloc.code}
+                  defaultChecked={initialExtraLocation.includes(tradingBloc.code)}
+                />
+                <label className="govuk-label checkbox-filter__label" for={"extra_location" + index}>
+                  {getTradingBlocLabel(tradingBloc)}
+                </label>
+              </div>
+            )}
           </div>
+        ) : (
+          null
         )}
 
       </fieldset>
