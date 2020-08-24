@@ -24,18 +24,17 @@ const customStyles = {
     },
   }),
   control: (provided, state) => {
-    return {
+    let styles = {
       ...provided,
       "border": `2px solid ${BLACK}`,
       "border-radius": 0,
       "boxShadow": "none",
-      ":focus": {
-        "outline": `3px solid ${YELLOW} !important`,
-      },
       ":hover": {
         "border": `2px solid ${BLACK}`,
       },
     }
+    if (state.isFocused) styles["outline"] = `3px solid ${YELLOW}`
+    return styles
   },
   valueContainer: (provided, state) => {
     return {
