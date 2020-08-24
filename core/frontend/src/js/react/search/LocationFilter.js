@@ -69,6 +69,7 @@ function LocationFilter(props) {
     return selected;
   }, []);
 
+  const initialExtraLocation = new URLSearchParams(window.location.search).getAll("extra_location")
 
   return (
     <div className="govuk-form-group">
