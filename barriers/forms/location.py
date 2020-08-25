@@ -49,6 +49,12 @@ class EditCountryOrTradingBlocForm(forms.Form):
         label="Which location is affected by this issue?",
         choices=[],
         error_messages={"required": "Select a location for this barrier"},
+        help_text=(
+            "A trading bloc should be selected if the barrier applies to the whole "
+            "trading bloc. Select a country if the barrier is a national "
+            "implementation of a trading bloc regulation (so only applies to that "
+            "country)"
+        )
     )
 
     def __init__(self, countries, trading_blocs, *args, **kwargs):
