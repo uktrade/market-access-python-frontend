@@ -156,17 +156,8 @@ class YesNoDontKnowBooleanField(YesNoBooleanField):
     default_choices = (
         ("yes", "Yes"),
         ("no", "No"),
-        ("dontknow", "Don't Know"),
+        ("dontknow", "Don't know"),
     )
-
-    def prepare_value(self, data):
-        if data is True:
-            return "yes"
-        elif data is False:
-            return "no"
-        elif data is None:
-            return "dontknow"
-        return data
 
     def clean(self, value):
         self.validate(value)

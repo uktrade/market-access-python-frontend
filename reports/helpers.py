@@ -314,7 +314,8 @@ class ReportFormGroup:
         return data
 
     def get_caused_by_trading_bloc_form_data(self):
-        return {"caused_by_trading_bloc": self.barrier.caused_by_trading_bloc}
+        if self.barrier:
+            return {"caused_by_trading_bloc": self.barrier.caused_by_trading_bloc}
 
     def get_trade_direction_form_data(self):
         if self.barrier.trade_direction:

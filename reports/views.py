@@ -382,7 +382,7 @@ class NewReportBarrierLocationRemoveAdminAreasView(ReportsFormView):
 
 
 class NewReportBarrierCausedByTradingBlocView(MetadataMixin, ReportsFormView):
-    heading_text = "Caused by trading bloc"
+    heading_text = "Location of the barrier"
     template_name = "reports/new_report_caused_by_trading_bloc.html"
     form_class = NewReportCausedByTradingBlocForm
     success_path = "reports:barrier_trade_direction"
