@@ -12,13 +12,15 @@
 
         <form action="" method="POST">
             {% csrf_token %}
-            <div class="{% form_group_classes form.errors %}">
-                {% include "partials/forms/select_input.html" with field=form.location %}
+
+            <div id="{{ form.caused_by_trading_bloc.name }}" class="{% form_group_classes form.errors %}">
+                {% include "partials/forms/radio_input.html" with field=form.caused_by_trading_bloc %}
             </div>
+
             <input type="submit" value="Continue" class="govuk-button">
         </form>
 
-	</section>
+    </section>
 
 
 {% endblock %}

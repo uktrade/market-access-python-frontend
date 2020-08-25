@@ -17,6 +17,7 @@ from reports.forms.new_report_barrier_location import (
     NewReportBarrierLocationAddAdminAreasForm,
     NewReportBarrierLocationAdminAreasForm,
     NewReportBarrierTradeDirectionForm,
+    NewReportCausedByTradingBlocForm,
 )
 from reports.forms.new_report_barrier_sectors import (
     NewReportBarrierHasSectorsForm,
@@ -33,7 +34,7 @@ from reports.helpers import ReportFormGroup
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
-from utils.metadata import get_metadata
+from utils.metadata import get_metadata, MetadataMixin
 
 
 class CalloutMixin(ContextMixin):
@@ -226,28 +227,35 @@ class NewReportBarrierStatusView(ReportsFormView):
         return context_data
 
 
-class NewReportBarrierLocationView(ReportsFormView):
+class NewReportBarrierLocationView(MetadataMixin, ReportsFormView):
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_barrier_location.html"
     form_class = NewReportBarrierLocationForm
     success_path = None
     extra_paths = {'back': 'reports:barrier_status'}
     form_session_key = FormSessionKeys.LOCATION
-    metadata = get_metadata()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["countries"] = (
-            (country['id'], country['name'])
-            for country in self.metadata.get_country_list()
-        )
+        kwargs["countries"] = self.metadata.get_country_list()
+        kwargs["trading_blocs"] = self.metadata.get_trading_bloc_list()
         return kwargs
+
+    def get_initial(self):
+        form_data = self.form_group.get(self.form_session_key, {})
+        if form_data.get("country"):
+            return {"location": form_data["country"]}
+        elif form_data.get("trading_bloc"):
+            return {"location": form_data["trading_bloc"]}
 
     def success(self):
         country_id = self.form_group.location_form["country"]
+        country_trading_bloc = self.metadata.get_trading_bloc_by_country_id(country_id)
         admin_areas = self.metadata.get_admin_areas_by_country(country_id)
         if admin_areas:
             self.success_path = "reports:barrier_has_admin_areas"
+        elif country_trading_bloc:
+            self.success_path = "reports:barrier_caused_by_trading_bloc"
         else:
             self.success_path = "reports:barrier_trade_direction"
             self.form_group.selected_admin_areas = ""
@@ -371,6 +379,22 @@ class NewReportBarrierLocationRemoveAdminAreasView(ReportsFormView):
         admin_area_id = request.POST.get("admin_area")
         self.form_group.remove_selected_admin_area(admin_area_id)
         return HttpResponseRedirect(self.get_success_url())
+
+
+class NewReportBarrierCausedByTradingBlocView(MetadataMixin, ReportsFormView):
+    heading_text = "Caused by trading bloc"
+    template_name = "reports/new_report_caused_by_trading_bloc.html"
+    form_class = NewReportCausedByTradingBlocForm
+    success_path = "reports:barrier_trade_direction"
+    extra_paths = {'back': 'reports:barrier_location'}
+    form_session_key = FormSessionKeys.CAUSED_BY_TRADING_BLOC
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        country_id = self.form_group.location_form.get("country")
+        trading_bloc = self.metadata.get_trading_bloc_by_country_id(country_id)
+        kwargs["trading_bloc"] = trading_bloc
+        return kwargs
 
 
 class NewReportBarrierTradeDirectionView(ReportsFormView):

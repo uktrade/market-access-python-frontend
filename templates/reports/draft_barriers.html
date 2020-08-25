@@ -46,7 +46,11 @@
                         {{ report.code }}
                     </td>
                     <td class="standard-table__cell">
-                        {{ report.country.name|default:'---' }}
+                        {% if report.country %}
+                            {{ report.country.name|default:'---' }}
+                        {% else %}
+                            {{ report.trading_bloc.name|default:'---' }}
+                        {% endif %}
                     </td>
                     <td class="standard-table__cell">
                         {{ report.resolved_text }}
