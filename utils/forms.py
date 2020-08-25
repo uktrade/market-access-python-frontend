@@ -124,13 +124,14 @@ class YesNoBooleanField(forms.ChoiceField):
     """
     Display a BooleanField as Yes and No radio buttons
     """
+    default_choices = (
+        ("yes", "Yes"),
+        ("no", "No"),
+    )
 
     def __init__(self, choices=None, **kwargs):
         if not choices:
-            choices = (
-                ("yes", "Yes"),
-                ("no", "No"),
-            )
+            choices = self.default_choices
         super().__init__(choices=choices, **kwargs)
 
     def prepare_value(self, data):
@@ -149,6 +150,29 @@ class YesNoBooleanField(forms.ChoiceField):
     def valid_value(self, value):
         value = self.prepare_value(value)
         return super().valid_value(value)
+
+
+class YesNoDontKnowBooleanField(YesNoBooleanField):
+    default_choices = (
+        ("yes", "Yes"),
+        ("no", "No"),
+        ("dontknow", "Don't Know"),
+    )
+
+    def prepare_value(self, data):
+        if data is True:
+            return "yes"
+        elif data is False:
+            return "no"
+        elif data is None:
+            return "dontknow"
+        return data
+
+    def clean(self, value):
+        self.validate(value)
+        value = self.to_python(value)
+        self.run_validators(value)
+        return value
 
 
 class MonthYearWidget(forms.MultiWidget):

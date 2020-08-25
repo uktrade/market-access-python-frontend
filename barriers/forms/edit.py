@@ -9,6 +9,7 @@ from utils.forms import (
     DayMonthYearField,
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
+    YesNoDontKnowBooleanField,
 )
 
 
@@ -230,7 +231,7 @@ class UpdateTradeDirectionForm(APIFormMixin, forms.Form):
 
 
 class UpdateCausedByTradingBlocForm(APIFormMixin, forms.Form):
-    caused_by_trading_bloc = YesNoBooleanField(
+    caused_by_trading_bloc = YesNoDontKnowBooleanField(
         label="",
         error_messages={
             "required": (
