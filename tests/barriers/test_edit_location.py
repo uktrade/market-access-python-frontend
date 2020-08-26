@@ -59,7 +59,9 @@ class EditLocationTestCase(MarketAccessTestCase):
 
         metadata = get_metadata()
         country_list = metadata.get_country_list()
-        assert len(form.fields["country"].choices) == len(country_list)
+        trading_bloc_list = metadata.get_trading_bloc_list()
+        assert len(form.fields["location"].choices[0][1]) == len(trading_bloc_list)
+        assert len(form.fields["location"].choices[1][1]) == len(country_list)
 
     @patch("utils.api.resources.APIResource.patch")
     def test_edit_country(self, mock_patch):
@@ -79,7 +81,7 @@ class EditLocationTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse("barriers:edit_country", kwargs={"barrier_id": self.barrier["id"]}),
-            data={"country": self.new_country_id},
+            data={"location": self.new_country_id},
         )
         assert response.status_code == HTTPStatus.FOUND
         assert self.client.session["location"]["country"] == self.new_country_id
@@ -205,5 +207,6 @@ class EditLocationTestCase(MarketAccessTestCase):
             id=self.barrier["id"],
             country=self.new_country_id,
             admin_areas=self.new_admin_area_ids,
+            trading_bloc=None,
         )
         assert response.status_code == HTTPStatus.FOUND

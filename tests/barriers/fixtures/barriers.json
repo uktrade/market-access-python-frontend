@@ -23,6 +23,8 @@
                 "name": "Sao Paulo"
             }
         ],
+        "trading_bloc": null,
+        "caused_by_trading_bloc": null,
         "sectors_affected": true,
         "all_sectors": false,
         "sectors": [
@@ -113,6 +115,8 @@
                 "name": ""
             }
         ],
+        "trading_bloc": null,
+        "caused_by_trading_bloc": null,
         "status": {
             "id": 3,
             "name": "Resolved: In part"
@@ -168,6 +172,8 @@
             "name": "Country Name"
         },
         "admin_areas": [],
+        "trading_bloc": null,
+        "caused_by_trading_bloc": null,
         "status": {
             "id": 2,
             "name": "Open: In progress"
@@ -224,6 +230,8 @@
                 "name": ""
             }
         ],
+        "trading_bloc": null,
+        "caused_by_trading_bloc": null,
         "status": {
             "id": 4,
             "name": "Resolved: In full"

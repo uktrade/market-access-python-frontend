@@ -18,6 +18,8 @@
     "status_summary": null,
     "country": null,
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": null,
     "sectors_affected": null,
     "all_sectors": null,
@@ -90,6 +92,8 @@
       "name": "Brazil"
     },
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": {
       "id": 1,
       "name": "Exporting from the UK"
@@ -165,6 +169,8 @@
       "name": "Brazil"
     },
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": {
         "id": 1,
         "name": "Exporting from the UK"
@@ -240,6 +246,8 @@
       "name": "Brazil"
     },
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": {
       "id": 1,
       "name": "Exporting from the UK"
@@ -315,6 +323,8 @@
       "name": "Brazil"
     },
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": {
       "id": 1,
       "name": "Exporting from the UK"
@@ -390,6 +400,8 @@
       "name": "Brazil"
     },
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": {
       "id": 1,
       "name": "Exporting from the UK"
@@ -470,6 +482,8 @@
       "name": "Brazil"
     },
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": {
       "id": 1,
       "name": "Exporting from the UK"
@@ -553,6 +567,8 @@
       "name": "Brazil"
     },
     "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
     "trade_direction": {
       "id": 1,
       "name": "Exporting from the UK"

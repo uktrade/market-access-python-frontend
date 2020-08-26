@@ -28,8 +28,8 @@ class LocationViewTestCase(ReportsTestCase):
 
     def test_location_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - Location of the barrier</title>'
-        expected_dropdown_container = '<select class="govuk-select govuk-!-width-full" id="country" name="country">'
-        dropdown_option = '<option class="country_option"'
+        expected_dropdown_container = '<select class="govuk-select" id="location" name="location">'
+        dropdown_option = '<option class="location_option"'
         country_count = 195
         expected_continue_btn = '<input type="submit" value="Continue" class="govuk-button">'
 
@@ -47,7 +47,7 @@ class LocationViewTestCase(ReportsTestCase):
 
     @patch("reports.helpers.ReportFormGroup.save")
     def test_location_cannot_be_empty(self, mock_save):
-        field_name = 'country'
+        field_name = 'location'
         session_key = 'draft_barrier__location_form_data'
 
         response = self.client.post(self.url, data={field_name: ''})
@@ -67,10 +67,10 @@ class LocationViewTestCase(ReportsTestCase):
     def test_location_saved_in_session(self, mock_create):
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
-        field_name = 'country'
+        field_name = 'location'
         session_key = 'draft_barrier__location_form_data'
         fiji_uuid = 'd9f682ac-5d95-e211-a939-e4115bead28a'
-        expected_form_data = {'country': fiji_uuid}
+        expected_form_data = {'country': fiji_uuid, 'trading_bloc': None}
 
         response = self.client.post(self.url, data={field_name: fiji_uuid}, follow=True)
         saved_form_data = self.client.session.get(session_key)
@@ -83,7 +83,7 @@ class LocationViewTestCase(ReportsTestCase):
     def test_saving_location_redirects_to_correct_view(self, mock_create):
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
-        field_name = 'country'
+        field_name = 'location'
         fiji_uuid = 'd9f682ac-5d95-e211-a939-e4115bead28a'
         redirect_url = reverse('reports:barrier_trade_direction')
 
@@ -99,7 +99,7 @@ class LocationViewHasAdminAreasTestCase(ReportsTestCase):
     @patch("reports.helpers.ReportFormGroup.save")
     def test_saving_location_redirects_to_correct_view(self, mock_save):
         url = reverse('reports:barrier_location')
-        field_name = 'country'
+        field_name = 'location'
         brazil_uuid = 'b05f66a0-5d95-e211-a939-e4115bead28a'
         redirect_url = reverse('reports:barrier_has_admin_areas')
 

@@ -13,7 +13,7 @@
         <form action="" method="POST">
             {% csrf_token %}
             <div class="{% form_group_classes form.errors %}">
-                {% include "partials/forms/select_input.html" with field=form.location %}
+                {% include "partials/forms/select_input.html" with field=form.location option_classes="location_option" %}
             </div>
             <input type="submit" value="Continue" class="govuk-button">
         </form>
