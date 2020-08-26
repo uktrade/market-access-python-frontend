@@ -50,6 +50,7 @@ urlpatterns = [
     path("reports/new/trade-direction/", NewReportBarrierTradeDirectionView.as_view(), name="barrier_trade_direction"),
     path("reports/<uuid:barrier_id>/trade-direction/", NewReportBarrierTradeDirectionView.as_view(), name="barrier_trade_direction_uuid"),
     path("reports/new/caused-by-trading-bloc/", NewReportBarrierCausedByTradingBlocView.as_view(), name="barrier_caused_by_trading_bloc"),
+    path("reports/<uuid:barrier_id>/caused-by-trading-bloc/", NewReportBarrierTradeDirectionView.as_view(), name="barrier_caused_by_trading_bloc_uuid"),
 
     # Sectors
     path("reports/<uuid:barrier_id>/has-sectors/", NewReportBarrierHasSectorsView.as_view(), name="barrier_has_sectors_uuid"),

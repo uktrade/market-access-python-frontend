@@ -300,10 +300,16 @@ class ReportFormGroup:
 
     def get_location_form_data(self):
         if self.barrier.country:
-            return {"location": self.barrier.country["id"]}
+            return {
+                "country": self.barrier.country["id"],
+                "trading_bloc": None,
+            }
         if self.barrier.trading_bloc:
-            return {"location": self.barrier.trading_bloc["code"]}
-        return {"location": None}
+            return {
+                "country": None,
+                "trading_bloc": self.barrier.trading_bloc["code"],
+            }
+        return {"country": None, "trading_bloc": None}
 
     def get_has_admin_areas_form_data(self):
         data = {"has_admin_areas": None}
