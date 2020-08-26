@@ -52,7 +52,7 @@ class SessionKeys:
         FormSessionKeys.LOCATION: "location_form_data",
         FormSessionKeys.HAS_ADMIN_AREAS: "has_admin_areas_form_data",
         FormSessionKeys.ADMIN_AREAS: "admin_areas_form_data",
-        FormSessionKeys.CAUSED_BY_TRADING_BLOC: "caused_by_trading_bloc",
+        FormSessionKeys.CAUSED_BY_TRADING_BLOC: "caused_by_trading_bloc_form_data",
         FormSessionKeys.TRADE_DIRECTION: "trade_direction_form_data",
         FormSessionKeys.SELECTED_ADMIN_AREAS: "selected_admin_areas",
         FormSessionKeys.SECTORS_AFFECTED: "sectors_affected",

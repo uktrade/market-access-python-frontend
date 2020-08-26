@@ -80,6 +80,20 @@ class LocationViewTestCase(ReportsTestCase):
         assert mock_create.called is False
 
     @patch("reports.helpers.ReportFormGroup._create_barrier")
+    def test_trading_bloc_location_saved_in_session(self, mock_create):
+        draft_barrier = self.draft_barrier(2)
+        mock_create.return_value = Report(draft_barrier)
+        session_key = "draft_barrier__location_form_data"
+        expected_form_data = {"country": None, "trading_bloc": "TB00016"}
+
+        response = self.client.post(self.url, data={"location": "TB00016"}, follow=True)
+        saved_form_data = self.client.session.get(session_key)
+
+        assert HTTPStatus.OK == response.status_code
+        assert expected_form_data == saved_form_data
+        assert mock_create.called is False
+
+    @patch("reports.helpers.ReportFormGroup._create_barrier")
     def test_saving_location_redirects_to_correct_view(self, mock_create):
         draft_barrier = self.draft_barrier(2)
         mock_create.return_value = Report(draft_barrier)
@@ -91,6 +105,44 @@ class LocationViewTestCase(ReportsTestCase):
 
         self.assertRedirects(response, redirect_url)
         assert mock_create.called is False
+
+    @patch("reports.helpers.ReportFormGroup._create_barrier")
+    def test_saving_location_with_trading_bloc_redirects_to_correct_view(self, mock_create):
+        draft_barrier = self.draft_barrier(2)
+        mock_create.return_value = Report(draft_barrier)
+        field_name = 'location'
+        france_uuid = "82756b9a-5d95-e211-a939-e4115bead28a"
+        redirect_url = reverse('reports:barrier_caused_by_trading_bloc')
+
+        response = self.client.post(self.url, data={field_name: france_uuid})
+
+        self.assertRedirects(response, redirect_url)
+        assert mock_create.called is False
+
+
+class LocationViewCausedByTradingBlocTestCase(ReportsTestCase):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('reports:barrier_caused_by_trading_bloc')
+        session = self.client.session
+        france_uuid = "82756b9a-5d95-e211-a939-e4115bead28a"
+        session['draft_barrier__location_form_data'] = {"country": france_uuid}
+        session.save()
+
+    def test_caused_by_trading_bloc_gets_saved_in_session(self):
+        session_key = "draft_barrier__caused_by_trading_bloc_form_data"
+        expected_form_data = {'caused_by_trading_bloc': True}
+
+        response = self.client.post(
+            self.url,
+            data={"caused_by_trading_bloc": "yes"},
+            follow=True,
+        )
+        saved_form_data = self.client.session.get(session_key)
+        sess = self.client.session
+
+        assert HTTPStatus.OK == response.status_code
+        assert expected_form_data == saved_form_data
 
 
 class LocationViewHasAdminAreasTestCase(ReportsTestCase):
