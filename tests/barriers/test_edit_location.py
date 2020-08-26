@@ -35,9 +35,9 @@ class EditLocationTestCase(MarketAccessTestCase):
             admin_area["id"] for admin_area in self.barrier["admin_areas"]
         ]
 
-    def test_edit_country_choices(self):
+    def test_edit_location_choices(self):
         """
-        Check the edit country page lists all countries in choices
+        Check the edit location page lists all countries in choices
         """
         self.update_session(
             {
@@ -74,7 +74,8 @@ class EditLocationTestCase(MarketAccessTestCase):
                     "country": self.barrier["country"],
                     "admin_areas": [
                         admin_area["id"] for admin_area in self.barrier["admin_areas"]
-                    ]
+                    ],
+                    "trading_bloc": None,
                 }
             }
         )
@@ -86,6 +87,34 @@ class EditLocationTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
         assert self.client.session["location"]["country"] == self.new_country_id
         assert self.client.session["location"]["admin_areas"] == []
+        assert self.client.session["location"]["trading_bloc"] == None
+        assert mock_patch.called is False
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_edit_trading_bloc(self, mock_patch):
+        """
+        Edit trading bloc should change the session, not call the API
+        """
+        self.update_session(
+            {
+                "location": {
+                    "country": self.barrier["country"],
+                    "admin_areas": [
+                        admin_area["id"] for admin_area in self.barrier["admin_areas"]
+                    ],
+                    "trading_bloc": None,
+                }
+            }
+        )
+
+        response = self.client.post(
+            reverse("barriers:edit_country", kwargs={"barrier_id": self.barrier["id"]}),
+            data={"location": "TB00016"},
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert self.client.session["location"]["country"] == None
+        assert self.client.session["location"]["admin_areas"] == []
+        assert self.client.session["location"]["trading_bloc"] == "TB00016"
         assert mock_patch.called is False
 
     def test_add_admin_area_choices(self):
@@ -181,7 +210,7 @@ class EditLocationTestCase(MarketAccessTestCase):
         assert form.initial["admin_areas"] == self.new_admin_area_ids
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_location_confirm(self, mock_patch):
+    def test_edit_location_with_country_confirm(self, mock_patch):
         """
         Saving location should call the API
         """
@@ -208,5 +237,38 @@ class EditLocationTestCase(MarketAccessTestCase):
             country=self.new_country_id,
             admin_areas=self.new_admin_area_ids,
             trading_bloc=None,
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_edit_location_with_trading_bloc_confirm(self, mock_patch):
+        """
+        Saving location should call the API
+        """
+        self.update_session(
+            {
+                "location": {
+                    "trading_bloc": "TB00016",
+                    "country": None,
+                    "admin_areas": [],
+                }
+            }
+        )
+        response = self.client.post(
+            reverse(
+                "barriers:edit_location_session",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={
+                "trading_bloc": "TB00016",
+                "country": "",
+                "admin_areas": [],
+            },
+        )
+        mock_patch.assert_called_with(
+            id=self.barrier["id"],
+            country=None,
+            admin_areas=[],
+            trading_bloc="TB00016",
         )
         assert response.status_code == HTTPStatus.FOUND

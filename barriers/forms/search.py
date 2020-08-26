@@ -1,3 +1,4 @@
+import copy
 from operator import itemgetter
 from urllib.parse import urlencode
 
@@ -306,6 +307,7 @@ class BarrierSearchForm(forms.Form):
         filters = {}
 
         for name, value in self.get_raw_filters().items():
+            value = copy.copy(value)
             key = self.get_filter_key(name)
             if key not in filters:
                 filters[key] = {
@@ -322,6 +324,9 @@ class BarrierSearchForm(forms.Form):
                 filters[key][
                     "readable_value"
                 ] = f"{existing_readable_value}, {this_readable_value}"
-                filters[key]["value"].append(value)
+                if isinstance(value, list):
+                    filters[key]["value"] += value
+                else:
+                    filters[key]["value"].append(value)
 
         return filters

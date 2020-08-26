@@ -102,21 +102,17 @@
         "all_sectors": true,
         "sectors": [],
         "country": {
-            "id": "62af72a6-5d95-e211-a939-e4115bead28a",
-            "name": "Country Name"
-        },
-        "admin_areas": [
-            {
-                "id": "d21ea723-13cf-4cba-a36c-2577b2f2e309",
-                "name": ""
-            },
-            {
-                "id": "a5a2d421-5274-49ca-9c33-ea3282f5c618",
-                "name": ""
+            "id": "82756b9a-5d95-e211-a939-e4115bead28a",
+            "name": "France",
+            "trading_bloc": {
+                "code": "TB00016",
+                "name": "European Union",
+                "short_name": "the EU"
             }
-        ],
+        },
+        "admin_areas": [],
         "trading_bloc": null,
-        "caused_by_trading_bloc": null,
+        "caused_by_trading_bloc": false,
         "status": {
             "id": 3,
             "name": "Resolved: In part"

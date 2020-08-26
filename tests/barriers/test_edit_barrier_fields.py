@@ -447,3 +447,40 @@ class EditEndDateTestCase(MarketAccessTestCase):
             end_date=None,
         )
         assert response.status_code == HTTPStatus.FOUND
+
+
+class EditCausedByTradingBlocTestCase(MarketAccessTestCase):
+    barrier_index = 1
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse(
+            "barriers:edit_caused_by_trading_bloc",
+            kwargs={"barrier_id": self.barrier["id"]}
+        )
+
+    def test_edit_caused_by_trading_bloc_has_initial_data(self):
+        response = self.client.get(self.url)
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["caused_by_trading_bloc"] == self.barrier["caused_by_trading_bloc"]
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_caused_by_trading_bloc_cannot_be_empty(self, mock_patch):
+        response = self.client.post(self.url, data={"caused_by_trading_bloc": ""})
+        assert response.status_code == HTTPStatus.OK
+        form = response.context["form"]
+        assert form.is_valid() is False
+        assert "caused_by_trading_bloc" in form.errors
+        assert mock_patch.called is False
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_edit_caused_by_trading_bloc_calls_api(self, mock_patch):
+        mock_patch.return_value = self.barrier
+        response = self.client.post(self.url, data={"caused_by_trading_bloc": "yes"})
+        mock_patch.assert_called_with(
+            id=self.barrier["id"],
+            caused_by_trading_bloc=True,
+        )
+        assert response.status_code == HTTPStatus.FOUND
