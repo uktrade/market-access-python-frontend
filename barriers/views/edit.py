@@ -110,7 +110,7 @@ class BarrierEditTradeDirection(APIBarrierFormViewMixin, FormView):
 
 
 class BarrierEditCausedByTradingBloc(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/trading_bloc.html"
+    template_name = "barriers/edit/caused_by_trading_bloc.html"
     form_class = UpdateCausedByTradingBlocForm
 
     def get_form_kwargs(self):
