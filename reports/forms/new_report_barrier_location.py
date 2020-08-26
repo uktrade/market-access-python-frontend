@@ -2,7 +2,6 @@ from django import forms
 
 from barriers.forms.edit import CausedByTradingBlocForm
 from barriers.forms.location import EditCountryOrTradingBlocForm
-from utils.forms import YesNoDontKnowBooleanField
 
 
 class NewReportBarrierLocationForm(EditCountryOrTradingBlocForm):
