@@ -230,7 +230,7 @@ class UpdateTradeDirectionForm(APIFormMixin, forms.Form):
         self.fields["trade_direction"].choices = trade_direction_choices
 
 
-class UpdateCausedByTradingBlocForm(APIFormMixin, forms.Form):
+class CausedByTradingBlocForm(forms.Form):
     caused_by_trading_bloc = YesNoDontKnowBooleanField(
         label="",
         error_messages={
@@ -260,6 +260,8 @@ class UpdateCausedByTradingBlocForm(APIFormMixin, forms.Form):
         }
         return help_text.get(trading_bloc_code, "")
 
+
+class UpdateCausedByTradingBlocForm(APIFormMixin, CausedByTradingBlocForm):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(

@@ -81,6 +81,11 @@ class EditCountryOrTradingBlocForm(forms.Form):
             self.cleaned_data["country"] = location
             self.cleaned_data["trading_bloc"] = None
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if "location" in cleaned_data:
+            cleaned_data.pop("location")
+
 
 class AddAdminAreaForm(forms.Form):
     admin_area = forms.ChoiceField(
