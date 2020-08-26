@@ -40,7 +40,7 @@ class EditLocationForm(forms.Form):
             id=self.barrier_id,
             country=self.cleaned_data["country"] or None,
             admin_areas=self.cleaned_data["admin_areas"],
-            trading_bloc=self.cleaned_data["trading_bloc"],
+            trading_bloc=self.cleaned_data["trading_bloc"] or None,
         )
 
 
