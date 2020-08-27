@@ -16,12 +16,15 @@ class CategoriesHistoryItem(BaseHistoryItem):
         return category_names
 
 
-class CountryHistoryItem(BaseHistoryItem):
-    field = "country"
-    field_name = "Public country"
+class LocationHistoryItem(BaseHistoryItem):
+    field = "location"
+    field_name = "Public location"
 
     def get_value(self, value):
-        return self.metadata.get_country(value)
+        if value.get("country"):
+            return value["country"]["name"]
+        elif value.get("trading_bloc"):
+            return value["trading_bloc"]["name"]
 
 
 class PublicViewStatusHistoryItem(BaseHistoryItem):
@@ -79,7 +82,7 @@ class PublicBarrierHistoryItem(PolymorphicBase):
     key = "field"
     subclasses = (
         CategoriesHistoryItem,
-        CountryHistoryItem,
+        LocationHistoryItem,
         PublicViewStatusHistoryItem,
         SectorsHistoryItem,
         StatusHistoryItem,
