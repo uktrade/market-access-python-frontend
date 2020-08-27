@@ -136,13 +136,13 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Country</dt>
+            <dt class="summary-group__list__key">Location</dt>
             <dd class="summary-group__list__value">
-                {% if public_barrier.internal_country_changed and public_barrier.first_published_on %}
-                    <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.country.name }}</span>
-                    <span class="diff__ins diff__ins--block">{{ public_barrier.internal_country.name }}</span>
+                {% if public_barrier.internal_location_changed and public_barrier.first_published_on %}
+                    <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.location.name }}</span>
+                    <span class="diff__ins diff__ins--block">{{ public_barrier.internal_location.name }}</span>
                 {% else %}
-                    {{ public_barrier.internal_country.name }}
+                    {{ public_barrier.internal_location.name }}
                 {% endif %}
             </dd>
 
