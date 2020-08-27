@@ -194,9 +194,10 @@ class PublicBarrier(APIModel):
 
     @property
     def internal_location(self):
-        if self.internal_country:
+        if self.data.get("internal_country"):
             return self.internal_country
-        return self.internal_trading_bloc
+        elif self.data.get("internal_trading_bloc"):
+            return self.internal_trading_bloc
 
     @property
     def internal_location_changed(self):
