@@ -5,6 +5,10 @@
     <div id="{{ field.name }}" class="govuk-form-group{% if field.errors %} govuk-form-group--error{% endif %}">
         <label class="govuk-label{% if label_classes %} {{ label_classes }}{% else %} govuk-label--s{% endif %}" for="{{ field.name }}">{{ field.label }}</label>
 
+        {% if field.help_text %}
+        <span class="govuk-hint">{{ field.help_text|safe }}</span>
+        {% endif %}
+
         <textarea class="govuk-textarea{% if character_count %} js-character-count{% endif %}{% if field.errors %} govuk-textarea--error{% endif %}" id="{{ field.name }}" name="{{ field.name }}" rows="5">{% if field.value %}{{ field.value }}{% endif %}</textarea>
 
         {% if character_count %}
