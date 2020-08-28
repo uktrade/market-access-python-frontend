@@ -350,5 +350,32 @@ class Metadata:
     def get_trade_direction_choices(self):
         return (td for td in self.get_trade_direction(all_items=True))
 
+    def get_trading_bloc(self, code):
+        for trading_bloc in self.get_trading_bloc_list():
+            if trading_bloc["code"] == code:
+                return trading_bloc
+
+    def get_trading_bloc_list(self):
+        return self.data.get("trading_blocs", [])
+
+    def get_trading_bloc_by_country_id(self, country_id):
+        for trading_bloc in self.get_trading_bloc_list():
+            if country_id in trading_bloc["country_ids"]:
+                return {
+                    "code": trading_bloc["code"],
+                    "name": trading_bloc["name"],
+                    "short_name": trading_bloc["short_name"],
+                }
+
     def get_wto_committee_groups(self):
         return self.data.get("wto_committee_groups", [])
+
+
+class MetadataMixin:
+    _metadata = None
+
+    @property
+    def metadata(self):
+        if self._metadata is None:
+            self._metadata = get_metadata()
+        return self._metadata

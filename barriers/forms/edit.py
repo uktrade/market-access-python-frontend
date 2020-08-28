@@ -9,6 +9,7 @@ from utils.forms import (
     DayMonthYearField,
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
+    YesNoDontKnowBooleanField,
 )
 
 
@@ -227,3 +228,43 @@ class UpdateTradeDirectionForm(APIFormMixin, forms.Form):
     def __init__(self, trade_direction_choices, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["trade_direction"].choices = trade_direction_choices
+
+
+class CausedByTradingBlocForm(forms.Form):
+    caused_by_trading_bloc = YesNoDontKnowBooleanField(
+        label="",
+        error_messages={
+            "required": (
+                "Indicate if the barrier was caused by the trading bloc"
+            )
+        },
+    )
+
+    def __init__(self, trading_bloc, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["caused_by_trading_bloc"].label = (
+            f"Was this barrier caused by a regulation introduced by "
+            f"{trading_bloc['short_name']}?"
+        )
+        self.fields["caused_by_trading_bloc"].help_text = (
+            self.get_help_text(trading_bloc.get("code"))
+        )
+
+    def get_help_text(self, trading_bloc_code):
+        help_text = {
+            "TB00016": (
+                "Yes should be selected if the barrier is a local application of an EU "
+                "regulation. If it is an EU-wide barrier, the country location should "
+                "be changed to EU in the location screen."
+            )
+        }
+        return help_text.get(trading_bloc_code, "")
+
+
+class UpdateCausedByTradingBlocForm(APIFormMixin, CausedByTradingBlocForm):
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(
+            id=self.id,
+            caused_by_trading_bloc=self.cleaned_data["caused_by_trading_bloc"],
+        )

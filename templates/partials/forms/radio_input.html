@@ -4,6 +4,8 @@
             {% if strong|default_if_none:True %}<strong>{{ field.label }}</strong>{% else %}{{ field.label }}{% endif %}
         </legend>
 
+        {% if field.help_text %}<span class="govuk-hint">{{ field.help_text }}</span>{% endif %}
+
         {% form_field_error field %}
 
         <div class="govuk-radios {{ field.name }}{% if radio_classes %} {{ radio_classes }}{% endif %}" data-module="radios">

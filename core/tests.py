@@ -23,6 +23,7 @@ class MarketAccessTestCase(TestCase):
     _history = None
     _team_members = None
     _users = None
+    barrier_index = 0
 
     def setUp(self):
         self.init_session()
@@ -46,7 +47,9 @@ class MarketAccessTestCase(TestCase):
     def init_get_barrier_patcher(self):
         self.get_barrier_patcher = patch("utils.api.resources.BarriersResource.get")
         self.mock_get_barrier = self.get_barrier_patcher.start()
-        self.mock_get_barrier.return_value = BarriersResource.model(self.barriers[0])
+        self.mock_get_barrier.return_value = BarriersResource.model(
+            self.barriers[self.barrier_index]
+        )
         self.addCleanup(self.get_barrier_patcher.stop)
 
     def init_get_activity_patcher(self):
@@ -110,7 +113,7 @@ class MarketAccessTestCase(TestCase):
 
     @property
     def barrier(self):
-        return self.barriers[0]
+        return self.barriers[self.barrier_index]
 
     @property
     def public_barrier(self):

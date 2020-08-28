@@ -41,8 +41,9 @@ class SearchTestCase(MarketAccessTestCase):
 
         metadata = get_metadata()
         country_list = metadata.get_country_list()
+        trading_bloc_list = metadata.get_trading_bloc_list()
         country_choices = form.fields["country"].choices
-        assert len(country_choices) == len(country_list) + 1
+        assert len(country_choices) == len(country_list) + len(trading_bloc_list)
 
         sector_list = metadata.get_sector_list(level=0)
         sector_choices = form.fields["sector"].choices
@@ -74,6 +75,7 @@ class SearchTestCase(MarketAccessTestCase):
                 "country": [
                     "9f5f66a0-5d95-e211-a939-e4115bead28a",
                     "83756b9a-5d95-e211-a939-e4115bead28a",
+                    "TB00016",
                 ],
                 "sector": [
                     "9538cecc-5f95-e211-a939-e4115bead28a",
@@ -96,6 +98,7 @@ class SearchTestCase(MarketAccessTestCase):
         assert form.cleaned_data["country"] == [
             "9f5f66a0-5d95-e211-a939-e4115bead28a",
             "83756b9a-5d95-e211-a939-e4115bead28a",
+            "TB00016",
         ]
         assert form.cleaned_data["sector"] == [
             "9538cecc-5f95-e211-a939-e4115bead28a",
@@ -118,6 +121,7 @@ class SearchTestCase(MarketAccessTestCase):
             location=(
                 "9f5f66a0-5d95-e211-a939-e4115bead28a,"
                 "83756b9a-5d95-e211-a939-e4115bead28a,"
+                "TB00016,"
                 "3e6809d6-89f6-4590-8458-1d0dab73ad1a,"
                 "5616ccf5-ab4a-4c2c-9624-13c69be3c46b"
             ),
@@ -129,6 +133,55 @@ class SearchTestCase(MarketAccessTestCase):
             priority="HIGH,MEDIUM",
             status="1,2,7",
             user="1",
+            archived="0",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_include_eu_wide_search_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "extra_location": ["TB00016"],
+                "country": ["82756b9a-5d95-e211-a939-e4115bead28a"],
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+
+        form = response.context["form"]
+        assert form.cleaned_data["country"] == [
+            "82756b9a-5d95-e211-a939-e4115bead28a",
+        ]
+        assert form.cleaned_data["extra_location"] == ["TB00016"]
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            location="82756b9a-5d95-e211-a939-e4115bead28a,TB00016",
+            archived="0",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_country_specific_trading_bloc_search_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "country": ["TB00016"],
+                "country_trading_bloc": ["TB00016"],
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+
+        form = response.context["form"]
+        assert form.cleaned_data["country"] == ["TB00016"]
+        assert form.cleaned_data["country_trading_bloc"] == ["TB00016"]
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            location="TB00016",
+            country_trading_bloc="TB00016",
             archived="0",
         )
 

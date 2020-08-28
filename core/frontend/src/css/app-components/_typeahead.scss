@@ -131,3 +131,7 @@ $highlight-colour: $govuk-light-grey;;
 		}
 	}
 }
+
+.multiselect + .checkbox-filter {
+	margin-top: govuk-em( 12, 16 );
+}

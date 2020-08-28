@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from 'react-dom'
 
 import CommodityForm from "./commodities/CommodityForm"
-import {getCSRFToken} from "./utils"
+import LocationFilter from "./search/LocationFilter"
+import {getCSRFToken, getCheckboxValues} from "./utils"
 
 
 function renderCommodityForm(confirmedCommodities, countries, label, helpText) {
@@ -20,4 +21,22 @@ function renderCommodityForm(confirmedCommodities, countries, label, helpText) {
 }
 
 
-export {renderCommodityForm}
+function renderLocationFilter(countryElement, tradingBlocElement, tradingBlocData) {
+  const label = countryElement.querySelector('legend').textContent.trim()
+  const countries = getCheckboxValues(countryElement)
+  const tradingBlocs = getCheckboxValues(tradingBlocElement)
+
+  tradingBlocElement.remove()
+  ReactDOM.render(
+    <LocationFilter
+      label={label}
+      countries={countries}
+      tradingBlocs={tradingBlocs}
+      tradingBlocData={tradingBlocData}
+    />,
+    countryElement
+  );
+}
+
+
+export {renderCommodityForm, renderLocationFilter}

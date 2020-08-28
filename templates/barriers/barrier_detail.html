@@ -84,6 +84,26 @@
                 {% endif %}
             </dd>
 
+            {% if barrier.country.trading_bloc %}
+                <dt class="summary-group__list__key">
+                    Was this barrier caused by a regulation introduced by {{ barrier.country.trading_bloc.short_name }}?
+                </dt>
+                <dd class="summary-group__list__value">
+                    {% if barrier.caused_by_trading_bloc is not None %}
+                        {{ barrier.caused_by_trading_bloc|yesno:"Yes,No" }}
+                        {% if not barrier.archived %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_caused_by_trading_bloc' barrier.id %}">Edit</a>
+                        {% endif %}
+                    {% else %}
+                        {% if barrier.archived %}
+                            <span class="summary-group__list__value__none">No information</span>
+                        {% else %}
+                            <a href="{% url 'barriers:edit_caused_by_trading_bloc' barrier.id %}" class="summary-group__list__value__add">Add information</a>
+                        {% endif %}
+                    {% endif %}
+                </dd>
+            {% endif %}
+
             <dt class="summary-group__list__key">End date</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.end_date %}

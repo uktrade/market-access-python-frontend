@@ -11,12 +11,16 @@
     {% include 'partials/heading.html' with text='Edit location' %}
     {% form_error_banner form %}
 
-    <h3> Exports to which country are affected by this issue?</h3>
+    <h3>Which location is affected by this issue?</h3>
 
     <div class="selection-list restrict-width">
-        <h3 class="selection-list__heading">Selected country</h3>
-        <p>{{ country.name }}</p>
-        <a href="{% url 'barriers:edit_country' barrier.id %}" class="govuk-button button--secondary selection-list__add-button"> Change country </a>
+        <h3 class="selection-list__heading">Selected location</h3>
+        {% if country %}
+            <p>{{ country.name }}</p>
+        {% elif trading_bloc %}
+            <p>{{ trading_bloc.name }}</p>
+        {% endif %}
+        <a href="{% url 'barriers:edit_country' barrier.id %}" class="govuk-button button--secondary selection-list__add-button"> Change location</a>
     </div>
 
     {% if form.fields.admin_areas.choices %}
@@ -46,6 +50,7 @@
 
     <form action="" method="POST">
         {% csrf_token %}
+        {{ form.trading_bloc }}
         {{ form.country }}
         {{ form.admin_areas }}
         <input type="submit" value="Save and exit to barrier" class="govuk-button">

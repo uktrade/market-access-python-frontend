@@ -1,4 +1,5 @@
 from barriers.constants import ARCHIVED_REASON
+from barriers.models import Barrier
 from barriers.models.commodities import format_commodity_code
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
@@ -35,6 +36,29 @@ class CategoriesHistoryItem(BaseHistoryItem):
         ]
         category_names.sort()
         return category_names
+
+
+class CausedByTradingBlocHistoryItem(BaseHistoryItem):
+    field = "caused_by_trading_bloc"
+    field_name = "Caused by trading bloc"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        country_trading_bloc = self.get_country_trading_bloc()
+        if country_trading_bloc:
+            self.field_name = (
+                f"Was this barrier caused by a regulation introduced by "
+                f"{country_trading_bloc['short_name']}?"
+            )
+
+    def get_country_trading_bloc(self):
+        if self.data["old_value"]["country_trading_bloc"]:
+            return self.data["old_value"]["country_trading_bloc"]
+        elif self.data["new_value"]["country_trading_bloc"]:
+            return self.data["new_value"]["country_trading_bloc"]
+
+    def get_value(self, value):
+        return value["caused_by_trading_bloc"]
 
 
 class CommoditiesHistoryItem(BaseHistoryItem):
@@ -109,7 +133,7 @@ class LocationHistoryItem(BaseHistoryItem):
     field_name = "Location"
 
     def get_value(self, value):
-        return self.metadata.get_location_text(value["country"], value["admin_areas"])
+        return Barrier(value).location
 
 
 class PriorityHistoryItem(BaseHistoryItem):
@@ -234,6 +258,7 @@ class BarrierHistoryItem(PolymorphicBase):
     subclasses = (
         ArchivedHistoryItem,
         CategoriesHistoryItem,
+        CausedByTradingBlocHistoryItem,
         CommoditiesHistoryItem,
         CompaniesHistoryItem,
         EndDateHistoryItem,

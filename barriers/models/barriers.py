@@ -69,9 +69,15 @@ class Barrier(APIModel):
 
     def get_location_text(self):
         if not self.country:
+            if self.trading_bloc:
+                return self.trading_bloc.get("name")
             return ""
 
         country_name = self.country.get("name", "")
+
+        if self.caused_by_trading_bloc and self.country.get("trading_bloc"):
+            trading_bloc = self.country["trading_bloc"].get("name")
+            return f"{trading_bloc} ({country_name})"
 
         if self.admin_areas:
             admin_areas_string = ", ".join(
@@ -185,6 +191,23 @@ class PublicBarrier(APIModel):
     @property
     def internal_category_titles(self):
         return [category["title"] for category in self.internal_categories]
+
+    @property
+    def internal_location(self):
+        if self.data.get("internal_country"):
+            return self.internal_country
+        elif self.data.get("internal_trading_bloc"):
+            return self.internal_trading_bloc
+
+    @property
+    def internal_location_changed(self):
+        return self.internal_country_changed or self.internal_trading_bloc_changed
+
+    @property
+    def location(self):
+        if self.country:
+            return self.country
+        return self.trading_bloc
 
     @property
     def first_published_on(self):

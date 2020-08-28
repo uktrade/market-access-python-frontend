@@ -1,18 +1,15 @@
 from django import forms
 
+from barriers.forms.edit import CausedByTradingBlocForm
+from barriers.forms.location import EditCountryOrTradingBlocForm
 
-class NewReportBarrierLocationForm(forms.Form):
-    """Form to capture Barrier Location"""
-    country = forms.ChoiceField(
-        label="Which country has introduced the barrier?",
-        choices=[],
-        widget=forms.HiddenInput(),
-        error_messages={'required': "Select a location for this barrier"},
-    )
 
-    def __init__(self, countries, *args, **kwargs):
+class NewReportBarrierLocationForm(EditCountryOrTradingBlocForm):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['country'].choices = countries
+        self.fields['location'].choices = (
+            [("", "Choose a location")] + self.fields['location'].choices
+        )
 
 
 class HasAdminAreas:
@@ -79,3 +76,7 @@ class NewReportBarrierTradeDirectionForm(forms.Form):
     def __init__(self, trade_direction_choices, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["trade_direction"].choices = trade_direction_choices
+
+
+class NewReportCausedByTradingBlocForm(CausedByTradingBlocForm):
+    pass

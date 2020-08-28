@@ -7935,5 +7935,41 @@
                 }
             ]
         }
+    ],
+    "trading_blocs": [
+        {
+            "code": "TB00016",
+            "name": "European Union",
+            "short_name": "the EU",
+            "country_ids": [
+                "a75f66a0-5d95-e211-a939-e4115bead28a",
+                "57af72a6-5d95-e211-a939-e4115bead28a",
+                "6caf72a6-5d95-e211-a939-e4115bead28a",
+                "6eaf72a6-5d95-e211-a939-e4115bead28a",
+                "6faf72a6-5d95-e211-a939-e4115bead28a",
+                "70af72a6-5d95-e211-a939-e4115bead28a",
+                "d5f682ac-5d95-e211-a939-e4115bead28a",
+                "daf682ac-5d95-e211-a939-e4115bead28a",
+                "82756b9a-5d95-e211-a939-e4115bead28a",
+                "83756b9a-5d95-e211-a939-e4115bead28a",
+                "e3f682ac-5d95-e211-a939-e4115bead28a",
+                "6d6a9ab2-5d95-e211-a939-e4115bead28a",
+                "736a9ab2-5d95-e211-a939-e4115bead28a",
+                "84756b9a-5d95-e211-a939-e4115bead28a",
+                "806a9ab2-5d95-e211-a939-e4115bead28a",
+                "866a9ab2-5d95-e211-a939-e4115bead28a",
+                "876a9ab2-5d95-e211-a939-e4115bead28a",
+                "0850bdb8-5d95-e211-a939-e4115bead28a",
+                "1950bdb8-5d95-e211-a939-e4115bead28a",
+                "5361b8be-5d95-e211-a939-e4115bead28a",
+                "5461b8be-5d95-e211-a939-e4115bead28a",
+                "5861b8be-5d95-e211-a939-e4115bead28a",
+                "200be5c4-5d95-e211-a939-e4115bead28a",
+                "210be5c4-5d95-e211-a939-e4115bead28a",
+                "86756b9a-5d95-e211-a939-e4115bead28a",
+                "300be5c4-5d95-e211-a939-e4115bead28a",
+                "80756b9a-5d95-e211-a939-e4115bead28a"
+            ]
+        }
     ]
 }

@@ -34,6 +34,7 @@ from .views.core import (
 )
 from .views.documents import DownloadDocument
 from .views.edit import (
+    BarrierEditCausedByTradingBloc,
     BarrierEditEndDate,
     BarrierEditTitle,
     BarrierEditProduct,
@@ -48,7 +49,7 @@ from .views.history import BarrierHistory
 from .views.location import (
     BarrierEditLocation,
     BarrierEditLocationSession,
-    BarrierEditCountry,
+    BarrierEditCountryOrTradingBloc,
     AddAdminArea,
     RemoveAdminArea,
 )
@@ -131,6 +132,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
     path("barriers/<uuid:barrier_id>/edit/tags/", BarrierEditTags.as_view(), name="edit_tags"),
     path("barriers/<uuid:barrier_id>/edit/trade-direction/", BarrierEditTradeDirection.as_view(), name="edit_trade_direction"),
+    path("barriers/<uuid:barrier_id>/edit/caused-by-trading-bloc/", BarrierEditCausedByTradingBloc.as_view(), name="edit_caused_by_trading_bloc"),
     path("barriers/<uuid:barrier_id>/edit/wto-status/", EditWTOStatus.as_view(), name="edit_wto_status"),
     path("barriers/<uuid:barrier_id>/edit/wto/", EditWTOProfile.as_view(), name="edit_wto_profile"),
     path("barriers/<uuid:barrier_id>/wto/documents/add/", AddWTODocument.as_view(), name="add_wto_document"),
@@ -151,7 +153,7 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/location/", BarrierEditLocationSession.as_view(), name="edit_location_session"),
     path("barriers/<uuid:barrier_id>/location/edit/", BarrierEditLocation.as_view(), name="edit_location"),
-    path("barriers/<uuid:barrier_id>/location/country/", BarrierEditCountry.as_view(), name="edit_country"),
+    path("barriers/<uuid:barrier_id>/location/country/", BarrierEditCountryOrTradingBloc.as_view(), name="edit_country"),
     path("barriers/<uuid:barrier_id>/location/add-admin-area/", AddAdminArea.as_view(), name="add_admin_area"),
     path("barriers/<uuid:barrier_id>/location/remove-admin-area/", RemoveAdminArea.as_view(), name="remove_admin_area"),
 

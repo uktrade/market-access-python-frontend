@@ -52,6 +52,7 @@ class SessionKeys:
         FormSessionKeys.LOCATION: "location_form_data",
         FormSessionKeys.HAS_ADMIN_AREAS: "has_admin_areas_form_data",
         FormSessionKeys.ADMIN_AREAS: "admin_areas_form_data",
+        FormSessionKeys.CAUSED_BY_TRADING_BLOC: "caused_by_trading_bloc_form_data",
         FormSessionKeys.TRADE_DIRECTION: "trade_direction_form_data",
         FormSessionKeys.SELECTED_ADMIN_AREAS: "selected_admin_areas",
         FormSessionKeys.SECTORS_AFFECTED: "sectors_affected",
@@ -154,6 +155,14 @@ class ReportFormGroup:
         admin_areas = self.selected_admin_areas_as_list
         admin_areas.remove(admin_area_id)
         self.selected_admin_areas = ', '.join(admin_areas)
+
+    @property
+    def caused_by_trading_bloc_form(self):
+        return self.get(FormSessionKeys.CAUSED_BY_TRADING_BLOC, {})
+
+    @caused_by_trading_bloc_form.setter
+    def caused_by_trading_bloc_form(self, value):
+        self.set(FormSessionKeys.CAUSED_BY_TRADING_BLOC, value)
 
     @property
     def trade_direction_form(self):
@@ -291,8 +300,16 @@ class ReportFormGroup:
 
     def get_location_form_data(self):
         if self.barrier.country:
-            return {"country": self.barrier.country["id"]}
-        return {"country": None}
+            return {
+                "country": self.barrier.country["id"],
+                "trading_bloc": None,
+            }
+        if self.barrier.trading_bloc:
+            return {
+                "country": None,
+                "trading_bloc": self.barrier.trading_bloc["code"],
+            }
+        return {"country": None, "trading_bloc": None}
 
     def get_has_admin_areas_form_data(self):
         data = {"has_admin_areas": None}
@@ -301,6 +318,10 @@ class ReportFormGroup:
         else:
             data["has_admin_areas"] = HasAdminAreas.YES
         return data
+
+    def get_caused_by_trading_bloc_form_data(self):
+        if self.barrier:
+            return {"caused_by_trading_bloc": self.barrier.caused_by_trading_bloc}
 
     def get_trade_direction_form_data(self):
         if self.barrier.trade_direction:
@@ -353,6 +374,7 @@ class ReportFormGroup:
         self.term_form = self.get_term_form_data()
         self.status_form = self.get_status_form_data()
         self.location_form = self.get_location_form_data()
+        self.caused_by_trading_bloc_form = self.get_caused_by_trading_bloc_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
         self.trade_direction_form = self.get_trade_direction_form_data()
         admin_area_ids = [
@@ -377,6 +399,8 @@ class ReportFormGroup:
             "term": self.term_form.get("term"),
             "country": self.location_form.get("country"),
             "admin_areas": self.selected_admin_areas_as_list,
+            "trading_bloc": self.location_form.get("trading_bloc"),
+            "caused_by_trading_bloc": self.caused_by_trading_bloc_form.get("caused_by_trading_bloc"),
             "trade_direction": self.trade_direction_form.get("trade_direction"),
         }
         payload.update(self.status_form)

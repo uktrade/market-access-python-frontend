@@ -10,7 +10,9 @@ from barriers.forms.edit import (
     UpdateBarrierPriorityForm,
     UpdateBarrierTagsForm,
     UpdateBarrierTermForm,
-    UpdateTradeDirectionForm)
+    UpdateCausedByTradingBlocForm,
+    UpdateTradeDirectionForm,
+)
 from utils.metadata import get_metadata
 
 
@@ -105,3 +107,16 @@ class BarrierEditTradeDirection(APIBarrierFormViewMixin, FormView):
     def get_initial(self):
         if self.barrier.trade_direction:
             return {"trade_direction": str(self.barrier.trade_direction["id"])}
+
+
+class BarrierEditCausedByTradingBloc(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/caused_by_trading_bloc.html"
+    form_class = UpdateCausedByTradingBlocForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["trading_bloc"] = self.barrier.country.get("trading_bloc")
+        return kwargs
+
+    def get_initial(self):
+        return {"caused_by_trading_bloc": self.barrier.caused_by_trading_bloc}

@@ -43,9 +43,11 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
         context_data = super().get_context_data(form=form, **kwargs)
         context_data.update(self.get_saved_search_context_data(form))
         barriers = self.get_barriers(form)
+        metadata = get_metadata()
         context_data.update(
             {
                 "barriers": barriers,
+                "trading_blocs": metadata.get_trading_bloc_list(),
                 "filters": form.get_readable_filters(with_remove_links=True),
                 "pagination": self.get_pagination_data(object_list=barriers),
                 "pageless_querystring": self.get_pageless_querystring(),

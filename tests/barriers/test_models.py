@@ -28,6 +28,14 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.is_open is False
         assert barrier.is_hibernated is False
 
+    def test_location_text(self):
+        barrier = Barrier(self.barriers[1])
+        barrier.data["caused_by_trading_bloc"] = False
+        assert barrier.get_location_text() == "France"
+
+        barrier.data["caused_by_trading_bloc"] = True
+        assert barrier.get_location_text() == "European Union (France)"
+
 
 class CompanyModelTestCase(MarketAccessTestCase):
     def test_fields(self):
