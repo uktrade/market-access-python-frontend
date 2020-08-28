@@ -69,7 +69,7 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
         label="Summary",
         widget=forms.Textarea,
-        max_length=250,
+        max_length=1000,
         error_messages={"required": "Enter a summary"},
         help_text=(
             "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
