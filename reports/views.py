@@ -621,7 +621,7 @@ class DeleteReport(TemplateView):
     template_name = "reports/delete_report.html"
 
     def get_template_names(self):
-        if self.request.is_ajax():
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return ["reports/modals/delete_report.html"]
         return ["reports/delete_report.html"]
 
@@ -630,7 +630,7 @@ class DeleteReport(TemplateView):
         return client.reports.get(self.kwargs.get('barrier_id'))
 
     def get_context_data(self, **kwargs):
-        if self.request.is_ajax():
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return {'report': self.get_report()}
 
         context_data = super().get_context_data(**kwargs)

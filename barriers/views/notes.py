@@ -134,12 +134,12 @@ class BarrierDeleteNote(NoteSessionDocumentMixin, BarrierMixin, TemplateView):
     include_interactions = True
 
     def get_template_names(self):
-        if self.request.is_ajax():
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return ["barriers/modals/delete_note.html"]
         return ["barriers/delete_note.html"]
 
     def get_context_data(self, **kwargs):
-        if self.request.is_ajax():
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return {
                 "barrier": {"id": self.kwargs.get("barrier_id")},
                 "note": self.note,
