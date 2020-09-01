@@ -13,7 +13,7 @@ class TestMiddleware(TestCase):
 
     def setUp(self):
         get_response = Mock()
-        self.middleware = StatsMiddleware()
+        self.middleware = StatsMiddleware(get_response)
         self.request = Mock(spec=[""])
 
     def test_middleware_start_time_added(self):
