@@ -49,6 +49,12 @@ class PublishTitleForm(APIFormMixin, forms.Form):
         label="Title",
         max_length=255,
         error_messages={"required": "Enter a title"},
+        help_text=(
+            "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
+            "how-prepare-market-access-barrier-report-public-view/'>"
+            "How to write a title for public view"
+            "</a>"
+        ),
     )
 
     def save(self):
@@ -63,8 +69,14 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
         label="Summary",
         widget=forms.Textarea,
-        max_length=250,
+        max_length=1000,
         error_messages={"required": "Enter a summary"},
+        help_text=(
+            "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
+            "how-prepare-market-access-barrier-report-public-view/'>"
+            "How to write a summary for public view"
+            "</a>"
+        ),
     )
 
     def save(self):
