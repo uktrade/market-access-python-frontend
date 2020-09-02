@@ -51,7 +51,7 @@ class PublishTitleForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter a title"},
         help_text=(
             "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
-            "how-prepare-market-access-barrier-report-public-view/'>"
+            "how-prepare-market-access-barrier-report-public-view/' target='_blank'>"
             "How to write a title for public view"
             "</a>"
         ),
@@ -73,7 +73,7 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter a summary"},
         help_text=(
             "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
-            "how-prepare-market-access-barrier-report-public-view/'>"
+            "how-prepare-market-access-barrier-report-public-view/' target='_blank'>"
             "How to write a summary for public view"
             "</a>"
         ),
