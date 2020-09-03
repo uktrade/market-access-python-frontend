@@ -290,6 +290,10 @@ class PublicBarrier(APIModel):
         return []
 
     @property
+    def internal_any_sectors_changed(self):
+        return self.internal_sectors_changed or self.internal_all_sectors_changed
+
+    @property
     def sector_names(self):
         if self.all_sectors:
             return ["All sectors"]
