@@ -41,6 +41,9 @@ ma.components.ConditionalRadioContent = (function( jessie ){
 		removeClass( this.conditionalElem, govukClass ); // remove this class as it keeps the content hidden
 		setAriaAttribute( this.conditionalElem, 'hidden', true );
 
+		// Set "display: none" explicitly to prevent tabbing into hidden elements
+		this.conditionalElem.setAttribute("style", "display: none");
+
 		while( ( input = inputs[ i++ ] ) ){
 
 			attachListener( input, 'click', bind( this.checkState, this ) );
@@ -60,6 +63,11 @@ ma.components.ConditionalRadioContent = (function( jessie ){
 		jessie[ classFn ]( this.conditionalElem, 'visually-hidden' );
 		setAriaAttribute( this.conditionalElem, 'hidden', !show );
 
+		if (show) {
+			this.conditionalElem.removeAttribute("style");
+		} else {
+			this.conditionalElem.setAttribute("style", "display: none");
+		}
 		this.events.toggle.publish( show );
 	};
 
