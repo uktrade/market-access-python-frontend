@@ -18,7 +18,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
     form_class = UpdateBarrierCommoditiesForm
 
     def get(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
             return self.ajax(request, *args, **kwargs)
 
         lookup_form = self.get_lookup_form()

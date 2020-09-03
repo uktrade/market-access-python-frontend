@@ -1,22 +1,18 @@
 'use strict';
 
+const production = ((process.env.NODE_ENV || 'dev').trim().toLowerCase() === 'production');
 const
     gulp = require('gulp'),
     concat = require('gulp-concat'),
     gulpif = require('gulp-if'),
     sass = require('gulp-sass'),
     babel = require('gulp-babel'),
-    browserSync = require('browser-sync').create(),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
     webpack = require('webpack-stream');
 
-
 // NOTES
 // Useful tips for uglifying - https://stackoverflow.com/questions/24591854/using-gulp-to-concatenate-and-uglify-files
-
-
-const production = ((process.env.NODE_ENV || 'dev').trim().toLowerCase() === 'production');
 
 // Source paths
 const
@@ -35,18 +31,6 @@ const
 const
     jsLicensingInfo = '/* Licensing info */';
 
-// BrowserSync Init
-const browserSyncInit = () => {
-    browserSync.init({
-        notify: false,
-        open: false,
-        proxy: '127.0.0.1:9880',
-        port: 9881,
-        reloadDelay: 300,
-        reloadDebounce: 500,
-    });
-};
-
 // Prepare Main CSS
 const main_css = () => {
     return gulp.src([scssEntryFile])
@@ -54,8 +38,7 @@ const main_css = () => {
         .pipe(gulpif(!production, sourcemaps.init()))
         .pipe(sass({outputStyle: 'compressed'})).on('error', sass.logError)
         .pipe(gulpif(!production, sourcemaps.write('.')))
-        .pipe(gulp.dest(cssBuildPath))
-        .pipe(browserSync.stream());
+        .pipe(gulp.dest(cssBuildPath));
 };
 
 // Prepare Main JS
@@ -117,8 +100,7 @@ const main_js = () => {
         }))
         .pipe(concat(jsBuildFileName))
         .pipe(gulpif(!production, sourcemaps.write('.')))
-        .pipe(gulp.dest(jsBuildPath))
-        .pipe(browserSync.stream());
+        .pipe(gulp.dest(jsBuildPath));
 };
 
 // Prepare React
@@ -143,20 +125,34 @@ const copyFonts = () => {
         .pipe(gulp.dest('core/static/govuk-public/fonts'));
 };
 
+
+// BrowserSync Init
+const browserSyncInit = (browserSync) => {
+    browserSync.init({
+        notify: false,
+        open: false,
+        proxy: '127.0.0.1:9880',
+        port: 9881,
+        reloadDelay: 300,
+        reloadDebounce: 500,
+    });
+};
+
 // File watchers
 const watchFiles = () => {
-    browserSyncInit();
+    const browserSync = require('browser-sync').create();
+    browserSyncInit(browserSync);
     // gulp.watch('**/*.html').on('change', () => browserSync.reload());
     gulp.watch(`${assetsSrcPath}css/**/*.scss`).on('change', () => {
-        main_css();
+        main_css().pipe(browserSync.stream());
         browserSync.reload();
     });
     gulp.watch(`${assetsSrcPath}js/**/*.js`).on('change', () => {
-        main_js();
+        main_js().pipe(browserSync.stream());
         browserSync.reload();
     });
     gulp.watch(`${assetsSrcPath}js/react/**/*.js`).on('change', () => {
-        main_react();
+        main_react().pipe(browserSync.stream());
         browserSync.reload();
     });
 };

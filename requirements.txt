@@ -1,24 +1,25 @@
 # ======
 # DO NOT EDIT - use pyproject.toml instead!
-# Generated: 2020-06-04_14-45
+# Generated: 2020-09-01_14-51
 # ======
-certifi==2020.4.5.1
-cffi==1.14.0
+asgiref==3.2.10
+certifi==2020.6.20
+cffi==1.14.2
 chardet==3.0.4
-django==2.2.13
+django==3.1.1
 django-environ==0.4.5
 django-extensions==2.2.9
-django-ipware==2.1.0
+django-ipware==3.0.1
 django-log-formatter-ecs==0.0.2
 django-model-utils==4.0.0
 django-settings-export==1.2.1
 elastic-apm==5.6.0
 gevent==20.5.2
-greenlet==0.4.15; platform_python_implementation == "CPython"
+greenlet==0.4.16; platform_python_implementation == "CPython"
 gunicorn==20.0.4
-idna==2.9
-kubi-ecs-logger==0.0.6
-marshmallow==2.19.2
+idna==2.10
+kubi-ecs-logger==0.1.0
+marshmallow==3.6.1
 mohawk==1.1.0
 psycopg2-binary==2.8.5
 pycparser==2.20; platform_python_implementation == "CPython" and sys_platform == "win32"
@@ -31,7 +32,7 @@ requests==2.23.0
 sentry-sdk==0.14.4
 six==1.15.0
 sqlparse==0.3.1
-urllib3==1.25.9
+urllib3==1.25.10
 whitenoise==5.1.0
 zope.event==4.4
 zope.interface==5.1.0
