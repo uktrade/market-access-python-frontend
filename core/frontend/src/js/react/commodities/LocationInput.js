@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function CountryInput(props) {
+function LocationInput(props) {
   return (
     <div className="govuk-form-group govuk-!-margin-top-5">
       <fieldset className="govuk-fieldset">
@@ -9,19 +9,19 @@ function CountryInput(props) {
           Which location are the commodity codes from?
         </legend>
 
-        <div className="govuk-radios country govuk-radios--inline" data-module="radios">
-          {props.countries.map((country, index) =>
+        <div className="govuk-radios location govuk-radios--inline" data-module="radios">
+          {props.locations.map((location, index) =>
             <div className="govuk-radios__item">
               <input
                 className="govuk-radios__input"
-                id={"country-" + country.id}
-                name="country"
+                id={"location-" + location.id}
+                name="location"
                 type="radio"
-                value={country.id}
-                defaultChecked={country.id == props.countryId}
+                value={location.id}
+                defaultChecked={location.id == props.locationId}
                 onChange={props.onChange}
               />
-              <label className="govuk-label govuk-radios__label" for={"country-" + country.id}>{country.name}</label>
+              <label className="govuk-label govuk-radios__label" for={"location-" + location.id}>{location.name}</label>
             </div>
           )}
         </div>
@@ -31,4 +31,4 @@ function CountryInput(props) {
 }
 
 
-export default CountryInput
+export default LocationInput
