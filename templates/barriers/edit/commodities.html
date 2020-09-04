@@ -8,13 +8,13 @@
   <script>
     document.addEventListener("DOMContentLoaded", function(event) {
       let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
-      let countries = [
-        {"id": "{{ lookup_form.country.field.choices.0.0 }}", "name": "{{ lookup_form.country.field.choices.0.1 }}"},
-        {"id": "{{ lookup_form.country.field.choices.1.0 }}", "name": "{{ lookup_form.country.field.choices.1.1 }}"},
+      let locations = [
+        {"id": "{{ lookup_form.location.field.choices.0.0 }}", "name": "{{ lookup_form.location.field.choices.0.1 }}"},
+        {"id": "{{ lookup_form.location.field.choices.1.0 }}", "name": "{{ lookup_form.location.field.choices.1.1 }}"},
       ]
       ReactApp.renderCommodityForm(
         confirmedCommodities=confirmedCommodities,
-        countries=countries,
+        locations=locations,
         label="{{ lookup_form.code.label }}",
         helpText="{{ lookup_form.code.help_text }}",
       )
@@ -42,7 +42,7 @@
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ lookup_form.code.label }}</legend>
                     <span class="govuk-hint">{{ lookup_form.code.help_text }}</span>
 
-                    {% include "partials/forms/radio_input.html" with field=lookup_form.country radio_classes="govuk-radios--inline" classes="govuk-!-margin-top-5" strong=False %}
+                    {% include "partials/forms/radio_input.html" with field=lookup_form.location radio_classes="govuk-radios--inline" classes="govuk-!-margin-top-5" strong=False %}
 
                     {% form_field_error lookup_form.code %}
 
@@ -58,7 +58,7 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="code" value="{{ lookup_form.commodity.code }}" />
-                <input type="hidden" name="country" value="{{ lookup_form.country.value }}" />
+                <input type="hidden" name="location" value="{{ lookup_form.location.value }}" />
 
                 <ul class="commodities-list restrict-width">
                     <li class="commodities-list__item">
@@ -93,6 +93,7 @@
             {% for confirmed_commodity in confirmed_commodities %}
                 <input type="hidden" name="codes" value="{{ confirmed_commodity.code }}" />
                 <input type="hidden" name="countries" value="{{ confirmed_commodity.country.id }}" />
+                <input type="hidden" name="trading_blocs" value="{{ confirmed_commodity.trading_bloc.code }}" />
             {% endfor %}
             <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
             <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>

@@ -367,6 +367,9 @@ class Metadata:
                     "short_name": trading_bloc["short_name"],
                 }
 
+    def is_trading_bloc_code(self, code):
+        return self.get_trading_bloc(code) is not None
+
     def get_wto_committee_groups(self):
         return self.data.get("wto_committee_groups", [])
 

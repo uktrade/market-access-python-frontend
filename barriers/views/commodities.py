@@ -55,11 +55,17 @@ class BarrierEditCommodities(BarrierMixin, FormView):
     def get_lookup_form(self, form_class=None):
         if form_class is None:
             form_class = CommodityLookupForm
+
+        if self.barrier.country:
+            initial = {"location": self.barrier.country["id"]}
+        elif self.barrier.trading_bloc:
+            initial = {"location": self.barrier.trading_bloc["code"]}
+
         return form_class(
-            initial={"country": self.barrier.country["id"]},
+            initial=initial,
             data=self.request.GET.dict() or None,
             token=self.request.session.get("sso_token"),
-            countries=self.get_countries(),
+            locations=self.get_locations(),
         )
 
     def get_form_kwargs(self):
@@ -68,20 +74,25 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
 
-    def get_countries(self):
-        return (
-            self.barrier.country,
-            {"id": UK_COUNTRY_ID, "name": "United Kingdom"},
-        )
+    def get_locations(self):
+        if self.barrier.country:
+            default_location = self.barrier.country,
+        elif self.barrier.trading_bloc:
+            default_location = {
+                "id": self.barrier.trading_bloc["code"],
+                "name": self.barrier.trading_bloc["name"],
+            }
 
-    def add_confirmed_commodity(self, code, country):
+        return (default_location, {"id": UK_COUNTRY_ID, "name": "United Kingdom"})
+
+    def add_confirmed_commodity(self, code, location):
         session_key = self.get_session_key()
         session_commodities = self.get_session_commodities()
         existing_codes = [commodity["code"] for commodity in session_commodities]
         code = code.ljust(10, "0")
 
         if code not in existing_codes:
-            session_commodities.append({"code": code, "country": country})
+            session_commodities.append({"code": code, "location": location})
         self.request.session[session_key] = session_commodities
 
     def remove_confirmed_commodity(self, code):
@@ -95,10 +106,13 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         session_key = self.get_session_key()
         session_commodities = self.request.session.get(session_key)
         if session_commodities is None:
-            session_commodities = [
-                {"code": commodity.code, "country": commodity.country["id"]}
-                for commodity in self.barrier.commodities
-            ]
+            session_commodities = []
+            for commodity in self.barrier.commodities:
+                if commodity.country:
+                    session_commodities.append({"code": commodity.code, "location": commodity.country["id"]})
+                elif commodity.trading_bloc:
+                    session_commodities.append({"code": commodity.code, "location": commodity.trading_bloc["code"]})
+
             self.request.session[session_key] = session_commodities
         return session_commodities
 
@@ -129,13 +143,13 @@ class BarrierEditCommodities(BarrierMixin, FormView):
             barrier_commodities = []
             for commodity_data in session_commodities:
                 code = commodity_data.get("code")
-                country = commodity_data.get("country")
+                location = commodity_data.get("location")
                 hs6_code = code[:6].ljust(10, "0")
                 commodity = commodity_lookup.get(hs6_code)
                 if commodity:
                     barrier_commodity = commodity.create_barrier_commodity(
                         code=code,
-                        country_id=country,
+                        location=location,
                     )
                     barrier_commodities.append(barrier_commodity)
             return barrier_commodities
@@ -149,8 +163,8 @@ class BarrierEditCommodities(BarrierMixin, FormView):
     def post(self, request, *args, **kwargs):
         if "confirm-commodity" in request.POST:
             code = request.POST.get("code")
-            country = request.POST.get("country")
-            self.add_confirmed_commodity(code, country)
+            location = request.POST.get("location")
+            self.add_confirmed_commodity(code, location)
             return HttpResponseRedirect(self.request.path_info)
         elif "remove-commodity" in request.POST:
             code = request.POST.get("remove-commodity")
