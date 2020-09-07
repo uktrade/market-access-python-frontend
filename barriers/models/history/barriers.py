@@ -67,7 +67,7 @@ class CommoditiesHistoryItem(BaseHistoryItem):
 
     @property
     def diff(self):
-        grouped = self.get_values_grouped_by_country()
+        grouped = self.get_values_grouped_by_location()
         diff = {}
         for country_name, item in grouped.items():
             old_codes = set([value["code"] for value in item["old_value"]])
@@ -87,16 +87,24 @@ class CommoditiesHistoryItem(BaseHistoryItem):
 
         return diff
 
-    def get_values_grouped_by_country(self):
+    def get_location_name(self, value):
+        if value.get("country"):
+            return value["country"]["name"]
+        elif value.get("trading_bloc"):
+            return value["trading_bloc"]["name"]
+
+    def get_values_grouped_by_location(self):
         grouped = {}
 
         for value in self.old_value:
-            grouped.setdefault(value["country"]["name"], {"old_value": [], "new_value": []})
-            grouped[value["country"]["name"]]["old_value"].append(value)
+            key = self.get_location_name(value)
+            grouped.setdefault(key, {"old_value": [], "new_value": []})
+            grouped[key]["old_value"].append(value)
 
         for value in self.new_value:
-            grouped.setdefault(value["country"]["name"], {"old_value": [], "new_value": []})
-            grouped[value["country"]["name"]]["new_value"].append(value)
+            key = self.get_location_name(value)
+            grouped.setdefault(key, {"old_value": [], "new_value": []})
+            grouped[key]["new_value"].append(value)
 
         return grouped
 
