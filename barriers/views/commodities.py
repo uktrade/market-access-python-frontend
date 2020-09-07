@@ -76,7 +76,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
 
     def get_locations(self):
         if self.barrier.country:
-            default_location = self.barrier.country,
+            default_location = self.barrier.country
         elif self.barrier.trading_bloc:
             default_location = {
                 "id": self.barrier.trading_bloc["code"],

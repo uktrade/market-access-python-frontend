@@ -10,10 +10,11 @@ from utils.exceptions import APIHttpException
 
 class CommoditiesTestCase(MarketAccessTestCase):
     country_id = "80756b9a-5d95-e211-a939-e4115bead28a"
+    trading_bloc_id = "TB00016"
     lookup_data = {
         "code_0": "21",
         "code_1": "05",
-        "country": country_id,
+        "location": country_id,
     }
     commodity_data = {
         "code": "2105000000",
@@ -25,6 +26,7 @@ class CommoditiesTestCase(MarketAccessTestCase):
         "code": "2105009900",
         "code_display": "2105.00.99",
         "country": {"id": country_id},
+        "trading_bloc": None,
         "commodity": commodity_data,
     }
 
@@ -60,7 +62,7 @@ class CommoditiesTestCase(MarketAccessTestCase):
         mock_get.return_value = Commodity(self.commodity_data)
         response = self.client.get(
             reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
-            {"code": "21050099", "country": self.country_id},
+            {"code": "21050099", "location": self.country_id},
             **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
         )
         assert response.status_code == HTTPStatus.OK
@@ -75,7 +77,7 @@ class CommoditiesTestCase(MarketAccessTestCase):
     def test_ajax_commodity_not_found(self, mock_get):
         response = self.client.get(
             reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
-            {"code": "99999999", "country": self.country_id},
+            {"code": "99999999", "location": self.country_id},
             **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
         )
         assert response.status_code == HTTPStatus.OK
@@ -88,7 +90,7 @@ class CommoditiesTestCase(MarketAccessTestCase):
         mock_list.return_value = [Commodity(self.commodity_data)]
         response = self.client.get(
             reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
-            {"codes": "21050099,2106,2107", "country": self.country_id},
+            {"codes": "21050099,2106,2107", "location": self.country_id},
             **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
         )
         assert response.status_code == HTTPStatus.OK
@@ -107,8 +109,9 @@ class CommoditiesTestCase(MarketAccessTestCase):
             reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
             data={
                 "action": "save",
-                "codes": ["2105009900", "0708000000"],
-                "countries": [self.country_id, self.country_id],
+                "codes": ["2105009900", "0708000000", "0101000000"],
+                "countries": [self.country_id, self.country_id, ""],
+                "trading_blocs": ["", "", self.trading_bloc_id],
             },
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -116,8 +119,9 @@ class CommoditiesTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             commodities=[
-                {'code': '2105009900', 'country': '80756b9a-5d95-e211-a939-e4115bead28a'},
-                {'code': '0708000000', 'country': '80756b9a-5d95-e211-a939-e4115bead28a'},
+                {'code': '2105009900', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': None},
+                {'code': '0708000000', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': None},
+                {'code': '0101000000', 'country': None, 'trading_bloc': "TB00016"},
             ],
         )
 
@@ -130,14 +134,14 @@ class CommoditiesTestCase(MarketAccessTestCase):
             data={
                 "confirm-commodity": "1",
                 "code": "2105009900",
-                "country": self.country_id,
+                "location": self.country_id,
             },
         )
         assert response.status_code == HTTPStatus.FOUND
         assert mock_patch.called is False
 
         assert self.client.session[session_key] == [
-            {"code": "2105009900", "country": self.country_id}
+            {"code": "2105009900", "location": self.country_id}
         ]
 
     @patch("utils.api.resources.CommoditiesResource.list")
@@ -147,8 +151,8 @@ class CommoditiesTestCase(MarketAccessTestCase):
         session_key = f"barrier:{self.barrier['id']}:commodities"
         self.update_session({
             session_key: [
-                {"code": "2105009900", "country": self.country_id},
-                {"code": "0708000000", "country": self.country_id},
+                {"code": "2105009900", "location": self.country_id},
+                {"code": "0708000000", "location": self.country_id},
             ]
         })
         response = self.client.post(
@@ -166,7 +170,7 @@ class CommoditiesTestCase(MarketAccessTestCase):
     def test_cancel_commodity_form(self):
         session_key = f"barrier:{self.barrier['id']}:commodities"
         self.update_session({
-            session_key: [{"code": "2105009900", "country": self.country_id},]
+            session_key: [{"code": "2105009900", "location": self.country_id},]
         })
         response = self.client.post(
             reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
