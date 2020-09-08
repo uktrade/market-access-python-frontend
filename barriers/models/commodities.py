@@ -1,3 +1,4 @@
+from utils.metadata import get_metadata
 from utils.models import APIModel
 
 
@@ -15,11 +16,20 @@ class Commodity(APIModel):
     """
     A commodity containing a code and description
     """
-    def create_barrier_commodity(self, code, country_id):
+    def create_barrier_commodity(self, code, location):
+        metadata = get_metadata()
+        if metadata.is_trading_bloc_code(location):
+            return BarrierCommodity({
+                "commodity": self.data,
+                "code": code,
+                "country": None,
+                "trading_bloc": {"code": location},
+            })
         return BarrierCommodity({
             "commodity": self.data,
             "code": code,
-            "country": {"id": country_id},
+            "country": {"id": location},
+            "trading_bloc": None,
         })
 
     @property
@@ -56,5 +66,6 @@ class BarrierCommodity(APIModel):
             "code": self.code,
             "code_display": self.code_display,
             "country": self.country,
+            "trading_bloc": self.trading_bloc,
             "commodity": self.commodity.to_dict()
         }

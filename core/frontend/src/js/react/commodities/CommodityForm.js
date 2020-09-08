@@ -3,13 +3,13 @@ import React, { useEffect, useRef, useState } from "react"
 import CodeInput from "./CodeInput"
 import CodeTextArea from "./CodeTextArea"
 import CommodityList from "./CommodityList"
-import CountryInput from "./CountryInput"
+import LocationInput from "./LocationInput"
 import ErrorBanner from "../forms/ErrorBanner"
 
 
 function CommodityForm(props) {
   const [codeArray, setCodeArray] = useState(["", "", "", "", ""])
-  const [countryId, setCountryId] = useState(props.countries[0]["id"])
+  const [locationId, setLocationId] = useState(props.locations[0]["id"])
   const [confirmedCommodities, setConfirmedCommodities] = useState(props.confirmedCommodities)
   const [unconfirmedCommodities, setUnconfirmedCommodities] = useState([])
   const [pastedCodes, setPastedCodes] = useState("")
@@ -18,8 +18,8 @@ function CommodityForm(props) {
   const boxCount = 5
   const inputRefContainer = useRef(new Array(boxCount))
 
-  const handleCountryChange = (event) => {
-    setCountryId(event.target.value)
+  const handleLocationChange = (event) => {
+    setLocationId(event.target.value)
   }
 
   const handleCodeChange = (event, index) => {
@@ -52,7 +52,7 @@ function CommodityForm(props) {
       let code = getCode()
       lookupCode(code)
     }
-  }, [countryId]);
+  }, [locationId]);
 
   const clearCodeInput = () => {
     for (var input of inputRefContainer.current) {
@@ -99,7 +99,7 @@ function CommodityForm(props) {
       return
     }
     setIsLoading(true)
-    const url = "?code=" + code + "&country=" + countryId
+    const url = "?code=" + code + "&location=" + locationId
     const response = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
@@ -137,7 +137,7 @@ function CommodityForm(props) {
       setUnconfirmedCommodities([])
       return
     }
-    const url = "?codes=" + codes + "&country=" + countryId
+    const url = "?codes=" + codes + "&location=" + locationId
     const response = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
@@ -178,7 +178,7 @@ function CommodityForm(props) {
             <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">{props.label}</legend>
             <span className="govuk-hint">{props.helpText}</span>
 
-            <CountryInput countries={props.countries} countryId={countryId} onChange={handleCountryChange} />
+            <LocationInput locations={props.locations} locationId={locationId} onChange={handleLocationChange} />
 
             {codeLookupError ? (
               <span class="govuk-error-message">
@@ -232,9 +232,20 @@ function CommodityForm(props) {
         {confirmedCommodities.map((commodity, index) =>
           <input type="hidden" name="codes" value={commodity.code} />
         )}
-        {confirmedCommodities.map((commodity, index) =>
-          <input type="hidden" name="countries" value={commodity.country.id} />
-        )}
+        {confirmedCommodities.map((commodity, index) => {
+          if (commodity.country) {
+            return <input type="hidden" name="countries" value={commodity.country.id} />
+          } else {
+            return <input type="hidden" name="countries" value="" />
+          }
+        })}
+        {confirmedCommodities.map((commodity, index) => {
+          if (commodity.trading_bloc) {
+            return <input type="hidden" name="trading_blocs" value={commodity.trading_bloc.code} />
+          } else {
+            return <input type="hidden" name="trading_blocs" value="" />
+          }
+        })}
         <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
         <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
       </form>
