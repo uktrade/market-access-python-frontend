@@ -212,6 +212,15 @@ else:
     REDIS_URI = env("REDIS_URI")
 REDIS_URI = f"{REDIS_URI}/{REDIS_DB}"
 
+if REDIS_URI:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URI,
+            "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        }
+    }
+
 # Market access API
 MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI")
 MARKET_ACCESS_API_HAWK_ID = env("MARKET_ACCESS_API_HAWK_ID")
