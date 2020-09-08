@@ -19,17 +19,17 @@ class CommodityLookupForm(forms.Form):
         error_messages={"required": "Enter a commodity code"},
         widget=CommodityCodeWidget,
     )
-    country = forms.ChoiceField(
+    location = forms.ChoiceField(
         label="Which location are the commodity codes from?",
         choices=[],
         error_messages={"required": "Select a location"},
     )
 
-    def __init__(self, countries, *args, **kwargs):
+    def __init__(self, locations, *args, **kwargs):
         self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
-        self.fields["country"].choices = tuple([
-            (country["id"], country["name"]) for country in countries
+        self.fields["location"].choices = tuple([
+            (location["id"], location["name"]) for location in locations
         ])
 
     def clean_code(self):
@@ -39,16 +39,16 @@ class CommodityLookupForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         code = cleaned_data.get("code")
-        country = cleaned_data.get("country")
+        location = cleaned_data.get("location")
 
-        if not code or not country:
+        if not code or not location:
             return
 
         client = MarketAccessAPIClient(self.token)
         try:
             hs6_code = code[:6].ljust(10, "0")
             commodity = client.commodities.get(id=hs6_code)
-            self.commodity = commodity.create_barrier_commodity(code=code, country_id=country)
+            self.commodity = commodity.create_barrier_commodity(code=code, location=location)
         except APIHttpException:
             raise forms.ValidationError("Code not found")
 
@@ -58,17 +58,17 @@ class CommodityLookupForm(forms.Form):
 
 class MultiCommodityLookupForm(forms.Form):
     codes = forms.CharField()
-    country = forms.ChoiceField(
+    location = forms.ChoiceField(
         label="Which location are the HS commodity codes from?",
         choices=[],
         error_messages={"required": "Select a location"},
     )
 
-    def __init__(self, countries, *args, **kwargs):
+    def __init__(self, locations, *args, **kwargs):
         self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
-        self.fields["country"].choices = tuple([
-            (country["id"], country["name"]) for country in countries
+        self.fields["location"].choices = tuple([
+            (location["id"], location["name"]) for location in locations
         ])
 
     def clean_codes(self):
@@ -80,9 +80,9 @@ class MultiCommodityLookupForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         codes = cleaned_data.get("codes")
-        country = cleaned_data.get("country")
+        location = cleaned_data.get("location")
 
-        if not codes or not country:
+        if not codes or not location:
             return
 
         hs6_codes = [code[:6].ljust(10, "0") for code in codes]
@@ -102,7 +102,7 @@ class MultiCommodityLookupForm(forms.Form):
             commodity = commodity_lookup.get(hs6_code)
             if not commodity:
                 continue
-            barrier_commodity = commodity.create_barrier_commodity(code=code, country_id=country)
+            barrier_commodity = commodity.create_barrier_commodity(code=code, location=location)
             self.commodities.append(barrier_commodity)
 
     def get_commodity_data(self):
@@ -112,6 +112,7 @@ class MultiCommodityLookupForm(forms.Form):
 class UpdateBarrierCommoditiesForm(forms.Form):
     codes = MultipleValueField(required=False)
     countries = MultipleValueField(required=False)
+    trading_blocs = MultipleValueField(required=False)
 
     def __init__(self, barrier_id, token, *args, **kwargs):
         self.barrier_id = str(barrier_id)
@@ -122,12 +123,14 @@ class UpdateBarrierCommoditiesForm(forms.Form):
         cleaned_data = super().clean()
         codes = cleaned_data["codes"]
         countries = cleaned_data["countries"]
+        trading_blocs = cleaned_data["trading_blocs"]
         self.commodities = []
         for index, code in enumerate(codes):
             try:
                 self.commodities.append({
                     "code": code,
-                    "country": countries[index],
+                    "country": countries[index] or None,
+                    "trading_bloc": trading_blocs[index] or None,
                 })
             except IndexError:
                 raise forms.ValidationError("Code/country mismatch")

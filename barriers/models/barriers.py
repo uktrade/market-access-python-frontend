@@ -59,8 +59,13 @@ class Barrier(APIModel):
     def commodities_grouped_by_country(self):
         grouped_commodities = {}
         for barrier_commodity in self.commodities:
-            grouped_commodities.setdefault(barrier_commodity.country["id"], [])
-            grouped_commodities[barrier_commodity.country["id"]].append(barrier_commodity)
+            if barrier_commodity.country:
+                key = barrier_commodity.country["id"]
+            elif barrier_commodity.trading_bloc:
+                key = barrier_commodity.trading_bloc["code"]
+
+            grouped_commodities.setdefault(key, [])
+            grouped_commodities[key].append(barrier_commodity)
         return grouped_commodities
 
     @property

@@ -6,13 +6,13 @@ import LocationFilter from "./search/LocationFilter"
 import {getCSRFToken, getCheckboxValues} from "./utils"
 
 
-function renderCommodityForm(confirmedCommodities, countries, label, helpText) {
+function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
   const csrfToken = getCSRFToken()
   ReactDOM.render(
     <CommodityForm
       csrfToken={csrfToken}
       confirmedCommodities={confirmedCommodities}
-      countries={countries}
+      locations={locations}
       label={label}
       helpText={helpText}
     />,

@@ -144,7 +144,11 @@
             <dd class="summary-group__list__value">
                 {% if barrier.commodities %}
                     {% for country_id, commodity_list in barrier.commodities_grouped_by_country.items %}
-                        <span class="commodity-summary__country">These codes are for {{ commodity_list.0.country.name }}</span>
+                        {% if commodity_list.0.country %}
+                            <span class="commodity-summary__country">These codes are for {{ commodity_list.0.country.name }}</span>
+                        {% elif commodity_list.0.trading_bloc %}
+                            <span class="commodity-summary__country">These codes are for {{ commodity_list.0.trading_bloc.name }}</span>
+                        {% endif %}
                         <ul class="commodity-summary">
                             {% for commodity in commodity_list %}
                                 <li class="commodity-summary__item">
