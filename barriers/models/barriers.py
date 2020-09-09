@@ -198,23 +198,6 @@ class PublicBarrier(APIModel):
         return [category["title"] for category in self.internal_categories]
 
     @property
-    def internal_location(self):
-        if self.data.get("internal_country"):
-            return self.internal_country
-        elif self.data.get("internal_trading_bloc"):
-            return self.internal_trading_bloc
-
-    @property
-    def internal_location_changed(self):
-        return self.internal_country_changed or self.internal_trading_bloc_changed
-
-    @property
-    def location(self):
-        if self.country:
-            return self.country
-        return self.trading_bloc
-
-    @property
     def first_published_on(self):
         if self.data.get("first_published_on") is not None:
             return dateutil.parser.parse(self.data["first_published_on"])
