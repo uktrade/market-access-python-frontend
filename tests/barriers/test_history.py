@@ -90,27 +90,8 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "date": "2020-03-18T16:31:43.711765Z",
                 "model": "barrier",
                 "field": "location",
-                "old_value": {
-                    "country": {
-                        "id": "985f66a0-5d95-e211-a939-e4115bead28a",
-                        "name": "Angola",
-                    },
-                    "admin_areas": [],
-                    "trading_bloc": None,
-                    "caused_by_trading_bloc": None,
-                },
-                "new_value": {
-                    "country": {
-                        "id": "5daf72a6-5d95-e211-a939-e4115bead28a",
-                        "name": "Canada",
-                    },
-                    "admin_areas": [
-                        {"id": "351410eb-81b5-4a55-a76d-790b31a833fa", "name": "British Columbia"},
-                        {"id": "75e337c3-23c9-4294-8085-6b1e8c43eb07", "name": "Alberta"},
-                    ],
-                    "trading_bloc": None,
-                    "caused_by_trading_bloc": None,
-                },
+                "old_value": "Angola",
+                "new_value": "British Columbia, Alberta (Canada)",
                 "user": {"id": 48, "name": "Test-user"},
             }
         )

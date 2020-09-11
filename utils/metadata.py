@@ -137,25 +137,6 @@ class Metadata:
     def get_country_list(self):
         return self.data["countries"]
 
-    def get_location_text(self, country_id, admin_area_ids):
-        country_data = self.get_country(country_id)
-
-        if country_data:
-            country_name = country_data["name"]
-        else:
-            country_name = ""
-
-        if admin_area_ids:
-            admin_areas_string = ", ".join(
-                [
-                    self.get_admin_area(admin_area_id)["name"]
-                    for admin_area_id in admin_area_ids
-                ]
-            )
-            return f"{admin_areas_string} ({country_name})"
-
-        return country_name
-
     def get_overseas_region_list(self):
         regions = {
             country["overseas_region"]["id"]: country["overseas_region"]

@@ -25,6 +25,7 @@
         ],
         "trading_bloc": null,
         "caused_by_trading_bloc": null,
+        "location": "Rio de Janeiro, Sao Paulo (Brazil)",
         "sectors_affected": true,
         "all_sectors": false,
         "sectors": [
@@ -113,6 +114,7 @@
         "admin_areas": [],
         "trading_bloc": null,
         "caused_by_trading_bloc": false,
+        "location": "France",
         "status": {
             "id": 3,
             "name": "Resolved: In part"
@@ -170,6 +172,7 @@
         "admin_areas": [],
         "trading_bloc": null,
         "caused_by_trading_bloc": null,
+        "location": "Country Name",
         "status": {
             "id": 2,
             "name": "Open: In progress"
@@ -228,6 +231,7 @@
         ],
         "trading_bloc": null,
         "caused_by_trading_bloc": null,
+        "location": " , (Country Name)",
         "status": {
             "id": 4,
             "name": "Resolved: In full"
