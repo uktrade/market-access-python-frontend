@@ -38,6 +38,7 @@ class BarrierSearchForm(forms.Form):
     public_view = forms.MultipleChoiceField(
         label="Public view",
         choices=(
+            ("not_yet_sifted", "Not yet sifted"),
             ("eligible", "Eligible to publish"),
             ("ineligible", "Ineligible to publish"),
             ("ready", "Ready to publish"),
