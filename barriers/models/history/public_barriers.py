@@ -20,12 +20,6 @@ class LocationHistoryItem(BaseHistoryItem):
     field = "location"
     field_name = "Public location"
 
-    def get_value(self, value):
-        if value.get("country"):
-            return value["country"]["name"]
-        elif value.get("trading_bloc"):
-            return value["trading_bloc"]["name"]
-
 
 class PublicViewStatusHistoryItem(BaseHistoryItem):
     field = "public_view_status"

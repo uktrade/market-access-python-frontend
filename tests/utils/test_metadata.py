@@ -30,18 +30,6 @@ class MetadataTestCase(MarketAccessTestCase):
         assert country["id"] == country_id
         assert country["name"] == "Brazil"
 
-    def test_get_location_text(self):
-        metadata = get_metadata()
-        country_id = "b05f66a0-5d95-e211-a939-e4115bead28a"
-        admin_area_ids = [
-            "3d4f0b93-b16e-4f61-98e8-006a2c290f95",
-            "71f66703-64eb-4e00-85db-4644b9f10be8",
-        ]
-        assert metadata.get_location_text(country_id, []) == "Brazil"
-        assert metadata.get_location_text(country_id, admin_area_ids) == (
-            "Rio de Janeiro, Sao Paulo (Brazil)"
-        )
-
     def test_get_overseas_region_list(self):
         metadata = get_metadata()
         regions = metadata.get_overseas_region_list()

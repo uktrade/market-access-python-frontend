@@ -9,6 +9,7 @@ class BarrierModelTestCase(MarketAccessTestCase):
         barrier = Barrier(self.barrier)
         assert barrier.country["name"] == "Brazil"
         assert barrier.admin_areas[0]["name"] == "Rio de Janeiro"
+        assert barrier.admin_areas[1]["name"] == "Sao Paulo"
 
         assert barrier.created_on.date() == datetime.date(2019, 10, 28)
         assert barrier.reported_on.date() == datetime.date(2019, 10, 28)
@@ -27,14 +28,6 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.is_partially_resolved is False
         assert barrier.is_open is False
         assert barrier.is_hibernated is False
-
-    def test_location_text(self):
-        barrier = Barrier(self.barriers[1])
-        barrier.data["caused_by_trading_bloc"] = False
-        assert barrier.get_location_text() == "France"
-
-        barrier.data["caused_by_trading_bloc"] = True
-        assert barrier.get_location_text() == "European Union (France)"
 
 
 class CompanyModelTestCase(MarketAccessTestCase):
