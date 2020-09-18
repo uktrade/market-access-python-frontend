@@ -270,7 +270,7 @@ class PublicBarrier(APIModel):
     @property
     def tab_badge(self):
         if self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
-            return "Eligible"
+            return "Allowed"
         elif self.public_view_status == PUBLIC_BARRIER_STATUSES.READY:
             return "Ready"
         elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:

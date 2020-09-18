@@ -29,6 +29,8 @@
 
 {% block page_content %}
 
+    <h2 class="govuk-heading-l">Change status of public view</h2>
+
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -36,11 +38,40 @@
 
         <div class="{% form_group_classes form.public_eligibility.errors %}">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
                     <strong>{{ form.public_eligibility.label }}</strong>
                 </legend>
 
                 {% form_field_error form.public_eligibility %}
+
+                <details class="govuk-details" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                            Criteria for making a barrier public
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        <p>When it can be made public</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            <li>barriers affecting export from the UK</li>
+                            <li>barriers already published on WTO/EU MADB</li>
+                            <li>both short-term and long-term barriers</li>
+                            <li>business environment issues</li>
+                            <li>all priorities (high, medium, low, unknown)</li>
+                            <li>all barrier status (Open: Pending action, Open: In progress, Resolved: In part, Resolved: In full, Dormant, Unknown)</li>
+                        </ul>
+                        <p>When it can't be made public</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            <li>barriers affecting import into the UK</li>
+                            <li>sensitive for security reasons</li>
+                            <li>strategic concerns e.g. leverage in FTA negotiations?</li>
+                            <li>barriers being addressed in a current/near future dialogue with partner country</li>
+                            <li>barriers that identify a business even once individual details are removed due to niche/closed nature of market</li>
+                            <li>politically sensitive</li>
+                            <li>indicated by OGDs/DAs as not publishable during prior engagement</li>
+                        </ul>
+                    </div>
+                </details>
 
                 <div class="govuk-radios {{ form.public_eligibility.name }} govuk-radios--conditional" data-module="radios">
                     {% for value, name in form.public_eligibility.field.choices %}
