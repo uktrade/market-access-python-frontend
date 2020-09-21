@@ -30,5 +30,6 @@ urlpatterns += [
     path("", include("users.urls", namespace="users")),
     path("", include("barriers.urls", namespace="barriers")),
     path("", include("reports.urls", namespace="reports")),
+    path("", include("core.urls", namespace="core")),
     path("", include("healthcheck.urls", namespace="healthcheck")),
 ]
