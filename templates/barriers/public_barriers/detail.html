@@ -126,13 +126,17 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Status</dt>
+            <dt class="summary-group__list__key">Resolved</dt>
             <dd class="summary-group__list__value">
-                {% if public_barrier.internal_status_changed and public_barrier.first_published_on %}
-                    <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.status.name }}</span>
-                    <span class="diff__ins diff__ins--block">{{ public_barrier.internal_status.name }}</span>
+                {% if public_barrier.internal_is_resolved_changed or public_barrier.internal_status_date_changed and public_barrier.first_published_on %}
+                    <span class="diff__del diff__del--block">
+                        {{ public_barrier.latest_published_version.internal_is_resolved|yesno:"Yes,No" }}{% if public_barrier.latest_published_version.internal_is_resolved and public_barrier.latest_published_version.internal_status_date %} - {{ public_barrier.latest_published_version.internal_status_date|date:"F Y" }}{% endif %}
+                    </span>
+                    <span class="diff__ins diff__ins--block">
+                        {{ public_barrier.internal_is_resolved|yesno:"Yes,No" }}{% if public_barrier.internal_is_resolved and public_barrier.internal_status_date %} - {{ public_barrier.internal_status_date|date:"F Y" }}{% endif %}
+                    </span>
                 {% else %}
-                    {{ public_barrier.internal_status.name }}
+                    {{ public_barrier.internal_is_resolved|yesno:"Yes,No" }}{% if public_barrier.internal_is_resolved and public_barrier.internal_status_date %} - {{ public_barrier.internal_status_date|date:"F Y" }}{% endif %}
                 {% endif %}
             </dd>
 

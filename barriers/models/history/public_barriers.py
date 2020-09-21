@@ -48,7 +48,7 @@ class SectorsHistoryItem(BaseHistoryItem):
 
 class StatusHistoryItem(BaseHistoryItem):
     field = "status"
-    field_name = "Public status"
+    field_name = "Public resolved status"
     modifier = "status"
 
     def get_value(self, value):
