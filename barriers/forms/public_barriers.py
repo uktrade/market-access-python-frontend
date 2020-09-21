@@ -8,10 +8,10 @@ from utils.forms import YesNoBooleanField
 
 class PublicEligibilityForm(APIFormMixin, forms.Form):
     public_eligibility = YesNoBooleanField(
-        label="Can this barrier be made public?",
+        label="Does this barrier meet the criteria to be made public?",
         choices=(
-            ("yes", "Yes, it can be viewed by the public"),
-            ("no", "No"),
+            ("yes", "Allowed, it can be viewed by the public"),
+            ("no", "Not allowed"),
         ),
         error_messages={"required": "Enter yes or no"},
     )

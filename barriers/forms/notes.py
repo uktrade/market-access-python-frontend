@@ -39,7 +39,10 @@ class AddNoteForm(DocumentMixin, forms.Form):
 
 class AddPublicBarrierNoteForm(forms.Form):
     note = forms.CharField(
-        label="Add note",
+        label=(
+            "Is something incorrect or out of date? Enter the details so an Editor can "
+            "update the barrier."
+        ),
         widget=forms.Textarea,
         error_messages={"required": "Add text for the note."},
     )
@@ -88,7 +91,10 @@ class EditNoteForm(DocumentMixin, forms.Form):
 
 class EditPublicBarrierNoteForm(forms.Form):
     note = forms.CharField(
-        label="Edit note",
+        label=(
+            "Is something incorrect or out of date? Enter the details so an Editor can "
+            "update the barrier."
+        ),
         widget=forms.Textarea,
         error_messages={"required": "Add text for the note."},
     )
