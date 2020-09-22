@@ -1,5 +1,9 @@
 <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
 
 <p class="event-list__item__text">
-    Barrier publish status was changed to <strong>{{ item.new_value }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}
+    Barrier publish status was changed to <strong>{{ item.new_value.public_view_status.name }}</strong>{% if item.user.name %} by {{ item.user.name }}{% endif %}
 </p>
+
+{% if item.show_summary %}
+    <p class="event-list__item__text">{{ item.new_value.public_eligibility_summary|escape|linebreaksbr }}</p>
+{% endif %}

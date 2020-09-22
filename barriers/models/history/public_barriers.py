@@ -27,11 +27,18 @@ class PublicViewStatusHistoryItem(BaseHistoryItem):
     field = "public_view_status"
     field_name = "Publish status"
 
-    def get_value(self, value):
-        try:
-            return PUBLIC_BARRIER_STATUSES[value]
-        except KeyError:
-            return ""
+    @property
+    def show_summary(self):
+        if self.new_value["public_view_status"]["id"] in (
+            PUBLIC_BARRIER_STATUSES.UNKNOWN,
+            PUBLIC_BARRIER_STATUSES.INELIGIBLE,
+            PUBLIC_BARRIER_STATUSES.ELIGIBLE,
+        ):
+            old_summary = self.old_value.get("public_eligibility_summary")
+            new_summary = self.new_value.get("public_eligibility_summary")
+            if new_summary and new_summary != old_summary:
+                return True
+        return False
 
 
 class SectorsHistoryItem(BaseHistoryItem):

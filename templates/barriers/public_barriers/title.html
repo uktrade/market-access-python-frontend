@@ -23,6 +23,17 @@
 
         {% include "partials/forms/text_input.html" with field=form.title label_classes="govuk-label--l" %}
 
+        <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    Internal summary for reference
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                {{ barrier.summary|escape|linebreaksbr }}
+            </div>
+        </details>
+
         <input type="submit" value="Save" class="govuk-button">
         <a href="{% url 'barriers:public_barrier_detail' object.id %}" class="form-cancel">Cancel</a>
     </form>

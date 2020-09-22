@@ -39,8 +39,8 @@ class BarrierSearchForm(forms.Form):
         label="Public view",
         choices=(
             ("not_yet_sifted", "Not yet sifted"),
-            ("eligible", "Eligible to publish"),
-            ("ineligible", "Ineligible to publish"),
+            ("eligible", "Allowed to be published"),
+            ("ineligible", "Not allowed to be published"),
             ("ready", "Ready to publish"),
             ("published", "Published"),
             ("changed", "Barriers changed internally since being made public"),

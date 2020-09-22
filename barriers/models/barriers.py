@@ -231,7 +231,7 @@ class PublicBarrier(APIModel):
     def public_status_text(self):
         return {
             PUBLIC_BARRIER_STATUSES.UNKNOWN: "To be decided",
-            PUBLIC_BARRIER_STATUSES.INELIGIBLE: "Not for public view",
+            PUBLIC_BARRIER_STATUSES.INELIGIBLE: "Not allowed",
             PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Allowed - yet to be published",
             PUBLIC_BARRIER_STATUSES.READY: "Allowed - yet to be published",
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "Published",
@@ -280,7 +280,7 @@ class PublicBarrier(APIModel):
     @property
     def tab_badge(self):
         if self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
-            return "Eligible"
+            return "Allowed"
         elif self.public_view_status == PUBLIC_BARRIER_STATUSES.READY:
             return "Ready"
         elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:

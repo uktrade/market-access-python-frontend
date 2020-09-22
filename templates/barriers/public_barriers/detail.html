@@ -60,7 +60,7 @@
         {% endif %}
 
         {% if current_user|has_permission:"change_barrier_public_eligibility" and not current_user|has_permission:"change_publicbarrier" %}
-            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Change public view status</a>
+            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Change status of public view</a>
         {% endif %}
 
         <dl class="summary-group__list">
@@ -228,19 +228,20 @@
         </form>
 
         {% if not public_barrier.is_published and current_user|has_permission:"change_publicbarrier" %}
-            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary">Change public view status</a>
+            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary">Change status of public view</a>
         {% endif %}
     </section>
 
     <section class="barrier-content">
-        <h2 class="section-heading">Issues and updates</h2>
+        <h2 class="section-heading govuk-!-margin-bottom-0">Internal notes and updates</h2>
+        <span class="govuk-caption-m govuk-!-margin-bottom-6">These are not shown to the public.</span>
 
         {% if add_note %}
             <div class="interaction-panel">
                 {% include 'barriers/partials/public_barrier_note_form.html' %}
             </div>
         {% elif not edit_note %}
-            <a class="govuk-button button--primary" href="?add-note=1">Add new remark</a>
+            <a class="govuk-button button--primary" href="?add-note=1">Add a note</a>
         {% endif %}
 
         <ol class="event-list js-delete-modal-container">

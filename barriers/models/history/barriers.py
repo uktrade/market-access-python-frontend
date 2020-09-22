@@ -161,7 +161,7 @@ class ProductHistoryItem(BaseHistoryItem):
 
 class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
     field = "public_eligibility_summary"
-    field_name = "Public eligibility summary"
+    field_name = "Publish status summary"
     modifier = "note"
 
 

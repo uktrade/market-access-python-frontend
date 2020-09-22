@@ -46,7 +46,7 @@ UK_COUNTRY_ID = "80756b9a-5d95-e211-a939-e4115bead28a"
 
 PUBLIC_BARRIER_STATUSES = Choices(
     (0, "UNKNOWN", "To be decided"),
-    (10, "INELIGIBLE", "Not for public view"),
+    (10, "INELIGIBLE", "Not allowed"),
     (20, "ELIGIBLE", "Allowed"),
     (30, "READY", "Ready"),
     (40, "PUBLISHED", "Published"),
