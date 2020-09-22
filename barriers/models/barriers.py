@@ -181,6 +181,21 @@ class PublicBarrier(APIModel):
             return dateutil.parser.parse(self.data["internal_status_date"])
 
     @property
+    def is_resolved_text(self):
+        return self.get_resolved_text(self.is_resolved, self.status_date)
+
+    @property
+    def internal_is_resolved_text(self):
+        return self.get_resolved_text(self.internal_is_resolved, self.internal_status_date)
+
+    def get_resolved_text(self, is_resolved, status_date):
+        if is_resolved:
+            if status_date:
+                return f"Yes - {status_date.strftime('%B %Y')}"
+            return "Yes"
+        return "No"
+
+    @property
     def status_date(self):
         if self.data.get("status_date"):
             return dateutil.parser.parse(self.data["status_date"])

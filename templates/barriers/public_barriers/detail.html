@@ -130,13 +130,13 @@
             <dd class="summary-group__list__value">
                 {% if public_barrier.internal_is_resolved_changed or public_barrier.internal_status_date_changed and public_barrier.first_published_on %}
                     <span class="diff__del diff__del--block">
-                        {{ public_barrier.latest_published_version.is_resolved|yesno:"Yes,No" }}{% if public_barrier.latest_published_version.is_resolved and public_barrier.latest_published_version.status_date %} - {{ public_barrier.latest_published_version.status_date|date:"F Y" }}{% endif %}
+                        {{ public_barrier.latest_published_version.is_resolved_text }}
                     </span>
                     <span class="diff__ins diff__ins--block">
-                        {{ public_barrier.internal_is_resolved|yesno:"Yes,No" }}{% if public_barrier.internal_is_resolved and public_barrier.internal_status_date %} - {{ public_barrier.internal_status_date|date:"F Y" }}{% endif %}
+                        {{ public_barrier.internal_is_resolved_text }}
                     </span>
                 {% else %}
-                    {{ public_barrier.internal_is_resolved|yesno:"Yes,No" }}{% if public_barrier.internal_is_resolved and public_barrier.internal_status_date %} - {{ public_barrier.internal_status_date|date:"F Y" }}{% endif %}
+                    {{ public_barrier.internal_is_resolved_text }}
                 {% endif %}
             </dd>
 
