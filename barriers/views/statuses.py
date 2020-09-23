@@ -20,7 +20,7 @@ class BarrierEditStatus(APIBarrierFormViewMixin, FormView):
         initial = {"status_summary": self.object.status_summary}
 
         if self.is_barrier_resolved():
-            initial["status_date"] = self.object.status["date"]
+            initial["status_date"] = self.object.status_date
         return initial
 
     def get_form_kwargs(self):

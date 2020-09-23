@@ -2,6 +2,8 @@ from barriers.constants import PUBLIC_BARRIER_STATUSES
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
 
+import dateutil.parser
+
 
 class CategoriesHistoryItem(BaseHistoryItem):
     field = "categories"
@@ -55,13 +57,15 @@ class SectorsHistoryItem(BaseHistoryItem):
 
 class StatusHistoryItem(BaseHistoryItem):
     field = "status"
-    field_name = "Public status"
+    field_name = "Public resolved status"
     modifier = "status"
 
     def get_value(self, value):
         value["status_text"] = self.metadata.get_status_text(
             status_id=value["status"],
         )
+        if value["status_date"]:
+            value["status_date"] = dateutil.parser.parse(value["status_date"])
         return value
 
 
