@@ -69,7 +69,7 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
     def test_readable_filters(self):
         saved_search = SavedSearch(self.saved_search_data)
         assert saved_search.readable_filters["search"] == {
-            "label": "Search barrier title, summary or code",
+            "label": "Search barrier title, summary, code or PID",
             "readable_value": "Test",
             "value": "Test",
         }
