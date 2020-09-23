@@ -243,6 +243,10 @@ class PublicBarrier(APIModel):
             return PublicBarrier(self.data["latest_published_version"])
 
     @property
+    def public_id(self):
+        return f"PID-{self.id}"
+
+    @property
     def public_status_text(self):
         return {
             PUBLIC_BARRIER_STATUSES.UNKNOWN: "To be decided",

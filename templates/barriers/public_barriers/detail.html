@@ -126,6 +126,15 @@
                 {% endif %}
             </dd>
 
+            <dt class="summary-group__list__key">Public ID</dt>
+            <dd class="summary-group__list__value">
+                {% if public_barrier.first_published_on %}
+                    {{ public_barrier.public_id }}
+                {% else %}
+                    &mdash;
+                {% endif %}
+            </dd>
+
             <dt class="summary-group__list__key">Resolved</dt>
             <dd class="summary-group__list__value">
                 {% if public_barrier.internal_is_resolved_changed or public_barrier.internal_status_date_changed and public_barrier.first_published_on %}
