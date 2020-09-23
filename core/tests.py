@@ -122,6 +122,10 @@ class MarketAccessTestCase(TestCase):
             "summary": "Public summary",
             "public_view_status": 20,
             "status": 0,
+            "is_resolved": False,
+            "internal_is_resolved": False,
+            "status_date": None,
+            "internal_status_date": None,
         }
 
     @property
