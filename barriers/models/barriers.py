@@ -177,7 +177,7 @@ class PublicBarrier(APIModel):
 
     @property
     def internal_is_resolved(self):
-        return self.data.get("internal_status_date")
+        return self.data.get("internal_is_resolved")
 
     @property
     def internal_status_date(self):

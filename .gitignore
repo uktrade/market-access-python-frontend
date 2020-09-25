@@ -124,6 +124,7 @@ staticfiles/
 node_modules/
 
 docker-compose.dev.env
+docker-compose.uat.env
 docker-compose.env
 config/settings/static/
 
