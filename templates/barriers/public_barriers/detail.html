@@ -34,8 +34,7 @@
     {% include 'barriers/partials/barrier_tabs.html' with active='public' %}
 
     <section class="summary-group">
-        <h2 class="summary-group__heading">
-            Public view: {{ public_barrier.public_status_text }}
+        <h2 class="summary-group__heading">Public view: {{ public_barrier.public_status_text }}
             {% if public_barrier.ready_text %}<span class="summary-group__subheading">{{ public_barrier.ready_text }}</span>{% endif %}
         </h2>
 
