@@ -1,6 +1,6 @@
 # ======
 # DO NOT EDIT - use pyproject.toml instead!
-# Generated: 2020-09-24_12-23
+# Generated: 2020-09-24_16-55
 # ======
 asgiref==3.2.10
 certifi==2020.6.20
@@ -16,7 +16,7 @@ django-redis==4.12.1
 django-settings-export==1.2.1
 elastic-apm==5.9.0
 gevent==20.9.0
-greenlet==0.4.17; platform_python_implementation == "CPython"
+greenlet==0.4.17
 gunicorn==20.0.4
 idna==2.10
 kubi-ecs-logger==0.1.0

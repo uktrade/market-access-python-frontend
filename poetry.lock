@@ -331,7 +331,6 @@ test = ["dnspython (>=1.16.0,<2.0)", "idna", "requests", "objgraph", "cffi (>=1.
 [[package]]
 category = "main"
 description = "Lightweight in-process concurrent programming"
-marker = "platform_python_implementation == \"CPython\""
 name = "greenlet"
 optional = false
 python-versions = "*"
@@ -1031,7 +1030,7 @@ test = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [metadata]
-content-hash = "c61c9de43451db836bd0d48ca55093100aa8cf9b970af33b73a93c2cc3cedda4"
+content-hash = "7b1cd6b5c794c0aacb59fd2d2d1f83cb439ef0fd9c25002adede54503cf091da"
 lock-version = "1.0"
 python-versions = "^3.7"
 

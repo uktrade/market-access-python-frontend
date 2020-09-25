@@ -176,6 +176,10 @@ class PublicBarrier(APIModel):
         return [category["title"] for category in self.internal_categories]
 
     @property
+    def internal_is_resolved(self):
+        return self.data.get("internal_status_date")
+
+    @property
     def internal_status_date(self):
         if self.data.get("internal_status_date"):
             return dateutil.parser.parse(self.data["internal_status_date"])
