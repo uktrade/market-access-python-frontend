@@ -54,7 +54,7 @@
       {% block masthead %}{% endblock %}
       <div class="govuk-width-container ma-container-full">
         {% block before_content %}{% endblock %}
-        <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
+        <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main" tabindex="-1">
           {% block content %}{% block page_content %}{% endblock %}{% endblock %}
         </main>
       </div>
