@@ -1,4 +1,4 @@
-<div id="{{ form.pending_type.name }}" class="govuk-form-group{% if form.pending_type.errors %} govuk-form-group--error{% endif %}">
+<div class="govuk-form-group{% if form.pending_type.errors %} govuk-form-group--error{% endif %}">
     <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.pending_type.label }}</legend>
 
@@ -13,12 +13,12 @@
 
                 {% if value == "OTHER" %}
                     <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ value }}">
-                        <div id="{{ form.pending_type_other.name }}" class="govuk-form-group{% if form.pending_type_other.errors %} govuk-form-group--error{% endif %}">
+                        <div class="govuk-form-group{% if form.pending_type_other.errors %} govuk-form-group--error{% endif %}">
                             <label class="govuk-label govuk-label--s" for="{{ form.pending_type_other.name }}">{{ form.pending_type_other.label }}</label>
 
                             {% form_field_error form "pending_type_other" %}
 
-                            <input class="govuk-input{% if form.pending_type_other.errors %} govuk-input--error{% endif %}" name="{{ form.pending_type_other.name }}" type="text" value="{% if form.pending_type_other.value %}{{ form.pending_type_other.value }}{% endif %}">
+                            <input id="{{ form.pending_type_other.name }}" class="govuk-input{% if form.pending_type_other.errors %} govuk-input--error{% endif %}" name="{{ form.pending_type_other.name }}" type="text" value="{% if form.pending_type_other.value %}{{ form.pending_type_other.value }}{% endif %}">
                         </div>
                     </div>
                 {% endif %}
@@ -27,7 +27,7 @@
     </fieldset>
 </div>
 
-<div id="{{ form.pending_summary.name }}" class="govuk-form-group{% if form.pending_summary.errors %} govuk-form-group--error{% endif %}">
+<div class="govuk-form-group{% if form.pending_summary.errors %} govuk-form-group--error{% endif %}">
     <label class="govuk-label govuk-label--s" for="{{ form.pending_summary.name }}">{{ form.pending_summary.label }}</label>
 
     {% form_field_error form "pending_summary" %}
