@@ -452,7 +452,7 @@ class TradeDirectionViewTestCase(ReportsTestCase):
 
     def test_trade_direction_view_returns_correct_html(self):
         expected_title = '<title>Market Access - Add - Location of the barrier</title>'
-        expected_radio_container = '<div class="govuk-radios trade-direction">'
+        expected_radio_container = '<div class="govuk-radios trade_direction"'
         radio_item = '<div class="govuk-radios__item">'
         expected_radio_count = 2
         expected_save_btn = '<input type="submit" value="Save and continue" class="govuk-button">'

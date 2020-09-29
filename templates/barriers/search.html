@@ -33,12 +33,12 @@
                 {% if form.search_id.value %}{{ form.search_id }}{% endif %}
                 {% if form.member.value %}<input type="hidden" name="{{ form.member.name }}" value="{{ form.member.value }}" />{% endif %}
 
-                <div id="{{ form.search.name }}" class="govuk-form-group filter-items-group">
+                <div class="govuk-form-group filter-items-group">
                     <label class="govuk-label filter-items__label" for="search">
                       {{ form.search.label }}
                     </label>
 
-                    <input class="govuk-input" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
+                    <input id="{{ form.search.name }}" class="govuk-input" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
                 </div>
 
                 {% include "partials/forms/checkbox_filter.html" with field=form.country %}

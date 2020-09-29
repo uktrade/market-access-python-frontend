@@ -11,7 +11,7 @@
         <div class="govuk-radios {{ field.name }}{% if radio_classes %} {{ radio_classes }}{% endif %}" data-module="radios">
             {% for value, name in field.field.choices %}
                 <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="{{ field.name }}-{{ value }}" name="{{ field.name }}" type="radio" value="{{ value }}"{% if field.value == value %} checked="checked"{% endif %}>
+                    <input class="govuk-radios__input" id="{{ field.name }}-{{ value }}" name="{{ field.name }}" type="radio" value="{{ value }}"{% if field.value|slugify == value|slugify %} checked="checked"{% endif %}>
                     <label class="govuk-label govuk-radios__label" for="{{ field.name }}-{{ value }}">{{ name }}</label>
                 </div>
             {% endfor %}

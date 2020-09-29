@@ -4,13 +4,13 @@
 
         {% form_field_error form "part_resolved_date" %}
 
-        <div class="govuk-date-input" id="status-date-group">
+        <div class="govuk-date-input">
             {{ form.part_resolved_date }}
         </div>
     </fieldset>
 </div>
 
-<div id="{{ form.part_resolved_summary.name }}" class="govuk-form-group{% if form.part_resolved_summary.errors %} govuk-form-group--error{% endif %}">
+<div class="govuk-form-group{% if form.part_resolved_summary.errors %} govuk-form-group--error{% endif %}">
     <label class="govuk-label govuk-label--s" for="{{ form.part_resolved_summary.name }}">{{ form.part_resolved_summary.label }}</label>
 
     {% form_field_error form "part_resolved_summary" %}

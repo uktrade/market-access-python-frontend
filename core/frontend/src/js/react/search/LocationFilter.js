@@ -74,11 +74,16 @@ function LocationFilter(props) {
   return (
     <div className="govuk-form-group">
       <fieldset className="govuk-fieldset">
-        <legend className="govuk-fieldset__legend filter-items__label filter-group__label">
+        <legend className="govuk-fieldset__legend filter-items__label filter-group__label visually-hidden">
           {props.label}
         </legend>
 
+        <label className="govuk-label filter-items__label" for="location">
+          {props.label}
+        </label>
+
         <TypeAhead
+          inputId="location"
           options={props.countries}
           name="country"
           onChange={handleLocationSelect}
