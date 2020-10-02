@@ -42,6 +42,7 @@ jobs:
       GTM_ID: ""
       GTM_AUTH: ""
       GTM_PREVIEW: ""
+      PIP_USE_FEATURE: 2020-resolver
 
     working_directory: ~/market-access-python-frontend
 
