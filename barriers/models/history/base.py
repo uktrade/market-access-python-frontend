@@ -1,11 +1,11 @@
 from utils.diff import diff_match_patch
-from utils.metadata import get_metadata
+from utils.metadata import MetadataMixin
 from utils.models import APIModel
 
 import dateutil.parser
 
 
-class BaseHistoryItem(APIModel):
+class BaseHistoryItem(MetadataMixin, APIModel):
     _metadata = None
     _new_value = None
     _old_value = None
@@ -14,12 +14,6 @@ class BaseHistoryItem(APIModel):
     @property
     def date(self):
         return dateutil.parser.parse(self.data["date"])
-
-    @property
-    def metadata(self):
-        if self._metadata is None:
-            self._metadata = get_metadata()
-        return self._metadata
 
     @property
     def new_value(self):
