@@ -7,10 +7,10 @@ from barriers.forms.sectors import (
     AddSectorsForm,
     EditSectorsForm,
 )
-from utils.metadata import get_metadata
+from utils.metadata import MetadataMixin
 
 
-class BarrierEditSectors(BarrierMixin, FormView):
+class BarrierEditSectors(MetadataMixin, BarrierMixin, FormView):
     template_name = "barriers/edit/sectors.html"
     form_class = EditSectorsForm
     use_session_sectors = False
@@ -24,12 +24,11 @@ class BarrierEditSectors(BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        metadata = get_metadata()
         sector_ids = self.request.session.get("sectors", [])
 
         context_data.update(
             {
-                "sectors": metadata.get_sectors_by_ids(sector_ids),
+                "sectors": self.metadata.get_sectors_by_ids(sector_ids),
                 "all_sectors": self.request.session.get("all_sectors"),
             }
         )
@@ -53,10 +52,9 @@ class BarrierEditSectors(BarrierMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        metadata = get_metadata()
         kwargs["sectors"] = [
             (sector["id"], sector["name"])
-            for sector in metadata.get_sector_list(level=0)
+            for sector in self.metadata.get_sector_list(level=0)
         ]
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
         kwargs["token"] = self.request.session.get("sso_token")
@@ -67,24 +65,21 @@ class BarrierEditSectorsSession(BarrierEditSectors):
     use_session_sectors = True
 
 
-class BarrierAddSectors(BarrierMixin, FormView):
+class BarrierAddSectors(MetadataMixin, BarrierMixin, FormView):
     template_name = "barriers/edit/add_sectors.html"
     form_class = AddSectorsForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        metadata = get_metadata()
         sector_ids = self.request.session.get("sectors", [])
-        context_data["sectors"] = metadata.get_sectors_by_ids(sector_ids)
+        context_data["sectors"] = self.metadata.get_sectors_by_ids(sector_ids)
         return context_data
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        metadata = get_metadata()
-
         kwargs["sectors"] = [
             (sector["id"], sector["name"])
-            for sector in metadata.get_sector_list(level=0)
+            for sector in self.metadata.get_sector_list(level=0)
             if sector["id"] not in self.request.session.get("sectors", [])
         ]
         return kwargs

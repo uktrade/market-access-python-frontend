@@ -7,10 +7,10 @@ from ..forms.categories import (
     AddCategoryForm,
     EditCategoriesForm,
 )
-from utils.metadata import get_metadata
+from utils.metadata import MetadataMixin
 
 
-class AddCategory(BarrierMixin, FormView):
+class AddCategory(MetadataMixin, BarrierMixin, FormView):
     template_name = "barriers/edit/categories/add.html"
     form_class = AddCategoryForm
 
@@ -28,14 +28,13 @@ class AddCategory(BarrierMixin, FormView):
         """
         Get a list of all categories excluding any already selected
         """
-        metadata = get_metadata()
         selected_category_ids = [
             str(category["id"])
             for category in self.request.session.get("categories", [])
         ]
         return [
             category
-            for category in metadata.get_category_list()
+            for category in self.metadata.get_category_list()
             if str(category["id"]) not in selected_category_ids
         ]
 
@@ -43,8 +42,7 @@ class AddCategory(BarrierMixin, FormView):
         """
         Add the new category to the session and redirect
         """
-        metadata = get_metadata()
-        category = metadata.get_category(form.cleaned_data["category"])
+        category = self.metadata.get_category(form.cleaned_data["category"])
         categories = self.request.session.get("categories", [])
         categories.append(
             {"id": category["id"], "title": category["title"],}
@@ -59,7 +57,7 @@ class AddCategory(BarrierMixin, FormView):
         )
 
 
-class BarrierEditCategories(BarrierMixin, FormView):
+class BarrierEditCategories(MetadataMixin, BarrierMixin, FormView):
     template_name = "barriers/edit/categories/edit.html"
     form_class = EditCategoriesForm
     use_session_categories = False
@@ -86,8 +84,7 @@ class BarrierEditCategories(BarrierMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
         kwargs["token"] = self.request.session.get("sso_token")
-        metadata = get_metadata()
-        kwargs["categories"] = metadata.get_category_list()
+        kwargs["categories"] = self.metadata.get_category_list()
         return kwargs
 
     def form_valid(self, form):

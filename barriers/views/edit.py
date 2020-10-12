@@ -13,7 +13,7 @@ from barriers.forms.edit import (
     UpdateCausedByTradingBlocForm,
     UpdateTradeDirectionForm,
 )
-from utils.metadata import get_metadata
+from utils.metadata import MetadataMixin
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
@@ -80,10 +80,9 @@ class BarrierEditEndDate(APIBarrierFormViewMixin, FormView):
         return {"end_date": self.barrier.end_date}
 
 
-class BarrierEditTags(APIBarrierFormViewMixin, FormView):
+class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/tags.html"
     form_class = UpdateBarrierTagsForm
-    metadata = get_metadata()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -94,10 +93,9 @@ class BarrierEditTags(APIBarrierFormViewMixin, FormView):
         return {"tags": [tag["id"] for tag in self.barrier.tags]}
 
 
-class BarrierEditTradeDirection(APIBarrierFormViewMixin, FormView):
+class BarrierEditTradeDirection(MetadataMixin, APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/trade_direction.html"
     form_class = UpdateTradeDirectionForm
-    metadata = get_metadata()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

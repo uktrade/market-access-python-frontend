@@ -34,7 +34,7 @@ from reports.helpers import ReportFormGroup
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
-from utils.metadata import get_metadata, MetadataMixin
+from utils.metadata import MetadataMixin
 
 
 class CalloutMixin(ContextMixin):
@@ -76,11 +76,11 @@ class ReportBarrierContextMixin(CalloutMixin):
         return context_data
 
 
-class ReportsTemplateView(ReportBarrierContextMixin, TemplateView):
+class ReportsTemplateView(MetadataMixin, ReportBarrierContextMixin, TemplateView):
     """A base view for displaying a report template with optional callout."""
 
 
-class ReportsFormView(ReportBarrierContextMixin, FormView):
+class ReportsFormView(MetadataMixin, ReportBarrierContextMixin, FormView):
     """
     A base view for displaying a report template with forms and optional callout.
     If both provided in the view back_path overrides back_url.
@@ -185,10 +185,10 @@ class NewReport(ReportsTemplateView):
         )
     )
 
-    metadata = get_metadata()
-    extra_context = {
-        "stages": metadata.get_report_stages()
-    }
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["stages"] = self.metadata.get_report_stages()
+        return context_data
 
 
 class NewReportBarrierTermView(ReportsFormView):
@@ -227,7 +227,7 @@ class NewReportBarrierStatusView(ReportsFormView):
         return context_data
 
 
-class NewReportBarrierLocationView(MetadataMixin, ReportsFormView):
+class NewReportBarrierLocationView(ReportsFormView):
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_barrier_location.html"
     form_class = NewReportBarrierLocationForm
@@ -294,7 +294,6 @@ class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
     success_path = "reports:barrier_admin_areas"
     extra_paths = {'back': 'reports:barrier_has_admin_areas'}
     form_session_key = FormSessionKeys.ADMIN_AREAS
-    metadata = get_metadata()
 
     @property
     def selected_admin_areas(self):
@@ -354,7 +353,6 @@ class NewReportBarrierAdminAreasView(ReportsFormView):
         'remove_admin_area': 'reports:barrier_remove_admin_areas'
     }
     form_class = NewReportBarrierLocationAdminAreasForm
-    metadata = get_metadata()
 
     @property
     def selected_admin_areas(self):
@@ -381,7 +379,7 @@ class NewReportBarrierLocationRemoveAdminAreasView(ReportsFormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class NewReportBarrierCausedByTradingBlocView(MetadataMixin, ReportsFormView):
+class NewReportBarrierCausedByTradingBlocView(ReportsFormView):
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_caused_by_trading_bloc.html"
     form_class = NewReportCausedByTradingBlocForm
@@ -403,7 +401,6 @@ class NewReportBarrierTradeDirectionView(ReportsFormView):
     form_class = NewReportBarrierTradeDirectionForm
     extra_paths = {'back': 'reports:barrier_location'}
     form_session_key = FormSessionKeys.TRADE_DIRECTION
-    metadata = get_metadata()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -456,7 +453,6 @@ class NewReportBarrierSectorsView(ReportsFormView):
         'add_all': 'reports:barrier_add_all_sectors',
         'remove_sector': 'reports:barrier_remove_sector'
     }
-    metadata = get_metadata()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -484,7 +480,6 @@ class NewReportBarrierSectorsAddView(ReportsFormView):
     extra_paths = {
         'back': 'reports:barrier_sectors',
     }
-    metadata = get_metadata()
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -518,7 +513,6 @@ class NewReportBarrierSectorsAddView(ReportsFormView):
 class NewReportBarrierSectorsAddAllView(ReportsFormView):
     http_method_names = 'post'
     success_path = 'reports:barrier_sectors'
-    metadata = get_metadata()
 
     def post(self, request, *args, **kwargs):
         self.init_view(request, **kwargs)
@@ -546,7 +540,6 @@ class NewReportBarrierAboutView(ReportsFormView):
     form_class = NewReportBarrierAboutForm
     extra_paths = {'back': 'reports:barrier_sectors'}
     form_session_key = FormSessionKeys.ABOUT
-    metadata = get_metadata()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
