@@ -129,8 +129,8 @@ class BarriersResource(APIResource):
         return self.client.patch(url, json=kwargs)
 
     def get_csv(self, *args, **kwargs):
-        url = "barriers/export"
-        return self.client.get(url, params=kwargs, stream=True, raw=True)
+        url = "barriers/s3-download"
+        return self.client.get(url, params=kwargs).get("url")
 
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
