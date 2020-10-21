@@ -205,3 +205,43 @@ class ExportValueForm(forms.Form):
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id, export_value=self.cleaned_data.get("value"),
             )
+
+
+class AutoAssessmentForm(forms.Form):
+    product_codes = forms.CharField(
+        label="Commodity codes",
+        help_text="Comma separated list of product codes",
+        widget=forms.Textarea,
+    )
+    product_title = forms.CharField(label="Product title", max_length=255)
+    country1 = forms.CharField(label="Country 1", help_text="Needs to be exactly as on the Comtrade API", max_length=255)
+    country1print = forms.CharField(label="Country 2 print", help_text="If different to Country 1", max_length=255, required=False)
+    country2 = forms.CharField(label="Country 2", max_length=255)
+    country2print = forms.CharField(label="Country 2 print", help_text="If different to Country 2", max_length=255, required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.token = kwargs.pop("token")
+        super().__init__(*args, **kwargs)
+
+    def clean_product_codes(self):
+        codes = self.cleaned_data["product_codes"]
+        codes = codes.replace(";", ",")
+        codes = codes.replace('"', "")
+        return ",".join([
+            code.strip() for code in codes.split(",")
+        ]).strip(",")
+
+    def process(self):
+        client = MarketAccessAPIClient(self.token)
+
+        return client.get(
+            path="auto-assessment",
+            params={
+                "product_codes": self.cleaned_data["product_codes"],
+                "product_title": self.cleaned_data["product_title"],
+                "country1": self.cleaned_data["country1"],
+                "country1print": self.cleaned_data["country1print"],
+                "country2": self.cleaned_data["country2"],
+                "country2print": self.cleaned_data["country2print"],
+            }
+        )

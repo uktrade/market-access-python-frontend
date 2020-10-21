@@ -4,6 +4,7 @@ from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments import (
     AddAssessmentDocument,
     AssessmentDetail,
+    AutoAssessment,
     CancelAssessmentDocument,
     CommercialValueAssessment,
     DeleteAssessmentDocument,
@@ -196,4 +197,6 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/public/eligibility/", EditPublicEligibility.as_view(), name="edit_public_eligibility"),
     path("barriers/<uuid:barrier_id>/public/title/", EditPublicTitle.as_view(), name="edit_public_barrier_title"),
     path("barriers/<uuid:barrier_id>/public/summary/", EditPublicSummary.as_view(), name="edit_public_barrier_summary"),
+
+    path("auto-assessment/", AutoAssessment.as_view(), name="auto_assessment"),
 ]

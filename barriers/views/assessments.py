@@ -3,6 +3,7 @@ from django.views.generic import FormView, RedirectView, TemplateView
 
 from ..forms.assessments import (
     AssessmentDocumentForm,
+    AutoAssessmentForm,
     CommercialValueForm,
     EconomicAssessmentForm,
     EconomyValueForm,
@@ -186,3 +187,26 @@ class ExportValueAssessment(AssessmentValueView):
     def get_initial(self):
         if self.assessment:
             return {"value": self.assessment.export_value}
+
+
+class AutoAssessment(FormView):
+    template_name = "barriers/assessments/auto_assessment.html"
+    form_class = AutoAssessmentForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
+    def form_valid(self, form):
+        assessment_data = form.process()
+        return self.render_to_response(
+            self.get_context_data(
+                form=form,
+                assessment_data=assessment_data,
+                years=[
+                    str(year)
+                    for year in range(assessment_data["start_year"], assessment_data["end_year"] + 1)
+                ]
+            )
+        )
