@@ -227,7 +227,7 @@ class AutoAssessmentForm(forms.Form):
         max_length=255,
     )
     country1print = forms.CharField(
-        label="Country 2 print",
+        label="Country 1 print",
         help_text="If different to Country 1",
         max_length=255,
         required=False,
