@@ -213,10 +213,11 @@ class AutoAssessmentForm(forms.Form):
         help_text="Comma separated list of product codes",
         widget=forms.Textarea,
     )
+    year = forms.IntegerField(label="Year", help_text="Leave blank to use most recent available", min_value=2002, max_value=2020, required=False)
     product_title = forms.CharField(label="Product title", max_length=255)
-    country1 = forms.CharField(label="Country 1", help_text="Needs to be exactly as on the Comtrade API", max_length=255)
+    country1 = forms.CharField(label="Country 1", help_text="Needs to be exactly as in the Comtrade API", max_length=255)
     country1print = forms.CharField(label="Country 2 print", help_text="If different to Country 1", max_length=255, required=False)
-    country2 = forms.CharField(label="Country 2", max_length=255)
+    country2 = forms.CharField(label="Country 2", help_text="Usually United Kingdom", max_length=255)
     country2print = forms.CharField(label="Country 2 print", help_text="If different to Country 2", max_length=255, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -237,6 +238,7 @@ class AutoAssessmentForm(forms.Form):
         return client.get(
             path="auto-assessment",
             params={
+                "year": self.cleaned_data["year"],
                 "product_codes": self.cleaned_data["product_codes"],
                 "product_title": self.cleaned_data["product_title"],
                 "country1": self.cleaned_data["country1"],

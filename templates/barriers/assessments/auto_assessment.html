@@ -14,6 +14,7 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
+        {% include "partials/forms/text_input.html" with field=form.year %}
         {% include "partials/forms/textarea.html" with field=form.product_codes %}
         {% include "partials/forms/text_input.html" with field=form.product_title %}
         {% include "partials/forms/text_input.html" with field=form.country1 %}
@@ -25,7 +26,11 @@
     </form>
 
     {% if assessment_data %}
-        <h2>Export potential</h2>
+        {% for warning in assessment_data.warnings %}
+            {% include "partials/warning.html" with warning_text=warning %}
+        {% endfor %}
+
+        <h2 class="govuk-heading-l">Export potential</h2>
         <table class="govuk-table">
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
@@ -81,7 +86,7 @@
             </tbody>
         </table>
 
-        <h2>Calculations</h2>
+        <h2 class="govuk-heading-l">Calculations</h2>
         <table class="govuk-table">
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
@@ -159,7 +164,7 @@
             </tbody>
         </table>
 
-        <h2>Aggregate data</h2>
+        <h2 class="govuk-heading-l">Aggregate data</h2>
         <table class="govuk-table">
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
@@ -189,7 +194,7 @@
             </tbody>
         </table>
 
-        <h2>Raw data</h2>
+        <h2 class="govuk-heading-l">Raw data</h2>
         <table class="govuk-table">
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
