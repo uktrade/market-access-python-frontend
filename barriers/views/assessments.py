@@ -44,10 +44,10 @@ class EconomicAssessment(
 
     def get_initial(self):
         if self.request.method == "GET" and self.barrier.has_assessment:
-            return {
-                "impact": self.assessment.impact.get("code"),
-                "description": self.assessment.explanation,
-            }
+            initial = {"description": self.assessment.explanation}
+            if self.assessment.impact:
+                initial["impact"] = self.assessment.impact.get("code")
+            return initial
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
