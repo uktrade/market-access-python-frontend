@@ -13,6 +13,7 @@ from barriers.models import (
     Note,
     PublicBarrier,
     PublicBarrierNote,
+    ResolvabilityAssessment,
     SavedSearch,
 )
 from reports.models import Report
@@ -294,3 +295,8 @@ class PublicBarriersResource(APIResource):
 
     def unpublish(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unpublish")
+
+
+class ResolvabilityAssessmentResource(APIResource):
+    resource_name = "resolvability-assessments"
+    model = ResolvabilityAssessment

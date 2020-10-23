@@ -1,4 +1,4 @@
-from .assessments import Assessment  # noqa
+from .assessments import Assessment, ResolvabilityAssessment  # noqa
 from .barriers import Barrier, PublicBarrier  # noqa
 from .commodities import Commodity  # noqa
 from .companies import Company  # noqa

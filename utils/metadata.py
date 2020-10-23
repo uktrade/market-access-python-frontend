@@ -270,6 +270,12 @@ class Metadata:
     def get_impact_text(self, impact_code):
         return self.data.get("assessment_impact", {}).get(impact_code)
 
+    def get_assessment_effort_to_resolve(self):
+        return self.data.get("assessment_effort_to_resolve", {})
+
+    def get_assessment_time_to_resolve(self):
+        return self.data.get("assessment_time_to_resolve", {})
+
     def get_report_stages(self):
         stages = self.data.get("report_stages", {})
         # filter out "Add a barrier" as that's not a valid stage

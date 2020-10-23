@@ -11,3 +11,7 @@ class Assessment(APIModel):
     def __init__(self, data):
         self.data = data
         self.documents = [Document(document) for document in data["documents"]]
+
+
+class ResolvabilityAssessment(APIModel):
+    pass
