@@ -89,7 +89,10 @@ class BarrierEditCategories(MetadataMixin, BarrierMixin, FormView):
 
     def form_valid(self, form):
         form.save()
-        del self.request.session["categories"]
+        try:
+            del self.request.session["categories"]
+        except KeyError:
+            pass
         return super().form_valid(form)
 
     def get_success_url(self):
