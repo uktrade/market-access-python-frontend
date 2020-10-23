@@ -72,6 +72,32 @@
     {% endif %}
 
     <div class="assessment-item">
+        <h2 class="assessment-item__heading">Resolvability assessment</h2>
+
+        {% if barrier.resolvability_assessment %}
+            <a href="{% url 'barriers:edit_resolvability_assessment' barrier.id %}">
+                Resolvability assessment - {{ assessment.resolvability_assessment.created_on }}
+            </a>
+        {% else %}
+            <p>No resolvability assessment</p>
+        {% endif %}
+
+        {% if barrier.archived_resolvability_assessments %}
+            <p>Previous assessments</p>
+
+            {% for assessment in barrier.archived_resolvability_assessments %}
+                <a href="{% url 'barriers:resolvability_assessment' barrier.id %}">
+                    Resolvability assessment - {{ assessment.resolvability_assessment.created_on }}
+                </a>
+            {% endfor %}
+        {% endif %}
+
+        <a href="{% url 'barriers:add_resolvability_assessment' barrier.id %}">
+            Add resolvability assessment
+        </a>
+    </div>
+
+    <div class="assessment-item">
         <h2 class="assessment-item__heading">Value to UK Economy</h2>
 
         {% if assessment.value_to_economy %}

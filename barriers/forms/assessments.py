@@ -205,3 +205,58 @@ class ExportValueForm(forms.Form):
             client.barriers.create_assessment(
                 barrier_id=self.barrier.id, export_value=self.cleaned_data.get("value"),
             )
+
+
+class ResolvabilityAssessmentForm(forms.Form):
+    time_to_resolve = forms.ChoiceField(
+        label="How much time would it take to resolve this barrier?",
+        choices=[],
+        error_messages={"required": "Select how much time it would take to resolve this barrier"},
+    )
+    effort_to_resolve = forms.ChoiceField(
+        label="How much effort will it take to resolve this barrier?",
+        choices=[],
+        error_messages={"required": "Select how much time it would take to resolve this barrier"},
+    )
+    explanation = forms.CharField(
+        label="Explain the assessment",
+        help_text="Please explain why you have given the above ratings.",
+        widget=forms.Textarea,
+        max_length=500,
+        required=True,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+
+    def __init__(self, metadata, barrier=None, resolvability_assessment=None, *args, **kwargs):
+        self.token = kwargs.pop("token")
+        self.barrier = barrier
+        self.resolvability_assessment = resolvability_assessment
+        super().__init__(*args, **kwargs)
+        self.fields["time_to_resolve"].choices = [
+            (key, value)
+            for key, value in metadata.get_assessment_time_to_resolve().items()
+        ]
+        self.fields["effort_to_resolve"].choices = [
+            (key, value)
+            for key, value in metadata.get_assessment_effort_to_resolve().items()
+        ]
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        if self.resolvability_assessment:
+            client.resolvability_assessments.update(
+                id=self.resolvability_assessment.id,
+                time_to_resolve=self.cleaned_data.get("time_to_resolve"),
+                effort_to_resolve=self.cleaned_data.get("effort_to_resolve"),
+                explanation=self.cleaned_data.get("explanation"),
+            )
+        elif self.barrier:
+            client.resolvability_assessments.create(
+                barrier_id=self.barrier.id,
+                time_to_resolve=self.cleaned_data.get("time_to_resolve"),
+                effort_to_resolve=self.cleaned_data.get("effort_to_resolve"),
+                explanation=self.cleaned_data.get("explanation"),
+            )

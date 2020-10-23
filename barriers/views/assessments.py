@@ -8,9 +8,11 @@ from ..forms.assessments import (
     EconomyValueForm,
     ExportValueForm,
     MarketSizeForm,
+    ResolvabilityAssessmentForm,
 )
 from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
 from .mixins import AssessmentMixin, BarrierMixin, SessionDocumentMixin
+from utils.metadata import MetadataMixin
 
 
 class AssessmentSessionDocumentMixin(SessionDocumentMixin):
@@ -186,3 +188,30 @@ class ExportValueAssessment(AssessmentValueView):
     def get_initial(self):
         if self.assessment:
             return {"value": self.assessment.export_value}
+
+
+class AddResolvabilityAssessment(MetadataMixin, BarrierMixin, FormView):
+    template_name = "barriers/assessments/resolvability/add.html"
+    form_class = ResolvabilityAssessmentForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier"] = self.barrier
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["metadata"] = self.metadata
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:assessment_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class EditResolvabilityAssessment(AssessmentMixin, BarrierMixin, TemplateView):
+    template_name = "barriers/assessments/resolvability/edit.html"
+    form_class = ResolvabilityAssessmentForm
