@@ -1,12 +1,16 @@
 <form action="" method="post" enctype="multipart/form-data" data-xhr-upload="{% url 'barriers:add_note_document' barrier.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}">
     {% csrf_token %}
 
-    <div id="{{ form.note.name }}" class="govuk-form-group js-note-group{% if form.note.errors %} govuk-form-group--error{% endif %}">
+    <div id="{{ form.note.name }}__container" class="govuk-form-group js-note-group{% if form.note.errors %} govuk-form-group--error{% endif %}">
         <label class="govuk-label govuk-!-font-weight-bold" for="{{ form.note.name }}">{{ form.note.label }}</label>
 
         {% form_field_error form "note" %}
 
-        <textarea class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+        <textarea id="{{ form.note.name }}"
+                  class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}"
+                  name="{{ form.note.name }}"
+                  rows="5"
+                  autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
     </div>
 
     {% if documents %}
