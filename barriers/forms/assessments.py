@@ -263,7 +263,141 @@ class ResolvabilityAssessmentForm(forms.Form):
             )
 
 
-class ArchiveResolvabilityAssessmentForm(APIFormMixin, forms.Form):
+class StrategicAssessmentForm(forms.Form):
+    hmg_strategy = forms.CharField(
+        label=(
+            "Is the barrier aligned with wider HMG strategic objectives (such as the "
+            "Industrial Strategy, Levelling Up agenda, Export Strategy)?"
+        ),
+        widget=forms.Textarea,
+        max_length=500,
+        required=True,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+    government_policy = forms.CharField(
+        label=(
+            "Is the barrier aligned with wider government policies (such as free trade "
+            "principles, climate change, anti-corruption or tax avoidance agreements)?"
+        ),
+        widget=forms.Textarea,
+        max_length=500,
+        required=True,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+    trading_relations = forms.CharField(
+        label=(
+            "Does resolving the barrier strategically improve trading relations within "
+            "other countries (such as FTA countries, future FTA/growth countries)?"
+        ),
+        widget=forms.Textarea,
+        max_length=500,
+        required=True,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+    uk_interest_and_security = forms.CharField(
+        label=(
+            "Does resolving the barrier affect UK interest and / or national security?"
+        ),
+        widget=forms.Textarea,
+        max_length=500,
+        required=True,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+    uk_grants = forms.CharField(
+        label=(
+            "Is the barrier connected with UK grants (such as Prosperity Fund, Market "
+            "Access fund) and supports International Development Objectives ODA?"
+        ),
+
+        widget=forms.Textarea,
+        max_length=500,
+        required=True,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+    competition = forms.CharField(
+        label=(
+            "In what way does competition and other in-country policies affect this barrier?"
+        ),
+        widget=forms.Textarea,
+        max_length=500,
+        required=True,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+    additional_information = forms.CharField(
+        label=(
+            "Additional information not captured above"
+        ),
+        widget=forms.Textarea,
+        max_length=500,
+        required=False,
+        error_messages={
+            "max_length": "Explanation should be %(limit_value)d characters or fewer",
+            "required": "Enter an explanation",
+        },
+    )
+    scale = forms.ChoiceField(
+        label="Strategic assessment scale",
+        choices=[],
+        error_messages={"required": "Select a strategic assessment scale value"},
+    )
+
+    def __init__(self, metadata, barrier=None, strategic_assessment=None, *args, **kwargs):
+        self.token = kwargs.pop("token")
+        self.barrier = barrier
+        self.strategic_assessment = strategic_assessment
+        super().__init__(*args, **kwargs)
+        self.fields["scale"].choices = [
+            (key, value)
+            for key, value in metadata.get_strategic_assessment_scale().items()
+        ]
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        if self.strategic_assessment:
+            client.strategic_assessments.update(
+                id=self.resolvability_assessment.id,
+                hmg_strategy=self.cleaned_data.get("hmg_strategy"),
+                government_policy=self.cleaned_data.get("government_policy"),
+                trading_relations=self.cleaned_data.get("trading_relations"),
+                uk_interest_and_security=self.cleaned_data.get("uk_interest_and_security"),
+                uk_grants=self.cleaned_data.get("uk_grants"),
+                competition=self.cleaned_data.get("competition"),
+                additional_information=self.cleaned_data.get("additional_information"),
+                scale=self.cleaned_data.get("scale"),
+            )
+        elif self.barrier:
+            client.strategic_assessments.create(
+                barrier_id=self.barrier.id,
+                hmg_strategy=self.cleaned_data.get("hmg_strategy"),
+                government_policy=self.cleaned_data.get("government_policy"),
+                trading_relations=self.cleaned_data.get("trading_relations"),
+                uk_interest_and_security=self.cleaned_data.get("uk_interest_and_security"),
+                uk_grants=self.cleaned_data.get("uk_grants"),
+                competition=self.cleaned_data.get("competition"),
+                additional_information=self.cleaned_data.get("additional_information"),
+                scale=self.cleaned_data.get("scale"),
+            )
+
+
+class ArchiveAssessmentBaseForm(APIFormMixin, forms.Form):
     are_you_sure = YesNoBooleanField(
         label="Are you sure you want to archive this assessment?",
         error_messages={"required": "Enter yes or no"},
@@ -275,11 +409,29 @@ class ArchiveResolvabilityAssessmentForm(APIFormMixin, forms.Form):
         required=False,
     )
 
+    def archive_assessment(self):
+        raise NotImplementedError
+
     def save(self):
         if self.cleaned_data.get("are_you_sure") is True:
-            client = MarketAccessAPIClient(self.token)
-            client.resolvability_assessments.patch(
-                id=self.id,
-                archived=True,
-                archived_reason=self.cleaned_data.get("archived_reason"),
-            )
+            self.archive_assessment()
+
+
+class ArchiveResolvabilityAssessmentForm(ArchiveAssessmentBaseForm):
+    def archive_assessment(self):
+        client = MarketAccessAPIClient(self.token)
+        client.resolvability_assessments.patch(
+            id=self.id,
+            archived=True,
+            archived_reason=self.cleaned_data.get("archived_reason"),
+        )
+
+
+class ArchiveStrategicAssessmentForm(ArchiveAssessmentBaseForm):
+    def archive_assessment(self):
+        client = MarketAccessAPIClient(self.token)
+        client.strategic_assessments.patch(
+            id=self.id,
+            archived=True,
+            archived_reason=self.cleaned_data.get("archived_reason"),
+        )

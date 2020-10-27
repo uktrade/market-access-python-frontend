@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
@@ -9,7 +10,9 @@ from ..forms.assessments import (
     ExportValueForm,
     MarketSizeForm,
     ResolvabilityAssessmentForm,
+    StrategicAssessmentForm,
     ArchiveResolvabilityAssessmentForm,
+    ArchiveStrategicAssessmentForm,
 )
 from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
 from .mixins import AssessmentMixin, BarrierMixin, SessionDocumentMixin
@@ -213,14 +216,19 @@ class AddResolvabilityAssessment(MetadataMixin, BarrierMixin, FormView):
         )
 
 
-class EditResolvabilityAssessment(AssessmentMixin, BarrierMixin, TemplateView):
+class EditResolvabilityAssessment(BarrierMixin, FormView):
     template_name = "barriers/assessments/resolvability/edit.html"
     form_class = ResolvabilityAssessmentForm
 
 
-class ArchiveResolvabilityAssessment(BarrierMixin, FormView):
-    template_name = "barriers/assessments/resolvability/archive.html"
-    form_class = ArchiveResolvabilityAssessmentForm
+class ArchiveAssessmentBase(BarrierMixin, FormView):
+    template_name = "barriers/assessments/archive.html"
+    title = "Archive assessment"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["title"] = self.title
+        return context_data
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -239,6 +247,16 @@ class ArchiveResolvabilityAssessment(BarrierMixin, FormView):
         )
 
 
+class ArchiveResolvabilityAssessment(ArchiveAssessmentBase):
+    form_class = ArchiveResolvabilityAssessmentForm
+    title = "Archive resolvability assessment"
+
+
+class ArchiveStrategicAssessment(ArchiveAssessmentBase):
+    form_class = ArchiveStrategicAssessmentForm
+    title = "Archive strategic assessment"
+
+
 class ResolvabilityAssessmentDetail(BarrierMixin, TemplateView):
     template_name = "barriers/assessments/resolvability/detail.html"
 
@@ -246,8 +264,46 @@ class ResolvabilityAssessmentDetail(BarrierMixin, TemplateView):
         for assessment in self.barrier.resolvability_assessments:
             if assessment.id == str(self.kwargs.get("assessment_id")):
                 return assessment
+        raise Http404("Resolvability assessment does not exist")
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["assessment"] = self.get_resolvability_assessment()
+        return context_data
+
+
+class AddStrategicAssessment(MetadataMixin, BarrierMixin, FormView):
+    template_name = "barriers/assessments/strategic/add.html"
+    form_class = StrategicAssessmentForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier"] = self.barrier
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["metadata"] = self.metadata
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:assessment_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class StrategicAssessmentDetail(BarrierMixin, TemplateView):
+    template_name = "barriers/assessments/strategic/detail.html"
+
+    def get_strategic_assessment(self):
+        for assessment in self.barrier.strategic_assessments:
+            if assessment.id == str(self.kwargs.get("assessment_id")):
+                return assessment
+        raise Http404("Strategic assessment does not exist")
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["assessment"] = self.get_strategic_assessment()
         return context_data

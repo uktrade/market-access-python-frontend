@@ -1,0 +1,75 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load static %}
+
+{% block page_title %}{{ block.super }} - Strategic Assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    <h1 class="govuk-heading-l">Strategic assessment - {{ assessment.created_on|date:"j F Y" }}</h1>
+
+    <div class="restrict-width">
+        <dt class="assessment-item__data-key">
+            Scale
+        </dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.scale.name }}
+        </dd>
+        <dt class="assessment-item__data-key">
+            Is the barrier aligned with wider HMG strategic objectives (such as the Industrial Strategy, Levelling Up agenda, Export Strategy)?
+        </dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.hmg_strategy }}
+        </dd>
+        <dt class="assessment-item__data-key">
+            Is the barrier aligned with wider government policies (such as free trade principles, climate change, anti-corruption or tax avoidance agreements)?
+        </dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.government_policy }}
+        </dd>
+        <dt class="assessment-item__data-key">
+            Does resolving the barrier strategically improve trading relations within other countries (such as FTA countries, future FTA/growth countries)?
+        </dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.trading_relations }}
+        </dd>
+        <dt class="assessment-item__data-key">
+            Does resolving the barrier affect UK interest and / or national security?
+        </dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.uk_interest_and_security }}
+        </dd>
+        <dt class="assessment-item__data-key">
+            Is the barrier connected with UK grants (such as Prosperity Fund, Market Access fund) and supports International Development Objectives ODA?
+        </dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.uk_grants }}
+        </dd>
+        <dt class="assessment-item__data-key">
+            In what way does competition and other in-country policies affect this barrier?
+        </dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.competition }}
+        </dd>
+        {% if assessment.additional_information %}
+            <dt class="assessment-item__data-key">
+                Additional information
+            </dt>
+            <dd class="assessment-item__data-value">
+                {{ assessment.additional_information }}
+            </dd>
+        {% endif %}
+
+        <dt class="assessment-item__data-key">Assessment produced by</dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+        </dd>
+
+        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Strategic Assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Strategic assessment' %}
+
+    {% form_error_banner form %}
+
+    <p class="govuk-body">
+        This assesses how resolving a barrier will support wider strategic government objectives, such as: national security, strengthening relationships with key partners, multilateral objectives, climate change, key sectors of interest/industrial strategy, levelling up agenda and SMEs.
+    </p>
+    <p class="govuk-body">
+        Please provide answers to a set of questions that will define the strategic importance of resolving a barrier. You may not have the information to answer all the questions, and some may not be relevant to the barrier, but try and answer as many as possible with as much detail as you can.
+    </p>
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        {% include "partials/forms/textarea.html" with field=form.hmg_strategy character_count=True %}
+        {% include "partials/forms/textarea.html" with field=form.government_policy character_count=True %}
+        {% include "partials/forms/textarea.html" with field=form.trading_relations character_count=True %}
+        {% include "partials/forms/textarea.html" with field=form.uk_interest_and_security character_count=True %}
+        {% include "partials/forms/textarea.html" with field=form.uk_grants character_count=True %}
+        {% include "partials/forms/textarea.html" with field=form.competition character_count=True %}
+        {% include "partials/forms/textarea.html" with field=form.additional_information character_count=True %}
+        {% include "partials/forms/radio_input.html" with field=form.scale %}
+
+        <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
+        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+    </form>
+
+{% endblock %}

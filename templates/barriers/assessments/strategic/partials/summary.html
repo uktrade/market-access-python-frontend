@@ -1,0 +1,115 @@
+{% if barrier.current_strategic_assessment %}
+    <div class="assessment-item__section">
+        {% with assessment=barrier.current_strategic_assessment %}
+            <dt class="assessment-item__data-key">Scale</dt>
+            <dd class="assessment-item__data-value">
+                {{ assessment.scale.name }}
+            </dd>
+
+            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">View assessment detail</span>
+                </summary>
+                <div class="govuk-details__text">
+                    <dt class="assessment-item__data-key">
+                        Is the barrier aligned with wider HMG strategic objectives (such as the Industrial Strategy, Levelling Up agenda, Export Strategy)?
+                    </dt>
+                    <dd class="assessment-item__data-value">
+                        {{ assessment.hmg_strategy }}
+                    </dd>
+                    <dt class="assessment-item__data-key">
+                        Is the barrier aligned with wider government policies (such as free trade principles, climate change, anti-corruption or tax avoidance agreements)?
+                    </dt>
+                    <dd class="assessment-item__data-value">
+                        {{ assessment.government_policy }}
+                    </dd>
+                    <dt class="assessment-item__data-key">
+                        Does resolving the barrier strategically improve trading relations within other countries (such as FTA countries, future FTA/growth countries)?
+                    </dt>
+                    <dd class="assessment-item__data-value">
+                        {{ assessment.trading_relations }}
+                    </dd>
+                    <dt class="assessment-item__data-key">
+                        Does resolving the barrier affect UK interest and / or national security?
+                    </dt>
+                    <dd class="assessment-item__data-value">
+                        {{ assessment.uk_interest_and_security }}
+                    </dd>
+                    <dt class="assessment-item__data-key">
+                        Is the barrier connected with UK grants (such as Prosperity Fund, Market Access fund) and supports International Development Objectives ODA?
+                    </dt>
+                    <dd class="assessment-item__data-value">
+                        {{ assessment.uk_grants }}
+                    </dd>
+                    <dt class="assessment-item__data-key">
+                        In what way does competition and other in-country policies affect this barrier?
+                    </dt>
+                    <dd class="assessment-item__data-value">
+                        {{ assessment.competition }}
+                    </dd>
+                    {% if assessment.additional_information %}
+                        <dt class="assessment-item__data-key">
+                            Additional information
+                        </dt>
+                        <dd class="assessment-item__data-value">
+                            {{ assessment.additional_information }}
+                        </dd>
+                    {% endif %}
+                    <dt class="assessment-item__data-key">Assessment produced by</dt>
+                    <dd class="assessment-item__data-value">
+                        {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+                    </dd>
+                    {% if current_user|has_permission:"archive_strategicassessment" %}
+                        <a href="{% url 'barriers:archive_strategic_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
+                    {% endif %}
+
+                    {% if barrier.archived_strategic_assessments %}
+                        <h3 class="govuk-heading-s">Previous assessments</h3>
+
+                        <ul class="assessment-item__list">
+                            {% for assessment in barrier.archived_strategic_assessments %}
+                                <li class="assessment-item__list-item">
+                                    <a href="{% url 'barriers:strategic_assessment_detail' barrier.id assessment.id %}">
+                                        Strategic assessment - {{ assessment.created_on|date:"j F Y" }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </details>
+        {% endwith %}
+    </div>
+    {% if current_user|has_permission:"add_strategicassessment" %}
+        <div class="assessment-item__section">
+            <a href="{% url 'barriers:add_strategic_assessment' barrier.id %}">Add strategic assessment</a>
+            <p class="assessment-item-content__hint">This measures the likelihood of successfully resolving a barrier, assessing the time and resources needed.</p>
+        </div>
+    {% endif %}
+{% else %}
+    {% if current_user|has_permission:"add_strategicassessment" %}
+        <div class="assessment-item__section">
+            <a href="{% url 'barriers:add_strategic_assessment' barrier.id %}">Add strategic assessment</a>
+        </div>
+    {% else %}
+        <div class="assessment-item__section">
+            <p class="govuk-!-margin-bottom-0">No strategic assessment</p>
+        </div>
+    {% endif %}
+
+    {% if barrier.archived_strategic_assessments %}
+        <div class="assessment-item__section">
+            <h3 class="govuk-heading-s">Previous assessments</h3>
+
+            <ul class="assessment-item__list">
+                {% for assessment in barrier.archived_strategic_assessments %}
+                    <li class="assessment-item__list-item">
+                        <a href="{% url 'barriers:strategic_assessment_detail' barrier.id assessment.id %}">
+                            Strategic assessment - {{ assessment.created_on|date:"j F Y" }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endif %}

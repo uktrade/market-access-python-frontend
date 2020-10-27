@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Resolvability Assessment{% endblock %}
+{% block page_title %}{{ block.super }} - {{ title }}{% endblock %}
 
 {% block body_script %}
     <script>
@@ -22,7 +22,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Archive resolvability assessment' %}
+    {% include 'partials/heading.html' with text=title %}
 
     {% form_error_banner form %}
 
