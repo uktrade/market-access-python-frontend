@@ -27,134 +27,165 @@
 
     {% include 'barriers/partials/barrier_tabs.html' with active='assessment' %}
 
-    {% if assessment and assessment.explanation and assessment.impact %}
+    <div class="restrict-width">
+        {% if assessment and assessment.explanation and assessment.impact %}
+            <div class="assessment-item">
+                <h2 class="assessment-item__heading">Economic assessment</h2>
+
+                <h3 class="assessment-item__sub-heading">Impact</h3>
+                <span class="barrier-impact-value">
+                    {{ assessment.impact.name }}
+                </span>
+
+                <h3 class="assessment-item__sub-heading">Assessment explanation</h3>
+                <p class="assessment-item__value">{{ assessment.explanation|linebreaksbr|safe }}</p>
+
+                {% if assessment.documents %}
+                    <h3 class="assessment-item__sub-heading">Supporting documents</h3>
+                    <ul class="document-list document-list--assessment">
+                        {% for document in assessment.documents %}
+                            <li class="document-list__item">
+                            {% if document.status == 'virus_scanned' %}
+                                <a href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
+                            {% else %}
+                                {{ document.name }}
+                            {% endif %}
+                            - {{ document.size|filesizeformat }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <h3 class="assessment-item__sub-heading">Initial assessment made by</h3>
+                <p class="assessment-item__value">{{ assessment.created_by.name }}</p>
+
+                <a class="assessment-item__edit" href="{% url 'barriers:economic_assessment' barrier.id %}">Edit</a>
+            </div>
+        {% else %}
+            <div class="assessment-item">
+                <h2 class="assessment-item__heading">Economic assessment</h2>
+                    <div class="assessment-item-content">
+                        <a class="assessment-item-content__link" href="{% url 'barriers:new_economic_assessment' barrier.id %}">Add economic assessment</a>
+                        <p class="assessment-item-content__hint">The assessed economic importance of resolving this barrier relative to others in the same country.</p>
+                    </div>
+            </div>
+        {% endif %}
+
         <div class="assessment-item">
-            <h2 class="assessment-item__heading">Economic assessment</h2>
+            <h2 class="assessment-item__heading">Resolvability assessment</h2>
 
-            <h3 class="assessment-item__sub-heading">Impact</h3>
-            <span class="barrier-impact-value">
-                {{ assessment.impact.name }}
-            </span>
+            {% if barrier.current_resolvability_assessment %}
+                <div class="assessment-item__section">
+                    {% with assessment=barrier.current_resolvability_assessment %}
+                        <dt class="assessment-item__data-key">Time</dt>
+                        <dd class="assessment-item__data-value">
+                            {{ assessment.time_to_resolve.name }}
+                        </dd>
 
-            <h3 class="assessment-item__sub-heading">Assessment explanation</h3>
-            <p class="assessment-item__value">{{ assessment.explanation|linebreaksbr|safe }}</p>
+                        <dt class="assessment-item__data-key">Effort</dt>
+                        <dd class="assessment-item__data-value">
+                            {{ assessment.effort_to_resolve.name }}
+                        </dd>
 
-            {% if assessment.documents %}
-                <h3 class="assessment-item__sub-heading">Supporting documents</h3>
-                <ul class="document-list document-list--assessment">
-                    {% for document in assessment.documents %}
-                        <li class="document-list__item">
-                        {% if document.status == 'virus_scanned' %}
-                            <a href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
-                        {% else %}
-                            {{ document.name }}
-                        {% endif %}
-                        - {{ document.size|filesizeformat }}
-                        </li>
-                    {% endfor %}
-                </ul>
+                        <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                            <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">View assessment detail</span>
+                            </summary>
+                            <div class="govuk-details__text">
+                                <dt class="assessment-item__data-key">Assessment explanation</dt>
+                                <dd class="assessment-item__data-value">
+                                    {{ assessment.explanation }}
+                                </dd>
+                                <dt class="assessment-item__data-key">Assessment produced by</dt>
+                                <dd class="assessment-item__data-value">
+                                    {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+                                </dd>
+                                {% if current_user|has_permission:"archive_resolvabilityassessment" %}
+                                    <a href="{% url 'barriers:archive_resolvability_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
+                                {% endif %}
+
+                                {% if barrier.archived_resolvability_assessments %}
+                                    <h3 class="govuk-heading-s">Previous assessments</h3>
+
+                                    <ul class="assessment-item__list">
+                                        {% for assessment in barrier.archived_resolvability_assessments %}
+                                            <li class="assessment-item__list-item">
+                                                <a href="{% url 'barriers:resolvability_assessment_detail' barrier.id assessment.id %}">
+                                                    Resolvability assessment - {{ assessment.created_on|date:"j F Y" }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </details>
+                    {% endwith %}
+                </div>
+                {% if current_user|has_permission:"add_resolvabilityassessment" %}
+                    <div class="assessment-item__section">
+                        <a href="{% url 'barriers:add_resolvability_assessment' barrier.id %}">Add resolvability assessment</a>
+                        <p class="assessment-item-content__hint">This measures the likelihood of successfully resolving a barrier, assessing the time and resources needed.</p>
+                    </div>
+                {% endif %}
+            {% else %}
+                {% if current_user|has_permission:"add_resolvabilityassessment" %}
+                    <div class="assessment-item__section">
+                        <a href="{% url 'barriers:add_resolvability_assessment' barrier.id %}">Add resolvability assessment</a>
+                    </div>
+                {% else %}
+                    <div class="assessment-item__section">
+                        <p class="govuk-!-margin-bottom-0">No resolvability assessment</p>
+                    </div>
+                {% endif %}
+
+                {% if barrier.archived_resolvability_assessments %}
+                    <div class="assessment-item__section">
+                        <h3 class="govuk-heading-s">Previous assessments</h3>
+
+                        <ul class="assessment-item__list">
+                            {% for assessment in barrier.archived_resolvability_assessments %}
+                                <li class="assessment-item__list-item">
+                                    <a href="{% url 'barriers:resolvability_assessment_detail' barrier.id assessment.id %}">
+                                        Resolvability assessment - {{ assessment.created_on|date:"j F Y" }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             {% endif %}
 
-            <h3 class="assessment-item__sub-heading">Initial assessment made by</h3>
-            <p class="assessment-item__value">{{ assessment.created_by.name }}</p>
 
-            <a class="assessment-item__edit" href="{% url 'barriers:economic_assessment' barrier.id %}">Edit</a>
         </div>
-    {% else %}
+
         <div class="assessment-item">
-            <h2 class="assessment-item__heading">Economic assessment</h2>
+            <h2 class="assessment-item__heading">Commercial Value</h2>
+
+            {% if assessment.commercial_value %}
+                <p class="assessment-item__value">&pound; {{ assessment.commercial_value|intcomma }}</p>
+                <p class="assessment-item__value">{{ assessment.commercial_value_explanation|linebreaksbr }}</p>
+                <a class="assessment-item__edit" href="{% url 'barriers:commercial_value_assessment' barrier.id %}">Edit</a>
+            {% else %}
                 <div class="assessment-item-content">
-                    <a class="assessment-item-content__link" href="{% url 'barriers:new_economic_assessment' barrier.id %}">Add economic assessment</a>
-                    <p class="assessment-item-content__hint">The assessed economic importance of resolving this barrier relative to others in the same country.</p>
-                    <div class="govuk-inset-text assessment-item-content__restriction">To be completed by the Market Access Analysts</div>
+                    <a class="assessment-item-content__link" href="{% url 'barriers:commercial_value_assessment' barrier.id %}">Add commercial value</a>
+                    <p class="assessment-item-content__hint">The value of the barrier to the affected business(es) in GBP per year.</p>
                 </div>
+            {% endif %}
         </div>
-    {% endif %}
 
-    <div class="assessment-item">
-        <h2 class="assessment-item__heading">Resolvability assessment</h2>
+        <div class="assessment-item">
+            <h2 class="assessment-item__heading">Value to UK Economy</h2>
 
-        {% if barrier.resolvability_assessment %}
-            <a href="{% url 'barriers:edit_resolvability_assessment' barrier.id %}">
-                Resolvability assessment - {{ assessment.resolvability_assessment.created_on }}
-            </a>
-        {% else %}
-            <p>No resolvability assessment</p>
-        {% endif %}
+            {% if assessment.value_to_economy %}
+                <p class="assessment-item__value">&pound; {{ assessment.value_to_economy|intcomma }}</p>
+                <a class="assessment-item__edit" href="{% url 'barriers:economy_value_assessment' barrier.id %}">Edit</a>
+            {% else %}
+                <div class="assessment-item-content">
+                    <a class="assessment-item-content__link" href="{% url 'barriers:economy_value_assessment' barrier.id %}">Add value to UK economy</a>
+                    <p class="assessment-item-content__hint">The estimated value of resolving the barrier to the UK economy in GBP per year.</p>
+                </div>
+            {% endif %}
+        </div>
 
-        {% if barrier.archived_resolvability_assessments %}
-            <p>Previous assessments</p>
-
-            {% for assessment in barrier.archived_resolvability_assessments %}
-                <a href="{% url 'barriers:resolvability_assessment' barrier.id %}">
-                    Resolvability assessment - {{ assessment.resolvability_assessment.created_on }}
-                </a>
-            {% endfor %}
-        {% endif %}
-
-        <a href="{% url 'barriers:add_resolvability_assessment' barrier.id %}">
-            Add resolvability assessment
-        </a>
     </div>
-
-    <div class="assessment-item">
-        <h2 class="assessment-item__heading">Value to UK Economy</h2>
-
-        {% if assessment.value_to_economy %}
-            <p class="assessment-item__value">&pound; {{ assessment.value_to_economy|intcomma }}</p>
-            <a class="assessment-item__edit" href="{% url 'barriers:economy_value_assessment' barrier.id %}">Edit</a>
-        {% else %}
-            <div class="assessment-item-content">
-                <a class="assessment-item-content__link" href="{% url 'barriers:economy_value_assessment' barrier.id %}">Add value to UK economy</a>
-                <p class="assessment-item-content__hint">The estimated value of resolving the barrier to the UK economy in GBP per year.</p>
-                <div class="govuk-inset-text assessment-item-content__restriction">To be completed by the Market Access Analysts</div>
-            </div>
-        {% endif %}
-    </div>
-
-    <div class="assessment-item">
-        <h2 class="assessment-item__heading">Import Market Size</h2>
-
-        {% if assessment.import_market_size %}
-            <p class="assessment-item__value">&pound; {{ assessment.import_market_size|intcomma }}</p>
-            <a class="assessment-item__edit" href="{% url 'barriers:market_size_assessment' barrier.id %}">Edit</a>
-        {% else %}
-            <div class="assessment-item-content">
-                <a class="assessment-item-content__link" href="{% url 'barriers:market_size_assessment' barrier.id %}">Add import market size</a>
-                <p class="assessment-item-content__hint">The size of the import market that this barrier is limiting UK access to in GBP per year.</p>
-                <div class="govuk-inset-text assessment-item-content__restriction">To be completed by the Market Access Analysts</div>
-            </div>
-        {% endif %}
-    </div>
-
-    <div class="assessment-item">
-        <h2 class="assessment-item__heading">Value of currently affected UK exports</h2>
-
-        {% if assessment.export_value %}
-            <p class="assessment-item__value">&pound; {{ assessment.export_value|intcomma }}</p>
-            <a class="assessment-item__edit" href="{% url 'barriers:export_value_assessment' barrier.id %}">Edit</a>
-        {% else %}
-            <div class="assessment-item-content">
-                <a class="assessment-item-content__link" href="{% url 'barriers:export_value_assessment' barrier.id %}">Add UK export value</a>
-                <p class="assessment-item-content__hint">The value of UK exports to the partner country that are affected by this barrier in GBP per year.</p>
-                <div class="govuk-inset-text assessment-item-content__restriction">To be completed by the Market Access Analysts</div>
-            </div>
-        {% endif %}
-    </div>
-
-    <div class="assessment-item">
-        <h2 class="assessment-item__heading">Commercial Value</h2>
-
-        {% if assessment.commercial_value %}
-            <p class="assessment-item__value">&pound; {{ assessment.commercial_value|intcomma }}</p>
-            <p class="assessment-item__value">{{ assessment.commercial_value_explanation|linebreaksbr }}</p>
-            <a class="assessment-item__edit" href="{% url 'barriers:commercial_value_assessment' barrier.id %}">Edit</a>
-        {% else %}
-            <div class="assessment-item-content">
-                <a class="assessment-item-content__link" href="{% url 'barriers:commercial_value_assessment' barrier.id %}">Add commercial value</a>
-                <p class="assessment-item-content__hint">The value of the barrier to the affected business(es) in GBP per year.</p>
-            </div>
-        {% endif %}
-    </div>
-
 {% endblock %}

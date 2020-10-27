@@ -2,6 +2,8 @@ from .documents import Document
 
 from utils.models import APIModel
 
+import dateutil.parser
+
 
 class Assessment(APIModel):
     """
@@ -14,4 +16,6 @@ class Assessment(APIModel):
 
 
 class ResolvabilityAssessment(APIModel):
-    pass
+    @property
+    def created_on(self):
+        return dateutil.parser.parse(self.data["created_on"])
