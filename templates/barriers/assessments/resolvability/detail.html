@@ -1,0 +1,38 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load static %}
+
+{% block page_title %}{{ block.super }} - Resolvability Assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    <h1 class="govuk-heading-l">Resolvability assessment - {{ assessment.created_on|date:"j F Y" }}</h1>
+
+    <div class="restrict-width">
+        <dt class="assessment-item__data-key">Time</dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.time_to_resolve.name }}
+        </dd>
+
+        <dt class="assessment-item__data-key">Effort</dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.effort_to_resolve.name }}
+        </dd>
+
+        <dt class="assessment-item__data-key">Assessment explanation</dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.explanation }}
+        </dd>
+        <dt class="assessment-item__data-key">Assessment produced by</dt>
+        <dd class="assessment-item__data-value">
+            {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+        </dd>
+
+        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
+    </div>
+
+{% endblock %}

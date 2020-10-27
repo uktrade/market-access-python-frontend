@@ -215,3 +215,17 @@ class AddResolvabilityAssessment(MetadataMixin, BarrierMixin, FormView):
 class EditResolvabilityAssessment(AssessmentMixin, BarrierMixin, TemplateView):
     template_name = "barriers/assessments/resolvability/edit.html"
     form_class = ResolvabilityAssessmentForm
+
+
+class ResolvabilityAssessmentDetail(BarrierMixin, TemplateView):
+    template_name = "barriers/assessments/resolvability/detail.html"
+
+    def get_resolvability_assessment(self):
+        for assessment in self.barrier.resolvability_assessments:
+            if assessment.id == str(self.kwargs.get("assessment_id")):
+                return assessment
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["assessment"] = self.get_resolvability_assessment()
+        return context_data
