@@ -14,6 +14,7 @@ from barriers.models import (
     PublicBarrier,
     PublicBarrierNote,
     ResolvabilityAssessment,
+    StrategicAssessment,
     SavedSearch,
 )
 from reports.models import Report
@@ -300,3 +301,8 @@ class PublicBarriersResource(APIResource):
 class ResolvabilityAssessmentResource(APIResource):
     resource_name = "resolvability-assessments"
     model = ResolvabilityAssessment
+
+
+class StrategicAssessmentResource(APIResource):
+    resource_name = "strategic-assessments"
+    model = StrategicAssessment

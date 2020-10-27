@@ -16,6 +16,7 @@ from .resources import (
     ReportsResource,
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
+    StrategicAssessmentResource,
 )
 from utils.exceptions import APIHttpException, APIJsonException
 
@@ -35,6 +36,7 @@ class MarketAccessAPIClient:
         self.public_barriers = PublicBarriersResource(self)
         self.reports = ReportsResource(self)
         self.resolvability_assessments = ResolvabilityAssessmentResource(self)
+        self.strategic_assessments = StrategicAssessmentResource(self)
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
 

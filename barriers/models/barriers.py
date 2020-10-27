@@ -1,5 +1,5 @@
 from barriers.constants import PUBLIC_BARRIER_STATUSES
-from barriers.models.assessments import ResolvabilityAssessment
+from barriers.models.assessments import ResolvabilityAssessment, StrategicAssessment
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
 
@@ -20,6 +20,7 @@ class Barrier(APIModel):
     _metadata = None
     _public_barrier = None
     _resolvability_assessments = None
+    _strategic_assessments = None
     _status = None
     _wto_profile = None
 
@@ -118,6 +119,29 @@ class Barrier(APIModel):
                 for assessment in self.data.get("resolvability_assessments", [])
             ]
         return self._resolvability_assessments
+
+    @property
+    def archived_strategic_assessments(self):
+        return [
+            assessment
+            for assessment in self.strategic_assessments
+            if assessment.archived is True
+        ]
+
+    @property
+    def current_strategic_assessment(self):
+        for assessment in self.strategic_assessments:
+            if assessment.archived is False:
+                return assessment
+
+    @property
+    def strategic_assessments(self):
+        if self._strategic_assessments is None:
+            self._strategic_assessments = [
+                StrategicAssessment(assessment)
+                for assessment in self.data.get("strategic_assessments", [])
+            ]
+        return self._strategic_assessments
 
     @property
     def sector_ids(self):
