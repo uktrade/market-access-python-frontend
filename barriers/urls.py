@@ -13,6 +13,7 @@ from .views.assessments import (
     MarketSizeAssessment,
     NewEconomicAssessment,
     AddResolvabilityAssessment,
+    ArchiveResolvabilityAssessment,
     EditResolvabilityAssessment,
     ResolvabilityAssessmentDetail,
 )
@@ -198,6 +199,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/resolvability-assessments/add", AddResolvabilityAssessment.as_view(), name="add_resolvability_assessment"),
     path("barriers/<uuid:barrier_id>/resolvability-assessments/<uuid:assessment_id>/", ResolvabilityAssessmentDetail.as_view(), name="resolvability_assessment_detail"),
     path("barriers/<uuid:barrier_id>/resolvability-assessments/<uuid:assessment_id>/edit", EditResolvabilityAssessment.as_view(), name="edit_resolvability_assessment"),
+    path("barriers/<uuid:barrier_id>/resolvability-assessments/<uuid:assessment_id>/archive", ArchiveResolvabilityAssessment.as_view(), name="archive_resolvability_assessment"),
 
     path("barriers/<uuid:barrier_id>/public/", PublicBarrierDetail.as_view(), name="public_barrier_detail"),
     path("barriers/<uuid:barrier_id>/public/eligibility/", EditPublicEligibility.as_view(), name="edit_public_eligibility"),

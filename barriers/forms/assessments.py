@@ -1,10 +1,11 @@
 from django import forms
 from django.conf import settings
 
+from barriers.forms.mixins import APIFormMixin
 from .mixins import DocumentMixin
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import MultipleValueField, RestrictedFileField
+from utils.forms import MultipleValueField, RestrictedFileField, YesNoBooleanField
 
 
 class EconomicAssessmentForm(DocumentMixin, forms.Form):
@@ -259,4 +260,26 @@ class ResolvabilityAssessmentForm(forms.Form):
                 time_to_resolve=self.cleaned_data.get("time_to_resolve"),
                 effort_to_resolve=self.cleaned_data.get("effort_to_resolve"),
                 explanation=self.cleaned_data.get("explanation"),
+            )
+
+
+class ArchiveResolvabilityAssessmentForm(APIFormMixin, forms.Form):
+    are_you_sure = YesNoBooleanField(
+        label="Are you sure you want to archive this assessment?",
+        error_messages={"required": "Enter yes or no"},
+    )
+    archived_reason = forms.CharField(
+        label="Why are you archiving this assessment? (optional)",
+        widget=forms.Textarea,
+        max_length=500,
+        required=False,
+    )
+
+    def save(self):
+        if self.cleaned_data.get("are_you_sure") is True:
+            client = MarketAccessAPIClient(self.token)
+            client.resolvability_assessments.patch(
+                id=self.id,
+                archived=True,
+                archived_reason=self.cleaned_data.get("archived_reason"),
             )
