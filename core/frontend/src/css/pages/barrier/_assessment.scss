@@ -43,16 +43,6 @@
 
 } */
 
-.assessment-item__data-key {
-	font-weight: bold;
-	font-size: 19px;
-}
-
-.assessment-item__data-value {
-	margin: 0 0 govuk-em( 16, 16 );
-	font-size: 19px;
-}
-
 .assessment-item-content__hint {
 	color: $govuk-dark-grey;
 	margin: 0;
@@ -67,11 +57,13 @@
 
 .assessment-item__list {
     padding: 0;
+    margin-top: 0;
     margin-bottom: 0;
 }
 
 .assessment-item__list-item {
     list-style-type: none;
+    @include govuk-font( 16 );
     &:not(:last-child) {
         margin-bottom: govuk-em( 8, 16 );
     }

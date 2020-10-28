@@ -1,13 +1,13 @@
 {% if barrier.current_resolvability_assessment %}
     <div class="assessment-item__section">
         {% with assessment=barrier.current_resolvability_assessment %}
-            <dt class="assessment-item__data-key">Time</dt>
-            <dd class="assessment-item__data-value">
+            <dt class="ma-data-key">Time</dt>
+            <dd class="ma-data-value">
                 {{ assessment.time_to_resolve.name }}
             </dd>
 
-            <dt class="assessment-item__data-key">Effort</dt>
-            <dd class="assessment-item__data-value">
+            <dt class="ma-data-key">Effort</dt>
+            <dd class="ma-data-value">
                 {{ assessment.effort_to_resolve.name }}
             </dd>
 
@@ -16,12 +16,12 @@
                     <span class="govuk-details__summary-text">View assessment detail</span>
                 </summary>
                 <div class="govuk-details__text">
-                    <dt class="assessment-item__data-key">Assessment explanation</dt>
-                    <dd class="assessment-item__data-value">
-                        {{ assessment.explanation }}
+                    <dt class="ma-data-key">Assessment explanation</dt>
+                    <dd class="ma-data-value">
+                        {{ assessment.explanation|linebreaks }}
                     </dd>
-                    <dt class="assessment-item__data-key">Assessment produced by</dt>
-                    <dd class="assessment-item__data-value">
+                    <dt class="ma-data-key">Assessment produced by</dt>
+                    <dd class="ma-data-value ma-data-value--s">
                         {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
                     </dd>
                     {% if current_user|has_permission:"archive_resolvabilityassessment" %}
@@ -29,7 +29,7 @@
                     {% endif %}
 
                     {% if barrier.archived_resolvability_assessments %}
-                        <h3 class="govuk-heading-s">Previous assessments</h3>
+                        <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
 
                         <ul class="assessment-item__list">
                             {% for assessment in barrier.archived_resolvability_assessments %}
@@ -64,7 +64,7 @@
 
     {% if barrier.archived_resolvability_assessments %}
         <div class="assessment-item__section">
-            <h3 class="govuk-heading-s">Previous assessments</h3>
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
 
             <ul class="assessment-item__list">
                 {% for assessment in barrier.archived_resolvability_assessments %}

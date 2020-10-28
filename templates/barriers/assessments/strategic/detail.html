@@ -10,62 +10,62 @@
 
 {% block page_content %}
 
-    <h1 class="govuk-heading-l">Strategic assessment - {{ assessment.created_on|date:"j F Y" }}</h1>
+    <h2 class="govuk-heading-m">Strategic assessment - {{ assessment.created_on|date:"j F Y" }}</h2>
 
     <div class="restrict-width">
-        <dt class="assessment-item__data-key">
+        <dt class="ma-data-key">
             Scale
         </dt>
-        <dd class="assessment-item__data-value">
+        <dd class="ma-data-value">
             {{ assessment.scale.name }}
         </dd>
-        <dt class="assessment-item__data-key">
+        <dt class="ma-data-key">
             Is the barrier aligned with wider HMG strategic objectives (such as the Industrial Strategy, Levelling Up agenda, Export Strategy)?
         </dt>
-        <dd class="assessment-item__data-value">
-            {{ assessment.hmg_strategy }}
+        <dd class="ma-data-value">
+            {{ assessment.hmg_strategy|linebreaks }}
         </dd>
-        <dt class="assessment-item__data-key">
+        <dt class="ma-data-key">
             Is the barrier aligned with wider government policies (such as free trade principles, climate change, anti-corruption or tax avoidance agreements)?
         </dt>
-        <dd class="assessment-item__data-value">
-            {{ assessment.government_policy }}
+        <dd class="ma-data-value">
+            {{ assessment.government_policy|linebreaks }}
         </dd>
-        <dt class="assessment-item__data-key">
+        <dt class="ma-data-key">
             Does resolving the barrier strategically improve trading relations within other countries (such as FTA countries, future FTA/growth countries)?
         </dt>
-        <dd class="assessment-item__data-value">
-            {{ assessment.trading_relations }}
+        <dd class="ma-data-value">
+            {{ assessment.trading_relations|linebreaks }}
         </dd>
-        <dt class="assessment-item__data-key">
+        <dt class="ma-data-key">
             Does resolving the barrier affect UK interest and / or national security?
         </dt>
-        <dd class="assessment-item__data-value">
-            {{ assessment.uk_interest_and_security }}
+        <dd class="ma-data-value">
+            {{ assessment.uk_interest_and_security|linebreaks }}
         </dd>
-        <dt class="assessment-item__data-key">
+        <dt class="ma-data-key">
             Is the barrier connected with UK grants (such as Prosperity Fund, Market Access fund) and supports International Development Objectives ODA?
         </dt>
-        <dd class="assessment-item__data-value">
-            {{ assessment.uk_grants }}
+        <dd class="ma-data-value">
+            {{ assessment.uk_grants|linebreaks }}
         </dd>
-        <dt class="assessment-item__data-key">
+        <dt class="ma-data-key">
             In what way does competition and other in-country policies affect this barrier?
         </dt>
-        <dd class="assessment-item__data-value">
-            {{ assessment.competition }}
+        <dd class="ma-data-value">
+            {{ assessment.competition|linebreaks }}
         </dd>
         {% if assessment.additional_information %}
-            <dt class="assessment-item__data-key">
+            <dt class="ma-data-key">
                 Additional information
             </dt>
-            <dd class="assessment-item__data-value">
-                {{ assessment.additional_information }}
+            <dd class="ma-data-value">
+                {{ assessment.additional_information|linebreaks }}
             </dd>
         {% endif %}
 
-        <dt class="assessment-item__data-key">Assessment produced by</dt>
-        <dd class="assessment-item__data-value">
+        <dt class="ma-data-key">Assessment produced by</dt>
+        <dd class="ma-data-value ma-data-value--s">
             {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
         </dd>
 
