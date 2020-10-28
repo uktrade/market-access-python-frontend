@@ -231,18 +231,26 @@ class ResolvabilityAssessmentForm(forms.Form):
         },
     )
 
-    def __init__(self, metadata, barrier=None, resolvability_assessment=None, *args, **kwargs):
+    def __init__(
+        self,
+        time_to_resolve,
+        effort_to_resolve,
+        barrier=None,
+        resolvability_assessment=None,
+        *args,
+        **kwargs,
+    ):
         self.token = kwargs.pop("token")
         self.barrier = barrier
         self.resolvability_assessment = resolvability_assessment
         super().__init__(*args, **kwargs)
         self.fields["time_to_resolve"].choices = [
             (key, value)
-            for key, value in metadata.get_assessment_time_to_resolve().items()
+            for key, value in time_to_resolve.items()
         ]
         self.fields["effort_to_resolve"].choices = [
             (key, value)
-            for key, value in metadata.get_assessment_effort_to_resolve().items()
+            for key, value in effort_to_resolve.items()
         ]
 
     def save(self):
@@ -359,14 +367,14 @@ class StrategicAssessmentForm(forms.Form):
         error_messages={"required": "Select a strategic assessment scale value"},
     )
 
-    def __init__(self, metadata, barrier=None, strategic_assessment=None, *args, **kwargs):
+    def __init__(self, scale, barrier=None, strategic_assessment=None, *args, **kwargs):
         self.token = kwargs.pop("token")
         self.barrier = barrier
         self.strategic_assessment = strategic_assessment
         super().__init__(*args, **kwargs)
         self.fields["scale"].choices = [
             (key, value)
-            for key, value in metadata.get_strategic_assessment_scale().items()
+            for key, value in scale.items()
         ]
 
     def save(self):

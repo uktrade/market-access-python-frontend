@@ -202,7 +202,8 @@ class AddResolvabilityAssessment(MetadataMixin, BarrierMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["barrier"] = self.barrier
         kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["metadata"] = self.metadata
+        kwargs["time_to_resolve"] = self.metadata.get_assessment_time_to_resolve()
+        kwargs["effort_to_resolve"] = self.metadata.get_assessment_effort_to_resolve()
         return kwargs
 
     def form_valid(self, form):
@@ -280,7 +281,7 @@ class AddStrategicAssessment(MetadataMixin, BarrierMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["barrier"] = self.barrier
         kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["metadata"] = self.metadata
+        kwargs["scale"] = self.metadata.get_strategic_assessment_scale()
         return kwargs
 
     def form_valid(self, form):
