@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block head %}
+{% if not screen_reader_mode %}
   <script src="{% static 'js/react.js' %}"></script>
   {{ confirmed_commodities_data|json_script:"confirmed-commodities-data" }}
   <script>
@@ -20,6 +21,7 @@
       )
     })
   </script>
+{% endif %}
 {% endblock %}
 
 {% block page_title %}{{ block.super }} - Edit commodity codes{% endblock %}
@@ -30,9 +32,20 @@
 
 {% block page_content %}
 
+    {% if not screen_reader_mode %}
+    <div class="sr-only govuk-visually-hidden">
+        This page contains dynamic content which screen reader users can find difficult to use, for an accessible page
+        please <a href="{% url 'barriers:edit_commodities_sr' barrier.id 'sr' %}">follow this link</a>.
+    </div>
+    {% endif %}
+
     {% include 'partials/heading.html' with text='Add commodity codes' %}
 
-    <div id="react-app">
+    {% if not screen_reader_mode %}
+    <div id="react-app" class="commodities-form__container">
+    {% else %}
+    <div class="commodities-form__container">
+    {% endif %}
 
         {% form_error_banner lookup_form %}
 

@@ -44,12 +44,17 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         else:
             return JsonResponse({"status": "error", "message": "Code not found"})
 
+    def screen_reader_mode(self):
+        # detect screen reader mode
+        return "sr" == self.kwargs.get("mode", "")
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["confirmed_commodities"] = self.get_confirmed_commodities()
         context_data["confirmed_commodities_data"] = [
             commodity.to_dict() for commodity in context_data["confirmed_commodities"]
         ]
+        context_data["screen_reader_mode"] = self.screen_reader_mode()
         return context_data
 
     def get_lookup_form(self, form_class=None):

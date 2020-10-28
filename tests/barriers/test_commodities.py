@@ -1,9 +1,10 @@
 from http import HTTPStatus
 
-from django.urls import reverse
+from django.urls import reverse, resolve
 from mock import Mock, patch
 
 from barriers.models import Commodity
+from barriers.views.commodities import BarrierEditCommodities
 from core.tests import MarketAccessTestCase
 from utils.exceptions import APIHttpException
 
@@ -178,3 +179,50 @@ class CommoditiesTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         assert session_key not in self.client.session
+
+
+class CommoditiesViewTestCase(MarketAccessTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.url = reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]})
+        self.url_sr = reverse("barriers:edit_commodities_sr", kwargs={"barrier_id": self.barrier["id"], "mode": "sr"})
+
+    # Regular view
+    def test_edit_commodities_url_resolves_to_correct_view(self):
+        match = resolve(f'/barriers/{self.barrier["id"]}/edit/commodities/')
+        assert match.func.view_class == BarrierEditCommodities
+
+    def test_view_loads_correct_template(self):
+        response = self.client.get(self.url)
+        assert HTTPStatus.OK == response.status_code
+        self.assertTemplateUsed(response, "barriers/edit/commodities.html")
+
+    def test_view_loads_react_entry_by_default(self):
+        expected_form = '<div id="react-app" class="commodities-form__container">'
+
+        response = self.client.get(self.url)
+        html = response.content.decode('utf8')
+
+        assert HTTPStatus.OK == response.status_code
+        assert expected_form in html
+
+    # Screen reader mode
+    def test_edit_commodities_sr_url_resolves_to_correct_view(self):
+        match = resolve(f'/barriers/{self.barrier["id"]}/edit/commodities/sr/')
+        assert match.func.view_class == BarrierEditCommodities
+        assert "sr" == match.kwargs.get("mode")
+
+    def test_view_with_screen_reader_mode_loads_correct_template(self):
+        response = self.client.get(self.url_sr)
+        assert HTTPStatus.OK == response.status_code
+        self.assertTemplateUsed(response, "barriers/edit/commodities.html")
+
+    def test_view_with_screen_reader_mode_renders_the_non_react_form(self):
+        expected_form = '<div class="commodities-form__container">'
+
+        response = self.client.get(self.url_sr)
+        html = response.content.decode('utf8')
+
+        assert HTTPStatus.OK == response.status_code
+        assert expected_form in html

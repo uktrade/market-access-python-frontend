@@ -138,6 +138,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/term/", BarrierEditTerm.as_view(), name="edit_term"),
     path("barriers/<uuid:barrier_id>/edit/end-date/", BarrierEditEndDate.as_view(), name="edit_end_date"),
     path("barriers/<uuid:barrier_id>/edit/commodities/", BarrierEditCommodities.as_view(), name="edit_commodities"),
+    path("barriers/<uuid:barrier_id>/edit/commodities/<str:mode>/", BarrierEditCommodities.as_view(), name="edit_commodities_sr"),
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
     path("barriers/<uuid:barrier_id>/edit/tags/", BarrierEditTags.as_view(), name="edit_tags"),
     path("barriers/<uuid:barrier_id>/edit/trade-direction/", BarrierEditTradeDirection.as_view(), name="edit_trade_direction"),
