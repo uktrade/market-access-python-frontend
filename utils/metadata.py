@@ -270,11 +270,11 @@ class Metadata:
     def get_impact_text(self, impact_code):
         return self.data.get("assessment_impact", {}).get(impact_code)
 
-    def get_assessment_effort_to_resolve(self):
-        return self.data.get("assessment_effort_to_resolve", {})
+    def get_resolvability_assessment_effort(self):
+        return self.data.get("resolvability_assessment_effort", {})
 
-    def get_assessment_time_to_resolve(self):
-        return self.data.get("assessment_time_to_resolve", {})
+    def get_resolvability_assessment_time(self):
+        return self.data.get("resolvability_assessment_time", {})
 
     def get_strategic_assessment_scale(self):
         return self.data.get("strategic_assessment_scale", {})
