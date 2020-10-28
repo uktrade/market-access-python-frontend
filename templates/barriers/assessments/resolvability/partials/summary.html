@@ -1,80 +1,83 @@
 {% if barrier.current_resolvability_assessment %}
     <div class="assessment-item__section">
         {% with assessment=barrier.current_resolvability_assessment %}
-            <dt class="ma-data-key">Time</dt>
-            <dd class="ma-data-value">
-                {{ assessment.time_to_resolve.name }}
-            </dd>
+            {% if assessment.approved %}
+                <dt class="ma-data-key">Time</dt>
+                <dd class="ma-data-value">
+                    {{ assessment.time_to_resolve.name }}
+                </dd>
 
-            <dt class="ma-data-key">Effort</dt>
-            <dd class="ma-data-value">
-                {{ assessment.effort_to_resolve.name }}
-            </dd>
+                <dt class="ma-data-key">Effort</dt>
+                <dd class="ma-data-value">
+                    {{ assessment.effort_to_resolve.name }}
+                </dd>
 
-            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                    <span class="govuk-details__summary-text">View assessment detail</span>
-                </summary>
-                <div class="govuk-details__text">
-                    <dt class="ma-data-key">Assessment explanation</dt>
-                    <dd class="ma-data-value">
-                        {{ assessment.explanation|linebreaks }}
-                    </dd>
-                    <dt class="ma-data-key">Assessment produced by</dt>
-                    <dd class="ma-data-value ma-data-value--s">
-                        {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
-                    </dd>
-                    {% if current_user|has_permission:"archive_resolvabilityassessment" %}
-                        <a href="{% url 'barriers:archive_resolvability_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
-                    {% endif %}
+                <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">View assessment detail</span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        <dt class="ma-data-key">Assessment explanation</dt>
+                        <dd class="ma-data-value">
+                            {{ assessment.explanation|linebreaks }}
+                        </dd>
+                        <dt class="ma-data-key">Assessment produced by</dt>
+                        <dd class="ma-data-value ma-data-value--s">
+                            {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+                        </dd>
+                        {% if current_user|has_permission:"archive_resolvabilityassessment" %}
+                            <a href="{% url 'barriers:archive_resolvability_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
+                        {% endif %}
 
-                    {% if barrier.archived_resolvability_assessments %}
-                        <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
+                        {% if barrier.archived_resolvability_assessments %}
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
 
-                        <ul class="assessment-item__list">
-                            {% for assessment in barrier.archived_resolvability_assessments %}
-                                <li class="assessment-item__list-item">
-                                    <a href="{% url 'barriers:resolvability_assessment_detail' barrier.id assessment.id %}">
-                                        Resolvability assessment - {{ assessment.created_on|date:"j F Y" }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </details>
+                            <ul class="assessment-item__list">
+                                {% for assessment in barrier.archived_resolvability_assessments %}
+                                    <li class="assessment-item__list-item">
+                                        <a href="{% url 'barriers:resolvability_assessment_detail' barrier.id assessment.id %}">
+                                            Resolvability assessment - {{ assessment.created_on|date:"j F Y" }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </details>
+            {% else %}
+                {% include "partials/warning.html" with warning_text="Resolvability assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
+
+                <a class="assessment-item__approval-link" href="{% url 'barriers:edit_resolvability_assessment' barrier.id barrier.current_resolvability_assessment.id %}">
+                    Resolvability assessment - {{ barrier.current_resolvability_assessment.created_on|date:"j F Y" }}
+                </a>
+            {% endif %}
         {% endwith %}
     </div>
-    {% if current_user|has_permission:"add_resolvabilityassessment" %}
-        <div class="assessment-item__section">
-            <a href="{% url 'barriers:add_resolvability_assessment' barrier.id %}">Add resolvability assessment</a>
-            <p class="assessment-item-content__hint">This measures the likelihood of successfully resolving a barrier, assessing the time and resources needed.</p>
-        </div>
-    {% endif %}
-{% else %}
-    {% if current_user|has_permission:"add_resolvabilityassessment" %}
-        <div class="assessment-item__section">
-            <a href="{% url 'barriers:add_resolvability_assessment' barrier.id %}">Add resolvability assessment</a>
-        </div>
-    {% else %}
-        <div class="assessment-item__section">
-            <p class="govuk-!-margin-bottom-0">No resolvability assessment</p>
-        </div>
-    {% endif %}
+{% endif %}
 
-    {% if barrier.archived_resolvability_assessments %}
-        <div class="assessment-item__section">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
+{% if current_user|has_permission:"add_resolvabilityassessment" %}
+    <div class="assessment-item__section">
+        <a href="{% url 'barriers:add_resolvability_assessment' barrier.id %}">Add resolvability assessment</a>
+        <p class="assessment-item-content__hint">This measures the likelihood of successfully resolving a barrier, assessing the time and resource needed.</p>
+    </div>
+{% elif not barrier.current_resolvability_assessment %}
+    <div class="assessment-item__section">
+        <p class="govuk-!-margin-bottom-0">No resolvability assessment</p>
+    </div>
+{% endif %}
 
-            <ul class="assessment-item__list">
-                {% for assessment in barrier.archived_resolvability_assessments %}
-                    <li class="assessment-item__list-item">
-                        <a href="{% url 'barriers:resolvability_assessment_detail' barrier.id assessment.id %}">
-                            Resolvability assessment - {{ assessment.created_on|date:"j F Y" }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+{% if barrier.archived_resolvability_assessments and not barrier.current_resolvability_assessment.approved %}
+    <div class="assessment-item__section">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
+
+        <ul class="assessment-item__list">
+            {% for assessment in barrier.archived_resolvability_assessments %}
+                <li class="assessment-item__list-item">
+                    <a href="{% url 'barriers:resolvability_assessment_detail' barrier.id assessment.id %}">
+                        Resolvability assessment - {{ assessment.created_on|date:"j F Y" }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endif %}

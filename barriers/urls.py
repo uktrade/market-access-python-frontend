@@ -18,6 +18,7 @@ from .views.assessments import (
     ResolvabilityAssessmentDetail,
     AddStrategicAssessment,
     ArchiveStrategicAssessment,
+    EditStrategicAssessment,
     StrategicAssessmentDetail,
 )
 from .views.categories import (
@@ -206,6 +207,7 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/strategic-assessments/add", AddStrategicAssessment.as_view(), name="add_strategic_assessment"),
     path("barriers/<uuid:barrier_id>/strategic-assessments/<uuid:assessment_id>/", StrategicAssessmentDetail.as_view(), name="strategic_assessment_detail"),
+    path("barriers/<uuid:barrier_id>/strategic-assessments/<uuid:assessment_id>/edit", EditStrategicAssessment.as_view(), name="edit_strategic_assessment"),
     path("barriers/<uuid:barrier_id>/strategic-assessments/<uuid:assessment_id>/archive", ArchiveStrategicAssessment.as_view(), name="archive_strategic_assessment"),
 
     path("barriers/<uuid:barrier_id>/public/", PublicBarrierDetail.as_view(), name="public_barrier_detail"),

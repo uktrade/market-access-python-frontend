@@ -13,7 +13,7 @@
     {% form_error_banner form %}
 
     <p class="govuk-body">This evaluates the likelihood of successfully resolving a barrier. This assessment is made up of:</p>
-    <ul>
+    <ul class="govuk-body">
         <li>timescale</li>
         <li>resources needed</li>
     </ul>
@@ -25,8 +25,10 @@
         {% include "partials/forms/radio_input.html" with field=form.effort_to_resolve %}
         {% include "partials/forms/textarea.html" with field=form.explanation character_count=True %}
 
-        <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
-        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% block buttons %}
+            <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
+            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% endblock %}
     </form>
 
 {% endblock %}

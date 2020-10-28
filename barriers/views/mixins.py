@@ -270,3 +270,31 @@ class AnalyticsMixin:
         if utm_querystring is not None:
             return HttpResponseRedirect(f"{request.path_info}?{utm_querystring}")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ResolvabilityAssessmentMixin:
+    _resolvability_assessment = None
+
+    @property
+    def resolvability_assessment(self):
+        if self._resolvability_assessment is None:
+            for assessment in self.barrier.resolvability_assessments:
+                if assessment.id == str(self.kwargs.get("assessment_id")):
+                    self._resolvability_assessment = assessment
+                    return self._resolvability_assessment
+            raise Http404("Resolvability assessment does not exist")
+        return self._resolvability_assessment
+
+
+class StrategicAssessmentMixin:
+    _strategic_assessment = None
+
+    @property
+    def strategic_assessment(self):
+        if self._strategic_assessment is None:
+            for assessment in self.barrier.strategic_assessments:
+                if assessment.id == str(self.kwargs.get("assessment_id")):
+                    self._strategic_assessment = assessment
+                    return self._strategic_assessment
+            raise Http404("Strategic assessment does not exist")
+        return self._strategic_assessment

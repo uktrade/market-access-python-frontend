@@ -230,6 +230,7 @@ class ResolvabilityAssessmentForm(forms.Form):
             "required": "Enter an explanation",
         },
     )
+    approved = forms.NullBooleanField()
 
     def __init__(
         self,
@@ -253,22 +254,17 @@ class ResolvabilityAssessmentForm(forms.Form):
             for key, value in effort_to_resolve.items()
         ]
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.cleaned_data["approved"] is None:
+            del cleaned_data["approved"]
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.resolvability_assessment:
-            client.resolvability_assessments.update(
-                id=self.resolvability_assessment.id,
-                time_to_resolve=self.cleaned_data.get("time_to_resolve"),
-                effort_to_resolve=self.cleaned_data.get("effort_to_resolve"),
-                explanation=self.cleaned_data.get("explanation"),
-            )
+            client.resolvability_assessments.patch(id=self.resolvability_assessment.id, **self.cleaned_data)
         elif self.barrier:
-            client.resolvability_assessments.create(
-                barrier_id=self.barrier.id,
-                time_to_resolve=self.cleaned_data.get("time_to_resolve"),
-                effort_to_resolve=self.cleaned_data.get("effort_to_resolve"),
-                explanation=self.cleaned_data.get("explanation"),
-            )
+            client.resolvability_assessments.create(barrier_id=self.barrier.id, **self.cleaned_data)
 
 
 class StrategicAssessmentForm(forms.Form):
@@ -366,6 +362,7 @@ class StrategicAssessmentForm(forms.Form):
         choices=[],
         error_messages={"required": "Select a strategic assessment scale value"},
     )
+    approved = forms.NullBooleanField()
 
     def __init__(self, scale, barrier=None, strategic_assessment=None, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -377,32 +374,17 @@ class StrategicAssessmentForm(forms.Form):
             for key, value in scale.items()
         ]
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.cleaned_data["approved"] is None:
+            del cleaned_data["approved"]
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.strategic_assessment:
-            client.strategic_assessments.update(
-                id=self.resolvability_assessment.id,
-                hmg_strategy=self.cleaned_data.get("hmg_strategy"),
-                government_policy=self.cleaned_data.get("government_policy"),
-                trading_relations=self.cleaned_data.get("trading_relations"),
-                uk_interest_and_security=self.cleaned_data.get("uk_interest_and_security"),
-                uk_grants=self.cleaned_data.get("uk_grants"),
-                competition=self.cleaned_data.get("competition"),
-                additional_information=self.cleaned_data.get("additional_information"),
-                scale=self.cleaned_data.get("scale"),
-            )
+            client.strategic_assessments.patch(id=self.strategic_assessment.id, **self.cleaned_data)
         elif self.barrier:
-            client.strategic_assessments.create(
-                barrier_id=self.barrier.id,
-                hmg_strategy=self.cleaned_data.get("hmg_strategy"),
-                government_policy=self.cleaned_data.get("government_policy"),
-                trading_relations=self.cleaned_data.get("trading_relations"),
-                uk_interest_and_security=self.cleaned_data.get("uk_interest_and_security"),
-                uk_grants=self.cleaned_data.get("uk_grants"),
-                competition=self.cleaned_data.get("competition"),
-                additional_information=self.cleaned_data.get("additional_information"),
-                scale=self.cleaned_data.get("scale"),
-            )
+            client.strategic_assessments.create(barrier_id=self.barrier.id, **self.cleaned_data)
 
 
 class ArchiveAssessmentBaseForm(APIFormMixin, forms.Form):

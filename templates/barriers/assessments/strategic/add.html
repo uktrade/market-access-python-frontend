@@ -31,8 +31,10 @@
         {% include "partials/forms/textarea.html" with field=form.additional_information character_count=True %}
         {% include "partials/forms/radio_input.html" with field=form.scale %}
 
-        <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
-        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% block buttons %}
+            <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
+            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% endblock %}
     </form>
 
 {% endblock %}

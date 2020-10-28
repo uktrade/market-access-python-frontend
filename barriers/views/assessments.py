@@ -15,7 +15,13 @@ from ..forms.assessments import (
     ArchiveStrategicAssessmentForm,
 )
 from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
-from .mixins import AssessmentMixin, BarrierMixin, SessionDocumentMixin
+from .mixins import (
+    AssessmentMixin,
+    BarrierMixin,
+    ResolvabilityAssessmentMixin,
+    SessionDocumentMixin,
+    StrategicAssessmentMixin,
+)
 from utils.metadata import MetadataMixin
 
 
@@ -194,17 +200,23 @@ class ExportValueAssessment(AssessmentValueView):
             return {"value": self.assessment.export_value}
 
 
-class AddResolvabilityAssessment(MetadataMixin, BarrierMixin, FormView):
-    template_name = "barriers/assessments/resolvability/add.html"
+class ResolvabilityAssessmentEditBase(ResolvabilityAssessmentMixin, MetadataMixin, BarrierMixin, FormView):
     form_class = ResolvabilityAssessmentForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["barrier"] = self.barrier
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["time_to_resolve"] = self.metadata.get_resolvability_assessment_time()
         kwargs["effort_to_resolve"] = self.metadata.get_resolvability_assessment_effort()
         return kwargs
+
+    def get_initial(self):
+        if self.kwargs.get("assessment_id"):
+            return {
+                "time_to_resolve": self.resolvability_assessment.time_to_resolve["id"],
+                "effort_to_resolve": self.resolvability_assessment.effort_to_resolve["id"],
+                "explanation": self.resolvability_assessment.explanation,
+            }
 
     def form_valid(self, form):
         form.save()
@@ -217,9 +229,22 @@ class AddResolvabilityAssessment(MetadataMixin, BarrierMixin, FormView):
         )
 
 
-class EditResolvabilityAssessment(BarrierMixin, FormView):
+class AddResolvabilityAssessment(ResolvabilityAssessmentEditBase):
+    template_name = "barriers/assessments/resolvability/add.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier"] = self.barrier
+        return kwargs
+
+
+class EditResolvabilityAssessment(ResolvabilityAssessmentEditBase):
     template_name = "barriers/assessments/resolvability/edit.html"
-    form_class = ResolvabilityAssessmentForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["resolvability_assessment"] = self.resolvability_assessment
+        return kwargs
 
 
 class ArchiveAssessmentBase(BarrierMixin, FormView):
@@ -258,31 +283,36 @@ class ArchiveStrategicAssessment(ArchiveAssessmentBase):
     title = "Archive strategic assessment"
 
 
-class ResolvabilityAssessmentDetail(BarrierMixin, TemplateView):
+class ResolvabilityAssessmentDetail(ResolvabilityAssessmentMixin, BarrierMixin, TemplateView):
     template_name = "barriers/assessments/resolvability/detail.html"
-
-    def get_resolvability_assessment(self):
-        for assessment in self.barrier.resolvability_assessments:
-            if assessment.id == str(self.kwargs.get("assessment_id")):
-                return assessment
-        raise Http404("Resolvability assessment does not exist")
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["assessment"] = self.get_resolvability_assessment()
+        context_data["assessment"] = self.resolvability_assessment
         return context_data
 
 
-class AddStrategicAssessment(MetadataMixin, BarrierMixin, FormView):
-    template_name = "barriers/assessments/strategic/add.html"
+class StrategicAssessmentEditBase(StrategicAssessmentMixin, MetadataMixin, BarrierMixin, FormView):
     form_class = StrategicAssessmentForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["barrier"] = self.barrier
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["scale"] = self.metadata.get_strategic_assessment_scale()
         return kwargs
+
+    def get_initial(self):
+        if self.kwargs.get("assessment_id"):
+            return {
+                "scale": self.strategic_assessment.scale["id"],
+                "hmg_strategy": self.strategic_assessment.hmg_strategy,
+                "government_policy": self.strategic_assessment.government_policy,
+                "trading_relations": self.strategic_assessment.trading_relations,
+                "uk_interest_and_security": self.strategic_assessment.uk_interest_and_security,
+                "uk_grants": self.strategic_assessment.uk_grants,
+                "competition": self.strategic_assessment.competition,
+                "additional_information": self.strategic_assessment.additional_information,
+            }
 
     def form_valid(self, form):
         form.save()
@@ -295,16 +325,28 @@ class AddStrategicAssessment(MetadataMixin, BarrierMixin, FormView):
         )
 
 
-class StrategicAssessmentDetail(BarrierMixin, TemplateView):
-    template_name = "barriers/assessments/strategic/detail.html"
+class AddStrategicAssessment(StrategicAssessmentEditBase):
+    template_name = "barriers/assessments/strategic/add.html"
 
-    def get_strategic_assessment(self):
-        for assessment in self.barrier.strategic_assessments:
-            if assessment.id == str(self.kwargs.get("assessment_id")):
-                return assessment
-        raise Http404("Strategic assessment does not exist")
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier"] = self.barrier
+        return kwargs
+
+
+class EditStrategicAssessment(StrategicAssessmentEditBase):
+    template_name = "barriers/assessments/strategic/edit.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["strategic_assessment"] = self.strategic_assessment
+        return kwargs
+
+
+class StrategicAssessmentDetail(StrategicAssessmentMixin, BarrierMixin, TemplateView):
+    template_name = "barriers/assessments/strategic/detail.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["assessment"] = self.get_strategic_assessment()
+        context_data["assessment"] = self.strategic_assessment
         return context_data
