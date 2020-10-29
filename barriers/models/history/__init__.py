@@ -1,4 +1,6 @@
 from .assessments import AssessmentHistoryItem
+from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
+from .assessments.strategic import StrategicAssessmentHistoryItem
 from .barriers import BarrierHistoryItem
 from .notes import NoteHistoryItem
 from .public_barriers import PublicBarrierHistoryItem
@@ -23,6 +25,8 @@ class HistoryItem(PolymorphicBase):
         NoteHistoryItem,
         PublicBarrierHistoryItem,
         PublicBarrierNoteHistoryItem,
+        ResolvabilityAssessmentHistoryItem,
+        StrategicAssessmentHistoryItem,
         TeamMemberHistoryItem,
         WTOHistoryItem,
     )
