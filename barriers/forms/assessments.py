@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.template.loader import render_to_string
 
 from barriers.forms.mixins import APIFormMixin
 from .mixins import DocumentMixin
@@ -213,11 +214,13 @@ class ResolvabilityAssessmentForm(forms.Form):
         label="How much time would it take to resolve this barrier?",
         choices=[],
         error_messages={"required": "Select how much time it would take to resolve this barrier"},
+        help_text=render_to_string("barriers/assessments/resolvability/help_text/time_to_resolve.html")
     )
     effort_to_resolve = forms.ChoiceField(
         label="How much effort will it take to resolve this barrier?",
         choices=[],
         error_messages={"required": "Select how much time it would take to resolve this barrier"},
+        help_text=render_to_string("barriers/assessments/resolvability/help_text/effort_to_resolve.html")
     )
     explanation = forms.CharField(
         label="Explain the assessment",
