@@ -20,8 +20,18 @@ class ResolvabilityAssessment(APIModel):
     def created_on(self):
         return dateutil.parser.parse(self.data["created_on"])
 
+    @property
+    def reviewed_on(self):
+        if self.data.get("reviewed_on"):
+            return dateutil.parser.parse(self.data["reviewed_on"])
+
 
 class StrategicAssessment(APIModel):
     @property
     def created_on(self):
         return dateutil.parser.parse(self.data["created_on"])
+
+    @property
+    def reviewed_on(self):
+        if self.data.get("reviewed_on"):
+            return dateutil.parser.parse(self.data["reviewed_on"])

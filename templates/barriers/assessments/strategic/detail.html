@@ -68,6 +68,12 @@
         <dd class="ma-data-value ma-data-value--s">
             {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
         </dd>
+        {% if assessment.approved is not None %}
+            <dt class="ma-data-key">Assessment {{ assessment.approved|yesno:"accepted,rejected" }} by</dt>
+            <dd class="ma-data-value ma-data-value--s">
+                {{ assessment.reviewed_by.name }} on {{ assessment.reviewed_on|date:"j F Y" }}
+            </dd>
+        {% endif %}
 
         <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
     </div>

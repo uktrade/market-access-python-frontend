@@ -60,6 +60,10 @@
                         <dd class="ma-data-value ma-data-value--s">
                             {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
                         </dd>
+                        <dt class="ma-data-key">Assessment accepted by</dt>
+                        <dd class="ma-data-value ma-data-value--s">
+                            {{ assessment.reviewed_by.name }} on {{ assessment.reviewed_on|date:"j F Y" }}
+                        </dd>
                         {% if current_user|has_permission:"archive_strategicassessment" %}
                             <a href="{% url 'barriers:archive_strategic_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
                         {% endif %}
@@ -101,7 +105,7 @@
     </div>
 {% endif %}
 
-{% if barrier.archived_strategic_assessments %}
+{% if barrier.archived_strategic_assessments and not barrier.current_strategic_assessment.approved %}
     <div class="assessment-item__section">
         <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
 
