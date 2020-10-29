@@ -134,6 +134,10 @@ class BarriersResource(APIResource):
         url = "barriers/s3-download"
         return self.client.get(url, params=kwargs).get("url")
 
+    def get_streamed_csv(self, *args, **kwargs):
+        url = "barriers/export"
+        return self.client.get(url, params=kwargs, stream=True, raw=True)
+
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
             url = f"barriers/{barrier_id}/unknown"

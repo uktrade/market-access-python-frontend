@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
 from django.views.generic import FormView, View
 
@@ -129,5 +131,14 @@ class DownloadBarriers(SearchFormMixin, View):
         search_parameters = form.get_api_search_parameters()
 
         client = MarketAccessAPIClient(self.request.session["sso_token"])
-        download_url = client.barriers.get_csv(ordering="-reported_on", **search_parameters)
-        return redirect(download_url)
+
+        if settings.USE_S3_FOR_CSV_DOWNLOADS:
+            download_url = client.barriers.get_csv(ordering="-reported_on", **search_parameters)
+            return redirect(download_url)
+
+        file = client.barriers.get_streamed_csv(ordering="-reported_on", **search_parameters)
+        response = StreamingHttpResponse(
+            file.iter_content(), content_type=file.headers["Content-Type"]
+        )
+        response["Content-Disposition"] = file.headers["Content-Disposition"]
+        return response
