@@ -21,6 +21,7 @@ from .mixins import (
     SessionDocumentMixin,
     StrategicAssessmentMixin,
 )
+from users.permissions import APIPermissionMixin
 from utils.metadata import MetadataMixin
 
 
@@ -228,8 +229,9 @@ class ResolvabilityAssessmentEditBase(ResolvabilityAssessmentMixin, MetadataMixi
         )
 
 
-class AddResolvabilityAssessment(ResolvabilityAssessmentEditBase):
+class AddResolvabilityAssessment(APIPermissionMixin, ResolvabilityAssessmentEditBase):
     template_name = "barriers/assessments/resolvability/add.html"
+    permission_required = "add_resolvabilityassessment"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -237,8 +239,9 @@ class AddResolvabilityAssessment(ResolvabilityAssessmentEditBase):
         return kwargs
 
 
-class EditResolvabilityAssessment(ResolvabilityAssessmentEditBase):
+class EditResolvabilityAssessment(APIPermissionMixin, ResolvabilityAssessmentEditBase):
     template_name = "barriers/assessments/resolvability/edit.html"
+    permission_required = "change_resolvabilityassessment"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -272,14 +275,16 @@ class ArchiveAssessmentBase(BarrierMixin, FormView):
         )
 
 
-class ArchiveResolvabilityAssessment(ArchiveAssessmentBase):
+class ArchiveResolvabilityAssessment(APIPermissionMixin, ArchiveAssessmentBase):
     form_class = ArchiveResolvabilityAssessmentForm
     title = "Archive resolvability assessment"
+    permission_required = "archive_resolvabilityassessment"
 
 
-class ArchiveStrategicAssessment(ArchiveAssessmentBase):
+class ArchiveStrategicAssessment(APIPermissionMixin, ArchiveAssessmentBase):
     form_class = ArchiveStrategicAssessmentForm
     title = "Archive strategic assessment"
+    permission_required = "archive_strategicassessment"
 
 
 class ResolvabilityAssessmentDetail(ResolvabilityAssessmentMixin, BarrierMixin, TemplateView):
@@ -324,8 +329,9 @@ class StrategicAssessmentEditBase(StrategicAssessmentMixin, MetadataMixin, Barri
         )
 
 
-class AddStrategicAssessment(StrategicAssessmentEditBase):
+class AddStrategicAssessment(APIPermissionMixin, StrategicAssessmentEditBase):
     template_name = "barriers/assessments/strategic/add.html"
+    permission_required = "add_strategicassessment"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -333,8 +339,9 @@ class AddStrategicAssessment(StrategicAssessmentEditBase):
         return kwargs
 
 
-class EditStrategicAssessment(StrategicAssessmentEditBase):
+class EditStrategicAssessment(APIPermissionMixin, StrategicAssessmentEditBase):
     template_name = "barriers/assessments/strategic/edit.html"
+    permission_required = "change_strategicassessment"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
