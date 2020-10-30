@@ -9,20 +9,6 @@ from mock import patch
 
 
 class ManageUsersPermissionsTestCase(MarketAccessTestCase):
-    administrator = User(
-        {
-            "is_superuser": False,
-            "is_active": True,
-            "permissions": ["change_user", "list_users"],
-        }
-    )
-    general_user = User(
-        {
-            "is_superuser": False,
-            "is_active": True,
-            "permissions": [],
-        }
-    )
 
     def test_link_appears_for_superuser(self):
         response = self.client.get(reverse("reports:new_report"))
