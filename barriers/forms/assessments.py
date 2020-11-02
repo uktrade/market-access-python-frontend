@@ -219,7 +219,7 @@ class ResolvabilityAssessmentForm(forms.Form):
     effort_to_resolve = forms.ChoiceField(
         label="How much effort will it take to resolve this barrier?",
         choices=[],
-        error_messages={"required": "Select how much time it would take to resolve this barrier"},
+        error_messages={"required": "Select how much effort it would take to resolve this barrier"},
         help_text=render_to_string("barriers/assessments/resolvability/help_text/effort_to_resolve.html")
     )
     explanation = forms.CharField(
