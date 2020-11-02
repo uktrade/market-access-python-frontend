@@ -280,8 +280,8 @@ class StrategicAssessmentForm(forms.Form):
         max_length=500,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "HMG strategic objectives should be %(limit_value)d characters or fewer",
+            "required": "Enter HMG strategic objectives",
         },
     )
     government_policy = forms.CharField(
@@ -293,8 +293,8 @@ class StrategicAssessmentForm(forms.Form):
         max_length=500,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "Wider government policies should be %(limit_value)d characters or fewer",
+            "required": "Enter wider government policies",
         },
     )
     trading_relations = forms.CharField(
@@ -306,8 +306,8 @@ class StrategicAssessmentForm(forms.Form):
         max_length=500,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "Strategic improvement to trading relations should be %(limit_value)d characters or fewer",
+            "required": "Enter strategic improvement to trading relations",
         },
     )
     uk_interest_and_security = forms.CharField(
@@ -318,8 +318,8 @@ class StrategicAssessmentForm(forms.Form):
         max_length=500,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "UK interests or national security should be %(limit_value)d characters or fewer",
+            "required": "Enter UK interests or national security",
         },
     )
     uk_grants = forms.CharField(
@@ -332,8 +332,8 @@ class StrategicAssessmentForm(forms.Form):
         max_length=500,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "UK grants should be %(limit_value)d characters or fewer",
+            "required": "Enter UK grants",
         },
     )
     competition = forms.CharField(
@@ -344,8 +344,8 @@ class StrategicAssessmentForm(forms.Form):
         max_length=500,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "Competition or in-country policies should be %(limit_value)d characters or fewer",
+            "required": "Enter competition or in-country policies",
         },
     )
     additional_information = forms.CharField(
@@ -363,7 +363,7 @@ class StrategicAssessmentForm(forms.Form):
     scale = forms.ChoiceField(
         label="Strategic assessment scale",
         choices=[],
-        error_messages={"required": "Select a strategic assessment scale value"},
+        error_messages={"required": "Select a strategic assessment value"},
     )
     approved = forms.NullBooleanField()
 
