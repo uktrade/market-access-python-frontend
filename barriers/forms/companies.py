@@ -8,6 +8,7 @@ class CompanySearchForm(forms.Form):
         label="Find details of the company affected",
         max_length=255,
         error_messages={
+            "max_length": "Company should be %(limit_value)d characters or fewer",
             "required": "Enter a company or organisation affected by the barrier",
         },
     )
