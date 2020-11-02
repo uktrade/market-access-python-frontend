@@ -23,10 +23,20 @@
                 </div>
             </div>
 
+            <div class="barrier-summary__status__edit-links">
             {% if not hide_links and not barrier.archived %}
-                <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:change_status' barrier.id %}">change status</a>
-                <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">change priority</a>
+                Change
+                <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:change_status' barrier.id %}">
+                    <span class="sr-only govuk-visually-hidden">Activate link to change barrier status.</span>
+                    status
+                </a>
+                or
+                <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">
+                    <span class="sr-only govuk-visually-hidden">Activate link to change barrier priority.</span>
+                    priority
+                </a>
             {% endif %}
+            </div>
         </div>
     {% endif %}
 </section>
