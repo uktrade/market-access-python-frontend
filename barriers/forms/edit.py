@@ -21,7 +21,10 @@ class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
             "exported to, for example, Import quotas for steel rods in India."
         ),
         max_length=255,
-        error_messages={"required": "Enter a title for this barrier"},
+        error_messages={
+            "max_length": "Title should be %(limit_value)d characters or fewer",
+            "required": "Enter a title for this barrier",
+        },
     )
 
     def save(self):
@@ -33,7 +36,10 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
     product = forms.CharField(
         label="What product or service is being exported?",
         max_length=255,
-        error_messages={"required": "Enter a product or service"},
+        error_messages={
+            "max_length": "Product or service should be %(limit_value)d characters or fewer",
+            "required": "Enter a product or service",
+        },
     )
 
     def save(self):

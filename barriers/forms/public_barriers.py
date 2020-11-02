@@ -20,12 +20,18 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         max_length=250,
         required=False,
+        error_messages={
+            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
+        },
     )
     not_allowed_summary = forms.CharField(
         label="Why is it not allowed to be public? (optional)",
         widget=forms.Textarea,
         max_length=250,
         required=False,
+        error_messages={
+            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
+        },
     )
 
     def get_summary(self):
@@ -48,7 +54,10 @@ class PublishTitleForm(APIFormMixin, forms.Form):
     title = forms.CharField(
         label="Title",
         max_length=255,
-        error_messages={"required": "Enter a title"},
+        error_messages={
+            "max_length": "Title should be %(limit_value)d characters or fewer",
+            "required": "Enter a title",
+        },
         help_text=(
             "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
             "how-prepare-market-access-barrier-report-public-view/' target='_blank'>"
@@ -70,7 +79,10 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
         label="Summary",
         widget=forms.Textarea,
         max_length=1000,
-        error_messages={"required": "Enter a summary"},
+        error_messages={
+            "max_length": "Summary should be %(limit_value)d characters or fewer",
+            "required": "Enter a summary",
+        },
         help_text=(
             "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
             "how-prepare-market-access-barrier-report-public-view/' target='_blank'>"
