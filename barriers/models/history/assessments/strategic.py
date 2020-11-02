@@ -7,7 +7,6 @@ class ApprovedHistoryItem(BaseHistoryItem):
     field_name = "Stretegic assessment: Approval"
 
     def get_value(self, value):
-        print(self.data)
         if value is True:
             return "Approved"
         elif value is False:
