@@ -166,8 +166,8 @@ class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
 
 
 class TermHistoryItem(BaseHistoryItem):
-    field = "problem_status"
-    field_name = "Type"
+    field = "term"
+    field_name = "Term"
 
     def get_value(self, value):
         return self.metadata.get_term(value)
@@ -244,7 +244,7 @@ class TagsHistoryItem(BaseHistoryItem):
 
 
 class TitleHistoryItem(BaseHistoryItem):
-    field = "barrier_title"
+    field = "title"
     field_name = "Title"
 
 

@@ -146,7 +146,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
             {
                 "date": "2020-03-19T15:03:03.599763Z",
                 "model": "barrier",
-                "field": "problem_status",
+                "field": "term",
                 "old_value": 1,
                 "new_value": 2,
                 "user": {"id": 48, "name": "Test-user"},
@@ -245,7 +245,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
             {
                 "date": "2020-03-24T15:01:23.778824Z",
                 "model": "barrier",
-                "field": "barrier_title",
+                "field": "title",
                 "old_value": "Old Title",
                 "new_value": "New Title",
                 "user": {"id": 48, "name": "Test-user"},
