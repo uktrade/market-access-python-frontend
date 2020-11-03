@@ -9,6 +9,8 @@
         <span class="govuk-hint">{{ field.help_text|safe }}</span>
         {% endif %}
 
+        {% form_field_error field %}
+
         <textarea class="govuk-textarea{% if character_count %} js-character-count{% endif %}{% if field.errors %} govuk-textarea--error{% endif %}" id="{{ field.name }}" name="{{ field.name }}" rows="5">{% if field.value %}{{ field.value }}{% endif %}</textarea>
 
         {% if character_count %}

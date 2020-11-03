@@ -86,7 +86,124 @@
             "id": 2,
             "name": "Test-user"
         },
-        "modified_on": "2020-01-21T15:39:34.137208Z"
+        "modified_on": "2020-01-21T15:39:34.137208Z",
+        "resolvability_assessments": [
+            {
+                "id": "1181e104-4607-4231-b70e-b3f96ccf402f",
+                "approved": true,
+                "archived": false,
+                "archived_by": null,
+                "archived_on": null,
+                "barrier_id": "30b4e10b-d23f-4923-bc00-17d5d994ae9f",
+                "created_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                },
+                "created_on": "2020-10-29T15:35:08.372183Z",
+                "effort_to_resolve": {
+                    "id": 3,
+                    "name": "3: moderate resources required (low or moderate prioritisation or resources needed)"
+                },
+                "explanation": "Explanation!!!",
+                "reviewed_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                },
+                "reviewed_on": "2020-10-29T15:35:14.202150Z",
+                "time_to_resolve": {
+                    "id": 1,
+                    "name": "1: longer than 5 years"
+                }
+            }, {
+                "id": "01cbd190-d608-4450-a112-c993e3401d70",
+                "approved": false,
+                "archived": true,
+                "archived_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                },
+                "archived_on": "2020-10-29T15:02:03.896412Z",
+                "barrier_id": "30b4e10b-d23f-4923-bc00-17d5d994ae9f",
+                "created_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                },
+                "created_on": "2020-10-29T15:01:57.998502Z",
+                "effort_to_resolve": {
+                    "id": 1,
+                    "name": "1: Highly resource intensive (significant resources needed)"
+                },
+                "explanation": "Another explanation",
+                "reviewed_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                },
+                "reviewed_on": "2020-10-29T15:02:03.896391Z",
+                "time_to_resolve": {
+                    "id": 2,
+                    "name": "2: 3 to 5 years"
+                }
+            }
+        ],
+        "strategic_assessments": [
+            {
+                "id": "5ffabcc8-5f05-4c1a-a7ca-b81834a58cdd",
+                "approved": true,
+                "archived": false,
+                "archived_by": null,
+                "archived_on": null,
+                "barrier_id": "30b4e10b-d23f-4923-bc00-17d5d994ae9f",
+                "hmg_strategy": "hmg_strategy test",
+                "government_policy": "government_policy test",
+                "trading_relations": "trading_relations test",
+                "uk_interest_and_security": "uk_interest_and_security test",
+                "uk_grants": "uk_grants test",
+                "competition": "competition test",
+                "additional_information": "additional_information test",
+                "reviewed_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                },
+                "reviewed_on": "2020-10-29T12:25:40.607898Z",
+                "scale": {
+                    "id": 2,
+                    "name": "2: 1 or 2 government wide objectives but does not pose much risk for PR or objective delivery"
+                },
+                "created_on": "2020-10-29T12:19:47.688604Z",
+                "created_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                }
+            }, {
+                "id": "11dfa9a1-78d3-4b2e-9f5a-9da537d228a8",
+                "approved": null,
+                "archived": true,
+                "archived_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                },
+                "archived_on": "2020-10-29T12:19:47.649371Z",
+                "barrier_id": "30b4e10b-d23f-4923-bc00-17d5d994ae9f",
+                "hmg_strategy": "hmg_strategy test",
+                "government_policy": "government_policy test",
+                "trading_relations": "trading_relations test",
+                "uk_interest_and_security": "uk_interest_and_security test",
+                "uk_grants": "uk_grants test",
+                "competition": "competition test",
+                "additional_information": "additional_information test",
+                "reviewed_by": null,
+                "reviewed_on": null,
+                "scale": {
+                    "id": 4,
+                    "name": "4: supports 1 or 2  government wide objectives"
+                },
+                "created_on": "2020-10-29T12:19:08.410034Z",
+                "created_by": {
+                    "id": 2,
+                    "name": "Test-user"
+                }
+            }
+        ]
     },
     {
         "id": "8152467a-a59b-4481-aea9-deba8f0f397a",

@@ -1,15 +1,27 @@
 .assessment-item {
-	margin-bottom: govuk-em( 45, 16 );
+	margin-bottom: govuk-em( 32, 16 );
+	padding: govuk-em( 32, 16 );
+	background: $govuk-light-grey;
+	&:first-child {
+		margin-top: govuk-em( 32, 16 );
+	}
 }
 
 .assessment-item__heading {
 	@include govuk-font( 24, $weight: 'bold' );
-	margin-bottom: govuk-em( 5, 24 );
+	margin-top: 0;
+	margin-bottom: govuk-em( 24, 24 );
 }
 
 .assessment-item__sub-heading {
 	@include govuk-font( 19, $weight: bold );
 	margin: govuk-em( 15, 19 ) 0 govuk-em( 5, 19 ) 0;
+}
+
+.assessment-item__section:not(:last-child) {
+    border-bottom: 1px solid $govuk-mid-grey;
+    padding: 0 0 govuk-em( 32, 16 );
+    margin-bottom: govuk-em( 32, 16 );
 }
 
 .assessment-item__value {
@@ -23,7 +35,6 @@
 
 .assessment-item-content {
 	border: 2px dashed $govuk-light-grey;
-	padding: govuk-em( 15, 16 );
 	max-width: 600px;
 	box-sizing: border-box;
 }
@@ -44,6 +55,24 @@
 	@include govuk-font( 16 );
 }
 
+.assessment-item__approval-link {
+	margin-left: 45px;
+	@include govuk-font( 19 );
+}
+
+.assessment-item__list {
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.assessment-item__list-item {
+    list-style-type: none;
+    @include govuk-font( 16 );
+    &:not(:last-child) {
+        margin-bottom: govuk-em( 8, 16 );
+    }
+}
 
 .barrier-impact-value {
 	display: inline-block;

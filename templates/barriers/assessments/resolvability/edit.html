@@ -1,0 +1,9 @@
+{% extends "barriers/assessments/resolvability/add.html" %}
+
+{% block buttons %}
+    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Save changes</button>
+    <p>or</p>
+    <button name="approved" value="True" class="govuk-button govuk-!-margin-right-2" data-module="govuk-button">Approve</button>
+    <button name="approved" value="False" class="govuk-button govuk-button--secondary govuk-!-margin-right-2" data-module="govuk-button">Reject</button>
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+{% endblock %}

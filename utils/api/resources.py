@@ -13,6 +13,8 @@ from barriers.models import (
     Note,
     PublicBarrier,
     PublicBarrierNote,
+    ResolvabilityAssessment,
+    StrategicAssessment,
     SavedSearch,
 )
 from reports.models import Report
@@ -131,6 +133,10 @@ class BarriersResource(APIResource):
     def get_csv(self, *args, **kwargs):
         url = "barriers/s3-download"
         return self.client.get(url, params=kwargs).get("url")
+
+    def get_streamed_csv(self, *args, **kwargs):
+        url = "barriers/export"
+        return self.client.get(url, params=kwargs, stream=True, raw=True)
 
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
@@ -294,3 +300,13 @@ class PublicBarriersResource(APIResource):
 
     def unpublish(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unpublish")
+
+
+class ResolvabilityAssessmentResource(APIResource):
+    resource_name = "resolvability-assessments"
+    model = ResolvabilityAssessment
+
+
+class StrategicAssessmentResource(APIResource):
+    resource_name = "strategic-assessments"
+    model = StrategicAssessment
