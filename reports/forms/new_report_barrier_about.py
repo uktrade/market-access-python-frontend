@@ -46,12 +46,18 @@ class NewReportBarrierAboutForm(forms.Form):
                   "service or investment and the type of problem. "
                   "For example, Import quotas for steel rods.",
         max_length=255,
-        error_messages={'required': "Enter a name for this barrier"},
+        error_messages={
+            "max_length": "Name should be %(limit_value)d characters or fewer",
+            "required": "Enter a name for this barrier",
+        },
     )
     product = forms.CharField(
         label="What product, service or investment is affected?",
         max_length=255,
-        error_messages={'required': "Enter a product, service or investment"},
+        error_messages={
+            "max_length": "Product, service or investment should be %(limit_value)d characters or fewer",
+            "required": "Enter a product, service or investment",
+        },
     )
     source = forms.ChoiceField(
         label="Who told you about the barrier?",
