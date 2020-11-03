@@ -1,6 +1,6 @@
-from .base import BaseHistoryItem, GenericHistoryItem
-from .documents import BaseDocumentsHistoryItem
-from .utils import PolymorphicBase
+from ..base import BaseHistoryItem, GenericHistoryItem
+from ..documents import BaseDocumentsHistoryItem
+from ..utils import PolymorphicBase
 
 
 class BaseAssessmentHistoryItem(BaseHistoryItem):

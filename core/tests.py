@@ -24,6 +24,30 @@ class MarketAccessTestCase(TestCase):
     _team_members = None
     _users = None
     barrier_index = 0
+    administrator = User({
+        "is_superuser": False,
+        "is_active": True,
+        "permissions": ["change_user", "list_users"],
+    })
+    general_user = User({
+        "is_superuser": False,
+        "is_active": True,
+        "permissions": [],
+    })
+    approver_user = User({
+        "is_superuser": False,
+        "is_active": True,
+        "permissions": [
+            "add_resolvabilityassessment",
+            "change_resolvabilityassessment",
+            "archive_resolvabilityassessment",
+            "approve_resolvabilityassessment",
+            "add_strategicassessment",
+            "change_strategicassessment",
+            "archive_strategicassessment",
+            "approve_strategicassessment",
+        ],
+    })
 
     def setUp(self):
         self.init_session()

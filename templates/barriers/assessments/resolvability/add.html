@@ -1,0 +1,34 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Resolvability Assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Resolvability assessment' %}
+
+    {% form_error_banner form %}
+
+    <p class="govuk-body">This evaluates the likelihood of successfully resolving a barrier. This assessment is made up of:</p>
+    <ul class="ma-list">
+        <li>timescale</li>
+        <li>resources needed</li>
+    </ul>
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        {% include "partials/forms/radio_input.html" with field=form.time_to_resolve %}
+        {% include "partials/forms/radio_input.html" with field=form.effort_to_resolve %}
+        {% include "partials/forms/textarea.html" with field=form.explanation character_count=True %}
+
+        {% block buttons %}
+            <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
+            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% endblock %}
+    </form>
+
+{% endblock %}

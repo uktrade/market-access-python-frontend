@@ -6,7 +6,7 @@ from utils.exceptions import FileUploadError, ScanError
 
 class APIFormMixin:
     def __init__(self, id, token, *args, **kwargs):
-        self.id = id
+        self.id = str(id)
         self.token = token
         super().__init__(*args, **kwargs)
 
