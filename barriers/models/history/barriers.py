@@ -165,14 +165,6 @@ class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
     modifier = "note"
 
 
-class TermHistoryItem(BaseHistoryItem):
-    field = "problem_status"
-    field_name = "Type"
-
-    def get_value(self, value):
-        return self.metadata.get_term(value)
-
-
 class SectorsHistoryItem(BaseHistoryItem):
     field = "sectors"
     field_name = "Sectors affected"
@@ -243,8 +235,16 @@ class TagsHistoryItem(BaseHistoryItem):
         return tag_names
 
 
+class TermHistoryItem(BaseHistoryItem):
+    field = "term"
+    field_name = "Type"
+
+    def get_value(self, value):
+        return self.metadata.get_term(value)
+
+
 class TitleHistoryItem(BaseHistoryItem):
-    field = "barrier_title"
+    field = "title"
     field_name = "Title"
 
 

@@ -105,7 +105,7 @@ class Metadata:
         self.data = data
 
     def get_admin_area(self, admin_area_id):
-        for admin_area in self.data["country_admin_areas"]:
+        for admin_area in self.data["admin_areas"]:
             if admin_area["id"] == admin_area_id and admin_area["disabled_on"] is None:
                 return admin_area
 
@@ -125,7 +125,7 @@ class Metadata:
     def get_admin_areas_by_country(self, country_id):
         return [
             admin_area
-            for admin_area in self.data["country_admin_areas"]
+            for admin_area in self.data["admin_areas"]
             if admin_area["country"]["id"] == country_id
         ]
 
@@ -209,8 +209,7 @@ class Metadata:
         return self.data["barrier_pending"].get(sub_status)
 
     def get_term(self, term_id):
-        # TODO: read it from terms once status_types has been retired
-        terms = self.data["status_types"]
+        terms = self.data["barrier_terms"]
         return terms.get(str(term_id))
 
     def get_source(self, source):

@@ -1,5 +1,5 @@
 {
-    "status_types": {
+    "barrier_terms": {
         "1": "A procedural, short-term barrier",
         "2": "A long-term strategic barrier"
     },
@@ -2242,7 +2242,7 @@
         },
         "iso_alpha2_code": "ZW"
     }],
-    "country_admin_areas": [{
+    "admin_areas": [{
         "id": "b5d03d97-fef5-4da6-9117-98a4d633b581",
         "name": "Acre",
         "disabled_on": null,
