@@ -165,14 +165,6 @@ class PublicEligibilitySummaryHistoryItem(BaseHistoryItem):
     modifier = "note"
 
 
-class TermHistoryItem(BaseHistoryItem):
-    field = "term"
-    field_name = "Term"
-
-    def get_value(self, value):
-        return self.metadata.get_term(value)
-
-
 class SectorsHistoryItem(BaseHistoryItem):
     field = "sectors"
     field_name = "Sectors affected"
@@ -241,6 +233,14 @@ class TagsHistoryItem(BaseHistoryItem):
         sorted_tags = sorted(tags, key=lambda k: k['order'])
         tag_names = [t["title"] for t in sorted_tags]
         return tag_names
+
+
+class TermHistoryItem(BaseHistoryItem):
+    field = "term"
+    field_name = "Type"
+
+    def get_value(self, value):
+        return self.metadata.get_term(value)
 
 
 class TitleHistoryItem(BaseHistoryItem):
