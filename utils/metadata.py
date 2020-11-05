@@ -148,6 +148,18 @@ class Metadata:
         regions.sort(key=itemgetter("name"))
         return regions
 
+    def get_overseas_region_by_id(self, region_id):
+        for region in self.get_overseas_region_list():
+            if region["id"] == str(region_id):
+                return region
+        return None
+
+    def get_overseas_region_choices(self):
+        return [
+            (region["id"], region["name"])
+            for region in self.get_overseas_region_list()
+        ]
+
     def get_sector(self, sector_id):
         for sector in self.data.get("sectors", []):
             if sector["id"] == sector_id:

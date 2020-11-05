@@ -74,6 +74,7 @@ from .views.public_barriers import (
     EditPublicEligibility,
     EditPublicTitle,
     EditPublicSummary,
+    PublicBarrierListView,
 )
 from .views.search import (
     DownloadBarriers,
@@ -214,4 +215,6 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/public/eligibility/", EditPublicEligibility.as_view(), name="edit_public_eligibility"),
     path("barriers/<uuid:barrier_id>/public/title/", EditPublicTitle.as_view(), name="edit_public_barrier_title"),
     path("barriers/<uuid:barrier_id>/public/summary/", EditPublicSummary.as_view(), name="edit_public_barrier_summary"),
+
+    path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers")
 ]
