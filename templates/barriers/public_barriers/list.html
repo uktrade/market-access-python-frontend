@@ -4,8 +4,6 @@
 
 {% block page_content %}
 
-{#    {% include 'partials/heading.html' with text='Market access public barriers' %}#}
-
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Market access public barriers</h1>
     {% if selected_overseas_region %}
         <p class="govuk-!-margin-top-0">in {{ selected_overseas_region.name }}</p>
@@ -14,7 +12,8 @@
     <section class="govuk-!-margin-bottom-8">
         <h2>Overseas regions</h2>
         {% for id, name in overseas_regions %}
-            <a class="govuk-!-margin-right-2 govuk-link govuk-link--no-visited-state" href="{% url "barriers:public_barriers" %}?region={{ id }}">
+            <a class="govuk-!-margin-right-2 govuk-link govuk-link--no-visited-state"
+               href="{% url "barriers:public_barriers" %}?region={{ id }}">
                 {{ name }}
             </a>
         {% endfor %}
@@ -40,6 +39,7 @@
                     <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Public Summary</th>
                     <th scope="col" class="govuk-table__header">Location</th>
                     <th scope="col" class="govuk-table__header">Public status</th>
+                    <th scope="col" class="govuk-table__header">Latest note</th>
                 </tr>
                 </thead>
                 <tbody class="govuk-table__body">
@@ -71,6 +71,12 @@
                         <td class="govuk-table__cell">{{ barrier.location }}</td>
                         <!-- Public status -->
                         <td class="govuk-table__cell">{{ barrier.public_status_text }}</td>
+                        <!-- Latest note -->
+                        {% if barrier.latest_note %}
+                            <td class="govuk-table__cell">{{ barrier.latest_note.text }}</td>
+                        {% else %}
+                            <td class="govuk-table__cell">No notes</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
