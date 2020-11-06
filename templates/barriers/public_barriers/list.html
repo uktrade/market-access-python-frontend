@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block page_title %}{{ block.super }} - Public barriers{% endblock %}
+
+{% block page_content %}
+
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Market access public barriers</h1>
+    {% if selected_overseas_region %}
+        <p class="govuk-!-margin-top-0">in {{ selected_overseas_region.name }}</p>
+    {% endif %}
+
+    <section class="govuk-!-margin-bottom-8">
+        <h2>Overseas regions</h2>
+        {% for id, name in overseas_regions %}
+            <a class="govuk-!-margin-right-2 govuk-link govuk-link--no-visited-state"
+               href="{% url "barriers:public_barriers" %}?region={{ id }}">
+                {{ name }}
+            </a>
+        {% endfor %}
+    </section>
+
+    <section>
+        <div class="filter-results-header">
+            <div class="filter-results-header__row">
+                <div class="filter-results-count__container">
+                    <h2 class="filter-results-title">
+                        {{ barriers.total_count }}
+                        <span class="filter-results-title__caption"> result{{ barriers.total_count|pluralize }} found</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        {% if barriers.total_count %}
+            <table class="govuk-table filter-results-table">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Barrier Code</th>
+                    <th scope="col" class="govuk-table__header">Public Title</th>
+                    <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Public Summary</th>
+                    <th scope="col" class="govuk-table__header">Location</th>
+                    <th scope="col" class="govuk-table__header">Public status</th>
+                    <th scope="col" class="govuk-table__header">Latest note</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                {% for barrier in barriers %}
+                    <tr class="govuk-table__row">
+                        <!-- Barrier Code -->
+                        <td class="govuk-table__cell">
+                            <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}" class="govuk-link">
+                                {{ barrier.internal_code }}
+                            </a>
+                        </td>
+                        <!-- Public Title -->
+                        <td class="govuk-table__cell">
+                            {% if barrier.title %}
+                                {{ barrier.title }}
+                            {% else %}
+                                Not set
+                            {% endif %}
+                        </td>
+                        <!-- Public Summary -->
+                        <td class="govuk-table__cell">
+                            {% if barrier.summary %}
+                                {{ barrier.summary }}
+                            {% else %}
+                                Not set
+                            {% endif %}
+                        </td>
+                        <!-- Location -->
+                        <td class="govuk-table__cell">{{ barrier.location }}</td>
+                        <!-- Public status -->
+                        <td class="govuk-table__cell">{{ barrier.public_status_text }}</td>
+                        <!-- Latest note -->
+                        {% if barrier.latest_note %}
+                            <td class="govuk-table__cell">{{ barrier.latest_note.text }}</td>
+                        {% else %}
+                            <td class="govuk-table__cell">No notes</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h2 class="filter-results-comment">There are no reported trade barriers.</h2>
+        {% endif %}
+    </section>
+
+{% endblock %}

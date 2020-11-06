@@ -206,6 +206,14 @@ class PublicBarrier(APIModel):
     _status = None
 
     @property
+    def internal_code(self):
+        return self.data.get("internal_code")
+
+    @property
+    def internal_id(self):
+        return self.data.get("internal_id")
+
+    @property
     def any_internal_sectors_changed(self):
         return (
             self.data.get("internal_sectors_changed")
