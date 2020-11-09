@@ -2,16 +2,24 @@ $highlight-colour: $govuk-light-grey;;
 
 .multiselect {
 	color: $govuk-black;
+
+	.multiselect__placeholder {
+		color: $govuk-dark-grey;
+		margin-bottom: 0;
+		padding-top: 0;
+	}
+
+	input {
+		// workaround, so the input field placeholder breaks on zoom
+		height: 54px;
+		@media (min-width: 985px ){
+			height: auto;
+		}
+	}
 }
 
 .multiselect__content {
 	width: 100%;
-}
-
-.multiselect__placeholder {
-	color: $govuk-dark-grey;
-	margin-bottom: 0;
-	padding-top: 0;
 }
 
 .multiselect__content-wrapper {
