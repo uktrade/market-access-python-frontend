@@ -195,7 +195,7 @@ class EditSourceTestCase(MarketAccessTestCase):
             data={"source": "TRADE", "other_source": "don't save this"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], source="TRADE", other_source=None,
+            id=self.barrier["id"], source="TRADE", other_source="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -262,7 +262,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
             data={"priority": "LOW", "priority_summary": ""},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], priority="LOW", priority_summary=None,
+            id=self.barrier["id"], priority="LOW", priority_summary="",
         )
         assert response.status_code == HTTPStatus.FOUND
 

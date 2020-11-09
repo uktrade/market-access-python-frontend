@@ -119,8 +119,8 @@ class CommoditiesTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             commodities=[
-                {'code': '2105009900', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': None},
-                {'code': '0708000000', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': None},
+                {'code': '2105009900', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ""},
+                {'code': '0708000000', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ""},
                 {'code': '0101000000', 'country': None, 'trading_bloc': "TB00016"},
             ],
         )
