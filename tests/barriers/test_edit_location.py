@@ -87,7 +87,7 @@ class EditLocationTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
         assert self.client.session["location"]["country"] == self.new_country_id
         assert self.client.session["location"]["admin_areas"] == []
-        assert self.client.session["location"]["trading_bloc"] is None
+        assert self.client.session["location"]["trading_bloc"] == ""
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
@@ -236,7 +236,7 @@ class EditLocationTestCase(MarketAccessTestCase):
             id=self.barrier["id"],
             country=self.new_country_id,
             admin_areas=self.new_admin_area_ids,
-            trading_bloc=None,
+            trading_bloc="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
