@@ -289,11 +289,17 @@ class ReportFormGroup:
     def get_status_form_data(self):
         """Returns DICT - extract status form data from barrier.data"""
         if self.barrier:
+            status_id = None
+            sub_status_code = None
+            if self.barrier.status:
+                status_id = str(self.barrier.status.get("id"))
+            if self.barrier.sub_status:
+                sub_status_code = self.barrier.sub_status.get("code")
             return {
-                "status": str(self.barrier.status["id"]),
+                "status": status_id,
                 "status_date": self.barrier.status_date,
                 "status_summary": self.barrier.status_summary,
-                "sub_status": self.barrier.sub_status,
+                "sub_status": sub_status_code,
                 "sub_status_other": self.barrier.sub_status_other,
             }
         return {}
