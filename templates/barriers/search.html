@@ -20,10 +20,6 @@
 
 {% block page_title %}{{ block.super }} - Search{% endblock %}
 
-{% block body_script %}
-    <script src="{% static 'js/vue-bundle.js' %}"></script>
-{% endblock %}
-
 {% block page_content %}
 
     {% include 'partials/heading.html' with caption='Market access barriers' text='Search' %}
@@ -50,9 +46,6 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.category %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
-{#                {% include "partials/forms/search_typeahead.html" with placeholder='Search sector' field=form.sector %}#}
-{#                {% include "partials/forms/search_typeahead.html" with placeholder='Search category' field=form.category %}#}
-{#                {% include "partials/forms/search_typeahead.html" with placeholder='Search regions' field=form.region extra_classes='js-filter' %}#}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
 
