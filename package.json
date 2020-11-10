@@ -33,7 +33,7 @@
     "webpack-stream": "^5.2.1"
   },
   "devDependencies": {
-    "browser-sync": "^2.26.12"
+    "browser-sync": "^2.26.13"
   },
   "engines": {
     "node": "12.x"
