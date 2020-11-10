@@ -130,7 +130,7 @@ class UpdateBarrierCommoditiesForm(forms.Form):
                 self.commodities.append({
                     "code": code,
                     "country": countries[index] or None,
-                    "trading_bloc": trading_blocs[index] or None,
+                    "trading_bloc": trading_blocs[index],
                 })
             except IndexError:
                 raise forms.ValidationError("Code/country mismatch")

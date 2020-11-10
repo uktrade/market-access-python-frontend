@@ -405,7 +405,7 @@ class ReportFormGroup:
             "term": self.term_form.get("term"),
             "country": self.location_form.get("country"),
             "admin_areas": self.selected_admin_areas_as_list,
-            "trading_bloc": self.location_form.get("trading_bloc"),
+            "trading_bloc": self.location_form.get("trading_bloc", ""),
             "caused_by_trading_bloc": self.caused_by_trading_bloc_form.get("caused_by_trading_bloc"),
             "trade_direction": self.trade_direction_form.get("trade_direction"),
         }
@@ -434,14 +434,14 @@ class ReportFormGroup:
     def prepare_payload_about(self):
         payload = self.about_form
         if not payload["other_source"]:
-            payload["other_source"] = None
+            payload["other_source"] = ""
         return payload
 
     def prepare_payload_summary(self):
         payload = self.summary_form
 
         if not self.summary_form.get("next_steps_summary"):
-            payload["next_steps_summary"] = None
+            payload["next_steps_summary"] = ""
         return payload
 
     def _update_barrier(self, payload):

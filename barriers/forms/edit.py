@@ -104,7 +104,7 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
                     "other_source", "Enter how you became aware of the barrier"
                 )
         else:
-            cleaned_data["other_source"] = None
+            cleaned_data["other_source"] = ""
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -147,7 +147,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         client.barriers.patch(
             id=self.id,
             priority=self.cleaned_data["priority"],
-            priority_summary=self.cleaned_data["priority_summary"] or None,
+            priority_summary=self.cleaned_data["priority_summary"],
         )
 
 

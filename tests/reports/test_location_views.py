@@ -70,7 +70,7 @@ class LocationViewTestCase(ReportsTestCase):
         field_name = 'location'
         session_key = 'draft_barrier__location_form_data'
         fiji_uuid = 'd9f682ac-5d95-e211-a939-e4115bead28a'
-        expected_form_data = {'country': fiji_uuid, 'trading_bloc': None}
+        expected_form_data = {'country': fiji_uuid, 'trading_bloc': ""}
 
         response = self.client.post(self.url, data={field_name: fiji_uuid}, follow=True)
         saved_form_data = self.client.session.get(session_key)

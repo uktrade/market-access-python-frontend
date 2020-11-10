@@ -40,7 +40,7 @@ class EditLocationForm(forms.Form):
             id=self.barrier_id,
             country=self.cleaned_data["country"] or None,
             admin_areas=self.cleaned_data["admin_areas"],
-            trading_bloc=self.cleaned_data["trading_bloc"] or None,
+            trading_bloc=self.cleaned_data["trading_bloc"],
         )
 
 
@@ -79,7 +79,7 @@ class EditCountryOrTradingBlocForm(forms.Form):
             self.cleaned_data["trading_bloc"] = location
         else:
             self.cleaned_data["country"] = location
-            self.cleaned_data["trading_bloc"] = None
+            self.cleaned_data["trading_bloc"] = ""
 
     def clean(self):
         cleaned_data = super().clean()
