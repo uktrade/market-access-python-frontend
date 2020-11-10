@@ -3,6 +3,8 @@ import React, {useState} from "react";
 
 
 function MultiSelectFilter(props) {
+    let labelClasses = props.labelClasses ? props.labelClasses : "filter-items__label"
+    labelClasses = `govuk-label ${labelClasses}`
     const initialSelectedOptions = props.options.reduce((selected, option) => {
         if (option.checked) selected.push(option)
         return selected
@@ -29,7 +31,7 @@ function MultiSelectFilter(props) {
                     {props.label}
                 </legend>
 
-                <label className="govuk-label filter-items__label" htmlFor={props.inputId}>
+                <label className={labelClasses} htmlFor={props.inputId}>
                     {props.label}
                 </label>
 
@@ -40,6 +42,7 @@ function MultiSelectFilter(props) {
                     onChange={handleOptionSelect}
                     placeholder={props.placeholder}
                     defaultValue={initialSelectedOptions}
+                    containerClasses={props.containerClasses}
                 />
 
             </fieldset>

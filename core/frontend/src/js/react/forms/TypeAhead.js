@@ -125,7 +125,7 @@ function TypeAhead(props) {
             {...props}
             isMulti={true}
             isClearable={false}
-            className="multiselect"
+            className={`multiselect ${props.containerClasses}`}
             styles={customStyles}
             components={{
                 IndicatorSeparator: () => null,

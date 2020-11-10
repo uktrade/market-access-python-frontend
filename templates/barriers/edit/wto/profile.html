@@ -4,8 +4,22 @@
 
 {% block page_title %}{{ block.super }} - Edit WTO information{% endblock %}
 
+{% block head %}
+    <script src="{% static 'js/react.js' %}"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderMultiSelectFilter(
+            "member_states",
+            "Search member states",
+            "govuk-label--s",
+            "govuk-!-width-two-thirds"
+        )
+    })
+    </script>
+{% endblock %}
+
+
 {% block body_script %}
-    <script src="{% static 'js/vue-bundle.js' %}"></script>
     <script>
         ma.pages.barrier.wto();
         var csrftoken = ma.get_csrf_token();
@@ -43,7 +57,7 @@
             </div>
         {% endif %}
 
-        {% include 'partials/forms/typeahead.html' with placeholder='Search member states' field=form.member_states field_classes="govuk-!-width-two-thirds" %}
+        {% include "partials/forms/checkbox_filter.html" with field=form.member_states from_group_classes="member-states__container" field_classes="govuk-!-width-two-thirds" %}
         {% include "partials/forms/select_input.html" with field=form.committee_raised_in field_classes="govuk-!-width-one-half" %}
 
         {% if form.meeting_minutes %}
