@@ -1,22 +1,25 @@
 .ma-badge {
-    padding: govuk-em( 8, 16 );
+    padding: govuk-em(8, 16);
     font-size: 11px;
     text-transform: uppercase;
     background-color: $govuk-dark-grey;
     color: $govuk-white;
     display: inline-block;
-    margin-right: govuk-em( 4, 16 );
+    margin-right: govuk-em(4, 16);
     font-weight: bold;
     text-decoration: none;
+
     &:link,
     &:visited,
     &:active,
     &:hover {
-      color: $govuk-white;
-      text-decoration: none;
+        color: $govuk-white;
+        text-decoration: none;
     }
+
     &:focus {
-      outline: none;
+        outline: none;
+        color: $govuk-black;
     }
 
     &--new {
@@ -31,8 +34,8 @@
         background-color: $govuk-orange;
         text-transform: none;
         font-size: 16px;
-        margin-left: govuk-em( 8, 16 );
-        padding: govuk-em( 4, 16 ) govuk-em( 8, 16 );
+        margin-left: govuk-em(8, 16);
+        padding: govuk-em(4, 16) govuk-em(8, 16);
         line-height: 1;
     }
 }

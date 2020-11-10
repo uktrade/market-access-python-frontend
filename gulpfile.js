@@ -106,20 +106,12 @@ const main_js = () => {
 // Prepare React
 const main_react = () => {
     return gulp.src("js/react/*")
-    .pipe(webpack(require('./webpack.config.js')))
-    .pipe(gulp.dest(jsBuildPath));
+        .pipe(webpack(require('./webpack.config.js')))
+        .pipe(gulp.dest(jsBuildPath));
 };
 
 
 // Move files to dist
-const prepDist = () => {
-    // Move JS bundles to dist
-    return gulp.src([
-        `${assetsSrcPath}js/vue/vue-bundle.js`
-    ])
-        .pipe(gulp.dest(jsBuildPath));
-};
-
 const copyFonts = () => {
     return gulp.src(`${govukAssets}fonts/*`)
         .pipe(gulp.dest('core/static/govuk-public/fonts'));
@@ -169,7 +161,7 @@ const watchcss = watchCss;
 const css = main_css;
 const js = main_js;
 const react = main_react;
-const build = gulp.parallel(css, js, react, prepDist, copyFonts);
+const build = gulp.parallel(css, js, react, copyFonts);
 const fe = gulp.series(build, watch);
 
 // Export Commands

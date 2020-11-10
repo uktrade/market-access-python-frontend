@@ -1,4 +1,5 @@
 {% extends "barriers/edit/base.html" %}
+{% load govuk_forms %}
 
 {% block page_title %}{{ block.super }} - Barrier - Edit location{% endblock %}
 
@@ -37,7 +38,7 @@
                             <form action="{% url 'barriers:remove_admin_area' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="admin_area" value="{{ item.id }}">
-                                <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+                                {% action_remove_list_item forloop.counter item.name %}
                             </form>
                         </li>
                     {% endfor %}

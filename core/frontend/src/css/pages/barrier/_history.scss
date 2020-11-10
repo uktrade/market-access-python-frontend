@@ -1,15 +1,15 @@
 .history-heading {
-    padding-bottom: govuk-em( 4, 32 );
+    padding-bottom: govuk-em(4, 32);
     border-bottom: 4px solid $govuk-black;
 }
 
 .history-item {
     border-top: 2px solid $govuk-dark-grey;
-    margin-bottom: govuk-em( 48, 16 );
+    margin-bottom: govuk-em(48, 16);
 }
 
 .history-item__date {
-    margin: govuk-em( 8, 16 ) 0 govuk-em( 16, 16 );
+    margin: govuk-em(8, 16) 0 govuk-em(16, 16);
     font-size: 0.9em;
     color: $secondary-text-colour;
 }
@@ -20,30 +20,30 @@
 
 .history-item__field {
 
-    @include mq( $from: tablet ){
+    @include mq($from: tablet) {
         float: left;
         width: 20%;
         margin: 0;
-        padding-right: govuk-em( 8, 16 );
+        padding-right: govuk-em(8, 16);
         box-sizing: border-box;
     }
 }
 
 .history-item__change {
-    @include mq( $from: tablet ){
+    @include mq($from: tablet) {
         float: right;
         width: 80%;
     }
 }
 
 .history-item__old-value {
-    margin-bottom: govuk-em( 16, 16 );
+    margin-bottom: govuk-em(16, 16);
 }
 
 .history-item__link {
     &--existing {
         color: $govuk-black;
-        padding: govuk-em( 2, 16 );
+        padding: govuk-em(2, 16);
 
         &:link, &:visited {
             color: $govuk-black;
@@ -51,10 +51,10 @@
     }
 
     &--new {
-        background-color: $govuk-green-25;
+        background-color: $govuk-green-10;
         text-decoration: underline;
         color: $govuk-green;
-        padding: govuk-em( 2, 16 );
+        padding: govuk-em(2, 16);
 
         &:link, &:visited {
             color: $govuk-green;
@@ -64,7 +64,7 @@
     &--old {
         text-decoration: line-through;
         color: $govuk-red;
-        padding: govuk-em( 2, 16 );
+        padding: govuk-em(2, 16);
 
         &:link, &:visited {
             color: $govuk-red;
@@ -74,15 +74,16 @@
 
 .diff__ins {
     text-decoration: none;
-    background-color: $govuk-green-25;
+    background-color: $govuk-green-10;
     color: $govuk-green;
-    padding: govuk-em( 2, 16 );
+    padding: govuk-em(2, 16);
+
     &--block {
         display: block;
         float: left;
         clear: both;
         line-height: 1;
-        margin-top: govuk-em( 8, 16 );
+        margin-top: govuk-em(8, 16);
     }
 }
 
@@ -90,11 +91,12 @@
 .diff__del {
     text-decoration: line-through;
     color: $govuk-red;
+
     &--block {
         display: block;
         float: left;
         clear: both;
         line-height: 1;
-        margin-top: govuk-em( 8, 16 );
+        margin-top: govuk-em(8, 16);
     }
 }

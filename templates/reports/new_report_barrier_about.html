@@ -47,32 +47,45 @@
                     {% form_field_error form "source" %}
                     <div class="govuk-radios barrier-source govuk-radios--conditional" data-module="radios">
                         {% for choice_id, choice_value in form.fields.source.choices %}
-                        <div class="govuk-radios__item barrier-source">
-                            <input class="govuk-radios__input"
-                                   id="source-{{ forloop.counter }}"
-                                   name="source"
-                                   type="radio"
-                                   value="{{ choice_id }}"
-                                   {% if form.initial.source == choice_id %}checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="source-{{ forloop.counter }}">
-                                {{ choice_value }}
-                            </label>
-                        </div>
-                        {% if choice_id == form.BS.OTHER %}
-                        <div class="govuk-radios__conditional" id="conditional-{{ form.BS.OTHER }}" aria-hidden="false">
-                            <div class="{% form_group_classes form.other_source.errors %}">
-                                <label class="govuk-label govuk-label--s" for="other_source">
-                                    {{ form.fields.other_source.label }}
+                            <div class="govuk-radios__item barrier-source">
+                                <input class="govuk-radios__input"
+                                        {% if forloop.counter == 1 %}
+                                       id="source"
+                                        {% else %}
+                                       id="source-{{ forloop.counter }}"
+                                        {% endif %}
+                                       name="source"
+                                       type="radio"
+                                       value="{{ choice_id }}"
+                                        {% if form.initial.source == choice_id or form.initial.source.code == choice_id %}
+                                       checked="checked"
+                                        {% endif %}>
+                                <label class="govuk-label govuk-radios__label"
+                                        {% if forloop.counter == 1 %}
+                                       for="source"
+                                        {% else %}
+                                       for="source-{{ forloop.counter }}"
+                                        {% endif %}
+                                >
+                                    {{ choice_value }}
                                 </label>
-                                {% form_field_error form "other_source" %}
-                                <input class="govuk-input"
-                                       id="other_source"
-                                       name="other_source"
-                                       type="text"
-                                       value="{{ form.initial.other_source }}">
                             </div>
-                        </div>
-                        {% endif %}
+                            {% if choice_id == form.BS.OTHER %}
+                                <div class="govuk-radios__conditional" id="conditional-{{ form.BS.OTHER }}"
+                                     aria-hidden="false">
+                                    <div class="{% form_group_classes form.other_source.errors %}">
+                                        <label class="govuk-label govuk-label--s" for="other_source">
+                                            {{ form.fields.other_source.label }}
+                                        </label>
+                                        {% form_field_error form "other_source" %}
+                                        <input class="govuk-input"
+                                               id="other_source"
+                                               name="other_source"
+                                               type="text"
+                                               value="{{ form.initial.other_source }}">
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </fieldset>
@@ -91,8 +104,13 @@
                                 <input class="govuk-checkboxes__input"
                                        id="tag-{{ value }}"
                                        name="{{ form.tags.name }}"
-                                       type="checkbox" value="{{ value }}"{% if value|lower in form.tags.value %} checked="checked"{% endif %}>
-                                <label class="govuk-label govuk-checkboxes__label" for="tag-{{ value }}">{{ name }}</label>
+                                       type="checkbox"
+                                       value="{{ value }}"
+                                        {% if value in form.initial.tags or value|lower in form.initial.tags %}
+                                       checked="checked"
+                                        {% endif %}>
+                                <label class="govuk-label govuk-checkboxes__label"
+                                       for="tag-{{ value }}">{{ name }}</label>
                                 <span id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
                                   {{ help_text }}
                                 </span>
@@ -106,7 +124,7 @@
             <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
 
         </form>
-	</section>
+    </section>
 
 
 {% endblock %}
@@ -115,7 +133,7 @@
 {% block body_script %}
     {{ block.super }}
     <script>
-		ma.pages.report.aboutProblem();
-	</script>
+        ma.pages.report.aboutProblem();
+    </script>
 {% endblock %}
 

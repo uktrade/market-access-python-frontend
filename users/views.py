@@ -71,7 +71,7 @@ class LoginCallback(RedirectView):
             "redirect_uri": redirect_uri,
         }
 
-        response = requests.post(url=settings.SSO_TOKEN_URI, data=payload)
+        response = requests.post(url=settings.SSO_TOKEN_URI, data=payload, timeout=10)
 
         if response.status_code == 200:
             response_data = response.json()

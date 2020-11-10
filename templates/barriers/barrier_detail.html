@@ -4,20 +4,6 @@
 
 {% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
 
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        ma.pages.barrier.detail( {
-            noteErrorText: 'Add text for the note',
-            toggleLinks: {
-                text: 'Update the barrier',
-                linkClass: 'js-barrier-summary-link'
-            }
-        } );
-        var csrftoken = ma.get_csrf_token();
-    </script>
-{% endblock %}
-
 {% block outside_content %}
     {% include 'barriers/partials/archived_banner.html' with show_unarchive_button=True %}
 {% endblock %}

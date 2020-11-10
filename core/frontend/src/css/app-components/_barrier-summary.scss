@@ -81,9 +81,8 @@
 	color: $govuk-black;
 }
 
-.barrier-summary__status__link {
-	//margin-left: govuk-em( 10, 16 );
-	display: block;
+.barrier-summary__status__edit-links {
+	@include govuk-font( $size: 14);
 }
 
 .barrier-summary__info {
