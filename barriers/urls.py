@@ -12,10 +12,24 @@ from .views.assessments import (
     ExportValueAssessment,
     MarketSizeAssessment,
     NewEconomicAssessment,
+)
+from .views.assessments.economic import (
+    AddEconomicAssessment,
+    ArchiveEconomicAssessment,
+    EconomicAssessmentDetail,
+    EditEconomicAssessmentData,
+    EditEconomicAssessmentRating,
+)
+from .views.assessments.economic_impact import (
+    AddEconomicImpactAssessment,
+)
+from .views.assessments.resolvability import (
     AddResolvabilityAssessment,
     ArchiveResolvabilityAssessment,
     EditResolvabilityAssessment,
     ResolvabilityAssessmentDetail,
+)
+from .views.assessments.strategic import (
     AddStrategicAssessment,
     ArchiveStrategicAssessment,
     EditStrategicAssessment,
@@ -43,6 +57,7 @@ from .views.core import (
 from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditCausedByTradingBloc,
+    BarrierEditEconomicAssessmentEligibility,
     BarrierEditEndDate,
     BarrierEditTitle,
     BarrierEditProduct,
@@ -136,6 +151,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/source/", BarrierEditSource.as_view(), name="edit_source"),
     path("barriers/<uuid:barrier_id>/edit/priority/", BarrierEditPriority.as_view(), name="edit_priority"),
     path("barriers/<uuid:barrier_id>/edit/term/", BarrierEditTerm.as_view(), name="edit_term"),
+    path("barriers/<uuid:barrier_id>/edit/economic-assessment-eligibility/", BarrierEditEconomicAssessmentEligibility.as_view(), name="economic_assessment_eligibility"),
     path("barriers/<uuid:barrier_id>/edit/end-date/", BarrierEditEndDate.as_view(), name="edit_end_date"),
     path("barriers/<uuid:barrier_id>/edit/commodities/", BarrierEditCommodities.as_view(), name="edit_commodities"),
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
@@ -200,6 +216,16 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/assessment/documents/add/", AddAssessmentDocument.as_view(), name="add_assessment_document"),
     path("barriers/<uuid:barrier_id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name="cancel_assessment_document"),
     path("barriers/<uuid:barrier_id>/assessment/documents/<uuid:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
+
+    path("barriers/<uuid:barrier_id>/economic-assessments/add", AddEconomicAssessment.as_view(), name="add_economic_assessment"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/add/data", EditEconomicAssessmentData.as_view(), name="add_economic_assessment_data"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/", EconomicAssessmentDetail.as_view(), name="economic_assessment_detail"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/data", EditEconomicAssessmentData.as_view(), name="edit_economic_assessment_data"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/rating", EditEconomicAssessmentRating.as_view(), name="edit_economic_assessment_rating"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/commercial-value", EditCommercialValue.as_view(), name="edit_commercial_value"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/archive", ArchiveEconomicAssessment.as_view(), name="archive_economic_assessment"),
+
+    path("barriers/<uuid:barrier_id>/economic-impact-assessments/add", AddEconomicImpactAssessment.as_view(), name="add_economic_impact_assessment"),
 
     path("barriers/<uuid:barrier_id>/resolvability-assessments/add", AddResolvabilityAssessment.as_view(), name="add_resolvability_assessment"),
     path("barriers/<uuid:barrier_id>/resolvability-assessments/<uuid:assessment_id>/", ResolvabilityAssessmentDetail.as_view(), name="resolvability_assessment_detail"),

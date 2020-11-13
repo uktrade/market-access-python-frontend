@@ -15,6 +15,17 @@ class Assessment(APIModel):
         self.documents = [Document(document) for document in data["documents"]]
 
 
+class EconomicAssessment(APIModel):
+    @property
+    def created_on(self):
+        return dateutil.parser.parse(self.data["created_on"])
+
+    @property
+    def reviewed_on(self):
+        if self.data.get("reviewed_on"):
+            return dateutil.parser.parse(self.data["reviewed_on"])
+
+
 class ResolvabilityAssessment(APIModel):
     @property
     def created_on(self):

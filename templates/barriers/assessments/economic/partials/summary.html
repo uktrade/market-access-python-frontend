@@ -1,0 +1,96 @@
+{% if barrier.economic_assessment_eligibility is True %}
+    {% if barrier.current_economic_assessment %}
+
+        {% with assessment=barrier.current_economic_assessment %}
+            {% if assessment.approved %}
+                <div class="assessment-item__section">
+                    <dt class="ma-data-key">Economic rating</dt>
+                    <dd class="ma-data-value">
+                        {{ assessment.rating.name }}
+                    </dd>
+
+                    <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                        <summary class="govuk-details__summary">
+                            <span class="govuk-details__summary-text">View assessment detail</span>
+                        </summary>
+                        <div class="govuk-details__text">
+                            <dt class="ma-data-key">Assessment explanation</dt>
+                            <dd class="ma-data-value">
+                                {{ assessment.explanation|linebreaks }}
+                            </dd>
+                            <dt class="ma-data-key">Assessment produced by</dt>
+                            <dd class="ma-data-value ma-data-value--s">
+                                {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+                            </dd>
+                            <dt class="ma-data-key">Assessment accepted by</dt>
+                            <dd class="ma-data-value ma-data-value--s">
+                                {{ assessment.reviewed_by.name }} on {{ assessment.reviewed_on|date:"j F Y" }}
+                            </dd>
+                            {% if current_user|has_permission:"archive_economicassessment" %}
+                                <a href="{% url 'barriers:archive_economic_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
+                            {% endif %}
+                        </div>
+                    </details>
+                </div>
+                <div class="assessment-item__section">
+                    <a href="{% url 'barriers:add_economic_assessment' barrier.id %}">Add an initial economic assessment</a>
+                    <p class="assessment-item-content__hint">Lorem ipsum</p>
+                </div>
+            {% elif assessment.ready_for_approval %}
+                <div class="assessment-item__section">
+                    {% include "partials/warning.html" with warning_text="Initial economic assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
+
+                    <a class="assessment-item__approval-link" href="{% url 'barriers:edit_economic_assessment_rating' barrier.id assessment.id %}">
+                        Initial economic assessment - {{ assessment.created_on|date:"j F Y" }}
+                    </a>
+                </div>
+            {% else %}
+                <div class="assessment-item__section">
+                    <a href="{% url 'barriers:edit_economic_assessment_data' barrier.id assessment.id %}">Continue with assessment</a>
+                    <p class="assessment-item-content__hint">An assessment has been started but not yet completed</p>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+    {% else %}
+        <div class="assessment-item__section">
+            <p>This barrier has been marked as eligible for an initial economic assessment</p>
+        </div>
+        <div class="assessment-item__section">
+            <a href="{% url 'barriers:add_economic_assessment' barrier.id %}">Add an initial economic assessment</a>
+            <p class="assessment-item-content__hint">Lorem impsum...</p>
+        </div>
+    {% endif %}
+{% elif barrier.economic_assessment_eligibility is False %}
+    <div class="assessment-item__section">
+        <p>This barrier has been marked as ineligible for an economic rating assessment</p>
+        <dt class="ma-data-key">Reason</dt>
+        <dd class="ma-data-value">
+            {{ barrier.economic_assessment_eligibility_summary|linebreaksbr }}
+        </dd>
+    </div>
+    <div class="assessment-item__section">
+        <a href="{% url 'barriers:economic_assessment_eligibility' barrier.id %}">Review and change this status</a>
+    </div>
+{% else %}
+    <div class="assessment-item__section">
+        <a href="{% url 'barriers:economic_assessment_eligibility' barrier.id %}">Is the barrier eligible for an initial economic assessment?</a>
+        <p class="assessment-item-content__hint">Lorem ipsum...</p>
+    </div>
+{% endif %}
+
+{% if barrier.archived_economic_assessments %}
+    <div class="assessment-item__section">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Previous assessments</h3>
+
+        <ul class="assessment-item__list">
+            {% for assessment in barrier.archived_economic_assessments %}
+                <li class="assessment-item__list-item">
+                    <a href="{% url 'barriers:economic_assessment_detail' barrier.id assessment.id %}">
+                        Initial economic assessment - {{ assessment.created_on|date:"j F Y" }}{% if assessment.approved is False %} (Rejected){% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

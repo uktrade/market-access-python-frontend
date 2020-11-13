@@ -272,6 +272,26 @@ class AnalyticsMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
+class EconomicAssessmentMixin:
+    _economic_assessment = None
+
+    @property
+    def economic_assessment(self):
+        if self._economic_assessment is None:
+            for assessment in self.barrier.economic_assessments:
+                if str(assessment.id) == str(self.kwargs.get("assessment_id")):
+                    self._economic_assessment = assessment
+                    return self._economic_assessment
+            raise Http404("Economic assessment does not exist")
+        return self._economic_assessment
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        if self.kwargs.get("assessment_id"):
+            context_data["economic_assessment"] = self.economic_assessment
+        return context_data
+
+
 class ResolvabilityAssessmentMixin:
     _resolvability_assessment = None
 

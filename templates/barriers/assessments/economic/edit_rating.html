@@ -1,0 +1,35 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Add initial economic assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Add economic rating assessment' %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        {% include "partials/forms/radio_input.html" with field=form.rating %}
+        {% include "partials/forms/textarea.html" with field=form.explanation %}
+
+        {% if economic_assessment.ready_for_approval %}
+            <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Save changes</button>
+            <p>or</p>
+            <button name="approved" value="True" class="govuk-button govuk-!-margin-right-2" data-module="govuk-button">Approve</button>
+            <button name="approved" value="False" class="govuk-button govuk-button--secondary govuk-!-margin-right-2" data-module="govuk-button">Reject</button>
+            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% else %}
+            <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Save for later</button>
+            <p>or</p>
+            <button name="ready_for_approval" value="True" class="govuk-button" data-module="govuk-button">Mark as ready</button>
+            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% endif %}
+    </form>
+
+{% endblock %}

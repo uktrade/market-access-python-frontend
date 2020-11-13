@@ -7708,6 +7708,13 @@
         "BARRIER_CREATED": "Barrier Created",
         "BARRIER_STATUS_CHANGE": "Barrier Status Change"
     },
+    "trade_categories": {
+        "GOODS": "Goods",
+        "SERVICE": "Service",
+        "INVESTMENT": "Investment",
+        "PROCUREMENT": "Procurement",
+        "OTHER": "Other"
+    },
     "trade_direction": {
         "1": "Exporting from the UK or investing overseas",
         "2": "Importing or investing into the UK"
@@ -7729,7 +7736,17 @@
         "name": "Low",
         "order": 3
     }],
-    "assessment_impact": {
+    "economic_assessment_impact": {
+        "1": "1: £ less than a thousand",
+        "2": "2: £ tens of thousands",
+        "3": "3: £ hundreds of thousands",
+        "4": "4: £ millions",
+        "5": "5: £ tens of millions",
+        "6": "6: £ hundreds of millions",
+        "7": "7: £ billions",
+        "8": "8: £ tens of billions"
+    },
+    "economic_assessment_rating": {
         "HIGH": "High",
         "MEDIUMHIGH": "Medium High",
         "MEDIUMLOW": "Medium Low",

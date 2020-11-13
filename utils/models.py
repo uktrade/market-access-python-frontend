@@ -10,7 +10,7 @@ class APIModel:
     def __getattr__(self, name):
         if name in self.data:
             return self.data.get(name)
-        raise AttributeError
+        raise AttributeError(f"{name} not found in data")
 
 
 class ModelList(UserList):

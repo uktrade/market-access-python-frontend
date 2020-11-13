@@ -334,6 +334,9 @@ class Metadata:
             if tag["show_at_reporting"] is True
         )
 
+    def get_trade_categories(self):
+        return self.data.get("trade_categories", [])
+
     def get_trade_direction(self, key=None, all_items=False):
         """
         Helper to get either a value or all items for trade_direction.

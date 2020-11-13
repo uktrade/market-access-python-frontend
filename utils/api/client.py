@@ -8,6 +8,7 @@ from .resources import (
     BarriersResource,
     CommoditiesResource,
     DocumentsResource,
+    EconomicAssessmentResource,
     GroupsResource,
     NotesResource,
     UsersResource,
@@ -29,6 +30,7 @@ class MarketAccessAPIClient:
         self.token = token or settings.TRUSTED_USER_TOKEN
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
+        self.economic_assessments = EconomicAssessmentResource(self)
         self.groups = GroupsResource(self)
         self.commodities = CommoditiesResource(self)
         self.notes = NotesResource(self)

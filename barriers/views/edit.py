@@ -1,4 +1,5 @@
 from django.views.generic import FormView
+from django.urls import reverse
 
 from .mixins import APIBarrierFormViewMixin
 from barriers.forms.edit import (
@@ -11,6 +12,7 @@ from barriers.forms.edit import (
     UpdateBarrierTagsForm,
     UpdateBarrierTermForm,
     UpdateCausedByTradingBlocForm,
+    UpdateEconomicAssessmentEligibilityForm,
     UpdateTradeDirectionForm,
 )
 from utils.metadata import MetadataMixin
@@ -118,3 +120,20 @@ class BarrierEditCausedByTradingBloc(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {"caused_by_trading_bloc": self.barrier.caused_by_trading_bloc}
+
+
+class BarrierEditEconomicAssessmentEligibility(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/economic_assessment_eligibility.html"
+    form_class = UpdateEconomicAssessmentEligibilityForm
+
+    def get_initial(self):
+        return {
+            "economic_assessment_eligibility": self.barrier.economic_assessment_eligibility,
+            "economic_assessment_eligibility_summary": self.barrier.economic_assessment_eligibility_summary,
+        }
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:assessment_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )

@@ -28,6 +28,11 @@
     {% include 'barriers/partials/barrier_tabs.html' with active='assessment' %}
 
     <div class="restrict-width">
+        <div class="assessment-item">
+            <h2 class="assessment-item__heading">Initial economic assessment</h2>
+            {% include "barriers/assessments/economic/partials/summary.html" %}
+        </div>
+
         {% if assessment and assessment.explanation and assessment.impact %}
             <div class="assessment-item">
                 <h2 class="assessment-item__heading">Economic assessment</h2>
