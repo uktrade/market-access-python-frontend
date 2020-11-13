@@ -34,7 +34,7 @@
                 </div>
                 <div class="assessment-item__section">
                     <a href="{% url 'barriers:add_economic_assessment' barrier.id %}">Add an initial economic assessment</a>
-                    <p class="assessment-item-content__hint">Lorem ipsum</p>
+                    <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
                 </div>
             {% elif assessment.ready_for_approval %}
                 <div class="assessment-item__section">
@@ -47,18 +47,18 @@
             {% else %}
                 <div class="assessment-item__section">
                     <a href="{% url 'barriers:edit_economic_assessment_data' barrier.id assessment.id %}">Continue with assessment</a>
-                    <p class="assessment-item-content__hint">An assessment has been started but not yet completed</p>
+                    <p class="assessment-item-content__hint">An assessment has been started but not yet completed (marked as ready).</p>
                 </div>
             {% endif %}
         {% endwith %}
 
     {% else %}
         <div class="assessment-item__section">
-            <p>This barrier has been marked as eligible for an initial economic assessment</p>
+            <p class=" govuk-!-margin-bottom-0">This barrier has been marked as eligible for an initial economic assessment.</p>
         </div>
         <div class="assessment-item__section">
             <a href="{% url 'barriers:add_economic_assessment' barrier.id %}">Add an initial economic assessment</a>
-            <p class="assessment-item-content__hint">Lorem impsum...</p>
+            <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
         </div>
     {% endif %}
 {% elif barrier.economic_assessment_eligibility is False %}
@@ -74,8 +74,8 @@
     </div>
 {% else %}
     <div class="assessment-item__section">
-        <a href="{% url 'barriers:economic_assessment_eligibility' barrier.id %}">Is the barrier eligible for an initial economic assessment?</a>
-        <p class="assessment-item-content__hint">Lorem ipsum...</p>
+        <a href="{% url 'barriers:economic_assessment_eligibility' barrier.id %}">Is this barrier eligible for an initial economic assessment?</a>
+        <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
     </div>
 {% endif %}
 

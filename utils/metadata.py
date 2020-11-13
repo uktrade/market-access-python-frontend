@@ -278,8 +278,14 @@ class Metadata:
     def get_services(self):
         return self.get_categories_by_group("SERVICES")
 
-    def get_impact_text(self, impact_code):
-        return self.data.get("assessment_impact", {}).get(impact_code)
+    def get_economic_assessment_impact(self):
+        return self.data.get("economic_assessment_impact", {})
+
+    def get_economic_assessment_rating(self):
+        return self.data.get("economic_assessment_rating", {})
+
+    def get_resolvability_assessment_effort(self):
+        return self.data.get("resolvability_assessment_effort", {})
 
     def get_resolvability_assessment_effort(self):
         return self.data.get("resolvability_assessment_effort", {})
@@ -335,7 +341,7 @@ class Metadata:
         )
 
     def get_trade_categories(self):
-        return self.data.get("trade_categories", [])
+        return self.data.get("trade_categories", {})
 
     def get_trade_direction(self, key=None, all_items=False):
         """

@@ -454,11 +454,11 @@ class TradeCategoryForm(forms.Form):
 
 class AnalysisDataForm(forms.Form):
     analysis_data = forms.CharField(
-        label="Paste initial assessment data",
-        help_text="Lorem ipsum...",
+        label="Add the initial assessment data",
+        help_text="Paste in the initial assessment data in the text box below.",
         widget=forms.Textarea,
         required=True,
-        error_messages={"required": "Enter initial assessment data"},
+        error_messages={"required": "Enter the initial assessment data"},
     )
 
     def __init__(self, barrier=None, economic_assessment=None, *args, **kwargs):
