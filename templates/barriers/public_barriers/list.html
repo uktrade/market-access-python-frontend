@@ -75,6 +75,8 @@
                         <td class="govuk-table__cell">
                             {% if barrier.latest_note %}
                                 {{ barrier.latest_note.text }}
+                                <br />
+                                (by {{ barrier.latest_note.created_by.name }})
                             {% else %}
                                 No notes
                             {% endif %}
