@@ -72,11 +72,17 @@
                         <!-- Public status -->
                         <td class="govuk-table__cell">{{ barrier.public_status_text }}</td>
                         <!-- Latest note -->
-                        {% if barrier.latest_note %}
-                            <td class="govuk-table__cell">{{ barrier.latest_note.text }}</td>
-                        {% else %}
-                            <td class="govuk-table__cell">No notes</td>
-                        {% endif %}
+                        <td class="govuk-table__cell">
+                            {% if barrier.latest_note %}
+                                {{ barrier.latest_note.text }}
+                            {% else %}
+                                No notes
+                            {% endif %}
+                            <br/>
+                            <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}?add-note=1" class="govuk-link" target="_blank">
+                                Add new note
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
