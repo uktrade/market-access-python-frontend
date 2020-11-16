@@ -1,4 +1,4 @@
-from .assessments import EconomicAssessment, ResolvabilityAssessment, StrategicAssessment  # noqa
+from .assessments import EconomicAssessment, EconomicImpactAssessment, ResolvabilityAssessment, StrategicAssessment  # noqa
 from .barriers import Barrier, PublicBarrier  # noqa
 from .commodities import Commodity  # noqa
 from .companies import Company  # noqa

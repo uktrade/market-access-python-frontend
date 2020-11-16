@@ -9,6 +9,7 @@ from .resources import (
     CommoditiesResource,
     DocumentsResource,
     EconomicAssessmentResource,
+    EconomicImpactAssessmentResource,
     GroupsResource,
     NotesResource,
     UsersResource,
@@ -31,6 +32,7 @@ class MarketAccessAPIClient:
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
         self.economic_assessments = EconomicAssessmentResource(self)
+        self.economic_impact_assessments = EconomicImpactAssessmentResource(self)
         self.groups = GroupsResource(self)
         self.commodities = CommoditiesResource(self)
         self.notes = NotesResource(self)

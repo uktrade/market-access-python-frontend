@@ -9,6 +9,7 @@ from barriers.models import (
     Barrier,
     Commodity,
     EconomicAssessment,
+    EconomicImpactAssessment,
     HistoryItem,
     Note,
     PublicBarrier,
@@ -286,6 +287,11 @@ class PublicBarriersResource(APIResource):
 class EconomicAssessmentResource(APIResource):
     resource_name = "economic-assessments"
     model = EconomicAssessment
+
+
+class EconomicImpactAssessmentResource(APIResource):
+    resource_name = "economic-impact-assessments"
+    model = EconomicImpactAssessment
 
 
 class ResolvabilityAssessmentResource(APIResource):

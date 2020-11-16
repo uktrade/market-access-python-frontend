@@ -22,6 +22,8 @@ from .views.assessments.economic import (
 )
 from .views.assessments.economic_impact import (
     AddEconomicImpactAssessment,
+    ArchiveEconomicImpactAssessment,
+    EconomicImpactAssessmentDetail,
 )
 from .views.assessments.resolvability import (
     AddResolvabilityAssessment,
@@ -226,6 +228,8 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/archive", ArchiveEconomicAssessment.as_view(), name="archive_economic_assessment"),
 
     path("barriers/<uuid:barrier_id>/economic-impact-assessments/add", AddEconomicImpactAssessment.as_view(), name="add_economic_impact_assessment"),
+    path("barriers/<uuid:barrier_id>/economic-impact-assessments/<uuid:assessment_id>/", EconomicImpactAssessmentDetail.as_view(), name="economic_impact_assessment_detail"),
+    path("barriers/<uuid:barrier_id>/economic-impact-assessments/<uuid:assessment_id>/archive", ArchiveEconomicImpactAssessment.as_view(), name="archive_economic_impact_assessment"),
 
     path("barriers/<uuid:barrier_id>/resolvability-assessments/add", AddResolvabilityAssessment.as_view(), name="add_resolvability_assessment"),
     path("barriers/<uuid:barrier_id>/resolvability-assessments/<uuid:assessment_id>/", ResolvabilityAssessmentDetail.as_view(), name="resolvability_assessment_detail"),

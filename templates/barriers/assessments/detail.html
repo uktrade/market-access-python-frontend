@@ -33,6 +33,11 @@
             {% include "barriers/assessments/economic/partials/summary.html" %}
         </div>
 
+        <div class="assessment-item">
+            <h2 class="assessment-item__heading">Economic impact assessment</h2>
+            {% include "barriers/assessments/economic_impact/partials/summary.html" %}
+        </div>
+
         {% if assessment and assessment.explanation and assessment.impact %}
             <div class="assessment-item">
                 <h2 class="assessment-item__heading">Economic assessment</h2>

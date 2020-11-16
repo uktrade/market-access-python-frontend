@@ -1,0 +1,33 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load static %}
+
+{% block page_title %}{{ block.super }} - Economic impact assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    <h2 class="govuk-heading-m">Economic impact assessment - {{ economic_impact_assessment.created_on|date:"j F Y" }}</h2>
+
+    <div class="restrict-width">
+        <dt class="ma-data-key">Economic impact</dt>
+        <dd class="ma-data-value">
+            {{ economic_impact_assessment.impact.name }}
+        </dd>
+
+        <dt class="ma-data-key">Assessment explanation</dt>
+        <dd class="ma-data-value">
+            {{ economic_impact_assessment.explanation|linebreaks }}
+        </dd>
+        <dt class="ma-data-key">Assessment produced by</dt>
+        <dd class="ma-data-value ma-data-value--s">
+            {{ economic_impact_assessment.created_by.name }} on {{ economic_impact_assessment.created_on|date:"j F Y" }}
+        </dd>
+
+        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
+    </div>
+
+{% endblock %}
