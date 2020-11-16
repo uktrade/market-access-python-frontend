@@ -1,7 +1,6 @@
 {% if barrier.economic_assessment_eligibility is True %}
-    {% if barrier.current_economic_assessment %}
-
-        {% with assessment=barrier.current_economic_assessment %}
+    {% with assessment=barrier.current_economic_assessment %}
+        {% if assessment %}
             {% if assessment.approved %}
                 <div class="assessment-item__section">
                     <dt class="ma-data-key">Economic rating</dt>
@@ -32,35 +31,47 @@
                         </div>
                     </details>
                 </div>
+                {% if current_user|has_permission:"add_economicassessment" %}
+                    <div class="assessment-item__section">
+                        <a href="{% url 'barriers:add_economic_assessment' barrier.id %}">Add an initial economic assessment</a>
+                        <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
+                    </div>
+                {% endif %}
+            {% elif assessment.ready_for_approval %}
+                {% if current_user|has_permission:"approve_economicassessment" %}
+                    <div class="assessment-item__section">
+                        {% include "partials/warning.html" with warning_text="Initial economic assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
+
+                        <a class="assessment-item__approval-link" href="{% url 'barriers:edit_economic_assessment_rating' barrier.id assessment.id %}">
+                            Initial economic assessment - {{ assessment.created_on|date:"j F Y" }}
+                        </a>
+                    </div>
+                {% else %}
+                    <p>This barrier has been marked as eligible for an initial economic assessment - awaiting completion of assessment.</p>
+                {% endif %}
+            {% else %}
+                {% if current_user|has_permission:"edit_economicassessment" %}
+                    <div class="assessment-item__section">
+                        <a href="{% url 'barriers:edit_economic_assessment_data' barrier.id assessment.id %}">Continue with assessment</a>
+                        <p class="assessment-item-content__hint">An assessment has been started but not yet completed (marked as ready).</p>
+                    </div>
+                {% else %}
+                    <p>This barrier has been marked as eligible for an initial economic assessment - awaiting completion of assessment.</p>
+                {% endif %}
+            {% endif %}
+
+        {% else %}
+            <div class="assessment-item__section">
+                <p class=" govuk-!-margin-bottom-0">This barrier has been marked as eligible for an initial economic assessment.</p>
+            </div>
+            {% if current_user|has_permission:"add_economicassessment" %}
                 <div class="assessment-item__section">
                     <a href="{% url 'barriers:add_economic_assessment' barrier.id %}">Add an initial economic assessment</a>
                     <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
                 </div>
-            {% elif assessment.ready_for_approval %}
-                <div class="assessment-item__section">
-                    {% include "partials/warning.html" with warning_text="Initial economic assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
-
-                    <a class="assessment-item__approval-link" href="{% url 'barriers:edit_economic_assessment_rating' barrier.id assessment.id %}">
-                        Initial economic assessment - {{ assessment.created_on|date:"j F Y" }}
-                    </a>
-                </div>
-            {% else %}
-                <div class="assessment-item__section">
-                    <a href="{% url 'barriers:edit_economic_assessment_data' barrier.id assessment.id %}">Continue with assessment</a>
-                    <p class="assessment-item-content__hint">An assessment has been started but not yet completed (marked as ready).</p>
-                </div>
             {% endif %}
-        {% endwith %}
-
-    {% else %}
-        <div class="assessment-item__section">
-            <p class=" govuk-!-margin-bottom-0">This barrier has been marked as eligible for an initial economic assessment.</p>
-        </div>
-        <div class="assessment-item__section">
-            <a href="{% url 'barriers:add_economic_assessment' barrier.id %}">Add an initial economic assessment</a>
-            <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
-        </div>
-    {% endif %}
+        {% endif %}
+    {% endwith %}
 {% elif barrier.economic_assessment_eligibility is False %}
     <div class="assessment-item__section">
         <p>This barrier has been marked as ineligible for an economic rating assessment</p>

@@ -49,11 +49,15 @@
                     </div>
                 </details>
             {% else %}
-                {% include "partials/warning.html" with warning_text="Resolvability assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
+                {% if current_user|has_permission:"approve_resolvabilityassessment" %}
+                    {% include "partials/warning.html" with warning_text="Resolvability assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
 
-                <a class="assessment-item__approval-link" href="{% url 'barriers:edit_resolvability_assessment' barrier.id barrier.current_resolvability_assessment.id %}">
-                    Resolvability assessment - {{ barrier.current_resolvability_assessment.created_on|date:"j F Y" }}
-                </a>
+                    <a class="assessment-item__approval-link" href="{% url 'barriers:edit_resolvability_assessment' barrier.id barrier.current_resolvability_assessment.id %}">
+                        Resolvability assessment - {{ barrier.current_resolvability_assessment.created_on|date:"j F Y" }}
+                    </a>
+                {% else %}
+                    <p class="govuk-!-margin-bottom-0">Awaiting approval of assessment.</p>
+                {% endif %}
             {% endif %}
         {% endwith %}
     </div>

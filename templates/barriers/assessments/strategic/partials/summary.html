@@ -84,11 +84,15 @@
                     </div>
                 </details>
             {% else %}
-                {% include "partials/warning.html" with warning_text="Strategic assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
+                {% if current_user|has_permission:"approve_strategicassessment" %}
+                    {% include "partials/warning.html" with warning_text="Strategic assessment ready for review" icon_modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-padding-bottom-0" %}
 
-                <a class="assessment-item__approval-link" href="{% url 'barriers:edit_strategic_assessment' barrier.id assessment.id %}">
-                    Strategic assessment - {{ assessment.created_on|date:"j F Y" }}
-                </a>
+                    <a class="assessment-item__approval-link" href="{% url 'barriers:edit_strategic_assessment' barrier.id assessment.id %}">
+                        Strategic assessment - {{ assessment.created_on|date:"j F Y" }}
+                    </a>
+                {% else %}
+                    <p class="govuk-!-margin-bottom-0">Awaiting approval of assessment.</p>
+                {% endif %}
             {% endif %}
         {% endwith %}
     </div>
@@ -99,7 +103,7 @@
         <a href="{% url 'barriers:add_strategic_assessment' barrier.id %}">Add strategic assessment</a>
         <p class="assessment-item-content__hint">This assesses how resolving a barrier will support wider strategic government objectives.</p>
     </div>
-{% else %}
+{% elif not barrier.current_strategic_assessment  %}
     <div class="assessment-item__section">
         <p class="govuk-!-margin-bottom-0">No strategic assessment</p>
     </div>
