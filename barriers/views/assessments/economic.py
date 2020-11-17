@@ -48,7 +48,16 @@ class AddEconomicAssessment(APIPermissionMixin, EconomicAssessmentEditBase):
         kwargs["trade_categories"] = self.metadata.get_trade_categories()
         return kwargs
 
-    def get_success_url(self):
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(self.get_success_url(form))
+
+    def get_success_url(self, form):
+        if form.cleaned_data.get("trade_category") == "GOODS":
+            return reverse(
+                "barriers:automate_economic_assessment",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
         return reverse(
             "barriers:add_economic_assessment_data",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
@@ -105,6 +114,27 @@ class EditEconomicAssessmentRating(APIPermissionMixin, EconomicAssessmentEditBas
 
 class EconomicAssessmentDetail(EconomicAssessmentMixin, BarrierMixin, TemplateView):
     template_name = "barriers/assessments/economic/detail.html"
+
+
+class AutomateEconomicAssessment(EconomicAssessmentMixin, BarrierMixin, TemplateView):
+    template_name = "barriers/assessments/economic/automate.html"
+
+    def post(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(self.token)
+        economic_assessment = client.economic_assessments.create(
+            barrier_id=self.barrier.id,
+            automate=True,
+        )
+        return HttpResponseRedirect(self.get_success_url(economic_assessment))
+
+    def get_success_url(self, economic_assessment):
+        return reverse(
+            "barriers:edit_economic_assessment_rating",
+            kwargs={
+                "barrier_id": self.kwargs.get("barrier_id"),
+                "assessment_id": economic_assessment.id,
+            },
+        )
 
 
 class ArchiveEconomicAssessment(APIPermissionMixin, ArchiveAssessmentBase):

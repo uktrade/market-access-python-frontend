@@ -16,6 +16,7 @@ from .views.assessments import (
 from .views.assessments.economic import (
     AddEconomicAssessment,
     ArchiveEconomicAssessment,
+    AutomateEconomicAssessment,
     EconomicAssessmentDetail,
     EditEconomicAssessmentData,
     EditEconomicAssessmentRating,
@@ -221,6 +222,7 @@ urlpatterns = [
 
     path("barriers/<uuid:barrier_id>/economic-assessments/add", AddEconomicAssessment.as_view(), name="add_economic_assessment"),
     path("barriers/<uuid:barrier_id>/economic-assessments/add/data", EditEconomicAssessmentData.as_view(), name="add_economic_assessment_data"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/automate", AutomateEconomicAssessment.as_view(), name="automate_economic_assessment"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/", EconomicAssessmentDetail.as_view(), name="economic_assessment_detail"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/data", EditEconomicAssessmentData.as_view(), name="edit_economic_assessment_data"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/rating", EditEconomicAssessmentRating.as_view(), name="edit_economic_assessment_rating"),
