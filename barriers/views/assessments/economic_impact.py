@@ -4,7 +4,6 @@ from django.views.generic import FormView, RedirectView, TemplateView
 
 from .base import ArchiveAssessmentBase
 from ..mixins import (
-    AssessmentMixin,
     BarrierMixin,
     EconomicImpactAssessmentMixin,
 )

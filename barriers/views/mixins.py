@@ -118,28 +118,6 @@ class TeamMembersContextMixin:
         return context_data
 
 
-class AssessmentMixin:
-    _assessment = None
-
-    @property
-    def assessment(self):
-        if not self._assessment:
-            if hasattr(self, "_barrier") and not self.barrier.has_assessment:
-                return None
-            self._assessment = self.get_assessment()
-        return self._assessment
-
-    def get_assessment(self):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        barrier_id = self.kwargs.get("barrier_id")
-        return client.barriers.get_assessment(barrier_id=barrier_id)
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data["assessment"] = self.assessment
-        return context_data
-
-
 class APIFormViewMixin:
     _object = None
 

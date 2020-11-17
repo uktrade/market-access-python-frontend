@@ -11,7 +11,6 @@ from ...forms.assessments import (
 )
 from ..documents import AddDocumentAjaxView, DeleteDocumentAjaxView
 from ..mixins import (
-    AssessmentMixin,
     BarrierMixin,
     SessionDocumentMixin,
 )
@@ -23,12 +22,12 @@ class AssessmentSessionDocumentMixin(SessionDocumentMixin):
         return f"barrier:{barrier_id}:assessment_documents"
 
 
-class AssessmentDetail(AssessmentMixin, BarrierMixin, TemplateView):
+class AssessmentDetail(BarrierMixin, TemplateView):
     template_name = "barriers/assessments/detail.html"
 
 
 class EconomicAssessment(
-    AssessmentSessionDocumentMixin, AssessmentMixin, BarrierMixin, FormView,
+    AssessmentSessionDocumentMixin, BarrierMixin, FormView,
 ):
     template_name = "barriers/assessments/economic.html"
     form_class = EconomicAssessmentForm
@@ -131,7 +130,7 @@ class CancelAssessmentDocument(AssessmentSessionDocumentMixin, RedirectView):
         )
 
 
-class AssessmentValueView(AssessmentMixin, BarrierMixin, FormView):
+class AssessmentValueView(BarrierMixin, FormView):
     """
     Base class to be used by views which update one field of an Assessment
     """
