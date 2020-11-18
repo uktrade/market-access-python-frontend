@@ -173,6 +173,10 @@ class Barrier(APIModel):
         return sorted(tags, key=lambda k: k['order'])
 
     @property
+    def organisations(self):
+        return self.data.get("organisations") or ()
+
+    @property
     def wto_profile(self):
         if self._wto_profile is None:
             if self.data.get("wto_profile") is not None:

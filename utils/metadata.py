@@ -374,6 +374,18 @@ class Metadata:
     def get_wto_committee_groups(self):
         return self.data.get("wto_committee_groups", [])
 
+    def get_gov_organisations(self):
+        return self.data.get("government_organisations", [])
+
+    def get_gov_organisation_choices(self):
+        """
+        Generates government organisation choices.
+        """
+        return (
+            (org["id"], org["name"])
+            for org in self.get_gov_organisations()
+        )
+
 
 class MetadataMixin:
     _metadata = None

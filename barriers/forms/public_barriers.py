@@ -1,4 +1,5 @@
 from django import forms
+from django.http import QueryDict
 
 from .mixins import APIFormMixin
 
@@ -97,3 +98,31 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
             id=self.id,
             summary=self.cleaned_data.get("summary"),
         )
+
+
+class PublicBarrierSearchForm(forms.Form):
+    organisation = forms.MultipleChoiceField(
+        label="Government organisations", required=False,
+    )
+
+    def __init__(self, metadata, *args, **kwargs):
+        self.metadata = metadata
+
+        if isinstance(kwargs["data"], QueryDict):
+            kwargs["data"] = self.get_data_from_querydict(kwargs["data"])
+
+        super().__init__(*args, **kwargs)
+        self.set_organisation_choices()
+
+    def set_organisation_choices(self):
+        self.fields["organisation"].choices = \
+            self.metadata.get_gov_organisation_choices()
+
+    def get_data_from_querydict(self, data):
+        """
+        Get form data from the GET parameters.
+        """
+        cleaned_data = {
+            "organisation": data.get("orgaisation"),
+        }
+        return {k: v for k, v in cleaned_data.items() if v}
