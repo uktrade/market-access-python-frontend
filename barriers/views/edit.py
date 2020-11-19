@@ -12,6 +12,7 @@ from barriers.forms.edit import (
     UpdateBarrierTagsForm,
     UpdateBarrierTermForm,
     UpdateCausedByTradingBlocForm,
+    UpdateCommercialValueForm,
     UpdateEconomicAssessmentEligibilityForm,
     UpdateTradeDirectionForm,
 )
@@ -120,6 +121,17 @@ class BarrierEditCausedByTradingBloc(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         return {"caused_by_trading_bloc": self.barrier.caused_by_trading_bloc}
+
+
+class BarrierEditCommercialValue(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/commercial_value.html"
+    form_class = UpdateCommercialValueForm
+
+    def get_initial(self):
+        return {
+            "commercial_value": self.barrier.commercial_value,
+            "commercial_value_explanation": self.barrier.commercial_value_explanation,
+        }
 
 
 class BarrierEditEconomicAssessmentEligibility(APIBarrierFormViewMixin, FormView):

@@ -13,6 +13,28 @@ from utils.forms import (
 )
 
 
+class UpdateCommercialValueForm(APIFormMixin, forms.Form):
+    commercial_value = forms.IntegerField(
+        min_value=0,
+        max_value=1000000000000,
+        localize=True,
+        label="What is the value of the barrier to the affected business(es) in GBP?",
+        error_messages={
+            "required": "Enter a value",
+            "min_value": "Enter a valid number",
+            "max_value": "Enter a valid number",
+        },
+    )
+    commercial_value_explanation = forms.CharField(
+        widget=forms.Textarea,
+        error_messages={"required": "Enter a value description and timescale"},
+    )
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(id=self.id, **self.cleaned_data)
+
+
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
     title = forms.CharField(
         label="Suggest a title for this barrier",

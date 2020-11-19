@@ -60,6 +60,7 @@ from .views.core import (
 from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditCausedByTradingBloc,
+    BarrierEditCommercialValue,
     BarrierEditEconomicAssessmentEligibility,
     BarrierEditEndDate,
     BarrierEditTitle,
@@ -156,6 +157,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/term/", BarrierEditTerm.as_view(), name="edit_term"),
     path("barriers/<uuid:barrier_id>/edit/economic-assessment-eligibility/", BarrierEditEconomicAssessmentEligibility.as_view(), name="economic_assessment_eligibility"),
     path("barriers/<uuid:barrier_id>/edit/end-date/", BarrierEditEndDate.as_view(), name="edit_end_date"),
+    path("barriers/<uuid:barrier_id>/edit/commercial-value/", BarrierEditCommercialValue.as_view(), name="edit_commercial_value"),
     path("barriers/<uuid:barrier_id>/edit/commodities/", BarrierEditCommodities.as_view(), name="edit_commodities"),
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
     path("barriers/<uuid:barrier_id>/edit/tags/", BarrierEditTags.as_view(), name="edit_tags"),
