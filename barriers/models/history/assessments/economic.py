@@ -45,19 +45,6 @@ class ArchivedHistoryItem(BaseHistoryItem):
             return "Unarchived"
 
 
-class CommercialValueHistoryItem(BaseEconomicAssessmentHistoryItem):
-    field = "commercial_value"
-    field_name = "Commercial value"
-
-
-class CommercialValueExplanationHistoryItem(BaseHistoryItem):
-    field = "commercial_value_explanation"
-    field_name = "Commercial value explanation"
-
-    def get_value(self, value):
-        return value or ""
-
-
 class DocumentsHistoryItem(BaseDocumentsHistoryItem):
     field = "documents"
     field_name = "Economic assessment: Supporting documents"
@@ -113,8 +100,6 @@ class EconomicAssessmentHistoryItem(PolymorphicBase):
     subclasses = (
         ArchivedHistoryItem,
         ApprovedHistoryItem,
-        CommercialValueHistoryItem,
-        CommercialValueExplanationHistoryItem,
         DocumentsHistoryItem,
         ExplanationHistoryItem,
         ExportValueHistoryItem,

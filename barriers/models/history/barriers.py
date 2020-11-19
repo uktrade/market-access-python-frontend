@@ -61,6 +61,16 @@ class CausedByTradingBlocHistoryItem(BaseHistoryItem):
         return value["caused_by_trading_bloc"]
 
 
+class CommercialValueHistoryItem(BaseHistoryItem):
+    field = "commercial_value"
+    field_name = "Commercial value"
+
+
+class CommercialValueExplanationHistoryItem(BaseHistoryItem):
+    field = "commercial_value_explanation"
+    field_name = "Commercial value explanation"
+
+
 class CommoditiesHistoryItem(BaseHistoryItem):
     field = "commodities"
     field_name = "Commodities"
@@ -155,9 +165,6 @@ class IsSummarySensitiveHistoryItem(BaseHistoryItem):
 class LocationHistoryItem(BaseHistoryItem):
     field = "location"
     field_name = "Location"
-
-    def get_value(self, value):
-        return Barrier(value).location
 
 
 class PriorityHistoryItem(BaseHistoryItem):
@@ -283,6 +290,8 @@ class BarrierHistoryItem(PolymorphicBase):
         ArchivedHistoryItem,
         CategoriesHistoryItem,
         CausedByTradingBlocHistoryItem,
+        CommercialValueHistoryItem,
+        CommercialValueExplanationHistoryItem,
         CommoditiesHistoryItem,
         CompaniesHistoryItem,
         EconomicAssessmentEligibilityHistoryItem,
