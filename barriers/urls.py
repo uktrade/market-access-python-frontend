@@ -1,18 +1,7 @@
 from django.urls import path, re_path
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
-from .views.assessments import (
-    AddAssessmentDocument,
-    AssessmentDetail,
-    CancelAssessmentDocument,
-    CommercialValueAssessment,
-    DeleteAssessmentDocument,
-    EconomicAssessment,
-    EconomyValueAssessment,
-    ExportValueAssessment,
-    MarketSizeAssessment,
-    NewEconomicAssessment,
-)
+from .views.assessments import AssessmentDetail
 from .views.assessments.economic import (
     AddEconomicAssessment,
     ArchiveEconomicAssessment,
@@ -212,15 +201,6 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/team/change-owner/<int:team_member_id>", ChangeOwnerView.as_view(), name="team_change_owner"),
 
     path("barriers/<uuid:barrier_id>/assessment/", AssessmentDetail.as_view(), name="assessment_detail"),
-    path("barriers/<uuid:barrier_id>/assessment/economic/", EconomicAssessment.as_view(), name="economic_assessment"),
-    path("barriers/<uuid:barrier_id>/assessment/economic/new/", NewEconomicAssessment.as_view(), name="new_economic_assessment"),
-    path("barriers/<uuid:barrier_id>/assessment/economy-value/", EconomyValueAssessment.as_view(), name="economy_value_assessment"),
-    path("barriers/<uuid:barrier_id>/assessment/market-size/", MarketSizeAssessment.as_view(), name="market_size_assessment"),
-    path("barriers/<uuid:barrier_id>/assessment/export-value/", ExportValueAssessment.as_view(), name="export_value_assessment"),
-    path("barriers/<uuid:barrier_id>/assessment/commercial-value/", CommercialValueAssessment.as_view(), name="commercial_value_assessment"),
-    path("barriers/<uuid:barrier_id>/assessment/documents/add/", AddAssessmentDocument.as_view(), name="add_assessment_document"),
-    path("barriers/<uuid:barrier_id>/assessment/documents/cancel/", CancelAssessmentDocument.as_view(), name="cancel_assessment_document"),
-    path("barriers/<uuid:barrier_id>/assessment/documents/<uuid:document_id>/delete/", DeleteAssessmentDocument.as_view(), name="delete_assessment_document"),
 
     path("barriers/<uuid:barrier_id>/economic-assessments/add", AddEconomicAssessment.as_view(), name="add_economic_assessment"),
     path("barriers/<uuid:barrier_id>/economic-assessments/add/data", EditEconomicAssessmentData.as_view(), name="add_economic_assessment_data"),
@@ -228,7 +208,6 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/", EconomicAssessmentDetail.as_view(), name="economic_assessment_detail"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/data", EditEconomicAssessmentData.as_view(), name="edit_economic_assessment_data"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/rating", EditEconomicAssessmentRating.as_view(), name="edit_economic_assessment_rating"),
-    path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/commercial-value", EditCommercialValue.as_view(), name="edit_commercial_value"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/archive", ArchiveEconomicAssessment.as_view(), name="archive_economic_assessment"),
 
     path("barriers/<uuid:barrier_id>/economic-impact-assessments/add", AddEconomicImpactAssessment.as_view(), name="add_economic_impact_assessment"),
