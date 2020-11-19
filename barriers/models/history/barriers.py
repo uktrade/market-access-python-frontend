@@ -122,6 +122,22 @@ class CompaniesHistoryItem(BaseHistoryItem):
         return [company["name"] for company in value or []]
 
 
+class EconomicAssessmentEligibilityHistoryItem(BaseHistoryItem):
+    field = "economic_assessment_eligibility"
+    field_name = "Economic assessment: Eligibility"
+
+    def get_value(self, value):
+        if value is True:
+            return "Eligible"
+        elif value is False:
+            return "Ineligible"
+
+
+class EconomicAssessmentEligibilitySummaryHistoryItem(BaseHistoryItem):
+    field = "economic_assessment_eligibility_summary"
+    field_name = "Economic assessment: Eligibility summary"
+
+
 class EndDateHistoryItem(BaseHistoryItem):
     field = "end_date"
     field_name = "End date"
@@ -269,6 +285,8 @@ class BarrierHistoryItem(PolymorphicBase):
         CausedByTradingBlocHistoryItem,
         CommoditiesHistoryItem,
         CompaniesHistoryItem,
+        EconomicAssessmentEligibilityHistoryItem,
+        EconomicAssessmentEligibilitySummaryHistoryItem,
         EndDateHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,

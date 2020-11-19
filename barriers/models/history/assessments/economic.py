@@ -23,6 +23,28 @@ class BaseEconomicAssessmentHistoryItem(BaseHistoryItem):
         return self.get_assessment_name(self.field)
 
 
+class ApprovedHistoryItem(BaseHistoryItem):
+    field = "approved"
+    field_name = "Economic assessment: Approval"
+
+    def get_value(self, value):
+        if value is True:
+            return "Approved"
+        elif value is False:
+            return "Rejected"
+
+
+class ArchivedHistoryItem(BaseHistoryItem):
+    field = "archived"
+    field_name = "Economic assessment: Archived"
+
+    def get_value(self, value):
+        if value is True:
+            return "Archived"
+        elif value is False:
+            return "Unarchived"
+
+
 class CommercialValueHistoryItem(BaseEconomicAssessmentHistoryItem):
     field = "commercial_value"
     field_name = "Commercial value"
@@ -38,12 +60,12 @@ class CommercialValueExplanationHistoryItem(BaseHistoryItem):
 
 class DocumentsHistoryItem(BaseDocumentsHistoryItem):
     field = "documents"
-    field_name = "Economic assessment - Supporting documents"
+    field_name = "Economic assessment: Supporting documents"
 
 
 class ExplanationHistoryItem(BaseEconomicAssessmentHistoryItem):
     field = "explanation"
-    field_name = "Economic assessment - explanation"
+    field_name = "Economic assessment: Explanation"
 
 
 class ExportValueHistoryItem(BaseEconomicAssessmentHistoryItem):
@@ -58,7 +80,22 @@ class ImportMarketSizeHistoryItem(BaseEconomicAssessmentHistoryItem):
 
 class RatingHistoryItem(BaseEconomicAssessmentHistoryItem):
     field = "rating"
-    field_name = "Economic assessment - rating"
+    field_name = "Economic assessment: Rating"
+
+    def get_value(self, value):
+        if value:
+            return value.get("name")
+
+
+class ReadyForApprovalHistoryItem(BaseEconomicAssessmentHistoryItem):
+    field = "ready_for_approval"
+    field_name = "Economic assessment: Ready for approval"
+
+    def get_value(self, value):
+        if value is True:
+            return "Yes"
+        elif value is False:
+            return "No"
 
 
 class ValueToEconomyHistoryItem(BaseEconomicAssessmentHistoryItem):
@@ -74,6 +111,8 @@ class EconomicAssessmentHistoryItem(PolymorphicBase):
     model = "economic_assessment"
     key = "field"
     subclasses = (
+        ArchivedHistoryItem,
+        ApprovedHistoryItem,
         CommercialValueHistoryItem,
         CommercialValueExplanationHistoryItem,
         DocumentsHistoryItem,
@@ -81,6 +120,7 @@ class EconomicAssessmentHistoryItem(PolymorphicBase):
         ExportValueHistoryItem,
         ImportMarketSizeHistoryItem,
         RatingHistoryItem,
+        ReadyForApprovalHistoryItem,
         ValueToEconomyHistoryItem,
     )
     default_subclass = GenericHistoryItem
