@@ -10,7 +10,7 @@ class BaseEconomicAssessmentHistoryItem(BaseHistoryItem):
 
     def get_assessment_name(self, assessment_code):
         assessment_names = {
-            "impact": "Economic assessment",
+            "rating": "Economic assessment",
             "value_to_economy": "Value to UK Economy",
             "import_market_size": "Import Market Size",
             "export_value": "Value of currently affected UK exports",
