@@ -16,7 +16,7 @@ class Assessment(APIModel):
 
 
 class EconomicAssessment(APIModel):
-    _economic_impact_assessments  = None
+    _economic_impact_assessments = None
 
     def __init__(self, data):
         self.data = data

@@ -3,7 +3,7 @@ from django.views.generic import FormView, TemplateView
 
 from .base import ArchiveAssessmentBase
 from ..mixins import BarrierMixin, ResolvabilityAssessmentMixin
-from ...forms.assessments import (
+from ...forms.assessments.resolvability import (
     ResolvabilityAssessmentForm,
     ArchiveResolvabilityAssessmentForm,
 )

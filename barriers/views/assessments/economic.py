@@ -4,13 +4,14 @@ from django.views.generic import FormView, TemplateView
 
 from .base import ArchiveAssessmentBase
 from ..mixins import BarrierMixin, EconomicAssessmentMixin
-from ...forms.assessments import (
+from ...forms.assessments.economic import (
     AnalysisDataForm,
     ArchiveEconomicAssessmentForm,
     EconomicAssessmentRatingForm,
     TradeCategoryForm,
 )
 from users.permissions import APIPermissionMixin
+from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
 
 

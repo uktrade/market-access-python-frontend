@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
-from .views.assessments import AssessmentDetail
+from .views.assessments.overview import AssessmentOverview
 from .views.assessments.economic import (
     AddEconomicAssessment,
     ArchiveEconomicAssessment,
@@ -200,7 +200,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/team/delete/<int:team_member_id>", DeleteTeamMember.as_view(), name="delete_team_member"),
     path("barriers/<uuid:barrier_id>/team/change-owner/<int:team_member_id>", ChangeOwnerView.as_view(), name="team_change_owner"),
 
-    path("barriers/<uuid:barrier_id>/assessment/", AssessmentDetail.as_view(), name="assessment_detail"),
+    path("barriers/<uuid:barrier_id>/assessments/", AssessmentOverview.as_view(), name="assessment_detail"),
 
     path("barriers/<uuid:barrier_id>/economic-assessments/add", AddEconomicAssessment.as_view(), name="add_economic_assessment"),
     path("barriers/<uuid:barrier_id>/economic-assessments/add/data", EditEconomicAssessmentData.as_view(), name="add_economic_assessment_data"),

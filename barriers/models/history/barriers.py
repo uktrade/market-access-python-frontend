@@ -1,5 +1,4 @@
 from barriers.constants import ARCHIVED_REASON
-from barriers.models import Barrier
 from barriers.models.commodities import format_commodity_code
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase

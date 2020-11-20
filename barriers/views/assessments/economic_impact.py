@@ -1,13 +1,15 @@
-from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, RedirectView, TemplateView
+from django.views.generic import FormView, TemplateView
 
 from .base import ArchiveAssessmentBase
 from ..mixins import (
     BarrierMixin,
     EconomicImpactAssessmentMixin,
 )
-from ...forms.assessments import ArchiveEconomicImpactAssessmentForm, EconomicImpactAssessmentForm
+from ...forms.assessments.economic_impact import (
+    ArchiveEconomicImpactAssessmentForm,
+    EconomicImpactAssessmentForm,
+)
 from users.permissions import APIPermissionMixin
 from utils.metadata import MetadataMixin
 
