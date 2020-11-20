@@ -1,0 +1,12 @@
+<ul class="document-list document-list--assessment">
+    {% for document in documents %}
+        <li class="document-list__item">
+            {% if document.status == 'virus_scanned' %}
+                <a href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
+            {% else %}
+                {{ document.name }}
+            {% endif %}
+            - {{ document.size|filesizeformat }}
+        </li>
+    {% endfor %}
+</ul>

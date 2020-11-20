@@ -12,7 +12,7 @@
 
     <h2 class="govuk-heading-m">Initial economic assessment - {{ economic_assessment.created_on|date:"j F Y" }}</h2>
 
-    <div class="restrict-width">
+    <dl class="restrict-width">
         <dt class="ma-data-key">Economic rating</dt>
         <dd class="ma-data-value">
             {{ economic_assessment.rating.name }}
@@ -22,6 +22,14 @@
         <dd class="ma-data-value">
             {{ economic_assessment.explanation|linebreaks }}
         </dd>
+
+        {% if economic_assessment.documents %}
+            <dt class="ma-data-key">Documents</dt>
+            <dd class="ma-data-value">
+                {% include "barriers/assessments/partials/documents_list.html" with documents=economic_assessment.documents %}
+            </dd>
+        {% endif %}
+
         <dt class="ma-data-key">Assessment produced by</dt>
         <dd class="ma-data-value ma-data-value--s">
             {{ economic_assessment.created_by.name }} on {{ economic_assessment.created_on|date:"j F Y" }}
@@ -34,6 +42,6 @@
         {% endif %}
 
         <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
-    </div>
+    </dl>
 
 {% endblock %}

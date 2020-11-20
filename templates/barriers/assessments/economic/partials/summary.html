@@ -21,6 +21,14 @@
                             <dd class="ma-data-value ma-data-value--s">
                                 {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
                             </dd>
+
+                            {% if assessment.documents %}
+                                <dt class="ma-data-key">Documents</dt>
+                                <dd class="ma-data-value">
+                                    {% include "barriers/assessments/partials/documents_list.html" with documents=assessment.documents %}
+                                </dd>
+                            {% endif %}
+
                             <dt class="ma-data-key">Assessment accepted by</dt>
                             <dd class="ma-data-value ma-data-value--s">
                                 {{ assessment.reviewed_by.name }} on {{ assessment.reviewed_on|date:"j F Y" }}
