@@ -33,11 +33,14 @@
                 <a href="{% url 'barriers:add_economic_impact_assessment' barrier.id %}">Add economic impact assessment</a>
                 <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
             </div>
+        {% elif not barrier.current_economic_impact_assessment %}
+            <div class="assessment-item__section">
+                <p>No economic impact assessment</p>
+                <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
+            </div>
         {% endif %}
     {% endwith %}
-{% endif %}
-
-{% if barrier.economic_assessment_eligibility is not True or not barrier.current_economic_assessment.approved %}
+{% else %}
     <div class="assessment-item__section">
         <p>No economic impact assessment</p>
         <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
