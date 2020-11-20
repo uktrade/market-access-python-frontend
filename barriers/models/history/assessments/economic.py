@@ -3,26 +3,6 @@ from ..documents import BaseDocumentsHistoryItem
 from ..utils import PolymorphicBase
 
 
-class BaseEconomicAssessmentHistoryItem(BaseHistoryItem):
-    @property
-    def is_edit(self):
-        return self.data["old_value"] is not None
-
-    def get_assessment_name(self, assessment_code):
-        assessment_names = {
-            "rating": "Economic assessment",
-            "value_to_economy": "Value to UK Economy",
-            "import_market_size": "Import Market Size",
-            "export_value": "Value of currently affected UK exports",
-            "commercial_value": "Commercial Value",
-        }
-        return assessment_names.get(assessment_code)
-
-    @property
-    def name(self):
-        return self.get_assessment_name(self.field)
-
-
 class ApprovedHistoryItem(BaseHistoryItem):
     field = "approved"
     field_name = "Economic assessment: Approval"
@@ -50,22 +30,22 @@ class DocumentsHistoryItem(BaseDocumentsHistoryItem):
     field_name = "Economic assessment: Supporting documents"
 
 
-class ExplanationHistoryItem(BaseEconomicAssessmentHistoryItem):
+class ExplanationHistoryItem(BaseHistoryItem):
     field = "explanation"
     field_name = "Economic assessment: Explanation"
 
 
-class ExportValueHistoryItem(BaseEconomicAssessmentHistoryItem):
+class ExportValueHistoryItem(BaseHistoryItem):
     field = "export_value"
     field_name = "UK export value"
 
 
-class ImportMarketSizeHistoryItem(BaseEconomicAssessmentHistoryItem):
+class ImportMarketSizeHistoryItem(BaseHistoryItem):
     field = "import_market_size"
     field_name = "Import market size"
 
 
-class RatingHistoryItem(BaseEconomicAssessmentHistoryItem):
+class RatingHistoryItem(BaseHistoryItem):
     field = "rating"
     field_name = "Economic assessment: Rating"
 
@@ -74,7 +54,7 @@ class RatingHistoryItem(BaseEconomicAssessmentHistoryItem):
             return value.get("name")
 
 
-class ReadyForApprovalHistoryItem(BaseEconomicAssessmentHistoryItem):
+class ReadyForApprovalHistoryItem(BaseHistoryItem):
     field = "ready_for_approval"
     field_name = "Economic assessment: Ready for approval"
 
@@ -85,7 +65,7 @@ class ReadyForApprovalHistoryItem(BaseEconomicAssessmentHistoryItem):
             return "No"
 
 
-class ValueToEconomyHistoryItem(BaseEconomicAssessmentHistoryItem):
+class ValueToEconomyHistoryItem(BaseHistoryItem):
     field = "value_to_economy"
     field_name = "Value to UK economy"
 
