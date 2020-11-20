@@ -270,6 +270,15 @@ class TitleHistoryItem(BaseHistoryItem):
     field_name = "Title"
 
 
+class TradeCategoryHistoryItem(BaseHistoryItem):
+    field = "trade_category"
+    field_name = "Trade category"
+
+    def get_value(self, value):
+        if value:
+            return value.get("name")
+
+
 class TradeDirectionHistoryItem(BaseHistoryItem):
     field = "trade_direction"
     field_name = "Trade direction"
@@ -308,6 +317,7 @@ class BarrierHistoryItem(PolymorphicBase):
         TagsHistoryItem,
         TermHistoryItem,
         TitleHistoryItem,
+        TradeCategoryHistoryItem,
         TradeDirectionHistoryItem,
     )
     default_subclass = GenericHistoryItem
