@@ -115,14 +115,13 @@ class PublicBarrierSearchForm(forms.Form):
         self.set_organisation_choices()
 
     def set_organisation_choices(self):
-        self.fields["organisation"].choices = \
-            self.metadata.get_gov_organisation_choices()
+        self.fields["organisation"].choices = self.metadata.get_gov_organisation_choices()
 
     def get_data_from_querydict(self, data):
         """
         Get form data from the GET parameters.
         """
         cleaned_data = {
-            "organisation": data.get("orgaisation"),
+            "organisation": data.getlist("organisation"),
         }
         return {k: v for k, v in cleaned_data.items() if v}

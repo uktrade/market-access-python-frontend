@@ -1,0 +1,50 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Barrier - Add a related government organisation{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Government organisations related to the barrier' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.organisation.name }}" class="{% form_group_classes form.summary.errors %}">
+            <label class="govuk-label govuk-label--s" for="organisations">
+                Which government organisations are related to the barrier?
+            </label>
+
+            {% form_field_error form "sector" %}
+
+            <select class="govuk-select govuk-!-width-full{% if form.sector.errors %} govuk-select--error{% endif %}"
+                    id="organisations" name="organisation"
+                    {% if form.sector.errors %}aria-describedby="organisations-error"{% endif %}>
+                <option value selected>Select a government organisation</option>
+                {% for id, name in form.fields.organisation.choices %}
+                <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if selected_organisation %}
+            <div class="selection-list restrict-width">
+                <h3 class="selection-list__heading">Selected governmennt organisations</h3>
+                <ul class="selection-list__list">
+                    {% for item in selected_organisation %}
+                    <li class="selection-list__list__item">
+                        <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <input type="submit" value="Add organisation" class="govuk-button">
+        <a class="form-cancel" href="{% url 'barriers:edit_gov_orgs' barrier.id %}">cancel</a>
+    </form>
+{% endblock %}

@@ -9,7 +9,8 @@ from .mixins import APIBarrierFormViewMixin, BarrierMixin, PublicBarrierMixin
 from barriers.forms.public_barriers import (
     PublicEligibilityForm,
     PublishSummaryForm,
-    PublishTitleForm, PublicBarrierSearchForm,
+    PublishTitleForm,
+    PublicBarrierSearchForm,
 )
 from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNoteForm
 
@@ -24,7 +25,7 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
     def get_params(self):
         return parse_qs(self.request.META.get("QUERY_STRING"))
 
-    def get_overseas_region(self):
+    def get_selected_overseas_region(self):
         region_ids = self.get_params().get("region")
         if region_ids:
             return self.metadata.get_overseas_region_by_id(region_ids[0])
@@ -39,7 +40,7 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
         data = super().get_context_data(**kwargs)
         data["barriers"] = self.get_public_barriers()
         data["overseas_regions"] = self.metadata.get_overseas_region_choices()
-        data["selected_overseas_region"] = self.get_overseas_region()
+        data["selected_overseas_region"] = self.get_selected_overseas_region()
         return data
 
 

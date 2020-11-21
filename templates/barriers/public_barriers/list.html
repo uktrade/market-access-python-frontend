@@ -7,7 +7,7 @@
     <script src="{% static 'js/react.js' %}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
-            {#ReactApp.renderMultiSelectFilter("organisation")#}
+            ReactApp.renderMultiSelectFilter("organisation", "All")
         })
     </script>
 {% endblock %}
@@ -31,7 +31,7 @@
 
     <section class="govuk-!-width-one-third">
         <form action="" method="GET" class="filter-items">
-            {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
+            {% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}
             <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
         </form>
     </section>

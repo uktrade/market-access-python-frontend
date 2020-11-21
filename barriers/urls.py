@@ -53,6 +53,8 @@ from .views.edit import (
     BarrierEditTags,
     BarrierEditTradeDirection,
 )
+from .views.government_organisations import BarrierEditGovernmentOrganisations, BarrierAddGovernmentOrganisation, \
+    BarrierRemoveGovernmentOrganisation
 from .views.history import BarrierHistory
 from .views.location import (
     BarrierEditLocation,
@@ -179,6 +181,10 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/sectors/remove/", BarrierRemoveSector.as_view(), name="remove_sector"),
     path("barriers/<uuid:barrier_id>/sectors/add/", BarrierAddSectors.as_view(), name="add_sectors"),
     path("barriers/<uuid:barrier_id>/sectors/add/all/", BarrierAddAllSectors.as_view(), name="add_all_sectors"),
+
+    path("barriers/<uuid:barrier_id>/government-organisations/edit/", BarrierEditGovernmentOrganisations.as_view(), name="edit_gov_orgs"),
+    path("barriers/<uuid:barrier_id>/government-organisations/remove/", BarrierRemoveGovernmentOrganisation.as_view(), name="remove_gov_orgs"),
+    path("barriers/<uuid:barrier_id>/government-organisations/add/", BarrierAddGovernmentOrganisation.as_view(), name="add_gov_orgs"),
 
     path("barriers/<uuid:barrier_id>/companies/", BarrierEditCompaniesSession.as_view(), name="edit_companies_session"),
     path("barriers/<uuid:barrier_id>/companies/edit/", BarrierEditCompanies.as_view(), name="edit_companies"),

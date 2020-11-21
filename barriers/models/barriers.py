@@ -173,8 +173,12 @@ class Barrier(APIModel):
         return sorted(tags, key=lambda k: k['order'])
 
     @property
-    def organisations(self):
-        return self.data.get("organisations") or ()
+    def government_organisations(self):
+        return self.data.get("government_organisations") or ()
+
+    @property
+    def government_organisation_ids_as_str(self):
+        return ",".join((str(org["id"]) for org in self.government_organisations))
 
     @property
     def wto_profile(self):

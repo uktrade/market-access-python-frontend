@@ -1,0 +1,52 @@
+{% extends "barriers/edit/base.html" %}
+{% load govuk_forms %}
+
+{% block page_title %}{{ block.super }} - Government organisations related to the barrier{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Government organisations related to the barrier' %}
+    {% form_error_banner form %}
+
+    <h3 class="report-sectors-heading">Save or add {% if sectors %}another{% else %}an{% endif %} organisation</h3>
+
+    <div class="selection-list restrict-width">
+        <h3 class="selection-list__heading">Selected government organisations</h3>
+
+        {% include 'barriers/partials/sector_list.html' with sectors=sectors show_remove_links=True %}
+
+        <ul class="selection-list__list">
+            {% for item in selected_organisation %}
+                <li class="selection-list__list__item">
+                    <span class="selection-list__list__item__number"
+                          data-number="{{ forloop.counter }}"></span>{{ item.name }}
+
+                    <form action="{% url 'barriers:remove_gov_orgs' barrier.id %}"
+                          class="selection-list__list__item__remove-form" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="organisation" value="{{ item.id }}">
+                        {% action_remove_list_item forloop.counter item.name %}
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'barriers:add_gov_orgs' barrier.id %}"
+           id="add-government-organisation-button"
+           class="govuk-button button--secondary selection-list__add-button">
+            Add a government organisation
+        </a>
+
+    </div>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
+    </form>
+{% endblock %}
