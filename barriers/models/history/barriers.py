@@ -144,6 +144,16 @@ class LocationHistoryItem(BaseHistoryItem):
         return Barrier(value).location
 
 
+class OrganisationHistoryItem(BaseHistoryItem):
+    field = "organisations"
+    field_name = "Organisations"
+
+    def get_value(self, value):
+        organisations = [self.metadata.get_government_organisation(org) for org in value or {}]
+        names = [t["name"] for t in organisations]
+        return names
+
+
 class PriorityHistoryItem(BaseHistoryItem):
     field = "priority"
     field_name = "Priority"
@@ -229,7 +239,7 @@ class TagsHistoryItem(BaseHistoryItem):
     field_name = "Barrier tags"
 
     def get_value(self, value):
-        tags = [self.metadata.get_barrier_tag(tag) for tag in value or ()]
+        tags = [self.metadata.get_barrier_tag(tag) for tag in value or {}]
         sorted_tags = sorted(tags, key=lambda k: k['order'])
         tag_names = [t["title"] for t in sorted_tags]
         return tag_names
@@ -272,6 +282,7 @@ class BarrierHistoryItem(PolymorphicBase):
         EndDateHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
+        OrganisationHistoryItem,
         ProductHistoryItem,
         PriorityHistoryItem,
         PublicEligibilitySummaryHistoryItem,

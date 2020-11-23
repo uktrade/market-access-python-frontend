@@ -2,7 +2,7 @@ from urllib.parse import parse_qs
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
 
 from utils.metadata import MetadataMixin
 from .mixins import APIBarrierFormViewMixin, BarrierMixin, PublicBarrierMixin
@@ -10,19 +10,22 @@ from barriers.forms.public_barriers import (
     PublicEligibilityForm,
     PublishSummaryForm,
     PublishTitleForm,
+    PublicBarrierSearchForm,
 )
 from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNoteForm
 
 from utils.api.client import MarketAccessAPIClient
+from .search import SearchFormView
 
 
-class PublicBarrierListView(MetadataMixin, TemplateView):
+class PublicBarrierListView(MetadataMixin, SearchFormView):
     template_name = "barriers/public_barriers/list.html"
+    form_class = PublicBarrierSearchForm
 
     def get_params(self):
         return parse_qs(self.request.META.get("QUERY_STRING"))
 
-    def get_overseas_region(self):
+    def get_selected_overseas_region(self):
         region_ids = self.get_params().get("region")
         if region_ids:
             return self.metadata.get_overseas_region_by_id(region_ids[0])
@@ -37,7 +40,7 @@ class PublicBarrierListView(MetadataMixin, TemplateView):
         data = super().get_context_data(**kwargs)
         data["barriers"] = self.get_public_barriers()
         data["overseas_regions"] = self.metadata.get_overseas_region_choices()
-        data["selected_overseas_region"] = self.get_overseas_region()
+        data["selected_overseas_region"] = self.get_selected_overseas_region()
         return data
 
 
