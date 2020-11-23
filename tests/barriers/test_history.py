@@ -49,6 +49,21 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         ]
         assert item.new_value == ["Limitations on access to key infrastructure"]
 
+    def test_commercial_value(self):
+        item = HistoryItem(
+            {
+                "date": "2020-03-19T09:35:38.130738Z",
+                "model": "barrier",
+                "field": "commercial_value",
+                "old_value": None,
+                "new_value": 12345,
+                "user": {"id": 48, "name": "Test-user"},
+            }
+        )
+        assert item.field_name == "Commercial value"
+        assert item.old_value is None
+        assert item.new_value == 12345
+
     def test_companies(self):
         item = HistoryItem(
             {
@@ -312,7 +327,7 @@ class AssessmentHistoryItemTestCase(MarketAccessTestCase):
         item = HistoryItem(
             {
                 "date": "2020-03-20T09:42:29.265590Z",
-                "model": "assessment",
+                "model": "economic_assessment",
                 "field": "documents",
                 "old_value": [
                     {"id": "e8a4587c-7bf2-48e3-b22b-90276f26e569", "name": "old.jpeg"},
@@ -325,7 +340,7 @@ class AssessmentHistoryItemTestCase(MarketAccessTestCase):
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
-        assert item.field_name == "Economic assessment - Supporting documents"
+        assert item.field_name == "Economic assessment: Supporting documents"
         assert item.deleted_documents == [
             {"id": "e8a4587c-7bf2-48e3-b22b-90276f26e569", "name": "old.jpeg"}
         ]
@@ -336,48 +351,39 @@ class AssessmentHistoryItemTestCase(MarketAccessTestCase):
             {"id": "958a7fd9-8bf7-4a1f-b222-46d3e69af35a", "name": "new.jpeg"}
         ]
 
-    def test_commercial_value(self):
-        item = HistoryItem(
-            {
-                "date": "2020-03-19T09:35:38.130738Z",
-                "model": "assessment",
-                "field": "commercial_value",
-                "old_value": None,
-                "new_value": 12345,
-                "user": {"id": 48, "name": "Test-user"},
-            }
-        )
-        assert item.field_name == "Commercial value"
-        assert item.old_value is None
-        assert item.new_value == 12345
-
     def test_explanation(self):
         item = HistoryItem(
             {
                 "date": "2020-03-19T09:26:02.623635Z",
-                "model": "assessment",
+                "model": "economic_assessment",
                 "field": "explanation",
                 "old_value": "Old explanation",
                 "new_value": "Change to the explanation",
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
-        assert item.field_name == "Economic assessment - explanation"
+        assert item.field_name == "Economic assessment: Explanation"
         assert item.old_value == "Old explanation"
         assert item.new_value == "Change to the explanation"
 
-    def test_impact(self):
+    def test_rating(self):
         item = HistoryItem(
             {
                 "date": "2020-03-19T09:26:02.623635Z",
-                "model": "assessment",
-                "field": "impact",
-                "old_value": "MEDIUMHIGH",
-                "new_value": "LOW",
+                "model": "economic_assessment",
+                "field": "rating",
+                "old_value": {
+                    "code": "MEDIUMHIGH",
+                    "name": "Medium High",
+                },
+                "new_value": {
+                    "code": "LOW",
+                    "name": "Low",
+                },
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
-        assert item.field_name == "Economic assessment - impact"
+        assert item.field_name == "Economic assessment: Rating"
         assert item.old_value == "Medium High"
         assert item.new_value == "Low"
 
@@ -385,7 +391,7 @@ class AssessmentHistoryItemTestCase(MarketAccessTestCase):
         item = HistoryItem(
             {
                 "date": "2019-10-29T15:54:05.384000Z",
-                "model": "assessment",
+                "model": "economic_assessment",
                 "field": "import_market_size",
                 "old_value": 25,
                 "new_value": 26,
@@ -400,7 +406,7 @@ class AssessmentHistoryItemTestCase(MarketAccessTestCase):
         item = HistoryItem(
             {
                 "date": "2020-03-19T09:04:12.292070Z",
-                "model": "assessment",
+                "model": "economic_assessment",
                 "field": "value_to_economy",
                 "old_value": 20000000,
                 "new_value": 2000000,
@@ -415,7 +421,7 @@ class AssessmentHistoryItemTestCase(MarketAccessTestCase):
         item = HistoryItem(
             {
                 "date": "2020-03-19T09:18:16.687291Z",
-                "model": "assessment",
+                "model": "economic_assessment",
                 "field": "export_value",
                 "old_value": None,
                 "new_value": 55000,

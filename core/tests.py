@@ -3,7 +3,6 @@ import json
 from django.conf import settings
 from django.test import override_settings, TestCase
 
-from barriers.models import Assessment
 from core.filecache import memfiles
 from users.models import User
 from utils.api.resources import (
@@ -18,7 +17,6 @@ from mock import patch
 
 @override_settings(API_RESULTS_LIMIT=10)
 class MarketAccessTestCase(TestCase):
-    _assessments = None
     _barriers = None
     _history = None
     _team_members = None
@@ -46,6 +44,19 @@ class MarketAccessTestCase(TestCase):
             "change_strategicassessment",
             "archive_strategicassessment",
             "approve_strategicassessment",
+        ],
+    })
+    analyst_user = User({
+        "is_superuser": False,
+        "is_active": True,
+        "permissions": [
+            "add_economicassessment",
+            "change_economicassessment",
+            "archive_economicassessment",
+            "approve_economicassessment",
+            "add_economicimpactassessment",
+            "change_economicimpactassessment",
+            "archive_economicimpactassessment",
         ],
     })
 
@@ -156,14 +167,6 @@ class MarketAccessTestCase(TestCase):
     def history(self):
         # goes hand in hand with self.barriers
         return self.all_history[0]
-
-    @property
-    def assessments(self):
-        if self._assessments is None:
-            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/assessments.json"
-            assessments = json.loads(memfiles.open(file))
-            self._assessments = [Assessment(assessment) for assessment in assessments]
-        return self._assessments
 
     @property
     def current_user(self):

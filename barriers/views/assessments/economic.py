@@ -117,8 +117,9 @@ class EconomicAssessmentDetail(EconomicAssessmentMixin, BarrierMixin, TemplateVi
     template_name = "barriers/assessments/economic/detail.html"
 
 
-class AutomateEconomicAssessment(EconomicAssessmentMixin, BarrierMixin, TemplateView):
+class AutomateEconomicAssessment(APIPermissionMixin, EconomicAssessmentMixin, BarrierMixin, TemplateView):
     template_name = "barriers/assessments/economic/automate.html"
+    permission_required = "add_economicassessment"
 
     def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.token)

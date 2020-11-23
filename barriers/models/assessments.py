@@ -20,7 +20,6 @@ class EconomicAssessment(APIModel):
 
     def __init__(self, data):
         self.data = data
-        print(data)
 
     @property
     def archived_economic_impact_assessments(self):
