@@ -13,26 +13,26 @@
     <h2 class="govuk-heading-m">Add initial economic assessment</h2>
 
     <div class="restrict-width">
-        <dl>
-            <dt class="ma-data-key">HS commodity codes</dt>
+        <h3 class="commodities-list__title">HS commodity codes</h3>
 
-            <dd class="ma-data-value">
-                <ul class="commodities-list restrict-width">
-                    {% for commodity in barrier.commodities %}
-                        <li class="commodities-list__item">
-                            <div class="commodities-list__code">{{ commodity.code_display }}</div>
-                            <div class="commodities-list__description">{{ commodity.commodity.full_description }}</div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </dd>
-        </dl>
+        {% if barrier.commodities %}
+            <ul class="commodities-list">
+                {% for commodity in barrier.commodities %}
+                    <li class="commodities-list__item commodities-list__item--light-grey">
+                        <div class="commodities-list__code">{{ commodity.code_display }}</div>
+                        <div class="commodities-list__description">{{ commodity.commodity.full_description }}</div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="govuk-body">No HS commodity codes have been added.</p>
+        {% endif %}
 
-        <p class="govuk-body"><a href="{% url 'barriers:edit_commodities' barrier.id %}" class="govuk-link">Need to change HS commodity codes?</a></p>
+        <p class="govuk-!-margin-bottom-6"><a href="{% url 'barriers:edit_commodities' barrier.id %}" class="govuk-link">Need to change the HS commodity codes?</a></p>
 
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
-            <button class="govuk-button govuk-!-margin-right-4">Run automated assessment</button>
+            <button class="govuk-button govuk-!-margin-right-4"{% if not barrier.commodities %} disabled{% endif %}>Run automated assessment</button>
 
             <a href="{% url 'barriers:add_economic_assessment_data' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-right-4" data-module="govuk-button">Manual assessment</a>
 
