@@ -17,6 +17,7 @@ class Assessment(APIModel):
 
 class EconomicAssessment(APIModel):
     _economic_impact_assessments = None
+    date_fields = ("archived_on", "created_on", "reviewed_on")
 
     def __init__(self, data):
         self.data = data
@@ -44,42 +45,14 @@ class EconomicAssessment(APIModel):
             ]
         return self._economic_impact_assessments
 
-    @property
-    def created_on(self):
-        return dateutil.parser.parse(self.data["created_on"])
-
-    @property
-    def reviewed_on(self):
-        if self.data.get("reviewed_on"):
-            return dateutil.parser.parse(self.data["reviewed_on"])
-
 
 class EconomicImpactAssessment(APIModel):
-    def __init__(self, data):
-        self.data = data
-
-    @property
-    def created_on(self):
-        return dateutil.parser.parse(self.data["created_on"])
+    date_fields = ("archived_on", "created_on")
 
 
 class ResolvabilityAssessment(APIModel):
-    @property
-    def created_on(self):
-        return dateutil.parser.parse(self.data["created_on"])
-
-    @property
-    def reviewed_on(self):
-        if self.data.get("reviewed_on"):
-            return dateutil.parser.parse(self.data["reviewed_on"])
+    date_fields = ("archived_on", "created_on", "reviewed_on")
 
 
 class StrategicAssessment(APIModel):
-    @property
-    def created_on(self):
-        return dateutil.parser.parse(self.data["created_on"])
-
-    @property
-    def reviewed_on(self):
-        if self.data.get("reviewed_on"):
-            return dateutil.parser.parse(self.data["reviewed_on"])
+    date_fields = ("archived_on", "created_on", "reviewed_on")
