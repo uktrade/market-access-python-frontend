@@ -2,8 +2,6 @@ from .documents import Document
 
 from utils.models import APIModel
 
-import dateutil.parser
-
 
 class Assessment(APIModel):
     """
