@@ -13,21 +13,22 @@
     <h2 class="govuk-heading-m">Initial economic assessment - {{ economic_assessment.created_on|date:"j F Y" }}</h2>
 
     <dl class="restrict-width">
-
-        <details class="govuk-details" data-module="govuk-details">
-            <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-                View initial assessment data
-            </span>
-            </summary>
-            <div class="govuk-details__text">
-                {% if economic_assessment.automated_analysis_data %}
-                    {% include "barriers/assessments/economic/partials/export_potential.html" with data=economic_assessment.automated_analysis_data %}
-                {% elif economic_assessment.user_analysis_data %}
-                    {{ economic_assessment.user_analysis_data|linebreaks }}
-                {% endif %}
-            </div>
-        </details>
+        {% if economic_assessment.automated_analysis_data or economic_assessment.user_analysis_data %}
+            <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    View initial assessment data
+                </span>
+                </summary>
+                <div class="govuk-details__text">
+                    {% if economic_assessment.automated_analysis_data %}
+                        {% include "barriers/assessments/economic/partials/export_potential.html" with data=economic_assessment.automated_analysis_data %}
+                    {% elif economic_assessment.user_analysis_data %}
+                        {{ economic_assessment.user_analysis_data|linebreaks }}
+                    {% endif %}
+                </div>
+            </details>
+        {% endif %}
 
         <dt class="ma-data-key">Economic rating</dt>
         <dd class="ma-data-value">
