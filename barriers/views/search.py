@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.forms import Form
 from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
 from django.views.generic import FormView, View
@@ -25,7 +26,16 @@ class SearchFormMixin:
         }
 
 
-class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
+class SearchFormView(SearchFormMixin, FormView):
+    form_class = Form
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        form.full_clean()
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+class BarrierSearch(PaginationMixin, SearchFormView):
     template_name = "barriers/search.html"
     form_class = BarrierSearchForm
     _client = None
@@ -35,11 +45,6 @@ class BarrierSearch(PaginationMixin, SearchFormMixin, FormView):
         if self._client is None:
             self._client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         return self._client
-
-    def get(self, request, *args, **kwargs):
-        form = self.get_form()
-        form.full_clean()
-        return self.render_to_response(self.get_context_data(form=form))
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(form=form, **kwargs)

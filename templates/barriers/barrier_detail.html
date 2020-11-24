@@ -4,20 +4,6 @@
 
 {% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
 
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        ma.pages.barrier.detail( {
-            noteErrorText: 'Add text for the note',
-            toggleLinks: {
-                text: 'Update the barrier',
-                linkClass: 'js-barrier-summary-link'
-            }
-        } );
-        var csrftoken = ma.get_csrf_token();
-    </script>
-{% endblock %}
-
 {% block outside_content %}
     {% include 'barriers/partials/archived_banner.html' with show_unarchive_button=True %}
 {% endblock %}
@@ -207,6 +193,26 @@
                         <span class="summary-group__list__value__none">No sectors</span>
                     {% else %}
                         <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="summary-group__list__value__add">Add one or more sectors</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Government organisations related to the barrier</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.government_organisations %}
+                    <ul class="summary-group__list__value__list">
+                        {% for item in barrier.government_organisations %}
+                        <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if not barrier.archived %}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_gov_orgs' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No related government organisations</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="summary-group__list__value__add">Add government organisations</a>
                     {% endif %}
                 {% endif %}
             </dd>

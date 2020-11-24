@@ -3,23 +3,22 @@
 {% load static %}
 
 {% block head %}
-  <script src="{% static 'js/react.js' %}"></script>
-  {{ trading_blocs|json_script:"trading-blocs-data" }}
-  <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-      let countryElement = document.getElementById("country")
-      let tradingBlocElement = document.getElementById("country_trading_bloc")
-      let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent)
-      ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs)
-    })
-  </script>
+    <script src="{% static 'js/react.js' %}"></script>
+    {{ trading_blocs|json_script:"trading-blocs-data" }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            let countryElement = document.getElementById("country")
+            let tradingBlocElement = document.getElementById("country_trading_bloc")
+            let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent)
+            ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs)
+            ReactApp.renderMultiSelectFilter("sector")
+            ReactApp.renderMultiSelectFilter("category", "Search categories")
+            ReactApp.renderMultiSelectFilter("region")
+        })
+    </script>
 {% endblock %}
 
 {% block page_title %}{{ block.super }} - Search{% endblock %}
-
-{% block body_script %}
-    <script src="{% static 'js/vue-bundle.js' %}"></script>
-{% endblock %}
 
 {% block page_content %}
 
@@ -44,9 +43,9 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.country %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.trade_direction %}
-                {% include "partials/forms/search_typeahead.html" with placeholder='Search sector' field=form.sector %}
-                {% include "partials/forms/search_typeahead.html" with placeholder='Search category' field=form.category %}
-                {% include "partials/forms/search_typeahead.html" with placeholder='Search regions' field=form.region extra_classes='js-filter' %}
+                {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
+                {% include "partials/forms/checkbox_filter.html" with field=form.category %}
+                {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
 

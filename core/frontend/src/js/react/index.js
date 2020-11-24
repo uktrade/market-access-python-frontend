@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import CommodityForm from "./commodities/CommodityForm"
 import LocationFilter from "./search/LocationFilter"
 import {getCSRFToken, getCheckboxValues} from "./utils"
+import MultiSelectFilter from "./search/MultiSelectFilter";
 
 
 function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
@@ -39,4 +40,24 @@ function renderLocationFilter(countryElement, tradingBlocElement, tradingBlocDat
 }
 
 
-export {renderCommodityForm, renderLocationFilter}
+function renderMultiSelectFilter(htmlElementId, placeholder = null, labelClasses = null, containerClasses=null) {
+  let placeholderString = placeholder ? placeholder : `Search ${htmlElementId}s`
+  let htmlElement = document.getElementById(htmlElementId)
+  const label = htmlElement.querySelector('legend').textContent.trim()
+  const options = getCheckboxValues(htmlElement)
+
+  ReactDOM.render(
+      <MultiSelectFilter
+          label={label}
+          options={options}
+          inputId={htmlElementId}
+          placeholder={placeholderString}
+          labelClasses={labelClasses}
+          containerClasses={containerClasses}
+      />,
+      htmlElement
+  );
+}
+
+
+export {renderCommodityForm, renderLocationFilter, renderMultiSelectFilter}

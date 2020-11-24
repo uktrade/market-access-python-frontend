@@ -34,7 +34,7 @@
 {% endif %}
 
 {% if form.is_valid %}
-    <h2 class="results-count">
+    <h2 class="results-count" role="alert">
         <span class="results-count__number">{{ results|length }}</span>
         users match <span class="highlight">{{ form.query.value }}</span>
     </h2>

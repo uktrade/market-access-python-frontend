@@ -1,6 +1,16 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block page_title %}{{ block.super }} - Public barriers{% endblock %}
+
+{% block head %}
+    <script src="{% static 'js/react.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderMultiSelectFilter("organisation", "All")
+        })
+    </script>
+{% endblock %}
 
 {% block page_content %}
 
@@ -17,6 +27,13 @@
                 {{ name }}
             </a>
         {% endfor %}
+    </section>
+
+    <section class="govuk-!-width-one-third">
+        <form action="" method="GET" class="filter-items">
+            {% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}
+            <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
+        </form>
     </section>
 
     <section>
@@ -72,11 +89,19 @@
                         <!-- Public status -->
                         <td class="govuk-table__cell">{{ barrier.public_status_text }}</td>
                         <!-- Latest note -->
-                        {% if barrier.latest_note %}
-                            <td class="govuk-table__cell">{{ barrier.latest_note.text }}</td>
-                        {% else %}
-                            <td class="govuk-table__cell">No notes</td>
-                        {% endif %}
+                        <td class="govuk-table__cell">
+                            {% if barrier.latest_note %}
+                                {{ barrier.latest_note.text }}
+                                <br />
+                                (by {{ barrier.latest_note.created_by.name }})
+                            {% else %}
+                                No notes
+                            {% endif %}
+                            <br/>
+                            <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}?add-note=1" class="govuk-link" target="_blank">
+                                Add new note
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,4 +1,5 @@
 from django import template
+from django.utils.text import slugify
 
 FORM_GROUP_CLASSES = "govuk-form-group"
 FORM_GROUP_ERROR_CLASSES = "govuk-form-group--error"
@@ -60,3 +61,16 @@ def as_text(value):
     value = value.as_text()
     value = value.lstrip("* ")
     return value
+
+
+@register.inclusion_tag('partials/forms/input_submit_remove_list_item.html')
+def action_remove_list_item(unique_id, value):
+    """
+    Helps to prepare the remove link that's screen reader friendly.
+    :param value: The list item to be removed. This will be included in the label
+    :return:
+    """
+    return {
+        "item_id": f"{slugify(value)}__remove-link-{unique_id}",
+        "item_label": value
+    }

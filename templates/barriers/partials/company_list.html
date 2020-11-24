@@ -1,3 +1,4 @@
+{% load govuk_forms%}
 <div class="selection-list restrict-width">
     <h3 class="selection-list__heading">Selected companies</h3>
 
@@ -11,7 +12,7 @@
                     <form action="{% url 'barriers:remove_company' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="company_id" value="{{ item.id }}">
-                        <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+                        {% action_remove_list_item forloop.counter item.name %}
                     </form>
                     {% endif %}
                 </li>

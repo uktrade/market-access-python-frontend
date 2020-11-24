@@ -62,6 +62,8 @@ from .views.edit import (
     BarrierEditTags,
     BarrierEditTradeDirection,
 )
+from .views.government_organisations import BarrierEditGovernmentOrganisations, BarrierAddGovernmentOrganisation, \
+    BarrierRemoveGovernmentOrganisation
 from .views.history import BarrierHistory
 from .views.location import (
     BarrierEditLocation,
@@ -149,6 +151,7 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/edit/end-date/", BarrierEditEndDate.as_view(), name="edit_end_date"),
     path("barriers/<uuid:barrier_id>/edit/commercial-value/", BarrierEditCommercialValue.as_view(), name="edit_commercial_value"),
     path("barriers/<uuid:barrier_id>/edit/commodities/", BarrierEditCommodities.as_view(), name="edit_commodities"),
+    path("barriers/<uuid:barrier_id>/edit/commodities/<str:mode>/", BarrierEditCommodities.as_view(), name="edit_commodities_sr"),
     path("barriers/<uuid:barrier_id>/edit/status/", BarrierEditStatus.as_view(), name="edit_status"),
     path("barriers/<uuid:barrier_id>/edit/tags/", BarrierEditTags.as_view(), name="edit_tags"),
     path("barriers/<uuid:barrier_id>/edit/trade-direction/", BarrierEditTradeDirection.as_view(), name="edit_trade_direction"),
@@ -189,6 +192,10 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/sectors/remove/", BarrierRemoveSector.as_view(), name="remove_sector"),
     path("barriers/<uuid:barrier_id>/sectors/add/", BarrierAddSectors.as_view(), name="add_sectors"),
     path("barriers/<uuid:barrier_id>/sectors/add/all/", BarrierAddAllSectors.as_view(), name="add_all_sectors"),
+
+    path("barriers/<uuid:barrier_id>/government-organisations/edit/", BarrierEditGovernmentOrganisations.as_view(), name="edit_gov_orgs"),
+    path("barriers/<uuid:barrier_id>/government-organisations/remove/", BarrierRemoveGovernmentOrganisation.as_view(), name="remove_gov_orgs"),
+    path("barriers/<uuid:barrier_id>/government-organisations/add/", BarrierAddGovernmentOrganisation.as_view(), name="add_gov_orgs"),
 
     path("barriers/<uuid:barrier_id>/companies/", BarrierEditCompaniesSession.as_view(), name="edit_companies_session"),
     path("barriers/<uuid:barrier_id>/companies/edit/", BarrierEditCompanies.as_view(), name="edit_companies"),

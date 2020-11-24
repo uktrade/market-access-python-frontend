@@ -130,7 +130,7 @@
                 {% if public_barrier.first_published_on %}
                     {{ public_barrier.public_id }}
                 {% else %}
-                    &mdash;
+                    A public ID will appear once published.
                 {% endif %}
             </dd>
 
@@ -171,7 +171,7 @@
                     {% if public_barrier.internal_sector_names %}
                         {{ public_barrier.internal_sector_names|join:", " }}
                     {% else %}
-                        &mdash;
+                        Not selected, add on main barrier tab.
                     {% endif %}
                 {% endif %}
             </dd>
@@ -189,7 +189,7 @@
                     {% if public_barrier.internal_category_titles %}
                         {{ public_barrier.internal_category_titles|join:", " }}
                     {% else %}
-                        &mdash;
+                        Not selected, add on main barrier tab.
                     {% endif %}
                 {% endif %}
             </dd>

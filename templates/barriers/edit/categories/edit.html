@@ -1,4 +1,5 @@
 {% extends "barriers/edit/base.html" %}
+{% load govuk_forms %}
 
 {% block page_title %}{{ block.super }} - Define barrier category{% endblock %}
 
@@ -24,7 +25,7 @@
                             <form action="{% url 'barriers:remove_category' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="category_id" value="{{ item.id }}">
-                                <input type="submit" value="remove" class="selection-list__list__item__remove-form__submit">
+                                {% action_remove_list_item forloop.counter item.title %}
                             </form>
                         </li>
                     {% endfor %}
