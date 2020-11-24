@@ -13,6 +13,22 @@
     <h2 class="govuk-heading-m">Initial economic assessment - {{ economic_assessment.created_on|date:"j F Y" }}</h2>
 
     <dl class="restrict-width">
+
+        <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+                View initial assessment data
+            </span>
+            </summary>
+            <div class="govuk-details__text">
+                {% if economic_assessment.automated_analysis_data %}
+                    {% include "barriers/assessments/economic/partials/export_potential.html" with data=economic_assessment.automated_analysis_data %}
+                {% elif economic_assessment.user_analysis_data %}
+                    {{ economic_assessment.user_analysis_data|linebreaks }}
+                {% endif %}
+            </div>
+        </details>
+
         <dt class="ma-data-key">Economic rating</dt>
         <dd class="ma-data-value">
             {{ economic_assessment.rating.name }}
@@ -33,6 +49,12 @@
         <dt class="ma-data-key">Assessment produced by</dt>
         <dd class="ma-data-value ma-data-value--s">
             {{ economic_assessment.created_by.name }} on {{ economic_assessment.created_on|date:"j F Y" }}
+            {% if economic_assessment.automated_analysis_data %}
+                <ul class="ma-metadata-list govuk-!-margin-top-2">
+                    <li class="ma-metadata-list__item">Model version: {{ economic_assessment.automated_analysis_data.version }}</li>
+                    <li class="ma-metadata-list__item">Years: {{ economic_assessment.automated_analysis_data.start_year }}-{{ economic_assessment.automated_analysis_data.end_year }}</li>
+                </ul>
+            {% endif %}
         </dd>
         {% if economic_assessment.approved is not None %}
             <dt class="ma-data-key">Assessment {{ economic_assessment.approved|yesno:"accepted,rejected" }} by</dt>

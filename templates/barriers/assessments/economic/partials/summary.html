@@ -13,13 +13,39 @@
                             <span class="govuk-details__summary-text">View assessment detail</span>
                         </summary>
                         <div class="govuk-details__text">
+
+                            <details class="govuk-details" data-module="govuk-details">
+                                <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">
+                                    View initial assessment data
+                                </span>
+                                </summary>
+                                <div class="govuk-details__text">
+                                    {% if assessment.automated_analysis_data %}
+                                        {% include "barriers/assessments/economic/partials/export_potential.html" with data=assessment.automated_analysis_data classes="govuk-!-font-size-16" %}
+                                    {% elif assessment.user_analysis_data %}
+                                        {{ assessment.user_analysis_data|linebreaks }}
+                                    {% endif %}
+                                </div>
+                            </details>
+
                             <dt class="ma-data-key">Assessment explanation</dt>
                             <dd class="ma-data-value">
                                 {{ assessment.explanation|linebreaks }}
+
+                                {% if assessment.automated_analysis_data %}
+                                    <a href="{% url 'barriers:economic_assessment_raw_data' barrier.id assessment.id %}">View raw data</a>
+                                {% endif %}
                             </dd>
                             <dt class="ma-data-key">Assessment produced by</dt>
                             <dd class="ma-data-value ma-data-value--s">
                                 {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+                                {% if assessment.automated_analysis_data %}
+                                    <ul class="ma-metadata-list govuk-!-margin-top-2">
+                                        <li class="ma-metadata-list__item">Model version: {{ assessment.automated_analysis_data.version }}</li>
+                                        <li class="ma-metadata-list__item">Years: {{ assessment.automated_analysis_data.start_year }}-{{ assessment.automated_analysis_data.end_year }}</li>
+                                    </ul>
+                                {% endif %}
                             </dd>
 
                             {% if assessment.documents %}
@@ -60,7 +86,7 @@
             {% else %}
                 {% if current_user|has_permission:"edit_economicassessment" %}
                     <div class="assessment-item__section">
-                        <a href="{% url 'barriers:edit_economic_assessment_data' barrier.id assessment.id %}">Continue with assessment</a>
+                        <a href="{% url 'barriers:edit_economic_assessment_rating' barrier.id assessment.id %}">Continue with assessment</a>
                         <p class="assessment-item-content__hint">An assessment has been started but not yet completed (marked as ready).</p>
                     </div>
                 {% else %}

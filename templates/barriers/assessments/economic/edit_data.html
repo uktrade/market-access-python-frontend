@@ -15,7 +15,7 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        {% include "partials/forms/textarea.html" with field=form.analysis_data %}
+        {% include "partials/forms/textarea.html" with field=form.user_analysis_data %}
 
         {% block buttons %}
             <button class="govuk-button" data-module="govuk-button">Continue</button>

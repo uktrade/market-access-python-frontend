@@ -122,7 +122,7 @@ class AutomateEconomicAssessment(APIPermissionMixin, EconomicAssessmentMixin, Ba
     permission_required = "add_economicassessment"
 
     def post(self, request, *args, **kwargs):
-        client = MarketAccessAPIClient(self.token)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         economic_assessment = client.economic_assessments.create(
             barrier_id=self.barrier.id,
             automate=True,
@@ -137,6 +137,10 @@ class AutomateEconomicAssessment(APIPermissionMixin, EconomicAssessmentMixin, Ba
                 "assessment_id": economic_assessment.id,
             },
         )
+
+
+class EconomicAssessmentRawData(EconomicAssessmentMixin, BarrierMixin, TemplateView):
+    template_name = "barriers/assessments/economic/raw_data.html"
 
 
 class ArchiveEconomicAssessment(APIPermissionMixin, ArchiveAssessmentBase):
