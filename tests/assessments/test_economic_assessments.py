@@ -49,12 +49,12 @@ class TestEconomicAssessments(MarketAccessTestCase):
                 "barriers:add_economic_assessment_data",
                 kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"analysis_data": "Data"},
+            data={"user_analysis_data": "Data"},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_create.assert_called_with(
             barrier_id=self.barrier["id"],
-            analysis_data="Data",
+            user_analysis_data="Data",
         )
 
     @patch("utils.api.resources.APIResource.create")
@@ -64,13 +64,13 @@ class TestEconomicAssessments(MarketAccessTestCase):
                 "barriers:add_economic_assessment_data",
                 kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"analysis_data": "",},
+            data={"user_analysis_data": "",},
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "analysis_data" in form.errors
+        assert "user_analysis_data" in form.errors
         assert mock_create.called is False
 
     @patch("utils.api.resources.APIResource.patch")

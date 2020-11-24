@@ -72,7 +72,7 @@ class EditEconomicAssessmentData(APIPermissionMixin, EconomicAssessmentEditBase)
 
     def get_initial(self):
         if self.kwargs.get("assessment_id"):
-            return {"analysis_data": self.economic_assessment.analysis_data}
+            return {"user_analysis_data": self.economic_assessment.user_analysis_data}
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

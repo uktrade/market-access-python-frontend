@@ -92,7 +92,6 @@
         "economic_assessments": [
             {
                 "id": 15,
-                "analysis_data": "Data",
                 "approved": true,
                 "archived": false,
                 "archived_by": null,
@@ -150,6 +149,7 @@
                 "ready_for_approval": false,
                 "reviewed_by": null,
                 "reviewed_on": null,
+                "user_analysis_data": "Data",
                 "value_to_economy": 111
             }
         ],

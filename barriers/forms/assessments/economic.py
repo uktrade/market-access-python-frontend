@@ -27,7 +27,7 @@ class TradeCategoryForm(forms.Form):
 
 
 class AnalysisDataForm(forms.Form):
-    analysis_data = forms.CharField(
+    user_analysis_data = forms.CharField(
         label="Add the initial assessment data",
         help_text="Paste in the initial assessment data in the text box below.",
         widget=forms.Textarea,
