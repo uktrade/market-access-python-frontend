@@ -75,6 +75,20 @@
             </dd>
         {% endif %}
 
+        {% if assessment.archived and assessment.archived_by %}
+            <dt class="ma-data-key">Assessment archived by</dt>
+            <dd class="ma-data-value ma-data-value--s">
+                {{ assessment.archived_by.name }} on {{ assessment.archived_on|date:"j F Y" }}
+            </dd>
+
+            {% if assessment.archived_reason %}
+                <dt class="ma-data-key">Reason for archiving</dt>
+                <dd class="ma-data-value ma-data-value--s">
+                    {{ assessment.archived_reason|linebreaks }}
+                </dd>
+            {% endif %}
+        {% endif %}
+
         <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
     </div>
 

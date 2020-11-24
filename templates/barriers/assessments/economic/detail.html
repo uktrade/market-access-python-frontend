@@ -63,6 +63,20 @@
             </dd>
         {% endif %}
 
+        {% if economic_assessment.archived and economic_assessment.archived_by %}
+            <dt class="ma-data-key">Assessment archived by</dt>
+            <dd class="ma-data-value ma-data-value--s">
+                {{ economic_assessment.archived_by.name }} on {{ economic_assessment.archived_on|date:"j F Y" }}
+            </dd>
+
+            {% if economic_assessment.archived_reason %}
+                <dt class="ma-data-key">Reason for archiving</dt>
+                <dd class="ma-data-value ma-data-value--s">
+                    {{ economic_assessment.archived_reason|linebreaks }}
+                </dd>
+            {% endif %}
+        {% endif %}
+
         <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
     </dl>
 
