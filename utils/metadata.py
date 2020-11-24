@@ -277,9 +277,6 @@ class Metadata:
     def get_resolvability_assessment_effort(self):
         return self.data.get("resolvability_assessment_effort", {})
 
-    def get_resolvability_assessment_effort(self):
-        return self.data.get("resolvability_assessment_effort", {})
-
     def get_resolvability_assessment_time(self):
         return self.data.get("resolvability_assessment_time", {})
 
