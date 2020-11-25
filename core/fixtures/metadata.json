@@ -9044,6 +9044,106 @@
       "id": 26,
       "name": "Welsh Government",
       "organisation_type": 2
+    },
+    {
+      "id": 27,
+      "name": "The Charity Commission",
+      "organisation_type": 3
+    },
+    {
+      "id": 28,
+      "name": "Competition and Markets Authority",
+      "organisation_type": 3
+    },
+    {
+      "id": 29,
+      "name": "Crown Prosecution Service",
+      "organisation_type": 3
+    },
+    {
+      "id": 30,
+      "name": "Food Standards Agency",
+      "organisation_type": 3
+    },
+    {
+      "id": 31,
+      "name": "Forestry Commission",
+      "organisation_type": 3
+    },
+    {
+      "id": 32,
+      "name": "Government Actuary's Department",
+      "organisation_type": 3
+    },
+    {
+      "id": 33,
+      "name": "Government Legal Department",
+      "organisation_type": 3
+    },
+    {
+      "id": 34,
+      "name": "HM Land Registry",
+      "organisation_type": 3
+    },
+    {
+      "id": 35,
+      "name": "HM Revenue & Customs",
+      "organisation_type": 3
+    },
+    {
+      "id": 36,
+      "name": "NS&I",
+      "organisation_type": 3
+    },
+    {
+      "id": 37,
+      "name": "The National Archives",
+      "organisation_type": 3
+    },
+    {
+      "id": 38,
+      "name": "National Crime Agency",
+      "organisation_type": 3
+    },
+    {
+      "id": 39,
+      "name": "Office of Rail and Road",
+      "organisation_type": 3
+    },
+    {
+      "id": 40,
+      "name": "Ofgem",
+      "organisation_type": 3
+    },
+    {
+      "id": 41,
+      "name": "Ofqual",
+      "organisation_type": 3
+    },
+    {
+      "id": 42,
+      "name": "Ofsted",
+      "organisation_type": 3
+    },
+    {
+      "id": 43,
+      "name": "Serious Fraud Office",
+      "organisation_type": 3
+    },
+    {
+      "id": 44,
+      "name": "Supreme Court of the United Kingdom",
+      "organisation_type": 3
+    },
+    {
+      "id": 45,
+      "name": "UK Statistics Authority",
+      "organisation_type": 3
+    },
+    {
+      "id": 46,
+      "name": "The Water Services Regulation Authority",
+      "organisation_type": 3
     }
   ]
 }
