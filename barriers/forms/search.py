@@ -14,6 +14,7 @@ class BarrierSearchForm(forms.Form):
     extra_location = forms.MultipleChoiceField(label="Barrier location", required=False,)
     trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
     sector = forms.MultipleChoiceField(label="Sector", required=False,)
+    organisation = forms.MultipleChoiceField(label="Government organisations", required=False,)
     category = forms.MultipleChoiceField(label="Category", required=False,)
     region = forms.MultipleChoiceField(label="Overseas region", required=False,)
     priority = forms.MultipleChoiceField(label="Barrier priority", required=False,)
@@ -66,6 +67,7 @@ class BarrierSearchForm(forms.Form):
         self.set_extra_location_choices()
         self.set_trade_direction_choices()
         self.set_sector_choices()
+        self.set_organisation_choices()
         self.set_category_choices()
         self.set_region_choices()
         self.set_priority_choices()
@@ -85,6 +87,7 @@ class BarrierSearchForm(forms.Form):
             "extra_location": data.getlist("extra_location"),
             "trade_direction": data.getlist("trade_direction"),
             "sector": data.getlist("sector"),
+            "organisation": data.getlist("organisation"),
             "category": data.getlist("category"),
             "region": data.getlist("region"),
             "priority": data.getlist("priority"),
@@ -139,6 +142,9 @@ class BarrierSearchForm(forms.Form):
             (sector["id"], sector["name"])
             for sector in self.metadata.get_sector_list(level=0)
         ]
+
+    def set_organisation_choices(self):
+        self.fields["organisation"].choices = self.metadata.get_gov_organisation_choices()
 
     def set_category_choices(self):
         choices = [
@@ -262,6 +268,7 @@ class BarrierSearchForm(forms.Form):
         )
         params["trade_direction"] = ",".join(self.cleaned_data.get("trade_direction", []))
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
+        params["organisation"] = ",".join(self.cleaned_data.get("organisation", []))
         params["category"] = ",".join(self.cleaned_data.get("category", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
