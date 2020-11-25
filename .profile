@@ -5,7 +5,8 @@
 echo "---- RUNNING release tasks (.profile) ------"
 echo "---- Apply Migrations ------"
 python manage.py migrate
-
+echo "---- Flush Metadata Cache ------"
+python manage.py clear_metadata_cache
 echo "---- Collect Static Files ------"
 OUTPUT=$(python manage.py collectstatic --noinput --clear)
 mkdir -p ~/logs
