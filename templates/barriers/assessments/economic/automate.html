@@ -32,7 +32,7 @@
 
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
-            <button class="govuk-button govuk-!-margin-right-4"{% if not barrier.commodities %} disabled{% endif %}>Run automated assessment</button>
+            <button class="govuk-button govuk-!-margin-right-4" disabled{% if not barrier.commodities %} disabled{% endif %}>Run automated assessment</button>
 
             <a href="{% url 'barriers:add_economic_assessment_data' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-right-4" data-module="govuk-button">Manual assessment</a>
 
