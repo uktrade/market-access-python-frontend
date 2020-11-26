@@ -12,6 +12,7 @@
             let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent)
             ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs)
             ReactApp.renderMultiSelectFilter("sector")
+            ReactApp.renderMultiSelectFilter("organisation")
             ReactApp.renderMultiSelectFilter("category", "Search categories")
             ReactApp.renderMultiSelectFilter("region")
         })
@@ -44,6 +45,7 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.trade_direction %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
+                {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.category %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
@@ -132,6 +134,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.trade_direction %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.organisation %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.category %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.search %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.region %}

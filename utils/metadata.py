@@ -378,7 +378,7 @@ class Metadata:
         Generates government organisation choices.
         """
         return (
-            (org["id"], org["name"])
+            (str(org["id"]), org["name"])
             for org in self.get_gov_organisations()
         )
 
