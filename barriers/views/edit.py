@@ -133,6 +133,12 @@ class BarrierEditCommercialValue(APIBarrierFormViewMixin, FormView):
             "commercial_value_explanation": self.barrier.commercial_value_explanation,
         }
 
+    def get_success_url(self):
+        return reverse(
+            "barriers:assessment_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
 
 class BarrierEditEconomicAssessmentEligibility(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/economic_assessment_eligibility.html"

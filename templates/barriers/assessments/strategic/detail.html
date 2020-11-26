@@ -12,7 +12,7 @@
 
     <h2 class="govuk-heading-m">Strategic assessment - {{ assessment.created_on|date:"j F Y" }}</h2>
 
-    <div class="restrict-width">
+    <dl class="restrict-width">
         <dt class="ma-data-key">
             Scale
         </dt>
@@ -88,8 +88,8 @@
                 </dd>
             {% endif %}
         {% endif %}
+    </dl>
 
-        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
-    </div>
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
 
 {% endblock %}

@@ -3,22 +3,13 @@ from .documents import Document
 from utils.models import APIModel
 
 
-class Assessment(APIModel):
-    """
-    Wrapper around API assessment data
-    """
-
-    def __init__(self, data):
-        self.data = data
-        self.documents = [Document(document) for document in data["documents"]]
-
-
 class EconomicAssessment(APIModel):
     _economic_impact_assessments = None
     date_fields = ("archived_on", "created_on", "reviewed_on")
 
     def __init__(self, data):
         self.data = data
+        self.documents = [Document(document) for document in data.get("documents", [])]
 
     @property
     def archived_economic_impact_assessments(self):
