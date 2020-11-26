@@ -9144,6 +9144,21 @@
       "id": 46,
       "name": "The Water Services Regulation Authority",
       "organisation_type": 3
+    },
+    {
+      "id": 47,
+      "name": "Ofcom",
+      "organisation_type": 4
+    },
+    {
+      "id": 48,
+      "name": "Intellectual Property Office",
+      "organisation_type": 4
+    },
+    {
+      "id": 49,
+      "name": "Medicines and Healthcare products Regulatory Agency",
+      "organisation_type": 4
     }
   ]
 }
