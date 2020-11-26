@@ -12,6 +12,7 @@ from ...forms.assessments.economic import (
 )
 from users.permissions import APIPermissionMixin
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIHttpException
 from utils.metadata import MetadataMixin
 
 
@@ -122,15 +123,18 @@ class AutomateEconomicAssessment(APIPermissionMixin, EconomicAssessmentMixin, Ba
     permission_required = "add_economicassessment"
 
     def post(self, request, *args, **kwargs):
-        # Disable automated assessments until sensitivity issues are resolved
-        if False:
-            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        try:
             economic_assessment = client.economic_assessments.create(
                 barrier_id=self.barrier.id,
                 automate=True,
             )
-            return HttpResponseRedirect(self.get_success_url(economic_assessment))
-        return self.get(request, *args, **kwargs)
+        except APIHttpException as e:
+            self.extra_context = {
+                "errors": e.response_data or ["There was an error when running the automated assessment."]
+            }
+            return self.get(request, *args, **kwargs)
+        return HttpResponseRedirect(self.get_success_url(economic_assessment))
 
     def get_success_url(self, economic_assessment):
         return reverse(

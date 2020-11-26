@@ -13,6 +13,19 @@
     <h2 class="govuk-heading-m">Add initial economic assessment</h2>
 
     <div class="restrict-width">
+        {% if errors %}
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        {% for error in errors %}
+                            <li><a href="#">{{ error }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+
         <h3 class="commodities-list__title">HS commodity codes</h3>
 
         {% if barrier.commodities %}
@@ -32,7 +45,7 @@
 
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
-            <button class="govuk-button govuk-!-margin-right-4" disabled{% if not barrier.commodities %} disabled{% endif %}>Run automated assessment</button>
+            <button class="govuk-button govuk-!-margin-right-4"{% if not barrier.commodities %} disabled{% endif %}>Run automated assessment</button>
 
             <a href="{% url 'barriers:add_economic_assessment_data' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-right-4" data-module="govuk-button">Manual assessment</a>
 
