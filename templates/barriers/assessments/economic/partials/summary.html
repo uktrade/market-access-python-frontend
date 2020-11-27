@@ -85,7 +85,7 @@
                     <p>This barrier has been marked as eligible for an initial economic assessment - awaiting completion of assessment.</p>
                 {% endif %}
             {% else %}
-                {% if current_user|has_permission:"edit_economicassessment" %}
+                {% if current_user|has_permission:"change_economicassessment" %}
                     <div class="assessment-item__section">
                         <a href="{% url 'barriers:edit_economic_assessment_rating' barrier.id assessment.id %}">Continue with assessment</a>
                         <p class="assessment-item-content__hint">An assessment has been started but not yet completed (marked as ready).</p>
