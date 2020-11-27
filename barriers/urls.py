@@ -4,11 +4,13 @@ from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments.overview import AssessmentOverview
 from .views.assessments.economic import (
     AddEconomicAssessment,
+    AddEconomicAssessmentDocument,
     ArchiveEconomicAssessment,
     AutomateEconomicAssessment,
+    CancelEconomicAssessmentDocument,
+    DeleteEconomicAssessmentDocument,
     EconomicAssessmentDetail,
     EconomicAssessmentRawData,
-    EditEconomicAssessmentData,
     EditEconomicAssessmentRating,
 )
 from .views.assessments.economic_impact import (
@@ -211,13 +213,15 @@ urlpatterns = [
     path("barriers/<uuid:barrier_id>/assessments/", AssessmentOverview.as_view(), name="assessment_detail"),
 
     path("barriers/<uuid:barrier_id>/economic-assessments/add", AddEconomicAssessment.as_view(), name="add_economic_assessment"),
-    path("barriers/<uuid:barrier_id>/economic-assessments/add/data", EditEconomicAssessmentData.as_view(), name="add_economic_assessment_data"),
     path("barriers/<uuid:barrier_id>/economic-assessments/automate", AutomateEconomicAssessment.as_view(), name="automate_economic_assessment"),
+    path("barriers/<uuid:barrier_id>/economic-assessments/add-rating", EditEconomicAssessmentRating.as_view(), name="add_economic_assessment_rating"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/", EconomicAssessmentDetail.as_view(), name="economic_assessment_detail"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/raw-data", EconomicAssessmentRawData.as_view(), name="economic_assessment_raw_data"),
-    path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/data", EditEconomicAssessmentData.as_view(), name="edit_economic_assessment_data"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/edit/rating", EditEconomicAssessmentRating.as_view(), name="edit_economic_assessment_rating"),
     path("barriers/<uuid:barrier_id>/economic-assessments/<int:assessment_id>/archive", ArchiveEconomicAssessment.as_view(), name="archive_economic_assessment"),
+    path("barriers/<uuid:barrier_id>/economic-assessment/documents/add/", AddEconomicAssessmentDocument.as_view(), name="add_economic_assessment_document"),
+    path("barriers/<uuid:barrier_id>/economic-assessment/documents/cancel/", CancelEconomicAssessmentDocument.as_view(), name="cancel_economic_assessment_document"),
+    path("barriers/<uuid:barrier_id>/economic-assessment/documents/<uuid:document_id>/delete/", DeleteEconomicAssessmentDocument.as_view(), name="delete_economic_assessment_document"),
 
     path("barriers/<uuid:barrier_id>/economic-impact-assessments/add", AddEconomicImpactAssessment.as_view(), name="add_economic_impact_assessment"),
     path("barriers/<uuid:barrier_id>/economic-impact-assessments/<uuid:assessment_id>/", EconomicImpactAssessmentDetail.as_view(), name="economic_impact_assessment_detail"),

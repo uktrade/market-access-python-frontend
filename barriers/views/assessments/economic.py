@@ -1,12 +1,13 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, RedirectView, TemplateView
 
 from .base import ArchiveAssessmentBase
-from ..mixins import BarrierMixin, EconomicAssessmentMixin
+from ..documents import AddDocumentAjaxView, DeleteDocumentAjaxView
+from ..mixins import BarrierMixin, EconomicAssessmentMixin, SessionDocumentMixin
 from ...forms.assessments.economic import (
-    AnalysisDataForm,
     ArchiveEconomicAssessmentForm,
+    EconomicAssessmentDocumentForm,
     EconomicAssessmentRatingForm,
     TradeCategoryForm,
 )
@@ -22,6 +23,8 @@ class EconomicAssessmentEditBase(EconomicAssessmentMixin, MetadataMixin, Barrier
         kwargs["token"] = self.request.session.get("sso_token")
         if self.kwargs.get("assessment_id"):
             kwargs["economic_assessment"] = self.economic_assessment
+        elif self.kwargs.get("barrier_id"):
+            kwargs["barrier"] = self.barrier
         return kwargs
 
     def form_valid(self, form):
@@ -66,43 +69,15 @@ class AddEconomicAssessment(APIPermissionMixin, EconomicAssessmentEditBase):
         )
 
 
-class EditEconomicAssessmentData(APIPermissionMixin, EconomicAssessmentEditBase):
-    template_name = "barriers/assessments/economic/edit_data.html"
-    permission_required = "change_economicassessment"
-    form_class = AnalysisDataForm
-
-    def get_initial(self):
-        if self.kwargs.get("assessment_id"):
-            return {"user_analysis_data": self.economic_assessment.user_analysis_data}
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        if self.kwargs.get("assessment_id"):
-            kwargs["economic_assessment"] = self.economic_assessment
-        else:
-            kwargs["barrier"] = self.barrier
-        return kwargs
-
-    def form_valid(self, form):
-        form.save()
-        return HttpResponseRedirect(self.get_success_url(form))
-
-    def get_success_url(self, form):
-        return reverse(
-            "barriers:edit_economic_assessment_rating",
-            kwargs={
-                "barrier_id": self.kwargs.get("barrier_id"),
-                "assessment_id": form.economic_assessment.id,
-            },
-        )
-
-
 class EditEconomicAssessmentRating(APIPermissionMixin, EconomicAssessmentEditBase):
     template_name = "barriers/assessments/economic/edit_rating.html"
     permission_required = "change_economicassessment"
     form_class = EconomicAssessmentRatingForm
 
     def get_initial(self):
+        if not self.kwargs.get("assessment_id"):
+            return {}
+
         initial = {"explanation": self.economic_assessment.explanation}
         if self.economic_assessment.rating:
             initial["rating"] = self.economic_assessment.rating["code"]
@@ -154,3 +129,51 @@ class ArchiveEconomicAssessment(APIPermissionMixin, ArchiveAssessmentBase):
     form_class = ArchiveEconomicAssessmentForm
     title = "Archive economic assessment"
     permission_required = "archive_economicassessment"
+
+
+class AssessmentSessionDocumentMixin(SessionDocumentMixin):
+    def get_session_key(self):
+        barrier_id = self.kwargs.get("barrier_id")
+        assessment_id = self.kwargs.get("assessment_id", "new")
+        return f"barrier:{barrier_id}:economic_assessments:{assessment_id}:documents"
+
+
+class AddEconomicAssessmentDocument(
+    AssessmentSessionDocumentMixin, AddDocumentAjaxView,
+):
+    form_class = EconomicAssessmentDocumentForm
+
+    def get_delete_url(self, document):
+        return reverse(
+            "barriers:delete_economic_assessment_document",
+            kwargs={
+                "barrier_id": self.kwargs.get("barrier_id"),
+                "document_id": document["id"],
+            },
+        )
+
+
+class DeleteEconomicAssessmentDocument(
+    AssessmentSessionDocumentMixin, DeleteDocumentAjaxView,
+):
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse(
+            "barriers:economic_assessment",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class CancelEconomicAssessmentDocument(AssessmentSessionDocumentMixin, RedirectView):
+    """
+    Clears the session and redirects to the barrier detail page
+    """
+
+    def get(self, request, *args, **kwargs):
+        self.delete_session_documents()
+        return super().get(request, *args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse(
+            "barriers:assessment_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )

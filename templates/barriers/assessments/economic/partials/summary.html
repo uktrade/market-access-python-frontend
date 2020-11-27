@@ -13,7 +13,7 @@
                             <span class="govuk-details__summary-text">View assessment detail</span>
                         </summary>
                         <div class="govuk-details__text">
-                            {% if assessment.automated_analysis_data or assessment.user_analysis_data %}
+                            {% if assessment.automated_analysis_data %}
                                 <details class="govuk-details" data-module="govuk-details">
                                     <summary class="govuk-details__summary">
                                     <span class="govuk-details__summary-text">
@@ -23,8 +23,6 @@
                                     <div class="govuk-details__text">
                                         {% if assessment.automated_analysis_data %}
                                             {% include "barriers/assessments/economic/partials/export_potential.html" with data=assessment.automated_analysis_data classes="govuk-!-font-size-16" %}
-                                        {% elif assessment.user_analysis_data %}
-                                            {{ assessment.user_analysis_data|linebreaks }}
                                         {% endif %}
                                     </div>
                                 </details>
@@ -85,7 +83,7 @@
                     <p>This barrier has been marked as eligible for an initial economic assessment - awaiting completion of assessment.</p>
                 {% endif %}
             {% else %}
-                {% if current_user|has_permission:"edit_economicassessment" %}
+                {% if current_user|has_permission:"change_economicassessment" %}
                     <div class="assessment-item__section">
                         <a href="{% url 'barriers:edit_economic_assessment_rating' barrier.id assessment.id %}">Continue with assessment</a>
                         <p class="assessment-item-content__hint">An assessment has been started but not yet completed (marked as ready).</p>
