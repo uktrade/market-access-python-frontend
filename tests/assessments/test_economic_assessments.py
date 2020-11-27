@@ -48,13 +48,14 @@ class TestEconomicAssessments(MarketAccessTestCase):
                 "barriers:edit_economic_assessment_rating",
                 kwargs={"barrier_id": self.barrier["id"], "assessment_id": self.assessment_id}
             ),
-            data={"rating": "HIGH", "explanation": "Explanation"},
+            data={"rating": "HIGH", "explanation": "Explanation", "document_ids": ["5"]},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
             id=self.assessment_id,
             rating="HIGH",
             explanation="Explanation",
+            documents=["5"],
         )
 
     @patch("utils.api.resources.APIResource.patch")
@@ -87,6 +88,7 @@ class TestEconomicAssessments(MarketAccessTestCase):
             data={
                 "rating": "HIGH",
                 "explanation": "New explanation...",
+                "documents": [],
                 "approved": "True",
             },
         )
@@ -95,6 +97,7 @@ class TestEconomicAssessments(MarketAccessTestCase):
             id=self.assessment_id,
             rating="HIGH",
             explanation="New explanation...",
+            documents=[],
             approved=True,
         )
 
@@ -111,6 +114,7 @@ class TestEconomicAssessments(MarketAccessTestCase):
             data={
                 "rating": "LOW",
                 "explanation": "New explanation...",
+                "documents": [],
                 "approved": "False",
             },
         )
@@ -119,6 +123,7 @@ class TestEconomicAssessments(MarketAccessTestCase):
             id=self.assessment_id,
             rating="LOW",
             explanation="New explanation...",
+            documents=[],
             approved=False,
         )
 
@@ -168,19 +173,8 @@ class TestEconomicAssessments(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                "barriers:add_economic_assessment_data",
+                "barriers:add_economic_assessment",
                 kwargs={"barrier_id": self.barrier["id"]}
-            ),
-        )
-        assert response.status_code == HTTPStatus.FORBIDDEN
-
-        response = self.client.get(
-            reverse(
-                "barriers:edit_economic_assessment_data",
-                kwargs={
-                    "barrier_id": self.barrier["id"],
-                    "assessment_id": self.assessment_id,
-                }
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -223,19 +217,8 @@ class TestEconomicAssessments(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                "barriers:add_economic_assessment_data",
+                "barriers:add_economic_assessment",
                 kwargs={"barrier_id": self.barrier["id"]}
-            ),
-        )
-        assert response.status_code == HTTPStatus.OK
-
-        response = self.client.get(
-            reverse(
-                "barriers:edit_economic_assessment_data",
-                kwargs={
-                    "barrier_id": self.barrier["id"],
-                    "assessment_id": self.assessment_id,
-                }
             ),
         )
         assert response.status_code == HTTPStatus.OK

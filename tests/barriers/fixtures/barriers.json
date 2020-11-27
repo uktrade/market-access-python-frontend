@@ -149,7 +149,7 @@
                 "ready_for_approval": false,
                 "reviewed_by": null,
                 "reviewed_on": null,
-                "user_analysis_data": "Data",
+                "automated_analysis_data": null,
                 "value_to_economy": 111
             }
         ],
