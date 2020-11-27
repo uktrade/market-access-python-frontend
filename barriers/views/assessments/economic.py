@@ -64,7 +64,7 @@ class AddEconomicAssessment(APIPermissionMixin, EconomicAssessmentEditBase):
                 kwargs={"barrier_id": self.kwargs.get("barrier_id")},
             )
         return reverse(
-            "barriers:add_economic_assessment_data",
+            "barriers:add_economic_assessment_rating",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
