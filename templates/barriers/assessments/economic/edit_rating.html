@@ -2,8 +2,18 @@
 
 {% block page_title %}{{ block.super }} - Add initial economic assessment{% endblock %}
 
+{% block body_script %}
+    {{ block.super }}
+    {% if not economic_assessment.automated_analysis_data %}
+        <script>
+            ma.pages.barrier.assessment();
+            var csrftoken = ma.get_csrf_token();
+        </script>
+    {% endif %}
+{% endblock %}
+
 {% block back_link %}
-    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:cancel_economic_assessment_document' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
@@ -21,29 +31,60 @@
         <div class="govuk-details__text">
             {% if economic_assessment.automated_analysis_data %}
                 {% include "barriers/assessments/economic/partials/export_potential.html" with data=form.economic_assessment.automated_analysis_data %}
-            {% elif economic_assessment.user_analysis_data %}
-                {{ economic_assessment.user_analysis_data|linebreaks }}
             {% endif %}
         </div>
     </details>
 
-    <form action="" method="POST" class="restrict-width">
+    <form action="" method="POST" class="restrict-width" enctype="multipart/form-data" data-xhr-upload="{% url 'barriers:add_economic_assessment_document' barrier.id %}">
         {% csrf_token %}
 
         {% include "partials/forms/radio_input.html" with field=form.rating %}
         {% include "partials/forms/textarea.html" with field=form.explanation %}
 
+        {% if not economic_assessment.automated_analysis_data %}
+            <h3 class="govuk-label--s">Add supporting documents (optional)</h3>
+
+            {% if economic_assessment.documents %}
+                <div class="attachments">
+                    <h3 class="attachments__heading">Attached documents</h3>
+                    <ul class="attachments__list js-documents-list">
+                        {% for document in economic_assessment.documents %}
+                            {% if document %}
+                                <li class="attachments__list__item">
+                                    <span class="attachments__list__item__file-name">{{ document.name }} - {{ document.size|filesizeformat }}</span>
+                                    <a href="{% url 'barriers:delete_economic_assessment_document' barrier.id document.id %}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
+                                    <input type="hidden" name="document_ids" value="{{ document.id }}">
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div id="{{ form.document.name }}" class="govuk-form-group file-upload js-form-group">
+                <label class="govuk-label visually-hidden" for="document">Attach a document</label>
+
+                {% form_field_error form "document" %}
+
+                <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
+                (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
+                </span>
+
+                <input class="govuk-file-upload file-upload__input js-file-input" id="document" name="document" type="file" aria-describedby="document-hint">
+            </div>
+        {% endif %}
+
         {% if economic_assessment.ready_for_approval %}
-            <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Save changes</button>
+            <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 js-submit-button" data-module="govuk-button">Save changes</button>
             <p>or</p>
-            <button name="approved" value="True" class="govuk-button govuk-!-margin-right-2" data-module="govuk-button">Approve</button>
-            <button name="approved" value="False" class="govuk-button govuk-button--secondary govuk-!-margin-right-2" data-module="govuk-button">Reject</button>
-            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+            <button name="approved" value="True" class="govuk-button govuk-!-margin-right-2 js-submit-button" data-module="govuk-button">Approve</button>
+            <button name="approved" value="False" class="govuk-button govuk-button--secondary govuk-!-margin-right-2 js-submit-button" data-module="govuk-button">Reject</button>
+            <a href="{% url 'barriers:cancel_economic_assessment_document' barrier.id %}" class="form-cancel">Cancel</a>
         {% else %}
-            <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Save for later</button>
+            <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 js-submit-button" data-module="govuk-button">Save for later</button>
             <p>or</p>
-            <button name="ready_for_approval" value="True" class="govuk-button" data-module="govuk-button">Mark as ready</button>
-            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+            <button name="ready_for_approval" value="True" class="govuk-button js-submit-button" data-module="govuk-button">Mark as ready</button>
+            <a href="{% url 'barriers:cancel_economic_assessment_document' barrier.id %}" class="form-cancel">Cancel</a>
         {% endif %}
     </form>
 

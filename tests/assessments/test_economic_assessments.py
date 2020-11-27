@@ -41,38 +41,6 @@ class TestEconomicAssessments(MarketAccessTestCase):
         assert "trade_category" in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api.resources.APIResource.create")
-    def test_add_economic_assessment_data(self, mock_create):
-        mock_create.return_value = EconomicAssessment({"id": 55})
-        response = self.client.post(
-            reverse(
-                "barriers:add_economic_assessment_data",
-                kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={"user_analysis_data": "Data"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        mock_create.assert_called_with(
-            barrier_id=self.barrier["id"],
-            user_analysis_data="Data",
-        )
-
-    @patch("utils.api.resources.APIResource.create")
-    def test_add_economic_assessment_data_errors(self, mock_create):
-        response = self.client.post(
-            reverse(
-                "barriers:add_economic_assessment_data",
-                kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={"user_analysis_data": "",},
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "user_analysis_data" in form.errors
-        assert mock_create.called is False
-
     @patch("utils.api.resources.APIResource.patch")
     def test_update_economic_assessment_rating(self, mock_patch):
         response = self.client.post(

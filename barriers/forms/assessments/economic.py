@@ -1,8 +1,10 @@
 from django import forms
+from django.conf import settings
 
 from .base import ArchiveAssessmentBaseForm
-
+from ..mixins import DocumentMixin
 from utils.api.client import MarketAccessAPIClient
+from utils.forms import MultipleValueField, RestrictedFileField
 
 
 class TradeCategoryForm(forms.Form):
@@ -26,33 +28,7 @@ class TradeCategoryForm(forms.Form):
         client.barriers.patch(id=self.barrier.id, trade_category=self.cleaned_data["trade_category"])
 
 
-class AnalysisDataForm(forms.Form):
-    user_analysis_data = forms.CharField(
-        label="Add the initial assessment data",
-        help_text="Paste in the initial assessment data in the text box below.",
-        widget=forms.Textarea,
-        required=True,
-        error_messages={"required": "Enter the initial assessment data"},
-    )
-
-    def __init__(self, barrier=None, economic_assessment=None, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier = barrier
-        self.economic_assessment = economic_assessment
-        super().__init__(*args, **kwargs)
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        if self.economic_assessment:
-            client.economic_assessments.patch(id=self.economic_assessment.id, **self.cleaned_data)
-        elif self.barrier:
-            self.economic_assessment = client.economic_assessments.create(
-                barrier_id=self.barrier.id,
-                **self.cleaned_data,
-            )
-
-
-class EconomicAssessmentRatingForm(forms.Form):
+class EconomicAssessmentRatingForm(DocumentMixin, forms.Form):
     rating = forms.ChoiceField(
         label="What is the economic rating of this barrier?",
         choices=[],
@@ -68,11 +44,17 @@ class EconomicAssessmentRatingForm(forms.Form):
         required=True,
         error_messages={"required": "Enter an explanation"},
     )
+    document_ids = MultipleValueField(required=False)
+    document = RestrictedFileField(
+        content_types=settings.ALLOWED_FILE_TYPES,
+        max_upload_size=settings.FILE_MAX_SIZE,
+        required=False,
+    )
     ready_for_approval = forms.NullBooleanField()
     approved = forms.NullBooleanField()
 
-    def __init__(self, ratings, economic_assessment=None, *args, **kwargs):
-        self.token = kwargs.pop("token")
+    def __init__(self, ratings, barrier=None, economic_assessment=None, *args, **kwargs):
+        self.barrier = barrier
         self.economic_assessment = economic_assessment
         super().__init__(*args, **kwargs)
         self.fields["rating"].choices = [
@@ -86,10 +68,31 @@ class EconomicAssessmentRatingForm(forms.Form):
             del cleaned_data["ready_for_approval"]
         if self.cleaned_data["approved"] is None:
             del cleaned_data["approved"]
+        cleaned_data["documents"] = self.cleaned_data.pop("document_ids", [])
+        del cleaned_data["document"]
+
+    def clean_document(self):
+        return self.validate_document()
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.economic_assessments.patch(id=self.economic_assessment.id, **self.cleaned_data)
+        if self.economic_assessment:
+            client.economic_assessments.patch(id=self.economic_assessment.id, **self.cleaned_data)
+        elif self.barrier:
+            client.economic_assessments.create(
+                barrier_id=self.barrier.id,
+                **self.cleaned_data,
+            )
+
+
+class EconomicAssessmentDocumentForm(DocumentMixin, forms.Form):
+    document = RestrictedFileField(
+        content_types=settings.ALLOWED_FILE_TYPES,
+        max_upload_size=settings.FILE_MAX_SIZE,
+    )
+
+    def save(self):
+        return self.upload_document()
 
 
 class ArchiveEconomicAssessmentForm(ArchiveAssessmentBaseForm):
