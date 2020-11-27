@@ -17,6 +17,13 @@ from utils.exceptions import APIHttpException
 from utils.metadata import MetadataMixin
 
 
+class AssessmentSessionDocumentMixin(SessionDocumentMixin):
+    def get_session_key(self):
+        barrier_id = self.kwargs.get("barrier_id")
+        assessment_id = self.kwargs.get("assessment_id", "new")
+        return f"barrier:{barrier_id}:economic_assessments:{assessment_id}:documents"
+
+
 class EconomicAssessmentEditBase(EconomicAssessmentMixin, MetadataMixin, BarrierMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -69,10 +76,35 @@ class AddEconomicAssessment(APIPermissionMixin, EconomicAssessmentEditBase):
         )
 
 
-class EditEconomicAssessmentRating(APIPermissionMixin, EconomicAssessmentEditBase):
+class EditEconomicAssessmentRating(
+    APIPermissionMixin, AssessmentSessionDocumentMixin, EconomicAssessmentEditBase
+):
     template_name = "barriers/assessments/economic/edit_rating.html"
     permission_required = "change_economicassessment"
     form_class = EconomicAssessmentRatingForm
+
+    def get(self, request, *args, **kwargs):
+        session_key = self.get_session_key()
+        if self.kwargs.get("assessment_id") and session_key not in self.request.session:
+            self.set_session_documents(self.economic_assessment.documents)
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["documents"] = self.get_session_documents()
+        context_data["cancel_link"] = self.get_cancel_link()
+        return context_data
+
+    def get_cancel_link(self):
+        if self.kwargs.get("assessment_id") and self.economic_assessment.automated_analysis_data:
+            return reverse(
+                "barriers:assessment_detail",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        return reverse(
+            "barriers:cancel_economic_assessment_document",
+            kwargs=self.kwargs,
+        )
 
     def get_initial(self):
         if not self.kwargs.get("assessment_id"):
@@ -87,6 +119,11 @@ class EditEconomicAssessmentRating(APIPermissionMixin, EconomicAssessmentEditBas
         kwargs = super().get_form_kwargs()
         kwargs["ratings"] = self.metadata.get_economic_assessment_rating()
         return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        self.delete_session_documents()
+        return super().form_valid(form)
 
 
 class EconomicAssessmentDetail(EconomicAssessmentMixin, BarrierMixin, TemplateView):
@@ -131,34 +168,31 @@ class ArchiveEconomicAssessment(APIPermissionMixin, ArchiveAssessmentBase):
     permission_required = "archive_economicassessment"
 
 
-class AssessmentSessionDocumentMixin(SessionDocumentMixin):
-    def get_session_key(self):
-        barrier_id = self.kwargs.get("barrier_id")
-        assessment_id = self.kwargs.get("assessment_id", "new")
-        return f"barrier:{barrier_id}:economic_assessments:{assessment_id}:documents"
-
-
 class AddEconomicAssessmentDocument(
     AssessmentSessionDocumentMixin, AddDocumentAjaxView,
 ):
     form_class = EconomicAssessmentDocumentForm
 
     def get_delete_url(self, document):
-        return reverse(
-            "barriers:delete_economic_assessment_document",
-            kwargs={
-                "barrier_id": self.kwargs.get("barrier_id"),
-                "document_id": document["id"],
-            },
-        )
+        kwargs = self.kwargs
+        kwargs["document_id"] = document["id"]
+        return reverse("barriers:delete_economic_assessment_document", kwargs=kwargs)
 
 
 class DeleteEconomicAssessmentDocument(
     AssessmentSessionDocumentMixin, DeleteDocumentAjaxView,
 ):
     def get_redirect_url(self, *args, **kwargs):
+        if self.kwargs.get("assessment_id"):
+            return reverse(
+                "barriers:edit_economic_assessment_rating",
+                kwargs={
+                    "barrier_id": self.kwargs.get("barrier_id"),
+                    "assessment_id": self.kwargs.get("assessment_id")
+                },
+            )
         return reverse(
-            "barriers:economic_assessment",
+            "barriers:add_economic_assessment_rating",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
