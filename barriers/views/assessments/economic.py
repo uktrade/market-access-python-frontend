@@ -121,7 +121,6 @@ class EditEconomicAssessmentRating(
         return kwargs
 
     def form_valid(self, form):
-        form.save()
         self.delete_session_documents()
         return super().form_valid(form)
 
