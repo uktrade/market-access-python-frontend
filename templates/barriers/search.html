@@ -50,9 +50,7 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
-
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
-
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
                 <div id="show" class="govuk-form-group filter-group">
@@ -68,6 +66,8 @@
                 </div>
 
                 {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.economic_impact_assessment %}
 
                 {% if filters %}
                 <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
@@ -144,6 +144,8 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.public_view %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.economic_assessment %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.economic_impact_assessment %}
                     </ul>
                 {% endif %}
             </div>
