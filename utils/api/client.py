@@ -8,6 +8,8 @@ from .resources import (
     BarriersResource,
     CommoditiesResource,
     DocumentsResource,
+    EconomicAssessmentResource,
+    EconomicImpactAssessmentResource,
     GroupsResource,
     NotesResource,
     UsersResource,
@@ -29,6 +31,8 @@ class MarketAccessAPIClient:
         self.token = token or settings.TRUSTED_USER_TOKEN
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
+        self.economic_assessments = EconomicAssessmentResource(self)
+        self.economic_impact_assessments = EconomicImpactAssessmentResource(self)
         self.groups = GroupsResource(self)
         self.commodities = CommoditiesResource(self)
         self.notes = NotesResource(self)
@@ -53,7 +57,7 @@ class MarketAccessAPIClient:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             logger.warning(e)
-            raise APIHttpException(e)
+            raise APIHttpException(e, response)
 
         return response
 

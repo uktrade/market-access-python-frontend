@@ -1,5 +1,5 @@
 from barriers.constants import PUBLIC_BARRIER_STATUSES
-from barriers.models.assessments import ResolvabilityAssessment, StrategicAssessment
+from barriers.models.assessments import EconomicAssessment, ResolvabilityAssessment, StrategicAssessment
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
 
@@ -19,6 +19,8 @@ class Barrier(APIModel):
     _location = None
     _metadata = None
     _public_barrier = None
+    _economic_assessments = None
+    _economic_impact_assessments = None
     _resolvability_assessments = None
     _strategic_assessments = None
     _status = None
@@ -96,6 +98,53 @@ class Barrier(APIModel):
     @property
     def reported_on(self):
         return self.created_on
+
+    @property
+    def archived_economic_assessments(self):
+        return [
+            assessment
+            for assessment in self.economic_assessments
+            if assessment.archived is True
+        ]
+
+    @property
+    def current_economic_assessment(self):
+        for assessment in self.economic_assessments:
+            if assessment.archived is False:
+                return assessment
+
+    @property
+    def economic_assessments(self):
+        if self._economic_assessments is None:
+            self._economic_assessments = [
+                EconomicAssessment(assessment)
+                for assessment in self.data.get("economic_assessments", [])
+            ]
+        return self._economic_assessments
+
+    @property
+    def archived_economic_impact_assessments(self):
+        return [
+            assessment
+            for assessment in self.economic_impact_assessments
+            if assessment.archived is True
+        ]
+
+    @property
+    def current_economic_impact_assessment(self):
+        for assessment in self.economic_impact_assessments:
+            if assessment.archived is False:
+                return assessment
+
+    @property
+    def economic_impact_assessments(self):
+        if self._economic_impact_assessments is None:
+            self._economic_impact_assessments = []
+            for economic_assessment in self.economic_assessments:
+                for economic_impact_assessment in economic_assessment.economic_impact_assessments:
+                    economic_impact_assessment.economic_assessment = economic_assessment
+                    self._economic_impact_assessments.append(economic_impact_assessment)
+        return self._economic_impact_assessments
 
     @property
     def archived_resolvability_assessments(self):

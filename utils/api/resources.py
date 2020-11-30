@@ -6,9 +6,10 @@ from django.core.cache import cache
 
 from barriers.constants import Statuses
 from barriers.models import (
-    Assessment,
     Barrier,
     Commodity,
+    EconomicAssessment,
+    EconomicImpactAssessment,
     HistoryItem,
     Note,
     PublicBarrier,
@@ -84,13 +85,6 @@ class BarriersResource(APIResource):
             for result in self.client.get(url, params=kwargs)["history"]
         ]
 
-    def get_assessment_history(self, barrier_id, **kwargs):
-        url = f"barriers/{barrier_id}/assessment_history"
-        return [
-            HistoryItem(result)
-            for result in self.client.get(url, params=kwargs)["history"]
-        ]
-
     def get_team_members(self, barrier_id, **kwargs):
         url = f"barriers/{barrier_id}/members"
         response_data = self.client.get(url, params=kwargs)
@@ -117,18 +111,6 @@ class BarriersResource(APIResource):
     def delete_team_member(self, team_member_id, **kwargs):
         url = f"barriers/members/{team_member_id}"
         return self.client.delete(url, params=kwargs)
-
-    def get_assessment(self, barrier_id):
-        url = f"barriers/{barrier_id}/assessment"
-        return Assessment(self.client.get(url))
-
-    def create_assessment(self, barrier_id, **kwargs):
-        url = f"barriers/{barrier_id}/assessment"
-        return self.client.post(url, json=kwargs)
-
-    def update_assessment(self, barrier_id, **kwargs):
-        url = f"barriers/{barrier_id}/assessment"
-        return self.client.patch(url, json=kwargs)
 
     def get_csv(self, *args, **kwargs):
         url = "barriers/s3-download"
@@ -300,6 +282,16 @@ class PublicBarriersResource(APIResource):
 
     def unpublish(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unpublish")
+
+
+class EconomicAssessmentResource(APIResource):
+    resource_name = "economic-assessments"
+    model = EconomicAssessment
+
+
+class EconomicImpactAssessmentResource(APIResource):
+    resource_name = "economic-impact-assessments"
+    model = EconomicImpactAssessment
 
 
 class ResolvabilityAssessmentResource(APIResource):

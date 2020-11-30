@@ -1,0 +1,31 @@
+{% load get_item %}
+{% load humanize %}
+
+<table class="govuk-table{% if classes %} {{ classes }}{% endif %}">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Trade flow</th>
+            <th scope="col" class="govuk-table__header">Products</th>
+            <th scope="col" class="govuk-table__header">Reporter</th>
+            <th scope="col" class="govuk-table__header">Partner</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Average</th>
+            {% for year in years %}
+                <th scope="col" class="govuk-table__header govuk-table__header--numeric">{{ year }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        {% for row in data.aggregate_data %}
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ row.trade_flow }}</td>
+                <td class="govuk-table__cell">{{ row.products }}</td>
+                <td class="govuk-table__cell">{{ row.reporter }}</td>
+                <td class="govuk-table__cell">{{ row.partner }}</td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.average|floatformat:0|intcomma }}</td>
+                {% for year in years %}
+                    <td class="govuk-table__cell govuk-table__cell--numeric">{{ row|get_item:year|floatformat:0|intcomma }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

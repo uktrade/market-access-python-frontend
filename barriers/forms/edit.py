@@ -13,6 +13,28 @@ from utils.forms import (
 )
 
 
+class UpdateCommercialValueForm(APIFormMixin, forms.Form):
+    commercial_value = forms.IntegerField(
+        min_value=0,
+        max_value=1000000000000,
+        localize=True,
+        label="What is the value of the barrier to the affected business(es) in GBP?",
+        error_messages={
+            "required": "Enter a value",
+            "min_value": "Enter a valid number",
+            "max_value": "Enter a valid number",
+        },
+    )
+    commercial_value_explanation = forms.CharField(
+        widget=forms.Textarea,
+        error_messages={"required": "Enter a value description and timescale"},
+    )
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(id=self.id, **self.cleaned_data)
+
+
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
     title = forms.CharField(
         label="Suggest a title for this barrier",
@@ -273,4 +295,44 @@ class UpdateCausedByTradingBlocForm(APIFormMixin, CausedByTradingBlocForm):
         client.barriers.patch(
             id=self.id,
             caused_by_trading_bloc=self.cleaned_data["caused_by_trading_bloc"],
+        )
+
+
+class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
+    economic_assessment_eligibility = YesNoBooleanField(
+        label="Is the barrier eligible for an economic rating assessment?",
+        error_messages={
+            "required": (
+                "Select yes if the barrier is eligible for an economic rating assessment"
+            )
+        },
+    )
+    economic_assessment_eligibility_summary = forms.CharField(
+        label="Why is this barrier not eligible for an economic rating assessment?",
+        help_text="Please explain why this barrier is not eligible",
+        max_length=500,
+        widget=forms.Textarea,
+        required=False,
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        economic_assessment_eligibility = cleaned_data.get("economic_assessment_eligibility")
+        economic_assessment_eligibility_summary = cleaned_data.get("economic_assessment_eligibility_summary")
+
+        if economic_assessment_eligibility is False:
+            if not economic_assessment_eligibility_summary:
+                self.add_error(
+                    "economic_assessment_eligibility_summary",
+                    "Enter why this barrier is not eligible",
+                )
+        else:
+            cleaned_data["economic_assessment_eligibility_summary"] = ""
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(
+            id=self.id,
+            economic_assessment_eligibility=self.cleaned_data["economic_assessment_eligibility"],
+            economic_assessment_eligibility_summary=self.cleaned_data["economic_assessment_eligibility_summary"],
         )

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block page_title %}{{ block.super }} - Barrier Assessment{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' %}
+    </div>
+    {% include 'barriers/partials/tags.html' %}
+{% endblock %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        if( ma.components.ToggleLinks ){
+            new ma.components.ToggleLinks( {
+                text: 'Update the barrier',
+                linkClass: 'js-barrier-summary-link'
+            } );
+        }
+    </script>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='assessment' %}
+
+    <div class="restrict-width">
+        <div class="assessment-item">
+            <h2 class="assessment-item__heading">Initial economic assessment</h2>
+            {% include "barriers/assessments/economic/partials/summary.html" %}
+        </div>
+
+        <div class="assessment-item">
+            <h2 class="assessment-item__heading">Economic impact assessment</h2>
+            {% include "barriers/assessments/economic_impact/partials/summary.html" %}
+        </div>
+
+        <div class="assessment-item">
+            <h2 class="assessment-item__heading">Commercial Value</h2>
+
+            {% if barrier.commercial_value %}
+                <p class="assessment-item__value">&pound; {{ barrier.commercial_value|intcomma }}</p>
+                <p class="assessment-item__value">{{ barrier.commercial_value_explanation|linebreaksbr }}</p>
+                <a class="assessment-item__edit" href="{% url 'barriers:edit_commercial_value' barrier.id %}">Edit</a>
+            {% else %}
+                <div class="assessment-item-content">
+                    <a class="assessment-item-content__link" href="{% url 'barriers:edit_commercial_value' barrier.id %}">Add commercial value</a>
+                    <p class="assessment-item-content__hint">The value of the barrier to the affected business(es) in GBP per year.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="assessment-item visually-hidden">
+            <h2 class="assessment-item__heading">Resolvability assessment</h2>
+            {% include "barriers/assessments/resolvability/partials/summary.html" %}
+        </div>
+
+        <div class="assessment-item visually-hidden">
+            <h2 class="assessment-item__heading">Strategic assessment</h2>
+            {% include "barriers/assessments/strategic/partials/summary.html" %}
+        </div>
+    </div>
+{% endblock %}

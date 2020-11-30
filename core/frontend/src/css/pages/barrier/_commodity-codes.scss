@@ -21,6 +21,9 @@
         &:last-child {
             border-bottom: 1px solid $govuk-mid-grey;
         }
+        &--light-grey {
+            background-color: $govuk-light-grey;
+        }
     }
 
     &__code {

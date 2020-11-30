@@ -116,10 +116,6 @@ class MetadataTestCase(MarketAccessTestCase):
         assert metadata.get_priority("MEDIUM")["name"] == "Medium"
         assert metadata.get_priority("LOW")["name"] == "Low"
 
-    def test_get_assessment_name(self):
-        metadata = get_metadata()
-        assert metadata.get_assessment_name("impact") == "Economic assessment"
-
     def test_get_category_list(self):
         metadata = get_metadata()
         categories = metadata.get_category_list()
@@ -153,10 +149,3 @@ class MetadataTestCase(MarketAccessTestCase):
         assert len(barrier_types) > 0
         for barrier_type in barrier_types:
             assert barrier_type["category"] == "SERVICES"
-
-    def test_get_impact_text(self):
-        metadata = get_metadata()
-        assert metadata.get_impact_text("HIGH") == "High"
-        assert metadata.get_impact_text("MEDIUMHIGH") == "Medium High"
-        assert metadata.get_impact_text("MEDIUMLOW") == "Medium Low"
-        assert metadata.get_impact_text("LOW") == "Low"

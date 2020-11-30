@@ -1,0 +1,54 @@
+<table class="govuk-table{% if classes %} {{ classes }}{% endif %}">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Metric</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Details</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">United Kingdom-Global RCA (Potential position - global baseline)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.uk_global_rca }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Bilateral RCA (Bilateral position)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.bilateral_rca }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">RCA difference (UK Global minus Bilateral)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.uk_rca_difference }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Trading partner-Global RCA</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.partner_global_rca }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Global RCA difference (UK minus partner country)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.global_rca_difference }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Size of import market for affected product(s)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.import_market_size }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Imports of the subject product as share of total partner country import market</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.product_share_partner_import }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods to world</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.uk_exports_world }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods to partner country</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.uk_exports_affected }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods as share of total UK exports to world</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.product_share_uk_export_world }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods as share of total UK exports to partner country</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.export_potential.product_share_uk_export_partner }}</td>
+        </tr>
+    </tbody>
+</table>

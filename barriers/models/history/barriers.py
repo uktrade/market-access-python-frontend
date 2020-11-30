@@ -1,5 +1,4 @@
 from barriers.constants import ARCHIVED_REASON
-from barriers.models import Barrier
 from barriers.models.commodities import format_commodity_code
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
@@ -59,6 +58,16 @@ class CausedByTradingBlocHistoryItem(BaseHistoryItem):
 
     def get_value(self, value):
         return value["caused_by_trading_bloc"]
+
+
+class CommercialValueHistoryItem(BaseHistoryItem):
+    field = "commercial_value"
+    field_name = "Commercial value"
+
+
+class CommercialValueExplanationHistoryItem(BaseHistoryItem):
+    field = "commercial_value_explanation"
+    field_name = "Commercial value explanation"
 
 
 class CommoditiesHistoryItem(BaseHistoryItem):
@@ -122,6 +131,22 @@ class CompaniesHistoryItem(BaseHistoryItem):
         return [company["name"] for company in value or []]
 
 
+class EconomicAssessmentEligibilityHistoryItem(BaseHistoryItem):
+    field = "economic_assessment_eligibility"
+    field_name = "Economic assessment: Eligibility"
+
+    def get_value(self, value):
+        if value is True:
+            return "Eligible"
+        elif value is False:
+            return "Ineligible"
+
+
+class EconomicAssessmentEligibilitySummaryHistoryItem(BaseHistoryItem):
+    field = "economic_assessment_eligibility_summary"
+    field_name = "Economic assessment: Eligibility summary"
+
+
 class EndDateHistoryItem(BaseHistoryItem):
     field = "end_date"
     field_name = "End date"
@@ -139,9 +164,6 @@ class IsSummarySensitiveHistoryItem(BaseHistoryItem):
 class LocationHistoryItem(BaseHistoryItem):
     field = "location"
     field_name = "Location"
-
-    def get_value(self, value):
-        return Barrier(value).location
 
 
 class OrganisationHistoryItem(BaseHistoryItem):
@@ -258,6 +280,15 @@ class TitleHistoryItem(BaseHistoryItem):
     field_name = "Title"
 
 
+class TradeCategoryHistoryItem(BaseHistoryItem):
+    field = "trade_category"
+    field_name = "Trade category"
+
+    def get_value(self, value):
+        if value:
+            return value.get("name")
+
+
 class TradeDirectionHistoryItem(BaseHistoryItem):
     field = "trade_direction"
     field_name = "Trade direction"
@@ -277,8 +308,12 @@ class BarrierHistoryItem(PolymorphicBase):
         ArchivedHistoryItem,
         CategoriesHistoryItem,
         CausedByTradingBlocHistoryItem,
+        CommercialValueHistoryItem,
+        CommercialValueExplanationHistoryItem,
         CommoditiesHistoryItem,
         CompaniesHistoryItem,
+        EconomicAssessmentEligibilityHistoryItem,
+        EconomicAssessmentEligibilitySummaryHistoryItem,
         EndDateHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
@@ -293,6 +328,7 @@ class BarrierHistoryItem(PolymorphicBase):
         TagsHistoryItem,
         TermHistoryItem,
         TitleHistoryItem,
+        TradeCategoryHistoryItem,
         TradeDirectionHistoryItem,
     )
     default_subclass = GenericHistoryItem

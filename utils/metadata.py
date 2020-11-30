@@ -235,16 +235,6 @@ class Metadata:
             if priority["code"] == priority_code:
                 return priority
 
-    def get_assessment_name(self, assessment_code):
-        assessment_names = {
-            "impact": "Economic assessment",
-            "value_to_economy": "Value to UK Economy",
-            "import_market_size": "Import Market Size",
-            "export_value": "Value of currently affected UK exports",
-            "commercial_value": "Commercial Value",
-        }
-        return assessment_names.get(assessment_code)
-
     def get_category_list(self, sort=True):
         """
         Dedupe and sort the barrier types
@@ -278,8 +268,11 @@ class Metadata:
     def get_services(self):
         return self.get_categories_by_group("SERVICES")
 
-    def get_impact_text(self, impact_code):
-        return self.data.get("assessment_impact", {}).get(impact_code)
+    def get_economic_assessment_impact(self):
+        return self.data.get("economic_assessment_impact", {})
+
+    def get_economic_assessment_rating(self):
+        return self.data.get("economic_assessment_rating", {})
 
     def get_resolvability_assessment_effort(self):
         return self.data.get("resolvability_assessment_effort", {})
@@ -333,6 +326,9 @@ class Metadata:
             for tag in self.get_barrier_tags()
             if tag["show_at_reporting"] is True
         )
+
+    def get_trade_categories(self):
+        return self.data.get("trade_categories", {})
 
     def get_trade_direction(self, key=None, all_items=False):
         """

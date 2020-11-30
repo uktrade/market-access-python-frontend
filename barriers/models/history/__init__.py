@@ -1,4 +1,5 @@
-from .assessments import AssessmentHistoryItem
+from .assessments.economic import EconomicAssessmentHistoryItem
+from .assessments.economic_impact import EconomicImpactAssessmentHistoryItem
 from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
 from .assessments.strategic import StrategicAssessmentHistoryItem
 from .barriers import BarrierHistoryItem
@@ -20,8 +21,9 @@ class HistoryItem(PolymorphicBase):
 
     key = "model"
     subclasses = (
-        AssessmentHistoryItem,
         BarrierHistoryItem,
+        EconomicAssessmentHistoryItem,
+        EconomicImpactAssessmentHistoryItem,
         NoteHistoryItem,
         PublicBarrierHistoryItem,
         PublicBarrierNoteHistoryItem,

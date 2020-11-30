@@ -1,4 +1,5 @@
 import requests
+import uuid
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
@@ -6,7 +7,9 @@ from utils.exceptions import FileUploadError, ScanError
 
 class APIFormMixin:
     def __init__(self, id, token, *args, **kwargs):
-        self.id = str(id)
+        if isinstance(id, uuid.UUID):
+            id = str(id)
+        self.id = id
         self.token = token
         super().__init__(*args, **kwargs)
 

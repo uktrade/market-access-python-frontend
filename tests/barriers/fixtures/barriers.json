@@ -75,8 +75,8 @@
             "name": "Medium",
             "order": 2
         },
-        "priority_summary": null,
-        "has_assessment": false,
+        "priority_summary": "",
+        "trade_category": "",
         "wto_profile": {
             "wto_has_been_notified": true,
             "wto_should_be_notified": null
@@ -87,6 +87,74 @@
             "name": "Test-user"
         },
         "modified_on": "2020-01-21T15:39:34.137208Z",
+        "commercial_value": 250000,
+        "commercial_value_explanation": "Wibble wobble!",
+        "economic_assessments": [
+            {
+                "id": 15,
+                "approved": true,
+                "archived": false,
+                "archived_by": null,
+                "archived_on": null,
+                "barrier_id": "3e12dd72-8b51-43ec-8269-a173031a0eee",
+                "created_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "created_on": "2020-11-09T16:21:59.953024Z",
+                "documents": [
+                    {
+                        "id": "051a1d3a-4925-494d-91c1-49fd42a11134",
+                        "name": "IMG-20190219-WA0014.jpg",
+                        "size": 71103,
+                        "status": "virus_scanned"
+                    }
+                ],
+                "economic_impact_assessments": [
+                    {
+                        "id": "08410280-b342-4fe1-9f24-13b8df508e25",
+                        "archived": false,
+                        "archived_by": null,
+                        "archived_on": null,
+                        "created_by": {
+                            "id": 54,
+                            "name": "Vyvyan Holland"
+                        },
+                        "created_on": "2020-11-20T15:12:49.978614Z",
+                        "modified_on": "2020-11-20T15:12:49.978641Z",
+                        "modified_by": {
+                            "id": 54,
+                            "name": "Vyvyan Holland"
+                        },
+                        "economic_assessment_id": 38,
+                        "impact": {
+                            "id": 4,
+                            "name": "4: \u00a3 millions"
+                        },
+                        "explanation": "uk"
+                    }
+                ],
+                "explanation": "abc",
+                "export_value": 333,
+                "import_market_size": 222,
+                "modified_on": "2020-11-20T10:32:22.867452Z",
+                "modified_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "rating": {
+                    "code": "MEDIUMHIGH",
+                    "name": "Medium High"
+                },
+                "ready_for_approval": false,
+                "reviewed_by": null,
+                "reviewed_on": null,
+                "automated_analysis_data": null,
+                "value_to_economy": 111
+            }
+        ],
+
+
         "resolvability_assessments": [
             {
                 "id": "1181e104-4607-4231-b70e-b3f96ccf402f",

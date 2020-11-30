@@ -118,28 +118,6 @@ class TeamMembersContextMixin:
         return context_data
 
 
-class AssessmentMixin:
-    _assessment = None
-
-    @property
-    def assessment(self):
-        if not self._assessment:
-            if hasattr(self, "_barrier") and not self.barrier.has_assessment:
-                return None
-            self._assessment = self.get_assessment()
-        return self._assessment
-
-    def get_assessment(self):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        barrier_id = self.kwargs.get("barrier_id")
-        return client.barriers.get_assessment(barrier_id=barrier_id)
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data["assessment"] = self.assessment
-        return context_data
-
-
 class APIFormViewMixin:
     _object = None
 
@@ -270,6 +248,46 @@ class AnalyticsMixin:
         if utm_querystring is not None:
             return HttpResponseRedirect(f"{request.path_info}?{utm_querystring}")
         return super().dispatch(request, *args, **kwargs)
+
+
+class EconomicAssessmentMixin:
+    _economic_assessment = None
+
+    @property
+    def economic_assessment(self):
+        if self._economic_assessment is None:
+            for assessment in self.barrier.economic_assessments:
+                if str(assessment.id) == str(self.kwargs.get("assessment_id")):
+                    self._economic_assessment = assessment
+                    return self._economic_assessment
+            raise Http404("Economic assessment does not exist")
+        return self._economic_assessment
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        if self.kwargs.get("assessment_id"):
+            context_data["economic_assessment"] = self.economic_assessment
+        return context_data
+
+
+class EconomicImpactAssessmentMixin:
+    _economic_impact_assessment = None
+
+    @property
+    def economic_impact_assessment(self):
+        if self._economic_impact_assessment is None:
+            for assessment in self.barrier.economic_impact_assessments:
+                if str(assessment.id) == str(self.kwargs.get("assessment_id")):
+                    self._economic_impact_assessment = assessment
+                    return self._economic_impact_assessment
+            raise Http404("Economic impact assessment does not exist")
+        return self._economic_impact_assessment
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        if self.kwargs.get("assessment_id"):
+            context_data["economic_impact_assessment"] = self.economic_impact_assessment
+        return context_data
 
 
 class ResolvabilityAssessmentMixin:

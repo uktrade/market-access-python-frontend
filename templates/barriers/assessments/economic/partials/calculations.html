@@ -1,0 +1,78 @@
+{% load humanize %}
+
+<table class="govuk-table{% if classes %} {{ classes }}{% endif %}">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Metric</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Import</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Export</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Bilateral RCA (Bilateral position)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.bilateral_rca|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.bilateral_rca|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">UK-Global RCA (Potential position - global baseline)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.uk_global_rca|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.uk_global_rca|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">RCA difference (UK Global minus Bilateral)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.rca_difference|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.rca_difference|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Trading partner-Global RCA</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.partner_global_rca|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.partner_global_rca|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Global RCA difference (UK minus partner country)</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.global_rca_difference|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.global_rca_difference|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Size of import market of product</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.partner_from_world|floatformat:0|intcomma }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.partner_from_world|floatformat:0|intcomma }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods to world</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.world_from_uk|floatformat:0|intcomma }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.world_from_uk|floatformat:0|intcomma }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods to partner country</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.partner_from_uk|floatformat:0|intcomma }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.market_share|floatformat:0|intcomma }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Market share of UK exports of products affected</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.market_share|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.market_share|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">UK share of import market</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.uk_share_of_import_market|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.uk_share_of_import_market|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Imports of the subject product as share of total partner country import market</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.product_share_partner_import|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.product_share_partner_import|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods as share of total UK exports to world</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.product_share_uk_export_world|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.product_share_uk_export_world|floatformat:10 }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Value of UK exports of affected goods as share of total UK exports to partner country</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.import.product_share_uk_export_partner|floatformat:10 }}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ data.calculations.export.product_share_uk_export_partner|floatformat:10 }}</td>
+        </tr>
+    </tbody>
+</table>

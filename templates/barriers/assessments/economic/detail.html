@@ -1,0 +1,82 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load static %}
+
+{% block page_title %}{{ block.super }} - Economic assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    <h2 class="govuk-heading-m">Initial economic assessment - {{ economic_assessment.created_on|date:"j F Y" }}</h2>
+
+    <dl class="restrict-width">
+        {% if economic_assessment.automated_analysis_data %}
+            <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    View initial assessment data
+                </span>
+                </summary>
+                <div class="govuk-details__text">
+                    {% if economic_assessment.automated_analysis_data %}
+                        {% include "barriers/assessments/economic/partials/export_potential.html" with data=economic_assessment.automated_analysis_data %}
+                    {% endif %}
+                </div>
+            </details>
+        {% endif %}
+
+        <dt class="ma-data-key">Economic rating</dt>
+        <dd class="ma-data-value">
+            {{ economic_assessment.rating.name }}
+        </dd>
+
+        <dt class="ma-data-key">Assessment explanation</dt>
+        <dd class="ma-data-value">
+            {{ economic_assessment.explanation|linebreaks }}
+        </dd>
+
+        {% if economic_assessment.documents %}
+            <dt class="ma-data-key">Documents</dt>
+            <dd class="ma-data-value">
+                {% include "barriers/assessments/partials/documents_list.html" with documents=economic_assessment.documents %}
+            </dd>
+        {% endif %}
+
+        <dt class="ma-data-key">Assessment produced by</dt>
+        <dd class="ma-data-value ma-data-value--s">
+            {{ economic_assessment.created_by.name }} on {{ economic_assessment.created_on|date:"j F Y" }}
+            {% if economic_assessment.automated_analysis_data %}
+                <ul class="ma-metadata-list govuk-!-margin-top-2">
+                    <li class="ma-metadata-list__item">Model version: {{ economic_assessment.automated_analysis_data.version }}</li>
+                    <li class="ma-metadata-list__item">Years: {{ economic_assessment.automated_analysis_data.start_year }}-{{ economic_assessment.automated_analysis_data.end_year }}</li>
+                </ul>
+            {% endif %}
+        </dd>
+        {% if economic_assessment.approved is not None %}
+            <dt class="ma-data-key">Assessment {{ economic_assessment.approved|yesno:"accepted,rejected" }} by</dt>
+            <dd class="ma-data-value ma-data-value--s">
+                {{ economic_assessment.reviewed_by.name }} on {{ economic_assessment.reviewed_on|date:"j F Y" }}
+            </dd>
+        {% endif %}
+
+        {% if economic_assessment.archived and economic_assessment.archived_by %}
+            <dt class="ma-data-key">Assessment archived by</dt>
+            <dd class="ma-data-value ma-data-value--s">
+                {{ economic_assessment.archived_by.name }} on {{ economic_assessment.archived_on|date:"j F Y" }}
+            </dd>
+
+            {% if economic_assessment.archived_reason %}
+                <dt class="ma-data-key">Reason for archiving</dt>
+                <dd class="ma-data-value ma-data-value--s">
+                    {{ economic_assessment.archived_reason|linebreaks }}
+                </dd>
+            {% endif %}
+        {% endif %}
+
+        <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
+    </dl>
+
+{% endblock %}

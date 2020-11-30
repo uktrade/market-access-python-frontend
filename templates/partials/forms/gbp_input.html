@@ -1,0 +1,22 @@
+<div id="{{ field.name }}" class="{% form_group_classes field.errors %}">
+    <label class="govuk-label{% if label_classes %} {{ label_classes }}{% else %} govuk-label--s{% endif %}" for="{{ field.name }}">{{ field.label }}</label>
+
+    {% if field.help_text %}
+        <span class="govuk-hint">{{ field.help_text|safe }}</span>
+    {% endif %}
+
+    {% form_field_error field %}
+
+    <div class="currency-input">
+        <span class="currency-input__prefix" title="GBP">&pound;</span>
+        <div class="currency-input__value">
+            <input
+                class="currency-input__value__input govuk-input govuk-input--currency{% if field.errors %} govuk-input--error{% endif %}"
+                name="{{ field.name }}"
+                type="text"
+                aria-describedby="value-hint"
+                {% if field.value %}value="{{ field.value }}"{% endif %}
+            />
+        </div>
+    </div>
+</div>

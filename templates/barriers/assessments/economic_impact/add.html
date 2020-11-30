@@ -1,0 +1,40 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Add economic impact assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Add economic impact assessment' %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <p class="govuk-body">To assess the economic important of a barrier:</p>
+        <ul class="ma-list">
+            <li>post will collect estimates in UK pounds from affected businesses </li>
+            <li>Market Access analysts will apply a range of economic metrics to ensure relative accuracy and consistency</li>
+        </ul>
+
+        <p class="govuk-body">An overall score of 1 to 8 will be given to each barrier, which gives the estimated potential value over the next 5 years. If a 5 year estimate is not possible please indicate the time frame in the text box.</p>
+
+        <dt class="ma-data-key">Economic rating of this barrier</dt>
+        <dd class="ma-data-value">
+            {{ barrier.current_economic_assessment.rating.name }}
+        </dd>
+
+        {% include "partials/forms/radio_input.html" with field=form.impact %}
+        {% include "partials/forms/textarea.html" with field=form.explanation %}
+
+        {% block buttons %}
+            <button class="govuk-button" data-module="govuk-button">Save assessment</button>
+            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+        {% endblock %}
+    </form>
+
+{% endblock %}

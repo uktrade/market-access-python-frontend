@@ -1,0 +1,62 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load static %}
+
+{% block page_title %}{{ block.super }} - Economic assessment{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    <span class="govuk-caption-m">Raw assessment data</span>
+    <h2 class="govuk-heading-m">Initial economic assessment - {{ economic_assessment.created_on|date:"j F Y" }}</h2>
+
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View initial assessment data
+        </span>
+        </summary>
+        <div class="govuk-details__text">
+            {% include "barriers/assessments/economic/partials/export_potential.html" with data=economic_assessment.automated_analysis_data classes="govuk-!-font-size-16 restrict-width" %}
+        </div>
+    </details>
+
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Calculations
+        </span>
+        </summary>
+        <div class="govuk-details__text">
+            {% include "barriers/assessments/economic/partials/calculations.html" with data=economic_assessment.automated_analysis_data classes="govuk-!-font-size-16 restrict-width" %}
+        </div>
+    </details>
+
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Aggregated data
+        </span>
+        </summary>
+        <div class="govuk-details__text">
+            {% include "barriers/assessments/economic/partials/aggregate_data.html" with data=economic_assessment.automated_analysis_data classes="govuk-!-font-size-16 restrict-width" %}
+        </div>
+    </details>
+
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Raw data
+        </span>
+        </summary>
+        <div class="govuk-details__text">
+            {% include "barriers/assessments/economic/partials/raw_data.html" with data=economic_assessment.automated_analysis_data classes="govuk-!-font-size-16 restrict-width"  %}
+        </div>
+    </details>
+
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-button govuk-!-margin-top-3" data-module="govuk-button">Back</a>
+
+{% endblock %}

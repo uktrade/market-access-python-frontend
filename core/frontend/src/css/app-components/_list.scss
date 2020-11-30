@@ -2,3 +2,12 @@
     padding-left: 1em;
     font-size: 19px;
 }
+
+.ma-metadata-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.ma-metadata-list__item {
+    @include govuk-font( 14 );
+}
