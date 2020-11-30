@@ -49,6 +49,23 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
+    economic_assessment = forms.MultipleChoiceField(
+        label="Economic assessment",
+        choices=(
+            ("with", "With an economic assessment"),
+            ("without", "Without an economic assessment"),
+            ("ready_for_approval", "With an economic assessment ready for approval"),
+        ),
+        required=False,
+    )
+    economic_impact_assessment = forms.MultipleChoiceField(
+        label="Economic impact assessment",
+        choices=(
+            ("with", "With an economic impact assessment"),
+            ("without", "Without an economic impact assessment"),
+        ),
+        required=False,
+    )
 
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
@@ -99,6 +116,8 @@ class BarrierSearchForm(forms.Form):
             "only_archived": data.get("only_archived"),
             "wto": data.getlist("wto"),
             "public_view": data.getlist("public_view"),
+            "economic_assessment": data.getlist("economic_assessment"),
+            "economic_impact_assessment": data.getlist("economic_impact_assessment"),
         }
         return {k: v for k, v in cleaned_data.items() if v}
 
@@ -280,6 +299,8 @@ class BarrierSearchForm(forms.Form):
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
         params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
         params["country_trading_bloc"] = ",".join(self.cleaned_data.get("country_trading_bloc", []))
+        params["economic_assessment"] = ",".join(self.cleaned_data.get("economic_assessment", []))
+        params["economic_impact_assessment"] = ",".join(self.cleaned_data.get("economic_impact_assessment", []))
 
         return {k: v for k, v in params.items() if v}
 
