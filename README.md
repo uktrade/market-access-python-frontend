@@ -3,6 +3,12 @@
 This repository provides a frontend client to consume the Market Access API.
 It's built with python django. 
 
+## Background
+The Market Access frontend was originally a node project:
+https://github.com/uktrade/market-access-frontend
+
+It was converted into Django from December 2019 to around February 2020. As a result, most of the css, javascript and html markup were copied directly across.
+
 ## Installation with Docker (preferred)
 
 Market Access Python Frontend uses Docker compose to setup and run all the necessary components. \
