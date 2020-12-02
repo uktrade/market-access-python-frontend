@@ -47,17 +47,17 @@ class SearchTestCase(MarketAccessTestCase):
 
         sector_list = metadata.get_sector_list(level=0)
         sector_choices = form.fields["sector"].choices
-        assert len(sector_choices) == len(sector_list) + 1
+        assert len(sector_choices) == len(sector_list)
 
         category_list = set([category["id"] for category in metadata.data["categories"]])
         category_choices = form.fields["category"].choices
-        assert len(category_choices) == len(category_list) + 1
+        assert len(category_choices) == len(category_list)
 
         region_list = set(
             [region["id"] for region in metadata.get_overseas_region_list()]
         )
         region_choices = form.fields["region"].choices
-        assert len(region_choices) == len(region_list) + 1
+        assert len(region_choices) == len(region_list)
 
         priority_list = metadata.data["barrier_priorities"]
         priority_choices = form.fields["priority"].choices

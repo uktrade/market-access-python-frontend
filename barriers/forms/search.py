@@ -157,7 +157,7 @@ class BarrierSearchForm(forms.Form):
         self.fields["trade_direction"].choices = self.metadata.get_trade_direction_choices()
 
     def set_sector_choices(self):
-        self.fields["sector"].choices = [("", "All sectors")] + [
+        self.fields["sector"].choices = [
             (sector["id"], sector["name"])
             for sector in self.metadata.get_sector_list(level=0)
         ]
@@ -172,7 +172,6 @@ class BarrierSearchForm(forms.Form):
         ]
         choices = list(set(choices))
         choices.sort(key=itemgetter(1))
-        choices = [("", "All categories")] + choices
         self.fields["category"].choices = choices
 
     def set_region_choices(self):
@@ -180,7 +179,6 @@ class BarrierSearchForm(forms.Form):
             (country["id"], country["name"])
             for country in self.metadata.get_overseas_region_list()
         ]
-        choices = [("", "All regions")] + choices
         self.fields["region"].choices = choices
 
     def set_priority_choices(self):
