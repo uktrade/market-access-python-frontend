@@ -148,6 +148,11 @@
                 {% endif %}
             </dd>
 
+            <dt class="summary-group__list__key">Date reported</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.reported_on|date:"j F Y" }}
+            </dd>
+
             <dt class="summary-group__list__key">Location</dt>
             <dd class="summary-group__list__value">
                 {% if public_barrier.internal_location_changed and public_barrier.first_published_on %}

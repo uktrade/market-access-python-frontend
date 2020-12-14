@@ -422,3 +422,8 @@ class PublicBarrier(APIModel):
             return "Ready"
         elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:
             return "Published"
+
+    @property
+    def reported_on(self):
+        if self.data.get("reported_on"):
+            return dateutil.parser.parse(self.data["reported_on"])
