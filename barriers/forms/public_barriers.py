@@ -79,7 +79,7 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
         label="Summary",
         widget=forms.Textarea,
-        max_length=1000,
+        max_length=1500,
         error_messages={
             "max_length": "Summary should be %(limit_value)d characters or fewer",
             "required": "Enter a summary",
