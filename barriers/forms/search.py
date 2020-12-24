@@ -66,6 +66,22 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
+    commodity_code = forms.MultipleChoiceField(
+        label="HS commodity code",
+        choices=(
+            ("with", "With an hs commodity code"),
+            ("without", "Without an hs commodity code"),
+        ),
+        required=False,
+    )
+    commercial_value_estimate = forms.MultipleChoiceField(
+        label="Commercial value estimate",
+        choices=(
+            ("with", "With a commercial value estimate"),
+            ("without", "Without a commercial value estimate"),
+        ),
+        required=False,
+    )
 
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
@@ -118,6 +134,8 @@ class BarrierSearchForm(forms.Form):
             "public_view": data.getlist("public_view"),
             "economic_assessment": data.getlist("economic_assessment"),
             "economic_impact_assessment": data.getlist("economic_impact_assessment"),
+            "commodity_code": data.getlist("commodity_code"),
+            "commercial_value_estimate": data.getlist("commercial_value_estimate"),
         }
         return {k: v for k, v in cleaned_data.items() if v}
 
@@ -299,6 +317,8 @@ class BarrierSearchForm(forms.Form):
         params["country_trading_bloc"] = ",".join(self.cleaned_data.get("country_trading_bloc", []))
         params["economic_assessment"] = ",".join(self.cleaned_data.get("economic_assessment", []))
         params["economic_impact_assessment"] = ",".join(self.cleaned_data.get("economic_impact_assessment", []))
+        params["commodity_code"] = ",".join(self.cleaned_data.get("commodity_code", []))
+        params["commercial_value_estimate"] = ",".join(self.cleaned_data.get("commercial_value_estimate", []))
 
         return {k: v for k, v in params.items() if v}
 
