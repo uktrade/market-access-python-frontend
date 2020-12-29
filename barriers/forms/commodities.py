@@ -9,14 +9,14 @@ from utils.forms import CommodityCodeWidget, MultipleValueField
 
 class CommodityLookupForm(forms.Form):
     code = forms.CharField(
-        label="Enter a commodity code (also known as an HS code)",
+        label="Enter an HS commodity code",
         help_text=(
-            "Enter your commodity code below ignoring any spaces or full stops. "
+            "Enter your HS commodity code below ignoring any spaces or full stops. "
             "You can also copy and paste multiple codes separated by commas "
             "into the first box (there is no limit). Only numbers and commas "
             "will be recognised, all other punctuation and characters will be ignored."
         ),
-        error_messages={"required": "Enter a commodity code"},
+        error_messages={"required": "Enter an HS commodity code"},
         widget=CommodityCodeWidget,
     )
     location = forms.ChoiceField(
@@ -50,7 +50,7 @@ class CommodityLookupForm(forms.Form):
             commodity = client.commodities.get(id=hs6_code)
             self.commodity = commodity.create_barrier_commodity(code=code, location=location)
         except APIHttpException:
-            raise forms.ValidationError("Code not found")
+            raise forms.ValidationError("HS commodity code not found")
 
     def get_commodity_data(self):
         return self.commodity.to_dict()
@@ -94,7 +94,7 @@ class MultiCommodityLookupForm(forms.Form):
                 for commodity in client.commodities.list(codes=",".join(hs6_codes))
             }
         except APIHttpException:
-            raise forms.ValidationError("Code not found")
+            raise forms.ValidationError("HS commodity code not found")
 
         self.commodities = []
         for code in codes:

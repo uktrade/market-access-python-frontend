@@ -69,8 +69,8 @@ class BarrierSearchForm(forms.Form):
     commodity_code = forms.MultipleChoiceField(
         label="HS commodity code",
         choices=(
-            ("with", "With an hs commodity code"),
-            ("without", "Without an hs commodity code"),
+            ("with", "With an HS commodity code"),
+            ("without", "Without an HS commodity code"),
         ),
         required=False,
     )
