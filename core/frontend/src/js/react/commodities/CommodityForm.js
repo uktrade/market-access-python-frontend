@@ -218,7 +218,7 @@ function CommodityForm(props) {
       ) : null}
 
       {confirmedCommodities.length ? (
-        <h3 className="commodities-list__title">Commodity codes to add to this barrier</h3>
+        <h3 className="commodities-list__title">HS commodity codes to add to this barrier</h3>
       ) : null}
 
       {confirmedCommodities.length ? (

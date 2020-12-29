@@ -20,7 +20,7 @@ class CommodityLookupForm(forms.Form):
         widget=CommodityCodeWidget,
     )
     location = forms.ChoiceField(
-        label="Which location are the commodity codes from?",
+        label="Which location are the HS commodity codes from?",
         choices=[],
         error_messages={"required": "Select a location"},
     )

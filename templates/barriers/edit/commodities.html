@@ -24,7 +24,7 @@
 {% endif %}
 {% endblock %}
 
-{% block page_title %}{{ block.super }} - Edit commodity codes{% endblock %}
+{% block page_title %}{{ block.super }} - Edit HS commodity codes{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -39,7 +39,7 @@
     </div>
     {% endif %}
 
-    {% include 'partials/heading.html' with text='Add commodity codes' %}
+    {% include 'partials/heading.html' with text='Add HS commodity codes' %}
 
     {% if not screen_reader_mode %}
     <div id="react-app" class="commodities-form__container">
@@ -84,7 +84,7 @@
         {% endif %}
 
         {% if confirmed_commodities %}
-            <h3>Commodity codes to add to this barrier</h3>
+            <h3>HS commodity codes to add to this barrier</h3>
             <form action="" method="POST">
                 {% csrf_token %}
                 <ul class="commodities-list restrict-width">
