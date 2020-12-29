@@ -14,7 +14,7 @@ function CodeBox(props) {
     return (
         <div className="codebox__container">
             <label className="sr-only govuk-visually-hidden" htmlFor={"code_" + props.index}>
-                {codeBoxLabels[props.index] + " two digits of your commodity code."}
+                {codeBoxLabels[props.index] + " two digits of your HS commodity code."}
             </label>
             <input
                 id={"code_" + props.index}

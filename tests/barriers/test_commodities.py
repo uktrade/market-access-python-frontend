@@ -84,7 +84,7 @@ class CommoditiesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         mock_get.assert_called_with(id="9999990000")
         response_data = response.json()
-        assert response_data == {"status": "error", "message": "Code not found"}
+        assert response_data == {"status": "error", "message": "HS commodity code not found"}
 
     @patch("utils.api.resources.CommoditiesResource.list")
     def test_ajax_multiple_commodity_lookup(self, mock_list):
