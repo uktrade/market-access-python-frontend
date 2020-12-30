@@ -132,7 +132,13 @@ function CommodityForm(props) {
 
   async function lookupMultipleCodes(codes) {
     setIsLoading(true)
-    codes = codes.replace(/[^\d+,;]/g, '').replace(";", ",").replace(/,+$/g, '').replace(/^,+/g, '')
+    codes = codes
+        .replace(/[\r\n]+/g, ';')
+        .replace(/[^\d+,;]/g, '')
+        .replaceAll(';', ',')
+        .replaceAll(',,', ',')
+        .replace(/,+$/g, '')
+        .replace(/^,+/g, '')
     if (codes == "") {
       setUnconfirmedCommodities([])
       return
