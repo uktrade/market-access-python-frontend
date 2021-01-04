@@ -3,7 +3,7 @@
     {% for widget in widget.subwidgets %}
         <div class="codebox__container">
             <label class="sr-only govuk-visually-hidden" for="code_{{ forloop.counter0 }}">
-                {{ forloop.counter0|code_box_label }} two digits of your commodity code.
+                {{ forloop.counter0|code_box_label }} two digits of your HS commodity code.
             </label>
             <input id="code_{{ forloop.counter0 }}"
                    class="govuk-input govuk-input--width-2 commodity-code-input"

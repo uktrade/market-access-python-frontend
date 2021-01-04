@@ -42,7 +42,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
                 "data": lookup_form.get_commodity_data(),
             })
         else:
-            return JsonResponse({"status": "error", "message": "Code not found"})
+            return JsonResponse({"status": "error", "message": "HS commodity code not found"})
 
     def screen_reader_mode(self):
         # detect screen reader mode
@@ -190,7 +190,13 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse(
-            "barriers:barrier_detail",
-            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
-        )
+        if self.request.GET.get('next') == "automate":
+            return reverse(
+                "barriers:automate_economic_assessment",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        else:
+            return reverse(
+                "barriers:barrier_detail",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
