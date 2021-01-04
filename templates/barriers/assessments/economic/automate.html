@@ -37,11 +37,15 @@
                     </li>
                 {% endfor %}
             </ul>
+            <p class="govuk-hint">
+                The automated assessment uses codes up to HS6 so results will be based on this level. Higher HS codes
+                can be entered but the automated assessment will ignore any figure above HS6.
+            </p>
         {% else %}
             <p class="govuk-body">No HS commodity codes have been added.</p>
         {% endif %}
 
-        <p class="govuk-!-margin-bottom-6"><a href="{% url 'barriers:edit_commodities' barrier.id %}" class="govuk-link">Need to change the HS commodity codes?</a></p>
+        <p class="govuk-!-margin-bottom-6"><a href="{% url 'barriers:edit_commodities' barrier.id %}?next=automate" class="govuk-link">Need to change the HS commodity codes?</a></p>
 
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
