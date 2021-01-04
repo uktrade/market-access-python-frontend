@@ -209,7 +209,7 @@
                         {% if public_barrier.unpublished_changes %}
                             <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
                             {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
-                                <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
+                                <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="ignore-changes">Confirm changes</button>
                             {% endif %}
                         {% else %}
                             <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
@@ -232,7 +232,7 @@
             {% if public_barrier.is_published and current_user|has_permission:"publish_barrier" %}
                 {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
                     <button disabled="disabled" aria-disabled="true"  class="govuk-button publishing-button" data-module="govuk-button" name="action" value="publish">Publish update</button>
-                    <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="ignore-changes">Ignore changes</button>
+                    <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="ignore-changes">Accept changes</button>
                 {% elif public_barrier.unpublished_changes %}
                     <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
                 {% endif %}
