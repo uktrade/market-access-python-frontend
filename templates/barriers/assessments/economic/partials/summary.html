@@ -107,7 +107,7 @@
     {% endwith %}
 {% elif barrier.economic_assessment_eligibility is False %}
     <div class="assessment-item__section">
-        <p>This barrier has been marked as ineligible for an economic rating assessment</p>
+        <p>This barrier has been marked as ineligible for an initial economic assessment</p>
         <dt class="ma-data-key">Reason</dt>
         <dd class="ma-data-value">
             {{ barrier.economic_assessment_eligibility_summary|linebreaksbr }}
