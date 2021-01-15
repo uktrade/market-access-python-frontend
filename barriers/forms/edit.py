@@ -310,7 +310,7 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
     economic_assessment_eligibility_summary = forms.CharField(
         label="Why is this barrier not eligible for an initial economic assessment?",
         help_text="Please explain why this barrier is not eligible",
-        max_length=500,
+        max_length=1500,
         widget=forms.Textarea,
         required=False,
     )
