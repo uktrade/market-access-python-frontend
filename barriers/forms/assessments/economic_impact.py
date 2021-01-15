@@ -7,9 +7,9 @@ from utils.api.client import MarketAccessAPIClient
 
 class EconomicImpactAssessmentForm(forms.Form):
     impact = forms.ChoiceField(
-        label="What is the economic impact of this barrier?",
+        label="What is the valuation of this barrier?",
         choices=[],
-        error_messages={"required": "Select the economic impact of this barrier"},
+        error_messages={"required": "Select the valuation of this barrier"},
     )
     explanation = forms.CharField(
         label="Explain the assessment",

@@ -300,15 +300,15 @@ class UpdateCausedByTradingBlocForm(APIFormMixin, CausedByTradingBlocForm):
 
 class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
     economic_assessment_eligibility = YesNoBooleanField(
-        label="Is the barrier eligible for an economic rating assessment?",
+        label="Is the barrier eligible for an initial economic assessment?",
         error_messages={
             "required": (
-                "Select yes if the barrier is eligible for an economic rating assessment"
+                "Select yes if the barrier is eligible for an initial economic assessment"
             )
         },
     )
     economic_assessment_eligibility_summary = forms.CharField(
-        label="Why is this barrier not eligible for an economic rating assessment?",
+        label="Why is this barrier not eligible for an initial economic assessment?",
         help_text="Please explain why this barrier is not eligible",
         max_length=500,
         widget=forms.Textarea,

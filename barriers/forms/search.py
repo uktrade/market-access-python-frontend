@@ -59,10 +59,10 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     economic_impact_assessment = forms.MultipleChoiceField(
-        label="Economic impact assessment",
+        label="Valuation assessment",
         choices=(
-            ("with", "With an economic impact assessment"),
-            ("without", "Without an economic impact assessment"),
+            ("with", "With a valuation assessment"),
+            ("without", "Without a valuation assessment"),
         ),
         required=False,
     )

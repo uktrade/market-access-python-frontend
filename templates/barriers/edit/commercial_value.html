@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Commercial value{% endblock %}
+{% block page_title %}{{ block.super }} - Commercial value estimate{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Commercial value' %}
+    {% include 'partials/heading.html' with text='Commercial value estimate' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">

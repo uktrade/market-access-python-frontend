@@ -9,9 +9,9 @@ from utils.forms import MultipleValueField, RestrictedFileField
 
 class TradeCategoryForm(forms.Form):
     trade_category = forms.ChoiceField(
-        label="What is the barrier type?",
+        label="What is the trade category?",
         choices=[],
-        error_messages={"required": "Select the barrier type"},
+        error_messages={"required": "Select the trade category"},
     )
 
     def __init__(self, trade_categories, barrier=None, *args, **kwargs):
@@ -30,9 +30,9 @@ class TradeCategoryForm(forms.Form):
 
 class EconomicAssessmentRatingForm(DocumentMixin, forms.Form):
     rating = forms.ChoiceField(
-        label="What is the economic rating of this barrier?",
+        label="What is the initial economic assessment of this barrier?",
         choices=[],
-        error_messages={"required": "Select the economic rating of this barrier"},
+        error_messages={"required": "Select the initial economic assessment of this barrier"},
     )
     explanation = forms.CharField(
         label="Explain the assessment",
