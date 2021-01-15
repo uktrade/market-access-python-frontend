@@ -1,0 +1,44 @@
+<details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            View initial assessment data
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        {% include "barriers/assessments/economic/partials/export_potential.html" with data=data classes=classes %}
+    </div>
+</details>
+
+<details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Calculations
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        {% include "barriers/assessments/economic/partials/calculations.html" with data=data classes=classes %}
+    </div>
+</details>
+
+<details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Aggregated data
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        {% include "barriers/assessments/economic/partials/aggregate_data.html" with data=data classes=classes %}
+    </div>
+</details>
+
+<details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Raw data
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        {% include "barriers/assessments/economic/partials/raw_data.html" with data=data classes=classes %}
+    </div>
+</details>
+

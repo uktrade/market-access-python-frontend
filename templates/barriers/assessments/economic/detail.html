@@ -14,18 +14,7 @@
 
     <dl class="restrict-width">
         {% if economic_assessment.automated_analysis_data %}
-            <details class="govuk-details" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">
-                    View initial assessment data
-                </span>
-                </summary>
-                <div class="govuk-details__text">
-                    {% if economic_assessment.automated_analysis_data %}
-                        {% include "barriers/assessments/economic/partials/export_potential.html" with data=economic_assessment.automated_analysis_data %}
-                    {% endif %}
-                </div>
-            </details>
+        {% include "barriers/assessments/economic/partials/automated_analysis_data.html" with data=economic_assessment.automated_analysis_data %}
         {% endif %}
 
         <dt class="ma-data-key">Economic assessment</dt>
