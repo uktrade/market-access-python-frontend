@@ -9,9 +9,9 @@ from utils.forms import MultipleValueField, RestrictedFileField
 
 class TradeCategoryForm(forms.Form):
     trade_category = forms.ChoiceField(
-        label="What is the barrier type?",
+        label="What is the trade category?",
         choices=[],
-        error_messages={"required": "Select the barrier type"},
+        error_messages={"required": "Select the trade category"},
     )
 
     def __init__(self, trade_categories, barrier=None, *args, **kwargs):
