@@ -60,7 +60,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
-        assert item.field_name == "Commercial value"
+        assert item.field_name == "Commercial value estimate"
         assert item.old_value is None
         assert item.new_value == 12345
 

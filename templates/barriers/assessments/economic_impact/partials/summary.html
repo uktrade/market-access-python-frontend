@@ -2,7 +2,7 @@
     {% with assessment=barrier.current_economic_impact_assessment %}
         {% if assessment %}
             <div class="assessment-item__section">
-                <dt class="ma-data-key">Economic impact</dt>
+                <dt class="ma-data-key">Valuation</dt>
                 <dd class="ma-data-value">
                     {{ assessment.impact.name }}
                 </dd>
@@ -30,19 +30,19 @@
 
         {% if barrier.current_economic_assessment.approved and current_user|has_permission:"add_economicimpactassessment" %}
             <div class="assessment-item__section">
-                <a href="{% url 'barriers:add_economic_impact_assessment' barrier.id %}">Add economic impact assessment</a>
+                <a href="{% url 'barriers:add_economic_impact_assessment' barrier.id %}">Add valuation assessment</a>
                 <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
             </div>
         {% elif not barrier.current_economic_impact_assessment %}
             <div class="assessment-item__section">
-                <p>No economic impact assessment</p>
+                <p>No valuation assessment</p>
                 <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
             </div>
         {% endif %}
     {% endwith %}
 {% else %}
     <div class="assessment-item__section">
-        <p>No economic impact assessment</p>
+        <p>No valuation assessment</p>
         <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
     </div>
 {% endif %}
@@ -55,7 +55,7 @@
             {% for assessment in barrier.archived_economic_impact_assessments %}
                 <li class="assessment-item__list-item">
                     <a href="{% url 'barriers:economic_impact_assessment_detail' barrier.id assessment.id %}">
-                        Economic impact assessment - {{ assessment.created_on|date:"j F Y" }}
+                        Valuation assessment - {{ assessment.created_on|date:"j F Y" }}
                     </a>
                 </li>
             {% endfor %}

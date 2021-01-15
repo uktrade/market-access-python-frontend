@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Add economic impact assessment{% endblock %}
+{% block page_title %}{{ block.super }} - Add valuation assessment{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add economic impact assessment' %}
+    {% include 'partials/heading.html' with text='Add valuation assessment' %}
 
     {% form_error_banner form %}
 

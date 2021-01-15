@@ -49,5 +49,5 @@ class EconomicImpactAssessmentDetail(EconomicImpactAssessmentMixin, BarrierMixin
 
 class ArchiveEconomicImpactAssessment(APIPermissionMixin, ArchiveAssessmentBase):
     form_class = ArchiveEconomicImpactAssessmentForm
-    title = "Archive economic impact assessment"
+    title = "Archive valuation assessment"
     permission_required = "archive_economicimpactassessment"

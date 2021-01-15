@@ -62,7 +62,7 @@ class CausedByTradingBlocHistoryItem(BaseHistoryItem):
 
 class CommercialValueHistoryItem(BaseHistoryItem):
     field = "commercial_value"
-    field_name = "Commercial value"
+    field_name = "Commercial value estimate"
 
 
 class CommercialValueExplanationHistoryItem(BaseHistoryItem):

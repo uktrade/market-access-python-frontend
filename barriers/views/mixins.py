@@ -280,7 +280,7 @@ class EconomicImpactAssessmentMixin:
                 if str(assessment.id) == str(self.kwargs.get("assessment_id")):
                     self._economic_impact_assessment = assessment
                     return self._economic_impact_assessment
-            raise Http404("Economic impact assessment does not exist")
+            raise Http404("Valuation assessment does not exist")
         return self._economic_impact_assessment
 
     def get_context_data(self, **kwargs):
