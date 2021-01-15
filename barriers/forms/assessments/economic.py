@@ -36,10 +36,6 @@ class EconomicAssessmentRatingForm(DocumentMixin, forms.Form):
     )
     explanation = forms.CharField(
         label="Explain the assessment",
-        help_text=(
-            "If the assessment does not cover a 5 year period - please indicate the "
-            "time frame used for this assessment"
-        ),
         widget=forms.Textarea,
         required=True,
         error_messages={"required": "Enter an explanation"},
