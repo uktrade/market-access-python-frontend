@@ -137,6 +137,12 @@ class Metadata:
     def get_country_list(self):
         return self.data["countries"]
 
+    def get_country_choices(self):
+        return [
+            (country["id"], country["name"])
+            for country in self.get_country_list()
+        ]
+
     def get_overseas_region_list(self):
         regions = {
             country["overseas_region"]["id"]: country["overseas_region"]
@@ -193,6 +199,12 @@ class Metadata:
             and sector["disabled_on"] is None
         ]
 
+    def get_sector_choices(self):
+        return [
+            (sector["id"], sector["name"])
+            for sector in self.data["sectors"]
+        ]
+
     def get_status(self, status_id):
         for id, name in self.data["barrier_status"].items():
             self.STATUS_INFO[id]["id"] = id
@@ -213,6 +225,12 @@ class Metadata:
             return name
 
         return status_id
+
+    def get_status_choices(self):
+        return [
+            (status[0], status[1])
+            for status in self.data["barrier_status"].items()
+        ]
 
     def get_sub_status_text(self, sub_status, sub_status_other=None):
         if sub_status == "OTHER":
