@@ -1,3 +1,4 @@
+from barriers.constants import PUBLIC_BARRIER_STATUSES
 from utils.metadata import Metadata
 from django import forms
 from django.http import QueryDict
@@ -103,19 +104,17 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
 
 class PublicBarrierSearchForm(forms.Form):
     organisation = forms.MultipleChoiceField(
-        label="Government organisations", required=False,
+        label="Government organisations",
+        required=False,
     )
     sector = forms.MultipleChoiceField(
-        label="Sector", required=False,
+        label="Sector",
+        required=False,
     )
-    country = forms.MultipleChoiceField(
-        label="Country", required=False
-    )
-    status = forms.MultipleChoiceField(
-        label="Status", required=False
-    )
+    country = forms.MultipleChoiceField(label="Country", required=False)
+    status = forms.MultipleChoiceField(label="Status", required=False)
 
-    def __init__(self, metadata:Metadata, *args, **kwargs):
+    def __init__(self, metadata: Metadata, *args, **kwargs):
         self.metadata = metadata
 
         if isinstance(kwargs["data"], QueryDict):
@@ -128,7 +127,9 @@ class PublicBarrierSearchForm(forms.Form):
         self.set_status_choices()
 
     def set_organisation_choices(self):
-        self.fields["organisation"].choices = self.metadata.get_gov_organisation_choices()
+        self.fields[
+            "organisation"
+        ].choices = self.metadata.get_gov_organisation_choices()
 
     def set_sector_choices(self):
         self.fields["sector"].choices = self.metadata.get_sector_choices()
@@ -137,7 +138,7 @@ class PublicBarrierSearchForm(forms.Form):
         self.fields["country"].choices = self.metadata.get_country_choices()
 
     def set_status_choices(self):
-        self.fields["status"].choices = self.metadata.get_status_choices()
+        self.fields["status"].choices = PUBLIC_BARRIER_STATUSES
 
     def get_data_from_querydict(self, data):
         """
@@ -147,6 +148,6 @@ class PublicBarrierSearchForm(forms.Form):
             "organisation": data.getlist("organisation"),
             "sector": data.getlist("sector"),
             "country": data.getlist("country"),
-            # "status": data.getlist("barrier_status")
+            "status": data.getlist("status"),
         }
         return {k: v for k, v in cleaned_data.items() if v}
