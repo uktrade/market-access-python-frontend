@@ -140,7 +140,6 @@ class PublicBarrierSearchForm(forms.Form):
 
     def set_status_choices(self):
         self.fields["status"].choices = PUBLIC_BARRIER_STATUSES
-        self.fields["status"].value = [20,30]
 
     def set_region_choices(self):
         self.fields["region"].choices = self.metadata.get_overseas_region_choices()

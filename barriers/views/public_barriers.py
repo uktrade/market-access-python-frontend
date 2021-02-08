@@ -1,4 +1,5 @@
 from urllib.parse import parse_qs
+from utils.helpers import remove_empty_values_from_dict
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -21,19 +22,22 @@ from .search import SearchFormView
 class PublicBarrierListView(MetadataMixin, SearchFormView):
     template_name = "barriers/public_barriers/list.html"
     form_class = PublicBarrierSearchForm
-
+    initial_values = {
+        "status": ["20", "30"]
+    }
     def get_params(self):
-        multi_choices_fields = ["country", "status", "sector", "region", "status"]
-        params = parse_qs(self.request.META.get("QUERY_STRING"))
+        multi_choices_fields = ["country", "status", "sector", "region", "status", "organisation"]
+        params = parse_qs(self.request.META.get("QUERY_STRING"), keep_blank_values=True)
         for multi_choice_field in multi_choices_fields:
             if params.get(multi_choice_field) is not None:
                 value = params.get(multi_choice_field)
                 if isinstance(value, list):
                     params[multi_choice_field] = ",".join(value)
             else:
-                if multi_choice_field == "status":
-                    params[multi_choice_field] = ["20","30"]
-        return params
+                if multi_choice_field in self.initial_values.keys():
+                    params[multi_choice_field] = self.initial_values[multi_choice_field]
+
+        return remove_empty_values_from_dict(params)
 
     def get_selected_overseas_region(self):
         region_ids = self.get_params().get("region")
