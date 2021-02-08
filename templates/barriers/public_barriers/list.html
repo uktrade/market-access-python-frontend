@@ -7,9 +7,10 @@
     <script src="{% static 'js/react.js' %}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderMultiSelectFilter("region", "All")
+            ReactApp.renderMultiSelectFilter("country", "All")
             ReactApp.renderMultiSelectFilter("organisation", "All")
             ReactApp.renderMultiSelectFilter("sector", "All")
-            ReactApp.renderMultiSelectFilter("country", "All")
             ReactApp.renderMultiSelectFilter("status", "All")
         })
     </script>
@@ -17,8 +18,8 @@
 
 {% block page_content %}
 
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Market access public barriers</h1>
-    {% if selected_overseas_region %}
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-5">Market access public barriers</h1>
+    <!-- {% if selected_overseas_region %}
         <p class="govuk-!-margin-top-0">in {{ selected_overseas_region.name }}</p>
     {% endif %}
 
@@ -30,13 +31,14 @@
                 {{ name }}
             </a>
         {% endfor %}
-    </section>
+    </section> -->
 
     <section class="govuk-!-width-one-third">
         <form action="" method="GET" class="filter-items">
+            {% include "partials/forms/checkbox_filter.html" with field=form.region from_group_classes="pb-filter" %}
+            {% include "partials/forms/checkbox_filter.html" with field=form.country from_group_classes="pb-filter" %}
             {% include "partials/forms/checkbox_filter.html" with field=form.sector from_group_classes="pb-filter" %}
             {% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}
-            {% include "partials/forms/checkbox_filter.html" with field=form.country from_group_classes="pb-filter" %}
             {% include "partials/forms/checkbox_filter.html" with field=form.status from_group_classes="pb-filter" %}
             <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
         </form>

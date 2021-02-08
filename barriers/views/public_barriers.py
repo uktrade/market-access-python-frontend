@@ -23,13 +23,16 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
     form_class = PublicBarrierSearchForm
 
     def get_params(self):
-        multi_choices_fields = ["country", "status", "sector"]
+        multi_choices_fields = ["country", "status", "sector", "region", "status"]
         params = parse_qs(self.request.META.get("QUERY_STRING"))
         for multi_choice_field in multi_choices_fields:
-            if params.get(multi_choice_field):
+            if params.get(multi_choice_field) is not None:
                 value = params.get(multi_choice_field)
                 if isinstance(value, list):
                     params[multi_choice_field] = ",".join(value)
+            else:
+                if multi_choice_field == "status":
+                    params[multi_choice_field] = ["20","30"]
         return params
 
     def get_selected_overseas_region(self):
