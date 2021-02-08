@@ -198,11 +198,12 @@ class Metadata:
             if (level is None or sector["level"] == level)
             and sector["disabled_on"] is None
         ]
+        
 
-    def get_sector_choices(self):
+    def get_sector_choices(self, level=None):
         return [
             (sector["id"], sector["name"])
-            for sector in self.data["sectors"]
+            for sector in self.get_sector_list(level)
         ]
 
     def get_status(self, status_id):
