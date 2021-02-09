@@ -224,6 +224,13 @@ class Barrier(APIModel):
     @property
     def government_organisations(self):
         return self.data.get("government_organisations") or ()
+    
+    @property
+    def government_organisations_names(self):
+        org_names = []
+        for org in self.government_organisations():
+            org_names.append(org["name"])
+        return org_names
 
     @property
     def government_organisation_ids_as_str(self):

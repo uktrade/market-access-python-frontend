@@ -19,19 +19,6 @@
 {% block page_content %}
 
     <h1 class="govuk-heading-l govuk-!-margin-bottom-5">Market access public barriers</h1>
-    <!-- {% if selected_overseas_region %}
-        <p class="govuk-!-margin-top-0">in {{ selected_overseas_region.name }}</p>
-    {% endif %}
-
-    <section class="govuk-!-margin-bottom-8">
-        <h2>Overseas regions</h2>
-        {% for id, name in overseas_regions %}
-            <a class="govuk-!-margin-right-2 govuk-link govuk-link--no-visited-state"
-               href="{% url "barriers:public_barriers" %}?region={{ id }}">
-                {{ name }}
-            </a>
-        {% endfor %}
-    </section> -->
 
     <section class="govuk-!-width-one-third">
         <form action="" method="GET" class="filter-items">
@@ -62,6 +49,9 @@
                     <th scope="col" class="govuk-table__header">Barrier Code</th>
                     <th scope="col" class="govuk-table__header">Public Title</th>
                     <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Public Summary</th>
+                    <th scope="col" class="govuk-table__header">Reported Date</th>
+                    <th scope="col" class="govuk-table__header">Sector</th>
+                    <th scope="col" class="govuk-table__header">Government organisation</th>
                     <th scope="col" class="govuk-table__header">Location</th>
                     <th scope="col" class="govuk-table__header">Public status</th>
                     <th scope="col" class="govuk-table__header">Latest note</th>
@@ -91,6 +81,30 @@
                             {% else %}
                                 Not set
                             {% endif %}
+                        </td>
+                        <!-- Reported Date -->
+                        <td class="govuk-table__cell">
+                            {% if barrier.reported_on %}
+                                {{ barrier.reported_on|date:"j F Y" }}
+                            {% else %}
+                                Not set
+                            {% endif %}
+                        </td>
+                        <!-- Sector -->
+                        <td class="govuk-table__cell">
+                            {% for sector in barrier.internal_sector_names %}
+                                {{ sector }}{% if not forloop.last %},{% endif %}
+                            {% empty %}
+                                Not set
+                            {% endfor %}
+                        </td>
+                        <!-- Government organisation -->
+                        <td class="govuk-table__cell">
+                            {% for org_name in barrier.government_organisations_names %}
+                                {{ org_name }}{% if not forloop.last %},{% endif %}
+                            {% empty %}
+                                Not set
+                            {% endfor %}
                         </td>
                         <!-- Location -->
                         <td class="govuk-table__cell">{{ barrier.location }}</td>
