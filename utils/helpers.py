@@ -5,16 +5,13 @@ from django.urls import reverse
 
 
 def build_absolute_uri(request, reverse_path):
-    redirect_uri = request.build_absolute_uri(
-        reverse(reverse_path)
-    )
+    redirect_uri = request.build_absolute_uri(reverse(reverse_path))
     uri_bits = urlsplit(redirect_uri)
     if settings.DJANGO_ENV != "local" and uri_bits.scheme != "https":
         redirect_uri = f"{'https'}://{uri_bits.netloc}{uri_bits.path}"
 
     return redirect_uri
 
+
 def remove_empty_values_from_dict(dictionary):
-    return {
-        k:v for k,v in dictionary.items() if v
-    }
+    return {k: v for k, v in dictionary.items() if v}

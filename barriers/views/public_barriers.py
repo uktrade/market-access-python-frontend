@@ -22,11 +22,17 @@ from .search import SearchFormView
 class PublicBarrierListView(MetadataMixin, SearchFormView):
     template_name = "barriers/public_barriers/list.html"
     form_class = PublicBarrierSearchForm
-    initial_values = {
-        "status": ["20", "30"]
-    }
+    initial_values = {"status": ["20", "30"]}
+
     def get_params(self):
-        multi_choices_fields = ["country", "status", "sector", "region", "status", "organisation"]
+        multi_choices_fields = [
+            "country",
+            "status",
+            "sector",
+            "region",
+            "status",
+            "organisation",
+        ]
         params = parse_qs(self.request.META.get("QUERY_STRING"), keep_blank_values=True)
         for multi_choice_field in multi_choices_fields:
             if params.get(multi_choice_field) is not None:

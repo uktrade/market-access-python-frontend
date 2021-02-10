@@ -101,6 +101,7 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
             summary=self.cleaned_data.get("summary"),
         )
 
+
 class PublicBarrierSearchForm(forms.Form):
     region = forms.MultipleChoiceField(label="Overseas Regions", required=False)
     organisation = forms.MultipleChoiceField(
@@ -112,7 +113,9 @@ class PublicBarrierSearchForm(forms.Form):
         required=False,
     )
     country = forms.MultipleChoiceField(label="Country", required=False)
-    status = forms.MultipleChoiceField(label="Status", required=False, initial=["20","30"])
+    status = forms.MultipleChoiceField(
+        label="Status", required=False, initial=["20", "30"]
+    )
 
     def __init__(self, metadata: Metadata, *args, **kwargs):
         self.metadata = metadata
@@ -153,7 +156,7 @@ class PublicBarrierSearchForm(forms.Form):
             "organisation": data.getlist("organisation"),
             "sector": data.getlist("sector"),
             "country": data.getlist("country"),
-            "status": data.getlist("status", ["20","30"]),
-            "region": data.getlist("region")
+            "status": data.getlist("status", ["20", "30"]),
+            "region": data.getlist("region"),
         }
         return {k: v for k, v in cleaned_data.items() if v}
