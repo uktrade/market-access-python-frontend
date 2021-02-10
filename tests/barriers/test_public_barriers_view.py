@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from utils.helpers import make_absolute_path
 
 from django.urls import resolve, reverse
 from mock import patch
@@ -55,18 +54,19 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
         assert notes_head in html
         assert add_note_button in html
 
+    @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.client.PublicBarriersResource.get")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     def test_public_barrier_search_view_loads_html(
-        self, _mock_get_notes, _mock_get_activity, mock_get
+        self, _mock_get_notes, _mock_get_activity, mock_get, mock_list
     ):
         mock_get.return_value = self.public_barrier
         url = reverse("barriers:public_barriers")
         title = "<title>Market Access - Public barriers</title>"
         section_head = '<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Market access public barriers</h1>'
 
-        response = self.client.get(make_absolute_path(url))
+        response = self.client.get(url)
         html = response.content.decode("utf8")
 
         assert HTTPStatus.OK == response.status_code
@@ -82,7 +82,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     ):
         def fetch_html_for_params(params):
             url = reverse("barriers:public_barriers")
-            response = self.client.get(make_absolute_path(url), data=params)
+            response = self.client.get(url, data=params)
             html = response.content.decode("utf8")
             return html, response
 

@@ -13,11 +13,5 @@ def build_absolute_uri(request, reverse_path):
     return redirect_uri
 
 
-def make_absolute_path(path):
-    if path.startswith("/"):
-        return path
-    return "/" + path
-
-
 def remove_empty_values_from_dict(dictionary):
     return {k: v for k, v in dictionary.items() if v}
