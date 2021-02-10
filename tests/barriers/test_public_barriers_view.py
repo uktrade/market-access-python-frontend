@@ -61,7 +61,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
         self, _mock_get_notes, _mock_get_activity, mock_get
     ):
         mock_get.return_value = self.public_barrier
-        url = reverse("barriers:public_barriers", kwargs={})
+        url = reverse("barriers:public_barriers")
         title = "<title>Market Access - Public barriers</title>"
         section_head = '<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Market access public barriers</h1>'
 
