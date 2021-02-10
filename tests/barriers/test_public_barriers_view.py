@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from utils.helpers import make_absolute_path
 
 from django.urls import resolve, reverse
 from mock import patch
@@ -65,7 +66,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
         title = "<title>Market Access - Public barriers</title>"
         section_head = '<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Market access public barriers</h1>'
 
-        response = self.client.get(url)
+        response = self.client.get(make_absolute_path(url))
         html = response.content.decode("utf8")
 
         assert HTTPStatus.OK == response.status_code
@@ -81,7 +82,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     ):
         def fetch_html_for_params(params):
             url = reverse("barriers:public_barriers")
-            response = self.client.get(url, data=params)
+            response = self.client.get(make_absolute_path(url), data=params)
             html = response.content.decode("utf8")
             return html, response
 
