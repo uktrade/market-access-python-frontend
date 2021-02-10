@@ -1,5 +1,9 @@
 from barriers.constants import PUBLIC_BARRIER_STATUSES
-from barriers.models.assessments import EconomicAssessment, ResolvabilityAssessment, StrategicAssessment
+from barriers.models.assessments import (
+    EconomicAssessment,
+    ResolvabilityAssessment,
+    StrategicAssessment,
+)
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
 
@@ -58,7 +62,10 @@ class Barrier(APIModel):
 
     @property
     def commodities(self):
-        return [BarrierCommodity(commodity) for commodity in self.data.get("commodities", [])]
+        return [
+            BarrierCommodity(commodity)
+            for commodity in self.data.get("commodities", [])
+        ]
 
     @property
     def commodities_grouped_by_country(self):
@@ -141,7 +148,9 @@ class Barrier(APIModel):
         if self._economic_impact_assessments is None:
             self._economic_impact_assessments = []
             for economic_assessment in self.economic_assessments:
-                for economic_impact_assessment in economic_assessment.economic_impact_assessments:
+                for (
+                    economic_impact_assessment
+                ) in economic_assessment.economic_impact_assessments:
                     economic_impact_assessment.economic_assessment = economic_assessment
                     self._economic_impact_assessments.append(economic_impact_assessment)
         return self._economic_impact_assessments
@@ -219,11 +228,18 @@ class Barrier(APIModel):
     @property
     def tags(self):
         tags = self.data.get("tags") or ()
-        return sorted(tags, key=lambda k: k['order'])
+        return sorted(tags, key=lambda k: k["order"])
 
     @property
     def government_organisations(self):
         return self.data.get("government_organisations") or ()
+
+    @property
+    def government_organisations_names(self):
+        org_names = []
+        for org in self.government_organisations():
+            org_names.append(org["name"])
+        return org_names
 
     @property
     def government_organisation_ids_as_str(self):
@@ -272,9 +288,8 @@ class PublicBarrier(APIModel):
 
     @property
     def any_internal_sectors_changed(self):
-        return (
-            self.data.get("internal_sectors_changed")
-            or self.data.get("internal_all_sectors_changed")
+        return self.data.get("internal_sectors_changed") or self.data.get(
+            "internal_all_sectors_changed"
         )
 
     @property
@@ -299,12 +314,26 @@ class PublicBarrier(APIModel):
             return dateutil.parser.parse(self.data["internal_status_date"])
 
     @property
+    def internal_government_organisations(self):
+        return self.data.get("internal_government_organisations")
+
+    @property
+    def internal_government_organisations_names(self):
+        org_names = []
+        if self.internal_government_organisations:
+            for org in self.internal_government_organisations:
+                org_names.append(org["name"])
+        return org_names
+
+    @property
     def is_resolved_text(self):
         return self.get_resolved_text(self.is_resolved, self.status_date)
 
     @property
     def internal_is_resolved_text(self):
-        return self.get_resolved_text(self.internal_is_resolved, self.internal_status_date)
+        return self.get_resolved_text(
+            self.internal_is_resolved, self.internal_status_date
+        )
 
     def get_resolved_text(self, is_resolved, status_date):
         if is_resolved:

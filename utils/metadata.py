@@ -38,7 +38,10 @@ def get_metadata():
     response = requests.get(
         url,
         verify=not settings.DEBUG,
-        headers={"Authorization": sender.request_header, "Content-Type": "text/plain",},
+        headers={
+            "Authorization": sender.request_header,
+            "Content-Type": "text/plain",
+        },
     )
 
     if response.ok:
@@ -137,6 +140,9 @@ class Metadata:
     def get_country_list(self):
         return self.data["countries"]
 
+    def get_country_choices(self):
+        return [(country["id"], country["name"]) for country in self.get_country_list()]
+
     def get_overseas_region_list(self):
         regions = {
             country["overseas_region"]["id"]: country["overseas_region"]
@@ -156,8 +162,7 @@ class Metadata:
 
     def get_overseas_region_choices(self):
         return [
-            (region["id"], region["name"])
-            for region in self.get_overseas_region_list()
+            (region["id"], region["name"]) for region in self.get_overseas_region_list()
         ]
 
     def get_sector(self, sector_id):
@@ -193,6 +198,11 @@ class Metadata:
             and sector["disabled_on"] is None
         ]
 
+    def get_sector_choices(self, level=None):
+        return [
+            (sector["id"], sector["name"]) for sector in self.get_sector_list(level)
+        ]
+
     def get_status(self, status_id):
         for id, name in self.data["barrier_status"].items():
             self.STATUS_INFO[id]["id"] = id
@@ -201,18 +211,27 @@ class Metadata:
         return self.STATUS_INFO[status_id]
 
     def get_status_text(
-        self, status_id, sub_status=None, sub_status_other=None,
+        self,
+        status_id,
+        sub_status=None,
+        sub_status_other=None,
     ):
         if status_id in self.STATUS_INFO.keys():
             name = self.get_status(status_id)["name"]
             if sub_status and status_id == Statuses.OPEN_PENDING_ACTION:
                 sub_status_text = self.get_sub_status_text(
-                    sub_status, sub_status_other,
+                    sub_status,
+                    sub_status_other,
                 )
                 return f"{name} ({sub_status_text})"
             return name
 
         return status_id
+
+    def get_status_choices(self):
+        return [
+            (status[0], status[1]) for status in self.data["barrier_status"].items()
+        ]
 
     def get_sub_status_text(self, sub_status, sub_status_other=None):
         if sub_status == "OTHER":
@@ -304,7 +323,7 @@ class Metadata:
 
     def get_barrier_tags(self):
         tags = self.data.get("barrier_tags", [])
-        return sorted(tags, key=lambda k: k['order'])
+        return sorted(tags, key=lambda k: k["order"])
 
     def get_barrier_tag_choices(self):
         """
@@ -377,10 +396,7 @@ class Metadata:
         """
         Generates government organisation choices.
         """
-        return (
-            (str(org["id"]), org["name"])
-            for org in self.get_gov_organisations()
-        )
+        return ((str(org["id"]), org["name"]) for org in self.get_gov_organisations())
 
     def get_government_organisation(self, org_id):
         for org in self.get_gov_organisations():
@@ -390,8 +406,7 @@ class Metadata:
     def get_gov_organisations_by_ids(self, list_of_ids):
         list_of_ids = [str(id) for id in list_of_ids]
         return (
-            org for org in self.get_gov_organisations()
-            if str(org["id"]) in list_of_ids
+            org for org in self.get_gov_organisations() if str(org["id"]) in list_of_ids
         )
 
 

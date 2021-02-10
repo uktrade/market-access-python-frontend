@@ -4,111 +4,134 @@
 {% block page_title %}{{ block.super }} - Public barriers{% endblock %}
 
 {% block head %}
-    <script src="{% static 'js/react.js' %}"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function (event) {
-            ReactApp.renderMultiSelectFilter("organisation", "All")
-        })
-    </script>
+<script src="{% static 'js/react.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderMultiSelectFilter("region", "All")
+        ReactApp.renderMultiSelectFilter("country", "All")
+        ReactApp.renderMultiSelectFilter("organisation", "All")
+        ReactApp.renderMultiSelectFilter("sector", "All")
+        ReactApp.renderMultiSelectFilter("status", "All")
+    })
+</script>
 {% endblock %}
 
 {% block page_content %}
 
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Market access public barriers</h1>
-    {% if selected_overseas_region %}
-        <p class="govuk-!-margin-top-0">in {{ selected_overseas_region.name }}</p>
-    {% endif %}
+<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Market access public barriers</h1>
 
-    <section class="govuk-!-margin-bottom-8">
-        <h2>Overseas regions</h2>
-        {% for id, name in overseas_regions %}
-            <a class="govuk-!-margin-right-2 govuk-link govuk-link--no-visited-state"
-               href="{% url "barriers:public_barriers" %}?region={{ id }}">
-                {{ name }}
-            </a>
-        {% endfor %}
-    </section>
+<section class="govuk-!-width-one-third">
+    <form action="" method="GET" class="filter-items">
+        {% include "partials/forms/checkbox_filter.html" with field=form.region from_group_classes="pb-filter" %}
+        {% include "partials/forms/checkbox_filter.html" with field=form.country from_group_classes="pb-filter" %}
+        {% include "partials/forms/checkbox_filter.html" with field=form.sector from_group_classes="pb-filter" %}
+        {% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}
+        {% include "partials/forms/checkbox_filter.html" with field=form.status from_group_classes="pb-filter" %}
+        <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
+    </form>
+</section>
 
-    <section class="govuk-!-width-one-third">
-        <form action="" method="GET" class="filter-items">
-            {% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}
-            <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
-        </form>
-    </section>
-
-    <section>
-        <div class="filter-results-header">
-            <div class="filter-results-header__row">
-                <div class="filter-results-count__container">
-                    <h2 class="filter-results-title">
-                        {{ barriers.total_count }}
-                        <span class="filter-results-title__caption"> result{{ barriers.total_count|pluralize }} found</span>
-                    </h2>
-                </div>
+<section>
+    <div class="filter-results-header">
+        <div class="filter-results-header__row">
+            <div class="filter-results-count__container">
+                <h2 class="filter-results-title">
+                    {{ barriers.total_count }}
+                    <span class="filter-results-title__caption"> result{{ barriers.total_count|pluralize }} found</span>
+                </h2>
             </div>
         </div>
-        {% if barriers.total_count %}
-            <table class="govuk-table filter-results-table">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Barrier Code</th>
-                    <th scope="col" class="govuk-table__header">Public Title</th>
-                    <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Public Summary</th>
-                    <th scope="col" class="govuk-table__header">Location</th>
-                    <th scope="col" class="govuk-table__header">Public status</th>
-                    <th scope="col" class="govuk-table__header">Latest note</th>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                {% for barrier in barriers %}
-                    <tr class="govuk-table__row">
-                        <!-- Barrier Code -->
-                        <td class="govuk-table__cell">
-                            <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}" class="govuk-link">
-                                {{ barrier.internal_code }}
-                            </a>
-                        </td>
-                        <!-- Public Title -->
-                        <td class="govuk-table__cell">
-                            {% if barrier.title %}
-                                {{ barrier.title }}
-                            {% else %}
-                                Not set
-                            {% endif %}
-                        </td>
-                        <!-- Public Summary -->
-                        <td class="govuk-table__cell">
-                            {% if barrier.summary %}
-                                {{ barrier.summary }}
-                            {% else %}
-                                Not set
-                            {% endif %}
-                        </td>
-                        <!-- Location -->
-                        <td class="govuk-table__cell">{{ barrier.location }}</td>
-                        <!-- Public status -->
-                        <td class="govuk-table__cell">{{ barrier.public_status_text }}</td>
-                        <!-- Latest note -->
-                        <td class="govuk-table__cell">
-                            {% if barrier.latest_note %}
-                                {{ barrier.latest_note.text }}
-                                <br />
-                                (by {{ barrier.latest_note.created_by.name }})
-                            {% else %}
-                                No notes
-                            {% endif %}
-                            <br/>
-                            <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}?add-note=1" class="govuk-link" target="_blank">
-                                Add new note
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <h2 class="filter-results-comment">There are no reported trade barriers.</h2>
-        {% endif %}
-    </section>
+    </div>
+    {% if barriers.total_count %}
+    <table class="govuk-table filter-results-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Barrier Code</th>
+                <th scope="col" class="govuk-table__header">Public Title</th>
+                <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Public Summary</th>
+                <th scope="col" class="govuk-table__header">Reported Date</th>
+                <th scope="col" class="govuk-table__header">Sector</th>
+                <th scope="col" class="govuk-table__header">Government organisation</th>
+                <th scope="col" class="govuk-table__header">Location</th>
+                <th scope="col" class="govuk-table__header">Public status</th>
+                <th scope="col" class="govuk-table__header">Latest note</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            {% for barrier in barriers %}
+            <tr class="govuk-table__row">
+                <!-- Barrier Code -->
+                <td class="govuk-table__cell">
+                    <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}" class="govuk-link">
+                        {{ barrier.internal_code }}
+                    </a>
+                </td>
+                <!-- Public Title -->
+                <td class="govuk-table__cell">
+                    {% if barrier.title %}
+                        {{ barrier.title }}
+                    {% else %}
+                        Not set
+                    {% endif %}
+                </td>
+                <!-- Public Summary -->
+                <td class="govuk-table__cell">
+                    {% if barrier.summary %}
+                        {{ barrier.summary }}
+                    {% else %}
+                        Not set
+                    {% endif %}
+                </td>
+                <!-- Reported Date -->
+                <td class="govuk-table__cell">
+                    {% if barrier.reported_on %}
+                        {{ barrier.reported_on|date:"j F Y" }}
+                    {% else %}
+                        Not set
+                    {% endif %}
+                </td>
+                <!-- Sector -->
+                <td class="govuk-table__cell">
+                    {% for sector in barrier.internal_sector_names %}
+                        {{ sector }}{% if not forloop.last %},{% endif %}
+                    {% empty %}
+                    Not set
+                    {% endfor %}
+                </td>
+                <!-- Government organisation -->
+                <td class="govuk-table__cell">
+                    {% for org_name in barrier.internal_government_organisations_names %}
+                        {{ org_name }}{% if not forloop.last %},{% endif %}
+                    {% empty %}
+                        Not set
+                    {% endfor %}
+                </td>
+                <!-- Location -->
+                <td class="govuk-table__cell">{{ barrier.location }}</td>
+                <!-- Public status -->
+                <td class="govuk-table__cell">{{ barrier.public_status_text }}</td>
+                <!-- Latest note -->
+                <td class="govuk-table__cell">
+                    {% if barrier.latest_note %}
+                        {{ barrier.latest_note.text }}
+                        <br />
+                        (by {{ barrier.latest_note.created_by.name }})
+                    {% else %}
+                        No notes
+                    {% endif %}
+                    <br />
+                    <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}?add-note=1"
+                        class="govuk-link" target="_blank">
+                        Add new note
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h2 class="filter-results-comment">There are no reported trade barriers.</h2>
+    {% endif %}
+</section>
 
 {% endblock %}
