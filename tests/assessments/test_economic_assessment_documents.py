@@ -1,13 +1,11 @@
 from http import HTTPStatus
 
-from django.urls import reverse
-
-from core.tests import MarketAccessTestCase
-
-from utils.exceptions import FileUploadError, ScanError
-
 import mock
+from core.tests import MarketAccessTestCase
+from django.conf import settings
+from django.urls import reverse
 from mock import patch
+from utils.exceptions import FileUploadError, ScanError
 
 
 class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
@@ -145,7 +143,12 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:economic_assessments:new:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         self.client.post(
             reverse(
@@ -169,11 +172,19 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:economic_assessments:new:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         url = reverse(
             "barriers:delete_economic_assessment_document",
-            kwargs={"barrier_id": self.barrier["id"], "document_id": document_ids[0],},
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "document_id": document_ids[0],
+            },
         )
         self.client.post(url, xhr=True)
         session_document_ids = [
@@ -188,11 +199,19 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:economic_assessments:new:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         url = reverse(
             "barriers:delete_economic_assessment_document",
-            kwargs={"barrier_id": self.barrier["id"], "document_id": document_ids[0],},
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "document_id": document_ids[0],
+            },
         )
         self.client.get(url)
         session_document_ids = [
