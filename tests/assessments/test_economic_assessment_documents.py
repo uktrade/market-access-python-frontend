@@ -165,6 +165,26 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         assert session_document_ids == document_ids[1:]
 
+    def test_strategic_assessments(self):
+        url = reverse(
+            "barriers:assessment_detail",
+            kwargs={
+                "barrier_id": self.barrier["id"],
+            },
+        )
+
+        res = self.client.get(url)
+        # Default to false, hidden by default
+        assert settings.PRIORITISATION_STRATEGIC_ASSESSMENTS is False
+        assert res.status_code == HTTPStatus.OK
+        assert "assessment-item visually-hidden" in res.content.decode("utf8")
+
+        with self.settings(PRIORITISATION_STRATEGIC_ASSESSMENTS=True):
+            res = self.client.get(url)
+            assert settings.PRIORITISATION_STRATEGIC_ASSESSMENTS is True
+            assert res.status_code == HTTPStatus.OK
+            assert "assessment-item visually-hidden" not in res.content.decode("utf8")
+
     def test_delete_edit_economic_assessment_document_ajax(self):
         document_ids = [
             "309d9ef4-4379-4514-ae5f-3399ba7f2ca6",
