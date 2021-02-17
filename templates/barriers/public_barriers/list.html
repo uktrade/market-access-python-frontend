@@ -54,6 +54,7 @@
                 <th scope="col" class="govuk-table__header">Government organisation</th>
                 <th scope="col" class="govuk-table__header">Location</th>
                 <th scope="col" class="govuk-table__header">Public status</th>
+                <th scope="col" class="govuk-table__header">Changes since publishing</th>
                 <th scope="col" class="govuk-table__header">Latest note</th>
             </tr>
         </thead>
@@ -110,6 +111,13 @@
                 <td class="govuk-table__cell">{{ barrier.location }}</td>
                 <!-- Public status -->
                 <td class="govuk-table__cell">{{ barrier.public_status_text }}</td>
+                <td class="govuk-table__cell">
+                    {% if barrier.unpublished_changes %}
+                        Has unpublished changes
+                    {% else %}
+                        Up to date
+                    {% endif %}
+                </td>
                 <!-- Latest note -->
                 <td class="govuk-table__cell">
                     {% if barrier.latest_note %}
