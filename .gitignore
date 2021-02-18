@@ -129,3 +129,6 @@ docker-compose.env
 config/settings/static/
 
 requirements-dev.txt
+/GPATH
+/GRTAGS
+/GTAGS

@@ -1,13 +1,11 @@
 from http import HTTPStatus
 
-from django.urls import reverse
-
-from core.tests import MarketAccessTestCase
-
-from utils.exceptions import FileUploadError, ScanError
-
 import mock
+from core.tests import MarketAccessTestCase
+from django.conf import settings
+from django.urls import reverse
 from mock import patch
+from utils.exceptions import FileUploadError, ScanError
 
 
 class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
@@ -145,7 +143,12 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:economic_assessments:new:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         self.client.post(
             reverse(
@@ -162,6 +165,26 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         assert session_document_ids == document_ids[1:]
 
+    def test_strategic_assessments(self):
+        url = reverse(
+            "barriers:assessment_detail",
+            kwargs={
+                "barrier_id": self.barrier["id"],
+            },
+        )
+
+        res = self.client.get(url)
+        # Default to false, hidden by default
+        assert settings.PRIORITISATION_STRATEGIC_ASSESSMENTS is False
+        assert res.status_code == HTTPStatus.OK
+        assert "assessment-item visually-hidden" in res.content.decode("utf8")
+
+        with self.settings(PRIORITISATION_STRATEGIC_ASSESSMENTS=True):
+            res = self.client.get(url)
+            assert settings.PRIORITISATION_STRATEGIC_ASSESSMENTS is True
+            assert res.status_code == HTTPStatus.OK
+            assert "assessment-item visually-hidden" not in res.content.decode("utf8")
+
     def test_delete_edit_economic_assessment_document_ajax(self):
         document_ids = [
             "309d9ef4-4379-4514-ae5f-3399ba7f2ca6",
@@ -169,11 +192,19 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:economic_assessments:new:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         url = reverse(
             "barriers:delete_economic_assessment_document",
-            kwargs={"barrier_id": self.barrier["id"], "document_id": document_ids[0],},
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "document_id": document_ids[0],
+            },
         )
         self.client.post(url, xhr=True)
         session_document_ids = [
@@ -188,11 +219,19 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:economic_assessments:new:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         url = reverse(
             "barriers:delete_economic_assessment_document",
-            kwargs={"barrier_id": self.barrier["id"], "document_id": document_ids[0],},
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "document_id": document_ids[0],
+            },
         )
         self.client.get(url)
         session_document_ids = [
