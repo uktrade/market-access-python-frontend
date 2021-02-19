@@ -1,22 +1,28 @@
 from collections import UserList
+from typing import Dict, Tuple
 
 import dateutil.parser
 
 
 class APIModel:
-    data = {}
-    date_fields = tuple()
+    data: Dict = {}
+    date_fields: Tuple = tuple()
 
     def __init__(self, data):
         self.data = data
 
     def __getattr__(self, name):
-        if name in self.data:
-            value = self.data.get(name)
-            if value and name in self.date_fields:
-                return dateutil.parser.parse(value)
+        if name not in self.data:
+            raise AttributeError(f"{name} not found in data")
+
+        value = self.data.get(name)
+        if not value:
             return value
-        raise AttributeError(f"{name} not found in data")
+
+        if name in self.date_fields:
+            return dateutil.parser.parse(value)
+
+        return value
 
 
 class ModelList(UserList):

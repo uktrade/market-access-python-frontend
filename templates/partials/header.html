@@ -13,18 +13,8 @@
         </div>
         <ul id="logo-navigation" class="datahub-header__links" aria-label="Header links">
             <li class="datahub-header__links__item">
-                <a class="datahub-header__links__item__text" href="{{ settings.DATAHUB_DOMAIN }}/support">Support</a>
+                <a class="datahub-header__links__item__text" href="https://data.trade.gov.uk/"> Switch to Data Workspace </a>
             </li>
-            <li class="datahub-header__links__item">
-                {% if current_user.has_crm_permission %}
-                    <a class="datahub-header__links__item__text" href="{{ settings.DATAHUB_DOMAIN }}/profile">{{ current_user.username }}</a>
-                {% else %}
-                    <span class="datahub-header__links__item__text">{{ current_user.username }}</span>
-                {% endif %}
-            </li>
-{#            <li class="datahub-header__links__item">#}
-{#                <a class="datahub-header__links__item__text" href="{% url 'users:sign-out' %}">Sign out</a>#}
-{#            </li>#}
         </ul>
     </div>
     <button role="button" class="datahub-header__menu-button js-datahub-header-toggle" aria-controls="navigation sub-navigation logo-navigation" aria-label="Show or hide navigation">Menu</button>
