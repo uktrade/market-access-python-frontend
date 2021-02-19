@@ -315,15 +315,11 @@ class PublicBarrier(APIModel):
 
     @property
     def internal_government_organisations(self):
-        return self.data.get("internal_government_organisations")
+        return self.data.get("internal_government_organisations", [])
 
     @property
     def internal_government_organisations_names(self):
-        org_names = []
-        if self.internal_government_organisations:
-            for org in self.internal_government_organisations:
-                org_names.append(org["name"])
-        return org_names
+        return [org["name"] for org in self.internal_government_organisations]
 
     @property
     def is_resolved_text(self):

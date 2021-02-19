@@ -34,14 +34,22 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
             "organisation",
         ]
         params = parse_qs(self.request.META.get("QUERY_STRING"), keep_blank_values=True)
+
+        def _is_list_param(field_name):
+            return isinstance(params.get(field_name), list)
+
+        def _has_initial_value(field_name):
+            return field_name in self.initial_values.keys()
+
         for multi_choice_field in multi_choices_fields:
-            if params.get(multi_choice_field) is not None:
-                value = params.get(multi_choice_field)
-                if isinstance(value, list):
-                    params[multi_choice_field] = ",".join(value)
-            else:
-                if multi_choice_field in self.initial_values.keys():
-                    params[multi_choice_field] = self.initial_values[multi_choice_field]
+            if not params.get(multi_choice_field) and _has_initial_value(
+                multi_choice_field
+            ):
+                params[multi_choice_field] = self.initial_values[multi_choice_field]
+
+        for multi_choice_field in multi_choices_fields:
+            if _is_list_param(multi_choice_field):
+                params[multi_choice_field] = ",".join(params[multi_choice_field])
 
         return remove_empty_values_from_dict(params)
 
