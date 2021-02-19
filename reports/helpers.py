@@ -3,7 +3,6 @@ from reports.forms.new_report_barrier_location import HasAdminAreas
 from reports.forms.new_report_barrier_sectors import SectorsAffected
 from utils.api.client import MarketAccessAPIClient
 
-
 # Barrier fields and the corresponding step in the "Add a barrier" journey.
 # fields = (
 #     "id",
@@ -46,6 +45,7 @@ class SessionKeys:
     """
     Set of session keys to be used at report forms to help with draft barrier data management.
     """
+
     meta_mapping = {
         FormSessionKeys.TERM: "term_form_data",
         FormSessionKeys.STATUS: "status_form_data",
@@ -59,7 +59,6 @@ class SessionKeys:
         FormSessionKeys.SECTORS: "sectors",
         FormSessionKeys.ABOUT: "about",
         FormSessionKeys.SUMMARY: "summary",
-
     }
     attr_mapping = {}
 
@@ -85,6 +84,7 @@ class ReportFormGroup:
      - session key naming pattern for DRAFT barriers: "draft_barrier_<UUID>_session_key"
      - session key naming pattern for UNSAVED barriers: "draft_barrier__session_key"
     """
+
     def __init__(self, session, barrier_id=None):
         self.session = session
         self.session_keys = None
@@ -154,7 +154,7 @@ class ReportFormGroup:
     def remove_selected_admin_area(self, admin_area_id):
         admin_areas = self.selected_admin_areas_as_list
         admin_areas.remove(admin_area_id)
-        self.selected_admin_areas = ', '.join(admin_areas)
+        self.selected_admin_areas = ", ".join(admin_areas)
 
     @property
     def caused_by_trading_bloc_form(self):
@@ -221,7 +221,7 @@ class ReportFormGroup:
     def remove_selected_sector(self, sector_id):
         sectors = self.selected_sectors_as_list
         sectors.remove(sector_id)
-        self.selected_sectors = ', '.join(sectors)
+        self.selected_sectors = ", ".join(sectors)
 
     # ABOUT
     # ==================================
@@ -282,9 +282,7 @@ class ReportFormGroup:
         self.session_keys = SessionKeys(self.session_key_infix)
 
     def get_term_form_data(self):
-        return {
-            "term": str(self.barrier.term["id"])
-        }
+        return {"term": str(self.barrier.term["id"])}
 
     def get_status_form_data(self):
         """Returns DICT - extract status form data from barrier.data"""
@@ -344,14 +342,14 @@ class ReportFormGroup:
 
     def get_selected_sectors(self):
         """Helper to extract selected sectors from barrier data and preload the form."""
-        all_sectors = (self.barrier.data.get("all_sectors") is True)
+        all_sectors = self.barrier.data.get("all_sectors") is True
         if all_sectors:
             selected_sectors = "all"
         else:
             sectors = [
                 sector["id"] for sector in self.barrier.data.get("sectors") or []
             ]
-            selected_sectors = ', '.join(sectors)
+            selected_sectors = ", ".join(sectors)
         return selected_sectors
 
     def get_about_form(self):
@@ -384,10 +382,9 @@ class ReportFormGroup:
         self.has_admin_areas = self.get_has_admin_areas_form_data()
         self.trade_direction_form = self.get_trade_direction_form_data()
         admin_area_ids = [
-            admin_area["id"]
-            for admin_area in self.barrier.data.get("admin_areas", [])
+            admin_area["id"] for admin_area in self.barrier.data.get("admin_areas", [])
         ]
-        self.selected_admin_areas = ', '.join(admin_area_ids)
+        self.selected_admin_areas = ", ".join(admin_area_ids)
         self.sectors_affected = self.get_sectors_affected_form_data()
         self.selected_about_formsectors = self.get_selected_sectors()
         self.about_form = self.get_about_form()
@@ -406,14 +403,16 @@ class ReportFormGroup:
             "country": self.location_form.get("country"),
             "admin_areas": self.selected_admin_areas_as_list,
             "trading_bloc": self.location_form.get("trading_bloc", ""),
-            "caused_by_trading_bloc": self.caused_by_trading_bloc_form.get("caused_by_trading_bloc"),
+            "caused_by_trading_bloc": self.caused_by_trading_bloc_form.get(
+                "caused_by_trading_bloc"
+            ),
             "trade_direction": self.trade_direction_form.get("trade_direction"),
         }
         payload.update(self.status_form)
         return payload
 
     def prepare_payload_sectors(self):
-        all_sectors = (self.selected_sectors == "all")
+        all_sectors = self.selected_sectors == "all"
         sectors = ()
         sectors_affected = self.sectors_affected.get("sectors_affected")
 

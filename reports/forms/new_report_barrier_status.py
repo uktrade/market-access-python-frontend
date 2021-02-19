@@ -2,11 +2,11 @@ from django import forms
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
 from barriers.forms.statuses import (
-    OpenPendingForm,
-    OpenInProgressForm,
-    ResolvedInPartForm,
-    ResolvedInFullForm,
     DormantForm,
+    OpenInProgressForm,
+    OpenPendingForm,
+    ResolvedInFullForm,
+    ResolvedInPartForm,
 )
 from utils.forms import SubformChoiceField, SubformMixin
 
@@ -23,14 +23,14 @@ class BarrierTerms:
                 {
                     "label": "A procedural, short-term barrier",
                     "hint": "For example, overly complex customs paperwork",
-                }
+                },
             ),
             (
                 cls.LONG_TERM,
                 {
                     "label": "A long-term strategic barrier",
                     "hint": "For example, a change of regulation",
-                }
+                },
             ),
         )
         return choices
@@ -38,10 +38,11 @@ class BarrierTerms:
 
 class NewReportBarrierTermForm(forms.Form):
     """Form to capture Barrier's term"""
+
     term = forms.ChoiceField(
         label="What type of barrier is it?",
         choices=BarrierTerms.choices,
-        error_messages={'required': "Select a barrier scope"},
+        error_messages={"required": "Select a barrier scope"},
     )
 
 

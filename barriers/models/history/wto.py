@@ -1,8 +1,9 @@
-from .base import BaseHistoryItem, GenericHistoryItem
-from .utils import PolymorphicBase
+import dateutil.parser
+
 from barriers.models.wto import WTOProfile
 
-import dateutil.parser
+from .base import BaseHistoryItem, GenericHistoryItem
+from .utils import PolymorphicBase
 
 
 class CaseNumberHistoryItem(BaseHistoryItem):
@@ -47,8 +48,7 @@ class MemberStatesHistoryItem(BaseHistoryItem):
 
     def get_value(self, value):
         return [
-            self.metadata.get_country(country_id).get("name")
-            for country_id in value
+            self.metadata.get_country(country_id).get("name") for country_id in value
         ]
 
 

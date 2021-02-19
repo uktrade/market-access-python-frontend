@@ -1,7 +1,6 @@
 from django import forms
 
 from barriers.forms.mixins import APIFormMixin
-
 from utils.api.client import MarketAccessAPIClient
 
 

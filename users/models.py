@@ -1,6 +1,6 @@
-from .datahub import get_visible_apps
-
 from utils.models import APIModel
+
+from .datahub import get_visible_apps
 
 
 class Group(APIModel):

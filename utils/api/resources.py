@@ -1,6 +1,6 @@
-import requests
 import time
 
+import requests
 from django.conf import settings
 from django.core.cache import cache
 
@@ -15,12 +15,11 @@ from barriers.models import (
     PublicBarrier,
     PublicBarrierNote,
     ResolvabilityAssessment,
-    StrategicAssessment,
     SavedSearch,
+    StrategicAssessment,
 )
 from reports.models import Report
 from users.models import Group, User
-
 from utils.exceptions import ScanError
 from utils.models import ModelList
 
@@ -103,7 +102,11 @@ class BarriersResource(APIResource):
     def add_team_member(self, barrier_id, user_id, role, **kwargs):
         url = f"barriers/{barrier_id}/members"
         data = {
-            "user": {"profile": {"sso_user_id": user_id,}},
+            "user": {
+                "profile": {
+                    "sso_user_id": user_id,
+                }
+            },
             "role": role,
         }
         return self.client.post(url, json=data)
@@ -162,7 +165,11 @@ class NotesResource(APIResource):
 class DocumentsResource(APIResource):
     def create(self, filename, filesize):
         return self.client.post(
-            "documents", json={"original_filename": filename, "size": filesize,}
+            "documents",
+            json={
+                "original_filename": filename,
+                "size": filesize,
+            },
         )
 
     def complete_upload(self, document_id):

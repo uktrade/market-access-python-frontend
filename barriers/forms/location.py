@@ -20,7 +20,9 @@ class EditLocationForm(forms.Form):
         required=False,
     )
 
-    def __init__(self, barrier_id, countries, admin_areas, trading_blocs, *args, **kwargs):
+    def __init__(
+        self, barrier_id, countries, admin_areas, trading_blocs, *args, **kwargs
+    ):
         self.token = kwargs.pop("token")
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
@@ -31,7 +33,8 @@ class EditLocationForm(forms.Form):
             (admin_area["id"], admin_area["name"]) for admin_area in admin_areas
         ]
         self.fields["trading_bloc"].choices = [
-            (trading_bloc["code"], trading_bloc["name"]) for trading_bloc in trading_blocs
+            (trading_bloc["code"], trading_bloc["name"])
+            for trading_bloc in trading_blocs
         ]
 
     def save(self):
@@ -54,7 +57,7 @@ class EditCountryOrTradingBlocForm(forms.Form):
             "trading bloc. Select a country if the barrier is a national "
             "implementation of a trading bloc regulation (so only applies to that "
             "country)"
-        )
+        ),
     )
 
     def __init__(self, countries, trading_blocs, *args, **kwargs):
@@ -73,7 +76,9 @@ class EditCountryOrTradingBlocForm(forms.Form):
 
     def clean_location(self):
         location = self.cleaned_data["location"]
-        trading_bloc_codes = [trading_bloc["code"] for trading_bloc in self.trading_blocs]
+        trading_bloc_codes = [
+            trading_bloc["code"] for trading_bloc in self.trading_blocs
+        ]
         if location in trading_bloc_codes:
             self.cleaned_data["country"] = None
             self.cleaned_data["trading_bloc"] = location

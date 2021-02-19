@@ -4,12 +4,12 @@ from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
 from django.views.generic import FormView, View
 
-from ..forms.search import BarrierSearchForm
-
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 from utils.tools import nested_sort
+
+from ..forms.search import BarrierSearchForm
 
 
 class SearchFormMixin:
@@ -104,7 +104,9 @@ class BarrierSearch(PaginationMixin, SearchFormView):
         member_id = form.cleaned_data.get("member")
         if member_id:
             member = self.client.barriers.get_team_member(member_id)
-            context_data["filters"]["member"]["readable_value"] = member["user"]["full_name"]
+            context_data["filters"]["member"]["readable_value"] = member["user"][
+                "full_name"
+            ]
             context_data["search_title"] = member["user"]["full_name"]
         return context_data
 
@@ -138,10 +140,14 @@ class DownloadBarriers(SearchFormMixin, View):
         client = MarketAccessAPIClient(self.request.session["sso_token"])
 
         if settings.USE_S3_FOR_CSV_DOWNLOADS:
-            download_url = client.barriers.get_csv(ordering="-reported_on", **search_parameters)
+            download_url = client.barriers.get_csv(
+                ordering="-reported_on", **search_parameters
+            )
             return redirect(download_url)
 
-        file = client.barriers.get_streamed_csv(ordering="-reported_on", **search_parameters)
+        file = client.barriers.get_streamed_csv(
+            ordering="-reported_on", **search_parameters
+        )
         response = StreamingHttpResponse(
             file.iter_content(), content_type=file.headers["Content-Type"]
         )

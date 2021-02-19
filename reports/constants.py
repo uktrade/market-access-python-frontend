@@ -3,6 +3,7 @@ class FormSessionKeys:
     These (meta) keys are used by ReportFormGroup to help manage form data
     during the "Add a barrier" journey.
     """
+
     TERM = "TERM"
     STATUS = "STATUS"
     LOCATION = "LOCATION"

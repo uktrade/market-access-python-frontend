@@ -9,6 +9,7 @@ class BarrierSource:
      - Where did you hear about the barrier?
      - Who told you about it?
     """
+
     COMPANY = "COMPANY"
     TRADE = "TRADE"
     GOVT = "GOVT"
@@ -43,8 +44,8 @@ class NewReportBarrierAboutForm(forms.Form):
     title = forms.CharField(
         label="Name this barrier",
         help_text="Include the name of the product, "
-                  "service or investment and the type of problem. "
-                  "For example, Import quotas for steel rods.",
+        "service or investment and the type of problem. "
+        "For example, Import quotas for steel rods.",
         max_length=255,
         error_messages={
             "max_length": "Name should be %(limit_value)d characters or fewer",
@@ -62,16 +63,14 @@ class NewReportBarrierAboutForm(forms.Form):
     source = forms.ChoiceField(
         label="Who told you about the barrier?",
         choices=BS.choices(),
-        error_messages={
-            'required': "Select how you became aware of the barrier"
-        },
+        error_messages={"required": "Select how you became aware of the barrier"},
     )
     other_source = forms.CharField(
         label="Please specify",
         required=False,
         max_length=255,
         error_messages={
-            'required': "Select how you became aware of the barrier",
+            "required": "Select how you became aware of the barrier",
             "max_length": "Other source should be %(limit_value)d characters or fewer",
         },
     )
@@ -79,7 +78,7 @@ class NewReportBarrierAboutForm(forms.Form):
         choices=[],
         widget=forms.CheckboxSelectMultiple,
         label="Is this issue caused by or related to any of the following?",
-        required=False
+        required=False,
     )
 
     def __init__(self, tags, *args, **kwargs):

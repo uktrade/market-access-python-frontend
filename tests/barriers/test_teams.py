@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
-
-from mock import patch
 
 
 class TeamDetailTestCase(MarketAccessTestCase):
@@ -99,7 +98,10 @@ class DeleteTeamMemberTestCase(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:delete_team_member",
-                kwargs={"barrier_id": self.barrier["id"], "team_member_id": 9,},
+                kwargs={
+                    "barrier_id": self.barrier["id"],
+                    "team_member_id": 9,
+                },
             ),
         )
 
@@ -113,7 +115,10 @@ class DeleteTeamMemberTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:delete_team_member",
-                kwargs={"barrier_id": self.barrier["id"], "team_member_id": 37,},
+                kwargs={
+                    "barrier_id": self.barrier["id"],
+                    "team_member_id": 37,
+                },
             ),
         )
 
@@ -123,7 +128,6 @@ class DeleteTeamMemberTestCase(MarketAccessTestCase):
 
 
 class ChangeOwnerTestCase(MarketAccessTestCase):
-
     @patch("utils.api.resources.BarriersResource.get_team_member")
     def test_get(self, mock_get_team_member):
         """
@@ -152,7 +156,9 @@ class ChangeOwnerTestCase(MarketAccessTestCase):
             "barriers:team_change_owner",
             kwargs={"barrier_id": self.barrier["id"], "team_member_id": 9},
         )
-        form_data = {"query": "wobble",}
+        form_data = {
+            "query": "wobble",
+        }
 
         response = self.client.post(url, data=form_data)
 
@@ -162,12 +168,16 @@ class ChangeOwnerTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.BarriersResource.get_team_members")
     @patch("utils.api.resources.BarriersResource.patch_team_member")
     @patch("utils.api.resources.BarriersResource.get_team_member")
-    def test_add_new_owner(self, mock_get_team_member, mock_patch_team_member, mock_get_team_members):
+    def test_add_new_owner(
+        self, mock_get_team_member, mock_patch_team_member, mock_get_team_members
+    ):
         """
         Should redirect to team page once the owner has been changed.
         """
         mock_get_team_member.return_value = self.team_members[0]
-        redirect_url = reverse("barriers:team", kwargs={"barrier_id": self.barrier["id"]})
+        redirect_url = reverse(
+            "barriers:team", kwargs={"barrier_id": self.barrier["id"]}
+        )
         url = reverse(
             "barriers:team_change_owner",
             kwargs={"barrier_id": self.barrier["id"], "team_member_id": 9},

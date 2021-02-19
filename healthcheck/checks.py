@@ -21,10 +21,7 @@ def db_check():
 
 
 def api_check():
-    data = {
-        "status": HealthStatus.FAIL,
-        "duration": None
-    }
+    data = {"status": HealthStatus.FAIL, "duration": None}
     # trailing / is important here
     url = f"{settings.MARKET_ACCESS_API_URI}check/"
     sender = Sender(
@@ -40,7 +37,10 @@ def api_check():
         response = requests.get(
             url,
             verify=not settings.DEBUG,
-            headers={"Authorization": sender.request_header, "Content-Type": "text/plain", },
+            headers={
+                "Authorization": sender.request_header,
+                "Content-Type": "text/plain",
+            },
         )
         response.raise_for_status()
         response_data = response.json()

@@ -1,6 +1,6 @@
-from ui_tests import settings
-
 from splinter.exceptions import ElementDoesNotExist
+
+from ui_tests import settings
 
 
 def clear_watchlists(browser):

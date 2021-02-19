@@ -1,7 +1,8 @@
 import json
 
 from django.conf import settings
-from django.test import override_settings, TestCase
+from django.test import TestCase, override_settings
+from mock import patch
 
 from core.filecache import memfiles
 from users.models import User
@@ -12,8 +13,6 @@ from utils.api.resources import (
     UsersResource,
 )
 
-from mock import patch
-
 
 @override_settings(API_RESULTS_LIMIT=10)
 class MarketAccessTestCase(TestCase):
@@ -22,43 +21,51 @@ class MarketAccessTestCase(TestCase):
     _team_members = None
     _users = None
     barrier_index = 0
-    administrator = User({
-        "is_superuser": False,
-        "is_active": True,
-        "permissions": ["change_user", "list_users"],
-    })
-    general_user = User({
-        "is_superuser": False,
-        "is_active": True,
-        "permissions": [],
-    })
-    approver_user = User({
-        "is_superuser": False,
-        "is_active": True,
-        "permissions": [
-            "add_resolvabilityassessment",
-            "change_resolvabilityassessment",
-            "archive_resolvabilityassessment",
-            "approve_resolvabilityassessment",
-            "add_strategicassessment",
-            "change_strategicassessment",
-            "archive_strategicassessment",
-            "approve_strategicassessment",
-        ],
-    })
-    analyst_user = User({
-        "is_superuser": False,
-        "is_active": True,
-        "permissions": [
-            "add_economicassessment",
-            "change_economicassessment",
-            "archive_economicassessment",
-            "approve_economicassessment",
-            "add_economicimpactassessment",
-            "change_economicimpactassessment",
-            "archive_economicimpactassessment",
-        ],
-    })
+    administrator = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": ["change_user", "list_users"],
+        }
+    )
+    general_user = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": [],
+        }
+    )
+    approver_user = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": [
+                "add_resolvabilityassessment",
+                "change_resolvabilityassessment",
+                "archive_resolvabilityassessment",
+                "approve_resolvabilityassessment",
+                "add_strategicassessment",
+                "change_strategicassessment",
+                "archive_strategicassessment",
+                "approve_strategicassessment",
+            ],
+        }
+    )
+    analyst_user = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": [
+                "add_economicassessment",
+                "change_economicassessment",
+                "archive_economicassessment",
+                "approve_economicassessment",
+                "add_economicimpactassessment",
+                "change_economicimpactassessment",
+                "archive_economicimpactassessment",
+            ],
+        }
+    )
 
     def setUp(self):
         self.init_session()
@@ -70,13 +77,15 @@ class MarketAccessTestCase(TestCase):
 
     def init_session(self):
         session = self.client.session
-        session.update({
-            "sso_token": "abcd",
-            "user_data": {
-                "id": 49,
-                "username": "test user",
+        session.update(
+            {
+                "sso_token": "abcd",
+                "user_data": {
+                    "id": 49,
+                    "username": "test user",
+                },
             }
-        })
+        )
         session.save()
 
     def init_get_barrier_patcher(self):
@@ -96,9 +105,7 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.get_activity_patcher.stop)
 
     def init_get_interactions_patcher(self):
-        self.get_interactions_patcher = patch(
-            "utils.api.resources.NotesResource.list"
-        )
+        self.get_interactions_patcher = patch("utils.api.resources.NotesResource.list")
         self.mock_get_interactions = self.get_interactions_patcher.start()
         self.mock_get_interactions.return_value = self.notes
         self.addCleanup(self.get_interactions_patcher.stop)
@@ -174,9 +181,7 @@ class MarketAccessTestCase(TestCase):
             {
                 "id": 49,
                 "username": "test user",
-                "profile": {
-                    "sso_user_id": "c12195ed-bf30-4a67-ba73-e95cfe012f77"
-                },
+                "profile": {"sso_user_id": "c12195ed-bf30-4a67-ba73-e95cfe012f77"},
                 "email": "test@test.com",
                 "first_name": "Geraldine",
                 "last_name": "Kshlerin",

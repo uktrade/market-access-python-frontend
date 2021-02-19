@@ -1,13 +1,11 @@
 from http import HTTPStatus
 
+import mock
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
-
 from utils.exceptions import FileUploadError
-
-import mock
-from mock import patch
 
 
 class NotesTestCase(MarketAccessTestCase):
@@ -49,7 +47,9 @@ class NotesTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_update_note.assert_called_with(
-            id=1, text="Edited note", documents=[],
+            id=1,
+            text="Edited note",
+            documents=[],
         )
 
     @patch("utils.api.client.NotesResource.update")
@@ -64,7 +64,9 @@ class NotesTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_update_note.assert_called_with(
-            id=1, text="Edited note", documents=[document_id],
+            id=1,
+            text="Edited note",
+            documents=[document_id],
         )
 
     @patch("utils.api.client.DocumentsResource.check_scan_status")
@@ -98,7 +100,9 @@ class NotesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
         assert mock_create_document.called is True
         mock_update_note.assert_called_with(
-            id=1, text="New note", documents=[document_id],
+            id=1,
+            text="New note",
+            documents=[document_id],
         )
         mock_upload_to_s3.assert_called_with(url="someurl", document=mock.ANY)
         mock_complete_upload.assert_called_with(document_id)

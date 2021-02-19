@@ -1,6 +1,5 @@
-from core.tests import MarketAccessTestCase
-
 from barriers.models import HistoryItem
+from core.tests import MarketAccessTestCase
 
 
 class BarrierHistoryItemTestCase(MarketAccessTestCase):

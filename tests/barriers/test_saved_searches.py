@@ -1,11 +1,10 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from barriers.models import SavedSearch
 from core.tests import MarketAccessTestCase
-
-from mock import patch
 
 
 class SavedSearchTestCase(MarketAccessTestCase):
@@ -20,13 +19,13 @@ class SavedSearchTestCase(MarketAccessTestCase):
     def get_delete_url(self):
         return reverse(
             "barriers:delete_saved_search",
-            kwargs={"saved_search_id": self.saved_search_data["id"]}
+            kwargs={"saved_search_id": self.saved_search_data["id"]},
         )
 
     def get_rename_url(self):
         return reverse(
             "barriers:rename_saved_search",
-            kwargs={"saved_search_id": self.saved_search_data["id"]}
+            kwargs={"saved_search_id": self.saved_search_data["id"]},
         )
 
     @patch("utils.api.resources.APIResource.get")
@@ -44,9 +43,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
     def test_rename_saved_search_error(self, mock_get, mock_patch):
         mock_get.return_value = SavedSearch(self.saved_search_data)
 
-        response = self.client.post(
-            self.get_rename_url(), data={"name": ""}
-        )
+        response = self.client.post(self.get_rename_url(), data={"name": ""})
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
@@ -62,7 +59,8 @@ class SavedSearchTestCase(MarketAccessTestCase):
         mock_list.return_value = [self.saved_search_data]
 
         response = self.client.post(
-            self.get_rename_url(), data={"name": "New Name"},
+            self.get_rename_url(),
+            data={"name": "New Name"},
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
@@ -79,7 +77,8 @@ class SavedSearchTestCase(MarketAccessTestCase):
         mock_list.return_value = []
 
         response = self.client.post(
-            self.get_rename_url(), data={"name": "New Name"},
+            self.get_rename_url(),
+            data={"name": "New Name"},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
@@ -97,7 +96,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             self.get_delete_url(),
-            data={"saved_search_id": self.saved_search_data["id"]}
+            data={"saved_search_id": self.saved_search_data["id"]},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_delete.assert_called_with(self.saved_search_data["id"])
@@ -158,7 +157,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
                 "search": "Test",
                 "priority": ["HIGH"],
                 "status": ["2"],
-            }
+            },
         )
         assert "saved_search_created" in self.client.session
 
@@ -172,7 +171,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
         response = self.client.post(
             f"{reverse('barriers:search')}"
             f"?search=Test&priority=HIGH&status=2&search_id={search_id}",
-            data={"update_search": "1"}
+            data={"update_search": "1"},
         )
 
         assert response.status_code == HTTPStatus.OK
@@ -183,7 +182,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
                 "search": "Test",
                 "priority": ["HIGH"],
                 "status": ["2"],
-            }
+            },
         )
         assert response.context["saved_search_updated"] is True
 
@@ -200,7 +199,7 @@ class NotificationsTestCase(MarketAccessTestCase):
     def get_url(self):
         return reverse(
             "barriers:saved_search_notifications",
-            kwargs={"saved_search_id": self.saved_search_data["id"]}
+            kwargs={"saved_search_id": self.saved_search_data["id"]},
         )
 
     @patch("utils.api.resources.APIResource.get")
@@ -220,7 +219,8 @@ class NotificationsTestCase(MarketAccessTestCase):
         mock_get.return_value = SavedSearch(self.saved_search_data)
 
         response = self.client.post(
-            self.get_url(), data={"notify_about_updates": "1"},
+            self.get_url(),
+            data={"notify_about_updates": "1"},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(

@@ -5,7 +5,10 @@ from utils.api.client import MarketAccessAPIClient
 
 class EditGovernmentOrganisationsForm(forms.Form):
     organisations = forms.MultipleChoiceField(
-        label="", choices=[], widget=forms.MultipleHiddenInput(), required=False,
+        label="",
+        choices=[],
+        widget=forms.MultipleHiddenInput(),
+        required=False,
     )
 
     def __init__(self, barrier_id, organisations, *args, **kwargs):
@@ -17,7 +20,8 @@ class EditGovernmentOrganisationsForm(forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
-            id=self.barrier_id, government_organisations=self.cleaned_data["organisations"],
+            id=self.barrier_id,
+            government_organisations=self.cleaned_data["organisations"],
         )
 
 

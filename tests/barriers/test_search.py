@@ -2,13 +2,12 @@ from http import HTTPStatus
 
 from django.conf import settings
 from django.urls import reverse
+from mock import patch
 
 from barriers.models import Barrier, SavedSearch
 from core.tests import MarketAccessTestCase
 from utils.metadata import get_metadata
 from utils.models import ModelList
-
-from mock import patch
 
 
 @patch("utils.pagination.PaginationMixin.pagination_limit", 10)
@@ -49,7 +48,9 @@ class SearchTestCase(MarketAccessTestCase):
         sector_choices = form.fields["sector"].choices
         assert len(sector_choices) == len(sector_list)
 
-        category_list = set([category["id"] for category in metadata.data["categories"]])
+        category_list = set(
+            [category["id"] for category in metadata.data["categories"]]
+        )
         category_choices = form.fields["category"].choices
         assert len(category_choices) == len(category_list)
 
@@ -197,7 +198,8 @@ class SearchTestCase(MarketAccessTestCase):
             }
         )
         response = self.client.get(
-            reverse("barriers:search"), data={"user": "1"},
+            reverse("barriers:search"),
+            data={"user": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -222,7 +224,8 @@ class SearchTestCase(MarketAccessTestCase):
             }
         )
         response = self.client.get(
-            reverse("barriers:search"), data={"team": "1"},
+            reverse("barriers:search"),
+            data={"team": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -236,7 +239,8 @@ class SearchTestCase(MarketAccessTestCase):
         assert response.context["search_title"] == "Team barriers"
 
         response = self.client.get(
-            reverse("barriers:search"), data={"user": "1", "team": "1"},
+            reverse("barriers:search"),
+            data={"user": "1", "team": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -281,7 +285,8 @@ class SearchTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_archived_filter(self, mock_list):
         response = self.client.get(
-            reverse("barriers:search"), data={"only_archived": "1"},
+            reverse("barriers:search"),
+            data={"only_archived": "1"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -294,7 +299,9 @@ class SearchTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.list")
     def test_pagination(self, mock_list):
         mock_list.return_value = ModelList(
-            model=Barrier, data=[self.barrier] * 10, total_count=123,
+            model=Barrier,
+            data=[self.barrier] * 10,
+            total_count=123,
         )
 
         response = self.client.get(

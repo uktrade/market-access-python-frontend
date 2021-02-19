@@ -1,7 +1,6 @@
 from django.core.cache import cache
 
 from users.models import User
-
 from utils.api.client import MarketAccessAPIClient
 
 

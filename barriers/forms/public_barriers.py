@@ -1,12 +1,12 @@
-from barriers.constants import PUBLIC_BARRIER_STATUSES
-from utils.metadata import Metadata
 from django import forms
 from django.http import QueryDict
 
-from .mixins import APIFormMixin
-
+from barriers.constants import PUBLIC_BARRIER_STATUSES
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import YesNoBooleanField
+from utils.metadata import Metadata
+
+from .mixins import APIFormMixin
 
 
 class PublicEligibilityForm(APIFormMixin, forms.Form):

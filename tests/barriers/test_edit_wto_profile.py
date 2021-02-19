@@ -1,20 +1,17 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
 
-from mock import patch
-
 
 class EditWTOProfileTestCase(MarketAccessTestCase):
-
     @patch("utils.api.resources.APIResource.patch")
     def test_bad_raised_date(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_wto_profile",
-                kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_wto_profile", kwargs={"barrier_id": self.barrier["id"]}
             ),
             data={
                 "raised_date_0": "50",
@@ -33,8 +30,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
     def test_empty_form_success(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_wto_profile",
-                kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_wto_profile", kwargs={"barrier_id": self.barrier["id"]}
             ),
             data={},
         )
@@ -50,12 +46,12 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
                 "meeting_minutes": "",
                 "raised_date": None,
                 "case_number": "",
-            }
+            },
         )
 
     @patch("barriers.forms.mixins.DocumentMixin.upload_document")
     @patch("utils.api.resources.APIResource.patch")
-    def test_full_form_success(self, mock_patch,mock_upload_document):
+    def test_full_form_success(self, mock_patch, mock_upload_document):
         mock_upload_document.return_value = {
             "id": "a9593a3f-1640-40ba-9c92-1a1186ca6e68",
             "file": {"name": "name.jpg", "size": "5000"},
@@ -65,7 +61,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
             response = self.client.post(
                 reverse(
                     "barriers:edit_wto_profile",
-                    kwargs={"barrier_id": self.barrier["id"]}
+                    kwargs={"barrier_id": self.barrier["id"]},
                 ),
                 data={
                     "committee_notified": "6448e88f-bf12-481f-873d-ac1199825743",
@@ -101,7 +97,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
                 "meeting_minutes": "",
                 "raised_date": "2020-01-25",
                 "case_number": "ABCD1234",
-            }
+            },
         )
 
     @patch("barriers.forms.mixins.DocumentMixin.upload_document")
@@ -116,7 +112,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
             response = self.client.post(
                 reverse(
                     "barriers:edit_wto_profile",
-                    kwargs={"barrier_id": self.barrier["id"]}
+                    kwargs={"barrier_id": self.barrier["id"]},
                 ),
                 data={
                     "meeting_minutes": document,
@@ -136,7 +132,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
                 "meeting_minutes": "a9593a3f-1640-40ba-9c92-1a1186ca6e68",
                 "raised_date": None,
                 "case_number": "XYZ999",
-            }
+            },
         )
 
     @patch("utils.api.resources.APIResource.patch")
@@ -146,8 +142,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
 
         response = self.client.post(
             reverse(
-                "barriers:edit_wto_profile",
-                kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_wto_profile", kwargs={"barrier_id": self.barrier["id"]}
             ),
             data={
                 "committee_notification_document_id": notification_document_id,
@@ -166,7 +161,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
                 "meeting_minutes": minutes_document_id,
                 "raised_date": None,
                 "case_number": "",
-            }
+            },
         )
 
     @patch("barriers.forms.mixins.DocumentMixin.upload_document")
@@ -199,7 +194,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
 
     def test_delete_document_via_ajax(self):
         document_id = "309d9ef4-4379-4514-ae5f-3399ba7f2ca6"
-        barrier_id = self.barrier['id']
+        barrier_id = self.barrier["id"]
         session_key = f"barrier:{barrier_id}:wto:committee_notification_document"
 
         self.update_session({session_key: {"id": document_id}})
@@ -214,7 +209,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
 
     def test_delete_document_non_ajax(self):
         document_id = "309d9ef4-4379-4514-ae5f-3399ba7f2ca6"
-        barrier_id = self.barrier['id']
+        barrier_id = self.barrier["id"]
         session_key = f"barrier:{barrier_id}:wto:meeting_minutes"
 
         self.update_session({session_key: {"id": document_id}})
@@ -229,7 +224,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.patch")
     def test_cancel_form(self, mock_patch):
         """ Cancelling the form should clear the session and not call the API """
-        barrier_id = self.barrier['id']
+        barrier_id = self.barrier["id"]
 
         notification_document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
         notification_session_key = (

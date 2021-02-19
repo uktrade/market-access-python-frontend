@@ -4,6 +4,7 @@ class FileCache:
     Avoids reading files repeatedly from disk by holding onto the
     contents of each file as a list of strings.
     """
+
     def __init__(self):
         self.filecache = {}
 

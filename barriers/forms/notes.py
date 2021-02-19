@@ -1,10 +1,10 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import DocumentMixin
-
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import MultipleValueField, RestrictedFileField
+
+from .mixins import DocumentMixin
 
 
 class AddNoteForm(DocumentMixin, forms.Form):
@@ -62,7 +62,8 @@ class AddPublicBarrierNoteForm(forms.Form):
 
 class EditNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
-        widget=forms.Textarea, error_messages={"required": "Add text for the note."},
+        widget=forms.Textarea,
+        error_messages={"required": "Add text for the note."},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(

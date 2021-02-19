@@ -1,8 +1,8 @@
+import dateutil.parser
+
 from utils.diff import diff_match_patch
 from utils.metadata import MetadataMixin
 from utils.models import APIModel
-
-import dateutil.parser
 
 
 class BaseHistoryItem(MetadataMixin, APIModel):

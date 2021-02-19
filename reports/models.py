@@ -1,11 +1,10 @@
 import operator
 
-from barriers.constants import STATUSES
+import dateutil.parser
 
+from barriers.constants import STATUSES
 from utils.metadata import get_metadata
 from utils.models import APIModel
-
-import dateutil.parser
 
 
 class Report(APIModel):
@@ -33,26 +32,26 @@ class Report(APIModel):
 
     @property
     def created_on(self):
-        return dateutil.parser.parse(self.data['created_on'])
+        return dateutil.parser.parse(self.data["created_on"])
 
     @property
     def progress(self):
         if self._progress is None:
-            self._progress = self.data.get('progress', [])
-            self._progress.sort(key=operator.itemgetter('stage_code'))
+            self._progress = self.data.get("progress", [])
+            self._progress.sort(key=operator.itemgetter("stage_code"))
         return self._progress
 
     @property
     def is_complete(self):
         for stage in self.progress:
-            if stage['status_id'] != 3:
+            if stage["status_id"] != 3:
                 return False
         return True
 
     @property
     def next_stage(self):
         for stage in self.progress:
-            if stage['status_id'] != 3:
+            if stage["status_id"] != 3:
                 return stage
 
     @property
@@ -82,25 +81,22 @@ class Report(APIModel):
         """
         if self._stages is None:
             base_stages = self.metadata.data.get("report_stages", {})
-            progress_lookup = {
-                item['stage_code']: item
-                for item in self.progress
-            }
+            progress_lookup = {item["stage_code"]: item for item in self.progress}
 
             self._stages = {}
 
             for stage_code, name in base_stages.items():
-                major_number, minor_number = stage_code.split('.')
+                major_number, minor_number = stage_code.split(".")
 
                 if major_number not in self._stages:
                     self._stages[major_number] = {}
 
-                if minor_number == '0':
-                    self._stages[major_number]['name'] = name
-                    self._stages[major_number]['stages'] = []
+                if minor_number == "0":
+                    self._stages[major_number]["name"] = name
+                    self._stages[major_number]["stages"] = []
                 else:
                     stage = progress_lookup.get(stage_code, {})
-                    stage['name'] = name
-                    self._stages[major_number]['stages'].append(stage)
+                    stage["name"] = name
+                    self._stages[major_number]["stages"].append(stage)
 
         return self._stages

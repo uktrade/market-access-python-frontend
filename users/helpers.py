@@ -35,6 +35,6 @@ def sync_user(session):
 
         if user_data:
             synced = True
-        session['user_data'] = user_data
+        session["user_data"] = user_data
 
     return synced

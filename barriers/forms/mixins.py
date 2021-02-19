@@ -1,5 +1,6 @@
-import requests
 import uuid
+
+import requests
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
@@ -63,7 +64,10 @@ class DocumentMixin:
         document = self.cleaned_data[field_name]
 
         client = MarketAccessAPIClient(self.token)
-        data = client.documents.create(filename=document.name, filesize=document.size,)
+        data = client.documents.create(
+            filename=document.name,
+            filesize=document.size,
+        )
         document_id = data["id"]
 
         self.upload_to_s3(url=data["signed_upload_url"], document=document)
@@ -73,13 +77,20 @@ class DocumentMixin:
 
         return {
             "id": document_id,
-            "file": {"name": document.name, "size": document.size,},
+            "file": {
+                "name": document.name,
+                "size": document.size,
+            },
         }
 
     def upload_to_s3(self, url, document):
         document.seek(0)
         response = requests.put(
-            url, headers={"x-amz-server-side-encryption": "AES256",}, data=document
+            url,
+            headers={
+                "x-amz-server-side-encryption": "AES256",
+            },
+            data=document,
         )
         try:
             response.raise_for_status()

@@ -11,12 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
-from environ import Env
 from pathlib import Path
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
+import sentry_sdk
+from environ import Env
+from sentry_sdk.integrations.django import DjangoIntegration
 
 ROOT_DIR = Path(__file__).parents[2]
 
@@ -28,12 +27,10 @@ ENV_FILE = os.path.join(BASE_DIR, ".env")
 if os.path.exists(ENV_FILE):
     Env.read_env(ENV_FILE)
 
-env = Env(
-    DEBUG=(bool, False)
-)
+env = Env(DEBUG=(bool, False))
 
 # Load PaaS Service env vars
-VCAP_SERVICES = env.json('VCAP_SERVICES', default={})
+VCAP_SERVICES = env.json("VCAP_SERVICES", default={})
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -44,7 +41,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 # Application definition
 
 ELASTIC_APM_ENABLED = env("ELASTIC_APM_ENABLED", default=not DEBUG)
@@ -63,18 +60,18 @@ if ELASTIC_APM_ENABLED:
 
 BASE_APPS = [
     # apps that need to load first
-    'whitenoise.runserver_nostatic',
+    "whitenoise.runserver_nostatic",
 ]
 
 DJANGO_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.humanize',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.forms',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.humanize",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.forms",
 ]
 
 THIRD_PARTY_APPS = [
@@ -82,58 +79,58 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'authentication',
-    'barriers',
-    'core',
-    'healthcheck',
-    'reports',
-    'users',
+    "authentication",
+    "barriers",
+    "core",
+    "healthcheck",
+    "reports",
+    "users",
 ]
 
 INSTALLED_APPS = BASE_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 if ELASTIC_APM_ENABLED:
-    INSTALLED_APPS.append('elasticapm.contrib.django')
+    INSTALLED_APPS.append("elasticapm.contrib.django")
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'authentication.middleware.SSOMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "authentication.middleware.SSOMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
-FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [str(ROOT_DIR / "templates")],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'utils.context_processors.user_scope',
-                'django_settings_export.settings_export',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [str(ROOT_DIR / "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "utils.context_processors.user_scope",
+                "django_settings_export.settings_export",
             ],
-            'builtins':[
-                'core.templatetags.govuk_forms',
-                'users.templatetags.permissions',
+            "builtins": [
+                "core.templatetags.govuk_forms",
+                "users.templatetags.permissions",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
@@ -149,16 +146,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -166,9 +163,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -190,18 +187,18 @@ CSRF_COOKIE_HTTPONLY = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 STATIC_ROOT = ROOT_DIR / "staticfiles"
 STATICFILES_DIRS = [
     str(ROOT_DIR / "core/frontend/dist/"),
 ]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
-TRUSTED_USER_TOKEN = 'ssobypass'
+TRUSTED_USER_TOKEN = "ssobypass"
 
 USER_DATA_CACHE_TIME = 3600
 METADATA_CACHE_TIME = "10600"
@@ -254,12 +251,11 @@ DATAHUB_HAWK_KEY = env("DATAHUB_HAWK_KEY")
 FILE_MAX_SIZE = env.int("FILE_MAX_SIZE", default=(5 * 1024 * 1024))
 FILE_SCAN_MAX_WAIT_TIME = env.int("FILE_SCAN_MAX_WAIT_TIME", default=30000)
 FILE_SCAN_STATUS_CHECK_INTERVAL = env.int(
-    "FILE_SCAN_STATUS_CHECK_INTERVAL",
-    default=500
+    "FILE_SCAN_STATUS_CHECK_INTERVAL", default=500
 )
 ALLOWED_FILE_TYPES = env.list("ALLOWED_FILE_TYPES", default=["text/csv", "image/jpeg"])
 
-API_RESULTS_LIMIT = env.int('API_RESULTS_LIMIT', default=100)
+API_RESULTS_LIMIT = env.int("API_RESULTS_LIMIT", default=100)
 
 # Logging
 # ============================================
@@ -267,14 +263,14 @@ DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="info").upper()
 
 
 # Google Tag Manager
-GTM_ID = env('GTM_ID')
-GTM_AUTH = env('GTM_AUTH')
-GTM_PREVIEW = env('GTM_PREVIEW')
+GTM_ID = env("GTM_ID")
+GTM_AUTH = env("GTM_AUTH")
+GTM_PREVIEW = env("GTM_PREVIEW")
 
 if not DEBUG:
     sentry_sdk.init(
-        dsn=env('SENTRY_DSN'),
-        environment=env('SENTRY_ENVIRONMENT'),
+        dsn=env("SENTRY_DSN"),
+        environment=env("SENTRY_ENVIRONMENT"),
         integrations=[
             DjangoIntegration(),
         ],
@@ -282,9 +278,9 @@ if not DEBUG:
 
 # Settings made available in templates
 SETTINGS_EXPORT = (
-    'DJANGO_ENV',
-    'DATAHUB_DOMAIN',
-    'GTM_ID',
-    'GTM_AUTH',
-    'GTM_PREVIEW',
+    "DJANGO_ENV",
+    "DATAHUB_DOMAIN",
+    "GTM_ID",
+    "GTM_AUTH",
+    "GTM_PREVIEW",
 )

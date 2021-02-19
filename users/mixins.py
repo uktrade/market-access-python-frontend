@@ -1,10 +1,10 @@
 from django.http import HttpResponseRedirect
 
-from .forms import UserSearchForm
-
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIException
 from utils.sso import SSOClient
+
+from .forms import UserSearchForm
 
 
 class UserMixin:

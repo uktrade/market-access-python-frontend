@@ -2,13 +2,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierMixin
 from barriers.forms.location import (
     AddAdminAreaForm,
     EditCountryOrTradingBlocForm,
     EditLocationForm,
 )
 from utils.metadata import MetadataMixin
+
+from .mixins import BarrierMixin
 
 
 class BarrierEditLocation(MetadataMixin, BarrierMixin, FormView):
@@ -21,7 +22,9 @@ class BarrierEditLocation(MetadataMixin, BarrierMixin, FormView):
             if self.barrier.country:
                 request.session["location"] = {
                     "country": self.barrier.country["id"],
-                    "admin_areas": [admin_area["id"] for admin_area in self.barrier.admin_areas],
+                    "admin_areas": [
+                        admin_area["id"] for admin_area in self.barrier.admin_areas
+                    ],
                 }
             elif self.barrier.trading_bloc:
                 request.session["location"] = {
@@ -51,7 +54,9 @@ class BarrierEditLocation(MetadataMixin, BarrierMixin, FormView):
                 }
             )
         elif trading_bloc_code:
-            context_data["trading_bloc"] = self.metadata.get_trading_bloc(trading_bloc_code)
+            context_data["trading_bloc"] = self.metadata.get_trading_bloc(
+                trading_bloc_code
+            )
         return context_data
 
     def get_initial(self):
@@ -74,7 +79,9 @@ class BarrierEditLocation(MetadataMixin, BarrierMixin, FormView):
 
         selected_country_id = self.request.session["location"].get("country")
         if selected_country_id:
-            kwargs["admin_areas"] = self.metadata.get_admin_areas_by_country(selected_country_id)
+            kwargs["admin_areas"] = self.metadata.get_admin_areas_by_country(
+                selected_country_id
+            )
             kwargs["trading_blocs"] = []
         else:
             kwargs["admin_areas"] = []
@@ -146,7 +153,9 @@ class AddAdminArea(MetadataMixin, BarrierMixin, FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         admin_area_ids = self.request.session["location"].get("admin_areas", [])
-        context_data.update({"admin_areas": self.metadata.get_admin_areas(admin_area_ids)})
+        context_data.update(
+            {"admin_areas": self.metadata.get_admin_areas(admin_area_ids)}
+        )
         return context_data
 
     def form_valid(self, form):

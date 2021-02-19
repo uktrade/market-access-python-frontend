@@ -4,11 +4,10 @@ from django import forms
 from django.template.loader import render_to_string
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
-from .mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (
-    MonthYearField, SubformChoiceField, SubformMixin,
-)
+from utils.forms import MonthYearField, SubformChoiceField, SubformMixin
+
+from .mixins import APIFormMixin
 
 
 class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
@@ -36,7 +35,9 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
 
     def validate_status_date(self):
         status_date = datetime.date(
-            self.cleaned_data.get("year"), self.cleaned_data.get("month"), 1,
+            self.cleaned_data.get("year"),
+            self.cleaned_data.get("month"),
+            1,
         )
         if status_date > datetime.date.today():
             self.add_error("month", "Resolution date must be this month or in the past")
@@ -109,7 +110,10 @@ class OpenPendingForm(APIMappingMixin, forms.Form):
         widget=forms.RadioSelect,
         error_messages={"required": "Select a pending action"},
     )
-    pending_type_other = forms.CharField(label="Please specify", required=False,)
+    pending_type_other = forms.CharField(
+        label="Please specify",
+        required=False,
+    )
     pending_summary = forms.CharField(
         label="Describe briefly why this barrier is pending action",
         widget=forms.Textarea,
@@ -131,9 +135,7 @@ class OpenPendingForm(APIMappingMixin, forms.Form):
         pending_type_other = cleaned_data.get("pending_type_other")
 
         if pending_type == "OTHER" and not pending_type_other:
-            self.add_error(
-                "pending_type_other", "Enter who will be taking action"
-            )
+            self.add_error("pending_type_other", "Enter who will be taking action")
 
     def get_api_params(self):
         params = super().get_api_params()

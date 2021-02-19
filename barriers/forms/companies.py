@@ -23,7 +23,10 @@ class AddCompanyForm(forms.Form):
 
 class EditCompaniesForm(forms.Form):
     companies = forms.MultipleChoiceField(
-        label="", choices=[], widget=forms.MultipleHiddenInput(), required=False,
+        label="",
+        choices=[],
+        widget=forms.MultipleHiddenInput(),
+        required=False,
     )
 
     def __init__(self, barrier_id, companies, *args, **kwargs):
@@ -44,5 +47,6 @@ class EditCompaniesForm(forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
-            id=self.barrier_id, companies=self.cleaned_data["companies"],
+            id=self.barrier_id,
+            companies=self.cleaned_data["companies"],
         )

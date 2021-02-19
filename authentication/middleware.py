@@ -23,7 +23,7 @@ class SSOMiddleware:
         return self.get_response(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        public_view = getattr(view_func.view_class, '_public_view', False)
+        public_view = getattr(view_func.view_class, "_public_view", False)
         if public_view:
             return view_func(request, *view_args, **view_kwargs)
         else:

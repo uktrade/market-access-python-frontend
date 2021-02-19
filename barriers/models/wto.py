@@ -1,6 +1,6 @@
-from .documents import Document
-
 from utils.models import APIModel
+
+from .documents import Document
 
 
 class WTOProfile(APIModel):

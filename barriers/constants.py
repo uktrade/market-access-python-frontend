@@ -13,7 +13,9 @@ class Statuses:
 
 
 ARCHIVED_REASON = Choices(
-    ("DUPLICATE", "Duplicate"), ("NOT_A_BARRIER", "Not a barrier"), ("OTHER", "Other"),
+    ("DUPLICATE", "Duplicate"),
+    ("NOT_A_BARRIER", "Not a barrier"),
+    ("OTHER", "Other"),
 )
 
 
@@ -26,7 +28,12 @@ STATUSES = Choices(
 )
 
 
-ALL_STATUSES = Choices(("7", "UNKNOWN", "Unknown"),) + STATUSES
+ALL_STATUSES = (
+    Choices(
+        ("7", "UNKNOWN", "Unknown"),
+    )
+    + STATUSES
+)
 
 
 STATUSES_HELP_TEXT = Choices(
@@ -34,7 +41,7 @@ STATUSES_HELP_TEXT = Choices(
     (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on"),
     (
         STATUSES.RESOLVED_IN_PART,
-        "Barrier impact has been significantly reduced but remains in part"
+        "Barrier impact has been significantly reduced but remains in part",
     ),
     (STATUSES.RESOLVED_IN_FULL, "Barrier has been resolved for all UK companies"),
     (STATUSES.DORMANT, "Barrier is present but not being pursued"),

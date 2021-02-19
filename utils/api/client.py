@@ -1,8 +1,10 @@
 import logging
 from json import JSONDecodeError
-import requests
 
+import requests
 from django.conf import settings
+
+from utils.exceptions import APIHttpException, APIJsonException
 
 from .resources import (
     BarriersResource,
@@ -12,16 +14,14 @@ from .resources import (
     EconomicImpactAssessmentResource,
     GroupsResource,
     NotesResource,
-    UsersResource,
     PublicBarrierNotesResource,
     PublicBarriersResource,
     ReportsResource,
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
+    UsersResource,
 )
-from utils.exceptions import APIHttpException, APIJsonException
-
 
 logger = logging.getLogger(__name__)
 

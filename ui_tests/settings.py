@@ -1,6 +1,5 @@
 import os
 
-
 BASE_URL = os.environ.get("TEST_BASE_URL")
 WEB_DRIVER_URL = os.environ.get("WEB_DRIVER_URL")
 

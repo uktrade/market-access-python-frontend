@@ -14,7 +14,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:add_resolvability_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
                 "time_to_resolve": "3",
@@ -35,7 +35,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:add_resolvability_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
                 "time_to_resolve": "xxx",
@@ -60,7 +60,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "time_to_resolve": "1",
@@ -84,7 +84,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "time_to_resolve": "1",
@@ -109,7 +109,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "time_to_resolve": "1",
@@ -135,7 +135,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "time_to_resolve": "1",
@@ -161,7 +161,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "are_you_sure": "yes",
@@ -183,7 +183,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "are_you_sure": "no",
@@ -200,7 +200,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:add_resolvability_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -211,7 +211,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -222,7 +222,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -234,7 +234,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:add_resolvability_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.OK
@@ -245,7 +245,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.OK
@@ -256,7 +256,7 @@ class TestResolvabilityAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.OK

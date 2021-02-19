@@ -1,10 +1,10 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import APIFormMixin, DocumentMixin
-
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import DayMonthYearField, YesNoBooleanField, RestrictedFileField
+from utils.forms import DayMonthYearField, RestrictedFileField, YesNoBooleanField
+
+from .mixins import APIFormMixin, DocumentMixin
 
 
 class WTOStatusForm(APIFormMixin, forms.Form):
@@ -13,7 +13,8 @@ class WTOStatusForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter yes or no"},
     )
     wto_should_be_notified = YesNoBooleanField(
-        label="Should the measure be notified to the WTO?", required=False,
+        label="Should the measure be notified to the WTO?",
+        required=False,
     )
 
     def clean(self):
@@ -38,7 +39,9 @@ class WTOStatusForm(APIFormMixin, forms.Form):
 
 class WTOProfileForm(DocumentMixin, forms.Form):
     committee_notified = forms.ChoiceField(
-        label="Committee notified of the barrier", choices=(), required=False,
+        label="Committee notified of the barrier",
+        choices=(),
+        required=False,
     )
     committee_notification_link = forms.URLField(
         label="Committee notification",
@@ -66,7 +69,9 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         required=False,
     )
     committee_raised_in = forms.ChoiceField(
-        label="WTO committee the barrier was raised in", choices=(), required=False,
+        label="WTO committee the barrier was raised in",
+        choices=(),
+        required=False,
     )
     meeting_minutes_id = forms.CharField(required=False)
     meeting_minutes = RestrictedFileField(

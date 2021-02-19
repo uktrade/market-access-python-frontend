@@ -1,19 +1,17 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
 from users.models import Group, User
 
-from mock import patch
-
 
 class ManageUsersPermissionsTestCase(MarketAccessTestCase):
-
     def test_link_appears_for_superuser(self):
         response = self.client.get(reverse("reports:new_report"))
         assert response.status_code == HTTPStatus.OK
-        html = response.content.decode('utf8')
+        html = response.content.decode("utf8")
         assert "Administer users" in html
 
     @patch("utils.api.resources.UsersResource.get_current")
@@ -21,7 +19,7 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
         mock_user.return_value = self.administrator
         response = self.client.get(reverse("reports:new_report"))
         assert response.status_code == HTTPStatus.OK
-        html = response.content.decode('utf8')
+        html = response.content.decode("utf8")
         assert "Administer users" in html
 
     @patch("utils.api.resources.UsersResource.get_current")
@@ -29,7 +27,7 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
         mock_user.return_value = self.general_user
         response = self.client.get(reverse("reports:new_report"))
         assert response.status_code == HTTPStatus.OK
-        html = response.content.decode('utf8')
+        html = response.content.decode("utf8")
         assert "Administer users" not in html
 
     @patch("utils.api.resources.APIResource.list")
@@ -52,11 +50,9 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
 
 
 class ManageUsersTestCase(MarketAccessTestCase):
-    editor = User({
-        "id": 75,
-        "first_name": "Dave",
-        "groups": [{"id": 2, "name": "Editor"}]
-    })
+    editor = User(
+        {"id": 75, "first_name": "Dave", "groups": [{"id": 2, "name": "Editor"}]}
+    )
 
     @patch("utils.sso.SSOClient.search_users")
     def test_no_results(self, mock_search_users):
@@ -121,8 +117,7 @@ class ManageUsersTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
-            id="3fbe6479-b9bd-4658-81d7-f07c2a73d33d",
-            groups=[{"id": 2}]
+            id="3fbe6479-b9bd-4658-81d7-f07c2a73d33d", groups=[{"id": 2}]
         )
 
     @patch("utils.api.resources.APIResource.get")
@@ -141,10 +136,7 @@ class ManageUsersTestCase(MarketAccessTestCase):
             data={"group": "3"},
         )
         assert response.status_code == HTTPStatus.FOUND
-        mock_patch.assert_called_with(
-            id="75",
-            groups=[{"id": "3"}]
-        )
+        mock_patch.assert_called_with(id="75", groups=[{"id": "3"}])
 
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")

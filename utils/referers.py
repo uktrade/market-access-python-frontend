@@ -8,6 +8,7 @@ class Referer:
     """
     Wrapper for http referer information
     """
+
     def __init__(self, current_path, referer_path):
         self.current_path = current_path
         self.referer_path = referer_path
@@ -37,6 +38,7 @@ class RefererMixin:
     """
     Allows a view to access the referring url information
     """
+
     _referer = None
 
     def get_context_data(self, **kwargs):
@@ -47,9 +49,9 @@ class RefererMixin:
     def get_referer(self):
         if "referer_path" in self.request.POST:
             referer_path = self.request.POST.get("referer_path")
-        elif self.request.META.get('HTTP_REFERER'):
-            referer_path = urlparse(self.request.META.get('HTTP_REFERER')).path
-            referer_querystring = urlparse(self.request.META.get('HTTP_REFERER')).query
+        elif self.request.META.get("HTTP_REFERER"):
+            referer_path = urlparse(self.request.META.get("HTTP_REFERER")).path
+            referer_querystring = urlparse(self.request.META.get("HTTP_REFERER")).query
             if referer_querystring:
                 referer_path = f"{referer_path}?{referer_querystring}"
         else:
