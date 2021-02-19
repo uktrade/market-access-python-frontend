@@ -31,7 +31,10 @@ class AboutViewTestCase(ReportsTestCase):
         expected_title = "<title>Market Access - Add - About the barrier</title>"
         name_input_field = '<input class="govuk-input" id="title"'
         product_input_field = '<input class="govuk-input" id="product"'
-        barrier_source_radio_container = '<div class="govuk-radios barrier-source govuk-radios--conditional" data-module="radios">'
+        barrier_source_radio_container = (
+            '<div class="govuk-radios barrier-source govuk-radios--conditional" '
+            'data-module="radios">'
+        )
         barrier_source_radio_item = '<div class="govuk-radios__item barrier-source">'
         expected_barrier_source_radio_count = 4
         tags_container = '<div class="govuk-checkboxes" id="tags">'

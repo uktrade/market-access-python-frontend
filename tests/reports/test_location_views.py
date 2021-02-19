@@ -305,7 +305,10 @@ class LocationViewAddAdminAreasTestCase(ReportsTestCase):
 
     def test_add_admin_areas_view_returns_correct_html(self):
         expected_title = "<title>Market Access - Add - Location of the barrier</title>"
-        expected_dropdown_container = '<select class="govuk-select govuk-!-width-full" id="admin_areas" name="admin_areas">'
+        expected_dropdown_container = (
+            '<select class="govuk-select govuk-!-width-full" id="admin_areas" '
+            'name="admin_areas">'
+        )
         dropdown_option = '<option class="admin_area_option"'
         expected_add_btn = (
             '<input type="submit" value="Add admin area" class="govuk-button">'
