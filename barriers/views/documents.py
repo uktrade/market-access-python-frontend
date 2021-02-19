@@ -31,10 +31,14 @@ class AddDocumentAjaxView(FormView):
             document = form.save()
         except FileUploadError as e:
             return JsonResponse(
-                {"message": str(e)}, status=HTTPStatus.INTERNAL_SERVER_ERROR,
+                {"message": str(e)},
+                status=HTTPStatus.INTERNAL_SERVER_ERROR,
             )
         except ScanError as e:
-            return JsonResponse({"message": str(e)}, status=HTTPStatus.UNAUTHORIZED,)
+            return JsonResponse(
+                {"message": str(e)},
+                status=HTTPStatus.UNAUTHORIZED,
+            )
 
         self.add_document_to_session(document, form.is_multi_document())
 
@@ -71,7 +75,9 @@ class AddDocumentAjaxView(FormView):
 
     def form_invalid(self, form):
         return JsonResponse(
-            {"message": ", ".join(form.errors.get("document", [])),},
+            {
+                "message": ", ".join(form.errors.get("document", [])),
+            },
             status=HTTPStatus.BAD_REQUEST,
         )
 

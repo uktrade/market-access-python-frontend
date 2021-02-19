@@ -46,7 +46,7 @@ class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
             "utm_campaign": {
                 "n": "new-barriers",
                 "u": "updated-barriers",
-            }
+            },
         }
     }
 

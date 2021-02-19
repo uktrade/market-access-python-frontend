@@ -10,14 +10,22 @@ class ResolvabilityAssessmentForm(forms.Form):
     time_to_resolve = forms.ChoiceField(
         label="How much time would it take to resolve this barrier?",
         choices=[],
-        error_messages={"required": "Select how much time it would take to resolve this barrier"},
-        help_text=render_to_string("barriers/assessments/resolvability/help_text/time_to_resolve.html")
+        error_messages={
+            "required": "Select how much time it would take to resolve this barrier"
+        },
+        help_text=render_to_string(
+            "barriers/assessments/resolvability/help_text/time_to_resolve.html"
+        ),
     )
     effort_to_resolve = forms.ChoiceField(
         label="How much effort will it take to resolve this barrier?",
         choices=[],
-        error_messages={"required": "Select how much effort it would take to resolve this barrier"},
-        help_text=render_to_string("barriers/assessments/resolvability/help_text/effort_to_resolve.html")
+        error_messages={
+            "required": "Select how much effort it would take to resolve this barrier"
+        },
+        help_text=render_to_string(
+            "barriers/assessments/resolvability/help_text/effort_to_resolve.html"
+        ),
     )
     explanation = forms.CharField(
         label="Explain the assessment",
@@ -46,12 +54,10 @@ class ResolvabilityAssessmentForm(forms.Form):
         self.resolvability_assessment = resolvability_assessment
         super().__init__(*args, **kwargs)
         self.fields["time_to_resolve"].choices = [
-            (key, value)
-            for key, value in time_to_resolve.items()
+            (key, value) for key, value in time_to_resolve.items()
         ]
         self.fields["effort_to_resolve"].choices = [
-            (key, value)
-            for key, value in effort_to_resolve.items()
+            (key, value) for key, value in effort_to_resolve.items()
         ]
 
     def clean(self):
@@ -62,9 +68,13 @@ class ResolvabilityAssessmentForm(forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.resolvability_assessment:
-            client.resolvability_assessments.patch(id=self.resolvability_assessment.id, **self.cleaned_data)
+            client.resolvability_assessments.patch(
+                id=self.resolvability_assessment.id, **self.cleaned_data
+            )
         elif self.barrier:
-            client.resolvability_assessments.create(barrier_id=self.barrier.id, **self.cleaned_data)
+            client.resolvability_assessments.create(
+                barrier_id=self.barrier.id, **self.cleaned_data
+            )
 
 
 class ArchiveResolvabilityAssessmentForm(ArchiveAssessmentBaseForm):

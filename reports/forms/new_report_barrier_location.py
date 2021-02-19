@@ -7,9 +7,9 @@ from barriers.forms.location import EditCountryOrTradingBlocForm
 class NewReportBarrierLocationForm(EditCountryOrTradingBlocForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['location'].choices = (
-            [("", "Choose a location")] + self.fields['location'].choices
-        )
+        self.fields["location"].choices = [("", "Choose a location")] + self.fields[
+            "location"
+        ].choices
 
 
 class HasAdminAreas:
@@ -30,7 +30,7 @@ class NewReportBarrierLocationHasAdminAreasForm(forms.Form):
     has_admin_areas = forms.ChoiceField(
         label="Does it affect the entire country?",
         choices=HasAdminAreas.choices(),
-        error_messages={'required': "Does it affect the entire country?"},
+        error_messages={"required": "Does it affect the entire country?"},
     )
 
 
@@ -38,14 +38,12 @@ class NewReportBarrierLocationAddAdminAreasForm(forms.Form):
     admin_areas = forms.ChoiceField(
         label="Which admin area is affected by the barrier?",
         choices=[],
-        error_messages={
-            'required': "Select an admin area affected by the barrier"
-        },
+        error_messages={"required": "Select an admin area affected by the barrier"},
     )
 
     def __init__(self, admin_areas, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['admin_areas'].choices = admin_areas
+        self.fields["admin_areas"].choices = admin_areas
 
 
 class NewReportBarrierLocationAdminAreasForm(forms.Form):
@@ -54,6 +52,7 @@ class NewReportBarrierLocationAdminAreasForm(forms.Form):
     The admin_areas.choices is considered admin areas selection which is to be used
     during create_barrier.
     """
+
     admin_areas = forms.ChoiceField(
         label="Selected admin areas",
         choices=[],
@@ -62,7 +61,7 @@ class NewReportBarrierLocationAdminAreasForm(forms.Form):
 
     def __init__(self, admin_areas, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['admin_areas'].choices = admin_areas
+        self.fields["admin_areas"].choices = admin_areas
 
 
 class NewReportBarrierTradeDirectionForm(forms.Form):

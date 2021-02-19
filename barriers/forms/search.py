@@ -8,22 +8,68 @@ from django.http import QueryDict
 
 class BarrierSearchForm(forms.Form):
     search_id = forms.UUIDField(required=False, widget=forms.HiddenInput())
-    search = forms.CharField(label="Search barrier title, summary, code or PID", max_length=255, required=False)
-    country = forms.MultipleChoiceField(label="Barrier location", required=False,)
-    country_trading_bloc = forms.MultipleChoiceField(label="Country trading blocs", required=False,)
-    extra_location = forms.MultipleChoiceField(label="Barrier location", required=False,)
-    trade_direction = forms.MultipleChoiceField(label="Trade direction", required=False,)
-    sector = forms.MultipleChoiceField(label="Sector", required=False,)
-    organisation = forms.MultipleChoiceField(label="Government organisations", required=False,)
-    category = forms.MultipleChoiceField(label="Category", required=False,)
-    region = forms.MultipleChoiceField(label="Overseas region", required=False,)
-    priority = forms.MultipleChoiceField(label="Barrier priority", required=False,)
-    status = forms.MultipleChoiceField(label="Barrier status", required=False,)
-    tags = forms.MultipleChoiceField(label="Tags", required=False,)
-    user = forms.BooleanField(label="My barriers", required=False,)
-    team = forms.BooleanField(label="My team barriers", required=False,)
+    search = forms.CharField(
+        label="Search barrier title, summary, code or PID",
+        max_length=255,
+        required=False,
+    )
+    country = forms.MultipleChoiceField(
+        label="Barrier location",
+        required=False,
+    )
+    country_trading_bloc = forms.MultipleChoiceField(
+        label="Country trading blocs",
+        required=False,
+    )
+    extra_location = forms.MultipleChoiceField(
+        label="Barrier location",
+        required=False,
+    )
+    trade_direction = forms.MultipleChoiceField(
+        label="Trade direction",
+        required=False,
+    )
+    sector = forms.MultipleChoiceField(
+        label="Sector",
+        required=False,
+    )
+    organisation = forms.MultipleChoiceField(
+        label="Government organisations",
+        required=False,
+    )
+    category = forms.MultipleChoiceField(
+        label="Category",
+        required=False,
+    )
+    region = forms.MultipleChoiceField(
+        label="Overseas region",
+        required=False,
+    )
+    priority = forms.MultipleChoiceField(
+        label="Barrier priority",
+        required=False,
+    )
+    status = forms.MultipleChoiceField(
+        label="Barrier status",
+        required=False,
+    )
+    tags = forms.MultipleChoiceField(
+        label="Tags",
+        required=False,
+    )
+    user = forms.BooleanField(
+        label="My barriers",
+        required=False,
+    )
+    team = forms.BooleanField(
+        label="My team barriers",
+        required=False,
+    )
     member = forms.IntegerField(label="People", required=False)
-    only_archived = forms.BooleanField(label="Only archived barriers", required=False,)
+    only_archived = forms.BooleanField(
+        label="Only archived barriers",
+        required=False,
+    )
     wto = forms.MultipleChoiceField(
         label="WTO",
         choices=(
@@ -85,7 +131,10 @@ class BarrierSearchForm(forms.Form):
 
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
-        "country": {"label": "Barrier location", "fields": ("extra_location", "country_trading_bloc")},
+        "country": {
+            "label": "Barrier location",
+            "fields": ("extra_location", "country_trading_bloc"),
+        },
     }
 
     def __init__(self, metadata, *args, **kwargs):
@@ -156,8 +205,9 @@ class BarrierSearchForm(forms.Form):
         self.fields["extra_location"].choices = [
             (
                 trading_bloc["code"],
-                trading_bloc_labels.get(trading_bloc["code"], trading_bloc["name"])
-            ) for trading_bloc in self.metadata.get_trading_bloc_list()
+                trading_bloc_labels.get(trading_bloc["code"], trading_bloc["name"]),
+            )
+            for trading_bloc in self.metadata.get_trading_bloc_list()
         ]
 
     def set_country_trading_bloc_choices(self):
@@ -167,12 +217,15 @@ class BarrierSearchForm(forms.Form):
         self.fields["country_trading_bloc"].choices = [
             (
                 trading_bloc["code"],
-                trading_bloc_labels.get(trading_bloc["code"], trading_bloc["name"])
-            ) for trading_bloc in self.metadata.get_trading_bloc_list()
+                trading_bloc_labels.get(trading_bloc["code"], trading_bloc["name"]),
+            )
+            for trading_bloc in self.metadata.get_trading_bloc_list()
         ]
 
     def set_trade_direction_choices(self):
-        self.fields["trade_direction"].choices = self.metadata.get_trade_direction_choices()
+        self.fields[
+            "trade_direction"
+        ].choices = self.metadata.get_trade_direction_choices()
 
     def set_sector_choices(self):
         self.fields["sector"].choices = [
@@ -181,7 +234,9 @@ class BarrierSearchForm(forms.Form):
         ]
 
     def set_organisation_choices(self):
-        self.fields["organisation"].choices = self.metadata.get_gov_organisation_choices()
+        self.fields[
+            "organisation"
+        ].choices = self.metadata.get_gov_organisation_choices()
 
     def set_category_choices(self):
         choices = [
@@ -227,8 +282,7 @@ class BarrierSearchForm(forms.Form):
 
     def set_tags_choices(self):
         choices = [
-            (str(tag['id']), tag['title'])
-            for tag in self.metadata.get_barrier_tags()
+            (str(tag["id"]), tag["title"]) for tag in self.metadata.get_barrier_tags()
         ]
         choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
@@ -298,10 +352,13 @@ class BarrierSearchForm(forms.Form):
         params["search_id"] = self.cleaned_data.get("search_id")
         params["search"] = self.cleaned_data.get("search")
         params["location"] = ",".join(
-            self.cleaned_data.get("country", []) + self.cleaned_data.get("region", [])
+            self.cleaned_data.get("country", [])
+            + self.cleaned_data.get("region", [])
             + self.cleaned_data.get("extra_location", [])
         )
-        params["trade_direction"] = ",".join(self.cleaned_data.get("trade_direction", []))
+        params["trade_direction"] = ",".join(
+            self.cleaned_data.get("trade_direction", [])
+        )
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
         params["organisation"] = ",".join(self.cleaned_data.get("organisation", []))
         params["category"] = ",".join(self.cleaned_data.get("category", []))
@@ -314,11 +371,19 @@ class BarrierSearchForm(forms.Form):
         params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
         params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
-        params["country_trading_bloc"] = ",".join(self.cleaned_data.get("country_trading_bloc", []))
-        params["economic_assessment"] = ",".join(self.cleaned_data.get("economic_assessment", []))
-        params["economic_impact_assessment"] = ",".join(self.cleaned_data.get("economic_impact_assessment", []))
+        params["country_trading_bloc"] = ",".join(
+            self.cleaned_data.get("country_trading_bloc", [])
+        )
+        params["economic_assessment"] = ",".join(
+            self.cleaned_data.get("economic_assessment", [])
+        )
+        params["economic_impact_assessment"] = ",".join(
+            self.cleaned_data.get("economic_impact_assessment", [])
+        )
         params["commodity_code"] = ",".join(self.cleaned_data.get("commodity_code", []))
-        params["commercial_value_estimate"] = ",".join(self.cleaned_data.get("commercial_value_estimate", []))
+        params["commercial_value_estimate"] = ",".join(
+            self.cleaned_data.get("commercial_value_estimate", [])
+        )
 
         return {k: v for k, v in params.items() if v}
 

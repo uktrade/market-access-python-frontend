@@ -26,7 +26,8 @@ def delete_draft_barrier(browser, index=0):
 
 
 def create_draft_barrier(
-    browser, country_id="82756b9a-5d95-e211-a939-e4115bead28a",
+    browser,
+    country_id="82756b9a-5d95-e211-a939-e4115bead28a",
 ):
     browser.visit(settings.BASE_URL)
     browser.click_link_by_text("Add a barrier")

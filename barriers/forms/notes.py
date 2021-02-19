@@ -62,7 +62,8 @@ class AddPublicBarrierNoteForm(forms.Form):
 
 class EditNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
-        widget=forms.Textarea, error_messages={"required": "Add text for the note."},
+        widget=forms.Textarea,
+        error_messages={"required": "Add text for the note."},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(

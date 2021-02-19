@@ -1,5 +1,4 @@
 class Callout:
-
     class CSSClasses:
         CALLOUT = "callout"
         CALLOUT_WITH_BUTTON = "callout--with-button"
@@ -29,7 +28,9 @@ class Callout:
     def css_class(self):
         css_class = self.CSSClasses.CALLOUT
         if self.state:
-            css_class += f" {self.CSSClasses.CALLOUT_STATES.get(self.state.lower(), '')}"
+            css_class += (
+                f" {self.CSSClasses.CALLOUT_STATES.get(self.state.lower(), '')}"
+            )
 
         if self.button and self.button.visible:
             css_class += f" {self.CSSClasses.CALLOUT_WITH_BUTTON}"
@@ -38,14 +39,20 @@ class Callout:
 
 
 class CalloutButton:
-
     class CSSClasses:
         BUTTON = "callout__button"
         BUTTON_TYPES = {
             "start": "callout__button--start",
         }
 
-    def __init__(self, form_action=None, form_method="POST", text=None, href=None, button_type=None):
+    def __init__(
+        self,
+        form_action=None,
+        form_method="POST",
+        text=None,
+        href=None,
+        button_type=None,
+    ):
         """
         Helper to add a form or simple button to Callout.
         """
@@ -63,5 +70,7 @@ class CalloutButton:
     def button_css_class(self):
         css_class = self.CSSClasses.BUTTON
         if self.button_type:
-            css_class += f" {self.CSSClasses.BUTTON_TYPES.get(self.button_type.lower(), '')}"
+            css_class += (
+                f" {self.CSSClasses.BUTTON_TYPES.get(self.button_type.lower(), '')}"
+            )
         return css_class

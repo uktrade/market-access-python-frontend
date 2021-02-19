@@ -9,42 +9,42 @@ from reports.views import DeleteReport, DraftBarriers, NewReport, ReportDetail
 
 
 class NewReportsViewTestCase(MarketAccessTestCase):
-
     def test_new_report_url_resolves_to_correct_view(self):
-        match = resolve('/reports/new/')
+        match = resolve("/reports/new/")
         assert match.func.view_class == NewReport
 
     def test_new_report_view_loads_correct_template(self):
-        url = reverse('reports:new_report')
+        url = reverse("reports:new_report")
         response = self.client.get(url)
         assert HTTPStatus.OK == response.status_code
         self.assertTemplateUsed(response, "reports/new_report.html")
 
     def test_new_report_returns_correct_html(self):
-        url = reverse('reports:new_report')
-        expected_title = '<title>Market Access - Report a barrier</title>'
+        url = reverse("reports:new_report")
+        expected_title = "<title>Market Access - Report a barrier</title>"
         expected_callout = '<a href="/reports/new/start/" class="callout__button callout__button--start">Start now</a>'
         task_item = '<li class="task-list__item">'
         expected_tasks_count = 5
 
         response = self.client.get(url)
-        html = response.content.decode('utf8')
+        html = response.content.decode("utf8")
 
         assert HTTPStatus.OK == response.status_code
         assert expected_title in html
         assert expected_callout in html
         tasks_count = html.count(task_item)
-        assert expected_tasks_count is tasks_count, f'Expected {expected_tasks_count} tasks, got: {tasks_count}'
+        assert (
+            expected_tasks_count is tasks_count
+        ), f"Expected {expected_tasks_count} tasks, got: {tasks_count}"
 
 
 class DraftBarriersViewTestCase(ReportsTestCase):
-
     def setUp(self):
         super().setUp()
-        self.url = reverse('reports:draft_barriers')
+        self.url = reverse("reports:draft_barriers")
 
     def test_draft_barrier_url_resolves_to_correct_view(self):
-        match = resolve('/draft-barriers/')
+        match = resolve("/draft-barriers/")
         assert match.func.view_class == DraftBarriers
 
     @patch("utils.api.client.ReportsResource.list")
@@ -55,25 +55,28 @@ class DraftBarriersViewTestCase(ReportsTestCase):
 
     @patch("utils.api.client.ReportsResource.list")
     def test_draft_barriers_returns_correct_html(self, mock_list):
-        mock_list.return_value = (Report(self.draft_barrier(4)), Report(self.draft_barrier(5)),)
+        mock_list.return_value = (
+            Report(self.draft_barrier(4)),
+            Report(self.draft_barrier(5)),
+        )
         expected_title = "<title>Market Access - Draft barriers</title>"
         my_draft_barriers_table = '<table class="standard-table my-draft-barriers">'
         draft_barrier_row = '<tr class="standard-table__row draft-barrier-item">'
         expected_row_count = 2
 
         response = self.client.get(self.url)
-        html = response.content.decode('utf8')
+        html = response.content.decode("utf8")
 
         assert HTTPStatus.OK == response.status_code
         assert expected_title in html
         assert my_draft_barriers_table in html
         row_count = html.count(draft_barrier_row)
-        assert expected_row_count == row_count,\
-            f'Expected {expected_row_count} least one sector option, got: {row_count}'
+        assert (
+            expected_row_count == row_count
+        ), f"Expected {expected_row_count} least one sector option, got: {row_count}"
 
 
 class ReportDetailViewTestCase(ReportsTestCase):
-
     def test_report_detail_url_resolves_to_correct_view(self):
         draft = self.draft_barrier(1)
         match = resolve(f'/reports/{draft["id"]}/')
@@ -83,7 +86,9 @@ class ReportDetailViewTestCase(ReportsTestCase):
     def test_report_detail_view_loads_correct_template(self, mock_get):
         draft = self.draft_barrier(1)
         mock_get.return_value = Report(draft)
-        url = reverse('reports:draft_barrier_details_uuid', kwargs={"barrier_id": draft["id"]})
+        url = reverse(
+            "reports:draft_barrier_details_uuid", kwargs={"barrier_id": draft["id"]}
+        )
 
         response = self.client.get(url)
 
@@ -94,14 +99,19 @@ class ReportDetailViewTestCase(ReportsTestCase):
     def test_report_detail_view_loads_html__with_sections_not_started(self, mock_get):
         draft = self.draft_barrier(30)
         url = reverse(
-            "reports:draft_barrier_details_uuid",
-            kwargs={"barrier_id": draft["id"]}
+            "reports:draft_barrier_details_uuid", kwargs={"barrier_id": draft["id"]}
         )
         mock_get.return_value = Report(draft)
         expected_title = "<title>Market Access - Add - Barrier details</title>"
-        expected_callout_container = '<div class="callout callout--warn callout--with-button">'
-        expected_callout_heading = '<h2 class="callout__heading">Unfinished barrier for</h2>'
-        submit_button = '<input type="submit" value="Submit barrier" class="callout__button">'
+        expected_callout_container = (
+            '<div class="callout callout--warn callout--with-button">'
+        )
+        expected_callout_heading = (
+            '<h2 class="callout__heading">Unfinished barrier for</h2>'
+        )
+        submit_button = (
+            '<input type="submit" value="Submit barrier" class="callout__button">'
+        )
         complete_class = "task-list__item__banner--complete"
         expected_complete_class_count = 3
 
@@ -114,21 +124,27 @@ class ReportDetailViewTestCase(ReportsTestCase):
         assert expected_callout_heading in html
         assert submit_button not in html
         completed_count = html.count(complete_class)
-        assert expected_complete_class_count == completed_count,\
-            f'Expected {expected_complete_class_count} admin areas, got: {completed_count}'
+        assert (
+            expected_complete_class_count == completed_count
+        ), f"Expected {expected_complete_class_count} admin areas, got: {completed_count}"
 
     @patch("utils.api.client.ReportsResource.get")
     def test_report_detail_view_loads_html__with_all_sections_completed(self, mock_get):
         draft = self.draft_barrier(6)
         url = reverse(
-            "reports:draft_barrier_details_uuid",
-            kwargs={"barrier_id": draft["id"]}
+            "reports:draft_barrier_details_uuid", kwargs={"barrier_id": draft["id"]}
         )
         mock_get.return_value = Report(draft)
         expected_title = "<title>Market Access - Add - Barrier details</title>"
-        expected_callout_container = '<div class="callout callout--success callout--with-button">'
-        expected_callout_heading = '<h2 class="callout__heading">All tasks completed for</h2>'
-        submit_button = '<input type="submit" value="Submit barrier" class="callout__button">'
+        expected_callout_container = (
+            '<div class="callout callout--success callout--with-button">'
+        )
+        expected_callout_heading = (
+            '<h2 class="callout__heading">All tasks completed for</h2>'
+        )
+        submit_button = (
+            '<input type="submit" value="Submit barrier" class="callout__button">'
+        )
         complete_class = "task-list__item__banner--complete"
         expected_complete_class_count = 5
 
@@ -142,8 +158,9 @@ class ReportDetailViewTestCase(ReportsTestCase):
         assert expected_callout_heading in html
         assert submit_button in html
         completed_count = html.count(complete_class)
-        assert expected_complete_class_count == completed_count, \
-            f'Expected {expected_complete_class_count} admin areas, got: {completed_count}'
+        assert (
+            expected_complete_class_count == completed_count
+        ), f"Expected {expected_complete_class_count} admin areas, got: {completed_count}"
 
     @patch("utils.api.client.ReportsResource.get")
     @patch("reports.helpers.ReportFormGroup.submit")
@@ -154,12 +171,10 @@ class ReportDetailViewTestCase(ReportsTestCase):
         """
         draft = self.draft_barrier(6)
         url = reverse(
-            "reports:draft_barrier_details_uuid",
-            kwargs={"barrier_id": draft["id"]}
+            "reports:draft_barrier_details_uuid", kwargs={"barrier_id": draft["id"]}
         )
         redirect_url = reverse(
-            "barriers:barrier_detail",
-            kwargs={"barrier_id": draft["id"]}
+            "barriers:barrier_detail", kwargs={"barrier_id": draft["id"]}
         )
         mock_get.return_value = Report(draft)
         mock_submit.return_value = {"status_code": 200}
@@ -171,11 +186,12 @@ class ReportDetailViewTestCase(ReportsTestCase):
 
 
 class DeleteReportViewTestCase(ReportsTestCase):
-
     def setUp(self):
         super().setUp()
         self.draft = self.draft_barrier(5)
-        self.url = reverse("reports:delete_report", kwargs={"barrier_id": self.draft["id"]})
+        self.url = reverse(
+            "reports:delete_report", kwargs={"barrier_id": self.draft["id"]}
+        )
 
     def test_delete_report_url_resolves_to_correct_view(self):
         match = resolve(f'/reports/{self.draft["id"]}/delete/')
@@ -184,7 +200,9 @@ class DeleteReportViewTestCase(ReportsTestCase):
     @patch("utils.api.client.ReportsResource.list")
     @patch("utils.api.client.ReportsResource.get")
     @patch("utils.api.client.ReportsResource.delete")
-    def test_delete_report_view_loads_correct_template(self, mock_delete, mock_get, _mock_list):
+    def test_delete_report_view_loads_correct_template(
+        self, mock_delete, mock_get, _mock_list
+    ):
         mock_get.return_value = Report(self.draft)
         redirect_url = reverse("reports:draft_barriers")
 

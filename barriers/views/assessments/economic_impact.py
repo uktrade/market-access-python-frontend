@@ -5,7 +5,9 @@ from users.permissions import APIPermissionMixin
 from utils.metadata import MetadataMixin
 
 from ...forms.assessments.economic_impact import (
-    ArchiveEconomicImpactAssessmentForm, EconomicImpactAssessmentForm)
+    ArchiveEconomicImpactAssessmentForm,
+    EconomicImpactAssessmentForm,
+)
 from ..mixins import BarrierMixin, EconomicImpactAssessmentMixin
 from .base import ArchiveAssessmentBase
 
@@ -39,7 +41,9 @@ class AddEconomicImpactAssessment(APIPermissionMixin, EconomicImpactAssessmentEd
         return kwargs
 
 
-class EconomicImpactAssessmentDetail(EconomicImpactAssessmentMixin, BarrierMixin, TemplateView):
+class EconomicImpactAssessmentDetail(
+    EconomicImpactAssessmentMixin, BarrierMixin, TemplateView
+):
     template_name = "barriers/assessments/economic_impact/detail.html"
 
 

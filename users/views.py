@@ -212,8 +212,7 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
                 return f"{manage_users_url}?group={new_group_id}"
             return self.referer.path
         return reverse(
-            "users:user_detail",
-            kwargs={"user_id": self.kwargs.get("user_id")}
+            "users:user_detail", kwargs={"user_id": self.kwargs.get("user_id")}
         )
 
 

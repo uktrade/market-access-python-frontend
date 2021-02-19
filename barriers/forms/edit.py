@@ -1,9 +1,14 @@
 from django import forms
 
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (ChoiceFieldWithHelpText, ClearableMixin,
-                         DayMonthYearField, MultipleChoiceFieldWithHelpText,
-                         YesNoBooleanField, YesNoDontKnowBooleanField)
+from utils.forms import (
+    ChoiceFieldWithHelpText,
+    ClearableMixin,
+    DayMonthYearField,
+    MultipleChoiceFieldWithHelpText,
+    YesNoBooleanField,
+    YesNoDontKnowBooleanField,
+)
 
 from .mixins import APIFormMixin
 
@@ -107,7 +112,7 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         max_length=255,
         error_messages={
             "max_length": "Other source should be %(limit_value)d characters or fewer",
-        }
+        },
     )
 
     def clean(self):
@@ -175,7 +180,11 @@ class UpdateBarrierTermForm(APIFormMixin, forms.Form):
             "A procedural, short-term barrier",
             "for example, goods stuck at the border or documentation issue",
         ),
-        (2, "A long-term strategic barrier", "for example, a change of regulation",),
+        (
+            2,
+            "A long-term strategic barrier",
+            "for example, a change of regulation",
+        ),
     ]
     term = ChoiceFieldWithHelpText(
         label="What is the scope of the barrier?",
@@ -186,9 +195,7 @@ class UpdateBarrierTermForm(APIFormMixin, forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id, term=self.cleaned_data["term"]
-        )
+        client.barriers.patch(id=self.id, term=self.cleaned_data["term"])
 
 
 class UpdateBarrierEndDateForm(ClearableMixin, APIFormMixin, forms.Form):
@@ -257,9 +264,7 @@ class CausedByTradingBlocForm(forms.Form):
     caused_by_trading_bloc = YesNoDontKnowBooleanField(
         label="",
         error_messages={
-            "required": (
-                "Indicate if the barrier was caused by the trading bloc"
-            )
+            "required": ("Indicate if the barrier was caused by the trading bloc")
         },
     )
 
@@ -269,8 +274,8 @@ class CausedByTradingBlocForm(forms.Form):
             f"Was this barrier caused by a regulation introduced by "
             f"{trading_bloc['short_name']}?"
         )
-        self.fields["caused_by_trading_bloc"].help_text = (
-            self.get_help_text(trading_bloc.get("code"))
+        self.fields["caused_by_trading_bloc"].help_text = self.get_help_text(
+            trading_bloc.get("code")
         )
 
     def get_help_text(self, trading_bloc_code):
@@ -312,8 +317,12 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        economic_assessment_eligibility = cleaned_data.get("economic_assessment_eligibility")
-        economic_assessment_eligibility_summary = cleaned_data.get("economic_assessment_eligibility_summary")
+        economic_assessment_eligibility = cleaned_data.get(
+            "economic_assessment_eligibility"
+        )
+        economic_assessment_eligibility_summary = cleaned_data.get(
+            "economic_assessment_eligibility_summary"
+        )
 
         if economic_assessment_eligibility is False:
             if not economic_assessment_eligibility_summary:
@@ -328,6 +337,10 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            economic_assessment_eligibility=self.cleaned_data["economic_assessment_eligibility"],
-            economic_assessment_eligibility_summary=self.cleaned_data["economic_assessment_eligibility_summary"],
+            economic_assessment_eligibility=self.cleaned_data[
+                "economic_assessment_eligibility"
+            ],
+            economic_assessment_eligibility_summary=self.cleaned_data[
+                "economic_assessment_eligibility_summary"
+            ],
         )

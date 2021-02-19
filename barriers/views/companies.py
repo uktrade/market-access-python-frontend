@@ -2,8 +2,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from barriers.forms.companies import (AddCompanyForm, CompanySearchForm,
-                                      EditCompaniesForm)
+from barriers.forms.companies import (
+    AddCompanyForm,
+    CompanySearchForm,
+    EditCompaniesForm,
+)
 from utils.datahub import DatahubClient
 from utils.exceptions import APIException
 
@@ -45,7 +48,10 @@ class CompanyDetail(BarrierMixin, FormView):
         company = client.get_company(form.cleaned_data["company_id"])
         companies = self.request.session.get("companies", [])
         companies.append(
-            {"id": company.id, "name": company.name,}
+            {
+                "id": company.id,
+                "name": company.name,
+            }
         )
         self.request.session["companies"] = companies
         return super().form_valid(form)

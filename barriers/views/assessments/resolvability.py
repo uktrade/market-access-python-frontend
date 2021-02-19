@@ -5,26 +5,34 @@ from users.permissions import APIPermissionMixin
 from utils.metadata import MetadataMixin
 
 from ...forms.assessments.resolvability import (
-    ArchiveResolvabilityAssessmentForm, ResolvabilityAssessmentForm)
+    ArchiveResolvabilityAssessmentForm,
+    ResolvabilityAssessmentForm,
+)
 from ..mixins import BarrierMixin, ResolvabilityAssessmentMixin
 from .base import ArchiveAssessmentBase
 
 
-class ResolvabilityAssessmentEditBase(ResolvabilityAssessmentMixin, MetadataMixin, BarrierMixin, FormView):
+class ResolvabilityAssessmentEditBase(
+    ResolvabilityAssessmentMixin, MetadataMixin, BarrierMixin, FormView
+):
     form_class = ResolvabilityAssessmentForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["time_to_resolve"] = self.metadata.get_resolvability_assessment_time()
-        kwargs["effort_to_resolve"] = self.metadata.get_resolvability_assessment_effort()
+        kwargs[
+            "effort_to_resolve"
+        ] = self.metadata.get_resolvability_assessment_effort()
         return kwargs
 
     def get_initial(self):
         if self.kwargs.get("assessment_id"):
             return {
                 "time_to_resolve": self.resolvability_assessment.time_to_resolve["id"],
-                "effort_to_resolve": self.resolvability_assessment.effort_to_resolve["id"],
+                "effort_to_resolve": self.resolvability_assessment.effort_to_resolve[
+                    "id"
+                ],
                 "explanation": self.resolvability_assessment.explanation,
             }
 
@@ -59,7 +67,9 @@ class EditResolvabilityAssessment(APIPermissionMixin, ResolvabilityAssessmentEdi
         return kwargs
 
 
-class ResolvabilityAssessmentDetail(ResolvabilityAssessmentMixin, BarrierMixin, TemplateView):
+class ResolvabilityAssessmentDetail(
+    ResolvabilityAssessmentMixin, BarrierMixin, TemplateView
+):
     template_name = "barriers/assessments/resolvability/detail.html"
 
     def get_context_data(self, **kwargs):

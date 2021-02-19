@@ -137,7 +137,10 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"status": "2", "open_in_progress_summary": "Test summary",},
+            data={
+                "status": "2",
+                "open_in_progress_summary": "Test summary",
+            },
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_set_status.assert_called_with(

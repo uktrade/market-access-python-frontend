@@ -19,7 +19,10 @@ class EditCommercialValueTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["commercial_value"] == self.barrier["commercial_value"]
-        assert form.initial["commercial_value_explanation"] == self.barrier["commercial_value_explanation"]
+        assert (
+            form.initial["commercial_value_explanation"]
+            == self.barrier["commercial_value_explanation"]
+        )
 
     @patch("utils.api.resources.APIResource.patch")
     def test_edit_commercial_value_calls_api(self, mock_patch):
@@ -30,13 +33,13 @@ class EditCommercialValueTestCase(MarketAccessTestCase):
             ),
             data={
                 "commercial_value": "500003",
-                "commercial_value_explanation": "Wibble, wobble."
+                "commercial_value_explanation": "Wibble, wobble.",
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             commercial_value=500003,
-            commercial_value_explanation="Wibble, wobble."
+            commercial_value_explanation="Wibble, wobble.",
         )
         assert response.status_code == HTTPStatus.FOUND
 

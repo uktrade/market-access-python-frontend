@@ -3,9 +3,11 @@ from django.urls import reverse
 from django.views.generic import FormView
 
 from barriers.constants import UK_COUNTRY_ID
-from barriers.forms.commodities import (CommodityLookupForm,
-                                        MultiCommodityLookupForm,
-                                        UpdateBarrierCommoditiesForm)
+from barriers.forms.commodities import (
+    CommodityLookupForm,
+    MultiCommodityLookupForm,
+    UpdateBarrierCommoditiesForm,
+)
 from utils.api.client import MarketAccessAPIClient
 
 from .mixins import BarrierMixin
@@ -36,12 +38,16 @@ class BarrierEditCommodities(BarrierMixin, FormView):
 
         lookup_form = self.get_lookup_form(form_class)
         if lookup_form.is_valid():
-            return JsonResponse({
-                "status": "ok",
-                "data": lookup_form.get_commodity_data(),
-            })
+            return JsonResponse(
+                {
+                    "status": "ok",
+                    "data": lookup_form.get_commodity_data(),
+                }
+            )
         else:
-            return JsonResponse({"status": "error", "message": "HS commodity code not found"})
+            return JsonResponse(
+                {"status": "error", "message": "HS commodity code not found"}
+            )
 
     def screen_reader_mode(self):
         # detect screen reader mode
@@ -113,9 +119,16 @@ class BarrierEditCommodities(BarrierMixin, FormView):
             session_commodities = []
             for commodity in self.barrier.commodities:
                 if commodity.country:
-                    session_commodities.append({"code": commodity.code, "location": commodity.country["id"]})
+                    session_commodities.append(
+                        {"code": commodity.code, "location": commodity.country["id"]}
+                    )
                 elif commodity.trading_bloc:
-                    session_commodities.append({"code": commodity.code, "location": commodity.trading_bloc["code"]})
+                    session_commodities.append(
+                        {
+                            "code": commodity.code,
+                            "location": commodity.trading_bloc["code"],
+                        }
+                    )
 
             self.request.session[session_key] = session_commodities
         return session_commodities
@@ -138,11 +151,14 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         if session_commodities != []:
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             hs6_session_codes = [
-                commodity["code"][:6].ljust(10, "0") for commodity in session_commodities
+                commodity["code"][:6].ljust(10, "0")
+                for commodity in session_commodities
             ]
             commodity_lookup = {
                 commodity.code: commodity
-                for commodity in client.commodities.list(codes=",".join(hs6_session_codes))
+                for commodity in client.commodities.list(
+                    codes=",".join(hs6_session_codes)
+                )
             }
             barrier_commodities = []
             for commodity_data in session_commodities:
@@ -173,7 +189,9 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         elif "remove-commodity" in request.POST:
             code = request.POST.get("remove-commodity")
             self.remove_confirmed_commodity(code)
-            return self.render_to_response(self.get_context_data(lookup_form=self.get_lookup_form()))
+            return self.render_to_response(
+                self.get_context_data(lookup_form=self.get_lookup_form())
+            )
         elif request.POST.get("action") == "save":
             form = self.get_form()
             if form.is_valid():
@@ -189,7 +207,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
-        if self.request.GET.get('next') == "automate":
+        if self.request.GET.get("next") == "automate":
             return reverse(
                 "barriers:automate_economic_assessment",
                 kwargs={"barrier_id": self.kwargs.get("barrier_id")},

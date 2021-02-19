@@ -43,7 +43,10 @@ class AddCategory(MetadataMixin, BarrierMixin, FormView):
         category = self.metadata.get_category(form.cleaned_data["category"])
         categories = self.request.session.get("categories", [])
         categories.append(
-            {"id": category["id"], "title": category["title"],}
+            {
+                "id": category["id"],
+                "title": category["title"],
+            }
         )
         self.request.session["categories"] = categories
         return super().form_valid(form)
@@ -67,9 +70,7 @@ class BarrierEditCategories(MetadataMixin, BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data.update(
-            {"categories": self.request.session.get("categories", [])}
-        )
+        context_data.update({"categories": self.request.session.get("categories", [])})
         return context_data
 
     def get_initial(self):
@@ -114,9 +115,7 @@ class BarrierRemoveCategory(View):
         category_id = request.POST.get("category_id")
 
         self.request.session["categories"] = [
-            category
-            for category in categories
-            if category_id != str(category["id"])
+            category for category in categories if category_id != str(category["id"])
         ]
         return HttpResponseRedirect(self.get_success_url())
 

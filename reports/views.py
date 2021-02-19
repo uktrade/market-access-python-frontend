@@ -11,17 +11,25 @@ from partials.callout import Callout, CalloutButton
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
 from reports.forms.new_report_barrier_location import (
-    HasAdminAreas, NewReportBarrierLocationAddAdminAreasForm,
-    NewReportBarrierLocationAdminAreasForm, NewReportBarrierLocationForm,
+    HasAdminAreas,
+    NewReportBarrierLocationAddAdminAreasForm,
+    NewReportBarrierLocationAdminAreasForm,
+    NewReportBarrierLocationForm,
     NewReportBarrierLocationHasAdminAreasForm,
-    NewReportBarrierTradeDirectionForm, NewReportCausedByTradingBlocForm)
+    NewReportBarrierTradeDirectionForm,
+    NewReportCausedByTradingBlocForm,
+)
 from reports.forms.new_report_barrier_sectors import (
-    NewReportBarrierAddSectorsForm, NewReportBarrierHasSectorsForm,
-    NewReportBarrierSectorsForm, SectorsAffected)
+    NewReportBarrierAddSectorsForm,
+    NewReportBarrierHasSectorsForm,
+    NewReportBarrierSectorsForm,
+    SectorsAffected,
+)
 from reports.forms.new_report_barrier_status import (
-    NewReportBarrierStatusForm, NewReportBarrierTermForm)
-from reports.forms.new_report_barrier_summary import \
-    NewReportBarrierSummaryForm
+    NewReportBarrierStatusForm,
+    NewReportBarrierTermForm,
+)
+from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
 from reports.helpers import ReportFormGroup
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
@@ -76,6 +84,7 @@ class ReportsFormView(MetadataMixin, ReportBarrierContextMixin, FormView):
     A base view for displaying a report template with forms and optional callout.
     If both provided in the view back_path overrides back_url.
     """
+
     form_class = Form
     form_session_key = ""
     form_group = None
@@ -109,7 +118,7 @@ class ReportsFormView(MetadataMixin, ReportBarrierContextMixin, FormView):
         return initial
 
     def init_view(self, request, **kwargs):
-        barrier_id = kwargs.get('barrier_id')
+        barrier_id = kwargs.get("barrier_id")
         self.form_group = ReportFormGroup(request.session, barrier_id)
         self.urls = self.get_urls()
 
@@ -162,6 +171,7 @@ class NewReport(ReportsTemplateView):
     """
     Landing page where users can initiate to report a barrier.
     """
+
     template_name = "reports/new_report.html"
     callout = Callout(
         heading=(
@@ -173,7 +183,7 @@ class NewReport(ReportsTemplateView):
             href=reverse_lazy("reports:barrier_term"),
             text="Start now",
             button_type="start",
-        )
+        ),
     )
 
     def get_context_data(self, **kwargs):
@@ -186,10 +196,11 @@ class NewReportBarrierTermView(ReportsFormView):
     """
     Report a barrier - Step 1.1 Select Barrier Term
     """
+
     heading_text = "Barrier status"
     template_name = "reports/new_report_barrier_term.html"
     form_class = NewReportBarrierTermForm
-    success_path = 'reports:barrier_status'
+    success_path = "reports:barrier_status"
     form_session_key = FormSessionKeys.TERM
 
 
@@ -197,11 +208,12 @@ class NewReportBarrierStatusView(ReportsFormView):
     """
     Report a barrier - Step 1.2
     """
+
     heading_text = "Barrier status"
     template_name = "reports/new_report_barrier_status.html"
     form_class = NewReportBarrierStatusForm
-    success_path = 'reports:barrier_location'
-    extra_paths = {'back': 'reports:barrier_term'}
+    success_path = "reports:barrier_location"
+    extra_paths = {"back": "reports:barrier_term"}
     form_session_key = FormSessionKeys.STATUS
 
     def get_context_data(self, **kwargs):
@@ -223,7 +235,7 @@ class NewReportBarrierLocationView(ReportsFormView):
     template_name = "reports/new_report_barrier_location.html"
     form_class = NewReportBarrierLocationForm
     success_path = None
-    extra_paths = {'back': 'reports:barrier_status'}
+    extra_paths = {"back": "reports:barrier_status"}
     form_session_key = FormSessionKeys.LOCATION
 
     def get_form_kwargs(self):
@@ -254,11 +266,12 @@ class NewReportBarrierLocationView(ReportsFormView):
 
 class NewReportBarrierLocationHasAdminAreasView(ReportsFormView):
     """Does it affect the entire country?"""
+
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_barrier_location_has_admin_areas.html"
     form_class = NewReportBarrierLocationHasAdminAreasForm
     success_path = None
-    extra_paths = {'back': 'reports:barrier_location'}
+    extra_paths = {"back": "reports:barrier_location"}
     form_session_key = FormSessionKeys.HAS_ADMIN_AREAS
 
     def success(self):
@@ -279,11 +292,12 @@ class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
     """
     Users can add admin areas that are affected by the barrier.
     """
+
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_barrier_location_add_admin_areas.html"
     form_class = NewReportBarrierLocationAddAdminAreasForm
     success_path = "reports:barrier_admin_areas"
-    extra_paths = {'back': 'reports:barrier_has_admin_areas'}
+    extra_paths = {"back": "reports:barrier_has_admin_areas"}
     form_session_key = FormSessionKeys.ADMIN_AREAS
 
     @property
@@ -318,9 +332,9 @@ class NewReportBarrierLocationAddAdminAreasView(ReportsFormView):
         selected_admin_areas = self.form_group.selected_admin_areas
 
         kwargs["admin_areas"] = (
-            (admin_area['id'], admin_area['name'])
+            (admin_area["id"], admin_area["name"])
             for admin_area in admin_areas
-            if admin_area['id'] not in selected_admin_areas
+            if admin_area["id"] not in selected_admin_areas
         )
         return kwargs
 
@@ -340,8 +354,8 @@ class NewReportBarrierAdminAreasView(ReportsFormView):
     template_name = "reports/new_report_barrier_location_admin_areas.html"
     success_path = "reports:barrier_trade_direction"
     extra_paths = {
-        'back': 'reports:barrier_add_admin_areas',
-        'remove_admin_area': 'reports:barrier_remove_admin_areas'
+        "back": "reports:barrier_add_admin_areas",
+        "remove_admin_area": "reports:barrier_remove_admin_areas",
     }
     form_class = NewReportBarrierLocationAdminAreasForm
 
@@ -349,7 +363,9 @@ class NewReportBarrierAdminAreasView(ReportsFormView):
     def selected_admin_areas(self):
         choices = (
             (area["id"], area["name"])
-            for area in self.metadata.get_admin_areas(self.form_group.selected_admin_areas)
+            for area in self.metadata.get_admin_areas(
+                self.form_group.selected_admin_areas
+            )
         )
         return choices
 
@@ -360,8 +376,8 @@ class NewReportBarrierAdminAreasView(ReportsFormView):
 
 
 class NewReportBarrierLocationRemoveAdminAreasView(ReportsFormView):
-    http_method_names = 'post'
-    success_path = 'reports:barrier_admin_areas'
+    http_method_names = "post"
+    success_path = "reports:barrier_admin_areas"
 
     def post(self, request, *args, **kwargs):
         self.init_view(request, **kwargs)
@@ -375,7 +391,7 @@ class NewReportBarrierCausedByTradingBlocView(ReportsFormView):
     template_name = "reports/new_report_caused_by_trading_bloc.html"
     form_class = NewReportCausedByTradingBlocForm
     success_path = "reports:barrier_trade_direction"
-    extra_paths = {'back': 'reports:barrier_location'}
+    extra_paths = {"back": "reports:barrier_location"}
     form_session_key = FormSessionKeys.CAUSED_BY_TRADING_BLOC
 
     def get_form_kwargs(self):
@@ -390,7 +406,7 @@ class NewReportBarrierTradeDirectionView(ReportsFormView):
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_barrier_trade_direction.html"
     form_class = NewReportBarrierTradeDirectionForm
-    extra_paths = {'back': 'reports:barrier_location'}
+    extra_paths = {"back": "reports:barrier_location"}
     form_session_key = FormSessionKeys.TRADE_DIRECTION
 
     def get_form_kwargs(self):
@@ -412,10 +428,11 @@ class NewReportBarrierTradeDirectionView(ReportsFormView):
 
 class NewReportBarrierHasSectorsView(ReportsFormView):
     """Does it affect the entire country?"""
+
     heading_text = "Sectors affected by the barrier"
     template_name = "reports/new_report_barrier_sectors_main.html"
     form_class = NewReportBarrierHasSectorsForm
-    extra_paths = {'back': 'reports:barrier_trade_direction'}
+    extra_paths = {"back": "reports:barrier_trade_direction"}
     form_session_key = FormSessionKeys.SECTORS_AFFECTED
 
     def set_success_path(self):
@@ -423,7 +440,10 @@ class NewReportBarrierHasSectorsView(ReportsFormView):
         if action == "exit":
             self.success_path = "reports:draft_barrier_details"
         else:
-            if self.form_group.sectors_affected["sectors_affected"] == SectorsAffected.YES:
+            if (
+                self.form_group.sectors_affected["sectors_affected"]
+                == SectorsAffected.YES
+            ):
                 self.success_path = "reports:barrier_sectors"
             else:
                 self.success_path = "reports:barrier_about"
@@ -437,12 +457,12 @@ class NewReportBarrierSectorsView(ReportsFormView):
     heading_text = "Sectors affected by the barrier"
     template_name = "reports/new_report_barrier_sectors_manage.html"
     form_class = NewReportBarrierSectorsForm
-    success_path = 'reports:barrier_about'
+    success_path = "reports:barrier_about"
     extra_paths = {
-        'back': 'reports:barrier_has_sectors',
-        'add_sector': 'reports:barrier_add_sectors',
-        'add_all': 'reports:barrier_add_all_sectors',
-        'remove_sector': 'reports:barrier_remove_sector'
+        "back": "reports:barrier_has_sectors",
+        "add_sector": "reports:barrier_add_sectors",
+        "add_all": "reports:barrier_add_all_sectors",
+        "remove_sector": "reports:barrier_remove_sector",
     }
 
     def get_form_kwargs(self):
@@ -467,14 +487,17 @@ class NewReportBarrierSectorsAddView(ReportsFormView):
     heading_text = "Sectors affected by the barrier"
     template_name = "reports/new_report_barrier_sectors_add.html"
     form_class = NewReportBarrierAddSectorsForm
-    success_path = 'reports:barrier_sectors'
+    success_path = "reports:barrier_sectors"
     extra_paths = {
-        'back': 'reports:barrier_sectors',
+        "back": "reports:barrier_sectors",
     }
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        has_selected_sectors, selected_sectors = self.form_group.selected_sectors_generator(self.metadata)
+        (
+            has_selected_sectors,
+            selected_sectors,
+        ) = self.form_group.selected_sectors_generator(self.metadata)
         context_data["has_selected_sectors"] = has_selected_sectors
         context_data["selected_sectors"] = selected_sectors
         return context_data
@@ -502,8 +525,8 @@ class NewReportBarrierSectorsAddView(ReportsFormView):
 
 
 class NewReportBarrierSectorsAddAllView(ReportsFormView):
-    http_method_names = 'post'
-    success_path = 'reports:barrier_sectors'
+    http_method_names = "post"
+    success_path = "reports:barrier_sectors"
 
     def post(self, request, *args, **kwargs):
         self.init_view(request, **kwargs)
@@ -512,8 +535,8 @@ class NewReportBarrierSectorsAddAllView(ReportsFormView):
 
 
 class NewReportBarrierSectorsRemoveView(ReportsFormView):
-    http_method_names = 'post'
-    success_path = 'reports:barrier_sectors'
+    http_method_names = "post"
+    success_path = "reports:barrier_sectors"
 
     def post(self, request, *args, **kwargs):
         self.init_view(request, **kwargs)
@@ -529,7 +552,7 @@ class NewReportBarrierAboutView(ReportsFormView):
     heading_text = "About the barrier"
     template_name = "reports/new_report_barrier_about.html"
     form_class = NewReportBarrierAboutForm
-    extra_paths = {'back': 'reports:barrier_sectors'}
+    extra_paths = {"back": "reports:barrier_sectors"}
     form_session_key = FormSessionKeys.ABOUT
 
     def get_form_kwargs(self):
@@ -562,8 +585,8 @@ class NewReportBarrierSummaryView(ReportsFormView):
     heading_text = "Barrier summary"
     template_name = "reports/new_report_barrier_summary.html"
     form_class = NewReportBarrierSummaryForm
-    success_path = 'reports:draft_barrier_details'
-    extra_paths = {'back': 'reports:barrier_about'}
+    success_path = "reports:draft_barrier_details"
+    extra_paths = {"back": "reports:barrier_about"}
     form_session_key = FormSessionKeys.SUMMARY
 
     def get_context_data(self, **kwargs):
@@ -595,9 +618,9 @@ class DraftBarriers(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        client = MarketAccessAPIClient(self.request.session['sso_token'])
+        client = MarketAccessAPIClient(self.request.session["sso_token"])
         reports = client.reports.list(ordering="-created_on")
-        context_data['reports'] = reports
+        context_data["reports"] = reports
         return context_data
 
 
@@ -610,34 +633,34 @@ class DeleteReport(TemplateView):
         return ["reports/delete_report.html"]
 
     def get_report(self):
-        client = MarketAccessAPIClient(self.request.session['sso_token'])
-        return client.reports.get(self.kwargs.get('barrier_id'))
+        client = MarketAccessAPIClient(self.request.session["sso_token"])
+        return client.reports.get(self.kwargs.get("barrier_id"))
 
     def get_context_data(self, **kwargs):
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
-            return {'report': self.get_report()}
+            return {"report": self.get_report()}
 
         context_data = super().get_context_data(**kwargs)
-        context_data['page'] = "draft-barriers"
+        context_data["page"] = "draft-barriers"
 
-        client = MarketAccessAPIClient(self.request.session['sso_token'])
+        client = MarketAccessAPIClient(self.request.session["sso_token"])
         reports = client.reports.list(ordering="-created_on")
 
-        context_data['reports'] = reports
+        context_data["reports"] = reports
         for report in reports:
-            if report.id == str(self.kwargs.get('barrier_id')):
-                context_data['report'] = report
+            if report.id == str(self.kwargs.get("barrier_id")):
+                context_data["report"] = report
 
         return context_data
 
     def post(self, request, *args, **kwargs):
         report = self.get_report()
 
-        if report.created_by['id'] == request.session['user_data']['id']:
-            client = MarketAccessAPIClient(request.session.get('sso_token'))
-            client.reports.delete(self.kwargs.get('barrier_id'))
+        if report.created_by["id"] == request.session["user_data"]["id"]:
+            client = MarketAccessAPIClient(request.session.get("sso_token"))
+            client.reports.delete(self.kwargs.get("barrier_id"))
 
-        return HttpResponseRedirect(reverse('reports:draft_barriers'))
+        return HttpResponseRedirect(reverse("reports:draft_barriers"))
 
 
 class ReportDetail(ReportsFormView):
@@ -655,7 +678,7 @@ class ReportDetail(ReportsFormView):
     @property
     def client(self):
         if not self._client:
-            self._client = MarketAccessAPIClient(self.request.session['sso_token'])
+            self._client = MarketAccessAPIClient(self.request.session["sso_token"])
         return self._client
 
     def get_barrier(self, uuid):
@@ -676,23 +699,28 @@ class ReportDetail(ReportsFormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['page'] = "add-a-barrier"
-        context_data['report'] = self.draft_barrier
+        context_data["page"] = "add-a-barrier"
+        context_data["report"] = self.draft_barrier
         return context_data
 
     def get_success_url(self):
-        return reverse_lazy("barriers:barrier_detail", kwargs={"barrier_id": str(self.form_group.barrier_id)})
+        return reverse_lazy(
+            "barriers:barrier_detail",
+            kwargs={"barrier_id": str(self.form_group.barrier_id)},
+        )
 
     def success(self):
         self.form_group.submit()
 
     def get(self, request, *args, **kwargs):
-        barrier_id = kwargs.get('barrier_id')
+        barrier_id = kwargs.get("barrier_id")
         self.draft_barrier = self.get_draft_barrier(barrier_id)
         if self.draft_barrier:
             self.init_view(request, **kwargs)
             self.form_group.update_context(self.draft_barrier)
             return self.render_to_response(self.get_context_data())
         else:
-            url = reverse_lazy("barriers:barrier_detail", kwargs={"barrier_id": barrier_id})
+            url = reverse_lazy(
+                "barriers:barrier_detail", kwargs={"barrier_id": barrier_id}
+            )
             return redirect(url, permanent=True)

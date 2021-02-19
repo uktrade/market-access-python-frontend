@@ -6,8 +6,10 @@ from django.views.generic import FormView
 from utils.metadata import MetadataMixin
 from utils.sessions import SessionList
 
-from ..forms.government_organisations import (AddGovernmentOrganisationsForm,
-                                              EditGovernmentOrganisationsForm)
+from ..forms.government_organisations import (
+    AddGovernmentOrganisationsForm,
+    EditGovernmentOrganisationsForm,
+)
 from .mixins import BarrierMixin
 
 
@@ -16,6 +18,7 @@ class BaseGovernmentOrganisationFormView(MetadataMixin, BarrierMixin, FormView):
     View that helps to manage government organisations in the session
      - session key naming pattern: "<UUID>_government_organisations"
     """
+
     form_class = Form
     SESSION_KEY_POSTFIX = "government_organisations"
     barrier_id = None
@@ -23,13 +26,15 @@ class BaseGovernmentOrganisationFormView(MetadataMixin, BarrierMixin, FormView):
 
     @property
     def session_key(self):
-        return f'{self.barrier_id}_{self.SESSION_KEY_POSTFIX}'
+        return f"{self.barrier_id}_{self.SESSION_KEY_POSTFIX}"
 
     def init_view(self, request, **kwargs):
-        self.barrier_id = kwargs.get('barrier_id')
+        self.barrier_id = kwargs.get("barrier_id")
         self.government_organisations = SessionList(request.session, self.session_key)
         if request.session.get(self.session_key) is None:
-            self.government_organisations.value = self.barrier.government_organisation_ids_as_str
+            self.government_organisations.value = (
+                self.barrier.government_organisation_ids_as_str
+            )
 
     def get(self, request, *args, **kwargs):
         self.init_view(request, **kwargs)
@@ -41,7 +46,9 @@ class BaseGovernmentOrganisationFormView(MetadataMixin, BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["selected_organisation"] = self.metadata.get_gov_organisations_by_ids(
+        context_data[
+            "selected_organisation"
+        ] = self.metadata.get_gov_organisations_by_ids(
             self.government_organisations.value
         )
         return context_data
@@ -108,5 +115,6 @@ class BarrierRemoveGovernmentOrganisation(BaseGovernmentOrganisationFormView):
 
     def get_success_url(self):
         return reverse(
-            "barriers:edit_gov_orgs", kwargs={"barrier_id": self.barrier_id},
+            "barriers:edit_gov_orgs",
+            kwargs={"barrier_id": self.barrier_id},
         )

@@ -96,6 +96,7 @@ class HelpTextMixin:
 
     choices should be a three part tuple (value, name, help_text)
     """
+
     def valid_value(self, value):
         """Check to see if the provided value is a valid choice."""
         text_value = str(value)
@@ -123,6 +124,7 @@ class YesNoBooleanField(forms.ChoiceField):
     """
     Display a BooleanField as Yes and No radio buttons
     """
+
     default_choices = (
         ("yes", "Yes"),
         ("no", "No"),
@@ -430,14 +432,14 @@ class CommodityCodeWidget(forms.MultiWidget):
     box_count = 5
 
     def __init__(self, attrs=None):
-        widget = (widgets.TextInput(), ) * self.box_count
+        widget = (widgets.TextInput(),) * self.box_count
         super().__init__(widget, attrs=attrs)
 
     def decompress(self, value):
         if value:
-            pairs = [value[i:i + 2] for i in range(0, len(value), 2)]
+            pairs = [value[i : i + 2] for i in range(0, len(value), 2)]
             pairs += [""] * self.box_count
-            return pairs[:self.box_count]
+            return pairs[: self.box_count]
         return [""] * self.box_count
 
     def value_from_datadict(self, data, files, name):

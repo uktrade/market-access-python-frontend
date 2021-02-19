@@ -37,7 +37,9 @@ class NotesTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_create.assert_called_with(
-            barrier_id=self.barrier["id"], text="New note", documents=[],
+            barrier_id=self.barrier["id"],
+            text="New note",
+            documents=[],
         )
 
     @patch("utils.api.client.NotesResource.create")
@@ -49,7 +51,9 @@ class NotesTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_create.assert_called_with(
-            barrier_id=self.barrier["id"], text="New note", documents=[document_id],
+            barrier_id=self.barrier["id"],
+            text="New note",
+            documents=[document_id],
         )
 
     @patch("utils.api.client.DocumentsResource.check_scan_status")
@@ -80,7 +84,9 @@ class NotesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
         assert mock_create_document.called is True
         mock_create_note.assert_called_with(
-            barrier_id=self.barrier["id"], text="New note", documents=[document_id],
+            barrier_id=self.barrier["id"],
+            text="New note",
+            documents=[document_id],
         )
         mock_upload_to_s3.assert_called_with(url="someurl", document=mock.ANY)
         mock_complete_upload.assert_called_with(document_id)

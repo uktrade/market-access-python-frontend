@@ -7,6 +7,7 @@ class PaginationMixin:
     """
     Allows views to get pagination data
     """
+
     pagination_limit = settings.API_RESULTS_LIMIT
 
     def get_current_page(self):
@@ -30,7 +31,10 @@ class PaginationMixin:
             "total_pages": total_pages,
             "current_page": current_page,
             "pages": [
-                {"label": i, "url": self.update_querystring(page=i),}
+                {
+                    "label": i,
+                    "url": self.update_querystring(page=i),
+                }
                 for i in range(1, total_pages + 1)
             ],
         }
@@ -71,7 +75,9 @@ class PaginationMixin:
         start_of_current_block = abs(current_page_num - block_pivot)
         start_of_last_block = last_page["label"] - block_size
         block_start_index = min(
-            start_of_current_block, start_of_last_block, current_page_index,
+            start_of_current_block,
+            start_of_last_block,
+            current_page_index,
         )
 
         truncated_pages = pages[block_start_index:][:block_size]

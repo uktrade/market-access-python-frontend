@@ -17,7 +17,7 @@ def form_group_classes(*args):
     return " ".join(set(classes))
 
 
-@register.inclusion_tag('partials/forms/field_error.html')
+@register.inclusion_tag("partials/forms/field_error.html")
 def form_field_error(arg1, arg2=None):
     if arg2 is None:
         field = arg1
@@ -33,19 +33,19 @@ def get_custom_errors(errors):
     for field_name, errors in errors.items():
         for error in errors:
             custom_errors.setdefault(field_name, [])
-            custom_errors[field_name].append({
-                'id': field_name,
-                'field_name': field_name.replace("_", " ").title(),
-                'text': error,
-            })
+            custom_errors[field_name].append(
+                {
+                    "id": field_name,
+                    "field_name": field_name.replace("_", " ").title(),
+                    "text": error,
+                }
+            )
     return custom_errors
 
 
-@register.inclusion_tag('partials/forms/error_summary.html')
+@register.inclusion_tag("partials/forms/error_summary.html")
 def form_error_banner(form):
-    return {
-        'custom_errors': get_custom_errors(form.errors)
-    }
+    return {"custom_errors": get_custom_errors(form.errors)}
 
 
 @register.filter
@@ -63,7 +63,7 @@ def as_text(value):
     return value
 
 
-@register.inclusion_tag('partials/forms/input_submit_remove_list_item.html')
+@register.inclusion_tag("partials/forms/input_submit_remove_list_item.html")
 def action_remove_list_item(unique_id, value):
     """
     Helps to prepare the remove link that's screen reader friendly.
@@ -72,5 +72,5 @@ def action_remove_list_item(unique_id, value):
     """
     return {
         "item_id": f"{slugify(value)}__remove-link-{unique_id}",
-        "item_label": value
+        "item_label": value,
     }

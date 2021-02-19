@@ -74,7 +74,7 @@ class ArchiveTestCase(MarketAccessTestCase):
             reverse("barriers:archive", kwargs={"barrier_id": self.barrier["id"]}),
             data={
                 "reason": "NOT_A_BARRIER",
-                "not_a_barrier_explanation": "Explanation"
+                "not_a_barrier_explanation": "Explanation",
             },
         )
         assert response.status_code == HTTPStatus.FOUND

@@ -5,9 +5,15 @@ from utils.api.client import MarketAccessAPIClient
 
 class EditSectorsForm(forms.Form):
     sectors = forms.MultipleChoiceField(
-        label="", choices=[], widget=forms.MultipleHiddenInput(), required=False,
+        label="",
+        choices=[],
+        widget=forms.MultipleHiddenInput(),
+        required=False,
     )
-    all_sectors = forms.BooleanField(widget=forms.HiddenInput(), required=False,)
+    all_sectors = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=False,
+    )
 
     def __init__(self, barrier_id, sectors, *args, **kwargs):
         self.token = kwargs.pop("token")

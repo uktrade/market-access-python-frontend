@@ -104,7 +104,9 @@ class BarrierSearch(PaginationMixin, SearchFormView):
         member_id = form.cleaned_data.get("member")
         if member_id:
             member = self.client.barriers.get_team_member(member_id)
-            context_data["filters"]["member"]["readable_value"] = member["user"]["full_name"]
+            context_data["filters"]["member"]["readable_value"] = member["user"][
+                "full_name"
+            ]
             context_data["search_title"] = member["user"]["full_name"]
         return context_data
 
@@ -138,10 +140,14 @@ class DownloadBarriers(SearchFormMixin, View):
         client = MarketAccessAPIClient(self.request.session["sso_token"])
 
         if settings.USE_S3_FOR_CSV_DOWNLOADS:
-            download_url = client.barriers.get_csv(ordering="-reported_on", **search_parameters)
+            download_url = client.barriers.get_csv(
+                ordering="-reported_on", **search_parameters
+            )
             return redirect(download_url)
 
-        file = client.barriers.get_streamed_csv(ordering="-reported_on", **search_parameters)
+        file = client.barriers.get_streamed_csv(
+            ordering="-reported_on", **search_parameters
+        )
         response = StreamingHttpResponse(
             file.iter_content(), content_type=file.headers["Content-Type"]
         )

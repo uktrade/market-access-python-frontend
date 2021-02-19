@@ -24,7 +24,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:add_strategic_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data=self.form_data,
         )
@@ -39,7 +39,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:add_strategic_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
                 "hmg_strategy": "Valid value",
@@ -65,7 +65,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data=self.form_data,
         )
@@ -83,7 +83,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "government_policy": "Valid value",
@@ -108,7 +108,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "approved": "True",
@@ -130,7 +130,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "approved": "False",
@@ -152,7 +152,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "are_you_sure": "yes",
@@ -174,7 +174,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "are_you_sure": "no",
@@ -191,7 +191,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:add_strategic_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -202,7 +202,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -213,7 +213,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -225,7 +225,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:add_strategic_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.OK
@@ -236,7 +236,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.OK
@@ -247,7 +247,7 @@ class TestStrategicAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.OK

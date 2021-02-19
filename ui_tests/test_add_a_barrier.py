@@ -5,9 +5,11 @@ from dateutil import parser
 
 from ui_tests import settings
 
-from .helpers.draft_barriers import (clear_draft_barriers,
-                                     create_draft_barrier,
-                                     delete_draft_barrier)
+from .helpers.draft_barriers import (
+    clear_draft_barriers,
+    create_draft_barrier,
+    delete_draft_barrier,
+)
 
 
 def test_add_a_barrier_early_exit(browser):
@@ -51,7 +53,8 @@ def test_draft_barrier_is_created(browser):
     assert draft_barriers.first.find_by_css("td")[2].value == "France"
 
     created_time = parser.parse(
-        draft_barriers.first.find_by_css("td")[0].value, fuzzy=True,
+        draft_barriers.first.find_by_css("td")[0].value,
+        fuzzy=True,
     )
     # Time on page does not include seconds, so allow ~minute difference
     assert abs((created_time - submitted_time).total_seconds()) < 65

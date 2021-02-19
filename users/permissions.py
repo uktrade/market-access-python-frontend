@@ -5,7 +5,6 @@ from utils.api.client import MarketAccessAPIClient
 
 
 class APIPermissionMixin(PermissionRequiredMixin):
-
     def has_permission(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         user = client.users.get_current()

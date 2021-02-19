@@ -18,15 +18,19 @@ class EconomicImpactAssessmentForm(forms.Form):
         error_messages={"required": "Enter an explanation"},
     )
 
-    def __init__(self, impacts, economic_assessment=None, economic_impact_assessment=None, *args, **kwargs):
+    def __init__(
+        self,
+        impacts,
+        economic_assessment=None,
+        economic_impact_assessment=None,
+        *args,
+        **kwargs
+    ):
         self.token = kwargs.pop("token")
         self.economic_assessment = economic_assessment
         self.economic_impact_assessment = economic_impact_assessment
         super().__init__(*args, **kwargs)
-        self.fields["impact"].choices = [
-            (key, value)
-            for key, value in impacts.items()
-        ]
+        self.fields["impact"].choices = [(key, value) for key, value in impacts.items()]
 
     def save(self):
         client = MarketAccessAPIClient(self.token)

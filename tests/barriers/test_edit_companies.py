@@ -14,7 +14,10 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         "id": company_id,
         "name": company_name,
         "created_on": "2020-01-01",
-        "address": {"line_1": "123 Test Street", "town": "London",},
+        "address": {
+            "line_1": "123 Test Street",
+            "town": "London",
+        },
     }
 
     def test_edit_companies_landing_page(self):
@@ -118,7 +121,10 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         Removing a company should remove it from the session, not call the API
         """
         companies = [
-            {"id": self.company_id, "name": self.company_name,},
+            {
+                "id": self.company_id,
+                "name": self.company_name,
+            },
             {
                 "id": self.barrier["companies"][0]["id"],
                 "name": self.barrier["companies"][0]["name"],
@@ -147,19 +153,33 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         Saving should call the API
         """
         self.update_session(
-            {"companies": [{"id": self.company_id, "name": self.company_name,}]}
+            {
+                "companies": [
+                    {
+                        "id": self.company_id,
+                        "name": self.company_name,
+                    }
+                ]
+            }
         )
 
         response = self.client.post(
             reverse(
                 "barriers:edit_companies_session",
-                kwargs={"barrier_id": self.barrier["id"],},
+                kwargs={
+                    "barrier_id": self.barrier["id"],
+                },
             ),
             data={"companies": [self.company_id]},
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            companies=[{"id": self.company_id, "name": self.company_name,}],
+            companies=[
+                {
+                    "id": self.company_id,
+                    "name": self.company_name,
+                }
+            ],
         )
         assert "companies" not in self.client.session

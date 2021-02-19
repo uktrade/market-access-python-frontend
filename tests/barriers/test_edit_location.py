@@ -44,7 +44,7 @@ class EditLocationTestCase(MarketAccessTestCase):
                     "country": self.barrier["country"],
                     "admin_areas": [
                         admin_area["id"] for admin_area in self.barrier["admin_areas"]
-                    ]
+                    ],
                 }
             }
         )
@@ -121,7 +121,12 @@ class EditLocationTestCase(MarketAccessTestCase):
         Check the add admin area page lists only admin areas in the country
         """
         self.update_session(
-            {"location": {"country": self.new_country_id, "admin_areas": [],}}
+            {
+                "location": {
+                    "country": self.new_country_id,
+                    "admin_areas": [],
+                }
+            }
         )
 
         response = self.client.get(
@@ -143,7 +148,12 @@ class EditLocationTestCase(MarketAccessTestCase):
         Add admin area should change the session, not call the API
         """
         self.update_session(
-            {"location": {"country": self.new_country_id, "admin_areas": [],}}
+            {
+                "location": {
+                    "country": self.new_country_id,
+                    "admin_areas": [],
+                }
+            }
         )
 
         response = self.client.post(

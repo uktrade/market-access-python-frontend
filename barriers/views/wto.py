@@ -48,7 +48,7 @@ class EditWTOProfile(SessionDocumentMixin, APIBarrierFormViewMixin, FormView):
         return super().get(request, *args, **kwargs)
 
     def initialise_session_with_document(self, document, session_key):
-        if (session_key not in self.request.session and document):
+        if session_key not in self.request.session and document:
             self.set_session_document(document, session_key)
 
     def get_initial(self):
@@ -64,9 +64,13 @@ class EditWTOProfile(SessionDocumentMixin, APIBarrierFormViewMixin, FormView):
                 "case_number": wto_profile.case_number,
             }
             if wto_profile.committee_notified:
-                initial_data["committee_notified"] = wto_profile.committee_notified.get("id")
+                initial_data["committee_notified"] = wto_profile.committee_notified.get(
+                    "id"
+                )
             if wto_profile.committee_raised_in:
-                initial_data["committee_raised_in"] = wto_profile.committee_raised_in.get("id")
+                initial_data[
+                    "committee_raised_in"
+                ] = wto_profile.committee_raised_in.get("id")
             return initial_data
 
     def get_context_data(self, **kwargs):
@@ -94,10 +98,12 @@ class EditWTOProfile(SessionDocumentMixin, APIBarrierFormViewMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        self.delete_session_documents([
-            self.get_committee_notification_document_session_key(),
-            self.get_meeting_minutes_session_key(),
-        ])
+        self.delete_session_documents(
+            [
+                self.get_committee_notification_document_session_key(),
+                self.get_meeting_minutes_session_key(),
+            ]
+        )
         return super().form_valid(form)
 
 
@@ -133,10 +139,12 @@ class CancelWTODocuments(SessionDocumentMixin, RedirectView):
 
     def get(self, request, *args, **kwargs):
         barrier_id = self.kwargs.get("barrier_id")
-        self.delete_session_documents([
-            f"barrier:{barrier_id}:wto:committee_notification_document",
-            f"barrier:{barrier_id}:wto:meeting_minutes",
-        ])
+        self.delete_session_documents(
+            [
+                f"barrier:{barrier_id}:wto:committee_notification_document",
+                f"barrier:{barrier_id}:wto:meeting_minutes",
+            ]
+        )
         return super().get(request, *args, **kwargs)
 
     def get_redirect_url(self, *args, **kwargs):

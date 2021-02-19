@@ -37,7 +37,8 @@ class EditTitleTestCase(MarketAccessTestCase):
             data={"title": "New Title"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], title="New Title",
+            id=self.barrier["id"],
+            title="New Title",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -45,9 +46,7 @@ class EditTitleTestCase(MarketAccessTestCase):
 class EditSummaryTestCase(MarketAccessTestCase):
     def test_edit_summary_has_initial_data(self):
         response = self.client.get(
-            reverse(
-                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
-            )
+            reverse("barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]})
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
@@ -57,9 +56,7 @@ class EditSummaryTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.patch")
     def test_summary_cannot_be_empty(self, mock_patch):
         response = self.client.post(
-            reverse(
-                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
-            ),
+            reverse("barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}),
             data={"summary": ""},
         )
         assert response.status_code == HTTPStatus.OK
@@ -71,9 +68,7 @@ class EditSummaryTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.patch")
     def test_is_summary_sensitive_is_required(self, mock_patch):
         response = self.client.post(
-            reverse(
-                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
-            ),
+            reverse("barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}),
             data={"summary": "This is a summary"},
         )
         assert response.status_code == HTTPStatus.OK
@@ -86,9 +81,7 @@ class EditSummaryTestCase(MarketAccessTestCase):
     def test_edit_summary_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
-            reverse(
-                "barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}
-            ),
+            reverse("barriers:edit_summary", kwargs={"barrier_id": self.barrier["id"]}),
             data={
                 "summary": "New summary",
                 "is_summary_sensitive": "yes",
@@ -132,7 +125,8 @@ class EditProductTestCase(MarketAccessTestCase):
             data={"product": "New product"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], product="New product",
+            id=self.barrier["id"],
+            product="New product",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -194,7 +188,9 @@ class EditSourceTestCase(MarketAccessTestCase):
             data={"source": "TRADE", "other_source": "don't save this"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], source="TRADE", other_source="",
+            id=self.barrier["id"],
+            source="TRADE",
+            other_source="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -206,7 +202,9 @@ class EditSourceTestCase(MarketAccessTestCase):
             data={"source": "OTHER", "other_source": "Some source"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], source="OTHER", other_source="Some source",
+            id=self.barrier["id"],
+            source="OTHER",
+            other_source="Some source",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -261,7 +259,9 @@ class EditPriorityTestCase(MarketAccessTestCase):
             data={"priority": "LOW", "priority_summary": ""},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], priority="LOW", priority_summary="",
+            id=self.barrier["id"],
+            priority="LOW",
+            priority_summary="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -275,7 +275,9 @@ class EditPriorityTestCase(MarketAccessTestCase):
             data={"priority": "HIGH", "priority_summary": "New summary"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], priority="HIGH", priority_summary="New summary",
+            id=self.barrier["id"],
+            priority="HIGH",
+            priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -334,7 +336,8 @@ class EditTermTestCase(MarketAccessTestCase):
             data={"term": "1"},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], term="1",
+            id=self.barrier["id"],
+            term="1",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -455,7 +458,7 @@ class EditCausedByTradingBlocTestCase(MarketAccessTestCase):
         super().setUp()
         self.url = reverse(
             "barriers:edit_caused_by_trading_bloc",
-            kwargs={"barrier_id": self.barrier["id"]}
+            kwargs={"barrier_id": self.barrier["id"]},
         )
 
     def test_edit_caused_by_trading_bloc_has_initial_data(self):
@@ -463,7 +466,10 @@ class EditCausedByTradingBlocTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["caused_by_trading_bloc"] == self.barrier["caused_by_trading_bloc"]
+        assert (
+            form.initial["caused_by_trading_bloc"]
+            == self.barrier["caused_by_trading_bloc"]
+        )
 
     @patch("utils.api.resources.APIResource.patch")
     def test_caused_by_trading_bloc_cannot_be_empty(self, mock_patch):

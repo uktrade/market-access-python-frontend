@@ -62,7 +62,6 @@ class StrategicAssessmentForm(forms.Form):
             "Is the barrier connected with UK grants (such as Prosperity Fund, Market "
             "Access fund) and supports International Development Objectives ODA?"
         ),
-
         widget=forms.Textarea,
         max_length=500,
         required=True,
@@ -84,9 +83,7 @@ class StrategicAssessmentForm(forms.Form):
         },
     )
     additional_information = forms.CharField(
-        label=(
-            "Additional information not captured above"
-        ),
+        label=("Additional information not captured above"),
         widget=forms.Textarea,
         max_length=500,
         required=False,
@@ -107,10 +104,7 @@ class StrategicAssessmentForm(forms.Form):
         self.barrier = barrier
         self.strategic_assessment = strategic_assessment
         super().__init__(*args, **kwargs)
-        self.fields["scale"].choices = [
-            (key, value)
-            for key, value in scale.items()
-        ]
+        self.fields["scale"].choices = [(key, value) for key, value in scale.items()]
 
     def clean(self):
         cleaned_data = super().clean()
@@ -120,9 +114,13 @@ class StrategicAssessmentForm(forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.strategic_assessment:
-            client.strategic_assessments.patch(id=self.strategic_assessment.id, **self.cleaned_data)
+            client.strategic_assessments.patch(
+                id=self.strategic_assessment.id, **self.cleaned_data
+            )
         elif self.barrier:
-            client.strategic_assessments.create(barrier_id=self.barrier.id, **self.cleaned_data)
+            client.strategic_assessments.create(
+                barrier_id=self.barrier.id, **self.cleaned_data
+            )
 
 
 class ArchiveStrategicAssessmentForm(ArchiveAssessmentBaseForm):

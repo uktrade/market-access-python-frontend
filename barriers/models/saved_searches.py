@@ -19,7 +19,10 @@ class SavedSearch(APIModel):
     @property
     def readable_filters(self):
         if self._readable_filters is None:
-            search_form = BarrierSearchForm(metadata=get_metadata(), data=self.filters,)
+            search_form = BarrierSearchForm(
+                metadata=get_metadata(),
+                data=self.filters,
+            )
             search_form.full_clean()
             self._readable_filters = search_form.get_readable_filters()
         return self._readable_filters

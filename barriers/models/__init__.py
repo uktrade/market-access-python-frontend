@@ -1,5 +1,9 @@
-from .assessments import (EconomicAssessment, EconomicImpactAssessment,  # noqa
-                          ResolvabilityAssessment, StrategicAssessment)
+from .assessments import (
+    EconomicAssessment,
+    EconomicImpactAssessment,  # noqa
+    ResolvabilityAssessment,
+    StrategicAssessment,
+)
 from .barriers import Barrier, PublicBarrier  # noqa
 from .commodities import Commodity  # noqa
 from .companies import Company  # noqa

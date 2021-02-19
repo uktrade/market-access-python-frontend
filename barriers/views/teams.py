@@ -35,14 +35,13 @@ class ChangeOwnerView(BarrierMixin, UserSearchMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        team_member_id = self.kwargs.get('team_member_id')
+        team_member_id = self.kwargs.get("team_member_id")
         context_data["owner"] = self.client.barriers.get_team_member(team_member_id)
         return context_data
 
     def select_user_api_call(self, user_id):
         self.client.barriers.patch_team_member(
-            self.kwargs.get('team_member_id'),
-            {"user": user_id}
+            self.kwargs.get("team_member_id"), {"user": user_id}
         )
 
     def get_success_url(self):
@@ -52,7 +51,9 @@ class ChangeOwnerView(BarrierMixin, UserSearchMixin, FormView):
 
 
 class DeleteTeamMember(
-    TeamMembersContextMixin, BarrierMixin, TemplateView,
+    TeamMembersContextMixin,
+    BarrierMixin,
+    TemplateView,
 ):
     template_name = "barriers/teams/delete_member.html"
 

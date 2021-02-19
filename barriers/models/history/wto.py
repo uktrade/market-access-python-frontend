@@ -48,8 +48,7 @@ class MemberStatesHistoryItem(BaseHistoryItem):
 
     def get_value(self, value):
         return [
-            self.metadata.get_country(country_id).get("name")
-            for country_id in value
+            self.metadata.get_country(country_id).get("name") for country_id in value
         ]
 
 

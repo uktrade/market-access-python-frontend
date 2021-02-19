@@ -10,11 +10,11 @@ urlpatterns = [
     path(
         "check-fe/",
         decorator_from_middleware(StatsMiddleware)(HealthCheckView.as_view()),
-        name="check-fe"
+        name="check-fe",
     ),
     path(
         "check-api/",
         decorator_from_middleware(StatsMiddleware)(APIHealthCheckView.as_view()),
-        name="check-api"
+        name="check-api",
     ),
 ]
