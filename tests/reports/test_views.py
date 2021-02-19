@@ -5,7 +5,7 @@ from mock import patch
 
 from core.tests import MarketAccessTestCase, ReportsTestCase
 from reports.models import Report
-from reports.views import NewReport, DraftBarriers, DeleteReport, ReportDetail
+from reports.views import DeleteReport, DraftBarriers, NewReport, ReportDetail
 
 
 class NewReportsViewTestCase(MarketAccessTestCase):

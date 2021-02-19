@@ -1,11 +1,11 @@
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView
 
+from barriers.forms.wto import WTODocumentForm, WTOProfileForm, WTOStatusForm
+from utils.metadata import get_metadata
+
 from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
 from .mixins import APIBarrierFormViewMixin, SessionDocumentMixin
-from barriers.forms.wto import WTOProfileForm, WTOStatusForm, WTODocumentForm
-
-from utils.metadata import get_metadata
 
 
 class EditWTOStatus(APIBarrierFormViewMixin, FormView):

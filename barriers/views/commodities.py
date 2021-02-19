@@ -2,14 +2,13 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.generic import FormView
 
-from .mixins import BarrierMixin
 from barriers.constants import UK_COUNTRY_ID
-from barriers.forms.commodities import (
-    CommodityLookupForm,
-    MultiCommodityLookupForm,
-    UpdateBarrierCommoditiesForm,
-)
+from barriers.forms.commodities import (CommodityLookupForm,
+                                        MultiCommodityLookupForm,
+                                        UpdateBarrierCommoditiesForm)
 from utils.api.client import MarketAccessAPIClient
+
+from .mixins import BarrierMixin
 
 
 class BarrierEditCommodities(BarrierMixin, FormView):

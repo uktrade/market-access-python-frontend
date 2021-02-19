@@ -1,11 +1,10 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from barriers.models import Company
 from core.tests import MarketAccessTestCase
-
-from mock import patch
 
 
 class EditCompaniesTestCase(MarketAccessTestCase):

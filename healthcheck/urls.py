@@ -2,7 +2,7 @@ from django.urls import path
 from django.utils.decorators import decorator_from_middleware
 
 from .middleware import StatsMiddleware
-from .views import HealthCheckView, APIHealthCheckView
+from .views import APIHealthCheckView, HealthCheckView
 
 app_name = "healthcheck"
 

@@ -1,11 +1,10 @@
 from http import HTTPStatus
 
+import dateutil.parser
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
-
-import dateutil.parser
-from mock import patch
 
 
 class EditTitleTestCase(MarketAccessTestCase):

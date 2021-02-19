@@ -1,27 +1,18 @@
 import logging
 from json import JSONDecodeError
-import requests
 
+import requests
 from django.conf import settings
 
-from .resources import (
-    BarriersResource,
-    CommoditiesResource,
-    DocumentsResource,
-    EconomicAssessmentResource,
-    EconomicImpactAssessmentResource,
-    GroupsResource,
-    NotesResource,
-    UsersResource,
-    PublicBarrierNotesResource,
-    PublicBarriersResource,
-    ReportsResource,
-    ResolvabilityAssessmentResource,
-    SavedSearchesResource,
-    StrategicAssessmentResource,
-)
 from utils.exceptions import APIHttpException, APIJsonException
 
+from .resources import (BarriersResource, CommoditiesResource,
+                        DocumentsResource, EconomicAssessmentResource,
+                        EconomicImpactAssessmentResource, GroupsResource,
+                        NotesResource, PublicBarrierNotesResource,
+                        PublicBarriersResource, ReportsResource,
+                        ResolvabilityAssessmentResource, SavedSearchesResource,
+                        StrategicAssessmentResource, UsersResource)
 
 logger = logging.getLogger(__name__)
 

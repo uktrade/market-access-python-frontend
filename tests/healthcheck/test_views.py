@@ -1,8 +1,8 @@
-from django.test import TestCase, Client
+import xml.etree.ElementTree as ET
+
+from django.test import Client, TestCase
 
 from healthcheck.models import HealthCheck
-
-import xml.etree.ElementTree as ET
 
 
 class TestHealthcheckViews(TestCase):

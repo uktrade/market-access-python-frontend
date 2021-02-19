@@ -1,9 +1,9 @@
 from django import forms
 from django.template.loader import render_to_string
 
-from .base import ArchiveAssessmentBaseForm
-
 from utils.api.client import MarketAccessAPIClient
+
+from .base import ArchiveAssessmentBaseForm
 
 
 class ResolvabilityAssessmentForm(forms.Form):

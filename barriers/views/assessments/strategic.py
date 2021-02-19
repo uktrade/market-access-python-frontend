@@ -1,14 +1,13 @@
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from .base import ArchiveAssessmentBase
-from ..mixins import BarrierMixin, StrategicAssessmentMixin
-from ...forms.assessments.strategic import (
-    StrategicAssessmentForm,
-    ArchiveStrategicAssessmentForm,
-)
 from users.permissions import APIPermissionMixin
 from utils.metadata import MetadataMixin
+
+from ...forms.assessments.strategic import (ArchiveStrategicAssessmentForm,
+                                            StrategicAssessmentForm)
+from ..mixins import BarrierMixin, StrategicAssessmentMixin
+from .base import ArchiveAssessmentBase
 
 
 class StrategicAssessmentEditBase(StrategicAssessmentMixin, MetadataMixin, BarrierMixin, FormView):

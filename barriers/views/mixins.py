@@ -1,5 +1,5 @@
-from http import HTTPStatus
 import urllib.parse
+from http import HTTPStatus
 
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse

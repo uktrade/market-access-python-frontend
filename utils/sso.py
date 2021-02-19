@@ -1,10 +1,9 @@
-import requests
 from urllib.parse import quote_plus
 
+import requests
 from django.conf import settings
 
 from users.exceptions import SSOException
-
 from utils.exceptions import APIHttpException
 
 

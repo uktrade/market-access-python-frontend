@@ -1,6 +1,6 @@
-from .base import *     # noqa
-
 from django.utils.log import DEFAULT_LOGGING
+
+from .base import *  # noqa
 
 DJANGO_ENV = 'local'
 SESSION_COOKIE_SECURE = False

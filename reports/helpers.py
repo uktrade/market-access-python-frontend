@@ -3,7 +3,6 @@ from reports.forms.new_report_barrier_location import HasAdminAreas
 from reports.forms.new_report_barrier_sectors import SectorsAffected
 from utils.api.client import MarketAccessAPIClient
 
-
 # Barrier fields and the corresponding step in the "Add a barrier" journey.
 # fields = (
 #     "id",

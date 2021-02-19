@@ -1,9 +1,8 @@
 import pytest
+from splinter import Browser
 
 from ui_tests import settings
 from ui_tests.helpers.auth import sso_sign_in
-
-from splinter import Browser
 
 
 @pytest.fixture(scope="module")

@@ -2,10 +2,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from .mixins import BarrierMixin, TeamMembersContextMixin
 from users.mixins import UserSearchMixin
-
 from utils.api.client import MarketAccessAPIClient
+
+from .mixins import BarrierMixin, TeamMembersContextMixin
 
 
 class BarrierTeam(TeamMembersContextMixin, BarrierMixin, TemplateView):

@@ -2,12 +2,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierMixin
-from ..forms.categories import (
-    AddCategoryForm,
-    EditCategoriesForm,
-)
 from utils.metadata import MetadataMixin
+
+from ..forms.categories import AddCategoryForm, EditCategoriesForm
+from .mixins import BarrierMixin
 
 
 class AddCategory(MetadataMixin, BarrierMixin, FormView):

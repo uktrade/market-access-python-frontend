@@ -1,8 +1,9 @@
+import dateutil.parser
+
 from barriers.constants import PUBLIC_BARRIER_STATUSES
+
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
-
-import dateutil.parser
 
 
 class CategoriesHistoryItem(BaseHistoryItem):

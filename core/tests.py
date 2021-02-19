@@ -1,18 +1,13 @@
 import json
 
 from django.conf import settings
-from django.test import override_settings, TestCase
+from django.test import TestCase, override_settings
+from mock import patch
 
 from core.filecache import memfiles
 from users.models import User
-from utils.api.resources import (
-    BarriersResource,
-    NotesResource,
-    PublicBarriersResource,
-    UsersResource,
-)
-
-from mock import patch
+from utils.api.resources import (BarriersResource, NotesResource,
+                                 PublicBarriersResource, UsersResource)
 
 
 @override_settings(API_RESULTS_LIMIT=10)

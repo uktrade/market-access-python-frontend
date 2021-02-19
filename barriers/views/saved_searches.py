@@ -2,15 +2,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from ..forms.saved_searches import (
-    NewSavedSearchForm,
-    RenameSavedSearchForm,
-    SavedSearchNotificationsForm,
-)
-from ..forms.search import BarrierSearchForm
-
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
+
+from ..forms.saved_searches import (NewSavedSearchForm, RenameSavedSearchForm,
+                                    SavedSearchNotificationsForm)
+from ..forms.search import BarrierSearchForm
 
 
 class SearchFiltersMixin:

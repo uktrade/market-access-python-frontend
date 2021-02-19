@@ -1,25 +1,24 @@
 import logging
-
 import re
-import requests
-from urllib.parse import urlencode
 import uuid
+from urllib.parse import urlencode
 
+import requests
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
-from .forms import UserGroupForm
-from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
-from .permissions import APIPermissionMixin
-
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
 from utils.referers import RefererMixin
 from utils.sessions import init_session
+
+from .forms import UserGroupForm
+from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
+from .permissions import APIPermissionMixin
 
 logger = logging.getLogger(__name__)
 

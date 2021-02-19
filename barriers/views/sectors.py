@@ -2,12 +2,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierMixin
-from barriers.forms.sectors import (
-    AddSectorsForm,
-    EditSectorsForm,
-)
+from barriers.forms.sectors import AddSectorsForm, EditSectorsForm
 from utils.metadata import MetadataMixin
+
+from .mixins import BarrierMixin
 
 
 class BarrierEditSectors(MetadataMixin, BarrierMixin, FormView):

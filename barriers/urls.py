@@ -1,128 +1,68 @@
 from django.urls import path, re_path
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
-from .views.assessments.overview import AssessmentOverview
-from .views.assessments.economic import (
-    AddEconomicAssessment,
-    AddEconomicAssessmentDocument,
-    ArchiveEconomicAssessment,
-    AutomateEconomicAssessment,
-    CancelEconomicAssessmentDocument,
-    DeleteEconomicAssessmentDocument,
-    EconomicAssessmentDetail,
-    EconomicAssessmentRawData,
-    EditEconomicAssessmentRating,
-)
+from .views.assessments.economic import (AddEconomicAssessment,
+                                         AddEconomicAssessmentDocument,
+                                         ArchiveEconomicAssessment,
+                                         AutomateEconomicAssessment,
+                                         CancelEconomicAssessmentDocument,
+                                         DeleteEconomicAssessmentDocument,
+                                         EconomicAssessmentDetail,
+                                         EconomicAssessmentRawData,
+                                         EditEconomicAssessmentRating)
 from .views.assessments.economic_impact import (
-    AddEconomicImpactAssessment,
-    ArchiveEconomicImpactAssessment,
-    EconomicImpactAssessmentDetail,
-)
-from .views.assessments.resolvability import (
-    AddResolvabilityAssessment,
-    ArchiveResolvabilityAssessment,
-    EditResolvabilityAssessment,
-    ResolvabilityAssessmentDetail,
-)
-from .views.assessments.strategic import (
-    AddStrategicAssessment,
-    ArchiveStrategicAssessment,
-    EditStrategicAssessment,
-    StrategicAssessmentDetail,
-)
-from .views.categories import (
-    AddCategory,
-    BarrierEditCategories,
-    BarrierEditCategoriesSession,
-    BarrierRemoveCategory,
-)
+    AddEconomicImpactAssessment, ArchiveEconomicImpactAssessment,
+    EconomicImpactAssessmentDetail)
+from .views.assessments.overview import AssessmentOverview
+from .views.assessments.resolvability import (AddResolvabilityAssessment,
+                                              ArchiveResolvabilityAssessment,
+                                              EditResolvabilityAssessment,
+                                              ResolvabilityAssessmentDetail)
+from .views.assessments.strategic import (AddStrategicAssessment,
+                                          ArchiveStrategicAssessment,
+                                          EditStrategicAssessment,
+                                          StrategicAssessmentDetail)
+from .views.categories import (AddCategory, BarrierEditCategories,
+                               BarrierEditCategoriesSession,
+                               BarrierRemoveCategory)
 from .views.commodities import BarrierEditCommodities
-from .views.companies import (
-    BarrierEditCompanies,
-    BarrierEditCompaniesSession,
-    BarrierRemoveCompany,
-    BarrierSearchCompany,
-    CompanyDetail,
-)
-from .views.core import (
-    BarrierDetail,
-    Dashboard,
-    WhatIsABarrier,
-)
+from .views.companies import (BarrierEditCompanies,
+                              BarrierEditCompaniesSession,
+                              BarrierRemoveCompany, BarrierSearchCompany,
+                              CompanyDetail)
+from .views.core import BarrierDetail, Dashboard, WhatIsABarrier
 from .views.documents import DownloadDocument
-from .views.edit import (
-    BarrierEditCausedByTradingBloc,
-    BarrierEditCommercialValue,
-    BarrierEditEconomicAssessmentEligibility,
-    BarrierEditEndDate,
-    BarrierEditTitle,
-    BarrierEditProduct,
-    BarrierEditSource,
-    BarrierEditSummary,
-    BarrierEditPriority,
-    BarrierEditTerm,
-    BarrierEditTags,
-    BarrierEditTradeDirection,
-)
-from .views.government_organisations import BarrierEditGovernmentOrganisations, BarrierAddGovernmentOrganisation, \
-    BarrierRemoveGovernmentOrganisation
+from .views.edit import (BarrierEditCausedByTradingBloc,
+                         BarrierEditCommercialValue,
+                         BarrierEditEconomicAssessmentEligibility,
+                         BarrierEditEndDate, BarrierEditPriority,
+                         BarrierEditProduct, BarrierEditSource,
+                         BarrierEditSummary, BarrierEditTags, BarrierEditTerm,
+                         BarrierEditTitle, BarrierEditTradeDirection)
+from .views.government_organisations import (
+    BarrierAddGovernmentOrganisation, BarrierEditGovernmentOrganisations,
+    BarrierRemoveGovernmentOrganisation)
 from .views.history import BarrierHistory
-from .views.location import (
-    BarrierEditLocation,
-    BarrierEditLocationSession,
-    BarrierEditCountryOrTradingBloc,
-    AddAdminArea,
-    RemoveAdminArea,
-)
-from .views.notes import (
-    AddNoteDocument,
-    CancelNoteDocument,
-    DeleteNoteDocument,
-    BarrierAddNote,
-    BarrierEditNote,
-    BarrierDeleteNote,
-)
-from .views.public_barriers import (
-    PublicBarrierDetail,
-    EditPublicEligibility,
-    EditPublicTitle,
-    EditPublicSummary,
-    PublicBarrierListView,
-)
-from .views.search import (
-    DownloadBarriers,
-    BarrierSearch,
-)
-from .views.sectors import (
-    BarrierAddAllSectors,
-    BarrierAddSectors,
-    BarrierEditSectors,
-    BarrierEditSectorsSession,
-    BarrierRemoveSector,
-)
-from .views.statuses import (
-    BarrierChangeStatus,
-    BarrierEditStatus,
-)
-from .views.teams import (
-    BarrierTeam,
-    DeleteTeamMember,
-    SearchTeamMember,
-    ChangeOwnerView,
-)
-from .views.saved_searches import (
-    DeleteSavedSearch,
-    NewSavedSearch,
-    RenameSavedSearch,
-    SavedSearchNotifications,
-)
-from .views.wto import (
-    AddWTODocument,
-    CancelWTODocuments,
-    DeleteWTODocument,
-    EditWTOProfile,
-    EditWTOStatus,
-)
+from .views.location import (AddAdminArea, BarrierEditCountryOrTradingBloc,
+                             BarrierEditLocation, BarrierEditLocationSession,
+                             RemoveAdminArea)
+from .views.notes import (AddNoteDocument, BarrierAddNote, BarrierDeleteNote,
+                          BarrierEditNote, CancelNoteDocument,
+                          DeleteNoteDocument)
+from .views.public_barriers import (EditPublicEligibility, EditPublicSummary,
+                                    EditPublicTitle, PublicBarrierDetail,
+                                    PublicBarrierListView)
+from .views.saved_searches import (DeleteSavedSearch, NewSavedSearch,
+                                   RenameSavedSearch, SavedSearchNotifications)
+from .views.search import BarrierSearch, DownloadBarriers
+from .views.sectors import (BarrierAddAllSectors, BarrierAddSectors,
+                            BarrierEditSectors, BarrierEditSectorsSession,
+                            BarrierRemoveSector)
+from .views.statuses import BarrierChangeStatus, BarrierEditStatus
+from .views.teams import (BarrierTeam, ChangeOwnerView, DeleteTeamMember,
+                          SearchTeamMember)
+from .views.wto import (AddWTODocument, CancelWTODocuments, DeleteWTODocument,
+                        EditWTOProfile, EditWTOStatus)
 
 app_name = "barriers"
 

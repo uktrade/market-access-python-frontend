@@ -1,10 +1,10 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import DocumentMixin
-
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import MultipleValueField, RestrictedFileField
+
+from .mixins import DocumentMixin
 
 
 class AddNoteForm(DocumentMixin, forms.Form):

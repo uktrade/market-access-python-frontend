@@ -2,14 +2,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierMixin
-from barriers.forms.companies import (
-    AddCompanyForm,
-    CompanySearchForm,
-    EditCompaniesForm,
-)
+from barriers.forms.companies import (AddCompanyForm, CompanySearchForm,
+                                      EditCompaniesForm)
 from utils.datahub import DatahubClient
 from utils.exceptions import APIException
+
+from .mixins import BarrierMixin
 
 
 class BarrierSearchCompany(BarrierMixin, FormView):

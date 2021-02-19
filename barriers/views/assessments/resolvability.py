@@ -1,14 +1,13 @@
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from .base import ArchiveAssessmentBase
-from ..mixins import BarrierMixin, ResolvabilityAssessmentMixin
-from ...forms.assessments.resolvability import (
-    ResolvabilityAssessmentForm,
-    ArchiveResolvabilityAssessmentForm,
-)
 from users.permissions import APIPermissionMixin
 from utils.metadata import MetadataMixin
+
+from ...forms.assessments.resolvability import (
+    ArchiveResolvabilityAssessmentForm, ResolvabilityAssessmentForm)
+from ..mixins import BarrierMixin, ResolvabilityAssessmentMixin
+from .base import ArchiveAssessmentBase
 
 
 class ResolvabilityAssessmentEditBase(ResolvabilityAssessmentMixin, MetadataMixin, BarrierMixin, FormView):

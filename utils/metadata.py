@@ -1,15 +1,14 @@
 import json
 from operator import itemgetter
 
+import redis
+import requests
+from django.conf import settings
+from mohawk import Sender
+
 from barriers.constants import Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
-
-from django.conf import settings
-from mohawk import Sender
-import redis
-import requests
-
 
 redis_client = None
 if not settings.MOCK_METADATA:

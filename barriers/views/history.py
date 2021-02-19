@@ -1,7 +1,8 @@
 from django.views.generic import TemplateView
 
-from .mixins import BarrierMixin
 from utils.api.client import MarketAccessAPIClient
+
+from .mixins import BarrierMixin
 
 
 class BarrierHistory(BarrierMixin, TemplateView):

@@ -1,26 +1,17 @@
-import requests
 import time
 
+import requests
 from django.conf import settings
 from django.core.cache import cache
 
 from barriers.constants import Statuses
-from barriers.models import (
-    Barrier,
-    Commodity,
-    EconomicAssessment,
-    EconomicImpactAssessment,
-    HistoryItem,
-    Note,
-    PublicBarrier,
-    PublicBarrierNote,
-    ResolvabilityAssessment,
-    StrategicAssessment,
-    SavedSearch,
-)
+from barriers.models import (Barrier, Commodity, EconomicAssessment,
+                             EconomicImpactAssessment, HistoryItem, Note,
+                             PublicBarrier, PublicBarrierNote,
+                             ResolvabilityAssessment, SavedSearch,
+                             StrategicAssessment)
 from reports.models import Report
 from users.models import Group, User
-
 from utils.exceptions import ScanError
 from utils.models import ModelList
 

@@ -11,12 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
-from environ import Env
 from pathlib import Path
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
+import sentry_sdk
+from environ import Env
+from sentry_sdk.integrations.django import DjangoIntegration
 
 ROOT_DIR = Path(__file__).parents[2]
 

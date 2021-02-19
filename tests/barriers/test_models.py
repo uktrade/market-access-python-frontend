@@ -1,7 +1,7 @@
 import datetime
-from core.tests import MarketAccessTestCase
 
 from barriers.models import Barrier, Company, SavedSearch
+from core.tests import MarketAccessTestCase
 
 
 class BarrierModelTestCase(MarketAccessTestCase):

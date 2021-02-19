@@ -4,12 +4,12 @@ from django.http import StreamingHttpResponse
 from django.shortcuts import redirect
 from django.views.generic import FormView, View
 
-from ..forms.search import BarrierSearchForm
-
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 from utils.tools import nested_sort
+
+from ..forms.search import BarrierSearchForm
 
 
 class SearchFormMixin:

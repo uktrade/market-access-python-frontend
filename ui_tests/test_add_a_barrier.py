@@ -1,14 +1,13 @@
 import random
 import re
 
-from ui_tests import settings
-from .helpers.draft_barriers import (
-    create_draft_barrier,
-    clear_draft_barriers,
-    delete_draft_barrier,
-)
-
 from dateutil import parser
+
+from ui_tests import settings
+
+from .helpers.draft_barriers import (clear_draft_barriers,
+                                     create_draft_barrier,
+                                     delete_draft_barrier)
 
 
 def test_add_a_barrier_early_exit(browser):

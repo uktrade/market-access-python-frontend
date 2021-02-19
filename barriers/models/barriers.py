@@ -1,16 +1,13 @@
+import dateutil.parser
+
 from barriers.constants import PUBLIC_BARRIER_STATUSES
-from barriers.models.assessments import (
-    EconomicAssessment,
-    ResolvabilityAssessment,
-    StrategicAssessment,
-)
+from barriers.models.assessments import (EconomicAssessment,
+                                         ResolvabilityAssessment,
+                                         StrategicAssessment)
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
-
 from utils.metadata import get_metadata
 from utils.models import APIModel
-
-import dateutil.parser
 
 
 class Barrier(APIModel):

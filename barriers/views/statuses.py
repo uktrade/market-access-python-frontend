@@ -1,12 +1,11 @@
 from django.urls import reverse
 from django.views.generic import FormView
 
-from .mixins import APIBarrierFormViewMixin, BarrierMixin
 from barriers.constants import Statuses
-from barriers.forms.statuses import (
-    BarrierChangeStatusForm,
-    UpdateBarrierStatusForm,
-)
+from barriers.forms.statuses import (BarrierChangeStatusForm,
+                                     UpdateBarrierStatusForm)
+
+from .mixins import APIBarrierFormViewMixin, BarrierMixin
 
 
 class BarrierEditStatus(APIBarrierFormViewMixin, FormView):

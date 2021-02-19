@@ -1,10 +1,11 @@
 from django import forms
 from django.conf import settings
 
-from .base import ArchiveAssessmentBaseForm
-from ..mixins import DocumentMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import MultipleValueField, RestrictedFileField
+
+from ..mixins import DocumentMixin
+from .base import ArchiveAssessmentBaseForm
 
 
 class TradeCategoryForm(forms.Form):

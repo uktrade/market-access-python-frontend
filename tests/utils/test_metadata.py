@@ -1,5 +1,4 @@
 from core.tests import MarketAccessTestCase
-
 from utils.metadata import get_metadata
 
 

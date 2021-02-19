@@ -2,19 +2,19 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
-from .base import ArchiveAssessmentBase
-from ..documents import AddDocumentAjaxView, DeleteDocumentAjaxView
-from ..mixins import BarrierMixin, EconomicAssessmentMixin, SessionDocumentMixin
-from ...forms.assessments.economic import (
-    ArchiveEconomicAssessmentForm,
-    EconomicAssessmentDocumentForm,
-    EconomicAssessmentRatingForm,
-    TradeCategoryForm,
-)
 from users.permissions import APIPermissionMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 from utils.metadata import MetadataMixin
+
+from ...forms.assessments.economic import (ArchiveEconomicAssessmentForm,
+                                           EconomicAssessmentDocumentForm,
+                                           EconomicAssessmentRatingForm,
+                                           TradeCategoryForm)
+from ..documents import AddDocumentAjaxView, DeleteDocumentAjaxView
+from ..mixins import (BarrierMixin, EconomicAssessmentMixin,
+                      SessionDocumentMixin)
+from .base import ArchiveAssessmentBase
 
 
 class AssessmentSessionDocumentMixin(SessionDocumentMixin):

@@ -1,10 +1,11 @@
+import dateutil.parser
+
 from barriers.constants import ARCHIVED_REASON
 from barriers.models.commodities import format_commodity_code
-from .base import BaseHistoryItem, GenericHistoryItem
-from .utils import PolymorphicBase
 from utils.metadata import Statuses
 
-import dateutil.parser
+from .base import BaseHistoryItem, GenericHistoryItem
+from .utils import PolymorphicBase
 
 
 class ArchivedHistoryItem(BaseHistoryItem):

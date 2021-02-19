@@ -4,8 +4,8 @@ from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
 from .assessments.strategic import StrategicAssessmentHistoryItem
 from .barriers import BarrierHistoryItem
 from .notes import NoteHistoryItem
-from .public_barriers import PublicBarrierHistoryItem
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
+from .public_barriers import PublicBarrierHistoryItem
 from .team_members import TeamMemberHistoryItem
 from .utils import PolymorphicBase
 from .wto import WTOHistoryItem

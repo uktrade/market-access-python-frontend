@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
 from mock import patch
 
 from core.tests import ReportsTestCase

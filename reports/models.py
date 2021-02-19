@@ -1,11 +1,10 @@
 import operator
 
-from barriers.constants import STATUSES
+import dateutil.parser
 
+from barriers.constants import STATUSES
 from utils.metadata import get_metadata
 from utils.models import APIModel
-
-import dateutil.parser
 
 
 class Report(APIModel):

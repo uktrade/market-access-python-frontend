@@ -4,7 +4,8 @@ from django.views.generic import TemplateView
 
 from authentication.decorators import public_view
 from healthcheck.constants import HealthStatus
-from .checks import db_check, api_check
+
+from .checks import api_check, db_check
 
 
 @public_view

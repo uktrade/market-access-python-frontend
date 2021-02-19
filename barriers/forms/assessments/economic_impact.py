@@ -1,8 +1,8 @@
 from django import forms
 
-from .base import ArchiveAssessmentBaseForm
-
 from utils.api.client import MarketAccessAPIClient
+
+from .base import ArchiveAssessmentBaseForm
 
 
 class EconomicImpactAssessmentForm(forms.Form):

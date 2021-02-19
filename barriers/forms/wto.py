@@ -1,10 +1,11 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import APIFormMixin, DocumentMixin
-
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import DayMonthYearField, YesNoBooleanField, RestrictedFileField
+from utils.forms import (DayMonthYearField, RestrictedFileField,
+                         YesNoBooleanField)
+
+from .mixins import APIFormMixin, DocumentMixin
 
 
 class WTOStatusForm(APIFormMixin, forms.Form):

@@ -1,13 +1,9 @@
 from django import forms
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
-from barriers.forms.statuses import (
-    OpenPendingForm,
-    OpenInProgressForm,
-    ResolvedInPartForm,
-    ResolvedInFullForm,
-    DormantForm,
-)
+from barriers.forms.statuses import (DormantForm, OpenInProgressForm,
+                                     OpenPendingForm, ResolvedInFullForm,
+                                     ResolvedInPartForm)
 from utils.forms import SubformChoiceField, SubformMixin
 
 

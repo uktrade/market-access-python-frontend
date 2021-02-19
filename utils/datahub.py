@@ -1,11 +1,11 @@
-import requests
 import json
 
+import requests
 from django.conf import settings
+from mohawk import Sender
 
 from barriers.models import Company
 from utils.exceptions import APIHttpException, DataHubException
-from mohawk import Sender
 
 
 class DatahubClient:

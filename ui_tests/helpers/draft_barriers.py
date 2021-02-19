@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from ui_tests import settings
-
 from splinter.exceptions import ElementDoesNotExist
+
+from ui_tests import settings
 
 
 def clear_draft_barriers(browser):

@@ -1,7 +1,8 @@
 import sys
-from .base import *                 # noqa
 
 from django_log_formatter_ecs import ECSFormatter
+
+from .base import *  # noqa
 
 DJANGO_ENV = 'dev'
 

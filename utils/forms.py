@@ -1,15 +1,14 @@
 import datetime
-import magic
 import os
 
+import dateutil.parser
+import magic
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.template.defaultfilters import filesizeformat
 
 from .validators import validate_date_not_in_future
-
-import dateutil.parser
 
 
 class MultipleValueField(forms.MultipleChoiceField):

@@ -1,17 +1,13 @@
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from .base import ArchiveAssessmentBase
-from ..mixins import (
-    BarrierMixin,
-    EconomicImpactAssessmentMixin,
-)
-from ...forms.assessments.economic_impact import (
-    ArchiveEconomicImpactAssessmentForm,
-    EconomicImpactAssessmentForm,
-)
 from users.permissions import APIPermissionMixin
 from utils.metadata import MetadataMixin
+
+from ...forms.assessments.economic_impact import (
+    ArchiveEconomicImpactAssessmentForm, EconomicImpactAssessmentForm)
+from ..mixins import BarrierMixin, EconomicImpactAssessmentMixin
+from .base import ArchiveAssessmentBase
 
 
 class EconomicImpactAssessmentEditBase(MetadataMixin, BarrierMixin, FormView):

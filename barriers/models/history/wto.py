@@ -1,8 +1,9 @@
-from .base import BaseHistoryItem, GenericHistoryItem
-from .utils import PolymorphicBase
+import dateutil.parser
+
 from barriers.models.wto import WTOProfile
 
-import dateutil.parser
+from .base import BaseHistoryItem, GenericHistoryItem
+from .utils import PolymorphicBase
 
 
 class CaseNumberHistoryItem(BaseHistoryItem):

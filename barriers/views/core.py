@@ -1,9 +1,9 @@
 from django.views.generic import TemplateView
 
-from .mixins import AnalyticsMixin, BarrierMixin
-
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
+
+from .mixins import AnalyticsMixin, BarrierMixin
 
 
 class Dashboard(AnalyticsMixin, TemplateView):

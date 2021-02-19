@@ -1,6 +1,5 @@
-from json.decoder import JSONDecodeError
 import logging
-
+from json.decoder import JSONDecodeError
 
 logger = logging.getLogger(__name__)
 

@@ -1,9 +1,9 @@
 from datetime import datetime, timezone
 
-from ui_tests.helpers.barriers import create_barrier
-from ui_tests import settings
-
 from dateutil import parser
+
+from ui_tests import settings
+from ui_tests.helpers.barriers import create_barrier
 
 
 def test_economic_assessment(browser):

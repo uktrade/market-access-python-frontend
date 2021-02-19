@@ -1,13 +1,11 @@
 from http import HTTPStatus
 
+import mock
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
-
 from utils.exceptions import FileUploadError, ScanError
-
-import mock
-from mock import patch
 
 
 class NoteDocumentsTestCase(MarketAccessTestCase):

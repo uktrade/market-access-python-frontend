@@ -1,22 +1,20 @@
-from django.views.generic import FormView
 from django.urls import reverse
+from django.views.generic import FormView
+
+from barriers.forms.edit import (UpdateBarrierEndDateForm,
+                                 UpdateBarrierPriorityForm,
+                                 UpdateBarrierProductForm,
+                                 UpdateBarrierSourceForm,
+                                 UpdateBarrierSummaryForm,
+                                 UpdateBarrierTagsForm, UpdateBarrierTermForm,
+                                 UpdateBarrierTitleForm,
+                                 UpdateCausedByTradingBlocForm,
+                                 UpdateCommercialValueForm,
+                                 UpdateEconomicAssessmentEligibilityForm,
+                                 UpdateTradeDirectionForm)
+from utils.metadata import MetadataMixin
 
 from .mixins import APIBarrierFormViewMixin
-from barriers.forms.edit import (
-    UpdateBarrierEndDateForm,
-    UpdateBarrierTitleForm,
-    UpdateBarrierProductForm,
-    UpdateBarrierSourceForm,
-    UpdateBarrierSummaryForm,
-    UpdateBarrierPriorityForm,
-    UpdateBarrierTagsForm,
-    UpdateBarrierTermForm,
-    UpdateCausedByTradingBlocForm,
-    UpdateCommercialValueForm,
-    UpdateEconomicAssessmentEligibilityForm,
-    UpdateTradeDirectionForm,
-)
-from utils.metadata import MetadataMixin
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):

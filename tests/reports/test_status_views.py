@@ -1,13 +1,10 @@
 from http import HTTPStatus
 
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
 from mock import patch
 
 from core.tests import MarketAccessTestCase
-from reports.views import (
-    NewReportBarrierTermView,
-    NewReportBarrierStatusView,
-)
+from reports.views import NewReportBarrierStatusView, NewReportBarrierTermView
 from tests.constants import ERROR_HTML
 
 

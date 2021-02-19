@@ -3,13 +3,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView
 
-from utils.sessions import SessionList
-from .mixins import BarrierMixin
 from utils.metadata import MetadataMixin
-from ..forms.government_organisations import (
-    EditGovernmentOrganisationsForm,
-    AddGovernmentOrganisationsForm,
-)
+from utils.sessions import SessionList
+
+from ..forms.government_organisations import (AddGovernmentOrganisationsForm,
+                                              EditGovernmentOrganisationsForm)
+from .mixins import BarrierMixin
 
 
 class BaseGovernmentOrganisationFormView(MetadataMixin, BarrierMixin, FormView):

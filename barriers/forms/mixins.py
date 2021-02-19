@@ -1,5 +1,6 @@
-import requests
 import uuid
+
+import requests
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError

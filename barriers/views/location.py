@@ -2,13 +2,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierMixin
-from barriers.forms.location import (
-    AddAdminAreaForm,
-    EditCountryOrTradingBlocForm,
-    EditLocationForm,
-)
+from barriers.forms.location import (AddAdminAreaForm,
+                                     EditCountryOrTradingBlocForm,
+                                     EditLocationForm)
 from utils.metadata import MetadataMixin
+
+from .mixins import BarrierMixin
 
 
 class BarrierEditLocation(MetadataMixin, BarrierMixin, FormView):

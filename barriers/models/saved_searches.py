@@ -1,7 +1,6 @@
 from urllib.parse import urlencode
 
 from barriers.forms.search import BarrierSearchForm
-
 from utils.metadata import get_metadata
 from utils.models import APIModel
 

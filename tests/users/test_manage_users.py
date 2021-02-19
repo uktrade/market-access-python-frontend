@@ -1,11 +1,10 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
 from users.models import Group, User
-
-from mock import patch
 
 
 class ManageUsersPermissionsTestCase(MarketAccessTestCase):

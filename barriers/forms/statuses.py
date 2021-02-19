@@ -4,11 +4,10 @@ from django import forms
 from django.template.loader import render_to_string
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
-from .mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (
-    MonthYearField, SubformChoiceField, SubformMixin,
-)
+from utils.forms import MonthYearField, SubformChoiceField, SubformMixin
+
+from .mixins import APIFormMixin
 
 
 class UpdateBarrierStatusForm(APIFormMixin, forms.Form):

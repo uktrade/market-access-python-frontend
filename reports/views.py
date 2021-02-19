@@ -3,7 +3,7 @@ from django.forms import Form
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView, FormView
+from django.views.generic import FormView, TemplateView
 from django.views.generic.base import ContextMixin
 
 from barriers.constants import STATUSES
@@ -11,27 +11,18 @@ from partials.callout import Callout, CalloutButton
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
 from reports.forms.new_report_barrier_location import (
-    NewReportBarrierLocationForm,
+    HasAdminAreas, NewReportBarrierLocationAddAdminAreasForm,
+    NewReportBarrierLocationAdminAreasForm, NewReportBarrierLocationForm,
     NewReportBarrierLocationHasAdminAreasForm,
-    HasAdminAreas,
-    NewReportBarrierLocationAddAdminAreasForm,
-    NewReportBarrierLocationAdminAreasForm,
-    NewReportBarrierTradeDirectionForm,
-    NewReportCausedByTradingBlocForm,
-)
+    NewReportBarrierTradeDirectionForm, NewReportCausedByTradingBlocForm)
 from reports.forms.new_report_barrier_sectors import (
-    NewReportBarrierHasSectorsForm,
-    SectorsAffected,
-    NewReportBarrierSectorsForm,
-    NewReportBarrierAddSectorsForm,
-)
+    NewReportBarrierAddSectorsForm, NewReportBarrierHasSectorsForm,
+    NewReportBarrierSectorsForm, SectorsAffected)
 from reports.forms.new_report_barrier_status import (
-    NewReportBarrierTermForm,
-    NewReportBarrierStatusForm,
-)
-from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
+    NewReportBarrierStatusForm, NewReportBarrierTermForm)
+from reports.forms.new_report_barrier_summary import \
+    NewReportBarrierSummaryForm
 from reports.helpers import ReportFormGroup
-
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 from utils.metadata import MetadataMixin
