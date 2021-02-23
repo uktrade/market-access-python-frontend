@@ -9,6 +9,12 @@
 	color: $govuk-dark-grey;
 }
 
+.filter-items-filterbox-group {
+	  padding: 1px 7px 1px 7px;
+    width: 31%;
+    float: left;
+}
+
 .filter-items-group {
 	padding: govuk-em( 10, 16 ) govuk-em( 8, 16 );
 	background: $govuk-light-grey;
