@@ -47,17 +47,10 @@ $desktop-width: mq-get-breakpoint-width(desktop, $mq-breakpoints);
 }
 
 .dash-button__heading {
-
-	background-image: govuk-image-url("icon-pointer.png");
 	background-repeat: no-repeat;
 	background-position: 100% 50%;
 	padding-right: govuk-em( 45, 24 );
 	display: table;
-
-	@include govuk-device-pixel-ratio {
-		background-image: govuk-image-url("icon-pointer-2x.png");
-		background-size: 30px 19px;
-	}
 }
 
 .dash-button__text {

@@ -32,35 +32,29 @@
         </nav>
 
         <nav class="datahub-header__navigation-wrapper datahub-header__navigation-wrapper--sub" aria-labelledby="sub-navigation">
-            <div>
-                <ul id="sub-navigation" class="datahub-header__navigation" aria-label="Second Level Navigation">
-                    <div class="datahub-header__navigation_flaot">
-                        <li class="datahub-header__navigation__item">
-                            <a class="datahub-header__navigation__item__link{% if page == 'dashboard' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
-                        </li>
-                        <li class="datahub-header__navigation__item">
-                            <a class="datahub-header__navigation__item__link{% if page == 'add-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'reports:new_report' %}">Report a barrier</a>
-                        </li>
-                        <li class="datahub-header__navigation__item">
-                            <a class="datahub-header__navigation__item__link{% if page == 'search' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:search' %}">Search</a>
-                        </li>
-                    </div>
-                    <div class="datahub-header__navigation_flaot">
-                        <li class="datahub-header__navigation__item">
-                            <a class="datahub-header__navigation__item__link{% if page == 'public-barriers' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:public_barriers' %}">Public Barriers</a>
-                        </li>
-                        <li class="datahub-header__navigation__item">
-                            <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>
-                        </li>
+            <ul id="sub-navigation" class="datahub-header__navigation" aria-label="Second Level Navigation">
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'dashboard' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'add-a-barrier' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'reports:new_report' %}">Report a barrier</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'search' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:search' %}">Search</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'public-barriers' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:public_barriers' %}">Review public barriers</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>
+                </li>
 
-                        {% if current_user|has_permission:"change_user" %}
-                        <li class="datahub-header__navigation__item">
-                            <a class="datahub-header__navigation__item__link{% if page == 'manage-users' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:manage_users' %}">Administer users</a>
-                        </li>
-                        {% endif %}
-                    </div>
-                </ul>
-            </div>
+                {% if current_user|has_permission:"change_user" %}
+                    <li class="datahub-header__navigation__item">
+                        <a class="datahub-header__navigation__item__link{% if page == 'manage-users' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:manage_users' %}">Administer users</a>
+                    </li>
+                {% endif %}
+            </ul>
         </nav>
     </div>
 </header>
