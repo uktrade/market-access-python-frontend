@@ -19,10 +19,10 @@ def get_metadata():
     if settings.MOCK_METADATA:
         file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
         return Metadata(json.loads(memfiles.open(file)))
-    else:
-        metadata = redis_client.get("metadata")
-        if metadata:
-            return Metadata(json.loads(metadata))
+
+    metadata = redis_client.get("metadata")
+    if metadata:
+        return Metadata(json.loads(metadata))
 
     url = f"{settings.MARKET_ACCESS_API_URI}metadata"
     sender = Sender(
@@ -43,14 +43,12 @@ def get_metadata():
         },
     )
 
-    if response.ok:
-        metadata = response.json()
-        redis_client.set(
-            "metadata", json.dumps(metadata), ex=settings.METADATA_CACHE_TIME
-        )
-        return Metadata(metadata)
+    if not response.ok:
+        raise HawkException(f"Call to fetch metadata failed {response}")
 
-    raise HawkException("Call to fetch metadata failed")
+    metadata = response.json()
+    redis_client.set("metadata", json.dumps(metadata), ex=settings.METADATA_CACHE_TIME)
+    return Metadata(metadata)
 
 
 class Metadata:

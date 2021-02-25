@@ -69,6 +69,7 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
         data["barriers"] = self.get_public_barriers()
         data["overseas_regions"] = self.metadata.get_overseas_region_choices()
         data["selected_overseas_region"] = self.get_selected_overseas_region()
+        data["page"] = "public-barriers"
         return data
 
 
