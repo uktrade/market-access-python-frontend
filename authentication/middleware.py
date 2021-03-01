@@ -26,32 +26,36 @@ class SSOMiddleware:
         public_view = getattr(view_func.view_class, "_public_view", False)
         if public_view:
             return view_func(request, *view_args, **view_kwargs)
-        else:
-            sso_token = request.session.get("sso_token")
-            user_data = request.session.get("user_data")
-            is_authenticated = sso_token and user_data
-            is_login_path = request.path in (
-                reverse("users:login"),
-                reverse("users:login_callback"),
-            )
-            is_static = request.path.startswith((settings.STATIC_URL, "/govuk-public"))
 
-            if is_authenticated or is_login_path or is_static:
-                # return None to allow this to continue as per Django docs
-                # https://docs.djangoproject.com/en/3.0/topics/http/middleware/#process-view
-                # If it returns None, Django will continue processing this request, executing any other process_view()
-                # middleware and, then, the appropriate view.
-                return None
+        sso_token = request.session.get("sso_token")
+        user_data = request.session.get("user_data")
+        is_authenticated = sso_token and user_data
+        is_login_path = request.path in (
+            reverse("users:login"),
+            reverse("users:login_callback"),
+        )
+        is_static = request.path.startswith((settings.STATIC_URL, "/govuk-public"))
 
-            request.session["return_path"] = request.path
-            return HttpResponseRedirect(reverse("users:login"))
+        if is_authenticated or is_login_path or is_static:
+            # return None to allow this to continue as per Django docs
+            # https://docs.djangoproject.com/en/3.0/topics/http/middleware/#process-view
+            # If it returns None, Django will continue processing this request, executing any other process_view()
+            # middleware and, then, the appropriate view.
+            return None
+
+        request.session["return_path"] = request.path
+        return HttpResponseRedirect(reverse("users:login"))
 
     def process_exception(self, request, exception):
-        if isinstance(exception, APIHttpException):
-            if exception.status_code == HTTPStatus.UNAUTHORIZED:
-                try:
-                    del request.session["sso_token"]
-                except KeyError:
-                    pass
-                request.session["return_path"] = request.path
-                return HttpResponseRedirect(reverse("users:login"))
+        if not isinstance(exception, APIHttpException):
+            return
+
+        if exception.status_code != HTTPStatus.UNAUTHORIZED:
+            return
+
+        try:
+            del request.session["sso_token"]
+        except KeyError:
+            pass
+        request.session["return_path"] = request.path
+        return HttpResponseRedirect(reverse("users:login"))
