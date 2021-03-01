@@ -8,10 +8,8 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django.views.generic import FormView, RedirectView, TemplateView
 from django.views import View
-
-
+from django.views.generic import FormView, RedirectView, TemplateView
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
@@ -27,6 +25,10 @@ from .permissions import APIPermissionMixin
 class GetUsers(View):
     def post(self, request, *args, **kwargs):
         query = request.POST.get("q")
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("q")
+
         if not query:
             return JsonResponse({})
 

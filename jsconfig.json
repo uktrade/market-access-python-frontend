@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "rootDir": "core/frontend/src/js",
+        "jsx": "react",
+        "checkJs": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
