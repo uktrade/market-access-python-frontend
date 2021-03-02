@@ -6,20 +6,33 @@ import requests
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
+from django.views import View
+
 
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
 from utils.referers import RefererMixin
 from utils.sessions import init_session
+from utils.sso import SSOClient
 
 from .forms import UserGroupForm
 from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
 from .permissions import APIPermissionMixin
 
+
+class GetUsers(View):
+    def post(self, request, *args, **kwargs):
+        query = request.POST.get("q")
+        if not query:
+            return JsonResponse({})
+
+        sso_client = SSOClient()
+        results = sso_client.search_users(query)
+        return JsonResponse(results, safe=False)
 
 
 class Login(RedirectView):
