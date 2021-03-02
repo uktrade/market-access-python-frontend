@@ -1,26 +1,38 @@
-import logging
 import re
 import uuid
 from urllib.parse import urlencode
 
 import requests
+
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
+from django.views import View
+
 
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
 from utils.referers import RefererMixin
 from utils.sessions import init_session
+from utils.sso import SSOClient
 
 from .forms import UserGroupForm
 from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
 from .permissions import APIPermissionMixin
 
-logger = logging.getLogger(__name__)
+
+class GetUsers(View):
+    def post(self, request, *args, **kwargs):
+        query = request.POST.get("q")
+        if not query:
+            return JsonResponse({})
+
+        sso_client = SSOClient()
+        results = sso_client.search_users(query)
+        return JsonResponse(results, safe=False)
 
 
 class Login(RedirectView):
@@ -71,18 +83,17 @@ class LoginCallback(RedirectView):
         }
 
         response = requests.post(url=settings.SSO_TOKEN_URI, data=payload, timeout=10)
+        if response.status_code != 200:
+            error_msg = f"No access_token from SSO: Status code: {response.status_code}, error: {response.text}"
+            raise PermissionDenied(error_msg)
 
-        if response.status_code == 200:
-            response_data = response.json()
-            access_token = response_data.get("access_token")
-            success = init_session(request.session, access_token)
-            if success:
-                return HttpResponseRedirect(self.get_redirect_url())
-            else:
-                raise PermissionDenied("Failed to initialise session.")
-        else:
-            error_msg = f"Status code: {response.status_code}, error: {response.text}"
-            raise PermissionDenied("No access_token from SSO: %s", error_msg)
+        response_data = response.json()
+        access_token = response_data.get("access_token")
+        success = init_session(request.session, access_token)
+        if not success:
+            raise PermissionDenied("Failed to initialise session.")
+
+        return HttpResponseRedirect(self.get_redirect_url())
 
     def get_redirect_url(self):
         url = self.request.session.get("return_path")
@@ -129,12 +140,11 @@ class ManageUsers(
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["page"] = "manage-users"
-
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        context_data["groups"] = client.groups.list()
-
         group_id = self.get_group_id()
+
+        context_data["page"] = "manage-users"
+        context_data["groups"] = client.groups.list()
         if group_id is None:
             users = client.users.list(
                 limit=self.get_pagination_limit(),
@@ -144,6 +154,7 @@ class ManageUsers(
             context_data["pagination"] = self.get_pagination_data(object_list=users)
         else:
             context_data["group_id"] = group_id
+
         return context_data
 
 
@@ -162,9 +173,10 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
         group_id = self.get_group_id()
         if group_id:
             self.client.users.patch(id=user_id, groups=[{"id": group_id}])
-        else:
-            # This call creates a user if they don't exist
-            self.client.users.get(id=user_id)
+            return
+
+        # This call creates a user if they don't exist
+        self.client.users.get(id=user_id)
 
     def get_success_url(self):
         success_url = reverse("users:manage_users")
@@ -204,16 +216,19 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
         )
 
     def get_success_url(self, new_group_id):
-        if self.referer.path:
-            if self.referer.url_name == "manage_users":
-                manage_users_url = reverse("users:manage_users")
-                if new_group_id == "0":
-                    return manage_users_url
-                return f"{manage_users_url}?group={new_group_id}"
+        if not self.referer.path:
+            return reverse(
+                "users:user_detail", kwargs={"user_id": self.kwargs.get("user_id")}
+            )
+
+        if self.referer.url_name != "manage_users":
             return self.referer.path
-        return reverse(
-            "users:user_detail", kwargs={"user_id": self.kwargs.get("user_id")}
-        )
+
+        manage_users_url = reverse("users:manage_users")
+        if new_group_id != "0":
+            return f"{manage_users_url}?group={new_group_id}"
+
+        return manage_users_url
 
 
 class UserDetail(UserMixin, TemplateView):

@@ -64,6 +64,56 @@ class ManageUsersTestCase(MarketAccessTestCase):
         assert response.context["results"] == []
 
     @patch("utils.sso.SSOClient.search_users")
+    def test_get_users_results(self, mock_search_users):
+        results = [
+            {
+                "user_id": "3fbe6479-b9bd-4658-81d7-f07c2a73d33d",
+                "first_name": "Joseph",
+                "last_name": "Heller",
+                "email": "bob_bobson1986@hotmail.com",
+            }
+        ]
+        mock_search_users.return_value = results
+        response = self.client.post(
+            reverse("users:get_users"),
+            data={"q": "Hell"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert mock_search_users.called is True
+        assert response.json() == results
+
+    @patch("utils.sso.SSOClient.search_users")
+    def test_get_users_results_no_results(self, mock_search_users):
+        results = []
+        mock_search_users.return_value = results
+        response = self.client.post(
+            reverse("users:get_users"),
+            data={"q": "wrong test"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert mock_search_users.called is True
+        assert response.json() == results
+
+    @patch("utils.sso.SSOClient.search_users")
+    def test_get_users_results_no_sarch(self, mock_search_users):
+        results = [
+            {
+                "user_id": "3fbe6479-b9bd-4658-81d7-f07c2a73d33d",
+                "first_name": "Joseph",
+                "last_name": "Heller",
+                "email": "bob_bobson1986@hotmail.com",
+            }
+        ]
+        mock_search_users.return_value = results
+        response = self.client.post(
+            reverse("users:get_users"),
+            data={"wrong value": "wrong test"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert mock_search_users.called is False
+        assert response.json() == {}
+
+    @patch("utils.sso.SSOClient.search_users")
     def test_with_results(self, mock_search_users):
         results = [
             {
