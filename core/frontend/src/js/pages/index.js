@@ -23,3 +23,17 @@ ma.pages.index = (function(){
 		}
 	};
 })();
+
+
+function autocomplete_on_at_char(event) {
+  if (event.key !== "@") {
+    return null;
+  }
+  alert("Captured!");
+
+  return null;
+}
+
+Array.from(document.getElementsByClassName("user_autocomplete")).forEach(ele => {
+  ele.onkeypress  = autocomplete_on_at_char;
+});
