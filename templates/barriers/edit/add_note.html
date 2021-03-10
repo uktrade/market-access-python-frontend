@@ -1,5 +1,16 @@
 {% extends '../barrier_detail.html' %}
 
+{% load static %}
+
+{% block head %}
+<script src="{% static 'js/react.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderTextAreaWithMentions("note-textarea-container")
+    })
+</script>
+{% endblock %}
+
 {% block note_form %}
     <div class="interaction-panel">
         {% include 'barriers/partials/note_form.html' %}

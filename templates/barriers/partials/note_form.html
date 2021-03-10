@@ -6,11 +6,13 @@
 
         {% form_field_error form "note" %}
 
-        <textarea id="{{ form.note.name }}"
+        <div id="note-textarea-container">
+            <textarea id="{{ form.note.name }}"
                   class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}"
                   name="{{ form.note.name }}"
                   rows="5"
                   autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+        </div>
     </div>
 
     {% if documents %}
