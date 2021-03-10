@@ -1,8 +1,18 @@
 {% extends "barriers/edit/base.html" %}
 
 {% load activity %}
+{% load static %}
 
 {% block page_title %}{{ block.super }} - Public barrier{% endblock %}
+
+{% block head %}
+<script src="{% static 'js/react.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderTextAreaWithMentions("note-textarea-container")
+    })
+</script>
+{% endblock %}
 
 {% block body_script %}
     <script>

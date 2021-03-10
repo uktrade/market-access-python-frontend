@@ -30,9 +30,9 @@ function TextAreaWithMentions({
     }
 
     const searchUsers = async (/** @type {any} */ query) => {
-        const result = await fetch(`/users/search/?q=${query}`)
-        const data = await result.json()
-        return data.map(item => ({
+        const response = await fetch(`/users/search/?q=${query}`)
+        const data = await response.json()
+        return data.results.map(item => ({
             id: `@${item.email}`,
             display: `@${item.email}`,
             email: item.email,
@@ -72,7 +72,7 @@ function TextAreaWithMentions({
             <Mention
                 trigger={"@"}
                 data={getSuggestions}
-                style={{ color: "#f47738", zIndex: 1, position: "relative", left: 1, top: 0.5 }}
+                style={{ color: "#f47738", zIndex: 1, position: "relative", left: 1, top: 1 }}
                 renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => {
                     const classNames = ["mentions-item"]
                     if (focused) {

@@ -1,9 +1,9 @@
 from http import HTTPStatus
 
+from core.tests import MarketAccessTestCase
 from django.urls import reverse
 from mock import patch
 
-from core.tests import MarketAccessTestCase
 from users.models import Group, User
 
 
@@ -74,25 +74,31 @@ class ManageUsersTestCase(MarketAccessTestCase):
             }
         ]
         mock_search_users.return_value = results
-        response = self.client.post(
+        response = self.client.get(
             reverse("users:get_users"),
             data={"q": "Hell"},
         )
         assert response.status_code == HTTPStatus.OK
         assert mock_search_users.called is True
-        assert response.json() == results
+        self.assertEqual(
+            response.json(),
+            {
+                "count": 1,
+                "results": results,
+            },
+        )
 
     @patch("utils.sso.SSOClient.search_users")
     def test_get_users_results_no_results(self, mock_search_users):
         results = []
         mock_search_users.return_value = results
-        response = self.client.post(
+        response = self.client.get(
             reverse("users:get_users"),
             data={"q": "wrong test"},
         )
         assert response.status_code == HTTPStatus.OK
         assert mock_search_users.called is True
-        assert response.json() == results
+        self.assertEqual(response.json(), {"count": 0, "results": results})
 
     @patch("utils.sso.SSOClient.search_users")
     def test_get_users_results_no_sarch(self, mock_search_users):
@@ -105,13 +111,13 @@ class ManageUsersTestCase(MarketAccessTestCase):
             }
         ]
         mock_search_users.return_value = results
-        response = self.client.post(
+        response = self.client.get(
             reverse("users:get_users"),
             data={"wrong value": "wrong test"},
         )
         assert response.status_code == HTTPStatus.OK
         assert mock_search_users.called is False
-        assert response.json() == {}
+        self.assertEqual(response.json(), {"count": 0, "results": []})
 
     @patch("utils.sso.SSOClient.search_users")
     def test_with_results(self, mock_search_users):

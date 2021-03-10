@@ -1,5 +1,7 @@
 from django.urls import path, re_path
 
+from barriers.views.mentions import MentionMarkAsRead, MentionMarkAsUnread
+
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments.economic import (
     AddEconomicAssessment,
@@ -575,4 +577,14 @@ urlpatterns = [
         name="edit_public_barrier_summary",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
+    path(
+        "mentions/mark-as-read/<int:mention_id>",
+        MentionMarkAsRead.as_view(),
+        name="mention_mark_as_read",
+    ),
+    path(
+        "mentions/mark-as-unread/<int:mention_id>",
+        MentionMarkAsUnread.as_view(),
+        name="mention_mark_as_unread",
+    ),
 ]
