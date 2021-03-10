@@ -30,9 +30,9 @@ function TextAreaWithMentions({
     }
 
     const searchUsers = async (/** @type {any} */ query) => {
-        const result = await fetch(`/users/search/?q=${query}`)
-        const data = await result.json()
-        return data.map(item => ({
+        const response = await fetch(`/users/search/?q=${query}`)
+        const data = await response.json()
+        return data.results.map(item => ({
             id: `@${item.email}`,
             display: `@${item.email}`,
             email: item.email,

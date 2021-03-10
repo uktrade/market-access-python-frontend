@@ -22,14 +22,29 @@ from .permissions import APIPermissionMixin
 
 
 class GetUsers(View):
+    def serialize_results(self, results):
+        return [
+            {
+                "user_id": str(result["user_id"]),
+                "first_name": result["first_name"],
+                "last_name": result["last_name"],
+                "email": result["email"],
+            }
+            for result in results
+        ]
+
     def get(self, request, *args, **kwargs):
         query = request.GET.get("q")
+        response = {"count": 0, "results": []}
         if not query:
-            return JsonResponse([])
+            return JsonResponse(response)
 
         sso_client = SSOClient()
         results = sso_client.search_users(query)
-        return JsonResponse(results, safe=False)
+        serialized_results = self.serialize_results(results)
+        response["results"] = serialized_results
+        response["count"] = len(results)
+        return JsonResponse(response)
 
 
 class Login(RedirectView):
