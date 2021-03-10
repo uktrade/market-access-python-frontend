@@ -4,6 +4,15 @@
 
 {% block page_title %}{{ block.super }} - Public barrier{% endblock %}
 
+{% block head %}
+<script src="{% static 'js/react.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderTextAreaWithMentions("note-textarea-container")
+    })
+</script>
+{% endblock %}
+
 {% block body_script %}
     <script>
         if( ma.components.DeleteModal ){
