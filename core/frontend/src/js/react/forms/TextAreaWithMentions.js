@@ -72,7 +72,7 @@ function TextAreaWithMentions({
             <Mention
                 trigger={"@"}
                 data={getSuggestions}
-                style={{ color: "#f47738", zIndex: 1, position: "relative", left: 1, top: 0.5 }}
+                style={{ color: "#f47738", zIndex: 1, position: "relative", left: 1, top: 1 }}
                 renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => {
                     const classNames = ["mentions-item"]
                     if (focused) {
