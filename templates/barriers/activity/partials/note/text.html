@@ -1,3 +1,5 @@
+{% load highlight_mentions %}
+
 <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span>
     {% if item.user.name %}
     <span class="event-list__item__heading__recede"> by </span>{{ item.user.name }}
@@ -7,7 +9,7 @@
 {% if form.note_id == item.id %}
     {% include 'barriers/partials/note_form.html' %}
 {% else %}
-    <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe  }}</p>
+    <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe|highlight_mentions  }}</p>
     {% if not barrier.archived %}
         <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
 
