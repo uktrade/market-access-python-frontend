@@ -1,0 +1,48 @@
+.mention-item{
+    padding-top: 0px;
+
+    .mention-item__info{
+        @include govuk-clearfix;
+        margin-bottom: govuk-em( 16, 16 );
+        @include mq( $from: tablet ){
+            float: left;
+            width: 60%;
+            margin-bottom: 0;
+        }
+        @include mq( $from: 1080px ){
+            width: 70%;
+        }
+    }
+    .mention-item__actions{
+        float: left;
+        padding-top: 17px;
+    }
+
+    &__title{
+        display: flex;
+        align-items: flex-end;
+        margin-bottom: 5px;
+
+        .govuk-tag{
+            position: relative;
+            top: -3px;
+            margin-right: 5px;
+        }
+    }
+    &__message{
+        margin: 5px 0px;
+    }
+    &__barrier{
+        margin: 5px 0px;
+    }
+    &__when{
+        margin: 5px 0px;
+        .mention-item__date{
+            font-weight: bold;
+            color: $govuk-dark-grey;
+        }
+        .mention-item__time{
+            color: $govuk-mid-grey;
+        }
+    }
+}

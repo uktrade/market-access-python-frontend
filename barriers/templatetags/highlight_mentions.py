@@ -11,6 +11,8 @@ def highlight_mentions(value, autoescape=True):
 
     regex = r"(@[^ @]+@[^ @]+)"
 
-    result = re.sub(regex, r"<span class='mention-highlight'>\1</span>", value, 0, re.MULTILINE)
+    result = re.sub(
+        regex, r"<span class='mention-highlight'>\1</span>", value, 0, re.MULTILINE
+    )
 
     return mark_safe(result)

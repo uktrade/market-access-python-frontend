@@ -1,9 +1,6 @@
 import time
 
 import requests
-from django.conf import settings
-from django.core.cache import cache
-
 from barriers.constants import Statuses
 from barriers.models import (
     Barrier,
@@ -18,6 +15,9 @@ from barriers.models import (
     SavedSearch,
     StrategicAssessment,
 )
+from barriers.models.history.mentions import Mention
+from django.conf import settings
+from django.core.cache import cache
 from reports.models import Report
 from users.models import Group, User
 from utils.exceptions import ScanError
@@ -309,3 +309,16 @@ class ResolvabilityAssessmentResource(APIResource):
 class StrategicAssessmentResource(APIResource):
     resource_name = "strategic-assessments"
     model = StrategicAssessment
+
+
+class MentionResource(APIResource):
+    resource_name = "mentions"
+    model = Mention
+
+    def mark_as_read(self, mention_id, *args, **kwargs):
+        url = f"mentions/mark-as-read/{mention_id}"
+        return self.model(self.client.get(url))
+
+    def mark_as_unread(self, mention_id):
+        url = f"mentions/mark-as-unread/{mention_id}"
+        return self.model(self.client.get(url))

@@ -11,6 +11,9 @@
 {% block page_content %}
     {% include 'barriers/partials/dashboard_heading.html' %}
 
+    {% include 'barriers/partials/dashboard_tabs.html' with active=active new_mentions_count=new_mentions_count %}
+
+    {% if active == 'barriers' %}
     <section>
         <ul class="ma-card-list">
             <li class="ma-card-list__item">
@@ -35,7 +38,19 @@
             </li>
         </ul>
     </section>
+    {% endif %}
 
+    {% if active == 'mentions' %}
+    <section>
+        <ul class="ma-card-list">
+            {% for mention in mentions %}
+                {% include "barriers/partials/mention.html" with mention=mention %}
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    {% if active == 'saved_searches' %}
     <section>
         <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ saved_searches|length }}</span> saved search{{ saved_searches|length|pluralize:"es" }}</h2>
 
@@ -66,5 +81,6 @@
             {% endfor %}
         </ul>
     </section>
+    {% endif %}
 
 {% endblock %}
