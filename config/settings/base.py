@@ -11,11 +11,14 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 
 import sentry_sdk
 from environ import Env
 from sentry_sdk.integrations.django import DjangoIntegration
+
+from django_log_formatter_ecs import ECSFormatter
 
 ROOT_DIR = Path(__file__).parents[2]
 
@@ -261,6 +264,64 @@ API_RESULTS_LIMIT = env.int("API_RESULTS_LIMIT", default=100)
 # ============================================
 DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="info").upper()
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "ecs_formatter": {
+            "()": ECSFormatter,
+        },
+        "simple": {
+            "format": "{asctime} {levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "ecs": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,  # noqa F405
+            "formatter": "ecs_formatter",
+        },
+        "stdout": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,  # noqa F405
+            "formatter": "simple",
+        },
+    },
+    "root": {
+        "handlers": [
+            "ecs",
+            "stdout",
+        ],
+        "level": os.getenv("ROOT_LOG_LEVEL", "INFO"),  # noqa F405
+    },
+    "loggers": {
+        "django": {
+            "handlers": [
+                "ecs",
+                "stdout",
+            ],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa F405
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": [
+                "ecs",
+                "stdout",
+            ],
+            "level": os.getenv("DJANGO_SERVER_LOG_LEVEL", "ERROR"),  # noqa F405
+            "propagate": False,
+        },
+        "django.db.backends": {
+            "handlers": [
+                "ecs",
+                "stdout",
+            ],
+            "level": os.getenv("DJANGO_DB_LOG_LEVEL", "ERROR"),  # noqa F405
+            "propagate": False,
+        },
+    },
+}
 
 # Google Tag Manager
 GTM_ID = env("GTM_ID")
