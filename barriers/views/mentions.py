@@ -15,3 +15,11 @@ class MentionMarkAsUnread(View):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         client.mentions.mark_as_unread(mention_id)
         return HttpResponseRedirect("/?active=mentions")
+
+
+class MentionMarkAsReadAndRedirect(View):
+    def get(self, request, mention_id):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        mention = client.mentions.get(mention_id)
+        client.mentions.mark_as_read(mention_id)
+        return HttpResponseRedirect(mention.go_to_url_path)

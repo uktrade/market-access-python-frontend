@@ -42,9 +42,15 @@
 
     {% if active == 'mentions' %}
     <section>
+        <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ mentions|length }}</span> mentions</h2>
+
         <ul class="ma-card-list">
             {% for mention in mentions %}
                 {% include "barriers/partials/mention.html" with mention=mention %}
+                {% empty %}
+                <li class="mention-item ma-card-list__item">
+                    <p>You have no mentions</p>
+                </li>
             {% endfor %}
         </ul>
     </section>

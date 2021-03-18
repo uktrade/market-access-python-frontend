@@ -1,6 +1,10 @@
 from django.urls import path, re_path
 
-from barriers.views.mentions import MentionMarkAsRead, MentionMarkAsUnread
+from barriers.views.mentions import (
+    MentionMarkAsRead,
+    MentionMarkAsReadAndRedirect,
+    MentionMarkAsUnread,
+)
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments.economic import (
@@ -586,5 +590,10 @@ urlpatterns = [
         "mentions/mark-as-unread/<int:mention_id>",
         MentionMarkAsUnread.as_view(),
         name="mention_mark_as_unread",
+    ),
+    path(
+        "mentions/go-to/<int:mention_id>",
+        MentionMarkAsReadAndRedirect.as_view(),
+        name="mention_go_to",
     ),
 ]
