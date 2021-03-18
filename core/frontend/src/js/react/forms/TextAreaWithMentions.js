@@ -4,7 +4,8 @@ import { MentionsInput, Mention } from 'react-mentions'
 
 function TextAreaWithMentions({
     textAreaName,
-    textAreaId
+    textAreaId,
+    preExistingText=""
 }) {
 
     const mentionsRef = useRef()
@@ -13,10 +14,10 @@ function TextAreaWithMentions({
     const [position, setPosition] = useState()
 
     /** @type {[string, any]} */
-    const [noteText, setNoteText] = useState()
+    const [noteText, setNoteText] = useState(preExistingText)
 
     /** @type {[string, any]} */
-    const [tokenisedText, setTokenisedText] = useState()
+    const [tokenisedText, setTokenisedText] = useState(preExistingText)
 
     useEffect(() => {
         mentionsRef.current?.classList.add("govuk-textarea")

@@ -24,6 +24,11 @@ class Dashboard(AnalyticsMixin, TemplateView):
         mentions = client.mentions.list()
         draft_barriers = client.reports.list()
         saved_searches = client.saved_searches.list()
+        notification_exclusion = client.notification_exclusion.get()
+
+        are_all_mentions_read: bool = not any(
+            not mention.read_by_recipient for mention in mentions
+        )
 
         context_data.update(
             {
@@ -32,7 +37,9 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 "team_barriers_saved_search": team_barriers_saved_search,
                 "draft_barriers": draft_barriers,
                 "saved_searches": saved_searches,
+                "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
+                "are_all_mentions_read": are_all_mentions_read,
                 "new_mentions_count": len(
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),

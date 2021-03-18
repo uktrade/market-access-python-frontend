@@ -15,7 +15,7 @@ from barriers.models import (
     SavedSearch,
     StrategicAssessment,
 )
-from barriers.models.history.mentions import Mention
+from barriers.models.history.mentions import Mention, NotificationExclusion
 from django.conf import settings
 from django.core.cache import cache
 from reports.models import Report
@@ -39,8 +39,11 @@ class APIResource:
             total_count=response_data["count"],
         )
 
-    def get(self, id, *args, **kwargs):
-        url = f"{self.resource_name}/{id}"
+    def get(self, id=None, *args, **kwargs):
+        if not id:
+            url = f"{self.resource_name}"
+        else:
+            url = f"{self.resource_name}/{id}"
         return self.model(self.client.get(url, *args, **kwargs))
 
     def patch(self, id, *args, **kwargs):
@@ -322,3 +325,24 @@ class MentionResource(APIResource):
     def mark_as_unread(self, mention_id):
         url = f"mentions/mark-as-unread/{mention_id}"
         return self.model(self.client.get(url))
+
+    def mark_all_as_read(self):
+        url = "mentions/mark-all-as-read"
+        return self.model(self.client.get(url))
+
+    def mark_all_as_unread(self):
+        url = "mentions/mark-all-as-unread"
+        return self.model(self.client.get(url))
+
+
+class NotificationExclusionResource(APIResource):
+    resource_name = "mentions/exclude-from-notifications"
+    model = NotificationExclusion
+
+    def turn_off_notifications(self):
+        url = "mentions/exclude-from-notifications"
+        return self.model(self.client.post(url))
+
+    def turn_on_notifications(self):
+        url = "mentions/exclude-from-notifications"
+        return self.model(self.client.delete(url))

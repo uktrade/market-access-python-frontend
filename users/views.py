@@ -40,6 +40,9 @@ class GetUsers(View):
         if not query:
             return JsonResponse(response)
 
+        # search needs to have email dots replaced with spaces for search lookup
+        query = query.replace(".", " ")
+
         sso_client = SSOClient()
         results = sso_client.search_users(query)
         serialized_results = self.serialize_results(results)

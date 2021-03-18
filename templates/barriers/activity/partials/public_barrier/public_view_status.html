@@ -7,5 +7,5 @@
 </p>
 
 {% if item.show_summary %}
-    <p class="event-list__item__text">{{ item.new_value.public_eligibility_summary|escape|linebreaksbr|highlight_mentions }}</p>
+    <p class="event-list__item__text">{{ item.new_value.public_eligibility_summary|escape|linebreaksbr|:current_user.email }}</p>
 {% endif %}
