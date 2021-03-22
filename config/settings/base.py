@@ -296,6 +296,14 @@ LOGGING = {
         "level": os.getenv("ROOT_LOG_LEVEL", "INFO"),  # noqa F405
     },
     "loggers": {
+        "": {
+            "handlers": [
+                "ecs",
+                "stdout",
+            ],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa F405
+            "propagate": False,
+        },
         "django": {
             "handlers": [
                 "ecs",
@@ -322,6 +330,8 @@ LOGGING = {
         },
     },
 }
+DLFE_APP_NAME = True
+DLFE_LOG_SENSITIVE_USER_DATA = True
 
 # Google Tag Manager
 GTM_ID = env("GTM_ID")
