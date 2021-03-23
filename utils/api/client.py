@@ -5,23 +5,15 @@ import requests
 from django.conf import settings
 from utils.exceptions import APIHttpException, APIJsonException
 
-from .resources import (
-    BarriersResource,
-    CommoditiesResource,
-    DocumentsResource,
-    EconomicAssessmentResource,
-    EconomicImpactAssessmentResource,
-    GroupsResource,
-    MentionResource,
-    NotesResource,
-    PublicBarrierNotesResource,
-    PublicBarriersResource,
-    ReportsResource,
-    ResolvabilityAssessmentResource,
-    SavedSearchesResource,
-    StrategicAssessmentResource,
-    UsersResource,
-)
+from .resources import (BarriersResource, CommoditiesResource,
+                        DocumentsResource, EconomicAssessmentResource,
+                        EconomicImpactAssessmentResource, GroupsResource,
+                        MentionResource, NotesResource,
+                        NotificationExclusionResource,
+                        PublicBarrierNotesResource, PublicBarriersResource,
+                        ReportsResource, ResolvabilityAssessmentResource,
+                        SavedSearchesResource, StrategicAssessmentResource,
+                        UsersResource)
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +36,7 @@ class MarketAccessAPIClient:
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
         self.mentions = MentionResource(self)
+        self.notification_exclusion = NotificationExclusionResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"
