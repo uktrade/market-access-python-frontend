@@ -5,15 +5,24 @@ import requests
 from django.conf import settings
 from utils.exceptions import APIHttpException, APIJsonException
 
-from .resources import (BarriersResource, CommoditiesResource,
-                        DocumentsResource, EconomicAssessmentResource,
-                        EconomicImpactAssessmentResource, GroupsResource,
-                        MentionResource, NotesResource,
-                        NotificationExclusionResource,
-                        PublicBarrierNotesResource, PublicBarriersResource,
-                        ReportsResource, ResolvabilityAssessmentResource,
-                        SavedSearchesResource, StrategicAssessmentResource,
-                        UsersResource)
+from .resources import (
+    BarriersResource,
+    CommoditiesResource,
+    DocumentsResource,
+    EconomicAssessmentResource,
+    EconomicImpactAssessmentResource,
+    GroupsResource,
+    MentionResource,
+    NotesResource,
+    NotificationExclusionResource,
+    PublicBarrierNotesResource,
+    PublicBarriersResource,
+    ReportsResource,
+    ResolvabilityAssessmentResource,
+    SavedSearchesResource,
+    StrategicAssessmentResource,
+    UsersResource,
+)
 
 logger = logging.getLogger(__name__)
 
