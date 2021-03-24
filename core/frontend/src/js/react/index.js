@@ -66,9 +66,10 @@ function renderTextAreaWithMentions(htmlElementId, placeholder = null, labelClas
 
   const name = nativeTextarea.getAttribute("name")
   const id = nativeTextarea.getAttribute("id")
+  const preExistingText = nativeTextarea.value
 
   ReactDOM.render(
-    <TextAreaWithMentions textAreaId={id} textAreaName={name} />,
+    <TextAreaWithMentions textAreaId={id} textAreaName={name} preExistingText={preExistingText} />,
     addNoteElement
   )
 }
