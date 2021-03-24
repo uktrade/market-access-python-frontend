@@ -9,7 +9,7 @@
 {% if form.note_id == item.id %}
     {% include 'barriers/partials/note_form.html' %}
 {% else %}
-    <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe|highlight_mentions  }}</p>
+    <p class="event-list__item__text">{{ item.text|escape|linebreaksbr|urlize|safe|highlight_mentions:current_user.email  }}</p>
     {% if not barrier.archived %}
         <a class="event-list__item__edit-link" href="{% url 'barriers:edit_note' barrier.id item.id %}">Edit</a>
 

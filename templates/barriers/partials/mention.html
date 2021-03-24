@@ -4,7 +4,7 @@
    <div class="mention-item__info">
        <h3 class="mention-item__title">{% if not mention.read_by_recipient %}<span class="govuk-tag ma-badge ma-badge--attention">NEW</span>{% endif %}
         <a class="govuk-link" href="{% url 'barriers:mention_go_to' mention_id=mention.id %}">{{ mention.created_by.full_name }} mentioned you in a comment</a></h3>
-       <p class="mention-item__message">{{ mention.message|highlight_mentions }}</p>
+       <p class="mention-item__message">{{ mention.message|highlight_mentions:current_user.email }}</p>
        <p class="mention-item__barrier"><a class="govuk-link" href="{% url 'barriers:mention_go_to' mention_id=mention.id %}">{{ mention.barrier.title }}</a></p>
        <p class="mention-item__when"><span class="mention-item__date">{{ mention.created_on|date:"j F Y" }}</span>
         <span class="mention-item__time">at {{ mention.created_on|date:"g:iA" }}</span></p>

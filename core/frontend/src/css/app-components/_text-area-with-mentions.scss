@@ -47,5 +47,10 @@
 }
 
 .mention-highlight{
-    color: #f47738;
+    color: $govuk-light-purple;
+    font-weight: bold;
+
+    &__me{
+        color: $govuk-orange;
+    }
 }

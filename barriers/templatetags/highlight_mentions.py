@@ -7,12 +7,18 @@ register = template.Library()
 
 
 @register.filter(needs_autoescape=True)
-def highlight_mentions(value, autoescape=True):
+def highlight_mentions(value, user_email=None, autoescape=True):
 
     regex = r"(@[^ @]+@[^ @\r\n]+)"
 
+    def wrap_email(match):
+        email = match.group(1)
+        if user_email and email == "@" + user_email:
+            return f"<span class='mention-highlight mention-highlight__me'>{email}</span>"
+        return f"<span class='mention-highlight'>{email}</span>"
+
     result = re.sub(
-        regex, r"<span class='mention-highlight'>\1</span>", value, 0, re.MULTILINE
+        regex, wrap_email, value, 0, re.MULTILINE
     )
 
     return mark_safe(result)
