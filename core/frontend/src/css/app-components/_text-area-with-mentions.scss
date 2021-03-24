@@ -47,10 +47,10 @@
 }
 
 .mention-highlight{
-    color: $govuk-light-purple;
-    font-weight: bold;
+    color: $govuk-bright-purple;
+    font-weight: normal;
 
     &__me{
-        color: $govuk-orange;
+        font-weight: bold;
     }
 }
