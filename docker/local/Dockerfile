@@ -25,7 +25,7 @@ RUN dnf -y update \
  && dnf -y clean all \
  && rm -rf /var/cache/dnf
 
-ENV PYTHON_VERSION 3.7.9
+ENV PYTHON_VERSION 3.9.2
 RUN wget --no-verbose https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz \
     && tar -C /usr/local/bin -xzvf Python-$PYTHON_VERSION.tgz \
     && rm Python-$PYTHON_VERSION.tgz \
@@ -33,8 +33,8 @@ RUN wget --no-verbose https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$
     && ./configure --enable-optimizations \
     && make altinstall
 
-RUN ln -s /usr/local/bin/python3.7 /usr/bin/python \
- && ln -s /usr/local/bin/pip3.7 /usr/bin/pip
+RUN ln -s /usr/local/bin/python3.9 /usr/bin/python \
+ && ln -s /usr/local/bin/pip3.9 /usr/bin/pip
 
 # SSH
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
