@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "market-access-python-frontend"
 version = "0.1.0"
-description = "Hello"
+description = "Python Frontend"
 authors = ["Ferenc Csepregi <feri@31.digital>"]
 
 [tool.poetry.dependencies]
