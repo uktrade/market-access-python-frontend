@@ -8,10 +8,8 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django.views.generic import FormView, RedirectView, TemplateView
 from django.views import View
-
-
+from django.views.generic import FormView, RedirectView, TemplateView
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
@@ -25,14 +23,32 @@ from .permissions import APIPermissionMixin
 
 
 class GetUsers(View):
-    def post(self, request, *args, **kwargs):
-        query = request.POST.get("q")
+    def serialize_results(self, results):
+        return [
+            {
+                "user_id": str(result["user_id"]),
+                "first_name": result["first_name"],
+                "last_name": result["last_name"],
+                "email": result["email"],
+            }
+            for result in results
+        ]
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("q")
+        response = {"count": 0, "results": []}
         if not query:
-            return JsonResponse({})
+            return JsonResponse(response)
+
+        # search needs to have email dots replaced with spaces for search lookup
+        query = query.replace(".", " ")
 
         sso_client = SSOClient()
         results = sso_client.search_users(query)
-        return JsonResponse(results, safe=False)
+        serialized_results = self.serialize_results(results)
+        response["results"] = serialized_results
+        response["count"] = len(results)
+        return JsonResponse(response)
 
 
 class Login(RedirectView):

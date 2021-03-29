@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load activity %}
+{% load static %}
 
 {% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
 
@@ -13,6 +14,15 @@
         {% include 'barriers/partials/barrier_summary.html' %}
     </div>
     {% include 'barriers/partials/tags.html' %}
+{% endblock %}
+
+{% block head %}
+<script src="{% static 'js/react.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderTextAreaWithMentions("note-textarea-container")
+    })
+</script>
 {% endblock %}
 
 {% block page_content %}

@@ -5,8 +5,9 @@
         <label class="govuk-label govuk-!-font-weight-bold" for="{{ form.note.name }}">{{ form.note.label }}</label>
 
         {% form_field_error form "note" %}
-
-        <textarea class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+        <div id="note-textarea-container">
+            <textarea class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}" name="{{ form.note.name }}" rows="5" autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+        </div>
     </div>
 
     <button class="govuk-button js-submit-button govuk-!-margin-bottom-0">Save note</button>

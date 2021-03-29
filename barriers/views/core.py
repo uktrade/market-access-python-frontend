@@ -1,5 +1,4 @@
 from django.views.generic import TemplateView
-
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
@@ -18,11 +17,18 @@ class Dashboard(AnalyticsMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        active = self.request.GET.get("active", "barriers")
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         my_barriers_saved_search = client.saved_searches.get("my-barriers")
         team_barriers_saved_search = client.saved_searches.get("team-barriers")
+        mentions = client.mentions.list()
         draft_barriers = client.reports.list()
         saved_searches = client.saved_searches.list()
+        notification_exclusion = client.notification_exclusion.get()
+
+        are_all_mentions_read: bool = not any(
+            not mention.read_by_recipient for mention in mentions
+        )
 
         context_data.update(
             {
@@ -31,6 +37,13 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 "team_barriers_saved_search": team_barriers_saved_search,
                 "draft_barriers": draft_barriers,
                 "saved_searches": saved_searches,
+                "notification_exclusion": notification_exclusion,
+                "mentions": mentions,
+                "are_all_mentions_read": are_all_mentions_read,
+                "new_mentions_count": len(
+                    [mention for mention in mentions if not mention.read_by_recipient]
+                ),
+                "active": active,
             }
         )
         return context_data

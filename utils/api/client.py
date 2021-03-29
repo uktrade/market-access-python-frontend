@@ -3,7 +3,6 @@ from json import JSONDecodeError
 
 import requests
 from django.conf import settings
-
 from utils.exceptions import APIHttpException, APIJsonException
 
 from .resources import (
@@ -13,7 +12,9 @@ from .resources import (
     EconomicAssessmentResource,
     EconomicImpactAssessmentResource,
     GroupsResource,
+    MentionResource,
     NotesResource,
+    NotificationExclusionResource,
     PublicBarrierNotesResource,
     PublicBarriersResource,
     ReportsResource,
@@ -43,6 +44,8 @@ class MarketAccessAPIClient:
         self.strategic_assessments = StrategicAssessmentResource(self)
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
+        self.mentions = MentionResource(self)
+        self.notification_exclusion = NotificationExclusionResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

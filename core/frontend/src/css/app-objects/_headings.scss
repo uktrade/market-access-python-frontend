@@ -14,9 +14,24 @@
     border-bottom: 5px solid $govuk-black;
     padding: 0 0 govuk-em( 16, 16 );
     margin: govuk-em( 28, 16 ) 0 govuk-em( 20, 16 );
+    overflow: hidden;
+
+    &__heading{
+        display: block;
+        width: 60%;
+        float: left;
+    }
 
     &__count {
         font-size: 32px;
         font-weight: bold;
+    }
+
+    &__action{
+        margin-left: 30px;
+    }
+
+    &__actions{
+        float: right;
     }
 }

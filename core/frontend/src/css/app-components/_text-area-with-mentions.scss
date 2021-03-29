@@ -1,0 +1,56 @@
+.textarea-with-mentions{
+    .govuk-mentions {
+        display: block;
+
+        margin-bottom: 35px;
+        background: white;
+        padding: 10px;
+        line-height: 20.5px;
+        box-sizing: border-box;
+
+        textarea.govuk-textarea{
+            background-color: white;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .govuk-mentions__control{
+            background-color: 'white';
+            min-height: 130px;
+        }
+
+        .govuk-mentions__highlighter{
+            strong{
+                color: "#f47738";
+                z-index: 1;
+                position: relative;
+            }
+        }
+
+        .mentions-item{
+            padding: 14px;
+
+            .mention-name{
+                font-weight: bold;
+            }
+        }
+        .govuk-mentions__suggestions{
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            margin-top: 35px;
+
+            &__item{
+                border-bottom: 1px solid #ddd;
+            }
+        }
+        
+    }
+}
+
+.mention-highlight{
+    color: $govuk-bright-purple;
+    font-weight: normal;
+
+    &__me{
+        font-weight: bold;
+    }
+}
