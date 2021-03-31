@@ -48,7 +48,9 @@
             </tr>
         </thead>
         <tbody class="govuk-table__body">
-            {% if group_id %}
+          STUB:1:
+          {% if group_id %}
+          STUB:GROUP:
                 {% for group in groups %}
                     {% if group_id == group.id %}
                         {% for user in group.users %}
@@ -75,7 +77,8 @@
                         {% endfor %}
                     {% endif %}
                 {% endfor %}
-            {% else %}
+                            {% else %}
+                            STUB:EMAIL:
                 {% for user in users %}
                     <tr class="govuk-table__row">
                         <!-- Name cell -->
