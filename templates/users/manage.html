@@ -79,7 +79,8 @@
                 {% endfor %}
                             {% else %}
                             STUB:EMAIL:
-                {% for user in users %}
+                            {% for user in users %}
+                            STUB:| {{ email.full_name }} | {{ user.email }} |
                     <tr class="govuk-table__row">
                         <!-- Name cell -->
                         <td class="govuk-table__cell">
