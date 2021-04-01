@@ -71,16 +71,16 @@
                                 {% endif %}
                                 <!-- Action cell -->
                                 <td class="govuk-table__cell">
-                                    <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                                  <a href="{% url 'users:edit_user' user.id %}">Change role</a>
                                 </td>
                             </tr>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                            {% endfor %}
                             {% else %}
                             STUB:EMAIL:{{stub}}:<br/>
                             {% for user in users %}
-                            STUB:| {{ user.full_name }} | {{ user.email }} |<br/>
+                            STUB:| {{ user.id }} | {{ user.full_name }} | {{ user.email }} |<br/>
                     <tr class="govuk-table__row">
                         <!-- Name cell -->
                         <td class="govuk-table__cell">
