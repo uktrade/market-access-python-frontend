@@ -93,6 +93,7 @@ function LocationFilter(props) {
       ...selectedCountryTradingBlocValues,
       [tradingBloc.code]: value
     })
+    setSelectedAllTradingBlocks(false)
   }
 
   const allTradingBlocsChangeHandler = (event) => {
