@@ -1,14 +1,8 @@
 from django import forms
-
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (
-    ChoiceFieldWithHelpText,
-    ClearableMixin,
-    DayMonthYearField,
-    MultipleChoiceFieldWithHelpText,
-    YesNoBooleanField,
-    YesNoDontKnowBooleanField,
-)
+from utils.forms import (ChoiceFieldWithHelpText, ClearableMixin,
+                         DayMonthYearField, MultipleChoiceFieldWithHelpText,
+                         YesNoBooleanField, YesNoDontKnowBooleanField)
 
 from .mixins import APIFormMixin
 
@@ -285,21 +279,21 @@ class CausedByTradingBlocForm(forms.Form):
                 "regulation. If it is an EU-wide barrier, the country location should "
                 "be changed to EU in the location screen."
             ),
-            "TB00026": {
+            "TB00026": (
                 "Yes should be selected if the barrier is a local application of an Mercosur "
-                "regulation. If it is an EU-wide barrier, the country location should "
+                "regulation. If it is an Mercosur-wide barrier, the country location should "
                 "be changed to Southern Common Market (Mercosur) in the location screen."
-            },
-            "TB00013": {
+            ),
+            "TB00013": (
                 "Yes should be selected if the barrier is a local application of an EAEU "
-                "regulation. If it is an EU-wide barrier, the country location should "
+                "regulation. If it is an EAEU-wide barrier, the country location should "
                 "be changed to Eurasian Economic Union (EAEU) in the location screen."
-            },
-            "TB00017": {
+            ),
+            "TB00017": (
                 "Yes should be selected if the barrier is a local application of an GCC "
-                "regulation. If it is an EU-wide barrier, the country location should "
+                "regulation. If it is an GCC-wide barrier, the country location should "
                 "be changed to Gulf Cooperation Council (GCC) in the location screen."
-            },
+            ),
             
         }
         return help_text.get(trading_bloc_code, "")
