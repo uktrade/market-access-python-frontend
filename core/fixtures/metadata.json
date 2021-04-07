@@ -8929,6 +8929,42 @@
         "300be5c4-5d95-e211-a939-e4115bead28a",
         "80756b9a-5d95-e211-a939-e4115bead28a"
       ]
+    },
+    {
+      "code": "TB00017",
+      "name": "Gulf Cooperation Council (GCC)",
+      "short_name": "the GCC",
+      "country_ids": [
+        "a35f66a0-5d95-e211-a939-e4115bead28a",
+        "7d6a9ab2-5d95-e211-a939-e4115bead28a",
+        "4a61b8be-5d95-e211-a939-e4115bead28a",
+        "5661b8be-5d95-e211-a939-e4115bead28a",
+        "1a0be5c4-5d95-e211-a939-e4115bead28a",
+        "b46ee1ca-5d95-e211-a939-e4115bead28a"
+    ]
+    },
+    {
+      "code": "TB00013",
+      "name": "Eurasian Economic Union (EAEU)",
+      "short_name": "the EAEU",
+      "country_ids": [
+        "9d5f66a0-5d95-e211-a939-e4115bead28a",
+        "a65f66a0-5d95-e211-a939-e4115bead28a",
+        "786a9ab2-5d95-e211-a939-e4115bead28a",
+        "7e6a9ab2-5d95-e211-a939-e4115bead28a",
+        "5961b8be-5d95-e211-a939-e4115bead28a"
+    ]
+    },
+    {
+      "code": "TB00026",
+      "name": "Southern Common Market (Mercosur)",
+      "short_name": "the Mercosur",
+      "country_ids": [
+        "b66ee1ca-5d95-e211-a939-e4115bead28a",
+        "b05f66a0-5d95-e211-a939-e4115bead28a",
+        "4f61b8be-5d95-e211-a939-e4115bead28a",
+        "9c5f66a0-5d95-e211-a939-e4115bead28a"
+    ]
     }
   ],
   "government_organisations": [

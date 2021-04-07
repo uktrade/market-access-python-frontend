@@ -55,7 +55,11 @@ function LocationFilter(props) {
 
   const getTradingBlocLabel = (tradingBloc) => {
     return {
-      "TB00016": "Include EU-wide barriers"
+      "TB00016": "Include EU-wide barriers",
+      "TB00017": "Include GCC-wide barriers",
+      "TB00013": "Include EAEU-wide barriers",
+      "TB00026": "Include Mercosur-wide barriers",
+
     }[tradingBloc.code] || "Include " + tradingBloc.name + " barriers"
   }
 
@@ -114,6 +118,19 @@ function LocationFilter(props) {
                 </label>
               </div>
             )}
+            {selectedCountryTradingBlocs.length > 0 ? (<div className="checkbox-filter__item">
+                <input
+                  className="checkbox-filter__input"
+                  id={"extra_location" + selectedCountryTradingBlocs.length}
+                  name="extra_location"
+                  type="checkbox"
+                  value={"ALL"}
+                  defaultChecked={false}
+                />
+                <label className="govuk-label checkbox-filter__label" for={"extra_location" + selectedCountryTradingBlocs.length}>
+                  Include all trading blocks
+                </label>
+              </div>) : null}
           </div>
         ) : (
           null
