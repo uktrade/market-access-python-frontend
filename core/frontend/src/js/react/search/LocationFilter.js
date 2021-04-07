@@ -40,6 +40,7 @@ function LocationFilter(props) {
   }, []);
   const initialSelectedLocationIds = initialSelectedLocations.map(location => location.value)
   const [selectedLocationIds, setSelectedLocationIds] = useState(initialSelectedLocationIds)
+  const [selectedAllTradingBlocks, setSelectedAllTradingBlocks] = useState(false)
 
   const handleLocationSelect = (value, meta) => {
     if (meta.action == "select-option") {
@@ -111,7 +112,7 @@ function LocationFilter(props) {
                   name="extra_location"
                   type="checkbox"
                   value={tradingBloc.code}
-                  defaultChecked={initialExtraLocation.includes(tradingBloc.code)}
+                  checked={selectedAllTradingBlocks || initialExtraLocation.includes(tradingBloc.code)}
                 />
                 <label className="govuk-label checkbox-filter__label" for={"extra_location" + index}>
                   {getTradingBlocLabel(tradingBloc)}
@@ -122,10 +123,10 @@ function LocationFilter(props) {
                 <input
                   className="checkbox-filter__input"
                   id={"extra_location" + selectedCountryTradingBlocs.length}
-                  name="extra_location"
+                  onChange={(event) => setSelectedAllTradingBlocks(event.target.checked)}
                   type="checkbox"
                   value={"ALL"}
-                  defaultChecked={false}
+                  checked={selectedAllTradingBlocks}
                 />
                 <label className="govuk-label checkbox-filter__label" for={"extra_location" + selectedCountryTradingBlocs.length}>
                   Include all trading blocks
