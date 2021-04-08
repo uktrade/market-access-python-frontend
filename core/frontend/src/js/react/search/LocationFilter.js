@@ -156,7 +156,7 @@ function LocationFilter(props) {
                 </label>
               </div>
             )}
-            {selectedCountryTradingBlocs.length > 0 ? (<div className="checkbox-filter__item">
+            {/* {selectedCountryTradingBlocs.length > 0 ? (<div className="checkbox-filter__item"}>
                 <input
                   className="checkbox-filter__input"
                   id={"extra_location" + selectedCountryTradingBlocs.length}
@@ -169,7 +169,7 @@ function LocationFilter(props) {
                   Include all trading blocks
                 </label>
               </div>) : null}
-          </div>
+          </div> */}
         ) : (
           null
         )}
