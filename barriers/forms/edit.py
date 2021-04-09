@@ -1,8 +1,13 @@
 from django import forms
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (ChoiceFieldWithHelpText, ClearableMixin,
-                         DayMonthYearField, MultipleChoiceFieldWithHelpText,
-                         YesNoBooleanField, YesNoDontKnowBooleanField)
+from utils.forms import (
+    ChoiceFieldWithHelpText,
+    ClearableMixin,
+    DayMonthYearField,
+    MultipleChoiceFieldWithHelpText,
+    YesNoBooleanField,
+    YesNoDontKnowBooleanField,
+)
 
 from .mixins import APIFormMixin
 
@@ -293,7 +298,7 @@ class CausedByTradingBlocForm(forms.Form):
                 "Yes should be selected if the barrier is a local application of an GCC "
                 "regulation. If it is an GCC-wide barrier, the country location should "
                 "be changed to Gulf Cooperation Council (GCC) in the location screen."
-            ),            
+            ),
         }
         return help_text.get(trading_bloc_code, "")
 
