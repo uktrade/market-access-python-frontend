@@ -3,29 +3,20 @@ from django.http import QueryDict
 
 from barriers.constants import PUBLIC_BARRIER_STATUSES
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import YesNoBooleanField
 from utils.metadata import Metadata
 
 from .mixins import APIFormMixin
 
 
 class PublicEligibilityForm(APIFormMixin, forms.Form):
-    public_eligibility = YesNoBooleanField(
+    public_eligibility = forms.ChoiceField(
         label="Does this barrier meet the criteria to be made public?",
         choices=(
             ("yes", "Allowed, it can be viewed by the public"),
             ("no", "Not allowed"),
+            ("review_later", "Review later"),
         ),
-        error_messages={"required": "Enter yes or no"},
-    )
-    allowed_summary = forms.CharField(
-        label="Why is it allowed to be public? (optional)",
-        widget=forms.Textarea,
-        max_length=250,
-        required=False,
-        error_messages={
-            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
-        },
+        error_messages={"required": "Enter yes, no or review later"},
     )
     not_allowed_summary = forms.CharField(
         label="Why is it not allowed to be public? (optional)",
@@ -36,21 +27,54 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
             "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
         },
     )
+    review_later_summary = forms.CharField(
+        label="Why should this barrier be reviewed at a later date?",
+        widget=forms.Textarea,
+        max_length=250,
+        required=False,
+        error_messages={
+            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
+        },
+    )
 
     def get_summary(self):
-        if self.cleaned_data.get("public_eligibility") is True:
-            return self.cleaned_data.get("allowed_summary")
-        elif self.cleaned_data.get("public_eligibility") is False:
+        if self.cleaned_data.get("public_eligibility") == "no":
             return self.cleaned_data.get("not_allowed_summary")
+        elif self.cleaned_data.get("public_eligibility") == "review_later":
+            return self.cleaned_data.get("review_later_summary")
         return ""
+
+    def clean(self):
+        data = self.cleaned_data
+        public_eligibility = data.get("public_eligibility", None)
+        if public_eligibility == "no" and not data.get("not_allowed_summary"):
+            raise forms.ValidationError(
+                "Summary required if public view status is not allowed"
+            )
+        if public_eligibility == "review_later" and not data.get(
+            "review_later_summary"
+        ):
+            raise forms.ValidationError(
+                "Summary required if public view status is be reviewed later"
+            )
+        return data
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id,
-            public_eligibility=self.cleaned_data.get("public_eligibility"),
-            public_eligibility_summary=self.get_summary(),
-        )
+        if self.cleaned_data.get("public_eligibility") == "review_later":
+            client.barriers.patch(
+                id=self.id,
+                public_eligibility_postponed=self.cleaned_data.get(
+                    "public_eligibility"
+                ),
+                public_eligibility_summary=self.get_summary(),
+            )
+        else:
+            client.barriers.patch(
+                id=self.id,
+                public_eligibility=self.cleaned_data.get("public_eligibility"),
+                public_eligibility_summary=self.get_summary(),
+            )
 
 
 class PublishTitleForm(APIFormMixin, forms.Form):

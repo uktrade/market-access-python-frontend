@@ -58,4 +58,5 @@ PUBLIC_BARRIER_STATUSES = Choices(
     (30, "READY", "Ready"),
     (40, "PUBLISHED", "Published"),
     (50, "UNPUBLISHED", "Unpublished"),
+    (60, "REVIEW_LATER", "Review public barrier status later"),
 )

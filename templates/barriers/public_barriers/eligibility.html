@@ -14,8 +14,14 @@
             conditionalElem: '#conditional-yes',
             shouldShow: function( value ){ return ( value === 'yes' ); }
         });
+        new ma.components.ConditionalRadioContent({
+            inputContainer: '.{{ form.public_eligibility.name }}',
+            inputName: '{{ form.public_eligibility.name }}',
+            conditionalElem: '#conditional-review_later',
+            shouldShow: function( value ){ return ( value === 'review_later' ); }
+        });
         if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '#conditional-yes .govuk-character-count' );
+            new ma.components.CharacterCount( '#conditional-review_later .govuk-character-count' );
             new ma.components.CharacterCount( '#conditional-no .govuk-character-count' );
         }
     </script>
@@ -29,7 +35,7 @@
 
 {% block page_content %}
 
-    <h2 class="govuk-heading-l">Change status of public view</h2>
+    <h2 class="govuk-heading-l">Update public view status</h2>
 
     {% form_error_banner form %}
 
@@ -84,9 +90,11 @@
 
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ value }}">
                             {% if value == "yes" %}
-                                {% include "partials/forms/textarea.html" with field=form.allowed_summary character_count=True %}
+                                {% comment %} {% include "partials/forms/textarea.html" with field=form.allowed_summary character_count=True %} {% endcomment %}
                             {% elif value == "no" %}
                                 {% include "partials/forms/textarea.html" with field=form.not_allowed_summary character_count=True %}
+                            {% elif value == "review_later" %}
+                                {% include "partials/forms/textarea.html" with field=form.review_later_summary character_count=True %}
                             {% endif %}
                         </div>
                     {% endfor %}

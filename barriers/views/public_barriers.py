@@ -171,7 +171,7 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
     def get_initial(self):
         initial = {"public_eligibility": self.barrier.public_eligibility}
         if self.barrier.public_eligibility is True:
-            initial["allowed_summary"] = self.barrier.public_eligibility_summary
+            initial["review_later_summary"] = self.barrier.public_eligibility_summary
         elif self.barrier.public_eligibility is False:
             initial["not_allowed_summary"] = self.barrier.public_eligibility_summary
         return initial
