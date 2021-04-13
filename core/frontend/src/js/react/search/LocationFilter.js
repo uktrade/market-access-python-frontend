@@ -168,8 +168,8 @@ function LocationFilter(props) {
                 <label className="govuk-label checkbox-filter__label" for={"extra_location" + selectedCountryTradingBlocs.length}>
                   Include all trading blocks
                 </label>
-              </div>) : null}
-          </div> */}
+              </div>) : null}*/}
+          </div> 
         ) : (
           null
         )}
