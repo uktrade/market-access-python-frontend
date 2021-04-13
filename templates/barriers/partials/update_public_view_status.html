@@ -1,0 +1,21 @@
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <h3>Update public view status</h3>
+  <input type="radio" id="allowed" name="view_status" value="allowed">
+  <label for="male">Allowed, it can be viewed by the public</label><br/>
+  <input type="radio" id="not_allowed" name="view_status" value="not_allowed">
+  <label for="male">Not allowed</label><br/>
+  <input type="radio" id="later" name="view_status" value="later">
+  <label for="male">Review later</label><br/>
+
+  <br/>
+  <textarea id="reason" name="view_status" rows="5" cols="80"></textarea><br/>
+  <input type="radio" id="three" name="view_status" value="three">
+  <label for="male">After 3 months</label><br/>
+  <input type="radio" id="six" name="view_status" value="six">
+  <label for="male">After 6 months</label><br/>
+  <input type="radio" id="year" name="view_status" value="year">
+  <label for="male">After 1 year</label><br/>
+  <button class="govuk-button js-submit-button govuk-!-margin-bottom-0">confirm</button>
+</form>
