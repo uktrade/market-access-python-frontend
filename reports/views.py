@@ -1,3 +1,4 @@
+from barriers.constants import STATUSES
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import Form
 from django.http import HttpResponseRedirect
@@ -5,35 +6,26 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 from django.views.generic.base import ContextMixin
-
-from barriers.constants import STATUSES
 from partials.callout import Callout, CalloutButton
-from reports.constants import FormSessionKeys
-from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
-from reports.forms.new_report_barrier_location import (
-    HasAdminAreas,
-    NewReportBarrierLocationAddAdminAreasForm,
-    NewReportBarrierLocationAdminAreasForm,
-    NewReportBarrierLocationForm,
-    NewReportBarrierLocationHasAdminAreasForm,
-    NewReportBarrierTradeDirectionForm,
-    NewReportCausedByTradingBlocForm,
-)
-from reports.forms.new_report_barrier_sectors import (
-    NewReportBarrierAddSectorsForm,
-    NewReportBarrierHasSectorsForm,
-    NewReportBarrierSectorsForm,
-    SectorsAffected,
-)
-from reports.forms.new_report_barrier_status import (
-    NewReportBarrierStatusForm,
-    NewReportBarrierTermForm,
-)
-from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
-from reports.helpers import ReportFormGroup
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 from utils.metadata import MetadataMixin
+
+from reports.constants import FormSessionKeys
+from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
+from reports.forms.new_report_barrier_location import (
+    HasAdminAreas, NewReportBarrierLocationAddAdminAreasForm,
+    NewReportBarrierLocationAdminAreasForm, NewReportBarrierLocationForm,
+    NewReportBarrierLocationHasAdminAreasForm,
+    NewReportBarrierTradeDirectionForm, NewReportCausedByTradingBlocForm)
+from reports.forms.new_report_barrier_sectors import (
+    NewReportBarrierAddSectorsForm, NewReportBarrierHasSectorsForm,
+    NewReportBarrierSectorsForm, SectorsAffected)
+from reports.forms.new_report_barrier_status import (
+    NewReportBarrierStatusForm, NewReportBarrierTermForm)
+from reports.forms.new_report_barrier_summary import \
+    NewReportBarrierSummaryForm
+from reports.helpers import ReportFormGroup
 
 
 class CalloutMixin(ContextMixin):
@@ -255,11 +247,12 @@ class NewReportBarrierLocationView(ReportsFormView):
         country_id = self.form_group.location_form["country"]
         country_trading_bloc = self.metadata.get_trading_bloc_by_country_id(country_id)
         admin_areas = self.metadata.get_admin_areas_by_country(country_id)
-        if admin_areas:
-            self.success_path = "reports:barrier_has_admin_areas"
-        elif country_trading_bloc:
+        if country_trading_bloc:
             self.success_path = "reports:barrier_caused_by_trading_bloc"
+        elif admin_areas:
+            self.success_path = "reports:barrier_has_admin_areas"
         else:
+            raise Exception()
             self.success_path = "reports:barrier_trade_direction"
             self.form_group.selected_admin_areas = ""
 
@@ -390,7 +383,7 @@ class NewReportBarrierCausedByTradingBlocView(ReportsFormView):
     heading_text = "Location of the barrier"
     template_name = "reports/new_report_caused_by_trading_bloc.html"
     form_class = NewReportCausedByTradingBlocForm
-    success_path = "reports:barrier_trade_direction"
+    success_path = None
     extra_paths = {"back": "reports:barrier_location"}
     form_session_key = FormSessionKeys.CAUSED_BY_TRADING_BLOC
 
@@ -400,6 +393,16 @@ class NewReportBarrierCausedByTradingBlocView(ReportsFormView):
         trading_bloc = self.metadata.get_trading_bloc_by_country_id(country_id)
         kwargs["trading_bloc"] = trading_bloc
         return kwargs
+
+    def success(self):
+        country_id = self.form_group.location_form["country"]
+        country_trading_bloc = self.metadata.get_trading_bloc_by_country_id(country_id)
+        admin_areas = self.metadata.get_admin_areas_by_country(country_id)
+        if admin_areas:
+            self.success_path = "reports:barrier_has_admin_areas"
+        else:
+            self.success_path = "reports:barrier_trade_direction"
+            self.form_group.selected_admin_areas = ""
 
 
 class NewReportBarrierTradeDirectionView(ReportsFormView):
