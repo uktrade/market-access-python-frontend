@@ -1,12 +1,12 @@
 # ======
 # DO NOT EDIT - use pyproject.toml instead!
-# Generated: 2021-04-12_14-50
+# Generated: 2021-04-14_08-54
 # ======
 asgiref==3.3.4
 certifi==2020.12.5
 cffi==1.14.5
 chardet==3.0.4
-django==3.1.6
+django==3.1.8
 django-environ==0.4.5
 django-extensions==3.0.9
 django-ipware==3.0.2
