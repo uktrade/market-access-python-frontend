@@ -252,7 +252,6 @@ class NewReportBarrierLocationView(ReportsFormView):
         elif admin_areas:
             self.success_path = "reports:barrier_has_admin_areas"
         else:
-            raise Exception()
             self.success_path = "reports:barrier_trade_direction"
             self.form_group.selected_admin_areas = ""
 
