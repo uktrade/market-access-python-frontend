@@ -187,8 +187,8 @@ function CommodityForm(props) {
             <LocationInput locations={props.locations} locationId={locationId} onChange={handleLocationChange} />
 
             {codeLookupError ? (
-              <span class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span>
+              <span className="govuk-error-message">
+                <span className="govuk-visually-hidden">Error:</span>
                 {codeLookupError}
               </span>
             ) : null}
@@ -207,7 +207,7 @@ function CommodityForm(props) {
         </div>
       </form>
 
-      <p class="govuk-body">Need help? <a href="https://www.gov.uk/check-duties-customs-exporting" target="_blank">Look up codes</a></p>
+      <p className="govuk-body">Need help? <a href="https://www.gov.uk/check-duties-customs-exporting" target="_blank">Look up codes</a></p>
 
       {unconfirmedCommodities.length ? (
         <CommodityList confirmed={false} commodities={unconfirmedCommodities} onClick={confirmCommodity} />
@@ -252,8 +252,8 @@ function CommodityForm(props) {
             return <input type="hidden" name="trading_blocs" value="" />
           }
         })}
-        <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
-        <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
+        <button name="action" value="save" className="govuk-button" data-module="govuk-button">Done</button>
+        <button className="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
       </form>
 
     </div>

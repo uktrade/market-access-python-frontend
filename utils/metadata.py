@@ -3,11 +3,11 @@ from operator import itemgetter
 
 import redis
 import requests
+from barriers.constants import Statuses
+from core.filecache import memfiles
 from django.conf import settings
 from mohawk import Sender
 
-from barriers.constants import Statuses
-from core.filecache import memfiles
 from utils.exceptions import HawkException
 
 redis_client = None

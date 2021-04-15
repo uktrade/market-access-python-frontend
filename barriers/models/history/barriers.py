@@ -48,7 +48,7 @@ class CausedByTradingBlocHistoryItem(BaseHistoryItem):
         if country_trading_bloc:
             self.field_name = (
                 f"Was this barrier caused by a regulation introduced by "
-                f"{country_trading_bloc['short_name']}?"
+                f"{country_trading_bloc['name']}?"
             )
 
     def get_country_trading_bloc(self):
