@@ -1,18 +1,16 @@
 from http import HTTPStatus
 
+from core.tests import ReportsTestCase
 from django.urls import resolve, reverse
 from mock import patch
-
-from core.tests import ReportsTestCase
-from reports.models import Report
-from reports.views import (
-    NewReportBarrierAdminAreasView,
-    NewReportBarrierLocationAddAdminAreasView,
-    NewReportBarrierLocationHasAdminAreasView,
-    NewReportBarrierLocationView,
-    NewReportBarrierTradeDirectionView,
-)
 from tests.constants import ERROR_HTML
+
+from reports.models import Report
+from reports.views import (NewReportBarrierAdminAreasView,
+                           NewReportBarrierLocationAddAdminAreasView,
+                           NewReportBarrierLocationHasAdminAreasView,
+                           NewReportBarrierLocationView,
+                           NewReportBarrierTradeDirectionView)
 
 
 class LocationViewTestCase(ReportsTestCase):
@@ -161,10 +159,10 @@ class LocationViewHasAdminAreasTestCase(ReportsTestCase):
     def test_saving_location_redirects_to_correct_view(self, mock_save):
         url = reverse("reports:barrier_location")
         field_name = "location"
-        brazil_uuid = "b05f66a0-5d95-e211-a939-e4115bead28a"
+        us_uuid = "81756b9a-5d95-e211-a939-e4115bead28a"
         redirect_url = reverse("reports:barrier_has_admin_areas")
 
-        response = self.client.post(url, data={field_name: brazil_uuid})
+        response = self.client.post(url, data={field_name: us_uuid})
 
         self.assertRedirects(response, redirect_url)
         assert mock_save.called is False
