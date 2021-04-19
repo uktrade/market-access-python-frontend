@@ -19,7 +19,7 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter yes, no or review later"},
     )
     not_allowed_summary = forms.CharField(
-        label="Why is it not allowed to be public? (optional)",
+        label="Why is it not allowed to be public?",
         widget=forms.Textarea,
         max_length=250,
         required=False,
