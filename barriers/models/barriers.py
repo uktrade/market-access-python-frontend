@@ -397,6 +397,7 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.READY: "Allowed - yet to be published",
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "Published",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "Unpublished",
+            PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
         }.get(self.public_view_status)
 
     @property
@@ -408,6 +409,7 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
+            PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
         }.get(self.public_view_status)
 
     @property

@@ -64,15 +64,15 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
         if self.cleaned_data.get("public_eligibility") == "review_later":
             client.barriers.patch(
                 id=self.id,
-                public_eligibility_postponed=self.cleaned_data.get(
-                    "public_eligibility"
-                ),
+                public_eligibility_postponed=True,
+                public_eligibility=False,
                 public_eligibility_summary=self.get_summary(),
             )
         else:
             client.barriers.patch(
                 id=self.id,
                 public_eligibility=self.cleaned_data.get("public_eligibility"),
+                public_eligibility_postponed=False,
                 public_eligibility_summary=self.get_summary(),
             )
 
