@@ -69,7 +69,7 @@
         {% endif %}
 
         {% if current_user|has_permission:"change_barrier_public_eligibility" and not current_user|has_permission:"change_publicbarrier" %}
-            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Change status of public view</a>
+            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Update public view status</a>
         {% endif %}
 
         <dl class="summary-group__list">
@@ -251,7 +251,7 @@
         </form>
 
         {% if not public_barrier.is_published and current_user|has_permission:"change_publicbarrier" %}
-            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary">Change status of public view</a>
+            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary">Update public view status</a>
         {% endif %}
     </section>
 

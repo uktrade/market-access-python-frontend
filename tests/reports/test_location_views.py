@@ -6,11 +6,13 @@ from mock import patch
 from tests.constants import ERROR_HTML
 
 from reports.models import Report
-from reports.views import (NewReportBarrierAdminAreasView,
-                           NewReportBarrierLocationAddAdminAreasView,
-                           NewReportBarrierLocationHasAdminAreasView,
-                           NewReportBarrierLocationView,
-                           NewReportBarrierTradeDirectionView)
+from reports.views import (
+    NewReportBarrierAdminAreasView,
+    NewReportBarrierLocationAddAdminAreasView,
+    NewReportBarrierLocationHasAdminAreasView,
+    NewReportBarrierLocationView,
+    NewReportBarrierTradeDirectionView,
+)
 
 
 class LocationViewTestCase(ReportsTestCase):
