@@ -107,7 +107,7 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["public_eligibility"] == self.barrier["public_eligibility"]
+        assert form.initial["public_eligibility"] == "yes" if self.barrier["public_eligibility"] else "no"
         assert (
             form.initial["allowed_summary"]
             == self.barrier["public_eligibility_summary"]
@@ -140,6 +140,7 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             public_eligibility=True,
+            public_eligibility_postponed=False,
             public_eligibility_summary="summary",
         )
         assert response.status_code == HTTPStatus.FOUND

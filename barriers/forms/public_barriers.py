@@ -18,6 +18,15 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
         ),
         error_messages={"required": "Enter yes, no or review later"},
     )
+    allowed_summary = forms.CharField(
+        label="Why is it allowed to be public? (optional)",
+        widget=forms.Textarea,
+        max_length=250,
+        required=False,
+        error_messages={
+            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
+        },
+    )
     not_allowed_summary = forms.CharField(
         label="Why is it not allowed to be public?",
         widget=forms.Textarea,
@@ -38,7 +47,9 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
     )
 
     def get_summary(self):
-        if self.cleaned_data.get("public_eligibility") == "no":
+        if self.cleaned_data.get("public_eligibility") == "yes":
+            return self.cleaned_data.get("allowed_summary")
+        elif self.cleaned_data.get("public_eligibility") == "no":
             return self.cleaned_data.get("not_allowed_summary")
         elif self.cleaned_data.get("public_eligibility") == "review_later":
             return self.cleaned_data.get("review_later_summary")

@@ -67,6 +67,14 @@ class Barrier(APIModel):
         ]
 
     @property
+    def public_eligibility(self):
+        return self.data.get("public_eligibility")
+
+    @property
+    def public_eligibility_postponed(self):
+        return self.data.get("public_eligibility_postponed")
+
+    @property
     def commodities_grouped_by_country(self):
         grouped_commodities = {}
         for barrier_commodity in self.commodities:

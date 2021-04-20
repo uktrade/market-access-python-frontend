@@ -21,6 +21,7 @@
             shouldShow: function( value ){ return ( value === 'review_later' ); }
         });
         if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#conditional-yes .govuk-character-count' );
             new ma.components.CharacterCount( '#conditional-review_later .govuk-character-count' );
             new ma.components.CharacterCount( '#conditional-no .govuk-character-count' );
         }
@@ -90,7 +91,7 @@
 
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ value }}">
                             {% if value == "yes" %}
-                                {% comment %} {% include "partials/forms/textarea.html" with field=form.allowed_summary character_count=True %} {% endcomment %}
+                                {% include "partials/forms/textarea.html" with field=form.allowed_summary character_count=True %}
                             {% elif value == "no" %}
                                 {% include "partials/forms/textarea.html" with field=form.not_allowed_summary character_count=True %}
                             {% elif value == "review_later" %}
