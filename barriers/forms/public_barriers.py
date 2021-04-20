@@ -71,7 +71,7 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
         else:
             client.barriers.patch(
                 id=self.id,
-                public_eligibility=self.cleaned_data.get("public_eligibility"),
+                public_eligibility=self.cleaned_data.get("public_eligibility") == "yes",
                 public_eligibility_postponed=False,
                 public_eligibility_summary=self.get_summary(),
             )

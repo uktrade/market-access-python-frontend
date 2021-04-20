@@ -34,6 +34,7 @@ class PublicViewStatusHistoryItem(BaseHistoryItem):
             PUBLIC_BARRIER_STATUSES.UNKNOWN,
             PUBLIC_BARRIER_STATUSES.INELIGIBLE,
             PUBLIC_BARRIER_STATUSES.ELIGIBLE,
+            PUBLIC_BARRIER_STATUSES.REVIEW_LATER,
         ):
             old_summary = self.old_value.get("public_eligibility_summary")
             new_summary = self.new_value.get("public_eligibility_summary")
