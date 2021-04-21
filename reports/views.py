@@ -14,17 +14,25 @@ from utils.metadata import MetadataMixin
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
 from reports.forms.new_report_barrier_location import (
-    HasAdminAreas, NewReportBarrierLocationAddAdminAreasForm,
-    NewReportBarrierLocationAdminAreasForm, NewReportBarrierLocationForm,
+    HasAdminAreas,
+    NewReportBarrierLocationAddAdminAreasForm,
+    NewReportBarrierLocationAdminAreasForm,
+    NewReportBarrierLocationForm,
     NewReportBarrierLocationHasAdminAreasForm,
-    NewReportBarrierTradeDirectionForm, NewReportCausedByTradingBlocForm)
+    NewReportBarrierTradeDirectionForm,
+    NewReportCausedByTradingBlocForm,
+)
 from reports.forms.new_report_barrier_sectors import (
-    NewReportBarrierAddSectorsForm, NewReportBarrierHasSectorsForm,
-    NewReportBarrierSectorsForm, SectorsAffected)
+    NewReportBarrierAddSectorsForm,
+    NewReportBarrierHasSectorsForm,
+    NewReportBarrierSectorsForm,
+    SectorsAffected,
+)
 from reports.forms.new_report_barrier_status import (
-    NewReportBarrierStatusForm, NewReportBarrierTermForm)
-from reports.forms.new_report_barrier_summary import \
-    NewReportBarrierSummaryForm
+    NewReportBarrierStatusForm,
+    NewReportBarrierTermForm,
+)
+from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
 from reports.helpers import ReportFormGroup
 
 
