@@ -79,6 +79,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "django_extensions",
+    "django_audit_log_middleware",
 ]
 
 LOCAL_APPS = [
@@ -104,6 +105,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_audit_log_middleware.AuditLogMiddleware",
     "authentication.middleware.SSOMiddleware",
     "utils.middleware.RequestLoggingMiddleware",
 ]
