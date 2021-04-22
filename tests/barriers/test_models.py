@@ -113,7 +113,7 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
         }
         assert saved_search.readable_filters["show"] == {
             "label": "Show",
-            "readable_value": "My barriers",
+            "readable_value": "Barriers I have created",
             "value": ["1"],
         }
 

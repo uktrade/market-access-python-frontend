@@ -18,7 +18,8 @@
         <ul class="ma-card-list">
             <li class="ma-card-list__item">
                 <div class="saved-search__content">
-                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?user=1">My barriers</a></h3>
+                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?user=1">Barriers I have created</a></h3>
+                    <p class="saved-search__description">You will always appear as the reporter in the 'barrier team' tab</p>
                     {% include "barriers/partials/saved_search_badges.html" with saved_search=my_barriers_saved_search my_barriers=True %}
                 </div>
 
@@ -26,7 +27,9 @@
             </li>
             <li class="ma-card-list__item">
                 <div class="saved-search__content">
-                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?team=1">My team barriers</a></h3>
+                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?team=1">Barriers I own or am working on</a></h3>
+                    <p class="saved-search__description">When you add, update or comment on a barrier you will appear in the 'barrier team' tab.</p>
+                    <p class="saved-search__description">In this tab you can change ownership or add or remove yourself from a barrier.</p>
                     {% include "barriers/partials/saved_search_badges.html" with saved_search=team_barriers_saved_search team_barriers=True %}
                 </div>
 
@@ -34,6 +37,7 @@
             </li>
             <li class="ma-card-list__item">
                 <h3 class="saved-search__title"><a href="{% url 'reports:draft_barriers' %}">Draft barriers</a></h3>
+                <p class="saved-search__description">Barriers I have created and not yet submitted.</p>
                 <p><span class="ma-badge">{{ draft_barriers|length }} total</span></p>
             </li>
         </ul>

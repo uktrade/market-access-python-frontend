@@ -58,11 +58,11 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     user = forms.BooleanField(
-        label="My barriers",
+        label="Barriers I have created",
         required=False,
     )
     team = forms.BooleanField(
-        label="My team barriers",
+        label="Barriers I own or am working on",
         required=False,
     )
     member = forms.IntegerField(label="People", required=False)
