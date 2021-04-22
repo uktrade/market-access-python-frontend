@@ -92,6 +92,7 @@ class BarrierSearchForm(forms.Form):
             ("published", "Published"),
             ("changed", "Barriers changed internally since being made public"),
             ("unpublished", "Unpublished"),
+            ("review_later", "Barriers marked as 'review later'"),
         ),
         required=False,
     )

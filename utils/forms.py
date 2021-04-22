@@ -167,6 +167,20 @@ class YesNoDontKnowBooleanField(YesNoBooleanField):
         return value
 
 
+class YesNoReviewLaterBooleanField(YesNoBooleanField):
+    default_choices = (
+        ("yes", "Yes"),
+        ("no", "No"),
+        ("review_later", "Review later"),
+    )
+
+    def clean(self, value):
+        self.validate(value)
+        value = self.to_python(value)
+        self.run_validators(value)
+        return value
+
+
 class MonthYearWidget(forms.MultiWidget):
     template_name = "partials/forms/widgets/month_year_widget.html"
 
