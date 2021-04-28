@@ -259,6 +259,48 @@
         <h2 class="section-heading govuk-!-margin-bottom-0">Internal notes and updates</h2>
         <span class="govuk-caption-m govuk-!-margin-bottom-6">These are not shown to the public.</span>
 
+        <div class="review-progress-checkboxes">
+            <h3>Review progress</h3>
+            <p class="description">Keep track of outstanding approvals</p>
+            
+            <div class="govuk-checkboxes" id="tags">
+            <fieldset class="govuk-fieldset">
+                <div class="checkbox-option">
+                    <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input"
+                                    type="checkbox">
+                        <label class="govuk-label govuk-checkboxes__label">Content team</label>
+                    </div>
+                </div>
+                <div class="checkbox-option">
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input"
+                            type="checkbox">
+                    <label class="govuk-label govuk-checkboxes__label">HM Trade Commissioner</label>
+                    <a href="#" class="remove">Remove</a>
+                </div>
+                </div>
+                <div class="checkbox-option">
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input"
+                            type="checkbox">
+                    <label class="govuk-label govuk-checkboxes__label">Cabinet Office</label>
+                    <a href="#" class="remove">Remove</a>
+                </div>
+                </div>
+                <div class="checkbox-option">
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input"
+                            type="checkbox">
+                    <label class="govuk-label govuk-checkboxes__label">HM Treasury</label>
+                    <a href="#" class="remove">Remove</a>
+                </div>
+                </div>
+            </div>
+            </fieldset>
+        </div>
+
+
         {% if add_note %}
             <div class="interaction-panel">
                 {% include 'barriers/partials/public_barrier_note_form.html' %}
