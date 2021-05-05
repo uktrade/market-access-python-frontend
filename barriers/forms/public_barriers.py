@@ -1,4 +1,3 @@
-from barriers.views import light_touch_reviews
 from django import forms
 from django.http import QueryDict
 
