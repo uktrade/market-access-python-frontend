@@ -32,6 +32,7 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
             "region",
             "status",
             "organisation",
+            "awaiting_review_from",
         ]
         params = parse_qs(self.request.META.get("QUERY_STRING"), keep_blank_values=True)
 
@@ -73,7 +74,7 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
         return data
 
 
-class PublicBarrierDetail(PublicBarrierMixin, BarrierMixin, FormView):
+class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormView):
     template_name = "barriers/public_barriers/detail.html"
 
     def get_activity(self):
@@ -94,6 +95,7 @@ class PublicBarrierDetail(PublicBarrierMixin, BarrierMixin, FormView):
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")
         context_data["delete_note"] = self.request.GET.get("delete-note")
+        context_data["gov_organisations"] = self.metadata.get_gov_organisation_dict()
         return context_data
 
     def get_form_class(self):

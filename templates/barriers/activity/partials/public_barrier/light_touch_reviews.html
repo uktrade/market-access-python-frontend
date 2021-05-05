@@ -1,0 +1,47 @@
+{% load activity %}
+
+<h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
+<p>Review tracker updated by {{ item.user.name }}</p>
+
+{% if item.old_value.content_team_approval != item.new_value.content_team_approval %}
+    <p>
+    {% if item.new_value.content_team_approval %}
+        Content <strong>Approved</strong> by {{ item.user.name }}
+    {% else %}
+        Content <strong>Approval removed</strong> by {{ item.user.name }}
+    {% endif %}
+    </p>
+{% endif %}
+
+{% if item.old_value.hm_trade_commissioner_approval != item.new_value.hm_trade_commissioner_approval %}
+    <p>
+    {% if item.new_value.hm_trade_commissioner_approval %}
+        <strong>Approved</strong> HM Trade Commissioner
+    {% else %}
+        <strong>Approval removed</strong> HM Trade Commissioner
+    {% endif %}
+    </p>
+{% endif %}
+
+{% if item.old_value.has_content_changed_since_approval != item.new_value.has_content_changed_since_approval %}
+    {% if item.new_value.has_content_changed_since_approval %}
+    Content has changed since last content approval
+    {% endif %}
+{% endif %}
+
+{% for organisation_id in item.new_value.government_organisation_approvals %}
+    {% if not organisation_id in item.old_value.government_organisation_approvals %}
+        <p>
+        <strong>Approved</strong> {{ gov_organisations|keyvalue:organisation_id }}
+        </p>
+    {% endif %}
+{% endfor %}
+
+
+{% for organisation_id in item.old_value.government_organisation_approvals %}
+    {% if not organisation_id in item.new_value.government_organisation_approvals %}
+        <p>
+        <strong>Approval removed</strong> {{ gov_organisations|keyvalue:organisation_id }}
+        </p>
+    {% endif %}
+{% endfor %}

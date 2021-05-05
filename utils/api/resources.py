@@ -293,6 +293,17 @@ class PublicBarriersResource(APIResource):
     def unpublish(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unpublish")
 
+    def mark_approvals(self, id, *args, **kwargs):
+        return self.client.post(
+            f"{self.resource_name}/{id}/mark_approvals", json=kwargs
+        )
+
+    def enable_hm_trade_commissioner_approvals(self, id, *args, **kwargs):
+        return self.client.post(
+            f"{self.resource_name}/{id}/enable_hm_trade_commissioner_approvals",
+            json=kwargs,
+        )
+
 
 class EconomicAssessmentResource(APIResource):
     resource_name = "economic-assessments"

@@ -7,6 +7,8 @@ from django.urls import reverse
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 
+from barriers.models import PublicBarrier
+
 
 class BarrierMixin:
     include_interactions = False
@@ -84,7 +86,7 @@ class PublicBarrierMixin:
             self._public_barrier = self.get_public_barrier()
         return self._public_barrier
 
-    def get_public_barrier(self):
+    def get_public_barrier(self) -> PublicBarrier:
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         barrier_id = self.kwargs.get("barrier_id")
         return client.public_barriers.get(id=barrier_id)

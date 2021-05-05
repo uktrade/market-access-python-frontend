@@ -461,3 +461,7 @@ class PublicBarrier(APIModel):
     def reported_on(self):
         if self.data.get("reported_on"):
             return dateutil.parser.parse(self.data["reported_on"])
+
+    @property
+    def light_touch_reviews(self):
+        return self.data.get("light_touch_reviews")

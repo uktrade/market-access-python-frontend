@@ -395,6 +395,9 @@ class Metadata:
         """
         return ((str(org["id"]), org["name"]) for org in self.get_gov_organisations())
 
+    def get_gov_organisation_dict(self):
+        return dict(self.get_gov_organisation_choices())
+
     def get_government_organisation(self, org_id):
         for org in self.get_gov_organisations():
             if str(org["id"]) == str(org_id):

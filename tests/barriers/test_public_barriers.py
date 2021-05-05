@@ -107,7 +107,11 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["public_eligibility"] == "yes" if self.barrier["public_eligibility"] else "no"
+        assert (
+            form.initial["public_eligibility"] == "yes"
+            if self.barrier["public_eligibility"]
+            else "no"
+        )
         assert (
             form.initial["allowed_summary"]
             == self.barrier["public_eligibility_summary"]
