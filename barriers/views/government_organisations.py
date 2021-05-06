@@ -70,7 +70,7 @@ class BarrierEditGovernmentOrganisations(BaseGovernmentOrganisationFormView):
 
     def get_success_url(self):
         return reverse(
-            "barriers:barrier_detail",
+            "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 

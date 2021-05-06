@@ -266,6 +266,7 @@
             
             <form class="govuk-checkboxes" id="tags" action="{% url 'barriers:edit_public_barrier_reviews' barrier.id %}" method="get">
                 <fieldset class="govuk-fieldset">
+                    {% if public_barrier.title and public_barrier.summary %}
                     <div class="checkbox-option">
                         <div class="govuk-checkboxes__item">
                             
@@ -279,6 +280,13 @@
                             {% if public_barrier.light_touch_reviews.has_content_changed_since_approval %}<span class="checkbox-note">Edited since last content review</span>{% endif %}
                         </div>
                     </div>
+                    {% else %}
+                    <div class="checkbox-option">
+                        <p class="add-approval-link">
+                            <span>Public barrier has no title or summary content to review</span>
+                        </p>
+                    </div>
+                    {% endif %}
                     {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval_enabled %}
                     <div class="checkbox-option">
                         <div class="govuk-checkboxes__item">
@@ -307,7 +315,7 @@
                                     type="checkbox"
                                     {% if government_organisation.id in public_barrier.light_touch_reviews.government_organisation_approvals %}checked{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label">{{ government_organisation.name }}</label>
-                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="remove">Remove</a>
+                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="remove">Edit</a>
                         </div>
                     </div>
                     {% empty %}

@@ -25,7 +25,7 @@
 
 {% if item.old_value.has_content_changed_since_approval != item.new_value.has_content_changed_since_approval %}
     {% if item.new_value.has_content_changed_since_approval %}
-    Content has changed since last content approval
+        Title or summary changed after content approval, by {{ item.user.name }
     {% endif %}
 {% endif %}
 
