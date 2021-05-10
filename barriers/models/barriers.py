@@ -329,6 +329,12 @@ class PublicBarrier(APIModel):
         return [org["name"] for org in self.internal_government_organisations]
 
     @property
+    def internal_government_organisations_lookup(self):
+        return dict(
+            {(org["id"], org["name"]) for org in self.internal_government_organisations}
+        )
+
+    @property
     def is_resolved_text(self):
         return self.get_resolved_text(self.is_resolved, self.status_date)
 
@@ -465,3 +471,21 @@ class PublicBarrier(APIModel):
     @property
     def light_touch_reviews(self):
         return self.data.get("light_touch_reviews")
+
+    @property
+    def awaiting_reviews_from(self):
+        from_who = []
+        if not self.light_touch_reviews["content_team_approval"]:
+            from_who.append("Content")
+        if (
+            self.light_touch_reviews["hm_trade_commissioner_approval_enabled"]
+            and not self.light_touch_reviews["hm_trade_commissioner_approval"]
+        ):
+            from_who.append("HM Trade Commissioner")
+        for org in self.internal_government_organisations:
+            if not (
+                int(org["id"])
+                in self.light_touch_reviews["government_organisation_approvals"]
+            ):
+                from_who.append(org["name"])
+        return from_who

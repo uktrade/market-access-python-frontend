@@ -259,6 +259,7 @@
         <h2 class="section-heading govuk-!-margin-bottom-0">Internal notes and updates</h2>
         <span class="govuk-caption-m govuk-!-margin-bottom-6">These are not shown to the public.</span>
 
+        {% if public_barrier.light_touch_reviews.enabled %}
         <div class="review-progress-checkboxes">
             <h3>Review progress</h3>
             <p class="description">Keep track of outstanding approvals</p>
@@ -315,7 +316,7 @@
                                     type="checkbox"
                                     {% if government_organisation.id in public_barrier.light_touch_reviews.government_organisation_approvals %}checked{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label">{{ government_organisation.name }}</label>
-                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="remove">Edit</a>
+                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail" class="remove">Edit</a>
                         </div>
                     </div>
                     {% empty %}
@@ -324,7 +325,7 @@
                     {% endif %}
                     <div class="checkbox-option">
                         <p class="add-approval-link">
-                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}">Add government organisation</a>
+                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail">Add government organisation</a>
                         </p>
                     </div>
                 </fieldset>
@@ -334,7 +335,7 @@
                 </noscript>
             </form>
         </div>
-
+        {% endif %}
 
         {% if add_note %}
             <div class="interaction-panel">

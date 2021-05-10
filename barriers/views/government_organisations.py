@@ -1,4 +1,4 @@
-from django.forms import Form
+from django.forms import Form, ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView
@@ -44,13 +44,24 @@ class BaseGovernmentOrganisationFormView(MetadataMixin, BarrierMixin, FormView):
         self.init_view(request, **kwargs)
         return super().post(request, *args, **kwargs)
 
+    def get_return_to(self):
+        return_to = self.request.GET.get("return_to", "barrier_detail")
+        if not (return_to in ["barrier_detail", "public_barrier_detail"]):
+            raise ValidationError("Invalid return_to argument")
+        return return_to
+
     def get_context_data(self, **kwargs):
+        return_to = self.request.GET.get("return_to", "barrier_detail")
+        if not (return_to in ["barrier_detail", "public_barrier_detail"]):
+            raise ValidationError("Invalid return_to argument")
+
         context_data = super().get_context_data(**kwargs)
         context_data[
             "selected_organisation"
         ] = self.metadata.get_gov_organisations_by_ids(
             self.government_organisations.value
         )
+        context_data["return_to"] = return_to
         return context_data
 
 
@@ -69,8 +80,9 @@ class BarrierEditGovernmentOrganisations(BaseGovernmentOrganisationFormView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        return_to = self.get_return_to()
         return reverse(
-            "barriers:public_barrier_detail",
+            f"barriers:{return_to}",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
@@ -100,10 +112,11 @@ class BarrierAddGovernmentOrganisation(BaseGovernmentOrganisationFormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse(
+        base_url = reverse(
             "barriers:edit_gov_orgs",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
+        return f"{base_url}?return_to={self.get_return_to()}"
 
 
 class BarrierRemoveGovernmentOrganisation(BaseGovernmentOrganisationFormView):
@@ -114,7 +127,8 @@ class BarrierRemoveGovernmentOrganisation(BaseGovernmentOrganisationFormView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse(
+        base_url = reverse(
             "barriers:edit_gov_orgs",
             kwargs={"barrier_id": self.barrier_id},
         )
+        return f"{base_url}?return_to={self.get_return_to()}"

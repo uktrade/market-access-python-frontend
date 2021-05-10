@@ -1,10 +1,10 @@
 {% load activity %}
 
 <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span></h4>
-<p>Review tracker updated by {{ item.user.name }}</p>
+<p class="event-list__item__text">Review tracker updated by {{ item.user.name }}</p>
 
 {% if item.old_value.content_team_approval != item.new_value.content_team_approval %}
-    <p>
+    <p class="event-list__item__text">
     {% if item.new_value.content_team_approval %}
         Content <strong>Approved</strong> by {{ item.user.name }}
     {% else %}
@@ -14,7 +14,7 @@
 {% endif %}
 
 {% if item.old_value.hm_trade_commissioner_approval != item.new_value.hm_trade_commissioner_approval %}
-    <p>
+    <p class="event-list__item__text" class="event-list__item__text">
     {% if item.new_value.hm_trade_commissioner_approval %}
         <strong>Approved</strong> HM Trade Commissioner
     {% else %}
@@ -25,13 +25,13 @@
 
 {% if item.old_value.has_content_changed_since_approval != item.new_value.has_content_changed_since_approval %}
     {% if item.new_value.has_content_changed_since_approval %}
-        Title or summary changed after content approval, by {{ item.user.name }
+        <p class="event-list__item__text">Title or summary changed after content approval, by {{ item.user.name }</p>
     {% endif %}
 {% endif %}
 
 {% for organisation_id in item.new_value.government_organisation_approvals %}
     {% if not organisation_id in item.old_value.government_organisation_approvals %}
-        <p>
+        <p class="event-list__item__text">
         <strong>Approved</strong> {{ gov_organisations|keyvalue:organisation_id }}
         </p>
     {% endif %}
@@ -40,7 +40,7 @@
 
 {% for organisation_id in item.old_value.government_organisation_approvals %}
     {% if not organisation_id in item.new_value.government_organisation_approvals %}
-        <p>
+        <p class="event-list__item__text">
         <strong>Approval removed</strong> {{ gov_organisations|keyvalue:organisation_id }}
         </p>
     {% endif %}
