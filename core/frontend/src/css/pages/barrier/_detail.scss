@@ -65,27 +65,17 @@
 			}
 		}
 		.govuk-checkboxes__item{
-			// padding: 5px;
-			// border-bottom: 1px solid #ddd;
 			display: flex;
 			justify-content: flex-start;
 			flex-direction: row;
 			align-items: center;
 			position: relative;
-			// height: 60px;
 
 			.checkbox-wrapper{
 				position: relative;
 				margin: 4px;
 			}
 
-			// .govuk-checkboxes__input{
-			// 	position: relative;
-			// 	top: 5px;
-			// 	// top: 0;
-			// 	// left: -44px;
-			// 	// display: block;
-			// }
 
 			.remove{
 				position: absolute;
