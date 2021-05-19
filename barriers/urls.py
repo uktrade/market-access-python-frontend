@@ -1,3 +1,7 @@
+from barriers.views.light_touch_reviews import (
+    PublicBarrierLightTouchReviewsEdit,
+    PublicBarrierLightTouchReviewsHMTradeCommissionerApprovalEnabled,
+)
 from django.urls import path, re_path
 
 from barriers.views.mentions import (
@@ -583,6 +587,16 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/public/summary/",
         EditPublicSummary.as_view(),
         name="edit_public_barrier_summary",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/mark_approved",
+        PublicBarrierLightTouchReviewsEdit.as_view(),
+        name="edit_public_barrier_reviews",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/enable_hm_trade_commissioner_approvals",
+        PublicBarrierLightTouchReviewsHMTradeCommissionerApprovalEnabled.as_view(),
+        name="enable_hm_trade_commissioner_approvals",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(

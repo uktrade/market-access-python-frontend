@@ -12,3 +12,8 @@ def activity_item(context, item):
     except template.TemplateDoesNotExist:
         return ""
     return item_template.render(context.flatten())
+
+
+@register.filter
+def keyvalue(dict, key):
+    return dict[str(key)]

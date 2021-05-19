@@ -1,7 +1,7 @@
 from django import forms
 from django.http import QueryDict
 
-from barriers.constants import PUBLIC_BARRIER_STATUSES
+from barriers.constants import AWAITING_REVIEW_FROM, PUBLIC_BARRIER_STATUSES
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import Metadata
 
@@ -151,6 +151,10 @@ class PublicBarrierSearchForm(forms.Form):
     status = forms.MultipleChoiceField(
         label="Status", required=False, initial=["20", "30"]
     )
+    awaiting_review_from = forms.MultipleChoiceField(
+        label="Awaiting review from",
+        required=False,
+    )
 
     def __init__(self, metadata: Metadata, *args, **kwargs):
         self.metadata = metadata
@@ -159,11 +163,15 @@ class PublicBarrierSearchForm(forms.Form):
             kwargs["data"] = self.get_data_from_querydict(kwargs["data"])
 
         super().__init__(*args, **kwargs)
+        self.set_awaiting_review_from_choices()
         self.set_organisation_choices()
         self.set_sector_choices()
         self.set_country_choices()
         self.set_status_choices()
         self.set_region_choices()
+
+    def set_awaiting_review_from_choices(self):
+        self.fields["awaiting_review_from"].choices = AWAITING_REVIEW_FROM
 
     def set_organisation_choices(self):
         self.fields[
@@ -190,6 +198,7 @@ class PublicBarrierSearchForm(forms.Form):
         """
 
         cleaned_data = {
+            "awaiting_review_from": data.getlist("awaiting_review_from"),
             "organisation": data.getlist("organisation"),
             "sector": data.getlist("sector"),
             "country": data.getlist("country"),

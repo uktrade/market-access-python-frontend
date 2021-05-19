@@ -12,6 +12,7 @@
         ReactApp.renderMultiSelectFilter("organisation", "All")
         ReactApp.renderMultiSelectFilter("sector", "All")
         ReactApp.renderMultiSelectFilter("status", "All")
+        ReactApp.renderMultiSelectFilter("awaiting_review_from", "All")
     })
 </script>
 {% endblock %}
@@ -20,14 +21,15 @@
 
 <h1 class="govuk-heading-l govuk-!-margin-bottom-5">Market access public barriers</h1>
 
-<section class="govuk-!-width-one-third">
-    <form action="" method="GET" class="filter-items">
-        {% include "partials/forms/checkbox_filter.html" with field=form.region from_group_classes="pb-filter" %}
-        {% include "partials/forms/checkbox_filter.html" with field=form.country from_group_classes="pb-filter" %}
-        {% include "partials/forms/checkbox_filter.html" with field=form.sector from_group_classes="pb-filter" %}
-        {% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}
-        {% include "partials/forms/checkbox_filter.html" with field=form.status from_group_classes="pb-filter" %}
-        <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
+<section xclass="govuk-!-width-one-third">
+    <form action="" method="GET" class="filter-items filter-items-flexi govuk-grid-row">
+        <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.region from_group_classes="pb-filter" %}</div>
+        <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.country from_group_classes="pb-filter" %}</div>
+        <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.sector from_group_classes="pb-filter" %}</div>
+        <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}</div>
+        <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.status from_group_classes="pb-filter" %}</div>
+        <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.awaiting_review_from from_group_classes="pb-filter" %}</div>
+        <div class="govuk-grid-column-one-third"><input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit"></div>
     </form>
 </section>
 
@@ -55,6 +57,7 @@
                 <th scope="col" class="govuk-table__header">Location</th>
                 <th scope="col" class="govuk-table__header">Public status</th>
                 <th scope="col" class="govuk-table__header">Changes since publishing</th>
+                <th scope="col" class="govuk-table__header">Awaiting review from</th>
                 <th scope="col" class="govuk-table__header">Latest note</th>
             </tr>
         </thead>
@@ -117,6 +120,11 @@
                     {% else %}
                         Up to date
                     {% endif %}
+                </td>
+                <td class="govuk-table__cell">
+                    {% for entity in barrier.awaiting_reviews_from %}
+                    <span>{{ entity }}</span>{% if not forloop.last %},<br />{% endif %}
+                    {% endfor %}
                 </td>
                 <!-- Latest note -->
                 <td class="govuk-table__cell">
