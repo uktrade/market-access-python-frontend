@@ -358,3 +358,5 @@ SETTINGS_EXPORT = (
     "GTM_AUTH",
     "GTM_PREVIEW",
 )
+
+AUDIT_LOG_USER_FIELD = "username"
