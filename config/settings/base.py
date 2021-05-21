@@ -282,12 +282,10 @@ LOGGING = {
     "handlers": {
         "ecs": {
             "class": "logging.StreamHandler",
-            "stream": sys.stdout,  # noqa F405
             "formatter": "ecs_formatter",
         },
         "stdout": {
             "class": "logging.StreamHandler",
-            "stream": sys.stdout,  # noqa F405
             "formatter": "simple",
         },
     },
