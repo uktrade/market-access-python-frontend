@@ -197,7 +197,7 @@ class NewReportBarrierTermView(ReportsFormView):
     Report a barrier - Step 1.1 Select Barrier Term
     """
 
-    heading_text = "Barrier status"
+    heading_text = "Barrier trm"
     template_name = "reports/new_report_barrier_term.html"
     form_class = NewReportBarrierTermForm
     success_path = "reports:barrier_status"

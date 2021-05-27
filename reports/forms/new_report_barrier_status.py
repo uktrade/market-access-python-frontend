@@ -22,14 +22,16 @@ class BarrierTerms:
                 cls.SHORT_TERM,
                 {
                     "label": "A procedural, short-term barrier",
-                    "hint": "For example, overly complex customs paperwork",
+                    "hint": "These are issues that can be resolved fairly quickly and can be routine tasks. For example, a shipment is stuck in customs due to incorrect customs documentation, this is cleared once the proper paperwork is submitted.",
                 },
             ),
             (
                 cls.LONG_TERM,
                 {
                     "label": "A long-term strategic barrier",
-                    "hint": "For example, a change of regulation",
+                    "hint": "These issues usually cannot be fixed quickly without a change in regulations or the business environment. For example, a ban on British food products as they don’t meet the countries new food safety regulations.
+
+",
                 },
             ),
         )
