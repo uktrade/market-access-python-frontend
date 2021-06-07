@@ -2,19 +2,11 @@ import time
 
 import requests
 from barriers.constants import Statuses
-from barriers.models import (
-    Barrier,
-    Commodity,
-    EconomicAssessment,
-    EconomicImpactAssessment,
-    HistoryItem,
-    Note,
-    PublicBarrier,
-    PublicBarrierNote,
-    ResolvabilityAssessment,
-    SavedSearch,
-    StrategicAssessment,
-)
+from barriers.models import (ActionPlan, Barrier, Commodity,
+                             EconomicAssessment, EconomicImpactAssessment,
+                             HistoryItem, Note, PublicBarrier,
+                             PublicBarrierNote, ResolvabilityAssessment,
+                             SavedSearch, StrategicAssessment)
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from django.conf import settings
 from django.core.cache import cache
@@ -357,3 +349,36 @@ class NotificationExclusionResource(APIResource):
     def turn_on_notifications(self):
         url = "mentions/exclude-from-notifications"
         return self.model(self.client.delete(url))
+
+class ActionPlanResource(APIResource):
+    resource_name = "action_plans"
+    model = ActionPlan
+
+    def get_barrier_action_plan(self, barrier_id:str):
+        url = f"barriers/{barrier_id}/action_plan"
+        return self.model(self.client.get(url))
+
+    def add_milestone(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/milestones"
+        return self.model(self.client.post(url, json={"barrier":str(barrier_id), **kwargs}))
+
+    def edit_milestone(self, barrier_id, milestone_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
+        return self.model(self.client.patch(url, json={**kwargs}))
+
+    def delete_milestone(self, barrier_id, milestone_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
+        return self.model(self.client.delete(url))
+
+    def add_task(self, barrier_id, milestone_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/tasks"
+        return self.model(self.client.post(url, json={"barrier":str(barrier_id), "milestone": milestone_id, **kwargs}))
+
+    def edit_task(self, barrier_id, task_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        return self.model(self.client.patch(url, json={**kwargs}))
+
+    def delete_task(self, barrier_id, task_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        return self.model(self.client.delete(url))
+

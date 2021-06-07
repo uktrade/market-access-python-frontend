@@ -42,5 +42,17 @@
     &--attention{
         background-color: $govuk-red;
     }
+
+    &--completed{
+        background-color: $govuk-light-blue;
+    }
+
+    &--in-progress{
+        background-color: $govuk-blue;
+    }
+
+    &--no-started{
+        background-color: $govuk-orange;
+    }
     
 }

@@ -74,6 +74,7 @@ const main_js = () => {
         `${assetsSrcPath}js/pages/barrier/assessment.js`,
         `${assetsSrcPath}js/pages/barrier/archive.js`,
         `${assetsSrcPath}js/pages/barrier/wto.js`,
+        `${assetsSrcPath}js/pages/barrier/action_plans_add_task.js`,
     ])
         .pipe(gulpif(!production, sourcemaps.init()))
         .pipe(babel({

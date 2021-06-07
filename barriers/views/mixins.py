@@ -16,6 +16,7 @@ class BarrierMixin:
     _interactions = None
     _notes = None
     _note = None
+    _action_plan = None
 
     @property
     def barrier(self):
@@ -40,6 +41,12 @@ class BarrierMixin:
         if not self._notes:
             self._notes = self.get_notes()
         return self._notes
+
+    @property
+    def action_plan(self):
+        if not self._action_plan:
+            self._action_plan = self.get_action_plan()
+        return self._action_plan
 
     def get_barrier(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
@@ -75,6 +82,11 @@ class BarrierMixin:
         for note in self.notes:
             if note.id == note_id:
                 return note
+
+    def get_action_plan(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.kwargs.get("barrier_id")
+        return client.action_plans.get_barrier_action_plan(barrier_id=barrier_id)
 
 
 class PublicBarrierMixin:

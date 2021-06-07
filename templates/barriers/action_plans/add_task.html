@@ -1,0 +1,186 @@
+{% extends "barriers/edit/base.html" %} 
+{% block page_title %}
+{{ block.super }} - Edit end date{% endblock %} 
+
+{% block back_link %}
+<a
+  href="{% url 'barriers:barrier_detail' barrier.id %}"
+  class="govuk-back-link ma-back-link"
+  >Back</a
+>
+{% endblock %}
+
+{% block body_script %}
+    <script>
+        ma.pages.barrier.action_plans_add_task();
+    </script>
+{% endblock %}
+
+ {% block page_content %} {% include 'partials/heading.html' with text='Add task' %} {% comment %} {% if barrier.end_date %}
+<div class="govuk-inset-text">
+  Current end date is <strong>{{ barrier.end_date|date:"j F Y" }}</strong>
+</div>
+{% endif %} {% endcomment %} {% form_error_banner form %}
+
+<form action="" method="POST">
+  {% csrf_token %}
+
+    <div id="{{ form.status.name }}"
+            class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
+            <span id="{{ form.status.name }}-item-hint" class="govuk-hint">{{ form.status.help_text }}</span>
+            {% form_field_error form "status" %}
+
+            <div class="govuk-radios status govuk-radios--conditional" data-module="radios">
+
+                {% for choice_value, choice_name in form.fields.status.choices %}
+                
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="{{ choice_value }}" name="{{ form.status.name }}"
+                                type="radio" value="{{ choice_value }}"
+                                {% if form.status.value == choice_value %}checked="checked"{% endif %}
+                                data-aria-controls="conditional-{{ choice_value }}"
+                                aria-describedby="{{ choice_value }}-item-hint">
+                        <label class="govuk-label govuk-radios__label"
+                                for="{{ choice_value }}">{{ choice_name }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+    </div>
+
+  <div
+    id="{{ form.start_date.name }}"
+    class="{% form_group_classes form.start_date.errors %}"
+  >
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        {{ form.start_date.label }}
+      </legend>
+
+      <span class="govuk-hint">{{ form.start_date.help_text }}</span>
+
+      {% form_field_error form "start_date" %}
+
+      <div class="govuk-date-input">{{ form.start_date }}</div>
+    </fieldset>
+  </div>
+
+  <div
+    id="{{ form.completion_date.name }}"
+    class="{% form_group_classes form.completion_date.errors %}"
+  >
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        {{ form.completion_date.label }}
+      </legend>
+
+      <span class="govuk-hint">{{ form.completion_date.help_text }}</span>
+
+      {% form_field_error form "completion_date" %}
+
+      <div class="govuk-date-input">{{ form.completion_date }}</div>
+    </fieldset>
+  </div>
+
+  <div
+    id="{{ form.action_text.name }}"
+    class="{% form_group_classes form.action_text.errors %}"
+  >
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        {{ form.action_text.label }}
+      </legend>
+
+      <span class="govuk-hint">{{ form.action_text.help_text }}</span>
+
+      {% form_field_error form "action_text" %}
+
+      <div class="govuk-date-input">{{ form.action_text }}</div>
+    </fieldset>
+  </div>
+
+    <div id="{{ form.action_type.name }}"
+            class="govuk-form-group{% if form.action_type.errors %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.action_type.label }}</legend>
+            <span id="{{ form.action_type.name }}-item-hint" class="govuk-hint">{{ form.action_type.help_text }}</span>
+            {% form_field_error form "action_type" %}
+
+            <div class="govuk-radios action_type govuk-radios--conditional" data-module="radios">
+
+                {% for choice in form.fields.action_type.enhanced_choices %}
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="{{ choice.value }}" name="{{ form.action_type.name }}"
+                                type="radio" value="{{ choice.value }}"
+                                {% if form.action_type.value == choice.value %}checked="checked"{% endif %}
+                                data-aria-controls="conditional-{{ choice.value }}"
+                                aria-describedby="{{ choice.value }}-item-hint">
+                        <label class="govuk-label govuk-radios__label"
+                                for="{{ choice.value }}">{{ choice.name }}</label>
+                    </div>
+
+                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                            id="conditional-{{ choice.value }}">
+                        {{ choice.subform.as_html }}
+                    </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+    </div>
+
+  <div
+    id="{{ form.assigned_to.name }}"
+    class="{% form_group_classes form.assigned_to.errors %}"
+  >
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        {{ form.assigned_to.label }}
+      </legend>
+
+      <span class="govuk-hint">{{ form.assigned_to.help_text }}</span>
+
+      {% form_field_error form "assigned_to" %}
+
+      <div class="govuk-date-input">{{ form.assigned_to }}</div>
+    </fieldset>
+  </div>
+
+  
+  <div
+    id="{{ form.stakeholders.name }}"
+    class="{% form_group_classes form.stakeholders.errors %}"
+  >
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        {{ form.stakeholders.label }}
+      </legend>
+
+      <span class="govuk-hint">{{ form.stakeholders.help_text }}</span>
+
+      {% form_field_error form "stakeholders" %}
+
+      <div class="govuk-date-input">{{ form.stakeholders }}</div>
+    </fieldset>
+  </div>
+  {% comment %} {% if barrier.end_date %}
+  <div>
+    <button
+      class="govuk-button govuk-button--secondary"
+      data-module="govuk-button"
+      name="clear"
+      value="1"
+    >
+      Remove end date and exit to barrier
+    </button>
+  </div>
+  {% endif %} {% endcomment %}
+
+  <button class="govuk-button" data-module="govuk-button">Confirm</button>
+  <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}"
+    >Cancel</a
+  >
+</form>
+
+{% endblock %}

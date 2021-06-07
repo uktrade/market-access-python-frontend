@@ -1,0 +1,91 @@
+
+
+.action_plan{
+    &__heading{
+        font-size: 36px;
+        line-height: 40px;
+    }
+
+    // &__milestones{}
+
+    &__milestone{
+        border-top: 5px solid #000;
+    }
+
+    .govuk-table__cell{
+        &.timeframe{
+            min-width: 100px;
+        }
+    }
+}
+
+.action-plan__milestone{
+    border-top: 5px solid #000;
+}
+
+.action_plan__milestone_header{
+    font-size: 24px;
+    line-height: 33px;
+}
+
+.action-plan__milestone_meta{
+    font-size: 19px;
+    line-height: 26px;
+}
+
+.action-plan__milestone__actions{
+    width: 100%;
+    margin: 15px 0px;
+    a{
+        display: inline-block;
+        padding: 2px;
+        font-size: 19px;
+        line-height: 26px;
+        margin-right: 15px;
+    }
+}
+
+.milestone-tasks-table{
+    width: 100%;
+    .govuk-table__head{
+        .govuk-table__row{
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+    }
+}
+
+.milestone-task-data-row{
+    border-bottom: none;
+
+    td{
+        border: none;
+    }
+}
+
+.milestone-task-action-row{
+    border-top: none;
+
+    td{
+        border-bottom: 2px solid $govuk-mid-grey;
+    }
+
+    .action-plan__milestone__actions{
+        padding: 5px 0px;
+        font-size: 19px;
+        line-height: 26px;
+        margin-right: 15px;
+    }
+}
+
+.ma-badge--completed{
+    background-color: $govuk-light-blue;
+}
+
+.ma-badge--in-progress{
+    background-color: $govuk-blue;
+}
+
+.ma-badge--not-started{
+    background-color: $govuk-mid-grey;
+}

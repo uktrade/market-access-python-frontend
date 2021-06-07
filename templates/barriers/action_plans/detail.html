@@ -1,0 +1,150 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load activity %}
+{% load static %}
+{% load dates %}
+
+{% block page_title %}{{ block.super }} - Public barrier{% endblock %}
+
+{% block head %}
+<script src="{% static 'js/react.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderTextAreaWithMentions("note-textarea-container")
+    })
+</script>
+{% endblock %}
+
+{% block body_script %}
+    <script>
+        if( ma.components.DeleteModal ){
+            new ma.components.DeleteModal();
+        }
+    </script>
+{% endblock %}
+
+{% block outside_content %}
+    {% if delete_note %}
+        <div class="modal">
+            <div class="modal__content" role="alertdialog" tabindex="1" aria-describedby="modal-label">
+                <h3 class="modal__content__title" id="modal-label">Delete note</h3>
+                <p>Are you sure you want to delete this note?</p>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="note_id" value="{{ delete_note }}" />
+                    <button name="action" value="delete-note" class="govuk-button" tabindex="2">Yes, delete</button>
+                    <a href="{% url 'barriers:public_barrier_detail' barrier.id %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">No, cancel</a>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='action_plan' %}
+
+    <section class="action_plan">
+        <h2 class="action_plan__heading"> Action Plan </h2>
+
+        <p>Track a barrier progress against an action plan. Include your weekly progress update, 
+        your milestones and your actions. 
+        This will allow for easier reporting and tracking.</p>
+{% comment %} 
+        <div>
+            <strong>Owner</strong>
+            <span>Username@trade.gov.uk</span>
+        </div> {% endcomment %}
+
+        <p>A milestone is the objective you need to reach that allows you to track progress on your action plan.
+        A milestone is broken down into specific actions.</p>
+
+        <a class="govuk-button button--primary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add milestone</a>    
+
+        <div class="action-plan__milestones">
+        {% for milestone in action_plan.milestones %}
+            <div class="action-plan__milestone">
+                <h3 class="action_plan__milestone_header">{{ milestone.objective }}</h3>
+                <p class="action-plan__milestone_meta">
+                    <strong>Completion date:</strong> <span>{{ milestone.completion_date|parse_date:"%Y-%m-%d"|date:"F y" }}</span>
+                </p>
+                <div class="action-plan__milestone__actions">
+                    <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit</a>
+                    <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add item</a>
+                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Delete</a>
+                </div>
+
+                {% if milestone.tasks %}
+                <table class="govuk-table milestone-tasks-table">
+                    <colgroup>
+                        <col style="">
+                        <col style="">
+                        <col style="">
+                        <col style="">
+                        <col style="width: 15%">
+                        <col style="width: 10%">
+                    </colgroup>
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header">Action</th>
+                            <th scope="col" class="govuk-table__header">Assigned to</th>
+                            <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Stakeholders</th>
+                            <th scope="col" class="govuk-table__header">Action Type</th>
+                            <th scope="col" class="govuk-table__header">Timeframe</th>
+                            <th scope="col" class="govuk-table__header">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        {% for task in milestone.tasks %}
+                        <tr class="govuk-table__row milestone-task-data-row">
+                            <!-- Barrier Code -->
+                            <td class="govuk-table__cell">
+                                <div>{{ task.action_text }}</div>
+                            </td>
+                            <!-- Public Title -->
+                            <td class="govuk-table__cell">
+                                {{ task.assigned_to_email }}
+                            </td>
+                            <!-- Public Summary -->
+                            <td class="govuk-table__cell">
+                                {{ task.stakeholders }}
+                            </td>
+                            <!-- Reported Date -->
+                            <td class="govuk-table__cell">
+                                {{ task.action_type_display }}
+                            </td>
+                            <!-- Sector -->
+                            <td class="govuk-table__cell timeframe">
+                                <div>Start date {{ task.start_date|parse_date:"%Y-%m-%d"|date:"m y" }}</div> 
+                                <div>End date {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"m y" }}</div>
+                            </td>
+                            <!-- Government organisation -->
+                            <td class="govuk-table__cell status">
+                                {% if task.status == "NOT_STARTED" %}
+                                    <span class="ma-badge ma-badge--not-started">Not started</span>
+                                {% elif task.status == "IN_PROGRESS" %}
+                                    <span class="ma-badge ma-badge--in-progress">In progress</span>
+                                {% elif task.status == "COMPLETED" %}
+                                    <span class="ma-badge ma-badge--completed">Completed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row milestone-task-action-row">
+                            <td colspan="6"><div class="action-plan__milestone__actions">
+                                    <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit</a>
+                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Delete</a>
+                                </div></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>This milestone has no tasks</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+
+    </section>
+
+{% endblock %}

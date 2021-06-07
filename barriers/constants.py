@@ -13,9 +13,7 @@ class Statuses:
 
 
 ARCHIVED_REASON = Choices(
-    ("DUPLICATE", "Duplicate"),
-    ("NOT_A_BARRIER", "Not a barrier"),
-    ("OTHER", "Other"),
+    ("DUPLICATE", "Duplicate"), ("NOT_A_BARRIER", "Not a barrier"), ("OTHER", "Other"),
 )
 
 
@@ -28,12 +26,7 @@ STATUSES = Choices(
 )
 
 
-ALL_STATUSES = (
-    Choices(
-        ("7", "UNKNOWN", "Unknown"),
-    )
-    + STATUSES
-)
+ALL_STATUSES = Choices(("7", "UNKNOWN", "Unknown"),) + STATUSES
 
 
 STATUSES_HELP_TEXT = Choices(
@@ -68,3 +61,84 @@ AWAITING_REVIEW_FROM = Choices(
     (20, "HM_TRADE_COMMISSION", "HM Trade Commission"),
     (30, "GOVERNMENT_ORGANISATION", "Government organisation"),
 )
+
+ACTION_PLAN_TASK_CHOICES = Choices(
+    ("NOT_STARTED", "Not started"),
+    ("IN_PROGRESS", "In progress"),
+    ("COMPLETED", "Completed"),
+)
+
+ACTION_PLAN_TASK_TYPE_CHOICES = Choices(
+    ("SCOPING_AND_RESEARCH", "Scoping/Research"),
+    ("LOBBYING", "Lobbying"),
+    ("UNILATERAL_INTERVENTIONS", "Unilateral interventions"),
+    ("BILATERAL_ENGAGEMENT", "Bilateral engagement"),
+    ("PLURILATERAL_ENGAGEMENT", "Plurilateral engagement"),
+    ("MULTILATERAL_ENGAGEMENT", "Multilateral engagement"),
+    ("EVENT", "Event"),
+    ("WHITEHALL_FUNDING_STREAMS", "Whitehall funding streams"),
+    ("RESOLUTION_NOT_LEAD_BY_DIT", "Resolution not lead by DIT"),
+)
+
+ACTION_PLAN_TASK_CATEGORIES = {
+    ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: Choices(
+        *[
+            "Dialogue",
+            "Stakeholder mapping",
+            "Research",
+            "Awareness raising",
+            "Comparing with similar barriers",
+            "Analysis",
+            "Best practise workshops",
+            "Investigating possible workarounds",
+        ]
+    ),
+    ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: Choices(*[
+        "Lobbying by officials",
+        "Lobbying by ministers",
+        "Lobbying by experts",
+        "Lobbying by industry",
+        "Lobbying with PM office",
+        "Lobbying by OGD",
+        "Influencing standard-setting bodies",
+    ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: Choices(*[
+        "Technical support to UK",
+        "Support to partner country",
+        "Export finance",
+        "Public consultation",
+        "Legislative changes",
+        "Harmonise standards",
+        "Trade remedies/disputes",
+    ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: Choices(*[
+        "Creating and maintaining trade agreements",
+        "Buidling partnerships",
+        "Market liberalisation forums",
+    ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: Choices(*[
+        "With the EU",
+        "With other forums",
+    ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: Choices(*[
+        "With OECD",
+        "With UN",
+        "With WHO",
+        "With G20/G7",
+        "With WTO",
+    ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: Choices(*[
+        "Organised exhibition",
+        "Conference",
+        "Trade delegation",
+        "Roundtable",
+    ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: Choices(*[
+        "Prosperity fund",
+        "Offical development assistance (ODA)",
+    ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: Choices(*[
+        "Lead by OGDs",
+        "Lead by industry",
+    ]),
+}

@@ -39,6 +39,16 @@
         </li>
     {% endif %}
 
+    {% if active == 'action_plan' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Action plan</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:action_plan' barrier.id %}">Action plan</a>
+        </li>
+    {% endif %}
+
     {% if active == 'public' %}
         <li class="page-tabs__tab page-tabs__tab--active">
             <span class="page-tabs__tab__text">Public view{% if public_barrier.tab_badge %} <span class="ma-badge ma-badge--in-tab">{{ public_barrier.tab_badge }}</span>{% endif %}</span>
