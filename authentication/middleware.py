@@ -1,3 +1,5 @@
+import logging
+
 from http import HTTPStatus
 
 from django.conf import settings
@@ -20,6 +22,7 @@ class SSOMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        logging.warning(f"STUB:1 {getattr(request,'user',None)}")
         return self.get_response(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
