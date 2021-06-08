@@ -22,17 +22,13 @@ class SSOMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        logging.warning(
-            f"STUB:1 {getattr(request,'user',None)} {getattr(request,'session',None)}"
-        )
+        logging.warning(f"STUB:1 {request.user} {request.session.__dict__}")
         tmp = self.get_response(request)
-        logging.warning(
-            f"STUB:2 {getattr(request,'user',None)} {getattr(request,'session',None)}"
-        )
+        logging.warning(f"STUB:2 {request.user} {request.session.__dict__}")
         return tmp
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        logging.warning("STUB:3 {getattr(request,'session',None)}")
+        logging.warning(f"STUB:3 {request.session.__dict__}")
         public_view = getattr(view_func.view_class, "_public_view", False)
         if public_view:
             return view_func(request, *view_args, **view_kwargs)
