@@ -23,7 +23,15 @@ class SSOMiddleware:
 
     def __call__(self, request):
         logging.warning(
-            f"STUB:1 {request.user} |||\n\n\n {request.session.__dict__} \n\n\n|||"
+            f"""
+STUB:1 {request.user} |||
+
+
+{request.session.__dict__['model'].__dict__}
+
+
+|||
+            """
         )
         tmp = self.get_response(request)
         logging.warning(f"STUB:2 {request.user} {request.session.__dict__}")
