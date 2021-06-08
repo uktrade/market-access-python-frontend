@@ -178,11 +178,15 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
 
     def clean_assigned_to(self):
         sso_client = SSOClient()
-        query = self.cleaned_data["assigned_to"].replace(".", " ").split("@")[0]
+        email = self.cleaned_data["assigned_to"]
+        query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
         if not results:
             raise ValidationError(f"Invalid user {query}")
-        return results[0]["user_id"]
+        for result in results:
+            if result["email"] == email:
+                return result["user_id"]
+        return
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -267,11 +271,15 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
 
     def clean_assigned_to(self):
         sso_client = SSOClient()
-        query = self.cleaned_data["assigned_to"].replace(".", " ").split("@")[0]
+        email = self.cleaned_data["assigned_to"]
+        query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
         if not results:
             raise ValidationError(f"Invalid user {query}")
-        return results[0]["user_id"]
+        for result in results:
+            if result["email"] == email:
+                return result["user_id"]
+        return
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
