@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from django.urls import reverse
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 
 from barriers.models import EconomicAssessment
 from core.tests import MarketAccessTestCase

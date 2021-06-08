@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from django.urls import reverse
-from mock import patch
+from unittest.mock import patch
 
 from core.tests import MarketAccessTestCase
 from utils.metadata import get_metadata

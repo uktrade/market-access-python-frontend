@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from django.conf import settings
 from django.urls import reverse
-from mock import patch
+from unittest.mock import patch
 
 from barriers.models import Barrier, SavedSearch
 from core.tests import MarketAccessTestCase

@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from django.urls import resolve, reverse
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 
 from barriers.models import Commodity
 from barriers.views.commodities import BarrierEditCommodities

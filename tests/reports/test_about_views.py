@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from django.urls import resolve, reverse
-from mock import patch
+from unittest.mock import patch
 
 from core.tests import ReportsTestCase
 from reports.models import Report

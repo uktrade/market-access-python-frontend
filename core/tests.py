@@ -2,7 +2,7 @@ import json
 
 from django.conf import settings
 from django.test import TestCase, override_settings
-from mock import patch
+from unittest.mock import patch
 
 from core.filecache import memfiles
 from users.models import User

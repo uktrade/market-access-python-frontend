@@ -1,9 +1,8 @@
 from http import HTTPStatus
-
-from django.urls import reverse
-from mock import patch
+from unittest.mock import patch
 
 from core.tests import MarketAccessTestCase
+from django.urls import reverse
 
 
 class EditCommercialValueTestCase(MarketAccessTestCase):

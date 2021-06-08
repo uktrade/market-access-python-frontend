@@ -1,8 +1,8 @@
 from http import HTTPStatus
 
-import mock
+from unittest import mock
 from django.urls import reverse
-from mock import patch
+from unittest.mock import patch
 
 from core.tests import MarketAccessTestCase
 from utils.exceptions import FileUploadError

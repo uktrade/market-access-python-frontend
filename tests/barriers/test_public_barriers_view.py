@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from django.urls import resolve, reverse
-from mock import patch
+from unittest.mock import patch
 
 from barriers.views.public_barriers import PublicBarrierDetail
 from core.tests import MarketAccessTestCase
