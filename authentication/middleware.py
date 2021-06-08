@@ -23,7 +23,10 @@ class SSOMiddleware:
 
     def __call__(self, request):
         logging.warning(f"STUB:1 {getattr(request,'user',None)}")
-        return self.get_response(request)
+        tmp = self.get_response(request)
+        logging.warning(f"STUB:2 {getattr(request,'user',None)}")
+        logging.warning(f"STUB:3 {tmp.__dict__}")
+        return tmp
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         public_view = getattr(view_func.view_class, "_public_view", False)
