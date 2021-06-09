@@ -110,8 +110,8 @@
                             </td>
                             <!-- Sector -->
                             <td class="govuk-table__cell timeframe">
-                                <div>Start date {{ task.start_date|parse_date:"%Y-%m-%d"|date:"m y" }}</div> 
-                                <div>End date {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"m y" }}</div>
+                                <div>Start date {{ task.start_date|parse_date:"%Y-%m-%d"|date:"F y" }}</div> 
+                                <div>End date {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"F y" }}</div>
                             </td>
                             <!-- Government organisation -->
                             <td class="govuk-table__cell status">
