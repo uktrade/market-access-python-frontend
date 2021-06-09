@@ -57,8 +57,26 @@ class EditActionPlanMilestoneFormView(APIBarrierFormViewMixin, FormView):
         )
 
 
-class DeleteActionPlanMilestoneView(View):
-    def get(self, request, *args, **kwargs):
+class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
+    template_name = "barriers/action_plans/delete_milestone_confirm.html"
+
+    def get_milestone(self):
+        milestones = self.action_plan.milestones
+        found = list(
+            filter(
+                lambda milestone: milestone["id"] == str(self.kwargs.get("id")),
+                milestones,
+            )
+        )
+        return found[0]
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["action_plan"] = self.action_plan
+        context_data["milestone"] = self.get_milestone()
+        return context_data
+
+    def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         milestone_id = str(self.kwargs.get("id"))
         barrier_id = str(self.kwargs.get("barrier_id"))
@@ -119,8 +137,23 @@ class EditActionPlanTaskFormView(APIBarrierFormViewMixin, FormView):
         )
 
 
-class DeleteActionPlanTaskView(View):
-    def get(self, request, *args, **kwargs):
+class DeleteActionPlanTaskView(BarrierMixin, TemplateView):
+    template_name = "barriers/action_plans/delete_task_confirm.html"
+
+    def get_task(self):
+        milestones = self.action_plan.milestones
+        for milestone in milestones:
+            for task in milestone["tasks"]:
+                if task["id"] == str(self.kwargs.get("id")):
+                    return {**task, "assigned_to": task["assigned_to_email"]}
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["action_plan"] = self.action_plan
+        context_data["task"] = self.get_task()
+        return context_data
+
+    def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         task_id = str(self.kwargs.get("id"))
         barrier_id = str(self.kwargs.get("barrier_id"))

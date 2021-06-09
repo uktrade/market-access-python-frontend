@@ -89,3 +89,12 @@
 .ma-badge--not-started{
     background-color: $govuk-mid-grey;
 }
+
+.action_plans_deletion_warning{
+    color: $govuk-red;
+
+    h2{
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+}
