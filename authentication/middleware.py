@@ -6,6 +6,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 
 
@@ -35,6 +36,8 @@ STUB:1 {request.user} |||
 |||
             """
         )
+        client = MarketAccessAPIClient(request.session.get("sso_token"))
+        request.user = client.users.get_current()
         tmp = self.get_response(request)
         logging.warning(f"STUB:2 {request.user} {request.session.__dict__}")
         return tmp
