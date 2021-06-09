@@ -61,7 +61,7 @@
             <div class="action-plan__milestone">
                 <h3 class="action_plan__milestone_header">{{ milestone.objective }}</h3>
                 <p class="action-plan__milestone_meta">
-                    <strong>Completion date:</strong> <span>{{ milestone.completion_date|parse_date:"%Y-%m-%d"|date:"F y" }}</span>
+                    <strong>Completion date:</strong> <span>{{ milestone.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</span>
                 </p>
                 <div class="action-plan__milestone__actions">
                     <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit</a>
@@ -110,8 +110,8 @@
                             </td>
                             <!-- Sector -->
                             <td class="govuk-table__cell timeframe">
-                                <div>Start date {{ task.start_date|parse_date:"%Y-%m-%d"|date:"F y" }}</div> 
-                                <div>End date {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"F y" }}</div>
+                                <div>Start date {{ task.start_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div> 
+                                <div>End date {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div>
                             </td>
                             <!-- Government organisation -->
                             <td class="govuk-table__cell status">
