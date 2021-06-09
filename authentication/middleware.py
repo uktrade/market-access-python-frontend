@@ -23,7 +23,7 @@ class SSOMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        logging.warning(f"STUB:1 {request.user} {request.session.get('sso_token')}")
+        logging.warning(f"STUB:1 |{request.user}| |{request.session.get('sso_token')}|")
         # client = MarketAccessAPIClient(request.session.get("sso_token"))
         # request.user = client.users.get_current()
         logging.warning(f"STUB:2 {request.user}")
