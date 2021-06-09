@@ -27,6 +27,8 @@ class SSOMiddleware:
 STUB:1 {request.user} |||
 
 
+{request.session.__dict__}
+{request.session.__dict__['model']}
 {request.session.__dict__['model'].__dict__}
 
 
