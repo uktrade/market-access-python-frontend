@@ -48,16 +48,11 @@
         <h2 class="action_plan__heading"> Action Plan </h2>
 
         <p>Track a barrier progress against an action plan. Include your weekly progress update, 
-        your milestones and your actions. 
+        your milestones and your tasks. 
         This will allow for easier reporting and tracking.</p>
-{% comment %} 
-        <div>
-            <strong>Owner</strong>
-            <span>Username@trade.gov.uk</span>
-        </div> {% endcomment %}
 
         <p>A milestone is the objective you need to reach that allows you to track progress on your action plan.
-        A milestone is broken down into specific actions.</p>
+        A milestone is broken down into specific tasks.</p>
 
         <a class="govuk-button button--primary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add milestone</a>    
 
@@ -70,7 +65,7 @@
                 </p>
                 <div class="action-plan__milestone__actions">
                     <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit</a>
-                    <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add item</a>
+                    <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add task</a>
                     <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Remove milestone</a>
                 </div>
 
@@ -86,10 +81,10 @@
                     </colgroup>
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
-                            <th scope="col" class="govuk-table__header">Action</th>
+                            <th scope="col" class="govuk-table__header">Task text</th>
                             <th scope="col" class="govuk-table__header">Assigned to</th>
                             <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Stakeholders</th>
-                            <th scope="col" class="govuk-table__header">Action Type</th>
+                            <th scope="col" class="govuk-table__header">Task Type</th>
                             <th scope="col" class="govuk-table__header">Timeframe</th>
                             <th scope="col" class="govuk-table__header">Status</th>
                         </tr>
