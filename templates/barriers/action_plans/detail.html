@@ -71,7 +71,7 @@
                 <div class="action-plan__milestone__actions">
                     <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit</a>
                     <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add item</a>
-                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Delete</a>
+                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Remove milestone</a>
                 </div>
 
                 {% if milestone.tasks %}
@@ -132,7 +132,7 @@
                         <tr class="govuk-table__row milestone-task-action-row">
                             <td colspan="6"><div class="action-plan__milestone__actions">
                                     <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit</a>
-                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Delete</a>
+                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Remove task</a>
                                 </div></td>
                         </tr>
                         {% endfor %}

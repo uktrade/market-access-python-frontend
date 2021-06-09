@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit end date{% endblock %}
+{% block page_title %}{{ block.super }} - Delete task{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,12 +8,8 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Are you sure you want to delete this milestone?' %}
+    {% include 'partials/heading.html' with text='Are you sure you want to delete this task?' %}
     {% include 'partials/sub_heading.html' with text=milestone.objective %}
-
-    <div class="govuk-error-summary restrict-width action_plans_deletion_warning" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-        <h2>This will remove all tasks within the milestone!</h2>
-    </div>
 
     <form action="" method="POST">
         {% csrf_token %}
