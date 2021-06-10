@@ -78,6 +78,7 @@ ACTION_PLAN_TASK_TYPE_CHOICES = Choices(
     ("EVENT", "Event"),
     ("WHITEHALL_FUNDING_STREAMS", "Whitehall funding streams"),
     ("RESOLUTION_NOT_LEAD_BY_DIT", "Resolution not lead by DIT"),
+    ("OTHER", "Other")
 )
 
 ACTION_PLAN_TASK_CATEGORIES = {
@@ -91,6 +92,7 @@ ACTION_PLAN_TASK_CATEGORIES = {
             "Analysis",
             "Best practise workshops",
             "Investigating possible workarounds",
+            "Other"
         ]
     ),
     ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: Choices(*[
@@ -101,6 +103,7 @@ ACTION_PLAN_TASK_CATEGORIES = {
         "Lobbying with PM office",
         "Lobbying by OGD",
         "Influencing standard-setting bodies",
+        "Other",
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: Choices(*[
         "Technical support to UK",
@@ -110,15 +113,18 @@ ACTION_PLAN_TASK_CATEGORIES = {
         "Legislative changes",
         "Harmonise standards",
         "Trade remedies/disputes",
+        "Other",
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: Choices(*[
         "Creating and maintaining trade agreements",
         "Buidling partnerships",
         "Market liberalisation forums",
+        "Other",
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: Choices(*[
         "With the EU",
         "With other forums",
+        "Other",
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: Choices(*[
         "With OECD",
@@ -126,19 +132,24 @@ ACTION_PLAN_TASK_CATEGORIES = {
         "With WHO",
         "With G20/G7",
         "With WTO",
+        "Other",
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: Choices(*[
         "Organised exhibition",
         "Conference",
         "Trade delegation",
         "Roundtable",
+        "Other",
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: Choices(*[
         "Prosperity fund",
         "Offical development assistance (ODA)",
+        "Other",
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: Choices(*[
         "Lead by OGDs",
         "Lead by industry",
+        "Other",
     ]),
+    ACTION_PLAN_TASK_TYPE_CHOICES.OTHER: None
 }

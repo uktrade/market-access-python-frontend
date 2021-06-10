@@ -33,9 +33,6 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
-        # end_date = kwargs.get("initial", {}).get("completion_date")
-        # if end_date:
-        #     self.fields["completion_date"].label = "Change end date"
 
     def clean_completion_date(self):
         return self.cleaned_data["completion_date"].isoformat()
@@ -154,7 +151,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             ),
             ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: get_action_type_category_form(
                 "RESOLUTION_NOT_LEAD_BY_DIT"
-            ),
+            )
         },
         widget=forms.RadioSelect,
     )
@@ -191,6 +188,15 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
+
+        action_type_field = self.fields[
+            "action_type"
+        ]
+        if hasattr(action_type_field, "subform"):
+            action_type_category = action_type_field.subform.get_action_type_category()
+        else:
+            action_type_category = "Other"
+            
         client.action_plans.add_task(
             barrier_id=self.barrier_id,
             milestone_id=self.milestone_id,
@@ -200,9 +206,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             start_date=self.cleaned_data.get("start_date"),
             completion_date=self.cleaned_data.get("completion_date"),
             action_type=self.cleaned_data.get("action_type"),
-            action_type_category=self.fields[
-                "action_type"
-            ].subform.get_action_type_category(),
+            action_type_category=action_type_category,
             stakeholders=self.cleaned_data["stakeholders"]
         )
 
@@ -247,7 +251,7 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             ),
             ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: get_action_type_category_form(
                 "RESOLUTION_NOT_LEAD_BY_DIT"
-            ),
+            )
         },
         widget=forms.RadioSelect,
     )
@@ -285,6 +289,15 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
+
+        action_type_field = self.fields[
+            "action_type"
+        ]
+        if hasattr(action_type_field, "subform"):
+            action_type_category = action_type_field.subform.get_action_type_category()
+        else:
+            action_type_category = "Other"
+
         client.action_plans.edit_task(
             barrier_id=self.barrier_id,
             task_id=self.task_id,
@@ -294,8 +307,6 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             start_date=self.cleaned_data.get("start_date"),
             completion_date=self.cleaned_data.get("completion_date"),
             action_type=self.cleaned_data.get("action_type"),
-            action_type_category=self.fields[
-                "action_type"
-            ].subform.get_action_type_category(),
+            action_type_category=action_type_category,
             stakeholders=self.cleaned_data["stakeholders"]
         )
