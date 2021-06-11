@@ -62,9 +62,9 @@
                     <strong>Completion date:</strong> <span>{{ milestone.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</span>
                 </p>
                 <div class="action-plan__milestone__actions">
-                    <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit</a>
                     <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add task</a>
-                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Remove milestone</a>
+                    <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit milestone</a>
+                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Delete milestone</a>
                 </div>
 
                 {% if milestone.tasks %}
@@ -73,7 +73,7 @@
                         <col style="">
                         <col style="">
                         <col style="">
-                        <col style="">
+                        <col style="" min-width=50>
                         <col style="width: 15%">
                         <col style="width: 10%">
                     </colgroup>
@@ -82,7 +82,7 @@
                             <th scope="col" class="govuk-table__header">Task text</th>
                             <th scope="col" class="govuk-table__header">Assigned to</th>
                             <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Stakeholders</th>
-                            <th scope="col" class="govuk-table__header">Task Type</th>
+                            <th scope="col" class="govuk-table__header">Task type</th>
                             <th scope="col" class="govuk-table__header">Timeframe</th>
                             <th scope="col" class="govuk-table__header">Status</th>
                         </tr>
@@ -108,8 +108,8 @@
                             </td>
                             <!-- Sector -->
                             <td class="govuk-table__cell timeframe">
-                                <div>Start date {{ task.start_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div> 
-                                <div>End date {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div>
+                                <div>Start {{ task.start_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div>
+                                <div>End {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div>
                             </td>
                             <!-- Government organisation -->
                             <td class="govuk-table__cell status">
@@ -124,8 +124,8 @@
                         </tr>
                         <tr class="govuk-table__row milestone-task-action-row">
                             <td colspan="6"><div class="action-plan__milestone__actions">
-                                    <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit</a>
-                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Remove task</a>
+                                    <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit task</a>
+                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Delete task</a>
                                 </div></td>
                         </tr>
                         {% endfor %}
