@@ -1,4 +1,5 @@
 import re
+import logging
 import uuid
 from urllib.parse import urlencode
 
@@ -104,6 +105,7 @@ class LoginCallback(RedirectView):
             raise PermissionDenied(error_msg)
 
         response_data = response.json()
+        logging.warning(f"STUB:10 {response_data}")
         access_token = response_data.get("access_token")
         success = init_session(request.session, access_token)
         if not success:
