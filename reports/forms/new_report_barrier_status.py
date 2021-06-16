@@ -1,13 +1,8 @@
-from django import forms
-
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
-from barriers.forms.statuses import (
-    DormantForm,
-    OpenInProgressForm,
-    OpenPendingForm,
-    ResolvedInFullForm,
-    ResolvedInPartForm,
-)
+from barriers.forms.statuses import (DormantForm, OpenInProgressForm,
+                                     OpenPendingForm, ResolvedInFullForm,
+                                     ResolvedInPartForm)
+from django import forms
 from utils.forms import SubformChoiceField, SubformMixin
 
 
@@ -29,9 +24,7 @@ class BarrierTerms:
                 cls.LONG_TERM,
                 {
                     "label": "A long-term strategic barrier",
-                    "hint": "These issues usually cannot be fixed quickly without a change in regulations or the business environment. For example, a ban on British food products as they don’t meet the countries new food safety regulations.
-
-",
+                    "hint": "These issues usually cannot be fixed quickly without a change in regulations or the business environment. For example, a ban on British food products as they don’t meet the countries new food safety regulations.",
                 },
             ),
         )
