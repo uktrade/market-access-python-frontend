@@ -358,6 +358,10 @@ class ActionPlanResource(APIResource):
         url = f"barriers/{barrier_id}/action_plan"
         return self.model(self.client.get(url))
 
+    def edit_action_plan(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan"
+        return self.model(self.client.patch(url, json={**kwargs}))
+
     def add_milestone(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones"
         return self.model(self.client.post(url, json={"barrier":str(barrier_id), **kwargs}))

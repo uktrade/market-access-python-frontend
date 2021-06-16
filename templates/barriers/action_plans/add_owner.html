@@ -1,0 +1,21 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Barrier team - Find user{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:team' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Edit action plan owner' %}
+
+    {% form_error_banner form %}
+
+    <div class="restrict-width">
+        {% url 'barriers:team' barrier.id as team_url %}
+        {% include "users/partials/user_search_form.html" with query_label="Find a user to add as a owner" cancel_url=team_url %}
+        {% include "users/partials/user_search_results.html" %}
+    </div>
+
+{% endblock %}

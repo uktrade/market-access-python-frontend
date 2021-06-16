@@ -1,4 +1,5 @@
-from barriers.forms.action_plans import (ActionPlanMilestoneEditForm,
+from barriers.forms.action_plans import (ActionPlanCurrentStatusEditForm,
+                                         ActionPlanMilestoneEditForm,
                                          ActionPlanMilestoneForm,
                                          ActionPlanTaskEditForm,
                                          ActionPlanTaskForm)
@@ -7,7 +8,44 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, TemplateView
+from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
+
+
+class EditActionPlanCurrentStatusFormView(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/action_plans/edit_action_plan_current_status.html"
+    form_class = ActionPlanCurrentStatusEditForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        return kwargs
+
+    def get_initial(self):
+        if self.request.method == "GET":
+            return self.action_plan.data
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
+        )
+
+class SelectActionPlanOwner(BarrierMixin, UserSearchMixin, FormView):
+    template_name = "barriers/action_plans/add_owner.html"
+    error_message = "There was an error adding {full_name} as an owner."
+
+    def select_user_api_call(self, user_id):
+        self.client.action_plans.edit_action_plan(
+            barrier_id=str(self.kwargs.get("barrier_id")),
+            owner=user_id
+        )
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
+        )
+
 
 
 class AddActionPlanMilestoneFormView(APIBarrierFormViewMixin, FormView):

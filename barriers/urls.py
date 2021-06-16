@@ -5,8 +5,10 @@ from barriers.views.action_plans import (ActionPlanTemplateView,
                                          AddActionPlanTaskFormView,
                                          DeleteActionPlanMilestoneView,
                                          DeleteActionPlanTaskView,
+                                         EditActionPlanCurrentStatusFormView,
                                          EditActionPlanMilestoneFormView,
-                                         EditActionPlanTaskFormView)
+                                         EditActionPlanTaskFormView,
+                                         SelectActionPlanOwner)
 from barriers.views.light_touch_reviews import (
     PublicBarrierLightTouchReviewsEdit,
     PublicBarrierLightTouchReviewsHMTradeCommissionerApprovalEnabled)
@@ -507,6 +509,16 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/action_plan",
         ActionPlanTemplateView.as_view(),
         name="action_plan",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/edit_current_status",
+        EditActionPlanCurrentStatusFormView.as_view(),
+        name="action_plan_edit_current_status",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/edit_owner",
+        SelectActionPlanOwner.as_view(),
+        name="action_plan_edit_owner",
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/add_milestone",

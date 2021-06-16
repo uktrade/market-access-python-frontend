@@ -17,6 +17,31 @@ class MonthYearInFutureField(MonthYearField):
     default_validators = []
 
 
+class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
+
+    current_status = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        label="Current status and progress on status action plans",
+    )
+
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier_id,
+            current_status=self.cleaned_data.get("current_status"),
+        )
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan", 
+            kwargs={"barrier_id": self.barrier_id}
+        )
+
 class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(
@@ -64,9 +89,8 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
         error_messages={"required": "Enter the completion date"},
     )
 
-    def __init__(self, barrier_id, milestone_id, *args, **kwargs):
+    def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
-        self.milestone_id = milestone_id
         super().__init__(*args, **kwargs)
 
     def clean_completion_date(self):
