@@ -177,12 +177,12 @@ class UpdateBarrierTermForm(APIFormMixin, forms.Form):
         (
             1,
             "A procedural, short-term barrier",
-            "for example, goods stuck at the border or documentation issue",
+            "These are issues that can be resolved fairly quickly and can be routine tasks. For example, a shipment is stuck in customs due to incorrect customs documentation, this is cleared once the proper paperwork is submitted.",
         ),
         (
             2,
             "A long-term strategic barrier",
-            "for example, a change of regulation",
+            "These issues usually cannot be fixed quickly without a change in regulations or the business environment. For example, a ban on British food products as they don’t meet the countries new food safety regulations.",
         ),
     ]
     term = ChoiceFieldWithHelpText(
