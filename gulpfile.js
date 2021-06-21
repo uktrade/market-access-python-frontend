@@ -5,11 +5,12 @@ const
     gulp = require('gulp'),
     concat = require('gulp-concat'),
     gulpif = require('gulp-if'),
-    sass = require('gulp-sass'),
     babel = require('gulp-babel'),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
     webpack = require('webpack-stream');
+
+const sass = require('gulp-sass')(require('sass'));
 
 // NOTES
 // Useful tips for uglifying - https://stackoverflow.com/questions/24591854/using-gulp-to-concatenate-and-uglify-files
