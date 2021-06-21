@@ -6,6 +6,7 @@ from django import forms
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import (ClearableMixin, MonthYearField, SubformChoiceField,
                          SubformMixin)
@@ -22,6 +23,7 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
     current_status = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Current status and progress on status action plans",
+        required=False
     )
 
 
@@ -34,6 +36,7 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
         client.action_plans.edit_action_plan(
             barrier_id=self.barrier_id,
             current_status=self.cleaned_data.get("current_status"),
+            current_status_last_updated=timezone.now().isoformat()
         )
 
     def get_success_url(self):
