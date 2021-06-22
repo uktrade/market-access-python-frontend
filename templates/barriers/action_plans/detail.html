@@ -57,7 +57,7 @@
         </div>
         {% if action_plan.current_status_last_updated %}
         <div>
-            <span class="action_plan__owner__heading">Updated on:</span> <span>{{ action_plan.current_status_last_updated|parse_iso|date:"F Y" }}</span>
+            <span class="action_plan__owner__heading">Updated on:</span> <span>{{ action_plan.current_status_last_updated|parse_iso|date:"jS F Y" }}</span>
         </div>
         {% endif %}
 
