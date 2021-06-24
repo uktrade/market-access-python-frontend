@@ -7,9 +7,9 @@ from core.tests import MarketAccessTestCase
 
 
 class DownloadBarriersTestCase(MarketAccessTestCase):
-    @patch("utils.api.client.BarriersResource.get_csv")
+    @patch("utils.api.client.BarriersResource.get_email_csv")
     def test_download_barriers(self, mock_get_csv):
-        mock_get_csv.return_value = "http://s3/file.csv"
+        mock_get_csv.return_value = {"successfully": True, "reason": ""}
         response = self.client.get(
             reverse("barriers:download"),
             data={
