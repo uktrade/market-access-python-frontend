@@ -122,6 +122,10 @@ class BarriersResource(APIResource):
         url = "barriers/s3-download"
         return self.client.get(url, params=kwargs).get("url")
 
+    def get_email_csv(self, *args, **kwargs):
+        url = "barriers/s3-email"
+        return self.client.get(url, params=kwargs)
+
     def get_streamed_csv(self, *args, **kwargs):
         url = "barriers/export"
         return self.client.get(url, params=kwargs, stream=True, raw=True)

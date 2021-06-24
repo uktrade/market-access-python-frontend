@@ -1,9 +1,9 @@
-from django.conf import settings
-from django.forms import Form
-from django.http import StreamingHttpResponse
-from django.shortcuts import redirect
-from django.views.generic import FormView, View
+from urllib.parse import urlencode
 
+from django.forms import Form
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views.generic import FormView, View
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
@@ -59,6 +59,10 @@ class BarrierSearch(PaginationMixin, SearchFormView):
                 "pagination": self.get_pagination_data(object_list=barriers),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "search",
+                "search_csv_downloaded": self.request.GET.get("search_csv_downloaded"),
+                "search_csv_download_error": self.request.GET.get(
+                    "search_csv_download_error"
+                ),
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)
@@ -136,20 +140,19 @@ class DownloadBarriers(SearchFormMixin, View):
         form = self.form_class(**self.get_form_kwargs())
         form.full_clean()
         search_parameters = form.get_api_search_parameters()
-
+        current_url = request.build_absolute_uri()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
-
-        if settings.USE_S3_FOR_CSV_DOWNLOADS:
-            download_url = client.barriers.get_csv(
-                ordering="-reported_on", **search_parameters
-            )
-            return redirect(download_url)
-
-        file = client.barriers.get_streamed_csv(
+        resp = client.barriers.get_email_csv(
             ordering="-reported_on", **search_parameters
         )
-        response = StreamingHttpResponse(
-            file.iter_content(), content_type=file.headers["Content-Type"]
+
+        search_page_url = reverse("barriers:search")
+        search_page_params = {
+            **search_parameters,
+            "search_csv_downloaded": int(resp.get("success", False)),
+            "search_csv_download_error": resp.get("reason", ""),
+        }
+
+        return HttpResponseRedirect(
+            f"{search_page_url}?{urlencode(search_page_params)}"
         )
-        response["Content-Disposition"] = file.headers["Content-Disposition"]
-        return response
