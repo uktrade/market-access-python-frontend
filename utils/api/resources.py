@@ -110,13 +110,9 @@ class BarriersResource(APIResource):
         url = f"barriers/members/{team_member_id}"
         return self.client.delete(url, params=kwargs)
 
-    def get_csv(self, *args, **kwargs):
-        url = "barriers/s3-download"
-        return self.client.get(url, params=kwargs).get("url")
-
-    def get_streamed_csv(self, *args, **kwargs):
-        url = "barriers/export"
-        return self.client.get(url, params=kwargs, stream=True, raw=True)
+    def get_email_csv(self, *args, **kwargs):
+        url = "barriers/s3-email"
+        return self.client.get(url, params=kwargs)
 
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:

@@ -170,6 +170,30 @@
                     {% endif %}
                     </span>
                     <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">Download</a>
+
+                    {% if search_csv_downloaded == "1" %}
+
+                    <div class="govuk-panel govuk-panel--confirmation">
+                      <h1 class="govuk-panel__title">
+                        Generating CSV file
+                      </h1>
+                      <div class="govuk-panel__body">
+                        An email with a link to your file will be sent to you shortly.
+                      </div>
+                    </div>
+
+                    {% elif search_csv_downloaded == "0" %}
+
+                    <div class="govuk-panel govuk-panel--confirmation">
+                      <h1 class="govuk-panel__title">
+                        This task has crashed
+                      </h1>
+                      <div class="govuk-panel__body">
+                        No CSV will be generated got ERROR: {{ search_csv_download_error }}
+                      </div>
+                    </div>
+
+                    {% endif %}
                 {% else %}
                     <span class="filter-results-download__text">There are no barriers to download</span>
                 {% endif %}
