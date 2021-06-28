@@ -113,4 +113,12 @@
             font-weight: bold;
         }
     }
+
+}
+
+#assigned_to .textarea-with-mentions .govuk-mentions .govuk-mentions__control{
+    min-height: 0;
+    .govuk-mentions__highlighter{
+        display: none;
+    }
 }

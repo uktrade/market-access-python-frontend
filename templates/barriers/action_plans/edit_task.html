@@ -1,5 +1,6 @@
 {% extends "barriers/edit/base.html" %} 
 {% block page_title %}
+{% load static %}
 {{ block.super }} - Edit end date{% endblock %} 
 
 {% block back_link %}
@@ -11,8 +12,12 @@
 {% endblock %}
 
 {% block body_script %}
+  <script src="{% static 'js/react.js' %}"></script>
     <script>
         ma.pages.barrier.action_plans_add_task();
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderInputSelectWithMentions("assigned_to__field-container", null, null, null, trigger="")
+    })
     </script>
 {% endblock %}
 
@@ -139,8 +144,7 @@
       <span class="govuk-hint">{{ form.assigned_to.help_text }}</span>
 
       {% form_field_error form "assigned_to" %}
-
-      <div class="govuk-date-input">{{ form.assigned_to }}</div>
+      <div class="" id="{{ form.assigned_to.name }}__field-container">{{ form.assigned_to }}</div>
     </fieldset>
   </div>
 

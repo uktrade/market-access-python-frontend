@@ -5,7 +5,10 @@ import { MentionsInput, Mention } from 'react-mentions'
 function TextAreaWithMentions({
     textAreaName,
     textAreaId,
-    preExistingText=""
+    preExistingText="",
+    trigger="@",
+    idPrefix="@",
+    isSingleLine=false
 }) {
 
     const mentionsRef = useRef()
@@ -34,8 +37,8 @@ function TextAreaWithMentions({
         const response = await fetch(`/users/search/?q=${query}`)
         const data = await response.json()
         return data.results.map(item => ({
-            id: `@${item.email}`,
-            display: `@${item.email}`,
+            id: `${idPrefix}${item.email}`,
+            display: `${idPrefix}${item.email}`,
             email: item.email,
             firstName: item.first_name,
             lastName: item.last_name
@@ -66,12 +69,12 @@ function TextAreaWithMentions({
             value={tokenisedText}
             onChange={onTextChange}
             className="govuk-mentions"
-            singleLine={false}
+            singleLine={isSingleLine}
             inputRef={mentionsRef}
             style={mentionsStyling}
         >
             <Mention
-                trigger={"@"}
+                trigger={trigger}
                 data={getSuggestions}
                 style={{ color: "#f47738", zIndex: 1, position: "relative", left: 1, top: 1 }}
                 renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => {
