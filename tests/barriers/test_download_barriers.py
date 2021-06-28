@@ -8,8 +8,8 @@ from core.tests import MarketAccessTestCase
 
 class DownloadBarriersTestCase(MarketAccessTestCase):
     @patch("utils.api.client.BarriersResource.get_email_csv")
-    def test_download_barriers(self, mock_get_csv):
-        mock_get_csv.return_value = {"successfully": True, "reason": ""}
+    def test_download_barriers(self, mock_get_email_csv):
+        mock_get_email_csv.return_value = {"successfully": True, "reason": ""}
         response = self.client.get(
             reverse("barriers:download"),
             data={
@@ -34,7 +34,7 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
 
-        mock_get_csv.assert_called_with(
+        mock_get_email_csv.assert_called_with(
             search="Test search",
             location=(
                 "9f5f66a0-5d95-e211-a939-e4115bead28a,"
