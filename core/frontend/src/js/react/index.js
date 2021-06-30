@@ -77,7 +77,7 @@ function renderTextAreaWithMentions(htmlElementId = "note-textarea-container", p
 
 function renderInputSelectWithMentions(htmlElementId = "note-textarea-container", placeholder = null, labelClasses = null, containerClasses = null, trigger = undefined) {
   
-  console.log("setting up input with mentions", htmlElementId, placholder,labelClasses, containerClasses, trigger )
+  console.log("setting up input with mentions", htmlElementId, trigger )
 
   const inputContainerElement = document.getElementById(htmlElementId)
   const nativeTextarea = inputContainerElement.querySelector("input")
