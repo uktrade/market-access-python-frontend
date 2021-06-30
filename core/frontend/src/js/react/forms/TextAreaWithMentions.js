@@ -29,6 +29,7 @@ function TextAreaWithMentions({
     }, [mentionsRef])
 
     const onTextChange = (event, newValue, newPlainTextValue, mentions) => {
+        console.log("text change", newValue)
         setNoteText(newPlainTextValue)
         setTokenisedText(newValue)
     }
@@ -46,6 +47,7 @@ function TextAreaWithMentions({
     }
 
     const getSuggestions = async (query, callback) => {
+        console.log("fetching suggestions", query)
         const users = await searchUsers(query)
         callback(users)
     }
