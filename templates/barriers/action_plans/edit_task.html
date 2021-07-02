@@ -11,7 +11,7 @@
 >
 {% endblock %}
 
-{% block body_script %}
+{% block head %}
   <script src="{% static 'js/react.js' %}"></script>
     <script>
         ma.pages.barrier.action_plans_add_task();
@@ -24,7 +24,7 @@
 
  {% block page_content %} {% include 'partials/heading.html' with text='Edit task' %}
   {% form_error_banner form %}
-
+<h1>Test</h1>
 <form action="" method="POST">
   {% csrf_token %}
 
