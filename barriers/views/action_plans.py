@@ -31,21 +31,20 @@ class EditActionPlanCurrentStatusFormView(APIBarrierFormViewMixin, FormView):
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
 
+
 class SelectActionPlanOwner(BarrierMixin, UserSearchMixin, FormView):
     template_name = "barriers/action_plans/add_owner.html"
     error_message = "There was an error adding {full_name} as an owner."
 
     def select_user_api_call(self, user_id):
         self.client.action_plans.edit_action_plan(
-            barrier_id=str(self.kwargs.get("barrier_id")),
-            owner=user_id
+            barrier_id=str(self.kwargs.get("barrier_id")), owner=user_id
         )
 
     def get_success_url(self):
         return reverse(
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
-
 
 
 class AddActionPlanMilestoneFormView(APIBarrierFormViewMixin, FormView):
