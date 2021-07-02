@@ -64,10 +64,11 @@
       {% include 'partials/footer.html' %}
     {% endblock %}
 
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>ma.init();</script>
+    {% block body_script %}{% endblock %}
+    
     {% block body_end %}
-      <script src="{% static 'js/main.js' %}"></script>
-      <script>ma.init();</script>
-      {% block body_script %}{% endblock %}
       {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
         <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
           <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
