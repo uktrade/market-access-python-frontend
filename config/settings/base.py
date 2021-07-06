@@ -15,10 +15,9 @@ import sys
 from pathlib import Path
 
 import sentry_sdk
+from django_log_formatter_ecs import ECSFormatter
 from environ import Env
 from sentry_sdk.integrations.django import DjangoIntegration
-
-from django_log_formatter_ecs import ECSFormatter
 
 ROOT_DIR = Path(__file__).parents[2]
 
@@ -124,6 +123,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "utils.context_processors.user_scope",
+                "utils.context_processors.feature_flags",
                 "django_settings_export.settings_export",
             ],
             "builtins": [
@@ -356,3 +356,5 @@ SETTINGS_EXPORT = (
     "GTM_AUTH",
     "GTM_PREVIEW",
 )
+
+ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED")
