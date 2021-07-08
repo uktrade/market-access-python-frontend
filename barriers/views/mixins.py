@@ -1,13 +1,11 @@
 import urllib.parse
 from http import HTTPStatus
 
+from barriers.models import PublicBarrier
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
-
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
-
-from barriers.models import PublicBarrier
 
 
 class BarrierMixin:
@@ -72,6 +70,7 @@ class BarrierMixin:
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["barrier"] = self.barrier
+        context_data["action_plan"] = self.action_plan
         if self.include_interactions:
             context_data["interactions"] = self.interactions
         return context_data

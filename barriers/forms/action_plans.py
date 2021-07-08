@@ -1,4 +1,5 @@
-from barriers.constants import (ACTION_PLAN_TASK_CATEGORIES,
+from barriers.constants import (ACTION_PLAN_RAG_STATUS_CHOICES,
+                                ACTION_PLAN_TASK_CATEGORIES,
                                 ACTION_PLAN_TASK_CHOICES,
                                 ACTION_PLAN_TASK_TYPE_CHOICES)
 from barriers.forms.mixins import APIFormMixin
@@ -25,7 +26,10 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
         label="Current status and progress on status action plans",
         required=False
     )
-
+    status = forms.ChoiceField(
+        label="Action plan delivery confidence",
+        choices=ACTION_PLAN_RAG_STATUS_CHOICES, widget=forms.RadioSelect
+    )
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
@@ -36,7 +40,8 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
         client.action_plans.edit_action_plan(
             barrier_id=self.barrier_id,
             current_status=self.cleaned_data.get("current_status"),
-            current_status_last_updated=timezone.now().isoformat()
+            current_status_last_updated=timezone.now().isoformat(),
+            status=self.cleaned_data.get("status")
         )
 
     def get_success_url(self):

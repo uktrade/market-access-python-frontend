@@ -15,6 +15,31 @@
     <form action="" method="POST">
         {% csrf_token %}
 
+        <div id="{{ form.status.name }}"
+        class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
+                <span id="{{ form.status.name }}-item-hint" class="govuk-hint">{{ form.status.help_text }}</span>
+                {% form_field_error form "status" %}
+
+                <div class="govuk-radios status govuk-radios--conditional" data-module="radios">
+
+                    {% for choice_value, choice_name in form.fields.status.choices %}
+                    
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="{{ choice_value }}" name="{{ form.status.name }}"
+                                    type="radio" value="{{ choice_value }}"
+                                    {% if form.status.value == choice_value %}checked="checked"{% endif %}
+                                    data-aria-controls="conditional-{{ choice_value }}"
+                                    aria-describedby="{{ choice_value }}-item-hint">
+                            <label class="govuk-label govuk-radios__label"
+                                    for="{{ choice_value }}">{{ choice_name }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
         <div id="{{ form.current_status.name }}" class="{% form_group_classes form.current_status.errors %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.current_status.label }}</legend>

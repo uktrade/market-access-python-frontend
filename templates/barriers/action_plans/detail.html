@@ -50,7 +50,16 @@
         <p> Track barrier progress against an action plan. Include your regular progress updates, your milestones and tasks. This will allow for easier reporting.</p>
 
         <div>
-            <span class="action_plan__current_status__heading">Current status and progress on status action plans</span> 
+            <span class="action_plan__current_status__heading">
+                Current status and progress on status action plans 
+                {% if action_plan.status == "ON_TRACK" %}
+                    <span class="ma-badge ma-badge--status-on-track">On track</span>
+                {% elif action_plan.status == "RISK_OF_DELAY" %}
+                    <span class="ma-badge ma-badge--status-risk-of-delay">Risk of delay</span>
+                {% elif action_plan.status == "DELAYED" %}
+                    <span class="ma-badge ma-badge--status-delayed">Delayed</span>
+                {% endif %}
+            </span> 
             {% if action_plan.current_status %}<a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Edit</a>{% else %}<br><a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Add progress update</a> {% endif %}
             
             <p>{{ action_plan.current_status }}</p>

@@ -92,6 +92,16 @@
     background-color: $govuk-mid-grey;
 }
 
+.ma-badge--status-on-track{
+    background-color: $govuk-green;
+}
+.ma-badge--status-risk-of-delay{
+    background-color: $govuk-orange;
+}
+.ma-badge--status-delayed{
+    background-color: $govuk-red;
+}
+
 .action_plans_deletion_warning{
     color: $govuk-red;
 

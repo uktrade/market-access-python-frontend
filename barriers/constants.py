@@ -153,3 +153,9 @@ ACTION_PLAN_TASK_CATEGORIES = {
     ]),
     ACTION_PLAN_TASK_TYPE_CHOICES.OTHER: None
 }
+
+ACTION_PLAN_RAG_STATUS_CHOICES = Choices(
+    ("ON_TRACK", "On track"),
+    ("RISK_OF_DELAY", "Risk of delay"),
+    ("DELAYED", "Delayed"),
+)
