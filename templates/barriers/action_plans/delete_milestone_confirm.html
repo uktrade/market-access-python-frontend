@@ -8,11 +8,11 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Are you sure you want to delete this milestone?' %}
+    {% include 'partials/heading.html' with text='Are you sure you want to delete this objective?' %}
     {% include 'partials/sub_heading.html' with text=milestone.objective %}
 
     <div class="govuk-error-summary restrict-width action_plans_deletion_warning" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-        <h2>This will remove all tasks within the milestone!</h2>
+        <h2>This will remove all interventions within the objective!</h2>
     </div>
 
     <form action="" method="POST">

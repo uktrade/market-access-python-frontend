@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Delete task{% endblock %}
+{% block page_title %}{{ block.super }} - Delete intervention{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Are you sure you want to delete this task?' %}
+    {% include 'partials/heading.html' with text='Are you sure you want to delete this intervention?' %}
     {% include 'partials/sub_heading.html' with text=milestone.objective %}
 
     <form action="" method="POST">

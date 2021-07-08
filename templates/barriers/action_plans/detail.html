@@ -47,7 +47,7 @@
     <section class="action_plan">
         <h2 class="action_plan__heading"> Action Plan </h2>
 
-        <p> Track barrier progress against an action plan. Include your regular progress updates, your milestones and tasks. This will allow for easier reporting.</p>
+        <p> This plans the steps needed to resolve a market access barrier. It contains specific objectives, stakeholders, timescales, outcomes and resources.</p>
 
         <div>
             <span class="action_plan__current_status__heading">
@@ -71,7 +71,7 @@
         {% endif %}
 
         <div>
-            <span class="action_plan__owner__heading">Owner</span> <span>{{ action_plan.owner_email }}</span> 
+            <span class="action_plan__owner__heading">Owner:</span> <span>{{ action_plan.owner_email }}</span> 
             <a href="{% url 'barriers:action_plan_edit_owner' barrier.id %}">Edit</a>
         </div>
 
@@ -84,13 +84,13 @@
         {% for milestone in action_plan.milestones %}
             <div class="action-plan__milestone">
                 <h3 class="action_plan__milestone_header">{{ milestone.objective }}</h3>
-                <p class="action-plan__milestone_meta">
+                <!-- <p class="action-plan__milestone_meta">
                     <strong>Completion date:</strong> <span>{{ milestone.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</span>
-                </p>
+                </p> -->
                 <div class="action-plan__milestone__actions">
-                    <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add task</a>
-                    <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit milestone</a>
-                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Delete milestone</a>
+                    <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add intervention</a>
+                    <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit objective</a>
+                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Delete objective</a>
                 </div>
 
                 {% if milestone.tasks %}
@@ -105,10 +105,10 @@
                     </colgroup>
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
-                            <th scope="col" class="govuk-table__header">Task text</th>
+                            <th scope="col" class="govuk-table__header">Purpose of the intervention</th>
                             <th scope="col" class="govuk-table__header">Assigned to</th>
                             <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Stakeholders</th>
-                            <th scope="col" class="govuk-table__header">Task type</th>
+                            <th scope="col" class="govuk-table__header">Intervention type</th>
                             <th scope="col" class="govuk-table__header">Timeframe</th>
                             <th scope="col" class="govuk-table__header">Status</th>
                         </tr>
@@ -150,8 +150,8 @@
                         </tr>
                         <tr class="govuk-table__row milestone-task-action-row">
                             <td colspan="6"><div class="action-plan__milestone__actions">
-                                    <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit task</a>
-                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Delete task</a>
+                                    <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit</a>
+                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Delete</a>
                                 </div></td>
                         </tr>
                         {% endfor %}

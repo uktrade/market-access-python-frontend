@@ -8,7 +8,11 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add milestone' %}
+    {% include 'partials/heading.html' with text='Add objective' %}
+
+    <div>
+        <p>Describe the objective, for example ‘Scope the extent of this MAB via engagement with businesses’. How objectives will be achieved are added as interventions.</p>
+    </div>
 
     {% form_error_banner form %}
 
@@ -29,7 +33,7 @@
             </fieldset>
         </div>
         
-        <div id="{{ form.completion_date.name }}" class="{% form_group_classes form.completion_date.errors %}">
+        <!-- <div id="{{ form.completion_date.name }}" class="{% form_group_classes form.completion_date.errors %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.completion_date.label }}</legend>
 
@@ -41,7 +45,7 @@
                     {{ form.completion_date }}
                 </div>
             </fieldset>
-        </div>
+        </div> -->
 
         <button class="govuk-button" data-module="govuk-button">Confirm</button>
         <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>

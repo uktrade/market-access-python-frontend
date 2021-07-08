@@ -92,17 +92,17 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
         error_messages={"required": "Enter your milestone objective"},
     )
 
-    completion_date = MonthYearInFutureField(
-        label="Completion date",
-        error_messages={"required": "Enter the completion date"},
-    )
+    # completion_date = MonthYearInFutureField(
+    #     label="Completion date",
+    #     error_messages={"required": "Enter the completion date"},
+    # )
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
 
-    def clean_completion_date(self):
-        return self.cleaned_data["completion_date"].isoformat()
+    # def clean_completion_date(self):
+    #     return self.cleaned_data["completion_date"].isoformat()
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -110,7 +110,7 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
             barrier_id=self.barrier_id,
             milestone_id=self.milestone_id,
             objective=self.cleaned_data.get("objective"),
-            completion_date=self.cleaned_data.get("completion_date"),
+            # completion_date=self.cleaned_data.get("completion_date"),
         )
 
     def get_success_url(self):
@@ -153,10 +153,10 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
     start_date = MonthYearInFutureField()
     completion_date = MonthYearInFutureField()
 
-    action_text = forms.CharField(label="Task text", widget=forms.Textarea(attrs={"class": "govuk-textarea"}))
+    action_text = forms.CharField(label="Intervention text", widget=forms.Textarea(attrs={"class": "govuk-textarea"}))
 
     action_type = SubformChoiceField(
-        label="Task type",
+        label="Intervention type",
         choices=ACTION_PLAN_TASK_TYPE_CHOICES,
         subform_classes={
             ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: get_action_type_category_form(
@@ -253,10 +253,10 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
     start_date = MonthYearInFutureField()
     completion_date = MonthYearInFutureField()
 
-    action_text = forms.CharField(label="Task text", widget=forms.Textarea(attrs={"class": "govuk-textarea"}))
+    action_text = forms.CharField(label="Purpose of the intervention", widget=forms.Textarea(attrs={"class": "govuk-textarea"}))
 
     action_type = SubformChoiceField(
-        label="Task type",
+        label="Intervention type",
         choices=ACTION_PLAN_TASK_TYPE_CHOICES,
         subform_classes={
             ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: get_action_type_category_form(
