@@ -58,24 +58,24 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
         error_messages={"required": "Enter your milestone objective"},
     )
 
-    completion_date = MonthYearInFutureField(
-        label="Completion date",
-        error_messages={"required": "Enter the completion date"},
-    )
+    # completion_date = MonthYearInFutureField(
+    #     label="Completion date",
+    #     error_messages={"required": "Enter the completion date"},
+    # )
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
 
-    def clean_completion_date(self):
-        return self.cleaned_data["completion_date"].isoformat()
+    # def clean_completion_date(self):
+    #     return self.cleaned_data["completion_date"].isoformat()
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.action_plans.add_milestone(
             barrier_id=self.barrier_id,
             objective=self.cleaned_data.get("objective"),
-            completion_date=self.cleaned_data.get("completion_date"),
+            # completion_date=self.cleaned_data.get("completion_date"),
         )
 
     def get_success_url(self):
