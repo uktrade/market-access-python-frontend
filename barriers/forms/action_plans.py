@@ -292,7 +292,7 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
         widget=forms.TextInput(attrs={"class": "govuk-input"})
     )
 
-    stakeholders = forms.CharField(label="Stakeholders (optional)", widget=forms.Textarea(attrs={"class": "govuk-textarea"}), required=False)
+    stakeholders = forms.CharField(label="Stakeholders", widget=forms.Textarea(attrs={"class": "govuk-textarea"}), required=True)
 
     def __init__(self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs):
         self.barrier_id = barrier_id
