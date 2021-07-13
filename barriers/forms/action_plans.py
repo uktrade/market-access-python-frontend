@@ -367,3 +367,43 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             action_type_category=action_type_category,
             stakeholders=self.cleaned_data["stakeholders"]
         )
+
+class ActionPlanTaskEditOutcomeForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
+
+    outcome = forms.CharField(label="Outcome", widget=forms.Textarea(attrs={"class": "govuk-textarea"}), required=False)
+
+    def __init__(self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.action_plan_id = action_plan_id
+        self.milestone_id = milestone_id
+        self.task_id = task_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.edit_task(
+            barrier_id=self.barrier_id,
+            task_id=self.task_id,
+            outcome=self.cleaned_data["outcome"],
+        )
+
+class ActionPlanTaskEditProgressForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
+
+    progress = forms.CharField(label="Progress", widget=forms.Textarea(attrs={"class": "govuk-textarea"}), required=False)
+
+    def __init__(self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.action_plan_id = action_plan_id
+        self.milestone_id = milestone_id
+        self.task_id = task_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.edit_task(
+            barrier_id=self.barrier_id,
+            task_id=self.task_id,
+            progress=self.cleaned_data["progress"],
+        )

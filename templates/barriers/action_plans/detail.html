@@ -63,6 +63,7 @@
             </details>
             {% else %}
             <a href="{% url 'barriers:action_plan_add_strategic_context' barrier.id %}">Add strategic context</a>
+            <br>
             {% endif %}
         </div>
 
@@ -161,6 +162,31 @@
                                     <span class="ma-badge ma-badge--in-progress">In progress</span>
                                 {% elif task.status == "COMPLETED" %}
                                     <span class="ma-badge ma-badge--completed">Completed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td colspan="6" >
+                                {% if task.status == "COMPLETED" %}
+                                    <p>Outcome:    
+                                    {% if task.outcome %}
+                                    {{ task.outcome }}
+                                    <br>
+                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Edit outcome</a>
+                                    {% else %}
+                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Add outcome</a>
+                                    {% endif %}
+                                </p>
+                                {% elif task.status == "IN_PROGRESS" %}
+                                    <p>Progress: 
+                                    {% if task.progress %}
+                                    {{ task.progress }}
+                                        <br>
+                                        <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Edit outcome</a>
+                                    {% else %}
+                                    <a href="{% url 'barriers:action_plan_edit_progress' barrier.id task.id %}">Add progress</a>
+                                    {% endif %}
+                                </p>
                                 {% endif %}
                             </td>
                         </tr>
