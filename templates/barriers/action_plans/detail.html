@@ -164,24 +164,6 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        <!-- <tr class="govuk-table__row">
-                            <td colspan="6" >
-                                {% if task.status == "COMPLETED" %}
-                                    Outcome:    
-                                    {% if task.outcome %}
-                                    <p>{{ task.outcome }}</p>
-                                    {% else %}
-                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Add outcome</a>
-                                    {% endif %}
-                                {% elif task.status == "PROGRESS" %}
-                                    {% if task.progress %}
-                                    <p>{{ task.progress }}</p>
-                                    {% else %}
-                                    <a href="{% url 'barriers:action_plan_edit_progress' barrier.id task.id %}">Add progress</a>
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                        </tr> -->
                         <tr class="govuk-table__row milestone-task-action-row">
                             <td colspan="6"><div class="action-plan__milestone__actions">
                                     <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit</a>
