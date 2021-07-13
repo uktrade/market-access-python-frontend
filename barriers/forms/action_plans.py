@@ -75,6 +75,7 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
             "barriers:action_plan", 
             kwargs={"barrier_id": self.barrier_id}
         )
+
 class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(
@@ -122,8 +123,9 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
     #     error_messages={"required": "Enter the completion date"},
     # )
 
-    def __init__(self, barrier_id, *args, **kwargs):
+    def __init__(self, barrier_id, milestone_id, *args, **kwargs):
         self.barrier_id = barrier_id
+        self.milestone_id = milestone_id
         super().__init__(*args, **kwargs)
 
     # def clean_completion_date(self):

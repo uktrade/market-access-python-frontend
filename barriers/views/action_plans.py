@@ -79,6 +79,10 @@ class AddActionPlanMilestoneFormView(APIBarrierFormViewMixin, FormView):
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         return kwargs
 
+    def get_initial(self):
+        if self.request.method == "GET":
+            return self.action_plan.data
+
     def get_success_url(self):
         return reverse(
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
