@@ -50,6 +50,23 @@
         <p> This plans the steps needed to resolve a market access barrier. It contains specific objectives, stakeholders, timescales, outcomes and resources.</p>
 
         <div>
+            {% if action_plan.strategic_context%}
+            <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        View Strategic context
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    {{ action_plan.strategic_context }}
+                </div>
+            </details>
+            {% else %}
+            <a href="{% url 'barriers:action_plan_add_strategic_context' barrier.id %}">Add strategic context</a>
+            {% endif %}
+        </div>
+
+        <div>
             <span class="action_plan__current_status__heading">
                 Progress update 
                 {% if action_plan.status == "ON_TRACK" %}
@@ -60,7 +77,9 @@
                     <span class="ma-badge ma-badge--status-delayed">Delayed</span>
                 {% endif %}
             </span> 
-            {% if action_plan.current_status %}<a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Edit</a>{% else %}<br><a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Add progress update</a> {% endif %}
+            {% if action_plan.current_status %}
+            <a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Edit</a>
+            {% else %}<br><a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Add progress update</a> {% endif %}
             
             <p>{{ action_plan.current_status }}</p>
         </div>
@@ -145,6 +164,24 @@
                                 {% endif %}
                             </td>
                         </tr>
+                        <!-- <tr class="govuk-table__row">
+                            <td colspan="6" >
+                                {% if task.status == "COMPLETED" %}
+                                    Outcome:    
+                                    {% if task.outcome %}
+                                    <p>{{ task.outcome }}</p>
+                                    {% else %}
+                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Add outcome</a>
+                                    {% endif %}
+                                {% elif task.status == "PROGRESS" %}
+                                    {% if task.progress %}
+                                    <p>{{ task.progress }}</p>
+                                    {% else %}
+                                    <a href="{% url 'barriers:action_plan_edit_progress' barrier.id task.id %}">Add progress</a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr> -->
                         <tr class="govuk-table__row milestone-task-action-row">
                             <td colspan="6"><div class="action-plan__milestone__actions">
                                     <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit</a>

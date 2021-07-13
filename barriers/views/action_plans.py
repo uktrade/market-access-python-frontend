@@ -1,6 +1,7 @@
 from barriers.forms.action_plans import (ActionPlanCurrentStatusEditForm,
                                          ActionPlanMilestoneEditForm,
                                          ActionPlanMilestoneForm,
+                                         ActionPlanStrategicContextForm,
                                          ActionPlanTaskEditForm,
                                          ActionPlanTaskForm)
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
@@ -40,6 +41,25 @@ class SelectActionPlanOwner(BarrierMixin, UserSearchMixin, FormView):
         self.client.action_plans.edit_action_plan(
             barrier_id=str(self.kwargs.get("barrier_id")), owner=user_id
         )
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
+        )
+
+class AddActionPlanStrategicContext(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/action_plans/add_strategic_context.html"
+    form_class = ActionPlanStrategicContextForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        return kwargs
+
+    def get_initial(self):
+        if self.request.method == "GET":
+            return self.action_plan.data
 
     def get_success_url(self):
         return reverse(

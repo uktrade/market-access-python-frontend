@@ -50,6 +50,31 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
             kwargs={"barrier_id": self.barrier_id}
         )
 
+
+class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
+
+    strategic_context = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        label="Strategic context",
+        required=False
+    )
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier_id,
+            strategic_context=self.cleaned_data.get("strategic_context"),
+        )
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan", 
+            kwargs={"barrier_id": self.barrier_id}
+        )
 class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(

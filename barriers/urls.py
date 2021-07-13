@@ -2,6 +2,7 @@ from django.urls import path, re_path
 
 from barriers.views.action_plans import (ActionPlanTemplateView,
                                          AddActionPlanMilestoneFormView,
+                                         AddActionPlanStrategicContext,
                                          AddActionPlanTaskFormView,
                                          DeleteActionPlanMilestoneView,
                                          DeleteActionPlanTaskView,
@@ -519,6 +520,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/action_plan/edit_owner",
         SelectActionPlanOwner.as_view(),
         name="action_plan_edit_owner",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/add_strategic_context",
+        AddActionPlanStrategicContext.as_view(),
+        name="action_plan_add_strategic_context",
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/add_milestone",
