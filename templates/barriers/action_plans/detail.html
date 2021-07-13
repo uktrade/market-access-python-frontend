@@ -59,6 +59,8 @@
                 </summary>
                 <div class="govuk-details__text">
                     {{ action_plan.strategic_context }}
+                    <br><br>
+                    <a href="{% url 'barriers:action_plan_add_strategic_context' barrier.id %}">Edit</a>
                 </div>
             </details>
             {% else %}
@@ -165,24 +167,22 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        <tr class="govuk-table__row">
-                            <td colspan="6" >
+                        <tr class="govuk-table__row milestone-task-status-progress-row">
+                            <td colspan="6" class="govuk-table__cell">
                                 {% if task.status == "COMPLETED" %}
-                                    <p>Outcome:    
+                                    <p><strong>Outcome:</strong>    
                                     {% if task.outcome %}
                                     {{ task.outcome }}
-                                    <br>
-                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Edit outcome</a>
+                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Edit</a>
                                     {% else %}
                                     <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Add outcome</a>
                                     {% endif %}
                                 </p>
                                 {% elif task.status == "IN_PROGRESS" %}
-                                    <p>Progress: 
+                                    <p><strong>Progress: </strong>
                                     {% if task.progress %}
                                     {{ task.progress }}
-                                        <br>
-                                        <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Edit outcome</a>
+                                        <a href="{% url 'barriers:action_plan_edit_progress' barrier.id task.id %}">Edit</a>
                                     {% else %}
                                     <a href="{% url 'barriers:action_plan_edit_progress' barrier.id task.id %}">Add progress</a>
                                     {% endif %}

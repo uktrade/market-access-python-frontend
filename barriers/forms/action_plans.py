@@ -128,9 +128,6 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
         self.milestone_id = milestone_id
         super().__init__(*args, **kwargs)
 
-    # def clean_completion_date(self):
-    #     return self.cleaned_data["completion_date"].isoformat()
-
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.action_plans.edit_milestone(
