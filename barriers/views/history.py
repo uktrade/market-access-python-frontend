@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+
 from utils.api.client import MarketAccessAPIClient
 
 from .mixins import BarrierMixin

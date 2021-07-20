@@ -1,8 +1,9 @@
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
-from utils.api.client import MarketAccessAPIClient
-from barriers.views.mixins import BarrierMixin, PublicBarrierMixin
 from django.views.generic.base import View
+
+from barriers.views.mixins import BarrierMixin, PublicBarrierMixin
+from utils.api.client import MarketAccessAPIClient
 
 
 class PublicBarrierLightTouchReviewsEdit(PublicBarrierMixin, BarrierMixin, View):

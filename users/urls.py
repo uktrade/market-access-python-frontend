@@ -3,12 +3,12 @@ from django.urls import path
 from .views import (
     AddUser,
     EditUser,
+    GetUsers,
     Login,
     LoginCallback,
     ManageUsers,
     SignOut,
     UserDetail,
-    GetUsers,
 )
 
 app_name = "users"

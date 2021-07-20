@@ -1,18 +1,19 @@
-from barriers.constants import (ACTION_PLAN_RAG_STATUS_CHOICES,
-                                ACTION_PLAN_TASK_CATEGORIES,
-                                ACTION_PLAN_TASK_CHOICES,
-                                ACTION_PLAN_TASK_TYPE_CHOICES)
-from barriers.forms.mixins import APIFormMixin
 from django import forms
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+
+from barriers.constants import (
+    ACTION_PLAN_RAG_STATUS_CHOICES,
+    ACTION_PLAN_TASK_CATEGORIES,
+    ACTION_PLAN_TASK_CHOICES,
+    ACTION_PLAN_TASK_TYPE_CHOICES,
+)
+from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (ClearableMixin, MonthYearField, SubformChoiceField,
-                         SubformMixin)
+from utils.forms import ClearableMixin, MonthYearField, SubformChoiceField, SubformMixin
 from utils.sso import SSOClient
-from utils.validators import validate_date_is_in_future
 
 
 class MonthYearInFutureField(MonthYearField):
@@ -24,11 +25,12 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
     current_status = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Current status and progress on status action plans",
-        required=False
+        required=False,
     )
     status = forms.ChoiceField(
         label="Action plan delivery confidence",
-        choices=ACTION_PLAN_RAG_STATUS_CHOICES, widget=forms.RadioSelect
+        choices=ACTION_PLAN_RAG_STATUS_CHOICES,
+        widget=forms.RadioSelect,
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
@@ -41,14 +43,11 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
             barrier_id=self.barrier_id,
             current_status=self.cleaned_data.get("current_status"),
             current_status_last_updated=timezone.now().isoformat(),
-            status=self.cleaned_data.get("status")
+            status=self.cleaned_data.get("status"),
         )
 
     def get_success_url(self):
-        return reverse(
-            "barriers:action_plan", 
-            kwargs={"barrier_id": self.barrier_id}
-        )
+        return reverse("barriers:action_plan", kwargs={"barrier_id": self.barrier_id})
 
 
 class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
@@ -56,7 +55,7 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
     strategic_context = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Strategic context",
-        required=False
+        required=False,
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
@@ -71,10 +70,8 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
         )
 
     def get_success_url(self):
-        return reverse(
-            "barriers:action_plan", 
-            kwargs={"barrier_id": self.barrier_id}
-        )
+        return reverse("barriers:action_plan", kwargs={"barrier_id": self.barrier_id})
+
 
 class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
@@ -105,10 +102,8 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
         )
 
     def get_success_url(self):
-        return reverse(
-            "barriers:action_plan", 
-            kwargs={"barrier_id": self.barrier_id}
-        )
+        return reverse("barriers:action_plan", kwargs={"barrier_id": self.barrier_id})
+
 
 class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
 
@@ -138,21 +133,19 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
         )
 
     def get_success_url(self):
-        return reverse(
-            "barriers:action_plan", 
-            kwargs={"barrier_id": self.barrier_id}
-        )
+        return reverse("barriers:action_plan", kwargs={"barrier_id": self.barrier_id})
+
 
 def get_action_type_category_form(action_type: str):
     field_name = f"action_type_category_{action_type}"
 
     class ActionPlanActionTypeCategoryForm(forms.Form):
-
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.fields[field_name] = forms.ChoiceField(
-            label="Select category", choices=ACTION_PLAN_TASK_CATEGORIES[action_type],
-        )
+                label="Select category",
+                choices=ACTION_PLAN_TASK_CATEGORIES[action_type],
+            )
 
         @property
         def get_field(self):
@@ -177,7 +170,10 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
     start_date = MonthYearInFutureField()
     completion_date = MonthYearInFutureField()
 
-    action_text = forms.CharField(label="Intervention text", widget=forms.Textarea(attrs={"class": "govuk-textarea"}))
+    action_text = forms.CharField(
+        label="Intervention text",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+    )
 
     action_type = SubformChoiceField(
         label="Intervention type",
@@ -207,7 +203,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             ),
             ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: get_action_type_category_form(
                 "RESOLUTION_NOT_LEAD_BY_DIT"
-            )
+            ),
         },
         widget=forms.RadioSelect,
     )
@@ -216,7 +212,11 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         widget=forms.TextInput(attrs={"class": "govuk-input"})
     )
 
-    stakeholders = forms.CharField(required=True, label="Stakeholders", widget=forms.Textarea(attrs={"class": "govuk-textarea"}))
+    stakeholders = forms.CharField(
+        required=True,
+        label="Stakeholders",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+    )
 
     def __init__(self, barrier_id, action_plan_id, milestone_id, *args, **kwargs):
         self.barrier_id = barrier_id
@@ -245,14 +245,12 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        action_type_field = self.fields[
-            "action_type"
-        ]
+        action_type_field = self.fields["action_type"]
         if hasattr(action_type_field, "subform"):
             action_type_category = action_type_field.subform.get_action_type_category()
         else:
             action_type_category = "Other"
-            
+
         client.action_plans.add_task(
             barrier_id=self.barrier_id,
             milestone_id=self.milestone_id,
@@ -263,9 +261,8 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             completion_date=self.cleaned_data.get("completion_date"),
             action_type=self.cleaned_data.get("action_type"),
             action_type_category=action_type_category,
-            stakeholders=self.cleaned_data["stakeholders"]
+            stakeholders=self.cleaned_data["stakeholders"],
         )
-
 
 
 class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
@@ -277,7 +274,10 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
     start_date = MonthYearInFutureField()
     completion_date = MonthYearInFutureField()
 
-    action_text = forms.CharField(label="Purpose of the intervention", widget=forms.Textarea(attrs={"class": "govuk-textarea"}))
+    action_text = forms.CharField(
+        label="Purpose of the intervention",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+    )
 
     action_type = SubformChoiceField(
         label="Intervention type",
@@ -307,7 +307,7 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             ),
             ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: get_action_type_category_form(
                 "RESOLUTION_NOT_LEAD_BY_DIT"
-            )
+            ),
         },
         widget=forms.RadioSelect,
     )
@@ -316,9 +316,15 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
         widget=forms.TextInput(attrs={"class": "govuk-input"})
     )
 
-    stakeholders = forms.CharField(label="Stakeholders", widget=forms.Textarea(attrs={"class": "govuk-textarea"}), required=True)
+    stakeholders = forms.CharField(
+        label="Stakeholders",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
 
-    def __init__(self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs):
+    def __init__(
+        self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs
+    ):
         self.barrier_id = barrier_id
         self.action_plan_id = action_plan_id
         self.milestone_id = milestone_id
@@ -346,9 +352,7 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        action_type_field = self.fields[
-            "action_type"
-        ]
+        action_type_field = self.fields["action_type"]
         if hasattr(action_type_field, "subform"):
             action_type_category = action_type_field.subform.get_action_type_category()
         else:
@@ -364,14 +368,23 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             completion_date=self.cleaned_data.get("completion_date"),
             action_type=self.cleaned_data.get("action_type"),
             action_type_category=action_type_category,
-            stakeholders=self.cleaned_data["stakeholders"]
+            stakeholders=self.cleaned_data["stakeholders"],
         )
 
-class ActionPlanTaskEditOutcomeForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
 
-    outcome = forms.CharField(label="Outcome", widget=forms.Textarea(attrs={"class": "govuk-textarea"}), required=False)
+class ActionPlanTaskEditOutcomeForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
 
-    def __init__(self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs):
+    outcome = forms.CharField(
+        label="Outcome",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=False,
+    )
+
+    def __init__(
+        self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs
+    ):
         self.barrier_id = barrier_id
         self.action_plan_id = action_plan_id
         self.milestone_id = milestone_id
@@ -387,11 +400,20 @@ class ActionPlanTaskEditOutcomeForm(ClearableMixin, SubformMixin, APIFormMixin, 
             outcome=self.cleaned_data["outcome"],
         )
 
-class ActionPlanTaskEditProgressForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
 
-    progress = forms.CharField(label="Progress", widget=forms.Textarea(attrs={"class": "govuk-textarea"}), required=False)
+class ActionPlanTaskEditProgressForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
 
-    def __init__(self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs):
+    progress = forms.CharField(
+        label="Progress",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=False,
+    )
+
+    def __init__(
+        self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs
+    ):
         self.barrier_id = barrier_id
         self.action_plan_id = action_plan_id
         self.milestone_id = milestone_id

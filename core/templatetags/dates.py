@@ -6,6 +6,7 @@ from django.template.defaultfilters import stringfilter
 
 register = Library()
 
+
 @register.filter
 @stringfilter
 def parse_date(date_string, format):
@@ -21,6 +22,7 @@ def parse_date(date_string, format):
         return datetime.datetime.strptime(date_string, format)
     except ValueError:
         return None
+
 
 @register.filter
 @stringfilter

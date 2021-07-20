@@ -1,14 +1,16 @@
 from urllib.parse import parse_qs
 
-from barriers.forms.notes import (AddPublicBarrierNoteForm,
-                                  EditPublicBarrierNoteForm)
-from barriers.forms.public_barriers import (PublicBarrierSearchForm,
-                                            PublicEligibilityForm,
-                                            PublishSummaryForm,
-                                            PublishTitleForm)
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView
+
+from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNoteForm
+from barriers.forms.public_barriers import (
+    PublicBarrierSearchForm,
+    PublicEligibilityForm,
+    PublishSummaryForm,
+    PublishTitleForm,
+)
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import remove_empty_values_from_dict
 from utils.metadata import MetadataMixin

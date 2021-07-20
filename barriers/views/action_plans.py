@@ -1,16 +1,18 @@
-from barriers.forms.action_plans import (ActionPlanCurrentStatusEditForm,
-                                         ActionPlanMilestoneEditForm,
-                                         ActionPlanMilestoneForm,
-                                         ActionPlanStrategicContextForm,
-                                         ActionPlanTaskEditForm,
-                                         ActionPlanTaskEditOutcomeForm,
-                                         ActionPlanTaskEditProgressForm,
-                                         ActionPlanTaskForm)
-from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views import View
 from django.views.generic import FormView, TemplateView
+
+from barriers.forms.action_plans import (
+    ActionPlanCurrentStatusEditForm,
+    ActionPlanMilestoneEditForm,
+    ActionPlanMilestoneForm,
+    ActionPlanStrategicContextForm,
+    ActionPlanTaskEditForm,
+    ActionPlanTaskEditOutcomeForm,
+    ActionPlanTaskEditProgressForm,
+    ActionPlanTaskForm,
+)
+from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
 
@@ -48,6 +50,7 @@ class SelectActionPlanOwner(BarrierMixin, UserSearchMixin, FormView):
         return reverse(
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
+
 
 class AddActionPlanStrategicContext(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/action_plans/add_strategic_context.html"
@@ -199,6 +202,7 @@ class EditActionPlanTaskFormView(APIBarrierFormViewMixin, FormView):
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
 
+
 class EditActionPlanTaskOutcomeFormView(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/action_plans/edit_task_outcome.html"
     form_class = ActionPlanTaskEditOutcomeForm
@@ -227,6 +231,7 @@ class EditActionPlanTaskOutcomeFormView(APIBarrierFormViewMixin, FormView):
         return reverse(
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
+
 
 class EditActionPlanTaskProgressFormView(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/action_plans/edit_task_progress.html"

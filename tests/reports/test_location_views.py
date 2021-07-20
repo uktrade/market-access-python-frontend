@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
-from core.tests import ReportsTestCase
 from django.urls import resolve, reverse
 from mock import patch
-from tests.constants import ERROR_HTML
 
+from core.tests import ReportsTestCase
 from reports.models import Report
 from reports.views import (
     NewReportBarrierAdminAreasView,
@@ -13,6 +12,7 @@ from reports.views import (
     NewReportBarrierLocationView,
     NewReportBarrierTradeDirectionView,
 )
+from tests.constants import ERROR_HTML
 
 
 class LocationViewTestCase(ReportsTestCase):

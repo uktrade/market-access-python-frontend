@@ -10,10 +10,10 @@ def validate_date_not_in_future(value):
             params={"value": value},
         )
 
+
 def validate_date_is_in_future(value):
     if value < datetime.date.today():
         raise ValidationError(
             "Date must be this month or in the future",
             params={"value": value},
         )
-

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
-from users.models import User
 
+from users.models import User
 from utils.api.client import MarketAccessAPIClient
 
 
@@ -21,9 +21,6 @@ def user_scope(request):
     user = get_user(request)
     return {"current_user": user}
 
+
 def feature_flags(request):
-    return {
-        "feature_flags": {
-            "action_plans_enabled": settings.ACTION_PLANS_ENABLED
-        }
-    }
+    return {"feature_flags": {"action_plans_enabled": settings.ACTION_PLANS_ENABLED}}
