@@ -4,8 +4,9 @@ from django.conf import settings
 from django.test import TestCase, override_settings
 from mock import patch
 from users.models import User
-from utils.api.resources import (BarriersResource, NotesResource,
-                                 PublicBarriersResource, UsersResource)
+from utils.api.resources import (ActionPlanResource, BarriersResource,
+                                 NotesResource, PublicBarriersResource,
+                                 UsersResource)
 
 from core.filecache import memfiles
 
@@ -120,7 +121,7 @@ class MarketAccessTestCase(TestCase):
             "utils.api.resources.ActionPlanResource.get_barrier_action_plan"
         )
         self.get_barrier_action_plan = self.get_current_user_patcher.start()
-        self.get_barrier_action_plan.return_value = None
+        self.get_barrier_action_plan.return_value = self.action_plans
         self.addCleanup(self.get_barrier_action_plan.stop)
 
     def init_get_public_barrier_patcher(self):
@@ -151,12 +152,12 @@ class MarketAccessTestCase(TestCase):
             self._barriers = json.loads(memfiles.open(file))
         return self._barriers
 
-    @property
-    def action_plans(self):
-        if self._action_plans is None:
-            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/action_plans.json"
-            self._action_plans = json.loads(memfiles.open(file))
-        return self._action_plans
+    # @property
+    # def action_plans(self):
+    #     if self._action_plans is None:
+    #         file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/action_plans.json"
+    #         self._action_plans = json.loads(memfiles.open(file))
+    #     return self._action_plans
 
     @property
     def all_history(self):
@@ -203,6 +204,23 @@ class MarketAccessTestCase(TestCase):
                 "permissions": [],
             }
         )
+
+    @property
+    def action_plans(self):
+        return ActionPlanResource.model({
+            "id": 1,
+            "barrier": "3e12dd72-8b51-43ec-8269-a173031a0eee",
+            "owner": 49,
+            "current_status": "IN_PROGRESS",
+            "milestones": [{
+                "id": 1,
+                "objective": "Objective text",
+                "tasks": [{
+                    "id": 1,
+                    "status": "IN_PROGRESS"
+                }]
+            }]
+        })
 
     @property
     def notes(self):
