@@ -3,15 +3,11 @@ import json
 from django.conf import settings
 from django.test import TestCase, override_settings
 from mock import patch
+from users.models import User
+from utils.api.resources import (BarriersResource, NotesResource,
+                                 PublicBarriersResource, UsersResource)
 
 from core.filecache import memfiles
-from users.models import User
-from utils.api.resources import (
-    BarriersResource,
-    NotesResource,
-    PublicBarriersResource,
-    UsersResource,
-)
 
 
 @override_settings(API_RESULTS_LIMIT=10)
@@ -74,6 +70,7 @@ class MarketAccessTestCase(TestCase):
         self.init_get_interactions_patcher()
         self.init_get_current_user_patcher()
         self.init_get_public_barrier_patcher()
+        self.init_get_action_plans_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -118,6 +115,14 @@ class MarketAccessTestCase(TestCase):
         self.get_current_user.return_value = self.current_user
         self.addCleanup(self.get_current_user_patcher.stop)
 
+    def init_get_action_plans_patcher(self):
+        self.get_barrier_action_plan = patch(
+            "utils.api.resources.ActionPlanResource.get_barrier_action_plan"
+        )
+        self.get_barrier_action_plan = self.get_current_user_patcher.start()
+        self.get_barrier_action_plan.return_value = None
+        self.addCleanup(self.get_barrier_action_plan.stop)
+
     def init_get_public_barrier_patcher(self):
         self.get_public_barrier_patcher = patch(
             "utils.api.resources.PublicBarriersResource.get"
@@ -145,6 +150,13 @@ class MarketAccessTestCase(TestCase):
             file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/barriers.json"
             self._barriers = json.loads(memfiles.open(file))
         return self._barriers
+
+    @property
+    def action_plans(self):
+        if self._action_plans is None:
+            file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/action_plans.json"
+            self._action_plans = json.loads(memfiles.open(file))
+        return self._action_plans
 
     @property
     def all_history(self):

@@ -1,10 +1,9 @@
 import urllib.parse
 from http import HTTPStatus
 
+from barriers.models import PublicBarrier
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
-
-from barriers.models import PublicBarrier
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 
@@ -86,8 +85,12 @@ class BarrierMixin:
     def get_action_plan(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         barrier_id = self.kwargs.get("barrier_id")
-        return client.action_plans.get_barrier_action_plan(barrier_id=barrier_id)
-
+        try:
+            return client.action_plans.get_barrier_action_plan(barrier_id=barrier_id)
+        except APIHttpException as e:
+            if e.status_code == HTTPStatus.NOT_FOUND:
+                raise Http404()
+            raise
 
 class PublicBarrierMixin:
     _public_barrier = None
