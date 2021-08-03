@@ -1,18 +1,15 @@
+from barriers.forms.action_plans import (ActionPlanCurrentStatusEditForm,
+                                         ActionPlanMilestoneEditForm,
+                                         ActionPlanMilestoneForm,
+                                         ActionPlanStrategicContextForm,
+                                         ActionPlanTaskEditForm,
+                                         ActionPlanTaskEditOutcomeForm,
+                                         ActionPlanTaskEditProgressForm,
+                                         ActionPlanTaskForm)
+from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
-
-from barriers.forms.action_plans import (
-    ActionPlanCurrentStatusEditForm,
-    ActionPlanMilestoneEditForm,
-    ActionPlanMilestoneForm,
-    ActionPlanStrategicContextForm,
-    ActionPlanTaskEditForm,
-    ActionPlanTaskEditOutcomeForm,
-    ActionPlanTaskEditProgressForm,
-    ActionPlanTaskForm,
-)
-from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
 
@@ -105,12 +102,7 @@ class EditActionPlanMilestoneFormView(APIBarrierFormViewMixin, FormView):
 
     def get_milestone(self):
         milestones = self.action_plan.milestones
-        found = list(
-            filter(
-                lambda milestone: milestone["id"] == str(self.kwargs.get("id")),
-                milestones,
-            )
-        )
+        found = [milestone for milestone in milestones if milestone["id"] == str(self.kwargs.get("id"))]
         return found[0]
 
     def get_initial(self):

@@ -33,19 +33,6 @@
             </fieldset>
         </div>
         
-        <!-- <div id="{{ form.completion_date.name }}" class="{% form_group_classes form.completion_date.errors %}">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.completion_date.label }}</legend>
-
-                <span class="govuk-hint">{{ form.completion_date.help_text }}</span>
-
-                {% form_field_error form "completion_date" %}
-
-                <div class="govuk-date-input">
-                    {{ form.completion_date }}
-                </div>
-            </fieldset>
-        </div> -->
 
         <button class="govuk-button" data-module="govuk-button">Confirm</button>
         <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>

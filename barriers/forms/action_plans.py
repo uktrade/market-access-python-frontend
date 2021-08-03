@@ -1,18 +1,16 @@
+from barriers.constants import (ACTION_PLAN_RAG_STATUS_CHOICES,
+                                ACTION_PLAN_TASK_CATEGORIES,
+                                ACTION_PLAN_TASK_CHOICES,
+                                ACTION_PLAN_TASK_TYPE_CHOICES)
+from barriers.forms.mixins import APIFormMixin
 from django import forms
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-
-from barriers.constants import (
-    ACTION_PLAN_RAG_STATUS_CHOICES,
-    ACTION_PLAN_TASK_CATEGORIES,
-    ACTION_PLAN_TASK_CHOICES,
-    ACTION_PLAN_TASK_TYPE_CHOICES,
-)
-from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ClearableMixin, MonthYearField, SubformChoiceField, SubformMixin
+from utils.forms import (ClearableMixin, MonthYearField, SubformChoiceField,
+                         SubformMixin)
 from utils.sso import SSOClient
 
 
@@ -81,24 +79,16 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
         error_messages={"required": "Enter your milestone objective"},
     )
 
-    # completion_date = MonthYearInFutureField(
-    #     label="Completion date",
-    #     error_messages={"required": "Enter the completion date"},
-    # )
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
-
-    # def clean_completion_date(self):
-    #     return self.cleaned_data["completion_date"].isoformat()
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.action_plans.add_milestone(
             barrier_id=self.barrier_id,
             objective=self.cleaned_data.get("objective"),
-            # completion_date=self.cleaned_data.get("completion_date"),
         )
 
     def get_success_url(self):
@@ -113,10 +103,6 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
         error_messages={"required": "Enter your milestone objective"},
     )
 
-    # completion_date = MonthYearInFutureField(
-    #     label="Completion date",
-    #     error_messages={"required": "Enter the completion date"},
-    # )
 
     def __init__(self, barrier_id, milestone_id, *args, **kwargs):
         self.barrier_id = barrier_id
@@ -129,14 +115,13 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
             barrier_id=self.barrier_id,
             milestone_id=self.milestone_id,
             objective=self.cleaned_data.get("objective"),
-            # completion_date=self.cleaned_data.get("completion_date"),
         )
 
     def get_success_url(self):
         return reverse("barriers:action_plan", kwargs={"barrier_id": self.barrier_id})
 
 
-def get_action_type_category_form(action_type: str):
+def action_plan_action_type_category_form_class_factory(action_type: str):
     field_name = f"action_type_category_{action_type}"
 
     class ActionPlanActionTypeCategoryForm(forms.Form):
@@ -179,29 +164,29 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         label="Intervention type",
         choices=ACTION_PLAN_TASK_TYPE_CHOICES,
         subform_classes={
-            ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: action_plan_action_type_category_form_class_factory(
                 "SCOPING_AND_RESEARCH"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: action_plan_action_type_category_form_class_factory(
                 "LOBBYING"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: action_plan_action_type_category_form_class_factory(
                 "UNILATERAL_INTERVENTIONS"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "BILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "PLURILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "MULTILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: get_action_type_category_form("EVENT"),
-            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory("EVENT"),
+            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory( #noqa
                 "WHITEHALL_FUNDING_STREAMS"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory( #noqa
                 "RESOLUTION_NOT_LEAD_BY_DIT"
             ),
         },
@@ -283,29 +268,29 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
         label="Intervention type",
         choices=ACTION_PLAN_TASK_TYPE_CHOICES,
         subform_classes={
-            ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: action_plan_action_type_category_form_class_factory(
                 "SCOPING_AND_RESEARCH"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: action_plan_action_type_category_form_class_factory(
                 "LOBBYING"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: action_plan_action_type_category_form_class_factory(
                 "UNILATERAL_INTERVENTIONS"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "BILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "PLURILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "MULTILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: get_action_type_category_form("EVENT"),
-            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory("EVENT"),
+            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory( #noqa
                 "WHITEHALL_FUNDING_STREAMS"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: get_action_type_category_form(
+            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory( #noqa
                 "RESOLUTION_NOT_LEAD_BY_DIT"
             ),
         },

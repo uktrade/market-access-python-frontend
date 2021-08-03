@@ -140,13 +140,6 @@ class MarketAccessTestCase(TestCase):
             self._barriers = json.loads(memfiles.open(file))
         return self._barriers
 
-    # @property
-    # def action_plans(self):
-    #     if self._action_plans is None:
-    #         file = f"{settings.BASE_DIR}/../tests/barriers/fixtures/action_plans.json"
-    #         self._action_plans = json.loads(memfiles.open(file))
-    #     return self._action_plans
-
     @property
     def all_history(self):
         if self._history is None:
@@ -199,7 +192,6 @@ class MarketAccessTestCase(TestCase):
             {
                 "id": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
                 "barrier": "ad217252-7b11-4c7b-885b-6d017a4c0812",
-                "archived": False,
                 "owner": 49,
                 "milestones": [
                     {
