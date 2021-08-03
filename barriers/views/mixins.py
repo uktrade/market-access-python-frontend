@@ -92,6 +92,7 @@ class BarrierMixin:
                 raise Http404()
             raise
 
+
 class PublicBarrierMixin:
     _public_barrier = None
 
@@ -149,10 +150,7 @@ class APIFormViewMixin:
             kwargs["initial"] = self.get_initial()
         elif self.request.method in ("POST", "PUT"):
             kwargs.update(
-                {
-                    "data": self.request.POST,
-                    "files": self.request.FILES,
-                }
+                {"data": self.request.POST, "files": self.request.FILES,}
             )
 
         kwargs.update(self.kwargs)
@@ -216,11 +214,7 @@ class SessionDocumentMixin:
     def set_session_documents(self, documents):
         session_key = self.get_session_key()
         self.request.session[session_key] = [
-            {
-                "id": document.id,
-                "name": document.name,
-                "size": document.size,
-            }
+            {"id": document.id, "name": document.name, "size": document.size,}
             for document in documents
         ]
 
