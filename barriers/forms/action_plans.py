@@ -79,7 +79,6 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
         error_messages={"required": "Enter your milestone objective"},
     )
 
-
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         super().__init__(*args, **kwargs)
@@ -87,8 +86,7 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.action_plans.add_milestone(
-            barrier_id=self.barrier_id,
-            objective=self.cleaned_data.get("objective"),
+            barrier_id=self.barrier_id, objective=self.cleaned_data.get("objective"),
         )
 
     def get_success_url(self):
@@ -102,7 +100,6 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
         label="Add here what is your milestone objective",
         error_messages={"required": "Enter your milestone objective"},
     )
-
 
     def __init__(self, barrier_id, milestone_id, *args, **kwargs):
         self.barrier_id = barrier_id
@@ -182,11 +179,13 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "MULTILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory("EVENT"),
-            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory( #noqa
+            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory(
+                "EVENT"
+            ),
+            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory(  # noqa
                 "WHITEHALL_FUNDING_STREAMS"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory( #noqa
+            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory(  # noqa
                 "RESOLUTION_NOT_LEAD_BY_DIT"
             ),
         },
@@ -286,11 +285,13 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
                 "MULTILATERAL_ENGAGEMENT"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory("EVENT"),
-            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory( #noqa
+            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory(
+                "EVENT"
+            ),
+            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory(  # noqa
                 "WHITEHALL_FUNDING_STREAMS"
             ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory( #noqa
+            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory(  # noqa
                 "RESOLUTION_NOT_LEAD_BY_DIT"
             ),
         },

@@ -18,7 +18,6 @@ class TestSearchTestCase(MarketAccessTestCase):
         browser.find_by_css('input[type=submit][value="Apply filters"]').first.click()
         assert browser.is_element_present_by_css(f'[data-barrier-id="{barrier_id}"]')
 
-
     def test_find_by_code(self, browser, fixture_func):
         """
         Ensure barrier is in results when searching by barrier code
@@ -30,7 +29,6 @@ class TestSearchTestCase(MarketAccessTestCase):
         browser.fill("search", code)
         browser.find_by_css('input[type=submit][value="Apply filters"]').first.click()
         assert browser.is_element_present_by_css(f'[data-barrier-id="{barrier_id}"]')
-
 
     def test_priority_search_filter(self, browser, fixture_func):
         """
@@ -49,7 +47,6 @@ class TestSearchTestCase(MarketAccessTestCase):
         for result in browser.find_by_css(".filter-results-list__item"):
             priority = result.find_by_css(".priority-marker-wrapper").value
             assert priority in ("High priority", "Low priority")
-
 
     def test_status_search_filter(self, browser, fixture_func):
         """
