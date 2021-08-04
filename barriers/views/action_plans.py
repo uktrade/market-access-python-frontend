@@ -15,20 +15,21 @@ from utils.api.client import MarketAccessAPIClient
 
 
 class ActionPlanFormViewMixin:
-    
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         return kwargs
-    
+
     def get_success_url(self):
         return reverse(
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
 
 
-class EditActionPlanCurrentStatusFormView(ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+class EditActionPlanCurrentStatusFormView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/action_plans/edit_action_plan_current_status.html"
     form_class = ActionPlanCurrentStatusEditForm
 
@@ -37,7 +38,9 @@ class EditActionPlanCurrentStatusFormView(ActionPlanFormViewMixin, APIBarrierFor
             return self.action_plan.data
 
 
-class SelectActionPlanOwner(ActionPlanFormViewMixin, BarrierMixin, UserSearchMixin, FormView):
+class SelectActionPlanOwner(
+    ActionPlanFormViewMixin, BarrierMixin, UserSearchMixin, FormView
+):
     template_name = "barriers/action_plans/add_owner.html"
     error_message = "There was an error adding {full_name} as an owner."
 
@@ -47,21 +50,20 @@ class SelectActionPlanOwner(ActionPlanFormViewMixin, BarrierMixin, UserSearchMix
         )
 
 
-
-class AddActionPlanStrategicContext(ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+class AddActionPlanStrategicContext(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/action_plans/add_strategic_context.html"
     form_class = ActionPlanStrategicContextForm
-
 
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
 
 
-
-
-
-class AddActionPlanMilestoneFormView(ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+class AddActionPlanMilestoneFormView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/action_plans/add_milestone.html"
     form_class = ActionPlanMilestoneForm
 
@@ -69,7 +71,10 @@ class AddActionPlanMilestoneFormView(ActionPlanFormViewMixin, APIBarrierFormView
         if self.request.method == "GET":
             return self.action_plan.data
 
-class EditActionPlanMilestoneFormView(ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+
+class EditActionPlanMilestoneFormView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/action_plans/edit_milestone.html"
     form_class = ActionPlanMilestoneEditForm
 
@@ -80,7 +85,11 @@ class EditActionPlanMilestoneFormView(ActionPlanFormViewMixin, APIBarrierFormVie
 
     def get_milestone(self):
         milestones = self.action_plan.milestones
-        found = [milestone for milestone in milestones if milestone["id"] == str(self.kwargs.get("id"))]
+        found = [
+            milestone
+            for milestone in milestones
+            if milestone["id"] == str(self.kwargs.get("id"))
+        ]
         return found[0]
 
     def get_initial(self):
@@ -119,6 +128,7 @@ class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
             )
         )
 
+
 class ActionPlanTaskFormViewMixin:
     form_class = ActionPlanTaskForm
 
@@ -137,18 +147,33 @@ class ActionPlanTaskFormViewMixin:
                 if task["id"] == str(self.kwargs.get("id")):
                     return {**task, "assigned_to": task["assigned_to_email"]}
 
-class ActionPlanTaskFormView(ActionPlanTaskFormViewMixin, ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+
+class ActionPlanTaskFormView(
+    ActionPlanTaskFormViewMixin,
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
+):
     template_name = "barriers/action_plans/add_task.html"
     form_class = ActionPlanTaskForm
 
 
-
-class AddActionPlanTaskFormView(ActionPlanTaskFormViewMixin, ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+class AddActionPlanTaskFormView(
+    ActionPlanTaskFormViewMixin,
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
+):
     template_name = "barriers/action_plans/add_task.html"
     form_class = ActionPlanTaskForm
 
 
-class EditActionPlanTaskFormView(ActionPlanTaskFormViewMixin, ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+class EditActionPlanTaskFormView(
+    ActionPlanTaskFormViewMixin,
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
+):
     template_name = "barriers/action_plans/edit_task.html"
     form_class = ActionPlanTaskEditForm
 
@@ -173,7 +198,9 @@ class EditActionPlanTaskFormView(ActionPlanTaskFormViewMixin, ActionPlanFormView
             return self.get_task()
 
 
-class EditActionPlanTaskOutcomeFormView(ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+class EditActionPlanTaskOutcomeFormView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/action_plans/edit_task_outcome.html"
     form_class = ActionPlanTaskEditOutcomeForm
 
@@ -198,8 +225,12 @@ class EditActionPlanTaskOutcomeFormView(ActionPlanFormViewMixin, APIBarrierFormV
             return self.get_task()
 
 
-
-class EditActionPlanTaskProgressFormView(ActionPlanTaskFormViewMixin, ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView):
+class EditActionPlanTaskProgressFormView(
+    ActionPlanTaskFormViewMixin,
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
+):
     template_name = "barriers/action_plans/edit_task_progress.html"
     form_class = ActionPlanTaskEditProgressForm
 
@@ -217,11 +248,8 @@ class EditActionPlanTaskProgressFormView(ActionPlanTaskFormViewMixin, ActionPlan
             return self.get_task()
 
 
-
-
 class DeleteActionPlanTaskView(ActionPlanTaskFormViewMixin, BarrierMixin, TemplateView):
     template_name = "barriers/action_plans/delete_task_confirm.html"
-
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
