@@ -1,9 +1,23 @@
+from django.urls import path, re_path
+
+from barriers.views.action_plans import (
+    ActionPlanTemplateView,
+    AddActionPlanMilestoneFormView,
+    AddActionPlanStrategicContext,
+    AddActionPlanTaskFormView,
+    DeleteActionPlanMilestoneView,
+    DeleteActionPlanTaskView,
+    EditActionPlanCurrentStatusFormView,
+    EditActionPlanMilestoneFormView,
+    EditActionPlanTaskFormView,
+    EditActionPlanTaskOutcomeFormView,
+    EditActionPlanTaskProgressFormView,
+    SelectActionPlanOwner,
+)
 from barriers.views.light_touch_reviews import (
     PublicBarrierLightTouchReviewsEdit,
     PublicBarrierLightTouchReviewsHMTradeCommissionerApprovalEnabled,
 )
-from django.urls import path, re_path
-
 from barriers.views.mentions import (
     MentionMarkAllAsRead,
     MentionMarkAllAsUnread,
@@ -552,6 +566,66 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/strategic-assessments/add",
         AddStrategicAssessment.as_view(),
         name="add_strategic_assessment",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan",
+        ActionPlanTemplateView.as_view(),
+        name="action_plan",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/edit_current_status",
+        EditActionPlanCurrentStatusFormView.as_view(),
+        name="action_plan_edit_current_status",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/edit_owner",
+        SelectActionPlanOwner.as_view(),
+        name="action_plan_edit_owner",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/add_strategic_context",
+        AddActionPlanStrategicContext.as_view(),
+        name="action_plan_add_strategic_context",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/add_milestone",
+        AddActionPlanMilestoneFormView.as_view(),
+        name="action_plan_add_milestone",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_milestone",
+        EditActionPlanMilestoneFormView.as_view(),
+        name="action_plan_edit_milestone",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/delete_milestone",
+        DeleteActionPlanMilestoneView.as_view(),
+        name="action_plan_delete_milestone",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/add_task",
+        AddActionPlanTaskFormView.as_view(),
+        name="action_plan_add_task",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_task",
+        EditActionPlanTaskFormView.as_view(),
+        name="action_plan_edit_task",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_outcome",
+        EditActionPlanTaskOutcomeFormView.as_view(),
+        name="action_plan_edit_outcome",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_progress",
+        EditActionPlanTaskProgressFormView.as_view(),
+        name="action_plan_edit_progress",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/delete_task",
+        DeleteActionPlanTaskView.as_view(),
+        name="action_plan_delete_task",
     ),
     path(
         "barriers/<uuid:barrier_id>/strategic-assessments/<uuid:assessment_id>/",

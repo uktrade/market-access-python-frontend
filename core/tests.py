@@ -3,15 +3,12 @@ import json
 from django.conf import settings
 from django.test import TestCase, override_settings
 from mock import patch
+from users.models import User
+from utils.api.resources import (ActionPlanResource, BarriersResource,
+                                 NotesResource, PublicBarriersResource,
+                                 UsersResource)
 
 from core.filecache import memfiles
-from users.models import User
-from utils.api.resources import (
-    BarriersResource,
-    NotesResource,
-    PublicBarriersResource,
-    UsersResource,
-)
 
 
 @override_settings(API_RESULTS_LIMIT=10)
@@ -28,13 +25,7 @@ class MarketAccessTestCase(TestCase):
             "permissions": ["change_user", "list_users"],
         }
     )
-    general_user = User(
-        {
-            "is_superuser": False,
-            "is_active": True,
-            "permissions": [],
-        }
-    )
+    general_user = User({"is_superuser": False, "is_active": True, "permissions": [],})
     approver_user = User(
         {
             "is_superuser": False,
@@ -74,17 +65,12 @@ class MarketAccessTestCase(TestCase):
         self.init_get_interactions_patcher()
         self.init_get_current_user_patcher()
         self.init_get_public_barrier_patcher()
+        self.init_get_action_plans_patcher()
 
     def init_session(self):
         session = self.client.session
         session.update(
-            {
-                "sso_token": "abcd",
-                "user_data": {
-                    "id": 49,
-                    "username": "test user",
-                },
-            }
+            {"sso_token": "abcd", "user_data": {"id": 49, "username": "test user",},}
         )
         session.save()
 
@@ -117,6 +103,14 @@ class MarketAccessTestCase(TestCase):
         self.get_current_user = self.get_current_user_patcher.start()
         self.get_current_user.return_value = self.current_user
         self.addCleanup(self.get_current_user_patcher.stop)
+
+    def init_get_action_plans_patcher(self):
+        self.get_barrier_action_plan = patch(
+            "utils.api.resources.ActionPlanResource.get_barrier_action_plan"
+        )
+        self.get_barrier_action_plan = self.get_barrier_action_plan.start()
+        self.get_barrier_action_plan.return_value = self.action_plans
+        self.addCleanup(self.get_barrier_action_plan.stop)
 
     def init_get_public_barrier_patcher(self):
         self.get_public_barrier_patcher = patch(
@@ -189,6 +183,54 @@ class MarketAccessTestCase(TestCase):
                 "is_superuser": True,
                 "is_active": True,
                 "permissions": [],
+            }
+        )
+
+    @property
+    def action_plans(self):
+        return ActionPlanResource.model(
+            {
+                "id": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
+                "barrier": "ad217252-7b11-4c7b-885b-6d017a4c0812",
+                "owner": 49,
+                "milestones": [
+                    {
+                        "id": "0d0a29c8-48f3-4e0c-bac7-72f1f3960673",
+                        "action_plan": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
+                        "objective": "ghfgh",
+                        "completion_date": "2021-10-01",
+                        "tasks": [
+                            {
+                                "id": "5dbea476-7aa3-4579-b6f3-b4036f4c1b76",
+                                "milestone": "0d0a29c8-48f3-4e0c-bac7-72f1f3960673",
+                                "status": "IN_PROGRESS",
+                                "start_date": "2021-10-01",
+                                "completion_date": "2022-10-01",
+                                "action_text": "asdasdas",
+                                "action_type": "PLURILATERAL_ENGAGEMENT",
+                                "action_type_category": "With the EU",
+                                "stakeholders": "asdasd",
+                                "action_type_display": "Plurilateral engagement - With the EU",
+                                "assigned_to": 76,
+                                "assigned_to_email": "aaron.jaswal@trade.gov.uk",
+                                "outcome": "",
+                                "progress": "",
+                            }
+                        ],
+                    },
+                    {
+                        "id": "c515c3bc-3541-414c-b92f-0e8ec2be37a2",
+                        "action_plan": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
+                        "objective": "bvvcbcvb",
+                        "completion_date": None,
+                        "tasks": [],
+                    },
+                ],
+                "current_status": "adsaasdasdasd",
+                "current_status_last_updated": "2021-07-08T09:03:36.246039Z",
+                "owner_email": "james.pacileo@digital.trade.gov.uk",
+                "status": "ON_TRACK",
+                "strategic_context": "asdasdasd",
             }
         )
 

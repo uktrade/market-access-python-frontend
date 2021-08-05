@@ -5,7 +5,10 @@ import { MentionsInput, Mention } from 'react-mentions'
 function TextAreaWithMentions({
     textAreaName,
     textAreaId,
-    preExistingText=""
+    preExistingText="",
+    trigger="@",
+    idPrefix="@",
+    isSingleLine=false
 }) {
 
     const mentionsRef = useRef()
@@ -26,6 +29,7 @@ function TextAreaWithMentions({
     }, [mentionsRef])
 
     const onTextChange = (event, newValue, newPlainTextValue, mentions) => {
+        console.log("text change", newValue)
         setNoteText(newPlainTextValue)
         setTokenisedText(newValue)
     }
@@ -34,8 +38,8 @@ function TextAreaWithMentions({
         const response = await fetch(`/users/search/?q=${query}`)
         const data = await response.json()
         return data.results.map(item => ({
-            id: `@${item.email}`,
-            display: `@${item.email}`,
+            id: `${idPrefix}${item.email}`,
+            display: `${idPrefix}${item.email}`,
             email: item.email,
             firstName: item.first_name,
             lastName: item.last_name
@@ -43,6 +47,7 @@ function TextAreaWithMentions({
     }
 
     const getSuggestions = async (query, callback) => {
+        console.log("fetching suggestions", query)
         const users = await searchUsers(query)
         callback(users)
     }
@@ -66,12 +71,12 @@ function TextAreaWithMentions({
             value={tokenisedText}
             onChange={onTextChange}
             className="govuk-mentions"
-            singleLine={false}
+            singleLine={isSingleLine}
             inputRef={mentionsRef}
             style={mentionsStyling}
         >
             <Mention
-                trigger={"@"}
+                trigger={trigger}
                 data={getSuggestions}
                 style={{ color: "#f47738", zIndex: 1, position: "relative", left: 1, top: 1 }}
                 renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => {

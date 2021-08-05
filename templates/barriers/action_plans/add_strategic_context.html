@@ -1,0 +1,39 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Edit end date{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Edit action plan' %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div
+            id="{{ form.strategic_context.name }}"
+            class="{% form_group_classes form.strategic_context.errors %}"
+        >
+            <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                {{ form.strategic_context.label }}
+            </legend>
+        
+            <span class="govuk-hint">{{ form.strategic_context.help_text }}</span>
+        
+            {% form_field_error form "strategic_context" %}
+        
+            <div class="govuk-date-input">{{ form.strategic_context }}</div>
+            </fieldset>
+        </div>
+
+        <button class="govuk-button" data-module="govuk-button">Confirm</button>
+        <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
+    </form>
+
+{% endblock %}

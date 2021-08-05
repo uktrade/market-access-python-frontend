@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
 import mock
+from core.tests import MarketAccessTestCase
 from django.urls import reverse
 from mock import patch
-
-from core.tests import MarketAccessTestCase
 from utils.exceptions import FileUploadError
 
 
@@ -21,7 +20,7 @@ class NotesTestCase(MarketAccessTestCase):
     def test_note_cannot_be_empty(self, mock_create):
         response = self.client.post(
             reverse("barriers:add_note", kwargs={"barrier_id": self.barrier["id"]}),
-            data={"note": ""},
+            data={"note": ""}
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
@@ -33,7 +32,7 @@ class NotesTestCase(MarketAccessTestCase):
     def test_add_note_success(self, mock_create):
         response = self.client.post(
             reverse("barriers:add_note", kwargs={"barrier_id": self.barrier["id"]}),
-            data={"note": "New note"},
+            data={"note": "New note"}
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_create.assert_called_with(
@@ -47,7 +46,7 @@ class NotesTestCase(MarketAccessTestCase):
         document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
         response = self.client.post(
             reverse("barriers:add_note", kwargs={"barrier_id": self.barrier["id"]}),
-            data={"note": "New note", "document_ids": [document_id]},
+            data={"note": "New note", "document_ids": [document_id]}
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_create.assert_called_with(
@@ -78,7 +77,7 @@ class NotesTestCase(MarketAccessTestCase):
         with open("tests/files/attachment.jpeg", "rb") as document:
             response = self.client.post(
                 reverse("barriers:add_note", kwargs={"barrier_id": self.barrier["id"]}),
-                data={"note": "New note", "document": document},
+                data={"note": "New note", "document": document}
             )
 
         assert response.status_code == HTTPStatus.FOUND
@@ -116,7 +115,7 @@ class NotesTestCase(MarketAccessTestCase):
         with open("tests/files/attachment.jpeg", "rb") as document:
             response = self.client.post(
                 reverse("barriers:add_note", kwargs={"barrier_id": self.barrier["id"]}),
-                data={"note": "New note", "document": document},
+                data={"note": "New note", "document": document}
             )
 
         assert response.status_code == HTTPStatus.OK
@@ -152,7 +151,7 @@ class NotesTestCase(MarketAccessTestCase):
         with open("tests/files/attachment.txt", "rb") as document:
             response = self.client.post(
                 reverse("barriers:add_note", kwargs={"barrier_id": self.barrier["id"]}),
-                data={"note": "New note", "document": document},
+                data={"note": "New note", "document": document}
             )
 
         assert response.status_code == HTTPStatus.OK

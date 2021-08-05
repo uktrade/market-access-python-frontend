@@ -3,13 +3,13 @@ import uuid
 from urllib.parse import urlencode
 
 import requests
-
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, RedirectView, TemplateView
+
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin

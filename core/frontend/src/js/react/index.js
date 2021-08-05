@@ -59,9 +59,9 @@ function renderMultiSelectFilter(htmlElementId, placeholder = null, labelClasses
   );
 }
 
-function renderTextAreaWithMentions(htmlElementId, placeholder = null, labelClasses = null, containerClasses = null) {
+function renderTextAreaWithMentions(htmlElementId = "note-textarea-container", placeholder = null, labelClasses = null, containerClasses = null, trigger = undefined) {
 
-  const addNoteElement = document.getElementById("note-textarea-container")
+  const addNoteElement = document.getElementById(htmlElementId)
   const nativeTextarea = addNoteElement.querySelector("textarea")
 
   const name = nativeTextarea.getAttribute("name")
@@ -69,10 +69,27 @@ function renderTextAreaWithMentions(htmlElementId, placeholder = null, labelClas
   const preExistingText = nativeTextarea.value
 
   ReactDOM.render(
-    <TextAreaWithMentions textAreaId={id} textAreaName={name} preExistingText={preExistingText} />,
+    <TextAreaWithMentions textAreaId={id} textAreaName={name} preExistingText={preExistingText} trigger={trigger} />,
     addNoteElement
   )
 }
 
 
-export { renderCommodityForm, renderLocationFilter, renderMultiSelectFilter, renderTextAreaWithMentions }
+function renderInputSelectWithMentions(htmlElementId = "note-textarea-container", placeholder = null, labelClasses = null, containerClasses = null, trigger = undefined) {
+  
+  console.log("setting up input with mentions", htmlElementId, trigger )
+
+  const inputContainerElement = document.getElementById(htmlElementId)
+  const nativeTextarea = inputContainerElement.querySelector("input")
+
+  const name = nativeTextarea.getAttribute("name")
+  const id = nativeTextarea.getAttribute("id")
+  const preExistingText = nativeTextarea.value
+
+  ReactDOM.render(
+    <TextAreaWithMentions idPrefix={""} isSingleLine={true} textAreaId={id} textAreaName={name} preExistingText={preExistingText} trigger={trigger} />,
+    inputContainerElement
+  )
+}
+
+export { renderCommodityForm, renderLocationFilter, renderMultiSelectFilter, renderTextAreaWithMentions, renderInputSelectWithMentions }

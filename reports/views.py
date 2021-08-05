@@ -1,4 +1,3 @@
-from barriers.constants import STATUSES
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import Form
 from django.http import HttpResponseRedirect
@@ -6,11 +5,9 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 from django.views.generic.base import ContextMixin
-from partials.callout import Callout, CalloutButton
-from utils.api.client import MarketAccessAPIClient
-from utils.exceptions import APIHttpException
-from utils.metadata import MetadataMixin
 
+from barriers.constants import STATUSES
+from partials.callout import Callout, CalloutButton
 from reports.constants import FormSessionKeys
 from reports.forms.new_report_barrier_about import NewReportBarrierAboutForm
 from reports.forms.new_report_barrier_location import (
@@ -34,6 +31,9 @@ from reports.forms.new_report_barrier_status import (
 )
 from reports.forms.new_report_barrier_summary import NewReportBarrierSummaryForm
 from reports.helpers import ReportFormGroup
+from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIHttpException
+from utils.metadata import MetadataMixin
 
 
 class CalloutMixin(ContextMixin):

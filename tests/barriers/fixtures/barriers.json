@@ -2,6 +2,7 @@
     {
         "id": "3e12dd72-8b51-43ec-8269-a173031a0eee",
         "code": "B-19-9DD",
+        "archived": false,
         "term": {
             "id": 2,
             "name": "A long-term strategic barrier"
@@ -274,6 +275,7 @@
     {
         "id": "8152467a-a59b-4481-aea9-deba8f0f397a",
         "code": "B-19-SV8",
+        "archived": false,
         "reported_on": "2019-11-14T18:34:34.880000Z",
         "term": {
             "id": 2,
@@ -332,6 +334,7 @@
     {
         "id": "cf983d1e-4391-409f-8a32-495f8abdbdd1",
         "code": "B-19-6F5",
+        "archived": false,
         "reported_on": "2019-03-20T15:27:33.359000Z",
         "term": {
             "id": 1,
@@ -378,6 +381,7 @@
     {
         "id": "47121200-4c8e-4736-a789-e396428caed0",
         "code": "B-19-VYG",
+        "archived": false,
         "reported_on": "2019-06-19T15:18:26.242000Z",
         "term": {
             "id": 2,

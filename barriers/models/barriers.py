@@ -480,7 +480,8 @@ class PublicBarrier(APIModel):
             org["name"]
             for org in self.internal_government_organisations
             if not (
-                int(org["id"]) in self.light_touch_reviews["government_organisation_approvals"]
+                int(org["id"])
+                in self.light_touch_reviews["government_organisation_approvals"]
             )
         ]
         return from_who

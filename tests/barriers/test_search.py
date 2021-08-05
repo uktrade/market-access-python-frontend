@@ -1,13 +1,13 @@
 from http import HTTPStatus
 
+from core.tests import MarketAccessTestCase
 from django.conf import settings
 from django.urls import reverse
 from mock import patch
-
-from barriers.models import Barrier, SavedSearch
-from core.tests import MarketAccessTestCase
 from utils.metadata import get_metadata
 from utils.models import ModelList
+
+from barriers.models import Barrier, SavedSearch
 
 
 @patch("utils.pagination.PaginationMixin.pagination_limit", 10)
