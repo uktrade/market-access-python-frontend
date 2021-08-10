@@ -1,15 +1,15 @@
 # ======
 # DO NOT EDIT - use pyproject.toml instead!
-# Generated: 2021-06-14_16-31
+# Generated: 2021-08-06_17-02
 # ======
-asgiref==3.3.4
+asgiref==3.4.1
 certifi==2021.5.30
-cffi==1.14.5
+cffi==1.14.6
 chardet==4.0.0
-django==3.1.12
+django==3.2.5
 django-environ==0.4.5
 django-extensions==3.0.9
-django-ipware==3.0.2
+django-ipware==3.0.7
 django-log-formatter-ecs==0.0.5
 django-model-utils==4.0.0
 django-redis==4.12.1
@@ -35,7 +35,7 @@ simplejson==3.17.2
 six==1.16.0
 sqlparse==0.4.1
 typing-extensions==3.10.0.0
-urllib3==1.26.5
+urllib3==1.26.6
 whitenoise==5.2.0
 zope.event==4.5.0
 zope.interface==5.4.0
