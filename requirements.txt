@@ -1,6 +1,6 @@
 # ======
 # DO NOT EDIT - use pyproject.toml instead!
-# Generated: 2021-08-06_17-02
+# Generated: 2021-08-10_14-25
 # ======
 asgiref==3.4.1
 certifi==2021.5.30
@@ -14,7 +14,7 @@ django-log-formatter-ecs==0.0.5
 django-model-utils==4.0.0
 django-redis==4.12.1
 django-settings-export==1.2.1
-elastic-apm==5.9.0
+elastic-apm==6.3.3
 gevent==20.9.0
 greenlet==0.4.17
 gunicorn==20.0.4
