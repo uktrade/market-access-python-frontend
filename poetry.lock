@@ -265,8 +265,8 @@ category = "main"
 description = "The official Python module for Elastic APM"
 name = "elastic-apm"
 optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,<4,>=2.7"
-version = "5.9.0"
+python-versions = "<4,>=3.6"
+version = "6.3.3"
 
 [package.dependencies]
 certifi = "*"
@@ -1034,7 +1034,7 @@ test = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [metadata]
-content-hash = "0cab8afc068e77870f364ce7737565d2f436a57cf7cbc91f5077e889d84a36a0"
+content-hash = "dafe9089bd65aea80275dadb854ba0934aa21829ffb1cf4883f327bdeb6ede4b"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -1233,35 +1233,23 @@ django-settings-export = [
     {file = "django-settings-export-1.2.1.tar.gz", hash = "sha256:fceeae49fc597f654c1217415d8e049fc81c930b7154f5d8f28c432db738ff79"},
 ]
 elastic-apm = [
-    {file = "elastic-apm-5.9.0.tar.gz", hash = "sha256:89a3ec089a9d24bfe909dc89736d880863e6eba929f176b9fc07e1150c30defd"},
-    {file = "elastic_apm-5.9.0-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:b000b6c50dc630d1aa4ef14d40b2c7e63f1bcf991420ae19efad4d4b24541f27"},
-    {file = "elastic_apm-5.9.0-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:d92c732add249f0310ebf6e76410d261c82dd11be07c524c41cb1e3b578227d3"},
-    {file = "elastic_apm-5.9.0-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:34d826a069f39ae29f788a7dad74d8bb7111e80819c2d2e30fc86a6774ed927d"},
-    {file = "elastic_apm-5.9.0-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:58b8b5cc033298c057265d0ad8332526ad57f69f056b0794ed6faec2d8527919"},
-    {file = "elastic_apm-5.9.0-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:b6eef9eae29427dcf4b1b2932674e2ded3d97cc0c62c45c0dbcd402da7f4d314"},
-    {file = "elastic_apm-5.9.0-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:09e9a0be232ace95aa500189bbeaff1fff557b63970fe92bd9c0209c84870b15"},
-    {file = "elastic_apm-5.9.0-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:6191080e30af147f1cc509c3d36eb38d46c07e570d401f6e173516934fa1d199"},
-    {file = "elastic_apm-5.9.0-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:ef9fe604299e9ed591927392583abbe4d69ff4d677bbd948d474c4eb6fee79dc"},
-    {file = "elastic_apm-5.9.0-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:2226a6cca396691da7df0b839150aa563f9dbdc09b9697c9f3bc3b915a6757cd"},
-    {file = "elastic_apm-5.9.0-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:8cd2382a038d2f90c3a6fc4eb78035e3d3f119c28c1c3b3ac6bb809723e00753"},
-    {file = "elastic_apm-5.9.0-cp35-cp35m-manylinux2010_i686.whl", hash = "sha256:0c14d3a1b94cb60db1fc5ea89729c1fa4f0a1b44be9aa1ebf402717687e814a4"},
-    {file = "elastic_apm-5.9.0-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:02339fc2afa69f5fcb0090a0f6138a30e50fa1506f2b4f4dc9aa35533f663047"},
-    {file = "elastic_apm-5.9.0-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:221ab6384312f07507b8adadad1e1c04e6f692c136ef2c155a0ac5b2794a12e5"},
-    {file = "elastic_apm-5.9.0-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:20a5fc1d40dc8fc81b97a8ca737c631180ae8a5962cab7fac6abc09dd3e54c56"},
-    {file = "elastic_apm-5.9.0-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:1006d485c15df32331b161d46af30bfe7e37a9c12745a3065a57e711110690f4"},
-    {file = "elastic_apm-5.9.0-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:ec22756200b1fd12c6c79124f4623f6752810362a377c7ef4ea9d78b4890df8f"},
-    {file = "elastic_apm-5.9.0-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:aca065c8d6177a35362e640033c1583e518fca82fc191ce3606c30a365899917"},
-    {file = "elastic_apm-5.9.0-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:eb558cc6890355a3b6b45ae0272dbde18c2ab56122d7d7cbf3549ddc414f2ffe"},
-    {file = "elastic_apm-5.9.0-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:508b232b51113b485990f21bf9a531ba850af481963c1984019ec6ea1aa95ff8"},
-    {file = "elastic_apm-5.9.0-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:6a22d811c868f4be9446d942989df9df26d1fc9c2fe6116a41357c0ab2dca7c4"},
-    {file = "elastic_apm-5.9.0-cp38-cp38-manylinux1_i686.whl", hash = "sha256:f4d915b48737938209ee54b1cdefcf6a911c53e01c80e24087fdcd6383e43ef1"},
-    {file = "elastic_apm-5.9.0-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:c5da673487ee9fd0c66c350396e3a1b9bc4149c504d2922fcf3f0a52ba68f980"},
-    {file = "elastic_apm-5.9.0-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:38991415fe8405393eb7a5c1b008015ee6111e602df346ab3289867a318b884a"},
-    {file = "elastic_apm-5.9.0-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:2204045fd334557a58c299ad3cc982b94f4e313358e9675809ab00571251f793"},
-    {file = "elastic_apm-5.9.0-cp39-cp39-manylinux1_i686.whl", hash = "sha256:a9d953e5ca7d2849e74ba8859c5539d7454ec6888791e2838c7a90644a11623c"},
-    {file = "elastic_apm-5.9.0-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:d5003702369bf69416a89ba0c7cc1e0750457f1ed380467cbe536be4805c1ac5"},
-    {file = "elastic_apm-5.9.0-cp39-cp39-manylinux2010_i686.whl", hash = "sha256:f087952f5c4af262b2ab997240826ff33ed8464edb3a4a14756b25d69fac65d9"},
-    {file = "elastic_apm-5.9.0-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:a23ac59e783b061945a4963658f51654d4783c2bbd122cb75c519b4fd097fe7b"},
+    {file = "elastic-apm-6.3.3.tar.gz", hash = "sha256:f42866ad25bf914a9ccf0a8feb66c69394395a07b1c90c3842991c3f2c8bb5d3"},
+    {file = "elastic_apm-6.3.3-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:3eb0f47b79346d5d3cdff6b88274b5a810616d713ad737ea91b469bcff11d5fb"},
+    {file = "elastic_apm-6.3.3-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:589674b7d22b22ab189158d7316767b0c44471fc1c23bdb97e55e2173c90d3fe"},
+    {file = "elastic_apm-6.3.3-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:5da35261cdbaf989424a3d41a8d9a7e4f34e268c4090696fc7a70db45f310642"},
+    {file = "elastic_apm-6.3.3-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:3b398665ab71e423684f68936a92a5ceef25f1debf1394359d2329428479b7f4"},
+    {file = "elastic_apm-6.3.3-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:e46ceb7222e43fe0e419ff5e769b2cb4ae1286c87e25761fa68809b78f037f1e"},
+    {file = "elastic_apm-6.3.3-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:3bb23c9d3d4dcf0fbf8cd21bb405ace25914ef7c706bc026a0c428c307018b32"},
+    {file = "elastic_apm-6.3.3-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:df6cd0c475b14cf5e3dd49db81bfa5177632ceebc69ffe1c0f1f501ff92e9124"},
+    {file = "elastic_apm-6.3.3-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:9a8b1f62deb68ed6d05a66c3406882e0e2dce4c5e3c5eccfd3ed0411ae573bc6"},
+    {file = "elastic_apm-6.3.3-cp38-cp38-manylinux1_i686.whl", hash = "sha256:b4f6c87f6195c864ebcb8015f2775e302d2360ecfcfd3719f0d629ff306452ac"},
+    {file = "elastic_apm-6.3.3-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:fb73048435d2b91923b67fe25ba7d2f411bcdf5c1aa3d564597df248d19b93b9"},
+    {file = "elastic_apm-6.3.3-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:0fdc31088584f4f4fa04ece07b5a14d8ee46b59fe560bb882898d6d88e23e99d"},
+    {file = "elastic_apm-6.3.3-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:43120e3591faecad8fe767ce6cf81964500e0d58ace7cc2f392e019e0884fff0"},
+    {file = "elastic_apm-6.3.3-cp39-cp39-manylinux1_i686.whl", hash = "sha256:c35f9efe39475725eec98f49b60a1f2692d0b3fd2d3189c50c9266e0b3ccbb10"},
+    {file = "elastic_apm-6.3.3-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:71b3e4a192c2da573fa3677a30ebd0d3c77192d7decb0f5bda7476b2efe18389"},
+    {file = "elastic_apm-6.3.3-cp39-cp39-manylinux2010_i686.whl", hash = "sha256:dad28da7dbf0799a24a8b5dc9e3bcaf4515de0b4a5eeb7af6086502c11184b46"},
+    {file = "elastic_apm-6.3.3-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:c6546e379e23c9c0274dd4f8edcd47b224721193c930baa0d1309c20ab6b35ab"},
 ]
 execnet = [
     {file = "execnet-1.9.0-py2.py3-none-any.whl", hash = "sha256:a295f7cc774947aac58dde7fdc85f4aa00c42adf5d8f5468fc630c1acf30a142"},
