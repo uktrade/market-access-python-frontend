@@ -17,6 +17,7 @@
     "@babel/preset-react": "^7.10.4",
     "@babel/runtime": "^7.11.2",
     "babel-loader": "^8.1.0",
+    "glob-parent": "^5.1.2",
     "govuk-colours": "^1.1.0",
     "govuk-frontend": "^3.8.1",
     "gulp": "^4.0.2",
