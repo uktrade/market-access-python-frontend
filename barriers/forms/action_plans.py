@@ -74,7 +74,7 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
 class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
         label="Describe the objective",
         error_messages={"required": "Enter your milestone objective"},
     )
@@ -96,7 +96,7 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
         label="Describe the objective",
         error_messages={"required": "Enter your milestone objective"},
     )
