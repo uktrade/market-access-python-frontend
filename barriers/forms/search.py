@@ -57,6 +57,10 @@ class BarrierSearchForm(forms.Form):
         label="Tags",
         required=False,
     )
+    has_action_plan = forms.BooleanField(
+        label="Has action plan",
+        required=False
+    )
     user = forms.BooleanField(
         label="Barriers I have created",
         required=False,
@@ -136,6 +140,7 @@ class BarrierSearchForm(forms.Form):
             "label": "Barrier location",
             "fields": ("extra_location", "country_trading_bloc"),
         },
+        "action_plans": {"label": "Action plans", "fields": ("has_action_plan", )}
     }
 
     def __init__(self, metadata, *args, **kwargs):
@@ -176,6 +181,7 @@ class BarrierSearchForm(forms.Form):
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
             "tags": data.getlist("tags"),
+            "has_action_plan": data.get("has_action_plan"),
             "user": data.get("user"),
             "team": data.get("team"),
             "member": data.get("member"),
