@@ -1,25 +1,15 @@
 import time
 
 import requests
+from barriers.constants import Statuses
+from barriers.models import (ActionPlan, Barrier, Commodity,
+                             EconomicAssessment, EconomicImpactAssessment,
+                             HistoryItem, Note, PublicBarrier,
+                             PublicBarrierNote, ResolvabilityAssessment,
+                             SavedSearch, StrategicAssessment)
+from barriers.models.history.mentions import Mention, NotificationExclusion
 from django.conf import settings
 from django.core.cache import cache
-
-from barriers.constants import Statuses
-from barriers.models import (
-    ActionPlan,
-    Barrier,
-    Commodity,
-    EconomicAssessment,
-    EconomicImpactAssessment,
-    HistoryItem,
-    Note,
-    PublicBarrier,
-    PublicBarrierNote,
-    ResolvabilityAssessment,
-    SavedSearch,
-    StrategicAssessment,
-)
-from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
 from utils.exceptions import ScanError
@@ -360,7 +350,7 @@ class NotificationExclusionResource(APIResource):
 class ActionPlanResource(APIResource):
     resource_name = "action_plans"
     model = ActionPlan
-
+    
     def get_barrier_action_plan(self, barrier_id: str):
         url = f"barriers/{barrier_id}/action_plan"
         return self.model(self.client.get(url))

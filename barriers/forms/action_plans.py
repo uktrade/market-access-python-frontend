@@ -22,7 +22,7 @@ class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
 
     current_status = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        label="Current status and progress on status action plans",
+        label="Add the latest progress update",
         required=False,
     )
     status = forms.ChoiceField(
@@ -75,7 +75,7 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        label="Add here what is your milestone objective",
+        label="Describe the objective",
         error_messages={"required": "Enter your milestone objective"},
     )
 
@@ -97,7 +97,7 @@ class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        label="Add here what is your milestone objective",
+        label="Describe the objective",
         error_messages={"required": "Enter your milestone objective"},
     )
 
