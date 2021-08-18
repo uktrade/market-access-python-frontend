@@ -259,7 +259,7 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
     completion_date = MonthYearInFutureField()
 
     action_text = forms.CharField(
-        label="Purpose of the intervention",
+        label="Intervention and purpose",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
     )
 
