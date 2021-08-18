@@ -312,6 +312,10 @@ class BarrierSearchForm(forms.Form):
             data.remove("")
         return data
 
+    def clean_has_action_plan(self):
+        if self.cleaned_data["has_action_plan"] is True:
+            return "1"
+
     def clean_user(self):
         if self.cleaned_data["user"] is True:
             return "1"
@@ -378,6 +382,7 @@ class BarrierSearchForm(forms.Form):
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
+        params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
         params["member"] = self.cleaned_data.get("member")
