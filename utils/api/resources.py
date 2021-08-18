@@ -97,11 +97,7 @@ class BarriersResource(APIResource):
     def add_team_member(self, barrier_id, user_id, role, **kwargs):
         url = f"barriers/{barrier_id}/members"
         data = {
-            "user": {
-                "profile": {
-                    "sso_user_id": user_id,
-                }
-            },
+            "user": {"profile": {"sso_user_id": user_id,}},
             "role": role,
         }
         return self.client.post(url, json=data)
@@ -156,11 +152,7 @@ class NotesResource(APIResource):
 class DocumentsResource(APIResource):
     def create(self, filename, filesize):
         return self.client.post(
-            "documents",
-            json={
-                "original_filename": filename,
-                "size": filesize,
-            },
+            "documents", json={"original_filename": filename, "size": filesize,},
         )
 
     def complete_upload(self, document_id):
@@ -350,7 +342,7 @@ class NotificationExclusionResource(APIResource):
 class ActionPlanResource(APIResource):
     resource_name = "action_plans"
     model = ActionPlan
-    
+
     def get_barrier_action_plan(self, barrier_id: str):
         url = f"barriers/{barrier_id}/action_plan"
         return self.model(self.client.get(url))
