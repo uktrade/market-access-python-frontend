@@ -66,7 +66,7 @@ class AddActionPlanMilestoneFormView(
         kwargs = super().get_form_kwargs()
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         return kwargs
-        
+
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
