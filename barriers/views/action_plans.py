@@ -15,11 +15,6 @@ from utils.api.client import MarketAccessAPIClient
 
 
 class ActionPlanFormViewMixin:
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
-        return kwargs
 
     def get_success_url(self):
         return reverse(
