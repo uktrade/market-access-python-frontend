@@ -57,6 +57,10 @@ class BarrierSearchForm(forms.Form):
         label="Tags",
         required=False,
     )
+    has_action_plan = forms.BooleanField(
+        label="Has action plan",
+        required=False
+    )
     user = forms.BooleanField(
         label="Barriers I have created",
         required=False,
@@ -136,6 +140,7 @@ class BarrierSearchForm(forms.Form):
             "label": "Barrier location",
             "fields": ("extra_location", "country_trading_bloc"),
         },
+        "action_plans": {"label": "Action plans", "fields": ("has_action_plan", )}
     }
 
     def __init__(self, metadata, *args, **kwargs):
@@ -176,6 +181,7 @@ class BarrierSearchForm(forms.Form):
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
             "tags": data.getlist("tags"),
+            "has_action_plan": data.get("has_action_plan"),
             "user": data.get("user"),
             "team": data.get("team"),
             "member": data.get("member"),
@@ -306,6 +312,10 @@ class BarrierSearchForm(forms.Form):
             data.remove("")
         return data
 
+    def clean_has_action_plan(self):
+        if self.cleaned_data["has_action_plan"] is True:
+            return "1"
+
     def clean_user(self):
         if self.cleaned_data["user"] is True:
             return "1"
@@ -372,6 +382,7 @@ class BarrierSearchForm(forms.Form):
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
+        params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
         params["member"] = self.cleaned_data.get("member")

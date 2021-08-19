@@ -49,7 +49,7 @@
 
         <p> This plans the steps needed to resolve a market access barrier. It contains specific objectives, stakeholders, timescales, outcomes and resources.</p>
 
-        <div>
+        <div class="stategic-assessment">
             {% if action_plan.strategic_context%}
             <details class="govuk-details" data-module="govuk-details">
                 <summary class="govuk-details__summary">
@@ -58,7 +58,7 @@
                     </span>
                 </summary>
                 <div class="govuk-details__text">
-                    {{ action_plan.strategic_context }}
+                    {{ action_plan.strategic_context|linebreaks }}
                     <br><br>
                     <a href="{% url 'barriers:action_plan_add_strategic_context' barrier.id %}">Edit</a>
                 </div>
@@ -69,7 +69,7 @@
             {% endif %}
         </div>
 
-        <div>
+        <div class="status-and-progress">
             <span class="action_plan__current_status__heading">
                 Progress update 
                 {% if action_plan.status == "ON_TRACK" %}
@@ -84,17 +84,18 @@
             <a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Edit</a>
             {% else %}<br><a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Add progress update</a> {% endif %}
             
-            <p>{{ action_plan.current_status }}</p>
+            <p>{{ action_plan.current_status|linebreaks }}</p>
         </div>
-        {% if action_plan.current_status_last_updated %}
-        <div>
-            <span class="action_plan__owner__heading">Updated on:</span> <span>{{ action_plan.current_status_last_updated|parse_iso|date:"jS F Y" }}</span>
-        </div>
-        {% endif %}
-
-        <div>
-            <span class="action_plan__owner__heading">Owner:</span> <span>{{ action_plan.owner_email }}</span> 
-            <a href="{% url 'barriers:action_plan_edit_owner' barrier.id %}">Edit</a>
+        <div class="action-plan-meta">
+            {% if action_plan.current_status_last_updated %}
+            <div>
+                <span class="action_plan__owner__heading">Updated on:</span> <span>{{ action_plan.current_status_last_updated|parse_iso|date:"jS F Y" }}</span>
+            </div>
+            {% endif %}
+            <div>
+                <span class="action_plan__owner__heading">Owner:</span> <span>{{ action_plan.owner_email }}</span>
+                <a href="{% url 'barriers:action_plan_edit_owner' barrier.id %}">Edit</a>
+            </div>
         </div>
 
         <a class="govuk-button button--primary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add objective</a>    
@@ -124,7 +125,7 @@
                     </colgroup>
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
-                            <th scope="col" class="govuk-table__header">Purpose of the intervention</th>
+                            <th scope="col" class="govuk-table__header">Intervention and purpose</th>
                             <th scope="col" class="govuk-table__header">Assigned to</th>
                             <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Stakeholders</th>
                             <th scope="col" class="govuk-table__header">Intervention type</th>

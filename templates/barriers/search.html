@@ -64,6 +64,16 @@
                         </div>
                     </fieldset>
                 </div>
+                
+                <div id="show" class="govuk-form-group filter-group">
+                    <fieldset class="govuk-fieldset filter-group__inner">
+                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Action plans</legend>
+
+                        <div class="checkbox-filter govuk-!-width-full">
+                            {% include 'partials/forms/checkbox.html' with field=form.has_action_plan %}
+                        </div>
+                    </fieldset>
+                </div>
 
                 {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment %}
