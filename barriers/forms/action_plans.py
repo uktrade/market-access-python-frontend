@@ -65,6 +65,7 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
         client.action_plans.edit_action_plan(
             barrier_id=self.barrier_id,
             strategic_context=self.cleaned_data.get("strategic_context"),
+            strategic_context_last_updated=timezone.now().isoformat(),
         )
 
     def get_success_url(self):

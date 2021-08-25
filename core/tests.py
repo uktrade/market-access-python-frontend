@@ -231,6 +231,7 @@ class MarketAccessTestCase(TestCase):
                 "owner_email": "james.pacileo@digital.trade.gov.uk",
                 "status": "ON_TRACK",
                 "strategic_context": "asdasdasd",
+                "strategic_context_last_updated": "2021-07-08T09:03:36.246039Z",
             }
         )
 
