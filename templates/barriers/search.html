@@ -11,7 +11,7 @@
             let tradingBlocElement = document.getElementById("country_trading_bloc")
             let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent)
             ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs)
-            ReactApp.renderMultiSelectFilter("sector")
+            ReactApp.renderMultiSelectFilter("sector", null, null, null, {fieldName: "ignore_all_sectors", label: "Exclude barriers marked as 'all sectors'"})
             ReactApp.renderMultiSelectFilter("organisation")
             ReactApp.renderMultiSelectFilter("category", "Search categories")
             ReactApp.renderMultiSelectFilter("region")
