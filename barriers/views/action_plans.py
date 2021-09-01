@@ -56,6 +56,11 @@ class AddActionPlanStrategicContext(
     template_name = "barriers/action_plans/add_strategic_context.html"
     form_class = ActionPlanStrategicContextForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        return kwargs
+        
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
