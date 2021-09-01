@@ -28,6 +28,11 @@ class EditActionPlanCurrentStatusFormView(
     template_name = "barriers/action_plans/edit_action_plan_current_status.html"
     form_class = ActionPlanCurrentStatusEditForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        return kwargs
+
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
