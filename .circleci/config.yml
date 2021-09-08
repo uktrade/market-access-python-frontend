@@ -55,7 +55,7 @@ jobs:
 
       - run:
           name: Compile webpack config
-          command: npm install && npm run build
+          command: npm install && npm install --dev && npm run build
 
       - restore_cache:
           keys:
