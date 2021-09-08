@@ -78,7 +78,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "django_extensions",
-    'webpack_loader',
+    "webpack_loader",
 ]
 
 LOCAL_APPS = [
@@ -153,15 +153,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 
@@ -270,13 +264,8 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "ecs_formatter": {
-            "()": ECSFormatter,
-        },
-        "simple": {
-            "format": "{asctime} {levelname} {message}",
-            "style": "{",
-        },
+        "ecs_formatter": {"()": ECSFormatter,},
+        "simple": {"format": "{asctime} {levelname} {message}", "style": "{",},
     },
     "handlers": {
         "ecs": {
@@ -291,42 +280,27 @@ LOGGING = {
         },
     },
     "root": {
-        "handlers": [
-            "ecs",
-            "stdout",
-        ],
+        "handlers": ["ecs", "stdout",],
         "level": os.getenv("ROOT_LOG_LEVEL", "INFO"),  # noqa F405
     },
     "loggers": {
         "": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
+            "handlers": ["ecs", "stdout",],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa F405
             "propagate": False,
         },
         "django": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
+            "handlers": ["ecs", "stdout",],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa F405
             "propagate": False,
         },
         "django.server": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
+            "handlers": ["ecs", "stdout",],
             "level": os.getenv("DJANGO_SERVER_LOG_LEVEL", "ERROR"),  # noqa F405
             "propagate": False,
         },
         "django.db.backends": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
+            "handlers": ["ecs", "stdout",],
             "level": os.getenv("DJANGO_DB_LOG_LEVEL", "ERROR"),  # noqa F405
             "propagate": False,
         },
@@ -344,9 +318,7 @@ if not DEBUG:
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
         environment=env("SENTRY_ENVIRONMENT"),
-        integrations=[
-            DjangoIntegration(),
-        ],
+        integrations=[DjangoIntegration(),],
     )
 
 # Settings made available in templates
@@ -363,20 +335,20 @@ ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
 # Webpack config
 
 WEBPACK_LOADER = {
-    'DEFAULT': {
-        'CACHE': not DEBUG,
-        'BUNDLE_DIR_NAME': 'webpack_bundles/', # must end with slash
-        'STATS_FILE': os.path.join(ROOT_DIR, 'webpack-stats.json'),
-        'POLL_INTERVAL': 0.1,
-        'TIMEOUT': None,
-        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+    "DEFAULT": {
+        "CACHE": not DEBUG,
+        "BUNDLE_DIR_NAME": "webpack_bundles/",  # must end with slash
+        "STATS_FILE": os.path.join(ROOT_DIR, "webpack-stats.json"),
+        "POLL_INTERVAL": 0.1,
+        "TIMEOUT": None,
+        "LOADER_CLASS": "webpack_loader.loader.WebpackLoader",
     },
-    'REACT': {
-        'CACHE': not DEBUG,
-        'BUNDLE_DIR_NAME': 'webpack_bundles/', # must end with slash
-        'STATS_FILE': os.path.join(ROOT_DIR, 'webpack-stats-react.json'),
-        'POLL_INTERVAL': 0.1,
-        'TIMEOUT': None,
-        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
-    }
+    "REACT": {
+        "CACHE": not DEBUG,
+        "BUNDLE_DIR_NAME": "webpack_bundles/",  # must end with slash
+        "STATS_FILE": os.path.join(ROOT_DIR, "webpack-stats-react.json"),
+        "POLL_INTERVAL": 0.1,
+        "TIMEOUT": None,
+        "LOADER_CLASS": "webpack_loader.loader.WebpackLoader",
+    },
 }
