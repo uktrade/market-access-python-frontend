@@ -159,5 +159,6 @@ workflows:
   version: 2
   test:
     jobs:
+      - webpack_build
       - tests
       - pep8
