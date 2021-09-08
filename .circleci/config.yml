@@ -139,6 +139,21 @@ jobs:
       - store_artifacts:
           path: ui-test-reports
 
+  webpack_build:
+    docker:
+      - image: cimg/node:12
+    working_directory: ~/market-access-python-frontend
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - run:
+          name: Compile webpack config
+          command: npm run build
+
 workflows:
   version: 2
   test:
