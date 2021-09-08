@@ -50,7 +50,8 @@ jobs:
     steps:
       - checkout
 
-      - installing_host_deps:
+      - run:
+          name: Installing system dependencies
           command: sudo apt-get install nodejs npm
 
       - run:
