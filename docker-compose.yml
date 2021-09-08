@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: docker/local/Dockerfile
     entrypoint: docker/local/entrypoint.sh
+    command: tail -f /dev/null
     volumes:
       - .:/usr/src/app
     env_file: docker-compose.env

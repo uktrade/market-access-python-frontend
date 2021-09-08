@@ -78,6 +78,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "django_extensions",
+    'webpack_loader',
 ]
 
 LOCAL_APPS = [
@@ -358,3 +359,24 @@ SETTINGS_EXPORT = (
 )
 
 ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
+
+# Webpack config
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'webpack_bundles/', # must end with slash
+        'STATS_FILE': os.path.join(ROOT_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+    },
+    'REACT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'webpack_bundles/', # must end with slash
+        'STATS_FILE': os.path.join(ROOT_DIR, 'webpack-stats-react.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+    }
+}

@@ -2,12 +2,13 @@
 
 {% load activity %}
 {% load static %}
+{% load render_bundle from webpack_loader %}
 {% load dates %}
 
 {% block page_title %}{{ block.super }} - Public barrier{% endblock %}
 
 {% block head %}
-<script src="{% static 'js/react.js' %}"></script>
+{% render_bundle 'main' 'js' 'REACT' %}
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
         ReactApp.renderTextAreaWithMentions("note-textarea-container")

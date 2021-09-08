@@ -1,11 +1,12 @@
 {% extends "barriers/edit/base.html" %}
 
 {% load static %}
+{% load render_bundle from webpack_loader %}
 
 {% block page_title %}{{ block.super }} - Edit WTO information{% endblock %}
 
 {% block head %}
-    <script src="{% static 'js/react.js' %}"></script>
+    {% render_bundle 'main' 'js' 'REACT' %}
     <script>
     document.addEventListener("DOMContentLoaded", function (event) {
         ReactApp.renderMultiSelectFilter(

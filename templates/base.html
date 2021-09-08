@@ -1,4 +1,7 @@
 {% load static %}
+{% load render_bundle from webpack_loader %}
+{% load webpack_static from webpack_loader %}
+
 <!DOCTYPE html>
 <html lang="{{ htmlLang | default:'en' }}" class="govuk-template {{ htmlClasses }}">
   <head>
@@ -17,21 +20,21 @@
     {# Ensure that older IE versions always render with the correct rendering engine #}
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% render_bundle 'style' 'css' 'DEFAULT' %}
 
     {% block headIcons %}
-      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
-      <link rel="mask-icon" href="{% static 'govuk-public/images/govuk-mask-icon.svg' %}" color="#0b0c0c"> {# Hardcoded value of $govuk-black #}
-      <link rel="apple-touch-icon" sizes="180x180" href="{% static 'govuk-public/images/govuk-apple-touch-icon-180x180.png' %}">
-      <link rel="apple-touch-icon" sizes="167x167" href="{% static 'govuk-public/images/govuk-apple-touch-icon-167x167.png' %}">
-      <link rel="apple-touch-icon" sizes="152x152" href="{% static 'govuk-public/images/govuk-apple-touch-icon-152x152.png' %}">
-      <link rel="apple-touch-icon" href="{% static 'govuk-public/images/govuk-apple-touch-icon.png' %}">
+      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{% webpack_static 'images/favicon.ico' %}" type="image/x-icon" />
+      <link rel="mask-icon" href="{% webpack_static 'govuk-public/images/govuk-mask-icon.svg' %}" color="#0b0c0c"> {# Hardcoded value of $govuk-black #}
+      <link rel="apple-touch-icon" sizes="180x180" href="{% webpack_static 'govuk-public/images/govuk-apple-touch-icon-180x180.png' %}">
+      <link rel="apple-touch-icon" sizes="167x167" href="{% webpack_static 'govuk-public/images/govuk-apple-touch-icon-167x167.png' %}">
+      <link rel="apple-touch-icon" sizes="152x152" href="{% webpack_static 'govuk-public/images/govuk-apple-touch-icon-152x152.png' %}">
+      <link rel="apple-touch-icon" href="{% webpack_static 'govuk-public/images/govuk-apple-touch-icon.png' %}">
     {% endblock %}
 
     {% block head %}{% endblock %}
     {# The default og:image is added below head so that scrapers see any custom metatags first, and this is just a fallback #}
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
-    <meta property="og:image" content="{% static 'images/govuk-opengraph-image.png' %}">
+    <meta property="og:image" content="{% webpack_static 'images/govuk-opengraph-image.png' %}">
   </head>
   <body class="govuk-template__body {{ bodyClasses }}">
     <!-- Google Tag Manager (noscript) -->
@@ -65,7 +68,7 @@
     {% endblock %}
 
     {% block body_end %}
-      <script src="{% static 'js/main.js' %}"></script>
+      {% render_bundle 'main' 'js' 'DEFAULT' %}
       <script>ma.init();</script>
       {% block body_script %}{% endblock %}
       {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
