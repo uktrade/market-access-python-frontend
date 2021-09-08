@@ -5,20 +5,6 @@
 version: 2
 jobs:
 
-  webpack_build:
-    docker:
-      - image: cimg/node:12
-    working_directory: ~/market-access-python-frontend
-    steps:
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: npm install
-
-      - run:
-          name: Compile webpack config
-          command: npm run build
   tests:
     docker:
       # specify the version you desire here
@@ -63,6 +49,13 @@ jobs:
 
     steps:
       - checkout
+
+      - installing_host_deps:
+          command: sudo apt-get install nodejs npm
+
+      - run:
+          name: Compile webpack config
+          command: npm install && npm run build
 
       - restore_cache:
           keys:
@@ -159,6 +152,5 @@ workflows:
   version: 2
   test:
     jobs:
-      - webpack_build
       - tests
       - pep8
