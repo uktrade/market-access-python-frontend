@@ -52,7 +52,7 @@ jobs:
 
       - run:
           name: Installing system dependencies
-          command: sudo apt-get install nodejs npm
+          command: sudo apt-get install -y nodejs npm
 
       - run:
           name: Compile webpack config

@@ -3,12 +3,12 @@ const BundleTracker = require("webpack-bundle-tracker");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackConcatPlugin = require('webpack-concat-files-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
+const babel = require("@babel/core")
 
 const assetsSrcPath = path.resolve(__dirname, "core/frontend/src/")
 
 const mainConfig = {
     entry: {
-        main: path.resolve(__dirname, 'core/frontend/src/js/main.js'),
         style: path.resolve(__dirname, "core/frontend/src/css/index.scss")
     },
     output: {
@@ -33,7 +33,15 @@ const mainConfig = {
         // the entry point gets generated and used by the babel-loader defined below
         new WebpackConcatPlugin({
                 bundles: [{
-                    dest: path.resolve(__dirname, 'core/frontend/src/js/main.js'),
+                    dest: path.resolve(__dirname, "./core/frontend/dist/webpack_bundles/main.js"),
+                    transforms: {
+                        after: async (code) => {
+                            const transcompiledFile = await babel.transform(code, {
+                                presets: [["@babel/env", {modules: false}]]
+                            })
+                            return transcompiledFile.code
+                        }
+                    },
                     src: [
                         `${assetsSrcPath}/js/vendor/jessie.js`,
                         `${assetsSrcPath}/js/vendor/body-scroll-lock.js`,
@@ -66,8 +74,12 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/barrier/archive.js`,
                         `${assetsSrcPath}/js/pages/barrier/wto.js`,
                         `${assetsSrcPath}/js/pages/barrier/action_plans_add_task.js`,
-                    ]
-        }]}),],
+                    ],
+                    
+        }],
+        allowOptimization: true
+    }),
+  ],
   module: {
     rules: [
     {
@@ -82,15 +94,6 @@ const mainConfig = {
         type: 'asset/resource',
         generator: {
             filename: "../images/[name].[ext]"
-        }
-    },{
-        test: /main\.js/i,
-        use: {
-            loader: "babel-loader", 
-                options: {
-                    presets: [["@babel/env", {modules: false}]]
-                }
-            
         }
     },
     {
@@ -118,7 +121,6 @@ const mainConfig = {
 // React components need special configuration
 
 const reactConfig = {
-    mode: 'development',
     entry: path.resolve(__dirname, 'core/frontend/src/js/react'),
     output: {
         path: path.resolve(__dirname, 'core/frontend/dist/webpack_bundles/'),
@@ -126,7 +128,6 @@ const reactConfig = {
         libraryTarget: 'var',
         library: 'ReactApp'
     },
-    devtool: "source-map",
     plugins: [
         new BundleTracker({ filename: "./webpack-stats-react.json" }),
     ],
