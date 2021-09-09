@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load render_bundle from webpack_loader %}
 
 {% block head %}
-    <script src="{% static 'js/react.js' %}"></script>
+    {% render_bundle 'main' 'js' 'REACT' %}
     {{ trading_blocs|json_script:"trading-blocs-data" }}
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {

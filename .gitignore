@@ -132,3 +132,7 @@ requirements-dev.txt
 /GPATH
 /GRTAGS
 /GTAGS
+
+
+webpack-stats.json
+webpack-stats-react.json

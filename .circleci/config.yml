@@ -4,6 +4,7 @@
 #
 version: 2
 jobs:
+
   tests:
     docker:
       # specify the version you desire here
@@ -48,6 +49,14 @@ jobs:
 
     steps:
       - checkout
+
+      - run:
+          name: Installing system dependencies
+          command: sudo apt-get install -y nodejs npm
+
+      - run:
+          name: Compile webpack config
+          command: npm install && npm run build
 
       - restore_cache:
           keys:
@@ -138,6 +147,7 @@ jobs:
 
       - store_artifacts:
           path: ui-test-reports
+
 
 workflows:
   version: 2

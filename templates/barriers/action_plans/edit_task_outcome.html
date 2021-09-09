@@ -1,6 +1,7 @@
 {% extends "barriers/edit/base.html" %} 
 {% block page_title %}
 {% load static %}
+{% load render_bundle from webpack_loader %}
 {{ block.super }} - Edit end date{% endblock %} 
 
 {% block back_link %}
@@ -12,7 +13,7 @@
 {% endblock %}
 
 {% block body_script %}
-  <script src="{% static 'js/react.js' %}"></script>
+  {% render_bundle 'main' 'js' 'REACT' %}
     <script>
         ma.pages.barrier.action_plans_add_task();
     document.addEventListener("DOMContentLoaded", function (event) {

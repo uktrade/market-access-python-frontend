@@ -28,7 +28,6 @@ http://127.0.0.1:1337/?addClass=1&hasClass=1&removeClass=1&toggleClass=1&ajaxGet
 var jessie;
 jessie = jessie || {};
 (function(global) {
-
 	var globalDocument = global.document,
 		isHostObjectProperty = function(object, property) {
 			var objectProperty = object[property];
