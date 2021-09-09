@@ -12,6 +12,14 @@ function MultiSelectFilter(props) {
     const initialSelectedOptionIds = initialSelectedOptions.map(option => option.value)
     const [selectedOptionIds, setSelectedOptionIds] = useState(initialSelectedOptionIds)
 
+    // A multi-select field can have a checkbox below it called secondary option
+    // if props are provided generated below with appropriate details
+    const {secondaryOptionLabel, secondaryOptionFieldName} = props
+    const urlSearchParams = new URLSearchParams(window.location.search)
+    const queryParams = Object.fromEntries(urlSearchParams.entries())
+    const defaultSecondaryOptionValue = secondaryOptionFieldName ? queryParams[secondaryOptionFieldName] : false
+    const [secondaryOptionValue, setSecondaryOptionValue] = useState(defaultSecondaryOptionValue)
+
     const handleOptionSelect = (value, meta) => {
         if (meta.action === "select-option") {
             let option = meta.option.value
@@ -44,6 +52,23 @@ function MultiSelectFilter(props) {
                     defaultValue={initialSelectedOptions}
                     containerClasses={props.containerClasses}
                 />
+
+        {(secondaryOptionFieldName && secondaryOptionLabel) ? (<div className="checkbox-filter govuk-!-width-full">
+              <div className="checkbox-filter__item">
+                <input
+                  className="checkbox-filter__input"
+                  id={`secondary-option-${secondaryOptionFieldName}`}
+                  name={secondaryOptionFieldName}
+                  type="checkbox"
+                  checked={secondaryOptionValue}
+                  onChange={(event) => setSecondaryOptionValue(!secondaryOptionValue)}
+                />
+                <label className="govuk-label checkbox-filter__label" for={`secondary-option-${secondaryOptionFieldName}`}>
+                  {secondaryOptionLabel}
+                </label>
+              </div>
+            
+          </div>): null }
 
             </fieldset>
 
