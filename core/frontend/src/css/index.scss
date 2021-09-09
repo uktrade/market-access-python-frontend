@@ -1,5 +1,5 @@
-$govuk-images-path: '/static/govuk-public/images/';
-$govuk-fonts-path: '/static/govuk-public/fonts/';
+$govuk-images-path: '../govuk-public/images/';
+$govuk-fonts-path: '../govuk-public/fonts/';
 
 @import "../../../../node_modules/govuk-frontend/govuk/all";
 @import 'colours';

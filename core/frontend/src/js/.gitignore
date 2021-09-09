@@ -1,0 +1,2 @@
+# concated file that gets compiled by webpack on babel-load
+main.js
