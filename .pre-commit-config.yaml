@@ -31,16 +31,12 @@ repos:
           - eslint-config-prettier@8.3.0
           - eslint-plugin-prettier@3.4.0
         types: [javascript]
-  - repo: https://github.com/awebdeveloper/pre-commit-stylelint
-    rev: 0.0.2
-    hooks:
-      - id: stylelint
-        additional_dependencies:
-          - stylelint@13.13.0
-          - stylelint-config-sass-guidelines@8.0.0
-          - stylelint-config-standard@22.0.0
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.1.0
     hooks:
       - id: detect-secrets
         args: ['--exclude-files', 'readme.md']
+  - repo: https://github.com/syntaqx/git-hooks
+    rev: v0.0.16
+    hooks:
+      - id: circleci-config-validate
