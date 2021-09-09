@@ -29,6 +29,10 @@ class BarrierSearchForm(forms.Form):
         label="Trade direction",
         required=False,
     )
+    ignore_all_sectors = forms.BooleanField(
+        label="Ignore all sectors",
+        required=False
+    )
     sector = forms.MultipleChoiceField(
         label="Sector",
         required=False,
@@ -175,6 +179,7 @@ class BarrierSearchForm(forms.Form):
             "extra_location": data.getlist("extra_location"),
             "trade_direction": data.getlist("trade_direction"),
             "sector": data.getlist("sector"),
+            "ignore_all_sectors": data.get("ignore_all_sectors"),
             "organisation": data.getlist("organisation"),
             "category": data.getlist("category"),
             "region": data.getlist("region"),
@@ -377,6 +382,7 @@ class BarrierSearchForm(forms.Form):
             self.cleaned_data.get("trade_direction", [])
         )
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
+        params["ignore_all_sectors"] = self.cleaned_data.get("ignore_all_sectors")
         params["organisation"] = ",".join(self.cleaned_data.get("organisation", []))
         params["category"] = ",".join(self.cleaned_data.get("category", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))

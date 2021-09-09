@@ -40,7 +40,7 @@ function renderLocationFilter(countryElement, tradingBlocElement, tradingBlocDat
 }
 
 
-function renderMultiSelectFilter(htmlElementId, placeholder = null, labelClasses = null, containerClasses = null) {
+function renderMultiSelectFilter(htmlElementId, placeholder = null, labelClasses = null, containerClasses = null, secondaryOption = null) {
   let placeholderString = placeholder ? placeholder : `Search ${htmlElementId}s`
   let htmlElement = document.getElementById(htmlElementId)
   const label = htmlElement.querySelector('legend').textContent.trim()
@@ -54,6 +54,8 @@ function renderMultiSelectFilter(htmlElementId, placeholder = null, labelClasses
       placeholder={placeholderString}
       labelClasses={labelClasses}
       containerClasses={containerClasses}
+      secondaryOptionFieldName={secondaryOption?.fieldName}
+      secondaryOptionLabel={secondaryOption?.label}
     />,
     htmlElement
   );
