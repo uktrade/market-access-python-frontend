@@ -16,6 +16,11 @@ from utils.api.client import MarketAccessAPIClient
 
 class ActionPlanFormViewMixin:
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        return kwargs
+
     def get_success_url(self):
         return reverse(
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
@@ -61,11 +66,6 @@ class AddActionPlanMilestoneFormView(
 ):
     template_name = "barriers/action_plans/add_milestone.html"
     form_class = ActionPlanMilestoneForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
-        return kwargs
 
     def get_initial(self):
         if self.request.method == "GET":
