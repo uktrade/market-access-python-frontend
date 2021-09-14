@@ -25,6 +25,7 @@ RUN dnf -y update \
  && dnf -y clean all \
  && rm -rf /var/cache/dnf
 
+# Installing Python
 ENV PYTHON_VERSION 3.9.2
 RUN wget --no-verbose https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz \
     && tar -C /usr/local/bin -xzvf Python-$PYTHON_VERSION.tgz \
@@ -35,6 +36,11 @@ RUN wget --no-verbose https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$
 
 RUN ln -s /usr/local/bin/python3.9 /usr/bin/python \
  && ln -s /usr/local/bin/pip3.9 /usr/bin/pip
+
+# Installing Node
+ENV NODE_VERSION 12
+RUN dnf -y module enable nodejs:$NODE_VERSION \
+    && dnf -y install nodejs
 
 # SSH
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
@@ -63,7 +69,12 @@ ENV LC_ALL en_GB.utf-8
 
 # Set PYTHONUNBUFFERED so output is displayed in the Docker log
 ENV PYTHONUNBUFFERED=1 \
-    POETRY_VERSION=1.1.8
+    POETRY_VERSION=1.1.8 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=200 \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_CREATE=false
 
 WORKDIR /usr/src/app
 
@@ -71,7 +82,10 @@ WORKDIR /usr/src/app
 COPY pyproject.toml poetry.lock ./
 RUN pip install --upgrade pip \
  && pip install poetry==$POETRY_VERSION \
- && poetry lock \
  && poetry export --without-hashes -f requirements.txt -o requirements.txt \
  && poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt \
  && pip install -r requirements-dev.txt
+
+COPY package.json package-lock.json ./
+RUN npm install -g npm \
+    && npm ci

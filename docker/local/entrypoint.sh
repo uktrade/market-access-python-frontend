@@ -3,6 +3,7 @@
 # Django Migrations
 python manage.py makemigrations
 python manage.py migrate
+npm run build
 python manage.py collectstatic --no-input
 
 echo -e "╔══════════════════════════════════════════════════════╗"
@@ -12,5 +13,5 @@ echo -e "║  - To list all available make commands               ║"
 echo -e "║    run 'make help'.                                  ║"
 echo -e "╚══════════════════════════════════════════════════════╝"
 
-# tail a file to keep the container alive
-tail -f /dev/null
+# Allow any command to be run against the image
+exec "$@"

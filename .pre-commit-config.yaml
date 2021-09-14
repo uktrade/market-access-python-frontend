@@ -16,10 +16,15 @@ repos:
       - id: prettier
         files: core/frontend/src
         types: [javascript]
-  - repo: https://github.com/pycqa/flake8
-    rev: 3.9.2
+  - repo: http://github.com/PyCQA/isort
+    rev: 5.9.3
+    hooks:
+      - id: isort
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
     hooks:
       - id: flake8
+        additional_dependencies: [flake8-isort]
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v7.32.0
     hooks:
