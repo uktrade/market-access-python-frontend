@@ -2,11 +2,13 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
-        "rootDir": "core/frontend/src/js",
+        "rootDir": "core/frontend/src",
         "jsx": "react",
         "checkJs": true
     },
+    "include": ["core/frontend/src/js"],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "core/frontend/dist"
     ]
 }
