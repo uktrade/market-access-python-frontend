@@ -655,23 +655,23 @@ var getElementPositionStyles;
 
 if(html && getElement && isHostObjectProperty(html, 'style') &&
 	'number' == typeof html.offsetLeft && 'string' == typeof html.style.left ) {
-	
+
 	getElementPositionStyles = (function() {
 		var result,
 			sides = ['left', 'top', 'right', 'bottom'],
 			inlineStyles = {},
 			findPosition;
-			
+
 		findPosition = function(el, sides) {
 			var i,
 				offsetLeft,
 				offsetTop;
-				
+
 			offsetLeft = el.offsetLeft;
 			offsetTop = el.offsetTop;
 			el.style[sides[2]] = 'auto';
 			el.style[sides[3]] = 'auto';
-			
+
 			if (offsetLeft != el.offsetLeft) {
 				result[sides[0]] = null;
 			}
@@ -703,7 +703,7 @@ if(html && getElement && isHostObjectProperty(html, 'style') &&
 					result[sides[1]] = el.offsetTop;
 				}
 			}
-			
+
 			for (i = 4; i--;) {
 				el.style[sides[i]] = inlineStyles[sides[i]];
 			}
@@ -732,7 +732,7 @@ if(html && getElement && isHostObjectProperty(html, 'style') &&
 
 			return result;
 		};
-		
+
 	}());
 }
 

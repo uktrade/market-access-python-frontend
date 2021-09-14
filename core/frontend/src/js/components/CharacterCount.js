@@ -1,214 +1,244 @@
-ma.components.CharacterCount = (function( doc, jessie ){
+ma.components.CharacterCount = (function (doc, jessie) {
+    var html =
+        jessie.isHostObjectProperty(doc, "documentElement") &&
+        doc.documentElement;
 
-	var html = jessie.isHostObjectProperty( doc, 'documentElement' ) && doc.documentElement;
+    if (
+        !(
+            jessie.isHostMethod(html, "insertAdjacentElement") &&
+            jessie.isHostMethod(html, "insertAdjacentHTML")
+        )
+    ) {
+        return;
+    }
+    if (
+        !jessie.hasFeatures(
+            "queryOne",
+            "attachListener",
+            "bind",
+            "addClass",
+            "removeClass"
+        )
+    ) {
+        return;
+    }
 
-	if( !( jessie.isHostMethod( html, 'insertAdjacentElement' ) && jessie.isHostMethod( html, 'insertAdjacentHTML' ) ) ){ return;	}
-	if( !jessie.hasFeatures( 'queryOne', 'attachListener', 'bind', 'addClass', 'removeClass' ) ){ return; }
+    function CharacterCount(moduleSelector) {
+        var $module = jessie.queryOne(moduleSelector);
+        this.$module = $module;
+        this.$textarea =
+            $module && jessie.queryOne(".js-character-count", $module);
 
-	function CharacterCount( moduleSelector ){
+        if (!this.$textarea) {
+            return;
+        }
 
-		var $module = jessie.queryOne( moduleSelector );
-		this.$module = $module;
-		this.$textarea = $module && jessie.queryOne( '.js-character-count', $module );
+        // Read options set using dataset ('data-' values)
+        this.options = this.getDataset($module);
 
-		if( !this.$textarea ){
-			return;
-		}
+        // Determine the limit attribute (characters or words)
+        var countAttribute = this.defaults.characterCountAttribute;
 
-		// Read options set using dataset ('data-' values)
-		this.options = this.getDataset( $module );
+        if (this.options.maxwords) {
+            countAttribute = this.defaults.wordCountAttribute;
+        }
 
-		// Determine the limit attribute (characters or words)
-		var countAttribute = this.defaults.characterCountAttribute;
+        // Save the element limit
+        this.maxLength = parseInt($module.getAttribute(countAttribute), 10);
 
-		if( this.options.maxwords ){
-			countAttribute = this.defaults.wordCountAttribute;
-		}
+        // Check for limit
+        if (!this.maxLength) {
+            return;
+        }
 
-		// Save the element limit
-		this.maxLength = parseInt( $module.getAttribute( countAttribute ), 10 );
+        // Generate and reference message
+        this.countMessage = this.createCountMessage();
 
-		// Check for limit
-		if( !this.maxLength ){
-			return;
-		}
+        // If there's a maximum length defined and the count message exists
+        if (this.countMessage) {
+            // Remove hard limit if set
+            $module.removeAttribute("maxlength");
 
-		// Generate and reference message
-		this.countMessage = this.createCountMessage();
+            // Bind event changes to the textarea
+            this.bindChangeEvents();
 
-		// If there's a maximum length defined and the count message exists
-		if( this.countMessage ){
-			// Remove hard limit if set
-			$module.removeAttribute( 'maxlength' );
+            // Update count message
+            this.updateCountMessage();
+        }
+    }
 
-			// Bind event changes to the textarea
-			this.bindChangeEvents();
+    CharacterCount.prototype.defaults = {
+        characterCountAttribute: "data-maxlength",
+        wordCountAttribute: "data-maxwords",
+    };
 
-			// Update count message
-			this.updateCountMessage();
-		}
-	}
+    // Read data attributes
+    CharacterCount.prototype.getDataset = function (element) {
+        var dataset = {};
+        var attributes = element.attributes;
 
-	CharacterCount.prototype.defaults = {
-		characterCountAttribute: 'data-maxlength',
-		wordCountAttribute: 'data-maxwords'
-	};
+        if (attributes) {
+            for (var i = 0, l = attributes.length; i < l; i++) {
+                var attribute = attributes[i];
+                var match = attribute.name.match(/^data-(.+)/);
 
-	// Read data attributes
-	CharacterCount.prototype.getDataset = function( element ){
+                if (match) {
+                    dataset[match[1]] = attribute.value;
+                }
+            }
+        }
 
-		var dataset = {};
-		var attributes = element.attributes;
+        return dataset;
+    };
 
-		if( attributes ){
+    // Counts characters or words in text
+    CharacterCount.prototype.count = function (text) {
+        var length;
 
-			for( var i = 0, l = attributes.length; i < l; i++ ){
+        if (this.options.maxwords) {
+            var tokens = text.match(/\S+/g) || []; // Matches consecutive non-whitespace chars
+            length = tokens.length;
+        } else {
+            length = text.length;
+        }
 
-				var attribute = attributes[ i ];
-				var match = attribute.name.match( /^data-(.+)/ );
+        return length;
+    };
 
-				if( match ){
-					dataset[ match[ 1 ] ] = attribute.value;
-				}
-			}
-		}
+    // Generate count message and bind it to the input
+    // returns reference to the generated element
+    CharacterCount.prototype.createCountMessage = function () {
+        var countElement = this.$textarea;
+        var elementId = countElement.id;
+        // Check for existing info count message
+        var countMessage = document.getElementById(elementId + "-info");
 
-		return dataset;
-	};
+        // If there is no existing info count message we add one right after the field
+        if (elementId && !countMessage) {
+            countElement.insertAdjacentHTML(
+                "afterend",
+                '<span id="' +
+                    elementId +
+                    '-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>'
+            );
+            this.describedBy = countElement.getAttribute("aria-describedby");
+            this.describedByInfo = this.describedBy + " " + elementId + "-info";
+            countElement.setAttribute("aria-describedby", this.describedByInfo);
+            countMessage = document.getElementById(elementId + "-info");
+        } else {
+            // If there is an existing info count message we move it right after the field
+            countElement.insertAdjacentElement("afterend", countMessage);
+        }
 
-	// Counts characters or words in text
-	CharacterCount.prototype.count = function( text ){
+        return countMessage;
+    };
 
-		var length;
+    // Bind input propertychange to the elements and update based on the change
+    CharacterCount.prototype.bindChangeEvents = function () {
+        var $textarea = this.$textarea;
+        jessie.attachListener(
+            $textarea,
+            "keyup",
+            jessie.bind(this.checkIfValueChanged, this)
+        );
 
-		if( this.options.maxwords ){
+        // Bind focus/blur events to start/stop polling
+        jessie.attachListener(
+            $textarea,
+            "focus",
+            jessie.bind(this.handleFocus, this)
+        );
+        jessie.attachListener(
+            $textarea,
+            "blur",
+            jessie.bind(this.handleBlur, this)
+        );
+    };
 
-			var tokens = text.match( /\S+/g ) || []; // Matches consecutive non-whitespace chars
-			length = tokens.length;
+    // Speech recognition software such as Dragon NaturallySpeaking will modify the
+    // fields by directly changing its `value`. These changes don't trigger events
+    // in JavaScript, so we need to poll to handle when and if they occur.
+    CharacterCount.prototype.checkIfValueChanged = function () {
+        if (!this.$textarea.oldValue) {
+            this.$textarea.oldValue = "";
+        }
 
-		} else {
+        if (this.$textarea.value !== this.$textarea.oldValue) {
+            this.$textarea.oldValue = this.$textarea.value;
+            this.updateCountMessage();
+        }
+    };
 
-			length = text.length;
-		}
+    // Update message box
+    CharacterCount.prototype.updateCountMessage = function () {
+        var countElement = this.$textarea;
+        var options = this.options;
+        var countMessage = this.countMessage;
 
-		return length;
-	};
+        // Determine the remaining number of characters/words
+        var currentLength = this.count(countElement.value);
+        var maxLength = this.maxLength;
+        var remainingNumber = maxLength - currentLength;
 
-	// Generate count message and bind it to the input
-	// returns reference to the generated element
-	CharacterCount.prototype.createCountMessage = function(){
+        // Set threshold if presented in options
+        var thresholdPercent = options.threshold ? options.threshold : 0;
+        var thresholdValue = (maxLength * thresholdPercent) / 100;
 
-		var countElement = this.$textarea;
-		var elementId = countElement.id;
-		// Check for existing info count message
-		var countMessage = document.getElementById( elementId + '-info' );
+        if (thresholdValue > currentLength) {
+            jessie.addClass(
+                countMessage,
+                "govuk-character-count__message--disabled"
+            );
+        } else {
+            jessie.removeClass(
+                countMessage,
+                "govuk-character-count__message--disabled"
+            );
+        }
 
-		// If there is no existing info count message we add one right after the field
-		if( elementId && !countMessage ){
+        // Update styles
+        if (remainingNumber < 0) {
+            jessie.addClass(countElement, "govuk-textarea--error");
+            jessie.addClass(countMessage, "govuk-error-message");
+            jessie.removeClass(countMessage, "govuk-hint");
+        } else {
+            jessie.removeClass(countElement, "govuk-textarea--error");
+            jessie.removeClass(countMessage, "govuk-error-message");
+            jessie.addClass(countMessage, "govuk-hint");
+        }
 
-			countElement.insertAdjacentHTML( 'afterend', '<span id="' + elementId + '-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>' );
-			this.describedBy = countElement.getAttribute( 'aria-describedby' );
-			this.describedByInfo = ( this.describedBy + ' ' + elementId + '-info' );
-			countElement.setAttribute( 'aria-describedby', this.describedByInfo );
-			countMessage = document.getElementById( elementId + '-info' );
+        // Update message
+        var charVerb = "remaining";
+        var charNoun = "character";
+        var displayNumber = remainingNumber;
 
-		} else {
-			// If there is an existing info count message we move it right after the field
-			countElement.insertAdjacentElement( 'afterend', countMessage );
-		}
+        if (options.maxwords) {
+            charNoun = "word";
+        }
 
-		return countMessage;
-	};
+        charNoun =
+            charNoun +
+            (remainingNumber === -1 || remainingNumber === 1 ? "" : "s");
 
-	// Bind input propertychange to the elements and update based on the change
-	CharacterCount.prototype.bindChangeEvents = function(){
+        charVerb = remainingNumber < 0 ? "too many" : "remaining";
+        displayNumber = Math.abs(remainingNumber);
 
-		var $textarea = this.$textarea;
-		jessie.attachListener( $textarea, 'keyup', jessie.bind( this.checkIfValueChanged, this ) );
+        countMessage.innerHTML =
+            "You have " + displayNumber + " " + charNoun + " " + charVerb;
+    };
 
-		// Bind focus/blur events to start/stop polling
-		jessie.attachListener( $textarea, 'focus', jessie.bind( this.handleFocus, this ) );
-		jessie.attachListener( $textarea, 'blur', jessie.bind( this.handleBlur, this ) );
-	};
+    CharacterCount.prototype.handleFocus = function () {
+        // Check if value changed on focus
+        this.valueChecker = setInterval(
+            jessie.bind(this.checkIfValueChanged, this),
+            1000
+        );
+    };
 
-	// Speech recognition software such as Dragon NaturallySpeaking will modify the
-	// fields by directly changing its `value`. These changes don't trigger events
-	// in JavaScript, so we need to poll to handle when and if they occur.
-	CharacterCount.prototype.checkIfValueChanged = function(){
+    CharacterCount.prototype.handleBlur = function () {
+        // Cancel value checking on blur
+        clearInterval(this.valueChecker);
+    };
 
-		if( !this.$textarea.oldValue ){
-			this.$textarea.oldValue = '';
-		}
-
-		if( this.$textarea.value !== this.$textarea.oldValue ){
-			this.$textarea.oldValue = this.$textarea.value;
-			this.updateCountMessage();
-		}
-	};
-
-	// Update message box
-	CharacterCount.prototype.updateCountMessage = function () {
-
-		var countElement = this.$textarea;
-		var options = this.options;
-		var countMessage = this.countMessage;
-
-		// Determine the remaining number of characters/words
-		var currentLength = this.count( countElement.value );
-		var maxLength = this.maxLength;
-		var remainingNumber = maxLength - currentLength;
-
-		// Set threshold if presented in options
-		var thresholdPercent = options.threshold ? options.threshold : 0;
-		var thresholdValue = maxLength * thresholdPercent / 100;
-
-		if( thresholdValue > currentLength ){
-			jessie.addClass( countMessage, 'govuk-character-count__message--disabled' );
-		} else {
-			jessie.removeClass( countMessage, 'govuk-character-count__message--disabled' );
-		}
-
-		// Update styles
-		if( remainingNumber < 0 ){
-
-			jessie.addClass( countElement, 'govuk-textarea--error' );
-			jessie.addClass( countMessage, 'govuk-error-message' );
-			jessie.removeClass( countMessage, 'govuk-hint' );
-
-		} else {
-
-			jessie.removeClass( countElement, 'govuk-textarea--error' );
-			jessie.removeClass( countMessage, 'govuk-error-message' );
-			jessie.addClass( countMessage, 'govuk-hint' );
-		}
-
-		// Update message
-		var charVerb = 'remaining';
-		var charNoun = 'character';
-		var displayNumber = remainingNumber;
-
-		if( options.maxwords ){
-			charNoun = 'word';
-		}
-
-		charNoun = charNoun + ( ( remainingNumber === -1 || remainingNumber === 1 ) ? '' : 's' );
-
-		charVerb = ( remainingNumber < 0 ? 'too many' : 'remaining' );
-		displayNumber = Math.abs( remainingNumber );
-
-		countMessage.innerHTML = ( 'You have ' + displayNumber + ' ' + charNoun + ' ' + charVerb );
-	};
-
-	CharacterCount.prototype.handleFocus = function () {
-		// Check if value changed on focus
-		this.valueChecker = setInterval( jessie.bind( this.checkIfValueChanged, this ), 1000 );
-	};
-
-	CharacterCount.prototype.handleBlur = function () {
-		// Cancel value checking on blur
-		clearInterval( this.valueChecker );
-	};
-
-	return CharacterCount;
-
-})( document, jessie );
+    return CharacterCount;
+})(document, jessie);

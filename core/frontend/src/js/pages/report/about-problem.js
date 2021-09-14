@@ -1,11 +1,14 @@
-ma.pages.report.aboutProblem = function(){
+ma.pages.report.aboutProblem = function () {
+    if (!ma.components.ConditionalRadioContent) {
+        return;
+    }
 
-	if( !ma.components.ConditionalRadioContent ){ return; }
-
-	new ma.components.ConditionalRadioContent({
-		inputContainer: '.barrier-source',
-		inputName: 'source',
-		conditionalElem: '#conditional-OTHER',
-		shouldShow: function( value ){ return ( value === 'OTHER' ); }
-	});
+    new ma.components.ConditionalRadioContent({
+        inputContainer: ".barrier-source",
+        inputName: "source",
+        conditionalElem: "#conditional-OTHER",
+        shouldShow: function (value) {
+            return value === "OTHER";
+        },
+    });
 };

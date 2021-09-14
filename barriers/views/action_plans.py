@@ -1,21 +1,23 @@
-from barriers.forms.action_plans import (ActionPlanCurrentStatusEditForm,
-                                         ActionPlanMilestoneEditForm,
-                                         ActionPlanMilestoneForm,
-                                         ActionPlanStrategicContextForm,
-                                         ActionPlanTaskEditForm,
-                                         ActionPlanTaskEditOutcomeForm,
-                                         ActionPlanTaskEditProgressForm,
-                                         ActionPlanTaskForm)
-from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
+
+from barriers.forms.action_plans import (
+    ActionPlanCurrentStatusEditForm,
+    ActionPlanMilestoneEditForm,
+    ActionPlanMilestoneForm,
+    ActionPlanStrategicContextForm,
+    ActionPlanTaskEditForm,
+    ActionPlanTaskEditOutcomeForm,
+    ActionPlanTaskEditProgressForm,
+    ActionPlanTaskForm,
+)
+from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
 
 
 class ActionPlanFormViewMixin:
-
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")

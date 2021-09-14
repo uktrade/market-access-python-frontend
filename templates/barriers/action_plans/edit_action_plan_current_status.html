@@ -25,7 +25,7 @@
                 <div class="govuk-radios status govuk-radios--conditional" data-module="radios">
 
                     {% for choice_value, choice_name in form.fields.status.choices %}
-                    
+
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input" id="{{ choice_value }}" name="{{ form.status.name }}"
                                     type="radio" value="{{ choice_value }}"

@@ -1,8 +1,9 @@
 from http import HTTPStatus
 
-from core.tests import MarketAccessTestCase
 from django.urls import reverse
 from mock import patch
+
+from core.tests import MarketAccessTestCase
 
 
 class TeamDetailTestCase(MarketAccessTestCase):

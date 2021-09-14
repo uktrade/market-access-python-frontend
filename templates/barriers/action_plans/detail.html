@@ -72,7 +72,7 @@
 
         <div class="status-and-progress">
             <span class="action_plan__current_status__heading">
-                Progress update 
+                Progress update
                 {% if action_plan.status == "ON_TRACK" %}
                     <span class="ma-badge ma-badge--status-on-track">On track</span>
                 {% elif action_plan.status == "RISK_OF_DELAY" %}
@@ -80,11 +80,11 @@
                 {% elif action_plan.status == "DELAYED" %}
                     <span class="ma-badge ma-badge--status-delayed">Delayed</span>
                 {% endif %}
-            </span> 
+            </span>
             {% if action_plan.current_status %}
             <a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Edit</a>
             {% else %}<br><a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Add progress update</a> {% endif %}
-            
+
             <p>{{ action_plan.current_status|linebreaks }}</p>
         </div>
         <div class="action-plan-meta">
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <a class="govuk-button button--primary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add objective</a>    
+        <a class="govuk-button button--primary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add objective</a>
 
         <div class="action-plan__milestones">
         {% for milestone in action_plan.milestones %}
@@ -172,7 +172,7 @@
                         <tr class="govuk-table__row milestone-task-status-progress-row">
                             <td colspan="6" class="govuk-table__cell">
                                 {% if task.status == "COMPLETED" %}
-                                    <p><strong>Outcome:</strong>    
+                                    <p><strong>Outcome:</strong>
                                     {% if task.outcome %}
                                     {{ task.outcome }}
                                     <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Edit</a>

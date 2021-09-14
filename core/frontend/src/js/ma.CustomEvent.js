@@ -1,48 +1,38 @@
-ma.CustomEvent = (function(){
+ma.CustomEvent = (function () {
+    function CustomEvent() {
+        this.subscribers = [];
+    }
 
-	function CustomEvent(){
+    var proto = CustomEvent.prototype;
 
-		this.subscribers = [];
-	}
+    proto.subscribe = function (fn) {
+        this.subscribers.push(fn);
+    };
 
-	var proto = CustomEvent.prototype;
+    proto.unSubscribe = function (fn) {
+        var i = 0;
+        var l = this.subscribers.length;
 
-	proto.subscribe = function( fn ){
+        for (; i < l; i++) {
+            if (this.subscribers[i] === fn) {
+                this.subscribers.pop(i, 1);
 
-		this.subscribers.push( fn );
-	};
+                break;
+            }
+        }
+    };
 
-	proto.unSubscribe = function( fn ){
+    proto.publish = function () {
+        var i = this.subscribers.length - 1;
 
-		var i = 0;
-		var l = this.subscribers.length;
+        for (; i >= 0; i--) {
+            try {
+                this.subscribers[i].apply(this, arguments);
+            } catch (e) {
+                //prevent subscribers from breaking it
+            }
+        }
+    };
 
-		for( ; i < l; i++ ) {
-
-			if( this.subscribers[ i ] === fn ){
-
-				this.subscribers.pop( i, 1 );
-
-				break;
-			}
-		}
-	};
-
-	proto.publish = function() {
-
-		var i = this.subscribers.length-1;
-
-		for( ; i >= 0; i-- ){
-
-			try {
-
-				this.subscribers[ i ].apply( this, arguments );
-
-			} catch( e ){
-				//prevent subscribers from breaking it
-			}
-		}
-	};
-
-	return CustomEvent;
-}());
+    return CustomEvent;
+})();

@@ -1,6 +1,8 @@
 from barriers.models.history.action_plans import (
-    ActionPlanHistoryItem, ActionPlanMilestoneHistoryItem,
-    ActionPlanTaskHistoryItem)
+    ActionPlanHistoryItem,
+    ActionPlanMilestoneHistoryItem,
+    ActionPlanTaskHistoryItem,
+)
 
 from .assessments.economic import EconomicAssessmentHistoryItem
 from .assessments.economic_impact import EconomicImpactAssessmentHistoryItem
@@ -37,6 +39,6 @@ class HistoryItem(PolymorphicBase):
         WTOHistoryItem,
         ActionPlanHistoryItem,
         ActionPlanMilestoneHistoryItem,
-        ActionPlanTaskHistoryItem
+        ActionPlanTaskHistoryItem,
     )
     class_lookup = {}

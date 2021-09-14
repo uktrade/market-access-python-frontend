@@ -1,5 +1,4 @@
 from core.tests import MarketAccessTestCase
-
 from ui_tests import settings
 
 from .helpers.barriers import get_barrier_code, get_barrier_title

@@ -29,10 +29,7 @@ class BarrierSearchForm(forms.Form):
         label="Trade direction",
         required=False,
     )
-    ignore_all_sectors = forms.BooleanField(
-        label="Ignore all sectors",
-        required=False
-    )
+    ignore_all_sectors = forms.BooleanField(label="Ignore all sectors", required=False)
     sector = forms.MultipleChoiceField(
         label="Sector",
         required=False,
@@ -61,10 +58,7 @@ class BarrierSearchForm(forms.Form):
         label="Tags",
         required=False,
     )
-    has_action_plan = forms.BooleanField(
-        label="Has action plan",
-        required=False
-    )
+    has_action_plan = forms.BooleanField(label="Has action plan", required=False)
     user = forms.BooleanField(
         label="Barriers I have created",
         required=False,
@@ -144,7 +138,7 @@ class BarrierSearchForm(forms.Form):
             "label": "Barrier location",
             "fields": ("extra_location", "country_trading_bloc"),
         },
-        "action_plans": {"label": "Action plans", "fields": ("has_action_plan", )}
+        "action_plans": {"label": "Action plans", "fields": ("has_action_plan",)},
     }
 
     def __init__(self, metadata, *args, **kwargs):

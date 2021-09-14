@@ -1,3 +1,5 @@
 *.min.js
 *.html
 *.json
+core/frontend/dist/*
+core/frontend/src/js/vendor/*

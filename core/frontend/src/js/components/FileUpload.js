@@ -1,175 +1,174 @@
-ma.components.FileUpload = (function( doc, jessie ){
+ma.components.FileUpload = (function (doc, jessie) {
+    if (
+        !jessie.hasFeatures(
+            "attachListener",
+            "bind",
+            "queryOne",
+            "addClass",
+            "removeClass",
+            "cancelDefault",
+            "getElementData"
+        )
+    ) {
+        return;
+    }
 
-	if( !jessie.hasFeatures(
-		'attachListener', 'bind', 'queryOne', 'addClass', 'removeClass', 'cancelDefault', 'getElementData'
-	) ){ return; }
+    var attachListener = jessie.attachListener;
+    var bind = jessie.bind;
+    var queryOne = jessie.queryOne;
+    var addClass = jessie.addClass;
+    var removeClass = jessie.removeClass;
+    var cancelDefault = jessie.cancelDefault;
 
-	var attachListener = jessie.attachListener;
-	var bind = jessie.bind;
-	var queryOne = jessie.queryOne;
-	var addClass = jessie.addClass;
-	var removeClass = jessie.removeClass;
-	var cancelDefault = jessie.cancelDefault;
+    var GROUP_ERROR_CLASS = ma.FORM_GROUP_ERROR_CLASS;
+    var INPUT_ERROR_CLASS = ma.FORM_INPUT_ERROR_CLASS;
+    var ERROR_CLASS = ma.FORM_ERROR_CLASS;
 
-	var GROUP_ERROR_CLASS = ma.FORM_GROUP_ERROR_CLASS;
-	var INPUT_ERROR_CLASS = ma.FORM_INPUT_ERROR_CLASS;
-	var ERROR_CLASS = ma.FORM_ERROR_CLASS;
+    function FileUpload(opts) {
+        this.formGroup = queryOne(opts.group);
+        this.input = queryOne(opts.input);
+        this.limitText = queryOne(opts.limitText);
+        this.attachText = opts.attachText || "Attach document";
 
-	function FileUpload( opts ){
+        if (!this.formGroup) {
+            throw new Error("No form group found");
+        }
+        if (!this.input) {
+            throw new Error("no input found");
+        }
+        if (!this.limitText) {
+            throw new Error("no limit text found");
+        }
 
-		this.formGroup = queryOne( opts.group );
-		this.input = queryOne( opts.input );
-		this.limitText = queryOne( opts.limitText );
-		this.attachText = opts.attachText || 'Attach document';
+        this.form = this.input.form;
+        this.action = jessie.getElementData(this.form, "xhr-upload");
 
-		if( !this.formGroup ){ throw new Error( 'No form group found' ); }
-		if( !this.input ){ throw new Error( 'no input found' ); }
-		if( !this.limitText ){ throw new Error( 'no limit text found' ); }
+        if (!this.form) {
+            throw new Error("no form");
+        }
+        if (!this.action) {
+            throw new Error("No action on form");
+        }
 
-		this.form = this.input.form;
-		this.action = jessie.getElementData( this.form, 'xhr-upload' );
+        this.createLink();
+        this.createProgress();
 
-		if( !this.form ){ throw new Error( 'no form' ); }
-		if( !this.action ){ throw new Error( 'No action on form' ); }
+        this.linkVisible = false;
+        this.progressVisible = false;
+        this.inErrorState = false;
 
-		this.createLink();
-		this.createProgress();
+        //this.input.style.display = 'none';
+        //remove the file input so the file is not uploaded again when saving the form
+        this.input.parentNode.removeChild(this.input);
+        addClass(this.limitText, "file-upload__size-limit--js");
 
-		this.linkVisible = false;
-		this.progressVisible = false;
-		this.inErrorState = false;
+        attachListener(this.link, "click", bind(this.selectDocument, this));
+        attachListener(this.input, "change", bind(this.fileChange, this));
 
-		//this.input.style.display = 'none';
-		//remove the file input so the file is not uploaded again when saving the form
-		this.input.parentNode.removeChild( this.input );
-		addClass( this.limitText, 'file-upload__size-limit--js' );
+        this.events = {
+            file: new ma.CustomEvent(),
+        };
 
-		attachListener( this.link, 'click', bind( this.selectDocument, this ) );
-		attachListener( this.input, 'change', bind( this.fileChange, this ) );
+        this.showLink();
+    }
 
-		this.events = {
-			file: new ma.CustomEvent()
-		};
+    FileUpload.prototype.createLink = function () {
+        var link = doc.createElement("a");
 
-		this.showLink();
-	}
+        link.innerText = this.attachText;
+        link.className = "file-upload__link";
+        link.style.display = "none";
+        link.href = "#";
 
-	FileUpload.prototype.createLink = function(){
+        this.limitText.parentNode.insertBefore(link, this.limitText);
+        this.link = link;
+    };
 
-		var link = doc.createElement( 'a' );
+    FileUpload.prototype.showLink = function () {
+        if (!this.linkVisible) {
+            this.link.style.display = "";
+            this.limitText.style.display = "";
+            this.linkVisible = true;
 
-		link.innerText = this.attachText;
-		link.className = 'file-upload__link';
-		link.style.display = 'none';
-		link.href = '#';
+            this.hideProgress();
+        }
+    };
 
-		this.limitText.parentNode.insertBefore( link, this.limitText );
-		this.link = link;
-	};
+    FileUpload.prototype.hideLink = function () {
+        if (this.linkVisible) {
+            this.link.style.display = "none";
+            this.limitText.style.display = "none";
+            this.linkVisible = false;
+        }
+    };
 
-	FileUpload.prototype.showLink = function(){
+    FileUpload.prototype.createProgress = function () {
+        var progress = doc.createElement("span");
+        progress.className = "file-upload__progress";
+        progress.style.display = "none";
 
-		if( !this.linkVisible ){
+        this.link.parentNode.insertBefore(progress, this.link);
+        this.progress = progress;
+    };
 
-			this.link.style.display = '';
-			this.limitText.style.display = '';
-			this.linkVisible = true;
+    FileUpload.prototype.showProgress = function () {
+        if (!this.progressVisible) {
+            this.progress.style.display = "";
+            this.progressVisible = true;
 
-			this.hideProgress();
-		}
-	};
+            this.hideLink();
+            this.removeError();
+        }
+    };
 
-	FileUpload.prototype.hideLink = function(){
+    FileUpload.prototype.hideProgress = function () {
+        if (this.progressVisible) {
+            this.progress.style.display = "none";
+            this.progressVisible = false;
+        }
+    };
 
-		if( this.linkVisible ){
+    FileUpload.prototype.selectDocument = function (e) {
+        cancelDefault(e);
+        this.input.click();
+    };
 
-			this.link.style.display = 'none';
-			this.limitText.style.display = 'none';
-			this.linkVisible = false;
-		}
-	};
+    FileUpload.prototype.fileChange = function () {
+        var file = this.input.files[0];
 
-	FileUpload.prototype.createProgress = function(){
+        if (file) {
+            this.events.file.publish(this.input.name, file);
+        }
+    };
 
-		var progress = doc.createElement( 'span' );
-		progress.className = 'file-upload__progress';
-		progress.style.display = 'none';
+    FileUpload.prototype.setError = function (message) {
+        if (!this.error) {
+            this.error = doc.createElement("span");
+            this.error.className = ERROR_CLASS;
+        }
 
-		this.link.parentNode.insertBefore( progress, this.link );
-		this.progress = progress;
-	};
+        this.error.innerText = message;
+        this.input.value = "";
+        this.link.parentNode.insertBefore(this.error, this.link);
+        addClass(this.formGroup, GROUP_ERROR_CLASS);
+        addClass(this.input, INPUT_ERROR_CLASS);
+        this.inErrorState = true;
+    };
 
-	FileUpload.prototype.showProgress = function(){
+    FileUpload.prototype.removeError = function () {
+        if (this.inErrorState) {
+            this.error.parentNode.removeChild(this.error);
+            removeClass(this.formGroup, GROUP_ERROR_CLASS);
+            removeClass(this.input, INPUT_ERROR_CLASS);
+            this.inErrorState = false;
+        }
+    };
 
-		if( !this.progressVisible ){
+    FileUpload.prototype.setProgress = function (html) {
+        this.progress.innerHTML = html;
+        this.showProgress();
+        this.progress.focus();
+    };
 
-			this.progress.style.display = '';
-			this.progressVisible = true;
-
-			this.hideLink();
-			this.removeError();
-		}
-	};
-
-	FileUpload.prototype.hideProgress = function(){
-
-		if( this.progressVisible ){
-
-			this.progress.style.display = 'none';
-			this.progressVisible = false;
-		}
-	};
-
-	FileUpload.prototype.selectDocument = function( e ){
-
-		cancelDefault( e );
-		this.input.click();
-	};
-
-	FileUpload.prototype.fileChange = function(){
-
-		var file = this.input.files[ 0 ];
-
-		if( file ){
-
-			this.events.file.publish( this.input.name, file );
-		}
-	};
-
-	FileUpload.prototype.setError = function( message ){
-
-		if( !this.error ){
-
-			this.error = doc.createElement( 'span' );
-			this.error.className = ERROR_CLASS;
-		}
-
-		this.error.innerText = message;
-		this.input.value = '';
-		this.link.parentNode.insertBefore( this.error, this.link );
-		addClass( this.formGroup, GROUP_ERROR_CLASS );
-		addClass( this.input, INPUT_ERROR_CLASS );
-		this.inErrorState = true;
-	};
-
-	FileUpload.prototype.removeError = function(){
-
-		if( this.inErrorState ){
-
-			this.error.parentNode.removeChild( this.error );
-			removeClass( this.formGroup, GROUP_ERROR_CLASS );
-			removeClass( this.input, INPUT_ERROR_CLASS );
-			this.inErrorState = false;
-		}
-	};
-
-	FileUpload.prototype.setProgress = function( html ){
-
-		this.progress.innerHTML = html;
-		this.showProgress();
-		this.progress.focus();
-	};
-
-	return FileUpload;
-
-}( document, jessie ));
+    return FileUpload;
+})(document, jessie);
