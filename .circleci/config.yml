@@ -20,7 +20,7 @@ jobs:
           MOCK_SSO_SCOPE: test
 
     environment:
-      SECRET_KEY: "secretkey"
+      SECRET_KEY: "secretkey" # pragma: allowlist secret
       DEBUG: True
       ALLOWED_HOSTS: "localhost"
       DJANGO_SETTINGS_MODULE: "config.settings.test"
