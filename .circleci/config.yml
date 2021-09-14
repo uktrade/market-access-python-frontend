@@ -149,9 +149,29 @@ jobs:
           path: ui-test-reports
 
 
+  format_and_secrets_checks:
+    docker:
+      - image: circleci/python:3.7
+    working_directory: ~/market-access-api
+    steps:
+      - checkout
+      - run:
+          command: sudo pip install pre-commit
+      - restore_cache:
+          keys:
+            - pre-commit-cache-{{ arch }}-{{ .Branch }}
+      - run:
+          name: Formatting checks
+          command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
+      - save_cache:
+          key: pre-commit-cache-{{ arch }}-{{ .Branch }}
+          paths:
+            - ~/.cache/pre-commit
+
 workflows:
   version: 2
   test:
     jobs:
       - tests
       - pep8
+      - format_and_secrets_checks
