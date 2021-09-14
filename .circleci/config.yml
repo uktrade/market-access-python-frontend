@@ -122,10 +122,7 @@ jobs:
                   command: sudo apt-get install -y nodejs npm
 
             - run:
-                  name: Compile webpack config
-                  command: npm install --dev
-
-            - run:
+                  name: Install dependencies
                   command: npm install --dev
 
             - run:
