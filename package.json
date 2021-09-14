@@ -25,7 +25,6 @@
     "govuk-colours": "^1.1.0",
     "govuk-frontend": "^3.8.1",
     "mini-css-extract-plugin": "^2.2.2",
-    "prettier": "^2.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-mentions": "^4.1.1",
@@ -46,9 +45,10 @@
     "last 2 versions"
   ],
   "devDependencies": {
+    "prettier": "^2.4.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.25.1"
+    "eslint-plugin-react": "^7.25.1",
+    "source-map-js": "^0.6.2"
   }
 }

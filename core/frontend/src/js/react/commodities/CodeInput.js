@@ -23,7 +23,7 @@ function CodeBox(props) {
                 className="govuk-input govuk-input--width-2 commodity-code-input"
                 name={"code_" + props.index}
                 type="number"
-                maxLength="2"
+                maxLength={2}
                 inputMode="numeric"
                 pattern="[0-9]{2}"
                 ref={(el) => (props.refContainer.current[props.index] = el)}
