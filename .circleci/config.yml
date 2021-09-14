@@ -2,7 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
 jobs:
 
   tests:
@@ -112,11 +112,30 @@ jobs:
 
       - run: poetry run flake8 . --exclude=venv --count --max-line-length=120
 
+  format_and_secrets_checks:
+    docker:
+      - image: circleci/python:3.7
+    working_directory: ~/market-access-python-frontend
+    steps:
+      - checkout
+      - run:
+          command: npm install --dev
+      - run:
+          command: sudo pip install pre-commit
+      - restore_cache:
+          keys:
+            - pre-commit-cache-{{ arch }}-{{ .Branch }}
+      - run:
+          name: Formatting checks
+          command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
+      - save_cache:
+          key: pre-commit-cache-{{ arch }}-{{ .Branch }}
+          paths:
+            - ~/.cache/pre-commit
+
   ui_tests:
     docker:
       - image: circleci/python:3.7
-
-    type: approval
 
     working_directory: ~/market-access-python-frontend
 
@@ -149,29 +168,12 @@ jobs:
           path: ui-test-reports
 
 
-  format_and_secrets_checks:
-    docker:
-      - image: circleci/python:3.7
-    working_directory: ~/market-access-api
-    steps:
-      - checkout
-      - run:
-          command: sudo pip install pre-commit
-      - restore_cache:
-          keys:
-            - pre-commit-cache-{{ arch }}-{{ .Branch }}
-      - run:
-          name: Formatting checks
-          command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
-      - save_cache:
-          key: pre-commit-cache-{{ arch }}-{{ .Branch }}
-          paths:
-            - ~/.cache/pre-commit
-
 workflows:
   version: 2
   test:
     jobs:
       - tests
       - pep8
-      - format_and_secrets_checks
+      - format_and_secrets_checks:
+          requires:
+            - tests
