@@ -23,6 +23,7 @@ module.exports = {
         "core/frontent/src/vendor/**"
     ],
     rules: {
+        // Current code needs refactoring to allow these rules to be added
         "react/prop-types": "off",
         "no-undef": "off",
         "no-unused-vars": "off",
