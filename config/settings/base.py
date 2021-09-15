@@ -26,6 +26,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ENV_FILE = os.path.join(BASE_DIR, ".env")
 
+# We've added pre-commit security checks - the secrets below are fake1
+# this is to test that our circleci mandatory job works
+SECRET_MASTER_DATABASE_USERNAME = "admin"
+SECRET_MASTER_DATABASE_PASSWORD = "password123"
+SECRET_MASTER_DATABASE_HOSTNAME = "192.168.0.1"
+SECRET_MASTER_DATABASE_ADMINISTRATOR = "Michael Jones"
+
 if os.path.exists(ENV_FILE):
     Env.read_env(ENV_FILE)
 
