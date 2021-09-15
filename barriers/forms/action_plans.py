@@ -1,16 +1,18 @@
-from barriers.constants import (ACTION_PLAN_RAG_STATUS_CHOICES,
-                                ACTION_PLAN_TASK_CATEGORIES,
-                                ACTION_PLAN_TASK_CHOICES,
-                                ACTION_PLAN_TASK_TYPE_CHOICES)
-from barriers.forms.mixins import APIFormMixin
 from django import forms
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+
+from barriers.constants import (
+    ACTION_PLAN_RAG_STATUS_CHOICES,
+    ACTION_PLAN_TASK_CATEGORIES,
+    ACTION_PLAN_TASK_CHOICES,
+    ACTION_PLAN_TASK_TYPE_CHOICES,
+)
+from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (ClearableMixin, MonthYearField, SubformChoiceField,
-                         SubformMixin)
+from utils.forms import ClearableMixin, MonthYearField, SubformChoiceField, SubformMixin
 from utils.sso import SSOClient
 
 
@@ -86,7 +88,8 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.action_plans.add_milestone(
-            barrier_id=self.barrier_id, objective=self.cleaned_data.get("objective"),
+            barrier_id=self.barrier_id,
+            objective=self.cleaned_data.get("objective"),
         )
 
     def get_success_url(self):

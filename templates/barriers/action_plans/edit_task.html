@@ -1,9 +1,9 @@
-{% extends "barriers/edit/base.html" %} 
+{% extends "barriers/edit/base.html" %}
 {% block page_title %}
 {% load static %}
 {% load render_bundle from webpack_loader %}
 
-{{ block.super }} - Edit end date{% endblock %} 
+{{ block.super }} - Edit end date{% endblock %}
 
 {% block back_link %}
 <a
@@ -39,7 +39,7 @@
             <div class="govuk-radios status govuk-radios--conditional" data-module="radios">
 
                 {% for choice_value, choice_name in form.fields.status.choices %}
-                
+
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input" id="{{ choice_value }}" name="{{ form.status.name }}"
                                 type="radio" value="{{ choice_value }}"
@@ -150,7 +150,7 @@
     </fieldset>
   </div>
 
-  
+
   <div
     id="{{ form.stakeholders.name }}"
     class="{% form_group_classes form.stakeholders.errors %}"

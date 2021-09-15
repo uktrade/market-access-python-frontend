@@ -16,7 +16,7 @@ CODE_BOX_LABELS = {
 
 @register.filter
 def code_box_label(counter):
-    """ Used to help generate the label text for commodity input boxes """
+    """Used to help generate the label text for commodity input boxes"""
     try:
         return CODE_BOX_LABELS[counter]
     except KeyError:

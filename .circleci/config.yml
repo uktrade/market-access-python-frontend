@@ -4,154 +4,178 @@
 #
 version: 2
 jobs:
+    tests:
+        docker:
+            # specify the version you desire here
+            # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+            - image: circleci/python:3.7
+            - image: postgres:9.6.16
+              environment: POSTGRES_DB=market_access_pyfe
+            - image: ukti/mock-sso
+              environment:
+                  MOCK_SSO_PORT: "5000"
+                  MOCK_SSO_USERNAME: test-user
+                  MOCK_SSO_SCOPE: test
 
-  tests:
-    docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.7
-      - image: postgres:9.6.16
         environment:
-          POSTGRES_DB=market_access_pyfe
-      - image: ukti/mock-sso
-        environment:
-          MOCK_SSO_PORT: "5000"
-          MOCK_SSO_USERNAME: test-user
-          MOCK_SSO_SCOPE: test
+            SECRET_KEY: "secretkey" # pragma: allowlist secret
+            DEBUG: True
+            ALLOWED_HOSTS: "localhost"
+            DJANGO_SETTINGS_MODULE: "config.settings.test"
+            DATABASE_URL: "postgresql://postgres@localhost/market_access_pyfe"
+            MARKET_ACCESS_API_URI: ""
+            MARKET_ACCESS_API_HAWK_ID: "market-access-api-hawk-id"
+            MARKET_ACCESS_API_HAWK_KEY: "market-access-api-hawk-key"
+            REDIS_URI: ""
+            SSO_CLIENT: ""
+            SSO_SECRET: ""
+            SSO_API_URI: "http://localhost:5000/api/v1/"
+            SSO_AUTHORIZE_URI: "http://localhost:5000/o/authorize/"
+            SSO_BASE_URI: "http://localhost:5000/"
+            SSO_TOKEN_URI: "http://localhost:5000/o/token/"
+            SSO_MOCK_CODE: ""
+            SSO_API_TOKEN: "token"
+            DATAHUB_URL: ""
+            DATAHUB_HAWK_ID: ""
+            DATAHUB_HAWK_KEY: ""
+            GTM_ID: ""
+            GTM_AUTH: ""
+            GTM_PREVIEW: ""
+            PIP_USE_FEATURE: 2020-resolver
 
-    environment:
-      SECRET_KEY: "secretkey"
-      DEBUG: True
-      ALLOWED_HOSTS: "localhost"
-      DJANGO_SETTINGS_MODULE: "config.settings.test"
-      DATABASE_URL: "postgresql://postgres@localhost/market_access_pyfe"
-      MARKET_ACCESS_API_URI: ""
-      MARKET_ACCESS_API_HAWK_ID: "market-access-api-hawk-id"
-      MARKET_ACCESS_API_HAWK_KEY: "market-access-api-hawk-key"
-      REDIS_URI: ""
-      SSO_CLIENT: ""
-      SSO_SECRET: ""
-      SSO_API_URI: "http://localhost:5000/api/v1/"
-      SSO_AUTHORIZE_URI: "http://localhost:5000/o/authorize/"
-      SSO_BASE_URI: "http://localhost:5000/"
-      SSO_TOKEN_URI: "http://localhost:5000/o/token/"
-      SSO_MOCK_CODE: ""
-      SSO_API_TOKEN: "token"
-      DATAHUB_URL: ""
-      DATAHUB_HAWK_ID: ""
-      DATAHUB_HAWK_KEY: ""
-      GTM_ID: ""
-      GTM_AUTH: ""
-      GTM_PREVIEW: ""
-      PIP_USE_FEATURE: 2020-resolver
+        working_directory: ~/market-access-python-frontend
 
-    working_directory: ~/market-access-python-frontend
+        steps:
+            - checkout
 
-    steps:
-      - checkout
+            - run:
+                  name: Installing system dependencies
+                  command: sudo apt-get install -y nodejs npm
 
-      - run:
-          name: Installing system dependencies
-          command: sudo apt-get install -y nodejs npm
+            - run:
+                  name: Compile webpack config
+                  command: npm install && npm run build
 
-      - run:
-          name: Compile webpack config
-          command: npm install && npm run build
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+            - run:
+                  command: sudo pip install poetry==1.1.8
 
-      - run:
-          command: sudo pip install poetry==1.0.5
+            - run:
+                  name: Install dependencies
+                  command: |
+                      poetry install
 
-      - run:
-          name: Install dependencies
-          command: |
-            poetry install
+            - save_cache:
+                  key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+                  paths:
+                      - /home/circleci/.cache/pypoetry/virtualenvs
 
-      - save_cache:
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
-          paths:
-            - /home/circleci/.cache/pypoetry/virtualenvs
+            - run:
+                  name: run tests
+                  command: |
+                      poetry run pytest tests
 
-      - run:
-          name: run tests
-          command: |
-            poetry run pytest tests
+            - store_artifacts:
+                  path: test-reports
+                  destination: test-reports
 
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+    pep8:
+        docker:
+            - image: circleci/python:3.7
 
-  pep8:
-    docker:
-      - image: circleci/python:3.7
+        working_directory: ~/market-access-python-frontend
 
-    working_directory: ~/market-access-python-frontend
+        steps:
+            - checkout
 
-    steps:
-      - checkout
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+            - run:
+                  command: sudo pip install poetry
 
-      - run:
-          command: sudo pip install poetry
+            - run:
+                  name: Install dependencies
+                  command: |
+                      poetry install
 
-      - run:
-          name: Install dependencies
-          command: |
-            poetry install
+            - save_cache:
+                  key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+                  paths:
+                      - /home/circleci/.cache/pypoetry/virtualenvs
 
-      - save_cache:
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
-          paths:
-            - /home/circleci/.cache/pypoetry/virtualenvs
+            - run: poetry run flake8 . --exclude=venv --count --max-line-length=120
 
-      - run: poetry run flake8 . --exclude=venv --count --max-line-length=120
+    format_and_secrets_checks:
+        docker:
+            - image: circleci/python:3.7
+        working_directory: ~/market-access-python-frontend
+        steps:
+            - checkout
 
-  ui_tests:
-    docker:
-      - image: circleci/python:3.7
+            - run:
+                  name: Installing system dependencies
+                  command: sudo apt-get install -y nodejs npm
 
-    type: approval
+            - run:
+                  name: Install dependencies
+                  command: npm install --dev
 
-    working_directory: ~/market-access-python-frontend
+            - run:
+                  command: sudo pip install pre-commit poetry==1.1.8
+            - restore_cache:
+                  keys:
+                      - pre-commit-cache-{{ arch }}-{{ .Branch }}
+            - run:
+                  name: Formatting checks
+                  command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
+            - save_cache:
+                  key: pre-commit-cache-{{ arch }}-{{ .Branch }}
+                  paths:
+                      - ~/.cache/pre-commit
 
-    steps:
-      - checkout
+    ui_tests:
+        docker:
+            - image: circleci/python:3.7
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+        working_directory: ~/market-access-python-frontend
 
-      - run:
-          command: sudo pip install poetry
+        steps:
+            - checkout
 
-      - run:
-          name: Install dependencies
-          command: |
-            poetry install
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
-      - save_cache:
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
-          paths:
-            - /home/circleci/.cache/pypoetry/virtualenvs
+            - run:
+                  command: sudo pip install poetry
 
-      - run:
-          name: Run UI Tests
-          command: |
-            poetry run pytest ui_tests
+            - run:
+                  name: Install dependencies
+                  command: |
+                      poetry install
 
-      - store_artifacts:
-          path: ui-test-reports
+            - save_cache:
+                  key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
+                  paths:
+                      - /home/circleci/.cache/pypoetry/virtualenvs
 
+            - run:
+                  name: Run UI Tests
+                  command: |
+                      poetry run pytest ui_tests
+
+            - store_artifacts:
+                  path: ui-test-reports
 
 workflows:
-  version: 2
-  test:
-    jobs:
-      - tests
-      - pep8
+    version: 2
+    test:
+        jobs:
+            - tests
+            - pep8
+            - format_and_secrets_checks

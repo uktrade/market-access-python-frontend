@@ -3,12 +3,16 @@ import json
 from django.conf import settings
 from django.test import TestCase, override_settings
 from mock import patch
-from users.models import User
-from utils.api.resources import (ActionPlanResource, BarriersResource,
-                                 NotesResource, PublicBarriersResource,
-                                 UsersResource)
 
 from core.filecache import memfiles
+from users.models import User
+from utils.api.resources import (
+    ActionPlanResource,
+    BarriersResource,
+    NotesResource,
+    PublicBarriersResource,
+    UsersResource,
+)
 
 
 @override_settings(API_RESULTS_LIMIT=10)
@@ -25,7 +29,13 @@ class MarketAccessTestCase(TestCase):
             "permissions": ["change_user", "list_users"],
         }
     )
-    general_user = User({"is_superuser": False, "is_active": True, "permissions": [],})
+    general_user = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": [],
+        }
+    )
     approver_user = User(
         {
             "is_superuser": False,
@@ -70,7 +80,13 @@ class MarketAccessTestCase(TestCase):
     def init_session(self):
         session = self.client.session
         session.update(
-            {"sso_token": "abcd", "user_data": {"id": 49, "username": "test user",},}
+            {
+                "sso_token": "abcd",
+                "user_data": {
+                    "id": 49,
+                    "username": "test user",
+                },
+            }
         )
         session.save()
 

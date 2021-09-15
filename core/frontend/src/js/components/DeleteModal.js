@@ -1,55 +1,67 @@
-ma.components.DeleteModal = (function(){
+ma.components.DeleteModal = (function () {
+    if (
+        !(
+            jessie.hasFeatures(
+                "bind",
+                "ajaxGet",
+                "hasClass",
+                "getEventTarget",
+                "attachListener",
+                "cancelDefault",
+                "queryOne"
+            ) || ma.components.Modal
+        )
+    ) {
+        return;
+    }
 
-	if( !( jessie.hasFeatures(
-		'bind', 'ajaxGet', 'hasClass', 'getEventTarget', 'attachListener', 'cancelDefault', 'queryOne'
-	) || ma.components.Modal ) ){ return; }
+    var MODAL_CLASS = "js-delete-modal";
 
-	var MODAL_CLASS = 'js-delete-modal';
+    function DeleteModal() {
+        var container = jessie.queryOne(".js-delete-modal-container");
 
-	function DeleteModal(){
+        if (!container) {
+            return;
+        }
 
-		var container = jessie.queryOne( '.js-delete-modal-container' );
+        this.modal = new ma.components.Modal();
+        jessie.attachListener(
+            container,
+            "click",
+            jessie.bind(this.handleClick, this)
+        );
+    }
 
-		if( !container ){ return; }
+    DeleteModal.prototype.handleClick = function (e) {
+        var target = jessie.getEventTarget(e);
+        var useModal = jessie.hasClass(target, MODAL_CLASS);
+        var modal = this.modal;
 
-		this.modal = new ma.components.Modal();
-		jessie.attachListener( container, 'click', jessie.bind( this.handleClick, this ) );
-	}
+        if (!useModal || modal.isOpen) {
+            return;
+        }
 
-	DeleteModal.prototype.handleClick = function( e ){
+        var url = target.href;
 
-		var target = jessie.getEventTarget( e );
-		var useModal = jessie.hasClass( target, MODAL_CLASS );
-		var modal = this.modal;
+        jessie.cancelDefault(e);
 
-		if( !useModal || modal.isOpen ){ return; }
+        jessie.ajaxGet(url, {
+            success: function (data) {
+                try {
+                    var wrapper = document.createElement("div");
+                    wrapper.innerHTML = data;
+                    modal.open(jessie.queryOne(".modal__content", wrapper));
+                    wrapper = null;
+                } catch (e) {
+                    window.location.href = url;
+                }
+            },
 
-		var url = target.href;
+            fail: function () {
+                window.location.href = url;
+            },
+        });
+    };
 
-		jessie.cancelDefault( e );
-
-		jessie.ajaxGet( url, {
-
-			success: function( data ){
-
-				try {
-
-					var wrapper = document.createElement( 'div' );
-					wrapper.innerHTML = data;
-					modal.open( jessie.queryOne( '.modal__content', wrapper ) );
-					wrapper = null;
-
-				} catch( e ){
-
-					window.location.href = url;
-				}
-			},
-
-			fail: function(){
-				window.location.href = url;
-			}
-		} );
-	};
-
-	return DeleteModal;
+    return DeleteModal;
 })();

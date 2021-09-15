@@ -265,13 +265,13 @@
             <h3>Review progress</h3>
             <p class="description">Keep track of outstanding approvals</p>
 
-            
+
             <form class="govuk-checkboxes" id="tags" action="{% url 'barriers:edit_public_barrier_reviews' barrier.id %}" method="get">
                 <fieldset class="govuk-fieldset">
                     {% if public_barrier.title and public_barrier.summary %}
                     <div class="checkbox-option">
                         <div class="govuk-checkboxes__item">
-                            
+
                                 <input class="govuk-checkboxes__input"
                                         name="content_approval"
                                         onChange="this.form.submit()"

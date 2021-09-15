@@ -1,7 +1,7 @@
 # Market Access Python Frontend
 
 This repository provides a frontend client to consume the Market Access API.
-It's built with python django. 
+It's built with python django.
 
 ## Background
 The Market Access frontend was originally a node project:
@@ -30,7 +30,7 @@ The docker-compose.yml file provided is meant to be used for running tests and d
 
 #### Install
 Please note that as of Jan 2020 you will need to run the containers from https://github.com/uktrade/market-access-api/ first \
-as they currently share some dependencies (this only applies for local development).  
+as they currently share some dependencies (this only applies for local development).
 1. Build the images and spin up the containers by running - `docker-compose up --build`
 2. Set up git hooks by running - `make git-hooks`
 3. Enter bash within the django container using `docker-compose exec web bash`
@@ -40,7 +40,7 @@ then create a superuser `py3 manage.py createsuperuser --email your@email.here` 
 6. run `make dev` - this will run the relevant gulp tasks (compile & watch CSS and JS files) and launch BrowserSync
 
 ##### BrowserSync auto-reload:
-When you visit the site via http://127.0.0.1:9881 BrowserSync will automatically reload the page when you modify scss or js files. 
+When you visit the site via http://127.0.0.1:9881 BrowserSync will automatically reload the page when you modify scss or js files.
 
 
 #### Running in detached mode
@@ -67,13 +67,13 @@ Resources for GOV.UK Frontend:
 Fonts are copied while css is imported from node modules.
 To prepare staticfiles for local run `make dev`
 
-Staticfiles are compressed offline for most environments, so it makes sense that you could run the same way locally to test things out. 
-To do that, just: 
-1. stop the django development server (if it's running) 
+Staticfiles are compressed offline for most environments, so it makes sense that you could run the same way locally to test things out.
+To do that, just:
+1. stop the django development server (if it's running)
 2. set `DEBUG` to `False` in `config/settings/local.py`
 3. run `npm run build` for a one off run (or `make dev` if you want to recompile css and js real time when changes are saved)
 3. run `make django-static`
-4. start the django development server 
+4. start the django development server
 
 **Note:** this is a good way to mimic how files are generated and served in an environment, \
 but please note, lazy loading of static files is also disabled in offline mode, so your changes to templates, js, scss \
@@ -84,12 +84,12 @@ To keep watching and recompiling css and js file use `make dev` from step 3.
 Builds can be initiated from Jenkins or from the command line using `cf` CLI tool (using `cf push <app_name>`).
 To use `cf push` you will need to be in the root of the project.
 
-The preferred way to deploy apps remains Jenkins as of now because Jenkins will set environment variables as part of the flow. 
+The preferred way to deploy apps remains Jenkins as of now because Jenkins will set environment variables as part of the flow.
 
 #### Init Tasks
 Tasks that should be run at app initialisation can be defined in `.profile` file.
-If you would like to check the output of that you can do so via `cf logs <app_name> --recent`, but 
-please note that these logs get trimmed so it's best to check straight after deployment. 
+If you would like to check the output of that you can do so via `cf logs <app_name> --recent`, but
+please note that these logs get trimmed so it's best to check straight after deployment.
 
 
 ## Tests

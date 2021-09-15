@@ -75,7 +75,7 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/barrier/wto.js`,
                         `${assetsSrcPath}/js/pages/barrier/action_plans_add_task.js`,
                     ],
-                    
+
         }],
         allowOptimization: true
     }),

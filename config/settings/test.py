@@ -2,7 +2,7 @@ from .base import *  # noqa
 
 DJANGO_ENV = "test"
 
-SECRET_KEY = "nothing secret about this one"
+SECRET_KEY = "nothing secret about this one"  # pragma: allowlist secret
 
 TEST_RUNNER = "config.testrunner.PytestTestRunner"
 

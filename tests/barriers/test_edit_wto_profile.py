@@ -223,7 +223,7 @@ class EditWTOProfileTestCase(MarketAccessTestCase):
 
     @patch("utils.api.resources.APIResource.patch")
     def test_cancel_form(self, mock_patch):
-        """ Cancelling the form should clear the session and not call the API """
+        """Cancelling the form should clear the session and not call the API"""
         barrier_id = self.barrier["id"]
 
         notification_document_id = "38ab3bed-fc19-4770-9c12-9e26667efbc5"
