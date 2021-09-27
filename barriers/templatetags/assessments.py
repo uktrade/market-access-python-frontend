@@ -11,4 +11,5 @@ def calculation_to_percentage(value: str, decimal_places: int = 10):
     normalized_value = float(value) * 100
     if normalized_value < 1 / (10 ** decimal_places):
         return "0%"
+
     return f"{normalized_value:5f}%"
