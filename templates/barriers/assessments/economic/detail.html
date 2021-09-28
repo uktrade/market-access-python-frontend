@@ -18,8 +18,13 @@
         {% endif %}
 
         <dt class="ma-data-key">Economic assessment</dt>
-        <dd class="ma-data-value">
             {{ economic_assessment.rating.name }}
+        <dd class="ma-data-value">
+        </dd>
+
+        <dt class="ma-data-key">Years of data used</dt>
+        <dd class="ma-data-value">
+            {{ economic_assessment.automated_analysis_data.years|join:", " }}
         </dd>
 
         <dt class="ma-data-key">Assessment explanation</dt>

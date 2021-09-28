@@ -98,6 +98,14 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
+    economic_assessment_eligibility = forms.MultipleChoiceField(
+        label="Economic assessment eligibility",
+        choices=(
+            ("eligible", "Eligible"),
+            ("ineligible", "Ineligible"),
+            ("not_yet_marked", "Not yet marked"),
+        ),
+    )
     economic_assessment = forms.MultipleChoiceField(
         label="Economic assessment",
         choices=(
@@ -187,6 +195,9 @@ class BarrierSearchForm(forms.Form):
             "only_archived": data.get("only_archived"),
             "wto": data.getlist("wto"),
             "public_view": data.getlist("public_view"),
+            "economic_assessment_eligibility": data.getlist(
+                "economic_assessment_eligibility"
+            ),
             "economic_assessment": data.getlist("economic_assessment"),
             "economic_impact_assessment": data.getlist("economic_impact_assessment"),
             "commodity_code": data.getlist("commodity_code"),
@@ -391,6 +402,9 @@ class BarrierSearchForm(forms.Form):
         params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
         params["country_trading_bloc"] = ",".join(
             self.cleaned_data.get("country_trading_bloc", [])
+        )
+        params["economic_assessment_eligibility"] = ",".join(
+            self.cleaned_data.get("economic_assessment_eligibility", [])
         )
         params["economic_assessment"] = ",".join(
             self.cleaned_data.get("economic_assessment", [])
