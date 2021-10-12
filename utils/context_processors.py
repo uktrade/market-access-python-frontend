@@ -23,4 +23,9 @@ def user_scope(request):
 
 
 def feature_flags(request):
-    return {"feature_flags": {"action_plans_enabled": settings.ACTION_PLANS_ENABLED}}
+    return {
+        "feature_flags": {
+            "action_plans_enabled": settings.ACTION_PLANS_ENABLED,
+            "action_plans_strategic_context_enabled": settings.ACTION_PLANS_STRATEGIC_CONTEXT_ENABLED,
+        }
+    }
