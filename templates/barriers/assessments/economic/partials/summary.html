@@ -105,6 +105,7 @@
             {% endif %}
         {% endif %}
     {% endwith %}
+    <a href="{% url 'barriers:economic_assessment_eligibility' barrier.id %}">Review and ammend eligibility for an initial economic assessment</a>
 {% elif barrier.economic_assessment_eligibility is False %}
     <div class="assessment-item__section">
         <p>This barrier has been marked as ineligible for an initial economic assessment</p>
