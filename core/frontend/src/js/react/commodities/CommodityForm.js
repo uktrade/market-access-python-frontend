@@ -98,6 +98,10 @@ function CommodityForm(props) {
         setConfirmedCommodities([...confirmedCommodities]);
     };
 
+    const removeAllCommodities = (event) => {
+        setConfirmedCommodities([]);
+    };
+
     async function lookupCode(code) {
         if (code == "") {
             setUnconfirmedCommodities([]);
@@ -266,9 +270,22 @@ function CommodityForm(props) {
             ) : null}
 
             {confirmedCommodities.length ? (
-                <h3 className="commodities-list__title">
-                    HS commodity codes to add to this barrier
-                </h3>
+                <div>
+                    <h3 className="commodities-list__title">
+                        HS commodity codes to add to this barrier
+                        <button
+                            name="remove-all-commodities"
+                            value={1}
+                            className="commodities-list__remove_all govuk-button govuk-button--secondary button-as-link"
+                            data-module="govuk-button"
+                            onClick={(event) => {
+                                removeAllCommodities();
+                            }}
+                        >
+                            Remove all
+                        </button>
+                    </h3>
+                </div>
             ) : null}
 
             {confirmedCommodities.length ? (

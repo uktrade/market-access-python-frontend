@@ -9,6 +9,14 @@
 
     &__title {
         clear: both;
+        position: relative;
+    }
+
+    &__remove_all{
+        position: absolute;
+        right: 0;
+        padding: govuk-em(10, 16);
+        font-size: 16px;
     }
 
     &__item {
