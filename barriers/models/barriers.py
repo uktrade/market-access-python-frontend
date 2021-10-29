@@ -11,6 +11,8 @@ from barriers.models.wto import WTOProfile
 from utils.metadata import get_metadata
 from utils.models import APIModel
 
+COMMODITY_CLASSIFICATION_TO_LABEL = {"H5": "HS2017", "H4": "HS2012"}
+
 
 class Barrier(APIModel):
     """
@@ -65,6 +67,15 @@ class Barrier(APIModel):
             BarrierCommodity(commodity)
             for commodity in self.data.get("commodities", [])
         ]
+
+    @property
+    def commodity_classifications(self):
+        classifications = set()
+        for commodity in self.data.get("commodities", []):
+            classification = commodity["commodity"]["classification"]
+            classification_label = COMMODITY_CLASSIFICATION_TO_LABEL.get(classification)
+            classifications.add(classification_label)
+        return classifications
 
     @property
     def public_eligibility(self):

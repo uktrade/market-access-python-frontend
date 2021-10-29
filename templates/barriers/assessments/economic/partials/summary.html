@@ -36,6 +36,10 @@
                                     <a href="{% url 'barriers:economic_assessment_raw_data' barrier.id assessment.id %}">View raw data</a>
                                 {% endif %}
                             </dd>
+                            <dt class="ma-data-key">Commodity code years used</dt>
+                            <dd class="ma-data-value">
+                                {{ barrier.commodity_classifications|join:"," }}
+                            </dd>
                             <dt class="ma-data-key">Assessment produced by</dt>
                             <dd class="ma-data-value ma-data-value--s">
                                 {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
