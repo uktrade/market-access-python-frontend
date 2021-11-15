@@ -172,6 +172,7 @@
             </p>
             {% endif %}
 
+            {% if current_user.has_approved_digital_trade_email %}
             <p class="filter-results-download">
                 {% if barriers %}
                     <span class="filter-results-download__text">
@@ -210,6 +211,7 @@
                     <span class="filter-results-download__text">There are no barriers to download</span>
                 {% endif %}
             </p>
+            {% endif %}
 
             <ol class="filter-results-list">
                 {% for barrier in barriers %}
