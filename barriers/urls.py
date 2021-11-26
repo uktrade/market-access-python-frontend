@@ -122,7 +122,11 @@ from .views.saved_searches import (
     RenameSavedSearch,
     SavedSearchNotifications,
 )
-from .views.search import BarrierSearch, DownloadBarriers
+from .views.search import (
+    BarrierSearch,
+    DownloadBarriers,
+    RequestBarrierDownloadApproval,
+)
 from .views.sectors import (
     BarrierAddAllSectors,
     BarrierAddSectors,
@@ -152,6 +156,11 @@ urlpatterns = [
     path("search/", BarrierSearch.as_view(), name="search"),
     path("find-a-barrier/", BarrierSearch.as_view(), name="find_a_barrier"),
     path("search/download/", DownloadBarriers.as_view(), name="download"),
+    path(
+        "search/request_download_approval/",
+        RequestBarrierDownloadApproval.as_view(),
+        name="request_download_approval",
+    ),
     path("what-is-a-barrier/", WhatIsABarrier.as_view(), name="what_is_a_barrier"),
     path(
         "documents/<uuid:document_id>/download/",

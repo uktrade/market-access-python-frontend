@@ -172,7 +172,7 @@
             </p>
             {% endif %}
 
-            {% if current_user.has_approved_digital_trade_email %}
+            {% if current_user.has_approved_digital_trade_email or current_user|has_permission:"download_barriers" %}
             <p class="filter-results-download">
                 {% if barriers %}
                     <span class="filter-results-download__text">
@@ -182,7 +182,9 @@
                         Download these {{ barriers.total_count }} barriers to a spreadsheet
                     {% endif %}
                     </span>
-                    <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">Download</a>
+                    <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
+                        Download
+                    </a>
 
                     {% if search_csv_downloaded == "1" %}
 
@@ -209,6 +211,39 @@
                     {% endif %}
                 {% else %}
                     <span class="filter-results-download__text">There are no barriers to download</span>
+                {% endif %}
+            </p>
+            {% else %}
+            <p class="filter-results-download">
+                <span class="filter-results-download__text">
+                    You require permission to download a CSV export of this search
+                </span>
+                <a class="govuk-button filter-results-download__button" href="{% url 'barriers:request_download_approval' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
+                    Request CSV download permission
+                </a>
+
+                {% if download_request_sent == "1" %}
+
+                <div class="govuk-panel govuk-panel--confirmation">
+                    <h1 class="govuk-panel__title">
+                    The request has been submitted
+                    </h1>
+                    <div class="govuk-panel__body">
+                    You will be notified when the request has been approved.
+                    </div>
+                </div>
+
+                {% elif download_request_sent == "0" %}
+
+                <div class="govuk-panel govuk-panel--confirmation">
+                    <h1 class="govuk-panel__title">
+                    This task crashed
+                    </h1>
+                    <div class="govuk-panel__body">
+                    The request for download permissions failed to go out
+                    </div>
+                </div>
+
                 {% endif %}
             </p>
             {% endif %}

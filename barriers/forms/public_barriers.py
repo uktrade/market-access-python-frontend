@@ -147,7 +147,7 @@ class PublicBarrierSearchForm(forms.Form):
         label="Sector",
         required=False,
     )
-    country = forms.MultipleChoiceField(label="Country", required=False)
+    country = forms.MultipleChoiceField(label="Location", required=False)
     status = forms.MultipleChoiceField(
         label="Status", required=False, initial=["20", "30"]
     )

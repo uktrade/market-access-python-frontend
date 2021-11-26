@@ -15,6 +15,17 @@
     margin-bottom: 0;
 }
 
+.public-barrier-approved-warning{
+    padding: govuk-em( 24, 16 ) 0;
+    border-bottom: 1px solid $govuk-light-grey;
+    margin-bottom: 0;
+    background-color: #f3f2f1;
+
+    &__body{
+        margin: govuk-em( 4, 16 );
+    }
+}
+
 .publishing-button {
     display: block;
     margin-bottom: govuk-em( 16, 16 );

@@ -124,6 +124,14 @@ class BarriersResource(APIResource):
         url = "barriers/s3-email"
         return self.client.get(url, params=kwargs)
 
+    def request_download_approval(self):
+        url = "barriers/request-download-approval"
+        return self.client.post(url)
+
+    def request_download_permissions(self, *args, **kwargs):
+        url = "barriers/request-download-permissions"
+        return self.client.get(url, params=kwargs)
+
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
             url = f"barriers/{barrier_id}/unknown"

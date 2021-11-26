@@ -65,6 +65,10 @@ class BarrierSearch(PaginationMixin, UserMixin, SearchFormView):
                 "search_csv_download_error": self.request.GET.get(
                     "search_csv_download_error"
                 ),
+                "download_request_sent": self.request.GET.get("download_request_sent"),
+                "download_request_sent_error": self.request.GET.get(
+                    "download_request_sent_error"
+                ),
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)
@@ -153,6 +157,28 @@ class DownloadBarriers(SearchFormMixin, View):
             **search_parameters,
             "search_csv_downloaded": int(resp.get("success", False)),
             "search_csv_download_error": resp.get("reason", ""),
+        }
+
+        return HttpResponseRedirect(
+            f"{search_page_url}?{urlencode(search_page_params)}"
+        )
+
+
+class RequestBarrierDownloadApproval(SearchFormMixin, View):
+    form_class = BarrierSearchForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(**self.get_form_kwargs())
+        form.full_clean()
+        search_parameters = form.get_api_search_parameters()
+        client = MarketAccessAPIClient(self.request.session["sso_token"])
+        resp = client.barriers.request_download_approval()
+
+        search_page_url = reverse("barriers:search")
+        search_page_params = {
+            **search_parameters,
+            "download_request_sent": 1 if resp.get("id", False) else 0,
+            "download_request_sent_error": resp.get("reason", ""),
         }
 
         return HttpResponseRedirect(
