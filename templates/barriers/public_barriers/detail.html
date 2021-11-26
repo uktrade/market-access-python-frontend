@@ -49,6 +49,7 @@
             {% if public_barrier.ready_text %}<span class="summary-group__subheading">{{ public_barrier.ready_text }}</span>{% endif %}
         </h2>
 
+        {% if public_barrier.public_view_status == 20 %}
         <div class="public-barrier-approved-warning">
             <div class="govuk-warning-text govuk-!-margin-bottom-2">
                                         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
@@ -65,6 +66,7 @@
 
                                     </div>
         </div>
+        {% endif %}
 
         {% if public_barrier.first_published_on %}
             <div class="publish-dates">
