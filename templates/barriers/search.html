@@ -216,20 +216,22 @@
             {% else %}
             <p class="filter-results-download">
                 <span class="filter-results-download__text">
-                    You require permission to download a CSV export of this search
+                    You need permission to download a spreadsheet of this search.
                 </span>
                 <a class="govuk-button filter-results-download__button" href="{% url 'barriers:request_download_approval' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
-                    Request CSV download permission
+                    Request spreadsheet download permission
                 </a>
 
                 {% if download_request_sent == "1" %}
 
                 <div class="govuk-panel govuk-panel--confirmation">
                     <h1 class="govuk-panel__title">
-                    The request has been submitted
+                    Your request has been submitted
                     </h1>
                     <div class="govuk-panel__body">
-                    You will be notified when the request has been approved.
+                        You will be notified by email when the request has been approved. Once your request
+                        has been approved, you will be able to come back to your search and download the
+                        spreadsheet.
                     </div>
                 </div>
 
@@ -237,10 +239,12 @@
 
                 <div class="govuk-panel govuk-panel--confirmation">
                     <h1 class="govuk-panel__title">
-                    This task crashed
+                        An error occurred.
                     </h1>
                     <div class="govuk-panel__body">
-                    The request for download permissions failed to go out
+                        The request for download permissions encountered an error and has failed to send.
+                        Please contact stefan.dennis@trade.gov.uk about this error and we will try to resolve the issue
+                        for you.
                     </div>
                 </div>
 
