@@ -155,7 +155,7 @@ class DownloadBarriers(SearchFormMixin, View):
 
         search_page_url = reverse("barriers:search")
         search_page_params = {
-            **search_parameters,
+            **request.GET.dict(),
             "search_csv_downloaded": int(resp.get("success", False)),
             "search_csv_download_error": resp.get("reason", ""),
         }
@@ -178,7 +178,7 @@ class RequestBarrierDownloadApproval(SearchFormMixin, View):
 
         search_page_url = reverse("barriers:search")
         search_page_params = {
-            **search_parameters,
+            **request.GET.dict(),
             "download_request_sent": 1 if resp.get("id", False) else 0,
             "download_request_sent_error": resp.get("reason", ""),
         }
