@@ -173,8 +173,8 @@
                 Page {{ pagination.current_page }} of {{ pagination.total_pages }}
             </p>
             {% endif %}
-
-            {% if 0 %}
+            
+            {% if current_user.has_approved_digital_trade_email or current_user|has_permission:"download_barriers" %}
             <p class="filter-results-download">
                 {% if barriers %}
                     <span class="filter-results-download__text">
@@ -198,9 +198,7 @@
                         An email with a link to your file will be sent to you shortly.
                       </div>
                     </div>
-
                     {% elif search_csv_downloaded == "0" %}
-
                     <div class="govuk-panel govuk-panel--confirmation">
                       <h1 class="govuk-panel__title">
                         This task has crashed
@@ -209,7 +207,6 @@
                         No CSV will be generated got ERROR: {{ search_csv_download_error }}
                       </div>
                     </div>
-
                     {% endif %}
                 {% else %}
                     <span class="filter-results-download__text">There are no barriers to download</span>
