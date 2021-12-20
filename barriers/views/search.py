@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from users.mixins import UserMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
@@ -37,7 +36,7 @@ class SearchFormView(SearchFormMixin, FormView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class BarrierSearch(PaginationMixin, UserMixin, SearchFormView):
+class BarrierSearch(PaginationMixin, SearchFormView):
     template_name = "barriers/search.html"
     form_class = BarrierSearchForm
     _client = None
