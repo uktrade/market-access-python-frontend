@@ -21,8 +21,7 @@ class SearchTestCase(MarketAccessTestCase):
     }
 
     @patch("utils.api.resources.APIResource.list")
-    def test_empty_search(self, mock_list, mock_user):
-        mock_user.return_value = self.administrator
+    def test_empty_search(self, mock_list):
         response = self.client.get(reverse("barriers:search"))
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(

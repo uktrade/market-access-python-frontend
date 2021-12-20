@@ -173,7 +173,7 @@
                 Page {{ pagination.current_page }} of {{ pagination.total_pages }}
             </p>
             {% endif %}
-            
+
             {% if current_user.has_approved_digital_trade_email or current_user|has_permission:"download_barriers" %}
             <p class="filter-results-download">
                 {% if barriers %}
@@ -211,6 +211,7 @@
                 {% else %}
                     <span class="filter-results-download__text">There are no barriers to download</span>
                 {% endif %}
+
             </p>
             {% else %}
             <p class="filter-results-download">
