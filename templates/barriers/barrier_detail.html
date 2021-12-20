@@ -335,32 +335,32 @@
             <ul class="outstanding-infomration">
                 {% if not barrier.location %}
                 <li class="outstanding-formation__link">
-                    <a href="#">Location of the barrier</a>
+                    <a href="{% url 'barriers:edit_location' barrier.id %}">Location of the barrier</a>
                 </li>
                 {% endif %}
                 {% if not barrier.sectors or not barrier.all_sectors %}
                 <li class="outstanding-formation__link">
-                    <a href="#">Sectors affected</a>
+                    <a href="{% url 'barriers:edit_sectors' barrier.id %}">Sectors affected</a>
                 </li>
                 {% endif %}
                 {% if not barrier.summary %}
                 <li class="outstanding-formation__link">
-                    <a href="#">Barrier description</a>
+                    <a href="{% url 'barriers:edit_summary' barrier.id %}">Barrier description</a>
                 </li>
                 {% endif %}
                 {% if not barrier.source %}
                 <li class="outstanding-formation__link">
-                    <a href="#">Information source</a>
+                    <a href="{% url 'barriers:edit_source' barrier.id %}">Information source</a>
                 </li>
                 {% endif %}
                 {% if not barrier.categories %}
                 <li class="outstanding-formation__link">
-                    <a href="#">Barrier category</a>
+                    <a href="{% url 'barriers:add_category' barrier.id %}">Barrier category</a>
                 </li>
                 {% endif %}
                 {% if not barrier.commodities %}
                 <li class="outstanding-formation__link">
-                    <a href="#">HS codes</a>
+                    <a href="{% url 'barriers:edit_commodities' barrier.id %}">HS codes</a>
                 </li>
                 {% endif %}
             </ul>
