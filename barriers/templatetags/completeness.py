@@ -5,6 +5,15 @@ register = template.Library()
 
 @register.filter
 def completeness_total(barrier):
+    """
+    Returns the completeness percentage of a given barrier.
+    18% for location being provided
+    18% for a summary being provided
+    16% for the source of information being provided
+    16% for the sectors affected being provided
+    16% for the barrier categories being provided
+    16% for the commodities affected being provided
+    """
     total = 0
     if barrier.location:
         total += 18
