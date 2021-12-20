@@ -143,10 +143,8 @@ class DownloadBarriers(SearchFormMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(**self.get_form_kwargs())
-        # form.full_clean()
         form.is_valid()
         search_parameters = form.get_api_search_parameters()
-        current_url = request.build_absolute_uri()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         resp = client.barriers.get_email_csv(
             ordering="-reported_on", **search_parameters
@@ -168,10 +166,6 @@ class RequestBarrierDownloadApproval(SearchFormMixin, View):
     form_class = BarrierSearchForm
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(**self.get_form_kwargs())
-        form.is_valid()
-        # form.full_clean()
-        search_parameters = form.get_api_search_parameters()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         resp = client.barriers.request_download_approval()
 
