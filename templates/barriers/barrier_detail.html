@@ -2,6 +2,7 @@
 
 {% load activity %}
 {% load static %}
+{% load completeness %}
 {% load render_bundle from webpack_loader %}
 
 {% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
@@ -325,6 +326,45 @@
             </div>
 
         {% endif %}
+        <div class="information-completeness">
+            <h2 class="section-heading">
+                Information completeness
+            </h2>
+            <h3 class="information-completeness__percentage">{{ barrier|completeness_total }}%</h3>
+            <h4 class="outstanding-information__header">Outstanding infomation:</h4>
+            <ul class="outstanding-information">
+                {% if not barrier.location %}
+                <li class="outstanding-formation__link">
+                    <a href="{% url 'barriers:edit_location' barrier.id %}">Location of the barrier</a>
+                </li>
+                {% endif %}
+                {% if not barrier.sectors or not barrier.all_sectors %}
+                <li class="outstanding-formation__link">
+                    <a href="{% url 'barriers:edit_sectors' barrier.id %}">Sectors affected</a>
+                </li>
+                {% endif %}
+                {% if not barrier.summary %}
+                <li class="outstanding-formation__link">
+                    <a href="{% url 'barriers:edit_summary' barrier.id %}">Barrier description</a>
+                </li>
+                {% endif %}
+                {% if not barrier.source %}
+                <li class="outstanding-formation__link">
+                    <a href="{% url 'barriers:edit_source' barrier.id %}">Information source</a>
+                </li>
+                {% endif %}
+                {% if not barrier.categories %}
+                <li class="outstanding-formation__link">
+                    <a href="{% url 'barriers:add_category' barrier.id %}">Barrier category</a>
+                </li>
+                {% endif %}
+                {% if not barrier.commodities %}
+                <li class="outstanding-formation__link">
+                    <a href="{% url 'barriers:edit_commodities' barrier.id %}">HS codes</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
 
         <h2 class="section-heading">
             Internal notes and updates

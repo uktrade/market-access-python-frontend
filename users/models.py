@@ -47,3 +47,7 @@ class User(APIModel):
             if app["permittedKey"] == "datahub-crm":
                 return True
         return False
+
+    @property
+    def has_approved_digital_trade_email(self):
+        return self.data.get("has_approved_digital_trade_email", False)

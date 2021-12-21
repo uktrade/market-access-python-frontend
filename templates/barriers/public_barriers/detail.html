@@ -49,6 +49,25 @@
             {% if public_barrier.ready_text %}<span class="summary-group__subheading">{{ public_barrier.ready_text }}</span>{% endif %}
         </h2>
 
+        {% if public_barrier.public_view_status == 20 %}
+        <div class="public-barrier-approved-warning">
+            <div class="govuk-warning-text govuk-!-margin-bottom-2">
+                                        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+
+
+                            <span class="govuk-warning-text__assistive">Warning</span> <strong class="govuk-warning-text__text">Updating the public view status to ‘allowed’ does not mean the barrier will be published.</strong>
+            </div>
+            <div class="public-barrier-approved-warning__body">
+            <p>The barrier will only be published once it has gone through quality assurance checks by BTR, Post, OGDs, DAs, HMTCs and the content team.</p>
+
+            <p>Choosing the option “allowed, it can be viewed by the public” confirms that the barrier will be viewable by the public once it has been published.</p>
+
+            <p>You can check the progress of these quality assurance checks in the “Public view” tab on the barrier’s page.</p>
+
+                                    </div>
+        </div>
+        {% endif %}
+
         {% if public_barrier.first_published_on %}
             <div class="publish-dates">
                 {% if public_barrier.last_published_on == public_barrier.first_published_on %}
@@ -298,7 +317,6 @@
                                     type="checkbox"
                                     {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval %}checked{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label">HM Trade Commissioner</label>
-                            <a href="{% url 'barriers:enable_hm_trade_commissioner_approvals' barrier.id %}?enabled=0" class="remove">Remove</a>
                         </div>
                     </div>
                     {% else %}
