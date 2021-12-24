@@ -81,43 +81,43 @@
         </ol>
 
     </section>
-    {% if barrier %}
+    {% if report %}
     <section class="report-side-section">
         <div class="information-completeness">
             <h2 class="section-heading">
                 Information completeness
             </h2>
-            <h3 class="information-completeness__percentage">{{ barrier|completeness_total }}%</h3>
+            <h3 class="information-completeness__percentage">{{ report|completeness_total }}%</h3>
             <h4 class="outstanding-information__header">Outstanding infomation:</h4>
             <ul class="outstanding-information">
-                {% if not barrier.location %}
+                {% if not report.location %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_location' barrier.id %}">Location of the barrier</a>
+                    <a href="{% url 'barriers:edit_location' report.id %}">Location of the barrier</a>
                 </li>
                 {% endif %}
-                {% if not barrier.sectors or not barrier.all_sectors %}
+                {% if not report.sectors or not report.all_sectors %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_sectors' barrier.id %}">Sectors affected</a>
+                    <a href="{% url 'barriers:edit_sectors' report.id %}">Sectors affected</a>
                 </li>
                 {% endif %}
-                {% if not barrier.summary %}
+                {% if not report.summary %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_summary' barrier.id %}">Barrier description</a>
+                    <a href="{% url 'barriers:edit_summary' report.id %}">Barrier description</a>
                 </li>
                 {% endif %}
-                {% if not barrier.source %}
+                {% if not report.source %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_source' barrier.id %}">Information source</a>
+                    <a href="{% url 'barriers:edit_source' report.id %}">Information source</a>
                 </li>
                 {% endif %}
-                {% if not barrier.categories %}
+                {% if not report.categories %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:add_category' barrier.id %}">Barrier category</a>
+                    <a href="{% url 'barriers:add_category' report.id %}">Barrier category</a>
                 </li>
                 {% endif %}
-                {% if not barrier.commodities %}
+                {% if not report.commodities %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_commodities' barrier.id %}">HS codes</a>
+                    <a href="{% url 'barriers:edit_commodities' report.id %}">HS codes</a>
                 </li>
                 {% endif %}
             </ul>
