@@ -21,10 +21,10 @@ def completeness_total(barrier):
         total += 18
     if barrier.source:
         total += 16
-    if barrier.sectors:
+    if hasattr(barrier, "sectors") and barrier.sectors:
         total += 16
-    if barrier.categories:
+    if hasattr(barrier, "categories") and barrier.categories:
         total += 16
-    if barrier.commodities:
+    if hasattr(barrier, "commodities") and barrier.commodities:
         total += 16
     return total
