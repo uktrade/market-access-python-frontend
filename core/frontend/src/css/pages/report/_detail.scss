@@ -25,3 +25,13 @@
 	margin: 0;
 	padding: 0;
 }
+
+.report-main-section{
+	max-width: govuk-em( 680, 16 );
+	display: inline-block;
+}
+
+.report-side-section{
+	max-width: govuk-em( 300, 16 );
+	display: inline-block;
+}
