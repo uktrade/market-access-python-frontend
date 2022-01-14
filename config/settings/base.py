@@ -380,3 +380,7 @@ WEBPACK_LOADER = {
         "LOADER_CLASS": "webpack_loader.loader.WebpackLoader",
     },
 }
+
+# The following are extra-permission groups (not roles)
+# Adding a user to these groups should not remove the role from the user
+USER_ADDITIONAL_PERMISSION_GROUPS = ["Download approved user", "Action plan user"]
