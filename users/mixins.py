@@ -55,8 +55,8 @@ class UserSearchMixin:
     def select_user(self, form):
         user_id = form.data["user_id"]
         full_name = form.data["user_full_name"]
-        self.select_user_api_call(user_id)
-        return HttpResponseRedirect(self.get_success_url())
+        # self.select_user_api_call(user_id)
+        # return HttpResponseRedirect(self.get_success_url())
         try:
             self.select_user_api_call(user_id)
             return HttpResponseRedirect(self.get_success_url())
@@ -64,6 +64,10 @@ class UserSearchMixin:
             error = self.error_message.format(full_name=full_name)
             return self.render_to_response(
                 self.get_context_data(form=form, results=(), error=error)
+            )
+        except Exception as e:
+            return HttpResponseRedirect(
+                self.get_success_url() + "?error={error}".format(error=e)
             )
 
     def select_user_api_call(self, *args, **kwargs):
