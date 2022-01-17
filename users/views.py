@@ -199,7 +199,7 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
             )
 
             if is_permission_bundle_group:
-                groups = [{"id": group.data["id"]} for group in user_groups] + [
+                groups = [{"id": group["id"]} for group in user_groups] + [
                     {"id": group_id}
                 ]
             else:
