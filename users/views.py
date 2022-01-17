@@ -187,9 +187,9 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
 
     def select_user_api_call(self, user_id):
         group_id = self.get_group_id()
-        user = self.client.get(user_id)
+        user = self.client.users.get(user_id)
         if group_id:
-            user_groups = user["groups"]
+            user_groups = user.groups
             groups = self.client.groups.list()
             # group_name = [group["name"] for group in groups if group["id"] == group_id][
             #     0
