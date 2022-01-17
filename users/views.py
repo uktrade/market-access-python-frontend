@@ -191,19 +191,19 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
         if group_id:
             user_groups = user.groups
             groups = self.client.groups.list()
-            # group_name = [group["name"] for group in groups if group["id"] == group_id][
-            #     0
-            # ]
-            # is_permission_bundle_group = (
-            #     group_name in settings.USER_ADDITIONAL_PERMISSION_GROUPS
-            # )
+            group_name = [group["name"] for group in groups if group["id"] == group_id][
+                0
+            ]
+            is_permission_bundle_group = (
+                group_name in settings.USER_ADDITIONAL_PERMISSION_GROUPS
+            )
 
-            # if is_permission_bundle_group:
-            #     groups = [{"id": group["id"]} for group in user_groups] + [
-            #         {"id": group_id}
-            #     ]
-            # else:
-            groups = [{"id": group_id}]
+            if is_permission_bundle_group:
+                groups = [{"id": group["id"]} for group in user_groups] + [
+                    {"id": group_id}
+                ]
+            else:
+                groups = [{"id": group_id}]
 
             self.client.users.patch(id=user_id, groups=groups)
             return
