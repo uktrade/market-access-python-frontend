@@ -243,12 +243,6 @@
       "category": "SERVICES"
     },
     {
-      "id": 126,
-      "title": "Specific taxes, other than tariffs, that are imposed to increase the price of goods.",
-      "description": "<p>These might favour domestic firms over foreign competitors by being placed on imported products to make them more expensive than domestically produced alternative products.</p>",
-      "category": "SERVICES"
-    },
-    {
       "id": 127,
       "title": "Government subsidies",
       "description": "<p>Transfers of public funds to specific companies, sectors or regions which artificially lower prices and distort competition. This could include preferential tax arrangements.</p>",
