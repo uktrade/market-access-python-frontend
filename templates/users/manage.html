@@ -5,10 +5,10 @@
 
 {% block page_content %}
 
-    <h1 class="govuk-heading-l header-l-with-button">
+    <h1 class="govuk-heading-l">
         Manage users and groups
-        <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:export_users' %}">Download CSV</a>
     </h1>
+    <a class="govuk-button button--primary govuk-!-margin-top-4" href="{% url 'users:export_users' %}">Download CSV</a>
 
     <ul class="page-tabs page-tabs--no-margin">
         {% if group_id %}
