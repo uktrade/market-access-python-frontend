@@ -291,15 +291,16 @@ class ExportUsers(View):
         response["Content-Disposition"] = "attachment; filename=users.csv"
         writer = csv.writer(response)
         writer.writerow(["id", "email", "first_name", "last_name", "groups"])
-        for user in users:
+        user_data_objs = [user.data for user in users]
+        for user in user_data_objs:
             user_data = user.data
             writer.writerow(
                 [
-                    user_data["id"],
-                    user_data["email"],
-                    user_data["first_name"],
-                    user_data["last_name"],
-                    user.groups_display(),
+                    user["id"],
+                    user["email"],
+                    user["first_name"],
+                    user["last_name"],
+                    ", ".join([group["name"] for group in user["groups"]]),
                 ]
             )
         return response
