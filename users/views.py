@@ -290,17 +290,16 @@ class ExportUsers(View):
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = "attachment; filename=users.csv"
         writer = csv.writer(response)
-        writer.writerow(["id", "email", "first_name", "last_name", "groups"])
-        user_data_objs = [user.data for user in users]
-        for user in user_data_objs:
+        writer.writerow(["id", "email", "first_name", "last_name", "roles"])
+        for user in users:
             user_data = user.data
             writer.writerow(
                 [
-                    user["id"],
-                    user["email"],
-                    user["first_name"],
-                    user["last_name"],
-                    ", ".join([group["name"] for group in user["groups"]]),
+                    user_data["id"],
+                    user_data["email"],
+                    user_data["first_name"],
+                    user_data["last_name"],
+                    ",".join([group["name"] for group in user_data["groups"]]),
                 ]
             )
         return response
