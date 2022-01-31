@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     AddUser,
     EditUser,
+    ExportUsers,
     GetUsers,
     Login,
     LoginCallback,
@@ -19,6 +20,7 @@ urlpatterns = [
     path("sign-out/", SignOut.as_view(), name="sign-out"),
     path("users/", ManageUsers.as_view(), name="manage_users"),
     path("users/search/", GetUsers.as_view(), name="get_users"),
+    path("users/export/", ExportUsers.as_view(), name="export_users"),
     path("users/add/", AddUser.as_view(), name="add_user"),
     path("users/<int:user_id>/", UserDetail.as_view(), name="user_detail"),
     path("users/<int:user_id>/edit/", EditUser.as_view(), name="edit_user"),

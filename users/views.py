@@ -1,3 +1,4 @@
+import csv
 import re
 import uuid
 from urllib.parse import urlencode
@@ -5,7 +6,7 @@ from urllib.parse import urlencode
 import requests
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, RedirectView, TemplateView
@@ -271,3 +272,34 @@ class UserDetail(UserMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data["page"] = "manage-users"
         return context_data
+
+
+class ExportUsers(View):
+    """
+    Django view that gets a list of users from MarketAccessAPIClient and
+    serializes them as a CSV file.
+
+    View should be protected being the Administrator permission required.
+    """
+
+    permission_required = "list_users"
+
+    def get(self, request):
+        client = MarketAccessAPIClient(request.session.get("sso_token"))
+        users = client.users.list()
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = "attachment; filename=users.csv"
+        writer = csv.writer(response)
+        writer.writerow(["id", "email", "first_name", "last_name", "roles"])
+        for user in users:
+            user_data = user.data
+            writer.writerow(
+                [
+                    user_data["id"],
+                    user_data["email"],
+                    user_data["first_name"],
+                    user_data["last_name"],
+                    ",".join([group["name"] for group in user_data["groups"]]),
+                ]
+            )
+        return response
