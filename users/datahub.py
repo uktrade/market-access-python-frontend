@@ -7,7 +7,7 @@ from django.conf import settings
 class Domains:
     DATA_HUB = settings.DATAHUB_DOMAIN + "/"
     MI = "https://mi.exportwins.service.trade.gov.uk/"
-    FIND_EXPORTERS = "https://find-exporters.datahub.trade.gov.uk/"
+    FIND_EXPORTERS = settings.EXTERNAL_URLS_FIND_EXPORTERS
     MARKET_ACCESS = "https://market-access.trade.gov.uk/"
 
 
