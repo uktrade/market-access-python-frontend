@@ -8,7 +8,7 @@ jobs:
         docker:
             # specify the version you desire here
             # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-            - image: circleci/python:3.7
+            - image: circleci/python:3.7.11-node
             - image: postgres:9.6.16
               environment: POSTGRES_DB=market_access_pyfe
             - image: ukti/mock-sso
@@ -49,10 +49,6 @@ jobs:
             - checkout
 
             - run:
-                  name: Installing system dependencies
-                  command: sudo apt-get install -y nodejs npm
-
-            - run:
                   name: Compile webpack config
                   command: npm install && npm run build
 
@@ -84,7 +80,7 @@ jobs:
 
     pep8:
         docker:
-            - image: circleci/python:3.7
+            - image: circleci/python:3.7.11-node
 
         working_directory: ~/market-access-python-frontend
 
@@ -112,14 +108,10 @@ jobs:
 
     format_and_secrets_checks:
         docker:
-            - image: circleci/python:3.7
+            - image: circleci/python:3.7.11-node
         working_directory: ~/market-access-python-frontend
         steps:
             - checkout
-
-            - run:
-                  name: Installing system dependencies
-                  command: sudo apt-get install -y nodejs npm
 
             - run:
                   name: Install dependencies
