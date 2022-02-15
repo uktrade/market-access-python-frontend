@@ -19,7 +19,7 @@
     "@babel/runtime": "^7.11.2",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^9.0.1",
-    "css-loader": "^6.2.0",
+    "css-loader": "^6.5.1",
     "file-loader": "^6.2.0",
     "glob-parent": "^5.1.2",
     "govuk-colours": "^1.1.0",
@@ -45,10 +45,10 @@
     "last 2 versions"
   ],
   "devDependencies": {
-    "prettier": "^2.4.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.25.1",
+    "prettier": "^2.4.0",
     "source-map-js": "^0.6.2"
   }
 }
