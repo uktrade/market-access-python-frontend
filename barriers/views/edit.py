@@ -1,3 +1,5 @@
+import logging
+
 from django.urls import reverse
 from django.views.generic import FormView
 
@@ -18,6 +20,8 @@ from barriers.forms.edit import (
 from utils.metadata import MetadataMixin
 
 from .mixins import APIBarrierFormViewMixin
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
@@ -64,7 +68,19 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierPriorityForm
 
     def get_initial(self):
-        return {"priority": self.barrier.priority["code"]}
+
+        # Check if the barrier has a Top-Priority barrier and set the initial value accordingly
+        top_barrier_initial = "No"
+        for tag in self.barrier.tags:
+            if tag["id"] == 4:
+                top_barrier_initial = "Yes"
+        # self.form_class.barrier_tags = self.barrier.tags
+
+        return {
+            "priority": self.barrier.priority["code"],
+            "top_barrier": top_barrier_initial,
+            "existing_tags_list": self.barrier.tags,
+        }
 
 
 class BarrierEditTerm(APIBarrierFormViewMixin, FormView):
@@ -90,11 +106,21 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["tags"] = self.metadata.get_barrier_tag_choices()
+        kwargs["tags"] = self.metadata.get_edit_barrier_tag_choices()
         return kwargs
 
     def get_initial(self):
-        return {"tags": [tag["id"] for tag in self.barrier.tags]}
+
+        # Check if the barrier has a Top-Priority barrier and set the initial value accordingly
+        top_barrier_initial = "No"
+        for tag in self.barrier.tags:
+            if tag["id"] == 4:
+                top_barrier_initial = "Yes"
+
+        return {
+            "tags": [tag["id"] for tag in self.barrier.tags],
+            "top_barrier": top_barrier_initial,
+        }
 
 
 class BarrierEditTradeDirection(MetadataMixin, APIBarrierFormViewMixin, FormView):
