@@ -1,4 +1,3 @@
-import logging
 from http import HTTPStatus
 
 import dateutil.parser
@@ -6,8 +5,6 @@ from django.urls import reverse
 from mock import patch
 
 from core.tests import MarketAccessTestCase
-
-logger = logging.getLogger(__name__)
 
 
 class EditTitleTestCase(MarketAccessTestCase):
@@ -208,6 +205,37 @@ class EditSourceTestCase(MarketAccessTestCase):
             id=self.barrier["id"],
             source="OTHER",
             other_source="Some source",
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+
+class EditTagsTestCase(MarketAccessTestCase):
+    def test_edit_tags_has_initial_data(self):
+        response = self.client.get(
+            reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]})
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+
+        test_tag_list = []
+        for tag in self.barrier["tags"]:
+            test_tag_list.append(tag["id"])
+        assert form.initial["tags"] == test_tag_list
+        assert form.initial["top_barrier"] == "Yes"
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_edit_tags_calls_api(self, mock_patch):
+        mock_patch.return_value = self.barrier
+        response = self.client.post(
+            reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]}),
+            data={"tags": [1], "top_barrier": "Yes"},
+        )
+
+        mock_patch.assert_called_with(
+            id=self.barrier["id"],
+            tags=["1", "4"],
         )
         assert response.status_code == HTTPStatus.FOUND
 

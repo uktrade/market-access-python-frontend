@@ -1,5 +1,3 @@
-import logging
-
 from django.urls import reverse
 from django.views.generic import FormView
 
@@ -20,8 +18,6 @@ from barriers.forms.edit import (
 from utils.metadata import MetadataMixin
 
 from .mixins import APIBarrierFormViewMixin
-
-logger = logging.getLogger(__name__)
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):

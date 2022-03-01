@@ -1,5 +1,3 @@
-import logging
-
 from django import forms
 
 from utils.api.client import MarketAccessAPIClient
@@ -13,8 +11,6 @@ from utils.forms import (
 )
 
 from .mixins import APIFormMixin
-
-logger = logging.getLogger(__name__)
 
 
 class UpdateCommercialValueForm(APIFormMixin, forms.Form):
