@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 import dateutil.parser
@@ -5,6 +6,8 @@ from django.urls import reverse
 from mock import patch
 
 from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class EditTitleTestCase(MarketAccessTestCase):
@@ -218,6 +221,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["priority"] == self.barrier["priority"]["code"]
+        assert form.initial["top_barrier"] == "Yes"
 
     @patch("utils.api.resources.APIResource.patch")
     def test_priority_cannot_be_empty(self, mock_patch):
@@ -256,12 +260,14 @@ class EditPriorityTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "LOW", "priority_summary": ""},
+            data={"priority": "LOW", "priority_summary": "", "top_barrier": "Yes"},
         )
+
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="LOW",
             priority_summary="",
+            tags=[1, 4],
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -272,11 +278,16 @@ class EditPriorityTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "HIGH", "priority_summary": "New summary"},
+            data={
+                "priority": "HIGH",
+                "top_barrier": "No",
+                "priority_summary": "New summary",
+            },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="HIGH",
+            tags=[1],
             priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND

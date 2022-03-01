@@ -322,22 +322,9 @@ class Metadata:
         tags = self.data.get("barrier_tags", [])
         return sorted(tags, key=lambda k: k["order"])
 
-    def get_search_barrier_tag_choices(self):
+    def get_barrier_tag_choices(self, list_use):
         """
-        Generates tag choices for search tags function.
-        Includes all tags except Top Priority, as that is assigned seperately.
-        """
-        tag_list = self.get_barrier_tags()
-        for tag in tag_list:
-            # remove 'top priority' tag from this list as we assign it through a seperate radio button
-            if tag["title"] == "TOP-PRIORITY BARRIER":
-                tag_list.remove(tag)
-
-        return tag_list
-
-    def get_edit_barrier_tag_choices(self):
-        """
-        Generates tag choices for edit tags page.
+        Generates tag choices for edit or search tags pages.
         Includes all tags except Top Priority, as that is assigned seperately.
         """
 
@@ -347,7 +334,12 @@ class Metadata:
             if tag["title"] == "TOP-PRIORITY BARRIER":
                 tag_list.remove(tag)
 
-        return ((tag["id"], tag["title"], tag["description"]) for tag in tag_list)
+        if list_use == "edit":
+            # If this list is for the edit pages, return as generator
+            return ((tag["id"], tag["title"], tag["description"]) for tag in tag_list)
+        elif list_use == "search":
+            # If this list is for the search functionality, return as a plain list
+            return tag_list
 
     def get_report_tag_choices(self):
         """

@@ -312,7 +312,7 @@ class BarrierSearchForm(forms.Form):
     def set_tags_choices(self):
         choices = [
             (str(tag["id"]), tag["title"])
-            for tag in self.metadata.get_search_barrier_tag_choices()
+            for tag in self.metadata.get_barrier_tag_choices("search")
         ]
         choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
