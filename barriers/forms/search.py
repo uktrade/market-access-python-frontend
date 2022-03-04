@@ -1,9 +1,13 @@
+import calendar
 import copy
+import logging
 from operator import itemgetter
 from urllib.parse import urlencode
 
 from django import forms
 from django.http import QueryDict
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierSearchForm(forms.Form):
@@ -59,6 +63,14 @@ class BarrierSearchForm(forms.Form):
         label="Barrier status",
         required=False,
     )
+    resolved_date_from_month = forms.CharField(
+        label="Resolved date from", help_text="For example, 01 2021", required=False
+    )
+    resolved_date_from_year = forms.CharField(required=False)
+    resolved_date_to_month = forms.CharField(
+        label="Resolved date to", help_text="For example, 01 2022", required=False
+    )
+    resolved_date_to_year = forms.CharField(required=False)
     tags = forms.MultipleChoiceField(
         label="Tags",
         required=False,
@@ -193,6 +205,10 @@ class BarrierSearchForm(forms.Form):
             "top_priority": data.getlist("top_priority"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
+            "resolved_date_from_month": data.get("resolved_date_from_month"),
+            "resolved_date_from_year": data.get("resolved_date_from_year"),
+            "resolved_date_to_month": data.get("resolved_date_to_month"),
+            "resolved_date_to_year": data.get("resolved_date_to_year"),
             "tags": data.getlist("tags"),
             "has_action_plan": data.get("has_action_plan"),
             "user": data.get("user"),
@@ -403,6 +419,7 @@ class BarrierSearchForm(forms.Form):
             self.cleaned_data.get("tags", [])
             + self.cleaned_data.get("top_priority", [])
         )
+        params["status_date"] = self.format_resolved_date()
         params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
@@ -428,6 +445,31 @@ class BarrierSearchForm(forms.Form):
         )
 
         return {k: v for k, v in params.items() if v}
+
+    def format_resolved_date(self):
+        """
+        Format the resolved date input to be compatible with the API's queryset filter
+        Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates
+        Users only input the month and year, so we need to generate a day value.
+        """
+
+        from_year = self.cleaned_data.get("resolved_date_from_year")
+        from_month = self.cleaned_data.get("resolved_date_from_month")
+        to_year = self.cleaned_data.get("resolved_date_to_year")
+        to_month = self.cleaned_data.get("resolved_date_to_month")
+
+        if from_year and from_month and to_year and to_month:
+
+            from_date = from_year + "-" + from_month + "-01"
+
+            # calendar has function to identify last day of a given month in a year
+            to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
+            to_date = to_year + "-" + to_month + "-" + str(to_date_day)
+
+            return from_date + "," + to_date
+
+        else:
+            return []
 
     def get_raw_filters(self):
         """

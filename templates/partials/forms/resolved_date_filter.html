@@ -1,0 +1,28 @@
+<!-- css needs to be aligned to be next to the checkbox. it pretty much all needs resizing too.-->
+
+<div id="resolved_date_input">
+    <fieldset class="govuk-fieldset filter-group__inner">
+        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
+            {{ field_month.label }}
+        </legend>
+        <span class="govuk-hint">{{ field_month.help_text }}</span>
+        <div class="govuk-date-input" id="resolved_date_filter">
+            <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="{{ field_month.name }}">
+                        Month
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ field_month.name }}" name="{{ field_month.name }}" type="text" pattern="[0-9]*" inputmode="numeric">
+                </div>
+            </div>
+            <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="{{ field_year.name }}">
+                        Year
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="{{ field_year.name }}" name="{{ field_year.name }}" type="text" pattern="[0-9]*" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
