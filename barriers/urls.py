@@ -81,6 +81,7 @@ from .views.edit import (
     BarrierEditEndDate,
     BarrierEditPriority,
     BarrierEditProduct,
+    BarrierEditProgressUpdate,
     BarrierEditSource,
     BarrierEditSummary,
     BarrierEditTags,
@@ -213,6 +214,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/source/",
         BarrierEditSource.as_view(),
         name="edit_source",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/progress_update/",
+        BarrierEditProgressUpdate.as_view(),
+        name="edit_progress_update",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/priority/",

@@ -93,6 +93,48 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         )
 
 
+class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
+    CHOICES = [
+        ("ON_TRACK", "On track"),
+        ("RISK_OF_DELAY", "Risk of delay"),
+        ("DELAYED", "Delayed"),
+    ]
+    progress_update_status = forms.ChoiceField(
+        label="Delivery confidence",
+        choices=CHOICES,
+        widget=forms.RadioSelect,
+        error_messages={"required": "Delivery confidence is required"},
+    )
+    progress_update = YesNoBooleanField(
+        label="Progress update",
+        help_text=(
+            "Outline recent progress towards resolving the barrier. "
+            "Please ensure this is appropriate for a Ministerial audience."
+        ),
+        widget=forms.Textarea,
+        error_messages={"required": ("Progress update is required")},
+    )
+    next_steps = YesNoBooleanField(
+        label="Next steps",
+        help_text=(
+            "List any planned engagement or lobbying over the next month, "
+            "as well as updates on any ongoing activity. Please ensure this"
+            " is appropriate for a Ministerial audience, and flag where the Minister’s"
+            " intervention would help progress activity."
+        ),
+        widget=forms.Textarea,
+        error_messages={"required": ("Next steps is required")},
+    )
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(
+            id=self.id,
+            progress_update_status=self.cleaned_data["progress_update_status"],
+            progress_update=self.cleaned_data["progress_update"],
+        )
+
+
 class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
     CHOICES = [
         ("COMPANY", "Company"),

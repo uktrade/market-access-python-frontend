@@ -130,3 +130,35 @@
 		}
 	}
 }
+
+.barrier-progress-update{
+	/* Auto layout */
+
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	// padding: 12px;
+
+	background: rgba(202, 226, 240, 0.3);
+
+	/* Inside auto layout */
+
+	flex: none;
+	order: 2;
+	flex-grow: 0;
+	margin: 14px 0px;
+
+	&__cta{
+		margin: 12px 0px;
+	}
+
+	&__section{
+		border-bottom: 1px solid #B1B4B6;
+		// padding: 8px;
+		margin: 12px;
+
+		&__heading{
+			margin: 0px;
+		}
+	}
+}
