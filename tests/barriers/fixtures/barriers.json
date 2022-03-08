@@ -71,6 +71,20 @@
         },
         "status_summary": "aabc",
         "status_date": "2019-08-01",
+        "tags": [
+            {
+                "id": 1,
+                "title": "COVID-19",
+                "description": "Barrier related to Covid pandemic.",
+                "order": 1
+            },
+            {
+                "id": 4,
+                "title": "Top-Priority Barrier",
+                "description": "Barrier considered a top priority",
+                "order": 4
+            }
+        ],
         "priority": {
             "code": "MEDIUM",
             "name": "Medium",

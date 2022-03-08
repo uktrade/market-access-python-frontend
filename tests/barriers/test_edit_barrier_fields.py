@@ -209,6 +209,37 @@ class EditSourceTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
+class EditTagsTestCase(MarketAccessTestCase):
+    def test_edit_tags_has_initial_data(self):
+        response = self.client.get(
+            reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]})
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+
+        test_tag_list = []
+        for tag in self.barrier["tags"]:
+            test_tag_list.append(tag["id"])
+        assert form.initial["tags"] == test_tag_list
+        assert form.initial["top_barrier"] == "Yes"
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_edit_tags_calls_api(self, mock_patch):
+        mock_patch.return_value = self.barrier
+        response = self.client.post(
+            reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]}),
+            data={"tags": [1], "top_barrier": "Yes"},
+        )
+
+        mock_patch.assert_called_with(
+            id=self.barrier["id"],
+            tags=["1", "4"],
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+
 class EditPriorityTestCase(MarketAccessTestCase):
     def test_edit_priority_has_initial_data(self):
         response = self.client.get(
@@ -218,6 +249,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["priority"] == self.barrier["priority"]["code"]
+        assert form.initial["top_barrier"] == "Yes"
 
     @patch("utils.api.resources.APIResource.patch")
     def test_priority_cannot_be_empty(self, mock_patch):
@@ -256,12 +288,14 @@ class EditPriorityTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "LOW", "priority_summary": ""},
+            data={"priority": "LOW", "priority_summary": "", "top_barrier": "Yes"},
         )
+
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="LOW",
             priority_summary="",
+            tags=[1, 4],
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -272,11 +306,16 @@ class EditPriorityTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "HIGH", "priority_summary": "New summary"},
+            data={
+                "priority": "HIGH",
+                "top_barrier": "No",
+                "priority_summary": "New summary",
+            },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="HIGH",
+            tags=[1],
             priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND

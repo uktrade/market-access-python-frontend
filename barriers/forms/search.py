@@ -46,6 +46,11 @@ class BarrierSearchForm(forms.Form):
         label="Overseas region",
         required=False,
     )
+    top_priority = forms.MultipleChoiceField(
+        label="Top-priority barrier",
+        choices=(("4", "Top-priority barrier"),),
+        required=False,
+    )
     priority = forms.MultipleChoiceField(
         label="Barrier priority",
         required=False,
@@ -185,6 +190,7 @@ class BarrierSearchForm(forms.Form):
             "organisation": data.getlist("organisation"),
             "category": data.getlist("category"),
             "region": data.getlist("region"),
+            "top_priority": data.getlist("top_priority"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
             "tags": data.getlist("tags"),
@@ -305,7 +311,8 @@ class BarrierSearchForm(forms.Form):
 
     def set_tags_choices(self):
         choices = [
-            (str(tag["id"]), tag["title"]) for tag in self.metadata.get_barrier_tags()
+            (str(tag["id"]), tag["title"])
+            for tag in self.metadata.get_barrier_tag_choices("search")
         ]
         choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
@@ -392,7 +399,10 @@ class BarrierSearchForm(forms.Form):
         params["category"] = ",".join(self.cleaned_data.get("category", []))
         params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
-        params["tags"] = ",".join(self.cleaned_data.get("tags", []))
+        params["tags"] = ",".join(
+            self.cleaned_data.get("tags", [])
+            + self.cleaned_data.get("top_priority", [])
+        )
         params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
