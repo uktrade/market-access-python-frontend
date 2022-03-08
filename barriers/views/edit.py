@@ -77,7 +77,18 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierPriorityForm
 
     def get_initial(self):
-        return {"priority": self.barrier.priority["code"]}
+
+        # Check if the barrier has a Top-Priority barrier and set the initial value accordingly
+        top_barrier_initial = "No"
+        for tag in self.barrier.tags:
+            if tag["id"] == 4:
+                top_barrier_initial = "Yes"
+
+        return {
+            "priority": self.barrier.priority["code"],
+            "top_barrier": top_barrier_initial,
+            "existing_tags_list": self.barrier.tags,
+        }
 
 
 class BarrierEditTerm(APIBarrierFormViewMixin, FormView):
@@ -103,11 +114,20 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["tags"] = self.metadata.get_barrier_tag_choices()
+        kwargs["tags"] = self.metadata.get_barrier_tag_choices("edit")
         return kwargs
 
     def get_initial(self):
-        return {"tags": [tag["id"] for tag in self.barrier.tags]}
+        # Check if the barrier has a Top-Priority barrier and set the initial value accordingly
+        top_barrier_initial = "No"
+        for tag in self.barrier.tags:
+            if tag["id"] == 4:
+                top_barrier_initial = "Yes"
+
+        return {
+            "tags": [tag["id"] for tag in self.barrier.tags],
+            "top_barrier": top_barrier_initial,
+        }
 
 
 class BarrierEditTradeDirection(MetadataMixin, APIBarrierFormViewMixin, FormView):
