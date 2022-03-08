@@ -5,6 +5,7 @@ from barriers.forms.edit import (
     UpdateBarrierEndDateForm,
     UpdateBarrierPriorityForm,
     UpdateBarrierProductForm,
+    UpdateBarrierProgressUpdateForm,
     UpdateBarrierSourceForm,
     UpdateBarrierSummaryForm,
     UpdateBarrierTagsForm,
@@ -44,6 +45,18 @@ class BarrierEditSummary(APIBarrierFormViewMixin, FormView):
         return {
             "summary": self.barrier.summary,
             "is_summary_sensitive": self.barrier.is_summary_sensitive,
+        }
+
+
+class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/progress_update.html"
+    form_class = UpdateBarrierProgressUpdateForm
+
+    def get_initial(self):
+        return {
+            "progress_status": self.barrier.progress_status,
+            "progress_update": self.barrier.progress_update,
+            "next_steps": self.barrier.next_steps,
         }
 
 

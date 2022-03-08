@@ -275,6 +275,18 @@ class Barrier(APIModel):
     def is_hibernated(self):
         return self.status["id"] == "5"
 
+    @property
+    def progress_status(self):
+        return self.data.get("progress_status")
+
+    @property
+    def progress_update(self):
+        return self.data.get("progress_update")
+
+    @property
+    def next_steps(self):
+        return self.data.get("next_steps")
+
 
 class PublicBarrier(APIModel):
     _country = None
