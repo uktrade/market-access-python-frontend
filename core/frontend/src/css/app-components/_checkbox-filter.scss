@@ -141,3 +141,12 @@ $default-spacing-unit: 5px;
 		}
 	}
 }
+
+.resolved_date_input {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.govuk-hint-small {
+	@include govuk-font(10);
+}

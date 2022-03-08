@@ -1,11 +1,12 @@
 <!-- css needs to be aligned to be next to the checkbox. it pretty much all needs resizing too.-->
 
-<div id="resolved_date_input">
+<div id="resolved_date_input" class="resolved_date_input">
     <fieldset class="govuk-fieldset filter-group__inner">
-        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
+        <legend class="govuk-fieldset__legend--s filter-items__label filter-group__label">
             {{ field_month.label }}
+            <span class="govuk-hint-small">{{ field_month.help_text }}</span>
         </legend>
-        <span class="govuk-hint">{{ field_month.help_text }}</span>
+
         <div class="govuk-date-input" id="resolved_date_filter">
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
