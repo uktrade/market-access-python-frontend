@@ -1,8 +1,8 @@
 <!-- css needs to be aligned to be next to the checkbox. it pretty much all needs resizing too.-->
 
-<div id="resolved_date_input" class="resolved_date_input">
-    <fieldset class="govuk-fieldset filter-group__inner">
-        <legend class="govuk-fieldset__legend--s filter-items__label filter-group__label">
+<div id="resolved_date_input" class="resolved_date__input">
+    <fieldset class="govuk-fieldset filter-group__inner resolved_date__indent">
+        <legend class="govuk-fieldset__legend--s resolved_date__label resolved_date__inner_vertical_gap">
             {{ field_month.label }}
             <span class="govuk-hint-small">{{ field_month.help_text }}</span>
         </legend>
@@ -10,18 +10,18 @@
         <div class="govuk-date-input" id="resolved_date_filter">
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{ field_month.name }}">
+                    <label class="govuk-label govuk-date-input__label resolved_date__inputs_label" for="{{ field_month.name }}">
                         Month
                     </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ field_month.name }}" name="{{ field_month.name }}" type="text" pattern="[0-9]*" inputmode="numeric">
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 resolved_date__month_input" id="{{ field_month.name }}" name="{{ field_month.name }}" type="text" pattern="[0-9]*" inputmode="numeric">
                 </div>
             </div>
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{ field_year.name }}">
+                    <label class="govuk-label govuk-date-input__label resolved_date__inputs_label" for="{{ field_year.name }}">
                         Year
                     </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="{{ field_year.name }}" name="{{ field_year.name }}" type="text" pattern="[0-9]*" inputmode="numeric">
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4 resolved_date__year_input" id="{{ field_year.name }}" name="{{ field_year.name }}" type="text" pattern="[0-9]*" inputmode="numeric">
                 </div>
             </div>
         </div>

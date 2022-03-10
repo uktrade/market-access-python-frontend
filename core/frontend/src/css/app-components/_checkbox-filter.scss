@@ -142,11 +142,45 @@ $default-spacing-unit: 5px;
 	}
 }
 
-.resolved_date_input {
-	margin-top: 5px;
-	margin-bottom: 5px;
+.resolved_date__input {
+	background-color: white;
+}
+
+.resolved_date__indent {
+	padding-left: govuk-spacing(7);
+	padding-bottom: govuk-spacing(4);
+}
+
+.resolved_date__inner_vertical_gap {
+	padding-top: govuk-spacing(2);
+}
+
+.resolved_date__label {
+	@include govuk-font($size: 16);
+	display: block;
+	font-weight: bold;
+}
+
+.resolved_date__inputs_label {
+	@include govuk-font($size: 16);
+}
+
+.resolved_date__month_input {
+	@include govuk-font($size: 16);
+	$input-size: 16px * 2;
+	width: $input-size * 2;
+	height: $input-size;
+}
+
+.resolved_date__year_input {
+	@include govuk-font($size: 16);
+	$input-size: 16px * 2;
+	width: $input-size * 3;
+	height: $input-size;
 }
 
 .govuk-hint-small {
-	@include govuk-font(10);
+	@include govuk-font($size: 14);
+	display: block;
+	color: $govuk-dark-grey;
 }

@@ -64,11 +64,11 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     resolved_date_from_month = forms.CharField(
-        label="Resolved date from", help_text="For example, 01 2021", required=False
+        label="Resolved date from", help_text="Example, 01 2021", required=False
     )
     resolved_date_from_year = forms.CharField(required=False)
     resolved_date_to_month = forms.CharField(
-        label="Resolved date to", help_text="For example, 01 2022", required=False
+        label="Resolved date to", help_text="Example, 01 2022", required=False
     )
     resolved_date_to_year = forms.CharField(required=False)
     tags = forms.MultipleChoiceField(
