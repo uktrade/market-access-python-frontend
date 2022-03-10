@@ -394,7 +394,15 @@ class BarrierSearchForm(forms.Form):
                 if field in params:
                     del params[field]
         else:
+            # Clear resolved date filters if requesting a resolved status filter removal
+            if field_name == "status":
+                params.pop("resolved_date_from_month", None)
+                params.pop("resolved_date_from_year", None)
+                params.pop("resolved_date_to_month", None)
+                params.pop("resolved_date_to_year", None)
+
             del params[field_name]
+
         return urlencode(params, doseq=True)
 
     def get_api_search_parameters(self):

@@ -36,7 +36,10 @@
                                 date_filter.removeAttribute("hidden");
                               } else {
                                 date_filter.setAttribute("hidden", true);
-                                //will have to clear the boxes somehow here too
+                                document.getElementById('resolved_date_from_month').value = '';
+                                document.getElementById('resolved_date_from_year').value = '';
+                                document.getElementById('resolved_date_to_month').value = '';
+                                document.getElementById('resolved_date_to_month').value = '';
                               }
                             })
                         </script>
