@@ -22,7 +22,7 @@
                     </label>
 
                     <!-- Section to display resolved date input, only displayed when loading the barrier status block-->
-                    {% if text == "Resolved: In full" %}
+                    {% if text == "Resolved: In full" and settings.MINISTERIAL_REPORTS_FUNCTIONALITY %}
                         <div id="resolved_date_filter" hidden>
                             {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month field_year=form.resolved_date_from_year %}
                             {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month field_year=form.resolved_date_to_year %}
