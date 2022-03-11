@@ -34,22 +34,24 @@
             </fieldset>
         </div>
 
-        <div id="{{ form.top_barrier.name }}" class="govuk-form-group{% if form.top_barrier.errors %} govuk-form-group--error{% endif %}">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.top_barrier.label }}</legend>
+        {% if current_user|has_permission:"set_topprioritybarrier" %}
+            <div id="{{ form.top_barrier.name }}" class="govuk-form-group{% if form.top_barrier.errors %} govuk-form-group--error{% endif %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.top_barrier.label }}</legend>
 
-                {% form_field_error form "top_barrier" %}
+                    {% form_field_error form "top_barrier" %}
 
-                <div class="govuk-radios">
-                    {% for value, name in form.fields.top_barrier.choices %}
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value %}checked="checked"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="{{ form.top_barrier.name }}-{{ forloop.counter }}">{{ name }}</label>
+                    <div class="govuk-radios">
+                        {% for value, name in form.fields.top_barrier.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="{{ form.top_barrier.name }}-{{ forloop.counter }}">{{ name }}</label>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                </div>
-            </fieldset>
-        </div>
+                </fieldset>
+            </div>
+        {% endif %}
 
         <input type="submit" value="Save changes" class="govuk-button">
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
