@@ -52,6 +52,9 @@
                 {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
+                {% if settings.MINISTERIAL_REPORTS_FUNCTIONALITY %}
+                    {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
+                {% endif %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
@@ -158,6 +161,7 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.top_priority %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.priority %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.status %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.delivery_confidence %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.wto %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.show %}

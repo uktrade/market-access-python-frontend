@@ -63,6 +63,15 @@ class BarrierSearchForm(forms.Form):
         label="Tags",
         required=False,
     )
+    delivery_confidence = forms.MultipleChoiceField(
+        label="Delivery Confidence",
+        choices=(
+            ("ON_TRACK", "On Track"),
+            ("RISK_OF_DELAY", "Risk of delay"),
+            ("DELAYED", "Delayed"),
+        ),
+        required=False,
+    )
     has_action_plan = forms.BooleanField(label="Has action plan", required=False)
     user = forms.BooleanField(
         label="Barriers I have created",
@@ -194,6 +203,7 @@ class BarrierSearchForm(forms.Form):
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
             "tags": data.getlist("tags"),
+            "delivery_confidence": data.getlist("delivery_confidence"),
             "has_action_plan": data.get("has_action_plan"),
             "user": data.get("user"),
             "team": data.get("team"),
@@ -402,6 +412,9 @@ class BarrierSearchForm(forms.Form):
         params["tags"] = ",".join(
             self.cleaned_data.get("tags", [])
             + self.cleaned_data.get("top_priority", [])
+        )
+        params["delivery_confidence"] = ",".join(
+            self.cleaned_data.get("delivery_confidence", [])
         )
         params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
