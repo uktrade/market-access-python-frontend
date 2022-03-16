@@ -1,5 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 {% load dates %}
+{% load tz %}
 {% block page_title %}{{ block.super }} - Monthly barrier update{% endblock %}
 
 {% block back_link %}
@@ -14,7 +15,14 @@
         <div class="barrier-progress-update summary-group__list__value">
             <div class="barrier-progress-update">
                 <div class="barrier-progress-update__section">
-                    <h4 class="barrier-progress-update__section__heading">{{ barrier.latest_progress_update.created_on|parse_iso|date:"j F Y at P (e)" }}</h4>
+                    {% timezone "Europe/London" %}
+                    <h4 class="barrier-progress-update__section__heading">
+                        Created: <span class="barrier-progress-update__section__date">{{ progress_update.created_on|parse_iso|date:"j F Y at P (e)" }}</span>
+                    </h4>
+                    <h4 class="barrier-progress-update__section__heading">
+                        Modified: <span class="barrier-progress-update__section__date">{{ progress_update.modified_on|parse_iso|date:"j F Y at P (e)" }}
+                    </h4>
+                    {% endtimezone %}
                 </div>
                 <div class="barrier-progress-update__section">
                     <h4 class="barrier-progress-update__section__heading">Delivery confidence</h4>

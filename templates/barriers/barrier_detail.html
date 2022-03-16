@@ -5,6 +5,7 @@
 {% load completeness %}
 {% load render_bundle from webpack_loader %}
 {% load dates %}
+{% load tz %}
 
 {% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
 
@@ -91,7 +92,14 @@
                 {% if barrier.latest_progress_update %}
                 <div class="barrier-progress-update">
                     <div class="barrier-progress-update__section">
-                        <h4 class="barrier-progress-update__section__heading">{{ barrier.latest_progress_update.created_on|parse_iso|date:"j F Y at P (e)" }}</h4>
+                        {% timezone "Europe/London" %}
+                        <h4 class="barrier-progress-update__section__heading">
+                            Created: <span class="barrier-progress-update__section__date">{{ barrier.latest_progress_update.created_on|parse_iso|date:"j F Y at P (e)" }}</span>
+                        </h4>
+                        <h4 class="barrier-progress-update__section__heading">
+                            Modified: <span class="barrier-progress-update__section__date">{{ barrier.latest_progress_update.modified_on|parse_iso|date:"j F Y at P (e)" }}
+                        </h4>
+                        {% endtimezone %}
                     </div>
                     <div class="barrier-progress-update__section">
                         <h4 class="barrier-progress-update__section__heading">Delivery confidence</h4>
