@@ -4,6 +4,7 @@
 {% load static %}
 {% load completeness %}
 {% load render_bundle from webpack_loader %}
+{% load dates %}
 
 {% block page_title %}{{ block.super }} - Barrier details{{ pageTitleSuffix }}{% endblock %}
 
@@ -83,18 +84,20 @@
             </dd>
 
 
-            <dt class="summary-group__list__key">Monthly barrier update</dt>
-            <dd class="summary-group__list__value">
-                <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:edit_progress_update' barrier.id %}">Add monthly barrier update</a>
+            <dt class="summary-group__list__key">Barrier update</dt>
+            <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:add_progress_update' barrier.id %}">Add barrier update</a>
 
-                {% if barrier.progress_update %}
+            <div class="barrier-progress-update summary-group__list__value">
+                {% if barrier.latest_progress_update %}
                 <div class="barrier-progress-update">
-                    {% comment %} 3 sections called "Delivery confidence", "Progress update" and "Next steps" followed by an edit link. {% endcomment %}
+                    <div class="barrier-progress-update__section">
+                        <h4 class="barrier-progress-update__section__heading">{{ barrier.latest_progress_update.created_on|parse_iso|date:"j F Y at P (e)" }}</h4>
+                    </div>
                     <div class="barrier-progress-update__section">
                         <h4 class="barrier-progress-update__section__heading">Delivery confidence</h4>
                         <p class="barrier-progress-update__section__text">
-                            {% if barrier.progress_status is not empty %}
-                                {{ barrier.progress_status|linebreaksbr }}
+                            {% if barrier.latest_progress_update.status is not empty %}
+                                {{ barrier.latest_progress_update.status_display|linebreaksbr }}
                             {% else %}
                                 No monthly delivery confidence summary
                             {% endif %}
@@ -104,8 +107,8 @@
                     <div class="barrier-progress-update__section">
                         <h4 class="barrier-progress-update__section__heading">Progress update</h4>
                         <p class="barrier-progress-update__section__text">
-                            {% if barrier.progress_update is not empty %}
-                                {{ barrier.progress_update|linebreaksbr }}
+                            {% if barrier.latest_progress_update.message is not empty %}
+                                {{ barrier.latest_progress_update.message|linebreaksbr }}
                             {% else %}
                                 No monthly progress update
                             {% endif %}
@@ -115,12 +118,17 @@
                     <div class="barrier-progress-update__section">
                         <h4 class="barrier-progress-update__section__heading">Next steps</h4>
                         <p class="barrier-progress-update__section__text">
-                            {% if barrier.next_steps is not empty %}
-                                {{ barrier.next_steps|linebreaksbr }}
+                            {% if barrier.latest_progress_update.next_steps is not empty %}
+                                {{ barrier.latest_progress_update.next_steps|linebreaksbr }}
                             {% else %}
                                 No monthly next steps
                             {% endif %}
                         </p>
+                    </div>
+
+                    <div class="barrier-progress-update__actions">
+                        <a class="" href="{% url 'barriers:edit_progress_update' barrier.id barrier.latest_progress_update.id %}">Edit</a>
+                        <a class="" href="{% url 'barriers:list_progress_update' barrier.id %}">View previous updates</a>
                     </div>
 
                     {% if not barrier.archived %}
@@ -129,7 +137,7 @@
                 </div>
                 {% endif %}
 
-            </dd>
+            </div>
 
 
             <dt class="summary-group__list__key">End date</dt>

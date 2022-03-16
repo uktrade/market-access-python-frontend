@@ -99,13 +99,13 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
         ("RISK_OF_DELAY", "Risk of delay"),
         ("DELAYED", "Delayed"),
     ]
-    progress_status = forms.ChoiceField(
+    status = forms.ChoiceField(
         label="Delivery confidence",
         choices=CHOICES,
         widget=forms.RadioSelect,
         error_messages={"required": "Delivery confidence is required"},
     )
-    progress_update = forms.CharField(
+    update = forms.CharField(
         label="Progress update",
         help_text=(
             "Outline recent progress towards resolving the barrier. "
@@ -126,14 +126,28 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
         error_messages={"required": ("Next steps is required")},
     )
 
+    def __init__(self, barrier_id, progress_update_id=None, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.progress_update_id = progress_update_id
+        super().__init__(*args, **kwargs)
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id,
-            progress_status=self.cleaned_data["progress_status"],
-            progress_update=self.cleaned_data["progress_update"],
-            next_steps=self.cleaned_data["next_steps"],
-        )
+        if self.progress_update_id:
+            client.barriers.patch_progress_update(
+                barrier=self.barrier_id,
+                id=self.progress_update_id,
+                status=self.cleaned_data["status"],
+                message=self.cleaned_data["update"],
+                next_steps=self.cleaned_data["next_steps"],
+            )
+        else:
+            client.barriers.create_progress_update(
+                barrier=self.barrier_id,
+                status=self.cleaned_data["status"],
+                message=self.cleaned_data["update"],
+                next_steps=self.cleaned_data["next_steps"],
+            )
 
 
 class UpdateBarrierSourceForm(APIFormMixin, forms.Form):

@@ -287,6 +287,16 @@ class Barrier(APIModel):
     def next_steps(self):
         return self.data.get("next_steps")
 
+    @property
+    def progress_updates(self):
+        return self.data.get("progress_updates")
+
+    @property
+    def latest_progress_update(self):
+        if self.progress_updates:
+            return self.progress_updates[0]
+        return None
+
 
 class PublicBarrier(APIModel):
     _country = None

@@ -130,3 +130,29 @@
 		}
 	}
 }
+
+.barrier-progress-update{
+	background: hsl(203, 100%, 93%);
+	padding: 0px;
+	padding-top: 2px;
+	&__cta{
+		margin: 12px 0px;
+	}
+	&__section{
+		margin: 12px;
+		border-bottom: 1px solid #B1B4B6;
+
+		&__heading{
+			margin: 0px;
+		}
+		&__text{
+			margin: 8px 0px;
+		}
+	}
+	&__actions{
+		margin: 12px;
+		a{
+			display: block;
+		}
+	}
+}
