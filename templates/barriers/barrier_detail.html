@@ -92,16 +92,6 @@
                 {% if barrier.latest_progress_update %}
                 <div class="barrier-progress-update">
                     <div class="barrier-progress-update__section">
-                        {% timezone "Europe/London" %}
-                        <h4 class="barrier-progress-update__section__heading">
-                            Created: <span class="barrier-progress-update__section__date">{{ barrier.latest_progress_update.created_on|parse_iso|date:"j F Y at P (e)" }}</span>
-                        </h4>
-                        <h4 class="barrier-progress-update__section__heading">
-                            Modified: <span class="barrier-progress-update__section__date">{{ barrier.latest_progress_update.modified_on|parse_iso|date:"j F Y at P (e)" }}
-                        </h4>
-                        {% endtimezone %}
-                    </div>
-                    <div class="barrier-progress-update__section">
                         <h4 class="barrier-progress-update__section__heading">Delivery confidence</h4>
                         <p class="barrier-progress-update__section__text">
                             {% if barrier.latest_progress_update.status is not empty %}
@@ -132,6 +122,22 @@
                                 No monthly next steps
                             {% endif %}
                         </p>
+                    </div>
+                    <div class="barrier-progress-update__section">
+                        {% timezone "Europe/London" %}
+                        <h4 class="barrier-progress-update__section__heading">
+                            Date created: <span class="barrier-progress-update__section__date">
+                                {{ barrier.latest_progress_update.created_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_progress_update.created_on|parse_iso|date:"P (e)" }}
+                            </span> by <span class="barrier-progress-update__section__user">{{ barrier.latest_progress_update.created_by }}</span>
+                        </h4>
+                        {% if barrier.latest_progress_update.created_on != barrier.latest_progress_update.modified_on %}
+                        <h4 class="barrier-progress-update__section__heading">
+                            Date Modified: <span class="barrier-progress-update__section__date">
+                                {{ barrier.latest_progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_progress_update.modified_on|parse_iso|date:"P (e)" }}
+                            </span> by <span class="barrier-progress-update__section__user">{{ barrier.latest_progress_update.modified_by }}</span>
+                        </h4>
+                        {% endif %}
+                        {% endtimezone %}
                     </div>
 
                     <div class="barrier-progress-update__actions">
