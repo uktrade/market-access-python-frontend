@@ -85,8 +85,8 @@
             </dd>
 
             {% if feature_flags.ministerial_reports_enabled %}
-            <dt class="summary-group__list__key">Barrier update</dt>
-            <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:add_progress_update' barrier.id %}">Add barrier update</a>
+            <dt class="summary-group__list__key">Progress update</dt>
+            <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:add_progress_update' barrier.id %}">Add progress update</a>
 
             <div class="barrier-progress-update summary-group__list__value">
                 {% if barrier.latest_progress_update %}
