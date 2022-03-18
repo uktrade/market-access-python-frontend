@@ -53,7 +53,7 @@
                         </h4>
                         {% if progress_update.created_on != progress_update.modified_on %}
                         <h4 class="barrier-progress-update__section__heading">
-                            Date Modified: <span class="barrier-progress-update__section__date">
+                            Date modified: <span class="barrier-progress-update__section__date">
                                 {{ progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ progress_update.modified_on|parse_iso|date:"P (e)" }}
                             by </span> <span class="barrier-progress-update__section__user">{{ progress_update.modified_by }}</span>
                         </h4>
