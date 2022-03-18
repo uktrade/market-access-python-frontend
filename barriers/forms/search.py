@@ -47,7 +47,7 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     top_priority = forms.MultipleChoiceField(
-        label="Top 100 barrier",
+        label="Top priority barrier",
         choices=(("4", "Top 100 priority barrier"),),
         required=False,
     )
