@@ -359,6 +359,7 @@ SETTINGS_EXPORT = (
 )
 
 ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
+MINISTERIAL_REPORTS_ENABLED = env.bool("MINISTERIAL_REPORTS_ENABLED", default=False)
 
 # Webpack config
 

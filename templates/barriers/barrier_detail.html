@@ -84,7 +84,7 @@
                 {% endif %}
             </dd>
 
-
+            {% if feature_flads.ministerial_reports_enabled %}
             <dt class="summary-group__list__key">Barrier update</dt>
             <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:add_progress_update' barrier.id %}">Add barrier update</a>
 
@@ -128,13 +128,13 @@
                         <h4 class="barrier-progress-update__section__heading">
                             Date created: <span class="barrier-progress-update__section__date">
                                 {{ barrier.latest_progress_update.created_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_progress_update.created_on|parse_iso|date:"P (e)" }}
-                            </span> by <span class="barrier-progress-update__section__user">{{ barrier.latest_progress_update.created_by }}</span>
+                            by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_progress_update.created_by }}</span>
                         </h4>
                         {% if barrier.latest_progress_update.created_on != barrier.latest_progress_update.modified_on %}
                         <h4 class="barrier-progress-update__section__heading">
                             Date Modified: <span class="barrier-progress-update__section__date">
                                 {{ barrier.latest_progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_progress_update.modified_on|parse_iso|date:"P (e)" }}
-                            </span> by <span class="barrier-progress-update__section__user">{{ barrier.latest_progress_update.modified_by }}</span>
+                            by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_progress_update.modified_by }}</span>
                         </h4>
                         {% endif %}
                         {% endtimezone %}
@@ -152,6 +152,7 @@
                 {% endif %}
 
             </div>
+            {% endif %}
 
 
             <dt class="summary-group__list__key">End date</dt>

@@ -26,7 +26,7 @@
                         </p>
                     </div>
                     <div class="barrier-progress-update__section">
-                        <h4 class="barrier-progress-update__section__heading">Progress update</h4>
+                        <h4 class="barrier-progress-update__section__heading">Current status</h4>
                         <p class="barrier-progress-update__section__text">
                             {% if progress_update.message is not empty %}
                                 {{ progress_update.message|linebreaksbr }}
@@ -49,13 +49,13 @@
                         <h4 class="barrier-progress-update__section__heading">
                             Date created: <span class="barrier-progress-update__section__date">
                                 {{ progress_update.created_on|parse_iso|date:"j F Y" }} at {{ progress_update.created_on|parse_iso|date:"P (e)" }}
-                            </span> by <span class="barrier-progress-update__section__user">{{ progress_update.created_by }}</span>
+                            by </span> <span class="barrier-progress-update__section__user">{{ progress_update.created_by }}</span>
                         </h4>
                         {% if progress_update.created_on != progress_update.modified_on %}
                         <h4 class="barrier-progress-update__section__heading">
                             Date Modified: <span class="barrier-progress-update__section__date">
                                 {{ progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ progress_update.modified_on|parse_iso|date:"P (e)" }}
-                            </span> by <span class="barrier-progress-update__section__user">{{ progress_update.modified_by }}</span>
+                            by </span> <span class="barrier-progress-update__section__user">{{ progress_update.modified_by }}</span>
                         </h4>
                         {% endif %}
                     </div>

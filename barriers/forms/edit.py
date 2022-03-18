@@ -108,8 +108,9 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
     update = forms.CharField(
         label="Progress update",
         help_text=(
-            "Outline recent progress towards resolving the barrier. "
-            "Please ensure this is appropriate for a Ministerial audience."
+            "Include the barrier status, recent progress, and any obstacles. Content will be used"
+            " for monthly reports and therefore should be appropriate for senior stakeholders"
+            " (including Ministers)."
         ),
         widget=forms.Textarea,
         error_messages={"required": ("Progress update is required")},
@@ -117,10 +118,10 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
     next_steps = forms.CharField(
         label="Next steps",
         help_text=(
-            "List any planned engagement or lobbying over the next month, "
-            "as well as updates on any ongoing activity. Please ensure this"
-            " is appropriate for a Ministerial audience, and flag where the Minister’s"
-            " intervention would help progress activity."
+            "Outline planned actions over the coming months, including internal to Government,"
+            " with industry, and with foreign governments/agencies. Content will be used for "
+            "monthly reports and therefore should be appropriate for senior stakeholders "
+            "(including Ministers)."
         ),
         widget=forms.Textarea,
         error_messages={"required": ("Next steps is required")},
