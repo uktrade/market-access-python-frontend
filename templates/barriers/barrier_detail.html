@@ -84,7 +84,7 @@
                 {% endif %}
             </dd>
 
-            {% if feature_flads.ministerial_reports_enabled %}
+            {% if feature_flags.ministerial_reports_enabled %}
             <dt class="summary-group__list__key">Barrier update</dt>
             <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:add_progress_update' barrier.id %}">Add barrier update</a>
 
