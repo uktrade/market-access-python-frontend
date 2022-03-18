@@ -138,16 +138,18 @@
 	&__cta{
 		margin: 12px 0px;
 	}
+
 	&__section{
 		margin: 12px;
 		border-bottom: 1px solid #B1B4B6;
 
+		&__dates{
+			color: #505A5F;
+		}
+
 		&__heading{
 			margin: 0px;
 
-			&__secondary{
-				color: #505A5F;
-			}
 		}
 		&__text{
 			margin: 8px 0px;
