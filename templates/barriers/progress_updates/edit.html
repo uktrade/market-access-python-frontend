@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit barrier update{% endblock %}
+{% block page_title %}{{ block.super }} - Edit progress update{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit barrier update' %}
+    {% include 'partials/heading.html' with text='Edit progress update' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
