@@ -106,13 +106,17 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
         error_messages={"required": "Delivery confidence is required"},
     )
     update = forms.CharField(
-        label="Progress update",
+        label="Current status",
         help_text=(
             "Include the barrier status, recent progress, and any obstacles. Content will be used"
             " for monthly reports and therefore should be appropriate for senior stakeholders"
             " (including Ministers)."
         ),
-        widget=forms.Textarea,
+        widget=forms.Textarea(
+            attrs={
+                "maxlength": "1250",
+            }
+        ),
         error_messages={"required": ("Progress update is required")},
     )
     next_steps = forms.CharField(
@@ -123,7 +127,11 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
             "monthly reports and therefore should be appropriate for senior stakeholders "
             "(including Ministers)."
         ),
-        widget=forms.Textarea,
+        widget=forms.Textarea(
+            attrs={
+                "maxlength": "1250",
+            }
+        ),
         error_messages={"required": ("Next steps is required")},
     )
 
