@@ -359,3 +359,48 @@ class SearchTestCase(MarketAccessTestCase):
                 "has_no_information"
             ),
         )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_empty_resolution_date_filters(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["4"],
+                "resolved_date_from_month": "",
+                "resolved_date_from_year": "",
+                "resolved_date_to_month": "",
+                "resolved_date_to_year": "",
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="4",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_resolution_date_filters(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["4"],
+                "resolved_date_from_month": "01",
+                "resolved_date_from_year": "2021",
+                "resolved_date_to_month": "01",
+                "resolved_date_to_year": "2022",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="4",
+            status_date="2021-01-01,2022-01-31",
+        )
