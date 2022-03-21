@@ -8593,7 +8593,7 @@
     },
     {
       "id": 4,
-      "title": "TOP-PRIORITY BARRIER",
+      "title": "TOP 100 PRIORITY BARRIER",
       "description": "Indicator that the barrier is marked as a top priority for resolution.",
       "show_at_reporting": true,
       "order": 4

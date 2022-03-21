@@ -27,6 +27,11 @@ from barriers.views.mentions import (
     TurnNotificationsOffAndRedirect,
     TurnNotificationsOnAndRedirect,
 )
+from barriers.views.progress_updates import (
+    BarrierAddProgressUpdate,
+    BarrierEditProgressUpdate,
+    BarrierListProgressUpdate,
+)
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments.economic import (
@@ -223,6 +228,16 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/term/",
         BarrierEditTerm.as_view(),
         name="edit_term",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/list/progress_update/",
+        BarrierListProgressUpdate.as_view(),
+        name="list_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/progress_update/<uuid:progress_update_id>/",
+        BarrierEditProgressUpdate.as_view(),
+        name="edit_progress_update",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/economic-assessment-eligibility/",
@@ -680,6 +695,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/enable_hm_trade_commissioner_approvals",
         PublicBarrierLightTouchReviewsHMTradeCommissionerApprovalEnabled.as_view(),
         name="enable_hm_trade_commissioner_approvals",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/progress_updates/add",
+        BarrierAddProgressUpdate.as_view(),
+        name="add_progress_update",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(
