@@ -404,3 +404,22 @@ class SearchTestCase(MarketAccessTestCase):
             status="4",
             status_date="2021-01-01,2022-01-31",
         )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_delivery_confidence_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "delivery_confidence": "ON_TRACK",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            delivery_confidence="ON_TRACK",
+        )
