@@ -9,7 +9,8 @@ const assetsSrcPath = path.resolve(__dirname, "core/frontend/src/")
 
 const mainConfig = {
     entry: {
-        style: path.resolve(__dirname, "core/frontend/src/css/index.scss")
+        style: path.resolve(__dirname, "core/frontend/src/css/index.scss"),
+        date_filter_component: path.resolve(__dirname, "core/frontend/src/js/components/resolved_date_filter.js"),
     },
     output: {
       path: path.resolve(__dirname, "./core/frontend/dist/webpack_bundles"),

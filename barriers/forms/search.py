@@ -63,14 +63,51 @@ class BarrierSearchForm(forms.Form):
         label="Barrier status",
         required=False,
     )
-    resolved_date_from_month = forms.CharField(
+
+    # Resolved date filter inputs for status: 'Resolved: In full' - status_id is 4
+    resolved_date_from_month_4 = forms.CharField(
         label="Resolved date from", help_text="Example, 01 2021", required=False
     )
-    resolved_date_from_year = forms.CharField(required=False)
-    resolved_date_to_month = forms.CharField(
+    resolved_date_from_year_4 = forms.CharField(required=False)
+    resolved_date_to_month_4 = forms.CharField(
         label="Resolved date to", help_text="Example, 01 2022", required=False
     )
-    resolved_date_to_year = forms.CharField(required=False)
+    resolved_date_to_year_4 = forms.CharField(required=False)
+
+    # Resolved date filter inputs for status: 'Resolved: In part' - status_id is 3
+    resolved_date_from_month_3 = forms.CharField(
+        label="Resolved date from", help_text="Example, 01 2021", required=False
+    )
+    resolved_date_from_year_3 = forms.CharField(required=False)
+    resolved_date_to_month_3 = forms.CharField(
+        label="Resolved date to", help_text="Example, 01 2022", required=False
+    )
+    resolved_date_to_year_3 = forms.CharField(required=False)
+
+    # Estimated resolved date filter inputs for status: 'Open: In progress' - status_id is 2
+    resolved_date_from_month_2 = forms.CharField(
+        label="Estimated resolved date from",
+        help_text="Example, 01 2021",
+        required=False,
+    )
+    resolved_date_from_year_2 = forms.CharField(required=False)
+    resolved_date_to_month_2 = forms.CharField(
+        label="Estimated resolved date to", help_text="Example, 01 2022", required=False
+    )
+    resolved_date_to_year_2 = forms.CharField(required=False)
+
+    # Estimated resolved date filter inputs for status: 'Open: Pending action' - status_id is 1
+    resolved_date_from_month_1 = forms.CharField(
+        label="Estimated resolved date from",
+        help_text="Example, 01 2021",
+        required=False,
+    )
+    resolved_date_from_year_1 = forms.CharField(required=False)
+    resolved_date_to_month_1 = forms.CharField(
+        label="Estimated resolved date to", help_text="Example, 01 2022", required=False
+    )
+    resolved_date_to_year_1 = forms.CharField(required=False)
+
     tags = forms.MultipleChoiceField(
         label="Tags",
         required=False,
@@ -214,10 +251,12 @@ class BarrierSearchForm(forms.Form):
             "top_priority": data.getlist("top_priority"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
-            "resolved_date_from_month": data.get("resolved_date_from_month"),
-            "resolved_date_from_year": data.get("resolved_date_from_year"),
-            "resolved_date_to_month": data.get("resolved_date_to_month"),
-            "resolved_date_to_year": data.get("resolved_date_to_year"),
+            #
+            # "resolved_date_from_month": data.get("resolved_date_from_month"),
+            # "resolved_date_from_year": data.get("resolved_date_from_year"),
+            # "resolved_date_to_month": data.get("resolved_date_to_month"),
+            # "resolved_date_to_year": data.get("resolved_date_to_year"),
+            #
             "tags": data.getlist("tags"),
             "delivery_confidence": data.getlist("delivery_confidence"),
             "has_action_plan": data.get("has_action_plan"),
@@ -235,6 +274,21 @@ class BarrierSearchForm(forms.Form):
             "commodity_code": data.getlist("commodity_code"),
             "commercial_value_estimate": data.getlist("commercial_value_estimate"),
         }
+
+        for status_value in (1, 2, 3, 4):
+            cleaned_data[f"resolved_date_from_month_{status_value}"] = data.get(
+                f"resolved_date_from_month_{status_value}"
+            )
+            cleaned_data[f"resolved_date_from_year_{status_value}"] = data.get(
+                f"resolved_date_from_year_{status_value}"
+            )
+            cleaned_data[f"resolved_date_to_month_{status_value}"] = data.get(
+                f"resolved_date_to_month_{status_value}"
+            )
+            cleaned_data[f"resolved_date_to_year_{status_value}"] = data.get(
+                f"resolved_date_to_year_{status_value}"
+            )
+
         return {k: v for k, v in cleaned_data.items() if v}
 
     def set_country_choices(self):
@@ -406,10 +460,11 @@ class BarrierSearchForm(forms.Form):
         else:
             # Clear resolved date filters if requesting a resolved status filter removal
             if field_name == "status":
-                params.pop("resolved_date_from_month", None)
-                params.pop("resolved_date_from_year", None)
-                params.pop("resolved_date_to_month", None)
-                params.pop("resolved_date_to_year", None)
+                for status in (1, 2, 3, 4):
+                    params.pop(f"resolved_date_from_month_{status}", None)
+                    params.pop(f"resolved_date_from_year_{status}", None)
+                    params.pop(f"resolved_date_to_month_{status}", None)
+                    params.pop(f"resolved_date_to_year_{status}", None)
 
             del params[field_name]
 
@@ -437,7 +492,10 @@ class BarrierSearchForm(forms.Form):
             self.cleaned_data.get("tags", [])
             + self.cleaned_data.get("top_priority", [])
         )
-        params["status_date"] = self.format_resolved_date()
+        for status_id_value in (1, 2, 3, 4):
+            params[f"status_date_{status_id_value}"] = self.format_resolved_date(
+                status_id_value
+            )
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
         )
@@ -467,17 +525,17 @@ class BarrierSearchForm(forms.Form):
 
         return {k: v for k, v in params.items() if v}
 
-    def format_resolved_date(self):
+    def format_resolved_date(self, status):
         """
         Format the resolved date input to be compatible with the API's queryset filter
         Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates
         Users only input the month and year, so we need to generate a day value.
         """
 
-        from_year = self.cleaned_data.get("resolved_date_from_year")
-        from_month = self.cleaned_data.get("resolved_date_from_month")
-        to_year = self.cleaned_data.get("resolved_date_to_year")
-        to_month = self.cleaned_data.get("resolved_date_to_month")
+        from_year = self.cleaned_data.get(f"resolved_date_from_year_{status}")
+        from_month = self.cleaned_data.get(f"resolved_date_from_month_{status}")
+        to_year = self.cleaned_data.get(f"resolved_date_to_year_{status}")
+        to_month = self.cleaned_data.get(f"resolved_date_to_month_{status}")
 
         if from_year and from_month and to_year and to_month:
 
