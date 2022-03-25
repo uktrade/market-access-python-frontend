@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.views.generic import FormView
 
 from barriers.forms.edit import (
-    UpdateBarrierEndDateForm,
+    UpdateBarrierEstimatedResolutionDateForm,
     UpdateBarrierPriorityForm,
     UpdateBarrierProductForm,
     UpdateBarrierSourceForm,
@@ -87,12 +87,12 @@ class BarrierEditTerm(APIBarrierFormViewMixin, FormView):
             return {"term": self.barrier.term["id"]}
 
 
-class BarrierEditEndDate(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/end_date.html"
-    form_class = UpdateBarrierEndDateForm
+class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/estimated_resolution_date.html"
+    form_class = UpdateBarrierEstimatedResolutionDateForm
 
     def get_initial(self):
-        return {"end_date": self.barrier.end_date}
+        return {"estimated_resolution_date": self.barrier.estimated_resolution_date}
 
 
 class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):

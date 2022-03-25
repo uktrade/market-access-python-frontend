@@ -148,9 +148,9 @@ class EconomicAssessmentEligibilitySummaryHistoryItem(BaseHistoryItem):
     field_name = "Economic assessment: Eligibility summary"
 
 
-class EndDateHistoryItem(BaseHistoryItem):
-    field = "end_date"
-    field_name = "End date"
+class EstimatedResolutionDateHistoryItem(BaseHistoryItem):
+    field = "estimated_resolution_date"
+    field_name = "Estimated resolution date"
 
     def get_value(self, value):
         if value:
@@ -317,7 +317,7 @@ class BarrierHistoryItem(PolymorphicBase):
         CompaniesHistoryItem,
         EconomicAssessmentEligibilityHistoryItem,
         EconomicAssessmentEligibilitySummaryHistoryItem,
-        EndDateHistoryItem,
+        EstimatedResolutionDateHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
         OrganisationHistoryItem,

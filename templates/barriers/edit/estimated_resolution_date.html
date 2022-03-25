@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit end date{% endblock %}
+{% block page_title %}{{ block.super }} - Edit estimated resolution date{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -10,8 +10,8 @@
 
     {% include 'partials/heading.html' with text='Update the Barrier' %}
 
-    {% if barrier.end_date %}
-        <div class="govuk-inset-text">Current end date is <strong>{{ barrier.end_date|date:"j F Y" }}</strong></div>
+    {% if barrier.estimated_resolution_date %}
+        <div class="govuk-inset-text">Current estimated resolution date is <strong>{{ barrier.estimated_resolution_date|date:"j F Y" }}</strong></div>
     {% endif %}
 
     {% form_error_banner form %}
@@ -19,24 +19,24 @@
     <form action="" method="POST">
         {% csrf_token %}
 
-        <div id="{{ form.end_date.name }}" class="{% form_group_classes form.end_date.errors %}">
+        <div id="{{ form.estimated_resolution_date.name }}" class="{% form_group_classes form.estimated_resolution_date.errors %}">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.end_date.label }}</legend>
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.estimated_resolution_date.label }}</legend>
 
-                <span class="govuk-hint">{{ form.end_date.help_text }}</span>
+                <span class="govuk-hint">{{ form.estimated_resolution_date.help_text }}</span>
 
-                {% form_field_error form "end_date" %}
+                {% form_field_error form "estimated_resolution_date" %}
 
                 <div class="govuk-date-input">
-                    {{ form.end_date }}
+                    {{ form.estimated_resolution_date }}
                 </div>
             </fieldset>
         </div>
 
-        {% if barrier.end_date %}
+        {% if barrier.estimated_resolution_date %}
             <div>
                 <button class="govuk-button govuk-button--secondary" data-module="govuk-button" name="clear" value="1">
-                    Remove end date and exit to barrier
+                    Remove estimated resolution date and exit to barrier
                 </button>
             </div>
         {% endif %}

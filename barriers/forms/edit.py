@@ -4,7 +4,7 @@ from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ChoiceFieldWithHelpText,
     ClearableMixin,
-    DayMonthYearField,
+    MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
     YesNoDontKnowBooleanField,
@@ -287,30 +287,35 @@ class UpdateBarrierTermForm(APIFormMixin, forms.Form):
         client.barriers.patch(id=self.id, term=self.cleaned_data["term"])
 
 
-class UpdateBarrierEndDateForm(ClearableMixin, APIFormMixin, forms.Form):
-    end_date = DayMonthYearField(
-        label="End date",
-        help_text=(
-            "For example, 30 11 2020. If you don't know the day, please enter 1 for "
-            "the first of the month."
-        ),
-        error_messages={"required": "Enter the end date"},
+class UpdateBarrierEstimatedResolutionDateForm(
+    ClearableMixin, APIFormMixin, forms.Form
+):
+    estimated_resolution_date = MonthYearInFutureField(
+        label="Estimated resolution date",
+        help_text=("For example, 11 2020"),
+        error_messages={"required": "Enter the estimated resolution date"},
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        end_date = kwargs.get("initial", {}).get("end_date")
-        if end_date:
-            self.fields["end_date"].label = "Change end date"
+        estimated_resolution_date = kwargs.get("initial", {}).get(
+            "estimated_resolution_date"
+        )
+        if estimated_resolution_date:
+            self.fields[
+                "estimated_resolution_date"
+            ].label = "Change estimated resolution date"
 
-    def clean_end_date(self):
-        return self.cleaned_data["end_date"].isoformat()
+    def clean_estimated_resolution_date(self):
+        return self.cleaned_data["estimated_resolution_date"].isoformat()
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.barriers.patch(
             id=self.id,
-            end_date=self.cleaned_data.get("end_date"),
+            estimated_resolution_date=self.cleaned_data.get(
+                "estimated_resolution_date"
+            ),
         )
 
 
