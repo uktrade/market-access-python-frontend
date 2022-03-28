@@ -7,6 +7,8 @@ from urllib.parse import urlencode
 from django import forms
 from django.http import QueryDict
 
+from barriers.constants import STATUS_WITH_DATE_FILTER
+
 logger = logging.getLogger(__name__)
 
 
@@ -65,48 +67,48 @@ class BarrierSearchForm(forms.Form):
     )
 
     # Resolved date filter inputs for status: 'Resolved: In full' - status_id is 4
-    resolved_date_from_month_4 = forms.CharField(
+    resolved_date_from_month_resolved_in_full = forms.CharField(
         label="Resolved date from", help_text="Example, 01 2021", required=False
     )
-    resolved_date_from_year_4 = forms.CharField(required=False)
-    resolved_date_to_month_4 = forms.CharField(
+    resolved_date_from_year_resolved_in_full = forms.CharField(required=False)
+    resolved_date_to_month_resolved_in_full = forms.CharField(
         label="Resolved date to", help_text="Example, 01 2022", required=False
     )
     resolved_date_to_year_4 = forms.CharField(required=False)
 
     # Resolved date filter inputs for status: 'Resolved: In part' - status_id is 3
-    resolved_date_from_month_3 = forms.CharField(
+    resolved_date_from_month_resolved_in_part = forms.CharField(
         label="Resolved date from", help_text="Example, 01 2021", required=False
     )
-    resolved_date_from_year_3 = forms.CharField(required=False)
-    resolved_date_to_month_3 = forms.CharField(
+    resolved_date_from_year_resolved_in_part = forms.CharField(required=False)
+    resolved_date_to_month_resolved_in_part = forms.CharField(
         label="Resolved date to", help_text="Example, 01 2022", required=False
     )
-    resolved_date_to_year_3 = forms.CharField(required=False)
+    resolved_date_to_year_resolved_in_part = forms.CharField(required=False)
 
     # Estimated resolved date filter inputs for status: 'Open: In progress' - status_id is 2
-    resolved_date_from_month_2 = forms.CharField(
+    resolved_date_from_month_open_in_progress = forms.CharField(
         label="Estimated resolved date from",
         help_text="Example, 01 2021",
         required=False,
     )
-    resolved_date_from_year_2 = forms.CharField(required=False)
-    resolved_date_to_month_2 = forms.CharField(
+    resolved_date_from_year_open_in_progress = forms.CharField(required=False)
+    resolved_date_to_month_open_in_progress = forms.CharField(
         label="Estimated resolved date to", help_text="Example, 01 2022", required=False
     )
-    resolved_date_to_year_2 = forms.CharField(required=False)
+    resolved_date_to_year_open_in_progress = forms.CharField(required=False)
 
     # Estimated resolved date filter inputs for status: 'Open: Pending action' - status_id is 1
-    resolved_date_from_month_1 = forms.CharField(
+    resolved_date_from_month_open_pending_action = forms.CharField(
         label="Estimated resolved date from",
         help_text="Example, 01 2021",
         required=False,
     )
-    resolved_date_from_year_1 = forms.CharField(required=False)
-    resolved_date_to_month_1 = forms.CharField(
+    resolved_date_from_year_open_pending_action = forms.CharField(required=False)
+    resolved_date_to_month_open_pend_action = forms.CharField(
         label="Estimated resolved date to", help_text="Example, 01 2022", required=False
     )
-    resolved_date_to_year_1 = forms.CharField(required=False)
+    resolved_date_to_year_open_pending_action = forms.CharField(required=False)
 
     tags = forms.MultipleChoiceField(
         label="Tags",
@@ -251,12 +253,6 @@ class BarrierSearchForm(forms.Form):
             "top_priority": data.getlist("top_priority"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
-            #
-            # "resolved_date_from_month": data.get("resolved_date_from_month"),
-            # "resolved_date_from_year": data.get("resolved_date_from_year"),
-            # "resolved_date_to_month": data.get("resolved_date_to_month"),
-            # "resolved_date_to_year": data.get("resolved_date_to_year"),
-            #
             "tags": data.getlist("tags"),
             "delivery_confidence": data.getlist("delivery_confidence"),
             "has_action_plan": data.get("has_action_plan"),
@@ -275,7 +271,7 @@ class BarrierSearchForm(forms.Form):
             "commercial_value_estimate": data.getlist("commercial_value_estimate"),
         }
 
-        for status_value in (1, 2, 3, 4):
+        for status_value in STATUS_WITH_DATE_FILTER:
             cleaned_data[f"resolved_date_from_month_{status_value}"] = data.get(
                 f"resolved_date_from_month_{status_value}"
             )
@@ -460,7 +456,7 @@ class BarrierSearchForm(forms.Form):
         else:
             # Clear resolved date filters if requesting a resolved status filter removal
             if field_name == "status":
-                for status in (1, 2, 3, 4):
+                for status in STATUS_WITH_DATE_FILTER:
                     params.pop(f"resolved_date_from_month_{status}", None)
                     params.pop(f"resolved_date_from_year_{status}", None)
                     params.pop(f"resolved_date_to_month_{status}", None)
@@ -492,7 +488,7 @@ class BarrierSearchForm(forms.Form):
             self.cleaned_data.get("tags", [])
             + self.cleaned_data.get("top_priority", [])
         )
-        for status_id_value in (1, 2, 3, 4):
+        for status_id_value in STATUS_WITH_DATE_FILTER:
             params[f"status_date_{status_id_value}"] = self.format_resolved_date(
                 status_id_value
             )
