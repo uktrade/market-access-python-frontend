@@ -8,7 +8,7 @@ open_pending_action_checkbox.addEventListener("change", (event) => {
         showDateFilter(open_pending_action_date_filter);
     } else {
         hideDateFilter(open_pending_action_date_filter);
-        clearDateFilter(1);
+        clearDateFilter("open_pending_action");
     }
 });
 
@@ -21,7 +21,7 @@ open_in_progress_checkbox.addEventListener("change", (event) => {
         showDateFilter(open_in_progress_date_filter);
     } else {
         hideDateFilter(open_in_progress_date_filter);
-        clearDateFilter(2);
+        clearDateFilter("open_in_progress");
     }
 });
 
@@ -34,7 +34,7 @@ resolved_in_part_checkbox.addEventListener("change", (event) => {
         showDateFilter(resolved_in_part_date_filter);
     } else {
         hideDateFilter(resolved_in_part_date_filter);
-        clearDateFilter(3);
+        clearDateFilter("resolved_in_part");
     }
 });
 
@@ -47,7 +47,7 @@ resolved_in_full_checkbox.addEventListener("change", (event) => {
         showDateFilter(resolved_in_full_date_filter);
     } else {
         hideDateFilter(resolved_in_full_date_filter);
-        clearDateFilter(4);
+        clearDateFilter("resolved_in_full");
     }
 });
 
@@ -59,9 +59,9 @@ function hideDateFilter(date_filter) {
     date_filter.setAttribute("hidden", true);
 }
 
-function clearDateFilter(status_id) {
-    document.getElementById(`resolved_date_from_month_${status_id}`).value = "";
-    document.getElementById(`resolved_date_from_year_${status_id}`).value = "";
-    document.getElementById(`resolved_date_to_month_${status_id}`).value = "";
-    document.getElementById(`resolved_date_to_month_${status_id}`).value = "";
+function clearDateFilter(status) {
+    document.getElementById(`resolved_date_from_month_${status}`).value = "";
+    document.getElementById(`resolved_date_from_year_${status}`).value = "";
+    document.getElementById(`resolved_date_to_month_${status}`).value = "";
+    document.getElementById(`resolved_date_to_year_${status}`).value = "";
 }

@@ -74,7 +74,7 @@ class BarrierSearchForm(forms.Form):
     resolved_date_to_month_resolved_in_full = forms.CharField(
         label="Resolved date to", help_text="Example, 01 2022", required=False
     )
-    resolved_date_to_year_4 = forms.CharField(required=False)
+    resolved_date_to_year_resolved_in_full = forms.CharField(required=False)
 
     # Resolved date filter inputs for status: 'Resolved: In part' - status_id is 3
     resolved_date_from_month_resolved_in_part = forms.CharField(
@@ -105,7 +105,7 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     resolved_date_from_year_open_pending_action = forms.CharField(required=False)
-    resolved_date_to_month_open_pend_action = forms.CharField(
+    resolved_date_to_month_open_pending_action = forms.CharField(
         label="Estimated resolved date to", help_text="Example, 01 2022", required=False
     )
     resolved_date_to_year_open_pending_action = forms.CharField(required=False)
