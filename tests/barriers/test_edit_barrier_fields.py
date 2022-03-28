@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 import dateutil.parser
@@ -5,6 +6,8 @@ from django.urls import reverse
 from mock import patch
 
 from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class EditTitleTestCase(MarketAccessTestCase):
@@ -419,8 +422,7 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
             ),
             data={
                 "estimated_resolution_date_0": "50",
-                "estimated_resolution_date_1": "1",
-                "estimated_resolution_date_2": "2022",
+                "estimated_resolution_date_1": "2022",
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -437,9 +439,8 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "estimated_resolution_date_0": "24",
-                "estimated_resolution_date_1": "",
-                "estimated_resolution_date_2": "2022",
+                "estimated_resolution_date_0": "",
+                "estimated_resolution_date_1": "2022",
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -457,14 +458,13 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "estimated_resolution_date_0": "25",
-                "estimated_resolution_date_1": "6",
-                "estimated_resolution_date_2": "2022",
+                "estimated_resolution_date_0": "6",
+                "estimated_resolution_date_1": "2022",
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            estimated_resolution_date="2022-06-25",
+            estimated_resolution_date="2022-06-01",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -477,9 +477,8 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "estimated_resolution_date_0": "25",
-                "estimated_resolution_date_1": "6",
-                "estimated_resolution_date_2": "2022",
+                "estimated_resolution_date_0": "6",
+                "estimated_resolution_date_1": "2022",
                 "clear": "1",
             },
         )

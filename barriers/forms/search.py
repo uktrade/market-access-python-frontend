@@ -488,9 +488,9 @@ class BarrierSearchForm(forms.Form):
             self.cleaned_data.get("tags", [])
             + self.cleaned_data.get("top_priority", [])
         )
-        for status_id_value in STATUS_WITH_DATE_FILTER:
-            params[f"status_date_{status_id_value}"] = self.format_resolved_date(
-                status_id_value
+        for status_value in STATUS_WITH_DATE_FILTER:
+            params[f"status_date_{status_value}"] = self.format_resolved_date(
+                status_value
             )
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
