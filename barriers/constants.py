@@ -28,6 +28,14 @@ STATUSES = Choices(
 )
 
 
+STATUS_WITH_DATE_FILTER = [
+    "open_pending_action",
+    "open_in_progress",
+    "resolved_in_part",
+    "resolved_in_full",
+]
+
+
 ALL_STATUSES = (
     Choices(
         ("7", "UNKNOWN", "Unknown"),

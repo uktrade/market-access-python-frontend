@@ -58,6 +58,11 @@
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
+                {% if settings.MINISTERIAL_REPORTS_FUNCTIONALITY %}
+                    <!-- Include JS component for resolved date filtering -->
+                    {% render_bundle 'date_filter_component' %}
+                {% endif%}
+
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
                         <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Show</legend>

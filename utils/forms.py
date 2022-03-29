@@ -248,6 +248,10 @@ class MonthYearField(forms.MultiValueField):
             return datetime.date(year, month, 1)
 
 
+class MonthYearInFutureField(MonthYearField):
+    default_validators = []
+
+
 class DayMonthYearWidget(forms.MultiWidget):
     template_name = "partials/forms/widgets/day_month_year_widget.html"
 

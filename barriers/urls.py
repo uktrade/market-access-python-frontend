@@ -83,7 +83,7 @@ from .views.edit import (
     BarrierEditCausedByTradingBloc,
     BarrierEditCommercialValue,
     BarrierEditEconomicAssessmentEligibility,
-    BarrierEditEndDate,
+    BarrierEditEstimatedResolutionDate,
     BarrierEditPriority,
     BarrierEditProduct,
     BarrierEditSource,
@@ -245,9 +245,9 @@ urlpatterns = [
         name="economic_assessment_eligibility",
     ),
     path(
-        "barriers/<uuid:barrier_id>/edit/end-date/",
-        BarrierEditEndDate.as_view(),
-        name="edit_end_date",
+        "barriers/<uuid:barrier_id>/edit/estimated-resolution-date/",
+        BarrierEditEstimatedResolutionDate.as_view(),
+        name="edit_estimated_resolution_date",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/commercial-value/",
