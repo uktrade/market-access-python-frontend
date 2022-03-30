@@ -112,12 +112,10 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
             " for monthly reports and therefore should be appropriate for senior stakeholders"
             " (including Ministers)."
         ),
-        widget=forms.Textarea(
-            attrs={
-                "maxlength": "1250",
-            }
-        ),
-        error_messages={"required": ("Progress update is required")},
+        widget=forms.Textarea,
+        error_messages={
+            "required": ("Progress update is required"),
+        },
     )
     next_steps = forms.CharField(
         label="Next steps",
@@ -127,11 +125,7 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
             "monthly reports and therefore should be appropriate for senior stakeholders "
             "(including Ministers)."
         ),
-        widget=forms.Textarea(
-            attrs={
-                "maxlength": "1250",
-            }
-        ),
+        widget=forms.Textarea,
         error_messages={"required": ("Next steps is required")},
     )
 

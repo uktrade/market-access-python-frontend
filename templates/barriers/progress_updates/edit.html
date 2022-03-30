@@ -43,7 +43,7 @@
             <span class="govuk-hint">{{ form.update.help_text }}</span>
 
 
-            <textarea class="govuk-textarea" name="{{ form.update.name }}" rows="5">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
+            <textarea class="govuk-textarea" name="{{ form.update.name }}" rows="5" maxlength="1250">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
         </div>
 
         <div id="{{ form.next_steps.name }}" class="govuk-form-group{% if form.next_steps.errors %} govuk-form-group--error{% endif %}">
@@ -53,7 +53,7 @@
             <span class="govuk-hint">{{ form.next_steps.help_text }}</span>
 
 
-            <textarea class="govuk-textarea" name="{{ form.next_steps.name }}" rows="5">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
+            <textarea class="govuk-textarea" name="{{ form.next_steps.name }}" rows="5" maxlength="1250">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
         </div>
 
 
