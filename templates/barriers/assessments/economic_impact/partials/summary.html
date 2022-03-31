@@ -1,4 +1,6 @@
 
+{{ barrier.current_economic_impact_assessment }}
+
 {% with assessment=barrier.current_economic_impact_assessment %}
     {% if assessment %}
         <div class="assessment-item__section">
@@ -40,8 +42,6 @@
         {% endif %}
     {% endif %}
 {% endwith %}
-
-
 
 {% if barrier.archived_economic_impact_assessments %}
     <div class="assessment-item__section">
