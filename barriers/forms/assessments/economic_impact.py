@@ -39,7 +39,7 @@ class EconomicImpactAssessmentForm(forms.Form):
                 id=self.economic_impact_assessment.id,
                 **self.cleaned_data,
             )
-        elif self.economic_assessment:
+        else:
             client.economic_impact_assessments.create(
                 economic_assessment_id=self.economic_assessment.id,
                 **self.cleaned_data,
