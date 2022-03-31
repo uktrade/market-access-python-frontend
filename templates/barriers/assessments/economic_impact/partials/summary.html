@@ -28,18 +28,13 @@
             </div>
         {% endif %}
 
-        {% if current_user|has_permission:"add_economicimpactassessment" %}
-            <div class="assessment-item__section">
-                <a href="{% url 'barriers:add_economic_impact_assessment' barrier.id %}">Add valuation assessment</a>
-                <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
-            </div>
-        {% elif not barrier.current_economic_impact_assessment %}
-            <div class="assessment-item__section">
-                <p>No valuation assessment</p>
-                <p class="assessment-item-content__hint">sing trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
-            </div>
-        {% endif %}
-    {% endwith %}
+{% endif %}
+
+{% if current_user|has_permission:"add_economicimpactassessment" %}
+    <div class="assessment-item__section">
+        <a href="{% url 'barriers:add_economic_impact_assessment' barrier.id %}">Add valuation assessment</a>
+        <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
+    </div>
 {% else %}
     <div class="assessment-item__section">
         <p>No valuation assessment</p>
