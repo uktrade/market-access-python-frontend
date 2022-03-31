@@ -48,6 +48,10 @@
                     </div>
                 </fieldset>
             </div>
+        {% else %}
+            <div id="existing_{{ form.top_barrier.name }}">
+                <input type="hidden" id="{{ form.top_barrier.name }}" name="{{ form.top_barrier.name }}" value={{ form.top_barrier.value }}>
+            </div>
         {% endif %}
 
         <div id="{{ form.priority_summary.name }}" class="govuk-form-group{% if form.priority_summary.errors %} govuk-form-group--error{% endif %}">
