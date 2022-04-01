@@ -7,7 +7,7 @@
             "id": 2,
             "name": "A long-term strategic barrier"
         },
-        "end_date": "2022-08-31",
+        "estimated_resolution_date": "2022-08-31",
         "is_resolved": false,
         "resolved_date": null,
         "country": {

@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 import dateutil.parser
@@ -5,6 +6,8 @@ from django.urls import reverse
 from mock import patch
 
 from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class EditTitleTestCase(MarketAccessTestCase):
@@ -381,111 +384,107 @@ class EditTermTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
-class EditEndDateTestCase(MarketAccessTestCase):
-    def test_edit_end_date_has_initial_data(self):
+class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
+    def test_edit_estimated_resolution_date_has_initial_data(self):
         response = self.client.get(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             )
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["end_date"] == dateutil.parser.parse(
-            self.barrier["end_date"]
+        assert form.initial["estimated_resolution_date"] == dateutil.parser.parse(
+            self.barrier["estimated_resolution_date"]
         )
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_end_date_cannot_be_empty(self, mock_patch):
+    def test_estimated_resolution_date_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "end_date" in form.errors
+        assert "estimated_resolution_date" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_end_date_bad_data_gets_error(self, mock_patch):
+    def test_estimated_resolution_date_bad_data_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "50",
-                "end_date_1": "1",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "50",
+                "estimated_resolution_date_1": "2022",
             },
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "end_date" in form.errors
+        assert "estimated_resolution_date" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_end_date_incomplete_data_gets_error(self, mock_patch):
+    def test_estimated_resolution_date_incomplete_data_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "24",
-                "end_date_1": "",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "",
+                "estimated_resolution_date_1": "2022",
             },
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "end_date" in form.errors
+        assert "estimated_resolution_date" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_end_date_calls_api(self, mock_patch):
+    def test_edit_estimated_resolution_date_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "25",
-                "end_date_1": "6",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "6",
+                "estimated_resolution_date_1": "2022",
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            end_date="2022-06-25",
+            estimated_resolution_date="2022-06-01",
         )
         assert response.status_code == HTTPStatus.FOUND
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_clear_end_date_calls_api(self, mock_patch):
+    def test_clear_estimated_resolution_date_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "25",
-                "end_date_1": "6",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "6",
+                "estimated_resolution_date_1": "2022",
                 "clear": "1",
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            end_date=None,
+            estimated_resolution_date=None,
         )
         assert response.status_code == HTTPStatus.FOUND
 

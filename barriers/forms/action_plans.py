@@ -12,12 +12,13 @@ from barriers.constants import (
 )
 from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import ClearableMixin, MonthYearField, SubformChoiceField, SubformMixin
+from utils.forms import (
+    ClearableMixin,
+    MonthYearInFutureField,
+    SubformChoiceField,
+    SubformMixin,
+)
 from utils.sso import SSOClient
-
-
-class MonthYearInFutureField(MonthYearField):
-    default_validators = []
 
 
 class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):

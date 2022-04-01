@@ -55,9 +55,9 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["created_on"])
 
     @property
-    def end_date(self):
-        if self.data.get("end_date"):
-            return dateutil.parser.parse(self.data["end_date"])
+    def estimated_resolution_date(self):
+        if self.data.get("estimated_resolution_date"):
+            return dateutil.parser.parse(self.data["estimated_resolution_date"])
 
     @property
     def commodities(self):

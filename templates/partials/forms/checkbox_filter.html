@@ -21,28 +21,32 @@
                       {{ text|safe }}
                     </label>
 
-                    <!-- Section to display resolved date input, only displayed when loading the barrier status block-->
-                    {% if text == "Resolved: In full" and settings.MINISTERIAL_REPORTS_FUNCTIONALITY %}
-                        <div id="resolved_date_filter" hidden>
-                            {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month field_year=form.resolved_date_from_year %}
-                            {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month field_year=form.resolved_date_to_year %}
-                        </div>
-                        <script>
-                            //status-4 is the checkbox for status "Resolved: In full"
-                            const checkbox = document.getElementById('status-4')
-                            let date_filter = document.getElementById('resolved_date_filter');
-                            checkbox.addEventListener('change', (event) => {
-                              if (event.currentTarget.checked) {
-                                date_filter.removeAttribute("hidden");
-                              } else {
-                                date_filter.setAttribute("hidden", true);
-                                document.getElementById('resolved_date_from_month').value = '';
-                                document.getElementById('resolved_date_from_year').value = '';
-                                document.getElementById('resolved_date_to_month').value = '';
-                                document.getElementById('resolved_date_to_month').value = '';
-                              }
-                            })
-                        </script>
+                    {% if settings.MINISTERIAL_REPORTS_FUNCTIONALITY %}
+                        <!-- Sections to display resolved date input, only displayed when loading the barrier status block-->
+                        {% if text == "Open: Pending action" %}
+                            <div id="resolved_date_filter_open_pending_action" hidden>
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_open_pending_action field_year=form.resolved_date_from_year_open_pending_action %}
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_open_pending_action field_year=form.resolved_date_to_year_open_pending_action %}
+                            </div>
+                        {% endif %}
+                        {% if text == "Open: In progress" %}
+                            <div id="resolved_date_filter_open_in_progress" hidden>
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_open_in_progress field_year=form.resolved_date_from_year_open_in_progress %}
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_open_in_progress field_year=form.resolved_date_to_year_open_in_progress %}
+                            </div>
+                        {% endif %}
+                        {% if text == "Resolved: In part" %}
+                            <div id="resolved_date_filter_resolved_in_part" hidden>
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_resolved_in_part field_year=form.resolved_date_from_year_resolved_in_part %}
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_resolved_in_part field_year=form.resolved_date_to_year_resolved_in_part %}
+                            </div>
+                        {% endif %}
+                        {% if text == "Resolved: In full" %}
+                            <div id="resolved_date_filter_resolved_in_full" hidden>
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_resolved_in_full field_year=form.resolved_date_from_year_resolved_in_full %}
+                                {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_resolved_in_full field_year=form.resolved_date_to_year_resolved_in_full %}
+                            </div>
+                        {% endif %}
                     {% endif %}
 
                 </div>
