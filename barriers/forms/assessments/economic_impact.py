@@ -27,6 +27,7 @@ class EconomicImpactAssessmentForm(forms.Form):
         **kwargs
     ):
         self.token = kwargs.pop("token")
+        self.barrier = kwargs.pop("barrier")
         self.economic_assessment = economic_assessment
         self.economic_impact_assessment = economic_impact_assessment
         super().__init__(*args, **kwargs)
