@@ -39,9 +39,16 @@ class EconomicImpactAssessmentForm(forms.Form):
                 id=self.economic_impact_assessment.id,
                 **self.cleaned_data,
             )
-        else:
+        elif self.economic_assessment:
             client.economic_impact_assessments.create(
                 economic_assessment_id=self.economic_assessment.id,
+                barrier_id=self.barrier.id,
+                **self.cleaned_data,
+            )
+        else:
+            # case where a barrier has no pre-existing economic assessment
+            client.economic_impact_assessments.create(
+                barrier_id=self.barrier.id,
                 **self.cleaned_data,
             )
 
