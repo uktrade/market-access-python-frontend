@@ -3,6 +3,7 @@ import dateutil.parser
 from barriers.constants import PUBLIC_BARRIER_STATUSES
 from barriers.models.assessments import (
     EconomicAssessment,
+    EconomicImpactAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
 )
@@ -149,6 +150,14 @@ class Barrier(APIModel):
         for assessment in self.valuation_assessments:
             if assessment.archived is False:
                 return assessment
+
+    @property
+    def valuation_assessments(self):
+        if self._valuation_assessments is None:
+            self._valuation_assessments = [
+                EconomicImpactAssessment(assessment)
+                for assessment in self.data.get("valuation_assessments", [])
+            ]
 
     @property
     def archived_resolvability_assessments(self):
