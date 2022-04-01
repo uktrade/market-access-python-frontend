@@ -141,23 +141,24 @@ class Barrier(APIModel):
     def archived_economic_impact_assessments(self):
         return [
             assessment
-            for assessment in self.valuation_assessments
+            for assessment in self.economic_impact_assessments
             if assessment.archived is True
         ]
 
     @property
     def current_economic_impact_assessment(self):
-        for assessment in self.valuation_assessments:
+        for assessment in self.economic_impact_assessments:
             if assessment.archived is False:
                 return assessment
 
     @property
-    def valuation_assessments(self):
-        if self._valuation_assessments is None:
-            self._valuation_assessments = [
+    def economic_impact_assessments(self):
+        if self._economic_impact_assessments is None:
+            self._economic_impact_assessments = [
                 EconomicImpactAssessment(assessment)
                 for assessment in self.data.get("valuation_assessments", [])
             ]
+        return self._economic_impact_assessments
 
     @property
     def archived_resolvability_assessments(self):
