@@ -43,13 +43,17 @@
 
                     <div class="govuk-radios">
                         {% for value, name in form.fields.top_barrier.choices %}
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value %}checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="{{ form.top_barrier.name }}-{{ forloop.counter }}">{{ name }}</label>
-                        </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value %}checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="{{ form.top_barrier.name }}-{{ forloop.counter }}">{{ name }}</label>
+                            </div>
                         {% endfor %}
                     </div>
                 </fieldset>
+            </div>
+        {% else %}
+            <div id="existing_{{ form.top_barrier.name }}">
+                <input type="hidden" id="{{ form.top_barrier.name }}" name="{{ form.top_barrier.name }}" value={{ form.top_barrier.value }}>
             </div>
         {% endif %}
 
