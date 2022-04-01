@@ -25,6 +25,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
         mock_create.assert_called_with(
             economic_assessment_id=15,
             impact="3",
+            barrier_id="3e12dd72-8b51-43ec-8269-a173031a0eee",
             explanation="Explanation...",
         )
 
