@@ -52,7 +52,7 @@
                 <span class="govuk-hint">{{ form.update.help_text }}</span>
 
 
-                <textarea class="govuk-textarea" name="{{ form.update.name }}" rows="5" maxlength="1250">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
+                <textarea class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.update.name }}" rows="5" maxlength="1250">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
             </div>
             <div id="{{ form.update.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
               You can enter up to 1250 characters
@@ -66,7 +66,7 @@
                 {% form_field_error form "next_steps" %}
                 <span class="govuk-hint">{{ form.next_steps.help_text }}</span>
 
-                <textarea class="govuk-textarea" name="{{ form.next_steps.name }}" rows="5" maxlength="1250">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
+                <textarea class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_steps.name }}" rows="5" maxlength="1250">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
             </div>
             <div id="{{ form.next_steps.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
             You can enter up to 1250 characters
