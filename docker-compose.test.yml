@@ -13,6 +13,7 @@ services:
       - "9881:9000"
     networks:
       - market-access-api_webnet
+    command: ./manage.py runserver 0:9000
   chrome:
     image: selenium/standalone-chrome
     ports:
