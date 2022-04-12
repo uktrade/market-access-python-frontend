@@ -3,6 +3,7 @@ import dateutil.parser
 from barriers.constants import PUBLIC_BARRIER_STATUSES
 from barriers.models.assessments import (
     EconomicAssessment,
+    EconomicImpactAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
 )
@@ -153,13 +154,10 @@ class Barrier(APIModel):
     @property
     def economic_impact_assessments(self):
         if self._economic_impact_assessments is None:
-            self._economic_impact_assessments = []
-            for economic_assessment in self.economic_assessments:
-                for (
-                    economic_impact_assessment
-                ) in economic_assessment.economic_impact_assessments:
-                    economic_impact_assessment.economic_assessment = economic_assessment
-                    self._economic_impact_assessments.append(economic_impact_assessment)
+            self._economic_impact_assessments = [
+                EconomicImpactAssessment(assessment)
+                for assessment in self.data.get("valuation_assessments", [])
+            ]
         return self._economic_impact_assessments
 
     @property

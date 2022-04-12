@@ -104,6 +104,32 @@
         "modified_on": "2020-01-21T15:39:34.137208Z",
         "commercial_value": 250000,
         "commercial_value_explanation": "Wibble wobble!",
+        "valuation_assessments": [
+
+            {
+                "id": "08410280-b342-4fe1-9f24-13b8df508e25",
+                "archived": false,
+                "archived_by": null,
+                "archived_on": null,
+                "created_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "created_on": "2020-11-20T15:12:49.978614Z",
+                "modified_on": "2020-11-20T15:12:49.978641Z",
+                "modified_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "economic_assessment_id": 38,
+                "impact": {
+                    "id": 4,
+                    "name": "4: \u00a3 millions"
+                },
+                "explanation": "uk"
+            }
+
+        ],
         "economic_assessments": [
             {
                 "id": 15,

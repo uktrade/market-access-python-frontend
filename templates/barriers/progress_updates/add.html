@@ -6,6 +6,15 @@
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
+{% block body_script %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.update.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.next_steps.name }}-form-group.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Add progress update' %}
@@ -36,24 +45,33 @@
             </div>
         </div>
 
-        <div id="{{ form.update.name }}" class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="update">{{ form.update.label }}</label>
+        <div id="{{ form.update.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="update">{{ form.update.label }}</label>
 
-            {% form_field_error form "update" %}
-            <span class="govuk-hint">{{ form.update.help_text }}</span>
+                {% form_field_error form "update" %}
+                <span class="govuk-hint">{{ form.update.help_text }}</span>
 
 
-            <textarea class="govuk-textarea" name="{{ form.update.name }}" rows="5" maxlength="1250">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
+                <textarea id="{{ form.update.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.update.name }}" rows="5" maxlength="1250">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.update.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+              You can enter up to 1250 characters
+            </div>
         </div>
 
-        <div id="{{ form.next_steps.name }}" class="govuk-form-group{% if form.next_steps.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="next_steps">{{ form.next_steps.label }}</label>
+        <div id="{{ form.next_steps.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div class="govuk-form-group{% if form.next_steps.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="next_steps">{{ form.next_steps.label }}</label>
 
-            {% form_field_error form "next_steps" %}
-            <span class="govuk-hint">{{ form.next_steps.help_text }}</span>
+                {% form_field_error form "next_steps" %}
+                <span class="govuk-hint">{{ form.next_steps.help_text }}</span>
 
-
-            <textarea class="govuk-textarea" name="{{ form.next_steps.name }}" rows="5" maxlength="1250">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
+                <textarea  id="{{ form.next_steps.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_steps.name }}" rows="5" maxlength="1250">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.next_steps.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            You can enter up to 1250 characters
+            </div>
         </div>
 
 
