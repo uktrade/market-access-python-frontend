@@ -403,7 +403,7 @@
             <h2 class="section-heading">
                 Information completeness
             </h2>
-            <h3 class="information-completeness__percentage">{{ barrier|completeness_total }}%</h3>
+            <h3 class="information-completeness__percentage">{{ barrier.completion_percent }}%</h3>
             <h4 class="outstanding-information__header">Outstanding infomation:</h4>
             <ul class="outstanding-information">
                 {% if not barrier.location %}

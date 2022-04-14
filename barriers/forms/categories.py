@@ -1,6 +1,10 @@
+import logging
+
 from django import forms
 
 from utils.api.client import MarketAccessAPIClient
+
+logger = logging.getLogger(__name__)
 
 
 class AddCategoryForm(forms.Form):
@@ -35,6 +39,7 @@ class EditCategoriesForm(forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
+        logger.critical("SAVING CATEGORY: " + str(self.cleaned_data["categories"]))
         client.barriers.patch(
             id=self.barrier_id,
             categories=self.cleaned_data["categories"],
