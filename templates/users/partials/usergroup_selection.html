@@ -1,0 +1,23 @@
+<ul class="page-tabs page-tabs--no-margin">
+    {% if group_id %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'users:manage_users' %}">All users</a>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">All users</span>
+        </li>
+    {% endif %}
+
+    {% for group in groups %}
+        {% if group_id == group.id %}
+            <li class="page-tabs__tab page-tabs__tab--active">
+                <span class="page-tabs__tab__text">{{ group.plural_name }}</span>
+            </li>
+        {% else %}
+            <li class="page-tabs__tab">
+                <a class="page-tabs__tab__text" href="?group={{ group.id }}">{{ group.plural_name }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
