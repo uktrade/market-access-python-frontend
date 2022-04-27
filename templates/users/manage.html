@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load formatters %}
 {% load static %}
+{% load static %}
 
 {% block page_title %}{{ block.super }} - Manage users{% endblock %}
 
@@ -8,6 +9,12 @@
     {{ block.super }}
     <script>
     ma.pages.users.enableGroupFilter();
+    </script>
+{% endblock body_script %}
+
+{% block body_script %}
+    <script>
+    ma.pages.users.select();
     </script>
 {% endblock body_script %}
 
@@ -67,8 +74,39 @@
     {% endif %}
     {# /Add User #}
 
+
+        {# /User search #}
+        <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+            {#  Download #}
+            <a class="govuk-button button--primary govuk-!-margin-top-4 filter-results-download__button"
+               href="{% url 'users:export_users' %}">Download CSV</a>{# TODO: export_users needs the parameters from the groups and name filters #}
+            {#  /Download #}
+        </div>
+    </div>
+    {# Add User #}
+    {% if group_id %}
+        <a class="govuk-button button--primary govuk-!-margin-top-4"
+           href="{% url 'users:add_user' %}{% if group_id %}?group={{ group_id }}{% endif %}">Add a user to this
+            group</a>
+    {% endif %}
+    {# /Add User #}
+
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third ">
+        <form class="search-form" action="/search" method="get" role="search">
+    <input class="govuk-input search-form__input" id="search-text" name="query" type="text" placeholder="Type your search phrase and click the magnifying glass. Or press the enter key" spellcheck="false" value="">
+    <button class="search-form__button" type="submit"></button>
+</form>
+            </div>
+    </div>
+    {# /Add User #}
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third ">
+        <form class="search-form" action="/search" method="get" role="search">
+    <input class="govuk-input search-form__input" id="search-text" name="query" type="text" placeholder="Type your search phrase and click the magnifying glass. Or press the enter key" spellcheck="false" value="">
+    <button class="search-form__button" type="submit"></button>
+</form>
             </div>
     </div>
 
