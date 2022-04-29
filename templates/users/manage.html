@@ -31,24 +31,30 @@
                     <label class="govuk-label" for="user_search">
                         Search
                     </label>
-                    <div class="govuk-input__wrapper search-form__input-group">
-                        <input class="search-form__input govuk-input govuk-input--width-10" id="name_search" name="name" type="text"
-                               spellcheck="false"><button class="govuk-button search-form__button" type="submit" enterkeyhint="search">
-                                <img src="{% static "images/search-button.png" %}" alt="Search">
-                            </button>
+                    <div class="dmas-search-field govuk-!-margin-bottom-2">
+                        <div class="dmas-search-field-wrapper govuk-!-padding-bottom-6">
+                            <input type="search" name="q" id="search" title="Search"
+                                   class="govuk-input dmas-search-field__item dmas-search-field__input js-class-toggle"
+                                   value="{{ query }}"
+                                   aria-controls="search-summary-accessible-hint-wrapper">
+                            <div class="dmas-search-field-submit-wrapper dmas-search-field__item">
+                                <button class="dmas-search-field__submit govuk-button" type="submit" value="Search">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <button type="submit">Temporary submit button 🙂</button>
         </form>
-
 
 
         {# /User search #}
         <div class="govuk-grid-column-one-third govuk-!-text-align-right">
             {#  Download #}
-            <a class="govuk-button button--primary govuk-!-margin-top-4 filter-results-download__button"
-               href="{% url 'users:export_users' %}">Download CSV</a>{# TODO: export_users needs the parameters from the groups and name filters #}
+            <a class="govuk-button button--primary govuk-!-margin-top-6 filter-results-download__button"
+               href="{% url 'users:export_users' %}">Download
+                CSV</a>{# TODO: export_users needs the parameters from the groups and name filters #}
             {#  /Download #}
         </div>
     </div>
@@ -62,10 +68,6 @@
 
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third ">
-        <form class="search-form" action="/search" method="get" role="search">
-    <input class="govuk-input search-form__input" id="search-text" name="query" type="text" placeholder="Type your search phrase and click the magnifying glass. Or press the enter key" spellcheck="false" value="">
-    <button class="search-form__button" type="submit"></button>
-</form>
             </div>
     </div>
 
