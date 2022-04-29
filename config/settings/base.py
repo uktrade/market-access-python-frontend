@@ -356,11 +356,9 @@ SETTINGS_EXPORT = (
     "GTM_ID",
     "GTM_AUTH",
     "GTM_PREVIEW",
-    "MINISTERIAL_REPORTS_FUNCTIONALITY",
 )
 
 ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
-MINISTERIAL_REPORTS_ENABLED = env.bool("MINISTERIAL_REPORTS_ENABLED", default=False)
 
 # Webpack config
 
@@ -389,6 +387,3 @@ USER_ADDITIONAL_PERMISSION_GROUPS = ["Download approved user", "Action plan user
 
 # External URLs used within the app
 EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
-
-# Feature flag for Ministerial Reports
-MINISTERIAL_REPORTS_FUNCTIONALITY = env.str("MINISTERIAL_REPORTS_FUNCTIONALITY", "")
