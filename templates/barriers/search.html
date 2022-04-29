@@ -52,16 +52,12 @@
                 {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
-                {% if settings.MINISTERIAL_REPORTS_FUNCTIONALITY %}
-                    {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
-                {% endif %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
-                {% if settings.MINISTERIAL_REPORTS_FUNCTIONALITY %}
-                    <!-- Include JS component for resolved date filtering -->
-                    {% render_bundle 'date_filter_component' %}
-                {% endif%}
+                <!-- Include JS component for resolved date filtering -->
+                {% render_bundle 'date_filter_component' %}
 
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
