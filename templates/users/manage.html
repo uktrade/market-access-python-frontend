@@ -80,7 +80,6 @@
                 {% endfor %}
             {% else %}
                 {% for user in users %}
-                    {{ user.is_active }}
                     {% if user.is_active == True %}
                         <tr class="govuk-table__row">
                             <!-- Name cell -->
