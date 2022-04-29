@@ -227,3 +227,11 @@ class ManageUsersTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(id="75", groups=[])
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_delete_user(self, mock_delete, mock_patch):
+        response = self.client.post(
+            reverse("users:delete_user", kwargs={"user_id": 56}),
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        mock_patch.assert_called_with(id="56", is_active=False)

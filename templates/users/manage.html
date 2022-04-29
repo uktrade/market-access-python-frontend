@@ -80,35 +80,38 @@
                 {% endfor %}
             {% else %}
                 {% for user in users %}
-                    <tr class="govuk-table__row">
-                        <!-- Name cell -->
-                        <td class="govuk-table__cell">
-                            <a href="{% url 'users:user_detail' user.id %}">
-                                <span class="team-member__full-name">{{ user.full_name }}</span>
-                            </a>
-                        </td>
-                        <!-- Email cell -->
-                        {% if user.email %}
-                        <td class="govuk-table__cell">{{ user.email }}</td>
-                        {% else %}
-                        <td class="govuk-table__cell">
-                            <span class="sr-only govuk-visually-hidden">Email not set</span>
-                        </td>
-                        {% endif %}
-                        <!-- Role cell -->
-                        {% if user.groups %}
-{#                        <td class="govuk-table__cell">{% for group in user.groups %}{{ group.name }}, {% endfor %}</td>#}
-                        <td class="govuk-table__cell">{{ user.groups | join_by_comma:"name" }}</td>
-                        {% else %}
-                        <td class="govuk-table__cell">
-                            <span class="sr-only govuk-visually-hidden">General user</span>
-                        </td>
-                        {% endif %}
-                        <!-- Action cell -->
-                        <td class="govuk-table__cell">
-                            <a href="{% url 'users:edit_user' user.id %}">Change role</a>
-                        </td>
-                    </tr>
+                    {{ user.is_active }}
+                    {% if user.is_active == True %}
+                        <tr class="govuk-table__row">
+                            <!-- Name cell -->
+                            <td class="govuk-table__cell">
+                                <a href="{% url 'users:user_detail' user.id %}">
+                                    <span class="team-member__full-name">{{ user.full_name }}</span>
+                                </a>
+                            </td>
+                            <!-- Email cell -->
+                            {% if user.email %}
+                            <td class="govuk-table__cell">{{ user.email }}</td>
+                            {% else %}
+                            <td class="govuk-table__cell">
+                                <span class="sr-only govuk-visually-hidden">Email not set</span>
+                            </td>
+                            {% endif %}
+                            <!-- Role cell -->
+                            {% if user.groups %}
+                            {# <td class="govuk-table__cell">{% for group in user.groups %}{{ group.name }}, {% endfor %}</td> #}
+                            <td class="govuk-table__cell">{{ user.groups | join_by_comma:"name" }}</td>
+                            {% else %}
+                            <td class="govuk-table__cell">
+                                <span class="sr-only govuk-visually-hidden">General user</span>
+                            </td>
+                            {% endif %}
+                            <!-- Action cell -->
+                            <td class="govuk-table__cell">
+                                <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
         </tbody>

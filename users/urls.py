@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     AddUser,
+    DeleteUser,
     EditUser,
     ExportUsers,
     GetUsers,
@@ -24,4 +25,5 @@ urlpatterns = [
     path("users/add/", AddUser.as_view(), name="add_user"),
     path("users/<int:user_id>/", UserDetail.as_view(), name="user_detail"),
     path("users/<int:user_id>/edit/", EditUser.as_view(), name="edit_user"),
+    path("users/<int:user_id>/delete/", DeleteUser.as_view(), name="delete_user"),
 ]
