@@ -336,3 +336,12 @@ class BarrierHistoryItem(PolymorphicBase):
     )
     default_subclass = GenericHistoryItem
     class_lookup = {}
+
+
+class ProgressUpdateHistoryItem(BaseHistoryItem):
+    model = "progress_update"
+    field = "status"
+    field_name = "Delivery Confidence"
+
+    def get_value(self, value):
+        return value
