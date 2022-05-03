@@ -1,4 +1,5 @@
 import csv
+import logging
 import re
 import uuid
 from urllib.parse import urlencode
@@ -18,9 +19,11 @@ from utils.referers import RefererMixin
 from utils.sessions import init_session
 from utils.sso import SSOClient
 
-from .forms import UserGroupForm
+from .forms import UserDeleteForm, UserGroupForm
 from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
 from .permissions import APIPermissionMixin
+
+logger = logging.getLogger(__name__)
 
 
 class GetUsers(View):
@@ -167,6 +170,8 @@ class ManageUsers(
                 limit=self.get_pagination_limit(),
                 offset=self.get_pagination_offset(),
             )
+            for user in users:
+                logger.critical(str(user.__dict__))
             context_data["users"] = users
             context_data["pagination"] = self.get_pagination_data(object_list=users)
         else:
@@ -217,6 +222,31 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
         group_id = self.get_group_id()
         if group_id:
             return f"{success_url}?group={group_id}"
+        return success_url
+
+
+class DeleteUser(APIPermissionMixin, UserMixin, FormView):
+    template_name = "users/delete.html"
+    form_class = UserDeleteForm
+    permission_required = "change_user"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["page"] = "manage-users"
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["id"] = str(self.kwargs.get("user_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        success_url = reverse("users:manage_users")
         return success_url
 
 

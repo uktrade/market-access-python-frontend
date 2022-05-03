@@ -16,4 +16,7 @@
     <p class="govuk-body"><strong>Role:</strong> {{ user.groups_display }}</p>
 
     <a href="{% url 'users:edit_user' user.id %}" class="govuk-button">Edit profile</a>
+    {% if user.id != request.session.user_data.id %}
+        <a href="{% url 'users:delete_user' user.id %}" class="form-cancel delete-user-link">Delete profile</a>
+    {% endif %}
 {% endblock %}
