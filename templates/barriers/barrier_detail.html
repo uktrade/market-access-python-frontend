@@ -84,7 +84,6 @@
                 {% endif %}
             </dd>
 
-            {% if feature_flags.ministerial_reports_enabled %}
             <dt class="summary-group__list__key">Progress update</dt>
             <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:add_progress_update' barrier.id %}">Add progress update</a>
 
@@ -152,7 +151,6 @@
                 {% endif %}
 
             </div>
-            {% endif %}
 
 
             <dt class="summary-group__list__key">Estimated resolution date</dt>
