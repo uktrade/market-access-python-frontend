@@ -32,3 +32,13 @@ class UserGroupForm(APIFormMixin, forms.Form):
         else:
             groups = [{"id": self.cleaned_data["group"]}]
         client.users.patch(id=self.id, groups=groups)
+
+
+class UserDeleteForm(APIFormMixin, forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.id_to_delete = kwargs["id"]
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.users.patch(id=self.id_to_delete, is_active=False, groups=[])
