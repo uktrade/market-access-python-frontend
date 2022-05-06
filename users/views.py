@@ -151,9 +151,39 @@ class ManageUsers(
     GroupQuerystringMixin,
     TemplateView,
 ):
+    """
+    View allowed GET query params:
+        - q: search for users by name or email
+        - group: filter by Django role/permission group
+        - page: page number
+        - sort: name, email, role
+
+    Set following context variables:
+        - users: list of users
+        - pagination: {
+            "total_pages": total_pages,
+            "current_page": current_page,
+            "pages": [
+                {
+                    "label": i,
+                    "url": self.update_querystring(page=i),
+                }
+                for i in range(1, total_pages + 1)
+            ],
+        }
+        - q: query used
+        - sort: sort used
+    """
+
     template_name = "users/manage.html"
     permission_required = "list_users"
-    pagination_limit = 500
+    pagination_limit = 10
+
+    def get_search_query(self):
+        return self.request.GET.get("q", "").strip()
+
+    def get_sort_query(self):
+        return self.request.GET.get("ordering", "").strip()
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -162,11 +192,23 @@ class ManageUsers(
 
         context_data["page"] = "manage-users"
         context_data["groups"] = client.groups.list()
+
+        search_query_param = self.get_search_query()
+        sort_param = self.get_sort_query()
+
+        context_data["search_query"] = search_query_param
+        context_data["ordering"] = sort_param
         if group_id is None:
-            users = client.users.list(
-                limit=self.get_pagination_limit(),
-                offset=self.get_pagination_offset(),
-            )
+            api_user_list_params = {
+                "limit": self.get_pagination_limit(),
+                "offset": self.get_pagination_offset(),
+            }
+            if search_query_param:
+                api_user_list_params["q"] = search_query_param
+            if sort_param:
+                api_user_list_params["ordering"] = sort_param
+
+            users = client.users.list(**api_user_list_params)
             context_data["users"] = users
             context_data["pagination"] = self.get_pagination_data(object_list=users)
         else:
