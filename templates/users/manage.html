@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load formatters %}
 {% load static %}
+{% load user_search %}
 
 {% block page_title %}{{ block.super }} - Manage users{% endblock %}
 
@@ -36,7 +37,8 @@
                         <div class="dmas-search-field-wrapper govuk-!-padding-bottom-6">
                             <input type="search" name="q" id="search" title="Search"
                                    class="govuk-input dmas-search-field__item dmas-search-field__input js-class-toggle"
-                                   value="{{ query }}"
+                                   value="{{ search_query }}"
+                                   placeholder="E.g. full name"
                                    aria-controls="search-summary-accessible-hint-wrapper">
                             <div class="dmas-search-field-submit-wrapper dmas-search-field__item">
                                 <button class="dmas-search-field__submit govuk-button" type="submit" value="Search">
@@ -74,10 +76,34 @@
         <caption class="govuk-table__caption visually-hidden">List of all users</caption>
         <thead>
         <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Name</th>
-            <th scope="col" class="govuk-table__header">Email</th>
+            <th scope="col" class="govuk-table__header">
+                {% if ordering == 'first_name' %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-first_name' %}">Name ▲</a>
+                {% elif ordering == '-first_name' %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name ▼</a>
+                {% else %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name ↕</a>
+                {% endif %}
+            </th>
+            <th scope="col" class="govuk-table__header">
+                {% if ordering == 'email' %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-email' %}">Email ▲</a>
+                {% elif ordering == '-email' %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email ▼</a>
+                {% else %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email ↕</a>
+                {% endif %}
+            </th>
             {% if not group_id %}
-                <th scope="col" class="govuk-table__header">Role</th>
+                <th scope="col" class="govuk-table__header">
+                    {% if ordering == 'role' %}
+                        <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-role' %}">Role ▲</a>
+                    {% elif ordering == '-role' %}
+                        <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ▼</a>
+                    {% else %}
+                        <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ↕</a>
+                    {% endif %}
+                </th>
             {% endif %}
             <th scope="col" class="govuk-table__header">Action</th>
         </tr>
@@ -104,7 +130,7 @@
                             {% endif %}
                             <!-- Action cell -->
                             <td class="govuk-table__cell">
-                                <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                                <a href="{% url 'users:edit_user' user.id %}">Edit</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -138,7 +164,7 @@
                     {% endif %}
                     <!-- Action cell -->
                     <td class="govuk-table__cell">
-                        <a href="{% url 'users:edit_user' user.id %}">Change role</a>
+                        <a href="{% url 'users:edit_user' user.id %}">Edit</a>
                     </td>
                 </tr>
             {% endfor %}
