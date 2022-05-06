@@ -5,8 +5,9 @@
 {% block page_title %}{{ block.super }} - Manage users{% endblock %}
 
 {% block body_script %}
+    {{ block.super }}
     <script>
-    ma.pages.users.select();
+    ma.pages.users.enableGroupFilter();
     </script>
 {% endblock body_script %}
 
