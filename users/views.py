@@ -159,7 +159,7 @@ class ManageUsers(
         - q: search for users by name or email
         - group: filter by Django role/permission group
         - page: page number
-        - sort: name, email, role
+        - ordering: name, email, role
 
     Set following context variables:
         - users: list of users
@@ -175,7 +175,7 @@ class ManageUsers(
             ],
         }
         - q: query used
-        - sort: sort used
+        - ordering: sort used
     """
 
     template_name = "users/manage.html"
