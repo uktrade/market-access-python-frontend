@@ -201,10 +201,11 @@ class ManageUsers(
 
         context_data["search_query"] = search_query_param
         context_data["ordering"] = sort_param
+        context_data["group_id"] = group_id
         api_user_list_params = {
             "limit": self.get_pagination_limit(),
             "offset": self.get_pagination_offset(),
-            "group_id": group_id or "",
+            "groups__id": group_id or "",
         }
         if search_query_param:
             api_user_list_params["q"] = search_query_param
