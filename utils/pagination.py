@@ -27,6 +27,8 @@ class PaginationMixin:
         limit = self.get_pagination_limit()
         total_pages = math.ceil(object_list.total_count / limit)
         current_page = self.get_current_page()
+        start_position = ((current_page - 1) * limit) + 1
+        end_position = min(start_position + limit - 1, object_list.total_count)
         pagination_data = {
             "total_pages": total_pages,
             "current_page": current_page,
@@ -37,6 +39,9 @@ class PaginationMixin:
                 }
                 for i in range(1, total_pages + 1)
             ],
+            "total_items": object_list.total_count,
+            "start_position": start_position,
+            "end_position": end_position,
         }
         if current_page > 1:
             pagination_data["previous"] = self.update_querystring(page=current_page - 1)
