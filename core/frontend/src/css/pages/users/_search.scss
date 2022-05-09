@@ -92,3 +92,7 @@
 .dmas-search-field__submit:hover {
   background-color: #171719;
 }
+
+.js-enabled .dmas-js-disabled-button {
+  display: none;
+}
