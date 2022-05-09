@@ -201,21 +201,19 @@ class ManageUsers(
 
         context_data["search_query"] = search_query_param
         context_data["ordering"] = sort_param
-        if group_id is None:
-            api_user_list_params = {
-                "limit": self.get_pagination_limit(),
-                "offset": self.get_pagination_offset(),
-            }
-            if search_query_param:
-                api_user_list_params["q"] = search_query_param
-            if sort_param:
-                api_user_list_params["ordering"] = sort_param
+        api_user_list_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "group_id": group_id or "",
+        }
+        if search_query_param:
+            api_user_list_params["q"] = search_query_param
+        if sort_param:
+            api_user_list_params["ordering"] = sort_param
 
-            users = client.users.list(**api_user_list_params)
-            context_data["users"] = users
-            context_data["pagination"] = self.get_pagination_data(object_list=users)
-        else:
-            context_data["group_id"] = group_id
+        users = client.users.list(**api_user_list_params)
+        context_data["users"] = users
+        context_data["pagination"] = self.get_pagination_data(object_list=users)
 
         return context_data
 
