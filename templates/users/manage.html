@@ -23,12 +23,9 @@
     <div class="govuk-grid-row">
         <form method="get" action="" class="search-form">
             <div class="govuk-grid-column-one-third govuk-!-text-align-left">
-                {# Usergroup Tabs #}
                 {% include "users/partials/usergroup_selection_new.html" %}
-                {# /Usergroup Tabs #}
             </div>
             <div class="govuk-grid-column-one-third govuk-!-text-align-centre">
-                {# User search #}
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="user_search">
                         Search
@@ -52,26 +49,18 @@
         </form>
 
 
-        {# /User search #}
         <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-            {#  Download #}
             <a class="govuk-button button--primary govuk-!-margin-top-6 filter-results-download__button"
-               href="{% url 'users:export_users' %}">Download
-                CSV</a>{# TODO: export_users needs the parameters from the groups and name filters #}
-            {#  /Download #}
+               href="{% url 'users:export_users' %}">Download CSV</a>
         </div>
     </div>
-    {# Add User #}
     {% if group_id %}
         <a class="govuk-button button--primary govuk-!-margin-top-4"
            href="{% url 'users:add_user' %}{% if group_id %}?group={{ group_id }}{% endif %}">Add a user to this
             group</a>
     {% endif %}
-    {# /Add User #}
 
 
-    {#    {% include "users/partials/usergroup_selection.html" %}#}
-    {# Users Table #}
     <table class="govuk-table">
         <caption class="govuk-table__caption visually-hidden">List of all users</caption>
         <thead>
@@ -140,8 +129,5 @@
             {% endfor %}
         </tbody>
     </table>
-    {# /Users Table #}
-    {# Pagination #}
     {% include 'partials/pagination.html' %}
-    {# /Pagination #}
 {% endblock %}
