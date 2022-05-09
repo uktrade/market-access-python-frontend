@@ -51,7 +51,7 @@
 
         <div class="govuk-grid-column-one-third govuk-!-text-align-right">
             <a class="govuk-button button--primary govuk-!-margin-top-6 filter-results-download__button"
-               href="{% url 'users:export_users' %}">Download CSV</a>
+               href="{% url 'users:export_users' %}?{{ request.GET.urlencode }}">Download CSV</a>
         </div>
     </div>
     {% if group_id %}

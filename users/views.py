@@ -343,7 +343,7 @@ class UserDetail(UserMixin, TemplateView):
         return context_data
 
 
-class ExportUsers(View):
+class ExportUsers(GroupQuerystringMixin, View):
     """
     Django view that gets a list of users from MarketAccessAPIClient and
     serializes them as a CSV file.
@@ -353,9 +353,33 @@ class ExportUsers(View):
 
     permission_required = "list_users"
 
+    def get_search_query(self):
+        return self.request.GET.get("q", "").strip()
+
+    def get_sort_query(self):
+        return self.request.GET.get("ordering", "").strip()
+
     def get(self, request):
         client = MarketAccessAPIClient(request.session.get("sso_token"))
-        users = client.users.list()
+        group_id = self.get_group_id()
+
+        search_query_param = self.get_search_query()
+        sort_param = self.get_sort_query()
+
+        # not the most elegant approach, but let's assume we never have more than a million users
+        api_user_list_params = {
+            "offset": 0,
+            "limit": 1000000,
+            "groups__id": group_id or "",
+        }
+        if search_query_param:
+            api_user_list_params["q"] = search_query_param
+        if sort_param:
+            api_user_list_params["ordering"] = sort_param
+
+        users = client.users.list(**api_user_list_params)
+
+        # users = client.users.list()
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = "attachment; filename=users.csv"
         writer = csv.writer(response)
