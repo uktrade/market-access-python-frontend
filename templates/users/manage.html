@@ -94,49 +94,19 @@
                     <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email ↕</a>
                 {% endif %}
             </th>
-            {% if not group_id %}
-                <th scope="col" class="govuk-table__header">
-                    {% if ordering == 'role' %}
-                        <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-role' %}">Role ▲</a>
-                    {% elif ordering == '-role' %}
-                        <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ▼</a>
-                    {% else %}
-                        <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ↕</a>
-                    {% endif %}
-                </th>
-            {% endif %}
+            <th scope="col" class="govuk-table__header">
+                {% if ordering == 'role' %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-role' %}">Role ▲</a>
+                {% elif ordering == '-role' %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ▼</a>
+                {% else %}
+                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ↕</a>
+                {% endif %}
+            </th>
             <th scope="col" class="govuk-table__header">Action</th>
         </tr>
         </thead>
         <tbody class="govuk-table__body">
-        {% if group_id %}
-            {% for group in groups %}
-                {% if group_id == group.id %}
-                    {% for user in group.users %}
-                        <tr class="govuk-table__row">
-                            <!-- Name cell -->
-                            <td class="govuk-table__cell">
-                                <a href="{% url 'users:user_detail' user.id %}">
-                                    <span class="team-member__full-name">{{ user.full_name }}</span>
-                                </a>
-                            </td>
-                            <!-- Email cell -->
-                            {% if user.email %}
-                                <td class="govuk-table__cell">{{ user.email }}</td>
-                            {% else %}
-                                <td class="govuk-table__cell">
-                                    <span class="sr-only govuk-visually-hidden">Email not set</span>
-                                </td>
-                            {% endif %}
-                            <!-- Action cell -->
-                            <td class="govuk-table__cell">
-                                <a href="{% url 'users:edit_user' user.id %}">Edit</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        {% else %}
             {% for user in users %}
                 <tr class="govuk-table__row">
                     <!-- Name cell -->
@@ -168,7 +138,6 @@
                     </td>
                 </tr>
             {% endfor %}
-        {% endif %}
         </tbody>
     </table>
     {# /Users Table #}
