@@ -10,7 +10,7 @@
                     {% endif %}
                     {% for page in pagination.pages %}
                         <li class="moj-pagination__item">
-                            {% if pagination.current_page != forloop.counter and page.url %}
+                            {% if pagination.current_page != page.label and page.url %}
                                 <a class="moj-pagination__link" href="?{{ page.url }}"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
                                     {{ page.label }}
                                 </a>
