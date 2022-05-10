@@ -25,10 +25,15 @@ class PaginationMixin:
 
     def get_pagination_data(self, object_list):
         limit = self.get_pagination_limit()
-        total_pages = math.ceil(object_list.total_count / limit)
+        total_count = object_list.total_count
+        total_pages = math.ceil(total_count / limit)
         current_page = self.get_current_page()
         start_position = ((current_page - 1) * limit) + 1
-        end_position = min(start_position + limit - 1, object_list.total_count)
+        # this used min(), but that crashes the tests because a MagicMock object can't handle the < operator
+        full_page_end = start_position + limit - 1
+        end_position = (
+            full_page_end + total_count - abs(total_count - full_page_end)
+        ) // 2
         pagination_data = {
             "total_pages": total_pages,
             "current_page": current_page,
@@ -39,7 +44,7 @@ class PaginationMixin:
                 }
                 for i in range(1, total_pages + 1)
             ],
-            "total_items": object_list.total_count,
+            "total_items": total_count,
             "start_position": start_position,
             "end_position": end_position,
         }
