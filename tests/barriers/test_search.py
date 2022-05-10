@@ -330,6 +330,90 @@ class SearchTestCase(MarketAccessTestCase):
         assert page_labels == [1, "...", 5, 6, 7, 8, "...", 13]
 
     @patch("utils.api.resources.APIResource.list")
+    def test_pagination_x_to_y_of_z_full_page(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=Barrier,
+            data=[self.barrier] * 10,
+            total_count=30,
+        )
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"status": ["1", "2", "3"], "page": "3"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            archived="0",
+            status="1,2,3",
+            limit=10,
+            offset=20,
+        )
+
+        pagination = response.context["pagination"]
+        assert pagination["total_pages"] == 3
+        assert pagination["current_page"] == 3
+        assert pagination["total_items"] == 30
+        assert pagination["start_position"] == 21
+        assert pagination["end_position"] == 30
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_pagination_x_to_y_of_z_partial_page(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=Barrier,
+            data=[self.barrier] * 10,
+            total_count=23,
+        )
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"status": ["1", "2", "3"], "page": "3"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            archived="0",
+            status="1,2,3",
+            limit=10,
+            offset=20,
+        )
+
+        pagination = response.context["pagination"]
+        assert pagination["total_pages"] == 3
+        assert pagination["current_page"] == 3
+        assert pagination["total_items"] == 23
+        assert pagination["start_position"] == 21
+        assert pagination["end_position"] == 23
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_pagination_x_to_y_of_z_page_before_partial_page(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=Barrier,
+            data=[self.barrier] * 10,
+            total_count=23,
+        )
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"status": ["1", "2", "3"], "page": "2"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            archived="0",
+            status="1,2,3",
+            limit=10,
+            offset=10,
+        )
+
+        pagination = response.context["pagination"]
+        assert pagination["total_pages"] == 3
+        assert pagination["current_page"] == 2
+        assert pagination["total_items"] == 23
+        assert pagination["start_position"] == 11
+        assert pagination["end_position"] == 20
+
+    @patch("utils.api.resources.APIResource.list")
     def test_wto_filters(self, mock_list):
         response = self.client.get(
             reverse("barriers:search"),
