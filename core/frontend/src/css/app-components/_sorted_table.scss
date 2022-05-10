@@ -1,0 +1,42 @@
+.sort-table{
+    .sort-asc{
+        display:  inline-block;
+        position: relative;
+        &:before{
+            content: " ▲";
+            position: absolute;
+            right: -18px;
+            top: 4px;
+            font-size: 0.8em;
+        }
+    }
+    .sort-desc{
+        display:  inline-block;
+        position: relative;
+        &:before{
+            content: " ▼";
+            position: absolute;
+            right: -18px;
+            top: 4px;
+            font-size: 0.8em;
+        }
+    }
+    .sort-default{
+        display:  inline-block;
+        position: relative;
+        &:before{
+            content: " ▼";
+            position: absolute;
+            right: -16px;
+            top: 12px;
+            font-size: .5em;
+        }
+        &:after{
+            content: " ▲";
+            position: absolute;
+            right: -16px;
+            top: 4px;
+            font-size: .5em;
+        }
+    }
+}

@@ -64,32 +64,32 @@
     <table class="govuk-table">
         <caption class="govuk-table__caption visually-hidden">List of all users</caption>
         <thead>
-        <tr class="govuk-table__row">
+        <tr class="govuk-table__row sort-table">
             <th scope="col" class="govuk-table__header">
                 {% if ordering == 'first_name' %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-first_name' %}">Name ▲</a>
+                    <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-first_name' %}">Name</a>
                 {% elif ordering == '-first_name' %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name ▼</a>
+                    <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name</a>
                 {% else %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name ↕</a>
+                    <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name</a>
                 {% endif %}
             </th>
             <th scope="col" class="govuk-table__header">
                 {% if ordering == 'email' %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-email' %}">Email ▲</a>
+                    <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-email' %}">Email</a>
                 {% elif ordering == '-email' %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email ▼</a>
+                    <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email</a>
                 {% else %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email ↕</a>
+                    <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email</a>
                 {% endif %}
             </th>
             <th scope="col" class="govuk-table__header">
                 {% if ordering == 'role' %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-role' %}">Role ▲</a>
+                    <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-role' %}">Role</a>
                 {% elif ordering == '-role' %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ▼</a>
+                    <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role</a>
                 {% else %}
-                    <a href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role ↕</a>
+                    <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role</a>
                 {% endif %}
             </th>
             <th scope="col" class="govuk-table__header">Action</th>
