@@ -308,9 +308,16 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
         return kwargs
 
     def get_initial(self):
+        role_group = "0"
+        additional_groups = []
+
         for group in self.user.groups:
-            return {"group": str(group["id"])}
-        return {"group": "0"}
+            if group["name"] in settings.USER_ADDITIONAL_PERMISSION_GROUPS:
+                additional_groups.append(str(group["id"]))
+            else:
+                role_group = str(group["id"])
+
+        return {"group": role_group, "additional_permissions": additional_groups}
 
     def form_valid(self, form):
         form.save()
