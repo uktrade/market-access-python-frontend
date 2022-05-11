@@ -113,14 +113,7 @@
                         </td>
                     {% endif %}
                     <!-- Role cell -->
-                    {% if user.groups %}
-                        {#                        <td class="govuk-table__cell">{% for group in user.groups %}{{ group.name }}, {% endfor %}</td>#}
-                        <td class="govuk-table__cell">{{ user.groups | join_by_comma:"name" }}</td>
-                    {% else %}
-                        <td class="govuk-table__cell">
-                            <span class="sr-only govuk-visually-hidden">General user</span>
-                        </td>
-                    {% endif %}
+                    <td class="govuk-table__cell">{{ user.groups_display }}</td>
                     <!-- Action cell -->
                     <td class="govuk-table__cell">
                         <a href="{% url 'users:edit_user' user.id %}">Edit</a>

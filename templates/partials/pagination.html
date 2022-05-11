@@ -10,13 +10,17 @@
                     {% endif %}
                     {% for page in pagination.pages %}
                         <li class="moj-pagination__item">
-                            {% if pagination.current_page != forloop.counter %}
-                                <a class="moj-pagination__link" href="?{{ page.url }}"  aria-label="Page {{ forloop.counter }} of {{ pagination.total_pages }}">
-                                    {{ forloop.counter }}
+                            {% if pagination.current_page != page.label and page.url %}
+                                <a class="moj-pagination__link" href="?{{ page.url }}"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
+                                    {{ page.label }}
                                 </a>
+                            {% elif page.url %}
+                                <span class="moj-pagination__item--active" aria-current="page"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
+                                    {{ page.label }}
+                                </span>
                             {% else %}
-                                <span class="moj-pagination__item--active" aria-current="page"  aria-label="Page {{ forloop.counter }} of {{ pagination.total_pages }}">
-                                    {{ forloop.counter }}
+                                <span class="moj-pagination__item" aria-current="page"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
+                                    {{ page.label }}
                                 </span>
                             {% endif %}
                         </li>
