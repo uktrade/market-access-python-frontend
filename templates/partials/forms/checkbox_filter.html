@@ -15,7 +15,7 @@
                            id="{{ field.name }}-{{ forloop.counter }}"
                            name="{{ field.name }}"
                            type="checkbox"
-                           value="{{ value }}" {% if value|lower in field.value|value %}checked="checked"{% endif %}>
+                           value="{{ value }}" {% if value|lower in field.value|lower %}checked="checked"{% endif %}>
 
                     <label class="govuk-label checkbox-filter__label" for="{{ field.name }}-{{ forloop.counter }}">
                       {{ text|safe }}
