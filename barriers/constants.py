@@ -190,3 +190,27 @@ ACTION_PLAN_RAG_STATUS_CHOICES = Choices(
     ("RISK_OF_DELAY", "Risk of delay"),
     ("DELAYED", "Delayed"),
 )
+
+TOP_PRIORITY_BARRIER_STATUS = Choices(
+    ("NONE", ""),
+    ("APPROVAL_PENDING", "Top 100 Priority Barrier - Approval Pending"),
+    ("REMOVAL_PENDING", "Top 100 Priority Barrier - Removal Pending"),
+    ("APPROVED", "Top 100 Priority Barrier"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES = Choices(
+    ("NONE", ""),
+    ("APPROVAL_PENDING", "Top 100 Priority Barrier - Approval Pending"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES = Choices(
+    ("APPROVED", "Top 100 Priority Barrier"),
+    ("REMOVAL_PENDING", "Top 100 Priority Barrier - Removal Pending"),
+)
+
+# Final choices for both approval and removal
+TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES = Choices(
+    ("NONE", "No"), ("APPROVED", "Yes")
+)
+
+TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"

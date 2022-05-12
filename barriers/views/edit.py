@@ -15,6 +15,7 @@ from barriers.forms.edit import (
     UpdateEconomicAssessmentEligibilityForm,
     UpdateTradeDirectionForm,
 )
+from users.mixins import UserMixin
 from utils.metadata import MetadataMixin
 
 from .mixins import APIBarrierFormViewMixin
@@ -65,11 +66,8 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
 
-        # Check if the barrier has a Top 100 Priority barrier and set the initial value accordingly
         top_barrier_initial = "No"
-        for tag in self.barrier.tags:
-            if tag["id"] == 4:
-                top_barrier_initial = "Yes"
+        top_barrier_initial = self.barrier.top_priority_status
 
         return {
             "priority": self.barrier.priority["code"],
@@ -95,7 +93,7 @@ class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
         return {"estimated_resolution_date": self.barrier.estimated_resolution_date}
 
 
-class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
+class BarrierEditTags(UserMixin, MetadataMixin, APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/tags.html"
     form_class = UpdateBarrierTagsForm
 
@@ -107,9 +105,12 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
     def get_initial(self):
         # Check if the barrier has a Top 100 Priority barrier and set the initial value accordingly
         top_barrier_initial = "No"
-        for tag in self.barrier.tags:
-            if tag["id"] == 4:
-                top_barrier_initial = "Yes"
+
+        # TODO: Just here to show example of how to use perms for the PB100 tickets
+        # if TOP_PRIORITY_BARRIER_EDIT_PERMISSION in self.user.permissions:
+        # has perm to approve or remove top barriers
+
+        top_barrier_initial = self.barrier.top_priority_status
 
         return {
             "tags": [tag["id"] for tag in self.barrier.tags],

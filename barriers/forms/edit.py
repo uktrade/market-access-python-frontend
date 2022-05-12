@@ -1,5 +1,6 @@
 from django import forms
 
+from barriers.constants import TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ChoiceFieldWithHelpText,
@@ -212,7 +213,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
     )
     top_barrier = forms.ChoiceField(
         label="Should this barrier be considered a top priority?",
-        choices=[("Yes", "Yes"), ("No", "No")],
+        choices=TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
         widget=forms.RadioSelect,
         error_messages={
             "required": "Please indicate if this is a top priority barrier"
@@ -239,19 +240,13 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         existing_tags = getattr(client.barriers.get(id=self.id), "tags")
         tag_ids = []
         for tag in existing_tags:
-            # Skip adding the top-priority tag, this will decided below
-            if tag["id"] == 4:
-                continue
             tag_ids.append(tag["id"])
-
-        # Add the top barrier tag to the tag list, or remove it
-        if self.cleaned_data["top_barrier"] == "Yes":
-            tag_ids.append(4)
 
         client.barriers.patch(
             id=self.id,
             priority=self.cleaned_data["priority"],
             priority_summary=self.cleaned_data["priority_summary"],
+            top_priority_status=self.cleaned_data["top_barrier"],
             tags=tag_ids,
         )
 
@@ -321,7 +316,7 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
     )
     top_barrier = forms.ChoiceField(
         label="Should this barrier be considered a top priority?",
-        choices=[("Yes", "Yes"), ("No", "No")],
+        choices=TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
         widget=forms.RadioSelect,
         error_messages={
             "required": "Please indicate if this is a top priority barrier"
@@ -333,13 +328,12 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
         self.fields["tags"].choices = tags
 
     def save(self):
-
-        if self.cleaned_data["top_barrier"] == "Yes":
-            # If top barrier answer is 'yes', append the id for the top barrier tag to the tag list
-            self.cleaned_data["tags"].append("4")
-
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, tags=self.cleaned_data["tags"])
+        client.barriers.patch(
+            id=self.id,
+            tags=self.cleaned_data["tags"],
+            top_priority_status=self.cleaned_data["top_barrier"],
+        )
 
 
 class UpdateTradeDirectionForm(APIFormMixin, forms.Form):

@@ -6,7 +6,18 @@
                 <li class="barrier-tag-list__tag">{{ tag.title }}</li>
                 {% endfor %}
             {% endspaceless %}
+
+            {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
+                <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
+            {% elif barrier.top_priority_status == "APPROVED" %}
+                <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER</li>
+            {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
+                <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+            {% endif %}
         </ul>
     {% endif %}
+
+
+
     <a class="barrier-tag-edit" href="{% url 'barriers:edit_tags' barrier.id %}">Edit tags</a>
 </div>

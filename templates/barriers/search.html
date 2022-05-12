@@ -49,7 +49,7 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.category %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
@@ -318,6 +318,15 @@
                                         {% for tag in barrier.tags %}
                                         <li class="barrier-tag-list__tag">{{ tag.title }}</li>
                                         {% endfor %}
+
+                                        {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
+                                            <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
+                                        {% elif barrier.top_priority_status == "APPROVED" %}
+                                            <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER</li>
+                                        {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
+                                            <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+                                        {% endif %}
+
                                     {% endspaceless %}
                                 </ul>
                             {% endif %}
