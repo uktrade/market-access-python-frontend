@@ -229,7 +229,9 @@ class EditTagsTestCase(MarketAccessTestCase):
         assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.NONE
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_tags_calls_api(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_edit_tags_calls_api(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]}),
@@ -289,20 +291,27 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_priority_calls_api(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_edit_priority_calls_api(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "LOW", "priority_summary": "", "top_barrier": "Yes"},
+            data={
+                "priority": "LOW",
+                "priority_summary": "test_summary",
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.APPROVED,
+            },
         )
 
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="LOW",
-            priority_summary="",
-            tags=[1, 4],
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.APPROVED,
+            priority_summary="test summary",
+            tags=[1],
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -315,7 +324,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
             ),
             data={
                 "priority": "HIGH",
-                "top_barrier": "No",
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
                 "priority_summary": "New summary",
             },
         )
@@ -323,6 +332,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
             id=self.barrier["id"],
             priority="HIGH",
             tags=[1],
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
             priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND
