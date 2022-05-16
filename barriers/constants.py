@@ -199,18 +199,29 @@ TOP_PRIORITY_BARRIER_STATUS = Choices(
 )
 
 TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES = Choices(
-    ("NONE", ""),
-    ("APPROVAL_PENDING", "Top 100 Priority Barrier - Approval Pending"),
+    ("APPROVAL_PENDING", "Yes - pending"),
+    ("NONE", "No"),
 )
 
 TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES = Choices(
-    ("APPROVED", "Top 100 Priority Barrier"),
-    ("REMOVAL_PENDING", "Top 100 Priority Barrier - Removal Pending"),
+    ("APPROVED", "Yes"),
+    ("REMOVAL_PENDING", "No - pending"),
 )
 
-# Final choices for both approval and removal
+# Default choice field for a user that can moderate top priority
 TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES = Choices(
-    ("NONE", "No"), ("APPROVED", "Yes")
+    ("APPROVED", "Yes"),
+    ("NONE", "No"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_APPROVE_REQUEST_CHOICES = Choices(
+    ("APPROVED", "Yes"),  # Set to APPROVED when Yes is selected
+    ("NONE", "No"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES = Choices(
+    ("NONE", "Yes"),  # Set to NONE when Yes is selected
+    ("APPROVED", "No"),
 )
 
 TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"

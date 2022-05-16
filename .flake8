@@ -10,7 +10,8 @@ ignore =
     F841,
     W503,
     # W504 - line break after binary operator
-    W504
+    W504,
+    C901
 
 per-file-ignores =
     # Common imports for all files in api/barriers/history
