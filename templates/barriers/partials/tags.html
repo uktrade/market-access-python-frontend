@@ -1,18 +1,18 @@
 <div class="barrier-tag-banner">
-    {% if barrier.tags %}
+    {% if barrier.tags or barrier.top_priority_status != "NONE" %}
         <ul class="barrier-tag-list barrier-tag-list--in-banner">
             {% spaceless %}
                 {% for tag in barrier.tags %}
-                <li class="barrier-tag-list__tag">{{ tag.title }}</li>
+                <li class="govuk-tag">{{ tag.title }}</li>
                 {% endfor %}
             {% endspaceless %}
 
             {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
-                <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
+                <li class="govuk-tag govuk-tag--yellow">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
             {% elif barrier.top_priority_status == "APPROVED" %}
-                <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER</li>
+                <li class="govuk-tag">TOP 100 PRIORITY BARRIER</li>
             {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                <li class="barrier-tag-list__tag">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+                <li class="govuk-tag govuk-tag--red">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
             {% endif %}
         </ul>
     {% endif %}

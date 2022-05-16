@@ -15,14 +15,3 @@
         margin-right: govuk-em( 16, 16 );
     }
 }
-
-.barrier-tag-list__tag {
-    display: inline-block;
-    margin-bottom: govuk-em( 8, 16 );
-    margin-right: govuk-em( 8, 16 );
-    background-color: $govuk-blue;
-    padding: govuk-em( 4, 16 ) govuk-em( 8, 16 );
-    color: $govuk-white;
-    line-height: 1;
-    font-weight: bold;
-}
