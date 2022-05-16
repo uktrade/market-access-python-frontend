@@ -17,7 +17,6 @@ from barriers.forms.edit import (
     UpdateTradeDirectionForm,
     update_barrier_priority_form_factory,
 )
-from users.mixins import UserMixin
 from utils.context_processors import user_scope
 from utils.metadata import MetadataMixin
 
@@ -63,7 +62,7 @@ class BarrierEditSource(APIBarrierFormViewMixin, FormView):
             }
 
 
-class BarrierEditPriority(APIBarrierFormViewMixin, UserMixin, FormView):
+class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
     """
     Based on the user's permissions, we need to show the user a different form.
 
@@ -154,8 +153,9 @@ class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
         return {"estimated_resolution_date": self.barrier.estimated_resolution_date}
 
 
-class BarrierEditTags(UserMixin, MetadataMixin, APIBarrierFormViewMixin, FormView):
+class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/tags.html"
+    form_class = UpdateBarrierTagsForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
