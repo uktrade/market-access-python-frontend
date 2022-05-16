@@ -226,7 +226,7 @@ class EditTagsTestCase(MarketAccessTestCase):
         for tag in self.barrier["tags"]:
             test_tag_list.append(tag["id"])
         assert form.initial["tags"] == test_tag_list
-        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.NONE
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVED
 
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.UsersResource.get_current")
@@ -235,7 +235,7 @@ class EditTagsTestCase(MarketAccessTestCase):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]}),
-            data={"tags": [1], "top_barrier": TOP_PRIORITY_BARRIER_STATUS.APPROVED},
+            data={"tags": [1], "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE},
         )
 
         mock_patch.assert_called_with(
@@ -243,7 +243,7 @@ class EditTagsTestCase(MarketAccessTestCase):
             tags=[
                 "1",
             ],
-            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.APPROVED,
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -257,7 +257,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["priority"] == self.barrier["priority"]["code"]
-        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.NONE
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVED
 
     @patch("utils.api.resources.APIResource.patch")
     def test_priority_cannot_be_empty(self, mock_patch):
@@ -302,16 +302,16 @@ class EditPriorityTestCase(MarketAccessTestCase):
             data={
                 "priority": "LOW",
                 "priority_summary": "test_summary",
-                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.APPROVED,
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
             },
         )
 
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="LOW",
-            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.APPROVED,
-            priority_summary="test summary",
             tags=[1],
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
+            priority_summary="test summary",
         )
         assert response.status_code == HTTPStatus.FOUND
 
