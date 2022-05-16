@@ -250,9 +250,41 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         client.barriers.patch(**patch_args)
 
 
+class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
+    tags = MultipleChoiceFieldWithHelpText(
+        label="Is this issue caused by or related to any of the following?",
+        choices=[],
+        required=False,
+    )
+
+    def __init__(self, tags, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["tags"].choices = tags
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        patch_args = {
+            "id": self.id,
+            "tags": self.cleaned_data["tags"],
+        }
+
+        if self.fields.get("top_barrier"):
+            patch_args["top_priority_status"] = self.cleaned_data["top_barrier"]
+
+        if self.fields.get("priority_summary"):
+            patch_args["priority_summary"] = self.cleaned_data["priority_summary"]
+
+        if self.fields.get("top_priority_rejection_summary"):
+            patch_args["top_priority_rejection_summary"] = self.cleaned_data[
+                "top_priority_rejection_summary"
+            ]
+
+        client.barriers.patch(**patch_args)
+
+
 def update_barrier_priority_form_factory(
-    barrier,
-    is_user_admin=False,
+    barrier, is_user_admin=False, BaseFormClass=UpdateBarrierPriorityForm
 ):
     """
     type: (Barrier, bool) -> UpdateBarrierPriorityForm
@@ -331,7 +363,7 @@ def update_barrier_priority_form_factory(
                 TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES
             )
 
-    class CustomizedUpdateBarrierPriorityForm(UpdateBarrierPriorityForm):
+    class CustomizedUpdateBarrierPriorityForm(BaseFormClass):
         if show_top_priority_status_field:
             top_barrier = forms.ChoiceField(
                 label=top_barrier_status_field_label,
@@ -443,34 +475,6 @@ class UpdateBarrierEstimatedResolutionDateForm(
             estimated_resolution_date=self.cleaned_data.get(
                 "estimated_resolution_date"
             ),
-        )
-
-
-class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
-    tags = MultipleChoiceFieldWithHelpText(
-        label="Is this issue caused by or related to any of the following?",
-        choices=[],
-        required=False,
-    )
-    top_barrier = forms.ChoiceField(
-        label="Should this barrier be considered a top priority?",
-        choices=TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
-        widget=forms.RadioSelect,
-        error_messages={
-            "required": "Please indicate if this is a top priority barrier"
-        },
-    )
-
-    def __init__(self, tags, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["tags"].choices = tags
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id,
-            tags=self.cleaned_data["tags"],
-            top_priority_status=self.cleaned_data["top_barrier"],
         )
 
 

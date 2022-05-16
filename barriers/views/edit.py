@@ -4,6 +4,7 @@ from django.views.generic import FormView
 from barriers.constants import TOP_PRIORITY_BARRIER_STATUS
 from barriers.forms.edit import (
     UpdateBarrierEstimatedResolutionDateForm,
+    UpdateBarrierPriorityForm,
     UpdateBarrierProductForm,
     UpdateBarrierSourceForm,
     UpdateBarrierSummaryForm,
@@ -115,10 +116,11 @@ class BarrierEditPriority(APIBarrierFormViewMixin, UserMixin, FormView):
     def get_form_class(self):
         user = user_scope(self.request)["current_user"]
         is_user_admin = user.has_permission("set_topprioritybarrier")
-        # is_user_admin = False
         barrier = self.barrier
         form_class = update_barrier_priority_form_factory(
-            barrier=barrier, is_user_admin=is_user_admin
+            barrier=barrier,
+            is_user_admin=is_user_admin,
+            BaseFormClass=UpdateBarrierPriorityForm,
         )
         return form_class
 
@@ -154,7 +156,6 @@ class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
 
 class BarrierEditTags(UserMixin, MetadataMixin, APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/tags.html"
-    form_class = UpdateBarrierTagsForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -165,16 +166,50 @@ class BarrierEditTags(UserMixin, MetadataMixin, APIBarrierFormViewMixin, FormVie
         # Check if the barrier has a Top 100 Priority barrier and set the initial value accordingly
         top_barrier_initial = "No"
 
-        # TODO: Just here to show example of how to use perms for the PB100 tickets
-        # if TOP_PRIORITY_BARRIER_EDIT_PERMISSION in self.user.permissions:
-        # has perm to approve or remove top barriers
-
         top_barrier_initial = self.barrier.top_priority_status
 
         return {
             "tags": [tag["id"] for tag in self.barrier.tags],
             "top_barrier": top_barrier_initial,
         }
+
+    def get_context_data(self, **kwargs):
+        # Add info on the user's permissions
+
+        user = user_scope(self.request)["current_user"]
+        is_user_admin = user.has_permission("set_topprioritybarrier")
+        # is_user_admin = False
+
+        REQUEST_PHASE_STATUSES = [
+            TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING,
+            TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING,
+        ]
+        is_top_priority_requested = (
+            self.barrier.top_priority_status in REQUEST_PHASE_STATUSES
+        )
+
+        kwargs["user_is_top_priority_moderator"] = is_user_admin
+        kwargs["is_top_priority_requested"] = is_top_priority_requested
+        kwargs["is_approval_pending"] = (
+            self.barrier.top_priority_status
+            == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
+        )
+        kwargs["is_removal_pending"] = (
+            self.barrier.top_priority_status
+            == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
+        )
+        return super().get_context_data(**kwargs)
+
+    def get_form_class(self):
+        user = user_scope(self.request)["current_user"]
+        is_user_admin = user.has_permission("set_topprioritybarrier")
+        barrier = self.barrier
+        form_class = update_barrier_priority_form_factory(
+            barrier=barrier,
+            is_user_admin=is_user_admin,
+            BaseFormClass=UpdateBarrierTagsForm,
+        )
+        return form_class
 
 
 class BarrierEditTradeDirection(MetadataMixin, APIBarrierFormViewMixin, FormView):
