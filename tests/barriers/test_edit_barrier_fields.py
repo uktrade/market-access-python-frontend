@@ -5,6 +5,7 @@ import dateutil.parser
 from django.urls import reverse
 from mock import patch
 
+from barriers.constants import TOP_PRIORITY_BARRIER_STATUS
 from core.tests import MarketAccessTestCase
 
 logger = logging.getLogger(__name__)
@@ -217,7 +218,6 @@ class EditTagsTestCase(MarketAccessTestCase):
         response = self.client.get(
             reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]})
         )
-
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
@@ -226,19 +226,22 @@ class EditTagsTestCase(MarketAccessTestCase):
         for tag in self.barrier["tags"]:
             test_tag_list.append(tag["id"])
         assert form.initial["tags"] == test_tag_list
-        assert form.initial["top_barrier"] == "Yes"
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.NONE
 
     @patch("utils.api.resources.APIResource.patch")
     def test_edit_tags_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]}),
-            data={"tags": [1], "top_barrier": "Yes"},
+            data={"tags": [1], "top_barrier": TOP_PRIORITY_BARRIER_STATUS.APPROVED},
         )
 
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            tags=["1", "4"],
+            tags=[
+                "1",
+            ],
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.APPROVED,
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -252,7 +255,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["priority"] == self.barrier["priority"]["code"]
-        assert form.initial["top_barrier"] == "Yes"
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.NONE
 
     @patch("utils.api.resources.APIResource.patch")
     def test_priority_cannot_be_empty(self, mock_patch):
@@ -266,7 +269,8 @@ class EditPriorityTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.is_valid() is False
         assert "priority" in form.errors
-        assert "priority_summary" not in form.errors
+        assert "priority_summary" in form.errors
+        assert form.errors["priority_summary"] == ["This field is required."]
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
@@ -281,7 +285,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.is_valid() is False
         assert "priority" in form.errors
-        assert "priority_summary" not in form.errors
+        assert "priority_summary" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
