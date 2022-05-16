@@ -238,7 +238,7 @@ class EditTagsTestCase(MarketAccessTestCase):
             data={
                 "tags": [1],
                 "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
-                "barrier_summary": "New summary",
+                "priority_summary": "New summary",
             },
         )
 
@@ -247,7 +247,7 @@ class EditTagsTestCase(MarketAccessTestCase):
             tags=[
                 "1",
             ],
-            barrier_summary="New summary",
+            priority_summary="New summary",
             top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
         )
         assert response.status_code == HTTPStatus.FOUND
