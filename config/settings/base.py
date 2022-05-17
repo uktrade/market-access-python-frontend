@@ -387,7 +387,7 @@ WEBPACK_LOADER = {
 # Adding a user to these groups should not remove the role from the user
 USER_ADDITIONAL_PERMISSION_GROUPS = [
     "Download approved user",
-    "Action plans user",
+    "Action plan user",
     "PB100 barrier approver",
 ]
 
