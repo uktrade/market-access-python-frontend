@@ -151,7 +151,9 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        ),
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -383,7 +385,11 @@ WEBPACK_LOADER = {
 
 # The following are extra-permission groups (not roles)
 # Adding a user to these groups should not remove the role from the user
-USER_ADDITIONAL_PERMISSION_GROUPS = ["Download approved user", "Action plan user"]
+USER_ADDITIONAL_PERMISSION_GROUPS = [
+    "Download approved user",
+    "Action plans user",
+    "PB100 barrier approver",
+]
 
 # External URLs used within the app
 EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
