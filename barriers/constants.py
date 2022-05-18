@@ -199,13 +199,13 @@ TOP_PRIORITY_BARRIER_STATUS = Choices(
 )
 
 TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES = Choices(
-    ("APPROVAL_PENDING", "Yes - pending"),
+    ("APPROVAL_PENDING", "Yes"),
     ("NONE", "No"),
 )
 
 TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES = Choices(
     ("APPROVED", "Yes"),
-    ("REMOVAL_PENDING", "No - pending"),
+    ("REMOVAL_PENDING", "No"),
 )
 
 # Default choice field for a user that can moderate top priority

@@ -8,7 +8,11 @@
             ma.pages.topBarrierPriority.optionalRejectionSummary(
                 "top_barrier",
                 "top_priority_rejection_summary-container"
-            )
+            );
+            ma.pages.topBarrierPriority.toggleNoticeOnPriorityRadioChange(
+                "top_barrier",
+                "top-priority-request-notice"
+            );
         }
     </script>
 {% endblock %}
@@ -91,7 +95,7 @@
         <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__header">
               <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                Notice - {{user_is_top_priority_moderator}} - {{is_top_priority_requested}}
+                Notice
               </h2>
             </div>
             <div class="govuk-notification-banner__content">
