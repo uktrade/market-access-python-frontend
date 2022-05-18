@@ -17,6 +17,7 @@ ma.pages.topBarrierPriority = {
         ) {
             return;
         }
+        rejectionSummaryInputContainer.style = "display: none";
 
         // get radio input that has No as label
         const yesRadioInput = jessie.queryOne(`#${top_barrier_status_id}-1`);
@@ -46,11 +47,11 @@ ma.pages.topBarrierPriority = {
             `#${top_barrier_status_id}`
         );
         const noticeContainer = jessie.queryOne(`#${notice_id}`);
-        noticeContainer.style = "display: none";
         if (!topBarrierStatusInputContainer || !noticeContainer) {
             // if notice container doesn't exist, return
             return;
         }
+        noticeContainer.style = "display: none";
 
         const yesRadioInput = jessie.queryOne(`#${top_barrier_status_id}-1`);
         const noRadioInput = jessie.queryOne(`#${top_barrier_status_id}-2`);
