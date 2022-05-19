@@ -26,7 +26,7 @@ class MarketAccessTestCase(TestCase):
         {
             "is_superuser": False,
             "is_active": True,
-            "permissions": ["change_user", "list_users"],
+            "permissions": ["change_user", "list_users", "set_topprioritybarrier"],
         }
     )
     general_user = User(
@@ -226,7 +226,9 @@ class MarketAccessTestCase(TestCase):
                                 "action_type": "PLURILATERAL_ENGAGEMENT",
                                 "action_type_category": "With the EU",
                                 "stakeholders": "asdasd",
-                                "action_type_display": "Plurilateral engagement - With the EU",
+                                "action_type_display": (
+                                    "Plurilateral engagement - With the EU"
+                                ),
                                 "assigned_to": 76,
                                 "assigned_to_email": "aaron.jaswal@trade.gov.uk",
                                 "outcome": "",

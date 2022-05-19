@@ -52,9 +52,12 @@ class BarrierSearchForm(forms.Form):
         label="Overseas region",
         required=False,
     )
-    top_priority = forms.MultipleChoiceField(
-        label="Top priority barrier",
-        choices=(("4", "Top 100 priority barrier"),),
+    top_priority_status = forms.MultipleChoiceField(
+        label="Top 100 priority barrier",
+        choices=(
+            ("APPROVED", "Top 100 priority barrier"),
+            ("PENDING", "Pending approval/removal"),
+        ),
         required=False,
     )
     priority = forms.MultipleChoiceField(
@@ -254,7 +257,7 @@ class BarrierSearchForm(forms.Form):
             "organisation": data.getlist("organisation"),
             "category": data.getlist("category"),
             "region": data.getlist("region"),
-            "top_priority": data.getlist("top_priority"),
+            "top_priority_status": data.getlist("top_priority_status"),
             "priority": data.getlist("priority"),
             "status": data.getlist("status"),
             "tags": data.getlist("tags"),
@@ -490,7 +493,7 @@ class BarrierSearchForm(forms.Form):
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(
             self.cleaned_data.get("tags", [])
-            + self.cleaned_data.get("top_priority", [])
+            # + self.cleaned_data.get("top_priority", []) TODO: Check we need this
         )
         for status_value in STATUS_WITH_DATE_FILTER:
             params[f"status_date_{status_value}"] = self.format_resolved_date(
@@ -498,6 +501,9 @@ class BarrierSearchForm(forms.Form):
             )
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
+        )
+        params["top_priority_status"] = ",".join(
+            self.cleaned_data.get("top_priority_status", [])
         )
         params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")

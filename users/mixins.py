@@ -8,6 +8,11 @@ from .forms import UserSearchForm
 
 
 class UserMixin:
+    """
+    Add this mixin to a view if you want get details on the user
+    that is currently logged in.
+    """
+
     _user = None
 
     @property

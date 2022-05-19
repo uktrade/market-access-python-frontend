@@ -76,6 +76,10 @@ class Barrier(APIModel):
         return self.data.get("public_eligibility_postponed")
 
     @property
+    def top_priority_status(self):
+        return self.data.get("top_priority_status")
+
+    @property
     def commodities_grouped_by_country(self):
         grouped_commodities = {}
         for barrier_commodity in self.commodities:

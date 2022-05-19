@@ -77,14 +77,9 @@
                 "title": "COVID-19",
                 "description": "Barrier related to Covid pandemic.",
                 "order": 1
-            },
-            {
-                "id": 4,
-                "title": "Top 100 Priority Barrier",
-                "description": "Barrier considered a top priority",
-                "order": 4
             }
         ],
+        "top_priority_status": "APPROVED",
         "priority": {
             "code": "MEDIUM",
             "name": "Medium",
