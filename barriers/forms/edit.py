@@ -1,5 +1,13 @@
 from django import forms
 
+from barriers.constants import (
+    TOP_PRIORITY_BARRIER_STATUS,
+    TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
+    TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES,
+    TOP_PRIORITY_BARRIER_STATUS_APPROVE_REQUEST_CHOICES,
+    TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES,
+    TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES,
+)
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ChoiceFieldWithHelpText,
@@ -59,7 +67,9 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
         label="What product or service is being exported?",
         max_length=255,
         error_messages={
-            "max_length": "Product or service should be %(limit_value)d characters or fewer",
+            "max_length": (
+                "Product or service should be %(limit_value)d characters or fewer"
+            ),
             "required": "Enter a product or service",
         },
     )
@@ -108,25 +118,25 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
     update = forms.CharField(
         label="Current status",
         help_text=(
-            "Include the barrier status, recent progress, and any obstacles. Content will be used"
-            " for monthly reports and therefore should be appropriate for senior stakeholders"
-            " (including Ministers)."
+            "Include the barrier status, recent progress, and any obstacles. Content"
+            " will be used for monthly reports and therefore should be appropriate for"
+            " senior stakeholders (including Ministers)."
         ),
         widget=forms.Textarea,
         error_messages={
-            "required": ("Progress update is required"),
+            "required": "Progress update is required",
         },
     )
     next_steps = forms.CharField(
         label="Next steps",
         help_text=(
-            "Outline planned actions over the coming months, including internal to Government,"
-            " with industry, and with foreign governments/agencies. Content will be used for "
-            "monthly reports and therefore should be appropriate for senior stakeholders "
-            "(including Ministers)."
+            "Outline planned actions over the coming months, including internal to"
+            " Government, with industry, and with foreign governments/agencies. Content"
+            " will be used for monthly reports and therefore should be appropriate for"
+            " senior stakeholders (including Ministers)."
         ),
         widget=forms.Textarea,
-        error_messages={"required": ("Next steps is required")},
+        error_messages={"required": "Next steps is required"},
     )
 
     def __init__(self, barrier_id, progress_update_id=None, *args, **kwargs):
@@ -210,27 +220,6 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         widget=forms.RadioSelect,
         error_messages={"required": "Select a barrier priority"},
     )
-    top_barrier = forms.ChoiceField(
-        label="Should this barrier be considered a top priority?",
-        choices=[("Yes", "Yes"), ("No", "No")],
-        widget=forms.RadioSelect,
-        error_messages={
-            "required": "Please indicate if this is a top priority barrier"
-        },
-    )
-    priority_summary = forms.CharField(
-        label="Why did the priority change? (optional)",
-        widget=forms.Textarea,
-        required=False,
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        initial_priority = kwargs.get("initial", {}).get("priority")
-        if initial_priority == "UNKNOWN":
-            self.fields[
-                "priority_summary"
-            ].label = "Why did you choose this priority? (optional)"
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -239,21 +228,219 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
         existing_tags = getattr(client.barriers.get(id=self.id), "tags")
         tag_ids = []
         for tag in existing_tags:
-            # Skip adding the top-priority tag, this will decided below
-            if tag["id"] == 4:
-                continue
             tag_ids.append(tag["id"])
 
-        # Add the top barrier tag to the tag list, or remove it
-        if self.cleaned_data["top_barrier"] == "Yes":
-            tag_ids.append(4)
+        patch_args = {
+            "id": self.id,
+            "priority": self.cleaned_data["priority"],
+            "tags": tag_ids,
+        }
 
-        client.barriers.patch(
-            id=self.id,
-            priority=self.cleaned_data["priority"],
-            priority_summary=self.cleaned_data["priority_summary"],
-            tags=tag_ids,
-        )
+        if self.fields.get("top_barrier"):
+            patch_args["top_priority_status"] = self.cleaned_data["top_barrier"]
+
+        if self.fields.get("priority_summary"):
+            patch_args["priority_summary"] = self.cleaned_data["priority_summary"]
+
+        if self.fields.get("top_priority_rejection_summary"):
+            patch_args["top_priority_rejection_summary"] = self.cleaned_data[
+                "top_priority_rejection_summary"
+            ]
+
+        client.barriers.patch(**patch_args)
+
+
+class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
+    tags = MultipleChoiceFieldWithHelpText(
+        label="Is this issue caused by or related to any of the following?",
+        choices=[],
+        required=False,
+    )
+
+    def __init__(self, tags, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["tags"].choices = tags
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        patch_args = {
+            "id": self.id,
+            "tags": self.cleaned_data["tags"],
+        }
+
+        if self.fields.get("top_barrier"):
+            patch_args["top_priority_status"] = self.cleaned_data["top_barrier"]
+
+        if self.fields.get("priority_summary"):
+            patch_args["priority_summary"] = self.cleaned_data["priority_summary"]
+
+        if self.fields.get("top_priority_rejection_summary"):
+            patch_args["top_priority_rejection_summary"] = self.cleaned_data[
+                "top_priority_rejection_summary"
+            ]
+
+        client.barriers.patch(**patch_args)
+
+
+def update_barrier_priority_form_factory(
+    barrier, is_user_admin=False, BaseFormClass=UpdateBarrierPriorityForm
+):
+    """
+    type: (Barrier, bool) -> UpdateBarrierPriorityForm
+
+    Return a form for updating the priority of a barrier based on
+    a barrier's Top priority status and if the user has moderator permissions.
+
+    Should support 5 cases:
+    - regular user + PB100 tag set:
+        -> show form for requesting removal
+    - regular user + no status:
+        -> show form for rquesting PB100
+    - regular user + request status:
+        -> show banner
+    - admin user + regular status
+        -> show form for setting PB100
+    - admin user + request status
+        -> show form for accepting/refusing PB100
+    """
+    top_barrier_status_field_label = (
+        "Should this barrier be considered for the Top 100 priority barriers list?"
+    )
+    top_barrier_status_field_choices = (
+        TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES
+    )
+
+    REQUEST_PHASE_STATUSES = [
+        TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING,
+        TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING,
+    ]
+
+    is_top_priority_in_request_phase = (
+        barrier.top_priority_status in REQUEST_PHASE_STATUSES
+    )
+
+    show_reason_for_rejection_field = False
+    show_reason_for_top_priority_field = True
+    show_top_priority_status_field = True
+    if is_user_admin:
+        top_barrier_status_field_choices = TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES
+        if barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING:
+            # user needs to approve/deny the request
+            top_barrier_status_field_label = (
+                "This barrier has been tagged as a Top 100 priority barrier. Do you"
+                " agree with this status?"
+            )
+            top_barrier_status_field_choices = (
+                TOP_PRIORITY_BARRIER_STATUS_APPROVE_REQUEST_CHOICES
+            )
+            show_reason_for_rejection_field = True
+            show_reason_for_top_priority_field = False
+        elif barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING:
+            # user needs to approve/deny the request
+            top_barrier_status_field_label = (
+                "This barrier has been requested to be removed as a Top 100 priority"
+                " barrier.  Do you agree with this status?"
+            )
+            top_barrier_status_field_choices = (
+                TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES
+            )
+            show_reason_for_rejection_field = True
+            show_reason_for_top_priority_field = False
+
+        # Show regular label for admin
+    else:
+        # regular user
+        if is_top_priority_in_request_phase:
+            show_reason_for_top_priority_field = False
+            show_top_priority_status_field = False
+        elif barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.NONE:
+            top_barrier_status_field_choices = (
+                TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES
+            )
+        else:
+            top_barrier_status_field_choices = (
+                TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES
+            )
+
+    class CustomizedUpdateBarrierPriorityForm(BaseFormClass):
+        if show_top_priority_status_field:
+            top_barrier = forms.ChoiceField(
+                label=top_barrier_status_field_label,
+                choices=top_barrier_status_field_choices,
+                widget=forms.RadioSelect,
+                error_messages={
+                    "required": "Please indicate if this is a top priority barrier"
+                },
+            )
+
+        if show_reason_for_top_priority_field:
+            priority_summary = forms.CharField(
+                label="Reason for the top 100 priority barrier assessment",
+                widget=forms.Textarea,
+                required=False,
+            )
+        if show_reason_for_rejection_field:
+            top_priority_rejection_summary = forms.CharField(
+                label=(
+                    "Please state your reason for rejecting the barrier change request"
+                ),
+                widget=forms.Textarea,
+                required=False,
+            )
+
+        def clean_priority_summary(self):
+            cleaned_priority_summary = self.cleaned_data["priority_summary"]
+            if cleaned_priority_summary:
+                # The field is filled in so we can ignore any checks
+                return cleaned_priority_summary
+
+            # The field is empty
+            # If the user changed the top_priority_status of the barrrier
+            # we should raise a ValidationError
+
+            cleaned_top_priority_status = self.cleaned_data.get("top_barrier")
+            if not cleaned_top_priority_status:
+                raise forms.ValidationError("Top priority status is required")
+            has_top_priority_status_changed = (
+                cleaned_top_priority_status != barrier.top_priority_status
+            )
+            if has_top_priority_status_changed:
+                raise forms.ValidationError("This field is required.")
+            return cleaned_priority_summary
+
+        def clean_top_priority_rejection_summary(self):
+            rejection_summary = self.cleaned_data["top_priority_rejection_summary"]
+            if rejection_summary:
+                # rejection summary has been filled is, so no need to check
+                return rejection_summary
+
+            # we need to raise a ValidationError if the admin rejected a request
+            # but did not supply a rejection summary
+            admins_decision = self.cleaned_data.get("top_barrier")
+            if not admins_decision:
+                raise forms.ValidationError("Top priority status is required")
+            if (
+                barrier.top_priority_status
+                == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
+            ):
+                if admins_decision == TOP_PRIORITY_BARRIER_STATUS.APPROVED:
+                    raise forms.ValidationError(
+                        "A reason needs to be provided if the removal request is"
+                        " rejected"
+                    )
+            elif (
+                barrier.top_priority_status
+                == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
+            ):
+                if admins_decision == TOP_PRIORITY_BARRIER_STATUS.NONE:
+                    raise forms.ValidationError(
+                        "A reason needs to be provided if the request is rejected"
+                    )
+
+            return rejection_summary
+
+    return CustomizedUpdateBarrierPriorityForm
 
 
 class UpdateBarrierTermForm(APIFormMixin, forms.Form):
@@ -286,7 +473,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
 ):
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
-        help_text=("For example, 11 2020"),
+        help_text="For example, 11 2020",
         error_messages={"required": "Enter the estimated resolution date"},
     )
 
@@ -313,35 +500,6 @@ class UpdateBarrierEstimatedResolutionDateForm(
         )
 
 
-class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
-    tags = MultipleChoiceFieldWithHelpText(
-        label="Is this issue caused by or related to any of the following?",
-        choices=[],
-        required=False,
-    )
-    top_barrier = forms.ChoiceField(
-        label="Should this barrier be considered a top priority?",
-        choices=[("Yes", "Yes"), ("No", "No")],
-        widget=forms.RadioSelect,
-        error_messages={
-            "required": "Please indicate if this is a top priority barrier"
-        },
-    )
-
-    def __init__(self, tags, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["tags"].choices = tags
-
-    def save(self):
-
-        if self.cleaned_data["top_barrier"] == "Yes":
-            # If top barrier answer is 'yes', append the id for the top barrier tag to the tag list
-            self.cleaned_data["tags"].append("4")
-
-        client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, tags=self.cleaned_data["tags"])
-
-
 class UpdateTradeDirectionForm(APIFormMixin, forms.Form):
     trade_direction = forms.ChoiceField(
         label="Which trade direction does this barrier affect?",
@@ -365,14 +523,14 @@ class CausedByTradingBlocForm(forms.Form):
     caused_by_trading_bloc = YesNoDontKnowBooleanField(
         label="",
         error_messages={
-            "required": ("Indicate if the barrier was caused by the trading bloc")
+            "required": "Indicate if the barrier was caused by the trading bloc"
         },
     )
 
     def __init__(self, trading_bloc, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["caused_by_trading_bloc"].label = (
-            f"Was this barrier caused by a regulation introduced by "
+            "Was this barrier caused by a regulation introduced by "
             f"{trading_bloc['short_name']}?"
         )
         self.fields["caused_by_trading_bloc"].help_text = self.get_help_text(
@@ -387,19 +545,21 @@ class CausedByTradingBlocForm(forms.Form):
                 "be changed to EU in the location screen."
             ),
             "TB00026": (
-                "Yes should be selected if the barrier is a local application of an Mercosur "
-                "regulation. If it is an Mercosur-wide barrier, the country location should "
-                "be changed to Southern Common Market (Mercosur) in the location screen."
+                "Yes should be selected if the barrier is a local application of an"
+                " Mercosur regulation. If it is an Mercosur-wide barrier, the country"
+                " location should be changed to Southern Common Market (Mercosur) in"
+                " the location screen."
             ),
             "TB00013": (
-                "Yes should be selected if the barrier is a local application of an EAEU "
-                "regulation. If it is an EAEU-wide barrier, the country location should "
-                "be changed to Eurasian Economic Union (EAEU) in the location screen."
+                "Yes should be selected if the barrier is a local application of an"
+                " EAEU regulation. If it is an EAEU-wide barrier, the country location"
+                " should be changed to Eurasian Economic Union (EAEU) in the location"
+                " screen."
             ),
             "TB00017": (
-                "Yes should be selected if the barrier is a local application of an GCC "
-                "regulation. If it is an GCC-wide barrier, the country location should "
-                "be changed to Gulf Cooperation Council (GCC) in the location screen."
+                "Yes should be selected if the barrier is a local application of an GCC"
+                " regulation. If it is an GCC-wide barrier, the country location should"
+                " be changed to Gulf Cooperation Council (GCC) in the location screen."
             ),
         }
         return help_text.get(trading_bloc_code, "")
@@ -419,7 +579,8 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
         label="Is the barrier eligible for an initial economic assessment?",
         error_messages={
             "required": (
-                "Select yes if the barrier is eligible for an initial economic assessment"
+                "Select yes if the barrier is eligible for an initial economic"
+                " assessment"
             )
         },
     )
