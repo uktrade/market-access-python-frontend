@@ -399,7 +399,9 @@ def update_barrier_priority_form_factory(
             # If the user changed the top_priority_status of the barrrier
             # we should raise a ValidationError
 
-            cleaned_top_priority_status = self.cleaned_data["top_barrier"]
+            cleaned_top_priority_status = self.cleaned_data.get("top_barrier")
+            if not cleaned_top_priority_status:
+                raise forms.ValidationError("Top priority status is required")
             has_top_priority_status_changed = (
                 cleaned_top_priority_status != barrier.top_priority_status
             )
@@ -416,6 +418,8 @@ def update_barrier_priority_form_factory(
             # we need to raise a ValidationError if the admin rejected a request
             # but did not supply a rejection summary
             admins_decision = self.cleaned_data.get("top_barrier")
+            if not admins_decision:
+                raise forms.ValidationError("Top priority status is required")
             if (
                 barrier.top_priority_status
                 == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
