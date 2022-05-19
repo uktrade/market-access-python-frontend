@@ -277,7 +277,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert form.is_valid() is False
         assert "priority" in form.errors
         assert "priority_summary" in form.errors
-        assert form.errors["priority_summary"] == ["This field is required."]
+        assert form.errors["priority_summary"] == ["Top priority status is required"]
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
