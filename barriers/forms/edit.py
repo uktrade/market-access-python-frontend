@@ -378,7 +378,7 @@ def update_barrier_priority_form_factory(
             priority_summary = forms.CharField(
                 label="Reason for the top 100 priority barrier assessment",
                 widget=forms.Textarea,
-                required=True,
+                required=False,
             )
         if show_reason_for_rejection_field:
             top_priority_rejection_summary = forms.CharField(
@@ -389,34 +389,56 @@ def update_barrier_priority_form_factory(
                 required=False,
             )
 
-        def clean(self):
-            cleaned_data = super().clean()
-            if self.fields.get("top_priority_rejection_summary"):
-                rejection_summary = cleaned_data["top_priority_rejection_summary"]
-                if rejection_summary:
-                    # rejection summary has been filled is, so no need to check
-                    return cleaned_data
+        def clean_priority_summary(self):
+            cleaned_priority_summary = self.cleaned_data["priority_summary"]
+            if cleaned_priority_summary:
+                # The field is filled in so we can ignore any checks
+                return cleaned_priority_summary
 
-                # we need to raise a ValidationError if the admin rejected a request
-                # but did not supply a rejection summary
-                admins_decision = cleaned_data.get("top_barrier")
-                if (
-                    barrier.top_priority_status
-                    == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
-                ):
-                    if admins_decision == TOP_PRIORITY_BARRIER_STATUS.APPROVED:
-                        raise forms.ValidationError(
-                            "A reason needs to be provided if the removal request is"
-                            " rejected"
-                        )
-                elif (
-                    barrier.top_priority_status
-                    == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
-                ):
-                    if admins_decision == TOP_PRIORITY_BARRIER_STATUS.NONE:
-                        raise forms.ValidationError(
-                            "A reason needs to be provided if the request is rejected"
-                        )
+            # The field is empty
+            # If the user changed the top_priority_status of the barrrier
+            # we should raise a ValidationError
+
+            cleaned_top_priority_status = self.cleaned_data.get("top_barrier")
+            if not cleaned_top_priority_status:
+                raise forms.ValidationError("Top priority status is required")
+            has_top_priority_status_changed = (
+                cleaned_top_priority_status != barrier.top_priority_status
+            )
+            if has_top_priority_status_changed:
+                raise forms.ValidationError("This field is required.")
+            return cleaned_priority_summary
+
+        def clean_top_priority_rejection_summary(self):
+            rejection_summary = self.cleaned_data["top_priority_rejection_summary"]
+            if rejection_summary:
+                # rejection summary has been filled is, so no need to check
+                return rejection_summary
+
+            # we need to raise a ValidationError if the admin rejected a request
+            # but did not supply a rejection summary
+            admins_decision = self.cleaned_data.get("top_barrier")
+            if not admins_decision:
+                raise forms.ValidationError("Top priority status is required")
+            if (
+                barrier.top_priority_status
+                == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
+            ):
+                if admins_decision == TOP_PRIORITY_BARRIER_STATUS.APPROVED:
+                    raise forms.ValidationError(
+                        "A reason needs to be provided if the removal request is"
+                        " rejected"
+                    )
+            elif (
+                barrier.top_priority_status
+                == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
+            ):
+                if admins_decision == TOP_PRIORITY_BARRIER_STATUS.NONE:
+                    raise forms.ValidationError(
+                        "A reason needs to be provided if the request is rejected"
+                    )
+
+            return rejection_summary
 
     return CustomizedUpdateBarrierPriorityForm
 

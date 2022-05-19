@@ -12,7 +12,11 @@
             ma.pages.topBarrierPriority.optionalRejectionSummary(
                 "top_barrier",
                 "top_priority_rejection_summary-container"
-            )
+            );
+            ma.pages.topBarrierPriority.toggleNoticeOnPriorityRadioChange(
+                "top_barrier",
+                "top-priority-request-notice"
+            );
         }
     </script>
 {% endblock %}
@@ -92,10 +96,10 @@
         {% comment %} End - Pending approval & non admin case {% endcomment %}
 
         {% if not user_is_top_priority_moderator and not is_top_priority_requested %}
-        <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__header">
               <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                Notice - {{user_is_top_priority_moderator}} - {{is_top_priority_requested}}
+                Notice
               </h2>
             </div>
             <div class="govuk-notification-banner__content">
@@ -104,7 +108,7 @@
               </p>
             </div>
           </div>
-          {% endif %}
+        {% endif %}
 
         {% if form.priority_summary %}
         <div id="{{ form.priority_summary.name }}-container" class="govuk-form-group{% if form.priority_summary.errors %} govuk-form-group--error{% endif %}">
