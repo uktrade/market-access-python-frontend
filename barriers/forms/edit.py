@@ -285,6 +285,7 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
 
         client.barriers.patch(**patch_args)
 
+
 def update_barrier_priority_form_factory(
     barrier, is_user_admin=False, BaseFormClass=UpdateBarrierPriorityForm
 ):
