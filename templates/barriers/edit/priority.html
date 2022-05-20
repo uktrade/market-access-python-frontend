@@ -32,6 +32,7 @@
         <div id="{{ form.priority.name }}" class="govuk-form-group{% if form.priority.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.priority.label }}</legend>
+                <span class="govuk-hint">{{ form.priority.help_text }}</span>
 
                 {% form_field_error form "priority" %}
 
@@ -110,6 +111,7 @@
         {% if form.priority_summary %}
         <div id="{{ form.priority_summary.name }}-container" class="govuk-form-group{% if form.priority_summary.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="{{ form.priority_summary.name }}">{{ form.priority_summary.label }}</label>
+            <span class="govuk-hint">{{ form.priority_summary.help_text }}</span>
 
             {% form_field_error form "priority_summary" %}
 
