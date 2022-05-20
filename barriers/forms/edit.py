@@ -216,6 +216,10 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
     ]
     priority = forms.ChoiceField(
         label="What is the priority of the barrier?",
+        help_text=(
+            "Note: The high, medium, low rating is currently under review, so you do"
+            " not need to provide this."
+        ),
         choices=CHOICES,
         widget=forms.RadioSelect,
         error_messages={"required": "Select a barrier priority"},
@@ -376,7 +380,13 @@ def update_barrier_priority_form_factory(
 
         if show_reason_for_top_priority_field:
             priority_summary = forms.CharField(
-                label="Reason for the top 100 priority barrier assessment",
+                label="Reason for the top 100 priority barrier assessment.",
+                help_text=(
+                    "If you are"
+                    " suggesting a potential addition, please outline the barrier’s"
+                    " economic value (including any relevant data), any strategic"
+                    " importance, and an estimated date of resolution (month and year)."
+                ),
                 widget=forms.Textarea,
                 required=False,
             )
