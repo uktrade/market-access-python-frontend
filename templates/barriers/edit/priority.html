@@ -122,7 +122,6 @@
         {% if form.top_priority_rejection_summary %}
         <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
-            <span class="govuk-hint">{{ form.top_priority_rejection_summary.help_text }}</span>
 
             {% form_field_error form "top_priority_rejection_summary" %}
 

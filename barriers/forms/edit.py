@@ -239,7 +239,6 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
             "priority": self.cleaned_data["priority"],
             "tags": tag_ids,
         }
-
         if self.fields.get("top_barrier"):
             patch_args["top_priority_status"] = self.cleaned_data["top_barrier"]
 
@@ -285,7 +284,6 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
             ]
 
         client.barriers.patch(**patch_args)
-
 
 def update_barrier_priority_form_factory(
     barrier, is_user_admin=False, BaseFormClass=UpdateBarrierPriorityForm
