@@ -329,10 +329,6 @@ class Metadata:
         """
 
         tag_list = self.get_barrier_tags()
-        for tag in tag_list:
-            # remove 'top priority' tag from this list as we assign it through a seperate radio button
-            if tag["title"] == "TOP 100 PRIORITY BARRIER":
-                tag_list.remove(tag)
 
         if list_use == "edit":
             # If this list is for the edit pages, return as generator
