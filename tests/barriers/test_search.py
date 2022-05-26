@@ -330,6 +330,90 @@ class SearchTestCase(MarketAccessTestCase):
         assert page_labels == [1, "...", 5, 6, 7, 8, "...", 13]
 
     @patch("utils.api.resources.APIResource.list")
+    def test_pagination_x_to_y_of_z_full_page(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=Barrier,
+            data=[self.barrier] * 10,
+            total_count=30,
+        )
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"status": ["1", "2", "3"], "page": "3"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            archived="0",
+            status="1,2,3",
+            limit=10,
+            offset=20,
+        )
+
+        pagination = response.context["pagination"]
+        assert pagination["total_pages"] == 3
+        assert pagination["current_page"] == 3
+        assert pagination["total_items"] == 30
+        assert pagination["start_position"] == 21
+        assert pagination["end_position"] == 30
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_pagination_x_to_y_of_z_partial_page(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=Barrier,
+            data=[self.barrier] * 10,
+            total_count=23,
+        )
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"status": ["1", "2", "3"], "page": "3"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            archived="0",
+            status="1,2,3",
+            limit=10,
+            offset=20,
+        )
+
+        pagination = response.context["pagination"]
+        assert pagination["total_pages"] == 3
+        assert pagination["current_page"] == 3
+        assert pagination["total_items"] == 23
+        assert pagination["start_position"] == 21
+        assert pagination["end_position"] == 23
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_pagination_x_to_y_of_z_page_before_partial_page(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=Barrier,
+            data=[self.barrier] * 10,
+            total_count=23,
+        )
+
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"status": ["1", "2", "3"], "page": "2"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            archived="0",
+            status="1,2,3",
+            limit=10,
+            offset=10,
+        )
+
+        pagination = response.context["pagination"]
+        assert pagination["total_pages"] == 3
+        assert pagination["current_page"] == 2
+        assert pagination["total_items"] == 23
+        assert pagination["start_position"] == 11
+        assert pagination["end_position"] == 20
+
+    @patch("utils.api.resources.APIResource.list")
     def test_wto_filters(self, mock_list):
         response = self.client.get(
             reverse("barriers:search"),
@@ -358,4 +442,140 @@ class SearchTestCase(MarketAccessTestCase):
                 "has_case_number,"
                 "has_no_information"
             ),
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_empty_resolution_date_filters(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["4"],
+                "resolved_date_from_month": "",
+                "resolved_date_from_year": "",
+                "resolved_date_to_month": "",
+                "resolved_date_to_year": "",
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="4",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_resolution_date_filters_resolved_in_full(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["4"],
+                "resolved_date_from_month_resolved_in_full": "01",
+                "resolved_date_from_year_resolved_in_full": "2021",
+                "resolved_date_to_month_resolved_in_full": "01",
+                "resolved_date_to_year_resolved_in_full": "2022",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="4",
+            status_date_resolved_in_full="2021-01-01,2022-01-31",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_resolution_date_filters_resolved_in_part(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["3"],
+                "resolved_date_from_month_resolved_in_part": "01",
+                "resolved_date_from_year_resolved_in_part": "2021",
+                "resolved_date_to_month_resolved_in_part": "01",
+                "resolved_date_to_year_resolved_in_part": "2022",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="3",
+            status_date_resolved_in_part="2021-01-01,2022-01-31",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_resolution_date_filters_open_pending_action(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["1"],
+                "resolved_date_from_month_open_pending_action": "01",
+                "resolved_date_from_year_open_pending_action": "2021",
+                "resolved_date_to_month_open_pending_action": "01",
+                "resolved_date_to_year_open_pending_action": "2022",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="1",
+            status_date_open_pending_action="2021-01-01,2022-01-31",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_resolution_date_filters_open_in_progress(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["2"],
+                "resolved_date_from_month_open_in_progress": "01",
+                "resolved_date_from_year_open_in_progress": "2021",
+                "resolved_date_to_month_open_in_progress": "01",
+                "resolved_date_to_year_open_in_progress": "2022",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="2",
+            status_date_open_in_progress="2021-01-01,2022-01-31",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_delivery_confidence_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "delivery_confidence": "ON_TRACK",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported_on",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            delivery_confidence="ON_TRACK",
         )

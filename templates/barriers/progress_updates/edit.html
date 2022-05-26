@@ -1,0 +1,84 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Edit progress update{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block body_script %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.update.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.next_steps.name }}-form-group.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Edit progress update' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+
+            {% form_field_error form "status" %}
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.status.label }}
+                    </legend>
+
+                    <div class="govuk-radios">
+                        {% for value, name in form.fields.status.choices %}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="{{ form.status.name }}-{{ value }}" name="{{ form.status.name }}" type="radio" value="{{ value }}"{% if form.status.value == value %} checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="{{ form.status.name }}-{{ value }}">{{ name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div id="{{ form.update.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="update">{{ form.update.label }}</label>
+
+                {% form_field_error form "update" %}
+                <span class="govuk-hint">{{ form.update.help_text }}</span>
+
+
+                <textarea id="{{ form.update.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.update.name }}" rows="5" maxlength="1250">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.update.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+              You can enter up to 1250 characters
+            </div>
+        </div>
+
+        <div id="{{ form.next_steps.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div  class="govuk-form-group{% if form.next_steps.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="next_steps">{{ form.next_steps.label }}</label>
+
+                {% form_field_error form "next_steps" %}
+                <span class="govuk-hint">{{ form.next_steps.help_text }}</span>
+
+
+                <textarea id="{{ form.next_steps.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_steps.name }}" rows="5" maxlength="1250">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.next_steps.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            You can enter up to 1250 characters
+            </div>
+        </div>
+
+
+        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+
+    </form>
+
+{% endblock %}

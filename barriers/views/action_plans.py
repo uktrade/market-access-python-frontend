@@ -17,16 +17,18 @@ from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
 
 
-class ActionPlanFormViewMixin:
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
-        return kwargs
-
+class ActionPlanFormSuccessUrlMixin:
     def get_success_url(self):
         return reverse(
             "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
         )
+
+
+class ActionPlanFormViewMixin(ActionPlanFormSuccessUrlMixin):
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        return kwargs
 
 
 class EditActionPlanCurrentStatusFormView(
@@ -41,7 +43,7 @@ class EditActionPlanCurrentStatusFormView(
 
 
 class SelectActionPlanOwner(
-    ActionPlanFormViewMixin, BarrierMixin, UserSearchMixin, FormView
+    ActionPlanFormSuccessUrlMixin, BarrierMixin, UserSearchMixin, FormView
 ):
     template_name = "barriers/action_plans/add_owner.html"
     error_message = "There was an error adding {full_name} as an owner."

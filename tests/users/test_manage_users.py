@@ -1,11 +1,14 @@
+import logging
 from http import HTTPStatus
+from unittest.mock import patch
 
 import pytest
 from django.urls import reverse
-from mock import patch
 
 from core.tests import MarketAccessTestCase
 from users.models import Group, User
+
+logger = logging.getLogger(__name__)
 
 
 class ManageUsersPermissionsTestCase(MarketAccessTestCase):
@@ -213,6 +216,28 @@ class ManageUsersTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.patch")
+    def test_change_role_additional_permissions(self, mock_patch, mock_list, mock_get):
+        mock_patch.return_value = self.editor
+        mock_get.return_value = self.editor
+        mock_list.return_value = [
+            Group({"id": 1, "name": "Sifter"}),
+            Group({"id": 2, "name": "Editor"}),
+            Group({"id": 3, "name": "Download approved user"}),
+        ]
+        response = self.client.post(
+            reverse("users:edit_user", kwargs={"user_id": 75}),
+            data={
+                "group": "2",
+                "additional_permissions": "3",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+        mock_patch.assert_called_with(id="75", groups=[{"id": "2"}, {"id": "3"}])
+
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.APIResource.patch")
     def test_remove_role(self, mock_patch, mock_list, mock_get):
         mock_patch.return_value = self.editor
         mock_get.return_value = self.editor
@@ -227,3 +252,11 @@ class ManageUsersTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(id="75", groups=[])
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_delete_user(self, mock_patch):
+        response = self.client.post(
+            reverse("users:delete_user", kwargs={"user_id": 56}),
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        mock_patch.assert_called_with(id="56", is_active=False, groups=[])

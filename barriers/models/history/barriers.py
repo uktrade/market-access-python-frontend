@@ -148,9 +148,9 @@ class EconomicAssessmentEligibilitySummaryHistoryItem(BaseHistoryItem):
     field_name = "Economic assessment: Eligibility summary"
 
 
-class EndDateHistoryItem(BaseHistoryItem):
-    field = "end_date"
-    field_name = "End date"
+class EstimatedResolutionDateHistoryItem(BaseHistoryItem):
+    field = "estimated_resolution_date"
+    field_name = "Estimated resolution date"
 
     def get_value(self, value):
         if value:
@@ -317,7 +317,7 @@ class BarrierHistoryItem(PolymorphicBase):
         CompaniesHistoryItem,
         EconomicAssessmentEligibilityHistoryItem,
         EconomicAssessmentEligibilitySummaryHistoryItem,
-        EndDateHistoryItem,
+        EstimatedResolutionDateHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
         OrganisationHistoryItem,
@@ -336,3 +336,12 @@ class BarrierHistoryItem(PolymorphicBase):
     )
     default_subclass = GenericHistoryItem
     class_lookup = {}
+
+
+class ProgressUpdateHistoryItem(BaseHistoryItem):
+    model = "progress_update"
+    field = "status"
+    field_name = "Delivery Confidence"
+
+    def get_value(self, value):
+        return value

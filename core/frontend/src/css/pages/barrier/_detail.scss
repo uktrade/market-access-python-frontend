@@ -130,3 +130,41 @@
 		}
 	}
 }
+
+.barrier-progress-update{
+	background: #ECF8FF;
+	padding: 0px;
+	padding-top: 2px;
+	&__cta{
+		margin: 12px 0px;
+	}
+
+	&__section{
+		margin: 12px;
+		border-bottom: 1px solid #B1B4B6;
+
+		&__dates{
+			color: #505A5F;
+		}
+
+		&__heading{
+			margin: 0px;
+
+		}
+		&__text{
+			margin: 8px 0px;
+		}
+		&__date{
+			font-weight: normal;
+		}
+		&__user{
+			font-weight: bold;
+		}
+	}
+	&__actions{
+		margin: 12px;
+		a{
+			display: block;
+		}
+	}
+}

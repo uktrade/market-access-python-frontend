@@ -49,10 +49,15 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.category %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority extra_classes='barrier-priority-filter' %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
+
+                <!-- Include JS component for resolved date filtering -->
+                {% render_bundle 'date_filter_component' %}
 
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
@@ -154,8 +159,10 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.category %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.search %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.top_priority %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.priority %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.status %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.delivery_confidence %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.wto %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
@@ -287,6 +294,11 @@
                                 <dt class="filter-results-list__item__definitions__key">Updated:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
 
+                                {% if barrier.status.id == '4' %}{# 4: RESOLVED_IN_FULL #}
+                                <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
+                                {% endif %}
+
                                 {% if barrier.sector_names %}
                                 <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
@@ -305,12 +317,19 @@
                                 </div>
                             </div>
 
-                            {% if barrier.tags %}
+                            {% if barrier.tags or barrier.top_priority_status != "NONE" %}
                                 <ul class="barrier-tag-list">
                                     {% spaceless %}
                                         {% for tag in barrier.tags %}
-                                        <li class="barrier-tag-list__tag">{{ tag.title }}</li>
+                                        <li class="govuk-tag">{{ tag.title }}</li>
                                         {% endfor %}
+                                        {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
+                                            <li class="govuk-tag govuk-tag--yellow">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
+                                        {% elif barrier.top_priority_status == "APPROVED" %}
+                                            <li class="govuk-tag">TOP 100 PRIORITY BARRIER</li>
+                                        {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
+                                            <li class="govuk-tag govuk-tag--red">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+                                        {% endif %}
                                     {% endspaceless %}
                                 </ul>
                             {% endif %}

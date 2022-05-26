@@ -7,7 +7,7 @@
             "id": 2,
             "name": "A long-term strategic barrier"
         },
-        "end_date": "2022-08-31",
+        "estimated_resolution_date": "2022-08-31",
         "is_resolved": false,
         "resolved_date": null,
         "country": {
@@ -71,6 +71,15 @@
         },
         "status_summary": "aabc",
         "status_date": "2019-08-01",
+        "tags": [
+            {
+                "id": 1,
+                "title": "COVID-19",
+                "description": "Barrier related to Covid pandemic.",
+                "order": 1
+            }
+        ],
+        "top_priority_status": "APPROVED",
         "priority": {
             "code": "MEDIUM",
             "name": "Medium",
@@ -90,6 +99,32 @@
         "modified_on": "2020-01-21T15:39:34.137208Z",
         "commercial_value": 250000,
         "commercial_value_explanation": "Wibble wobble!",
+        "valuation_assessments": [
+
+            {
+                "id": "08410280-b342-4fe1-9f24-13b8df508e25",
+                "archived": false,
+                "archived_by": null,
+                "archived_on": null,
+                "created_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "created_on": "2020-11-20T15:12:49.978614Z",
+                "modified_on": "2020-11-20T15:12:49.978641Z",
+                "modified_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "economic_assessment_id": 38,
+                "impact": {
+                    "id": 4,
+                    "name": "4: \u00a3 millions"
+                },
+                "explanation": "uk"
+            }
+
+        ],
         "economic_assessments": [
             {
                 "id": 15,

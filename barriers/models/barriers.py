@@ -3,6 +3,7 @@ import dateutil.parser
 from barriers.constants import PUBLIC_BARRIER_STATUSES
 from barriers.models.assessments import (
     EconomicAssessment,
+    EconomicImpactAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
 )
@@ -55,9 +56,9 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["created_on"])
 
     @property
-    def end_date(self):
-        if self.data.get("end_date"):
-            return dateutil.parser.parse(self.data["end_date"])
+    def estimated_resolution_date(self):
+        if self.data.get("estimated_resolution_date"):
+            return dateutil.parser.parse(self.data["estimated_resolution_date"])
 
     @property
     def commodities(self):
@@ -73,6 +74,10 @@ class Barrier(APIModel):
     @property
     def public_eligibility_postponed(self):
         return self.data.get("public_eligibility_postponed")
+
+    @property
+    def top_priority_status(self):
+        return self.data.get("top_priority_status")
 
     @property
     def commodities_grouped_by_country(self):
@@ -153,13 +158,10 @@ class Barrier(APIModel):
     @property
     def economic_impact_assessments(self):
         if self._economic_impact_assessments is None:
-            self._economic_impact_assessments = []
-            for economic_assessment in self.economic_assessments:
-                for (
-                    economic_impact_assessment
-                ) in economic_assessment.economic_impact_assessments:
-                    economic_impact_assessment.economic_assessment = economic_assessment
-                    self._economic_impact_assessments.append(economic_impact_assessment)
+            self._economic_impact_assessments = [
+                EconomicImpactAssessment(assessment)
+                for assessment in self.data.get("valuation_assessments", [])
+            ]
         return self._economic_impact_assessments
 
     @property
@@ -274,6 +276,28 @@ class Barrier(APIModel):
     @property
     def is_hibernated(self):
         return self.status["id"] == "5"
+
+    @property
+    def progress_status(self):
+        return self.data.get("progress_status")
+
+    @property
+    def progress_update(self):
+        return self.data.get("progress_update")
+
+    @property
+    def next_steps(self):
+        return self.data.get("next_steps")
+
+    @property
+    def progress_updates(self):
+        return self.data.get("progress_updates")
+
+    @property
+    def latest_progress_update(self):
+        if self.progress_updates:
+            return self.progress_updates[0]
+        return None
 
 
 class PublicBarrier(APIModel):

@@ -2,6 +2,7 @@ $govuk-images-path: '../govuk-public/images/';
 $govuk-fonts-path: '../govuk-public/fonts/';
 
 @import "../../../../node_modules/govuk-frontend/govuk/all";
+@import "~@ministryofjustice/frontend/moj/components/pagination/pagination";
 @import 'colours';
 @import 'layout';
 @import 'error';

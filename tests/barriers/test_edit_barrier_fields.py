@@ -1,10 +1,14 @@
+import logging
 from http import HTTPStatus
 
 import dateutil.parser
 from django.urls import reverse
 from mock import patch
 
+from barriers.constants import TOP_PRIORITY_BARRIER_STATUS
 from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class EditTitleTestCase(MarketAccessTestCase):
@@ -209,6 +213,46 @@ class EditSourceTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
+class EditTagsTestCase(MarketAccessTestCase):
+    def test_edit_tags_has_initial_data(self):
+        response = self.client.get(
+            reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]})
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+
+        test_tag_list = []
+        for tag in self.barrier["tags"]:
+            test_tag_list.append(tag["id"])
+        assert form.initial["tags"] == test_tag_list
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVED
+
+    @patch("utils.api.resources.APIResource.patch")
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_edit_tags_calls_api(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
+        mock_patch.return_value = self.barrier
+        response = self.client.post(
+            reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]}),
+            data={
+                "tags": [1],
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
+                "priority_summary": "New summary",
+            },
+        )
+
+        mock_patch.assert_called_with(
+            id=self.barrier["id"],
+            tags=[
+                "1",
+            ],
+            priority_summary="New summary",
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+
 class EditPriorityTestCase(MarketAccessTestCase):
     def test_edit_priority_has_initial_data(self):
         response = self.client.get(
@@ -218,6 +262,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["priority"] == self.barrier["priority"]["code"]
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVED
 
     @patch("utils.api.resources.APIResource.patch")
     def test_priority_cannot_be_empty(self, mock_patch):
@@ -231,7 +276,8 @@ class EditPriorityTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.is_valid() is False
         assert "priority" in form.errors
-        assert "priority_summary" not in form.errors
+        assert "priority_summary" in form.errors
+        assert form.errors["priority_summary"] == ["Top priority status is required"]
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
@@ -246,37 +292,54 @@ class EditPriorityTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.is_valid() is False
         assert "priority" in form.errors
-        assert "priority_summary" not in form.errors
+        assert "priority_summary" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_priority_calls_api(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_edit_priority_calls_api(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "LOW", "priority_summary": ""},
+            data={
+                "priority": "LOW",
+                "priority_summary": "test summary",
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
+            },
         )
+
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="LOW",
-            priority_summary="",
+            tags=[1],
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
+            priority_summary="test summary",
         )
         assert response.status_code == HTTPStatus.FOUND
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_priority_calls_api_with_summary(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_edit_priority_calls_api_with_summary(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "HIGH", "priority_summary": "New summary"},
+            data={
+                "priority": "HIGH",
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
+                "priority_summary": "New summary",
+            },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority="HIGH",
+            tags=[1],
+            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
             priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -342,111 +405,107 @@ class EditTermTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
-class EditEndDateTestCase(MarketAccessTestCase):
-    def test_edit_end_date_has_initial_data(self):
+class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
+    def test_edit_estimated_resolution_date_has_initial_data(self):
         response = self.client.get(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             )
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["end_date"] == dateutil.parser.parse(
-            self.barrier["end_date"]
+        assert form.initial["estimated_resolution_date"] == dateutil.parser.parse(
+            self.barrier["estimated_resolution_date"]
         )
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_end_date_cannot_be_empty(self, mock_patch):
+    def test_estimated_resolution_date_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "end_date" in form.errors
+        assert "estimated_resolution_date" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_end_date_bad_data_gets_error(self, mock_patch):
+    def test_estimated_resolution_date_bad_data_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "50",
-                "end_date_1": "1",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "50",
+                "estimated_resolution_date_1": "2022",
             },
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "end_date" in form.errors
+        assert "estimated_resolution_date" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_end_date_incomplete_data_gets_error(self, mock_patch):
+    def test_estimated_resolution_date_incomplete_data_gets_error(self, mock_patch):
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "24",
-                "end_date_1": "",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "",
+                "estimated_resolution_date_1": "2022",
             },
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "end_date" in form.errors
+        assert "estimated_resolution_date" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_end_date_calls_api(self, mock_patch):
+    def test_edit_estimated_resolution_date_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "25",
-                "end_date_1": "6",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "6",
+                "estimated_resolution_date_1": "2022",
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            end_date="2022-06-25",
+            estimated_resolution_date="2022-06-01",
         )
         assert response.status_code == HTTPStatus.FOUND
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_clear_end_date_calls_api(self, mock_patch):
+    def test_clear_estimated_resolution_date_calls_api(self, mock_patch):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
-                "barriers:edit_end_date",
+                "barriers:edit_estimated_resolution_date",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
-                "end_date_0": "25",
-                "end_date_1": "6",
-                "end_date_2": "2022",
+                "estimated_resolution_date_0": "6",
+                "estimated_resolution_date_1": "2022",
                 "clear": "1",
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            end_date=None,
+            estimated_resolution_date=None,
         )
         assert response.status_code == HTTPStatus.FOUND
 
