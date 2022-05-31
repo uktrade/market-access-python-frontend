@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from core.tests import MarketAccessTestCase
 from users.models import Group, User
+from utils.models import ModelList
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +123,35 @@ class ManageUsersTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert mock_search_users.called is False
         self.assertEqual(response.json(), {"count": 0, "results": []})
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_inactive_users_excluded(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=User,
+            data=[
+                {
+                    "id": 75,
+                    "full_name": "Timmy",
+                    "groups": [{"id": 2, "name": "Editor"}],
+                    "email": "tim@hotmail.com",
+                    "is_active": False,
+                },
+                {
+                    "id": 76,
+                    "full_name": "Jimmy",
+                    "groups": [{"id": 2, "name": "Editor"}],
+                    "email": "jim@hotmail.com",
+                    "is_active": True,
+                },
+            ],
+            total_count=2,
+        )
+        response = self.client.get(reverse("users:manage_users"))
+        assert response.status_code == HTTPStatus.OK
+        assert mock_list.called is True
+
+        self.assertIn("'is_active': True", str(response.context_data["users"]))
+        self.assertNotIn("'is_active': False", str(response.context_data["users"]))
 
     @patch("utils.sso.SSOClient.search_users")
     def test_with_results(self, mock_search_users):
