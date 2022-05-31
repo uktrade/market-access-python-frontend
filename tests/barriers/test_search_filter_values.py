@@ -5,6 +5,8 @@ from django.forms import MultipleChoiceField
 from django.urls import reverse
 from html.parser import HTMLParser
 
+from unittest.mock import patch
+
 from barriers.forms.search import BarrierSearchForm
 from core.tests import MarketAccessTestCase
 from utils.metadata import get_metadata
@@ -29,7 +31,7 @@ class CheckboxFinder(HTMLParser):
             )
 
 
-class FormValuesCaseInsensitivityTestCase(MarketAccessTestCase):
+class BarrierSearchFilterValuesTestCase(MarketAccessTestCase):
     """
     This test class examines the BarrierSearchForm for MultipleChoiceFields
     and generates two test methods for each field (except "extra_location" which seems to be unused):
@@ -48,7 +50,8 @@ class FormValuesCaseInsensitivityTestCase(MarketAccessTestCase):
 
     @classmethod
     def generate_test_for_checkbox_values_equal_to_choices(cls, field_name):
-        def _test(self):
+        @patch("utils.api.resources.APIResource.list")
+        def _test(self, mock_list):
             if self.parsed_checkboxes is None:
                 response = self.client.get(
                     reverse("barriers:search"),
@@ -67,7 +70,8 @@ class FormValuesCaseInsensitivityTestCase(MarketAccessTestCase):
 
     @classmethod
     def generate_test_for_checkbox_checked_when_choice_selected(cls, field_name):
-        def _test(self):
+        @patch("utils.api.resources.APIResource.list")
+        def _test(self, mock_list):
             field = self.form.fields[field_name]
             choice_values = [choice[0] for choice in field.choices]
             data = {
@@ -111,4 +115,4 @@ class FormValuesCaseInsensitivityTestCase(MarketAccessTestCase):
                 setattr(cls, f"test_{field_name}_checked_when_choice_selected", _test)
 
 
-FormValuesCaseInsensitivityTestCase.generateTests()
+BarrierSearchFilterValuesTestCase.generateTests()
