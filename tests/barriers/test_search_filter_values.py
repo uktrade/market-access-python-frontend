@@ -1,11 +1,10 @@
 from collections import defaultdict
+from html.parser import HTMLParser
 from http import HTTPStatus
+from unittest.mock import patch
 
 from django.forms import MultipleChoiceField
 from django.urls import reverse
-from html.parser import HTMLParser
-
-from unittest.mock import patch
 
 from barriers.forms.search import BarrierSearchForm
 from core.tests import MarketAccessTestCase
