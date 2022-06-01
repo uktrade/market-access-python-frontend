@@ -40,3 +40,7 @@ class ModelList(UserList):
     def __iter__(self):
         for obj in self.data:
             yield self.model(obj)
+
+    def remove(self, obj_ids):
+        # Rebuild data dictionaries, excluding any if their ids are in the given list
+        self.data = [model for model in self.data if model["id"] not in obj_ids]

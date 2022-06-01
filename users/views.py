@@ -213,6 +213,15 @@ class ManageUsers(
             api_user_list_params["ordering"] = sort_param
 
         users = client.users.list(**api_user_list_params)
+
+        # Get list of users who are inactive & remove them from the dataset
+        inactive_users = []
+        for user in users:
+            if not user.is_active:
+                inactive_users.append(user.id)
+
+        users.remove(inactive_users)
+
         context_data["users"] = users
         context_data["pagination"] = self.get_pagination_data(object_list=users)
 
