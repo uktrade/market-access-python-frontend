@@ -12,14 +12,14 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
     public_eligibility = forms.ChoiceField(
         label="Does this barrier meet the criteria to be made public?",
         choices=(
-            ("yes", "Allowed, it can be viewed by the public"),
-            ("no", "Not allowed"),
+            ("yes", "Yes, request barrier to be made public"),
+            ("no", "No"),
             ("review_later", "Review later"),
         ),
         error_messages={"required": "Enter yes, no or review later"},
     )
     allowed_summary = forms.CharField(
-        label="Why is it allowed to be public? (optional)",
+        label="How does this barrier meet the criteria to be made public? (optional)",
         widget=forms.Textarea,
         max_length=250,
         required=False,

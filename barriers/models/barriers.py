@@ -425,7 +425,7 @@ class PublicBarrier(APIModel):
         return {
             PUBLIC_BARRIER_STATUSES.UNKNOWN: "To be decided",
             PUBLIC_BARRIER_STATUSES.INELIGIBLE: "Not allowed",
-            PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Allowed - yet to be published",
+            PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Quality assurance - awaiting approval",
             PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "Published",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "Unpublished",
@@ -438,7 +438,7 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.UNKNOWN: "Not ready to publish",
             PUBLIC_BARRIER_STATUSES.INELIGIBLE: "",
             PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Not ready to publish",
-            PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
+            PUBLIC_BARRIER_STATUSES.READY: "Quality assurance complete",
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
             PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
@@ -475,9 +475,9 @@ class PublicBarrier(APIModel):
     @property
     def tab_badge(self):
         if self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
-            return "Allowed"
+            return "Quality assurance"
         elif self.public_view_status == PUBLIC_BARRIER_STATUSES.READY:
-            return "Ready"
+            return "Ready to publish"
         elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:
             return "Published"
 
