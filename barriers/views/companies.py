@@ -7,7 +7,7 @@ from barriers.forms.companies import (
     CompanySearchForm,
     EditCompaniesForm,
 )
-from utils.datahub import DatahubClient
+from company_house import company_house_api
 from utils.exceptions import APIException
 
 from .mixins import BarrierMixin
@@ -18,11 +18,12 @@ class BarrierSearchCompany(BarrierMixin, FormView):
     form_class = CompanySearchForm
 
     def form_valid(self, form):
-        client = DatahubClient()
         error = None
 
         try:
-            results = client.search_company(form.cleaned_data["query"], 1, 100)
+            results = company_house_api.search_companies(
+                form.cleaned_data["query"], 1, 100
+            )
         except APIException:
             error = "There was an error finding the company"
             results = []
@@ -39,18 +40,18 @@ class CompanyDetail(BarrierMixin, FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         company_id = str(self.kwargs.get("company_id"))
-        client = DatahubClient()
-        context_data["company"] = client.get_company(company_id)
+        context_data["company"] = company_house_api.get_company_from_id(company_id)
         return context_data
 
     def form_valid(self, form):
-        client = DatahubClient()
-        company = client.get_company(form.cleaned_data["company_id"])
+        company = company_house_api.get_company_from_id(form.cleaned_data["company_id"])
         companies = self.request.session.get("companies", [])
         companies.append(
             {
                 "id": company.id,
-                "name": company.name,
+                "source": "company_house",
+                "name": company.company_name,
+                "address": company.address_display,
             }
         )
         self.request.session["companies"] = companies
