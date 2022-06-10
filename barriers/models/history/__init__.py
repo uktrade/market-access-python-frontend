@@ -11,7 +11,6 @@ from .assessments.strategic import StrategicAssessmentHistoryItem
 from .barriers import (
     BarrierHistoryItem,
     ProgressUpdateHistoryItem,
-    TopPriorityStatusHistoryItem,
 )
 from .notes import NoteHistoryItem
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
@@ -45,6 +44,5 @@ class HistoryItem(PolymorphicBase):
         ActionPlanMilestoneHistoryItem,
         ActionPlanTaskHistoryItem,
         ProgressUpdateHistoryItem,
-        # TopPriorityStatusHistoryItem,
     )
     class_lookup = {}
