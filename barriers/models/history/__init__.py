@@ -8,10 +8,7 @@ from .assessments.economic import EconomicAssessmentHistoryItem
 from .assessments.economic_impact import EconomicImpactAssessmentHistoryItem
 from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
 from .assessments.strategic import StrategicAssessmentHistoryItem
-from .barriers import (
-    BarrierHistoryItem,
-    ProgressUpdateHistoryItem,
-)
+from .barriers import BarrierHistoryItem, ProgressUpdateHistoryItem
 from .notes import NoteHistoryItem
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
 from .public_barriers import PublicBarrierHistoryItem
