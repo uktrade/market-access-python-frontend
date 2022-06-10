@@ -42,7 +42,7 @@ jobs:
             GTM_AUTH: ""
             GTM_PREVIEW: ""
             PIP_USE_FEATURE: 2020-resolver
-            COMPANY_HOUSE_API_KEY: ""
+            COMPANIES_HOUSE_API_KEY: ""
 
         working_directory: ~/market-access-python-frontend
 
