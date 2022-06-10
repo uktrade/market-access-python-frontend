@@ -317,6 +317,13 @@ class Metadata:
         for tag in self.get_barrier_tags():
             if str(tag["id"]) == str(tag_id):
                 return tag
+        return {
+            "id": tag_id,
+            "title": "[unknown tag]",
+            "description": "No such tag exists",
+            "show_at_reporting": False,
+            "order": 9999,
+        }
 
     def get_barrier_tags(self):
         tags = self.data.get("barrier_tags", [])
