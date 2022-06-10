@@ -9239,17 +9239,17 @@
     },
     {
       "code": "APPROVAL_PENDING",
-      "name": "Approval Pending",
+      "name": "Top 100 Priority Barrier - Approval Pending",
       "order": 1
     },
     {
       "code": "REMOVAL_PENDING",
-      "name": "Removal Pending",
+      "name": "Top 100 Priority Barrier - Removal Pending",
       "order": 2
     },
     {
       "code": "APPROVED",
-      "name": "Approved",
+      "name": "Top 100 Priority Barrier",
       "order": 3
     }
   ]
