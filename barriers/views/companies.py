@@ -8,7 +8,7 @@ from barriers.forms.companies import (
     EditCompaniesForm,
 )
 from companies_house.api_client import CompaniesHouseAPIClient
-from config.settings.base import COMPANIES_HOUSE_API_KEY
+from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_API_KEY
 from utils.exceptions import APIException
 
 from .mixins import BarrierMixin
@@ -21,7 +21,7 @@ class BarrierSearchCompany(BarrierMixin, FormView):
     def form_valid(self, form):
         error = None
         companies_house_api_client = CompaniesHouseAPIClient(
-            api_key=COMPANIES_HOUSE_API_KEY
+            api_key=COMPANIES_HOUSE_API_KEY, api_endpoint=COMPANIES_HOUSE_API_ENDPOINT
         )
         try:
             results = companies_house_api_client.search_companies(
@@ -42,7 +42,7 @@ class CompanyDetail(BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         companies_house_api_client = CompaniesHouseAPIClient(
-            api_key=COMPANIES_HOUSE_API_KEY
+            api_key=COMPANIES_HOUSE_API_KEY, api_endpoint=COMPANIES_HOUSE_API_ENDPOINT
         )
         context_data = super().get_context_data(**kwargs)
         company_id = str(self.kwargs.get("company_id"))
@@ -53,7 +53,7 @@ class CompanyDetail(BarrierMixin, FormView):
 
     def form_valid(self, form):
         companies_house_api_client = CompaniesHouseAPIClient(
-            api_key=COMPANIES_HOUSE_API_KEY
+            api_key=COMPANIES_HOUSE_API_KEY, api_endpoint=COMPANIES_HOUSE_API_ENDPOINT
         )
         company = companies_house_api_client.get_company_from_id(
             form.cleaned_data["company_id"]
