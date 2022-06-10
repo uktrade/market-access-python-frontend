@@ -7,7 +7,8 @@ from barriers.forms.companies import (
     CompanySearchForm,
     EditCompaniesForm,
 )
-from company_house import company_house_api
+from companies_house.api_client import CompaniesHouseAPIClient
+from config.settings.base import COMPANIES_HOUSE_API_KEY
 from utils.exceptions import APIException
 
 from .mixins import BarrierMixin
@@ -19,9 +20,11 @@ class BarrierSearchCompany(BarrierMixin, FormView):
 
     def form_valid(self, form):
         error = None
-
+        companies_house_api_client = CompaniesHouseAPIClient(
+            api_key=COMPANIES_HOUSE_API_KEY
+        )
         try:
-            results = company_house_api.search_companies(
+            results = companies_house_api_client.search_companies(
                 form.cleaned_data["query"], 1, 100
             )
         except APIException:
@@ -38,13 +41,23 @@ class CompanyDetail(BarrierMixin, FormView):
     form_class = AddCompanyForm
 
     def get_context_data(self, **kwargs):
+        companies_house_api_client = CompaniesHouseAPIClient(
+            api_key=COMPANIES_HOUSE_API_KEY
+        )
         context_data = super().get_context_data(**kwargs)
         company_id = str(self.kwargs.get("company_id"))
-        context_data["company"] = company_house_api.get_company_from_id(company_id)
+        context_data["company"] = companies_house_api_client.get_company_from_id(
+            company_id
+        )
         return context_data
 
     def form_valid(self, form):
-        company = company_house_api.get_company_from_id(form.cleaned_data["company_id"])
+        companies_house_api_client = CompaniesHouseAPIClient(
+            api_key=COMPANIES_HOUSE_API_KEY
+        )
+        company = companies_house_api_client.get_company_from_id(
+            form.cleaned_data["company_id"]
+        )
         companies = self.request.session.get("companies", [])
         companies.append(
             {

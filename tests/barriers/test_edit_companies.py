@@ -3,7 +3,7 @@ from http import HTTPStatus
 from django.urls import reverse
 from mock import patch
 
-from company_house.dataclasses import CompanyHouseCompany, CompanyHouseSearchResult
+from companies_house.dataclasses import CompanyHouseCompany, CompanyHouseSearchResult
 from core.tests import MarketAccessTestCase
 
 
@@ -68,7 +68,7 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
 
-    @patch("barriers.views.companies.company_house_api.search_companies")
+    @patch("barriers.views.companies.CompaniesHouseAPIClient.search_companies")
     def test_company_search_submit(self, mock_post):
         """
         Searching should call the Datahub API
@@ -111,7 +111,7 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         assert results.items[0].id == self.company_id
         assert results.items[0].name == self.company_name
 
-    @patch("barriers.views.companies.company_house_api.get_company_from_id")
+    @patch("barriers.views.companies.CompaniesHouseAPIClient.get_company_from_id")
     def test_company_detail(self, mock_get_company):
         """
         Company Detail should call the Datahub API
@@ -132,7 +132,7 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         assert response.context["company"].name == self.company_name
 
     @patch("utils.api.resources.APIResource.patch")
-    @patch("barriers.views.companies.company_house_api.get_company_from_id")
+    @patch("barriers.views.companies.CompaniesHouseAPIClient.get_company_from_id")
     def test_add_company(self, mock_get_company, mock_patch):
         """
         Add company should change the session, not call the API
