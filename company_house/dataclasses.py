@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Optional
+from typing import Dict, List, Optional
 
 
 @dataclass
@@ -38,8 +38,8 @@ class CompanyHouseCompany(object):
     company_status: str
     registered_office_address: CompanyHouseAddress
     company_number: str
-    links: dict[str, str]
-    previous_company_names: list[dict]
+    links: Dict[str, str]
+    previous_company_names: List[dict]
     accounts: dict
     has_charges: bool
     has_insolvency_history: bool
@@ -49,7 +49,7 @@ class CompanyHouseCompany(object):
     date_of_creation: date
 
     type: str
-    sic_codes: list[str]
+    sic_codes: List[str]
 
     etag: Optional[str] = None
     undeliverable_registered_office_address: Optional[bool] = None
@@ -107,7 +107,7 @@ class CompanyHouseSearchResultItem(object):
     address_snippet: Optional[str]
     company_number: str
     company_type: str
-    description_identifier: list[str]
+    description_identifier: List[str]
     company_status: str
     matches: dict
 
@@ -157,7 +157,7 @@ class CompanyHouseSearchResult(object):
     start_index: int
     kind: str
     items_per_page: int
-    items: list[CompanyHouseCompany]
+    items: List[CompanyHouseCompany]
 
     def __post_init__(self):
         self.items = [CompanyHouseSearchResultItem(**item) for item in self.items]
