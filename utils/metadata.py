@@ -414,6 +414,11 @@ class Metadata:
             org for org in self.get_gov_organisations() if str(org["id"]) in list_of_ids
         )
 
+    def get_top_priority_status(self, status):
+        for status in self.data["top_priority_status"]:
+            if str(status["id"]) == str(status):
+                return status
+
 
 class MetadataMixin:
     _metadata = None
