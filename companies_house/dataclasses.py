@@ -32,36 +32,43 @@ class CompanyHouseAddress(object):
 
 @dataclass
 class CompanyHouseCompany(object):
-    """Company House - Company"""
+    """
+    Company House - Company
 
+    Note: Date strings are in format YYYY-MM-DD
+    """
+
+    # Required fields
     company_name: str
     company_status: str
     registered_office_address: CompanyHouseAddress
     company_number: str
     links: Dict[str, str]
-    previous_company_names: List[dict]
     accounts: dict
-    has_charges: bool
-    has_insolvency_history: bool
-    jurisdiction: str
-
-    # input str format YYYY-MM-DD
-    date_of_creation: date
-
     type: str
     sic_codes: List[str]
-    status: Optional[str] = None
+    date_of_creation: date
 
-    etag: Optional[str] = None
-    undeliverable_registered_office_address: Optional[bool] = None
-    can_file: Optional[bool] = None
-
-    # input str format YYYY-MM-DD
-    last_full_members_list_date: Optional[date] = None
-    # input str format YYYY-MM-DD
+    # Optional fields that are not always present
     date_of_cessation: Optional[date] = None
-    confirmation_statement: Optional[str] = None
+    annual_return: Optional[dict] = None
+    branch_company_details: Optional[dict] = None
+    company_status_detail: Optional[str] = None
+    confirmation_statement: Optional[dict] = None
+    foreign_company_details: Optional[dict] = None
+    has_been_liquidated: Optional[bool] = None
+    has_charges: Optional[bool] = None
+    has_insolvency_history: Optional[bool] = None
+    is_community_interest_company: Optional[bool] = None
+    jurisdiction: Optional[str] = None
+    last_full_members_list_date: Optional[date] = None
+    previous_company_names: Optional[List[dict]] = None
     registered_office_is_in_dispute: Optional[bool] = None
+    service_address: Optional[CompanyHouseAddress] = None
+    undeliverable_registered_office_address: Optional[bool] = None
+    status: Optional[str] = None
+    etag: Optional[str] = None
+    can_file: Optional[bool] = None
     has_super_secure_pscs: Optional[bool] = None
 
     def __post_init__(self):
