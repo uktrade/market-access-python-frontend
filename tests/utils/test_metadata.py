@@ -148,3 +148,16 @@ class MetadataTestCase(MarketAccessTestCase):
         assert len(barrier_types) > 0
         for barrier_type in barrier_types:
             assert barrier_type["category"] == "SERVICES"
+
+    def test_get_tag_that_does_not_exist(self):
+        metadata = get_metadata()
+
+        tag_id = 999999
+        tag = metadata.get_barrier_tag(tag_id=tag_id)
+        assert tag == {
+            "id": tag_id,
+            "title": "[unknown tag]",
+            "description": "No such tag exists",
+            "show_at_reporting": False,
+            "order": 9999,
+        }
