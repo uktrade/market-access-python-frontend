@@ -16,6 +16,7 @@ class CompanyHouseAddress(object):
     care_of: Optional[str] = None
     region: Optional[str] = None
     country: Optional[str] = None
+    locality: Optional[str] = None
 
     @property
     def display(self):
