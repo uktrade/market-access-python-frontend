@@ -50,6 +50,7 @@ class CompanyHouseCompany(object):
 
     type: str
     sic_codes: List[str]
+    status: Optional[str] = None
 
     etag: Optional[str] = None
     undeliverable_registered_office_address: Optional[bool] = None
