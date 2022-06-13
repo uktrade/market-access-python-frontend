@@ -13,6 +13,7 @@ class CompanyHouseAddress(object):
     address_line_2: Optional[str] = None
     premises: Optional[str] = None
     care_of_name: Optional[str] = None
+    care_of: Optional[str] = None
     region: Optional[str] = None
     country: Optional[str] = None
 
