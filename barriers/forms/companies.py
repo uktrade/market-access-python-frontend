@@ -15,7 +15,7 @@ class CompanySearchForm(forms.Form):
 
 
 class AddCompanyForm(forms.Form):
-    company_id = forms.UUIDField()
+    company_id = forms.CharField()
 
     def clean_company_id(self):
         return str(self.cleaned_data["company_id"])

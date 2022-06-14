@@ -177,7 +177,6 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
 
         user = user_scope(self.request)["current_user"]
         is_user_admin = user.has_permission("set_topprioritybarrier")
-        # is_user_admin = False
 
         REQUEST_PHASE_STATUSES = [
             TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING,

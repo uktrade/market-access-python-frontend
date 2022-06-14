@@ -461,7 +461,7 @@ urlpatterns = [
         name="remove_company",
     ),
     path(
-        "barriers/<uuid:barrier_id>/companies/<uuid:company_id>/",
+        "barriers/<uuid:barrier_id>/companies/<str:company_id>/",
         CompanyDetail.as_view(),
         name="company_detail",
     ),
