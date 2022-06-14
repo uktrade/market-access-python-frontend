@@ -300,6 +300,11 @@ class TradeDirectionHistoryItem(BaseHistoryItem):
         return self.metadata.get_trade_direction(str(value))
 
 
+class TopPriorityStatusHistoryItem(BaseHistoryItem):
+    field = "top_priority_status"
+    field_name = "PB100 Priority Status"
+
+
 class BarrierHistoryItem(PolymorphicBase):
     """
     Polymorphic wrapper for HistoryItem classes
@@ -333,6 +338,7 @@ class BarrierHistoryItem(PolymorphicBase):
         TitleHistoryItem,
         TradeCategoryHistoryItem,
         TradeDirectionHistoryItem,
+        TopPriorityStatusHistoryItem,
     )
     default_subclass = GenericHistoryItem
     class_lookup = {}

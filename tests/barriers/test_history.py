@@ -269,6 +269,21 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         assert item.old_value == "Old Title"
         assert item.new_value == "New Title"
 
+    def test_top_priority(self):
+        item = HistoryItem(
+            {
+                "date": "2020-04-01T00:00:00Z",
+                "model": "barrier",
+                "field": "top_priority_status",
+                "old_value": "",
+                "new_value": "Top 100 Priority Barrier - Approval Pending",
+                "user": None,
+            }
+        )
+        assert item.field_name == "PB100 Priority Status"
+        assert item.old_value == ""
+        assert item.new_value == "Top 100 Priority Barrier - Approval Pending"
+
 
 class NoteHistoryItemTestCase(MarketAccessTestCase):
     def test_text(self):
