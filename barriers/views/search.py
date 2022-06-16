@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+from urllib.parse import parse_qs, urlencode
 
 from django.forms import Form
 from django.http import HttpResponseRedirect
@@ -152,13 +152,15 @@ class DownloadBarriers(SearchFormMixin, View):
 
         search_page_url = reverse("barriers:search")
         search_page_params = {
-            **request.GET.dict(),
+            **parse_qs(
+                request.GET.urlencode(), keep_blank_values=True
+            ),  # Django flattens duplicate values
             "search_csv_downloaded": int(resp.get("success", False)),
             "search_csv_download_error": resp.get("reason", ""),
         }
 
         return HttpResponseRedirect(
-            f"{search_page_url}?{urlencode(search_page_params)}"
+            f"{search_page_url}?{urlencode(search_page_params, doseq=True)}"
         )
 
 
@@ -177,5 +179,5 @@ class RequestBarrierDownloadApproval(SearchFormMixin, View):
         }
 
         return HttpResponseRedirect(
-            f"{search_page_url}?{urlencode(search_page_params)}"
+            f"{search_page_url}?{urlencode(search_page_params, doseq=True)}"
         )
