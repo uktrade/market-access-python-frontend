@@ -268,6 +268,32 @@ class ManageUsersTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.patch")
+    def test_make_regional_lead(self, mock_patch, mock_list, mock_get):
+        mock_patch.return_value = self.editor
+        mock_get.return_value = self.editor
+        mock_list.return_value = [
+            Group({"id": 1, "name": "Sifter"}),
+            Group({"id": 2, "name": "Editor"}),
+            Group({"id": 3, "name": "Download approved user"}),
+            Group({"id": 4, "name": "Regional Lead - Europe"}),
+        ]
+        response = self.client.post(
+            reverse("users:edit_user", kwargs={"user_id": 75}),
+            data={
+                "group": "2",
+                "additional_permissions": "3",
+                "regional_lead_groups": "4",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+        mock_patch.assert_called_with(
+            id="75", groups=[{"id": "2"}, {"id": "3"}, {"id": "4"}]
+        )
+
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.APIResource.patch")
     def test_remove_role(self, mock_patch, mock_list, mock_get):
         mock_patch.return_value = self.editor
         mock_get.return_value = self.editor

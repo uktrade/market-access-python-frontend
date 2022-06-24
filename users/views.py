@@ -319,14 +319,21 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
     def get_initial(self):
         role_group = "0"
         additional_groups = []
+        regional_lead_assignments = []
 
         for group in self.user.groups:
             if group["name"] in settings.USER_ADDITIONAL_PERMISSION_GROUPS:
                 additional_groups.append(str(group["id"]))
+            elif group["name"] in settings.REGIONAL_LEAD_PERMISSION_GROUPS:
+                regional_lead_assignments.append(str(group["id"]))
             else:
                 role_group = str(group["id"])
 
-        return {"group": role_group, "additional_permissions": additional_groups}
+        return {
+            "group": role_group,
+            "additional_permissions": additional_groups,
+            "regional_lead_groups": regional_lead_assignments,
+        }
 
     def form_valid(self, form):
         form.save()
