@@ -391,6 +391,19 @@ USER_ADDITIONAL_PERMISSION_GROUPS = [
     "PB100 barrier approver",
 ]
 
+REGIONAL_LEAD_PERMISSION_GROUPS = [
+    "Regional Lead - LATAC",
+    "Regional Lead - APAC",
+    "Regional Lead - China/Hong Kong",
+    "Regional Lead - South Asia",
+    "Regional Lead - EECAN",
+    "Regional Lead - MEAP",
+    "Regional Lead - Africa",
+    "Regional Lead - North America",
+    "Regional Lead - Europe",
+    "Regional Lead - Wider Europe",
+]
+
 # External URLs used within the app
 EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
 
