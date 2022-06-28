@@ -413,7 +413,7 @@
                     <a href="{% url 'barriers:edit_location' barrier.id %}">Location of the barrier</a>
                 </li>
                 {% endif %}
-                {% if not barrier.sectors or not barrier.all_sectors %}
+                {% if not barrier.sectors and not barrier.all_sectors %}
                 <li class="outstanding-formation__link">
                     <a href="{% url 'barriers:edit_sectors' barrier.id %}">Sectors affected</a>
                 </li>
