@@ -246,7 +246,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "model": "barrier",
                 "field": "tags",
                 "old_value": [1],
-                "new_value": [1, 2],
+                "new_value": [1, 3],
                 "user": {"id": 48, "name": "Test-user"},
             }
         )

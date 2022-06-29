@@ -46,6 +46,23 @@
                     </div>
                 </fieldset>
             </div>
+            {% if current_user|has_permission:"set_regionallead" %}
+                <div id="{{ form.regional_lead_groups.name }}" class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend{% if label_classes %} {{ label_classes }}{% endif %}">
+                            {% if strong|default_if_none:True %}<strong>{{ form.fields.regional_lead_groups.label }}</strong>{% else %}{{ form.fields.regional_lead_groups.label }}{% endif %}
+                        </legend>
+                        <div class="govuk-checkboxes">
+                            {% for value, name in form.fields.regional_lead_groups.choices %}
+                                <div class="govuk-checkboxes__item">
+                                    <input class="govuk-checkboxes__input" id="regional_lead_groups-{{ value }}" name="{{ form.regional_lead_groups.name }}" type="checkbox" value="{{ value }}"  {% if value in form.regional_lead_groups.value %}checked="checked"{% endif %}>
+                                    <label class="govuk-label govuk-checkboxes__label" for="regional_lead_groups-{{ value }}">{{ name }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                </div>
+            {% endif %}
 
             <p class="govuk-body">All the information on your profile will be visible to DIT staff and contractors registered to use Market Access.</p>
 
