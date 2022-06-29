@@ -8578,18 +8578,25 @@
       "order": 1
     },
     {
-      "id": 2,
+      "id": 3,
       "title": "Brexit",
       "description": "",
       "show_at_reporting": true,
       "order": 2
     },
     {
-      "id": 3,
+      "id": 2,
       "title": "NI Protocol",
       "description": "Special provisions applied to goods from GB to avoid a hard border with Ireland when the UK leaves the EU.",
       "show_at_reporting": true,
       "order": 3
+    },
+    {
+      "id": 35,
+      "title": "Asia Pacific Cross-Government Pilot",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 4
     }
   ],
   "barrier_type_categories": {
