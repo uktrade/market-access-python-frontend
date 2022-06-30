@@ -80,7 +80,8 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Describe the objective",
         error_messages={"required": "Enter your milestone objective"},
-        help_text="Describe the objective. For example ‘Scope the extent of this barrier via engagement with businesses’.",
+        help_text="Describe the objective. "
+        "For example ‘Scope the extent of this barrier via engagement with businesses’.",
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
