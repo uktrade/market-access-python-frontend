@@ -124,6 +124,10 @@
 }
 
 .action_plan{
+    &__subheading{
+            font-size: 20px;
+            font-weight: bold;
+    }
     &__current_status{
         &__heading{
             font-size: 20px;
@@ -143,4 +147,13 @@
     .govuk-mentions__highlighter{
         display: none;
     }
+}
+
+.action_plans_stategic_context {
+    width: 50%;
+}
+
+.action_plans_tag{
+    size: 10%;
+    float: right;
 }
