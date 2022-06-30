@@ -1,11 +1,6 @@
 
 
 .action_plan{
-    &__heading{
-        font-size: 36px;
-        line-height: 40px;
-    }
-
     // &__milestones{}
 
     &__milestone{
@@ -143,4 +138,16 @@
     .govuk-mentions__highlighter{
         display: none;
     }
+}
+
+.action_plans_stategic_context {
+    width: 50%;
+}
+
+.action_plan_objectives {
+    width: 50%;
+}
+
+.action_plans_tag{
+    float: right;
 }

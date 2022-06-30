@@ -45,168 +45,128 @@
 
     {% include 'barriers/partials/barrier_tabs.html' with active='action_plan' %}
 
+    {% if feature_flags.new_action_plans_enabled %} <!-- FEATURE FLAG OPENED - DELETE WHEN NEW ACTION PLANS COMPLETE-->
+
     <section class="action_plan">
-        <h2 class="action_plan__heading"> Action Plan </h2>
-
-        <p> This plans the steps needed to resolve a market access barrier. It contains specific objectives, stakeholders, timescales, outcomes and resources.</p>
-
-        <div class="stategic-assessment">
-            {% if action_plan.strategic_context%}
-            <details class="govuk-details" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                    <span class="govuk-details__summary-text">
-                        View Strategic context
-                    </span>
-                </summary>
-                <div class="govuk-details__text">
-                    {{ action_plan.strategic_context|linebreaks }}
-                    <br><br>
-                    <a href="{% url 'barriers:action_plan_add_strategic_context' barrier.id %}">Edit</a>
-                </div>
-            </details>
-            {% else %}
-            <a href="{% url 'barriers:action_plan_add_strategic_context' barrier.id %}">Add strategic context</a>
-            <br>
-            {% endif %}
+        <h2 class="govuk-heading-l"> Action Plan </h2>
+        <div class="action_plans_stategic_context">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">
+                            <h2 class="govuk-heading-m"> Strategic context </h2>
+                        </th>
+                        <th class="govuk-table__header" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a href="{% url 'barriers:action_plan' barrier.id %}">Overview</a> <!-- UPDATE URL -->
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.overview %} <!-- CHANGE THIS TO CHECK IF PLAN HAS AN OVERVIEW -->
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a href="{% url 'barriers:action_plan' barrier.id %}">Stakeholder mapping</a> <!-- UPDATE URL -->
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.stakeholder %} <!-- CHANGE THIS TO CHECK IF PLAN HAS A STAKEHOLDER -->
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a href="{% url 'barriers:action_plan' barrier.id %}">Risks and mitigation</a> <!-- UPDATE URL -->
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.risks_mitigations %} <!-- CHANGE THIS TO CHECK IF PLAN HAS RISKS AND MITIGATIONS FILLED IN-->
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a href="{% url 'barriers:action_plan' barrier.id %}">Owner</a> <!-- UPDATE URL -->
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.owner %} <!-- CHANGE THIS TO CHECK IF PLAN HAS AN OWNER -->
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <div class="status-and-progress">
-            <span class="action_plan__current_status__heading">
-                Progress update
-                {% if action_plan.status == "ON_TRACK" %}
-                    <span class="ma-badge ma-badge--status-on-track">On track</span>
-                {% elif action_plan.status == "RISK_OF_DELAY" %}
-                    <span class="ma-badge ma-badge--status-risk-of-delay">Risk of delay</span>
-                {% elif action_plan.status == "DELAYED" %}
-                    <span class="ma-badge ma-badge--status-delayed">Delayed</span>
-                {% endif %}
-            </span>
-            {% if action_plan.current_status %}
-            <a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Edit</a>
-            {% else %}<br><a href="{% url 'barriers:action_plan_edit_current_status' barrier.id %}">Add progress update</a> {% endif %}
-
-            <p>{{ action_plan.current_status|linebreaks }}</p>
-        </div>
-        <div class="action-plan-meta">
-            {% if action_plan.current_status_last_updated %}
-            <div>
-                <span class="action_plan__owner__heading">Updated on:</span> <span>{{ action_plan.current_status_last_updated|parse_iso|date:"jS F Y" }}</span>
-            </div>
-            {% endif %}
-            <div>
-                <span class="action_plan__owner__heading">Owner:</span> <span>{{ action_plan.owner_email }}</span>
-                <a href="{% url 'barriers:action_plan_edit_owner' barrier.id %}">Edit</a>
-            </div>
-        </div>
-
-        <a class="govuk-button button--primary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add objective</a>
-
-        <div class="action-plan__milestones">
-        {% for milestone in action_plan.milestones %}
-            <div class="action-plan__milestone">
-                <h3 class="action_plan__milestone_header">{{ milestone.objective }}</h3>
-                <!-- <p class="action-plan__milestone_meta">
-                    <strong>Completion date:</strong> <span>{{ milestone.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</span>
-                </p> -->
-                <div class="action-plan__milestone__actions">
-                    <a href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add intervention</a>
-                    <a href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">Edit objective</a>
-                    <a href="{% url 'barriers:action_plan_delete_milestone' barrier.id milestone.id %}">Delete objective</a>
-                </div>
-
-                {% if milestone.tasks %}
-                <table class="govuk-table milestone-tasks-table">
-                    <colgroup>
-                        <col style="">
-                        <col style="">
-                        <col style="">
-                        <col style="" min-width=50>
-                        <col style="width: 15%">
-                        <col style="width: 10%">
-                    </colgroup>
-                    <thead class="govuk-table__head">
+        <div class="action_plan_objectives">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">
+                            <h2 class="govuk-heading-m"> Objectives </h2>
+                        </th>
+                        <th class="govuk-table__header" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    {% for objective in action_plan.objectives %} <!-- CHANGE THIS TO LOOP THROUGH ALL THE ACTION PLAN OBJECTIVES -->
                         <tr class="govuk-table__row">
-                            <th scope="col" class="govuk-table__header">Intervention and purpose</th>
-                            <th scope="col" class="govuk-table__header">Assigned to</th>
-                            <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Stakeholders</th>
-                            <th scope="col" class="govuk-table__header">Intervention type</th>
-                            <th scope="col" class="govuk-table__header">Timeframe</th>
-                            <th scope="col" class="govuk-table__header">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="govuk-table__body">
-                        {% for task in milestone.tasks %}
-                        <tr class="govuk-table__row milestone-task-data-row">
-                            <!-- Barrier Code -->
                             <td class="govuk-table__cell">
-                                <div>{{ task.action_text }}</div>
+                                <a href="{% url 'barriers:action_plan' barrier.id %}">Replace with objective name</a> <!-- UPDATE URL AND TEXT-->
+                                {% for objective in action_plan.objective_tasks %} <!-- CHANGE THIS TO LOOP THROUGH ALL THE OBJECTIVES TASKS -->
+                                    <a href="{% url 'barriers:action_plan' barrier.id %}">Replace with objective task summary</a> <!-- UPDATE URL AND TEXT-->
+                                {% endfor %}
+                                <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier.id %}">Add objective task</a> <!-- UPDATE URL -->
                             </td>
-                            <!-- Public Title -->
                             <td class="govuk-table__cell">
-                                {{ task.assigned_to_email }}
-                            </td>
-                            <!-- Public Summary -->
-                            <td class="govuk-table__cell">
-                                {{ task.stakeholders }}
-                            </td>
-                            <!-- Reported Date -->
-                            <td class="govuk-table__cell">
-                                {{ task.action_type_display }}
-                            </td>
-                            <!-- Sector -->
-                            <td class="govuk-table__cell timeframe">
-                                <div>Start {{ task.start_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div>
-                                <div>End {{ task.completion_date|parse_date:"%Y-%m-%d"|date:"F Y" }}</div>
-                            </td>
-                            <!-- Government organisation -->
-                            <td class="govuk-table__cell status">
-                                {% if task.status == "NOT_STARTED" %}
-                                    <span class="ma-badge ma-badge--not-started">Not started</span>
-                                {% elif task.status == "IN_PROGRESS" %}
-                                    <span class="ma-badge ma-badge--in-progress">In progress</span>
-                                {% elif task.status == "COMPLETED" %}
-                                    <span class="ma-badge ma-badge--completed">Completed</span>
+                                {% if action_plan.objective_status %} <!-- CHANGE THIS TO CHECK IF THE OBJECTIVE HAS BEEN STARTED -->
+                                    <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                        Started
+                                    </strong>
+                                {% else %}
+                                    <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                        Not Started
+                                    </strong>
                                 {% endif %}
                             </td>
                         </tr>
-                        <tr class="govuk-table__row milestone-task-status-progress-row">
-                            <td colspan="6" class="govuk-table__cell">
-                                {% if task.status == "COMPLETED" %}
-                                    <p><strong>Outcome:</strong>
-                                    {% if task.outcome %}
-                                    {{ task.outcome }}
-                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Edit</a>
-                                    {% else %}
-                                    <a href="{% url 'barriers:action_plan_edit_outcome' barrier.id task.id %}">Add outcome</a>
-                                    {% endif %}
-                                </p>
-                                {% elif task.status == "IN_PROGRESS" %}
-                                    <p><strong>Progress: </strong>
-                                    {% if task.progress %}
-                                    {{ task.progress }}
-                                        <a href="{% url 'barriers:action_plan_edit_progress' barrier.id task.id %}">Edit</a>
-                                    {% else %}
-                                    <a href="{% url 'barriers:action_plan_edit_progress' barrier.id task.id %}">Add progress</a>
-                                    {% endif %}
-                                </p>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr class="govuk-table__row milestone-task-action-row">
-                            <td colspan="6"><div class="action-plan__milestone__actions">
-                                    <a href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">Edit</a>
-                                    <a href="{% url 'barriers:action_plan_delete_task' barrier.id task.id %}">Delete</a>
-                                </div></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <p>This milestone has no tasks</p>
-                {% endif %}
-            </div>
-        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier.id %}">Add objective</a> <!-- UPDATE URL -->
         </div>
+
+    {% endif %} <!-- FEATURE FLAG CLOSED -->
 
     </section>
 
