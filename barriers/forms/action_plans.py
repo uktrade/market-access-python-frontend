@@ -159,12 +159,12 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
     completion_date = MonthYearInFutureField()
 
     action_text = forms.CharField(
-        label="Intervention text",
+        label="Provide a summary of the task and what it will involve",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
     )
 
     action_type = SubformChoiceField(
-        label="Intervention type",
+        label="Task type",
         choices=ACTION_PLAN_TASK_TYPE_CHOICES,
         subform_classes={
             ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: action_plan_action_type_category_form_class_factory(
@@ -198,6 +198,13 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         widget=forms.RadioSelect,
     )
 
+    # THE OTHER OPTION NOW NEEDS A TEXT INPUT
+
+    # NEED TO DO THE NEW STAKEHOLDERS INPUT
+
+    # NEED TO ASK ABOUT "ASSIGNED TO" DESIGN - ARE WE INTENDING FOR MORE THAN ONE ASSIGNED PERSON?
+    # THERE SEEMS TO BE A NAME IN A BOX ABOVE THE TEXT INPUT WHICH CAN BE DELETED, LIKE A LIST ITEM.
+
     assigned_to = forms.CharField(
         widget=forms.TextInput(attrs={"class": "govuk-input"})
     )
@@ -225,12 +232,14 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
-        if not results:
-            raise ValidationError(f"Invalid user {query}")
-        for result in results:
-            if result["email"] == email:
-                return result["user_id"]
-        return
+        # UNCOMMENT THIS BEFORE PUSHING/MERGING
+        # if not results:
+        #    raise ValidationError(f"Invalid user {query}")
+        # for result in results:
+        #    if result["email"] == email:
+        #        return result["user_id"]
+        # return
+        return "9affb723-21d8-43c5-82ac-f525bf02444f"
 
     def save(self):
         client = MarketAccessAPIClient(self.token)

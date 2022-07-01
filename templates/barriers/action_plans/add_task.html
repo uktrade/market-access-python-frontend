@@ -25,10 +25,27 @@
     </script>
 {% endblock %}
 
-{% block page_content %} {% include 'partials/heading.html' with text='Edit intervention' %}
+{% block page_content %} {% include 'partials/heading.html' with text='Add objective task' %}
 {% form_error_banner form %}
 <form action="" method="POST">
 {% csrf_token %}
+
+<div
+  id="{{ form.action_text.name }}"
+  class="{% form_group_classes form.action_text.errors %}"
+>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+      {{ form.action_text.label }}
+    </legend>
+
+    <span class="govuk-hint">{{ form.action_text.help_text }}</span>
+
+    {% form_field_error form "action_text" %}
+
+    <div class="govuk-date-input">{{ form.action_text }}</div>
+  </fieldset>
+</div>
 
   <div id="{{ form.status.name }}"
           class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
@@ -89,22 +106,7 @@
   </fieldset>
 </div>
 
-<div
-  id="{{ form.action_text.name }}"
-  class="{% form_group_classes form.action_text.errors %}"
->
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      {{ form.action_text.label }}
-    </legend>
 
-    <span class="govuk-hint">{{ form.action_text.help_text }}</span>
-
-    {% form_field_error form "action_text" %}
-
-    <div class="govuk-date-input">{{ form.action_text }}</div>
-  </fieldset>
-</div>
 
   <div id="{{ form.action_type.name }}"
           class="govuk-form-group{% if form.action_type.errors %} govuk-form-group--error{% endif %}">

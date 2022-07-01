@@ -62,7 +62,7 @@
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
-                            <a href="{% url 'barriers:action_plan' barrier.id %}">Overview</a> <!-- UPDATE URL -->
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Overview</a> <!-- UPDATE URL -->
                         </td>
                         <td class="govuk-table__cell">
                             {% if action_plan.overview %} <!-- CHANGE THIS TO CHECK IF PLAN HAS AN OVERVIEW -->
@@ -78,7 +78,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
-                            <a href="{% url 'barriers:action_plan' barrier.id %}">Stakeholder mapping</a> <!-- UPDATE URL -->
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Stakeholder mapping</a> <!-- UPDATE URL -->
                         </td>
                         <td class="govuk-table__cell">
                             {% if action_plan.stakeholder %} <!-- CHANGE THIS TO CHECK IF PLAN HAS A STAKEHOLDER -->
@@ -94,7 +94,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
-                            <a href="{% url 'barriers:action_plan' barrier.id %}">Risks and mitigation</a> <!-- UPDATE URL -->
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Risks and mitigation</a> <!-- UPDATE URL -->
                         </td>
                         <td class="govuk-table__cell">
                             {% if action_plan.risks_mitigations %} <!-- CHANGE THIS TO CHECK IF PLAN HAS RISKS AND MITIGATIONS FILLED IN-->
@@ -110,7 +110,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
-                            <a href="{% url 'barriers:action_plan' barrier.id %}">Owner</a> <!-- UPDATE URL -->
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Owner</a> <!-- UPDATE URL -->
                         </td>
                         <td class="govuk-table__cell">
                             {% if action_plan.owner %} <!-- CHANGE THIS TO CHECK IF PLAN HAS AN OWNER -->
@@ -139,31 +139,40 @@
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    {% for objective in action_plan.objectives %} <!-- CHANGE THIS TO LOOP THROUGH ALL THE ACTION PLAN OBJECTIVES -->
+                    {% for milestone in action_plan.milestones %}
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">
-                                <a href="{% url 'barriers:action_plan' barrier.id %}">Replace with objective name</a> <!-- UPDATE URL AND TEXT-->
-                                {% for objective in action_plan.objective_tasks %} <!-- CHANGE THIS TO LOOP THROUGH ALL THE OBJECTIVES TASKS -->
-                                    <a href="{% url 'barriers:action_plan' barrier.id %}">Replace with objective task summary</a> <!-- UPDATE URL AND TEXT-->
-                                {% endfor %}
-                                <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier.id %}">Add objective task</a> <!-- UPDATE URL -->
-                            </td>
-                            <td class="govuk-table__cell">
-                                {% if action_plan.objective_status %} <!-- CHANGE THIS TO CHECK IF THE OBJECTIVE HAS BEEN STARTED -->
-                                    <strong class="govuk-tag govuk-tag--blue action_plans_tag">
-                                        Started
-                                    </strong>
-                                {% else %}
-                                    <strong class="govuk-tag govuk-tag--grey action_plans_tag">
-                                        Not Started
-                                    </strong>
+                                <p class="govuk-body">
+                                    <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
+                                </p>
+                                {% if milestone.tasks %}
+                                    <div>
+                                        {% for task in milestone.tasks %}
+                                            <h2 class="govuk-heading-s"> Objective Task </h2>
+                                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">{{ task.action_text }}</a>
+                                            {% if task.status == "NOT_STARTED" %}
+                                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                                    Not Started
+                                                </strong>
+                                            {% elif task.status == "IN_PROGRESS" %}
+                                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                                    Started
+                                                </strong>
+                                            {% elif task.status == "COMPLETED" %}
+                                                <strong class="govuk-tag govuk-tag--green action_plans_tag">
+                                                    Complete
+                                                </strong>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
                                 {% endif %}
+                                <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add objective task</a>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier.id %}">Add objective</a> <!-- UPDATE URL -->
+            <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add objective</a>
         </div>
 
     {% endif %} <!-- FEATURE FLAG CLOSED -->
