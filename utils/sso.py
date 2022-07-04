@@ -41,6 +41,9 @@ class SSOClient:
 
     def search_users(self, query):
         path = f"user/search/?autocomplete={quote_plus(query)}"
+        print("IN SEARCH USERS, ABOUT TO RUN URL:")
+        print(path)
         response = self.get(path)
+        print(f"GOT RESPONSE: {response}")
         users = response.get("results", [])
         return users

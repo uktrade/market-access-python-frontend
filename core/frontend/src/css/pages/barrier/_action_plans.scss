@@ -148,6 +148,15 @@
     width: 50%;
 }
 
+.action_plans_other_task_type_input{
+    width: 50%
+}
+
 .action_plans_tag{
     float: right;
+}
+
+.action_plans_task_list{
+    @include govuk-responsive-margin(5, "left");
+    @include govuk-responsive-margin(6, "bottom");
 }

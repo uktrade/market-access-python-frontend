@@ -34,7 +34,7 @@
   id="{{ form.action_text.name }}"
   class="{% form_group_classes form.action_text.errors %}"
 >
-  <fieldset class="govuk-fieldset">
+  <fieldset class="govuk-fieldset govuk-!-width-two-thirds">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
       {{ form.action_text.label }}
     </legend>
@@ -106,8 +106,6 @@
   </fieldset>
 </div>
 
-
-
   <div id="{{ form.action_type.name }}"
           class="govuk-form-group{% if form.action_type.errors %} govuk-form-group--error{% endif %}">
       <fieldset class="govuk-fieldset">
@@ -128,8 +126,7 @@
                               for="{{ choice.value }}">{{ choice.name }}</label>
                   </div>
 
-                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                          id="conditional-{{ choice.value }}">
+                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden govuk-!-width-one-third" id="conditional-{{ choice.value }}">
                       {{ choice.subform.as_html }}
                   </div>
               {% endfor %}
@@ -151,6 +148,64 @@
     {% form_field_error form "assigned_to" %}
     <div class="" id="{{ form.assigned_to.name }}__field-container">{{ form.assigned_to }}</div>
   </fieldset>
+</div>
+
+
+
+
+<div id="{{ form.stakeholders.name }}" class="{% form_group_classes form.stakeholders.errors %}">
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+                <h2 class="govuk-heading-m"> Stakeholders </h2>
+            </th>
+            <th class="govuk-table__header" scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <!-- empty cell for selection boxes -->
+            </td>
+            <td class="govuk-table__cell">
+              Name
+            </td>
+            <td class="govuk-table__cell">
+              Type
+            </td>
+            <td class="govuk-table__cell">
+              Status
+            </td>
+            <td class="govuk-table__cell">
+              Action
+            </td>
+        </tr>
+        {% for choice in form.fields.stakeholders.choices %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              PUT THE CHECKBOX HERE
+            </td>
+            <td class="govuk-table__cell">
+              {{ choice.name }}
+            </td>
+            <td class="govuk-table__cell">
+              {% if choice.is_organisation %}
+                Organisation
+              {% else %}
+                Individual
+              {% endif %}
+            </td>
+            <td class="govuk-table__cell">
+              {{ choice.status }}
+            </td>
+            <td class="govuk-table__cell">
+              edit link for stakeholder
+            </td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 

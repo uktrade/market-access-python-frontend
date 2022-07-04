@@ -1,5 +1,6 @@
+import logging
+
 from django import forms
-from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -15,10 +16,13 @@ from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ClearableMixin,
     MonthYearInFutureField,
+    MultipleChoiceFieldWithHelpText,
     SubformChoiceField,
     SubformMixin,
 )
 from utils.sso import SSOClient
+
+logger = logging.getLogger(__name__)
 
 
 class ActionPlanCurrentStatusEditForm(ClearableMixin, APIFormMixin, forms.Form):
@@ -130,10 +134,18 @@ def action_plan_action_type_category_form_class_factory(action_type: str):
     class ActionPlanActionTypeCategoryForm(forms.Form):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.fields[field_name] = forms.ChoiceField(
-                label="Select category",
-                choices=ACTION_PLAN_TASK_CATEGORIES[action_type],
-            )
+            if action_type != "OTHER":
+                self.fields[field_name] = forms.ChoiceField(
+                    label="Select category",
+                    choices=ACTION_PLAN_TASK_CATEGORIES[action_type],
+                )
+            else:
+                self.fields[field_name] = forms.CharField(
+                    widget=forms.TextInput(attrs={"class": "govuk-input"}),
+                    max_length=100,
+                    label="Describe the task type",
+                    error_messages={"required": "Enter your task type description"},
+                )
 
         @property
         def get_field(self):
@@ -143,7 +155,10 @@ def action_plan_action_type_category_form_class_factory(action_type: str):
             return self.cleaned_data[field_name]
 
         def as_html(self):
-            template_name = "barriers/action_plans/action_type_category.html"
+            if action_type != "OTHER":
+                template_name = "barriers/action_plans/action_type_category.html"
+            else:
+                template_name = "barriers/action_plans/action_type_category_other.html"
             return render_to_string(template_name, context={"form": self})
 
     return ActionPlanActionTypeCategoryForm
@@ -194,11 +209,12 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory(  # noqa
                 "RESOLUTION_NOT_LEAD_BY_DIT"
             ),
+            ACTION_PLAN_TASK_TYPE_CHOICES.OTHER: action_plan_action_type_category_form_class_factory(  # noqa
+                "OTHER"
+            ),
         },
         widget=forms.RadioSelect,
     )
-
-    # THE OTHER OPTION NOW NEEDS A TEXT INPUT
 
     # NEED TO DO THE NEW STAKEHOLDERS INPUT
 
@@ -209,10 +225,11 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         widget=forms.TextInput(attrs={"class": "govuk-input"})
     )
 
-    stakeholders = forms.CharField(
+    stakeholders = MultipleChoiceFieldWithHelpText(
         required=True,
+        choices=[],
+        widget=forms.CheckboxSelectMultiple,
         label="Stakeholders",
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
     )
 
     def __init__(self, barrier_id, action_plan_id, milestone_id, *args, **kwargs):
@@ -221,6 +238,43 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         self.milestone_id = milestone_id
         super().__init__(*args, **kwargs)
 
+        # Get a list of stakeholders for the action plan - use action_plan_id
+        # Set them as choices
+
+        # TEMP STAKEHOLDER CLASS TO TEST STAKEHOLDER FUNCTIONS WHILE IT'S DEVED IN ANOTHER TICKET
+        class Stakeholder:
+            name = ""
+            status = ""
+            organisation = ""
+            job_title = ""
+            is_organisation = ""
+
+            # The class "constructor" - It's actually an initializer
+            def __init__(self, name, status, organisation, job_title, is_organisation):
+                self.name = name
+                self.status = status
+                self.organisation = organisation
+                self.job_title = job_title
+                self.is_organisation = is_organisation
+
+        stakeholder_1 = Stakeholder("Jim", "Friend", "HMRC", "Barista", False)
+        stakeholder_2 = Stakeholder("Bob", "Target", "A Big Company", "Cleaner", False)
+        stakeholder_3 = Stakeholder("Viv", "Friend", "DIT", "Security Guard", False)
+        stakeholder_4 = Stakeholder("The UK Government", "Neutral", None, None, True)
+        stakeholder_5 = Stakeholder("A Big Company", "Blocker", None, None, True)
+        list_of_stakeholders = [
+            stakeholder_1,
+            stakeholder_2,
+            stakeholder_3,
+            stakeholder_4,
+            stakeholder_5,
+        ]
+
+        # client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        # list_of_stakeholders = client.users.get(action_plan=action_plan_id)
+
+        self.fields["stakeholders"].choices = list_of_stakeholders
+
     def clean_start_date(self):
         return self.cleaned_data["start_date"].isoformat()
 
@@ -228,11 +282,17 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         return self.cleaned_data["completion_date"].isoformat()
 
     def clean_assigned_to(self):
+
+        # THIS FUNCTION NOW NEEDS TO ACCEPT MULTIPLE USERS
+
         sso_client = SSOClient()
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
+        print("---------------")
+        print(f"{query}")
         # UNCOMMENT THIS BEFORE PUSHING/MERGING
+        # USING PLACEHOLDER TO GET AROUND SSO VERIFICATION LOCALLY
         # if not results:
         #    raise ValidationError(f"Invalid user {query}")
         # for result in results:
@@ -247,8 +307,6 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         action_type_field = self.fields["action_type"]
         if hasattr(action_type_field, "subform"):
             action_type_category = action_type_field.subform.get_action_type_category()
-        else:
-            action_type_category = "Other"
 
         client.action_plans.add_task(
             barrier_id=self.barrier_id,
@@ -309,6 +367,9 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory(  # noqa
                 "RESOLUTION_NOT_LEAD_BY_DIT"
             ),
+            ACTION_PLAN_TASK_TYPE_CHOICES.OTHER: action_plan_action_type_category_form_class_factory(  # noqa
+                "OTHER"
+            ),
         },
         widget=forms.RadioSelect,
     )
@@ -343,12 +404,17 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
-        if not results:
-            raise ValidationError(f"Invalid user {query}")
-        for result in results:
-            if result["email"] == email:
-                return result["user_id"]
-        return
+        print("---------------")
+        print(f"THE ASSIGNED TO INPUT: {email}")
+        print(f"{query}")
+        # UNCOMMENT THIS BEFORE PUSHING/MERGING
+        # if not results:
+        #    raise ValidationError(f"Invalid user {query}")
+        # for result in results:
+        #    if result["email"] == email:
+        #        return result["user_id"]
+        # return
+        return "9affb723-21d8-43c5-82ac-f525bf02444f"
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -358,6 +424,11 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             action_type_category = action_type_field.subform.get_action_type_category()
         else:
             action_type_category = "Other"
+
+        print("****************")
+        submitter = self.cleaned_data["assigned_to"]
+        print(f"SUBMITTING THIS ASSIGNEES: {submitter}")
+        print("****************")
 
         client.action_plans.edit_task(
             barrier_id=self.barrier_id,
