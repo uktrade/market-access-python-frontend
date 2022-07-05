@@ -150,81 +150,62 @@
   </fieldset>
 </div>
 
-
-
-
 <div id="{{ form.stakeholders.name }}" class="{% form_group_classes form.stakeholders.errors %}">
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">
-                <h2 class="govuk-heading-m"> Stakeholders </h2>
-            </th>
-            <th class="govuk-table__header" scope="col"></th>
-        </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <!-- empty cell for selection boxes -->
-            </td>
-            <td class="govuk-table__cell">
-              Name
-            </td>
-            <td class="govuk-table__cell">
-              Type
-            </td>
-            <td class="govuk-table__cell">
-              Status
-            </td>
-            <td class="govuk-table__cell">
-              Action
-            </td>
-        </tr>
-        {% for choice in form.fields.stakeholders.choices %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              PUT THE CHECKBOX HERE
-            </td>
-            <td class="govuk-table__cell">
-              {{ choice.name }}
-            </td>
-            <td class="govuk-table__cell">
-              {% if choice.is_organisation %}
-                Organisation
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m"> Stakeholders </h2>
+      <span class="govuk-hint">{{ form.stakeholders.help_text }}</span>
+      <div class="govuk-grid-column-full">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
+            <p class="govuk-body govuk-!-font-weight-bold">Name</p>
+          </div>
+          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
+            <p class="govuk-body govuk-!-font-weight-bold">Type</p>
+          </div>
+          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
+            <p class="govuk-body govuk-!-font-weight-bold">Status</p>
+          </div>
+          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
+            <p class="govuk-body govuk-!-font-weight-bold">Action</p>
+          </div>
+        </div>
+        <hr class="govuk-section-break govuk-section-break--visible">
+      </div>
+
+      {% for status, name, org_status in form.fields.stakeholders.choices %}
+        <div class="govuk-grid-column-full">
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter">
+              <div class="govuk-checkboxes govuk-checkboxes--small">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="tag-{{ name }}" name="{{ form.stakeholders.name }}" type="checkbox" value="{{ name }}" {% if value in form.stakeholders.value %}checked="checked"{% endif %}>
+                  <label class="govuk-label govuk-checkboxes__label" for="regional_lead_groups-{{ value }}">{{ name }}</label>
+                </div>
+              </div>
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+              {% if org_status %}
+                <p class="govuk-!-text-align-centre">Organisation</p>
               {% else %}
-                Individual
+                <p class="govuk-!-text-align-centre">Individual</p>
               {% endif %}
-            </td>
-            <td class="govuk-table__cell">
-              {{ choice.status }}
-            </td>
-            <td class="govuk-table__cell">
-              edit link for stakeholder
-            </td>
-          </tr>
-        {% endfor %}
-    </tbody>
-  </table>
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+              <p class="govuk-!-text-align-centre">{{ status }}</p>
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+              <p class="govuk-!-text-align-centre">edit link for stakeholder</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--visible">
 </div>
 
-
-<div
-  id="{{ form.stakeholders.name }}"
-  class="{% form_group_classes form.stakeholders.errors %}"
->
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      {{ form.stakeholders.label }}
-    </legend>
-
-    <span class="govuk-hint">{{ form.stakeholders.help_text }}</span>
-
-    {% form_field_error form "stakeholders" %}
-
-    <div class="govuk-date-input">{{ form.stakeholders }}</div>
-  </fieldset>
-</div>
 
 <button class="govuk-button" data-module="govuk-button">Confirm</button>
 <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}"

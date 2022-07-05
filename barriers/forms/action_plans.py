@@ -1,6 +1,7 @@
 import logging
 
 from django import forms
+from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -230,6 +231,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         choices=[],
         widget=forms.CheckboxSelectMultiple,
         label="Stakeholders",
+        help_text="Add relevant stakeholders to the task",
     )
 
     def __init__(self, barrier_id, action_plan_id, milestone_id, *args, **kwargs):
@@ -242,7 +244,10 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         # Set them as choices
 
         # TEMP STAKEHOLDER CLASS TO TEST STAKEHOLDER FUNCTIONS WHILE IT'S DEVED IN ANOTHER TICKET
-        class Stakeholder:
+        # USE SOMETHING LIKE THIS IN FINAL VERSION:
+        # client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        # list_of_stakeholders = client.users.get(action_plan=action_plan_id)
+        class Stakeholder(models.Model):
             name = ""
             status = ""
             organisation = ""
@@ -270,10 +275,14 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             stakeholder_5,
         ]
 
-        # client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        # list_of_stakeholders = client.users.get(action_plan=action_plan_id)
+        self.fields["stakeholders"].choices = [
+            (holder.status, holder.name, holder.is_organisation)
+            for holder in list_of_stakeholders
+        ]
 
-        self.fields["stakeholders"].choices = list_of_stakeholders
+        print("*")
+        print(self.fields["stakeholders"].choices)
+        print("*")
 
     def clean_start_date(self):
         return self.cleaned_data["start_date"].isoformat()
@@ -424,11 +433,6 @@ class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.F
             action_type_category = action_type_field.subform.get_action_type_category()
         else:
             action_type_category = "Other"
-
-        print("****************")
-        submitter = self.cleaned_data["assigned_to"]
-        print(f"SUBMITTING THIS ASSIGNEES: {submitter}")
-        print("****************")
 
         client.action_plans.edit_task(
             barrier_id=self.barrier_id,
