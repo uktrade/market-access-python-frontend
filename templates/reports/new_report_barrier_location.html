@@ -1,17 +1,32 @@
 {% extends 'base.html' %}
-
+{% load render_bundle from webpack_loader %}
 {% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
+
+
+
+{% block body_script %}
+    {{ block.super }}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    {{ react_data|json_script:"location-form-data" }}
+    <script>
+        var reactData = JSON.parse(document.getElementById('location-form-data').textContent);
+        console.log(reactData);
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderLocationForm();
+        })
+    </script>
+{% endblock %}
 
 {% block page_content %}
 
-    <section class="restrict-width">
+    {% csrf_token %}
+    <section class="restrict-width" id="location-form-container">
 
         <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
         {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
         {% form_error_banner form %}
 
         <form action="" method="POST">
-            {% csrf_token %}
             <div class="{% form_group_classes form.errors %}">
                 {% include "partials/forms/select_input.html" with field=form.location option_classes="location_option" %}
             </div>

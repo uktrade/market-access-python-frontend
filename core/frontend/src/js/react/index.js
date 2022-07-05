@@ -6,6 +6,8 @@ import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
+import { renderLocationForm } from "./reports/LocationForm";
+import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 
 function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
     const csrfToken = getCSRFToken();
@@ -131,4 +133,6 @@ export {
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
+    renderLocationForm,
+    renderAsyncSearchResults,
 };

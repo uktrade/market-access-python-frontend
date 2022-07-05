@@ -5,13 +5,13 @@
                 <ol class="moj-pagination__list">
                     {% if pagination.previous %}
                         <li class="moj-pagination__item  moj-pagination__item--prev">
-                            <a href="?{{ pagination.previous }}" class="moj-pagination__link">Previous<span class="govuk-visually-hidden"> page</span></a>
+                            <a href="?{{ pagination.previous }}" data-enhance="pagination-link" class="moj-pagination__link">Previous<span class="govuk-visually-hidden"> page</span></a>
                         </li>
                     {% endif %}
                     {% for page in pagination.pages %}
                         <li class="moj-pagination__item">
                             {% if pagination.current_page != page.label and page.url %}
-                                <a class="moj-pagination__link" href="?{{ page.url }}"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
+                                <a class="moj-pagination__link" data-enhance="pagination-link" href="?{{ page.url }}"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
                                     {{ page.label }}
                                 </a>
                             {% elif page.url %}
@@ -27,7 +27,7 @@
                     {% endfor %}
                     {% if pagination.next %}
                         <li class="moj-pagination__item  moj-pagination__item--next">
-                            <a href="?{{ pagination.next }}" class="moj-pagination__link">Next<span class="govuk-visually-hidden"> page</span></a>
+                            <a href="?{{ pagination.next }}" data-enhance="pagination-link" class="moj-pagination__link">Next<span class="govuk-visually-hidden"> page</span></a>
                         </li>
                     {% endif %}
                 </ol>

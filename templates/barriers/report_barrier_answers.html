@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Check answers - {{ barrier.code }}{% endblock %}
+
+{% block page_content %}
+    <div class="back-link">
+        <a href="{{ back_link }}" class="govuk-back-link ma-back-link">Back</a>
+    </div>
+    <div class="page-heading">
+        <h1 class="govuk-heading-md">Check your answers- {{ barrier.id }}</h1>
+    </div>
+    {% for questions_section in report_barrier_answers %}
+    <div class="report-barrier-questions__section">
+        <h2 class="govuk-heading-m">{{ questions_section.name }}</h2>
+        {% for question in questions_section.questions %}
+        <div class="report-barrier-questions__question">
+            <h3 class="govuk-heading-s question-label">{{ question.name }}</h3>
+            <div class="answer">{{ question.value|linebreaksbr }}</div>
+            <div class="edit-url"><a href="{{ questions_section.url }}" class="govuk-link">Change</a></div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    {{ barrier.data }}
+
+    <div class="page-actions">
+        <a href="" class="govuk-button govuk-button--primary">Confirm</a>
+    </div>
+
+{% endblock %}

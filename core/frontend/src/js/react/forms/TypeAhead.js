@@ -7,10 +7,10 @@ const customStyles = {
     option: (provided, state) => {
         let styles = {
             ...provided,
-            "border-bottom": `1px solid ${GREY_2}`,
+            borderBottom: `1px solid ${GREY_2}`,
             padding: "12px",
             ":hover": {
-                "background-color": BLUE,
+                backgroundColor: BLUE,
                 color: WHITE,
             },
         };
@@ -24,7 +24,7 @@ const customStyles = {
         let styles = {
             ...provided,
             border: `2px solid ${BLACK}`,
-            "border-radius": 0,
+            borderRadius: 0,
             boxShadow: "none",
             ":hover": {
                 border: `2px solid ${BLACK}`,
@@ -45,10 +45,10 @@ const customStyles = {
     multiValue: (provided, state) => {
         return {
             ...provided,
-            "font-size": "16px",
-            "background-color": GREY_3,
-            "border-radius": 0,
-            "font-family": GDS_TRANSPORT_FONT,
+            fontSize: "16px",
+            backgroundColor: GREY_3,
+            borderRadius: 0,
+            fontFamily: GDS_TRANSPORT_FONT,
         };
     },
     multiValueRemove: (provided, state) => {
@@ -56,8 +56,8 @@ const customStyles = {
             ...provided,
             ":hover": {
                 color: RED,
-                "background-color": GREY_2,
-                "border-radius": 0,
+                backgroundColor: GREY_2,
+                borderRadius: 0,
                 cursor: "pointer",
             },
         };
@@ -73,7 +73,7 @@ const customStyles = {
             ...provided,
             border: `1px solid ${BLACK}`,
             padding: 0,
-            "margin-top": "-1px",
+            marginTop: "-1px",
         };
     },
 };

@@ -16,6 +16,8 @@
             ReactApp.renderMultiSelectFilter("organisation")
             ReactApp.renderMultiSelectFilter("category", "Search categories")
             ReactApp.renderMultiSelectFilter("region")
+
+            ReactApp.renderAsyncSearchResults();
         })
     </script>
 {% endblock %}
@@ -29,7 +31,7 @@
     <section class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
             <h2 class="filter-list-title">Filter barriers by:</h2>
-            <form action="" method="GET" class="filter-items">
+            <form action="" method="GET" class="filter-items" id="search-filters-form">
 
                 {% if form.search_id.value %}{{ form.search_id }}{% endif %}
                 {% if form.member.value %}<input type="hidden" name="{{ form.member.name }}" value="{{ form.member.value }}" />{% endif %}
@@ -94,10 +96,10 @@
                 <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
                 {% endif %}
 
-                <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
+                <input type="submit" value="Apply filters" data-enhance="search-filters-submit" class="govuk-button govuk-button--full-width js-filter-submit">
             </form>
         </div>
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-three-quarters" id="search-results-container">
 
             <div class="filter-results-header">
                 {% if search_title %}

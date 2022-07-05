@@ -59,6 +59,8 @@ class SessionKeys:
         FormSessionKeys.SECTORS: "sectors",
         FormSessionKeys.ABOUT: "about",
         FormSessionKeys.SUMMARY: "summary",
+        FormSessionKeys.CATEGORIES: "categories",
+        FormSessionKeys.COMMODITIES: "commodities",
     }
     attr_mapping = {}
 
@@ -144,7 +146,7 @@ class ReportFormGroup:
     @property
     def selected_admin_areas_as_list(self):
         areas_list = []
-        areas = self.selected_admin_areas
+        areas = self.location_form.get("selected_admin_areas", "")
 
         if areas:
             areas_list = areas.replace(" ", "").split(",")
@@ -243,6 +245,53 @@ class ReportFormGroup:
     def summary_form(self, value):
         self.set(FormSessionKeys.SUMMARY, value)
 
+    # CATEGORIES
+    # ==================================
+    @property
+    def categories_form(self):
+        return self.get(FormSessionKeys.CATEGORIES, {"categories": []})
+
+    @categories_form.setter
+    def categories_form(self, value):
+        self.set(FormSessionKeys.CATEGORIES, value)
+
+    @property
+    def selected_categories_ids(self):
+        """
+        Selected categories
+        :return: STR - comma separated UUIDs
+        """
+        selected_categories = []
+        for category in self.categories_form.get("categories", []):
+            if isinstance(category, dict):
+                selected_categories.append(int(category.get("id")))
+            if isinstance(category, str):
+                selected_categories.append(int(category))
+            if isinstance(category, int):
+                selected_categories.append(category)
+
+        return selected_categories
+
+    @property
+    def selected_categories_with_details(self, metadata):
+        """
+        Selected categories
+        :return: STR - comma separated UUIDs
+        """
+        selected_categories = []
+        all_categories = self.metadata.get_all_categories()
+        for category in self.selected_categories:
+            selected_categories.append(all_categories[category])
+        return selected_categories
+
+    def delete_category(self, category_id):
+        selected_categories = self.selected_categories_ids
+        # remove category_id from selected_categories
+        selected_categories = [
+            category for category in selected_categories if category != int(category_id)
+        ]
+        self.categories_form["categories"] = selected_categories
+
     # UTILS
     # ==================================
     @property
@@ -282,7 +331,16 @@ class ReportFormGroup:
         self.session_keys = SessionKeys(self.session_key_infix)
 
     def get_term_form_data(self):
-        return {"term": str(self.barrier.term["id"])}
+        try:
+            return {"term": str(self.barrier.term["id"])}
+        except:
+            return ""
+
+    def get_categories_form_data(self):
+        try:
+            return {"categories": self.barrier.categories}
+        except AttributeError:
+            return {"categories": []}
 
     def get_status_form_data(self):
         """Returns DICT - extract status form data from barrier.data"""
@@ -371,13 +429,29 @@ class ReportFormGroup:
         }
         return data
 
+    def get_admin_areas_form_data(self):
+        return {"admin_areas": self.barrier.data.get("admin_areas") or []}
+
+    def get_all_location_form_data(self):
+        barrier = self.barrier.data
+        keys = barrier.keys()
+        # raise Exception(barrier)
+        return {
+            **self.get_location_form_data(),
+            **self.get_has_admin_areas_form_data(),
+            **self.get_trade_direction_form_data(),
+            **self.get_caused_by_trading_bloc_form_data(),
+            **self.get_admin_areas_form_data(),
+        }
+
     def update_session_keys(self):
         """
         Update value of each session key, based on data from self.barrier.data
         """
+        # barrier = self.barrier
         self.term_form = self.get_term_form_data()
         self.status_form = self.get_status_form_data()
-        self.location_form = self.get_location_form_data()
+        self.location_form = self.get_all_location_form_data()
         self.caused_by_trading_bloc_form = self.get_caused_by_trading_bloc_form_data()
         self.has_admin_areas = self.get_has_admin_areas_form_data()
         self.trade_direction_form = self.get_trade_direction_form_data()
@@ -389,6 +463,7 @@ class ReportFormGroup:
         self.selected_about_formsectors = self.get_selected_sectors()
         self.about_form = self.get_about_form()
         self.summary_form = self.get_summary_form()
+        self.categories_form = self.get_categories_form_data()
 
     def update_context(self, barrier):
         self.barrier = barrier
@@ -398,16 +473,22 @@ class ReportFormGroup:
 
     def prepare_payload(self):
         """Combined payload of multiple steps (Status & Location)"""
-        payload = {
-            "term": self.term_form.get("term"),
+        temp_payload = {
+            "term": self.status_form.get("term"),
             "country": self.location_form.get("country"),
-            "admin_areas": self.selected_admin_areas_as_list,
+            "admin_areas": self.location_form.get("admin_areas").split(","),
             "trading_bloc": self.location_form.get("trading_bloc", ""),
-            "caused_by_trading_bloc": self.caused_by_trading_bloc_form.get(
-                "caused_by_trading_bloc"
-            ),
-            "trade_direction": self.trade_direction_form.get("trade_direction"),
+            "caused_by_trading_bloc": self.location_form.get("caused_by_trading_bloc"),
+            "trade_direction": self.location_form.get("trade_direction"),
+            "categories": self.selected_categories_ids,
         }
+        # raise Exception("test")
+        # remove empty values
+        payload = {}
+        for key, value in temp_payload.items():
+            if value is not None:
+                payload[key] = value
+
         payload.update(self.status_form)
         return payload
 
@@ -443,11 +524,20 @@ class ReportFormGroup:
             payload["next_steps_summary"] = ""
         return payload
 
+    def _get_barrier(self):
+        return self.client.reports.get(id=self.barrier_id)
+
     def _update_barrier(self, payload):
         return self.client.reports.patch(id=self.barrier_id, **payload)
 
     def _create_barrier(self, payload):
         return self.client.reports.create(**payload)
+
+    def refresh_context(self):
+        barrier = self._get_barrier()
+        # data = barrier.data["admin_areas"]
+        # raise Exception(barrier)
+        self.update_context(barrier)
 
     def save(self, payload=None):
         """Create or update a (report) barrier."""

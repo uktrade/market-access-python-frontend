@@ -8,7 +8,7 @@ services:
     entrypoint: docker/local/entrypoint.sh
     # Running the main service of the container
     # would be useful
-    command: ./manage.py runserver 0:9000
+    command: ./manage.py runserver_plus 0:9000 --nopin
     volumes:
       - .:/usr/src/app
     env_file: docker-compose.env

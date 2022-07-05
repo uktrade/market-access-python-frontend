@@ -1,0 +1,43 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Barrier - Add category{% endblock %}
+
+{% block body_script %}
+    <script>
+        ma.pages.barrier.type();
+    </script>
+{% endblock %}
+{% block page_content %}
+
+    {% include 'partials/heading.html' with caption=heading.caption text='Define barrier category' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.category.name }}" class="govuk-form-group {% if form.category.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                {% form_field_error form "category" %}
+
+                <div class="govuk-radios category govuk-radios--conditional" data-module="radios">
+                    {% for item in categories %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="category-{{ forloop.counter }}" name="{{ form.category.name }}" type="radio" value="{{ item.id }}" data-aria-controls="conditional-category-{{ forloop.counter }}">
+
+                            <label class="govuk-label govuk-radios__label" for="category-{{ forloop.counter }}">
+                            {{ item.title }}
+                            </label>
+                        </div>
+
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-category-{{ forloop.counter }}">
+                            <div class="conditional-category-content">{{ item.description|safe|linebreaks }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
+        <input type="submit" value="Add category" class="govuk-button">
+        <a class="form-cancel" href="{{ urls.back }}">cancel</a>
+    </form>
+{% endblock %}

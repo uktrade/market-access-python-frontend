@@ -63,6 +63,7 @@ class MarketAccessAPIClient:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             logger.warning(e)
+            content = response.json()
             raise APIHttpException(e, response)
 
         return response
@@ -77,8 +78,7 @@ class MarketAccessAPIClient:
             return response.json()
         except JSONDecodeError:
             raise APIJsonException(
-                f"Non json response at '{response.url}'. "
-                f"Response text: {response.text}"
+                f"Non json response at '{response.url}'. Response text: {response.text}"
             )
 
     def post(self, path, **kwargs):

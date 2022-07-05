@@ -8,6 +8,9 @@
     {% include 'partials/heading.html' with caption="Market access barriers" text="Report a barrier" %}
 
     <section class="restrict-width">
+
+        {{ report.next_stage}}
+
         {% if report.is_complete %}
             <div class="callout callout--success callout--with-button">
                 <h2 class="callout__heading">All tasks completed for</h2>
@@ -21,7 +24,7 @@
             <div class="callout callout--warn callout--with-button">
                 <h2 class="callout__heading">Unfinished barrier for</h2>
                 <p class="callout__text">{{ report.term.name }}{% if report.country %} in {{ report.country.name }}{% endif %}</p>
-                <a href="{% report_stage_url urls report.next_stage.stage_code %}" class="callout__button">Continue</a>
+                <a href="{{ report.next_stage.url }}" class="callout__button">Continue</a>
             </div>
         {% endif %}
 
@@ -45,13 +48,12 @@
         </dl>
 
         <ol class="task-list">
-            {% for parent_stage_number, parent_stage in report.stages.items %}
                 <li>
                     <h2 class="task-list__section-heading">
-                        {{ parent_stage.name }}
+                        Add a barrier
                     </h2>
                     <ul class="task-list__items">
-                        {% for stage in parent_stage.stages %}
+                        {% for stage in report.stages %}
                         <li class="task-list__item">
                             <span class="task-list__item__number">{{ forloop.counter }}</span>
 
@@ -76,7 +78,6 @@
                         {% endfor %}
                     </ul>
                 </li>
-            {% endfor %}
         </ol>
 
     </section>

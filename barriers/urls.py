@@ -32,6 +32,7 @@ from barriers.views.progress_updates import (
     BarrierEditProgressUpdate,
     BarrierListProgressUpdate,
 )
+from barriers.views.report_barrier import ReportBarrierAnswersView
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
 from .views.assessments.economic import (

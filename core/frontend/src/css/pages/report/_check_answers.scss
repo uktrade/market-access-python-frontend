@@ -1,0 +1,37 @@
+.report-barrier-questions{
+
+    &__section{
+        max-width: 960px;
+        margin-bottom: 50px;
+        h2{
+            margin: 10px 0px 16px;
+        }
+
+    }
+
+
+    &__question{
+        display: flex;
+        // align items to top of container
+        align-items: flex-start;
+        justify-content: flex-start;
+        box-shadow: inset 0px -1px 0px #B1B4B6;
+        padding: 10px 0px 8px;
+        gap: 5px;
+
+        .question-label{
+            width: 310px;
+            min-width: 310px;
+            padding: 0px;
+            margin: 0px;
+        }
+        .answer{
+
+            flex-grow: 1;
+        }
+        .edit-url{
+            // align this element to the right of the question
+            // align-self: flex-end;
+        }
+    }
+}

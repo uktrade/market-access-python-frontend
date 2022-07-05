@@ -3,7 +3,7 @@
 {% load webpack_static from webpack_loader %}
 
 <!DOCTYPE html>
-<html lang="{{ htmlLang | default:'en' }}" class="govuk-template {{ htmlClasses }}">
+<html class="govuk-template">
   <head>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,7 +16,7 @@
     <meta charset="utf-8" />
     <title>{% block page_title %}Market Access{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="{{ themeColor | default:'#0b0c0c' }}" /> {# Hardcoded value of $govuk-black #}
+    <meta name="theme-color" content="#0b0c0c" /> {# Hardcoded value of $govuk-black #}
     {# Ensure that older IE versions always render with the correct rendering engine #}
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
@@ -36,7 +36,7 @@
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
     <meta property="og:image" content="{% webpack_static '../images/govuk-opengraph-image.png' %}">
   </head>
-  <body class="govuk-template__body {{ bodyClasses }}">
+  <body class="govuk-template__body">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.GTM_ID }}&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -57,7 +57,7 @@
       {% block masthead %}{% endblock %}
       <div class="govuk-width-container ma-container-full">
         {% block before_content %}{% endblock %}
-        <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
+        <main class="govuk-main-wrapper" id="main-content" role="main">
           {% block content %}{% block page_content %}{% endblock %}{% endblock %}
         </main>
       </div>
