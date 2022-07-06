@@ -9,7 +9,7 @@
 
     <section class="restrict-width">
 
-        {{ report.next_stage}}
+        {% comment %} {{ report.next_stage}} {% endcomment %}
 
         {% if report.is_complete %}
             <div class="callout callout--success callout--with-button">
@@ -23,7 +23,8 @@
         {% elif report.next_stage %}
             <div class="callout callout--warn callout--with-button">
                 <h2 class="callout__heading">Unfinished barrier for</h2>
-                <p class="callout__text">{{ report.term.name }}{% if report.country %} in {{ report.country.name }}{% endif %}</p>
+                <p class="callout__text">{{ report.title }}</p>
+                {% comment %} <p class="callout__text">{{ report.term.name }}{% if report.country %} in {{ report.country.name }}{% endif %}</p> {% endcomment %}
                 <a href="{{ report.next_stage.url }}" class="callout__button">Continue</a>
             </div>
         {% endif %}

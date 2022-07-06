@@ -17,6 +17,19 @@ def get_report_barrier_answers(barrier: Report):
     # query_string with next = check_answers_page_url
     qs = "?next={}".format(check_answers_page_url)
 
+    hs_commodity_questions = {}
+    hs_countries = set()
+    for commodity in barrier.commodities:
+        country = commodity["country"]["name"]
+        if country not in hs_commodity_questions.keys():
+            hs_commodity_questions[country] = {
+                "name": f"{country} commodity codes",
+                "value": "",
+            }
+        hs_commodity_questions[country][
+            "value"
+        ] += f"{commodity['commodity']['full_description']}, "
+
     return [
         {
             "name": "About the barrier",
@@ -62,7 +75,7 @@ def get_report_barrier_answers(barrier: Report):
             "questions": [
                 {
                     "name": "What type of barrier is it?",
-                    "value": "",  # barrier.barrier_type,
+                    "value": barrier.term.get("name"),  # barrier.barrier_type,
                 },
                 {
                     "name": "What is the status of the barrier?",
@@ -95,10 +108,6 @@ def get_report_barrier_answers(barrier: Report):
                 {
                     "name": "Does it affect the entire country?",
                     "value": barrier.data.get("has_admin_areas", ""),
-                },
-                {
-                    "name": "Which location is affected by this issue?",
-                    "value": barrier.data.get("location", ""),
                 },
                 {
                     "name": "Which trade direction does this barrier affect?",
@@ -144,21 +153,7 @@ def get_report_barrier_answers(barrier: Report):
                 "reports:barrier_commodities_uuid", kwargs={"barrier_id": barrier.id}
             )
             + qs,
-            "questions": [
-                {
-                    "name": "Which location are the HS commodity codes from?",
-                    "value": None,
-                },
-                {
-                    "name": "HS commodity code",
-                    "value": ",\n".join(
-                        [
-                            commodity.get("commodity", {}).get("description")
-                            for commodity in barrier.commodities
-                        ]
-                    ),
-                },
-            ],
+            "questions": hs_commodity_questions.values(),
         },
     ]
 

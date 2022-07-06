@@ -11,9 +11,21 @@ from utils.models import APIModel
 
 
 def get_report_stages():
+    from reports.forms.new_report_barrier_commodities import (
+        NewReportUpdateBarrierCommoditiesForm,
+    )
     from reports.model_forms.new_report_barrier_about import NewReportBarrierAboutForm
+    from reports.model_forms.new_report_barrier_about_and_summary import (
+        NewReportBarrierAboutAndSummary,
+    )
+    from reports.model_forms.new_report_barrier_categories import (
+        NewReportBarrierCategoriesForm,
+    )
     from reports.model_forms.new_report_barrier_location import (
         NewReportBarrierLocationForm,
+    )
+    from reports.model_forms.new_report_barrier_sectors import (
+        NewReportBarrierSectorsForm,
     )
     from reports.model_forms.new_report_barrier_status import NewReportBarrierStatusForm
     from reports.model_forms.new_report_barrier_summary import (
@@ -22,20 +34,32 @@ def get_report_stages():
 
     return {
         "About the barrier": {
-            "form": NewReportBarrierAboutForm,
+            "form": NewReportBarrierAboutAndSummary,
             "url_path": "reports:barrier_about_uuid",
         },
-        "Barrier summary": {
-            "form": NewReportBarrierSummaryForm,
-            "url_path": "reports:barrier_summary_uuid",
-        },
+        # "Barrier summary": {
+        #     "form": NewReportBarrierSummaryForm,
+        #     "url_path": "reports:barrier_summary_uuid",
+        # },
         "Barrier status": {
             "form": NewReportBarrierStatusForm,
             "url_path": "reports:barrier_status_uuid",
         },
-        "Barrier location": {
+        "Location of the barrier": {
             "form": NewReportBarrierLocationForm,
             "url_path": "reports:barrier_location_uuid",
+        },
+        "Sectors affected by the barrier": {
+            "form": NewReportBarrierSectorsForm,
+            "url_path": "reports:barrier_sectors_uuid",
+        },
+        "Define barrier category": {
+            "form": NewReportBarrierCategoriesForm,
+            "url_path": "reports:barrier_categories_uuid",
+        },
+        "Add HS commodity codes": {
+            "form": NewReportBarrierCategoriesForm,
+            "url_path": "reports:barrier_commodities_uuid",
         },
     }
 

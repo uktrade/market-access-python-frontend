@@ -36,7 +36,8 @@
 
         <form action="" method="POST">
             {% csrf_token %}
-            <input type="submit" value="Save and continue" class="govuk-button">
+            <input type="hidden" name="sectors" value={{ form.fields.sectors.value }}>
+            <input type="submit" name="action" value="continue" class="govuk-button">
             <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
         </form>
 

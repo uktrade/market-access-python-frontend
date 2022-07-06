@@ -1,21 +1,39 @@
 from typing import Any, Dict
 
 from django.forms import Form
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import FormView, TemplateView
 
 from barriers.constants import STATUSES
+from barriers.views.commodities import BarrierEditCommodities
 from reports.model_forms.new_report_barrier_about import NewReportBarrierAboutForm
-from reports.model_forms.new_report_barrier_location import NewReportBarrierLocationForm
+from reports.model_forms.new_report_barrier_about_and_summary import (
+    NewReportBarrierAboutAndSummary,
+)
+from reports.model_forms.new_report_barrier_categories import (
+    NewReportBarrierCategoriesAddForm,
+)
+from reports.model_forms.new_report_barrier_location import (
+    NewReportBarrierLocationForm,
+    NewReportBarrierLocationHybridForm,
+    NewReportBarrierTradeDirectionForm,
+)
+from reports.model_forms.new_report_barrier_sectors import (
+    NewReportBarrierAddSectorsForm,
+    NewReportBarrierHasSectorsForm,
+    NewReportBarrierSectorsForm,
+    SectorsAffected,
+)
 from reports.model_forms.new_report_barrier_status import NewReportBarrierStatusForm
 from reports.model_forms.new_report_barrier_summary import NewReportBarrierSummaryForm
 from reports.models import Report
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 from utils.metadata import MetadataMixin
+from utils.react import form_fields_to_dict
 
 
 class ReportViewBase(MetadataMixin, TemplateView):
@@ -88,13 +106,19 @@ class ReportViewBase(MetadataMixin, TemplateView):
 
 
 class ReportFormViewBase(ReportViewBase, FormView):
-    def form_valid(self, form: Form) -> HttpResponse:
+    def serialize_data(self, form: Form):
+        # Serialize the form data to a dict
+        # Override if you need to alter the serialized data from the form
         if hasattr(form, "serialize_data"):
             # Certain forms require values to be serialized
             # to be compatible with the Barrier API
             data = form.serialize_data()
         else:
             data = form.cleaned_data
+        return data
+
+    def form_valid(self, form: Form) -> HttpResponse:
+        data = self.serialize_data(form)
         self._barrier = self.client.reports.patch(self.kwargs["barrier_id"], **data)
         return super().form_valid(form)
 
@@ -149,9 +173,9 @@ class ReportDetail(ReportViewBase):
 class NewReportBarrierAboutView(ReportFormViewBase):
     heading_text = "About the barrier"
     heading_caption = "Question 1 of 6"
-    template_name = "reports/new_report_barrier_about.html"
-    form_class = NewReportBarrierAboutForm
-    success_path = "reports:barrier_summary"
+    template_name = "reports/new_report_barrier_about_and_summary.html"
+    form_class = NewReportBarrierAboutAndSummary
+    success_path = "reports:barrier_status"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -241,52 +265,484 @@ class NewReportBarrierStatusView(ReportFormViewBase):
 
 class NewReportBarrierLocationView(ReportFormViewBase):
     heading_text = "Location of the barrier"
-    template_name = "reports/new_report_barrier_location.html"
-    form_class = NewReportBarrierLocationForm
+    template_name = "reports/new_report_barrier_location_hybrid.html"
+    form_class = NewReportBarrierLocationHybridForm
     success_path = None
     extra_paths = {"back": "reports:barrier_status"}
 
+    def get_react_data(self, context_data):
+
+        form_kwargs = {
+            # "countries": self.metadata.get_country_list(),
+            # "trading_blocs": self.metadata.get_trading_bloc_list(),
+            # "trading_bloc": None,
+        }
+
+        if self.request.method == "POST":
+            form = NewReportBarrierLocationHybridForm(
+                data=self.request.POST, **form_kwargs
+            )
+        else:
+            form = NewReportBarrierLocationHybridForm(
+                data=self.get_initial(), **form_kwargs
+            )
+
+        base_data = {
+            "barrier_id": self.barrier.id,
+            "method": self.request.method,
+            "form_fields": form_fields_to_dict(form),
+            "heading": {"caption": self.heading_caption, "text": self.heading_text},
+            "countries": self.metadata.get_country_list(),
+            # "admin_area_choices": self.metadata.get_admin_area_list(),
+            "trading_blocs": self.metadata.get_trading_bloc_list(),
+            "trade_directions": list(self.metadata.get_trade_direction_choices()),
+            "admin_areas": self.metadata.get_admin_area_list(),
+            # "csrf_token": get_token(self.request),
+        }
+
+        if self.request.method == "POST":
+            # if form.is_valid():
+            return {
+                **base_data,
+                "form_valid": form.is_valid(),
+                "form_errors": form.errors,
+                "form_data": form.data,
+                # "form_data": form.cleaned_data,
+            }
+
+        data = {
+            **base_data,
+            "form_data": self.get_initial(),
+            # "form_valid": is_valid,
+            # "form_data": form.cleaned_data,
+            # "form_errors": form.errors,
+        }
+        return data
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context_data = super().get_context_data(**kwargs)
+        context_data["react_data"] = self.get_react_data(context_data)
+        return context_data
+
     def get_success_url(self) -> str:
-        if self.barrier.country_trading_bloc():
+        if self.barrier.country_trading_bloc:
             return reverse_lazy(
-                "barriers:barrier_caused_by_trading_bloc_uuid",
-                kwargs={"barrier_id": self.form_group.barrier_id},
+                "reports:barrier_trade_direction_uuid",
+                kwargs={"barrier_id": self.barrier.id},
             )
         return super().get_success_url()
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["countries"] = self.metadata.get_country_list()
-    #     kwargs["trading_blocs"] = self.metadata.get_trading_bloc_list()
-    #     return kwargs
+    def form_valid(self, form: NewReportBarrierLocationForm) -> HttpResponse:
+        # raise Exception("Form invalid")
+        return super().form_valid(form)
 
-    # def get_initial(self):
-    #     form_data = self.form_group.get(self.form_session_key, {})
-    #     if form_data.get("country"):
-    #         return {"location": form_data["country"]}
-    #     elif form_data.get("trading_bloc"):
-    #         return {"location": form_data["trading_bloc"]}
+    def form_invalid(self, form: NewReportBarrierLocationForm) -> HttpResponse:
+        raise Exception("Form invalid")
+        return super().form_invalid(form)
 
-    # def post(self, request, *args, **kwargs):
-    #     location_form = NewReportBarrierLocationForm(self.get_form_kwargs())
-    #     if location_form.is_valid():
-    #         has_admin_areas_form = self.form_classes["has_admin_areas"](request.POST)
-    #         admin_areas_form = self.form_classes["admin_areas"](request.POST)
-    #         trade_direction_form = self.form_classes["trade_direction"](request.POST)
 
-    #     return super().post(request, *args, **kwargs)
+class NewReportBarrierTradeDirectionView(ReportFormViewBase):
+    heading_text = "Location of the barrier"
+    template_name = "reports/new_report_barrier_trade_direction.html"
+    form_class = NewReportBarrierTradeDirectionForm
+    extra_paths = {"back": "reports:barrier_location"}
+    success_path = "reports:barrier_has_sectors"
+
+    # def set_success_path(self):
+    #     action = self.request.POST.get("action")
+    #     if action == "exit":
+    #         self.success_path = "reports:draft_barrier_details"
+    #     else:
+    #         self.success_path = "reports:barrier_has_sectors"
+
+    def form_invalid(self, form: NewReportBarrierTradeDirectionForm) -> HttpResponse:
+        return super().form_invalid(form)
+
+    def form_valid(self, form: Form) -> HttpResponse:
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        return super().get_success_url()
+
+
+# Start: Secotr views
+
+
+class NewReportBarrierHasSectorsView(ReportFormViewBase):
+    """Does it affect the entire country?"""
+
+    heading_text = "Sectors affected by the barrier"
+    template_name = "reports/new_report_barrier_sectors_main.html"
+    form_class = NewReportBarrierHasSectorsForm
+    extra_paths = {"back": "reports:barrier_trade_direction"}
+    success_path = "reports:barrier_sectors"
+
+    # def set_success_path(self):
+    #     action = self.request.POST.get("action")
+    #     if action == "exit":
+    #         self.success_path = "reports:draft_barrier_details"
+    #     else:
+    #         if (
+    #             self.form_group.sectors_affected["sectors_affected"]
+    #             == SectorsAffected.YES
+    #         ):
+    #             self.success_path = "reports:barrier_sectors"
+    #         else:
+    #             self.success_path = "reports:barrier_categories"
 
     # def success(self):
-    #     country_id = self.form_group.location_form["country"]
-    #     country_trading_bloc = self.metadata.get_trading_bloc_by_country_id(country_id)
-    #     admin_areas = self.metadata.get_admin_areas_by_country(country_id)
-    #     if country_trading_bloc:
-    #         self.success_path = "reports:barrier_caused_by_trading_bloc"
-    #     elif admin_areas:
-    #         self.success_path = "reports:barrier_has_admin_areas"
+    #     self.form_group.save(payload=self.form_group.prepare_payload_sectors())
+    #     self.set_success_path()
+
+
+class NewReportBarrierSectorsView(ReportFormViewBase):
+    heading_text = "Sectors affected by the barrier"
+    heading_caption = "Question 4 of 6"
+    template_name = "reports/new_report_barrier_sectors_manage.html"
+    form_class = NewReportBarrierSectorsForm
+    success_path = "reports:barrier_categories"
+    extra_paths = {
+        "back": "reports:barrier_has_sectors",
+        "add_sector": "reports:barrier_add_sectors",
+        "add_all": "reports:barrier_add_all_sectors",
+        "remove_sector": "reports:barrier_remove_sector",
+    }
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     _, selected_sectors = self.form_group.selected_sectors_generator(self.metadata)
+    #     kwargs["sectors"] = selected_sectors
+    #     return kwargs
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get("action")
+        if action == "continue":
+            return HttpResponseRedirect(self.get_success_url())
+        elif action == "exit":
+            return HttpResponseRedirect(self.get_success_url())
+        return super().post(request, *args, **kwargs)
+
+    def get_initial(self) -> Dict[str, Any]:
+        return super().get_initial()
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        return {"barrier": self.barrier}
+
+    def form_valid(self, form: Form) -> HttpResponse:
+        # We don't need to patch the remote barrier here
+        # The updates are already performed in the other CRUD views
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form: Form) -> HttpResponse:
+        return HttpResponseRedirect(self.get_success_url())
+
+    # def success(self):
+    #     self.form_group.save(payload=self.form_group.prepare_payload_sectors())
+    #     self.set_success_path()
+
+
+class NewReportBarrierSectorsAddView(ReportFormViewBase):
+    heading_text = "Sectors affected by the barrier"
+    template_name = "reports/new_report_barrier_sectors_add.html"
+    form_class = NewReportBarrierAddSectorsForm
+    success_path = "reports:barrier_sectors"
+    extra_paths = {
+        "back": "reports:barrier_sectors",
+    }
+
+    def serialize_data(self, form: Form):
+        data = super().serialize_data(form)
+        sectors = data["sectors"]
+        barrier_sectors = [sector["id"] for sector in self.barrier.sectors]
+        updated_sectors = list(set(sectors + barrier_sectors))
+        return {**data, "sectors": updated_sectors}
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # (
+        #     has_selected_sectors,
+        #     selected_sectors,
+        # ) = self.form_group.selected_sectors_generator(self.metadata)
+        # context_data["has_selected_sectors"] = has_selected_sectors
+        # context_data["selected_sectors"] = selected_sectors
+        return context_data
+
+    def form_valid(self, form: Form) -> HttpResponse:
+        # We don't need to patch the remote barrier here
+        # The updates are already performed in the other CRUD views
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form: Form) -> HttpResponse:
+        return super().form_invalid(form)
+
+    # def get_form_kwargs(self):
+    #     """Add available sector choices to form"""
+    #     kwargs = super().get_form_kwargs()
+    #     selected_sectors = self.form_group.selected_sectors or ""
+    #     available_sectors = (
+    #         (sector["id"], sector["name"])
+    #         for sector in self.metadata.get_sector_list(level=0)
+    #         if sector["id"] not in selected_sectors
+    #     )
+    #     kwargs["sectors"] = available_sectors
+    #     return kwargs
+
+    # def form_valid(self, form):
+    #     selected_sectors = self.form_group.selected_sectors
+    #     if not selected_sectors or selected_sectors == "all":
+    #         data = form.cleaned_data["sectors"]
     #     else:
-    #         self.success_path = "reports:barrier_trade_direction"
-    #         self.form_group.selected_admin_areas = ""
+    #         data = f"{selected_sectors}, {form.cleaned_data['sectors']}"
+    #     self.form_group.selected_sectors = data
+    #     return super().form_valid(form)
+
+
+class NewReportBarrierSectorsAddAllView(ReportFormViewBase):
+    http_method_names = "post"
+    success_path = "reports:barrier_sectors"
+
+    def post(self, request, *args, **kwargs):
+        self.init_view(request, **kwargs)
+        self.form_group.selected_sectors = "all"
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class NewReportBarrierSectorsRemoveView(ReportFormViewBase):
+    http_method_names = "post"
+    success_path = "reports:barrier_sectors"
+
+    def post(self, request, *args, **kwargs):
+        sector_id = request.POST.get("sector")
+        if sector_id == "all":
+            self.client.reports.patch(self.kwargs["barrier_id"], {"all_sectors": False})
+        else:
+            barrier_sectors = [sector["id"] for sector in self.barrier.sectors]
+            barrier_sectors.remove(sector_id)
+            self.client.reports.patch(
+                self.kwargs["barrier_id"], {"sectors": barrier_sectors}
+            )
+        return HttpResponseRedirect(self.get_success_url())
+
+
+# END Secotrs views
+
+
+class NewReportBarrierCategoriesView(ReportFormViewBase):
+    heading_text = "Barrier categories"
+    heading_caption = "Question 5 of 6"
+    template_name: str = "reports/new_report_barrier_categories_edit.html"
+    form_class = NewReportBarrierCategoriesAddForm
+    success_path = "reports:barrier_commodities"
+    extra_paths = {
+        "add_category": "reports:barrier_categories_add",
+        "delete_category": "reports:barrier_categories_delete",
+    }
+    use_session_categories = False
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["categories"] = self.barrier.categories
+        return context_data
+
+    # def get(self, request, *args, **kwargs):
+    #     # if not self.use_session_categories:
+    #     #     request.session["categories"] = self.barrier.categories
+    #     return super().get(request, *args, **kwargs)
+
+    # def get_context_data(self, **kwargs):
+    #     context_data = super().get_context_data(**kwargs)
+    #     self.form_group.refresh_context()
+
+    #     # raise Exception(self.form_group.categories_form)
+
+    #     # self.form_group.update_context()
+    #     context_data.update(
+    #         {"categories": self.form_group.categories_form.get("categories")}
+    #     )
+    #     # raise Exception(self.request.session.get("categories"))
+    #     return context_data
+
+    # def get_initial(self):
+    #     selected_categories = self.form_group.categories_form.get("categories", [])
+    #     # self.form_group.update_context()
+    #     # categories = self.request.session.get("categories", [])
+    #     return {
+    #         "categories": [category for category in selected_categories],
+    #     }
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
+    #     kwargs["token"] = self.request.session.get("sso_token")
+    #     kwargs["categories"] = self.metadata.get_category_list()
+    #     return kwargs
+
+    # def form_valid(self, form):
+    #     categories_form = self.form_group.categories_form
+    #     selected_category = form.cleaned_data.get("category")
+    #     categories_form["categories"] = [selected_category]
+    #     self.form_group.categories_form = categories_form
+    #     return super().form_valid(form)
+
+    def form_valid(self, form):
+        # form.save()
+        # try:
+        #     del self.request.session["categories"]
+        # except KeyError:
+        #     pass
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class NewReportBarrierCategoriesAddView(ReportFormViewBase):
+    heading_text = "Barrier categories"
+    template_name: str = "reports/new_report_barrier_categories_add.html"
+    form_class = NewReportBarrierCategoriesAddForm
+    success_path = "reports:barrier_categories"
+    extra_paths = {
+        "add_category": "reports:barrier_categories_add",
+        "delete_category": "reports:barrier_categories_delete",
+        "back": "reports:barrier_categories",
+    }
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # self.form_group.flush_session_keys()
+        context_data.update({"categories": self.metadata.get_category_list()})
+        return context_data
+
+    def serialize_data(self, form: Form):
+        data = super().serialize_data(form)
+        return {"categories": [data["category"]]}
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs["categories"] = self.get_category_list()
+    #     return kwargs
+
+    # def get_category_list(self):
+    #     """
+    #     Get a list of all categories excluding any already selected
+    #     """
+    #     selected_category_ids = [
+    #         str(category["id"])
+    #         for category in self.request.session.get("categories", [])
+    #     ]
+    #     return [
+    #         category
+    #         for category in self.metadata.get_category_list()
+    #         if str(category["id"]) not in selected_category_ids
+    #     ]
+
+    # def add_category_by_id(self, category_id):
+    #     all_categories = self.metadata.get_category_list()
+    #     category = next(
+    #         (
+    #             category
+    #             for category in all_categories
+    #             if category["id"] == int(category_id)
+    #         ),
+    #         None,
+    #     )
+    #     if not category:
+    #         raise Exception("Category not found")
+
+    #     currently_selected_categories = self.form_group.categories_form.get(
+    #         "categories", []
+    #     )
+    #     if category in currently_selected_categories:
+    #         return currently_selected_categories
+    #     return [*currently_selected_categories, category]
+
+    # def form_valid(self, form):
+    #     categories_form = self.form_group.categories_form
+    #     selected_category_id = form.cleaned_data.get("category")
+    #     selected_categories = self.add_category_by_id(selected_category_id)
+
+    #     categories_form["categories"] = selected_categories
+    #     # [
+    #     #     selected_category_id,
+    #     #     *categories_form["categories"],
+    #     # ]
+
+    #     self.form_group.categories_form = categories_form
+    #     self.form_group.save()
+    #     return super().form_valid(form)
+
+
+class NewReportBarrierCategoriesDeleteView(ReportFormViewBase):
+    template_name = None
+
+    def post(self, request, *args, **kwargs):
+        # delete category from get param category_id
+        # and redirect to barrier_categories
+        self.init_view(request, *args, **kwargs)
+        category_id = request.POST.get("category_id")
+        self.form_group.delete_category(category_id)
+        self.form_group.save()
+
+        return HttpResponseRedirect(
+            reverse(
+                "reports:barrier_categories_uuid",
+                kwargs={"barrier_id": self.form_group.barrier_id},
+            )
+        )
+
+
+# class NewReportBarrierCommoditiesView(BarrierEditCommodities):
+#     heading_caption = "Question 6 of 6"
+#     template_name = "reports/new_report_barrier_commodities.html"
+#     form_class = NewReportUpdateBarrierCommoditiesForm
+
+#     def get_success_url(self):
+#         return reverse(
+#             "reports:report_barrier_answers", kwargs={"barrier_id": self.barrier.id}
+#         )
+
+#     def get_barrier(self):
+#         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+#         barrier_id = self.kwargs.get("barrier_id")
+#         try:
+#             return client.reports.get(id=barrier_id)
+#         except APIHttpException as e:
+#             raise Exception(e)
+
+
+# def get_form_kwargs(self):
+#     kwargs = super().get_form_kwargs()
+#     kwargs["countries"] = self.metadata.get_country_list()
+#     kwargs["trading_blocs"] = self.metadata.get_trading_bloc_list()
+#     return kwargs
+
+# def get_initial(self):
+#     form_data = self.form_group.get(self.form_session_key, {})
+#     if form_data.get("country"):
+#         return {"location": form_data["country"]}
+#     elif form_data.get("trading_bloc"):
+#         return {"location": form_data["trading_bloc"]}
+
+# def post(self, request, *args, **kwargs):
+#     location_form = NewReportBarrierLocationForm(self.get_form_kwargs())
+#     if location_form.is_valid():
+#         has_admin_areas_form = self.form_classes["has_admin_areas"](request.POST)
+#         admin_areas_form = self.form_classes["admin_areas"](request.POST)
+#         trade_direction_form = self.form_classes["trade_direction"](request.POST)
+
+#     return super().post(request, *args, **kwargs)
+
+# def success(self):
+#     country_id = self.form_group.location_form["country"]
+#     country_trading_bloc = self.metadata.get_trading_bloc_by_country_id(country_id)
+#     admin_areas = self.metadata.get_admin_areas_by_country(country_id)
+#     if country_trading_bloc:
+#         self.success_path = "reports:barrier_caused_by_trading_bloc"
+#     elif admin_areas:
+#         self.success_path = "reports:barrier_has_admin_areas"
+#     else:
+#         self.success_path = "reports:barrier_trade_direction"
+#         self.form_group.selected_admin_areas = ""
 
 
 # class NewReportBarrierLocationHasAdminAreasView(ReportFormViewBase):

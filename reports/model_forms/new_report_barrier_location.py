@@ -32,9 +32,13 @@ class NewReportBarrierLocationForm(EditCountryOrTradingBlocForm, NewReportBaseFo
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
         if barrier.country:
-            return {"location": barrier.country.id}
+            return {
+                "location": barrier.country.get("id"),
+            }
         if barrier.trading_bloc:
-            return {"location": barrier.trading_bloc.code}
+            return {
+                "location": barrier.trading_bloc.get("code"),
+            }
         return {}
 
 
@@ -59,6 +63,12 @@ class NewReportBarrierLocationHasAdminAreasForm(NewReportBaseForm):
         error_messages={"required": "Does it affect the entire country?"},
     )
 
+    @staticmethod
+    def get_barrier_initial(barrier: Report) -> dict[str, any]:
+        return {
+            "has_admin_areas": barrier.has_admin_areas,
+        }
+
 
 class NewReportBarrierLocationAddAdminAreasForm(NewReportBaseForm):
     admin_areas = forms.ChoiceField(
@@ -75,6 +85,12 @@ class NewReportBarrierLocationAddAdminAreasForm(NewReportBaseForm):
 
     def clean_selected_admin_areas(self):
         return self.cleaned_data["selected_admin_areas"].split(",")
+
+    @staticmethod
+    def get_barrier_initial(barrier: Report) -> dict[str, any]:
+        return {
+            "admin_areas": barrier.admin_areas,
+        }
 
 
 class NewReportBarrierLocationAdminAreasForm(NewReportBaseForm):
@@ -94,6 +110,12 @@ class NewReportBarrierLocationAdminAreasForm(NewReportBaseForm):
         super().__init__(*args, **kwargs)
         self.fields["admin_areas"].choices = admin_areas
 
+    @staticmethod
+    def get_barrier_initial(barrier: Report) -> dict[str, any]:
+        return {
+            "admin_areas": barrier.admin_areas,
+        }
+
 
 class NewReportBarrierTradeDirectionForm(NewReportBaseForm):
     trade_direction = forms.ChoiceField(
@@ -103,13 +125,26 @@ class NewReportBarrierTradeDirectionForm(NewReportBaseForm):
         error_messages={"required": "Select a trade direction"},
     )
 
-    def __init__(self, trade_direction_choices, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        trade_direction_choices = self.metadata.get_trade_direction_choices()
         self.fields["trade_direction"].choices = trade_direction_choices
+
+    @staticmethod
+    def get_barrier_initial(barrier: Report) -> dict[str, any]:
+        return {
+            "trade_direction": barrier.trade_direction,
+        }
 
 
 class NewReportCausedByTradingBlocForm(CausedByTradingBlocForm):
-    pass
+    @staticmethod
+    def get_barrier_initial(barrier: Report) -> dict[str, any]:
+        if barrier.trading_bloc:
+            return {
+                "caused_by_trading_bloc": barrier.trading_bloc.get("code"),
+            }
+        return {}
 
 
 class NewReportBarrierLocationMasterForm(
@@ -139,5 +174,30 @@ class NewReportBarrierLocationAndAdminAreasForm(
     NewReportCausedByTradingBlocForm,
     NewReportBaseForm,
 ):
-
     admin_areas = forms.CharField()
+
+
+class NewReportBarrierLocationHybridForm(
+    NewReportBarrierLocationForm,
+    NewReportBarrierLocationHasAdminAreasForm,
+    NewReportCausedByTradingBlocForm,
+    NewReportBarrierLocationAddAdminAreasForm,
+    NewReportBaseForm,
+):
+    def serialize_data(self):
+        data = {
+            **self.cleaned_data,
+            "admin_areas": [
+                item for item in self.cleaned_data["admin_areas"].split(",") if item
+            ],
+        }
+        return data
+
+    @staticmethod
+    def get_barrier_initial(barrier: Report) -> dict[str, any]:
+        return {
+            **NewReportBarrierLocationForm.get_barrier_initial(barrier),
+            **NewReportBarrierLocationAddAdminAreasForm.get_barrier_initial(barrier),
+            **NewReportCausedByTradingBlocForm.get_barrier_initial(barrier),
+            **NewReportBarrierLocationHasAdminAreasForm.get_barrier_initial(barrier),
+        }

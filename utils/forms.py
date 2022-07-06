@@ -164,9 +164,9 @@ class TrueFalseBooleanField(forms.NullBooleanField):
     """
 
     def clean(self, value):
-        if value is True:
+        if value == "True":
             return True
-        elif value is False:
+        elif value == "False":
             return False
         if self.required:
             raise ValidationError("This field is required.")

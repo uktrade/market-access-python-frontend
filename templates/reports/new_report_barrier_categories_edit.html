@@ -33,7 +33,7 @@
 
     <form action="" method="POST">
         {% csrf_token %}
-        {{ form }}
+        <input type="submit" value="Save and continue" class="govuk-button">
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
     </form>
 {% endblock %}

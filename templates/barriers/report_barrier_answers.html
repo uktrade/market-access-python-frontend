@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block page_title %}Check answers - {{ barrier.code }}{% endblock %}
+{% block page_title %}Check answers{% endblock %}
 
 {% block page_content %}
     <div class="back-link">
         <a href="{{ back_link }}" class="govuk-back-link ma-back-link">Back</a>
     </div>
     <div class="page-heading">
-        <h1 class="govuk-heading-md">Check your answers- {{ barrier.id }}</h1>
+        <h1 class="govuk-heading-md">Check your answers</h1>
     </div>
     {% for questions_section in report_barrier_answers %}
     <div class="report-barrier-questions__section">
@@ -22,7 +22,7 @@
     </div>
     {% endfor %}
 
-    {{ barrier.data }}
+    {% comment %} {{ barrier.data }} {% endcomment %}
 
     <div class="page-actions">
         <a href="" class="govuk-button govuk-button--primary">Confirm</a>
