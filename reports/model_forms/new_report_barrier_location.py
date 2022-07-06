@@ -96,6 +96,7 @@ class HasAdminAreas:
 
 class NewReportBarrierLocationHasAdminAreasForm(NewReportBaseForm):
     has_admin_areas = forms.ChoiceField(
+        required=False,
         label="Does it affect the entire country?",
         choices=HasAdminAreas.choices(),
         error_messages={"required": "Does it affect the entire country?"},
@@ -268,23 +269,25 @@ class NewReportCausedByTradingBlocForm(CausedByTradingBlocForm, NewReportBaseFor
             }
         return {}
 
-    def clean_caused_by_trading_bloc(self):
-        location = self.cleaned_data.get("location")
-        if not location:
-            country_id = self.barrier.country["id"]
-        else:
-            country_id = self.cleaned_data.get("country")
+    # def clean_caused_by_trading_bloc(self):
+    #     location = self.cleaned_data.get("location")
+    #     if not location and self.barrier.country:
+    #         country_id = self.barrier.country["id"]
+    #     else:
+    #         country_id = self.cleaned_data.get("country")
 
-        does_country_have_trading_bloc = (
-            self.metadata.get_trading_bloc_by_country_id(country_id) is not None
-        )
+    #     if notcountry_id
 
-        if not does_country_have_trading_bloc:
-            return None
+    #     does_country_have_trading_bloc = (
+    #         self.metadata.get_trading_bloc_by_country_id(country_id) is not None
+    #     )
 
-        # if self.cleaned_data.get("caused_by_trading_bloc") is None:
-        #     raise forms.ValidationError("This field is required")
-        return self.cleaned_data["caused_by_trading_bloc"]
+    #     if not does_country_have_trading_bloc:
+    #         return None
+
+    #     # if self.cleaned_data.get("caused_by_trading_bloc") is None:
+    #     #     raise forms.ValidationError("This field is required")
+    #     return self.cleaned_data["caused_by_trading_bloc"]
 
 
 class NewReportBarrierLocationMasterForm(
@@ -347,6 +350,44 @@ class NewReportBarrierLocationHybridForm(
             **NewReportCausedByTradingBlocForm.get_barrier_initial(barrier),
             **NewReportBarrierLocationHasAdminAreasForm.get_barrier_initial(barrier),
         }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        location = self.cleaned_data.get("location")
+        if not location:
+            country_id = self.barrier.country["id"]
+        else:
+            country_id = self.cleaned_data.get("country")
+
+        does_country_have_trading_bloc = (
+            self.metadata.get_trading_bloc_by_country_id(country_id) is not None
+        )
+
+        if not does_country_have_trading_bloc:
+            cleaned_data["caused_by_trading_bloc"] = None
+
+        # if self.cleaned_data.get("caused_by_trading_bloc") is None:
+        #     raise forms.ValidationError("This field is required")
+
+        does_country_have_admin_areas = (
+            self.metadata.get_admin_areas_by_country(country_id) is not None
+        )
+        if not does_country_have_admin_areas:
+            cleaned_data["admin_areas"] = None
+        else:
+            if cleaned_data.get("has_admin_areas") is None:
+                # append validation error to "has_admin_areas" field
+                self.add_error(
+                    "has_admin_areas",
+                    forms.ValidationError("This field is required"),
+                )
+
+            if cleaned_data["has_admin_areas"] == HasAdminAreas.YES:
+                cleaned_data["caused_by_admin_areas"] = False
+            elif cleaned_data["has_admin_areas"] == HasAdminAreas.NO:
+                cleaned_data["caused_by_admin_areas"] = True
+
+        return cleaned_data
 
     # def clean_location(self):
     #     location = self.cleaned_data["location"]
