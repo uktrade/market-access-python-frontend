@@ -10,7 +10,7 @@ class NewReportUpdateBarrierCommoditiesForm(UpdateBarrierCommoditiesForm):
         client.reports.patch(id=self.barrier_id, commodities=self.commodities)
 
     def clean_codes(self):
-        codes = super().clean_codes()
+        codes = self.cleaned_data["codes"]
         if not codes:
-            raise forms.ValidationError("No codes provided")
+            raise forms.ValidationError("Please provide at least one HS code")
         return codes

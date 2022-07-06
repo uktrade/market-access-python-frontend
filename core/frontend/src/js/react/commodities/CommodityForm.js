@@ -340,7 +340,7 @@ function CommodityForm(props) {
                             Save and continue
                         </button>
                         <button
-                            className="form-cancel govuk-button button-as-link"
+                            className="govuk-button button--secondary"
                             name="action"
                             value="cancel"
                         >
@@ -358,7 +358,7 @@ function CommodityForm(props) {
                             Done
                         </button>
                         <button
-                            className="form-cancel govuk-button button-as-link"
+                            className="form-cancel govuk-button button--secondary"
                             name="action"
                             value="cancel"
                         >

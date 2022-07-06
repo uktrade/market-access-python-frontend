@@ -184,7 +184,10 @@ class Report(ReportCompletionMixin, APIModel):
 
     @property
     def sub_status_display(self):
-        return self.data.get("sub_status", {}).get("name", "")
+        sub_status = self.data.get("sub_status", {}).get("name", "")
+        if sub_status == "None":
+            return None
+        return sub_status
 
     @property
     def trade_direction_display(self):

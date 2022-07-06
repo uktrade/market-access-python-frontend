@@ -14,7 +14,7 @@
         {% if report.is_complete %}
             <div class="callout callout--success callout--with-button">
                 <h2 class="callout__heading">All tasks completed for</h2>
-                <p class="callout__text">{{ report.term.name }}{% if report.country %} in {{ report.country.name }}{% endif %}</p>
+                <p class="callout__text">{{ report.title }}</p>
                 <form action="" method="POST">
                     {% csrf_token %}
                     <input type="submit" value="Submit barrier" class="callout__button">

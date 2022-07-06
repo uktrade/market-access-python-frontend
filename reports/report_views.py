@@ -739,6 +739,7 @@ class NewReportBarrierCommoditiesView(BarrierEditCommodities):
             "text": "Add HS commodity codes",
             "caption": "Question 6 of 7",
         }
+        context_data["lookup_form"] = self.get_lookup_form()
         return context_data
 
     def get_barrier(self):
@@ -748,6 +749,22 @@ class NewReportBarrierCommoditiesView(BarrierEditCommodities):
             return client.reports.get(id=barrier_id)
         except APIHttpException as e:
             raise Exception(e)
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get("action")
+        if action in ("save-and-continue", "save-and-exit"):
+            form = self.get_form()
+            if form.is_valid():
+                form.save()
+                self.clear_session_commodities()
+                return HttpResponseRedirect(self.get_success_url())
+            else:
+                return self.form_invalid(form)
+                # return self.render_to_response(
+                #     self.get_context_data(lookup_form=self.get_lookup_form())
+                # )
+
+        return super().post(request, *args, **kwargs)
 
 
 # class NewReportBarrierCommoditiesView(BarrierEditCommodities):

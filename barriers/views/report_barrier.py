@@ -30,7 +30,7 @@ def get_report_barrier_answers(barrier: Report):
             }
         hs_commodity_questions[country][
             "value"
-        ] += f"{commodity['commodity']['full_description']}, "
+        ] += f"{commodity['commodity']['full_description']},\n"
 
     return [
         {
@@ -85,7 +85,7 @@ def get_report_barrier_answers(barrier: Report):
                 },
                 {
                     "name": "Who is due to take action?",
-                    "value": barrier.sub_status_display,
+                    "value": barrier.sub_status_display or "-",
                 },
             ],
         },
@@ -105,11 +105,11 @@ def get_report_barrier_answers(barrier: Report):
                         "Was this barrier caused by a regulation introduced by the"
                         " EAEU?"
                     ),
-                    "value": barrier.data.get("caused_by_trading_bloc", "") or "",
+                    "value": barrier.data.get("caused_by_trading_bloc", "-") or "-",
                 },
                 {
                     "name": "Does it affect the entire country?",
-                    "value": barrier.data.get("has_admin_areas", ""),
+                    "value": barrier.data.get("caused_by_admin_areas", "-"),
                 },
                 {
                     "name": "Which trade direction does this barrier affect?",
@@ -172,7 +172,7 @@ class ReportBarrierAnswersView(ReportViewBase):
 
     def post(self, request, *args, **kwargs):
         if self.barrier.draft:
-            self.barrier = self.client.reports.submit(self.barrier.id)
+            self._barrier = self.client.reports.submit(self.barrier.id)
         return HttpResponseRedirect(
             reverse("barriers:barrier_detail", kwargs={"barrier_id": self.barrier.id})
         )
