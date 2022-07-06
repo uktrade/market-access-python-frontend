@@ -12,6 +12,14 @@ if TYPE_CHECKING:
 
 
 class NewReportBarrierCategoriesForm(NewReportBaseForm):
+    categories = forms.CharField(required=True)
+
+    def clean_categories(self):
+        categories = self.cleaned_data["categories"]
+        if not categories:
+            raise forms.ValidationError("Please select at least one category")
+        return categories.split(",")
+
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
         return {

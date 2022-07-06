@@ -1,9 +1,11 @@
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 
 from barriers.models.barriers import Barrier
 from barriers.views.mixins import BarrierMixin
 from reports.models import Report
+from reports.report_views import ReportViewBase
 from reports.views import ReportsTemplateView
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
@@ -158,7 +160,7 @@ def get_report_barrier_answers(barrier: Report):
     ]
 
 
-class ReportBarrierAnswersView(TemplateView):
+class ReportBarrierAnswersView(ReportViewBase):
     template_name = "barriers/report_barrier_answers.html"
     _client: MarketAccessAPIClient = None
 
@@ -167,6 +169,13 @@ class ReportBarrierAnswersView(TemplateView):
         if not self._client:
             self._client = MarketAccessAPIClient(self.request.session["sso_token"])
         return self._client
+
+    def post(self, request, *args, **kwargs):
+        if self.barrier.draft:
+            self.barrier = self.client.reports.submit(self.barrier.id)
+        return HttpResponseRedirect(
+            reverse("barriers:barrier_detail", kwargs={"barrier_id": self.barrier.id})
+        )
 
     def get_barrier(self, uuid):
         """Once a report is submitted it becomes a barrier"""

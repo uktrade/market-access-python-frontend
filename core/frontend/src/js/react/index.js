@@ -9,7 +9,13 @@ import TextAreaWithMentions from "./forms/TextAreaWithMentions";
 import { renderLocationForm } from "./reports/LocationForm";
 import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 
-function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
+function renderCommodityForm(
+    confirmedCommodities,
+    locations,
+    label,
+    helpText,
+    isReportJourney = false
+) {
     const csrfToken = getCSRFToken();
     ReactDOM.render(
         <CommodityForm
@@ -18,6 +24,7 @@ function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
             locations={locations}
             label={label}
             helpText={helpText}
+            isReportJourney={isReportJourney}
         />,
         document.getElementById("react-app")
     );

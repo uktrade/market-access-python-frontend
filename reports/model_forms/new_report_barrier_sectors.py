@@ -40,7 +40,9 @@ class NewReportBarrierHasSectorsForm(NewReportBaseForm):
 
 
 class NewReportBarrierSectorsForm(NewReportBaseForm):
-    sectors = forms.ChoiceField(label="Selected sectors", choices=(), required=False)
+    sectors = forms.MultipleChoiceField(
+        label="Selected sectors", choices=(), required=False
+    )
 
     def __init__(self, barrier=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -55,13 +57,19 @@ class NewReportBarrierSectorsForm(NewReportBaseForm):
             for sector in self.metadata.get_sector_list(level=0)
             if sector["id"] in barrier_sectors
         )
-        self.fields["sectors"].choices = sectors
+        self.fields["sectors"].choices = list(sectors)
 
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
         return {
             "sectors": [sector["id"] for sector in barrier.sectors],
         }
+
+    def clean_sectors(self):
+        sectors = self.cleaned_data["sectors"]
+        if not sectors:
+            raise forms.ValidationError("Please select at least one sector")
+        return sectors
 
 
 class NewReportBarrierAddSectorsForm(NewReportBaseForm):

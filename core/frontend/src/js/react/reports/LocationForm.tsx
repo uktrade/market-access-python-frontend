@@ -13,16 +13,14 @@ import {
 } from "../types";
 import { SelectedAdminAreasBox } from "./SelectedAdminAreasBox";
 
-interface LocationFormReactData {
+interface LocationFormReactData<T> {
     barrier_id: string;
     method: string;
     heading: {
         caption: string;
         text: string;
     };
-    form_data: {
-        [key: string]: string;
-    };
+    form_data: T;
     form_errors?: {
         [key: string]: string[] | undefined;
     };
@@ -33,6 +31,21 @@ interface LocationFormReactData {
     countries: Country[];
     trading_blocs: TradingBloc[];
     admin_areas: AdminArea[];
+}
+
+interface LocationFormData {
+    admin_areas: string[];
+    caused_by_trading_bloc: string;
+    has_admin_areas: string;
+    location: string;
+    country?: string;
+    trading_bloc?: string;
+}
+
+const mapIdsToAdminAreas = (ids: string[], adminAreas: AdminArea[]) => {
+    return ids.map((id) => {
+        return adminAreas.find((area) => area.id === id);
+    })
 }
 
 const TRADING_BLOC_TO_HELP_TEXT = {
@@ -108,7 +121,7 @@ export const LocationForm = () => {
         location: "",
         selectedAdminAreas: [],
     });
-    const [pageReactData, setPageReactData] = useState<LocationFormReactData>();
+    const [pageReactData, setPageReactData] = useState<LocationFormReactData<LocationFormData>>();
 
     const {
         location,
@@ -121,7 +134,7 @@ export const LocationForm = () => {
 
     console.log("formState", formState);
 
-    const data: LocationFormReactData = JSON.parse(
+    const data: LocationFormReactData<LocationFormData> = JSON.parse(
         document.getElementById("location-form-data").innerHTML
     );
     const csrf_token = document.querySelector<HTMLInputElement>(
@@ -153,7 +166,7 @@ export const LocationForm = () => {
                 : undefined,
             causedByTradingBloc: form_data.caused_by_trading_bloc,
             causedByAdminAreas: form_data.has_admin_areas,
-            // selectedAdminAreas: form_data.selected_admin_areas,
+            selectedAdminAreas: mapIdsToAdminAreas(form_data.admin_areas, admin_areas),
         });
     }, []);
 
@@ -268,16 +281,15 @@ export const LocationForm = () => {
         ...countryChoices,
     ];
 
+    const showCausedByTradingBloc = !!countryTradingBloc
+    const showAdminAreasSelection = showCausedByTradingBloc ? (
+        countryHasAdminAreas && causedByTradingBloc
+    ) : ( countryHasAdminAreas)
+
     // console.log("form_fields.has_admin_areas", form_fields.has_admin_areas);
 
     return (
-        <section className="restrict-width" id="location-form-container">
-            <a href="{{ urls.back }}" className="govuk-back-link">
-                Back
-            </a>
-            <Heading caption={heading.caption} text={heading.text} />
-
-            <form action="" method="POST">
+        <div>
                 <input
                     type="hidden"
                     name="csrfmiddlewaretoken"
@@ -306,7 +318,7 @@ export const LocationForm = () => {
                         />
                     </div>
                 )}
-                {countryHasAdminAreas && causedByTradingBloc && (
+                {showAdminAreasSelection && (
                     <div className="govuk-form-group">
                         <RadioInput
                             value={causedByAdminAreas}
@@ -366,13 +378,7 @@ export const LocationForm = () => {
                 )} */}
 
                 <div className="{% form_group_classes form.errors %}"></div>
-                <input
-                    type="submit"
-                    value="Continue"
-                    className="govuk-button"
-                />
-            </form>
-        </section>
+        </div>
     );
 };
 

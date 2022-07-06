@@ -11,6 +11,12 @@ if TYPE_CHECKING:
 
 
 class NewReportBaseForm(MetadataMixin, forms.Form):
+    barrier: Report = None
+
+    def __init__(self, *args, barrier=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.barrier = barrier
+
     @staticmethod
     def get_barrier_initial(self, barrier: Report) -> dict[str, any]:
         # Akin to a ModelForm include the business logic for

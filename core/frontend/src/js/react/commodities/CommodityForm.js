@@ -19,6 +19,8 @@ function CommodityForm(props) {
     const boxCount = 5;
     const inputRefContainer = useRef(new Array(boxCount));
 
+    const { isReportJourney } = props;
+
     const handleLocationChange = (event) => {
         setLocationId(event.target.value);
     };
@@ -326,21 +328,44 @@ function CommodityForm(props) {
                         );
                     }
                 })}
-                <button
-                    name="action"
-                    value="save"
-                    className="govuk-button"
-                    data-module="govuk-button"
-                >
-                    Done
-                </button>
-                <button
-                    className="form-cancel govuk-button button-as-link"
-                    name="action"
-                    value="cancel"
-                >
-                    Cancel
-                </button>
+
+                {isReportJourney ? (
+                    <div>
+                        <button
+                            name="action"
+                            value="save"
+                            className="govuk-button"
+                            data-module="govuk-button"
+                        >
+                            Save and continue
+                        </button>
+                        <button
+                            className="form-cancel govuk-button button-as-link"
+                            name="action"
+                            value="cancel"
+                        >
+                            Save and exit
+                        </button>
+                    </div>
+                ) : (
+                    <div>
+                        <button
+                            name="action"
+                            value="save"
+                            className="govuk-button"
+                            data-module="govuk-button"
+                        >
+                            Done
+                        </button>
+                        <button
+                            className="form-cancel govuk-button button-as-link"
+                            name="action"
+                            value="cancel"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                )}
             </form>
         </div>
     );

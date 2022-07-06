@@ -12,6 +12,7 @@
 
         <div class="selection-list">
             <h3 class="selection-list__heading">{{ form.fields.sectors.label }}</h3>
+            {% form_field_error form "sectors" %}
                 <ul class="selection-list__list">
                     {% for sector_id, sector_name in form.fields.sectors.choices %}
                     <li class="selection-list__list__item">
@@ -36,8 +37,8 @@
 
         <form action="" method="POST">
             {% csrf_token %}
-            <input type="hidden" name="sectors" value={{ form.fields.sectors.value }}>
-            <input type="submit" name="action" value="continue" class="govuk-button">
+            <input type="hidden" name="sectors" value={{ sectors }}>
+            <button type="submit" name="action" value="continue" class="govuk-button">Save and continue</button>
             <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
         </form>
 

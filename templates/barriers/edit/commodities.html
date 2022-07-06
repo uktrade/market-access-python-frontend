@@ -109,8 +109,9 @@
                 <input type="hidden" name="countries" value="{{ confirmed_commodity.country.id }}" />
                 <input type="hidden" name="trading_blocs" value="{{ confirmed_commodity.trading_bloc.code }}" />
             {% endfor %}
-            <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
-            <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
+            {% include 'reports/partials/new_report_submit_buttons.html' with has_next=has_next next_url=next_url %}
+            {% comment %} <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
+            <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button> {% endcomment %}
         </form>
     </div>
 

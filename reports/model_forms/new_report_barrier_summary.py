@@ -47,7 +47,7 @@ class NewReportBarrierSummaryForm(forms.Form):
         return {
             "summary": barrier.summary,
             "is_summary_sensitive": barrier.is_summary_sensitive,
-            "next_steps_summary": barrier.next_steps_summary,
+            # "next_steps_summary": barrier.next_steps_summary,
         }
 
     # def serialize_is_summary_sensitive(self):
