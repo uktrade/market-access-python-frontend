@@ -15,9 +15,10 @@
 
             {% include "partials/forms/radio_input.html" with field=form.trade_direction %}
 
-            <input type="submit" value="Save and continue" class="govuk-button">
-            <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
+            {% comment %} <input type="submit" value="Save and continue" class="govuk-button">
+            <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button> {% endcomment %}
 
+            {% include 'reports/partials/new_report_submit_buttons.html' with has_next=has_next next_url=next_url %}
         </form>
 	</section>
 

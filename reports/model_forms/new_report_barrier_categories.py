@@ -12,7 +12,10 @@ if TYPE_CHECKING:
 
 
 class NewReportBarrierCategoriesForm(NewReportBaseForm):
-    categories = forms.CharField(required=True)
+    categories = forms.CharField(
+        required=True,
+        error_messages={"required": "Please select at least one category"},
+    )
 
     def clean_categories(self):
         categories = self.cleaned_data["categories"]

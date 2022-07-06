@@ -83,8 +83,12 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
         return {
-            "term": barrier.term["id"] if barrier.term else None,
-            "status": barrier.status["id"] if barrier.status else None,
+            "term": str(barrier.term["id"]) if barrier.term else None,
+            "status": str(barrier.status["id"]) if barrier.status else None,
+            "sub_status": str(barrier.sub_status["code"])
+            if barrier.sub_status
+            else None,
+            "status_summary": barrier.status_summary,
         }
 
     def serialize_data(self):

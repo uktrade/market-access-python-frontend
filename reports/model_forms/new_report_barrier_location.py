@@ -241,9 +241,11 @@ class NewReportBarrierTradeDirectionForm(NewReportBaseForm):
 
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
-        return {
-            "trade_direction": barrier.trade_direction,
-        }
+        if barrier.trade_direction:
+            return {
+                "trade_direction": barrier.trade_direction["id"],
+            }
+        return {}
 
 
 class NewReportCausedByTradingBlocForm(CausedByTradingBlocForm, NewReportBaseForm):

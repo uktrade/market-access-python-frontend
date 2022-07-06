@@ -381,8 +381,8 @@ class NewReportBarrierTradeDirectionView(ReportFormViewBase):
     def form_valid(self, form: Form) -> HttpResponse:
         return super().form_valid(form)
 
-    def get_success_url(self) -> str:
-        return super().get_success_url()
+    # def get_success_url(self) -> str:
+    #     return super().get_success_url()
 
 
 # Start: Secotr views
@@ -428,6 +428,19 @@ class NewReportBarrierSectorsView(ReportFormViewBase):
         "remove_sector": "reports:barrier_remove_sector",
     }
 
+    # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    #     context_data = super().get_context_data(**kwargs)
+    #     if self.barrier.all_sectors:
+    #         context_data["sectors"] = [
+    #             {
+    #                 "id": "all",
+    #                 "name": "All sectors",
+    #             }
+    #         ]
+    #     else:
+    #         context_data["sectors"] = self.barrier.sectors
+    #     return context_data
+
     # def get_form_kwargs(self):
     #     kwargs = super().get_form_kwargs()
     #     _, selected_sectors = self.form_group.selected_sectors_generator(self.metadata)
@@ -450,14 +463,22 @@ class NewReportBarrierSectorsView(ReportFormViewBase):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context_data = super().get_context_data(**kwargs)
-        context_data["sectors"] = ",".join(
-            [sector["id"] for sector in self.barrier.sectors]
-        )
+
+        if self.barrier.all_sectors:
+            context_data["sectors_list"] = [["all", "All sectors"]]
+            context_data["sectors"] = "all"
+        else:
+            context_data["sectors_list"] = [
+                (sector["id"], sector["name"]) for sector in self.barrier.sectors
+            ]
+            context_data["sectors"] = ",".join(
+                [sector["id"] for sector in self.barrier.sectors]
+            )
         return context_data
 
     def form_valid(self, form: Form) -> HttpResponse:
-        super().form_valid(form)
-        return HttpResponseRedirect(self.get_success_url())
+        return super().form_valid(form)
+        # return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form: Form) -> HttpResponse:
         return super().form_invalid(form)
@@ -481,7 +502,7 @@ class NewReportBarrierSectorsAddView(ReportFormViewBase):
         sectors = data["sectors"]
         barrier_sectors = [sector["id"] for sector in self.barrier.sectors]
         updated_sectors = list(set(sectors + barrier_sectors))
-        return {**data, "sectors": updated_sectors}
+        return {**data, "sectors": updated_sectors, "all_sectors": False}
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -527,8 +548,7 @@ class NewReportBarrierSectorsAddAllView(ReportFormViewBase):
     success_path = "reports:barrier_sectors"
 
     def post(self, request, *args, **kwargs):
-        self.init_view(request, **kwargs)
-        self.form_group.selected_sectors = "all"
+        self.client.reports.patch(self.barrier.id, all_sectors=True, sectors=[])
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -574,46 +594,6 @@ class NewReportBarrierCategoriesView(ReportFormViewBase):
         )
         return context_data
 
-    # def get(self, request, *args, **kwargs):
-    #     # if not self.use_session_categories:
-    #     #     request.session["categories"] = self.barrier.categories
-    #     return super().get(request, *args, **kwargs)
-
-    # def get_context_data(self, **kwargs):
-    #     context_data = super().get_context_data(**kwargs)
-    #     self.form_group.refresh_context()
-
-    #     # raise Exception(self.form_group.categories_form)
-
-    #     # self.form_group.update_context()
-    #     context_data.update(
-    #         {"categories": self.form_group.categories_form.get("categories")}
-    #     )
-    #     # raise Exception(self.request.session.get("categories"))
-    #     return context_data
-
-    # def get_initial(self):
-    #     selected_categories = self.form_group.categories_form.get("categories", [])
-    #     # self.form_group.update_context()
-    #     # categories = self.request.session.get("categories", [])
-    #     return {
-    #         "categories": [category for category in selected_categories],
-    #     }
-
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
-    #     kwargs["token"] = self.request.session.get("sso_token")
-    #     kwargs["categories"] = self.metadata.get_category_list()
-    #     return kwargs
-
-    # def form_valid(self, form):
-    #     categories_form = self.form_group.categories_form
-    #     selected_category = form.cleaned_data.get("category")
-    #     categories_form["categories"] = [selected_category]
-    #     self.form_group.categories_form = categories_form
-    #     return super().form_valid(form)
-
     def form_valid(self, form):
         # form.save()
         # try:
@@ -622,8 +602,8 @@ class NewReportBarrierCategoriesView(ReportFormViewBase):
         #     pass
         return super().form_valid(form)
 
-    def post(self, request, *args, **kwargs):
-        return HttpResponseRedirect(self.get_success_url())
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 class NewReportBarrierCategoriesAddView(ReportFormViewBase):
@@ -709,15 +689,17 @@ class NewReportBarrierCategoriesDeleteView(ReportFormViewBase):
     def post(self, request, *args, **kwargs):
         # delete category from get param category_id
         # and redirect to barrier_categories
-        self.init_view(request, *args, **kwargs)
+        # self.init_view(request, *args, **kwargs)
         category_id = request.POST.get("category_id")
-        self.form_group.delete_category(category_id)
-        self.form_group.save()
-
+        # self.form_group.delete_category(category_id)
+        # self.form_group.save()
+        existing_categories = [category["id"] for category in self.barrier.categories]
+        existing_categories.remove(int(category_id))
+        self.client.reports.patch(self.barrier.id, categories=existing_categories)
         return HttpResponseRedirect(
             reverse(
                 "reports:barrier_categories_uuid",
-                kwargs={"barrier_id": self.form_group.barrier_id},
+                kwargs={"barrier_id": self.barrier.id},
             )
         )
 

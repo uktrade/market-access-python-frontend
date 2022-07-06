@@ -33,8 +33,7 @@
     {% comment %} {% include 'partials/heading.html' with text='Add HS commodity codes' %} {% endcomment %}
     {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
 
-    {% form_field_error form "codes" %}
-
+    {% form_error_banner form %}
 
     {% if not screen_reader_mode %}
     <div id="react-app" class="commodities-form__container">

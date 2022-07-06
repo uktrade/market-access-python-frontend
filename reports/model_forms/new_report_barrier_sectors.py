@@ -40,9 +40,10 @@ class NewReportBarrierHasSectorsForm(NewReportBaseForm):
 
 
 class NewReportBarrierSectorsForm(NewReportBaseForm):
-    sectors = forms.MultipleChoiceField(
-        label="Selected sectors", choices=(), required=False
-    )
+    # sectors = forms.MultipleChoiceField(
+    #     label="Selected sectors", choices=(), required=False
+    # )
+    sectors = forms.CharField(label="Selected sectors", required=False)
 
     def __init__(self, barrier=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -61,6 +62,8 @@ class NewReportBarrierSectorsForm(NewReportBaseForm):
 
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
+        if barrier.all_sectors is True:
+            return {"sectors": ["all"]}
         return {
             "sectors": [sector["id"] for sector in barrier.sectors],
         }
@@ -69,7 +72,15 @@ class NewReportBarrierSectorsForm(NewReportBaseForm):
         sectors = self.cleaned_data["sectors"]
         if not sectors:
             raise forms.ValidationError("Please select at least one sector")
+        sectors = sectors.split(",")
+        if "all" in sectors:
+            return ["all"]
         return sectors
+
+    def serialize_data(self):
+        if "all" in self.cleaned_data["sectors"]:
+            return {"sectors": [], "all_sectors": True}
+        return {"sectors": self.cleaned_data["sectors"], "all_sectors": False}
 
 
 class NewReportBarrierAddSectorsForm(NewReportBaseForm):
