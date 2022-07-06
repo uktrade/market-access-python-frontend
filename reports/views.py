@@ -213,7 +213,6 @@ class NewReport(ReportsTemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["stages"] = {
-            "1.0": "Report a barrier",
             "1.1": "About the barrier",
             "1.2": "Barrier status",
             "1.3": "Location of the barrier",

@@ -25,7 +25,8 @@
     {% comment %} {{ barrier.data }} {% endcomment %}
 
     <div class="page-actions">
-        <a href="" class="govuk-button govuk-button--primary">Confirm</a>
+
+        <form action="" method="post">{% csrf_token %}<button type="submit" href="" class="govuk-button govuk-button--primary">Confirm</button></form>
     </div>
 
 {% endblock %}
