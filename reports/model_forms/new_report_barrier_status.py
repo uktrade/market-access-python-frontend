@@ -98,6 +98,13 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
         if not barrier.status:
             return base_initial
 
+        if (
+            not barrier.status["id"]
+            in NewReportBarrierStatusForm.status_to_form_class_map
+        ):
+            # Skip if status is not addressed by subforms
+            return base_initial
+
         # if a status is set, we need to get the subform class
         # and map the initial data to the custom field names of the
         # subform
