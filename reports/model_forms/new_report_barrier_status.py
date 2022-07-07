@@ -95,6 +95,12 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
             else None,
             "status_summary": barrier.status_summary,
         }
+        if not barrier.status:
+            return base_initial
+
+        # if a status is set, we need to get the subform class
+        # and map the initial data to the custom field names of the
+        # subform
         RelevantSubForm = NewReportBarrierStatusForm.status_to_form_class_map[
             str(barrier.status["id"])
         ]
