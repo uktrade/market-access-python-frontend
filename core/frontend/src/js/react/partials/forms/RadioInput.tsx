@@ -88,10 +88,10 @@ export const RadioInput: React.FC<RadioInputProps> = ({
     return (
         <div className="">
             <fieldset className="govuk-fieldset">
-                <legend className="govuk-label govuk-label--m">{label}</legend>
+                <legend className="govuk-label govuk-label--s">{label}</legend>
 
                 {help_text && (
-                    <span className="govuk-hint govuk-hint--m">
+                    <span className="govuk-hint govuk-hint--s">
                         {help_text}
                     </span>
                 )}

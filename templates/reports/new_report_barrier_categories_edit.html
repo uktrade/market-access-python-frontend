@@ -5,6 +5,7 @@
 
 {% block page_content %}
 
+    <a href="{% if has_next %}{{ next_url }}{% else %}{{ urls.back }}{% endif %}" class="govuk-back-link">Back</a>
     {% include 'partials/heading.html' with caption=heading.caption text='Define category' %}
     {% form_error_banner form %}
 

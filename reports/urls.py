@@ -8,6 +8,7 @@ from reports.report_views import (
     NewReportBarrierCategoriesDeleteView,
     NewReportBarrierCategoriesView,
     NewReportBarrierCommoditiesView,
+    NewReportBarrierHasSectorsView,
     NewReportBarrierLocationView,
     NewReportBarrierSectorsAddAllView,
     NewReportBarrierSectorsAddView,
@@ -24,7 +25,6 @@ from reports.views import (  # NewReportBarrierTermView,; NewReportBarrierLocati
     NewReport,
     NewReportBarrierAdminAreasView,
     NewReportBarrierCausedByTradingBlocView,
-    NewReportBarrierHasSectorsView,
     NewReportBarrierLocationAddAdminAreasView,
     NewReportBarrierLocationHasAdminAreasView,
     NewReportBarrierLocationRemoveAdminAreasView,
@@ -185,6 +185,12 @@ urlpatterns = [
         "reports/<uuid:barrier_id>/categories/",
         NewReportBarrierCategoriesView.as_view(),
         name="barrier_categories_uuid",
+    ),
+    path(
+        "reports/<uuid:barrier_id>/categories/add_first/",
+        NewReportBarrierCategoriesAddView.as_view(),
+        {"is_main_journey": True},
+        name="barrier_categories_add_first_uuid",
     ),
     path(
         "reports/<uuid:barrier_id>/categories/add/",

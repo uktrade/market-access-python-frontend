@@ -51,10 +51,10 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             id="{ field.name }"
             className="{% form_group_classes field.errors %}"
         >
-            <label className="govuk-label govuk-label--m">{field.label}</label>
+            <label className="govuk-label govuk-label--s">{field.label}</label>
 
             {field.help_text && (
-                <span className="govuk-hint govuk-hint--m">
+                <span className="govuk-hint govuk-hint--s">
                     {field.help_text}
                 </span>
             )}

@@ -15,10 +15,11 @@
             <div class="callout callout--success callout--with-button">
                 <h2 class="callout__heading">All tasks completed for</h2>
                 <p class="callout__text">{{ report.title }}</p>
-                <form action="" method="POST">
+                <a href="{{ check_answers_url }}" class="callout__button">Continue</a>
+                {% comment %} <form action="" method="POST">
                     {% csrf_token %}
                     <input type="submit" value="Submit barrier" class="callout__button">
-                </form>
+                </form> {% endcomment %}
             </div>
         {% elif report.next_stage %}
             <div class="callout callout--warn callout--with-button">

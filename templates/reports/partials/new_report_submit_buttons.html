@@ -1,7 +1,7 @@
 {% if has_next %}
-    <input type="submit" value="Save" class="govuk-button">
+    <button type="submit" class="govuk-button" name="action" value="save-and-go-to-summary">Save</button>
     <a href="{{ next_url }}" class="govuk-button button--secondary">Cancel</a>
 {% else %}
     <button type="submit" name="action" value="save-and-continue" class="govuk-button">Save and continue</button>
-    <button type="submit" class="govuk-button button--secondary" name="action" value="save-and-exit">Save and exit</button>
+    <button type="submit" class="govuk-button button--secondary m-l-2" name="action" value="save-and-exit">Save and exit</button>
 {% endif %}

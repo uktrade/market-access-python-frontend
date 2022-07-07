@@ -59,6 +59,14 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
     Form with subforms depending on the radio button selected
     """
 
+    status_to_form_class_map = {
+        STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
+        STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
+        STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
+        STATUSES.RESOLVED_IN_FULL: ResolvedInFullForm,
+        STATUSES.DORMANT: DormantForm,
+    }
+
     term = forms.ChoiceField(
         label="What type of barrier is it?",
         choices=BarrierTerms.choices,
@@ -71,25 +79,30 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
         choices_help_text=STATUSES_HELP_TEXT,
         widget=forms.RadioSelect,
         error_messages={"required": "Choose a status"},
-        subform_classes={
-            STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
-            STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
-            STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
-            STATUSES.RESOLVED_IN_FULL: ResolvedInFullForm,
-            STATUSES.DORMANT: DormantForm,
-        },
+        subform_classes=status_to_form_class_map,
     )
 
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
-        return {
+        base_initial = {
             "term": str(barrier.term["id"]) if barrier.term else None,
             "status": str(barrier.status["id"]) if barrier.status else None,
             "sub_status": str(barrier.sub_status["code"])
             if barrier.sub_status
             else None,
+            "sub_status_other": barrier.sub_status_other["id"]
+            if barrier.sub_status_other
+            else None,
             "status_summary": barrier.status_summary,
         }
+        RelevantSubForm = NewReportBarrierStatusForm.status_to_form_class_map[
+            str(barrier.status["id"])
+        ]
+        field_name_mapping = RelevantSubForm.api_mapping
+        for sub_form_field, barrier_field in field_name_mapping.items():
+            if barrier_field in base_initial:
+                base_initial[sub_form_field] = base_initial[barrier_field]
+        return base_initial
 
     def serialize_data(self):
         subform = self.fields["status"].subform

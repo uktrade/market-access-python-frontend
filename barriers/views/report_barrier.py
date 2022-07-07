@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 
+from barriers.constants import Statuses
 from barriers.models.barriers import Barrier
 from barriers.views.mixins import BarrierMixin
 from reports.models import Report
@@ -9,6 +10,51 @@ from reports.report_views import ReportViewBase
 from reports.views import ReportsTemplateView
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
+
+
+def get_hs_commodity_answers(barrier: Report):
+    """
+     Ok so for this part a new view was brought in scope
+     so we need to address this independently and will have to
+     be treated differently in the template
+
+    Example output:
+    {
+        "UK": {
+            "name": "UK commodity codes",
+            "value": [{
+                "code": "120345",
+                "name": "Aluminium"
+            }]
+        },
+        "EU": {
+            "name": "EU commodity codes",
+            "value": [{
+                "code": "120345",
+                "name": "Aluminium"
+            }]
+        }
+    }
+
+    Reason we return a list of object is so the template can format them into a table
+    """
+    hs_commodity_answers = {}
+    for commodity in barrier.commodities:
+        # if the commodity is not in the hs_commodity_answers dict, add it
+        commodity_country = commodity["country"]["name"]
+        if commodity_country not in hs_commodity_answers:
+            hs_commodity_answers[commodity_country] = {
+                "name": f"{commodity_country} commodity codes",
+                "value": [],
+            }
+        # add the commodity to the list of commodities for the country
+        hs_commodity_answers[commodity_country]["value"].append(
+            {
+                "code": commodity["code"],
+                "name": commodity["commodity"]["full_description"],
+            }
+        )
+    return hs_commodity_answers.values()
 
 
 def get_report_barrier_answers(barrier: Report):
@@ -20,7 +66,6 @@ def get_report_barrier_answers(barrier: Report):
     qs = "?next={}".format(check_answers_page_url)
 
     hs_commodity_questions = {}
-    hs_countries = set()
     for commodity in barrier.commodities:
         country = commodity["country"]["name"]
         if country not in hs_commodity_questions.keys():
@@ -87,6 +132,48 @@ def get_report_barrier_answers(barrier: Report):
                     "name": "Who is due to take action?",
                     "value": barrier.sub_status_display or "-",
                 },
+                {
+                    "name": "Describe briefly why this barrier is pending action",
+                    "value": barrier.status_summary
+                    if barrier.is_status(Statuses.OPEN_PENDING_ACTION)
+                    else "-",
+                },
+                {
+                    "name": "Describe briefly why work on this barrier is in progress",
+                    "value": barrier.status_summary
+                    if barrier.is_status(Statuses.OPEN_IN_PROGRESS)
+                    else "-",
+                },
+                {
+                    "name": "Date the barrier was partially resolved",
+                    "value": barrier.status_date
+                    if barrier.is_status(Statuses.RESOLVED_IN_PART)
+                    else "-",
+                },
+                {
+                    "name": "Describe briefly how this barrier was partially resolved",
+                    "value": barrier.status_summary
+                    if barrier.is_status(Statuses.RESOLVED_IN_PART)
+                    else "-",
+                },
+                {
+                    "name": "Date the barrier was resolved",
+                    "value": barrier.status_date
+                    if barrier.is_status(Statuses.RESOLVED_IN_FULL)
+                    else "-",
+                },
+                {
+                    "name": "Describe briefly how this barrier was fully resolved",
+                    "value": barrier.status_summary
+                    if barrier.is_status(Statuses.RESOLVED_IN_FULL)
+                    else "-",
+                },
+                {
+                    "name": "Describe briefly why this barrier is dormant",
+                    "value": barrier.status_summary
+                    if barrier.is_status(Statuses.DORMANT)
+                    else "-",
+                },
             ],
         },
         {
@@ -120,7 +207,7 @@ def get_report_barrier_answers(barrier: Report):
         {
             "name": "Sectors affected by the barrier",
             "url": reverse(
-                "reports:barrier_sectors_uuid", kwargs={"barrier_id": barrier.id}
+                "reports:barrier_has_sectors_uuid", kwargs={"barrier_id": barrier.id}
             )
             + qs,
             "questions": [
@@ -128,10 +215,17 @@ def get_report_barrier_answers(barrier: Report):
                     "name": (
                         "Do you know the sector or sectors affected by the barrier?"
                     ),
+                    "value": barrier.sectors_affected,
+                },
+                {
+                    "name": (
+                        "Do you know the sector or sectors affected by the barrier?"
+                    ),
                     "value": ",\n".join(
                         [sector.get("name") for sector in barrier.sectors]
-                    ),
-                }
+                    )
+                    or "-",
+                },
             ],
         },
         {
@@ -151,11 +245,12 @@ def get_report_barrier_answers(barrier: Report):
         },
         {
             "name": "Add HS commodity codes",
+            "type": "hs_commodity_codes",
             "url": reverse(
                 "reports:barrier_commodities_uuid", kwargs={"barrier_id": barrier.id}
             )
             + qs,
-            "questions": hs_commodity_questions.values(),
+            "questions": get_hs_commodity_answers(barrier),
         },
     ]
 
@@ -164,34 +259,12 @@ class ReportBarrierAnswersView(ReportViewBase):
     template_name = "barriers/report_barrier_answers.html"
     _client: MarketAccessAPIClient = None
 
-    @property
-    def client(self):
-        if not self._client:
-            self._client = MarketAccessAPIClient(self.request.session["sso_token"])
-        return self._client
-
     def post(self, request, *args, **kwargs):
         if self.barrier.draft:
-            self._barrier = self.client.reports.submit(self.barrier.id)
+            self.client.reports.submit(self.barrier.id)
         return HttpResponseRedirect(
             reverse("barriers:barrier_detail", kwargs={"barrier_id": self.barrier.id})
         )
-
-    def get_barrier(self, uuid):
-        """Once a report is submitted it becomes a barrier"""
-        barrier = self.client.barriers.get(uuid)
-        return barrier
-
-    def get_draft_barrier(self, uuid):
-        try:
-            return self.client.reports.get(uuid)
-        except APIHttpException as e:
-            if e.status_code == 404:
-                # Once a report is submitted it becomes a barrier
-                # So it can go missing - let's try to find it
-                self.get_barrier(uuid)
-            else:
-                raise
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

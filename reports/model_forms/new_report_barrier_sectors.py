@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from reports.models import Report
 
 
-class SectorsAffected:
+class AreSecorsAffectedKnown:
     YES = "1"
     NO = "0"
 
@@ -26,7 +26,7 @@ class SectorsAffected:
 class NewReportBarrierHasSectorsForm(NewReportBaseForm):
     sectors_affected = forms.ChoiceField(
         label="Do you know the sector or sectors affected by the barrier?",
-        choices=SectorsAffected.choices(),
+        choices=AreSecorsAffectedKnown.choices(),
         error_messages={
             "required": "Select if you are aware of a sector affected by the barrier"
         },
@@ -34,9 +34,25 @@ class NewReportBarrierHasSectorsForm(NewReportBaseForm):
 
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
-        return {
-            "sectors_affected": barrier.sectors_affected,
-        }
+        sectors_affected = barrier.sectors_affected
+        if sectors_affected is None:
+            return {}
+        if sectors_affected is True:
+            return {"sectors_affected": AreSecorsAffectedKnown.YES}
+        if sectors_affected is False:
+            return {"sectors_affected": AreSecorsAffectedKnown.NO}
+        return {}
+
+    def clean_sectors_affected(self):
+        sectors_affected = self.cleaned_data["sectors_affected"]
+        if sectors_affected == AreSecorsAffectedKnown.NO:
+            return False
+        elif sectors_affected == AreSecorsAffectedKnown.YES:
+            return True
+        raise forms.ValidationError("Please select a valid value")
+
+    def serialize_data(self):
+        return {"sectors_affected": self.cleaned_data["sectors_affected"]}
 
 
 class NewReportBarrierSectorsForm(NewReportBaseForm):

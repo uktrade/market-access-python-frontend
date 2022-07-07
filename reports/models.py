@@ -5,7 +5,7 @@ from enum import Enum
 import dateutil.parser
 from django.urls import reverse
 
-from barriers.constants import STATUSES
+from barriers.constants import STATUSES, Statuses
 from utils.metadata import get_metadata
 from utils.models import APIModel
 
@@ -73,6 +73,7 @@ class ReportStageStatus(Enum):
 class ReportCompletionMixin(object):
     _stages = None
     _stage_completion = None
+    _stage_form_errors = None
 
     @property
     def REPORT_STAGES(self):
@@ -167,12 +168,10 @@ class Report(ReportCompletionMixin, APIModel):
             self._progress.sort(key=operator.itemgetter("stage_code"))
         return self._progress
 
-    # @property
-    # def is_complete(self):
-    #     for stage in self.progress:
-    #         if stage["status_id"] != 3:
-    #             return False
-    #     return True
+    def is_status(self, status_id: Statuses):
+        if not self.status:
+            return False
+        return str(self.status["id"]) == status_id
 
     @property
     def source_display(self):
