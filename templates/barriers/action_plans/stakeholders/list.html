@@ -1,0 +1,41 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Stakeholders{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+  {% include 'partials/heading.html' with text='Stakeholders' %}
+
+  {% if action_plan.stakeholders %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Name</th>
+          <th scope="col" class="govuk-table__header">Type</th>
+          <th scope="col" class="govuk-table__header">Status</th>
+          <th scope="col" class="govuk-table__header">Action</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for stakeholder in action_plan.stakeholders %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ stakeholder.name }}</td>
+            <td class="govuk-table__cell">{{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}</td>
+            <td class="govuk-table__cell">{{ stakeholder.status }}</td>
+            <td class="govuk-table__cell"><a href="{% url 'barriers:action_plan_stakeholders_edit' barrier_id=barrier.id id=stakeholder.id %}">Edit</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <a href="{% url 'barriers:action_plan_stakeholders_add' barrier.id %}" class="govuk-button govuk-button--secondary">Add stakeholder</a>
+    </div>
+  </div>
+{% endblock page_content %}
