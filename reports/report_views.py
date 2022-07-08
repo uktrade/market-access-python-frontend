@@ -148,8 +148,14 @@ class ReportFormViewBase(ReportViewBase, FormView):
         self._barrier = self.client.reports.patch(self.kwargs["barrier_id"], **data)
         return super().form_valid(form)
 
+    def form_invalid(self, form: Form) -> HttpResponse:
+        return super().form_invalid(form)
+
     def get_initial(self) -> Dict[str, Any]:
         initial = super().get_initial()
+        if self.request.method == "POST":
+            # initial.update(self.request.POST)
+            return initial
         return {**initial, **self.form_class.get_barrier_initial(self.barrier)}
 
 
@@ -197,19 +203,9 @@ class NewReportBarrierAboutView(ReportFormViewBase):
         "back": "reports:draft_barrier_details",
     }
 
-    def get_initial(self) -> Dict[str, Any]:
-        initial = super().get_initial()
-        return {**initial, **self.form_class.get_barrier_initial(self.barrier)}
-
-    def set_success_path(self):
-        action = self.request.POST.get("action")
-        if action == "exit":
-            self.success_path = "reports:draft_barrier_details"
-        else:
-            self.success_path = "reports:barrier_summary"
-
-    def form_valid(self, form: Form) -> HttpResponse:
-        return super().form_valid(form)
+    # def get_initial(self) -> Dict[str, Any]:
+    #     initial = super().get_initial()
+    #     return {**initial, **self.form_class.get_barrier_initial(self.barrier)}
 
 
 class NewReportBarrierSummaryView(ReportFormViewBase):

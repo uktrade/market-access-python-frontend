@@ -62,23 +62,23 @@ urlpatterns = [
     # ),
     # Status
     path(
-        "reports/new/start/is-resolved/",
+        "reports/new/start/status/",
         NewReportBarrierStatusView.as_view(),
         name="barrier_status",
     ),
     path(
-        "reports/<uuid:barrier_id>/is-resolved/",
+        "reports/<uuid:barrier_id>/status/",
         NewReportBarrierStatusView.as_view(),
         name="barrier_status_uuid",
     ),
     # Location
     path(
-        "reports/new/country/",
+        "reports/new/location/",
         NewReportBarrierLocationMasterView.as_view(),
         name="barrier_location",
     ),
     path(
-        "reports/<uuid:barrier_id>/country/",
+        "reports/<uuid:barrier_id>/location/",
         NewReportBarrierLocationView.as_view(),
         name="barrier_location_uuid",
     ),
@@ -170,7 +170,7 @@ urlpatterns = [
     ),
     # About
     path(
-        "reports/<uuid:barrier_id>/problem/",
+        "reports/<uuid:barrier_id>/about/",
         NewReportBarrierAboutView.as_view(),
         name="barrier_about_uuid",
     ),

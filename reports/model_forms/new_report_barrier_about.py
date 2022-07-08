@@ -87,12 +87,12 @@ class NewReportBarrierAboutForm(NewReportBaseForm):
             "max_length": "Other source should be %(limit_value)d characters or fewer",
         },
     )
-    tags = MultipleChoiceFieldWithHelpText(
-        choices=[],
-        widget=forms.CheckboxSelectMultiple,
-        label="Is this issue caused by or related to any of the following?",
-        required=False,
-    )
+    # tags = MultipleChoiceFieldWithHelpText(
+    #     choices=[],
+    #     widget=forms.CheckboxSelectMultiple,
+    #     label="Is this issue caused by or related to any of the following?",
+    #     required=False,
+    # )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -109,12 +109,12 @@ class NewReportBarrierAboutForm(NewReportBaseForm):
         return {
             "title": barrier.title,
             "product": barrier.product,
-            "source": barrier.source["code"],
+            "source": barrier.source["code"] if barrier.source else None,
             "other_source": barrier.other_source,
-            "tags": initial_tags,
+            # "tags": initial_tags,
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        tag_choices = self.metadata.get_report_tag_choices()
-        self.fields["tags"].choices = tag_choices
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     tag_choices = self.metadata.get_report_tag_choices()
+    #     self.fields["tags"].choices = tag_choices

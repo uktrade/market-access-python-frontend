@@ -263,7 +263,10 @@ class ReportBarrierAnswersView(ReportViewBase):
         if self.barrier.draft:
             self.client.reports.submit(self.barrier.id)
         return HttpResponseRedirect(
-            reverse("barriers:barrier_detail", kwargs={"barrier_id": self.barrier.id})
+            reverse(
+                "barriers:barrier_detail_from_complete",
+                kwargs={"barrier_id": self.barrier.id},
+            )
         )
 
     def get_context_data(self, **kwargs):

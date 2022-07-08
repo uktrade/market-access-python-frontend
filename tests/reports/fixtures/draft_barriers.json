@@ -30,6 +30,7 @@
     "title": null,
     "summary": null,
     "next_steps_summary": null,
+    "tags": [],
     "progress": [
       {
         "stage_code": "1.1",
