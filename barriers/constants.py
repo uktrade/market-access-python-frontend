@@ -1,3 +1,4 @@
+from django.db.models import TextChoices
 from model_utils import Choices
 
 
@@ -189,6 +190,10 @@ ACTION_PLAN_RAG_STATUS_CHOICES = Choices(
     ("ON_TRACK", "On track"),
     ("RISK_OF_DELAY", "Risk of delay"),
     ("DELAYED", "Delayed"),
+)
+
+ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES", "INDIVIDUAL ORGANISATION"
 )
 
 TOP_PRIORITY_BARRIER_STATUS = Choices(
