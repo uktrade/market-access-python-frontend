@@ -18,6 +18,7 @@ from barriers.models import (
     ResolvabilityAssessment,
     SavedSearch,
     StrategicAssessment,
+    Stakeholder,
 )
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
@@ -417,3 +418,18 @@ class ActionPlanResource(APIResource):
     def delete_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
         return self.model(self.client.delete(url))
+
+
+class ActionPlanStakeholderResource(APIResource):
+    resource_name = "stakeholders"
+    model = Stakeholder
+
+    def add_stakeholder(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/"
+        response = self.client.post(url, json={**kwargs})
+        return self.model(response)
+
+    def update_stakeholder(self, barrier_id, stakeholder_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{stakeholder_id}/"
+        response = self.client.patch(url, json={**kwargs})
+        return self.model(response)
