@@ -11,6 +11,7 @@ from barriers.forms.action_plans import (
     ActionPlanTaskEditOutcomeForm,
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
+    ActionPlanStakeholderTypeForm,
 )
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
@@ -40,6 +41,41 @@ class EditActionPlanCurrentStatusFormView(
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
+
+
+class ActionPlanStakeholderFormViewMixin(ActionPlanFormViewMixin):
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs["stakeholder_id"] = self.kwargs.get("id", None)
+        return form_kwargs
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan_stakeholders_list",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class CreateActionPlanStakeholderTypeFormView(
+    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
+):
+    template_name = "barriers/action_plans/stakeholders/edit_type.html"
+    form_class = ActionPlanStakeholderTypeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class EditActionPlanStakeholderTypeFormView(
+    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
+):
+    template_name = "barriers/action_plans/stakeholders/edit_type.html"
+    form_class = ActionPlanStakeholderTypeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 class SelectActionPlanOwner(
@@ -282,3 +318,22 @@ class ActionPlanTemplateView(BarrierMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data["action_plan"] = self.action_plan
         return context_data
+
+
+class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
+    template_name = "barriers/action_plans/stakeholders/list.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["action_plan"] = self.action_plan
+        return context_data
+
+
+class AddActionPlanStakeholderFormView(
+    ActionPlanTaskFormViewMixin,
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
+):
+    template_name = "barriers/action_plans/add_task.html"
+    form_class = ActionPlanTaskForm

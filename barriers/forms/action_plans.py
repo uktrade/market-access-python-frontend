@@ -11,6 +11,7 @@ from barriers.constants import (
     ACTION_PLAN_TASK_CATEGORIES,
     ACTION_PLAN_TASK_CHOICES,
     ACTION_PLAN_TASK_TYPE_CHOICES,
+    ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
 )
 from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
@@ -504,3 +505,36 @@ class ActionPlanTaskEditProgressForm(
             task_id=self.task_id,
             progress=self.cleaned_data["progress"],
         )
+
+
+class ActionPlanStakeholderTypeForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
+    is_organisation = forms.ChoiceField(
+        choices=ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.choices,
+        widget=forms.RadioSelect,
+        label="Stakeholder type",
+        required=True,
+    )
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.stakeholder_id = kwargs.pop("stakeholder_id", None)
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        if self.stakeholder_id:
+            client.action_plans.update_stakeholder(
+                barrier_id=self.barrier_id,
+                stakeholder_id=self.stakeholder_id,
+                is_organisation=self.cleaned_data["is_organisation"]
+                == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION,
+            )
+        else:
+            client.action_plans.add_stakeholder(
+                barrier_id=self.barrier_id,
+                is_organisation=self.cleaned_data["is_organisation"]
+                == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION,
+            )

@@ -11,3 +11,7 @@ class ActionPlanMilestone(APIModel):
 
 class ActionPlanTask(APIModel):
     pass
+
+
+class Stakeholder(APIModel):
+    pass
