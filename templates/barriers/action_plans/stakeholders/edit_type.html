@@ -1,0 +1,27 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Stakeholders{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+  {% include 'partials/heading.html' with text='Stakeholders' %}
+
+  <form method="post" action=".">
+    {% csrf_token %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{form}}
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <button class="govuk-button" data-module="govuk-button">Confirm</button>
+        <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
+      </div>
+    </div>
+  </form>
+{% endblock page_content %}
