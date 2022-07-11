@@ -130,46 +130,54 @@ def get_report_barrier_answers(barrier: Report):
                 },
                 {
                     "name": "Who is due to take action?",
+                    "hide": not barrier.is_status(Statuses.OPEN_PENDING_ACTION),
                     "value": barrier.sub_status_display or "-",
                 },
                 {
                     "name": "Describe briefly why this barrier is pending action",
+                    "hide": not barrier.is_status(Statuses.OPEN_PENDING_ACTION),
                     "value": barrier.status_summary
                     if barrier.is_status(Statuses.OPEN_PENDING_ACTION)
                     else "-",
                 },
                 {
                     "name": "Describe briefly why work on this barrier is in progress",
+                    "hide": not barrier.is_status(Statuses.OPEN_IN_PROGRESS),
                     "value": barrier.status_summary
                     if barrier.is_status(Statuses.OPEN_IN_PROGRESS)
                     else "-",
                 },
                 {
                     "name": "Date the barrier was partially resolved",
+                    "hide": not barrier.is_status(Statuses.RESOLVED_IN_PART),
                     "value": barrier.status_date
                     if barrier.is_status(Statuses.RESOLVED_IN_PART)
                     else "-",
                 },
                 {
                     "name": "Describe briefly how this barrier was partially resolved",
+                    "hide": not barrier.is_status(Statuses.RESOLVED_IN_PART),
                     "value": barrier.status_summary
                     if barrier.is_status(Statuses.RESOLVED_IN_PART)
                     else "-",
                 },
                 {
                     "name": "Date the barrier was resolved",
+                    "hide": not barrier.is_status(Statuses.RESOLVED_IN_FULL),
                     "value": barrier.status_date
                     if barrier.is_status(Statuses.RESOLVED_IN_FULL)
                     else "-",
                 },
                 {
                     "name": "Describe briefly how this barrier was fully resolved",
+                    "hide": not barrier.is_status(Statuses.RESOLVED_IN_FULL),
                     "value": barrier.status_summary
                     if barrier.is_status(Statuses.RESOLVED_IN_FULL)
                     else "-",
                 },
                 {
                     "name": "Describe briefly why this barrier is dormant",
+                    "hide": not barrier.is_status(Statuses.DORMANT),
                     "value": barrier.status_summary
                     if barrier.is_status(Statuses.DORMANT)
                     else "-",
@@ -190,7 +198,7 @@ def get_report_barrier_answers(barrier: Report):
                 {
                     "name": (
                         "Was this barrier caused by a regulation introduced by the"
-                        " EAEU?"
+                        " country's trading bloc?"
                     ),
                     "value": barrier.data.get("caused_by_trading_bloc", "-") or "-",
                 },

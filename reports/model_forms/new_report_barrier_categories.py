@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class NewReportBarrierCategoriesForm(NewReportBaseForm):
     categories = forms.CharField(
-        required=True,
+        required=False,
         error_messages={"required": "Please select at least one category"},
     )
 
