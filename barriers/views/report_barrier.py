@@ -12,6 +12,14 @@ from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 
 
+def human_friendly_boolean(value, none_text="-", yes_text="Yes", no_text="No"):
+    # Translate boolean to Yes or No
+    # and handle empty value
+    if value is None:
+        return none_text
+    return yes_text if value else no_text
+
+
 def get_hs_commodity_answers(barrier: Report):
     """
      Ok so for this part a new view was brought in scope
@@ -95,7 +103,7 @@ def get_report_barrier_answers(barrier: Report):
                 },
                 {
                     "name": "Does the summary contain OFFICIAL-SENSITIVE information?",
-                    "value": barrier.is_summary_sensitive,
+                    "value": human_friendly_boolean(barrier.is_summary_sensitive),
                 },
                 {
                     "name": "What product, service or investment is affected?",
@@ -200,11 +208,15 @@ def get_report_barrier_answers(barrier: Report):
                         "Was this barrier caused by a regulation introduced by the"
                         " country's trading bloc?"
                     ),
-                    "value": barrier.data.get("caused_by_trading_bloc", "-") or "-",
+                    "value": human_friendly_boolean(
+                        barrier.data.get("caused_by_trading_bloc", "-")
+                    ),
                 },
                 {
                     "name": "Does it affect the entire country?",
-                    "value": barrier.data.get("caused_by_admin_areas", "-"),
+                    "value": human_friendly_boolean(
+                        barrier.data.get("caused_by_admin_areas", "-")
+                    ),
                 },
                 {
                     "name": "Which trade direction does this barrier affect?",
@@ -223,7 +235,7 @@ def get_report_barrier_answers(barrier: Report):
                     "name": (
                         "Do you know the sector or sectors affected by the barrier?"
                     ),
-                    "value": barrier.sectors_affected,
+                    "value": human_friendly_boolean(barrier.sectors_affected),
                 },
                 {
                     "name": (
