@@ -424,12 +424,21 @@ class ActionPlanStakeholderResource(APIResource):
     resource_name = "stakeholders"
     model = Stakeholder
 
-    def add_stakeholder(self, barrier_id, *args, **kwargs):
+    def create_stakeholder(self, *args, **kwargs):
+        barrier_id = kwargs.pop("barrier_id")
         url = f"barriers/{barrier_id}/action_plan/stakeholders/"
         response = self.client.post(url, json={**kwargs})
         return self.model(response)
 
-    def update_stakeholder(self, barrier_id, stakeholder_id, *args, **kwargs):
-        url = f"barriers/{barrier_id}/action_plan/stakeholders/{stakeholder_id}/"
+    def update_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
         response = self.client.patch(url, json={**kwargs})
         return self.model(response)
+
+    def delete_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
+        self.client.delete(url, json={**kwargs})
