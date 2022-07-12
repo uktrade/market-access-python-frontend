@@ -12,6 +12,7 @@ from barriers.constants import (
     ACTION_PLAN_TASK_CHOICES,
     ACTION_PLAN_TASK_TYPE_CHOICES,
     ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
+    ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
 )
 from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
@@ -507,34 +508,96 @@ class ActionPlanTaskEditProgressForm(
         )
 
 
-class ActionPlanStakeholderTypeForm(
-    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
-):
-    is_organisation = forms.ChoiceField(
-        choices=ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.choices,
-        widget=forms.RadioSelect,
-        label="Stakeholder type",
-        required=True,
-    )
-
+class ActionPlanStakeholderFormMixin:
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         self.stakeholder_id = kwargs.pop("stakeholder_id", None)
         super().__init__(*args, **kwargs)
 
+    def get_request_data(self):
+        return {}
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
+        request_data = self.get_request_data()
         if self.stakeholder_id:
-            client.action_plans.update_stakeholder(
-                barrier_id=self.barrier_id,
-                stakeholder_id=self.stakeholder_id,
-                is_organisation=self.cleaned_data["is_organisation"]
-                == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION,
+            stakeholder = client.action_plan_stakeholders.update_stakeholder(
+                barrier_id=self.barrier_id, id=self.stakeholder_id, **request_data
             )
         else:
-            client.action_plans.add_stakeholder(
-                barrier_id=self.barrier_id,
-                is_organisation=self.cleaned_data["is_organisation"]
-                == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION,
+            stakeholder = client.action_plan_stakeholders.create_stakeholder(
+                barrier_id=self.barrier_id, **request_data
             )
+        return stakeholder
+
+
+class ActionPlanStakeholderTypeForm(
+    ActionPlanStakeholderFormMixin,
+    ClearableMixin,
+    APIFormMixin,
+    forms.Form,
+):
+    is_organisation = forms.ChoiceField(
+        choices=ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.choices,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        label="Stakeholder type",
+        required=False,
+    )
+
+    def get_request_data(self):
+        request_data = super().get_request_data()
+        request_data["is_organisation"] = (
+            self.cleaned_data["is_organisation"]
+            == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION
+        )
+        return request_data
+
+
+class ActionPlanOrganisationStakeholderDetailsForm(
+    ActionPlanStakeholderFormMixin,
+    ClearableMixin,
+    APIFormMixin,
+    forms.Form,
+):
+    name = forms.CharField(
+        max_length=255,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+    )
+    status = forms.ChoiceField(
+        choices=ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES.choices,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        label="Status",
+        required=True,
+    )
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        super().__init__(barrier_id, *args, **kwargs)
+
+    def get_request_data(self):
+        request_data = super().get_request_data()
+        request_data["name"] = self.cleaned_data["name"]
+        request_data["status"] = self.cleaned_data["status"]
+        return request_data
+
+
+class ActionPlanIndividualStakeholderDetailsForm(
+    ActionPlanOrganisationStakeholderDetailsForm
+):
+    organisation = forms.CharField(
+        max_length=255,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+    )
+    job_title = forms.CharField(
+        max_length=255,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+    )
+
+    def get_request_data(self):
+        request_data = super().get_request_data()
+        request_data["organisation"] = self.cleaned_data["organisation"]
+        request_data["job_title"] = self.cleaned_data["job_title"]
+        return request_data
