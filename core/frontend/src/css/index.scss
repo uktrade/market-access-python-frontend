@@ -5,6 +5,7 @@ $govuk-fonts-path: '../govuk-public/fonts/';
 @import "~@ministryofjustice/frontend/moj/components/pagination/pagination";
 @import 'colours';
 @import 'layout';
+@import "spacing";
 @import 'error';
 
 @import 'vendor/all';

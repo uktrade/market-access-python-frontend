@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Add - {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+
+    <section class="restrict-width">
+
+        <a href="{% if has_next %}{{ next_url }}{% else %}{{ urls.back }}{% endif %}" class="govuk-back-link">Back</a>
+
+        {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+        {% form_error_banner form %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <div class="{% form_group_classes form.title.errors %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">
+                    {{ form.title.label }}
+                </label>
+                {% form_field_error form "title" %}
+                <span id="{{ form.title.name }}_hint" class="govuk-hint">
+                    {{ form.title.help_text }}
+                </span>
+                <input class="govuk-input" id="{{ form.title.name }}"
+                       name="{{ form.title.name }}"
+                       type="text"
+                       value="{{ form.title.value }}"
+                       aria-describedby="{{ form.title.name }}_hint">
+            </div>
+
+            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
+                <div class="{% form_group_classes form.summary.errors %}">
+                    <label class="govuk-label govuk-label--s" for="description">
+                        {{ form.summary.label }}
+                    </label>
+                    {% form_field_error form "summary" %}
+                    <span id="description-hint" class="govuk-hint">
+                        {{ form.summary.help_text }}
+                    </span>
+                    <textarea class="govuk-textarea js-character-count" id="description"
+                              name="{{ form.summary.name }}"
+                              rows="5"
+                              aria-describedby="description-hint description-info">{{ form.summary.value }}</textarea>
+                </div>
+            </div>
+
+
+
+            <div id="{{ form.is_summary_sensitive.name }}" class="{% form_group_classes form.is_summary_sensitive.errors %}">
+
+                {% form_field_error form "is_summary_sensitive" %}
+
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.is_summary_sensitive.label }}
+                    </legend>
+
+                    {% include "partials/official_sensitive.html" %}
+
+                    <div class="govuk-radios">
+
+                        {% for value, name in form.fields.is_summary_sensitive.widget.choices %}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="{{ form.is_summary_sensitive.name }}-{{ value }}" name="{{ form.is_summary_sensitive.name }}" type="radio" value="{{ value }}"{% if form.is_summary_sensitive.value == value %} checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="{{ form.is_summary_sensitive.name }}-{{ value }}">{{ name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="{% form_group_classes form.product.errors %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.product.name }}">
+                    {{ form.product.label }}
+                </label>
+                {% form_field_error form "product" %}
+                <input class="govuk-input" id="{{ form.product.name }}"
+                       name="{{ form.product.name }}"
+                       type="text"
+                       value="{{ form.product.value }}">
+            </div>
+
+            <div class="{% form_group_classes form.source.errors %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.fields.source.label }}
+                    </legend>
+                    {% form_field_error form "source" %}
+                    <div class="govuk-radios barrier-source govuk-radios--conditional" data-module="radios">
+                        {% for choice_id, choice_value in form.fields.source.choices %}
+                            <div class="govuk-radios__item barrier-source">
+                                <input class="govuk-radios__input"
+                                        {% if forloop.counter == 1 %}
+                                       id="source"
+                                        {% else %}
+                                       id="source-{{ forloop.counter }}"
+                                        {% endif %}
+                                       name="source"
+                                       type="radio"
+                                       value="{{ choice_id }}"
+                                        {% if form.source.value == choice_id or form.source.value.code == choice_id %}
+                                       checked="checked"
+                                        {% endif %}>
+                                <label class="govuk-label govuk-radios__label"
+                                        {% if forloop.counter == 1 %}
+                                       for="source"
+                                        {% else %}
+                                       for="source-{{ forloop.counter }}"
+                                        {% endif %}
+                                >
+                                    {{ choice_value }}
+                                </label>
+                            </div>
+                            {% if choice_id == form.BS.OTHER %}
+                                <div class="govuk-radios__conditional" id="conditional-{{ form.BS.OTHER }}"
+                                     aria-hidden="false">
+                                    <div class="{% form_group_classes form.other_source.errors %}">
+                                        <label class="govuk-label govuk-label--s" for="other_source">
+                                            {{ form.fields.other_source.label }}
+                                        </label>
+                                        {% form_field_error form "other_source" %}
+                                        <input class="govuk-input"
+                                               id="other_source"
+                                               name="other_source"
+                                               type="text"
+                                               value="{{ form.other_source.value }}">
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="{% form_group_classes form.tags.errors %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.fields.tags.label }}
+                    </legend>
+                    {% form_field_error form "tags" %}
+
+                    <div class="govuk-checkboxes" id="tags">
+                        {% for value, name, help_text in form.fields.tags.choices %}
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input"
+                                       id="tag-{{ value }}"
+                                       name="{{ form.tags.name }}"
+                                       type="checkbox"
+                                       value="{{ value }}"
+                                        {% if value in form.tags.value or value|lower in form.tags.value %}
+                                       checked="checked"
+                                        {% endif %}>
+                                <label class="govuk-label govuk-checkboxes__label"
+                                       for="tag-{{ value }}">{{ name }}</label>
+                                <span id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
+                                  {{ help_text }}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            {% include 'reports/partials/new_report_submit_buttons.html' with has_next=has_next next_url=next_url %}
+        </form>
+    </section>
+
+
+{% endblock %}
+
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.report.aboutProblem();
+    </script>
+{% endblock %}

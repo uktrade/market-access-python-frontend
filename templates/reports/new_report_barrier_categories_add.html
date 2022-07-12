@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load govuk_forms %}
+
+{% block page_title %}{{ block.super }} - Barrier - Add category{% endblock %}
+
+{% block body_script %}
+    <script>
+        ma.pages.barrier.type();
+    </script>
+{% endblock %}
+{% block page_content %}
+
+    {% if is_main_journey %}
+    <a href="{% if has_next %}{{ next_url }}{% else %}{{ urls.back_main_journey }}{% endif %}" class="govuk-back-link">Back</a>
+    {% else %}
+    {% endif %}
+    {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.category.name }}" class="govuk-form-group {% if form.category.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                {% form_field_error form "category" %}
+
+                <div class="govuk-radios category govuk-radios--conditional" data-module="radios">
+                    {% for item in categories %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="category-{{ forloop.counter }}" name="{{ form.category.name }}" type="radio" value="{{ item.id }}" data-aria-controls="conditional-category-{{ forloop.counter }}">
+
+                            <label class="govuk-label govuk-radios__label" for="category-{{ forloop.counter }}">
+                            {{ item.title }}
+                            </label>
+                        </div>
+
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-category-{{ forloop.counter }}">
+                            <div class="conditional-category-content">{{ item.description|safe|linebreaks }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
+        {% if is_main_journey %}
+        {% include 'reports/partials/new_report_submit_buttons.html' with has_next=has_next next_url=next_url %}
+        {% else %}
+        <input type="submit" value="Add category" class="govuk-button">
+        <a class="form-cancel" href="{{ urls.back }}">cancel</a>
+        {% endif %}
+    </form>
+{% endblock %}

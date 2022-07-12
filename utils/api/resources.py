@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import time
+from typing import TYPE_CHECKING
 
 import requests
 from django.conf import settings
@@ -25,10 +28,14 @@ from users.models import Group, User
 from utils.exceptions import ScanError
 from utils.models import ModelList
 
+if TYPE_CHECKING:
+    from utils.api.client import MarketAccessAPIClient
+
 
 class APIResource:
     resource_name = None
     model = None
+    client: MarketAccessAPIClient
 
     def __init__(self, client):
         self.client = client

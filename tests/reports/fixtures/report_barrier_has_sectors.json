@@ -1,0 +1,99 @@
+{
+    "admin_areas": [],
+    "all_sectors": null,
+    "caused_by_trading_bloc": null,
+    "code": "B-22-4YI",
+    "country": {
+        "id": "81756b9a-5d95-e211-a939-e4115bead28a",
+        "name": "United States",
+        "disabled_on": null,
+        "overseas_region": {
+            "name": "North America",
+            "id": "fdfbbc8d-0e8a-479a-b10f-4979d582ff87"
+        },
+        "iso_alpha2_code": "US",
+        "trading_bloc": null
+    },
+    "created_by": {
+        "id": 74,
+        "name": "James Pacileo"
+    },
+    "created_on": "2022-07-12T06:46:03.044907Z",
+    "id": "0127c26f-0105-4a5a-8b2f-ddaffa3d44b0",
+    "is_summary_sensitive": false,
+    "is_top_priority": false,
+    "location": "United States",
+    "modified_by": {
+        "id": 74,
+        "name": "James Pacileo"
+    },
+    "modified_on": "2022-07-12T06:46:04.721692Z",
+    "next_steps_summary": "",
+    "other_source": "",
+    "product": "Test product",
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        }
+    ],
+    "sectors": [],
+    "sectors_affected": true,
+    "source": {
+        "code": "COMPANY",
+        "name": "Company"
+    },
+    "status": {
+        "id": 2,
+        "name": "Open: In progress"
+    },
+    "status_date": null,
+    "status_summary": "asdasdasd",
+    "sub_status": {
+        "code": "",
+        "name": null
+    },
+    "sub_status_other": "",
+    "summary": "Test summary",
+    "tags": [],
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "title": "Test barrier about Marshmallows",
+    "trade_direction": {
+        "id": 2,
+        "name": "Importing or investing into the UK"
+    },
+    "trading_bloc": null,
+    "categories": [],
+    "commodities": [],
+    "draft": true,
+    "caused_by_admin_areas": true
+}

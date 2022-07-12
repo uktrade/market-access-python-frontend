@@ -7,13 +7,16 @@
 
     <section class="restrict-width">
 
-        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
+
+        <a href="{% if has_next %}{{ next_url }}{% else %}{{ urls.back }}{% endif %}" class="govuk-back-link">Back</a>
         {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
+
+        {% form_error_banner form %}
 
         <div class="selection-list">
             <h3 class="selection-list__heading">{{ form.fields.sectors.label }}</h3>
                 <ul class="selection-list__list">
-                    {% for sector_id, sector_name in form.fields.sectors.choices %}
+                    {% for sector_id, sector_name in sectors_list %}
                     <li class="selection-list__list__item">
                         <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ sector_name }}
                         <form action="{{ urls.remove_sector }}" class="selection-list__list__item__remove-form" method="POST">
@@ -36,7 +39,8 @@
 
         <form action="" method="POST">
             {% csrf_token %}
-            <input type="submit" value="Save and continue" class="govuk-button">
+            <input type="hidden" name="sectors" value={{ sectors }}>
+            <button type="submit" name="action" value="continue" class="govuk-button">Save and continue</button>
             <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
         </form>
 
