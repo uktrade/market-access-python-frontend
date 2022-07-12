@@ -3,24 +3,28 @@
 {% block page_title %}{{ block.super }} - Stakeholders{% endblock %}
 
 {% block back_link %}
-    <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:action_plan_stakeholders_list' barrier_id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
 
-  {% include 'partials/heading.html' with text='Stakeholders' %}
+  {% include 'partials/heading.html' with text='Add stakeholder' %}
+
+  {% form_error_banner form %}
 
   <form method="post" action=".">
     {% csrf_token %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        {{form}}
+        {% include "partials/forms/radio_button_group.html" with radio_group=form.is_organisation %}
       </div>
     </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <button class="govuk-button" data-module="govuk-button">Confirm</button>
-        <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
+        <div class="govuk-button-group">
+          <button class="govuk-button" data-module="govuk-button">Confirm</button>
+          <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_stakeholders_list' barrier_id %}">Cancel</a>
+        </div>
       </div>
     </div>
   </form>

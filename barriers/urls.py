@@ -14,8 +14,9 @@ from barriers.views.action_plans import (
     EditActionPlanTaskProgressFormView,
     SelectActionPlanOwner,
     ActionPlanStakeholdersListView,
-    EditActionPlanStakeholderTypeFormView,
     CreateActionPlanStakeholderTypeFormView,
+    EditActionPlanStakeholderDetailsFormView,
+    CreateActionPlanStakeholderDetailsFormView,
 )
 from barriers.views.light_touch_reviews import (
     PublicBarrierLightTouchReviewsEdit,
@@ -615,8 +616,13 @@ urlpatterns = [
         name="action_plan_stakeholders_add",
     ),
     path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/<uuid:id>/",
+        CreateActionPlanStakeholderDetailsFormView.as_view(),
+        name="action_plan_stakeholders_add_details",
+    ),
+    path(
         "barriers/<uuid:barrier_id>/action_plan/stakeholders/<uuid:id>/",
-        EditActionPlanStakeholderTypeFormView.as_view(),
+        EditActionPlanStakeholderDetailsFormView.as_view(),
         name="action_plan_stakeholders_edit",
     ),
     path(

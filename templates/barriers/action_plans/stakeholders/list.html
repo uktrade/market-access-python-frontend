@@ -25,7 +25,7 @@
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">{{ stakeholder.name }}</td>
             <td class="govuk-table__cell">{{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}</td>
-            <td class="govuk-table__cell">{{ stakeholder.status }}</td>
+            <td class="govuk-table__cell">{{ stakeholder.get_status_display }}</td>
             <td class="govuk-table__cell"><a href="{% url 'barriers:action_plan_stakeholders_edit' barrier_id=barrier.id id=stakeholder.id %}">Edit</a></td>
           </tr>
         {% endfor %}

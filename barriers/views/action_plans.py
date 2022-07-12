@@ -1,4 +1,6 @@
-from django.http import HttpResponseRedirect
+from http import HTTPStatus
+
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
@@ -12,10 +14,18 @@ from barriers.forms.action_plans import (
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
     ActionPlanStakeholderTypeForm,
+    ActionPlanOrganisationStakeholderDetailsForm,
+    ActionPlanIndividualStakeholderDetailsForm,
 )
-from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
+from barriers.models import Stakeholder
+from barriers.views.mixins import (
+    APIBarrierFormViewMixin,
+    BarrierMixin,
+    APIFormViewMixin,
+)
 from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIHttpException
 
 
 class ActionPlanFormSuccessUrlMixin:
@@ -26,10 +36,35 @@ class ActionPlanFormSuccessUrlMixin:
 
 
 class ActionPlanFormViewMixin(ActionPlanFormSuccessUrlMixin):
+    _action_plan = None
+
+    @property
+    def action_plan(self):
+        if not self._action_plan:
+            self._action_plan = self.get_action_plan()
+        return self._action_plan
+
+    def get_action_plan(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.kwargs.get("barrier_id")
+        try:
+            return client.action_plans.get_barrier_action_plan(barrier_id=barrier_id)
+        except APIHttpException as e:
+            if e.status_code == HTTPStatus.NOT_FOUND:
+                raise Http404()
+            raise
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["action_plan"] = self.action_plan
+        context["barrier_id"] = self.action_plan.barrier
+        context["stakeholder"] = self.object
+        return context
 
 
 class EditActionPlanCurrentStatusFormView(
@@ -44,15 +79,25 @@ class EditActionPlanCurrentStatusFormView(
 
 
 class ActionPlanStakeholderFormViewMixin(ActionPlanFormViewMixin):
+    def get_object(self):
+        stakeholder_id = self.kwargs.get("id")
+        stakeholder = self.action_plan.get_stakeholder(stakeholder_id)
+        return stakeholder
+
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
         form_kwargs["stakeholder_id"] = self.kwargs.get("id", None)
         return form_kwargs
 
     def get_success_url(self):
+        if hasattr(self, "saved_object"):
+            self.kwargs["id"] = self.saved_object.id
         return reverse(
-            "barriers:action_plan_stakeholders_list",
-            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            "barriers:action_plan_stakeholders_edit",
+            kwargs={
+                "id": self.kwargs.get("id"),
+                "barrier_id": self.kwargs.get("barrier_id"),
+            },
         )
 
 
@@ -62,19 +107,70 @@ class CreateActionPlanStakeholderTypeFormView(
     template_name = "barriers/action_plans/stakeholders/edit_type.html"
     form_class = ActionPlanStakeholderTypeForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan_stakeholders_add_details",
+            kwargs={
+                "barrier_id": self.kwargs.get("barrier_id"),
+                "id": self.saved_object.id,
+            },
+        )
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
-class EditActionPlanStakeholderTypeFormView(
+class EditActionPlanStakeholderDetailsFormView(
     ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
 ):
-    template_name = "barriers/action_plans/stakeholders/edit_type.html"
-    form_class = ActionPlanStakeholderTypeForm
+    template_name = "barriers/action_plans/stakeholders/edit_details.html"
+
+    def get_form_kwargs(self):
+        return super().get_form_kwargs()
+
+    def get_form_class(self):
+        if self.object.is_organisation:
+            return ActionPlanOrganisationStakeholderDetailsForm
+        else:
+            return ActionPlanIndividualStakeholderDetailsForm
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["name"] = self.object.name
+        initial["status"] = self.object.status
+        if not self.object.is_organisation:
+            initial["organisation"] = self.object.organisation
+            initial["job_title"] = self.object.job_title
+        return initial
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan_stakeholders_list",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+class CreateActionPlanStakeholderDetailsFormView(
+    EditActionPlanStakeholderDetailsFormView
+):
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            # delete the pending stakeholder
+            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+            stakeholder_id = self.kwargs.get("id")
+            barrier_id = self.kwargs.get("barrier_id")
+            client.action_plan_stakeholders.delete_stakeholder(
+                id=stakeholder_id, barrier_id=barrier_id
+            )
+            return HttpResponseRedirect(self.get_success_url())
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["allow_deletion"] = True
         return context
 
 
@@ -325,6 +421,9 @@ class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        self.action_plan.stakeholders = [
+            Stakeholder(stakeholder) for stakeholder in self.action_plan.stakeholders
+        ]
         context_data["action_plan"] = self.action_plan
         return context_data
 
