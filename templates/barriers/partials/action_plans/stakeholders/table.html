@@ -1,0 +1,38 @@
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      {% if show_selection_column %}
+        <th scope="col" class="govuk-table__header">&nbsp;</th>
+      {% endif %}
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">Type</th>
+      <th scope="col" class="govuk-table__header">Status</th>
+      {% if show_actions_column %}
+      <th scope="col" class="govuk-table__header">Action</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    {% if stakeholders %}
+      {% for stakeholder in stakeholders %}
+        <tr class="govuk-table__row">
+        {% if show_selection_column %}
+          <td class="govuk-table__cell">checkbox</th>
+        {% endif %}
+          <td class="govuk-table__cell">{{ stakeholder.name }}</td>
+          <td class="govuk-table__cell">{{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}</td>
+          <td class="govuk-table__cell">{{ stakeholder.get_status_display }}</td>
+          {% if show_actions_column %}
+          <td class="govuk-table__cell"><a href="{% url 'barriers:action_plan_stakeholders_edit' barrier_id=barrier.id id=stakeholder.id %}">Edit</a></td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr class="govuk-table__row">
+        <td class="govuk-!-text-align-centre" colspan="{% if show_selection_column and show_actions_column %}5{% elif show_selection_column or show_actions_column %}4{% else %}3{% endif %}">
+          <p class="govuk-!-padding-top-">No stakeholders found</p>
+        </td>
+      </tr>
+    {% endif %}
+  </tbody>
+</table>
