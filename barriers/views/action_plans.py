@@ -6,7 +6,6 @@ from django.views.generic import FormView, TemplateView
 
 from barriers.forms.action_plans import (
     ActionPlanCurrentStatusEditForm,
-    ActionPlanMilestoneEditForm,
     ActionPlanMilestoneForm,
     ActionPlanStrategicContextForm,
     ActionPlanTaskEditForm,
@@ -197,41 +196,37 @@ class AddActionPlanStrategicContext(
             return self.action_plan.data
 
 
-class AddActionPlanMilestoneFormView(
+class ActionPlanMilestoneFormView(
     ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
 ):
-    template_name = "barriers/action_plans/add_milestone.html"
+    template_name = "barriers/action_plans/milestone_detail.html"
     form_class = ActionPlanMilestoneForm
+    title = "Add objective"
 
-    def get_initial(self):
-        if self.request.method == "GET":
-            return self.action_plan.data
-
-
-class EditActionPlanMilestoneFormView(
-    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
-):
-    template_name = "barriers/action_plans/edit_milestone.html"
-    form_class = ActionPlanMilestoneEditForm
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        if "id" in self.kwargs:
+            self.title = "Edit objective"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
-        kwargs["milestone_id"] = self.kwargs.get("id")
+        kwargs["milestone_id"] = self.kwargs.get("id", None)
         return kwargs
 
+    # def get_initial(self):
+    #     if self.request.method == "GET":
+    #         return self.action_plan.data
+    #
     def get_milestone(self):
         milestones = self.action_plan.milestones
+        milestone_id = str(self.kwargs.get("id"))
         found = [
-            milestone
-            for milestone in milestones
-            if milestone["id"] == str(self.kwargs.get("id"))
+            milestone for milestone in milestones if milestone["id"] == milestone_id
         ]
         return found[0]
 
     def get_initial(self):
-        if self.request.method == "GET":
-            return self.get_milestone()
+        return self.get_milestone()
 
 
 class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):

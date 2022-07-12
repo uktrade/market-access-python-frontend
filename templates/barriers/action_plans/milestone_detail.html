@@ -3,12 +3,12 @@
 {% block page_title %}{{ block.super }} - Edit objective{% endblock %}
 
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add objective' %}
+    {% include 'partials/heading.html' with text=view.title %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

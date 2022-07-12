@@ -93,39 +93,22 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
+        self.milestone_id = kwargs.pop("milestone_id", None)
         super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.action_plans.add_milestone(
-            barrier_id=self.barrier_id,
-            objective=self.cleaned_data.get("objective"),
-        )
-
-    def get_success_url(self):
-        return reverse("barriers:action_plan", kwargs={"barrier_id": self.barrier_id})
-
-
-class ActionPlanMilestoneEditForm(ClearableMixin, APIFormMixin, forms.Form):
-
-    objective = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "govuk-input"}),
-        label="Describe the objective",
-        error_messages={"required": "Enter your milestone objective"},
-    )
-
-    def __init__(self, barrier_id, milestone_id, *args, **kwargs):
-        self.barrier_id = barrier_id
-        self.milestone_id = milestone_id
-        super().__init__(*args, **kwargs)
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        client.action_plans.edit_milestone(
-            barrier_id=self.barrier_id,
-            milestone_id=self.milestone_id,
-            objective=self.cleaned_data.get("objective"),
-        )
+        if self.milestone_id:
+            client.action_plans.edit_milestone(
+                barrier_id=self.barrier_id,
+                milestone_id=self.milestone_id,
+                objective=self.cleaned_data.get("objective"),
+            )
+        else:
+            client.action_plans.add_milestone(
+                barrier_id=self.barrier_id,
+                objective=self.cleaned_data.get("objective"),
+            )
 
     def get_success_url(self):
         return reverse("barriers:action_plan", kwargs={"barrier_id": self.barrier_id})
