@@ -1,1 +1,83 @@
-{"admin_areas": [], "all_sectors": null, "caused_by_trading_bloc": null, "code": "B-22-EMM", "country": null, "created_by": {"id": 74, "name": "James Pacileo"}, "created_on": "2022-07-08T08:23:02.126584Z", "id": "2b83009a-7a5b-44bd-9b78-95ce010b475e", "is_summary_sensitive": false, "is_top_priority": false, "location": "", "modified_by": {"id": 74, "name": "James Pacileo"}, "modified_on": "2022-07-08T08:23:02.553510Z", "next_steps_summary": "", "other_source": "", "product": "Test product", "progress": [{"stage_code": "1.1", "stage_desc": "Barrier status", "status_id": 1, "status_desc": "NOT STARTED"}, {"stage_code": "1.2", "stage_desc": "Location of the barrier", "status_id": 1, "status_desc": "NOT STARTED"}, {"stage_code": "1.3", "stage_desc": "Sectors affected by the barrier", "status_id": 1, "status_desc": "NOT STARTED"}, {"stage_code": "1.4", "stage_desc": "About the barrier", "status_id": 3, "status_desc": "COMPLETED"}, {"stage_code": "1.5", "stage_desc": "Barrier summary", "status_id": 3, "status_desc": "COMPLETED"}], "sectors": [], "sectors_affected": null, "source": {"code": "COMPANY", "name": "Company"}, "status": {"id": 0, "name": "Unfinished"}, "status_date": null, "status_summary": "", "sub_status": {"code": "", "name": null}, "sub_status_other": "", "summary": "Test summary", "tags": [], "term": null, "title": "Test barrier about Marshmallows", "trade_direction": null, "trading_bloc": null, "categories": [], "commodities": [], "draft": true, "caused_by_admin_areas": null}
+{
+    "admin_areas": [],
+    "all_sectors": null,
+    "caused_by_trading_bloc": null,
+    "code": "B-22-HYJ",
+    "country": null,
+    "created_by": {
+        "id": 74,
+        "name": "James Pacileo"
+    },
+    "created_on": "2022-07-12T07:15:20.322149Z",
+    "id": "0127c26f-0105-4a5a-8b2f-ddaffa3d44b0",
+    "is_summary_sensitive": false,
+    "is_top_priority": false,
+    "location": "",
+    "modified_by": {
+        "id": 74,
+        "name": "James Pacileo"
+    },
+    "modified_on": "2022-07-12T07:15:20.651056Z",
+    "next_steps_summary": "",
+    "other_source": "",
+    "product": "Test product",
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        }
+    ],
+    "sectors": [],
+    "sectors_affected": null,
+    "source": {
+        "code": "COMPANY",
+        "name": "Company"
+    },
+    "status": {
+        "id": 0,
+        "name": "Unfinished"
+    },
+    "status_date": null,
+    "status_summary": "",
+    "sub_status": {
+        "code": "",
+        "name": null
+    },
+    "sub_status_other": "",
+    "summary": "Test summary",
+    "tags": [],
+    "term": null,
+    "title": "Test barrier about Marshmallows",
+    "trade_direction": null,
+    "trading_bloc": null,
+    "categories": [],
+    "commodities": [],
+    "draft": true,
+    "caused_by_admin_areas": null
+}
