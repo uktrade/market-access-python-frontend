@@ -7,7 +7,7 @@
 
 {% block back_link %}
 <a
-  href="{% url 'barriers:barrier_detail' barrier.id %}"
+  href="{% url 'barriers:action_plan' barrier.id %}"
   class="govuk-back-link ma-back-link"
   >Back</a
 >
@@ -155,53 +155,54 @@
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-m"> Stakeholders </h2>
       <span class="govuk-hint">{{ form.stakeholders.help_text }}</span>
-      <div class="govuk-grid-column-full">
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
-            <p class="govuk-body govuk-!-font-weight-bold">Name</p>
-          </div>
-          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
-            <p class="govuk-body govuk-!-font-weight-bold">Type</p>
-          </div>
-          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
-            <p class="govuk-body govuk-!-font-weight-bold">Status</p>
-          </div>
-          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">
-            <p class="govuk-body govuk-!-font-weight-bold">Action</p>
-          </div>
-        </div>
-        <hr class="govuk-section-break govuk-section-break--visible">
-      </div>
-
-      {% for status, name, org_status in form.fields.stakeholders.choices %}
-        <div class="govuk-grid-column-full">
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-quarter">
-              <div class="govuk-checkboxes govuk-checkboxes--small">
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="tag-{{ name }}" name="{{ form.stakeholders.name }}" type="checkbox" value="{{ name }}" {% if value in form.stakeholders.value %}checked="checked"{% endif %}>
-                  <label class="govuk-label govuk-checkboxes__label" for="regional_lead_groups-{{ value }}">{{ name }}</label>
-                </div>
-              </div>
-            </div>
-            <div class="govuk-grid-column-one-quarter">
-              {% if org_status %}
-                <p class="govuk-!-text-align-centre">Organisation</p>
-              {% else %}
-                <p class="govuk-!-text-align-centre">Individual</p>
-              {% endif %}
-            </div>
-            <div class="govuk-grid-column-one-quarter">
-              <p class="govuk-!-text-align-centre">{{ status }}</p>
-            </div>
-            <div class="govuk-grid-column-one-quarter">
-              <p class="govuk-!-text-align-centre">edit link for stakeholder</p>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-
-    </div>
+      {% include "barriers/partials/action_plans/stakeholders/table.html" with stakeholders=action_plan.stakeholders show_actions_column=False show_selection_column=True %}
+{#      <div class="govuk-grid-column-full">#}
+{#        <div class="govuk-grid-row">#}
+{#          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">#}
+{#            <p class="govuk-body govuk-!-font-weight-bold">Name</p>#}
+{#          </div>#}
+{#          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">#}
+{#            <p class="govuk-body govuk-!-font-weight-bold">Type</p>#}
+{#          </div>#}
+{#          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">#}
+{#            <p class="govuk-body govuk-!-font-weight-bold">Status</p>#}
+{#          </div>#}
+{#          <div class="govuk-grid-column-one-quarter govuk-!-text-align-centre">#}
+{#            <p class="govuk-body govuk-!-font-weight-bold">Action</p>#}
+{#          </div>#}
+{#        </div>#}
+{#        <hr class="govuk-section-break govuk-section-break--visible">#}
+{#      </div>#}
+{##}
+{#      {% for status, name, org_status in form.fields.stakeholders.choices %}#}
+{#        <div class="govuk-grid-column-full">#}
+{#          <div class="govuk-grid-row">#}
+{#            <div class="govuk-grid-column-one-quarter">#}
+{#              <div class="govuk-checkboxes govuk-checkboxes--small">#}
+{#                <div class="govuk-checkboxes__item">#}
+{#                  <input class="govuk-checkboxes__input" id="tag-{{ name }}" name="{{ form.stakeholders.name }}" type="checkbox" value="{{ name }}" {% if value in form.stakeholders.value %}checked="checked"{% endif %}>#}
+{#                  <label class="govuk-label govuk-checkboxes__label" for="regional_lead_groups-{{ value }}">{{ name }}</label>#}
+{#                </div>#}
+{#              </div>#}
+{#            </div>#}
+{#            <div class="govuk-grid-column-one-quarter">#}
+{#              {% if org_status %}#}
+{#                <p class="govuk-!-text-align-centre">Organisation</p>#}
+{#              {% else %}#}
+{#                <p class="govuk-!-text-align-centre">Individual</p>#}
+{#              {% endif %}#}
+{#            </div>#}
+{#            <div class="govuk-grid-column-one-quarter">#}
+{#              <p class="govuk-!-text-align-centre">{{ status }}</p>#}
+{#            </div>#}
+{#            <div class="govuk-grid-column-one-quarter">#}
+{#              <p class="govuk-!-text-align-centre">edit link for stakeholder</p>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      {% endfor %}#}
+{##}
+{#    </div>#}
   </div>
   <hr class="govuk-section-break govuk-section-break--visible">
 </div>

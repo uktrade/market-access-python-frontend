@@ -25,6 +25,8 @@ from .resources import (
     StrategicAssessmentResource,
     UsersResource,
     ActionPlanStakeholderResource,
+    ActionPlanMilestoneResource,
+    ActionPlanTaskResource,
 )
 
 logger = logging.getLogger(__name__)
@@ -50,6 +52,8 @@ class MarketAccessAPIClient:
         self.mentions = MentionResource(self)
         self.notification_exclusion = NotificationExclusionResource(self)
         self.action_plans = ActionPlanResource(self)
+        self.action_plan_milestones = ActionPlanMilestoneResource(self)
+        self.action_plan_tasks = ActionPlanTaskResource(self)
         self.action_plan_stakeholders = ActionPlanStakeholderResource(self)
 
     def request(self, method, path, **kwargs):

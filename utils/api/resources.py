@@ -20,6 +20,7 @@ from barriers.models import (
     StrategicAssessment,
     Stakeholder,
 )
+from barriers.models.action_plans import Milestone, ActionPlanTask
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
@@ -388,6 +389,11 @@ class ActionPlanResource(APIResource):
         url = f"barriers/{barrier_id}/action_plan"
         return self.model(self.client.patch(url, json={**kwargs}))
 
+
+class ActionPlanMilestoneResource(APIResource):
+    resource_name = "action_plan_milestones"
+    model = Milestone
+
     def add_milestone(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones"
         return self.model(
@@ -401,6 +407,11 @@ class ActionPlanResource(APIResource):
     def delete_milestone(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
         return self.model(self.client.delete(url))
+
+
+class ActionPlanTaskResource(APIResource):
+    resource_name = "action_plan_tasks"
+    model = ActionPlanTask
 
     def add_task(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks"

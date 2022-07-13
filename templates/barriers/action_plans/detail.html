@@ -146,28 +146,45 @@
                                     <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
                                 </p>
                                 <div class="govuk-body action_plans_task_list">
-                                    {% if milestone.tasks %}
-                                            {% for task in milestone.tasks %}
-                                                <p class="govuk-body govuk-!-margin-bottom-3">
-                                                    <h2 class="govuk-heading-s"> Objective Task </h2>
-                                                    <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_task' barrier.id task.id %}">{{ task.action_text }}</a>
-                                                    {% if task.status == "NOT_STARTED" %}
-                                                        <strong class="govuk-tag govuk-tag--grey action_plans_tag">
-                                                            Not Started
-                                                        </strong>
-                                                    {% elif task.status == "IN_PROGRESS" %}
-                                                        <strong class="govuk-tag govuk-tag--blue action_plans_tag">
-                                                            Started
-                                                        </strong>
-                                                    {% elif task.status == "COMPLETED" %}
-                                                        <strong class="govuk-tag govuk-tag--green action_plans_tag">
-                                                            Complete
-                                                        </strong>
-                                                    {% endif %}
-                                                </p>
-                                            {% endfor %}
-                                    {% endif %}
-                                    <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_add_task' barrier.id %}?milestone={{ milestone.id }}">Add objective task</a>
+                                  {% if milestone.tasks %}
+                                    <table class="govuk-table">
+                                      <thead class="govuk-table__head">
+                                        <tr class="govuk-table__row">
+                                          <th class="govuk-table__header" scope="col">Objective task</th>
+                                          <th class="govuk-table__header" scope="col">&nbsp;</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody class="govuk-table__body">
+                                        {% for task in milestone.tasks %}
+                                          <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">
+                                              <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_task' barrier.id milestone.id task.id %}">{{ task.action_text }}</a>
+                                            </td>
+                                            <td class="govuk-table__cell">
+                                              {% if task.status == "NOT_STARTED" %}
+                                                  <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                                      Not Started
+                                                  </strong>
+                                              {% elif task.status == "IN_PROGRESS" %}
+                                                  <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                                      Started
+                                                  </strong>
+                                              {% elif task.status == "COMPLETED" %}
+                                                  <strong class="govuk-tag govuk-tag--green action_plans_tag">
+                                                      Complete
+                                                  </strong>
+                                              {% endif %}
+                                            </td>
+                                          </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                    </table>
+                                  {% endif %}
+                                  <div class="govuk-grid-row">
+                                    <div class="govuk-grid-column-full">
+                                      <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_add_task' barrier.id milestone.id %}">Add objective task</a>
+                                    </div>
+                                  </div>
                                 </div>
                             </td>
                         </tr>

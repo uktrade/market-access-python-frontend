@@ -94,18 +94,19 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         self.milestone_id = kwargs.pop("milestone_id", None)
+        self.action_plan = kwargs.pop("action_plan")
         super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.milestone_id:
-            client.action_plans.edit_milestone(
+            client.action_plan_milestones.edit_milestone(
                 barrier_id=self.barrier_id,
                 milestone_id=self.milestone_id,
                 objective=self.cleaned_data.get("objective"),
             )
         else:
-            client.action_plans.add_milestone(
+            client.action_plan_milestones.add_milestone(
                 barrier_id=self.barrier_id,
                 objective=self.cleaned_data.get("objective"),
             )
@@ -211,7 +212,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         widget=forms.TextInput(attrs={"class": "govuk-input"})
     )
 
-    stakeholders = MultipleChoiceFieldWithHelpText(
+    assigned_stakeholders = MultipleChoiceFieldWithHelpText(
         required=True,
         choices=[],
         widget=forms.CheckboxSelectMultiple,
@@ -219,55 +220,53 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         help_text="Add relevant stakeholders to the task",
     )
 
-    def __init__(self, barrier_id, action_plan_id, milestone_id, *args, **kwargs):
+    def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
-        self.action_plan_id = action_plan_id
-        self.milestone_id = milestone_id
+        self.action_plan = kwargs.pop("action_plan")
+        self.milestone_id = kwargs.pop("milestone_id")
+        self.task_id = kwargs.pop("task_id")
         super().__init__(*args, **kwargs)
 
-        # Get a list of stakeholders for the action plan - use action_plan_id
-        # Set them as choices
+        # # Get a list of stakeholders for the action plan - use action_plan_id
+        # # Set them as choices
+        #
+        # # TEMP STAKEHOLDER CLASS TO TEST STAKEHOLDER FUNCTIONS WHILE IT'S DEVED IN ANOTHER TICKET
+        # # USE SOMETHING LIKE THIS IN FINAL VERSION:
+        # # client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        # # list_of_stakeholders = client.users.get(action_plan=action_plan_id)
+        # class Stakeholder(models.Model):
+        #     name = ""
+        #     status = ""
+        #     organisation = ""
+        #     job_title = ""
+        #     is_organisation = ""
+        #
+        #     # The class "constructor" - It's actually an initializer
+        #     def __init__(self, name, status, organisation, job_title, is_organisation):
+        #         self.name = name
+        #         self.status = status
+        #         self.organisation = organisation
+        #         self.job_title = job_title
+        #         self.is_organisation = is_organisation
+        #
+        # stakeholder_1 = Stakeholder("Jim", "Friend", "HMRC", "Barista", False)
+        # stakeholder_2 = Stakeholder("Bob", "Target", "A Big Company", "Cleaner", False)
+        # stakeholder_3 = Stakeholder("Viv", "Friend", "DIT", "Security Guard", False)
+        # stakeholder_4 = Stakeholder("The UK Government", "Neutral", None, None, True)
+        # stakeholder_5 = Stakeholder("A Big Company", "Blocker", None, None, True)
+        # list_of_stakeholders = [
+        #     stakeholder_1,
+        #     stakeholder_2,
+        #     stakeholder_3,
+        #     stakeholder_4,
+        #     stakeholder_5,
+        # ]
 
-        # TEMP STAKEHOLDER CLASS TO TEST STAKEHOLDER FUNCTIONS WHILE IT'S DEVED IN ANOTHER TICKET
-        # USE SOMETHING LIKE THIS IN FINAL VERSION:
-        # client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        # list_of_stakeholders = client.users.get(action_plan=action_plan_id)
-        class Stakeholder(models.Model):
-            name = ""
-            status = ""
-            organisation = ""
-            job_title = ""
-            is_organisation = ""
+        stakeholders = self.action_plan.stakeholders
 
-            # The class "constructor" - It's actually an initializer
-            def __init__(self, name, status, organisation, job_title, is_organisation):
-                self.name = name
-                self.status = status
-                self.organisation = organisation
-                self.job_title = job_title
-                self.is_organisation = is_organisation
-
-        stakeholder_1 = Stakeholder("Jim", "Friend", "HMRC", "Barista", False)
-        stakeholder_2 = Stakeholder("Bob", "Target", "A Big Company", "Cleaner", False)
-        stakeholder_3 = Stakeholder("Viv", "Friend", "DIT", "Security Guard", False)
-        stakeholder_4 = Stakeholder("The UK Government", "Neutral", None, None, True)
-        stakeholder_5 = Stakeholder("A Big Company", "Blocker", None, None, True)
-        list_of_stakeholders = [
-            stakeholder_1,
-            stakeholder_2,
-            stakeholder_3,
-            stakeholder_4,
-            stakeholder_5,
-        ]
-
-        self.fields["stakeholders"].choices = [
-            (holder.status, holder.name, holder.is_organisation)
-            for holder in list_of_stakeholders
-        ]
-
-        print("*")
-        print(self.fields["stakeholders"].choices)
-        print("*")
+        self.fields["assigned_stakeholders"].choices = (
+            (stakeholder.id, stakeholder.name) for stakeholder in stakeholders
+        )
 
     def clean_start_date(self):
         return self.cleaned_data["start_date"].isoformat()
@@ -301,136 +300,142 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         action_type_field = self.fields["action_type"]
         if hasattr(action_type_field, "subform"):
             action_type_category = action_type_field.subform.get_action_type_category()
-
-        client.action_plans.add_task(
-            barrier_id=self.barrier_id,
-            milestone_id=self.milestone_id,
-            assigned_to=self.cleaned_data["assigned_to"],
-            status=self.cleaned_data.get("status"),
-            action_text=self.cleaned_data.get("action_text"),
-            start_date=self.cleaned_data.get("start_date"),
-            completion_date=self.cleaned_data.get("completion_date"),
-            action_type=self.cleaned_data.get("action_type"),
-            action_type_category=action_type_category,
-            stakeholders=self.cleaned_data["stakeholders"],
-        )
-
-
-class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
-
-    status = forms.ChoiceField(
-        choices=ACTION_PLAN_TASK_CHOICES, widget=forms.RadioSelect
-    )
-
-    start_date = MonthYearInFutureField()
-    completion_date = MonthYearInFutureField()
-
-    action_text = forms.CharField(
-        label="Intervention and purpose",
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-    )
-
-    action_type = SubformChoiceField(
-        label="Intervention type",
-        choices=ACTION_PLAN_TASK_TYPE_CHOICES,
-        subform_classes={
-            ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: action_plan_action_type_category_form_class_factory(
-                "SCOPING_AND_RESEARCH"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: action_plan_action_type_category_form_class_factory(
-                "LOBBYING"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: action_plan_action_type_category_form_class_factory(
-                "UNILATERAL_INTERVENTIONS"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
-                "BILATERAL_ENGAGEMENT"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
-                "PLURILATERAL_ENGAGEMENT"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
-                "MULTILATERAL_ENGAGEMENT"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory(
-                "EVENT"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory(  # noqa
-                "WHITEHALL_FUNDING_STREAMS"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory(  # noqa
-                "RESOLUTION_NOT_LEAD_BY_DIT"
-            ),
-            ACTION_PLAN_TASK_TYPE_CHOICES.OTHER: action_plan_action_type_category_form_class_factory(  # noqa
-                "OTHER"
-            ),
-        },
-        widget=forms.RadioSelect,
-    )
-
-    assigned_to = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "govuk-input"})
-    )
-
-    stakeholders = forms.CharField(
-        label="Stakeholders",
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
-    )
-
-    def __init__(
-        self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs
-    ):
-        self.barrier_id = barrier_id
-        self.action_plan_id = action_plan_id
-        self.milestone_id = milestone_id
-        self.task_id = task_id
-        super().__init__(*args, **kwargs)
-
-    def clean_start_date(self):
-        return self.cleaned_data["start_date"].isoformat()
-
-    def clean_completion_date(self):
-        return self.cleaned_data["completion_date"].isoformat()
-
-    def clean_assigned_to(self):
-        sso_client = SSOClient()
-        email = self.cleaned_data["assigned_to"]
-        query = email.replace(".", " ").split("@")[0]
-        results = sso_client.search_users(query)
-        print("---------------")
-        print(f"THE ASSIGNED TO INPUT: {email}")
-        print(f"{query}")
-        # UNCOMMENT THIS BEFORE PUSHING/MERGING
-        # if not results:
-        #    raise ValidationError(f"Invalid user {query}")
-        # for result in results:
-        #    if result["email"] == email:
-        #        return result["user_id"]
-        # return
-        return "9affb723-21d8-43c5-82ac-f525bf02444f"
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-
-        action_type_field = self.fields["action_type"]
-        if hasattr(action_type_field, "subform"):
-            action_type_category = action_type_field.subform.get_action_type_category()
         else:
-            action_type_category = "Other"
+            action_type_category = ""
 
-        client.action_plans.edit_task(
-            barrier_id=self.barrier_id,
-            task_id=self.task_id,
-            assigned_to=self.cleaned_data["assigned_to"],
-            status=self.cleaned_data.get("status"),
-            action_text=self.cleaned_data.get("action_text"),
-            start_date=self.cleaned_data.get("start_date"),
-            completion_date=self.cleaned_data.get("completion_date"),
-            action_type=self.cleaned_data.get("action_type"),
-            action_type_category=action_type_category,
-            stakeholders=self.cleaned_data["stakeholders"],
-        )
+        save_kwargs = {
+            "barrier_id": self.barrier_id,
+            "assigned_to": self.cleaned_data["assigned_to"],
+            "status": self.cleaned_data.get("status"),
+            "action_text": self.cleaned_data.get("action_text"),
+            "start_date": self.cleaned_data.get("start_date"),
+            "completion_date": self.cleaned_data.get("completion_date"),
+            "action_type": self.cleaned_data.get("action_type"),
+            "action_type_category": action_type_category,
+            "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
+        }
+        if hasattr(self, "task_id"):
+            save_kwargs["task_id"] = self.task_id
+            client.action_plan_tasks.edit_task(**save_kwargs)
+        else:
+            client.action_plan_tasks.add_task(**save_kwargs)
+
+
+# class ActionPlanTaskEditForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
+#
+#     status = forms.ChoiceField(
+#         choices=ACTION_PLAN_TASK_CHOICES, widget=forms.RadioSelect
+#     )
+#
+#     start_date = MonthYearInFutureField()
+#     completion_date = MonthYearInFutureField()
+#
+#     action_text = forms.CharField(
+#         label="Intervention and purpose",
+#         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+#     )
+#
+#     action_type = SubformChoiceField(
+#         label="Intervention type",
+#         choices=ACTION_PLAN_TASK_TYPE_CHOICES,
+#         subform_classes={
+#             ACTION_PLAN_TASK_TYPE_CHOICES.SCOPING_AND_RESEARCH: action_plan_action_type_category_form_class_factory(
+#                 "SCOPING_AND_RESEARCH"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.LOBBYING: action_plan_action_type_category_form_class_factory(
+#                 "LOBBYING"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.UNILATERAL_INTERVENTIONS: action_plan_action_type_category_form_class_factory(
+#                 "UNILATERAL_INTERVENTIONS"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
+#                 "BILATERAL_ENGAGEMENT"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.PLURILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
+#                 "PLURILATERAL_ENGAGEMENT"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.MULTILATERAL_ENGAGEMENT: action_plan_action_type_category_form_class_factory(
+#                 "MULTILATERAL_ENGAGEMENT"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.EVENT: action_plan_action_type_category_form_class_factory(
+#                 "EVENT"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.WHITEHALL_FUNDING_STREAMS: action_plan_action_type_category_form_class_factory(  # noqa
+#                 "WHITEHALL_FUNDING_STREAMS"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.RESOLUTION_NOT_LEAD_BY_DIT: action_plan_action_type_category_form_class_factory(  # noqa
+#                 "RESOLUTION_NOT_LEAD_BY_DIT"
+#             ),
+#             ACTION_PLAN_TASK_TYPE_CHOICES.OTHER: action_plan_action_type_category_form_class_factory(  # noqa
+#                 "OTHER"
+#             ),
+#         },
+#         widget=forms.RadioSelect,
+#     )
+#
+#     assigned_to = forms.CharField(
+#         widget=forms.TextInput(attrs={"class": "govuk-input"})
+#     )
+#
+#     stakeholders = forms.CharField(
+#         label="Stakeholders",
+#         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+#         required=True,
+#     )
+#
+#     def __init__(
+#         self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs
+#     ):
+#         self.barrier_id = barrier_id
+#         self.action_plan_id = action_plan_id
+#         self.milestone_id = milestone_id
+#         self.task_id = task_id
+#         super().__init__(*args, **kwargs)
+#
+#     def clean_start_date(self):
+#         return self.cleaned_data["start_date"].isoformat()
+#
+#     def clean_completion_date(self):
+#         return self.cleaned_data["completion_date"].isoformat()
+#
+#     def clean_assigned_to(self):
+#         sso_client = SSOClient()
+#         email = self.cleaned_data["assigned_to"]
+#         query = email.replace(".", " ").split("@")[0]
+#         results = sso_client.search_users(query)
+#         print("---------------")
+#         print(f"THE ASSIGNED TO INPUT: {email}")
+#         print(f"{query}")
+#         # UNCOMMENT THIS BEFORE PUSHING/MERGING
+#         # if not results:
+#         #    raise ValidationError(f"Invalid user {query}")
+#         # for result in results:
+#         #    if result["email"] == email:
+#         #        return result["user_id"]
+#         # return
+#         return "9affb723-21d8-43c5-82ac-f525bf02444f"
+#
+#     def save(self):
+#         client = MarketAccessAPIClient(self.token)
+#
+#         action_type_field = self.fields["action_type"]
+#         if hasattr(action_type_field, "subform"):
+#             action_type_category = action_type_field.subform.get_action_type_category()
+#         else:
+#             action_type_category = "Other"
+#
+#         client.action_plans.edit_task(
+#             barrier_id=self.barrier_id,
+#             task_id=self.task_id,
+#             assigned_to=self.cleaned_data["assigned_to"],
+#             status=self.cleaned_data.get("status"),
+#             action_text=self.cleaned_data.get("action_text"),
+#             start_date=self.cleaned_data.get("start_date"),
+#             completion_date=self.cleaned_data.get("completion_date"),
+#             action_type=self.cleaned_data.get("action_type"),
+#             action_type_category=action_type_category,
+#             stakeholders=self.cleaned_data["stakeholders"],
+#         )
 
 
 class ActionPlanTaskEditOutcomeForm(
@@ -495,6 +500,7 @@ class ActionPlanStakeholderFormMixin:
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
         self.stakeholder_id = kwargs.pop("stakeholder_id", None)
+        self.action_plan = kwargs.pop("action_plan")
         super().__init__(*args, **kwargs)
 
     def get_request_data(self):
@@ -554,9 +560,6 @@ class ActionPlanOrganisationStakeholderDetailsForm(
         label="Status",
         required=True,
     )
-
-    def __init__(self, barrier_id, *args, **kwargs):
-        super().__init__(barrier_id, *args, **kwargs)
 
     def get_request_data(self):
         request_data = super().get_request_data()

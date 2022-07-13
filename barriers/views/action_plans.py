@@ -8,7 +8,6 @@ from barriers.forms.action_plans import (
     ActionPlanCurrentStatusEditForm,
     ActionPlanMilestoneForm,
     ActionPlanStrategicContextForm,
-    ActionPlanTaskEditForm,
     ActionPlanTaskEditOutcomeForm,
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
@@ -55,7 +54,7 @@ class ActionPlanFormViewMixin(ActionPlanFormSuccessUrlMixin):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        kwargs["action_plan"] = self.action_plan
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -213,20 +212,15 @@ class ActionPlanMilestoneFormView(
         kwargs["milestone_id"] = self.kwargs.get("id", None)
         return kwargs
 
-    # def get_initial(self):
-    #     if self.request.method == "GET":
-    #         return self.action_plan.data
-    #
     def get_milestone(self):
-        milestones = self.action_plan.milestones
-        milestone_id = str(self.kwargs.get("id"))
-        found = [
-            milestone for milestone in milestones if milestone["id"] == milestone_id
-        ]
-        return found[0]
+        if "id" in self.kwargs:
+            return self.action_plan.get_milestone(self.kwargs.get("id"))
+        return None
 
     def get_initial(self):
-        return self.get_milestone()
+        milestone = self.get_milestone()
+        initial = {**milestone.data}
+        return initial
 
 
 class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
@@ -261,73 +255,38 @@ class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
         )
 
 
-class ActionPlanTaskFormViewMixin:
-    form_class = ActionPlanTaskForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
-        kwargs["action_plan_id"] = self.request.GET.get("action_plan")
-        kwargs["milestone_id"] = self.request.GET.get("milestone")
-        return kwargs
-
-    def get_task(self):
-        milestones = self.action_plan.milestones
-        for milestone in milestones:
-            for task in milestone["tasks"]:
-                if task["id"] == str(self.kwargs.get("id")):
-                    return {**task, "assigned_to": task["assigned_to_email"]}
-
-
+# class ActionPlanTaskFormView(
+#     ActionPlanTaskFormViewMixin,
+#     ActionPlanFormViewMixin,
+#     APIBarrierFormViewMixin,
+#     FormView,
+# ):
+#     template_name = "barriers/action_plans/edit_milestone_task.html"
+#     form_class = ActionPlanTaskForm
+#
+#
 class ActionPlanTaskFormView(
-    ActionPlanTaskFormViewMixin,
     ActionPlanFormViewMixin,
     APIBarrierFormViewMixin,
     FormView,
 ):
-    template_name = "barriers/action_plans/add_task.html"
+    template_name = "barriers/action_plans/edit_milestone_task.html"
     form_class = ActionPlanTaskForm
-
-
-class AddActionPlanTaskFormView(
-    ActionPlanTaskFormViewMixin,
-    ActionPlanFormViewMixin,
-    APIBarrierFormViewMixin,
-    FormView,
-):
-    template_name = "barriers/action_plans/add_task.html"
-    form_class = ActionPlanTaskForm
-
-
-class EditActionPlanTaskFormView(
-    ActionPlanTaskFormViewMixin,
-    ActionPlanFormViewMixin,
-    APIBarrierFormViewMixin,
-    FormView,
-):
-    template_name = "barriers/action_plans/edit_task.html"
-    form_class = ActionPlanTaskEditForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
-        kwargs["action_plan_id"] = self.request.GET.get("action_plan")
-        kwargs["milestone_id"] = self.request.GET.get("milestone")
         kwargs["task_id"] = self.kwargs.get("id")
         return kwargs
 
     def get_task(self):
-        milestones = self.action_plan.milestones
-        for milestone in milestones:
-            for task in milestone["tasks"]:
-                if task["id"] == str(self.kwargs.get("id")):
-                    return {**task, "assigned_to": task["assigned_to_email"]}
+        milestone = self.action_plan.get_milestone(self.kwargs.get("milestone_id"))
+        task = milestone.get_task(self.kwargs.get("id"))
+        return task
 
     def get_initial(self):
-        if self.request.method == "GET":
-            return self.get_task()
+        task = self.get_task()
+        initial = {**task.data}
+        return initial
 
 
 class EditActionPlanTaskOutcomeFormView(
@@ -358,7 +317,7 @@ class EditActionPlanTaskOutcomeFormView(
 
 
 class EditActionPlanTaskProgressFormView(
-    ActionPlanTaskFormViewMixin,
+    # ActionPlanTaskFormViewMixin,
     ActionPlanFormViewMixin,
     APIBarrierFormViewMixin,
     FormView,
@@ -380,7 +339,11 @@ class EditActionPlanTaskProgressFormView(
             return self.get_task()
 
 
-class DeleteActionPlanTaskView(ActionPlanTaskFormViewMixin, BarrierMixin, TemplateView):
+class DeleteActionPlanTaskView(
+    # ActionPlanTaskFormViewMixin,
+    BarrierMixin,
+    TemplateView,
+):
     template_name = "barriers/action_plans/delete_task_confirm.html"
 
     def get_context_data(self, **kwargs):
@@ -416,18 +379,15 @@ class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        self.action_plan.stakeholders = [
-            Stakeholder(stakeholder) for stakeholder in self.action_plan.stakeholders
-        ]
         context_data["action_plan"] = self.action_plan
         return context_data
 
 
 class AddActionPlanStakeholderFormView(
-    ActionPlanTaskFormViewMixin,
+    # ActionPlanTaskFormV iewMixin,
     ActionPlanFormViewMixin,
     APIBarrierFormViewMixin,
     FormView,
 ):
-    template_name = "barriers/action_plans/add_task.html"
+    template_name = "barriers/action_plans/edit_milestone_task.html"
     form_class = ActionPlanTaskForm
