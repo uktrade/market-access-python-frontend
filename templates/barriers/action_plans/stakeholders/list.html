@@ -11,7 +11,7 @@
   {% include 'partials/heading.html' with text='Stakeholders' %}
 
   {% if action_plan.stakeholders %}
-    {% include "barriers/partials/action_plans/stakeholders/table.html" with stakeholders=action_plan.stakeholders show_actions_column=True show_selection_column=False %}
+    {% include "barriers/partials/action_plans/stakeholders/table.html" with stakeholders=action_plan.stakeholders %}
   {% endif %}
 
   <div class="govuk-grid-row">
