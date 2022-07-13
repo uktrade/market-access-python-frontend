@@ -35,14 +35,67 @@ from utils.metadata import MetadataMixin
 from utils.react import form_fields_to_dict
 
 
-class ReportViewBase(MetadataMixin, TemplateView):
-    heading_text = ""
-    heading_caption = ""
-    _client: MarketAccessAPIClient = None
+class ReportURLHandlingMixin:
+    """
+    Mixin that handles special URLs such as save and exit and save and go to summary
+    Back links and next links are handled by the get_urls method
+    Note: This is separated into a Mixin to share use with Views that conflict with other
+    behaviour
+    """
 
     success_path = None
     extra_paths = {}
+    _barrier = None
+
+    def get_next_step_url(self):
+        # if save and exit or save and go to summary
+        # is not in the form, this is called to get the next
+        # step in the process
+        # we have a separate method so we can override it without
+        # needing to rewrite the exit and summary logic
+        if self.success_path:
+            return self.get_path_url(self.success_path)
+        return super().get_success_url()
+
+    def get_success_url(self) -> str:
+        action = self.request.POST.get("action")
+        if action == "save-and-exit":
+            # Save and exit should send to the detail view
+            return reverse(
+                "reports:draft_barrier_details_uuid",
+                kwargs={"barrier_id": self.kwargs["barrier_id"]},
+            )
+        if action == "save-and-go-to-summary":
+            return reverse(
+                "reports:report_barrier_answers",
+                kwargs={
+                    "barrier_id": self.kwargs["barrier_id"],
+                },
+            )
+        return self.get_next_step_url()
+
+    def get_urls(self):
+        urls = {}
+        for url_name, path in self.extra_paths.items():
+            urls[url_name] = self.get_path_url(path)
+        if self.request.GET.get("next"):
+            urls["back"] = self.request.GET.get("next")
+        return urls
+
+    def get_path_url(self, path):
+        return reverse(f"{path}_uuid", kwargs={"barrier_id": self.kwargs["barrier_id"]})
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context_data = super().get_context_data(**kwargs)
+        context_data["urls"] = self.get_urls()
+        context_data["has_next"] = self.request.GET.get("next") is not None
+        context_data["next_url"] = self.request.GET.get("next")
+        return context_data
+
+
+class ReportBarrierMixin:
     _barrier: Report = None
+    _client: MarketAccessAPIClient = None
 
     def __init__(self, *args, **kwrags) -> None:
         if kwrags.get("barrier_id"):
@@ -69,35 +122,15 @@ class ReportViewBase(MetadataMixin, TemplateView):
     def get_draft_barrier(self, uuid):
         return self.client.reports.get(uuid)
 
-    def get_success_url(self) -> str:
-        action = self.request.POST.get("action")
-        if action == "save-and-exit":
-            # Save and exit should send to the detail view
-            return reverse(
-                "reports:draft_barrier_details_uuid",
-                kwargs={"barrier_id": self.kwargs["barrier_id"]},
-            )
-        if action == "save-and-go-to-summary":
-            return reverse(
-                "reports:report_barrier_answers",
-                kwargs={
-                    "barrier_id": self.kwargs["barrier_id"],
-                },
-            )
-        if self.success_path:
-            return self.get_path_url(self.success_path)
-        return super().get_success_url()
 
-    def get_urls(self):
-        urls = {}
-        for url_name, path in self.extra_paths.items():
-            urls[url_name] = self.get_path_url(path)
-        if self.request.GET.get("next"):
-            urls["back"] = self.request.GET.get("next")
-        return urls
+class ReportViewBase(
+    ReportURLHandlingMixin, ReportBarrierMixin, MetadataMixin, TemplateView
+):
+    heading_text = ""
+    heading_caption = ""
+    _client: MarketAccessAPIClient = None
 
-    def get_path_url(self, path):
-        return reverse(f"{path}_uuid", kwargs={"barrier_id": self.kwargs["barrier_id"]})
+    _barrier: Report = None
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context_data = super().get_context_data(**kwargs)
@@ -106,9 +139,6 @@ class ReportViewBase(MetadataMixin, TemplateView):
             "text": self.heading_text,
             "caption": self.heading_caption,
         }
-        context_data["urls"] = self.get_urls()
-        context_data["has_next"] = self.request.GET.get("next") is not None
-        context_data["next_url"] = self.request.GET.get("next")
         return context_data
 
 
@@ -287,7 +317,7 @@ class NewReportBarrierLocationView(ReportFormViewBase):
         context_data["react_data"] = self.get_react_data(context_data)
         return context_data
 
-    def get_success_url(self) -> str:
+    def get_next_step_url(self) -> str:
         return reverse_lazy(
             "reports:barrier_trade_direction_uuid",
             kwargs={"barrier_id": self.barrier.id},
@@ -301,12 +331,6 @@ class NewReportBarrierTradeDirectionView(ReportFormViewBase):
     form_class = NewReportBarrierTradeDirectionForm
     extra_paths = {"back": "reports:barrier_location"}
     success_path = "reports:barrier_has_sectors"
-
-    def form_invalid(self, form: NewReportBarrierTradeDirectionForm) -> HttpResponse:
-        return super().form_invalid(form)
-
-    def form_valid(self, form: Form) -> HttpResponse:
-        return super().form_valid(form)
 
 
 # Start: Sector views
@@ -326,7 +350,7 @@ class NewReportBarrierHasSectorsView(ReportFormViewBase):
     }
     success_path = "reports:barrier_sectors"
 
-    def get_success_url(self) -> str:
+    def get_next_step_url(self) -> str:
         # If sectors_currently_unknown set to True, the we go to the
         # categories page.
         # Otherise we redirect to the sectors selection page
@@ -339,14 +363,10 @@ class NewReportBarrierHasSectorsView(ReportFormViewBase):
             "reports:barrier_sectors_uuid", kwargs={"barrier_id": self.barrier.id}
         )
 
-    def form_valid(self, form: Form) -> HttpResponse:
-        # allow get_success_url access to form data
-        return super().form_valid(form)
-
 
 class NewReportBarrierSectorsView(ReportFormViewBase):
     heading_text = "Sectors affected by the barrier"
-    heading_caption = "Question 4 of 7"
+    heading_caption = "Question 5 of 7"
     template_name = "reports/new_report_barrier_sectors_manage.html"
     form_class = NewReportBarrierSectorsForm
     success_path = "reports:barrier_categories_add_first"
@@ -372,16 +392,21 @@ class NewReportBarrierSectorsView(ReportFormViewBase):
             )
         return context_data
 
-    def form_valid(self, form: Form) -> HttpResponse:
-        return super().form_valid(form)
-        # return HttpResponseRedirect(self.get_success_url())
-
-    def form_invalid(self, form: Form) -> HttpResponse:
-        return super().form_invalid(form)
+    def get_next_step_url(self) -> str:
+        if self.barrier.categories:
+            return reverse(
+                "reports:barrier_categories_uuid",
+                kwargs={"barrier_id": self.barrier.id},
+            )
+        return reverse(
+            "reports:barrier_categories_add_first_uuid",
+            kwargs={"barrier_id": self.barrier.id},
+        )
 
 
 class NewReportBarrierSectorsAddView(ReportFormViewBase):
     heading_text = "Sectors affected by the barrier"
+    heading_caption = "Question 5 of 7"
     template_name = "reports/new_report_barrier_sectors_add.html"
     form_class = NewReportBarrierAddSectorsForm
     success_path = "reports:barrier_sectors"
@@ -441,7 +466,7 @@ class NewReportBarrierSectorsRemoveView(ReportFormViewBase):
 
 class NewReportBarrierCategoriesView(ReportFormViewBase):
     heading_text = "Barrier categories"
-    heading_caption = "Question 5 of 7"
+    heading_caption = "Question 6 of 7"
     template_name: str = "reports/new_report_barrier_categories_edit.html"
     form_class = NewReportBarrierCategoriesForm
     success_path = "reports:barrier_commodities"
@@ -474,7 +499,7 @@ class NewReportBarrierCategoriesView(ReportFormViewBase):
 
 class NewReportBarrierCategoriesAddView(ReportFormViewBase):
     heading_text = "Barrier categories"
-    heading_caption = "Question 5 of 7"
+    heading_caption = "Question 6 of 7"
     template_name: str = "reports/new_report_barrier_categories_add.html"
     form_class = NewReportBarrierCategoriesAddForm
     success_path = "reports:barrier_categories"
@@ -513,11 +538,16 @@ class NewReportBarrierCategoriesDeleteView(ReportFormViewBase):
         )
 
 
-class NewReportBarrierCommoditiesView(BarrierEditCommodities):
-    heading_text = "Add HS commodity codes"
-    heading_caption = "Question 6 of 7"
+class NewReportBarrierCommoditiesView(
+    ReportURLHandlingMixin, ReportBarrierMixin, BarrierEditCommodities
+):
+    heading_text = "Add HS commodity codes (optional)"
+    heading_caption = "Question 7 of 7"
     template_name = "reports/new_report_barrier_commodities.html"
     form_class = NewReportUpdateBarrierCommoditiesForm
+    extra_paths = {
+        "back": "reports:barrier_categories",
+    }
 
     def get_success_url(self):
         return reverse(
@@ -527,8 +557,8 @@ class NewReportBarrierCommoditiesView(BarrierEditCommodities):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["heading"] = {
-            "text": "Add HS commodity codes",
-            "caption": "Question 6 of 7",
+            "text": "Add HS commodity codes (optional)",
+            "caption": "Question 7 of 7",
         }
         context_data["lookup_form"] = self.get_lookup_form()
         return context_data

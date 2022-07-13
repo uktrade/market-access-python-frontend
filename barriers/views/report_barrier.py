@@ -108,12 +108,6 @@ def get_report_barrier_answers(barrier: Report):
                     "name": "Who told you about the barrier?",
                     "value": barrier.source_display,  # barrier.reported_by,
                 },
-                {
-                    "name": (
-                        "Is this issue caused by or related to any of the following?"
-                    ),
-                    "value": ",\n".join([tag["title"] for tag in barrier.tags]),
-                },
             ],
         },
         {
@@ -203,6 +197,7 @@ def get_report_barrier_answers(barrier: Report):
                         "Was this barrier caused by a regulation introduced by the"
                         " country's trading bloc?"
                     ),
+                    "hide": not barrier.country_trading_bloc,
                     "value": human_friendly_boolean(
                         barrier.data.get("caused_by_trading_bloc", "-")
                     ),
@@ -259,7 +254,8 @@ def get_report_barrier_answers(barrier: Report):
             ],
         },
         {
-            "name": "Add HS commodity codes",
+            "name": "Add HS commodity codes (optional)",
+            "hide": not barrier.commodities,
             "type": "hs_commodity_codes",
             "url": reverse(
                 "reports:barrier_commodities_uuid", kwargs={"barrier_id": barrier.id}
@@ -273,6 +269,9 @@ def get_report_barrier_answers(barrier: Report):
 class ReportBarrierAnswersView(ReportViewBase):
     template_name = "barriers/report_barrier_answers.html"
     _client: MarketAccessAPIClient = None
+    extra_paths = {
+        "back": "reports:barrier_commodities",
+    }
 
     def post(self, request, *args, **kwargs):
         if self.barrier.draft:

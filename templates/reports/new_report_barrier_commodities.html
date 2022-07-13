@@ -19,7 +19,8 @@
         locations=locations,
         label="{{ lookup_form.code.label }}",
         helpText="{{ lookup_form.code.help_text }}",
-        isReportJourney=true
+        isReportJourney=true,
+        nextUrl={% if next_url %}"{{ next_url }}"{%else %}null{% endif %}
       )
     })
   </script>
