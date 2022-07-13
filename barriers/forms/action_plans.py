@@ -212,10 +212,10 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         widget=forms.TextInput(attrs={"class": "govuk-input"})
     )
 
-    assigned_stakeholders = MultipleChoiceFieldWithHelpText(
+    assigned_stakeholders = forms.MultipleChoiceField(
         required=True,
         choices=[],
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
         label="Stakeholders",
         help_text="Add relevant stakeholders to the task",
     )
@@ -264,9 +264,9 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
 
         stakeholders = self.action_plan.stakeholders
 
-        self.fields["assigned_stakeholders"].choices = (
-            (stakeholder.id, stakeholder.name) for stakeholder in stakeholders
-        )
+        self.fields["assigned_stakeholders"].choices = [
+            (stakeholder.id, stakeholder) for stakeholder in stakeholders
+        ]
 
     def clean_start_date(self):
         return self.cleaned_data["start_date"].isoformat()

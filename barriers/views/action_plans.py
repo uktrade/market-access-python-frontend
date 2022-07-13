@@ -54,6 +54,7 @@ class ActionPlanFormViewMixin(ActionPlanFormSuccessUrlMixin):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         kwargs["action_plan"] = self.action_plan
         return kwargs
 
