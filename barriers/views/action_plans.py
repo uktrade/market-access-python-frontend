@@ -15,11 +15,10 @@ from barriers.forms.action_plans import (
     ActionPlanOrganisationStakeholderDetailsForm,
     ActionPlanIndividualStakeholderDetailsForm,
 )
-from barriers.models import Stakeholder
+
 from barriers.views.mixins import (
     APIBarrierFormViewMixin,
     BarrierMixin,
-    APIFormViewMixin,
 )
 from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
