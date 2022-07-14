@@ -193,3 +193,9 @@ class Report(ReportCompletionMixin, APIModel):
         if not country:
             return False
         return country.get("trading_bloc", False)
+
+    @property
+    def get_admin_areas(self):
+        if not self.country:
+            return []
+        return self.metadata.get_admin_areas_by_country(self.country["id"])

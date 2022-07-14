@@ -7,11 +7,16 @@ from reports.report_views import ReportViewBase
 from utils.api.client import MarketAccessAPIClient
 
 
-def human_friendly_boolean(value, none_text="-", yes_text="Yes", no_text="No"):
+def human_friendly_boolean(
+    value, none_text="-", yes_text="Yes", no_text="No", reverse=False
+):
     # Translate boolean to Yes or No
     # and handle empty value
+    # if reverse is True, return Yes for False and vice versa
     if value is None:
         return none_text
+    if reverse:
+        return no_text if value else yes_text
     return yes_text if value else no_text
 
 
@@ -204,9 +209,15 @@ def get_report_barrier_answers(barrier: Report):
                 },
                 {
                     "name": "Does it affect the entire country?",
+                    "hide": not barrier.get_admin_areas(),
                     "value": human_friendly_boolean(
-                        barrier.data.get("caused_by_admin_areas", "-")
+                        barrier.data.get("caused_by_admin_areas", None), reverse=True
                     ),
+                },
+                {
+                    "name": "Which admin area is affected by the barrier?",
+                    "hide": not barrier.data.get("caused_by_admin_areas", False),
+                    "value": barrier.data.get("admin_areas", None),
                 },
                 {
                     "name": "Which trade direction does this barrier affect?",
