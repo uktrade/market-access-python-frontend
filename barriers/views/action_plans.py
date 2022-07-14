@@ -114,17 +114,11 @@ class CreateActionPlanStakeholderTypeFormView(
             },
         )
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
 
 class EditActionPlanStakeholderDetailsFormView(
     ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
 ):
     template_name = "barriers/action_plans/stakeholders/edit_details.html"
-
-    def get_form_kwargs(self):
-        return super().get_form_kwargs()
 
     def get_form_class(self):
         if self.object.is_organisation:
@@ -146,9 +140,6 @@ class EditActionPlanStakeholderDetailsFormView(
             "barriers:action_plan_stakeholders_list",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
-
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
 
 
 class CreateActionPlanStakeholderDetailsFormView(
