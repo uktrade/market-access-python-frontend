@@ -247,6 +247,7 @@ def get_report_barrier_answers(barrier: Report):
                     "name": (
                         "Do you know the sector or sectors affected by the barrier?"
                     ),
+                    "hide": not barrier.sectors_affected,
                     "value": ",\n".join(
                         [sector.get("name") for sector in barrier.sectors]
                     )
