@@ -214,14 +214,14 @@ class ActionPlanMilestoneFormView(
         return kwargs
 
     def get_milestone(self):
-        if "id" in self.kwargs:
-            return self.action_plan.get_milestone(self.kwargs.get("id"))
-        return None
+        milestone = self.action_plan.get_milestone(self.kwargs.get("id"))
+        return milestone
 
     def get_initial(self):
         milestone = self.get_milestone()
-        initial = {**milestone.data}
-        return initial
+        if milestone:
+            return {**milestone.data}
+        return {}
 
 
 class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
@@ -256,16 +256,6 @@ class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
         )
 
 
-# class ActionPlanTaskFormView(
-#     ActionPlanTaskFormViewMixin,
-#     ActionPlanFormViewMixin,
-#     APIBarrierFormViewMixin,
-#     FormView,
-# ):
-#     template_name = "barriers/action_plans/edit_milestone_task.html"
-#     form_class = ActionPlanTaskForm
-#
-#
 class ActionPlanTaskFormView(
     ActionPlanFormViewMixin,
     APIBarrierFormViewMixin,
@@ -286,8 +276,9 @@ class ActionPlanTaskFormView(
 
     def get_initial(self):
         task = self.get_task()
-        initial = {**task.data}
-        return initial
+        if task:
+            return {**task.data}
+        return {}
 
 
 class EditActionPlanTaskOutcomeFormView(
