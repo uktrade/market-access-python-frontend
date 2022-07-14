@@ -217,7 +217,12 @@ def get_report_barrier_answers(barrier: Report):
                 {
                     "name": "Which admin area is affected by the barrier?",
                     "hide": not barrier.data.get("caused_by_admin_areas", False),
-                    "value": barrier.data.get("admin_areas", None),
+                    "value": ",".join(
+                        [
+                            admin_area["name"]
+                            for admin_area in barrier.data.get("admin_areas", [])
+                        ]
+                    ),
                 },
                 {
                     "name": "Which trade direction does this barrier affect?",
