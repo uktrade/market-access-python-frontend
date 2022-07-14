@@ -209,7 +209,7 @@ def get_report_barrier_answers(barrier: Report):
                 },
                 {
                     "name": "Does it affect the entire country?",
-                    "hide": not barrier.get_admin_areas(),
+                    "hide": not barrier.get_admin_areas,
                     "value": human_friendly_boolean(
                         barrier.data.get("caused_by_admin_areas", None), reverse=True
                     ),
