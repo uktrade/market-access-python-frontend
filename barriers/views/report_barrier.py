@@ -216,7 +216,8 @@ def get_report_barrier_answers(barrier: Report):
                 },
                 {
                     "name": "Which admin area is affected by the barrier?",
-                    "hide": not barrier.data.get("caused_by_admin_areas", False),
+                    "hide": (not barrier.get_admin_areas)
+                    or (not barrier.data.get("caused_by_admin_areas", False)),
                     "value": ",".join(
                         [
                             admin_area["name"]
@@ -244,14 +245,9 @@ def get_report_barrier_answers(barrier: Report):
                     "value": human_friendly_boolean(barrier.sectors_affected),
                 },
                 {
-                    "name": (
-                        "Do you know the sector or sectors affected by the barrier?"
-                    ),
+                    "name": "Sectors affected by the barrier",
                     "hide": not barrier.sectors_affected,
-                    "value": ",\n".join(
-                        [sector.get("name") for sector in barrier.sectors]
-                    )
-                    or "-",
+                    "value": barrier.sector_names,
                 },
             ],
         },

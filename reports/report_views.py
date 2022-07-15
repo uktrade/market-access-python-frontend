@@ -519,7 +519,8 @@ class NewReportBarrierCategoriesAddView(ReportFormViewBase):
 
     def serialize_data(self, form: Form):
         data = super().serialize_data(form)
-        return {"categories": [data["category"]]}
+        categories = [category["id"] for category in self.barrier.categories]
+        return {"categories": [data["category"], *categories]}
 
 
 class NewReportBarrierCategoriesDeleteView(ReportFormViewBase):
