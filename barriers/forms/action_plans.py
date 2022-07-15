@@ -276,7 +276,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             "action_type_category": action_type_category,
             "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
         }
-        if hasattr(self, "task_id"):
+        if self.task_id:
             save_kwargs["task_id"] = self.task_id
             client.action_plan_tasks.update_task(**save_kwargs)
         else:
