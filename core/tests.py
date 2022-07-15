@@ -245,7 +245,8 @@ class MarketAccessTestCase(TestCase):
             {
                 "id": "d42f69b3-707a-4df2-b259-e8a4040e1791",
                 "milestone": "f142480b-71f5-439c-9ad8-b43e4be382c2",
-                "action_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+                "action_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
                 "status": "NOT_STARTED",
                 "start_date": "2022-07-01",
                 "completion_date": "2022-12-01",
