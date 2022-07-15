@@ -263,6 +263,7 @@ class ActionPlanTaskFormView(
     def get_initial(self):
         task = self.get_task()
         if task:
+            task.data["assigned_to"] = task.data["assigned_to_email"]
             return {**task.data}
         return {}
 
