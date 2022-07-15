@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from unittest import skip
 from unittest.mock import Mock, patch
 
 from django.urls import reverse
@@ -9,7 +8,20 @@ from core.tests import MarketAccessTestCase
 
 class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
     # N.B. The things called "Objectives" in the UI are known as "Milestones" in the code
-    @skip("Just for now")
+
+    subform_fields = {
+        "action_type_category_SCOPING_AND_RESEARCH": "Dialogue",
+        "action_type_category_LOBBYING": "Lobbying by officials",
+        "action_type_category_UNILATERAL_INTERVENTIONS": "Technical support to UK",
+        "action_type_category_BILATERAL_ENGAGEMENT": "Market liberalisation forums",
+        "action_type_category_PLURILATERAL_ENGAGEMENT": "With the EU",
+        "action_type_category_MULTILATERAL_ENGAGEMENT": "With OECD",
+        "action_type_category_EVENT": "Organised exhibition",
+        "action_type_category_WHITEHALL_FUNDING_STREAMS": "Prosperity fund",
+        "action_type_category_RESOLUTION_NOT_LEAD_BY_DIT": "Lead by OGDs",
+        "action_type_category_OTHER": "",
+    }
+
     @patch("utils.api.resources.ActionPlanTaskResource.create_task")
     def test_required_milestone_task_fails_validation(self, mock_create_method: Mock):
         mock_create_method.return_value = self.action_plan_task
@@ -30,8 +42,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         for field_name in form.fields.keys():
             assert field_name in form.errors
 
-    @skip("Just for now")
-    @patch("utils.api.resources.ActionPlanMilestoneResource.create_milestone")
+    @patch("utils.api.resources.ActionPlanTaskResource.create_task")
     def test_add_milestone(self, mock_create_method: Mock):
         mock_create_method.return_value = self.action_plan_task
         url = reverse(
@@ -42,9 +53,14 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             },
         )
         form_data = {**self.action_plan_task.data}
-        form_data[
-            "action_type_category_MULTILATERAL_ENGAGEMENT"
-        ] = "MULTILATERAL_ENGAGEMENT"
+        # We're supposed to be adding a new task, so don't set the id
+        form_data.pop("id")
+        # Bunch of extra stuff needed for SubformFields
+        form_data.update(self.subform_fields)
+        # and the asigned stakeholders would be just their id when submitted
+        form_data["assigned_stakeholders"] = [
+            stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
+        ]
         response = self.client.post(
             url,
             follow=False,
