@@ -1,19 +1,12 @@
 import uuid
 from http import HTTPStatus
-
-from django import forms
-from django.urls import reverse
 from unittest.mock import patch, Mock
 
-from unittest import skip
+from django.urls import reverse
 
 from barriers.constants import (
     ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
     ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
-)
-from barriers.forms.action_plans import (
-    ActionPlanOrganisationStakeholderDetailsForm,
-    ActionPlanIndividualStakeholderDetailsForm,
 )
 from core.tests import MarketAccessTestCase
 
@@ -30,13 +23,6 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
             url,
             follow=False,
             data={},
-        )
-        expected_url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
-            kwargs={
-                "barrier_id": self.barrier["id"],
-                "id": self.action_plan_individual_stakeholder.id,
-            },
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
