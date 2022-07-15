@@ -17,10 +17,10 @@ from barriers.models import (
     PublicBarrierNote,
     ResolvabilityAssessment,
     SavedSearch,
-    StrategicAssessment,
     Stakeholder,
+    StrategicAssessment,
 )
-from barriers.models.action_plans import Milestone, ActionPlanTask
+from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User

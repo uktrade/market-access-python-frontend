@@ -1,9 +1,8 @@
 from http import HTTPStatus
+from unittest import skip
+from unittest.mock import Mock, patch
 
 from django.urls import reverse
-from unittest.mock import patch, Mock
-
-from unittest import skip
 
 from core.tests import MarketAccessTestCase
 

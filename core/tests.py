@@ -7,8 +7,8 @@ from mock import patch
 from core.filecache import memfiles
 from users.models import User
 from utils.api.resources import (
-    ActionPlanResource,
     ActionPlanMilestoneResource,
+    ActionPlanResource,
     ActionPlanStakeholderResource,
     ActionPlanTaskResource,
     BarriersResource,

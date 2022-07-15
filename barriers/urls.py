@@ -1,10 +1,10 @@
 from django.urls import path, re_path
 
 from barriers.views.action_plans import (
-    ActionPlanTemplateView,
     ActionPlanMilestoneFormView,
     ActionPlanStakeholdersListView,
     ActionPlanTaskFormView,
+    ActionPlanTemplateView,
     AddActionPlanStrategicContext,
     CreateActionPlanStakeholderDetailsFormView,
     CreateActionPlanStakeholderTypeFormView,

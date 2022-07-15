@@ -5,6 +5,7 @@ import requests
 from django.conf import settings
 
 from utils.exceptions import APIHttpException, APIJsonException
+
 from .resources import (
     ActionPlanMilestoneResource,
     ActionPlanResource,

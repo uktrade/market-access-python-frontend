@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
@@ -15,11 +15,7 @@ from barriers.forms.action_plans import (
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
 )
-
-from barriers.views.mixins import (
-    APIBarrierFormViewMixin,
-    BarrierMixin,
-)
+from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException

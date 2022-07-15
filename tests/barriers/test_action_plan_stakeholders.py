@@ -1,6 +1,6 @@
 import uuid
 from http import HTTPStatus
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 from django.urls import reverse
 
