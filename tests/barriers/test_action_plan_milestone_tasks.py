@@ -17,7 +17,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         "action_type_category_PLURILATERAL_ENGAGEMENT": "With the EU",
         "action_type_category_MULTILATERAL_ENGAGEMENT": "With OECD",
         "action_type_category_EVENT": "Organised exhibition",
-        "action_type_category_WHITEHALL_FUNDING_STREAMS": "Prosperity fund",
+        "action_type_category_WHITEHALL_FUNDING_STREAMS": "Prosperity fund",  # pragma: allowlist secret
         "action_type_category_RESOLUTION_NOT_LEAD_BY_DIT": "Lead by OGDs",
         "action_type_category_OTHER": "",
     }
