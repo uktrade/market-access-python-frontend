@@ -165,6 +165,12 @@ class Report(ReportCompletionMixin, APIModel):
         return str(self.status["id"]) == status_id
 
     @property
+    def sector_names(self):
+        if self.all_sectors:
+            return "All sectors"
+        return ", ".join([sector.get("name") for sector in self.sectors])
+
+    @property
     def source_display(self):
         return self.data.get("source", {}).get("name", "")
 
