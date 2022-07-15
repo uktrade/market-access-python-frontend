@@ -30,7 +30,7 @@
             <div class="modal__content" role="alertdialog" tabindex="1" aria-describedby="modal-label">
                 <h3 class="modal__content__title" id="modal-label">Delete note</h3>
                 <p>Are you sure you want to delete this note?</p>
-                <form action="" method="POST">
+                <form action="" method="POST" novalidate>
                     {% csrf_token %}
                     <input type="hidden" name="note_id" value="{{ delete_note }}" />
                     <button name="action" value="delete-note" class="govuk-button" tabindex="2">Yes, delete</button>

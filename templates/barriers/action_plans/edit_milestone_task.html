@@ -27,7 +27,7 @@
 
 {% block page_content %} {% include 'partials/heading.html' with text='Add objective task' %}
 {% form_error_banner form %}
-<form action="" method="POST">
+<form action="" method="POST" novalidate>
 {% csrf_token %}
 
 <div
