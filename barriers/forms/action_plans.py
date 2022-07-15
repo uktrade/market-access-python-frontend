@@ -376,7 +376,7 @@ class ActionPlanStakeholderTypeForm(
         choices=ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.choices,
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
         label="Stakeholder type",
-        required=False,
+        required=True,
     )
 
     def get_request_data(self):
