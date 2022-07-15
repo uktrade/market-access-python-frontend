@@ -3,18 +3,18 @@ from django.urls import path, re_path
 from barriers.views.action_plans import (
     ActionPlanTemplateView,
     ActionPlanMilestoneFormView,
-    AddActionPlanStrategicContext,
+    ActionPlanStakeholdersListView,
     ActionPlanTaskFormView,
+    AddActionPlanStrategicContext,
+    CreateActionPlanStakeholderDetailsFormView,
+    CreateActionPlanStakeholderTypeFormView,
     DeleteActionPlanMilestoneView,
     DeleteActionPlanTaskView,
     EditActionPlanCurrentStatusFormView,
+    EditActionPlanStakeholderDetailsFormView,
     EditActionPlanTaskOutcomeFormView,
     EditActionPlanTaskProgressFormView,
     SelectActionPlanOwner,
-    ActionPlanStakeholdersListView,
-    CreateActionPlanStakeholderTypeFormView,
-    EditActionPlanStakeholderDetailsFormView,
-    CreateActionPlanStakeholderDetailsFormView,
 )
 from barriers.views.light_touch_reviews import (
     PublicBarrierLightTouchReviewsEdit,

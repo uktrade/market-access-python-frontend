@@ -5,9 +5,11 @@ import requests
 from django.conf import settings
 
 from utils.exceptions import APIHttpException, APIJsonException
-
 from .resources import (
+    ActionPlanMilestoneResource,
     ActionPlanResource,
+    ActionPlanStakeholderResource,
+    ActionPlanTaskResource,
     BarriersResource,
     CommoditiesResource,
     DocumentsResource,
@@ -24,9 +26,6 @@ from .resources import (
     SavedSearchesResource,
     StrategicAssessmentResource,
     UsersResource,
-    ActionPlanStakeholderResource,
-    ActionPlanMilestoneResource,
-    ActionPlanTaskResource,
 )
 
 logger = logging.getLogger(__name__)

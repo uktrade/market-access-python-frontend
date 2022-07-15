@@ -7,11 +7,11 @@ from django.utils import timezone
 
 from barriers.constants import (
     ACTION_PLAN_RAG_STATUS_CHOICES,
+    ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
+    ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
     ACTION_PLAN_TASK_CATEGORIES,
     ACTION_PLAN_TASK_CHOICES,
     ACTION_PLAN_TASK_TYPE_CHOICES,
-    ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
-    ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
 )
 from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient

@@ -8,13 +8,13 @@ from core.filecache import memfiles
 from users.models import User
 from utils.api.resources import (
     ActionPlanResource,
+    ActionPlanMilestoneResource,
+    ActionPlanStakeholderResource,
+    ActionPlanTaskResource,
     BarriersResource,
     NotesResource,
     PublicBarriersResource,
     UsersResource,
-    ActionPlanTaskResource,
-    ActionPlanStakeholderResource,
-    ActionPlanMilestoneResource,
 )
 
 

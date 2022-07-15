@@ -6,14 +6,14 @@ from django.views.generic import FormView, TemplateView
 
 from barriers.forms.action_plans import (
     ActionPlanCurrentStatusEditForm,
+    ActionPlanIndividualStakeholderDetailsForm,
     ActionPlanMilestoneForm,
+    ActionPlanOrganisationStakeholderDetailsForm,
+    ActionPlanStakeholderTypeForm,
     ActionPlanStrategicContextForm,
     ActionPlanTaskEditOutcomeForm,
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
-    ActionPlanStakeholderTypeForm,
-    ActionPlanOrganisationStakeholderDetailsForm,
-    ActionPlanIndividualStakeholderDetailsForm,
 )
 
 from barriers.views.mixins import (

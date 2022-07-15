@@ -5,8 +5,8 @@ from unittest.mock import patch, Mock
 from django.urls import reverse
 
 from barriers.constants import (
-    ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
     ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
+    ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
 )
 from core.tests import MarketAccessTestCase
 
