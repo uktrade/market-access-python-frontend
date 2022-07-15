@@ -204,7 +204,8 @@ def get_report_barrier_answers(barrier: Report):
                     ),
                     "hide": not barrier.country_trading_bloc,
                     "value": human_friendly_boolean(
-                        barrier.data.get("caused_by_trading_bloc", "-")
+                        barrier.data.get("caused_by_trading_bloc"),
+                        none_text="Don't know",
                     ),
                 },
                 {
@@ -246,6 +247,10 @@ def get_report_barrier_answers(barrier: Report):
                 },
                 {
                     "name": "Sectors affected by the barrier",
+                    "url": reverse(
+                        "reports:barrier_sectors_uuid",
+                        kwargs={"barrier_id": barrier.id},
+                    ),
                     "hide": not barrier.sectors_affected,
                     "value": barrier.sector_names,
                 },

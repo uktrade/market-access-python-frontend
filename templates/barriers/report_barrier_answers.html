@@ -34,7 +34,7 @@
                     <div class="report-barrier-questions__question">
                         <h3 class="govuk-heading-s question-label">{{ question.name }}</h3>
                         <div class="answer">{{ question.value|linebreaksbr }}</div>
-                        <div class="edit-url"><a href="{{ questions_section.url }}" class="govuk-link">Change</a></div>
+                        <div class="edit-url"><a href="{% if question.url %}{{ question.url }}{% else %}{{ questions_section.url }}{% endif %}" class="govuk-link">Change</a></div>
                     </div>
                     {% endif %}
                 {% endfor %}
