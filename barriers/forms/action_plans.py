@@ -98,13 +98,13 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.milestone_id:
-            client.action_plan_milestones.edit_milestone(
+            client.action_plan_milestones.update_milestone(
                 barrier_id=self.barrier_id,
                 milestone_id=self.milestone_id,
                 objective=self.cleaned_data.get("objective"),
             )
         else:
-            client.action_plan_milestones.add_milestone(
+            client.action_plan_milestones.create_milestone(
                 barrier_id=self.barrier_id,
                 objective=self.cleaned_data.get("objective"),
             )
@@ -278,9 +278,9 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         }
         if hasattr(self, "task_id"):
             save_kwargs["task_id"] = self.task_id
-            client.action_plan_tasks.edit_task(**save_kwargs)
+            client.action_plan_tasks.update_task(**save_kwargs)
         else:
-            client.action_plan_tasks.add_task(**save_kwargs)
+            client.action_plan_tasks.create_task(**save_kwargs)
 
 
 class ActionPlanTaskEditOutcomeForm(
@@ -305,7 +305,7 @@ class ActionPlanTaskEditOutcomeForm(
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        client.action_plans.edit_task(
+        client.action_plans.update_task(
             barrier_id=self.barrier_id,
             task_id=self.task_id,
             outcome=self.cleaned_data["outcome"],
@@ -334,7 +334,7 @@ class ActionPlanTaskEditProgressForm(
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        client.action_plans.edit_task(
+        client.action_plans.update_task(
             barrier_id=self.barrier_id,
             task_id=self.task_id,
             progress=self.cleaned_data["progress"],

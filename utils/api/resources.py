@@ -394,13 +394,13 @@ class ActionPlanMilestoneResource(APIResource):
     resource_name = "action_plan_milestones"
     model = Milestone
 
-    def add_milestone(self, barrier_id, *args, **kwargs):
+    def create_milestone(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones"
         return self.model(
             self.client.post(url, json={"barrier": str(barrier_id), **kwargs})
         )
 
-    def edit_milestone(self, barrier_id, milestone_id, *args, **kwargs):
+    def update_milestone(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
         return self.model(self.client.patch(url, json={**kwargs}))
 
@@ -413,7 +413,7 @@ class ActionPlanTaskResource(APIResource):
     resource_name = "action_plan_tasks"
     model = ActionPlanTask
 
-    def add_task(self, barrier_id, milestone_id, *args, **kwargs):
+    def create_task(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks"
         return self.model(
             self.client.post(
@@ -422,7 +422,7 @@ class ActionPlanTaskResource(APIResource):
             )
         )
 
-    def edit_task(self, barrier_id, task_id, *args, **kwargs):
+    def update_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
         return self.model(self.client.patch(url, json={**kwargs}))
 
