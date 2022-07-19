@@ -30,7 +30,7 @@
                                    id="term-{{ choice_id }}"
                                    value="{{ choice_id }}"
                                    aria-describedby="{{ choice_id }}-item-hint"
-                                   {% if form.initial.term == choice_id %}checked="checked"{% endif %}>
+                                   {% if form.term.value == choice_id %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-radios__label" for="term-{{ choice_id }}">
                                 {{ choice_data.label }}
                             </label>

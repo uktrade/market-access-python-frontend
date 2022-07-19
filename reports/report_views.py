@@ -325,7 +325,7 @@ class NewReportBarrierLocationView(ReportFormViewBase):
 
 
 class NewReportBarrierTradeDirectionView(ReportFormViewBase):
-    heading_text = "Location of the barrier"
+    heading_text = "Trade direction"
     heading_caption = "Question 4 of 7"
     template_name = "reports/new_report_barrier_trade_direction.html"
     form_class = NewReportBarrierTradeDirectionForm
@@ -485,13 +485,18 @@ class NewReportBarrierCategoriesView(ReportFormViewBase):
         )
         return context_data
 
-    def form_valid(self, form):
-        # form.save()
-        # try:
-        #     del self.request.session["categories"]
-        # except KeyError:
-        #     pass
-        return super().form_valid(form)
+    def get_urls(self):
+        urls = super().get_urls()
+        if self.barrier.sectors_affected:
+            urls["back"] = reverse(
+                "reports:barrier_sectors_uuid", kwargs={"barrier_id": self.barrier.id}
+            )
+        else:
+            urls["back"] = reverse(
+                "reports:barrier_has_sectors_uuid",
+                kwargs={"barrier_id": self.barrier.id},
+            )
+        return urls
 
     def form_invalid(self, form):
         return super().form_invalid(form)
@@ -507,7 +512,6 @@ class NewReportBarrierCategoriesAddView(ReportFormViewBase):
         "add_category": "reports:barrier_categories_add",
         "delete_category": "reports:barrier_categories_delete",
         "back": "reports:barrier_categories",
-        "back_main_journey": "reports:barrier_has_sectors",
     }
 
     def get_context_data(self, **kwargs):
@@ -521,6 +525,22 @@ class NewReportBarrierCategoriesAddView(ReportFormViewBase):
         data = super().serialize_data(form)
         categories = [category["id"] for category in self.barrier.categories]
         return {"categories": [data["category"], *categories]}
+
+    def get_urls(self):
+        urls = super().get_urls()
+        is_main_journey = self.kwargs.get("is_main_journey", False)
+        if is_main_journey:
+            if self.barrier.sectors_affected:
+                urls["back"] = reverse(
+                    "reports:barrier_sectors_uuid",
+                    kwargs={"barrier_id": self.barrier.id},
+                )
+            else:
+                urls["back"] = reverse(
+                    "reports:barrier_has_sectors_uuid",
+                    kwargs={"barrier_id": self.barrier.id},
+                )
+        return urls
 
 
 class NewReportBarrierCategoriesDeleteView(ReportFormViewBase):

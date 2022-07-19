@@ -12,6 +12,15 @@ if TYPE_CHECKING:
 class NewReportBarrierAboutAndSummary(
     NewReportBarrierAboutForm, NewReportBarrierSummaryForm
 ):
+    field_order = [
+        "title",
+        "summary",
+        "is_summary_sensitive",
+        "product",
+        "source",
+        "other_source",
+    ]
+
     @staticmethod
     def get_barrier_initial(barrier: Report):
         return {

@@ -85,7 +85,7 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
     @staticmethod
     def get_barrier_initial(barrier: Report) -> dict[str, any]:
         base_initial = {
-            "term": str(barrier.term["id"]) if barrier.term else None,
+            "term": barrier.term,
             "status": str(barrier.status["id"]) if barrier.status else None,
             "sub_status": str(barrier.sub_status["code"])
             if barrier.sub_status

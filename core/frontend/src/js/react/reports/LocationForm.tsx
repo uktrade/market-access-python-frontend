@@ -43,6 +43,9 @@ interface LocationFormData {
 }
 
 const mapIdsToAdminAreas = (ids: string[], adminAreas: AdminArea[]) => {
+    if (!ids || !adminAreas) {
+        return [];
+    }
     return ids.map((id) => {
         return adminAreas.find((area) => area.id === id);
     })

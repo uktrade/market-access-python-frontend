@@ -273,10 +273,14 @@ class NewReportBarrierLocationHybridForm(
     def clean(self):
         cleaned_data = self.cleaned_data
         location = self.cleaned_data.get("location")
-        if not location:
+        country_id = None
+        if (not location) and self.barrier.country:
             country_id = self.barrier.country["id"]
         else:
             country_id = self.cleaned_data.get("country")
+
+        if not country_id:
+            return cleaned_data
 
         does_country_have_trading_bloc = (
             self.metadata.get_trading_bloc_by_country_id(country_id) is not None
@@ -289,7 +293,7 @@ class NewReportBarrierLocationHybridForm(
             self.metadata.get_admin_areas_by_country(country_id) is not None
         )
         if not does_country_have_admin_areas:
-            cleaned_data["admin_areas"] = None
+            cleaned_data["admin_areas"] = []
         else:
             if cleaned_data.get("has_admin_areas") is None:
                 # append validation error to "has_admin_areas" field

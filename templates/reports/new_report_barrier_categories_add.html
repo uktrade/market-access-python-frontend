@@ -11,7 +11,7 @@
 {% block page_content %}
 
     {% if is_main_journey %}
-    <a href="{% if has_next %}{{ next_url }}{% else %}{{ urls.back_main_journey }}{% endif %}" class="govuk-back-link">Back</a>
+    <a href="{% if has_next %}{{ next_url }}{% else %}{{ urls.back }}{% endif %}" class="govuk-back-link">Back</a>
     {% else %}
     {% endif %}
     {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
