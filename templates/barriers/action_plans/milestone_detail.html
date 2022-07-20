@@ -1,0 +1,39 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Action plan objective{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text=view.title %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% form_error_banner form %}
+      <form action="" method="POST" novalidate>
+          {% csrf_token %}
+
+          <div id="{{ form.objective.name }}" class="{% form_group_classes form.objective.errors %}">
+              <fieldset class="govuk-fieldset">
+                  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.objective.help_text }}</legend>
+
+                  {% form_field_error form "objective" %}
+
+                  <div>
+                      {{ form.objective }}
+                  </div>
+              </fieldset>
+          </div>
+
+          <div class="govuk-button-group">
+            <button class="govuk-button" data-module="govuk-button">Confirm</button>
+            <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
+          </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

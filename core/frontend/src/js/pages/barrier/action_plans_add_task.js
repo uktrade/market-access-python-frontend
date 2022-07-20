@@ -83,4 +83,13 @@ ma.pages.barrier.action_plans_add_task = function () {
             return value === "RESOLUTION_NOT_LEAD_BY_DIT";
         },
     });
+
+    new ma.components.ConditionalRadioContent({
+        inputContainer: ".action_type",
+        inputName: "action_type",
+        conditionalElem: "#conditional-OTHER",
+        shouldShow: function (value) {
+            return value === "OTHER";
+        },
+    });
 };
