@@ -6,6 +6,7 @@ from django.utils import timezone
 
 from barriers.constants import (
     ACTION_PLAN_RAG_STATUS_CHOICES,
+    ACTION_PLAN_RISK_LEVEL_CHOICES,
     ACTION_PLAN_TASK_CATEGORIES,
     ACTION_PLAN_TASK_CHOICES,
     ACTION_PLAN_TASK_TYPE_CHOICES,
@@ -417,4 +418,52 @@ class ActionPlanTaskEditProgressForm(
             barrier_id=self.barrier_id,
             task_id=self.task_id,
             progress=self.cleaned_data["progress"],
+        )
+
+
+class ActionPlanRisksAndMitigationForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
+
+    potential_unwanted_outcomes = forms.CharField(
+        label=(
+            "Would progressing this market access barrier lead to any outcomes we don't"
+            " want?"
+        ),
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    potential_risks = forms.CharField(
+        label="What are the risks?",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    risk_level = forms.ChoiceField(
+        label="Risk level", choices=ACTION_PLAN_RISK_LEVEL_CHOICES, required=True
+    )
+
+    risk_mitigation_measures = forms.CharField(
+        label="What are the mitigation measures?",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        # self.action_plan_id = action_plan_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier_id,
+            potential_unwanted_outcomes=self.cleaned_data[
+                "potential_unwanted_outcomes"
+            ],
+            potential_risks=self.cleaned_data["potential_risks"],
+            risk_level=self.cleaned_data["risk_level"],
+            risk_mitigation_measures=self.cleaned_data["risk_mitigation_measures"],
         )

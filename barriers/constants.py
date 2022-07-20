@@ -191,6 +191,13 @@ ACTION_PLAN_RAG_STATUS_CHOICES = Choices(
     ("DELAYED", "Delayed"),
 )
 
+ACTION_PLAN_RISK_LEVEL_CHOICES = Choices(
+    ("LOW", "Low"),
+    ("MEDIUM", "Medium"),
+    ("HIGH", "High"),
+)
+
+
 TOP_PRIORITY_BARRIER_STATUS = Choices(
     ("NONE", ""),
     ("APPROVAL_PENDING", "Top 100 Priority Barrier - Approval Pending"),

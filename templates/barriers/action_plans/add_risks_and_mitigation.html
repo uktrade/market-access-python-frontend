@@ -1,0 +1,103 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Edit estimated resolution date{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Risks and mitigation' %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div
+            id="{{ form.potential_unwanted_outcomes.name }}"
+            class="{% form_group_classes form.potential_unwanted_outcomes.errors %}"
+        >
+            <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                {{ form.potential_unwanted_outcomes.label }}
+            </legend>
+
+            <span class="govuk-hint">{{ form.potential_unwanted_outcomes.help_text }}</span>
+
+            {% form_field_error form "potential_unwanted_outcomes" %}
+
+            <div class="govuk-date-input">{{ form.potential_unwanted_outcomes }}</div>
+            </fieldset>
+        </div>
+
+        <div
+            id="{{ form.potential_risks.name }}"
+            class="{% form_group_classes form.potential_risks.errors %}"
+        >
+            <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                {{ form.potential_risks.label }}
+            </legend>
+
+            <span class="govuk-hint">{{ form.potential_risks.help_text }}</span>
+
+            {% form_field_error form "potential_risks" %}
+
+            <div class="govuk-date-input">{{ form.potential_risks }}</div>
+            </fieldset>
+        </div>
+
+
+  <div id="{{ form.risk_level.name }}"
+          class="govuk-form-group{% if form.risk_level.errors %} govuk-form-group--error{% endif %}">
+      <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.risk_level.label }}</legend>
+          <span id="{{ form.risk_level.name }}-item-hint" class="govuk-hint">{{ form.risk_level.help_text }}</span>
+          {% form_field_error form "risk_level" %}
+
+          <div class="govuk-radios risk_level govuk-radios--conditional" data-module="radios">
+
+              {% for value, name in form.fields.risk_level.choices %}
+                  <div class="govuk-radios__item">
+                      <input class="govuk-radios__input" id="{{ value }}" name="{{ form.risk_level.name }}"
+                              type="radio" value="{{ value }}"
+                              {% if form.risk_level.value == value %}checked="checked"{% endif %}
+                              data-aria-controls="conditional-{{ value }}"
+                              aria-describedby="{{ value }}-item-hint">
+                      <label class="govuk-label govuk-radios__label"
+                              for="{{ value }}">{{ name }}</label>
+                  </div>
+
+                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                          id="conditional-{{ value }}">
+                      {{ choice.subform.as_html }}
+                  </div>
+              {% endfor %}
+          </div>
+      </fieldset>
+  </div>
+
+        <div
+            id="{{ form.risk_mitigation_measures.name }}"
+            class="{% form_group_classes form.risk_mitigation_measures.errors %}"
+        >
+            <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                {{ form.risk_mitigation_measures.label }}
+            </legend>
+
+            <span class="govuk-hint">{{ form.risk_mitigation_measures.help_text }}</span>
+
+            {% form_field_error form "risk_mitigation_measures" %}
+
+            <div class="govuk-date-input">{{ form.risk_mitigation_measures }}</div>
+            </fieldset>
+        </div>
+
+        <button class="govuk-button" data-module="govuk-button">Save Changes</button>
+        <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
+    </form>
+
+{% endblock %}

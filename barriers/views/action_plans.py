@@ -6,6 +6,7 @@ from barriers.forms.action_plans import (
     ActionPlanCurrentStatusEditForm,
     ActionPlanMilestoneEditForm,
     ActionPlanMilestoneForm,
+    ActionPlanRisksAndMitigationForm,
     ActionPlanStrategicContextForm,
     ActionPlanTaskEditForm,
     ActionPlanTaskEditOutcomeForm,
@@ -282,3 +283,14 @@ class ActionPlanTemplateView(BarrierMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data["action_plan"] = self.action_plan
         return context_data
+
+
+class ActionPlanRisksAndMitigationView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
+    template_name = "barriers/action_plans/add_risks_and_mitigation.html"
+    form_class = ActionPlanRisksAndMitigationForm
+
+    def get_initial(self):
+        if self.request.method == "GET":
+            return self.action_plan.data
