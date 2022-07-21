@@ -12,7 +12,7 @@ from utils.react import form_fields_to_dict
 
 class NewReportBarrierLocationMasterView(ReportsFormView):
     heading_text = "Location of barrier"
-    heading_caption = "Question 3 of 7"
+    heading_caption = "Section 3 of 7"
     template_name = "reports/new_report_barrier_location_master.html"
     form_class = NewReportBarrierLocationForm
     form_session_key = FormSessionKeys.LOCATION

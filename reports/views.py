@@ -213,9 +213,10 @@ class NewReport(ReportsTemplateView):
             "1.1": "About the barrier",
             "1.2": "Barrier status",
             "1.3": "Location of the barrier",
-            "1.4": "Sectors affected by the barrier",
-            "1.5": "Define barrier category",
-            "1.6": "Add HS commodity codes",
+            "1.4": "Trade direction",
+            "1.5": "Sectors affected by the barrier",
+            "1.6": "Define barrier category",
+            "1.7": "Add HS commodity codes",
         }
         return context_data
 
@@ -254,7 +255,7 @@ class NewReportBarrierStatusView(ReportsFormView):
     """
 
     heading_text = "Barrier status"
-    heading_caption = "Question 2 of 7"
+    heading_caption = "Section 2 of 7"
     template_name = "reports/new_report_barrier_status.html"
     form_class = NewReportBarrierStatusForm
     success_path = "reports:barrier_location"
@@ -538,7 +539,7 @@ class NewReportBarrierHasSectorsView(ReportsFormView):
 
 class NewReportBarrierSectorsView(ReportsFormView):
     heading_text = "Sectors affected by the barrier"
-    heading_caption = "Question 4 of 7"
+    heading_caption = "Section 4 of 7"
     template_name = "reports/new_report_barrier_sectors_manage.html"
     form_class = NewReportBarrierSectorsForm
     success_path = "reports:barrier_about"
@@ -634,7 +635,7 @@ class NewReportBarrierSectorsRemoveView(ReportsFormView):
 
 class NewReportBarrierAboutView(ReportsFormView):
     heading_text = "About the barrier"
-    heading_caption = "Question 1 of 7"
+    heading_caption = "Section 1 of 7"
     template_name = "reports/new_report_barrier_about.html"
     form_class = NewReportBarrierAboutForm
     # extra_paths = {"back": "reports:barrier_sectors"}
@@ -668,7 +669,7 @@ class NewReportBarrierAboutView(ReportsFormView):
 
 class NewReportBarrierSummaryView(ReportsFormView):
     heading_text = "Barrier summary"
-    heading_caption = "Question 1 of 7"
+    heading_caption = "Section 1 of 7"
     template_name = "reports/new_report_barrier_summary.html"
     form_class = NewReportBarrierSummaryForm
     success_path = "reports:barrier_status"
@@ -708,7 +709,7 @@ class NewReportBarrierSummaryView(ReportsFormView):
 
 class NewReportBarrierCategoriesView(ReportsFormView):
     heading_text = "Barrier categories"
-    heading_caption = "Question 5 of 7"
+    heading_caption = "Section 5 of 7"
     template_name: str = "reports/new_report_barrier_categories_edit.html"
     form_class = NewReportBarrierCategoriesForm
     success_path = "reports:barrier_commodities"
@@ -823,7 +824,7 @@ class NewReportBarrierCategoriesDeleteView(ReportsFormView):
 
 
 class NewReportBarrierCommoditiesView(BarrierEditCommodities):
-    heading_caption = "Question 6 of 7"
+    heading_caption = "Section 6 of 7"
     template_name = "reports/new_report_barrier_commodities.html"
     form_class = NewReportUpdateBarrierCommoditiesForm
 

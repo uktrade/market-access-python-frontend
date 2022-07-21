@@ -211,7 +211,7 @@ class ReportDetail(ReportViewBase):
 
 class NewReportBarrierAboutView(ReportFormViewBase):
     heading_text = "About the barrier"
-    heading_caption = "Question 1 of 7"
+    heading_caption = "Section 1 of 7"
     template_name = "reports/new_report_barrier_about_and_summary.html"
     form_class = NewReportBarrierAboutAndSummary
     success_path = "reports:barrier_status"
@@ -222,7 +222,7 @@ class NewReportBarrierAboutView(ReportFormViewBase):
 
 class NewReportBarrierSummaryView(ReportFormViewBase):
     heading_text = "Barrier summary"
-    heading_caption = "Question 1 of 7"
+    heading_caption = "Section 1 of 7"
     template_name = "reports/new_report_barrier_summary.html"
     form_class = NewReportBarrierSummaryForm
     success_path = "reports:barrier_status"
@@ -236,7 +236,7 @@ class NewReportBarrierStatusView(ReportFormViewBase):
     """
 
     heading_text = "Barrier status"
-    heading_caption = "Question 2 of 7"
+    heading_caption = "Section 2 of 7"
     template_name = "reports/new_report_barrier_status.html"
     form_class = NewReportBarrierStatusForm
     success_path = "reports:barrier_location"
@@ -258,7 +258,7 @@ class NewReportBarrierStatusView(ReportFormViewBase):
 
 class NewReportBarrierLocationView(ReportFormViewBase):
     heading_text = "Location of the barrier"
-    heading_caption = "Question 3 of 7"
+    heading_caption = "Section 3 of 7"
     template_name = "reports/new_report_barrier_location_hybrid.html"
     form_class = NewReportBarrierLocationHybridForm
     success_path = None
@@ -326,7 +326,7 @@ class NewReportBarrierLocationView(ReportFormViewBase):
 
 class NewReportBarrierTradeDirectionView(ReportFormViewBase):
     heading_text = "Trade direction"
-    heading_caption = "Question 4 of 7"
+    heading_caption = "Section 4 of 7"
     template_name = "reports/new_report_barrier_trade_direction.html"
     form_class = NewReportBarrierTradeDirectionForm
     extra_paths = {"back": "reports:barrier_location"}
@@ -340,7 +340,7 @@ class NewReportBarrierHasSectorsView(ReportFormViewBase):
     """Does it affect the entire country?"""
 
     heading_text = "Sectors affected by the barrier"
-    heading_caption = "Question 5 of 7"
+    heading_caption = "Section 5 of 7"
     template_name = "reports/new_report_barrier_sectors_main.html"
     form_class = NewReportBarrierHasSectorsForm
     extra_paths = {
@@ -366,7 +366,7 @@ class NewReportBarrierHasSectorsView(ReportFormViewBase):
 
 class NewReportBarrierSectorsView(ReportFormViewBase):
     heading_text = "Sectors affected by the barrier"
-    heading_caption = "Question 5 of 7"
+    heading_caption = "Section 5 of 7"
     template_name = "reports/new_report_barrier_sectors_manage.html"
     form_class = NewReportBarrierSectorsForm
     success_path = "reports:barrier_categories_add_first"
@@ -406,7 +406,7 @@ class NewReportBarrierSectorsView(ReportFormViewBase):
 
 class NewReportBarrierSectorsAddView(ReportFormViewBase):
     heading_text = "Sectors affected by the barrier"
-    heading_caption = "Question 5 of 7"
+    heading_caption = "Section 5 of 7"
     template_name = "reports/new_report_barrier_sectors_add.html"
     form_class = NewReportBarrierAddSectorsForm
     success_path = "reports:barrier_sectors"
@@ -466,7 +466,7 @@ class NewReportBarrierSectorsRemoveView(ReportFormViewBase):
 
 class NewReportBarrierCategoriesView(ReportFormViewBase):
     heading_text = "Barrier categories"
-    heading_caption = "Question 6 of 7"
+    heading_caption = "Section 6 of 7"
     template_name: str = "reports/new_report_barrier_categories_edit.html"
     form_class = NewReportBarrierCategoriesForm
     success_path = "reports:barrier_commodities"
@@ -504,7 +504,7 @@ class NewReportBarrierCategoriesView(ReportFormViewBase):
 
 class NewReportBarrierCategoriesAddView(ReportFormViewBase):
     heading_text = "Barrier categories"
-    heading_caption = "Question 6 of 7"
+    heading_caption = "Section 6 of 7"
     template_name: str = "reports/new_report_barrier_categories_add.html"
     form_class = NewReportBarrierCategoriesAddForm
     success_path = "reports:barrier_categories"
@@ -563,7 +563,7 @@ class NewReportBarrierCommoditiesView(
     ReportURLHandlingMixin, ReportBarrierMixin, BarrierEditCommodities
 ):
     heading_text = "Add HS commodity codes (optional)"
-    heading_caption = "Question 7 of 7"
+    heading_caption = "Section 7 of 7"
     template_name = "reports/new_report_barrier_commodities.html"
     form_class = NewReportUpdateBarrierCommoditiesForm
     extra_paths = {
@@ -579,7 +579,7 @@ class NewReportBarrierCommoditiesView(
         context_data = super().get_context_data(**kwargs)
         context_data["heading"] = {
             "text": "Add HS commodity codes (optional)",
-            "caption": "Question 7 of 7",
+            "caption": "Section 7 of 7",
         }
         context_data["lookup_form"] = self.get_lookup_form()
         return context_data
