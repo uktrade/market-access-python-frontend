@@ -119,7 +119,7 @@ function EmailSearchAutocomplete({ field, label }) {
                                 inputValue={inputValue}
                                 getMenuProps={getMenuProps}
                                 getItemProps={getItemProps}
-                                highlightedIndex={highlightedIndex || 0}
+                                highlightedIndex={highlightedIndex}
                             />
                         ) : null}
                     </div>
