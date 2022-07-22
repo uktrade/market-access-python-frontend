@@ -43,8 +43,17 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             assert field_name in form.errors
 
     @patch("utils.api.resources.ActionPlanTaskResource.create_task")
-    def test_add_milestone(self, mock_create_method: Mock):
+    @patch("utils.sso.SSOClient.search_users")
+    def test_add_milestone(
+        self, mock_search_users_method: Mock, mock_create_method: Mock
+    ):
         mock_create_method.return_value = self.action_plan_task
+        mock_search_users_method.return_value = [
+            {
+                "email": self.action_plan_task.assigned_to,
+                "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
+            }
+        ]
         url = reverse(
             "barriers:action_plan_add_task",
             kwargs={
