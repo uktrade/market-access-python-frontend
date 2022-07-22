@@ -10,6 +10,7 @@ import Downshift from "downshift";
 function EmailSearchAutocomplete({ field, label }) {
     const initialInputValue = field.value,
         initialFieldClasses = field.className,
+        initialFieldName = field.name,
         initialLabelClasses = label.className,
         initialLabelText = label.innerText;
 
@@ -116,6 +117,7 @@ function EmailSearchAutocomplete({ field, label }) {
                             <input
                                 {...getInputProps({
                                     className: initialFieldClasses,
+                                    name: initialFieldName,
                                 })}
                             />
                         </div>
