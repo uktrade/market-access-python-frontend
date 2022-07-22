@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
     useQuery,
     QueryClient,
@@ -30,7 +30,6 @@ function EmailSearchAutocomplete({ field, label }) {
         inputValue,
         getMenuProps,
         getItemProps,
-        itemToString,
         highlightedIndex,
     }) => {
         const query = useQuery(["users", inputValue], async () => {
@@ -76,13 +75,6 @@ function EmailSearchAutocomplete({ field, label }) {
     const AutocompleteContent = () => {
         return (
             <Downshift
-                // onChange={(selection) =>
-                //     alert(
-                //         selection
-                //             ? `You selected ${itemToString(selection)}`
-                //             : "selection cleared"
-                //     )
-                // }
                 itemToString={itemToString}
                 inputId={field.id}
                 initialInputValue={initialInputValue}
@@ -95,7 +87,6 @@ function EmailSearchAutocomplete({ field, label }) {
                     isOpen,
                     inputValue,
                     highlightedIndex,
-                    selectedItem,
                     getRootProps,
                 }) => (
                     <div>
