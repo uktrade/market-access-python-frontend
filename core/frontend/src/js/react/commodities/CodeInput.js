@@ -43,6 +43,7 @@ function CodeInput(props) {
         <div className="govuk-form-group commodity-code-form-group">
             {[...Array(boxCount)].map((x, index) => (
                 <CodeBox
+                    key={index}
                     index={index}
                     onChange={props.onChange}
                     onPaste={props.onPaste}

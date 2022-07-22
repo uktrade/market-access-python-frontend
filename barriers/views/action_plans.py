@@ -9,6 +9,7 @@ from barriers.forms.action_plans import (
     ActionPlanIndividualStakeholderDetailsForm,
     ActionPlanMilestoneForm,
     ActionPlanOrganisationStakeholderDetailsForm,
+    ActionPlanRisksAndMitigationForm,
     ActionPlanStakeholderTypeForm,
     ActionPlanStrategicContextForm,
     ActionPlanTaskEditOutcomeForm,
@@ -351,6 +352,36 @@ class ActionPlanTemplateView(BarrierMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data["action_plan"] = self.action_plan
         return context_data
+
+
+class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
+    template_name = "barriers/action_plans/stakeholders/list.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["action_plan"] = self.action_plan
+        return context_data
+
+
+class AddActionPlanStakeholderFormView(
+    # ActionPlanTaskFormV iewMixin,
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
+):
+    template_name = "barriers/action_plans/edit_milestone_task.html"
+    form_class = ActionPlanTaskForm
+
+
+class ActionPlanRisksAndMitigationView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
+    template_name = "barriers/action_plans/add_risks_and_mitigation.html"
+    form_class = ActionPlanRisksAndMitigationForm
+
+    def get_initial(self):
+        if self.request.method == "GET":
+            return self.action_plan.data
 
 
 class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):

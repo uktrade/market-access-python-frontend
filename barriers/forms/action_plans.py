@@ -1,13 +1,14 @@
 import logging
 
 from django import forms
-from django.core.exceptions import ValidationError
+from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 
 from barriers.constants import (
     ACTION_PLAN_RAG_STATUS_CHOICES,
+    ACTION_PLAN_RISK_LEVEL_CHOICES,
     ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
     ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES,
     ACTION_PLAN_TASK_CATEGORIES,
@@ -86,8 +87,10 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Describe the objective",
         error_messages={"required": "Enter your milestone objective"},
-        help_text="Describe the objective. "
-        "For example ‘Scope the extent of this barrier via engagement with businesses’.",
+        help_text=(
+            "Describe the objective. For example ‘Scope the extent of this barrier via"
+            " engagement with businesses’."
+        ),
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
@@ -326,6 +329,147 @@ class ActionPlanTaskEditProgressForm(
             barrier_id=self.barrier_id,
             task_id=self.task_id,
             progress=self.cleaned_data["progress"],
+        )
+
+
+class ActionPlanStakeholderFormMixin:
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.stakeholder_id = kwargs.pop("stakeholder_id", None)
+        self.action_plan = kwargs.pop("action_plan")
+        super().__init__(*args, **kwargs)
+
+    def get_request_data(self):
+        return {}
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        request_data = self.get_request_data()
+        if self.stakeholder_id:
+            stakeholder = client.action_plan_stakeholders.update_stakeholder(
+                barrier_id=self.barrier_id, id=self.stakeholder_id, **request_data
+            )
+        else:
+            stakeholder = client.action_plan_stakeholders.create_stakeholder(
+                barrier_id=self.barrier_id, **request_data
+            )
+        return stakeholder
+
+
+class ActionPlanStakeholderTypeForm(
+    ActionPlanStakeholderFormMixin,
+    ClearableMixin,
+    APIFormMixin,
+    forms.Form,
+):
+    is_organisation = forms.ChoiceField(
+        choices=ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.choices,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        label="Stakeholder type",
+        required=True,
+    )
+
+    def get_request_data(self):
+        request_data = super().get_request_data()
+        request_data["is_organisation"] = (
+            self.cleaned_data["is_organisation"]
+            == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION
+        )
+        return request_data
+
+
+class ActionPlanOrganisationStakeholderDetailsForm(
+    ActionPlanStakeholderFormMixin,
+    ClearableMixin,
+    APIFormMixin,
+    forms.Form,
+):
+    name = forms.CharField(
+        max_length=255,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+    )
+    status = forms.ChoiceField(
+        choices=ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES.choices,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        label="Status",
+        required=True,
+    )
+
+    def get_request_data(self):
+        request_data = super().get_request_data()
+        request_data["name"] = self.cleaned_data["name"]
+        request_data["status"] = self.cleaned_data["status"]
+        return request_data
+
+
+class ActionPlanIndividualStakeholderDetailsForm(
+    ActionPlanOrganisationStakeholderDetailsForm
+):
+    organisation = forms.CharField(
+        max_length=255,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+    )
+    job_title = forms.CharField(
+        max_length=255,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+    )
+
+    def get_request_data(self):
+        request_data = super().get_request_data()
+        request_data["organisation"] = self.cleaned_data["organisation"]
+        request_data["job_title"] = self.cleaned_data["job_title"]
+        return request_data
+
+
+class ActionPlanRisksAndMitigationForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
+
+    potential_unwanted_outcomes = forms.CharField(
+        label=(
+            "Would progressing this market access barrier lead to any outcomes we don't"
+            " want?"
+        ),
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    potential_risks = forms.CharField(
+        label="What are the risks?",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    risk_level = forms.ChoiceField(
+        label="Risk level", choices=ACTION_PLAN_RISK_LEVEL_CHOICES, required=True
+    )
+
+    risk_mitigation_measures = forms.CharField(
+        label="What are the mitigation measures?",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        # self.action_plan_id = action_plan_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier_id,
+            potential_unwanted_outcomes=self.cleaned_data[
+                "potential_unwanted_outcomes"
+            ],
+            potential_risks=self.cleaned_data["potential_risks"],
+            risk_level=self.cleaned_data["risk_level"],
+            risk_mitigation_measures=self.cleaned_data["risk_mitigation_measures"],
         )
 
 
