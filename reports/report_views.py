@@ -180,10 +180,10 @@ class ReportDetail(ReportViewBase):
     extra_paths = {
         "1.1": "reports:barrier_about",
         "1.2": "reports:barrier_status",
-        # "1.3": "reports:barrier_term",
         "1.3": "reports:barrier_location",
         "1.4": "reports:barrier_has_sectors",
-        "1.5": "reports:barrier_categories",
+        # Change this to enable categories
+        # "1.5": "reports:barrier_categories",
         "1.6": "reports:barrier_commodities",
     }
     _client = None
@@ -226,7 +226,6 @@ class NewReportBarrierSummaryView(ReportFormViewBase):
     template_name = "reports/new_report_barrier_summary.html"
     form_class = NewReportBarrierSummaryForm
     success_path = "reports:barrier_status"
-    # success_path = "reports:draft_barrier_details"
     extra_paths = {"back": "reports:barrier_about"}
 
 
@@ -356,7 +355,7 @@ class NewReportBarrierHasSectorsView(ReportFormViewBase):
         # Otherise we redirect to the sectors selection page
         if not self.barrier.sectors_affected:
             return reverse_lazy(
-                "reports:barrier_categories_add_first_uuid",
+                "reports:barrier_commodities_uuid",
                 kwargs={"barrier_id": self.barrier.id},
             )
         return reverse_lazy(
@@ -369,7 +368,8 @@ class NewReportBarrierSectorsView(ReportFormViewBase):
     heading_caption = "Section 5 of 7"
     template_name = "reports/new_report_barrier_sectors_manage.html"
     form_class = NewReportBarrierSectorsForm
-    success_path = "reports:barrier_categories_add_first"
+    success_path = "reports:barrier_commodities"
+    # success_path = "reports:barrier_categories_add_first"
     extra_paths = {
         "back": "reports:barrier_has_sectors",
         "add_sector": "reports:barrier_add_sectors",
@@ -393,15 +393,20 @@ class NewReportBarrierSectorsView(ReportFormViewBase):
         return context_data
 
     def get_next_step_url(self) -> str:
-        if self.barrier.categories:
-            return reverse(
-                "reports:barrier_categories_uuid",
-                kwargs={"barrier_id": self.barrier.id},
-            )
         return reverse(
-            "reports:barrier_categories_add_first_uuid",
+            "reports:barrier_commodities_uuid",
             kwargs={"barrier_id": self.barrier.id},
         )
+        # Enable this for categories
+        # if self.barrier.categories:
+        #     return reverse(
+        #         "reports:barrier_categories_uuid",
+        #         kwargs={"barrier_id": self.barrier.id},
+        #     )
+        # return reverse(
+        #     "reports:barrier_categories_add_first_uuid",
+        #     kwargs={"barrier_id": self.barrier.id},
+        # )
 
 
 class NewReportBarrierSectorsAddView(ReportFormViewBase):
@@ -567,7 +572,7 @@ class NewReportBarrierCommoditiesView(
     template_name = "reports/new_report_barrier_commodities.html"
     form_class = NewReportUpdateBarrierCommoditiesForm
     extra_paths = {
-        "back": "reports:barrier_categories",
+        "back": "reports:barrier_sectors",
     }
 
     def get_success_url(self):
