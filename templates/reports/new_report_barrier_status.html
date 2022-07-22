@@ -15,6 +15,34 @@
 
             <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
                 <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.fields.term.label }}
+                    </legend>
+
+                    {% form_field_error form "term" %}
+
+                    <div class="govuk-radios term">
+                    {% for choice_id, choice_data in form.fields.term.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                   name="term"
+                                   type="radio"
+                                   id="term-{{ choice_id }}"
+                                   value="{{ choice_id }}"
+                                   aria-describedby="{{ choice_id }}-item-hint"
+                                   {% if form.term.value == choice_id %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="term-{{ choice_id }}">
+                                {{ choice_data.label }}
+                            </label>
+                            <span id="{{ choice_id }}-item-hint" class="govuk-hint govuk-radios__hint">
+                                {{ choice_data.hint }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </fieldset>
+                <br>
+                <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
 
                     {% form_field_error form "status" %}
@@ -35,12 +63,12 @@
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ choice.value }}">
                                 {{ choice.subform.as_html }}
                             </div>
+
                         {% endfor %}
                     </div>
                 </fieldset>
             </div>
-
-            <input type="submit" class="govuk-button" value="Continue">
+            {% include 'reports/partials/new_report_submit_buttons.html' with has_next=has_next next_url=next_url %}
         </form>
 	</section>
 
