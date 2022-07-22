@@ -70,7 +70,13 @@ function EmailSearchAutocomplete({ field, label }) {
                     </li>
                 ))}
             </ul>
-        ) : null;
+        ) : (
+            <ul
+                {...getMenuProps({
+                    className: "dmas-autocomplete__suggestions govuk-list",
+                })}
+            ></ul>
+        );
     };
 
     const AutocompleteContent = () => {
