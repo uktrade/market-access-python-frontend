@@ -57,7 +57,7 @@ function EmailSearchAutocomplete({ field, label }) {
                         })}
                     >
                         <div className={"dmas-autocomplete__name"}>
-                            {[item.firstName, item.lastName].join(" ")}
+                            {[item.first_name, item.last_name].join(" ")}
                         </div>
                         {item.email}
                     </li>
