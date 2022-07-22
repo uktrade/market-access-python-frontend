@@ -3,11 +3,11 @@
 {% load render_bundle from webpack_loader %}
 
 {% block page_title %}
-{{ block.super }} - Edit estimated resolution date{% endblock %}
+{{ block.super }} - Action plan objective task{% endblock %}
 
 {% block back_link %}
 <a
-  href="{% url 'barriers:barrier_detail' barrier.id %}"
+  href="{% url 'barriers:action_plan' barrier.id %}"
   class="govuk-back-link ma-back-link"
   >Back</a
 >
@@ -19,16 +19,33 @@
     <script>
         ma.pages.barrier.action_plans_add_task();
     document.addEventListener("DOMContentLoaded", function (event) {
-        console.log("Dom content loaded")
-        ReactApp.renderInputSelectWithMentions("assigned_to__field-container", null, null, null, trigger="")
+        console.log("Dom content loaded");
+        ReactApp.renderInputSelectWithMentions("assigned_to__field-container", null, null, null, trigger="", autofocus=false);
     })
     </script>
 {% endblock %}
 
-{% block page_content %} {% include 'partials/heading.html' with text='Edit intervention' %}
+{% block page_content %} {% include 'partials/heading.html' with text='Add objective task' %}
 {% form_error_banner form %}
-<form action="" method="POST">
+<form action="" method="POST" novalidate>
 {% csrf_token %}
+
+<div
+  id="{{ form.action_text.name }}"
+  class="{% form_group_classes form.action_text.errors %}"
+>
+  <fieldset class="govuk-fieldset govuk-!-width-two-thirds">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+      {{ form.action_text.label }}
+    </legend>
+
+    <span class="govuk-hint">{{ form.action_text.help_text }}</span>
+
+    {% form_field_error form "action_text" %}
+
+    <div class="govuk-date-input">{{ form.action_text }}</div>
+  </fieldset>
+</div>
 
   <div id="{{ form.status.name }}"
           class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
@@ -89,23 +106,6 @@
   </fieldset>
 </div>
 
-<div
-  id="{{ form.action_text.name }}"
-  class="{% form_group_classes form.action_text.errors %}"
->
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      {{ form.action_text.label }}
-    </legend>
-
-    <span class="govuk-hint">{{ form.action_text.help_text }}</span>
-
-    {% form_field_error form "action_text" %}
-
-    <div class="govuk-date-input">{{ form.action_text }}</div>
-  </fieldset>
-</div>
-
   <div id="{{ form.action_type.name }}"
           class="govuk-form-group{% if form.action_type.errors %} govuk-form-group--error{% endif %}">
       <fieldset class="govuk-fieldset">
@@ -126,8 +126,7 @@
                               for="{{ choice.value }}">{{ choice.name }}</label>
                   </div>
 
-                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-                          id="conditional-{{ choice.value }}">
+                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden govuk-!-width-one-third" id="conditional-{{ choice.value }}">
                       {{ choice.subform.as_html }}
                   </div>
               {% endfor %}
@@ -151,28 +150,70 @@
   </fieldset>
 </div>
 
-
-<div
-  id="{{ form.stakeholders.name }}"
-  class="{% form_group_classes form.stakeholders.errors %}"
->
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      {{ form.stakeholders.label }}
-    </legend>
-
-    <span class="govuk-hint">{{ form.stakeholders.help_text }}</span>
-
-    {% form_field_error form "stakeholders" %}
-
-    <div class="govuk-date-input">{{ form.stakeholders }}</div>
-  </fieldset>
+<div id="{{ form.stakeholders.name }}" class="{% form_group_classes form.stakeholders.errors %}">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-form-group{% if field.errors %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-heading-m">Stakeholders</h2>
+          </legend>
+          <div class="govuk-hint">
+            {{ form.stakeholders.help_text }}
+          </div>
+          {% form_field_error form.assigned_stakeholders %}
+          <div class="" data-module="govuk-checkboxes">
+            <table class="govuk-table">
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th scope="col" class="govuk-table__header">Name</th>
+                  <th scope="col" class="govuk-table__header">Type</th>
+                  <th scope="col" class="govuk-table__header">Status</th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body govuk-checkboxes govuk-checkboxes--small">
+                {% for stakeholder_choice in form.assigned_stakeholders %}
+                  {% with stakeholder_choice.choice_label as stakeholder %}
+                  <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                        <div class="govuk-checkboxes__item">
+                        {{ stakeholder_choice.tag }}
+                        <label class="govuk-label govuk-checkboxes__label" for="{{ stakeholder_choice.id_for_label }}">{{ stakeholder.name }}</label>
+                        </div>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ stakeholder.get_status_display }}
+                    </td>
+                  </tr>
+                  {% endwith %}
+                {% empty %}
+                  <tr class="govuk-table__row">
+                    <td class="govuk-!-text-align-centre" colspan="3">
+                      <p class="govuk-!-padding-top-">No stakeholders found</p>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--visible">
 </div>
 
-<button class="govuk-button" data-module="govuk-button">Confirm</button>
-<a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}"
-  >Cancel</a
->
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-button-group">
+          <button class="govuk-button" data-module="govuk-button">Confirm</button>
+          <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier_id %}">Cancel</a>
+        </div>
+      </div>
+    </div>
 </form>
 
 {% endblock %}

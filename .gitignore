@@ -136,3 +136,4 @@ requirements-dev.txt
 
 webpack-stats.json
 webpack-stats-react.json
+.devcontainer/
