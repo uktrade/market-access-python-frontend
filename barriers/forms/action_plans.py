@@ -1,6 +1,7 @@
 import logging
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -201,11 +202,6 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         widget=forms.RadioSelect,
     )
 
-    # NEED TO DO THE NEW STAKEHOLDERS INPUT
-
-    # NEED TO ASK ABOUT "ASSIGNED TO" DESIGN - ARE WE INTENDING FOR MORE THAN ONE ASSIGNED PERSON?
-    # THERE SEEMS TO BE A NAME IN A BOX ABOVE THE TEXT INPUT WHICH CAN BE DELETED, LIKE A LIST ITEM.
-
     assigned_to = forms.CharField(
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"})
     )
@@ -237,24 +233,16 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         return self.cleaned_data["completion_date"].isoformat()
 
     def clean_assigned_to(self):
-
-        # THIS FUNCTION NOW NEEDS TO ACCEPT MULTIPLE USERS
-
         sso_client = SSOClient()
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
-        print("---------------")
-        print(f"{query}")
-        # UNCOMMENT THIS BEFORE PUSHING/MERGING
-        # USING PLACEHOLDER TO GET AROUND SSO VERIFICATION LOCALLY
-        # if not results:
-        #    raise ValidationError(f"Invalid user {query}")
-        # for result in results:
-        #    if result["email"] == email:
-        #        return result["user_id"]
-        # return
-        return "9affb723-21d8-43c5-82ac-f525bf02444f"
+        if not results:
+            raise ValidationError(f"Invalid user {query}")
+        for result in results:
+            if result["email"] == email:
+                return result["user_id"]
+        return
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
