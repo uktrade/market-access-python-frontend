@@ -207,7 +207,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
     # THERE SEEMS TO BE A NAME IN A BOX ABOVE THE TEXT INPUT WHICH CAN BE DELETED, LIKE A LIST ITEM.
 
     assigned_to = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "govuk-input"})
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"})
     )
 
     assigned_stakeholders = forms.MultipleChoiceField(

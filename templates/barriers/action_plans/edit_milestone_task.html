@@ -18,10 +18,10 @@
 {% render_bundle 'main' 'js' 'REACT' %}
     <script>
         ma.pages.barrier.action_plans_add_task();
-    document.addEventListener("DOMContentLoaded", function (event) {
-        console.log("Dom content loaded");
-        ReactApp.renderInputSelectWithMentions("assigned_to__field-container", null, null, null, trigger="", autofocus=false);
-    })
+        document.addEventListener("DOMContentLoaded", function (event) {
+            console.log("Dom content loaded");
+            ReactApp.renderEmailSearchAutocomplete("id_assigned_to");
+        })
     </script>
 {% endblock %}
 
@@ -135,19 +135,20 @@
   </div>
 
 <div
-  id="{{ form.assigned_to.name }}"
   class="{% form_group_classes form.assigned_to.errors %}"
 >
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      {{ form.assigned_to.label }}
-    </legend>
-
-    <span class="govuk-hint">{{ form.assigned_to.help_text }}</span>
-
+  <div class="dmas_autocomplete_wrapper">
+    <label class="govuk-label govuk-label--s" for="{{ form.assigned_to.id_for_label }}">
+        {{ form.assigned_to.label }}
+    </label>
+    {% if form.assigned_to.help_text %}
+      <span class="govuk-hint">{{ form.assigned_to.help_text }}</span>
+    {% endif %}
     {% form_field_error form "assigned_to" %}
-    <div class="" id="{{ form.assigned_to.name }}__field-container">{{ form.assigned_to }}</div>
-  </fieldset>
+    <div>
+      {{ form.assigned_to }}
+    </div>
+  </div>
 </div>
 
 <div id="{{ form.stakeholders.name }}" class="{% form_group_classes form.stakeholders.errors %}">
