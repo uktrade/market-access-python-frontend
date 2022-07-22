@@ -1,0 +1,22 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Action plan stakeholders{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+  {% include 'partials/heading.html' with text='Stakeholders' %}
+
+  {% if action_plan.stakeholders %}
+    {% include "barriers/partials/action_plans/stakeholders/table.html" with stakeholders=action_plan.stakeholders %}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <a href="{% url 'barriers:action_plan_stakeholders_add' barrier.id %}" class="govuk-button govuk-button--secondary">Add stakeholder</a>
+    </div>
+  </div>
+{% endblock page_content %}

@@ -112,7 +112,8 @@ function renderInputSelectWithMentions(
     placeholder = null,
     labelClasses = null,
     containerClasses = null,
-    trigger = undefined
+    trigger = undefined,
+    autofocus = true
 ) {
     console.log("setting up input with mentions", htmlElementId, trigger);
 
@@ -131,6 +132,7 @@ function renderInputSelectWithMentions(
             textAreaName={name}
             preExistingText={preExistingText}
             trigger={trigger}
+            autofocus={autofocus}
         />,
         inputContainerElement
     );

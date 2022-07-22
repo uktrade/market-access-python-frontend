@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit estimated_resolution date{% endblock %}
+{% block page_title %}{{ block.super }} - Action plan objective{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -12,7 +12,7 @@
 
     {% form_error_banner form %}
 
-    <form action="" method="POST">
+    <form action="" method="POST" novalidate>
         {% csrf_token %}
 
         <div id="{{ form.objective.name }}" class="{% form_group_classes form.objective.errors %}">

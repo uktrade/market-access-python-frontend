@@ -361,6 +361,7 @@ SETTINGS_EXPORT = (
 )
 
 ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
+NEW_ACTION_PLANS_ENABLED = env.bool("NEW_ACTION_PLANS_ENABLED", default=False)
 
 # Webpack config
 

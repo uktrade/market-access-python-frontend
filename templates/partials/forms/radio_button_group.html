@@ -1,0 +1,20 @@
+<div id="radio-group-{{ radio_group.name }}"
+     class="govuk-form-group{% if radio_group.errors %} govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ radio_group.label }}</legend>
+    {% if radio_group.help_text %}
+      <span id="radio-group-hint-{{ radio_group.name }}-item-hint" class="govuk-hint">{{ radio_group.help_text }}</span>
+    {% endif %}
+    {% form_field_error form radio_group.name %}
+    <div class="govuk-radios" data-module="radios">
+      {% for radio_button in radio_group %}
+        <div class="govuk-radios__item">
+          {{ radio_button.tag }}
+          <label class="govuk-label govuk-radios__label" for="{{ radio_button.id_for_label }}">
+            {{ radio_button.choice_label }}
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+</div>
