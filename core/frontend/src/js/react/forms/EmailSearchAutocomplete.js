@@ -23,14 +23,7 @@ function EmailSearchAutocomplete({ field, label }) {
     const searchUsers = async (/** @type {any} */ query) => {
         const response = await fetch(`/users/search/?q=${query}`);
         const data = await response.json();
-        console.log(data);
-        return data.results.map((item) => ({
-            id: `id_${item.email}`,
-            display: `id_${item.email}`,
-            email: item.email,
-            firstName: item.first_name,
-            lastName: item.last_name,
-        }));
+        return data.results;
     };
 
     const AutocompleteMenu = ({
