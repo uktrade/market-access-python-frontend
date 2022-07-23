@@ -584,7 +584,7 @@ class NewReportBarrierCommoditiesView(
         context_data = super().get_context_data(**kwargs)
         context_data["heading"] = {
             "text": "Add HS commodity codes (optional)",
-            "caption": "Section 7 of 6",
+            "caption": "Section 6 of 6",
         }
         context_data["lookup_form"] = self.get_lookup_form()
         return context_data
