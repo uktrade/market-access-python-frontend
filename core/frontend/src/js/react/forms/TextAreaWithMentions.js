@@ -9,7 +9,6 @@ function TextAreaWithMentions({
     trigger = "@",
     idPrefix = "@",
     isSingleLine = false,
-    autofocus = true,
 }) {
     const mentionsRef = useRef();
 
@@ -28,9 +27,7 @@ function TextAreaWithMentions({
             "mentionsRef",
             mentionsRef.current?.classList.add("govuk-textarea")
         );
-        if (autofocus) {
-            mentionsRef.current?.focus();
-        }
+        mentionsRef.current?.focus();
     }, [mentionsRef]);
 
     const onTextChange = (event, newValue, newPlainTextValue, mentions) => {
