@@ -382,22 +382,3 @@ class ActionPlanRisksAndMitigationView(
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
-
-
-class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
-    template_name = "barriers/action_plans/stakeholders/list.html"
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data["action_plan"] = self.action_plan
-        return context_data
-
-
-class AddActionPlanStakeholderFormView(
-    # ActionPlanTaskFormV iewMixin,
-    ActionPlanFormViewMixin,
-    APIBarrierFormViewMixin,
-    FormView,
-):
-    template_name = "barriers/action_plans/edit_milestone_task.html"
-    form_class = ActionPlanTaskForm
