@@ -41,5 +41,5 @@ class NewReportBarrierSummaryForm(forms.Form):
     def get_barrier_initial(barrier: Report):
         return {
             "summary": barrier.summary,
-            "is_summary_sensitive": barrier.is_summary_sensitive or False,
+            "is_summary_sensitive": barrier.is_summary_sensitive,
         }

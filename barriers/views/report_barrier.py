@@ -256,22 +256,21 @@ def get_report_barrier_answers(barrier: Report):
                 },
             ],
         },
-        # Uncomment this to enable categorie
-        # {
-        #     "name": "Barrier category",
-        #     "url": reverse(
-        #         "reports:barrier_categories_uuid", kwargs={"barrier_id": barrier.id}
-        #     )
-        #     + qs,
-        #     "questions": [
-        #         {
-        #             "name": "Define barrier category",
-        #             "value": ",\n".join(
-        #                 [category.get("title") for category in barrier.categories]
-        #             ),
-        #         }
-        #     ],
-        # },
+        {
+            "name": "Barrier category",
+            "url": reverse(
+                "reports:barrier_categories_uuid", kwargs={"barrier_id": barrier.id}
+            )
+            + qs,
+            "questions": [
+                {
+                    "name": "Define barrier category",
+                    "value": ",\n".join(
+                        [category.get("title") for category in barrier.categories]
+                    ),
+                }
+            ],
+        },
         {
             "name": "Add HS commodity codes (optional)",
             "hide": not barrier.commodities,

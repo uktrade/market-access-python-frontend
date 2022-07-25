@@ -31,8 +31,7 @@ class TestReportBarrierJourney(ReportsTestsMixin, MarketAccessTestCase):
     new_report_has_sectors_url = "reports:barrier_has_sectors_uuid"
     new_report_sectors_url = "reports:barrier_sectors_uuid"
     barrier_categories_add_first_uuid = "reports:barrier_categories_add_first_uuid"
-    # uncomment to enable categories
-    # new_report_categories_url = "reports:barrier_categories_uuid"
+    new_report_categories_url = "reports:barrier_categories_uuid"
     new_report_commodities_url = "reports:barrier_commodities_uuid"
     new_report_check_answers_url = "reports:report_barrier_answers"
     new_report_final_barrier_url = "barriers:barrier_detail_from_complete"
@@ -55,6 +54,10 @@ class TestReportBarrierJourney(ReportsTestsMixin, MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.ReportsResource.submit")
+    # @patch("utils.api.resources.APIResource.list")
+    # @patch("utils.api.resources.APIResource.list")
+    # @patch("utils.api.resources.APIResource.list")
+    # @patch("utils.api.resources.APIResource.list")
     def test_start_report_journey(self, mock_submit, mock_patch, mock_get, mock_create):
         start_url = reverse(self.new_report_url)
         response = self.client.get(start_url, follow=True)
@@ -218,52 +221,52 @@ class TestReportBarrierJourney(ReportsTestsMixin, MarketAccessTestCase):
         self.assertBarrierEqual(response, "report_barrier_sectors")
 
         # check that user is redirected to correct page
-        # self.assertEqual(response.status_code, 200)
-        # barrier_add_category_url = reverse(
-        #     self.barrier_categories_add_first_uuid, kwargs={"barrier_id": barrier.id}
-        # )
-        # self.assertRedirects(response, barrier_add_category_url)
+        self.assertEqual(response.status_code, 200)
+        barrier_add_category_url = reverse(
+            self.barrier_categories_add_first_uuid, kwargs={"barrier_id": barrier.id}
+        )
+        self.assertRedirects(response, barrier_add_category_url)
 
-        # submit_form_data = {
-        #     "category": "129",
-        #     "action": "save-and-continue",
-        # }
+        submit_form_data = {
+            "category": "129",
+            "action": "save-and-continue",
+        }
 
-        # mock_patch.return_value = Report(
-        #     self.from_snapshot("report_barrier_add_category")
-        # )
-        # mock_get.return_value = Report(
-        #     self.from_snapshot("report_barrier_add_category")
-        # )
+        mock_patch.return_value = Report(
+            self.from_snapshot("report_barrier_add_category")
+        )
+        mock_get.return_value = Report(
+            self.from_snapshot("report_barrier_add_category")
+        )
 
-        # response = self.client.post(
-        #     barrier_add_category_url, submit_form_data, follow=True
-        # )
-        # # save_barrier_snapshot(response, "report_barrier_add_category")
-        # self.assertBarrierEqual(response, "report_barrier_add_category")
+        response = self.client.post(
+            barrier_add_category_url, submit_form_data, follow=True
+        )
+        # save_barrier_snapshot(response, "report_barrier_add_category")
+        self.assertBarrierEqual(response, "report_barrier_add_category")
 
         # check that user is redirected to correct page
-        # self.assertEqual(response.status_code, 200)
-        # barrier_categories_url = reverse(
-        #     self.new_report_categories_url, kwargs={"barrier_id": barrier.id}
-        # )
-        # self.assertRedirects(response, barrier_categories_url)
+        self.assertEqual(response.status_code, 200)
+        barrier_categories_url = reverse(
+            self.new_report_categories_url, kwargs={"barrier_id": barrier.id}
+        )
+        self.assertRedirects(response, barrier_categories_url)
 
-        # submit_form_data = {
-        #     "categories": "129",
-        #     "action": "save-and-continue",
-        # }
+        submit_form_data = {
+            "categories": "129",
+            "action": "save-and-continue",
+        }
 
-        # mock_patch.return_value = Report(
-        #     self.from_snapshot("report_barrier_categories")
-        # )
-        # mock_get.return_value = Report(self.from_snapshot("report_barrier_categories"))
+        mock_patch.return_value = Report(
+            self.from_snapshot("report_barrier_categories")
+        )
+        mock_get.return_value = Report(self.from_snapshot("report_barrier_categories"))
 
-        # response = self.client.post(
-        #     barrier_categories_url, submit_form_data, follow=True
-        # )
-        # # save_barrier_snapshot(response, "report_barrier_categories")
-        # self.assertBarrierEqual(response, "report_barrier_categories")
+        response = self.client.post(
+            barrier_categories_url, submit_form_data, follow=True
+        )
+        # save_barrier_snapshot(response, "report_barrier_categories")
+        self.assertBarrierEqual(response, "report_barrier_categories")
 
         # check that user is redirected to correct page
         self.assertEqual(response.status_code, 200)

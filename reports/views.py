@@ -215,8 +215,8 @@ class NewReport(ReportsTemplateView):
             "1.3": "Location of the barrier",
             "1.4": "Trade direction",
             "1.5": "Sectors affected by the barrier",
-            # "1.6": "Define barrier category",
-            "1.6": "Add HS commodity codes",
+            "1.6": "Define barrier category",
+            "1.7": "Add HS commodity codes",
         }
         return context_data
 
