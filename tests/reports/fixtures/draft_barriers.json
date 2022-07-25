@@ -1,0 +1,633 @@
+[
+  {
+    "step": "1",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "status_summary": null,
+    "country": null,
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": null,
+    "sectors_affected": null,
+    "all_sectors": null,
+    "sectors": [],
+    "product": null,
+    "source": null,
+    "other_source": null,
+    "title": null,
+    "summary": null,
+    "next_steps_summary": null,
+    "progress": [
+      {
+        "stage_code": "1.1",
+        "stage_desc": "Barrier status",
+        "status_id": 3,
+        "status_desc": "COMPLETED"
+      },
+      {
+        "stage_code": "1.2",
+        "stage_desc": "Location of the barrier",
+        "status_id": 1,
+        "status_desc": "NOT STARTED"
+      },
+      {
+        "stage_code": "1.3",
+        "stage_desc": "Sectors affected by the barrier",
+        "status_id": 1,
+        "status_desc": "NOT STARTED"
+      },
+      {
+        "stage_code": "1.4",
+        "stage_desc": "About the barrier",
+        "status_id": 1,
+        "status_desc": "NOT STARTED"
+      },
+      {
+        "stage_code": "1.5",
+        "stage_desc": "Barrier summary",
+        "status_id": 1,
+        "status_desc": "NOT STARTED"
+      }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  },
+  {
+    "step": "2",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_summary": null,
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
+    "sectors_affected": null,
+    "all_sectors": null,
+    "sectors": [],
+    "product": null,
+    "source": null,
+    "other_source": null,
+    "title": null,
+    "summary": null,
+    "next_steps_summary": null,
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  },
+  {
+    "step": "30",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_summary": null,
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": {
+        "id": 1,
+        "name": "Exporting from the UK"
+    },
+    "sectors_affected": false,
+    "all_sectors": false,
+    "sectors": [],
+    "product": null,
+    "source": null,
+    "other_source": null,
+    "title": null,
+    "summary": null,
+    "next_steps_summary": null,
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  },
+  {
+    "step": "31",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_summary": null,
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
+    "sectors_affected": true,
+    "all_sectors": false,
+    "sectors": [],
+    "product": null,
+    "source": null,
+    "other_source": null,
+    "title": null,
+    "summary": null,
+    "next_steps_summary": null,
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  },
+  {
+    "step": "310",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_summary": null,
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
+    "sectors_affected": true,
+    "all_sectors": false,
+    "sectors": [],
+    "product": null,
+    "source": null,
+    "other_source": null,
+    "title": null,
+    "summary": null,
+    "next_steps_summary": null,
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  },
+  {
+    "step": "4",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_summary": null,
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
+    "sectors_affected": true,
+    "all_sectors": false,
+    "sectors": [
+      {
+        "id": "9538cecc-5f95-e211-a939-e4115bead28a",
+        "name": "Sector name"
+      }
+    ],
+    "product": null,
+    "source": null,
+    "other_source": null,
+    "title": null,
+    "summary": null,
+    "next_steps_summary": null,
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  },
+  {
+    "step": "5",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_summary": null,
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
+    "sectors_affected": true,
+    "all_sectors": false,
+    "sectors": [
+      {
+        "id": "9538cecc-5f95-e211-a939-e4115bead28a",
+        "name": "Sector name"
+      }
+    ],
+    "product": "wobble",
+    "source": {
+      "code": "COMPANY",
+      "name": "Company"
+    },
+    "other_source": null,
+    "title": "wibble",
+    "summary": null,
+    "next_steps_summary": null,
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 1,
+            "status_desc": "NOT STARTED"
+        }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  },
+  {
+    "step": "6",
+    "id": "a1c1a2fe-88cd-4d0e-8d19-9e5b25e34147",
+    "code": "B-20-PKF",
+    "term": {
+        "id": 2,
+        "name": "A long-term strategic barrier"
+    },
+    "draft": true,
+    "status": {
+        "id": 1,
+        "name": "Open: Pending action"
+    },
+    "status_summary": null,
+    "status_date": null,
+    "sub_status": null,
+    "sub_status_other": null,
+    "country": {
+      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
+      "name": "Brazil"
+    },
+    "admin_areas": [],
+    "trading_bloc": null,
+    "caused_by_trading_bloc": null,
+    "trade_direction": {
+      "id": 1,
+      "name": "Exporting from the UK"
+    },
+    "sectors_affected": true,
+    "all_sectors": false,
+    "sectors": [
+      {
+        "id": "9538cecc-5f95-e211-a939-e4115bead28a",
+        "name": "Sector name"
+      }
+    ],
+    "product": "wobble",
+    "source": {
+      "code": "COMPANY",
+      "name": "Company"
+    },
+    "other_source": null,
+    "title": "wibble",
+    "summary": "wibble",
+    "next_steps_summary": "wobble",
+    "progress": [
+        {
+            "stage_code": "1.1",
+            "stage_desc": "Barrier status",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.2",
+            "stage_desc": "Location of the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.3",
+            "stage_desc": "Sectors affected by the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.4",
+            "stage_desc": "About the barrier",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        },
+        {
+            "stage_code": "1.5",
+            "stage_desc": "Barrier summary",
+            "status_id": 3,
+            "status_desc": "COMPLETED"
+        }
+    ],
+    "created_by": {
+        "id": 49,
+        "name": "Vyvyan Holland"
+    },
+    "created_on": "2020-02-05T17:00:14.980777Z",
+    "modified_by": null,
+    "modified_on": "2020-02-05T17:00:14.980817Z"
+  }
+]

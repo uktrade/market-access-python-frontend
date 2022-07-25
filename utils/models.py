@@ -12,20 +12,17 @@ class APIModel:
         self.data = data
 
     def __getattr__(self, name):
+        if name not in self.data:
+            raise AttributeError(f"{name} not found in data")
 
-        try:
-            value = self.data.get(name)
-            if not value:
-                return value
-
-            if name in self.date_fields:
-                return dateutil.parser.parse(value)
-
+        value = self.data.get(name)
+        if not value:
             return value
-        except Exception:
-            # this utility method can sometimes be called before
-            # existing methods and properties
-            return super().__getattr__(name)
+
+        if name in self.date_fields:
+            return dateutil.parser.parse(value)
+
+        return value
 
 
 class ModelList(UserList):

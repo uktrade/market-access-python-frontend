@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit estimated_resolution date{% endblock %}
+{% block page_title %}{{ block.super }} - Edit estimated resolution date{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,11 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit objective' %}
+    {% include 'partials/heading.html' with text='Add objective' %}
+
+    <div>
+        <p>Describe the objective, for example ‘Scope the extent of this MAB via engagement with businesses’. How objectives will be achieved are added as interventions.</p>
+    </div>
 
     {% form_error_banner form %}
 

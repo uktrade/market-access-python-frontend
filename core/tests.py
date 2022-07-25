@@ -7,10 +7,7 @@ from mock import patch
 from core.filecache import memfiles
 from users.models import User
 from utils.api.resources import (
-    ActionPlanMilestoneResource,
     ActionPlanResource,
-    ActionPlanStakeholderResource,
-    ActionPlanTaskResource,
     BarriersResource,
     NotesResource,
     PublicBarriersResource,
@@ -124,12 +121,12 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.get_current_user_patcher.stop)
 
     def init_get_action_plans_patcher(self):
-        self.get_barrier_action_plan_patcher = patch(
+        self.get_barrier_action_plan = patch(
             "utils.api.resources.ActionPlanResource.get_barrier_action_plan"
         )
-        self.get_barrier_action_plan = self.get_barrier_action_plan_patcher.start()
+        self.get_barrier_action_plan = self.get_barrier_action_plan.start()
         self.get_barrier_action_plan.return_value = self.action_plans
-        self.addCleanup(self.get_barrier_action_plan_patcher.stop)
+        self.addCleanup(self.get_barrier_action_plan.stop)
 
     def init_get_public_barrier_patcher(self):
         self.get_public_barrier_patcher = patch(
@@ -212,83 +209,46 @@ class MarketAccessTestCase(TestCase):
                 "id": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
                 "barrier": "ad217252-7b11-4c7b-885b-6d017a4c0812",
                 "owner": 49,
-                "stakeholders": [
-                    self.action_plan_individual_stakeholder.data,
-                    self.action_plan_organisation_stakeholder.data,
+                "milestones": [
+                    {
+                        "id": "0d0a29c8-48f3-4e0c-bac7-72f1f3960673",
+                        "action_plan": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
+                        "objective": "ghfgh",
+                        "completion_date": "2021-10-01",
+                        "tasks": [
+                            {
+                                "id": "5dbea476-7aa3-4579-b6f3-b4036f4c1b76",
+                                "milestone": "0d0a29c8-48f3-4e0c-bac7-72f1f3960673",
+                                "status": "IN_PROGRESS",
+                                "start_date": "2021-10-01",
+                                "completion_date": "2022-10-01",
+                                "action_text": "asdasdas",
+                                "action_type": "PLURILATERAL_ENGAGEMENT",
+                                "action_type_category": "With the EU",
+                                "stakeholders": "asdasd",
+                                "action_type_display": (
+                                    "Plurilateral engagement - With the EU"
+                                ),
+                                "assigned_to": 76,
+                                "assigned_to_email": "aaron.jaswal@trade.gov.uk",
+                                "outcome": "",
+                                "progress": "",
+                            }
+                        ],
+                    },
+                    {
+                        "id": "c515c3bc-3541-414c-b92f-0e8ec2be37a2",
+                        "action_plan": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
+                        "objective": "bvvcbcvb",
+                        "completion_date": None,
+                        "tasks": [],
+                    },
                 ],
-                "milestones": [self.action_plan_milestone.data],
                 "current_status": "adsaasdasdasd",
                 "current_status_last_updated": "2021-07-08T09:03:36.246039Z",
                 "owner_email": "james.pacileo@digital.trade.gov.uk",
                 "status": "ON_TRACK",
                 "strategic_context": "asdasdasd",
-            }
-        )
-
-    @property
-    def action_plan_milestone(self):
-        return ActionPlanMilestoneResource.model(
-            {
-                "id": "f142480b-71f5-439c-9ad8-b43e4be382c2",
-                "action_plan": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
-                "objective": "Do all kinds of amazing things.",
-                "completion_date": None,
-                "tasks": [
-                    self.action_plan_task.data,
-                ],
-            }
-        )
-
-    @property
-    def action_plan_task(self):
-        return ActionPlanTaskResource.model(
-            {
-                "id": "d42f69b3-707a-4df2-b259-e8a4040e1791",
-                "milestone": "f142480b-71f5-439c-9ad8-b43e4be382c2",
-                "action_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
-                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-                "status": "NOT_STARTED",
-                "start_date": "2022-07-01",
-                "completion_date": "2022-12-01",
-                "action_type": "MULTILATERAL_ENGAGEMENT",
-                "action_type_category": "With OECD",
-                "assigned_stakeholders": [
-                    self.action_plan_individual_stakeholder.data,
-                    self.action_plan_organisation_stakeholder.data,
-                ],
-                "action_type_display": "Multilateral engagement - With OECD",
-                "assigned_to": 16,
-                "assigned_to_email": "Tre.Ratke46@hotmail.testfake",
-                "outcome": "",
-                "progress": "",
-            }
-        )
-
-    @property
-    def action_plan_individual_stakeholder(self):
-        return ActionPlanStakeholderResource.model(
-            {
-                "id": "b44e4818-0c96-4133-99e5-defacf4892bd",
-                "action_plan": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
-                "name": "Fred Bloggs",
-                "status": "NEUTRAL",
-                "organisation": "Doing Nothing Ltd.",
-                "job_title": "Doing Something Specialist",
-                "is_organisation": False,
-            }
-        )
-
-    @property
-    def action_plan_organisation_stakeholder(self):
-        return ActionPlanStakeholderResource.model(
-            {
-                "id": "af99d5fd-754a-48ae-9dbe-bba68cdf6853",
-                "action_plan": "83d08628-9442-4bad-8038-7a5e2a07d9b1",
-                "name": "Useless Gmbh.",
-                "status": "BLOCKER",
-                "organisation": "",
-                "job_title": "",
-                "is_organisation": True,
             }
         )
 

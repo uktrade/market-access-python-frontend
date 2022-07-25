@@ -15,7 +15,7 @@ function TradingBlocFilter(props) {
     return (
         <div className="checkbox-filter govuk-!-width-full">
             {selectedTradingBlocs.map((tradingBloc, index) => (
-                <div className="checkbox-filter__item" key={tradingBloc.value}>
+                <div className="checkbox-filter__item">
                     <input
                         className="checkbox-filter__input"
                         id={"country_trading_bloc-" + index}

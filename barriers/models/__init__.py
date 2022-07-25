@@ -1,4 +1,4 @@
-from .action_plans import ActionPlan, Stakeholder
+from .action_plans import ActionPlan
 from .assessments import (
     EconomicAssessment,
     EconomicImpactAssessment,
@@ -30,5 +30,4 @@ __all__ = [
     StrategicAssessment,
     WTOProfile,
     ActionPlan,
-    Stakeholder,
 ]
