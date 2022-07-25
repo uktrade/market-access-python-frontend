@@ -162,7 +162,7 @@ class APIFormViewMixin:
         return kwargs
 
     def form_valid(self, form):
-        self.saved_object = form.save()
+        form.save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

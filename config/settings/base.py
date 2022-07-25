@@ -338,9 +338,9 @@ DLFE_APP_NAME = True
 DLFE_LOG_SENSITIVE_USER_DATA = True
 
 # Google Tag Manager
-GTM_ID = env("GTM_ID", default=None)
-GTM_AUTH = env("GTM_AUTH", default=None)
-GTM_PREVIEW = env("GTM_PREVIEW", default=None)
+GTM_ID = env("GTM_ID")
+GTM_AUTH = env("GTM_AUTH")
+GTM_PREVIEW = env("GTM_PREVIEW")
 
 if not DEBUG:
     sentry_sdk.init(
@@ -361,7 +361,6 @@ SETTINGS_EXPORT = (
 )
 
 ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
-NEW_ACTION_PLANS_ENABLED = env.bool("NEW_ACTION_PLANS_ENABLED", default=False)
 
 # Webpack config
 

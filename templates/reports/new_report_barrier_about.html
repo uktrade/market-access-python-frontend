@@ -6,7 +6,7 @@
 
     <section class="restrict-width">
 
-        <a href="{% if has_next %}{{ next_url }}{% else %}{{ urls.back }}{% endif %}" class="govuk-back-link">Back</a>
+        <a href="{{ urls.back }}" class="govuk-back-link">Back</a>
         {% include 'partials/heading.html' with caption=heading.caption text=heading.text %}
         {% form_error_banner form %}
 
@@ -119,7 +119,10 @@
                     </div>
                 </fieldset>
             </div>
-            {% include 'reports/partials/new_report_submit_buttons.html' with has_next=has_next next_url=next_url %}
+
+            <input type="submit" value="Save and continue" class="govuk-button">
+            <button type="submit" class="govuk-button button--secondary" name="action" value="exit">Save and exit</button>
+
         </form>
     </section>
 

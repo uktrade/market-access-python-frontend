@@ -32,13 +32,12 @@
     "4": "Archived"
   },
   "report_stages": {
-    "1.0": "Report a barrier",
-    "1.1": "About the barrier",
-    "1.2": "Barrier status",
-    "1.3": "Location of the barrier",
-    "1.4": "Sectors affected by the barrier",
-    "1.5": "Define barrier category",
-    "1.6": "Add HS commodity codes"
+    "1.0": "Add a barrier",
+    "1.1": "Barrier status",
+    "1.2": "Location of the barrier",
+    "1.3": "Sectors affected by the barrier",
+    "1.4": "About the barrier",
+    "1.5": "Barrier summary"
   },
   "support_type": {
     "1": "Market access team to provide support on next steps",

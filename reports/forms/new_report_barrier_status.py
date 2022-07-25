@@ -51,12 +51,6 @@ class NewReportBarrierStatusForm(SubformMixin, forms.Form):
     Form with subforms depending on the radio button selected
     """
 
-    term = forms.ChoiceField(
-        label="What type of barrier is it?",
-        choices=BarrierTerms.choices,
-        error_messages={"required": "Select a barrier scope"},
-    )
-
     status = SubformChoiceField(
         label="Choose barrier status",
         choices=STATUSES,
@@ -74,9 +68,6 @@ class NewReportBarrierStatusForm(SubformMixin, forms.Form):
 
     def get_api_params(self):
         subform = self.fields["status"].subform
-        params = {
-            "status": self.cleaned_data["status"],
-            "term": self.cleaned_data["term"],
-        }
+        params = {"status": self.cleaned_data["status"]}
         params.update(**subform.get_api_params())
         return params

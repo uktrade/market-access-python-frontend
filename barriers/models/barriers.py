@@ -34,30 +34,6 @@ class Barrier(APIModel):
         self.data = data
 
     @property
-    def title(self):
-        return self.data["title"]
-
-    @property
-    def summary(self):
-        return self.data["summary"]
-
-    @property
-    def is_summary_sensitive(self):
-        return self.data["is_summary_sensitive"]
-
-    @property
-    def product(self):
-        return self.data["product"]
-
-    @property
-    def sub_status(self):
-        return self.data["sub_status"]
-
-    @property
-    def source(self):
-        return self.data.get("source")
-
-    @property
     def metadata(self):
         if self._metadata is None:
             self._metadata = get_metadata()
