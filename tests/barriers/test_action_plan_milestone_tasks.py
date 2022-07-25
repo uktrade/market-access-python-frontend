@@ -44,7 +44,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
 
     @patch("utils.api.resources.ActionPlanTaskResource.create_task")
     @patch("utils.sso.SSOClient.search_users")
-    def test_add_milestone(
+    def test_add_milestone_task(
         self, mock_search_users_method: Mock, mock_create_method: Mock
     ):
         mock_create_method.return_value = self.action_plan_task
@@ -70,6 +70,133 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         form_data["assigned_stakeholders"] = [
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
+        response = self.client.post(
+            url,
+            follow=False,
+            data=form_data,
+        )
+        expected_url = reverse(
+            "barriers:action_plan",
+            kwargs={
+                "barrier_id": self.barrier["id"],
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert "Location" in response
+        assert response["Location"] == expected_url
+
+    @patch("utils.api.resources.ActionPlanTaskResource.create_task")
+    @patch("utils.sso.SSOClient.search_users")
+    def test_update_milestone_task_changed_completion_date_fails_if_reason_not_given(
+        self, mock_search_users_method: Mock, mock_create_method: Mock
+    ):
+        mock_create_method.return_value = self.action_plan_task
+        mock_search_users_method.return_value = [
+            {
+                "email": self.action_plan_task.assigned_to,
+                "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
+            }
+        ]
+        url = reverse(
+            "barriers:action_plan_edit_task",
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "milestone_id": self.action_plan_milestone.id,
+                "id": self.action_plan_task.id,
+            },
+        )
+        form_data = {**self.action_plan_task.data}
+        form_data["completion_date"] = "2023-12-12"
+        # Bunch of extra stuff needed for SubformFields
+        form_data.update(self.subform_fields)
+        # and the asigned stakeholders would be just their id when submitted
+        form_data["assigned_stakeholders"] = [
+            stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
+        ]
+        # Ensure no reason given
+        form_data.pop("completion_date_change_reason", None)
+        response = self.client.post(
+            url,
+            follow=False,
+            data=form_data,
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "completion_date_change_reason" in response.context["form"].errors
+
+    @patch("utils.api.resources.ActionPlanTaskResource.create_task")
+    @patch("utils.sso.SSOClient.search_users")
+    def test_update_milestone_task_changed_completion_date_succeeds_if_reason_given(
+        self, mock_search_users_method: Mock, mock_create_method: Mock
+    ):
+        mock_create_method.return_value = self.action_plan_task
+        mock_search_users_method.return_value = [
+            {
+                "email": self.action_plan_task.assigned_to,
+                "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
+            }
+        ]
+        url = reverse(
+            "barriers:action_plan_edit_task",
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "milestone_id": self.action_plan_milestone.id,
+                "id": self.action_plan_task.id,
+            },
+        )
+        form_data = {**self.action_plan_task.data}
+        form_data["completion_date"] = "2023-12-12"
+        # Bunch of extra stuff needed for SubformFields
+        form_data.update(self.subform_fields)
+        # and the asigned stakeholders would be just their id when submitted
+        form_data["assigned_stakeholders"] = [
+            stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
+        ]
+        # Ensure no reason given
+        form_data["completion_date_change_reason"] = "A reason."
+        response = self.client.post(
+            url,
+            follow=False,
+            data=form_data,
+        )
+        expected_url = reverse(
+            "barriers:action_plan",
+            kwargs={
+                "barrier_id": self.barrier["id"],
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert "Location" in response
+        assert response["Location"] == expected_url
+
+    @patch("utils.api.resources.ActionPlanTaskResource.create_task")
+    @patch("utils.sso.SSOClient.search_users")
+    def test_update_milestone_task_unchanged_completion_date_needs_no_reason(
+        self, mock_search_users_method: Mock, mock_create_method: Mock
+    ):
+        mock_create_method.return_value = self.action_plan_task
+        mock_search_users_method.return_value = [
+            {
+                "email": self.action_plan_task.assigned_to,
+                "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
+            }
+        ]
+        url = reverse(
+            "barriers:action_plan_edit_task",
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "milestone_id": self.action_plan_milestone.id,
+                "id": self.action_plan_task.id,
+            },
+        )
+        form_data = {**self.action_plan_task.data}
+        # Bunch of extra stuff needed for SubformFields
+        form_data.update(self.subform_fields)
+        # and the asigned stakeholders would be just their id when submitted
+        form_data["assigned_stakeholders"] = [
+            stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
+        ]
+        # Ensure no reason given
+        form_data.pop("completion_date_change_reason", None)
         response = self.client.post(
             url,
             follow=False,

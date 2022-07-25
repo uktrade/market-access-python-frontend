@@ -15,6 +15,7 @@ from barriers.forms.action_plans import (
     ActionPlanTaskEditOutcomeForm,
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
+    ActionPlanTaskDateChangeReasonForm,
 )
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
@@ -253,6 +254,9 @@ class ActionPlanTaskFormView(
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        # for some unexplained reason from 2019, APIFormMixin skips get_iniitial() for POST and PUT
+        if "initial" not in kwargs:
+            kwargs["initial"] = self.get_initial()
         kwargs["task_id"] = self.kwargs.get("id")
         return kwargs
 
@@ -262,11 +266,19 @@ class ActionPlanTaskFormView(
         return task
 
     def get_initial(self):
+        initial = {}
         task = self.get_task()
         if task:
-            task.data["assigned_to"] = task.data["assigned_to_email"]
-            return {**task.data}
-        return {}
+            initial.update(task.data)
+            initial["assigned_to"] = initial["assigned_to_email"]
+            initial["assigned_stakeholders"] = [
+                stakeholder["id"] for stakeholder in initial["assigned_stakeholders"]
+            ]
+        return initial
+
+
+class ActionPlanTaskUpdateFormView(ActionPlanTaskFormView):
+    form_class = ActionPlanTaskDateChangeReasonForm
 
 
 class EditActionPlanTaskOutcomeFormView(

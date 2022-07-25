@@ -103,6 +103,20 @@
     {% form_field_error form "completion_date" %}
 
     <div class="govuk-date-input">{{ form.completion_date }}</div>
+    {% if form.completion_date_change_reason %}
+      <div class="{% form_group_classes form.completion_date_change_reason.errors %}">
+        <label class="govuk-label govuk-label--s" for="{{ form.completion_date_change_reason.id_for_label }}">
+            {{ form.completion_date_change_reason.label }}
+        </label>
+        {% if form.completion_date_change_reason.help_text %}
+          <span class="govuk-hint">{{ form.completion_date_change_reason.help_text }}</span>
+        {% endif %}
+        {% form_field_error form "completion_date_change_reason" %}
+        <div>
+          {{ form.completion_date_change_reason }}
+        </div>
+      </div>
+   {% endif %}
   </fieldset>
 </div>
 
