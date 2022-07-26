@@ -255,25 +255,6 @@ class StatusHistoryItem(BaseHistoryItem):
         return value
 
 
-class TopPriorityStatusHistoryItem(BaseHistoryItem):
-    field = "top_priority_status"
-    field_name = "PB100 Priority Status"
-
-    def get_value(self, value):
-        print("THE VALUE: " + str(value))
-        # ignore_list = ["REMOVED","REMOVAL_PENDING","APPROVAL_PENDING","None"]
-        # if value["value"] and value["value"] not in ignore_list:
-        if value["value"]:
-            return value
-        # else:
-        #    return None
-
-    # def get_value(self, value):
-    #    if "archived_reason" in value:
-    #        value["archived_reason"] = ARCHIVED_REASON[value["archived_reason"]]
-    #    return value
-
-
 class SummaryHistoryItem(BaseHistoryItem):
     field = "summary"
     field_name = "Summary"
@@ -321,6 +302,15 @@ class TradeDirectionHistoryItem(BaseHistoryItem):
 
     def get_value(self, value):
         return self.metadata.get_trade_direction(str(value))
+
+
+class TopPriorityStatusHistoryItem(BaseHistoryItem):
+    field = "top_priority_status"
+    field_name = "PB100 Priority Status"
+
+    def get_value(self, value):
+        if value["value"]:
+            return value
 
 
 class BarrierHistoryItem(PolymorphicBase):

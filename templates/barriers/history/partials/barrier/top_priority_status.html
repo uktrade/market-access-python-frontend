@@ -1,9 +1,15 @@
 {% if item.new_value != None %}
     <div class="history-item__new-value">
-        <span class="diff__ins">
-            {{ item.new_value.value }}
-            <br/>
-            {{ item.new_value.reason }}
-        </span>
+        {% if item.new_value.value == "APPROVED" %}
+            <span class="diff__ins">
+                Top 100 Priority Barrier
+                <br/>
+                {{ item.new_value.reason }}
+            </span>
+        {% else %}
+            <span class="diff__del">
+                Top 100 Priority Barrier
+            </span>
+        {% endif %}
     </div>
 {% endif %}

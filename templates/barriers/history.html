@@ -33,7 +33,6 @@
 
     <div class="edit-history">
         {% for item in history_items %}
-            {% if item.new_value != None %}
                 <div class="history-item">
                     <p class="history-item__date">
                         Updated on {{ item.date|date:"j M Y" }}, {{ item.date|time:"g:iA"|lower }}{% if item.user.name %} by {{ item.user.name }}{% endif %}
@@ -45,7 +44,6 @@
                         </div>
                     </div>
                 </div>
-            {% endif %}
         {% endfor %}
     </div>
 
