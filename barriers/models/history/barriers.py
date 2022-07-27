@@ -1,5 +1,3 @@
-import logging
-
 import dateutil.parser
 
 from barriers.constants import ARCHIVED_REASON
@@ -8,8 +6,6 @@ from utils.metadata import Statuses
 
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
-
-logger = logging.getLogger(__name__)
 
 
 class ArchivedHistoryItem(BaseHistoryItem):

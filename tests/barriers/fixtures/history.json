@@ -73,6 +73,91 @@
                 "id": 11,
                 "name": "Vyvyan Holland"
             }
+        },
+        {
+            "date": "2020-03-18T12:01:01.591474Z",
+            "model": "barrier",
+            "field": "top_priority_status",
+            "old_value": {
+                "value": "",
+                "reason": ""
+            },
+            "new_value": {
+                "value": "APPROVAL_PENDING",
+                "reason": "an approval"
+            },
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            }
+        },
+        {
+            "date": "2020-03-18T12:11:11.591474Z",
+            "model": "barrier",
+            "field": "top_priority_status",
+            "old_value": {
+                "value": "APPROVAL_PENDING",
+                "reason": "an approval"
+            },
+            "new_value": {
+                "value": "REJECTED",
+                "reason": "needs refining"
+            },
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            }
+        },
+        {
+            "date": "2020-03-18T12:21:21.591474Z",
+            "model": "barrier",
+            "field": "top_priority_status",
+            "old_value": {
+                "value": "APPROVAL_PENDING",
+                "reason": "an approval"
+            },
+            "new_value": {
+                "value": "APPROVED",
+                "reason": "an approval"
+            },
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            }
+        },
+        {
+            "date": "2020-03-18T12:31:31.591474Z",
+            "model": "barrier",
+            "field": "top_priority_status",
+            "old_value": {
+                "value": "APPROVED",
+                "reason": "an approval"
+            },
+            "new_value": {
+                "value": "REMOVAL_PENDING",
+                "reason": "want rid of it"
+            },
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            }
+        },
+        {
+            "date": "2020-03-18T12:41:41.591474Z",
+            "model": "barrier",
+            "field": "top_priority_status",
+            "old_value": {
+                "value": "REMOVAL_PENDING",
+                "reason": "an approval"
+            },
+            "new_value": {
+                "value": "REMOVED",
+                "reason": "an approval"
+            },
+            "user": {
+                "id": 11,
+                "name": "Vyvyan Holland"
+            }
         }
     ]
 ]
