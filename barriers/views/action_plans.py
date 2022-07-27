@@ -270,10 +270,7 @@ class ActionPlanTaskFormView(
         task = self.get_task()
         if task:
             initial.update(task.data)
-            initial["assigned_to"] = initial["assigned_to_email"]
-            initial["assigned_stakeholders"] = [
-                stakeholder["id"] for stakeholder in initial["assigned_stakeholders"]
-            ]
+            initial["assigned_to"] = task.assigned_to_email
         return initial
 
 
