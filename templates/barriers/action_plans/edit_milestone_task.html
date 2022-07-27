@@ -72,53 +72,58 @@
       </fieldset>
   </div>
 
-<div
-  id="{{ form.start_date.name }}"
-  class="{% form_group_classes form.start_date.errors %}"
->
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      {{ form.start_date.label }}
-    </legend>
+  <div
+    id="{{ form.start_date.name }}"
+    class="{% form_group_classes form.start_date.errors %}"
+  >
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        {{ form.start_date.label }}
+      </legend>
 
-    <span class="govuk-hint">{{ form.start_date.help_text }}</span>
+      <span class="govuk-hint">{{ form.start_date.help_text }}</span>
 
-    {% form_field_error form "start_date" %}
+      {% form_field_error form "start_date" %}
 
-    <div class="govuk-date-input">{{ form.start_date }}</div>
-  </fieldset>
-</div>
+      <div class="govuk-date-input">{{ form.start_date }}</div>
+    </fieldset>
+  </div>
 
-<div
-  id="{{ form.completion_date.name }}"
-  class="{% form_group_classes form.completion_date.errors %}"
->
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      {{ form.completion_date.label }}
-    </legend>
+  <div
+    id="{{ form.completion_date.name }}"
+    class="{% form_group_classes form.completion_date.errors %}"
+  >
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        {{ form.completion_date.label }}
+      </legend>
 
-    <span class="govuk-hint">{{ form.completion_date.help_text }}</span>
+      <span class="govuk-hint">{{ form.completion_date.help_text }}</span>
 
-    {% form_field_error form "completion_date" %}
+      {% form_field_error form "completion_date" %}
 
-    <div class="govuk-date-input">{{ form.completion_date }}</div>
-    {% if form.completion_date_change_reason %}
-      <div class="{% form_group_classes form.completion_date_change_reason.errors %}">
-        <label class="govuk-label govuk-label--s" for="{{ form.completion_date_change_reason.id_for_label }}">
+      <div class="govuk-date-input">{{ form.completion_date }}</div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-grid-row" id="{{ form.completion_date_change_reason.name }}">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      {% if form.completion_date_change_reason %}
+        <div class="{% form_group_classes form.completion_date_change_reason.errors %}">
+          <label class="govuk-label govuk-label--s" for="{{ form.completion_date_change_reason.id_for_label }}">
             {{ form.completion_date_change_reason.label }}
-        </label>
-        {% if form.completion_date_change_reason.help_text %}
-          <span class="govuk-hint">{{ form.completion_date_change_reason.help_text }}</span>
-        {% endif %}
-        {% form_field_error form "completion_date_change_reason" %}
-        <div>
-          {{ form.completion_date_change_reason }}
+          </label>
+          {% if form.completion_date_change_reason.help_text %}
+            <span class="govuk-hint">{{ form.completion_date_change_reason.help_text }}</span>
+          {% endif %}
+          {% form_field_error form "completion_date_change_reason" %}
+          <div>
+            {{ form.completion_date_change_reason }}
+          </div>
         </div>
-      </div>
-   {% endif %}
-  </fieldset>
-</div>
+     {% endif %}
+    </div>
+  </div>
 
   <div id="{{ form.action_type.name }}"
           class="govuk-form-group{% if form.action_type.errors %} govuk-form-group--error{% endif %}">
@@ -150,6 +155,7 @@
 
 <div
   class="{% form_group_classes form.assigned_to.errors %}"
+  id="{{ form.assigned_to.name }}"
 >
   <div class="dmas_autocomplete_wrapper">
     <label class="govuk-label govuk-label--s" for="{{ form.assigned_to.id_for_label }}">
