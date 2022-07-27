@@ -240,6 +240,16 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
+        results.append(
+            {
+                "user_id": "9affb723-21d8-43c5-82ac-f525bf02444f",
+                "first_name": "Warren",
+                "last_name": "Mraz",
+                "email": "Warren.Mraz@hotmail.testfake",
+                "email_user_id": "Tre.Ratke46-9affb723@id.mock-sso",
+            }
+        )
+
         if not results:
             raise ValidationError(f"Invalid user {query}")
         for result in results:
@@ -258,6 +268,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
 
         save_kwargs = {
             "barrier_id": self.barrier_id,
+            "milestone_id": self.milestone_id,
             "assigned_to": self.cleaned_data["assigned_to"],
             "status": self.cleaned_data.get("status"),
             "action_text": self.cleaned_data.get("action_text"),
@@ -283,6 +294,9 @@ class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
                 "rows": 4,
             }
         ),
+        error_messages={
+            "required": "You must provide a reason for changing the completion date",
+        },
         help_text="Provide a reason for changing the completion date",
     )
 
@@ -409,7 +423,7 @@ class ActionPlanOrganisationStakeholderDetailsForm(
     name = forms.CharField(
         max_length=255,
         required=True,
-        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     status = forms.ChoiceField(
         choices=ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES.choices,
@@ -431,12 +445,12 @@ class ActionPlanIndividualStakeholderDetailsForm(
     organisation = forms.CharField(
         max_length=255,
         required=True,
-        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     job_title = forms.CharField(
         max_length=255,
         required=True,
-        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
 
     def get_request_data(self):
