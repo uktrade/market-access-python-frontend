@@ -5,6 +5,7 @@ from barriers.views.action_plans import (
     ActionPlanRisksAndMitigationView,
     ActionPlanStakeholdersListView,
     ActionPlanTaskFormView,
+    ActionPlanTaskUpdateFormView,
     ActionPlanTemplateView,
     AddActionPlanStrategicContext,
     CreateActionPlanStakeholderDetailsFormView,
@@ -16,7 +17,6 @@ from barriers.views.action_plans import (
     EditActionPlanTaskOutcomeFormView,
     EditActionPlanTaskProgressFormView,
     SelectActionPlanOwner,
-    ActionPlanTaskUpdateFormView,
 )
 from barriers.views.light_touch_reviews import (
     PublicBarrierLightTouchReviewsEdit,

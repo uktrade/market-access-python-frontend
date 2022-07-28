@@ -12,10 +12,10 @@ from barriers.forms.action_plans import (
     ActionPlanRisksAndMitigationForm,
     ActionPlanStakeholderTypeForm,
     ActionPlanStrategicContextForm,
+    ActionPlanTaskDateChangeReasonForm,
     ActionPlanTaskEditOutcomeForm,
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
-    ActionPlanTaskDateChangeReasonForm,
 )
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
