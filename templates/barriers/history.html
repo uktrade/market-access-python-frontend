@@ -41,7 +41,7 @@
 
                 <div class="history-item__container">
                   {% if item.non_standard_layout %}
-                    This one looks weird
+                        {% history_item item %}
                   {% else %}
                     <h4 class="history-item__field">{{ item.field_name }}</h4>
                     <div class="history-item__change">
