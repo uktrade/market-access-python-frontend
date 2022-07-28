@@ -314,10 +314,7 @@ class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
 
     def get_save_kwargs(self, action_type_category):
         kwargs = super().get_save_kwargs(action_type_category)
-        if (
-            self.has_changed()
-            and "reason_for_completion_date_change" in self.changed_data
-        ):
+        if self.has_changed() and "completion_date" in self.changed_data:
             kwargs["reason_for_completion_date_change"] = self.cleaned_data.get(
                 "reason_for_completion_date_change"
             )
