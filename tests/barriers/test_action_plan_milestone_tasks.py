@@ -85,7 +85,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         assert "Location" in response
         assert response["Location"] == expected_url
 
-    @patch("utils.api.resources.ActionPlanTaskResource.create_task")
+    @patch("utils.api.resources.ActionPlanTaskResource.update_task")
     @patch("utils.sso.SSOClient.search_users")
     def test_update_milestone_task_changed_completion_date_fails_if_reason_not_given(
         self, mock_search_users_method: Mock, mock_create_method: Mock
@@ -123,7 +123,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "reason_for_completion_date_change" in response.context["form"].errors
 
-    @patch("utils.api.resources.ActionPlanTaskResource.create_task")
+    @patch("utils.api.resources.ActionPlanTaskResource.update_task")
     @patch("utils.sso.SSOClient.search_users")
     def test_update_milestone_task_changed_completion_date_succeeds_if_reason_given(
         self, mock_search_users_method: Mock, mock_create_method: Mock
@@ -168,7 +168,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         assert "Location" in response
         assert response["Location"] == expected_url
 
-    @patch("utils.api.resources.ActionPlanTaskResource.create_task")
+    @patch("utils.api.resources.ActionPlanTaskResource.update_task")
     @patch("utils.sso.SSOClient.search_users")
     def test_update_milestone_task_unchanged_completion_date_needs_no_reason(
         self, mock_search_users_method: Mock, mock_create_method: Mock
