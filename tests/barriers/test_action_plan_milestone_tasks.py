@@ -114,14 +114,14 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
         # Ensure no reason given
-        form_data.pop("completion_date_change_reason", None)
+        form_data.pop("reason_for_completion_date_change", None)
         response = self.client.post(
             url,
             follow=False,
             data=form_data,
         )
         assert response.status_code == HTTPStatus.OK
-        assert "completion_date_change_reason" in response.context["form"].errors
+        assert "reason_for_completion_date_change" in response.context["form"].errors
 
     @patch("utils.api.resources.ActionPlanTaskResource.create_task")
     @patch("utils.sso.SSOClient.search_users")
@@ -152,7 +152,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
         # Ensure no reason given
-        form_data["completion_date_change_reason"] = "A reason."
+        form_data["reason_for_completion_date_change"] = "A reason."
         response = self.client.post(
             url,
             follow=False,
@@ -196,7 +196,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
         # Ensure no reason given
-        form_data.pop("completion_date_change_reason", None)
+        form_data.pop("reason_for_completion_date_change", None)
         response = self.client.post(
             url,
             follow=False,

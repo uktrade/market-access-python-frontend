@@ -40,10 +40,14 @@
                 </p>
 
                 <div class="history-item__container">
+                  {% if item.non_standard_layout %}
+                    This one looks weird
+                  {% else %}
                     <h4 class="history-item__field">{{ item.field_name }}</h4>
                     <div class="history-item__change">
                         {% history_item item %}
                     </div>
+                  {% endif %}
                 </div>
 
             </div>

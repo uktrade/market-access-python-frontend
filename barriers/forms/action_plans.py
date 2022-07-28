@@ -266,6 +266,14 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         else:
             action_type_category = ""
 
+        save_kwargs = self.get_save_kwargs(action_type_category)
+        if self.task_id:
+            save_kwargs["task_id"] = self.task_id
+            client.action_plan_tasks.update_task(**save_kwargs)
+        else:
+            client.action_plan_tasks.create_task(**save_kwargs)
+
+    def get_save_kwargs(self, action_type_category):
         save_kwargs = {
             "barrier_id": self.barrier_id,
             "milestone_id": self.milestone_id,
@@ -278,15 +286,11 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             "action_type_category": action_type_category,
             "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
         }
-        if self.task_id:
-            save_kwargs["task_id"] = self.task_id
-            client.action_plan_tasks.update_task(**save_kwargs)
-        else:
-            client.action_plan_tasks.create_task(**save_kwargs)
+        return save_kwargs
 
 
 class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
-    completion_date_change_reason = forms.CharField(
+    reason_for_completion_date_change = forms.CharField(
         required=False,
         widget=forms.Textarea(
             attrs={
@@ -303,10 +307,21 @@ class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.has_changed() and "completion_date" in self.changed_data:
-            self.fields["completion_date_change_reason"].required = True
+            self.fields["reason_for_completion_date_change"].required = True
 
     def is_valid(self):
         return super().is_valid()
+
+    def get_save_kwargs(self, action_type_category):
+        kwargs = super().get_save_kwargs(action_type_category)
+        if (
+            self.has_changed()
+            and "reason_for_completion_date_change" in self.changed_data
+        ):
+            kwargs["reason_for_completion_date_change"] = self.cleaned_data.get(
+                "reason_for_completion_date_change"
+            )
+        return kwargs
 
 
 class ActionPlanTaskEditOutcomeForm(
