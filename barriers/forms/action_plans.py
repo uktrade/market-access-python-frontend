@@ -219,9 +219,9 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
-        self.action_plan = kwargs.pop("action_plan")
-        self.milestone_id = kwargs.pop("milestone_id")
-        self.task_id = kwargs.pop("task_id")
+        self.action_plan = kwargs.pop("action_plan", None)
+        self.milestone_id = kwargs.pop("milestone_id", None)
+        self.task_id = kwargs.pop("task_id", None)
         super().__init__(*args, **kwargs)
 
         stakeholders = self.action_plan.stakeholders

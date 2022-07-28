@@ -271,6 +271,8 @@ class ActionPlanTaskFormView(
         if task:
             initial.update(task.data)
             initial["assigned_to"] = task.assigned_to_email
+        action_type = initial["action_type"]
+        initial[f"action_type_category_{action_type}"] = initial["action_type_category"]
         return initial
 
 
