@@ -171,7 +171,7 @@
   </div>
 </div>
 
-<div id="{{ form.stakeholders.name }}" class="{% form_group_classes form.stakeholders.errors %}">
+<div id="{{ form.assigned_stakeholders.name }}" class="{% form_group_classes form.assigned_stakeholders.errors %}">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-form-group{% if field.errors %} govuk-form-group--error{% endif %}">
@@ -180,7 +180,7 @@
             <h2 class="govuk-heading-m">Stakeholders</h2>
           </legend>
           <div class="govuk-hint">
-            {{ form.stakeholders.help_text }}
+            {{ form.assigned_stakeholders.help_text }}
           </div>
           {% form_field_error form.assigned_stakeholders %}
           <div class="" data-module="govuk-checkboxes">
