@@ -288,20 +288,30 @@
                                 <dt class="filter-results-list__item__definitions__key visually-hidden">ID:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.code }}</dd>
 
-                                <dt class="filter-results-list__item__definitions__key">Reported:</dt>
+                                <dt class="filter-results-list__item__definitions__key">Date Reported:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.reported_on|date:"j F Y" }}</dd>
 
                                 <dt class="filter-results-list__item__definitions__key">Updated:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
 
                                 {% if barrier.status.id == '4' %}{# 4: RESOLVED_IN_FULL #}
-                                <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
-                                <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
+                                    <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
+                                {% else %}
+                                    {% if barrier.estimated_resolution_date %}
+                                    <dt class="filter-results-list__item__definitions__key">Estimated Resolution Date:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.estimated_resolution_date|date:"F Y" }}</dd>
+                                    {% endif %}
                                 {% endif %}
 
                                 {% if barrier.sector_names %}
-                                <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
-                                <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
+                                    <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
+                                {% endif %}
+
+                                {% if barrier.current_valuation_assessment %}
+                                    <dt class="filter-results-list__item__definitions__key">Value:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.current_valuation_assessment }}</dd>
                                 {% endif %}
 
                                 <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
