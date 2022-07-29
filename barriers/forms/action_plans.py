@@ -62,12 +62,14 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
 
     strategic_context = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        label="Strategic context",
+        label="Action plan overview",
+        help_text="Provide a brief description of your action plan",
         required=False,
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
+        self.action_plan = kwargs.pop("action_plan", None)
         super().__init__(*args, **kwargs)
 
     def save(self):
