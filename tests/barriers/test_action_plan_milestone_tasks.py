@@ -62,11 +62,11 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             },
         )
         form_data = {**self.action_plan_task.data}
+        form_data.update(**self.subform_fields)
+        form_data["action_plan"] = self.action_plans
         # We're supposed to be adding a new task, so don't set the id
         form_data.pop("id")
-        # Bunch of extra stuff needed for SubformFields
-        form_data.update(self.subform_fields)
-        # and the asigned stakeholders would be just their id when submitted
+        # The assigned stakeholders would be just their id when submitted
         form_data["assigned_stakeholders"] = [
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
@@ -107,9 +107,7 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         )
         form_data = {**self.action_plan_task.data}
         form_data["completion_date"] = "2023-12-12"
-        # Bunch of extra stuff needed for SubformFields
-        form_data.update(self.subform_fields)
-        # and the asigned stakeholders would be just their id when submitted
+        # The assigned stakeholders would be just their id when submitted
         form_data["assigned_stakeholders"] = [
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
@@ -144,14 +142,13 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             },
         )
         form_data = {**self.action_plan_task.data}
+        form_data.update(**self.subform_fields)
         form_data["completion_date"] = "2023-12-12"
-        # Bunch of extra stuff needed for SubformFields
-        form_data.update(self.subform_fields)
-        # and the asigned stakeholders would be just their id when submitted
+        # The assigned stakeholders would be just their id when submitted
         form_data["assigned_stakeholders"] = [
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
-        # Ensure no reason given
+        # Ensure reason given
         form_data["reason_for_completion_date_change"] = "A reason."
         response = self.client.post(
             url,
@@ -189,9 +186,8 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             },
         )
         form_data = {**self.action_plan_task.data}
-        # Bunch of extra stuff needed for SubformFields
-        form_data.update(self.subform_fields)
-        # and the asigned stakeholders would be just their id when submitted
+        form_data.update(**self.subform_fields)
+        # The assigned stakeholders would be just their id when submitted
         form_data["assigned_stakeholders"] = [
             stakeholder["id"] for stakeholder in form_data["assigned_stakeholders"]
         ]
