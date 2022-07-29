@@ -254,7 +254,7 @@ class ActionPlanTaskFormView(
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        # for some unexplained reason from 2019, APIFormMixin skips get_iniitial() for POST and PUT
+        # for some unexplained reason from 2019, APIFormMixin skips get_initial() for POST and PUT
         if "initial" not in kwargs:
             kwargs["initial"] = self.get_initial()
         kwargs["task_id"] = self.kwargs.get("id")
@@ -271,8 +271,11 @@ class ActionPlanTaskFormView(
         if task:
             initial.update(task.data)
             initial["assigned_to"] = task.assigned_to_email
-        action_type = initial["action_type"]
-        initial[f"action_type_category_{action_type}"] = initial["action_type_category"]
+        if "action_type" in initial and initial["action_type"]:
+            action_type = initial["action_type"]
+            initial[f"action_type_category_{action_type}"] = initial[
+                "action_type_category"
+            ]
         return initial
 
 
