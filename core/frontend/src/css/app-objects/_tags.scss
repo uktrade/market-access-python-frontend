@@ -17,5 +17,6 @@
 }
 
 .barrier-tag-list > .govuk-tag {
-    margin-right: 1em;
+    margin-right: govuk-spacing(3);
+    margin-bottom: govuk-spacing(2);
 }
