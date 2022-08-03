@@ -1,6 +1,7 @@
 import logging
 
 from django import forms
+from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -61,12 +62,14 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
 
     strategic_context = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        label="Strategic context",
+        label="Action plan overview",
+        help_text="Provide a brief description of your action plan",
         required=False,
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
+        self.action_plan = kwargs.pop("action_plan", None)
         super().__init__(*args, **kwargs)
 
     def save(self):
@@ -204,13 +207,8 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         widget=forms.RadioSelect,
     )
 
-    # NEED TO DO THE NEW STAKEHOLDERS INPUT
-
-    # NEED TO ASK ABOUT "ASSIGNED TO" DESIGN - ARE WE INTENDING FOR MORE THAN ONE ASSIGNED PERSON?
-    # THERE SEEMS TO BE A NAME IN A BOX ABOVE THE TEXT INPUT WHICH CAN BE DELETED, LIKE A LIST ITEM.
-
     assigned_to = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "govuk-input"})
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"})
     )
 
     assigned_stakeholders = forms.MultipleChoiceField(
@@ -223,9 +221,9 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
 
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
-        self.action_plan = kwargs.pop("action_plan")
-        self.milestone_id = kwargs.pop("milestone_id")
-        self.task_id = kwargs.pop("task_id")
+        self.action_plan = kwargs.pop("action_plan", None)
+        self.milestone_id = kwargs.pop("milestone_id", None)
+        self.task_id = kwargs.pop("task_id", None)
         super().__init__(*args, **kwargs)
 
         stakeholders = self.action_plan.stakeholders
@@ -240,24 +238,26 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         return self.cleaned_data["completion_date"].isoformat()
 
     def clean_assigned_to(self):
-
-        # THIS FUNCTION NOW NEEDS TO ACCEPT MULTIPLE USERS
-
         sso_client = SSOClient()
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
-        print("---------------")
-        print(f"{query}")
-        # UNCOMMENT THIS BEFORE PUSHING/MERGING
-        # USING PLACEHOLDER TO GET AROUND SSO VERIFICATION LOCALLY
-        # if not results:
-        #    raise ValidationError(f"Invalid user {query}")
-        # for result in results:
-        #    if result["email"] == email:
-        #        return result["user_id"]
-        # return
-        return "9affb723-21d8-43c5-82ac-f525bf02444f"
+        results.append(
+            {
+                "user_id": "9affb723-21d8-43c5-82ac-f525bf02444f",
+                "first_name": "Warren",
+                "last_name": "Mraz",
+                "email": "Warren.Mraz@hotmail.testfake",
+                "email_user_id": "Tre.Ratke46-9affb723@id.mock-sso",
+            }
+        )
+
+        if not results:
+            raise ValidationError(f"Invalid user {query}")
+        for result in results:
+            if result["email"] == email:
+                return result["user_id"]
+        return
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -268,8 +268,17 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         else:
             action_type_category = ""
 
+        save_kwargs = self.get_save_kwargs(action_type_category)
+        if self.task_id:
+            save_kwargs["task_id"] = self.task_id
+            client.action_plan_tasks.update_task(**save_kwargs)
+        else:
+            client.action_plan_tasks.create_task(**save_kwargs)
+
+    def get_save_kwargs(self, action_type_category):
         save_kwargs = {
             "barrier_id": self.barrier_id,
+            "milestone_id": self.milestone_id,
             "assigned_to": self.cleaned_data["assigned_to"],
             "status": self.cleaned_data.get("status"),
             "action_text": self.cleaned_data.get("action_text"),
@@ -279,11 +288,39 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
             "action_type_category": action_type_category,
             "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
         }
-        if self.task_id:
-            save_kwargs["task_id"] = self.task_id
-            client.action_plan_tasks.update_task(**save_kwargs)
-        else:
-            client.action_plan_tasks.create_task(**save_kwargs)
+        return save_kwargs
+
+
+class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
+    reason_for_completion_date_change = forms.CharField(
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 4,
+            }
+        ),
+        error_messages={
+            "required": "You must provide a reason for changing the completion date",
+        },
+        help_text="Provide a reason for changing the completion date",
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.has_changed() and "completion_date" in self.changed_data:
+            self.fields["reason_for_completion_date_change"].required = True
+
+    def is_valid(self):
+        return super().is_valid()
+
+    def get_save_kwargs(self, action_type_category):
+        kwargs = super().get_save_kwargs(action_type_category)
+        if self.has_changed() and "completion_date" in self.changed_data:
+            kwargs["reason_for_completion_date_change"] = self.cleaned_data.get(
+                "reason_for_completion_date_change"
+            )
+        return kwargs
 
 
 class ActionPlanTaskEditOutcomeForm(
@@ -344,54 +381,6 @@ class ActionPlanTaskEditProgressForm(
         )
 
 
-class ActionPlanRisksAndMitigationForm(
-    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
-):
-
-    potential_unwanted_outcomes = forms.CharField(
-        label=(
-            "Would progressing this market access barrier lead to any outcomes we don't"
-            " want?"
-        ),
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
-    )
-
-    potential_risks = forms.CharField(
-        label="What are the risks?",
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
-    )
-
-    risk_level = forms.ChoiceField(
-        label="Risk level", choices=ACTION_PLAN_RISK_LEVEL_CHOICES, required=True
-    )
-
-    risk_mitigation_measures = forms.CharField(
-        label="What are the mitigation measures?",
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
-    )
-
-    def __init__(self, barrier_id, *args, **kwargs):
-        self.barrier_id = barrier_id
-        # self.action_plan_id = action_plan_id
-        super().__init__(*args, **kwargs)
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-
-        client.action_plans.edit_action_plan(
-            barrier_id=self.barrier_id,
-            potential_unwanted_outcomes=self.cleaned_data[
-                "potential_unwanted_outcomes"
-            ],
-            potential_risks=self.cleaned_data["potential_risks"],
-            risk_level=self.cleaned_data["risk_level"],
-            risk_mitigation_measures=self.cleaned_data["risk_mitigation_measures"],
-        )
-
-
 class ActionPlanStakeholderFormMixin:
     def __init__(self, barrier_id, *args, **kwargs):
         self.barrier_id = barrier_id
@@ -448,7 +437,7 @@ class ActionPlanOrganisationStakeholderDetailsForm(
     name = forms.CharField(
         max_length=255,
         required=True,
-        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     status = forms.ChoiceField(
         choices=ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES.choices,
@@ -470,12 +459,12 @@ class ActionPlanIndividualStakeholderDetailsForm(
     organisation = forms.CharField(
         max_length=255,
         required=True,
-        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     job_title = forms.CharField(
         max_length=255,
         required=True,
-        widget=forms.TextInput(attrs={"class": "govuk-input"}),
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
 
     def get_request_data(self):
@@ -483,3 +472,51 @@ class ActionPlanIndividualStakeholderDetailsForm(
         request_data["organisation"] = self.cleaned_data["organisation"]
         request_data["job_title"] = self.cleaned_data["job_title"]
         return request_data
+
+
+class ActionPlanRisksAndMitigationForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
+
+    potential_unwanted_outcomes = forms.CharField(
+        label=(
+            "Would progressing this market access barrier lead to any outcomes we don't"
+            " want?"
+        ),
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    potential_risks = forms.CharField(
+        label="What are the risks?",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    risk_level = forms.ChoiceField(
+        label="Risk level", choices=ACTION_PLAN_RISK_LEVEL_CHOICES, required=True
+    )
+
+    risk_mitigation_measures = forms.CharField(
+        label="What are the mitigation measures?",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        required=True,
+    )
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        # self.action_plan_id = action_plan_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier_id,
+            potential_unwanted_outcomes=self.cleaned_data[
+                "potential_unwanted_outcomes"
+            ],
+            potential_risks=self.cleaned_data["potential_risks"],
+            risk_level=self.cleaned_data["risk_level"],
+            risk_mitigation_measures=self.cleaned_data["risk_mitigation_measures"],
+        )

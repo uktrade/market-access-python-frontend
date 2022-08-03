@@ -6,8 +6,18 @@ import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
+import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
+import { renderLocationForm } from "./reports/LocationForm";
+import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 
-function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
+function renderCommodityForm(
+    confirmedCommodities,
+    locations,
+    label,
+    helpText,
+    isReportJourney = false,
+    nextUrl = null
+) {
     const csrfToken = getCSRFToken();
     ReactDOM.render(
         <CommodityForm
@@ -16,6 +26,8 @@ function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
             locations={locations}
             label={label}
             helpText={helpText}
+            isReportJourney={isReportJourney}
+            nextUrl={nextUrl}
         />,
         document.getElementById("react-app")
     );
@@ -127,10 +139,23 @@ function renderInputSelectWithMentions(
     );
 }
 
+function renderEmailSearchAutocomplete(fieldID) {
+    const field = document.getElementById(fieldID),
+        fieldlLabel = field.labels[0],
+        wrapperElement = field.closest(".dmas_autocomplete_wrapper");
+    ReactDOM.render(
+        <EmailSearchAutocomplete field={field} label={fieldlLabel} />,
+        wrapperElement
+    );
+}
+
 export {
     renderCommodityForm,
     renderLocationFilter,
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
+    renderLocationForm,
+    renderAsyncSearchResults,
+    renderEmailSearchAutocomplete,
 };

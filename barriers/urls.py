@@ -5,6 +5,7 @@ from barriers.views.action_plans import (
     ActionPlanRisksAndMitigationView,
     ActionPlanStakeholdersListView,
     ActionPlanTaskFormView,
+    ActionPlanTaskUpdateFormView,
     ActionPlanTemplateView,
     AddActionPlanStrategicContext,
     CreateActionPlanStakeholderDetailsFormView,
@@ -197,6 +198,12 @@ urlpatterns = [
         name="saved_search_notifications",
     ),
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
+    # Reason for double url: Analytics requested a second url pointing to the same page
+    path(
+        "barriers/<uuid:barrier_id>/complete/",
+        BarrierDetail.as_view(),
+        name="barrier_detail_from_complete",
+    ),
     re_path(
         "barriers/(?P<barrier_id>[A-Z]-[0-9]{2}-[A-Z0-9]{3})/",
         BarrierDetail.as_view(),
@@ -630,6 +637,31 @@ urlpatterns = [
         name="action_plan_stakeholders_edit",
     ),
     path(
+        "barriers/<uuid:barrier_id>/action_plan/add_risks_and_mitigations",
+        ActionPlanRisksAndMitigationView.as_view(),
+        name="action_plan_add_risks_and_mitigations",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/",
+        ActionPlanStakeholdersListView.as_view(),
+        name="action_plan_stakeholders_list",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/",
+        CreateActionPlanStakeholderTypeFormView.as_view(),
+        name="action_plan_stakeholders_add",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/<uuid:id>/",
+        CreateActionPlanStakeholderDetailsFormView.as_view(),
+        name="action_plan_stakeholders_add_details",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/<uuid:id>/",
+        EditActionPlanStakeholderDetailsFormView.as_view(),
+        name="action_plan_stakeholders_edit",
+    ),
+    path(
         "barriers/<uuid:barrier_id>/action_plan/edit_owner",
         SelectActionPlanOwner.as_view(),
         name="action_plan_edit_owner",
@@ -661,7 +693,7 @@ urlpatterns = [
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/<uuid:id>/",
-        ActionPlanTaskFormView.as_view(),
+        ActionPlanTaskUpdateFormView.as_view(),
         name="action_plan_edit_task",
     ),
     path(

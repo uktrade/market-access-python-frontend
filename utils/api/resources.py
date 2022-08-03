@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import time
+from typing import TYPE_CHECKING
 
 import requests
 from django.conf import settings
@@ -27,10 +30,14 @@ from users.models import Group, User
 from utils.exceptions import ScanError
 from utils.models import ModelList
 
+if TYPE_CHECKING:
+    from utils.api.client import MarketAccessAPIClient
+
 
 class APIResource:
     resource_name = None
     model = None
+    client: MarketAccessAPIClient
 
     def __init__(self, client):
         self.client = client
@@ -418,16 +425,22 @@ class ActionPlanTaskResource(APIResource):
         return self.model(
             self.client.post(
                 url,
-                json={"barrier": str(barrier_id), "milestone": milestone_id, **kwargs},
+                json={
+                    "barrier": str(barrier_id),
+                    "milestone": str(milestone_id),
+                    **kwargs,
+                },
             )
         )
 
     def update_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.patch(url, json={**kwargs}))
 
     def delete_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.delete(url))
 
 
