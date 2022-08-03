@@ -1,5 +1,6 @@
 from urllib.parse import urlencode
 
+from django.conf import settings
 from django.forms import Form
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -68,6 +69,7 @@ class BarrierSearch(PaginationMixin, SearchFormView):
                 "download_request_sent_error": self.request.GET.get(
                     "download_request_sent_error"
                 ),
+                "search_ordering_choices": metadata.get_search_ordering_choices(),
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)
@@ -75,7 +77,6 @@ class BarrierSearch(PaginationMixin, SearchFormView):
 
     def get_barriers(self, form):
         return self.client.barriers.list(
-            ordering="-reported_on",
             limit=self.get_pagination_limit(),
             offset=self.get_pagination_offset(),
             **form.get_api_search_parameters(),
