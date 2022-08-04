@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import FormView, TemplateView
 
 from barriers.forms.action_plans import (
@@ -170,6 +171,26 @@ class SelectActionPlanOwner(
     def select_user_api_call(self, user_id):
         self.client.action_plans.edit_action_plan(
             barrier_id=str(self.kwargs.get("barrier_id")), owner=user_id
+        )
+
+
+class EditActionPlanOwner(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, TemplateView
+):
+    template_name = "barriers/action_plans/edit_owner.html"
+
+
+class RemoveActionPlanOwner(ActionPlanFormViewMixin, APIBarrierFormViewMixin, View):
+    def get(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        client.action_plans.edit_action_plan(
+            barrier_id=str(self.kwargs.get("barrier_id")), owner=None
+        )
+        return HttpResponseRedirect(
+            reverse(
+                "barriers:action_plan",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
         )
 
 

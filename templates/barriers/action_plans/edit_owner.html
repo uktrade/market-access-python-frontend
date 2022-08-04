@@ -1,0 +1,37 @@
+{% extends "barriers/edit/base.html" %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+{% block page_title %}
+{{ block.super }} - Action plan owner{% endblock %}
+
+
+{% block page_content %}
+    {% include 'partials/heading.html' with text='Action plan owner' %}
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Name</th>
+        <th scope="col" class="govuk-table__header">Action</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body govuk-checkboxes govuk-checkboxes--small">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+              {{ barrier.action_plan.owner_full_name }}
+          </td>
+          <td class="govuk-table__cell">
+            <a href="{% url 'barriers:action_plan_remove_owner' barrier.id %}" class="govuk-link">Remove owner</a>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <div>
+    <a href="{% url 'barriers:action_plan_edit_owner' barrier.id %}" class="govuk-button button--secondary">Add new action plan owner</a>
+    <a href="{% url 'barriers:action_plan' barrier.id %}" class="form-cancel">Return</a>
+
+  </div>
+
+{% endblock %}

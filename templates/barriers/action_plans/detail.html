@@ -126,7 +126,11 @@
 {#                    </tr>#}
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
-                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Owner</a> <!-- UPDATE URL -->
+                            {% if action_plan.owner %}
+                                <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_existing_owner' barrier.id %}">Owner</a> <!-- UPDATE URL -->
+                            {% else %}
+                                <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_owner' barrier.id %}">Owner</a>
+                            {% endif %}
                         </td>
                         <td class="govuk-table__cell">
                             {% if action_plan.owner %} <!-- CHANGE THIS TO CHECK IF PLAN HAS AN OWNER -->
