@@ -281,3 +281,8 @@
 		margin-right: govuk-spacing(2);
 	}
 }
+
+.js-enabled .dmas-search-ordering-select + button {
+	/* Hate using !important, but the GovUK inline block class forces it upon me :-( */
+	display: none !important;
+}
