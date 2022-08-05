@@ -1,6 +1,5 @@
 from urllib.parse import urlencode
 
-from django.conf import settings
 from django.forms import Form
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -41,6 +40,8 @@ class BarrierSearch(PaginationMixin, SearchFormView):
     template_name = "barriers/search.html"
     form_class = BarrierSearchForm
     _client = None
+
+    pagination_limit = 5
 
     @property
     def client(self):
