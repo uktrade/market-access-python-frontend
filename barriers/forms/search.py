@@ -409,9 +409,7 @@ class BarrierSearchForm(forms.Form):
 
     def set_ordering_choices(self):
         choices = self.metadata.get_search_ordering_choices()
-        self.fields["ordering"].choices = [
-            (value, label) for value, label in choices.items()
-        ]
+        self.fields["ordering"].choices = self.metadata.get_search_ordering_choices()
 
     def clean_country(self):
         data = self.cleaned_data["country"]
