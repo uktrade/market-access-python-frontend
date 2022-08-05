@@ -606,6 +606,11 @@ urlpatterns = [
         name="action_plan_edit_current_status",
     ),
     path(
+        "barriers/<uuid:barrier_id>/action_plan/add_risks_and_mitigations",
+        ActionPlanRisksAndMitigationView.as_view(),
+        name="action_plan_add_risks_and_mitigations",
+    ),
+    path(
         "barriers/<uuid:barrier_id>/action_plan/stakeholders/",
         ActionPlanStakeholdersListView.as_view(),
         name="action_plan_stakeholders_list",
