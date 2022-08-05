@@ -36,7 +36,6 @@ class NewReportBarrierLocationHasAdminAreasForm(forms.Form):
 
 class NewReportBarrierLocationAddAdminAreasForm(forms.Form):
     admin_areas = forms.ChoiceField(
-        required=False,
         label="Which admin area is affected by the barrier?",
         choices=[],
         error_messages={"required": "Select an admin area affected by the barrier"},
@@ -45,9 +44,6 @@ class NewReportBarrierLocationAddAdminAreasForm(forms.Form):
     def __init__(self, admin_areas, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["admin_areas"].choices = admin_areas
-
-    def clean_selected_admin_areas(self):
-        return self.cleaned_data["selected_admin_areas"].split(",")
 
 
 class NewReportBarrierLocationAdminAreasForm(forms.Form):
@@ -83,28 +79,3 @@ class NewReportBarrierTradeDirectionForm(forms.Form):
 
 class NewReportCausedByTradingBlocForm(CausedByTradingBlocForm):
     pass
-
-
-class NewReportBarrierLocationMasterForm(
-    NewReportBarrierTradeDirectionForm,
-    NewReportBarrierLocationHasAdminAreasForm,
-    NewReportCausedByTradingBlocForm,
-    NewReportBarrierLocationForm,
-):
-    pass
-
-
-class NewReportBarrierLocationMasterWithAdminAreaForm(
-    NewReportBarrierLocationAddAdminAreasForm, NewReportBarrierLocationMasterForm
-):
-    pass
-
-
-class NewReportBarrierLocationAndAdminAreasForm(
-    NewReportBarrierLocationForm,
-    NewReportBarrierLocationHasAdminAreasForm,
-    NewReportCausedByTradingBlocForm,
-    forms.Form,
-):
-
-    admin_areas = forms.CharField()

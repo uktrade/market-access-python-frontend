@@ -84,8 +84,6 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/report/index.js`,
                         `${assetsSrcPath}/js/pages/report/is-resolved.js`,
                         `${assetsSrcPath}/js/pages/report/about-problem.js`,
-                        `${assetsSrcPath}/js/pages/report/barrier-location-form.js`,
-                        `${assetsSrcPath}/js/pages/report/location-form-react.js`,
                         `${assetsSrcPath}/js/pages/barrier/status.js`,
                         `${assetsSrcPath}/js/pages/barrier/type.js`,
                         `${assetsSrcPath}/js/pages/barrier/edit.js`,
@@ -153,23 +151,16 @@ const reactConfig = {
         libraryTarget: "var",
         library: "ReactApp",
     },
-    resolve: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
-    },
     plugins: [new BundleTracker({ filename: "./webpack-stats-react.json" })],
     module: {
         rules: [
             {
-                test: /\.(js|jsx|ts|tsx)$/,
+                test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: [
-                            "@babel/react",
-                            "@babel/typescript",
-                            ["@babel/env", { modules: false }],
-                        ],
+                        presets: ["@babel/preset-react", "@babel/preset-env"],
                         plugins: ["@babel/plugin-transform-runtime"],
                     },
                 },

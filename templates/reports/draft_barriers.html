@@ -31,7 +31,7 @@
                     <th class="standard-table__heading">Barrier ID</th>
                     <th class="standard-table__heading">Barrier location</th>
                     <th class="standard-table__heading">Resolved?</th>
-                    <th class="standard-table__heading">Barrier title</th>
+                    <th class="standard-table__heading">Barrier scope</th>
                     <th class="standard-table__heading">Started by</th>
                     <th class="standard-table__heading">Action</th>
                 </tr>
@@ -56,7 +56,7 @@
                         {{ report.resolved_text }}
                     </td>
                     <td class="standard-table__cell">
-                        {{ report.title|default:'---' }}
+                        {{ report.term.name|default:'---' }}
                     </td>
                     <td class="standard-table__cell">
                         {{ report.created_by.name|default:'---' }}

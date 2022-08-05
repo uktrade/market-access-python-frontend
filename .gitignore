@@ -112,7 +112,6 @@ db.sqlite3
 
 # VS Code
 .vscode/
-.devcontainer/
 
 # PyCharm
 .idea/
@@ -124,7 +123,6 @@ core/static/govuk-public/fonts
 staticfiles/
 node_modules/
 
-.docker/
 docker-compose.dev.env
 docker-compose.uat.env
 docker-compose.env

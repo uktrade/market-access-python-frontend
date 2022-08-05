@@ -4,6 +4,7 @@ from django import forms
 from django.template.loader import render_to_string
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
+from utils.api.client import MarketAccessAPIClient
 from utils.forms import MonthYearField, SubformChoiceField, SubformMixin
 
 from .mixins import APIFormMixin
@@ -45,9 +46,6 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
             self.cleaned_data["status_date"] = status_date
 
     def save(self):
-        # to avoid circular imports
-        from utils.api.client import MarketAccessAPIClient
-
         client = MarketAccessAPIClient(self.token)
         data = {"status_summary": self.cleaned_data["status_summary"]}
 
@@ -268,8 +266,6 @@ class BarrierChangeStatusForm(SubformMixin, forms.Form):
         ]
 
     def save(self):
-        from utils.api.client import MarketAccessAPIClient
-
         client = MarketAccessAPIClient(self.token)
         subform = self.fields["status"].subform
         client.barriers.set_status(

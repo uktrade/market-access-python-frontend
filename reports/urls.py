@@ -1,14 +1,16 @@
 from django.urls import path
 
-from barriers.views.report_barrier import ReportBarrierAnswersView
-from reports.location_views import NewReportBarrierLocationMasterView
-from reports.report_views import (
+from reports.views import (
+    DeleteReport,
+    DraftBarriers,
+    NewReport,
     NewReportBarrierAboutView,
-    NewReportBarrierCategoriesAddView,
-    NewReportBarrierCategoriesDeleteView,
-    NewReportBarrierCategoriesView,
-    NewReportBarrierCommoditiesView,
+    NewReportBarrierAdminAreasView,
+    NewReportBarrierCausedByTradingBlocView,
     NewReportBarrierHasSectorsView,
+    NewReportBarrierLocationAddAdminAreasView,
+    NewReportBarrierLocationHasAdminAreasView,
+    NewReportBarrierLocationRemoveAdminAreasView,
     NewReportBarrierLocationView,
     NewReportBarrierSectorsAddAllView,
     NewReportBarrierSectorsAddView,
@@ -16,19 +18,9 @@ from reports.report_views import (
     NewReportBarrierSectorsView,
     NewReportBarrierStatusView,
     NewReportBarrierSummaryView,
+    NewReportBarrierTermView,
     NewReportBarrierTradeDirectionView,
     ReportDetail,
-)
-from reports.views import (
-    DeleteReport,
-    DraftBarriers,
-    NewReport,
-    NewReportBarrierAdminAreasView,
-    NewReportBarrierCausedByTradingBlocView,
-    NewReportBarrierLocationAddAdminAreasView,
-    NewReportBarrierLocationHasAdminAreasView,
-    NewReportBarrierLocationRemoveAdminAreasView,
-    NewReportStartRedirect,
 )
 
 app_name = "reports"
@@ -47,31 +39,31 @@ urlpatterns = [
         name="delete_report",
     ),
     # Problem Status
-    path("reports/new/start/", NewReportStartRedirect.as_view(), name="barrier_start"),
+    path("reports/new/start/", NewReportBarrierTermView.as_view(), name="barrier_term"),
     path(
         "reports/<uuid:barrier_id>/start/",
-        NewReportStartRedirect.as_view(),
-        name="barrier_start_uuid",
+        NewReportBarrierTermView.as_view(),
+        name="barrier_term_uuid",
     ),
     # Status
     path(
-        "reports/new/start/status/",
+        "reports/new/start/is-resolved/",
         NewReportBarrierStatusView.as_view(),
         name="barrier_status",
     ),
     path(
-        "reports/<uuid:barrier_id>/status/",
+        "reports/<uuid:barrier_id>/is-resolved/",
         NewReportBarrierStatusView.as_view(),
         name="barrier_status_uuid",
     ),
     # Location
     path(
-        "reports/new/location/",
-        NewReportBarrierLocationMasterView.as_view(),
+        "reports/new/country/",
+        NewReportBarrierLocationView.as_view(),
         name="barrier_location",
     ),
     path(
-        "reports/<uuid:barrier_id>/location/",
+        "reports/<uuid:barrier_id>/country/",
         NewReportBarrierLocationView.as_view(),
         name="barrier_location_uuid",
     ),
@@ -163,7 +155,7 @@ urlpatterns = [
     ),
     # About
     path(
-        "reports/<uuid:barrier_id>/about/",
+        "reports/<uuid:barrier_id>/problem/",
         NewReportBarrierAboutView.as_view(),
         name="barrier_about_uuid",
     ),
@@ -172,38 +164,5 @@ urlpatterns = [
         "reports/<uuid:barrier_id>/summary/",
         NewReportBarrierSummaryView.as_view(),
         name="barrier_summary_uuid",
-    ),
-    # Categories
-    path(
-        "reports/<uuid:barrier_id>/categories/",
-        NewReportBarrierCategoriesView.as_view(),
-        name="barrier_categories_uuid",
-    ),
-    path(
-        "reports/<uuid:barrier_id>/categories/add_first/",
-        NewReportBarrierCategoriesAddView.as_view(),
-        {"is_main_journey": True},
-        name="barrier_categories_add_first_uuid",
-    ),
-    path(
-        "reports/<uuid:barrier_id>/categories/add/",
-        NewReportBarrierCategoriesAddView.as_view(),
-        name="barrier_categories_add_uuid",
-    ),
-    path(
-        "reports/<uuid:barrier_id>/categories/delete/",
-        NewReportBarrierCategoriesDeleteView.as_view(),
-        name="barrier_categories_delete_uuid",
-    ),
-    # Commodities
-    path(
-        "reports/<uuid:barrier_id>/commodities/",
-        NewReportBarrierCommoditiesView.as_view(),
-        name="barrier_commodities_uuid",
-    ),
-    path(
-        "reports/<uuid:barrier_id>/check-answers/",
-        ReportBarrierAnswersView.as_view(),
-        name="report_barrier_answers",
     ),
 ]
