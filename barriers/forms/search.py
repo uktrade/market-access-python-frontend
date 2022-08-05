@@ -215,6 +215,10 @@ class BarrierSearchForm(forms.Form):
     ordering = forms.ChoiceField(
         label="Sort by",
         choices=(),
+        required=False,
+        widget=forms.Select(
+            attrs={"class": "govuk-select dmas-search-ordering-select"}
+        ),
     )
 
     filter_groups = {
