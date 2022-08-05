@@ -6,8 +6,17 @@ import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
+import { renderLocationForm } from "./reports/LocationForm";
+import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 
-function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
+function renderCommodityForm(
+    confirmedCommodities,
+    locations,
+    label,
+    helpText,
+    isReportJourney = false,
+    nextUrl = null
+) {
     const csrfToken = getCSRFToken();
     ReactDOM.render(
         <CommodityForm
@@ -16,6 +25,8 @@ function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
             locations={locations}
             label={label}
             helpText={helpText}
+            isReportJourney={isReportJourney}
+            nextUrl={nextUrl}
         />,
         document.getElementById("react-app")
     );
@@ -101,7 +112,8 @@ function renderInputSelectWithMentions(
     placeholder = null,
     labelClasses = null,
     containerClasses = null,
-    trigger = undefined
+    trigger = undefined,
+    autofocus = true
 ) {
     console.log("setting up input with mentions", htmlElementId, trigger);
 
@@ -120,6 +132,7 @@ function renderInputSelectWithMentions(
             textAreaName={name}
             preExistingText={preExistingText}
             trigger={trigger}
+            autofocus={autofocus}
         />,
         inputContainerElement
     );
@@ -131,4 +144,6 @@ export {
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
+    renderLocationForm,
+    renderAsyncSearchResults,
 };

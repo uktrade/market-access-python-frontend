@@ -1,0 +1,28 @@
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">Type</th>
+      <th scope="col" class="govuk-table__header">Status</th>
+      <th scope="col" class="govuk-table__header">Action</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    {% if stakeholders %}
+      {% for stakeholder in stakeholders %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ stakeholder.name }}</td>
+          <td class="govuk-table__cell">{{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}</td>
+          <td class="govuk-table__cell">{{ stakeholder.get_status_display }}</td>
+          <td class="govuk-table__cell"><a href="{% url 'barriers:action_plan_stakeholders_edit' barrier_id=barrier.id id=stakeholder.id %}">Edit</a></td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr class="govuk-table__row">
+        <td class="govuk-!-text-align-centre" colspan="3">
+          <p class="govuk-!-padding-top-">No stakeholders found</p>
+        </td>
+      </tr>
+    {% endif %}
+  </tbody>
+</table>
