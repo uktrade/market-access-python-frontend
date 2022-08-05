@@ -13,9 +13,11 @@ from barriers.views.action_plans import (
     DeleteActionPlanMilestoneView,
     DeleteActionPlanTaskView,
     EditActionPlanCurrentStatusFormView,
+    EditActionPlanOwner,
     EditActionPlanStakeholderDetailsFormView,
     EditActionPlanTaskOutcomeFormView,
     EditActionPlanTaskProgressFormView,
+    RemoveActionPlanOwner,
     SelectActionPlanOwner,
 )
 from barriers.views.light_touch_reviews import (
@@ -659,6 +661,16 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/action_plan/edit_owner",
         SelectActionPlanOwner.as_view(),
         name="action_plan_edit_owner",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/remove_owner",
+        RemoveActionPlanOwner.as_view(),
+        name="action_plan_remove_owner",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/existing_owner",
+        EditActionPlanOwner.as_view(),
+        name="action_plan_edit_existing_owner",
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/add_strategic_context",
