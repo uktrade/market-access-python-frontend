@@ -12,6 +12,7 @@ from barriers.forms.action_plans import (
     ActionPlanRisksAndMitigationForm,
     ActionPlanStakeholderTypeForm,
     ActionPlanStrategicContextForm,
+    ActionPlanTaskDateChangeReasonForm,
     ActionPlanTaskEditOutcomeForm,
     ActionPlanTaskEditProgressForm,
     ActionPlanTaskForm,
@@ -253,6 +254,9 @@ class ActionPlanTaskFormView(
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        # for some unexplained reason from 2019, APIFormMixin skips get_initial() for POST and PUT
+        if "initial" not in kwargs:
+            kwargs["initial"] = self.get_initial()
         kwargs["task_id"] = self.kwargs.get("id")
         return kwargs
 
@@ -262,11 +266,21 @@ class ActionPlanTaskFormView(
         return task
 
     def get_initial(self):
+        initial = {}
         task = self.get_task()
         if task:
-            task.data["assigned_to"] = task.data["assigned_to_email"]
-            return {**task.data}
-        return {}
+            initial.update(task.data)
+            initial["assigned_to"] = task.assigned_to_email
+        if "action_type" in initial and initial["action_type"]:
+            action_type = initial["action_type"]
+            initial[f"action_type_category_{action_type}"] = initial[
+                "action_type_category"
+            ]
+        return initial
+
+
+class ActionPlanTaskUpdateFormView(ActionPlanTaskFormView):
+    form_class = ActionPlanTaskDateChangeReasonForm
 
 
 class EditActionPlanTaskOutcomeFormView(
@@ -354,17 +368,6 @@ class ActionPlanTemplateView(BarrierMixin, TemplateView):
         return context_data
 
 
-class ActionPlanRisksAndMitigationView(
-    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
-):
-    template_name = "barriers/action_plans/add_risks_and_mitigation.html"
-    form_class = ActionPlanRisksAndMitigationForm
-
-    def get_initial(self):
-        if self.request.method == "GET":
-            return self.action_plan.data
-
-
 class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
     template_name = "barriers/action_plans/stakeholders/list.html"
 
@@ -382,3 +385,14 @@ class AddActionPlanStakeholderFormView(
 ):
     template_name = "barriers/action_plans/edit_milestone_task.html"
     form_class = ActionPlanTaskForm
+
+
+class ActionPlanRisksAndMitigationView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
+):
+    template_name = "barriers/action_plans/add_risks_and_mitigation.html"
+    form_class = ActionPlanRisksAndMitigationForm
+
+    def get_initial(self):
+        if self.request.method == "GET":
+            return self.action_plan.data

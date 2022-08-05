@@ -33,12 +33,12 @@ class ActionPlan(APIModel):
         return None
 
 
-class ActionPlanMilestone(APIModel):
-    pass
-
-
 class ActionPlanTask(APIModel):
-    pass
+    def __init__(self, data):
+        super().__init__(data)
+        self.assigned_stakeholders = [
+            Stakeholder(stakeholder) for stakeholder in self.assigned_stakeholders
+        ]
 
 
 class Stakeholder(APIModel):

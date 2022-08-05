@@ -425,16 +425,22 @@ class ActionPlanTaskResource(APIResource):
         return self.model(
             self.client.post(
                 url,
-                json={"barrier": str(barrier_id), "milestone": milestone_id, **kwargs},
+                json={
+                    "barrier": str(barrier_id),
+                    "milestone": str(milestone_id),
+                    **kwargs,
+                },
             )
         )
 
     def update_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.patch(url, json={**kwargs}))
 
     def delete_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.delete(url))
 
 

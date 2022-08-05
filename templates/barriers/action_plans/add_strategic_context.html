@@ -1,39 +1,43 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit estimated resolution date{% endblock %}
+{% block page_title %}{{ block.super }} - {{ form.strategic_context.label}}{% endblock %}
 
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit action plan' %}
+  <h1 class="govuk-heading-l">
+    <label class="govuk-label govuk-label--l" for="{{ form.strategic_context.id_for_label }}">
+      {{ form.strategic_context.label }}
+    </label>
+    <span class="govuk-caption-m js-heading-caption">{{ caption }}</span> {{ text }}
+  </h1>
 
-    {% form_error_banner form %}
+  {% form_error_banner form %}
 
-    <form action="" method="POST" novalidate>
-        {% csrf_token %}
-
-        <div
-            id="{{ form.strategic_context.name }}"
-            class="{% form_group_classes form.strategic_context.errors %}"
-        >
-            <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                {{ form.strategic_context.label }}
-            </legend>
-
-            <span class="govuk-hint">{{ form.strategic_context.help_text }}</span>
-
-            {% form_field_error form "strategic_context" %}
-
-            <div class="govuk-date-input">{{ form.strategic_context }}</div>
-            </fieldset>
+  <form action="" method="POST" novalidate>
+    {% csrf_token %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-form-group">
+          <div id="more-detail-hint" class="govuk-hint">
+            {{ form.strategic_context.help_text }}
+          </div>
+          {{ form.strategic_context }}
         </div>
+      </div>
+    </div>
 
-        <button class="govuk-button" data-module="govuk-button">Confirm</button>
-        <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
-    </form>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-button-group">
+          <button class="govuk-button" data-module="govuk-button">Confirm</button>
+          <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier_id %}">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </form>
 
 {% endblock %}
