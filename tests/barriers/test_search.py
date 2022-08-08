@@ -25,7 +25,6 @@ class SearchTestCase(MarketAccessTestCase):
         response = self.client.get(reverse("barriers:search"))
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
             archived="0",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
@@ -90,6 +89,7 @@ class SearchTestCase(MarketAccessTestCase):
                 "priority": ["HIGH", "MEDIUM"],
                 "status": ["1", "2", "7"],
                 "user": "1",
+                "ordering": "-reported",
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -115,7 +115,7 @@ class SearchTestCase(MarketAccessTestCase):
         assert form.cleaned_data["user"] == "1"
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             search="Test search",
@@ -144,6 +144,7 @@ class SearchTestCase(MarketAccessTestCase):
             data={
                 "extra_location": ["TB00016"],
                 "country": ["82756b9a-5d95-e211-a939-e4115bead28a"],
+                "ordering": "-reported",
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -155,7 +156,7 @@ class SearchTestCase(MarketAccessTestCase):
         assert form.cleaned_data["extra_location"] == ["TB00016"]
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             location="82756b9a-5d95-e211-a939-e4115bead28a,TB00016",
@@ -169,6 +170,7 @@ class SearchTestCase(MarketAccessTestCase):
             data={
                 "country": ["TB00016"],
                 "country_trading_bloc": ["TB00016"],
+                "ordering": "-reported",
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -178,7 +180,7 @@ class SearchTestCase(MarketAccessTestCase):
         assert form.cleaned_data["country_trading_bloc"] == ["TB00016"]
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             location="TB00016",
@@ -192,18 +194,20 @@ class SearchTestCase(MarketAccessTestCase):
         mock_get.return_value = SavedSearch(
             data={
                 "name": "My barriers",
-                "filters": {"user": "1"},
+                "filters": {
+                    "user": "1",
+                },
                 "notify_about_additions": True,
                 "notify_about_updates": False,
             }
         )
         response = self.client.get(
             reverse("barriers:search"),
-            data={"user": "1"},
+            data={"user": "1", "ordering": "-reported"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             user="1",
@@ -225,11 +229,14 @@ class SearchTestCase(MarketAccessTestCase):
         )
         response = self.client.get(
             reverse("barriers:search"),
-            data={"team": "1"},
+            data={
+                "team": "1",
+                "ordering": "-reported",
+            },
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             team="1",
@@ -240,11 +247,15 @@ class SearchTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse("barriers:search"),
-            data={"user": "1", "team": "1"},
+            data={
+                "user": "1",
+                "team": "1",
+                "ordering": "-reported",
+            },
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             team="1",
@@ -286,11 +297,11 @@ class SearchTestCase(MarketAccessTestCase):
     def test_archived_filter(self, mock_list):
         response = self.client.get(
             reverse("barriers:search"),
-            data={"only_archived": "1"},
+            data={"only_archived": "1", "ordering": "-reported"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="1",
@@ -306,11 +317,15 @@ class SearchTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse("barriers:search"),
-            data={"status": ["1", "2", "3", "4", "5"], "page": "6"},
+            data={
+                "status": ["1", "2", "3", "4", "5"],
+                "page": "6",
+                "ordering": "-reported",
+            },
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             archived="0",
             status="1,2,3,4,5",
             limit=10,
@@ -324,7 +339,7 @@ class SearchTestCase(MarketAccessTestCase):
         assert pagination["total_pages"] == 13
         assert pagination["pages"][0]["label"] == 1
         assert pagination["pages"][0]["url"] == (
-            "status=1&status=2&status=3&status=4&status=5&page=1"
+            "status=1&status=2&status=3&status=4&status=5&ordering=-reported&page=1"
         )
         page_labels = [page["label"] for page in pagination["pages"]]
         assert page_labels == [1, "...", 5, 6, 7, 8, "...", 13]
@@ -339,11 +354,11 @@ class SearchTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse("barriers:search"),
-            data={"status": ["1", "2", "3"], "page": "3"},
+            data={"status": ["1", "2", "3"], "page": "3", "ordering": "-reported"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             archived="0",
             status="1,2,3",
             limit=10,
@@ -367,11 +382,11 @@ class SearchTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse("barriers:search"),
-            data={"status": ["1", "2", "3"], "page": "3"},
+            data={"status": ["1", "2", "3"], "page": "3", "ordering": "-reported"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             archived="0",
             status="1,2,3",
             limit=10,
@@ -395,11 +410,11 @@ class SearchTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse("barriers:search"),
-            data={"status": ["1", "2", "3"], "page": "2"},
+            data={"status": ["1", "2", "3"], "page": "2", "ordering": "-reported"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             archived="0",
             status="1,2,3",
             limit=10,
@@ -425,12 +440,13 @@ class SearchTestCase(MarketAccessTestCase):
                     "has_committee_raised_in",
                     "has_case_number",
                     "has_no_information",
-                ]
+                ],
+                "ordering": "-reported",
             },
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
@@ -454,11 +470,12 @@ class SearchTestCase(MarketAccessTestCase):
                 "resolved_date_from_year": "",
                 "resolved_date_to_month": "",
                 "resolved_date_to_year": "",
+                "ordering": "-reported",
             },
         )
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
@@ -475,13 +492,14 @@ class SearchTestCase(MarketAccessTestCase):
                 "resolved_date_from_year_resolved_in_full": "2021",
                 "resolved_date_to_month_resolved_in_full": "01",
                 "resolved_date_to_year_resolved_in_full": "2022",
+                "ordering": "-reported",
             },
         )
 
         assert response.status_code == HTTPStatus.OK
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
@@ -499,13 +517,14 @@ class SearchTestCase(MarketAccessTestCase):
                 "resolved_date_from_year_resolved_in_part": "2021",
                 "resolved_date_to_month_resolved_in_part": "01",
                 "resolved_date_to_year_resolved_in_part": "2022",
+                "ordering": "-reported",
             },
         )
 
         assert response.status_code == HTTPStatus.OK
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
@@ -523,13 +542,14 @@ class SearchTestCase(MarketAccessTestCase):
                 "resolved_date_from_year_open_pending_action": "2021",
                 "resolved_date_to_month_open_pending_action": "01",
                 "resolved_date_to_year_open_pending_action": "2022",
+                "ordering": "-reported",
             },
         )
 
         assert response.status_code == HTTPStatus.OK
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
@@ -547,13 +567,14 @@ class SearchTestCase(MarketAccessTestCase):
                 "resolved_date_from_year_open_in_progress": "2021",
                 "resolved_date_to_month_open_in_progress": "01",
                 "resolved_date_to_year_open_in_progress": "2022",
+                "ordering": "-reported",
             },
         )
 
         assert response.status_code == HTTPStatus.OK
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
@@ -565,15 +586,13 @@ class SearchTestCase(MarketAccessTestCase):
     def test_delivery_confidence_filter(self, mock_list):
         response = self.client.get(
             reverse("barriers:search"),
-            data={
-                "delivery_confidence": "ON_TRACK",
-            },
+            data={"delivery_confidence": "ON_TRACK", "ordering": "-reported"},
         )
 
         assert response.status_code == HTTPStatus.OK
 
         mock_list.assert_called_with(
-            ordering="-reported_on",
+            ordering="-reported",
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
