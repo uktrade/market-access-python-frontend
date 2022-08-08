@@ -41,8 +41,6 @@ class BarrierSearch(PaginationMixin, SearchFormView):
     form_class = BarrierSearchForm
     _client = None
 
-    pagination_limit = 5
-
     @property
     def client(self):
         if self._client is None:
@@ -148,9 +146,7 @@ class DownloadBarriers(SearchFormMixin, View):
         form.is_valid()
         search_parameters = form.get_api_search_parameters()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
-        resp = client.barriers.get_email_csv(
-            ordering="-reported_on", **search_parameters
-        )
+        resp = client.barriers.get_email_csv(**search_parameters)
 
         search_page_url = reverse("barriers:search")
         search_page_params = {
