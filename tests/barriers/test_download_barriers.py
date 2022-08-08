@@ -30,6 +30,7 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
                 "priority": ["HIGH", "MEDIUM"],
                 "status": ["1", "2", "7"],
                 "user": "1",
+                "ordering": "-reported",
             },
         )
         assert response.status_code == HTTPStatus.FOUND
