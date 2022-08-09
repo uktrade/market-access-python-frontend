@@ -1,8 +1,8 @@
 {% if item.new_value != None %}
     <div class="history-item__new-value">
-        {% if item.new_value.value == "APPROVED" %}
+        {% if item.new_value.value == "APPROVAL_PENDING" %}
             <span class="diff__ins">
-                Top 100 Priority Barrier
+                Top 100 Priority Barrier - Approval Pending
                 <br/>
                 {{ item.new_value.reason }}
             </span>

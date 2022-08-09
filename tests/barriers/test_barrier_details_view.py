@@ -64,7 +64,7 @@ class BarrierViewTestCase(MarketAccessTestCase):
         html = response.content.decode("utf8")
         assert HTTPStatus.OK == response.status_code
         # Currently expect 6 items in return, update count with more additions
-        expected_history_item_count = 6
+        expected_history_item_count = 5
         displayed_history_items_count = html.count(history_item_class)
         assert expected_history_item_count == displayed_history_items_count
 
@@ -90,7 +90,7 @@ class BarrierViewTestCase(MarketAccessTestCase):
 
         # Check 2 are displayed
         assert HTTPStatus.OK == response.status_code
-        expected_history_item_count = 2
+        expected_history_item_count = 1
         displayed_history_items_count = html.count(top_priority_history_item_class)
         assert expected_history_item_count == displayed_history_items_count
 

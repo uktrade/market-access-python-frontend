@@ -20,7 +20,7 @@ class BarrierHistory(BarrierMixin, TemplateView):
             if item.field == "top_priority_status":
                 if item.data["new_value"] is None or item.data["new_value"][
                     "value"
-                ] not in ["APPROVED", "REMOVED"]:
+                ] not in ["APPROVAL_PENDING"]:
                     full_history.remove(item)
 
         context_data["history_items"] = full_history
