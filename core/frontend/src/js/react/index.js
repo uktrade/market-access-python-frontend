@@ -144,4 +144,5 @@ export {
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
+    renderEmailSearchAutocomplete,
 };
