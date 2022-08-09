@@ -288,7 +288,7 @@
                                 <dt class="filter-results-list__item__definitions__key visually-hidden">ID:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.code }}</dd>
 
-                                <dt class="filter-results-list__item__definitions__key">Date Reported:</dt>
+                                <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.reported_on|date:"j F Y" }}</dd>
 
                                 <dt class="filter-results-list__item__definitions__key">Updated:</dt>
@@ -299,7 +299,7 @@
                                     <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
                                 {% else %}
                                     {% if barrier.estimated_resolution_date %}
-                                    <dt class="filter-results-list__item__definitions__key">Estimated Resolution Date:</dt>
+                                    <dt class="filter-results-list__item__definitions__key">Estimated resolution date:</dt>
                                     <dd class="filter-results-list__item__definitions__value">{{ barrier.estimated_resolution_date|date:"F Y" }}</dd>
                                     {% endif %}
                                 {% endif %}
