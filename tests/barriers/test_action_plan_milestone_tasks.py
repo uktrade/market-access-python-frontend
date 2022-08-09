@@ -39,7 +39,12 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
-        for field_name in form.fields.keys():
+        required_field_names = [
+            field_name
+            for field_name in form.fields.keys()
+            if form.fields[field_name].required
+        ]
+        for field_name in required_field_names:
             assert field_name in form.errors
 
     @patch("utils.api.resources.ActionPlanTaskResource.create_task")
