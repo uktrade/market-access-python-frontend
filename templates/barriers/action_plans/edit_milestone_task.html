@@ -157,7 +157,7 @@
   class="{% form_group_classes form.assigned_to.errors %}"
   id="{{ form.assigned_to.name }}"
 >
-  <div class="dmas_autocomplete_wrapper">
+  <div class="dmas_autocomplete_wrapper padding-none">
     <label class="govuk-label govuk-label--s" for="{{ form.assigned_to.id_for_label }}">
         {{ form.assigned_to.label }}
     </label>
@@ -184,7 +184,7 @@
           </div>
           {% form_field_error form.assigned_stakeholders %}
           <div class="" data-module="govuk-checkboxes">
-            <table class="govuk-table">
+            <table class="govuk-table margin-none">
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th scope="col" class="govuk-table__header">Name</th>
@@ -202,11 +202,11 @@
                         <label class="govuk-label govuk-checkboxes__label" for="{{ stakeholder_choice.id_for_label }}">{{ stakeholder.name }}</label>
                         </div>
                     </td>
-                    <td class="govuk-table__cell">
-                      {{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}
+                    <td class="govuk-table__cell vertical-center">
+                      <div class="flex-center">{{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}</div>
                     </td>
-                    <td class="govuk-table__cell">
-                      {{ stakeholder.get_status_display }}
+                    <td class="govuk-table__cell vertical-center">
+                      <div class="flex-center">{{ stakeholder.get_status_display }}</div>
                     </td>
                   </tr>
                   {% endwith %}

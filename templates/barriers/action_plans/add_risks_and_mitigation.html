@@ -12,7 +12,7 @@
 
     {% form_error_banner form %}
 
-    <form action="" method="POST">
+    <form action="" method="POST" novalidate="required">
         {% csrf_token %}
 
         <div
@@ -28,7 +28,7 @@
 
             {% form_field_error form "potential_unwanted_outcomes" %}
 
-            <div class="govuk-date-input">{{ form.potential_unwanted_outcomes }}</div>
+            <div>{{ form.potential_unwanted_outcomes }}</div>
             </fieldset>
         </div>
 
@@ -45,7 +45,7 @@
 
             {% form_field_error form "potential_risks" %}
 
-            <div class="govuk-date-input">{{ form.potential_risks }}</div>
+            <div>{{ form.potential_risks }}</div>
             </fieldset>
         </div>
 
@@ -92,7 +92,7 @@
 
             {% form_field_error form "risk_mitigation_measures" %}
 
-            <div class="govuk-date-input">{{ form.risk_mitigation_measures }}</div>
+            <div>{{ form.risk_mitigation_measures }}</div>
             </fieldset>
         </div>
 
