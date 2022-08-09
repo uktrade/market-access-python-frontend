@@ -64,14 +64,14 @@ class BarrierViewTestCase(MarketAccessTestCase):
         html = response.content.decode("utf8")
         assert HTTPStatus.OK == response.status_code
         # Currently expect 6 items in return, update count with more additions
-        expected_history_item_count = 6
+        expected_history_item_count = 5
         displayed_history_items_count = html.count(history_item_class)
         assert expected_history_item_count == displayed_history_items_count
 
     @patch("utils.api.resources.BarriersResource.get_full_history")
     def test_barrier_history_list_top_priority_items(self, mock_history):
-        # We expect 5 top priority items returned, but only 2 displayed
-        # Only APPROVED and REMOVED should be displayed
+        # We expect 5 top priority items returned, but only 1 displayed
+        # Only APPROVAL_PENDING should be displayed
         mock_history.return_value = [HistoryItem(result) for result in self.history]
         top_priority_history_item_class = (
             '<h4 class="history-item__field">PB100 Priority Status</h4>'
@@ -88,9 +88,9 @@ class BarrierViewTestCase(MarketAccessTestCase):
                 history_changes_count = history_changes_count + 1
         assert history_changes_count == 5
 
-        # Check 2 are displayed
+        # Check 1 is displayed
         assert HTTPStatus.OK == response.status_code
-        expected_history_item_count = 2
+        expected_history_item_count = 1
         displayed_history_items_count = html.count(top_priority_history_item_class)
         assert expected_history_item_count == displayed_history_items_count
 
