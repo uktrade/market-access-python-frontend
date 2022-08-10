@@ -284,7 +284,7 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
 
 class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
     reason_for_completion_date_change = forms.CharField(
-        required=False,
+        required=True,
         widget=forms.Textarea(
             attrs={
                 "class": "govuk-textarea",
@@ -296,11 +296,6 @@ class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
         },
         help_text="Provide a reason for changing the completion date",
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.has_changed() and "completion_date" in self.changed_data:
-            self.fields["reason_for_completion_date_change"].required = True
 
     def is_valid(self):
         return super().is_valid()
