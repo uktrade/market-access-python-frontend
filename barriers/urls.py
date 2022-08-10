@@ -699,7 +699,7 @@ urlpatterns = [
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/<uuid:id>/",
-        ActionPlanTaskUpdateFormView.as_view(),
+        ActionPlanTaskFormView.as_view(),
         name="action_plan_edit_task",
     ),
     path(
