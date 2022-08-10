@@ -202,10 +202,10 @@
                         <label class="govuk-label govuk-checkboxes__label" for="{{ stakeholder_choice.id_for_label }}">{{ stakeholder.name }}</label>
                         </div>
                     </td>
-                    <td class="govuk-table__cell pad-top-18">
+                    <td class="govuk-table__cell stakeholder-table__pad-cell">
                       <div class="flex-center">{{ stakeholder.is_organisation|yesno:"Organisation,Individual" }}</div>
                     </td>
-                    <td class="govuk-table__cell pad-top-18">
+                    <td class="govuk-table__cell stakeholder-table__pad-cell">
                       <div class="flex-center">{{ stakeholder.get_status_display }}</div>
                     </td>
                   </tr>

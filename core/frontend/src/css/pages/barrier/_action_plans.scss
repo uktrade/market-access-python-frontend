@@ -161,3 +161,7 @@
     @include govuk-responsive-margin(5, "left");
     @include govuk-responsive-margin(6, "bottom");
 }
+
+.stakeholder-table__pad-cell{
+	padding-top: govuk-spacing(4);
+}
