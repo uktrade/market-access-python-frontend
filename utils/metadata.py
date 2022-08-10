@@ -426,6 +426,9 @@ class Metadata:
             if str(status["id"]) == str(status):
                 return status
 
+    def get_search_ordering_choices(self):
+        return self.data["search_ordering_choices"]
+
 
 class MetadataMixin:
     _metadata = None
