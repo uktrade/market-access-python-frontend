@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Add stakeholder{% endblock %}
+{% block page_title %}{{ block.super }} - Add stakeholder details{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:action_plan_stakeholders_list' barrier_id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-  {% include 'partials/heading.html' with text='Add stakeholder' %}
+  {% include 'partials/heading.html' with text='Add stakeholder details' %}
 
   {% form_error_banner form %}
 
