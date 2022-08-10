@@ -703,6 +703,11 @@ urlpatterns = [
         name="action_plan_edit_task",
     ),
     path(
+        "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/<uuid:id>/check-start_date/",
+        ActionPlanTaskUpdateFormView.as_view(),
+        name="action_plan_completion_date_change",
+    ),
+    path(
         "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_outcome",
         EditActionPlanTaskOutcomeFormView.as_view(),
         name="action_plan_edit_outcome",
