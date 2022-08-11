@@ -384,9 +384,6 @@ class ActionPlanTaskCompletionDateChangeFormView(ActionPlanTaskFormView):
     form_class = ActionPlanTaskDateChangeReasonForm
     template_name = "barriers/action_plans/milestone_task_completion_date_reason.html"
 
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
 
 class EditActionPlanTaskOutcomeFormView(
     ActionPlanFormViewMixin, APIBarrierFormViewMixin, FormView
