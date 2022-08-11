@@ -1,4 +1,3 @@
-import uuid
 from http import HTTPStatus
 from unittest.mock import Mock, patch
 
@@ -70,7 +69,7 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
         assert "Location" in response
         assert response["Location"] == expected_url
 
-    @patch("utils.api.resources.ActionPlanStakeholderResource.update_stakeholder")
+    @patch("utils.api.resources.ActionPlanStakeholderResource.create_stakeholder")
     def test_add_individual_stakeholder_details(self, mock_update_method: Mock):
         mock_update_method.return_value = self.action_plan_individual_stakeholder
         url = reverse(
@@ -97,7 +96,7 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
         assert "Location" in response
         assert response["Location"] == expected_url
 
-    @patch("utils.api.resources.ActionPlanStakeholderResource.update_stakeholder")
+    @patch("utils.api.resources.ActionPlanStakeholderResource.create_stakeholder")
     def test_required_stakeholder_details_fail_validation(
         self, mock_update_method: Mock
     ):
@@ -121,7 +120,7 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
         assert "name" in form.errors
         assert "status" in form.errors
 
-    @patch("utils.api.resources.ActionPlanStakeholderResource.update_stakeholder")
+    @patch("utils.api.resources.ActionPlanStakeholderResource.create_stakeholder")
     def test_required_individual_stakeholder_details_fail_validation(
         self, mock_update_method: Mock
     ):
@@ -147,7 +146,7 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
         assert "job_title" in form.errors
         assert "organisation" in form.errors
 
-    @patch("utils.api.resources.ActionPlanStakeholderResource.update_stakeholder")
+    @patch("utils.api.resources.ActionPlanStakeholderResource.create_stakeholder")
     def test_add_organisation_stakeholder_details(self, mock_update_method: Mock):
         mock_update_method.return_value = self.action_plan_organisation_stakeholder
         url = reverse(
@@ -167,39 +166,6 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
         expected_url = reverse(
             "barriers:action_plan_stakeholders_list",
             kwargs={"barrier_id": self.barrier["id"]},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert "Location" in response
-        assert response["Location"] == expected_url
-
-    @patch("utils.api.resources.ActionPlanStakeholderResource.delete_stakeholder")
-    @patch("utils.api.resources.ActionPlanStakeholderResource.update_stakeholder")
-    # N.B. multiple patches are passed in reverse order of declaration
-    def test_cancel_on_create_stakeholder_details_deletes_new_stakeholder(
-        self, mock_update_method: Mock, mock_delete_method: Mock
-    ):
-        mock_update_method.return_value = self.action_plan_organisation_stakeholder
-        mock_delete_method.return_value = None
-        url = reverse(
-            "barriers:action_plan_stakeholders_new_organisation",
-            kwargs={"barrier_id": self.barrier["id"]},
-        )
-        response = self.client.post(
-            url,
-            follow=False,
-            data={
-                "name": self.action_plan_organisation_stakeholder.name,
-                "status": ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES.TARGET,
-                "cancel": "",
-            },
-        )
-        expected_url = reverse(
-            "barriers:action_plan_stakeholders_list",
-            kwargs={"barrier_id": self.barrier["id"]},
-        )
-        mock_delete_method.assert_called_once_with(
-            id=uuid.UUID(self.action_plan_organisation_stakeholder.id),
-            barrier_id=uuid.UUID(self.barrier["id"]),
         )
         assert response.status_code == HTTPStatus.FOUND
         assert "Location" in response
