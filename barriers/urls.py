@@ -5,7 +5,7 @@ from barriers.views.action_plans import (
     ActionPlanRisksAndMitigationView,
     ActionPlanStakeholdersListView,
     ActionPlanTaskFormView,
-    ActionPlanTaskUpdateFormView,
+    ActionPlanTaskCompletionDateChangeFormView,
     ActionPlanTemplateView,
     AddActionPlanStrategicContext,
     CreateActionPlanStakeholderDetailsFormView,
@@ -704,7 +704,7 @@ urlpatterns = [
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/<uuid:id>/check-start_date/",
-        ActionPlanTaskUpdateFormView.as_view(),
+        ActionPlanTaskCompletionDateChangeFormView.as_view(),
         name="action_plan_completion_date_change",
     ),
     path(
