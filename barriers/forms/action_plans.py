@@ -432,6 +432,7 @@ class ActionPlanOrganisationStakeholderDetailsForm(
     name = forms.CharField(
         max_length=255,
         required=True,
+        label="Organisation name",
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     status = forms.ChoiceField(
