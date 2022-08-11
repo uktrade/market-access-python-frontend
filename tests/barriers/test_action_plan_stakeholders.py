@@ -41,11 +41,8 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
             data={"is_organisation": ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.INDIVIDUAL},
         )
         expected_url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
-            kwargs={
-                "barrier_id": self.barrier["id"],
-                "id": self.action_plan_individual_stakeholder.id,
-            },
+            "barriers:action_plan_stakeholders_new_individual",
+            kwargs={"barrier_id": self.barrier["id"]},
         )
         assert response.status_code == HTTPStatus.FOUND
         assert "Location" in response
@@ -64,10 +61,9 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
             data={"is_organisation": ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION},
         )
         expected_url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
+            "barriers:action_plan_stakeholders_new_organisation",
             kwargs={
                 "barrier_id": self.barrier["id"],
-                "id": self.action_plan_organisation_stakeholder.id,
             },
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -78,10 +74,9 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
     def test_add_individual_stakeholder_details(self, mock_update_method: Mock):
         mock_update_method.return_value = self.action_plan_individual_stakeholder
         url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
+            "barriers:action_plan_stakeholders_new_individual",
             kwargs={
                 "barrier_id": self.barrier["id"],
-                "id": self.action_plan_individual_stakeholder.id,
             },
         )
         response = self.client.post(
@@ -108,10 +103,9 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
     ):
         mock_update_method.return_value = self.action_plan_organisation_stakeholder
         url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
+            "barriers:action_plan_stakeholders_new_organisation",
             kwargs={
                 "barrier_id": self.barrier["id"],
-                "id": self.action_plan_organisation_stakeholder.id,
             },
         )
         response = self.client.post(
@@ -133,7 +127,7 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
     ):
         mock_update_method.return_value = self.action_plan_individual_stakeholder
         url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
+            "barriers:action_plan_stakeholders_new_individual",
             kwargs={
                 "barrier_id": self.barrier["id"],
                 "id": self.action_plan_individual_stakeholder.id,
@@ -158,10 +152,9 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
     def test_add_organisation_stakeholder_details(self, mock_update_method: Mock):
         mock_update_method.return_value = self.action_plan_organisation_stakeholder
         url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
+            "barriers:action_plan_stakeholders_new_organisation",
             kwargs={
                 "barrier_id": self.barrier["id"],
-                "id": self.action_plan_organisation_stakeholder.id,
             },
         )
         response = self.client.post(
@@ -189,11 +182,8 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
         mock_update_method.return_value = self.action_plan_organisation_stakeholder
         mock_delete_method.return_value = None
         url = reverse(
-            "barriers:action_plan_stakeholders_add_details",
-            kwargs={
-                "barrier_id": self.barrier["id"],
-                "id": self.action_plan_organisation_stakeholder.id,
-            },
+            "barriers:action_plan_stakeholders_new_organisation",
+            kwargs={"barrier_id": self.barrier["id"]},
         )
         response = self.client.post(
             url,
