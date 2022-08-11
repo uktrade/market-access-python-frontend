@@ -339,6 +339,8 @@
                                             <li class="govuk-tag">TOP 100 PRIORITY BARRIER</li>
                                         {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
                                             <li class="govuk-tag govuk-tag--red">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+                                        {% elif barrier.top_priority_status == "RESOLVED" %}
+                                            <li class="resolved-barrier-top-priority-tag">RESOLVED TOP 100 PRIORITY BARRIER</li>
                                         {% endif %}
                                     {% endspaceless %}
                                 </ul>
