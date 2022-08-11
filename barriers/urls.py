@@ -623,32 +623,7 @@ urlpatterns = [
         name="action_plan_stakeholders_add",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/<uuid:id>/",
-        CreateActionPlanStakeholderDetailsFormView.as_view(),
-        name="action_plan_stakeholders_add_details",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/action_plan/stakeholders/<uuid:id>/",
-        EditActionPlanStakeholderDetailsFormView.as_view(),
-        name="action_plan_stakeholders_edit",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/action_plan/add_risks_and_mitigations",
-        ActionPlanRisksAndMitigationView.as_view(),
-        name="action_plan_add_risks_and_mitigations",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/action_plan/stakeholders/",
-        ActionPlanStakeholdersListView.as_view(),
-        name="action_plan_stakeholders_list",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/",
-        CreateActionPlanStakeholderTypeFormView.as_view(),
-        name="action_plan_stakeholders_add",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/<uuid:id>/",
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/add_details/",
         CreateActionPlanStakeholderDetailsFormView.as_view(),
         name="action_plan_stakeholders_add_details",
     ),

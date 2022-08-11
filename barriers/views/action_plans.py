@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, TemplateView
 
+from barriers.constants import ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES
 from barriers.forms.action_plans import (
     ActionPlanCurrentStatusEditForm,
     ActionPlanIndividualStakeholderDetailsForm,
@@ -99,19 +100,26 @@ class ActionPlanStakeholderFormViewMixin(ActionPlanFormViewMixin):
 
 
 class CreateActionPlanStakeholderTypeFormView(
-    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
 ):
     template_name = "barriers/action_plans/stakeholders/edit_type.html"
     form_class = ActionPlanStakeholderTypeForm
 
+    def form_valid(self, form):
+        # allow access to form data in get_success_url
+        self.form = form
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
+        is_organisation = self.form.cleaned_data["is_organisation"]
         return reverse(
             "barriers:action_plan_stakeholders_add_details",
             kwargs={
                 "barrier_id": self.kwargs.get("barrier_id"),
-                "id": self.saved_object.id,
             },
-        )
+        ) + "?type={}".format(is_organisation)
 
 
 class EditActionPlanStakeholderDetailsFormView(
@@ -144,15 +152,20 @@ class EditActionPlanStakeholderDetailsFormView(
 class CreateActionPlanStakeholderDetailsFormView(
     EditActionPlanStakeholderDetailsFormView
 ):
-    def post(self, request, *args, **kwargs):
+    def get_form_class(self):
+        stakeholder_type = self.request.GET.get("type")
+        if stakeholder_type == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION:
+            return ActionPlanOrganisationStakeholderDetailsForm
+        elif stakeholder_type == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.INDIVIDUAL:
+            return ActionPlanIndividualStakeholderDetailsForm
+
+    def get_initial(self):
+        # create will always have a blank initial value
+        return {}
+
+    def post(self, request, barrier_id, *args, **kwargs):
         if "cancel" in request.POST:
-            # delete the pending stakeholder
-            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-            stakeholder_id = self.kwargs.get("id")
-            barrier_id = self.kwargs.get("barrier_id")
-            client.action_plan_stakeholders.delete_stakeholder(
-                id=stakeholder_id, barrier_id=barrier_id
-            )
+
             return HttpResponseRedirect(self.get_success_url())
         return super().post(request, *args, **kwargs)
 

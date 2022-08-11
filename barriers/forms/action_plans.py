@@ -398,7 +398,6 @@ class ActionPlanStakeholderFormMixin:
 
 
 class ActionPlanStakeholderTypeForm(
-    ActionPlanStakeholderFormMixin,
     ClearableMixin,
     APIFormMixin,
     forms.Form,
@@ -409,6 +408,11 @@ class ActionPlanStakeholderTypeForm(
         label="Stakeholder type",
         required=True,
     )
+
+    def __init__(self, barrier_id, action_plan, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.action_plan = action_plan
+        return super().__init__(*args, **kwargs)
 
     def get_request_data(self):
         request_data = super().get_request_data()
@@ -441,6 +445,7 @@ class ActionPlanOrganisationStakeholderDetailsForm(
         request_data = super().get_request_data()
         request_data["name"] = self.cleaned_data["name"]
         request_data["status"] = self.cleaned_data["status"]
+        request_data["is_organisation"] = True
         return request_data
 
 
@@ -462,6 +467,7 @@ class ActionPlanIndividualStakeholderDetailsForm(
         request_data = super().get_request_data()
         request_data["organisation"] = self.cleaned_data["organisation"]
         request_data["job_title"] = self.cleaned_data["job_title"]
+        request_data["is_organisation"] = False
         return request_data
 
 
