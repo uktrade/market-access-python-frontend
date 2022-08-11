@@ -124,6 +124,8 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         form_data[
             "completion_date"
         ] = "2023-12-12"  # original value in fixture is 2022-12-01
+        form_data["completion_date_1"] = "2023"
+        form_data["completion_date_0"] = "12"
         response = self.client.post(
             url,
             follow=False,
