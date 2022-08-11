@@ -64,7 +64,7 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Action plan overview",
         help_text="Provide a brief description of your action plan",
-        required=False,
+        required=True,
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
