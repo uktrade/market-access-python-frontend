@@ -114,12 +114,16 @@ class CreateActionPlanStakeholderTypeFormView(
 
     def get_success_url(self):
         is_organisation = self.form.cleaned_data["is_organisation"]
-        return reverse(
-            "barriers:action_plan_stakeholders_add_details",
-            kwargs={
-                "barrier_id": self.kwargs.get("barrier_id"),
-            },
-        ) + "?type={}".format(is_organisation)
+        if is_organisation == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION:
+            return reverse(
+                "barriers:action_plan_stakeholders_new_organisation",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        if is_organisation == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.INDIVIDUAL:
+            return reverse(
+                "barriers:action_plan_stakeholders_new_individual",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
 
 
 class EditActionPlanStakeholderDetailsFormView(
@@ -152,13 +156,6 @@ class EditActionPlanStakeholderDetailsFormView(
 class CreateActionPlanStakeholderDetailsFormView(
     EditActionPlanStakeholderDetailsFormView
 ):
-    def get_form_class(self):
-        stakeholder_type = self.request.GET.get("type")
-        if stakeholder_type == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION:
-            return ActionPlanOrganisationStakeholderDetailsForm
-        elif stakeholder_type == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.INDIVIDUAL:
-            return ActionPlanIndividualStakeholderDetailsForm
-
     def get_initial(self):
         # create will always have a blank initial value
         return {}
@@ -173,6 +170,22 @@ class CreateActionPlanStakeholderDetailsFormView(
         context = super().get_context_data(**kwargs)
         context["allow_deletion"] = True
         return context
+
+
+class CreateActionPlanStakeholderIndividualFormView(
+    CreateActionPlanStakeholderDetailsFormView
+):
+    def get_form_class(self):
+        # parent needs to be overriden
+        return ActionPlanIndividualStakeholderDetailsForm
+
+
+class CreateActionPlanStakeholderOrganisationFormView(
+    CreateActionPlanStakeholderDetailsFormView
+):
+    def get_form_class(self):
+        # parent needs to be overriden
+        return ActionPlanOrganisationStakeholderDetailsForm
 
 
 class SelectActionPlanOwner(
@@ -412,7 +425,6 @@ class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
 
 
 class AddActionPlanStakeholderFormView(
-    # ActionPlanTaskFormV iewMixin,
     ActionPlanFormViewMixin,
     APIBarrierFormViewMixin,
     FormView,

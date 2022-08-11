@@ -8,7 +8,8 @@ from barriers.views.action_plans import (
     ActionPlanTaskUpdateFormView,
     ActionPlanTemplateView,
     AddActionPlanStrategicContext,
-    CreateActionPlanStakeholderDetailsFormView,
+    CreateActionPlanStakeholderIndividualFormView,
+    CreateActionPlanStakeholderOrganisationFormView,
     CreateActionPlanStakeholderTypeFormView,
     DeleteActionPlanMilestoneView,
     DeleteActionPlanTaskView,
@@ -623,9 +624,14 @@ urlpatterns = [
         name="action_plan_stakeholders_add",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/add_details/",
-        CreateActionPlanStakeholderDetailsFormView.as_view(),
-        name="action_plan_stakeholders_add_details",
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/individual/",
+        CreateActionPlanStakeholderIndividualFormView.as_view(),
+        name="action_plan_stakeholders_new_individual",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/organisation/",
+        CreateActionPlanStakeholderOrganisationFormView.as_view(),
+        name="action_plan_stakeholders_new_organisation",
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/stakeholders/<uuid:id>/",
