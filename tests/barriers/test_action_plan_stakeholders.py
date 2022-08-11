@@ -130,7 +130,6 @@ class ActionPlanStakeholdersTestCase(MarketAccessTestCase):
             "barriers:action_plan_stakeholders_new_individual",
             kwargs={
                 "barrier_id": self.barrier["id"],
-                "id": self.action_plan_individual_stakeholder.id,
             },
         )
         response = self.client.post(
