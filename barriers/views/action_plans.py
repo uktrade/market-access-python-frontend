@@ -185,6 +185,13 @@ class SelectActionPlanOwner(
     template_name = "barriers/action_plans/add_owner.html"
     error_message = "There was an error adding {full_name} as an owner."
 
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["cancel_url"] = reverse(
+            "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
+        )
+        return context_data
+
     def select_user_api_call(self, user_id):
         self.client.action_plans.edit_action_plan(
             barrier_id=str(self.kwargs.get("barrier_id")), owner=user_id
