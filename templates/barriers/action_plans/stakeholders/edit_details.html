@@ -54,11 +54,7 @@
       <div class="govuk-grid-column-full">
         <div class="govuk-button-group">
           <button class="govuk-button" data-module="govuk-button" type="submit">Confirm</button>
-          {% if allow_deletion %}
-            <button class="govuk-button govuk-button--secondary" type="submit" name="cancel">Cancel</button>
-          {% else %}
-            <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_stakeholders_list' barrier_id %}">Cancel</a>
-          {% endif %}
+          <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_stakeholders_list' barrier_id %}">Cancel</a>
         </div>
       </div>
     </div>

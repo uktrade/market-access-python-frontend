@@ -153,39 +153,30 @@ class EditActionPlanStakeholderDetailsFormView(
         )
 
 
-class CreateActionPlanStakeholderDetailsFormView(
-    EditActionPlanStakeholderDetailsFormView
-):
-    def get_initial(self):
-        # create will always have a blank initial value
-        return {}
-
-    def post(self, request, barrier_id, *args, **kwargs):
-        if "cancel" in request.POST:
-
-            return HttpResponseRedirect(self.get_success_url())
-        return super().post(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["allow_deletion"] = True
-        return context
-
-
 class CreateActionPlanStakeholderIndividualFormView(
-    CreateActionPlanStakeholderDetailsFormView
+    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
 ):
-    def get_form_class(self):
-        # parent needs to be overriden
-        return ActionPlanIndividualStakeholderDetailsForm
+    template_name = "barriers/action_plans/stakeholders/edit_details.html"
+    form_class = ActionPlanIndividualStakeholderDetailsForm
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan_stakeholders_list",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
 
 
 class CreateActionPlanStakeholderOrganisationFormView(
-    CreateActionPlanStakeholderDetailsFormView
+    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
 ):
-    def get_form_class(self):
-        # parent needs to be overriden
-        return ActionPlanOrganisationStakeholderDetailsForm
+    template_name = "barriers/action_plans/stakeholders/edit_details.html"
+    form_class = ActionPlanOrganisationStakeholderDetailsForm
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan_stakeholders_list",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
 
 
 class SelectActionPlanOwner(
