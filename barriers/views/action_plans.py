@@ -320,47 +320,12 @@ class ActionPlanTaskFormView(
         ):
             response_kwargs = {}
             response_kwargs.setdefault("content_type", self.content_type)
-            initial = form.initial
-            # Sort out the changed values for the new form
-            for field_name in form.changed_data:
-                if field_name in ["start_date", "completion_date"]:
-                    year_field_name = f"{field_name}_1"
-                    month_field_name = f"{field_name}_0"
-                    initial[
-                        field_name
-                    ] = f"{form.data[year_field_name]}-{form.data[month_field_name]}-01"
-                elif field_name == "action_type":
-                    # Either that SubFormMixin isn't right, or I don't understand it. Or both.
-                    initial_action_type_category_name = (
-                        f"action_type_category_{initial['action_type']}"
-                    )
-                    initial.pop(initial_action_type_category_name)
-                    action_type = form.data["action_type"]
-                    action_type_category_name = f"action_type_category_{action_type}"
-                    action_type_category = form.data[action_type_category_name]
-                    initial["action_type_category"] = action_type_category
-                    initial[action_type_category_name] = action_type_category
-                    initial["action_type"] = action_type
-                elif field_name == "action_type_category":
-                    continue
-                elif field_name == "assigned_stakeholders":
-                    initial[field_name] = form.data.getlist(field_name)
-                else:
-                    initial[field_name] = form.data[field_name]
-            if "action_type" not in form.changed_data:
-                # Need to hammer the subform field into shape here instead
-                action_type = form.data["action_type"]
-                action_type_category_name = f"action_type_category_{action_type}"
-                action_type_category = form.data[action_type_category_name]
-                initial["action_type_category"] = action_type_category
-
             # Need to replace the form with an unbound form that asks for a reason
             # All other fields will be turned into hidden fields
             form_kwargs = self.get_form_kwargs()
-            form_kwargs["initial"] = initial
-            form_kwargs.pop(
-                "files"
-            )  # Need to get rid of files and data to ensure form is not bound
+            form_kwargs["initial"] = form.cleaned_data
+            # Need to get rid of files and data to ensure form is not bound
+            form_kwargs.pop("files")
             form_kwargs.pop("data")
             unbound_form = ActionPlanTaskDateChangeReasonForm(**form_kwargs)
 
