@@ -8574,6 +8574,7 @@
       "id": 1,
       "title": "COVID-19",
       "description": "Barrier imposed because of the COVID-19 (coronavirus) pandemic.",
+      "usage": "deprecated",
       "show_at_reporting": true,
       "order": 1
     },
@@ -8581,6 +8582,7 @@
       "id": 3,
       "title": "Brexit",
       "description": "",
+      "usage": "in-use",
       "show_at_reporting": true,
       "order": 2
     },
@@ -8588,6 +8590,7 @@
       "id": 2,
       "title": "NI Protocol",
       "description": "Special provisions applied to goods from GB to avoid a hard border with Ireland when the UK leaves the EU.",
+      "usage": "in-use",
       "show_at_reporting": true,
       "order": 3
     },
@@ -8595,6 +8598,7 @@
       "id": 35,
       "title": "Asia Pacific Cross-Government Pilot",
       "description": "",
+      "usage": "in-use",
       "show_at_reporting": true,
       "order": 4
     }

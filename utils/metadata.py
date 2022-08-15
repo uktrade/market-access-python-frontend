@@ -339,7 +339,10 @@ class Metadata:
 
         if list_use == "edit":
             # If this list is for the edit pages, return as generator
-            return ((tag["id"], tag["title"], tag["description"]) for tag in tag_list)
+            return (
+                (tag["id"], tag["title"], tag["description"], tag["usage"])
+                for tag in tag_list
+            )
         elif list_use == "search":
             # If this list is for the search functionality, return as a plain list
             return tag_list

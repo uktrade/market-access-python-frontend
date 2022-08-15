@@ -396,6 +396,7 @@ class BarrierSearchForm(forms.Form):
         choices = [
             (str(tag["id"]), tag["title"])
             for tag in self.metadata.get_barrier_tag_choices("search")
+            if tag["usage"] == "in-use"
         ]
         choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
