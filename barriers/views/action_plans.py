@@ -445,7 +445,6 @@ class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
 
 
 class AddActionPlanStakeholderFormView(
-    # ActionPlanTaskFormV iewMixin,
     ActionPlanFormViewMixin,
     APIBarrierFormViewMixin,
     FormView,
