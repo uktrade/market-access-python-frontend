@@ -4,6 +4,24 @@ ma.pages.barrier.action_plans_add_task = function () {
     }
 
     new ma.components.ConditionalRadioContent({
+        inputContainer: ".status",
+        inputName: "status",
+        conditionalElem: "#conditional-IN_PROGRESS",
+        shouldShow: function (value) {
+            return value === "IN_PROGRESS";
+        },
+    });
+
+    new ma.components.ConditionalRadioContent({
+        inputContainer: ".status",
+        inputName: "status",
+        conditionalElem: "#conditional-COMPLETED",
+        shouldShow: function (value) {
+            return value === "COMPLETED";
+        },
+    });
+
+    new ma.components.ConditionalRadioContent({
         inputContainer: ".action_type",
         inputName: "action_type",
         conditionalElem: "#conditional-SCOPING_AND_RESEARCH",
