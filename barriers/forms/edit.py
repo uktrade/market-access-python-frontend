@@ -1,6 +1,7 @@
 from django import forms
 
 from barriers.constants import (
+    DEPRECATED_TAGS,
     TOP_PRIORITY_BARRIER_STATUS,
     TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES,
@@ -263,6 +264,7 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
     def __init__(self, tags, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["tags"].choices = tags
+        self.deprecated_tags = DEPRECATED_TAGS
 
     def save(self):
         client = MarketAccessAPIClient(self.token)

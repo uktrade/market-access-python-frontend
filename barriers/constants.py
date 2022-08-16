@@ -226,3 +226,7 @@ TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES = Choices(
 )
 
 TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"
+
+# Deprecated tags are tags we do not want future barriers to be able to use,
+# but need to keep for older and archived barriers.
+DEPRECATED_TAGS = ["COVID-19"]
