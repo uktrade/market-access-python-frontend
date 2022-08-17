@@ -6,7 +6,7 @@ import requests
 from django.conf import settings
 from mohawk import Sender
 
-from barriers.constants import Statuses
+from barriers.constants import DEPRECATED_TAGS, Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
 
@@ -352,7 +352,7 @@ class Metadata:
         return (
             (tag["id"], tag["title"], tag["description"])
             for tag in self.get_barrier_tags()
-            if tag["show_at_reporting"] is True
+            if tag["show_at_reporting"] is True and tag["title"] not in DEPRECATED_TAGS
         )
 
     def get_trade_categories(self):

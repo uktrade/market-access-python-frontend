@@ -8,7 +8,7 @@ from django import forms
 from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import STATUS_WITH_DATE_FILTER
+from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER
 
 logger = logging.getLogger(__name__)
 
@@ -408,6 +408,7 @@ class BarrierSearchForm(forms.Form):
         choices = [
             (str(tag["id"]), tag["title"])
             for tag in self.metadata.get_barrier_tag_choices("search")
+            if tag["title"] not in DEPRECATED_TAGS
         ]
         choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
