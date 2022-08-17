@@ -275,14 +275,15 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "date": "2020-04-01T00:00:00Z",
                 "model": "barrier",
                 "field": "top_priority_status",
-                "old_value": "",
-                "new_value": "Top 100 Priority Barrier - Approval Pending",
+                "old_value": {"value": None, "reason": None},
+                "new_value": {"value": "APPROVAL_PENDING", "reason": "an approval"},
                 "user": None,
             }
         )
+
         assert item.field_name == "PB100 Priority Status"
-        assert item.old_value == ""
-        assert item.new_value == "Top 100 Priority Barrier - Approval Pending"
+        assert item.old_value is None
+        assert item.new_value == {"value": "APPROVAL_PENDING", "reason": "an approval"}
 
 
 class NoteHistoryItemTestCase(MarketAccessTestCase):
