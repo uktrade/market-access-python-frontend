@@ -5,6 +5,7 @@ from operator import itemgetter
 from urllib.parse import urlencode
 
 from django import forms
+from django.conf import settings
 from django.http import QueryDict
 
 from barriers.constants import STATUS_WITH_DATE_FILTER
@@ -212,6 +213,14 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
+    ordering = forms.ChoiceField(
+        label="Sort by",
+        choices=(),
+        required=False,
+        widget=forms.Select(
+            attrs={"class": "govuk-select dmas-search-ordering-select"}
+        ),
+    )
 
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
@@ -240,6 +249,7 @@ class BarrierSearchForm(forms.Form):
         self.set_priority_choices()
         self.set_status_choices()
         self.set_tags_choices()
+        self.set_ordering_choices()
         self.index_filter_groups()
 
     def get_data_from_querydict(self, data):
@@ -277,6 +287,7 @@ class BarrierSearchForm(forms.Form):
             "economic_impact_assessment": data.getlist("economic_impact_assessment"),
             "commodity_code": data.getlist("commodity_code"),
             "commercial_value_estimate": data.getlist("commercial_value_estimate"),
+            "ordering": data.get("ordering"),
         }
 
         for status_value in STATUS_WITH_DATE_FILTER:
@@ -400,6 +411,10 @@ class BarrierSearchForm(forms.Form):
         ]
         choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
+
+    def set_ordering_choices(self):
+        choices = self.metadata.get_search_ordering_choices()
+        self.fields["ordering"].choices = self.metadata.get_search_ordering_choices()
 
     def clean_country(self):
         data = self.cleaned_data["country"]
@@ -529,6 +544,9 @@ class BarrierSearchForm(forms.Form):
         params["commercial_value_estimate"] = ",".join(
             self.cleaned_data.get("commercial_value_estimate", [])
         )
+        params["ordering"] = self.cleaned_data.get(
+            "ordering", settings.API_BARRIER_LIST_DEFAULT_SORT
+        )
 
         return {k: v for k, v in params.items() if v}
 
@@ -564,7 +582,7 @@ class BarrierSearchForm(forms.Form):
         return {
             key: value
             for key, value in self.cleaned_data.items()
-            if value and not self.fields[key].widget.is_hidden
+            if value and not self.fields[key].widget.is_hidden and not key == "ordering"
         }
 
     def get_raw_filters_querystring(self):

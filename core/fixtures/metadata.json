@@ -8972,7 +8972,7 @@
         "5661b8be-5d95-e211-a939-e4115bead28a",
         "1a0be5c4-5d95-e211-a939-e4115bead28a",
         "b46ee1ca-5d95-e211-a939-e4115bead28a"
-    ]
+      ]
     },
     {
       "code": "TB00013",
@@ -8984,7 +8984,7 @@
         "786a9ab2-5d95-e211-a939-e4115bead28a",
         "7e6a9ab2-5d95-e211-a939-e4115bead28a",
         "5961b8be-5d95-e211-a939-e4115bead28a"
-    ]
+      ]
     },
     {
       "code": "TB00026",
@@ -8995,7 +8995,7 @@
         "b05f66a0-5d95-e211-a939-e4115bead28a",
         "4f61b8be-5d95-e211-a939-e4115bead28a",
         "9c5f66a0-5d95-e211-a939-e4115bead28a"
-    ]
+      ]
     }
   ],
   "government_organisations": [
@@ -9271,5 +9271,47 @@
       "name": "Top 100 Priority Barrier - Resolved",
       "order": 4
     }
+  ],
+  "search_ordering_choices": [
+    [
+      "-reported",
+      "Date reported (newest)"
+    ],
+    [
+      "reported",
+      "Date reported (oldest)"
+    ],
+    [
+      "-updated",
+      "Last updated (most recent)"
+    ],
+    [
+      "updated",
+      "Last updated (least recent)"
+    ],
+    [
+      "-value",
+      "Value (highest)"
+    ],
+    [
+      "value",
+      "Value (lowest)"
+    ],
+    [
+      "-resolution",
+      "Estimated resolution date (most recent)"
+    ],
+    [
+      "resolution",
+      "Estimated resolution date (least recent)"
+    ],
+    [
+      "-resolved",
+      "Date resolved (most recent)"
+    ],
+    [
+      "resolved",
+      "Date resolved (least recent)"
+    ]
   ]
 }

@@ -264,6 +264,10 @@ ALLOWED_FILE_TYPES = env.list("ALLOWED_FILE_TYPES", default=["text/csv", "image/
 
 API_RESULTS_LIMIT = env.int("API_RESULTS_LIMIT", default=100)
 
+API_BARRIER_LIST_DEFAULT_SORT = env.str(
+    "API_BARRIER_LIST_DEFAULT_SORT", default="-reported_on"
+)
+
 # Logging
 # ============================================
 DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="info").upper()

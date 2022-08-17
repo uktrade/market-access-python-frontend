@@ -68,6 +68,7 @@ class BarrierSearch(PaginationMixin, SearchFormView):
                 "download_request_sent_error": self.request.GET.get(
                     "download_request_sent_error"
                 ),
+                "search_ordering_choices": metadata.get_search_ordering_choices(),
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)
@@ -75,7 +76,6 @@ class BarrierSearch(PaginationMixin, SearchFormView):
 
     def get_barriers(self, form):
         return self.client.barriers.list(
-            ordering="-reported_on",
             limit=self.get_pagination_limit(),
             offset=self.get_pagination_offset(),
             **form.get_api_search_parameters(),
@@ -146,9 +146,7 @@ class DownloadBarriers(SearchFormMixin, View):
         form.is_valid()
         search_parameters = form.get_api_search_parameters()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
-        resp = client.barriers.get_email_csv(
-            ordering="-reported_on", **search_parameters
-        )
+        resp = client.barriers.get_email_csv(**search_parameters)
 
         search_page_url = reverse("barriers:search")
         search_page_params = {
