@@ -138,7 +138,7 @@ ACTION_PLAN_TASK_CATEGORIES = {
     ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: Choices(
         *[
             "Creating and maintaining trade agreements",
-            "Buidling partnerships",
+            "Building partnerships",
             "Market liberalisation forums",
             "Other",
         ]
