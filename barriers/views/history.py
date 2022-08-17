@@ -10,7 +10,20 @@ class BarrierHistory(BarrierMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["history_items"] = self.get_full_history()
+
+        full_history = self.get_full_history()
+
+        for item in full_history[:]:
+            # This loop allows us to exclude certain history items from the display if un-wanted
+
+            # Top priority fields should only be included for accepted and removed tags
+            if item.field == "top_priority_status":
+                if item.data["new_value"] is None or item.data["new_value"][
+                    "value"
+                ] not in ["APPROVAL_PENDING"]:
+                    full_history.remove(item)
+
+        context_data["history_items"] = full_history
         return context_data
 
     def get_full_history(self):

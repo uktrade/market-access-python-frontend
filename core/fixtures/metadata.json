@@ -8597,6 +8597,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 4
+    },
+    {
+      "id": 5,
+      "title": "Programme Fund",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 5
     }
   ],
   "barrier_type_categories": {
