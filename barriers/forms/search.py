@@ -58,6 +58,7 @@ class BarrierSearchForm(forms.Form):
         choices=(
             ("APPROVED", "Top 100 priority barrier"),
             ("PENDING", "Pending approval/removal"),
+            ("RESOLVED", "Resolved top 100 priority barrier"),
         ),
         required=False,
     )

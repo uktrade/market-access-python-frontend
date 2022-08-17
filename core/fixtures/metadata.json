@@ -9265,6 +9265,11 @@
       "code": "APPROVED",
       "name": "Top 100 Priority Barrier",
       "order": 3
+    },
+    {
+      "code": "RESOLVED",
+      "name": "Top 100 Priority Barrier - Resolved",
+      "order": 4
     }
   ],
   "search_ordering_choices": [
