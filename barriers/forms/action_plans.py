@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from barriers.constants import (
+    ACTION_PLAN_HAS_RISKS_CHOICES,
     ACTION_PLAN_RAG_STATUS_CHOICES,
     ACTION_PLAN_RISK_LEVEL_CHOICES,
     ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
@@ -518,4 +519,27 @@ class ActionPlanRisksAndMitigationForm(
             potential_risks=self.cleaned_data["potential_risks"],
             risk_level=self.cleaned_data["risk_level"],
             risk_mitigation_measures=self.cleaned_data["risk_mitigation_measures"],
+        )
+
+
+class ActionPlanRisksAndMitigationIntroForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
+    has_risks = forms.ChoiceField(
+        label="Are there any risks in progressing this market access barrier?",
+        choices=ACTION_PLAN_HAS_RISKS_CHOICES,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+    )
+
+    def __init__(self, barrier_id, action_plan, *args, **kwargs):
+        self.barrier_id = barrier_id
+        # self.action_plan_id = action_plan_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier_id,
+            has_risks=self.cleaned_data["has_risks"],
         )

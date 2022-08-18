@@ -2,7 +2,7 @@ from django.urls import path, re_path
 
 from barriers.views.action_plans import (
     ActionPlanMilestoneFormView,
-    ActionPlanRisksAndMitigationView,
+    ActionPlanRisksAndMitigationWizardView,
     ActionPlanStakeholdersListView,
     ActionPlanTaskFormView,
     ActionPlanTaskUpdateFormView,
@@ -610,7 +610,7 @@ urlpatterns = [
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/add_risks_and_mitigations",
-        ActionPlanRisksAndMitigationView.as_view(),
+        ActionPlanRisksAndMitigationWizardView.as_view(),
         name="action_plan_add_risks_and_mitigations",
     ),
     path(

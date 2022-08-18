@@ -79,6 +79,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_extensions",
     "webpack_loader",
+    "formtools",
 ]
 
 LOCAL_APPS = [

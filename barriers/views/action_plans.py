@@ -4,6 +4,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, TemplateView
+from formtools.wizard.views import SessionWizardView
 
 from barriers.constants import ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES
 from barriers.forms.action_plans import (
@@ -12,6 +13,7 @@ from barriers.forms.action_plans import (
     ActionPlanMilestoneForm,
     ActionPlanOrganisationStakeholderDetailsForm,
     ActionPlanRisksAndMitigationForm,
+    ActionPlanRisksAndMitigationIntroForm,
     ActionPlanStakeholderTypeForm,
     ActionPlanStrategicContextForm,
     ActionPlanTaskDateChangeReasonForm,
@@ -51,7 +53,7 @@ class ActionPlanFormViewMixin(ActionPlanFormSuccessUrlMixin):
                 raise Http404()
             raise
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs()
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         kwargs["action_plan"] = self.action_plan
@@ -440,3 +442,46 @@ class ActionPlanRisksAndMitigationView(
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
+
+
+def risks_and_mitigation_detail_form_condition(wizard):
+    step0_cleaned_data = wizard.get_cleaned_data_for_step("0")
+    if step0_cleaned_data:
+        return step0_cleaned_data.get("has_risks") == "YES"
+    return False
+
+
+class ActionPlanRisksAndMitigationWizardView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, SessionWizardView
+):
+    template_name = "barriers/action_plans/add_risks_and_mitigation.html"
+    form_list = [
+        ActionPlanRisksAndMitigationIntroForm,
+        ActionPlanRisksAndMitigationForm,
+    ]
+    condition_dict = {"1": risks_and_mitigation_detail_form_condition}
+
+    def get_form_initial(self, step):
+        if self.request.method == "GET":
+            return self.action_plan.data
+
+    def done(self, form_list, **kwargs):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier_id,
+            has_risks=self.cleaned_data.get("has_risks"),
+            potential_unwanted_outcomes=self.cleaned_data.get(
+                "potential_unwanted_outcomes"
+            ),
+            potential_risks=self.cleaned_data.get("potential_risks"),
+            risk_level=self.cleaned_data.get("risk_level"),
+            risk_mitigation_measures=self.cleaned_data.get("risk_mitigation_measures"),
+        )
+
+        return HttpResponseRedirect(
+            reverse(
+                "barriers:action_plan",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        )

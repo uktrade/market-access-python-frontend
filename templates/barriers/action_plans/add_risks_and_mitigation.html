@@ -14,6 +14,16 @@
 
     <form action="" method="POST" novalidate>
         {% csrf_token %}
+        {{ wizard.management_form }}
+
+        {% if wizard.steps.step0 == 0 %}
+        <fieldset class="govuk-fieldset">
+              {% include "partials/forms/radio_button_group.html" with radio_group=form.has_risks %}
+        </fieldset>
+
+        {% endif %}
+
+        {% if wizard.steps.step0 == 1 %}
 
         <div
             id="{{ form.potential_unwanted_outcomes.name }}"
@@ -31,6 +41,7 @@
             <div>{{ form.potential_unwanted_outcomes }}</div>
             </fieldset>
         </div>
+
 
         <div
             id="{{ form.potential_risks.name }}"
@@ -95,6 +106,8 @@
             <div>{{ form.risk_mitigation_measures }}</div>
             </fieldset>
         </div>
+
+        {% endif %}
 
         <button class="govuk-button" data-module="govuk-button">Save Changes</button>
         <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
