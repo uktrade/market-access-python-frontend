@@ -494,7 +494,10 @@ class ActionPlanRisksAndMitigationForm(
     )
 
     risk_level = forms.ChoiceField(
-        label="Risk level", choices=ACTION_PLAN_RISK_LEVEL_CHOICES, required=True
+        label="Risk level",
+        choices=ACTION_PLAN_RISK_LEVEL_CHOICES,
+        required=True,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
 
     risk_mitigation_measures = forms.CharField(

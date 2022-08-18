@@ -462,21 +462,20 @@ class ActionPlanRisksAndMitigationWizardView(
     condition_dict = {"1": risks_and_mitigation_detail_form_condition}
 
     def get_form_initial(self, step):
-        if self.request.method == "GET":
-            return self.action_plan.data
+        return self.action_plan.data
 
     def done(self, form_list, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
+        cleaned_data = self.get_all_cleaned_data()
+
         client.action_plans.edit_action_plan(
-            barrier_id=self.barrier_id,
-            has_risks=self.cleaned_data.get("has_risks"),
-            potential_unwanted_outcomes=self.cleaned_data.get(
-                "potential_unwanted_outcomes"
-            ),
-            potential_risks=self.cleaned_data.get("potential_risks"),
-            risk_level=self.cleaned_data.get("risk_level"),
-            risk_mitigation_measures=self.cleaned_data.get("risk_mitigation_measures"),
+            barrier_id=self.barrier.id,
+            has_risks=cleaned_data.get("has_risks"),
+            potential_unwanted_outcomes=cleaned_data.get("potential_unwanted_outcomes"),
+            potential_risks=cleaned_data.get("potential_risks"),
+            risk_level=cleaned_data.get("risk_level"),
+            risk_mitigation_measures=cleaned_data.get("risk_mitigation_measures"),
         )
 
         return HttpResponseRedirect(
