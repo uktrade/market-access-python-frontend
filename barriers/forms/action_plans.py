@@ -354,15 +354,6 @@ class ActionPlanTaskForm(
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
-        results = [
-            {
-                "user_id": "9affb723-21d8-43c5-82ac-f525bf02444f",
-                "first_name": "Warren",
-                "last_name": "Mraz",
-                "email": "Warren.Mraz@hotmail.testfake",
-                "email_user_id": "Tre.Ratke46-9affb723@id.mock-sso",
-            }
-        ]
         if not results:
             raise ValidationError(f"Invalid user {query}")
         for result in results:
