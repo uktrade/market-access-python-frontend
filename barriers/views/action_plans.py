@@ -299,9 +299,55 @@ class ActionPlanTaskFormView(
             ]
         return initial
 
+    def form_valid(self, form):
+        """
+        If the form is valid but the completion date has changed, we need to re-render
+        but with a different template and extended form that asks for a reason for that change.
 
-class ActionPlanTaskUpdateFormView(ActionPlanTaskFormView):
+        The "id" is only in self.kwargs if we're changing an existing instance;
+        "completion_date" will also be in changed_data for the case of creating a new one,
+        so we need both checks.
+        """
+        if all(
+            [
+                "id"
+                in self.kwargs,  # must be an existing instance, not creating a new one
+                "completion_date"
+                in form.changed_data,  # must be an update to completion_date
+                self.form_class
+                == ActionPlanTaskForm,  # must be using a form that doesn't ask for a reason
+            ]
+        ):
+            response_kwargs = {}
+            response_kwargs.setdefault("content_type", self.content_type)
+            # Need to replace the form with an unbound form that asks for a reason
+            # All other fields will be turned into hidden fields
+            form_kwargs = self.get_form_kwargs()
+            form_kwargs["initial"] = form.cleaned_data
+            # Need to get rid of files and data to ensure form is not bound
+            form_kwargs.pop("files")
+            form_kwargs.pop("data")
+            unbound_form = ActionPlanTaskDateChangeReasonForm(**form_kwargs)
+
+            context = self.get_context_data()
+            context["form"] = unbound_form
+            context["form_action"] = reverse(
+                "barriers:action_plan_completion_date_change",
+                kwargs=self.kwargs,
+            )
+            return self.response_class(
+                request=self.request,
+                template="barriers/action_plans/milestone_task_completion_date_reason.html",
+                context=context,
+                using=self.template_engine,
+                **response_kwargs,
+            )
+        return super().form_valid(form)
+
+
+class ActionPlanTaskCompletionDateChangeFormView(ActionPlanTaskFormView):
     form_class = ActionPlanTaskDateChangeReasonForm
+    template_name = "barriers/action_plans/milestone_task_completion_date_reason.html"
 
 
 class EditActionPlanTaskOutcomeFormView(
@@ -399,7 +445,6 @@ class ActionPlanStakeholdersListView(BarrierMixin, TemplateView):
 
 
 class AddActionPlanStakeholderFormView(
-    # ActionPlanTaskFormV iewMixin,
     ActionPlanFormViewMixin,
     APIBarrierFormViewMixin,
     FormView,

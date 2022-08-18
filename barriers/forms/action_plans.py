@@ -5,6 +5,7 @@ from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from barriers.constants import (
     ACTION_PLAN_RAG_STATUS_CHOICES,
@@ -124,6 +125,8 @@ def action_plan_action_type_category_form_class_factory(action_type: str):
 
     class ActionPlanActionTypeCategoryForm(forms.Form):
         def __init__(self, *args, **kwargs):
+            id = kwargs.pop("id", None)
+            token = kwargs.pop("token", None)
             super().__init__(*args, **kwargs)
             if action_type != "OTHER":
                 self.fields[field_name] = forms.ChoiceField(
@@ -155,10 +158,131 @@ def action_plan_action_type_category_form_class_factory(action_type: str):
     return ActionPlanActionTypeCategoryForm
 
 
-class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form):
+class ActionPlanTaskFormMixin:
+    def __init__(self, barrier_id, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.action_plan = kwargs.pop("action_plan", None)
+        self.milestone_id = kwargs.pop("milestone_id", None)
+        self.task_id = kwargs.pop("task_id", None)
+        super().__init__(*args, **kwargs)
 
-    status = forms.ChoiceField(
-        choices=ACTION_PLAN_TASK_CHOICES, widget=forms.RadioSelect
+        stakeholders = self.action_plan.stakeholders
+        self.fields["assigned_stakeholders"].choices = [
+            (stakeholder.id, stakeholder) for stakeholder in stakeholders
+        ]
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        save_kwargs = self.get_save_kwargs()
+        if self.task_id:
+            save_kwargs["task_id"] = self.task_id
+            client.action_plan_tasks.update_task(**save_kwargs)
+        else:
+            client.action_plan_tasks.create_task(**save_kwargs)
+
+    def get_save_kwargs(self):
+        save_kwargs = {
+            "barrier_id": self.barrier_id,
+            "milestone_id": self.milestone_id,
+            "assigned_to": self.cleaned_data["assigned_to"],
+            "status": self.cleaned_data.get("status"),
+            "action_text": self.cleaned_data.get("action_text"),
+            "start_date": self.cleaned_data.get("start_date"),
+            "completion_date": self.cleaned_data.get("completion_date"),
+            "action_type": self.cleaned_data.get("action_type"),
+            "action_type_category": self.cleaned_data.get("action_type_category"),
+            "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
+        }
+        return save_kwargs
+
+
+class ActionPlanTaskSubformRenderer:
+    def as_html(self):
+        if hasattr(self, "template_name"):
+            template_name = self.template_name
+        else:
+            template_name = "django/forms/widgets/textarea.html"
+        output = ""
+        for field_name, field in self.fields.items():
+            output += render_to_string(template_name, context={"widget": field.widget})
+        return mark_safe(output)
+
+
+class ActionPlanTaskEditOutcomeForm(
+    ActionPlanTaskSubformRenderer,
+    ClearableMixin,
+    SubformMixin,
+    APIFormMixin,
+    forms.Form,
+):
+
+    outcome = forms.CharField(
+        label="Provide outcome of objective task",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea", "id": "id_outcome"}),
+        required=False,
+    )
+
+    @property
+    def label(self):
+        return self.fields["outcome"].label
+
+    @property
+    def id_for_label(self):
+        return self.fields["outcome"].widget.attrs["id"]
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.update_task(
+            barrier_id=self.barrier_id,
+            task_id=self.task_id,
+            outcome=self.cleaned_data["outcome"],
+        )
+
+
+class ActionPlanTaskEditProgressForm(
+    ActionPlanTaskSubformRenderer,
+    ClearableMixin,
+    SubformMixin,
+    APIFormMixin,
+    forms.Form,
+):
+    progress = forms.CharField(
+        label="Provide progress of objective task",
+        widget=forms.Textarea(attrs={"class": "govuk-textarea", "id": "id_progress"}),
+        required=False,
+    )
+
+    @property
+    def label(self):
+        return self.fields["progress"].label
+
+    @property
+    def id_for_label(self):
+        return self.fields["progress"].widget.attrs["id"]
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.action_plans.update_task(
+            barrier_id=self.barrier_id,
+            task_id=self.task_id,
+            progress=self.cleaned_data["progress"],
+        )
+
+
+class ActionPlanTaskForm(
+    ActionPlanTaskFormMixin, ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
+
+    status = SubformChoiceField(
+        choices=ACTION_PLAN_TASK_CHOICES,
+        widget=forms.RadioSelect,
+        subform_classes={
+            ACTION_PLAN_TASK_CHOICES.IN_PROGRESS: ActionPlanTaskEditProgressForm,
+            ACTION_PLAN_TASK_CHOICES.COMPLETED: ActionPlanTaskEditOutcomeForm,
+        },
     )
 
     start_date = MonthYearInFutureField()
@@ -219,18 +343,6 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         help_text="Add relevant stakeholders to the task",
     )
 
-    def __init__(self, barrier_id, *args, **kwargs):
-        self.barrier_id = barrier_id
-        self.action_plan = kwargs.pop("action_plan", None)
-        self.milestone_id = kwargs.pop("milestone_id", None)
-        self.task_id = kwargs.pop("task_id", None)
-        super().__init__(*args, **kwargs)
-
-        stakeholders = self.action_plan.stakeholders
-        self.fields["assigned_stakeholders"].choices = [
-            (stakeholder.id, stakeholder) for stakeholder in stakeholders
-        ]
-
     def clean_start_date(self):
         return self.cleaned_data["start_date"].isoformat()
 
@@ -242,7 +354,6 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
         email = self.cleaned_data["assigned_to"]
         query = email.replace(".", " ").split("@")[0]
         results = sso_client.search_users(query)
-
         if not results:
             raise ValidationError(f"Invalid user {query}")
         for result in results:
@@ -250,41 +361,19 @@ class ActionPlanTaskForm(ClearableMixin, SubformMixin, APIFormMixin, forms.Form)
                 return result["user_id"]
         return
 
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-
-        action_type_field = self.fields["action_type"]
-        if hasattr(action_type_field, "subform"):
-            action_type_category = action_type_field.subform.get_action_type_category()
-        else:
-            action_type_category = ""
-
-        save_kwargs = self.get_save_kwargs(action_type_category)
-        if self.task_id:
-            save_kwargs["task_id"] = self.task_id
-            client.action_plan_tasks.update_task(**save_kwargs)
-        else:
-            client.action_plan_tasks.create_task(**save_kwargs)
-
-    def get_save_kwargs(self, action_type_category):
-        save_kwargs = {
-            "barrier_id": self.barrier_id,
-            "milestone_id": self.milestone_id,
-            "assigned_to": self.cleaned_data["assigned_to"],
-            "status": self.cleaned_data.get("status"),
-            "action_text": self.cleaned_data.get("action_text"),
-            "start_date": self.cleaned_data.get("start_date"),
-            "completion_date": self.cleaned_data.get("completion_date"),
-            "action_type": self.cleaned_data.get("action_type"),
-            "action_type_category": action_type_category,
-            "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
-        }
-        return save_kwargs
+    def clean_action_type(self):
+        action_type = self.data["action_type"]
+        action_type_category_name = f"action_type_category_{action_type}"
+        action_type_category = self.data[action_type_category_name]
+        self.cleaned_data["action_type_category"] = action_type_category
+        return action_type
 
 
-class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
+class ActionPlanTaskDateChangeReasonForm(
+    ActionPlanTaskFormMixin, APIFormMixin, forms.Form
+):
     reason_for_completion_date_change = forms.CharField(
-        required=False,
+        required=True,
         widget=forms.Textarea(
             attrs={
                 "class": "govuk-textarea",
@@ -297,79 +386,25 @@ class ActionPlanTaskDateChangeReasonForm(ActionPlanTaskForm):
         help_text="Provide a reason for changing the completion date",
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.has_changed() and "completion_date" in self.changed_data:
-            self.fields["reason_for_completion_date_change"].required = True
-
-    def is_valid(self):
-        return super().is_valid()
-
-    def get_save_kwargs(self, action_type_category):
-        kwargs = super().get_save_kwargs(action_type_category)
-        if self.has_changed() and "completion_date" in self.changed_data:
-            kwargs["reason_for_completion_date_change"] = self.cleaned_data.get(
-                "reason_for_completion_date_change"
-            )
-        return kwargs
-
-
-class ActionPlanTaskEditOutcomeForm(
-    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
-):
-
-    outcome = forms.CharField(
-        label="Outcome",
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+    status = forms.CharField(widget=forms.HiddenInput)
+    start_date = forms.CharField(widget=forms.HiddenInput)
+    completion_date = forms.CharField(widget=forms.HiddenInput)
+    action_text = forms.CharField(widget=forms.HiddenInput)
+    assigned_to = forms.CharField(widget=forms.HiddenInput)
+    action_type = forms.CharField(widget=forms.HiddenInput)
+    action_type_category = forms.CharField(widget=forms.HiddenInput)
+    assigned_stakeholders = forms.MultipleChoiceField(
         required=False,
+        choices=[],
+        widget=forms.MultipleHiddenInput(),
     )
 
-    def __init__(
-        self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs
-    ):
-        self.barrier_id = barrier_id
-        self.action_plan_id = action_plan_id
-        self.milestone_id = milestone_id
-        self.task_id = task_id
-        super().__init__(*args, **kwargs)
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-
-        client.action_plans.update_task(
-            barrier_id=self.barrier_id,
-            task_id=self.task_id,
-            outcome=self.cleaned_data["outcome"],
-        )
-
-
-class ActionPlanTaskEditProgressForm(
-    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
-):
-
-    progress = forms.CharField(
-        label="Progress",
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=False,
-    )
-
-    def __init__(
-        self, barrier_id, action_plan_id, milestone_id, task_id, *args, **kwargs
-    ):
-        self.barrier_id = barrier_id
-        self.action_plan_id = action_plan_id
-        self.milestone_id = milestone_id
-        self.task_id = task_id
-        super().__init__(*args, **kwargs)
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-
-        client.action_plans.update_task(
-            barrier_id=self.barrier_id,
-            task_id=self.task_id,
-            progress=self.cleaned_data["progress"],
-        )
+    def get_save_kwargs(self):
+        save_kwargs = super().get_save_kwargs()
+        save_kwargs["reason_for_completion_date_change"] = self.cleaned_data[
+            "reason_for_completion_date_change"
+        ]
+        return save_kwargs
 
 
 class ActionPlanStakeholderFormMixin:
