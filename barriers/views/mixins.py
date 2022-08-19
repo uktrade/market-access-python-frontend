@@ -148,7 +148,9 @@ class APIFormViewMixin:
 
     def get_form_kwargs(self, **kwargs):
         if self.request.method == "GET":
-            kwargs["initial"] = self.get_initial()
+            if hasattr(self, "get_initial"):
+                kwargs["initial"] = self.get_initial()
+
         elif self.request.method in ("POST", "PUT"):
             kwargs.update(
                 {

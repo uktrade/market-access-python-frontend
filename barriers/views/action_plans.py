@@ -4,13 +4,16 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, TemplateView
+from formtools.wizard.views import SessionWizardView
 
+from barriers.constants import ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES
 from barriers.forms.action_plans import (
     ActionPlanCurrentStatusEditForm,
     ActionPlanIndividualStakeholderDetailsForm,
     ActionPlanMilestoneForm,
     ActionPlanOrganisationStakeholderDetailsForm,
     ActionPlanRisksAndMitigationForm,
+    ActionPlanRisksAndMitigationIntroForm,
     ActionPlanStakeholderTypeForm,
     ActionPlanStrategicContextForm,
     ActionPlanTaskDateChangeReasonForm,
@@ -50,7 +53,7 @@ class ActionPlanFormViewMixin(ActionPlanFormSuccessUrlMixin):
                 raise Http404()
             raise
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs()
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         kwargs["action_plan"] = self.action_plan
@@ -99,19 +102,30 @@ class ActionPlanStakeholderFormViewMixin(ActionPlanFormViewMixin):
 
 
 class CreateActionPlanStakeholderTypeFormView(
-    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
+    ActionPlanFormViewMixin,
+    APIBarrierFormViewMixin,
+    FormView,
 ):
     template_name = "barriers/action_plans/stakeholders/edit_type.html"
     form_class = ActionPlanStakeholderTypeForm
 
+    def form_valid(self, form):
+        # allow access to form data in get_success_url
+        self.form = form
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
-        return reverse(
-            "barriers:action_plan_stakeholders_add_details",
-            kwargs={
-                "barrier_id": self.kwargs.get("barrier_id"),
-                "id": self.saved_object.id,
-            },
-        )
+        is_organisation = self.form.cleaned_data["is_organisation"]
+        if is_organisation == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.ORGANISATION:
+            return reverse(
+                "barriers:action_plan_stakeholders_new_organisation",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        if is_organisation == ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES.INDIVIDUAL:
+            return reverse(
+                "barriers:action_plan_stakeholders_new_individual",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
 
 
 class EditActionPlanStakeholderDetailsFormView(
@@ -141,25 +155,30 @@ class EditActionPlanStakeholderDetailsFormView(
         )
 
 
-class CreateActionPlanStakeholderDetailsFormView(
-    EditActionPlanStakeholderDetailsFormView
+class CreateActionPlanStakeholderIndividualFormView(
+    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
 ):
-    def post(self, request, *args, **kwargs):
-        if "cancel" in request.POST:
-            # delete the pending stakeholder
-            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-            stakeholder_id = self.kwargs.get("id")
-            barrier_id = self.kwargs.get("barrier_id")
-            client.action_plan_stakeholders.delete_stakeholder(
-                id=stakeholder_id, barrier_id=barrier_id
-            )
-            return HttpResponseRedirect(self.get_success_url())
-        return super().post(request, *args, **kwargs)
+    template_name = "barriers/action_plans/stakeholders/edit_details.html"
+    form_class = ActionPlanIndividualStakeholderDetailsForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["allow_deletion"] = True
-        return context
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan_stakeholders_list",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class CreateActionPlanStakeholderOrganisationFormView(
+    ActionPlanStakeholderFormViewMixin, APIBarrierFormViewMixin, FormView
+):
+    template_name = "barriers/action_plans/stakeholders/edit_details.html"
+    form_class = ActionPlanOrganisationStakeholderDetailsForm
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:action_plan_stakeholders_list",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
 
 
 class SelectActionPlanOwner(
@@ -167,6 +186,13 @@ class SelectActionPlanOwner(
 ):
     template_name = "barriers/action_plans/add_owner.html"
     error_message = "There was an error adding {full_name} as an owner."
+
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data["cancel_url"] = reverse(
+            "barriers:action_plan", kwargs={"barrier_id": self.kwargs.get("barrier_id")}
+        )
+        return context_data
 
     def select_user_api_call(self, user_id):
         self.client.action_plans.edit_action_plan(
@@ -462,3 +488,45 @@ class ActionPlanRisksAndMitigationView(
     def get_initial(self):
         if self.request.method == "GET":
             return self.action_plan.data
+
+
+def risks_and_mitigation_detail_form_condition(wizard):
+    step0_cleaned_data = wizard.get_cleaned_data_for_step("0")
+    if step0_cleaned_data:
+        return step0_cleaned_data.get("has_risks") == "YES"
+    return False
+
+
+class ActionPlanRisksAndMitigationWizardView(
+    ActionPlanFormViewMixin, APIBarrierFormViewMixin, SessionWizardView
+):
+    template_name = "barriers/action_plans/add_risks_and_mitigation.html"
+    form_list = [
+        ActionPlanRisksAndMitigationIntroForm,
+        ActionPlanRisksAndMitigationForm,
+    ]
+    condition_dict = {"1": risks_and_mitigation_detail_form_condition}
+
+    def get_form_initial(self, step):
+        return self.action_plan.data
+
+    def done(self, form_list, **kwargs):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        cleaned_data = self.get_all_cleaned_data()
+
+        client.action_plans.edit_action_plan(
+            barrier_id=self.barrier.id,
+            has_risks=cleaned_data.get("has_risks"),
+            potential_unwanted_outcomes=cleaned_data.get("potential_unwanted_outcomes"),
+            potential_risks=cleaned_data.get("potential_risks"),
+            risk_level=cleaned_data.get("risk_level"),
+            risk_mitigation_measures=cleaned_data.get("risk_mitigation_measures"),
+        )
+
+        return HttpResponseRedirect(
+            reverse(
+                "barriers:action_plan",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        )

@@ -21,7 +21,9 @@
     {% csrf_token %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <div class="govuk-form-group">
+        <div class="govuk-form-group{% if form.strategic_context.errors %} govuk-form-group--error{% endif %}">
+
+          {% form_field_error form.strategic_context %}
           <div id="more-detail-hint" class="govuk-hint">
             {{ form.strategic_context.help_text }}
           </div>

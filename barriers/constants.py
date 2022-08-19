@@ -138,7 +138,7 @@ ACTION_PLAN_TASK_CATEGORIES = {
     ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: Choices(
         *[
             "Creating and maintaining trade agreements",
-            "Buidling partnerships",
+            "Building partnerships",
             "Market liberalisation forums",
             "Other",
         ]
@@ -210,6 +210,11 @@ ACTION_PLAN_RISK_LEVEL_CHOICES = Choices(
     ("LOW", "Low"),
     ("MEDIUM", "Medium"),
     ("HIGH", "High"),
+)
+
+ACTION_PLAN_HAS_RISKS_CHOICES = Choices(
+    ("YES", "Yes"),
+    ("NO", "No"),
 )
 
 ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES = TextChoices(

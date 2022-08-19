@@ -7,6 +7,7 @@ import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
 import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
+import RisksAndMitigationForm from "./forms/RisksAndMitigationForm";
 
 function renderCommodityForm(confirmedCommodities, locations, label, helpText) {
     const csrfToken = getCSRFToken();
@@ -138,6 +139,15 @@ function renderEmailSearchAutocomplete(fieldID) {
     );
 }
 
+function renderRisksAndMitigationForm() {
+    // create and append empty div
+    const container = document.createElement("div");
+    // const body = document.getElementsByName("body")[0];
+    // append to dom
+    // body.appendChild(container);
+    ReactDOM.render(<RisksAndMitigationForm />, container);
+}
+
 export {
     renderCommodityForm,
     renderLocationFilter,
@@ -145,4 +155,5 @@ export {
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
     renderEmailSearchAutocomplete,
+    renderRisksAndMitigationForm,
 };

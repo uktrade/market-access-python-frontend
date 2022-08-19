@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 from barriers.constants import (
+    ACTION_PLAN_HAS_RISKS_CHOICES,
     ACTION_PLAN_RAG_STATUS_CHOICES,
     ACTION_PLAN_RISK_LEVEL_CHOICES,
     ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES,
@@ -65,7 +66,7 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Action plan overview",
         help_text="Provide a brief description of your action plan",
-        required=False,
+        required=True,
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
@@ -433,7 +434,6 @@ class ActionPlanStakeholderFormMixin:
 
 
 class ActionPlanStakeholderTypeForm(
-    ActionPlanStakeholderFormMixin,
     ClearableMixin,
     APIFormMixin,
     forms.Form,
@@ -444,6 +444,11 @@ class ActionPlanStakeholderTypeForm(
         label="Stakeholder type",
         required=True,
     )
+
+    def __init__(self, barrier_id, action_plan, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.action_plan = action_plan
+        return super().__init__(*args, **kwargs)
 
     def get_request_data(self):
         request_data = super().get_request_data()
@@ -463,6 +468,7 @@ class ActionPlanOrganisationStakeholderDetailsForm(
     name = forms.CharField(
         max_length=255,
         required=True,
+        label="Organisation name",
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     status = forms.ChoiceField(
@@ -476,15 +482,17 @@ class ActionPlanOrganisationStakeholderDetailsForm(
         request_data = super().get_request_data()
         request_data["name"] = self.cleaned_data["name"]
         request_data["status"] = self.cleaned_data["status"]
+        request_data["is_organisation"] = True
         return request_data
 
 
 class ActionPlanIndividualStakeholderDetailsForm(
     ActionPlanOrganisationStakeholderDetailsForm
 ):
-    organisation = forms.CharField(
+    name = forms.CharField(
         max_length=255,
         required=True,
+        label="Name",
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     job_title = forms.CharField(
@@ -492,11 +500,24 @@ class ActionPlanIndividualStakeholderDetailsForm(
         required=True,
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
+    organisation = forms.CharField(
+        max_length=255,
+        required=True,
+        label="Organisation name",
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
+    )
+    status = forms.ChoiceField(
+        choices=ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES.choices,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        label="Status",
+        required=True,
+    )
 
     def get_request_data(self):
         request_data = super().get_request_data()
         request_data["organisation"] = self.cleaned_data["organisation"]
         request_data["job_title"] = self.cleaned_data["job_title"]
+        request_data["is_organisation"] = False
         return request_data
 
 
@@ -504,29 +525,79 @@ class ActionPlanRisksAndMitigationForm(
     ClearableMixin, SubformMixin, APIFormMixin, forms.Form
 ):
 
-    potential_unwanted_outcomes = forms.CharField(
-        label=(
-            "Would progressing this market access barrier lead to any outcomes we don't"
-            " want?"
-        ),
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
+    has_risks = forms.ChoiceField(
+        label="Are there any risks in progressing this market access barrier?",
+        choices=ACTION_PLAN_HAS_RISKS_CHOICES,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
 
     potential_risks = forms.CharField(
-        label="What are the risks?",
+        label="Describe the risks",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
+        required=False,
     )
 
     risk_level = forms.ChoiceField(
-        label="Risk level", choices=ACTION_PLAN_RISK_LEVEL_CHOICES, required=True
+        label="What is the risk level?",
+        choices=ACTION_PLAN_RISK_LEVEL_CHOICES,
+        required=False,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
 
     risk_mitigation_measures = forms.CharField(
-        label="What are the mitigation measures?",
+        label="How will you mitigate the risks?",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
+        required=False,
+    )
+
+    def __init__(self, barrier_id, action_plan, *args, **kwargs):
+        self.barrier_id = barrier_id
+        # self.action_plan_id = action_plan_id
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        has_risks = cleaned_data.get("has_risks")
+        if has_risks == ACTION_PLAN_HAS_RISKS_CHOICES.YES:
+            if not cleaned_data.get("potential_risks"):
+                self.add_error("potential_risks", "Please describe the risks")
+            if not cleaned_data.get("risk_level"):
+                self.add_error("risk_level", "Please select the risk level")
+            if not cleaned_data.get("risk_mitigation_measures"):
+                self.add_error(
+                    "risk_mitigation_measures",
+                    "Please describe the mitigation measures",
+                )
+        return cleaned_data
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        has_risks = self.cleaned_data["has_risks"]
+
+        cleaned_data = self.cleaned_data
+
+        if has_risks == ACTION_PLAN_HAS_RISKS_CHOICES.YES:
+            client.action_plans.edit_action_plan(
+                barrier_id=self.barrier_id,
+                has_risks=cleaned_data["has_risks"],
+                potential_risks=cleaned_data["potential_risks"],
+                risk_level=cleaned_data["risk_level"],
+                risk_mitigation_measures=cleaned_data["risk_mitigation_measures"],
+            )
+        else:
+            client.action_plans.edit_action_plan(
+                barrier_id=self.barrier_id, has_risks=cleaned_data["has_risks"]
+            )
+
+
+class ActionPlanRisksAndMitigationIntroForm(
+    ClearableMixin, SubformMixin, APIFormMixin, forms.Form
+):
+    has_risks = forms.ChoiceField(
+        label="Are there any risks in progressing this market access barrier?",
+        choices=ACTION_PLAN_HAS_RISKS_CHOICES,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
 
     def __init__(self, barrier_id, action_plan, *args, **kwargs):
@@ -539,10 +610,5 @@ class ActionPlanRisksAndMitigationForm(
 
         client.action_plans.edit_action_plan(
             barrier_id=self.barrier_id,
-            potential_unwanted_outcomes=self.cleaned_data[
-                "potential_unwanted_outcomes"
-            ],
-            potential_risks=self.cleaned_data["potential_risks"],
-            risk_level=self.cleaned_data["risk_level"],
-            risk_mitigation_measures=self.cleaned_data["risk_mitigation_measures"],
+            has_risks=self.cleaned_data["has_risks"],
         )
