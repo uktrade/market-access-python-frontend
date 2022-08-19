@@ -506,20 +506,20 @@ class ActionPlanRisksAndMitigationForm(
     )
 
     potential_risks = forms.CharField(
-        label="What are the risks?",
+        label="Describe the risks",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         required=True,
     )
 
     risk_level = forms.ChoiceField(
-        label="Risk level",
+        label="What is the risk level?",
         choices=ACTION_PLAN_RISK_LEVEL_CHOICES,
         required=True,
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
 
     risk_mitigation_measures = forms.CharField(
-        label="What are the mitigation measures?",
+        label="How will you mitigate the risks?",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         required=True,
     )
