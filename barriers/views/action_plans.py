@@ -350,6 +350,21 @@ class ActionPlanTaskFormView(
             # All other fields will be turned into hidden fields
             form_kwargs = self.get_form_kwargs()
             form_kwargs["initial"] = form.cleaned_data
+            # Those subforms will be the death of me
+            if hasattr(form.fields["status"].subforms["IN_PROGRESS"], "cleaned_data"):
+                form_kwargs["initial"]["progress"] = (
+                    form.fields["status"]
+                    .subforms["IN_PROGRESS"]
+                    .cleaned_data["progress"]
+                )
+            else:
+                form_kwargs["initial"]["progress"] = form.data.get("progress", "")
+            if hasattr(form.fields["status"].subforms["COMPLETED"], "cleaned_data"):
+                form_kwargs["initial"]["outcome"] = (
+                    form.fields["status"].subforms["COMPLETED"].cleaned_data["outcome"]
+                )
+            else:
+                form_kwargs["initial"]["outcome"] = form.data.get("outcome", "")
             # Need to get rid of files and data to ensure form is not bound
             form_kwargs.pop("files")
             form_kwargs.pop("data")

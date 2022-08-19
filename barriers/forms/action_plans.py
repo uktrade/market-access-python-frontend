@@ -196,7 +196,10 @@ class ActionPlanTaskFormMixin:
             "action_type_category": self.cleaned_data.get("action_type_category"),
             "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
         }
-        if status in self.fields["status"].subforms:
+        if (
+            hasattr(self.fields["status"], "subforms")
+            and status in self.fields["status"].subforms
+        ):
             for status_name, status_text in (
                 self.fields["status"].subforms[status].cleaned_data.items()
             ):
@@ -406,6 +409,8 @@ class ActionPlanTaskDateChangeReasonForm(
         choices=[],
         widget=forms.MultipleHiddenInput(),
     )
+    progress = forms.CharField(widget=forms.HiddenInput, required=False)
+    outcome = forms.CharField(widget=forms.HiddenInput, required=False)
 
     def get_save_kwargs(self):
         save_kwargs = super().get_save_kwargs()
@@ -413,6 +418,9 @@ class ActionPlanTaskDateChangeReasonForm(
             "reason_for_completion_date_change"
         ]
         return save_kwargs
+
+    def __init__(self, barrier_id, *args, **kwargs):
+        super().__init__(barrier_id, *args, **kwargs)
 
 
 class ActionPlanStakeholderFormMixin:
