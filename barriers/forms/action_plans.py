@@ -533,6 +533,7 @@ class ActionPlanRisksAndMitigationForm(
                     "risk_mitigation_measures",
                     "Please describe the mitigation measures",
                 )
+        return cleaned_data
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
