@@ -546,7 +546,6 @@ class ActionPlanRisksAndMitigationForm(
             client.action_plans.edit_action_plan(
                 barrier_id=self.barrier_id,
                 has_risks=cleaned_data["has_risks"],
-                potential_unwanted_outcomes=cleaned_data["potential_unwanted_outcomes"],
                 potential_risks=cleaned_data["potential_risks"],
                 risk_level=cleaned_data["risk_level"],
                 risk_mitigation_measures=cleaned_data["risk_mitigation_measures"],
