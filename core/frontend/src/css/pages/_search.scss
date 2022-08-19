@@ -124,7 +124,7 @@
 
 .filter-results-download {
 	overflow: hidden;
-	margin: govuk-em( 10, 16 ) 0 govuk-em( 5, 16 ) 0;
+	margin: 0 0 govuk-em( 5, 16 ) 0;
 	padding: govuk-em( 10, 16 ) 0 0 0;
 	border-top: 1px solid $govuk-mid-grey;
 }
@@ -272,4 +272,18 @@
 	@include mq( $from: tablet ){
 		margin-bottom: 0;
 	}
+}
+
+.dmas-sort-widget {
+	text-align: right;
+	margin-top: govuk-spacing(2);
+
+	.govuk-label {
+		margin-right: govuk-spacing(2);
+	}
+}
+
+.js-enabled .dmas-search-ordering-select + button {
+	/* Hate using !important, but the GovUK inline block class forces it upon me :-( */
+	display: none !important;
 }

@@ -84,6 +84,8 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/report/index.js`,
                         `${assetsSrcPath}/js/pages/report/is-resolved.js`,
                         `${assetsSrcPath}/js/pages/report/about-problem.js`,
+                        `${assetsSrcPath}/js/pages/report/barrier-location-form.js`,
+                        `${assetsSrcPath}/js/pages/report/location-form-react.js`,
                         `${assetsSrcPath}/js/pages/barrier/status.js`,
                         `${assetsSrcPath}/js/pages/barrier/type.js`,
                         `${assetsSrcPath}/js/pages/barrier/edit.js`,
@@ -95,6 +97,7 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/barrier/wto.js`,
                         `${assetsSrcPath}/js/pages/barrier/action_plans_add_task.js`,
                         `${assetsSrcPath}/js/pages/users/select.js`,
+                        `${assetsSrcPath}/js/pages/barrier/search.js`,
                     ],
                 },
             ],
@@ -151,16 +154,23 @@ const reactConfig = {
         libraryTarget: "var",
         library: "ReactApp",
     },
+    resolve: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+    },
     plugins: [new BundleTracker({ filename: "./webpack-stats-react.json" })],
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-react", "@babel/preset-env"],
+                        presets: [
+                            "@babel/react",
+                            "@babel/typescript",
+                            ["@babel/env", { modules: false }],
+                        ],
                         plugins: ["@babel/plugin-transform-runtime"],
                     },
                 },

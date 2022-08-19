@@ -1,6 +1,7 @@
 from django import forms
 
 from barriers.constants import (
+    DEPRECATED_TAGS,
     TOP_PRIORITY_BARRIER_STATUS,
     TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES,
@@ -263,6 +264,7 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
     def __init__(self, tags, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["tags"].choices = tags
+        self.deprecated_tags = DEPRECATED_TAGS
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -536,15 +538,17 @@ class CausedByTradingBlocForm(forms.Form):
         },
     )
 
-    def __init__(self, trading_bloc, *args, **kwargs):
+    def __init__(self, trading_bloc=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["caused_by_trading_bloc"].label = (
-            "Was this barrier caused by a regulation introduced by "
-            f"{trading_bloc['short_name']}?"
-        )
-        self.fields["caused_by_trading_bloc"].help_text = self.get_help_text(
-            trading_bloc.get("code")
-        )
+        if trading_bloc:
+            # add custom labels and help_text only when provided
+            self.fields["caused_by_trading_bloc"].label = (
+                "Was this barrier caused by a regulation introduced by "
+                f"{trading_bloc['short_name']}?"
+            )
+            self.fields["caused_by_trading_bloc"].help_text = self.get_help_text(
+                trading_bloc.get("code")
+            )
 
     def get_help_text(self, trading_bloc_code):
         help_text = {

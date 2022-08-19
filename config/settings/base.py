@@ -265,6 +265,10 @@ ALLOWED_FILE_TYPES = env.list("ALLOWED_FILE_TYPES", default=["text/csv", "image/
 
 API_RESULTS_LIMIT = env.int("API_RESULTS_LIMIT", default=100)
 
+API_BARRIER_LIST_DEFAULT_SORT = env.str(
+    "API_BARRIER_LIST_DEFAULT_SORT", default="-reported_on"
+)
+
 # Logging
 # ============================================
 DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="info").upper()
@@ -339,9 +343,9 @@ DLFE_APP_NAME = True
 DLFE_LOG_SENSITIVE_USER_DATA = True
 
 # Google Tag Manager
-GTM_ID = env("GTM_ID")
-GTM_AUTH = env("GTM_AUTH")
-GTM_PREVIEW = env("GTM_PREVIEW")
+GTM_ID = env("GTM_ID", default=None)
+GTM_AUTH = env("GTM_AUTH", default=None)
+GTM_PREVIEW = env("GTM_PREVIEW", default=None)
 
 if not DEBUG:
     sentry_sdk.init(

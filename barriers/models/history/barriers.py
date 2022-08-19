@@ -304,6 +304,10 @@ class TopPriorityStatusHistoryItem(BaseHistoryItem):
     field = "top_priority_status"
     field_name = "PB100 Priority Status"
 
+    def get_value(self, value):
+        if value["value"]:
+            return value
+
 
 class BarrierHistoryItem(PolymorphicBase):
     """

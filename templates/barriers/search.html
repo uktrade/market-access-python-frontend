@@ -25,11 +25,11 @@
 {% block page_content %}
 
     {% include 'partials/heading.html' with caption='Market access barriers' text='Search' %}
+  <form action="" method="GET" class="filter-items">
 
     <section class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
             <h2 class="filter-list-title">Filter barriers by:</h2>
-            <form action="" method="GET" class="filter-items">
 
                 {% if form.search_id.value %}{{ form.search_id }}{% endif %}
                 {% if form.member.value %}<input type="hidden" name="{{ form.member.name }}" value="{{ form.member.value }}" />{% endif %}
@@ -95,7 +95,6 @@
                 {% endif %}
 
                 <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
-            </form>
         </div>
         <div class="govuk-grid-column-three-quarters">
 
@@ -175,11 +174,35 @@
                 {% endif %}
             </div>
 
-            {% if pagination.total_pages > 1 %}
-            <p class="filter-results-pagination-summary">
-                Page {{ pagination.current_page }} of {{ pagination.total_pages }}
-            </p>
-            {% endif %}
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-one-third">
+                {% if pagination.total_pages > 1 %}
+                <p class="filter-results-pagination-summary">
+                    Page {{ pagination.current_page }} of {{ pagination.total_pages }}
+                </p>
+                {% else %}
+                <p class="filter-results-pagination-summary">
+                    Page {{ pagination.current_page }} of {{ pagination.total_pages }}
+                </p>
+                {% endif %}
+              </div>
+              <div class="govuk-grid-column-two-thirds">
+                {% if search_ordering_choices %}
+                  <div class="govuk-form-group dmas-sort-widget">
+                    <label class="govuk-label govuk-!-display-inline-block" for="{{ form.ordering.id_for_label }}">
+                      {{ form.ordering.label}}
+                    </label>
+                    {{ form.ordering }}
+{#                    <select class="govuk-select" id="dmas-barrier-list-sorting" name="sort">#}
+{#                      {% for value, label in search_ordering_choices.items %}#}
+{#                        <option value="{{ value }}" selected>{{ label }}</option>#}
+{#                      {% endfor %}#}
+{#                    </select>#}
+                    <button type="submit" class="govuk-button govuk-!-display-inline-block">Apply</button>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
 
             {% if current_user.has_approved_digital_trade_email or current_user|has_permission:"download_barriers" %}
             <p class="filter-results-download">
@@ -288,20 +311,30 @@
                                 <dt class="filter-results-list__item__definitions__key visually-hidden">ID:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.code }}</dd>
 
-                                <dt class="filter-results-list__item__definitions__key">Reported:</dt>
+                                <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.reported_on|date:"j F Y" }}</dd>
 
                                 <dt class="filter-results-list__item__definitions__key">Updated:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
 
                                 {% if barrier.status.id == '4' %}{# 4: RESOLVED_IN_FULL #}
-                                <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
-                                <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
+                                    <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
+                                {% else %}
+                                    {% if barrier.estimated_resolution_date %}
+                                    <dt class="filter-results-list__item__definitions__key">Estimated resolution date:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.estimated_resolution_date|date:"F Y" }}</dd>
+                                    {% endif %}
                                 {% endif %}
 
                                 {% if barrier.sector_names %}
-                                <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
-                                <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
+                                    <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
+                                {% endif %}
+
+                                {% if barrier.current_valuation_assessment %}
+                                    <dt class="filter-results-list__item__definitions__key">Value:</dt>
+                                    <dd class="filter-results-list__item__definitions__value">{{ barrier.current_valuation_assessment }}</dd>
                                 {% endif %}
 
                                 <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
@@ -329,6 +362,8 @@
                                             <li class="govuk-tag">TOP 100 PRIORITY BARRIER</li>
                                         {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
                                             <li class="govuk-tag govuk-tag--red">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+                                        {% elif barrier.top_priority_status == "RESOLVED" %}
+                                            <li class="resolved-barrier-top-priority-tag">RESOLVED TOP 100 PRIORITY BARRIER</li>
                                         {% endif %}
                                     {% endspaceless %}
                                 </ul>
@@ -341,6 +376,8 @@
             {% include 'partials/pagination.html' %}
 
         </div>
+
     </section>
+  </form>
 
 {% endblock %}

@@ -6,7 +6,7 @@ import requests
 from django.conf import settings
 from mohawk import Sender
 
-from barriers.constants import Statuses
+from barriers.constants import DEPRECATED_TAGS, Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
 
@@ -75,9 +75,7 @@ class Metadata:
         Statuses.RESOLVED_IN_PART: {
             "name": "Part resolved",
             "modifier": "resolved",
-            "hint": (
-                "Barrier impact has been significantly reduced but remains " "in part"
-            ),
+            "hint": "Barrier impact has been significantly reduced but remains in part",
         },
         Statuses.RESOLVED_IN_FULL: {
             "name": "Resolved",
@@ -103,6 +101,9 @@ class Metadata:
 
     def __init__(self, data):
         self.data = data
+
+    def get_admin_area_list(self):
+        return self.data["admin_areas"]
 
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data["admin_areas"]:
@@ -352,7 +353,7 @@ class Metadata:
         return (
             (tag["id"], tag["title"], tag["description"])
             for tag in self.get_barrier_tags()
-            if tag["show_at_reporting"] is True
+            if tag["show_at_reporting"] is True and tag["title"] not in DEPRECATED_TAGS
         )
 
     def get_trade_categories(self):
@@ -425,6 +426,9 @@ class Metadata:
         for status in self.data["top_priority_status"]:
             if str(status["id"]) == str(status):
                 return status
+
+    def get_search_ordering_choices(self):
+        return self.data["search_ordering_choices"]
 
 
 class MetadataMixin:

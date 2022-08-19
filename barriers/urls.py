@@ -201,6 +201,12 @@ urlpatterns = [
         name="saved_search_notifications",
     ),
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
+    # Reason for double url: Analytics requested a second url pointing to the same page
+    path(
+        "barriers/<uuid:barrier_id>/complete/",
+        BarrierDetail.as_view(),
+        name="barrier_detail_from_complete",
+    ),
     re_path(
         "barriers/(?P<barrier_id>[A-Z]-[0-9]{2}-[A-Z0-9]{3})/",
         BarrierDetail.as_view(),
