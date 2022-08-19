@@ -97,7 +97,7 @@
                             <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_add_risks_and_mitigations' barrier.id %}">Risks and mitigation</a> <!-- UPDATE URL -->
                         </td>
                         <td class="govuk-table__cell">
-                            {% if action_plan.potential_risks %}
+                            {% if action_plan.has_risks %}
                                 <strong class="govuk-tag govuk-tag--blue action_plans_tag">
                                     Added
                                 </strong>
