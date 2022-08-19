@@ -499,26 +499,40 @@ class ActionPlanRisksAndMitigationForm(
     potential_risks = forms.CharField(
         label="Describe the risks",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
+        required=False,
     )
 
     risk_level = forms.ChoiceField(
         label="What is the risk level?",
         choices=ACTION_PLAN_RISK_LEVEL_CHOICES,
-        required=True,
+        required=False,
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
 
     risk_mitigation_measures = forms.CharField(
         label="How will you mitigate the risks?",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
+        required=False,
     )
 
     def __init__(self, barrier_id, action_plan, *args, **kwargs):
         self.barrier_id = barrier_id
         # self.action_plan_id = action_plan_id
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        has_risks = cleaned_data.get("has_risks")
+        if has_risks == ACTION_PLAN_HAS_RISKS_CHOICES.YES:
+            if not cleaned_data.get("potential_risks"):
+                self.add_error("potential_risks", "Please describe the risks")
+            if not cleaned_data.get("risk_level"):
+                self.add_error("risk_level", "Please select the risk level")
+            if not cleaned_data.get("risk_mitigation_measures"):
+                self.add_error(
+                    "risk_mitigation_measures",
+                    "Please describe the mitigation measures",
+                )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
