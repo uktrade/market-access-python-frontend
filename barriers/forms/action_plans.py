@@ -213,6 +213,8 @@ class ActionPlanTaskSubformRenderer:
         output = ""
         for field_name, field in self.fields.items():
             field.widget.name = field_name
+            if field_name in self.initial:
+                field.widget.value = self.initial[field_name]
             output += render_to_string(template_name, context={"widget": field.widget})
         return mark_safe(output)
 
@@ -220,7 +222,6 @@ class ActionPlanTaskSubformRenderer:
 class ActionPlanTaskEditOutcomeForm(
     ActionPlanTaskSubformRenderer,
     ClearableMixin,
-    SubformMixin,
     APIFormMixin,
     forms.Form,
 ):
@@ -252,7 +253,6 @@ class ActionPlanTaskEditOutcomeForm(
 class ActionPlanTaskEditProgressForm(
     ActionPlanTaskSubformRenderer,
     ClearableMixin,
-    SubformMixin,
     APIFormMixin,
     forms.Form,
 ):
@@ -278,9 +278,6 @@ class ActionPlanTaskEditProgressForm(
             task_id=self.task_id,
             progress=self.cleaned_data["progress"],
         )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class ActionPlanTaskForm(
