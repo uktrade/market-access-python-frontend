@@ -125,7 +125,7 @@ class UpdateBarrierCommoditiesForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        codes = cleaned_data["codes"]
+        codes = cleaned_data.get("codes", [])
         countries = cleaned_data["countries"]
         trading_blocs = cleaned_data["trading_blocs"]
         self.commodities = []

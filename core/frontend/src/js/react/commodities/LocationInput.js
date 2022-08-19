@@ -13,7 +13,7 @@ function LocationInput(props) {
                     data-module="radios"
                 >
                     {props.locations.map((location, index) => (
-                        <div className="govuk-radios__item">
+                        <div className="govuk-radios__item" key={location.id}>
                             <input
                                 className="govuk-radios__input"
                                 id={"location-" + location.id}

@@ -75,9 +75,7 @@ class Metadata:
         Statuses.RESOLVED_IN_PART: {
             "name": "Part resolved",
             "modifier": "resolved",
-            "hint": (
-                "Barrier impact has been significantly reduced but remains " "in part"
-            ),
+            "hint": "Barrier impact has been significantly reduced but remains in part",
         },
         Statuses.RESOLVED_IN_FULL: {
             "name": "Resolved",
@@ -103,6 +101,9 @@ class Metadata:
 
     def __init__(self, data):
         self.data = data
+
+    def get_admin_area_list(self):
+        return self.data["admin_areas"]
 
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data["admin_areas"]:
