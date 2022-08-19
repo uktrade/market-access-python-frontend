@@ -183,11 +183,12 @@ class ActionPlanTaskFormMixin:
             client.action_plan_tasks.create_task(**save_kwargs)
 
     def get_save_kwargs(self):
+        status = self.cleaned_data.get("status")
         save_kwargs = {
             "barrier_id": self.barrier_id,
             "milestone_id": self.milestone_id,
             "assigned_to": self.cleaned_data["assigned_to"],
-            "status": self.cleaned_data.get("status"),
+            "status": status,
             "action_text": self.cleaned_data.get("action_text"),
             "start_date": self.cleaned_data.get("start_date"),
             "completion_date": self.cleaned_data.get("completion_date"),
@@ -195,6 +196,11 @@ class ActionPlanTaskFormMixin:
             "action_type_category": self.cleaned_data.get("action_type_category"),
             "assigned_stakeholders": self.cleaned_data["assigned_stakeholders"],
         }
+        if status in self.fields["status"].subforms:
+            for status_name, status_text in (
+                self.fields["status"].subforms[status].cleaned_data.items()
+            ):
+                save_kwargs[status_name] = status_text
         return save_kwargs
 
 
@@ -206,6 +212,7 @@ class ActionPlanTaskSubformRenderer:
             template_name = "django/forms/widgets/textarea.html"
         output = ""
         for field_name, field in self.fields.items():
+            field.widget.name = field_name
             output += render_to_string(template_name, context={"widget": field.widget})
         return mark_safe(output)
 
@@ -271,6 +278,9 @@ class ActionPlanTaskEditProgressForm(
             task_id=self.task_id,
             progress=self.cleaned_data["progress"],
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class ActionPlanTaskForm(
