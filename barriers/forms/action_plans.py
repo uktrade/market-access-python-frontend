@@ -454,7 +454,7 @@ class ActionPlanOrganisationStakeholderDetailsForm(
 class ActionPlanIndividualStakeholderDetailsForm(
     ActionPlanOrganisationStakeholderDetailsForm
 ):
-    organisation = forms.CharField(
+    name = forms.CharField(
         max_length=255,
         required=True,
         label="Name",
@@ -464,6 +464,18 @@ class ActionPlanIndividualStakeholderDetailsForm(
         max_length=255,
         required=True,
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
+    )
+    organisation = forms.CharField(
+        max_length=255,
+        required=True,
+        label="Organisation name",
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
+    )
+    status = forms.ChoiceField(
+        choices=ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES.choices,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        label="Status",
+        required=True,
     )
 
     def get_request_data(self):
