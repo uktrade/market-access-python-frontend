@@ -457,7 +457,7 @@ class ActionPlanIndividualStakeholderDetailsForm(
     organisation = forms.CharField(
         max_length=255,
         required=True,
-        label="Organisation name",
+        label="Name",
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
     )
     job_title = forms.CharField(
@@ -477,6 +477,12 @@ class ActionPlanIndividualStakeholderDetailsForm(
 class ActionPlanRisksAndMitigationForm(
     ClearableMixin, SubformMixin, APIFormMixin, forms.Form
 ):
+
+    has_risks = forms.ChoiceField(
+        label="Are there any risks in progressing this market access barrier?",
+        choices=ACTION_PLAN_HAS_RISKS_CHOICES,
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+    )
 
     potential_unwanted_outcomes = forms.CharField(
         label=(
@@ -516,6 +522,7 @@ class ActionPlanRisksAndMitigationForm(
 
         client.action_plans.edit_action_plan(
             barrier_id=self.barrier_id,
+            has_risks=self.cleaned_data["has_risks"],
             potential_unwanted_outcomes=self.cleaned_data[
                 "potential_unwanted_outcomes"
             ],

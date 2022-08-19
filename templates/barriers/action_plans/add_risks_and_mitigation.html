@@ -1,6 +1,17 @@
 {% extends "barriers/edit/base.html" %}
+{% load render_bundle from webpack_loader %}
 
 {% block page_title %}{{ block.super }} - Edit estimated resolution date{% endblock %}
+
+
+{% block head %}
+{% render_bundle 'main' 'js' 'REACT' %}
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        ReactApp.renderRisksAndMitigationForm();
+    })
+</script>
+{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -14,76 +25,72 @@
 
     <form action="" method="POST" novalidate>
         {% csrf_token %}
-        {{ wizard.management_form }}
 
-        {% if wizard.steps.step0 == 0 %}
         <fieldset class="govuk-fieldset">
               {% include "partials/forms/radio_button_group.html" with radio_group=form.has_risks %}
         </fieldset>
 
-        {% endif %}
+<div id="extra-form-fields">
 
-        {% if wizard.steps.step0 == 1 %}
+            <div
+                id="{{ form.potential_unwanted_outcomes.name }}"
+                class="{% form_group_classes form.potential_unwanted_outcomes.errors %}"
+            >
+                <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                    {{ form.potential_unwanted_outcomes.label }}
+                </legend>
 
-        <div
-            id="{{ form.potential_unwanted_outcomes.name }}"
-            class="{% form_group_classes form.potential_unwanted_outcomes.errors %}"
-        >
+                <span class="govuk-hint">{{ form.potential_unwanted_outcomes.help_text }}</span>
+
+                {% form_field_error form "potential_unwanted_outcomes" %}
+
+                <div>{{ form.potential_unwanted_outcomes }}</div>
+                </fieldset>
+            </div>
+
+
+            <div
+                id="{{ form.potential_risks.name }}"
+                class="{% form_group_classes form.potential_risks.errors %}"
+            >
+                <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                    {{ form.potential_risks.label }}
+                </legend>
+
+                <span class="govuk-hint">{{ form.potential_risks.help_text }}</span>
+
+                {% form_field_error form "potential_risks" %}
+
+                <div>{{ form.potential_risks }}</div>
+                </fieldset>
+            </div>
+
+
             <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                {{ form.potential_unwanted_outcomes.label }}
-            </legend>
-
-            <span class="govuk-hint">{{ form.potential_unwanted_outcomes.help_text }}</span>
-
-            {% form_field_error form "potential_unwanted_outcomes" %}
-
-            <div>{{ form.potential_unwanted_outcomes }}</div>
-            </fieldset>
-        </div>
+                {% include "partials/forms/radio_button_group.html" with radio_group=form.risk_level %}
+          </fieldset>
 
 
-        <div
-            id="{{ form.potential_risks.name }}"
-            class="{% form_group_classes form.potential_risks.errors %}"
-        >
-            <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                {{ form.potential_risks.label }}
-            </legend>
+            <div
+                id="{{ form.risk_mitigation_measures.name }}"
+                class="{% form_group_classes form.risk_mitigation_measures.errors %}"
+            >
+                <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                    {{ form.risk_mitigation_measures.label }}
+                </legend>
 
-            <span class="govuk-hint">{{ form.potential_risks.help_text }}</span>
+                <span class="govuk-hint">{{ form.risk_mitigation_measures.help_text }}</span>
 
-            {% form_field_error form "potential_risks" %}
+                {% form_field_error form "risk_mitigation_measures" %}
 
-            <div>{{ form.potential_risks }}</div>
-            </fieldset>
-        </div>
+                <div>{{ form.risk_mitigation_measures }}</div>
+                </fieldset>
+            </div>
+</div>
 
-
-        <fieldset class="govuk-fieldset">
-            {% include "partials/forms/radio_button_group.html" with radio_group=form.risk_level %}
-      </fieldset>
-
-
-        <div
-            id="{{ form.risk_mitigation_measures.name }}"
-            class="{% form_group_classes form.risk_mitigation_measures.errors %}"
-        >
-            <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                {{ form.risk_mitigation_measures.label }}
-            </legend>
-
-            <span class="govuk-hint">{{ form.risk_mitigation_measures.help_text }}</span>
-
-            {% form_field_error form "risk_mitigation_measures" %}
-
-            <div>{{ form.risk_mitigation_measures }}</div>
-            </fieldset>
-        </div>
-
-        {% endif %}
 
         <button class="govuk-button" data-module="govuk-button">Save Changes</button>
         <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
