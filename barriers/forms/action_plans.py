@@ -496,15 +496,6 @@ class ActionPlanRisksAndMitigationForm(
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
 
-    potential_unwanted_outcomes = forms.CharField(
-        label=(
-            "Would progressing this market access barrier lead to any outcomes we don't"
-            " want?"
-        ),
-        widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        required=True,
-    )
-
     potential_risks = forms.CharField(
         label="Describe the risks",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
