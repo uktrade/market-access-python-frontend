@@ -540,20 +540,20 @@ class ActionPlanRisksAndMitigationForm(
 
         has_risks = self.cleaned_data["has_risks"]
 
+        cleaned_data = self.cleaned_data
+
         if has_risks == ACTION_PLAN_HAS_RISKS_CHOICES.YES:
             client.action_plans.edit_action_plan(
                 barrier_id=self.barrier_id,
-                has_risks=self.cleaned_data["has_risks"],
-                potential_unwanted_outcomes=self.cleaned_data[
-                    "potential_unwanted_outcomes"
-                ],
-                potential_risks=self.cleaned_data["potential_risks"],
-                risk_level=self.cleaned_data["risk_level"],
-                risk_mitigation_measures=self.cleaned_data["risk_mitigation_measures"],
+                has_risks=cleaned_data["has_risks"],
+                potential_unwanted_outcomes=cleaned_data["potential_unwanted_outcomes"],
+                potential_risks=cleaned_data["potential_risks"],
+                risk_level=cleaned_data["risk_level"],
+                risk_mitigation_measures=cleaned_data["risk_mitigation_measures"],
             )
         else:
             client.action_plans.edit_action_plan(
-                barrier_id=self.barrier_id, has_risks=self.cleaned_data["has_risks"]
+                barrier_id=self.barrier_id, has_risks=cleaned_data["has_risks"]
             )
 
 
