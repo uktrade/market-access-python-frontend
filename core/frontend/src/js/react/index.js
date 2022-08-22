@@ -160,7 +160,6 @@ export {
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
-    renderRisksAndMitigationForm,
     renderLocationForm,
     renderEmailSearchAutocomplete,
 };
