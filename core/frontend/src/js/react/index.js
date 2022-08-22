@@ -162,4 +162,5 @@ export {
     renderInputSelectWithMentions,
     renderLocationForm,
     renderEmailSearchAutocomplete,
+    renderRisksAndMitigationForm,
 };
