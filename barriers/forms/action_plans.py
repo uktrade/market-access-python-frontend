@@ -302,6 +302,9 @@ class ActionPlanTaskForm(
     action_text = forms.CharField(
         label="Provide a summary of the task and what it will involve",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
+        error_messages={
+            "required": "You must provide a summary of the task",
+        },
     )
 
     action_type = SubformChoiceField(
@@ -343,7 +346,10 @@ class ActionPlanTaskForm(
     )
 
     assigned_to = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"})
+        widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
+        error_messages={
+            "required": "You must provide an assignee",
+        },
     )
 
     assigned_stakeholders = forms.MultipleChoiceField(
@@ -374,6 +380,8 @@ class ActionPlanTaskForm(
 
     def clean_action_type(self):
         action_type = self.data["action_type"]
+        subform = self.fields["action_type"].subforms[action_type]
+        subform.full_clean()
         action_type_category_name = f"action_type_category_{action_type}"
         action_type_category = self.data[action_type_category_name]
         self.cleaned_data["action_type_category"] = action_type_category

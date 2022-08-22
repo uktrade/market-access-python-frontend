@@ -412,10 +412,10 @@ class SubformChoiceField(forms.ChoiceField):
                 choice["help_text"] = self.choices_help_text[value]
             yield choice
 
-    def init_subforms(self, initial, data, selected_value=None, **kwargs):
+    def init_subforms(self, selected_value=None, **kwargs):
         for value, subform_class in self.subform_classes.items():
             if value == selected_value:
-                subform = subform_class(initial=initial, data=data, **kwargs)
+                subform = subform_class(**kwargs)
                 self.subform = subform
                 self.subforms[value] = subform
             else:
@@ -440,8 +440,6 @@ class SubformMixin:
                     selected_value = kwargs.get("initial", {}).get(name)
                 self.subform_fields[name] = field
                 field.init_subforms(
-                    initial=kwargs.pop("initial", None),
-                    data=kwargs.pop("data", None),
                     selected_value=selected_value,
                     **kwargs,
                 )
