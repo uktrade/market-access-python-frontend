@@ -245,9 +245,9 @@ class DormantForm(APIMappingMixin, forms.Form):
         "dormant_summary": "status_summary",
     }
 
-    # def __init__(self, *args, **kwargs):
-    #     kwargs.pop("barrier", None)
-    #     super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("barrier", None)
+        super().__init__(*args, **kwargs)
 
     def as_html(self):
         template_name = "barriers/forms/statuses/dormant.html"
