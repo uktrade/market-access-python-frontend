@@ -6,7 +6,9 @@ import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
+import RisksAndMitigationForm from "./forms/RisksAndMitigationForm";
 import { renderLocationForm } from "./reports/LocationForm";
+import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -137,11 +139,28 @@ function renderInputSelectWithMentions(
     );
 }
 
+function renderEmailSearchAutocomplete(fieldID) {
+    const field = document.getElementById(fieldID),
+        fieldlLabel = field.labels[0],
+        wrapperElement = field.closest(".dmas_autocomplete_wrapper");
+    ReactDOM.render(
+        <EmailSearchAutocomplete field={field} label={fieldlLabel} />,
+        wrapperElement
+    );
+}
+
+function renderRisksAndMitigationForm() {
+    const container = document.createElement("div");
+    ReactDOM.render(<RisksAndMitigationForm />, container);
+}
+
 export {
     renderCommodityForm,
     renderLocationFilter,
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
+    renderRisksAndMitigationForm,
     renderLocationForm,
+    renderEmailSearchAutocomplete,
 };
