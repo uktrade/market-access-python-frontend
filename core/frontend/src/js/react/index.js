@@ -6,6 +6,7 @@ import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
+import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 import { renderLocationForm } from "./reports/LocationForm";
 
 function renderCommodityForm(
@@ -134,6 +135,16 @@ function renderInputSelectWithMentions(
             autofocus={autofocus}
         />,
         inputContainerElement
+    );
+}
+
+function renderEmailSearchAutocomplete(fieldID) {
+    const field = document.getElementById(fieldID),
+        fieldlLabel = field.labels[0],
+        wrapperElement = field.closest(".dmas_autocomplete_wrapper");
+    ReactDOM.render(
+        <EmailSearchAutocomplete field={field} label={fieldlLabel} />,
+        wrapperElement
     );
 }
 
