@@ -4,7 +4,6 @@ from django import forms
 from django.template.loader import render_to_string
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
-from utils.api.client import MarketAccessAPIClient
 from utils.forms import MonthYearField, SubformChoiceField, SubformMixin
 
 from .mixins import APIFormMixin
@@ -46,6 +45,9 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
             self.cleaned_data["status_date"] = status_date
 
     def save(self):
+        # to avoid circular imports
+        from utils.api.client import MarketAccessAPIClient
+
         client = MarketAccessAPIClient(self.token)
         data = {"status_summary": self.cleaned_data["status_summary"]}
 
@@ -125,6 +127,10 @@ class OpenPendingForm(APIMappingMixin, forms.Form):
         "pending_summary": "status_summary",
     }
 
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("barrier", None)
+        super().__init__(*args, **kwargs)
+
     def as_html(self):
         template_name = "barriers/forms/statuses/open_pending.html"
         return render_to_string(template_name, context={"form": self})
@@ -156,6 +162,10 @@ class OpenInProgressForm(APIMappingMixin, forms.Form):
     )
     api_mapping = {"open_in_progress_summary": "status_summary"}
 
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("barrier", None)
+        super().__init__(*args, **kwargs)
+
     def as_html(self):
         template_name = "barriers/forms/statuses/open_in_progress.html"
         return render_to_string(template_name, context={"form": self})
@@ -165,6 +175,10 @@ class ResolvedInPartForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
     """
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("barrier", None)
+        super().__init__(*args, **kwargs)
 
     part_resolved_date = MonthYearField(
         error_messages={
@@ -208,6 +222,10 @@ class ResolvedInFullForm(APIMappingMixin, forms.Form):
         "resolved_date": "status_date",
     }
 
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("barrier", None)
+        super().__init__(*args, **kwargs)
+
     def as_html(self):
         template_name = "barriers/forms/statuses/resolved_in_full.html"
         return render_to_string(template_name, context={"form": self})
@@ -226,6 +244,10 @@ class DormantForm(APIMappingMixin, forms.Form):
     api_mapping = {
         "dormant_summary": "status_summary",
     }
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("barrier", None)
+        super().__init__(*args, **kwargs)
 
     def as_html(self):
         template_name = "barriers/forms/statuses/dormant.html"
@@ -266,6 +288,8 @@ class BarrierChangeStatusForm(SubformMixin, forms.Form):
         ]
 
     def save(self):
+        from utils.api.client import MarketAccessAPIClient
+
         client = MarketAccessAPIClient(self.token)
         subform = self.fields["status"].subform
         client.barriers.set_status(

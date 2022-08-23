@@ -1,3 +1,4 @@
+from django.db.models import TextChoices
 from model_utils import Choices
 
 
@@ -137,7 +138,7 @@ ACTION_PLAN_TASK_CATEGORIES = {
     ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: Choices(
         *[
             "Creating and maintaining trade agreements",
-            "Buidling partnerships",
+            "Building partnerships",
             "Market liberalisation forums",
             "Other",
         ]
@@ -189,6 +190,39 @@ ACTION_PLAN_RAG_STATUS_CHOICES = Choices(
     ("ON_TRACK", "On track"),
     ("RISK_OF_DELAY", "Risk of delay"),
     ("DELAYED", "Delayed"),
+)
+
+ACTION_PLAN_RISK_LEVEL_CHOICES = Choices(
+    ("LOW", "Low"),
+    ("MEDIUM", "Medium"),
+    ("HIGH", "High"),
+)
+
+ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES", "INDIVIDUAL ORGANISATION"
+)
+
+ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES", "FRIEND NEUTRAL TARGET BLOCKER"
+)
+
+ACTION_PLAN_RISK_LEVEL_CHOICES = Choices(
+    ("LOW", "Low"),
+    ("MEDIUM", "Medium"),
+    ("HIGH", "High"),
+)
+
+ACTION_PLAN_HAS_RISKS_CHOICES = Choices(
+    ("YES", "Yes"),
+    ("NO", "No"),
+)
+
+ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES", "INDIVIDUAL ORGANISATION"
+)
+
+ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES", "FRIEND NEUTRAL TARGET BLOCKER"
 )
 
 TOP_PRIORITY_BARRIER_STATUS = Choices(

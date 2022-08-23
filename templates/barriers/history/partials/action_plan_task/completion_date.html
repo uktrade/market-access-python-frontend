@@ -1,0 +1,17 @@
+{% if item.new_value is not None %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <h4 class="govuk-heading-s">
+        {{ item.field_name }}
+      </h4>
+    </div>
+    <div class="govuk-grid-column-one-half">
+      <div class="govuk-tag govuk-tag--green">{{ item.user.name }}</div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ item.new_value.reason_for_completion_date_change }}
+    </div>
+  </div>
+{% endif %}

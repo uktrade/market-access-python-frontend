@@ -1,17 +1,24 @@
 from django.urls import path, re_path
 
 from barriers.views.action_plans import (
+    ActionPlanMilestoneFormView,
+    ActionPlanRisksAndMitigationView,
+    ActionPlanStakeholdersListView,
+    ActionPlanTaskCompletionDateChangeFormView,
+    ActionPlanTaskFormView,
     ActionPlanTemplateView,
-    AddActionPlanMilestoneFormView,
     AddActionPlanStrategicContext,
-    AddActionPlanTaskFormView,
+    CreateActionPlanStakeholderIndividualFormView,
+    CreateActionPlanStakeholderOrganisationFormView,
+    CreateActionPlanStakeholderTypeFormView,
     DeleteActionPlanMilestoneView,
     DeleteActionPlanTaskView,
     EditActionPlanCurrentStatusFormView,
-    EditActionPlanMilestoneFormView,
-    EditActionPlanTaskFormView,
+    EditActionPlanOwner,
+    EditActionPlanStakeholderDetailsFormView,
     EditActionPlanTaskOutcomeFormView,
     EditActionPlanTaskProgressFormView,
+    RemoveActionPlanOwner,
     SelectActionPlanOwner,
 )
 from barriers.views.light_touch_reviews import (
@@ -194,6 +201,12 @@ urlpatterns = [
         name="saved_search_notifications",
     ),
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
+    # Reason for double url: Analytics requested a second url pointing to the same page
+    path(
+        "barriers/<uuid:barrier_id>/complete/",
+        BarrierDetail.as_view(),
+        name="barrier_detail_from_complete",
+    ),
     re_path(
         "barriers/(?P<barrier_id>[A-Z]-[0-9]{2}-[A-Z0-9]{3})/",
         BarrierDetail.as_view(),
@@ -602,9 +615,49 @@ urlpatterns = [
         name="action_plan_edit_current_status",
     ),
     path(
+        "barriers/<uuid:barrier_id>/action_plan/add_risks_and_mitigations",
+        ActionPlanRisksAndMitigationView.as_view(),
+        name="action_plan_add_risks_and_mitigations",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/",
+        ActionPlanStakeholdersListView.as_view(),
+        name="action_plan_stakeholders_list",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/",
+        CreateActionPlanStakeholderTypeFormView.as_view(),
+        name="action_plan_stakeholders_add",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/individual/",
+        CreateActionPlanStakeholderIndividualFormView.as_view(),
+        name="action_plan_stakeholders_new_individual",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/new/organisation/",
+        CreateActionPlanStakeholderOrganisationFormView.as_view(),
+        name="action_plan_stakeholders_new_organisation",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/stakeholders/<uuid:id>/",
+        EditActionPlanStakeholderDetailsFormView.as_view(),
+        name="action_plan_stakeholders_edit",
+    ),
+    path(
         "barriers/<uuid:barrier_id>/action_plan/edit_owner",
         SelectActionPlanOwner.as_view(),
         name="action_plan_edit_owner",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/remove_owner",
+        RemoveActionPlanOwner.as_view(),
+        name="action_plan_remove_owner",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/existing_owner",
+        EditActionPlanOwner.as_view(),
+        name="action_plan_edit_existing_owner",
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/add_strategic_context",
@@ -612,13 +665,13 @@ urlpatterns = [
         name="action_plan_add_strategic_context",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/add_milestone",
-        AddActionPlanMilestoneFormView.as_view(),
+        "barriers/<uuid:barrier_id>/action_plan/milestones/new/",
+        ActionPlanMilestoneFormView.as_view(),
         name="action_plan_add_milestone",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_milestone",
-        EditActionPlanMilestoneFormView.as_view(),
+        "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:id>/",
+        ActionPlanMilestoneFormView.as_view(),
         name="action_plan_edit_milestone",
     ),
     path(
@@ -627,14 +680,19 @@ urlpatterns = [
         name="action_plan_delete_milestone",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/add_task",
-        AddActionPlanTaskFormView.as_view(),
+        "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/new/",
+        ActionPlanTaskFormView.as_view(),
         name="action_plan_add_task",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_task",
-        EditActionPlanTaskFormView.as_view(),
+        "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/<uuid:id>/",
+        ActionPlanTaskFormView.as_view(),
         name="action_plan_edit_task",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/<uuid:id>/check-start_date/",
+        ActionPlanTaskCompletionDateChangeFormView.as_view(),
+        name="action_plan_completion_date_change",
     ),
     path(
         "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/edit_outcome",

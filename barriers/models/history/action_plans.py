@@ -73,7 +73,8 @@ class StartDateHistoryItem(BaseHistoryItem):
 
 class CompletionDateHistoryItem(BaseHistoryItem):
     field = "completion_date"
-    field_name = "Completion Date"
+    field_name = "Objective task completion date changed"
+    non_standard_layout = True
 
 
 class ActionTextHistoryItem(BaseHistoryItem):
