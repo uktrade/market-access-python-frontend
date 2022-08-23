@@ -20,8 +20,10 @@ from barriers.models import (
     PublicBarrierNote,
     ResolvabilityAssessment,
     SavedSearch,
+    Stakeholder,
     StrategicAssessment,
 )
+from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
@@ -394,13 +396,18 @@ class ActionPlanResource(APIResource):
         url = f"barriers/{barrier_id}/action_plan"
         return self.model(self.client.patch(url, json={**kwargs}))
 
-    def add_milestone(self, barrier_id, *args, **kwargs):
+
+class ActionPlanMilestoneResource(APIResource):
+    resource_name = "action_plan_milestones"
+    model = Milestone
+
+    def create_milestone(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones"
         return self.model(
             self.client.post(url, json={"barrier": str(barrier_id), **kwargs})
         )
 
-    def edit_milestone(self, barrier_id, milestone_id, *args, **kwargs):
+    def update_milestone(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
         return self.model(self.client.patch(url, json={**kwargs}))
 
@@ -408,19 +415,54 @@ class ActionPlanResource(APIResource):
         url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
         return self.model(self.client.delete(url))
 
-    def add_task(self, barrier_id, milestone_id, *args, **kwargs):
+
+class ActionPlanTaskResource(APIResource):
+    resource_name = "action_plan_tasks"
+    model = ActionPlanTask
+
+    def create_task(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks"
         return self.model(
             self.client.post(
                 url,
-                json={"barrier": str(barrier_id), "milestone": milestone_id, **kwargs},
+                json={
+                    "barrier": str(barrier_id),
+                    "milestone": str(milestone_id),
+                    **kwargs,
+                },
             )
         )
 
-    def edit_task(self, barrier_id, task_id, *args, **kwargs):
+    def update_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.patch(url, json={**kwargs}))
 
     def delete_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.delete(url))
+
+
+class ActionPlanStakeholderResource(APIResource):
+    resource_name = "stakeholders"
+    model = Stakeholder
+
+    def create_stakeholder(self, *args, **kwargs):
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/"
+        response = self.client.post(url, json={**kwargs})
+        return self.model(response)
+
+    def update_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
+        response = self.client.patch(url, json={**kwargs})
+        return self.model(response)
+
+    def delete_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
+        self.client.delete(url, json={**kwargs})

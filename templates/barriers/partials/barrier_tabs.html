@@ -43,26 +43,12 @@
         {% if current_user|has_permission:"view_action_plans" %}
             {% if active == 'action_plan' %}
                 <li class="page-tabs__tab page-tabs__tab--active">
-                    <span class="page-tabs__tab__text">Action plan
-                    {% if action_plan.status == "ON_TRACK" %}
-                        <span class="ma-badge ma-badge--in-tab ma-badge--status-on-track">On track</span>
-                    {% elif action_plan.status == "RISK_OF_DELAY" %}
-                        <span class="ma-badge ma-badge--in-tab ma-badge--status-risk-of-delay">Risk of delay</span>
-                    {% elif action_plan.status == "DELAYED" %}
-                        <span class="ma-badge ma-badge--in-tab ma-badge--status-delayed">Delayed</span>
-                    {% endif %}</span>
+                    <span class="page-tabs__tab__text">Action plan</span>
                 </li>
             {% else %}
                 <li class="page-tabs__tab">
                     <a class="page-tabs__tab__text" href="{% url 'barriers:action_plan' barrier.id %}">
                         Action plan
-                        {% if action_plan.status == "ON_TRACK" %}
-                            <span class="ma-badge ma-badge--in-tab ma-badge--status-on-track">On track</span>
-                        {% elif action_plan.status == "RISK_OF_DELAY" %}
-                            <span class="ma-badge ma-badge--in-tab ma-badge--status-risk-of-delay">Risk of delay</span>
-                        {% elif action_plan.status == "DELAYED" %}
-                            <span class="ma-badge ma-badge--in-tab ma-badge--status-delayed">Delayed</span>
-                        {% endif %}
                     </a>
                 </li>
             {% endif %}

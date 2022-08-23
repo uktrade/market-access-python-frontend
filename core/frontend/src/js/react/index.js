@@ -6,8 +6,9 @@ import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
+import RisksAndMitigationForm from "./forms/RisksAndMitigationForm";
 import { renderLocationForm } from "./reports/LocationForm";
-import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
+import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -112,7 +113,8 @@ function renderInputSelectWithMentions(
     placeholder = null,
     labelClasses = null,
     containerClasses = null,
-    trigger = undefined
+    trigger = undefined,
+    autofocus = true
 ) {
     console.log("setting up input with mentions", htmlElementId, trigger);
 
@@ -131,9 +133,25 @@ function renderInputSelectWithMentions(
             textAreaName={name}
             preExistingText={preExistingText}
             trigger={trigger}
+            autofocus={autofocus}
         />,
         inputContainerElement
     );
+}
+
+function renderEmailSearchAutocomplete(fieldID) {
+    const field = document.getElementById(fieldID),
+        fieldlLabel = field.labels[0],
+        wrapperElement = field.closest(".dmas_autocomplete_wrapper");
+    ReactDOM.render(
+        <EmailSearchAutocomplete field={field} label={fieldlLabel} />,
+        wrapperElement
+    );
+}
+
+function renderRisksAndMitigationForm() {
+    const container = document.createElement("div");
+    ReactDOM.render(<RisksAndMitigationForm />, container);
 }
 
 export {
@@ -143,5 +161,6 @@ export {
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
     renderLocationForm,
-    renderAsyncSearchResults,
+    renderEmailSearchAutocomplete,
+    renderRisksAndMitigationForm,
 };

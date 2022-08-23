@@ -79,6 +79,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_extensions",
     "webpack_loader",
+    "formtools",
 ]
 
 LOCAL_APPS = [
@@ -365,6 +366,7 @@ SETTINGS_EXPORT = (
 )
 
 ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
+NEW_ACTION_PLANS_ENABLED = env.bool("NEW_ACTION_PLANS_ENABLED", default=False)
 
 # Webpack config
 
