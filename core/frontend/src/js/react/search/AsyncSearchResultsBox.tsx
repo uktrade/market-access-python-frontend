@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 interface AnchorElementPortalProps {
     element: HTMLElement;
 }
-const AnchorElementPortal = ({element}) => {
+const AnchorElementPortal = ({ element }) => {
     const classNames = [...element.classList];
     const elementId = element.id;
     const href = element.href;
@@ -15,88 +15,177 @@ const AnchorElementPortal = ({element}) => {
         e.preventDefault();
         e.stopPropagation();
         window.history.pushState({}, currentPageTitle, href);
-    }
+    };
 
     const parentElement = element.parentElement;
 
-    parentElement.innerHTML = ""
+    parentElement.innerHTML = "";
 
     return ReactDOM.createPortal(
-        <a className={classNames.join(" ")} href={href} onClick={onClick} id={elementId} dangerouslySetInnerHTML={{__html: innerHTML}} />,
+        <a
+            className={classNames.join(" ")}
+            href={href}
+            onClick={onClick}
+            id={elementId}
+            dangerouslySetInnerHTML={{ __html: innerHTML }}
+        />,
         parentElement
-    )
-}
+    );
+};
 
 const getFormData = (formId: string) => {
     const formData = new FormData();
-    const inputElements = document.querySelectorAll<HTMLInputElement>(`${formId} input`);
-    const selectElements = document.querySelectorAll<HTMLSelectElement>(`${formId} select`);
-    const textareaElements = document.querySelectorAll<HTMLTextAreaElement>(`${formId} textarea`);
+    const inputElements = document.querySelectorAll<HTMLInputElement>(
+        `${formId} input`
+    );
+    const selectElements = document.querySelectorAll<HTMLSelectElement>(
+        `${formId} select`
+    );
+    const textareaElements = document.querySelectorAll<HTMLTextAreaElement>(
+        `${formId} textarea`
+    );
 
     // iterate over elements and add to formData
-    inputElements.forEach(inputElement => {
-        if(inputElement.value){
+    inputElements.forEach((inputElement) => {
+        if (inputElement.value) {
             formData.append(inputElement.name, inputElement.value);
         }
-    })
-    selectElements.forEach(selectElement => {
-        if(!selectElement.value) return
+    });
+    selectElements.forEach((selectElement) => {
+        if (!selectElement.value) return;
         formData.append(selectElement.name, selectElement.value);
-    })
-    textareaElements.forEach(textareaElement => {
-        if(!textareaElement.value) return
+    });
+    textareaElements.forEach((textareaElement) => {
+        if (!textareaElement.value) return;
         formData.append(textareaElement.name, textareaElement.value);
-    })
+    });
     return formData;
-}
+};
 
 export const AsyncSearchResultsBox = ({}) => {
-
     // get all elements with data-enhance="pagination"
-    const paginationElements = document.querySelectorAll("[data-enhance=pagination-link]");
+    const paginationElements = document.querySelectorAll(
+        "[data-enhance=pagination-link]"
+    );
     // get search filters submit button
-    const searchFiltersSubmitButton = document.querySelector("[data-enhance=search-filters-submit]");
+    const searchFiltersSubmitButton = document.querySelector(
+        "[data-enhance=search-filters-submit]"
+    );
 
     const updateSearchResults = async (submitURL: string) => {
-        const searchResultsContainer = document.querySelector("#search-results-container");
+        const searchResultsContainer = document.querySelector(
+            "#search-results-container"
+        );
         searchResultsContainer.innerHTML = "Loading...";
         const response = await fetch(submitURL);
         const responseText = await response.text();
         const tempElement = document.createElement("html");
         tempElement.innerHTML = responseText;
-        const searchResults = tempElement.querySelector("#search-results-container");
+        const searchResults = tempElement.querySelector(
+            "#search-results-container"
+        );
         searchResultsContainer.innerHTML = searchResults.innerHTML;
-    }
+    };
 
-    document.addEventListener("change", async (e) => {
+    const handleChange = async () => {
+        // console.log("Detected change!!");
 
-        const form = document.querySelector<HTMLFormElement>("#search-filters-form");
+        const currentURLQuerystring = document.location.search.replace(
+            "&ordering=-reported",
+            ""
+        );
 
-        const formData =  new FormData(document.querySelector("#search-filters-form") as HTMLFormElement)
+        const form = document.querySelector<HTMLFormElement>(
+            "#search-filters-form"
+        );
+
+        const formData = new FormData(
+            document.querySelector("#search-filters-form") as HTMLFormElement
+        );
         const queryString = new URLSearchParams(formData as any).toString();
+
+        if (
+            currentURLQuerystring.replace("&ordering=-reported", "") ==
+            `?${queryString.replace("&ordering=-reported", "")}`
+        ) {
+            // console.log("Already called search");
+            return;
+        }
+        // console.log(
+        //     `New querystring: ${queryString}`,
+        //     `Current querystring: ${currentURLQuerystring}`
+        // );
+
         const formAction = form.action;
         const path = formAction.split("?")[0];
         const submitURL = `${path}?${queryString}`;
         window.history.pushState({}, document.title, submitURL);
         await updateSearchResults(submitURL);
+    };
 
-    })
+    // document.addEventListener("change", async (e) => {
+    //     console.log("Detected change!!");
+
+    //     const form = document.querySelector<HTMLFormElement>(
+    //         "#search-filters-form"
+    //     );
+
+    //     const formData = new FormData(
+    //         document.querySelector("#search-filters-form") as HTMLFormElement
+    //     );
+    //     const queryString = new URLSearchParams(formData as any).toString();
+    //     const formAction = form.action;
+    //     const path = formAction.split("?")[0];
+    //     const submitURL = `${path}?${queryString}`;
+    //     window.history.pushState({}, document.title, submitURL);
+    //     await updateSearchResults(submitURL);
+    // });
+
+    document.addEventListener("change", async (e) => {
+        handleChange();
+    });
+
+    const form = document.querySelector<HTMLFormElement>(
+        "#search-filters-form"
+    );
+    const formFieldsContainer = document.querySelector("#search-form-fields");
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            const oldValue = mutation.oldValue;
+            const newValue = mutation.target.textContent;
+            if (oldValue !== newValue) {
+                // console.log("DOM changed!!", oldValue, newValue);
+                handleChange();
+            }
+        });
+    });
+    observer.observe(formFieldsContainer, {
+        characterDataOldValue: true,
+        subtree: true,
+        childList: true,
+        characterData: true,
+    });
 
     document.querySelector(".filter-items").addEventListener("submit", (e) => {
         e.preventDefault();
-    })
+    });
 
     console.log("paginationElements", paginationElements);
-    return <div>
-        {[...paginationElements].map((element) => <AnchorElementPortal element={element as HTMLElement} />)}
-    </div>
-}
+    return (
+        <div>
+            {[...paginationElements].map((element) => (
+                <AnchorElementPortal element={element as HTMLElement} />
+            ))}
+        </div>
+    );
+};
 
 export const renderAsyncSearchResults = () => {
+    console.log("Rendering search results");
     const container = document.getElementById("search-results-container");
 
     const rootContainer = document.createElement("div");
     rootContainer.id = "async-search-results";
 
     ReactDOM.render(<AsyncSearchResultsBox />, rootContainer);
-}
+};

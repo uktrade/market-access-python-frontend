@@ -9,6 +9,7 @@ import TextAreaWithMentions from "./forms/TextAreaWithMentions";
 import RisksAndMitigationForm from "./forms/RisksAndMitigationForm";
 import { renderLocationForm } from "./reports/LocationForm";
 import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
+import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -163,4 +164,5 @@ export {
     renderLocationForm,
     renderEmailSearchAutocomplete,
     renderRisksAndMitigationForm,
+    renderAsyncSearchResults,
 };

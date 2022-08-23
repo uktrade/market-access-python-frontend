@@ -16,6 +16,7 @@
             ReactApp.renderMultiSelectFilter("organisation")
             ReactApp.renderMultiSelectFilter("category", "Search categories")
             ReactApp.renderMultiSelectFilter("region")
+            ReactApp.renderAsyncSearchResults()
         })
     </script>
 {% endblock %}
@@ -25,10 +26,10 @@
 {% block page_content %}
 
     {% include 'partials/heading.html' with caption='Market access barriers' text='Search' %}
-  <form action="" method="GET" class="filter-items">
+  <form action="" method="GET" class="filter-items" id="search-filters-form">
 
     <section class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter">
+        <div class="govuk-grid-column-one-quarter" id="search-form-fields">
             <h2 class="filter-list-title">Filter barriers by:</h2>
 
                 {% if form.search_id.value %}{{ form.search_id }}{% endif %}
@@ -96,7 +97,7 @@
 
                 <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
         </div>
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-three-quarters" id="search-results-container">
 
             <div class="filter-results-header">
                 {% if search_title %}
