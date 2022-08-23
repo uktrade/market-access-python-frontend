@@ -200,6 +200,17 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "django-formtools"
+version = "2.3"
+description = "A set of high-level abstractions for Django forms"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Django = ">=2.2"
+
+[[package]]
 name = "django-ipware"
 version = "3.0.7"
 description = "A Django application to retrieve user's IP address"
@@ -425,6 +436,20 @@ notebook = ["notebook", "ipywidgets"]
 parallel = ["ipyparallel"]
 qtconsole = ["qtconsole"]
 test = ["nose (>=0.10.1)", "requests", "testpath", "pygments", "nbformat", "ipykernel", "numpy (>=1.17)"]
+
+[[package]]
+name = "isort"
+version = "5.10.1"
+description = "A Python utility / library to sort Python imports."
+category = "dev"
+optional = false
+python-versions = ">=3.6.1,<4.0"
+
+[package.extras]
+pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
+requirements_deprecated_finder = ["pipreqs", "pip-api"]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+plugins = ["setuptools"]
 
 [[package]]
 name = "jedi"
@@ -1119,7 +1144,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "6c0871f2c6ff5fbe0650a1f5ec91366a4b09b6ec06030770741c07b8be3e95ee"
+content-hash = "b3528c5f1617726896b3e2cbfc890ef1b8ae35ba59be00c885d131f1e1ca0fb2"
 
 [metadata.files]
 appnope = []
@@ -1140,6 +1165,7 @@ decorator = []
 django = []
 django-environ = []
 django-extensions = []
+django-formtools = []
 django-ipware = []
 django-log-formatter-ecs = []
 django-model-utils = []
@@ -1157,6 +1183,7 @@ idna = []
 importlib-metadata = []
 iniconfig = []
 ipython = []
+isort = []
 jedi = []
 kubi-ecs-logger = []
 marshmallow = []
