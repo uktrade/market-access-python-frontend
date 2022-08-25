@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Accessibility{% endblock %}
+
+{% block page_content %}
+  <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half-from-desktop">
+        <h1 class="govuk-heading-xl">Give feedback</h1>
+      </div>
+  </div>
+  <form method="post">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">
+            {{ form.satisfaction.label   }}
+          </h2>
+        </legend>
+        <div class="govuk-radios govuk-radios--small" data-module="govuk-radios">
+          {% for satisfaction_level in form.satisfaction %}
+            <div class="govuk-radios__item">
+              {{  satisfaction_level.tag }}
+              <label class="govuk-label govuk-radios__label" for="{{ satisfaction_level.id_for_label }}">
+                {{ satisfaction_level.choice_label }}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">
+            {{ form.attempted_actions.label   }}
+          </h2>
+        </legend>
+        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+          {% for action in form.attempted_actions %}
+            <div class="govuk-checkboxes__item">
+              {{  action.tag }}
+              <label class="govuk-label govuk-checkboxes__label" for="{{ action.id_for_label }}">
+                {{ action.choice_label }}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <div class="govuk-form-group">
+        <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--m" for="{{ form.feedback_text.id_for_label }}">
+          {{ form.feedback_text.label }}
+          </label>
+        </h1>
+        <div id="more-detail-hint" class="govuk-hint">
+          {{ form.feedback_text.help_text }}
+        </div>
+        {{ form.feedback_text }}
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <button type="submit" class="govuk-button" data-module="govuk-button">Leave feedback</button>
+    </div>
+  </div>
+  </form>
+{% endblock page_content %}
