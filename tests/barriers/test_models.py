@@ -12,7 +12,7 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.admin_areas[1]["name"] == "Sao Paulo"
 
         assert barrier.created_on.date() == datetime.date(2019, 10, 28)
-        assert barrier.reported_on.date() == datetime.date(2019, 10, 28)
+        assert barrier.reported_on.date() == datetime.date(2019, 10, 30)
         assert barrier.modified_on.date() == datetime.date(2020, 1, 21)
 
         assert barrier.location == "Rio de Janeiro, Sao Paulo (Brazil)"
