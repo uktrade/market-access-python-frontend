@@ -1,5 +1,7 @@
 from django import forms
 
+from utils.api.client import MarketAccessAPIClient
+
 
 class FeedbackForm(forms.Form):
     satisfaction = forms.ChoiceField(
@@ -32,3 +34,11 @@ class FeedbackForm(forms.Form):
         max_length=3000,
         widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
     )
+
+    def __init__(self, *args, **kwargs):
+        self.token = kwargs.pop("token", None)
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.feedback.send_feedback(token=self.token, **self.cleaned_data)
