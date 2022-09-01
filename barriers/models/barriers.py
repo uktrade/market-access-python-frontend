@@ -140,7 +140,7 @@ class Barrier(APIModel):
 
     @property
     def reported_on(self):
-        return self.created_on
+        return dateutil.parser.parse(self.data["reported_on"])
 
     @property
     def archived_economic_assessments(self):
