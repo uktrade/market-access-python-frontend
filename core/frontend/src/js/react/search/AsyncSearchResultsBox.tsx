@@ -90,10 +90,7 @@ export const AsyncSearchResultsBox = ({}) => {
     const handleChange = async () => {
         // console.log("Detected change!!");
 
-        const currentURLQuerystring = document.location.search.replace(
-            "&ordering=-reported",
-            ""
-        );
+        const currentURLQuerystring = document.location.search;
 
         const form = document.querySelector<HTMLFormElement>(
             "#search-filters-form"
@@ -104,10 +101,7 @@ export const AsyncSearchResultsBox = ({}) => {
         );
         const queryString = new URLSearchParams(formData as any).toString();
 
-        if (
-            currentURLQuerystring.replace("&ordering=-reported", "") ==
-            `?${queryString.replace("&ordering=-reported", "")}`
-        ) {
+        if (currentURLQuerystring == `?${queryString}`) {
             // console.log("Already called search");
             return;
         }
