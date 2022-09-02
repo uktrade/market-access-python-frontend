@@ -3,7 +3,6 @@ from unittest.mock import Mock, patch
 
 from django.urls import reverse
 
-from barriers.forms.feedback import FeedbackForm
 from core.tests import MarketAccessTestCase
 
 
