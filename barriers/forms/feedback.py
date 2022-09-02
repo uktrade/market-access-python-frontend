@@ -14,6 +14,9 @@ class FeedbackForm(forms.Form):
             ("VERY_DISSATISFIED", "Very dissatisfied"),
         ),
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        error_messages={
+            "required": "You must select a level of satisfaction",
+        },
     )
     attempted_actions = forms.MultipleChoiceField(
         label="2. What were you trying to do today?",
@@ -27,12 +30,16 @@ class FeedbackForm(forms.Form):
             ("DONT_KNOW", "Don't know"),
         ),
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
+        error_messages={
+            "required": "You must select one or more activities",
+        },
     )
     feedback_text = forms.CharField(
         label="3. How could we improve the service?",
         help_text="Don't include any personal information, like your name or email address.",
         max_length=3000,
         widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):

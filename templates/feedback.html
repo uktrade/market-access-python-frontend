@@ -8,6 +8,7 @@
         <h1 class="govuk-heading-xl">Give feedback</h1>
       </div>
   </div>
+  {% form_error_banner form %}
   <form method="post" novalidate>
   {% csrf_token %}
   <div class="govuk-grid-row">
@@ -19,6 +20,7 @@
             {{ form.satisfaction.label   }}
           </h2>
         </legend>
+        {% form_field_error form "satisfaction" %}
         <div class="govuk-radios govuk-radios--small" data-module="govuk-radios">
           {% for satisfaction_level in form.satisfaction %}
             <div class="govuk-radios__item">
@@ -42,6 +44,7 @@
             {{ form.attempted_actions.label   }}
           </h2>
         </legend>
+        {% form_field_error form "attempted_actions" %}
         <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
           {% for action in form.attempted_actions %}
             <div class="govuk-checkboxes__item">
