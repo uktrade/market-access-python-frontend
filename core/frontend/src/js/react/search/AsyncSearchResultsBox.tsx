@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 
-interface AnchorElementPortalProps {
-    element: HTMLElement;
-}
 const AnchorElementPortal = ({ element }) => {
     const classNames = [...element.classList];
     const elementId = element.id;
@@ -33,35 +30,6 @@ const AnchorElementPortal = ({ element }) => {
     );
 };
 
-const getFormData = (formId: string) => {
-    const formData = new FormData();
-    const inputElements = document.querySelectorAll<HTMLInputElement>(
-        `${formId} input`
-    );
-    const selectElements = document.querySelectorAll<HTMLSelectElement>(
-        `${formId} select`
-    );
-    const textareaElements = document.querySelectorAll<HTMLTextAreaElement>(
-        `${formId} textarea`
-    );
-
-    // iterate over elements and add to formData
-    inputElements.forEach((inputElement) => {
-        if (inputElement.value) {
-            formData.append(inputElement.name, inputElement.value);
-        }
-    });
-    selectElements.forEach((selectElement) => {
-        if (!selectElement.value) return;
-        formData.append(selectElement.name, selectElement.value);
-    });
-    textareaElements.forEach((textareaElement) => {
-        if (!textareaElement.value) return;
-        formData.append(textareaElement.name, textareaElement.value);
-    });
-    return formData;
-};
-
 export const AsyncSearchResultsBox = ({}) => {
     // get all elements with data-enhance="pagination"
     const paginationElements = document.querySelectorAll(
@@ -88,8 +56,6 @@ export const AsyncSearchResultsBox = ({}) => {
     };
 
     const handleChange = async () => {
-        // console.log("Detected change!!");
-
         const currentURLQuerystring = document.location.search;
 
         const form = document.querySelector<HTMLFormElement>(
@@ -102,13 +68,8 @@ export const AsyncSearchResultsBox = ({}) => {
         const queryString = new URLSearchParams(formData as any).toString();
 
         if (currentURLQuerystring == `?${queryString}`) {
-            // console.log("Already called search");
             return;
         }
-        // console.log(
-        //     `New querystring: ${queryString}`,
-        //     `Current querystring: ${currentURLQuerystring}`
-        // );
 
         const formAction = form.action;
         const path = formAction.split("?")[0];
@@ -117,38 +78,16 @@ export const AsyncSearchResultsBox = ({}) => {
         await updateSearchResults(submitURL);
     };
 
-    // document.addEventListener("change", async (e) => {
-    //     console.log("Detected change!!");
-
-    //     const form = document.querySelector<HTMLFormElement>(
-    //         "#search-filters-form"
-    //     );
-
-    //     const formData = new FormData(
-    //         document.querySelector("#search-filters-form") as HTMLFormElement
-    //     );
-    //     const queryString = new URLSearchParams(formData as any).toString();
-    //     const formAction = form.action;
-    //     const path = formAction.split("?")[0];
-    //     const submitURL = `${path}?${queryString}`;
-    //     window.history.pushState({}, document.title, submitURL);
-    //     await updateSearchResults(submitURL);
-    // });
-
     document.addEventListener("change", async (e) => {
         handleChange();
     });
 
-    const form = document.querySelector<HTMLFormElement>(
-        "#search-filters-form"
-    );
     const formFieldsContainer = document.querySelector("#search-form-fields");
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             const oldValue = mutation.oldValue;
             const newValue = mutation.target.textContent;
             if (oldValue !== newValue) {
-                // console.log("DOM changed!!", oldValue, newValue);
                 handleChange();
             }
         });
@@ -176,7 +115,6 @@ export const AsyncSearchResultsBox = ({}) => {
 
 export const renderAsyncSearchResults = () => {
     console.log("Rendering search results");
-    const container = document.getElementById("search-results-container");
 
     const rootContainer = document.createElement("div");
     rootContainer.id = "async-search-results";
