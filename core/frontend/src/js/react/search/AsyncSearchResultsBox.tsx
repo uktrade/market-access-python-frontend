@@ -103,7 +103,9 @@ export const AsyncSearchResultsBox = ({}) => {
         e.preventDefault();
     });
 
-    console.log("paginationElements", paginationElements);
+    const applyFiltersButton = document.querySelector("#apply-filters-button");
+    applyFiltersButton.style.display = "none";
+
     return (
         <div>
             {[...paginationElements].map((element) => (
@@ -114,8 +116,6 @@ export const AsyncSearchResultsBox = ({}) => {
 };
 
 export const renderAsyncSearchResults = () => {
-    console.log("Rendering search results");
-
     const rootContainer = document.createElement("div");
     rootContainer.id = "async-search-results";
 
