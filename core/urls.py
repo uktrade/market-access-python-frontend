@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from barriers.views.feedback import FeedbackFormView
+from barriers.views.feedback import FeedbackFormView, FeedbackGratitudeView
 
 app_name = "core"
 
@@ -15,5 +15,10 @@ urlpatterns = [
         "feedback/",
         FeedbackFormView.as_view(),
         name="feedback",
+    ),
+    path(
+        "feedback/thankyou/",
+        FeedbackGratitudeView.as_view(),
+        name="feedback-thanks",
     ),
 ]

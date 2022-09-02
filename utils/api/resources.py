@@ -474,4 +474,4 @@ class FeedbackResource(APIResource):
     model = Feedback
 
     def send_feedback(self, *args, **kwargs):
-        self.client.post("/feedback/", json={**kwargs})
+        return self.client.post("feedback/", json={**kwargs})
