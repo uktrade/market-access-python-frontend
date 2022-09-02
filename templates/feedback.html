@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Accessibility{% endblock %}
+{% block page_title %}{{ block.super }} - Feedback{% endblock %}
 
 {% block page_content %}
   <div class="govuk-grid-row">
@@ -9,6 +9,7 @@
       </div>
   </div>
   <form method="post">
+  {% csrf_token %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half-from-desktop">
     <div class="govuk-form-group">
