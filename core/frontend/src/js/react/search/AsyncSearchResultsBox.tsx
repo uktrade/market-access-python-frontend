@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 const AnchorElementPortal = ({ element }) => {
@@ -32,6 +32,11 @@ const AnchorElementPortal = ({ element }) => {
 
 export const AsyncSearchResultsBox = ({}) => {
     // get all elements with data-enhance="pagination"
+
+    // const [requestCounter, setRequestCounter] = useState(0)
+
+    let requestCounter: number = 0;
+
     const paginationElements = document.querySelectorAll(
         "[data-enhance=pagination-link]"
     );
@@ -40,7 +45,10 @@ export const AsyncSearchResultsBox = ({}) => {
         "[data-enhance=search-filters-submit]"
     );
 
-    const updateSearchResults = async (submitURL: string) => {
+    const updateSearchResults = async (
+        submitURL: string,
+        requestCounterCheck: number
+    ) => {
         const searchResultsContainer = document.querySelector(
             "#search-results-container"
         );
@@ -52,6 +60,15 @@ export const AsyncSearchResultsBox = ({}) => {
         const searchResults = tempElement.querySelector(
             "#search-results-container"
         );
+
+        const currentURLQuerystring = document.location.search;
+        if (requestCounterCheck !== requestCounter) {
+            console.log(
+                `requestCounter ${requestCounter} is not equal to ${requestCounterCheck}`
+            );
+            return;
+        }
+
         searchResultsContainer.innerHTML = searchResults.innerHTML;
     };
 
@@ -71,11 +88,16 @@ export const AsyncSearchResultsBox = ({}) => {
             return;
         }
 
+        requestCounter += 1;
+        console.log(`Request #${requestCounter} started`);
+
         const formAction = form.action;
         const path = formAction.split("?")[0];
         const submitURL = `${path}?${queryString}`;
         window.history.pushState({}, document.title, submitURL);
-        await updateSearchResults(submitURL);
+
+        const requestCounterCheck = requestCounter;
+        await updateSearchResults(submitURL, requestCounterCheck);
     };
 
     document.addEventListener("change", async (e) => {
