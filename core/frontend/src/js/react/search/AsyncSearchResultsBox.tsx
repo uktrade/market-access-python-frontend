@@ -63,9 +63,6 @@ export const AsyncSearchResultsBox = ({}) => {
 
         const currentURLQuerystring = document.location.search;
         if (requestCounterCheck !== requestCounter) {
-            console.log(
-                `requestCounter ${requestCounter} is not equal to ${requestCounterCheck}`
-            );
             return;
         }
 
@@ -89,7 +86,6 @@ export const AsyncSearchResultsBox = ({}) => {
         }
 
         requestCounter += 1;
-        console.log(`Request #${requestCounter} started`);
 
         const formAction = form.action;
         const path = formAction.split("?")[0];
