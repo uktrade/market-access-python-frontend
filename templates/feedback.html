@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Feedback{% endblock %}
+
+{% block page_content %}
+  <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half-from-desktop">
+        <h1 class="govuk-heading-xl">Give feedback</h1>
+      </div>
+  </div>
+
+  {% if form.errors %}
+    <div class="govuk-error-summary restrict-width" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+              {% for field in form %}
+                  {% if field.errors %}
+                      {% for error in field.errors %}
+                          <li>
+                              <a href="#{{ field.id_for_label|default:field.subwidgets.0.id_for_label }}">{{ error }}</a>
+                          </li>
+                      {% endfor %}
+                  {% endif %}
+              {% endfor %}
+            </ul>
+        </div>
+    </div>
+  {% endif %}
+  <form method="post" novalidate action="{{ request.build_absolute_uri }}">
+  {% csrf_token %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+    <div class="govuk-form-group{% if form.satisfaction.errors %} govuk-form-group--error{% endif %}">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">
+            {{ form.satisfaction.label   }}
+          </h2>
+        </legend>
+        {% form_field_error form "satisfaction" %}
+        <div class="govuk-radios govuk-radios--small" data-module="govuk-radios" id="satisfaction">
+          {% for satisfaction_level in form.satisfaction %}
+            <div class="govuk-radios__item">
+              {{  satisfaction_level.tag }}
+              <label class="govuk-label govuk-radios__label" for="{{ satisfaction_level.id_for_label }}">
+                {{ satisfaction_level.choice_label }}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+    <div class="govuk-form-group{% if form.attempted_actions.errors %} govuk-form-group--error{% endif %}">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">
+            {{ form.attempted_actions.label   }}
+          </h2>
+        </legend>
+        {% form_field_error form "attempted_actions" %}
+        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes" id="attempted_actions">
+          {% for action in form.attempted_actions %}
+            <div class="govuk-checkboxes__item">
+              {{  action.tag }}
+              <label class="govuk-label govuk-checkboxes__label" for="{{ action.id_for_label }}">
+                {{ action.choice_label }}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <div class="govuk-form-group{% if form.feedback_text.errors %} govuk-form-group--error{% endif %}">
+        <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--m" for="{{ form.feedback_text.id_for_label }}">
+          {{ form.feedback_text.label }}
+          </label>
+        </h1>
+        <div id="more-detail-hint" class="govuk-hint">
+          {{ form.feedback_text.help_text }}
+        </div>
+        {{ form.feedback_text }}
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <button type="submit" class="govuk-button" data-module="govuk-button">Leave feedback</button>
+    </div>
+  </div>
+  </form>
+{% endblock page_content %}

@@ -24,6 +24,7 @@ from barriers.models import (
     StrategicAssessment,
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
+from barriers.models.feedback import Feedback
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
@@ -466,3 +467,11 @@ class ActionPlanStakeholderResource(APIResource):
         barrier_id = kwargs.pop("barrier_id")
         url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
         self.client.delete(url, json={**kwargs})
+
+
+class FeedbackResource(APIResource):
+    resource_name = "feedback"
+    model = Feedback
+
+    def send_feedback(self, *args, **kwargs):
+        return self.client.post("feedback/", json={**kwargs})
