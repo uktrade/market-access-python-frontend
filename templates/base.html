@@ -63,7 +63,7 @@
                 beta
               </strong>
               <span class="govuk-phase-banner__text">
-                This is a new service – your <a class="govuk-link" href="{% url 'core:feedback' %}" target="_blank">feedback</a> will help us to improve it.
+                This is a new service – your <a class="govuk-link" href="{% url 'core:feedback' %}?return={{ request.build_absolute_uri|urlencode }}">feedback</a> will help us to improve it.
               </span>
             </p>
           </div>
