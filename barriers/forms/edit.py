@@ -104,7 +104,7 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
+class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
     CHOICES = [
         ("ON_TRACK", "On track"),
         ("RISK_OF_DELAY", "Risk of delay"),
@@ -148,7 +148,7 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.progress_update_id:
-            client.barriers.patch_progress_update(
+            client.barriers.patch_top_100_progress_update(
                 barrier=self.barrier_id,
                 id=self.progress_update_id,
                 status=self.cleaned_data["status"],
@@ -156,11 +156,65 @@ class UpdateBarrierProgressUpdateForm(APIFormMixin, forms.Form):
                 next_steps=self.cleaned_data["next_steps"],
             )
         else:
-            client.barriers.create_progress_update(
+            client.barriers.create_top_100_progress_update(
                 barrier=self.barrier_id,
                 status=self.cleaned_data["status"],
                 message=self.cleaned_data["update"],
                 next_steps=self.cleaned_data["next_steps"],
+            )
+
+
+class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
+    milestones_and_deliverables = forms.CharField(
+        label="Milestones and deliverables",
+        help_text=(
+            "Please provide a monthly update in this box of your progress against the"
+            " milestones and deliverables you provided to the Bilateral Trade Relations"
+            " (BTR) team in your project plan. Please note in particular any slippage"
+            " against your project plan, emerging risks or issues that have arisen;"
+            " and what mitigating actions you are taking. If you need support from your"
+            " London-based colleagues, please note that here too."
+        ),
+        widget=forms.Textarea,
+        error_messages={
+            "required": "Milestones and deliverables is required",
+        },
+    )
+    expenditure = forms.CharField(
+        label="Expenditure",
+        help_text=(
+            "Please provide an update on how much money you have spent to date, when"
+            " each expenditure was made, and what it was spent on. You should indicate"
+            " if this is on track as compared to your project plan. If there is a risk of over"
+            " or underspend come the end of this financial year, you should indicate this here."
+        ),
+        widget=forms.Textarea,
+        error_messages={"required": "Expenditure is required"},
+    )
+
+    def __init__(self, barrier_id, programme_fund_update_id=None, *args, **kwargs):
+        self.barrier_id = barrier_id
+        self.programme_fund_update_id = programme_fund_update_id
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        if self.programme_fund_update_id:
+            client.barriers.patch_programme_fund_progress_update(
+                barrier=self.barrier_id,
+                id=self.programme_fund_update_id,
+                milestones_and_deliverables=self.cleaned_data[
+                    "milestones_and_deliverables"
+                ],
+                expenditure=self.cleaned_data["expenditure"],
+            )
+        else:
+            client.barriers.create_programme_fund_progress_update(
+                barrier=self.barrier_id,
+                milestones_and_deliverables=self.cleaned_data[
+                    "milestones_and_deliverables"
+                ],
+                expenditure=self.cleaned_data["expenditure"],
             )
 
 

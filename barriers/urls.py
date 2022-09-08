@@ -35,9 +35,11 @@ from barriers.views.mentions import (
     TurnNotificationsOnAndRedirect,
 )
 from barriers.views.progress_updates import (
-    BarrierAddProgressUpdate,
+    BarrierAddProgrammeFundProgressUpdate,
+    BarrierAddTop100ProgressUpdate,
     BarrierEditProgressUpdate,
     BarrierListProgressUpdate,
+    ChooseProgressUpdateTypeView,
 )
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
@@ -755,9 +757,19 @@ urlpatterns = [
         name="enable_hm_trade_commissioner_approvals",
     ),
     path(
-        "barriers/<uuid:barrier_id>/progress_updates/add",
-        BarrierAddProgressUpdate.as_view(),
-        name="add_progress_update",
+        "barriers/<uuid:barrier_id>/progress_updates/for",
+        ChooseProgressUpdateTypeView.as_view(),
+        name="choose_progress_update_type",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/progress_updates/top_100_priority",
+        BarrierAddTop100ProgressUpdate.as_view(),
+        name="add_top_100_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/progress_updates/programme_fund",
+        BarrierAddProgrammeFundProgressUpdate.as_view(),
+        name="add_programme_fund_progress_update",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(

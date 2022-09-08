@@ -1,13 +1,51 @@
 # add and edit views for progress updates
+from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from barriers.forms.edit import UpdateBarrierProgressUpdateForm
+from barriers.forms.edit import (
+    ProgrammeFundProgressUpdateForm,
+    Top100ProgressUpdateForm,
+)
+from barriers.forms.various import ChooseUpdateTypeForm
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 
 
-class BarrierAddProgressUpdate(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/progress_updates/add.html"
-    form_class = UpdateBarrierProgressUpdateForm
+class ChooseProgressUpdateTypeView(FormView):
+    template_name = "barriers/progress_updates/choose_type.html"
+    form_class = ChooseUpdateTypeForm
+    success_url_patterns = {
+        "top_100_priority": "barriers:add_top_100_progress_update",
+        "programme_fund": "barriers:add_programme_fund_progress_update",
+    }
+
+    def get_context_data(self, **kwargs):
+        kwargs["barrier_id"] = self.kwargs["barrier_id"]
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        success_url_pattern = self.success_url_patterns.get(
+            form.cleaned_data["update_type"]
+        )
+        self.success_url = reverse(
+            success_url_pattern, kwargs={"barrier_id": self.kwargs["barrier_id"]}
+        )
+        return super().form_valid(form)
+
+
+class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/progress_updates/add_top_100_update.html"
+    form_class = Top100ProgressUpdateForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        return kwargs
+
+
+class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/progress_updates/add_programme_fund_update.html"
+    form_class = ProgrammeFundProgressUpdateForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -18,7 +56,7 @@ class BarrierAddProgressUpdate(APIBarrierFormViewMixin, FormView):
 
 class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/progress_updates/edit.html"
-    form_class = UpdateBarrierProgressUpdateForm
+    form_class = Top100ProgressUpdateForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

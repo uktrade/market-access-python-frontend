@@ -86,9 +86,8 @@
 
             <dt class="summary-group__list__key">Progress update</dt>
             <dd class="summary-group__list__value">
-                Required for ‘Top 100 Priority Barriers’ only
 
-                <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:add_progress_update' barrier.id %}">Add progress update</a>
+                <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:choose_progress_update_type' barrier.id %}">Add progress update</a>
 
                 <div class="barrier-progress-update summary-group__list__value">
                     {% if barrier.latest_progress_update %}
