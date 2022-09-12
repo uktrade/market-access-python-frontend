@@ -1,6 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'barriers/edit/base.html' %}
 
 {% block page_title %}{{ block.super }} - What is your progress update for?{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
 
 {% block page_content %}
 

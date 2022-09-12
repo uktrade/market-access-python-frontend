@@ -10,7 +10,7 @@ from barriers.forms.various import ChooseUpdateTypeForm
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 
 
-class ChooseProgressUpdateTypeView(FormView):
+class ChooseProgressUpdateTypeView(BarrierMixin, FormView):
     template_name = "barriers/progress_updates/choose_type.html"
     form_class = ChooseUpdateTypeForm
     success_url_patterns = {
