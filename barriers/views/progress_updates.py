@@ -44,7 +44,8 @@ class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         success_url = super().get_success_url()
-        success_url = f"{success_url}#barrier-top-100-update-tab"
+        if self.barrier.latest_programme_fund_progress_update:
+            success_url = f"{success_url}#barrier-top-100-update-tab"
         return success_url
 
 
@@ -60,7 +61,8 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         success_url = super().get_success_url()
-        success_url = f"{success_url}#barrier-programme-fund-update-tab"
+        if self.barrier.latest_top_100_progress_update:
+            success_url = f"{success_url}#barrier-programme-fund-update-tab"
         return success_url
 
 
@@ -77,7 +79,8 @@ class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         success_url = super().get_success_url()
-        success_url = f"{success_url}#barrier-top-100-update-tab"
+        if self.barrier.latest_programme_fund_progress_update:
+            success_url = f"{success_url}#barrier-top-100-update-tab"
         return success_url
 
     def get_initial(self):
@@ -113,7 +116,8 @@ class ProgrammeFundEditProgressUpdate(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         success_url = super().get_success_url()
-        success_url = f"{success_url}#barrier-programme-fund-update-tab"
+        if self.barrier.latest_top_100_progress_update:
+            success_url = f"{success_url}#barrier-programme-fund-update-tab"
         return success_url
 
     def get_initial(self):
