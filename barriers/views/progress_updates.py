@@ -42,6 +42,11 @@ class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         return kwargs
 
+    def get_success_url(self):
+        success_url = super().get_success_url()
+        success_url = f"{success_url}#barrier-top-100-update-tab"
+        return success_url
+
 
 class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/progress_updates/add_programme_fund_update.html"
@@ -52,6 +57,11 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         return kwargs
+
+    def get_success_url(self):
+        success_url = super().get_success_url()
+        success_url = f"{success_url}#barrier-programme-fund-update-tab"
+        return success_url
 
 
 class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
@@ -64,6 +74,11 @@ class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
         kwargs["progress_update_id"] = str(self.kwargs.get("progress_update_id"))
         return kwargs
+
+    def get_success_url(self):
+        success_url = super().get_success_url()
+        success_url = f"{success_url}#barrier-top-100-update-tab"
+        return success_url
 
     def get_initial(self):
         progress_update = next(
@@ -95,6 +110,11 @@ class ProgrammeFundEditProgressUpdate(APIBarrierFormViewMixin, FormView):
             kwargs.pop("progress_update_id", self.kwargs.get("progress_update_id"))
         )
         return kwargs
+
+    def get_success_url(self):
+        success_url = super().get_success_url()
+        success_url = f"{success_url}#barrier-programme-fund-update-tab"
+        return success_url
 
     def get_initial(self):
         progress_update = next(
