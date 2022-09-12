@@ -89,8 +89,8 @@
 
                 <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:choose_progress_update_type' barrier.id %}">Add progress update</a>
 
-                <div class="barrier-progress-update summary-group__list__value">
-                    {% if barrier.latest_top_100_progress_update %}
+                {% if barrier.latest_top_100_progress_update %}
+                  <div class="barrier-progress-update summary-group__list__value">
                     <div class="barrier-progress-update">
                         <div class="barrier-progress-update__section">
                             <h4 class="barrier-progress-update__section__heading">Delivery confidence</h4>
@@ -151,10 +151,10 @@
                             {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_progress_update' barrier.id %}">Edit</a> {% endcomment %}
                         {% endif %}
                     </div>
-                    {% endif %}
-                </div>
-                <div class="barrier-progress-update summary-group__list__value">
-                    {% if barrier.latest_programme_fund_progress_update %}
+                  </div>
+                {% endif %}
+                {% if barrier.latest_programme_fund_progress_update %}
+                  <div class="barrier-progress-update summary-group__list__value">
                     <div class="barrier-progress-update">
                         <div class="barrier-progress-update__section">
                             <h4 class="barrier-progress-update__section__heading">Milestones and deliverables</h4>
@@ -205,8 +205,8 @@
                             {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_progress_update' barrier.id %}">Edit</a> {% endcomment %}
                         {% endif %}
                     </div>
-                    {% endif %}
-                </div>
+                  </div>
+                {% endif %}
             </dd>
 
 

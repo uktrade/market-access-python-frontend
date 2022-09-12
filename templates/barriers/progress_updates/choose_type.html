@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - Choose barrier progress update type{% endblock %}
+{% block page_title %}{{ block.super }} - What is your progress update for?{% endblock %}
 
 {% block page_content %}
 
@@ -36,7 +36,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-button-group">
-        <button class="govuk-button" data-module="govuk-button">Confirm</button>
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
         <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:barrier_detail' barrier_id=barrier_id %}">Cancel</a>
       </div>
     </div>

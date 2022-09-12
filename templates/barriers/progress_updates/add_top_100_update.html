@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Add Top 100 Priority Barrier progress update{% endblock %}
+{% block page_title %}{{ block.super }} - Add Top 100 priority barrier update{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -17,7 +17,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add progress update' %}
+    {% include 'partials/heading.html' with text='Add Top 100 priority barrier update' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">

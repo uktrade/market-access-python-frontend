@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit Programme Fund progress update{% endblock %}
+{% block page_title %}{{ block.super }} - Edit Programme Fund update{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -9,15 +9,15 @@
 {% block body_script %}
     <script>
         if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '#{{ form.update.name }}-form-group.govuk-character-count' );
-            new ma.components.CharacterCount( '#{{ form.next_steps.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.milestones_and_deliverables.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.expenditure.name }}-form-group.govuk-character-count' );
         }
     </script>
 {% endblock %}
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit progress update' %}
+    {% include 'partials/heading.html' with text='Edit Programme Fund update' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">

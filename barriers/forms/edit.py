@@ -168,12 +168,9 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
     milestones_and_deliverables = forms.CharField(
         label="Milestones and deliverables",
         help_text=(
-            "Please provide a monthly update in this box of your progress against the"
-            " milestones and deliverables you provided to the Bilateral Trade Relations"
-            " (BTR) team in your project plan. Please note in particular any slippage"
-            " against your project plan, emerging risks or issues that have arisen;"
-            " and what mitigating actions you are taking. If you need support from your"
-            " London-based colleagues, please note that here too."
+            "Tell us whether your milestones and deliverables from your project plan"
+            " are on track or not, any new risks or issues and how you’re managing them,"
+            " and if you need any support."
         ),
         widget=forms.Textarea,
         error_messages={
@@ -183,10 +180,9 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
     expenditure = forms.CharField(
         label="Expenditure",
         help_text=(
-            "Please provide an update on how much money you have spent to date, when"
-            " each expenditure was made, and what it was spent on. You should indicate"
-            " if this is on track as compared to your project plan. If there is a risk of over"
-            " or underspend come the end of this financial year, you should indicate this here."
+            "Tell us how much money you’ve spent so far, what it was spent on and when,"
+            " whether your spending is on track with your project plan projection and"
+            " whether there’s a risk of over or underspend for this financial year."
         ),
         widget=forms.Textarea,
         error_messages={"required": "Expenditure is required"},
