@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Add progress update{% endblock %}
+{% block page_title %}{{ block.super }} - Edit Top 100 priority barrier update{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -17,7 +17,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Add progress update' %}
+    {% include 'partials/heading.html' with text='Edit Top 100 priority barrier update' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -46,7 +46,7 @@
         </div>
 
         <div id="{{ form.update.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
-            <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+            <div class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s" for="update">{{ form.update.label }}</label>
 
                 {% form_field_error form "update" %}
@@ -76,7 +76,7 @@
 
 
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
-        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+        <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:barrier_detail' barrier_id=barrier.id %}">Cancel</a>
 
     </form>
 

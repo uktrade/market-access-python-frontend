@@ -157,14 +157,26 @@ class BarriersResource(APIResource):
             url = f"barriers/{barrier_id}/hibernate"
         return self.client.put(url, json=kwargs)
 
-    def create_progress_update(self, **kwargs):
+    def create_top_100_progress_update(self, **kwargs):
         return self.client.post(
-            f"barriers/{kwargs['barrier']}/progress_updates", data=kwargs
+            f"barriers/{kwargs['barrier']}/top_100_progress_updates", data=kwargs
         )
 
-    def patch_progress_update(self, **kwargs):
+    def patch_top_100_progress_update(self, **kwargs):
         return self.client.patch(
-            f"barriers/{kwargs['barrier']}/progress_updates/{kwargs['id']}", data=kwargs
+            f"barriers/{kwargs['barrier']}/top_100_progress_updates/{kwargs['id']}",
+            data=kwargs,
+        )
+
+    def create_programme_fund_progress_update(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/programme_fund_progress_updates", data=kwargs
+        )
+
+    def patch_programme_fund_progress_update(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/programme_fund_progress_updates/{kwargs['id']}",
+            data=kwargs,
         )
 
 

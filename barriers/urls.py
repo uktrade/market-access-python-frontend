@@ -35,9 +35,13 @@ from barriers.views.mentions import (
     TurnNotificationsOnAndRedirect,
 )
 from barriers.views.progress_updates import (
-    BarrierAddProgressUpdate,
+    BarrierAddProgrammeFundProgressUpdate,
+    BarrierAddTop100ProgressUpdate,
     BarrierEditProgressUpdate,
     BarrierListProgressUpdate,
+    ChooseProgressUpdateTypeView,
+    ProgrammeFundEditProgressUpdate,
+    ProgrammeFundListProgressUpdate,
 )
 
 from .views.archive import ArchiveBarrier, UnarchiveBarrier
@@ -243,14 +247,24 @@ urlpatterns = [
         name="edit_term",
     ),
     path(
-        "barriers/<uuid:barrier_id>/list/progress_update/",
+        "barriers/<uuid:barrier_id>/list/top_100_progress_update/",
         BarrierListProgressUpdate.as_view(),
-        name="list_progress_update",
+        name="list_top_100_progress_update",
     ),
     path(
-        "barriers/<uuid:barrier_id>/edit/progress_update/<uuid:progress_update_id>/",
+        "barriers/<uuid:barrier_id>/edit/top_100_progress_update/<uuid:progress_update_id>/",
         BarrierEditProgressUpdate.as_view(),
-        name="edit_progress_update",
+        name="edit_top_100_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/list/programme_fund_progress_update/",
+        ProgrammeFundListProgressUpdate.as_view(),
+        name="list_barrier_fund_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/programme_fund_progress_update/<uuid:progress_update_id>/",
+        ProgrammeFundEditProgressUpdate.as_view(),
+        name="edit_barrier_fund_progress_update",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/economic-assessment-eligibility/",
@@ -755,9 +769,19 @@ urlpatterns = [
         name="enable_hm_trade_commissioner_approvals",
     ),
     path(
-        "barriers/<uuid:barrier_id>/progress_updates/add",
-        BarrierAddProgressUpdate.as_view(),
-        name="add_progress_update",
+        "barriers/<uuid:barrier_id>/progress_updates/for",
+        ChooseProgressUpdateTypeView.as_view(),
+        name="choose_progress_update_type",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/progress_updates/top_100_priority",
+        BarrierAddTop100ProgressUpdate.as_view(),
+        name="add_top_100_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/progress_updates/programme_fund",
+        BarrierAddProgrammeFundProgressUpdate.as_view(),
+        name="add_programme_fund_progress_update",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(

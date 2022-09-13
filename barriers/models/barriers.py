@@ -318,9 +318,19 @@ class Barrier(APIModel):
         return self.data.get("progress_updates")
 
     @property
-    def latest_progress_update(self):
+    def latest_top_100_progress_update(self):
         if self.progress_updates:
             return self.progress_updates[0]
+        return None
+
+    @property
+    def programme_fund_progress_updates(self):
+        return self.data.get("programme_fund_progress_updates")
+
+    @property
+    def latest_programme_fund_progress_update(self):
+        if self.programme_fund_progress_updates:
+            return self.programme_fund_progress_updates[0]
         return None
 
 
