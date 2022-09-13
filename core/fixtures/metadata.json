@@ -8605,6 +8605,20 @@
       "description": "",
       "show_at_reporting": true,
       "order": 5
+    },
+    {
+      "id": 6,
+      "title": "International Standards",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 6
+    },
+    {
+      "id": 7,
+      "title": "Clean Growth",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 7
     }
   ],
   "barrier_type_categories": {
