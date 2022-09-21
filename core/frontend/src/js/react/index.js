@@ -10,6 +10,7 @@ import RisksAndMitigationForm from "./forms/RisksAndMitigationForm";
 import { renderLocationForm } from "./reports/LocationForm";
 import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
+import GDSTabs from "./gds/Tabs";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -165,4 +166,5 @@ export {
     renderEmailSearchAutocomplete,
     renderRisksAndMitigationForm,
     renderAsyncSearchResults,
+    GDSTabs,
 };

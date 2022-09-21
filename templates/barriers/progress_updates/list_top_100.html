@@ -60,7 +60,7 @@
                         {% endif %}
                     </div>
                     <div class="barrier-progress-update__actions">
-                        <a class="" href="{% url 'barriers:edit_progress_update' barrier.id progress_update.id %}">Edit</a>
+                        <a class="" href="{% url 'barriers:edit_top_100_progress_update' barrier.id progress_update.id %}">Edit</a>
                     </div>
                     {% if not barrier.archived %}
                         {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_progress_update' barrier.id %}">Edit</a> {% endcomment %}
