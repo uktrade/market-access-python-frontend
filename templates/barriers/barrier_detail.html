@@ -516,13 +516,14 @@
             </ul>
         </div>
 
-        <h2 class="section-heading">
+        <h2 class="section-heading govuk-!-margin-bottom-0">
             Internal notes and updates
         </h2>
 
 
         {% block note_form %}
             {% if not barrier.archived %}
+                <p class="govuk-!-margin-top-0">You can mention someone in your note by typing '@' and their name, then selecting their email address from the list. They will get a notification with a link to your note.</p>
                 <a class="govuk-button button--primary" href="{% url 'barriers:add_note' barrier.id %}">Add note</a>
             {% endif %}
         {% endblock %}
