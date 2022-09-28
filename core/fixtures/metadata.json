@@ -8619,6 +8619,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 7
+    },
+    {
+      "id": 8,
+      "title": "Regional Trade Plan",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 8
     }
   ],
   "barrier_type_categories": {
