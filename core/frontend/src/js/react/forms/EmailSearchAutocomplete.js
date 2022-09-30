@@ -78,6 +78,8 @@ function EmailSearchAutocomplete({ field, label }) {
                 itemToString={itemToString}
                 inputId={field.id}
                 initialInputValue={initialInputValue}
+                initialHighlightedIndex={0}
+                defaultHighlightedIndex={0}
             >
                 {({
                     getInputProps,
