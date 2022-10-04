@@ -1,29 +1,26 @@
 FROM ubuntu:18.04
 
-RUN dnf -y update \
- && dnf -y install \
-    gcc \
-	wget \
-    postgresql \
-    # packages so python can be compiled
-	nano \
-	make \
-	which \
-    openssl-devel \
-    bzip2-devel \
-	zlib-devel \
-    libffi \
-	libffi-devel \
-    # packages for pytest
-    sqlite-devel \
-    # packages for localdef
-    glibc-locale-source \
-    glibc-langpack-en \
-    # packages for ssh server
-    openssh-server \
-    openssh-clients \
- && dnf -y clean all \
- && rm -rf /var/cache/dnf
+# Install system stuff
+RUN apt-get update
+RUN apt-get install -y  software-properties-common \
+                        build-essential \
+                        gcc \
+                        curl \
+                        dirmngr \
+                        apt-transport-https \
+                        lsb-release \
+                        ca-certificates \
+                        locales
+
+# Installing Node
+# We do this first as it has the regrettable habit of installing Python 2.7
+# and symlinking it in place of the version we actually want
+ENV NODE_VERSION 12
+# Configure the node apt repository
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
+#RUN apt-get -y module enable nodejs:$NODE_VERSION \
+#    && apt-get -y install nodejs
 
 # Installing Python
 ENV PYTHON_VERSION 3.9.2
