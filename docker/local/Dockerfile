@@ -1,4 +1,4 @@
-FROM rockylinux:8
+FROM ubuntu:18.04
 
 RUN dnf -y update \
  && dnf -y install \
