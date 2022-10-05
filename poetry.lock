@@ -32,7 +32,7 @@ python-versions = ">=3.5"
 name = "atomicwrites"
 version = "1.4.1"
 description = "Atomic file writes."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -40,7 +40,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "attrs"
 version = "22.1.0"
 description = "Classes Without Boilerplate"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -124,7 +124,7 @@ importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 name = "colorama"
 version = "0.4.5"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -341,11 +341,14 @@ test = ["dnspython (>=1.16.0,<2.0)", "idna", "requests", "objgraph", "cffi (>=1.
 
 [[package]]
 name = "greenlet"
-version = "0.4.17"
+version = "1.1.3"
 description = "Lightweight in-process concurrent programming"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
+
+[package.extras]
+docs = ["sphinx"]
 
 [[package]]
 name = "gunicorn"
@@ -384,7 +387,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "importlib-metadata"
 version = "4.12.0"
 description = "Read metadata from Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -401,7 +404,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 name = "iniconfig"
 version = "1.1.1"
 description = "iniconfig: brain-dead simple config-ini parsing"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -619,10 +622,24 @@ docs = ["furo (>=2021.7.5b38)", "proselint (>=0.10.2)", "sphinx-autodoc-typehint
 test = ["appdirs (==1.4.4)", "pytest-cov (>=2.7)", "pytest-mock (>=3.6)", "pytest (>=6)"]
 
 [[package]]
+name = "playwright"
+version = "1.26.1"
+description = "A high-level API to automate web browsers"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+greenlet = "1.1.3"
+pyee = "8.1.0"
+typing-extensions = {version = "*", markers = "python_version <= \"3.8\""}
+websockets = "10.1"
+
+[[package]]
 name = "pluggy"
 version = "1.0.0"
 description = "plugin and hook calling mechanisms for python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -664,7 +681,7 @@ python-versions = "*"
 name = "py"
 version = "1.11.0"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -683,6 +700,14 @@ description = "C parser in Python"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[[package]]
+name = "pyee"
+version = "8.1.0"
+description = "A port of node.js's EventEmitter to python."
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "pyflakes"
@@ -742,7 +767,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "pytest"
 version = "7.1.2"
 description = "pytest: simple powerful testing with Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -759,6 +784,18 @@ tomli = ">=1.0.0"
 
 [package.extras]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
+
+[[package]]
+name = "pytest-base-url"
+version = "2.0.0"
+description = "pytest plugin for URL based testing"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+pytest = ">=3.0.0,<8.0.0"
+requests = ">=2.9"
 
 [[package]]
 name = "pytest-cov"
@@ -803,6 +840,20 @@ py = "*"
 pytest = ">=3.10"
 
 [[package]]
+name = "pytest-playwright"
+version = "0.3.0"
+description = "A pytest wrapper with fixtures for Playwright to automate web browsers"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+playwright = ">=1.18"
+pytest = "*"
+pytest-base-url = "*"
+python-slugify = "*"
+
+[[package]]
 name = "pytest-xdist"
 version = "2.1.0"
 description = "pytest xdist plugin for distributed testing and loop-on-failing modes"
@@ -845,6 +896,20 @@ description = "File type identification using libmagic"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "python-slugify"
+version = "6.1.2"
+description = "A Python slugify application that also handles Unicode"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
+
+[package.dependencies]
+text-unidecode = ">=1.3"
+
+[package.extras]
+unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytz"
@@ -982,10 +1047,18 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "text-unidecode"
+version = "1.3"
+description = "The most basic Text::Unidecode port"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1071,6 +1144,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "websockets"
+version = "10.1"
+description = "An implementation of the WebSocket Protocol (RFC 6455 & 7692)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "werkzeug"
 version = "1.0.1"
 description = "The comprehensive WSGI web application library."
@@ -1108,7 +1189,7 @@ h11 = ">=0.9.0,<1"
 name = "zipp"
 version = "3.8.1"
 description = "Backport of pathlib-compatible object wrapper for zip files"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1144,7 +1225,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b3528c5f1617726896b3e2cbfc890ef1b8ae35ba59be00c885d131f1e1ca0fb2"
+content-hash = "7cc31146d1e905299c2b61032221422dad654cbd97814c7dce480e2cbef2e68d"
 
 [metadata.files]
 appnope = []
@@ -1199,6 +1280,7 @@ pathspec = []
 pexpect = []
 pickleshare = []
 platformdirs = []
+playwright = []
 pluggy = []
 prompt-toolkit = []
 psycopg2-binary = []
@@ -1206,19 +1288,23 @@ ptyprocess = []
 py = []
 pycodestyle = []
 pycparser = []
+pyee = []
 pyflakes = []
 pygments = []
 pyopenssl = []
 pyparsing = []
 pysocks = []
 pytest = []
+pytest-base-url = []
 pytest-cov = []
 pytest-django = []
 pytest-forked = []
+pytest-playwright = []
 pytest-xdist = []
 python-dateutil = []
 python-json-logger = []
 python-magic = []
+python-slugify = []
 pytz = []
 redis = []
 requests = []
@@ -1230,6 +1316,7 @@ sniffio = []
 sortedcontainers = []
 splinter = []
 sqlparse = []
+text-unidecode = []
 tomli = []
 traitlets = []
 trio = []
@@ -1238,6 +1325,7 @@ typed-ast = []
 typing-extensions = []
 urllib3 = []
 wcwidth = []
+websockets = []
 werkzeug = []
 whitenoise = []
 wsproto = []
