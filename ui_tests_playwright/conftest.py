@@ -14,3 +14,8 @@ def pytest_configure(config):
 @pytest.fixture(scope="function", autouse=True)
 def sso_login_mock(settings):
     settings.SSO_AUTHORIZE_URI = test_settings.SSO_AUTHORIZE_URI
+
+
+@pytest.fixture(autouse=True)
+def always_run_live_server(live_server):
+    pass
