@@ -8,7 +8,7 @@ if (download_csv_results_box) {
     var csvResultBox = document.getElementById("download-csv-confirmation");
     var barrierListBox = document.getElementById("filter-results-list");
 
-    setTimeout(fadeResultBox, 1000);
+    setTimeout(fadeResultBox, 20000);
 
     csvResultBox.addEventListener("webkitAnimationEnd", removeResultBox);
     csvResultBox.addEventListener("animationend", removeResultBox);
