@@ -15,13 +15,7 @@ class BarrierHistory(BarrierMixin, TemplateView):
 
         for item in full_history[:]:
             # This loop allows us to exclude certain history items from the display if un-wanted
-
-            # Top priority fields should only be included for accepted and removed tags
-            if item.field == "top_priority_status":
-                if item.data["new_value"] is None or item.data["new_value"][
-                    "value"
-                ] in ["APPROVAL_PENDING"]:
-                    full_history.remove(item)
+            pass
 
         context_data["history_items"] = full_history
         return context_data
