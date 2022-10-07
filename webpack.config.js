@@ -14,6 +14,10 @@ const mainConfig = {
             __dirname,
             "core/frontend/src/js/components/resolved_date_filter.js"
         ),
+        csv_download_result_component: path.resolve(
+            __dirname,
+            "core/frontend/src/js/components/download_csv.js"
+        ),
     },
     output: {
         path: path.resolve(__dirname, "./core/frontend/dist/webpack_bundles"),
