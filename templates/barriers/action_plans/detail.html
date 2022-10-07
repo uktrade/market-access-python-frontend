@@ -45,18 +45,15 @@
 
     {% include 'barriers/partials/barrier_tabs.html' with active='action_plan' %}
 
-    {% if feature_flags.new_action_plans_enabled %} <!-- FEATURE FLAG OPENED - DELETE WHEN NEW ACTION PLANS COMPLETE-->
-
     <section class="action_plan">
         <h2 class="govuk-heading-l"> Action Plan </h2>
         <div class="action_plans_stategic_context">
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">
+                        <th class="govuk-table__header" colspan="2">
                             <h2 class="govuk-heading-m"> Strategic context </h2>
                         </th>
-                        <th class="govuk-table__header" scope="col"></th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
@@ -81,7 +78,7 @@
                             <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_stakeholders_list' barrier.id %}">Stakeholder mapping</a>
                         </td>
                         <td class="govuk-table__cell">
-                            {% if action_plan.stakeholders %} <!-- CHANGE THIS TO CHECK IF PLAN HAS A STAKEHOLDER -->
+                            {% if action_plan.stakeholders %}
                                 <strong class="govuk-tag govuk-tag--blue action_plans_tag">
                                     Added
                                 </strong>
@@ -94,7 +91,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
-                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_add_risks_and_mitigations' barrier.id %}">Risks and mitigation</a> <!-- UPDATE URL -->
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_add_risks_and_mitigations' barrier.id %}">Risks and mitigation</a>
                         </td>
                         <td class="govuk-table__cell">
                             {% if action_plan.has_risks %}
@@ -110,10 +107,10 @@
                     </tr>
 {#                    <tr class="govuk-table__row">#}
 {#                        <td class="govuk-table__cell">#}
-{#                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Risks and mitigation</a> <!-- UPDATE URL -->#}
+{#                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Risks and mitigation</a> #}
 {#                        </td>#}
 {#                        <td class="govuk-table__cell">#}
-{#                            {% if action_plan.risks_mitigations %} <!-- CHANGE THIS TO CHECK IF PLAN HAS RISKS AND MITIGATIONS FILLED IN-->#}
+{#                            {% if action_plan.risks_mitigations %} #}
 {#                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">#}
 {#                                    Added#}
 {#                                </strong>#}
@@ -127,13 +124,13 @@
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
                             {% if action_plan.owner %}
-                                <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_existing_owner' barrier.id %}">Action plan owner</a> <!-- UPDATE URL -->
+                                <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_existing_owner' barrier.id %}">Action plan owner</a>
                             {% else %}
                                 <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_owner' barrier.id %}">Action plan owner</a>
                             {% endif %}
                         </td>
                         <td class="govuk-table__cell">
-                            {% if action_plan.owner %} <!-- CHANGE THIS TO CHECK IF PLAN HAS AN OWNER -->
+                            {% if action_plan.owner %}
                                 <strong class="govuk-tag govuk-tag--blue action_plans_tag">
                                     Added
                                 </strong>
@@ -155,7 +152,6 @@
                         <th class="govuk-table__header" scope="col">
                             <h2 class="govuk-heading-m"> Objectives </h2>
                         </th>
-                        <th class="govuk-table__header" scope="col"></th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
@@ -170,8 +166,7 @@
                                     <table class="govuk-table">
                                       <thead class="govuk-table__head">
                                         <tr class="govuk-table__row">
-                                          <th class="govuk-table__header" scope="col">Objective task</th>
-                                          <th class="govuk-table__header" scope="col">&nbsp;</th>
+                                          <th class="govuk-table__header" colspan="2">Objective task</th>
                                         </tr>
                                       </thead>
                                       <tbody class="govuk-table__body">
@@ -213,8 +208,6 @@
             </table>
             <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add objective</a>
         </div>
-
-    {% endif %} <!-- FEATURE FLAG CLOSED -->
 
     </section>
 
