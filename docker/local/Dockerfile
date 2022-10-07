@@ -1,46 +1,44 @@
-FROM rockylinux:8
+FROM ubuntu:18.04
 
-RUN dnf -y update \
- && dnf -y install \
-    gcc \
-	wget \
-    postgresql \
-    # packages so python can be compiled
-	nano \
-	make \
-	which \
-    openssl-devel \
-    bzip2-devel \
-	zlib-devel \
-    libffi \
-	libffi-devel \
-    # packages for pytest
-    sqlite-devel \
-    # packages for localdef
-    glibc-locale-source \
-    glibc-langpack-en \
-    # packages for ssh server
-    openssh-server \
-    openssh-clients \
- && dnf -y clean all \
- && rm -rf /var/cache/dnf
-
-# Installing Python
-ENV PYTHON_VERSION 3.9.2
-RUN wget --no-verbose https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz \
-    && tar -C /usr/local/bin -xzvf Python-$PYTHON_VERSION.tgz \
-    && rm Python-$PYTHON_VERSION.tgz \
-    && cd /usr/local/bin/Python-$PYTHON_VERSION \
-    && ./configure --enable-optimizations \
-    && make altinstall
-
-RUN ln -s /usr/local/bin/python3.9 /usr/bin/python \
- && ln -s /usr/local/bin/pip3.9 /usr/bin/pip
+# Install system stuff
+RUN apt-get update
+RUN apt-get install -y  software-properties-common \
+                        build-essential \
+                        gcc \
+                        curl \
+                        dirmngr \
+                        apt-transport-https \
+                        lsb-release \
+                        ca-certificates \
+                        locales
 
 # Installing Node
-ENV NODE_VERSION 12
-RUN dnf -y module enable nodejs:$NODE_VERSION \
-    && dnf -y install nodejs
+# We do this first as it has the regrettable habit of installing Python 2.7
+# and symlinking it in place of the version we actually want
+ENV NODE_VERSION 14
+# Configure the node apt repository
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
+#RUN apt-get -y module enable nodejs:$NODE_VERSION \
+#    && apt-get -y install nodejs
+
+# Installing Python
+ENV PYTHON_VERSION 3.7
+# Configure the Deadsnakes Python apt repository
+RUN add-apt-repository -y ppa:deadsnakes/ppa
+
+RUN apt-get update
+RUN apt-get install -y  python3.7 \
+                        python3.7-dev \
+                        python3.7-venv
+
+# Install pip
+RUN python3.7 -m ensurepip
+# Ensure we use the right copies of python and pip
+# In particular, get rid of the /usr/bin/python symlink to 2.7 that Node installation kindly created
+RUN rm -f /usr/bin/python \
+ && ln -s /usr/bin/python3.7 /usr/bin/python \
+ && ln -s /usr/local/bin/pip3.7 /usr/bin/pip
 
 # SSH
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
@@ -58,7 +56,7 @@ CMD ["/usr/sbin/sshd", "-D"]
 
 # Download and install dockerize.
 ENV DOCKERIZE_VERSION v0.6.1
-RUN wget --no-verbose https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+RUN curl -sLO https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
@@ -80,8 +78,7 @@ WORKDIR /usr/src/app
 
 # Poetry commands reference https://python-poetry.org/docs/cli/#run
 COPY pyproject.toml poetry.lock ./
-RUN pip install --upgrade pip \
- && pip install poetry==$POETRY_VERSION \
+RUN pip install poetry==$POETRY_VERSION \
  && poetry export --without-hashes -f requirements.txt -o requirements.txt \
  && poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt \
  && pip install -r requirements-dev.txt
