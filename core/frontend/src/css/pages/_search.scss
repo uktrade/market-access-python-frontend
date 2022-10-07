@@ -287,3 +287,38 @@
 	/* Hate using !important, but the GovUK inline block class forces it upon me :-( */
 	display: none !important;
 }
+
+.csv-box-animate {
+	animation: csv-confirmation-animation 1s forwards;
+	-webkit-animation: csv-confirmation-animation 1s forwards;
+}
+
+.csv-box-barrier-list-animate {
+	animation: csv-confirmation-list-animation 1s forwards;
+	-webkit-animation: csv-confirmation-list-animation 1s forwards;
+}
+
+.csv-box-post-animation-state {
+	position: relative;
+	z-index: -10;
+}
+
+@-webkit-keyframes csv-confirmation-animation {
+	from {opacity: 100%;}
+	to {opacity: 0%;}
+}
+
+@keyframes csv-confirmation-animation {
+	from {opacity: 100%;}
+	to {opacity: 0%;}
+}
+
+@-webkit-keyframes csv-confirmation-list-animation {
+	from {margin-top: 0px;}
+	to {margin-top: var(--csv-box-height);}
+}
+
+@keyframes csv-confirmation-list-animation {
+	from {margin-top: 0px;}
+	to {margin-top: var(--csv-box-height);}
+}
