@@ -120,7 +120,7 @@ jobs:
                   command: npm install --dev
 
             - run:
-                  command: pip install pre-commit poetry==1.1.8
+                  command: pip install -I pre-commit poetry==1.1.8 'importlib-metadata<5.0.0'
             - restore_cache:
                   keys:
                       - pre-commit-cache-{{ arch }}-{{ .Branch }}
