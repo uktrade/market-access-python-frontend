@@ -125,6 +125,9 @@ jobs:
                   keys:
                       - pre-commit-cache-{{ arch }}-{{ .Branch }}
             - run:
+                  name: See installed packages
+                  command: pip freeze
+            - run:
                   name: Formatting checks
                   command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
             - save_cache:
