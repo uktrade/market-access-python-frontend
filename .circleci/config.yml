@@ -146,7 +146,7 @@ jobs:
                       - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
             - run:
-                  command: sudo pip install poetry
+                  command: pip install poetry
 
             - run:
                   name: Install dependencies
