@@ -8,7 +8,7 @@ jobs:
         docker:
             # specify the version you desire here
             # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-            - image: circleci/python:3.7-node
+            - image: circleci/python:3.7.11-node
             - image: postgres:9.6.16
               environment: POSTGRES_DB=market_access_pyfe
             - image: ukti/mock-sso
@@ -82,7 +82,7 @@ jobs:
 
     pep8:
         docker:
-            - image: circleci/python:3.7-node
+            - image: circleci/python:3.7.11-node
 
         working_directory: ~/market-access-python-frontend
 
@@ -110,7 +110,7 @@ jobs:
 
     format_and_secrets_checks:
         docker:
-            - image: cimg/python:3.7-node
+            - image: circleci/python:3.7.11-node
         working_directory: ~/market-access-python-frontend
         steps:
             - checkout
@@ -120,13 +120,10 @@ jobs:
                   command: npm install --dev
 
             - run:
-                  command: pip install -I pre-commit poetry==1.1.8 'importlib-metadata<5.0.0'
+                  command: sudo pip install pre-commit poetry==1.1.8
             - restore_cache:
                   keys:
                       - pre-commit-cache-{{ arch }}-{{ .Branch }}
-            - run:
-                  name: See installed packages
-                  command: pip freeze
             - run:
                   name: Formatting checks
                   command: pre-commit run --from-ref origin/HEAD --to-ref HEAD
@@ -149,7 +146,7 @@ jobs:
                       - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
             - run:
-                  command: pip install poetry
+                  command: sudo pip install poetry
 
             - run:
                   name: Install dependencies
