@@ -120,7 +120,7 @@ jobs:
                   command: npm install --dev
 
             - run:
-                  command: sudo pip install pre-commit poetry==1.1.8
+                  command: pip install pre-commit poetry==1.1.8
             - restore_cache:
                   keys:
                       - pre-commit-cache-{{ arch }}-{{ .Branch }}
