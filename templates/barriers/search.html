@@ -220,24 +220,23 @@
                     </a>
 
                     {% if search_csv_downloaded == "1" %}
-
-                    <div class="govuk-panel govuk-panel--confirmation">
-                      <h1 class="govuk-panel__title">
-                        Generating CSV file
-                      </h1>
-                      <div class="govuk-panel__body">
-                        An email with a link to your file will be sent to you shortly.
-                      </div>
-                    </div>
+                        <div id="download-csv-confirmation" class="govuk-panel govuk-panel--confirmation">
+                          <h1 class="govuk-panel__title">
+                            Generating CSV file
+                          </h1>
+                          <div class="govuk-panel__body">
+                            An email with a link to your file will be sent to you shortly.
+                          </div>
+                        </div>
                     {% elif search_csv_downloaded == "0" %}
-                    <div class="govuk-panel govuk-panel--confirmation">
-                      <h1 class="govuk-panel__title">
-                        This task has crashed
-                      </h1>
-                      <div class="govuk-panel__body">
-                        No CSV will be generated got ERROR: {{ search_csv_download_error }}
-                      </div>
-                    </div>
+                        <div class="govuk-panel govuk-panel--confirmation">
+                          <h1 class="govuk-panel__title">
+                            This task has crashed
+                          </h1>
+                          <div class="govuk-panel__body">
+                            No CSV will be generated got ERROR: {{ search_csv_download_error }}
+                          </div>
+                        </div>
                     {% endif %}
                 {% else %}
                     <span class="filter-results-download__text">There are no barriers to download</span>
@@ -254,36 +253,32 @@
                 </a>
 
                 {% if download_request_sent == "1" %}
-
-                <div class="govuk-panel govuk-panel--confirmation">
-                    <h1 class="govuk-panel__title">
-                    Your request has been submitted
-                    </h1>
-                    <div class="govuk-panel__body">
-                        You will be notified by email when the request has been approved. Once your request
-                        has been approved, you will be able to come back to your search and download the
-                        spreadsheet.
+                    <div class="govuk-panel govuk-panel--confirmation">
+                        <h1 class="govuk-panel__title">
+                        Your request has been submitted
+                        </h1>
+                        <div class="govuk-panel__body">
+                            You will be notified by email when the request has been approved. Once your request
+                            has been approved, you will be able to come back to your search and download the
+                            spreadsheet.
+                        </div>
                     </div>
-                </div>
-
                 {% elif download_request_sent == "0" %}
-
-                <div class="govuk-panel govuk-panel--confirmation">
-                    <h1 class="govuk-panel__title">
-                        An error occurred.
-                    </h1>
-                    <div class="govuk-panel__body">
-                        The request for download permissions encountered an error and has failed to send.
-                        Please contact stefan.dennis@trade.gov.uk about this error and we will try to resolve the issue
-                        for you.
+                    <div class="govuk-panel govuk-panel--confirmation">
+                        <h1 class="govuk-panel__title">
+                            An error occurred.
+                        </h1>
+                        <div class="govuk-panel__body">
+                            The request for download permissions encountered an error and has failed to send.
+                            Please contact stefan.dennis@trade.gov.uk about this error and we will try to resolve the issue
+                            for you.
+                        </div>
                     </div>
-                </div>
-
                 {% endif %}
             </p>
             {% endif %}
 
-            <ol class="filter-results-list">
+            <ol id="filter-results-list" class="filter-results-list">
                 {% for barrier in barriers %}
                     <li class='filter-results-list__item' data-barrier-id="{{ barrier.id }}">
                         <div class="filter-results-list__item__main-content">
@@ -380,5 +375,7 @@
 
     </section>
   </form>
+
+  {% render_bundle 'csv_download_result_component' %}
 
 {% endblock %}
