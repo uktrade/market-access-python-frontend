@@ -90,4 +90,3 @@ RUN npm install -g npm \
 # Set up Playwright
 RUN playwright install
 RUN playwright install-deps
-
