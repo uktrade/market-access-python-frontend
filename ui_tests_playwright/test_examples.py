@@ -10,6 +10,7 @@ from ui_tests_playwright.settings import BASE_URL
 def test_example(page: Page):
     """
     Most basic example: load the root URL of the site and check the title
+    N.B. This test will fail if the API isn't running
     """
     page.goto(settings.BASE_URL)
     expect(page).to_have_title("Market Access - Homepage")
@@ -19,6 +20,7 @@ def test_example_2(page: Page):
     """
     Use reverse() to get the URL path component for pages,
     but you still need BASE_URL
+    N.B. This test will fail if the API isn't running
     """
     search_page_path = reverse("barriers:search")
     page.goto(f"{settings.BASE_URL}{search_page_path}")
