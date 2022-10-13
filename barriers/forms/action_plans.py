@@ -369,14 +369,10 @@ class ActionPlanTaskForm(
     def clean_assigned_to(self):
         sso_client = SSOClient()
         email = self.cleaned_data["assigned_to"]
-        query = email.replace(".", " ").split("@")[0]
-        results = sso_client.search_users(query)
-        if not results:
-            raise ValidationError(f"Invalid user {query}")
-        for result in results:
-            if result["email"] == email:
-                return result["user_id"]
-        return
+        result = sso_client.get_user_by_email(email)
+        if result is None:
+            raise ValidationError(f"Invalid user {email}")
+        return result["user_id"]
 
     def clean_action_type(self):
         action_type = self.data["action_type"]
