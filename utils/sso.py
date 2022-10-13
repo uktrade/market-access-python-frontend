@@ -44,3 +44,9 @@ class SSOClient:
         response = self.get(path)
         users = response.get("results", [])
         return users
+
+    def get_user_by_email(selfself, email_address):
+        path = f"user/introspect/?email={quote_plus(email_address)}"
+        response = self.get(path)
+        users = response.get("results", [])
+        return users
