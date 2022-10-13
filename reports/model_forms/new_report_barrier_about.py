@@ -57,8 +57,8 @@ class NewReportBarrierAboutForm(NewReportBaseForm):
         ),
         max_length=255,
         error_messages={
-            "max_length": "Name should be %(limit_value)d characters or fewer",
-            "required": "Enter a name for this barrier",
+            "max_length": "Name should be %(limit_value)d characters or less",
+            "required": "Enter a name",
         },
     )
     product = forms.CharField(
@@ -67,7 +67,7 @@ class NewReportBarrierAboutForm(NewReportBaseForm):
         error_messages={
             "max_length": (
                 "Product, service or investment should be %(limit_value)d characters or"
-                " fewer"
+                " less"
             ),
             "required": "Enter a product, service or investment",
         },
@@ -75,15 +75,15 @@ class NewReportBarrierAboutForm(NewReportBaseForm):
     source = forms.ChoiceField(
         label="Who told you about the barrier?",
         choices=BS.choices(),
-        error_messages={"required": "Select how you became aware of the barrier"},
+        error_messages={"required": "Select who told you about the barrier"},
     )
     other_source = forms.CharField(
         label="Please specify",
         required=False,
         max_length=255,
         error_messages={
-            "required": "Select how you became aware of the barrier",
-            "max_length": "Other source should be %(limit_value)d characters or fewer",
+            "required": "Enter who told you about the barrier",
+            "max_length": "Entry should be %(limit_value)d characters or less",
         },
     )
 
@@ -93,7 +93,7 @@ class NewReportBarrierAboutForm(NewReportBaseForm):
         if source == self.BS.OTHER:
             other_source = cleaned_data.get("other_source")
             if not other_source:
-                self.add_error("other_source", "This field is required")
+                self.add_error("other_source", "Enter who told you about the barrier")
         return cleaned_data
 
     @staticmethod
