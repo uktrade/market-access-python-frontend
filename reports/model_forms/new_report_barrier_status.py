@@ -50,7 +50,7 @@ class NewReportBarrierTermForm(forms.Form):
     term = forms.ChoiceField(
         label="What type of barrier is it?",
         choices=BarrierTerms.choices,
-        error_messages={"required": "Select a barrier scope"},
+        error_messages={"required": "Select a barrier type"},
     )
 
 
@@ -70,7 +70,7 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
     term = forms.ChoiceField(
         label="What type of barrier is it?",
         choices=BarrierTerms.choices,
-        error_messages={"required": "Select a barrier scope"},
+        error_messages={"required": "Select a barrier type"},
     )
 
     status = SubformChoiceField(
@@ -78,7 +78,7 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
         choices=STATUSES,
         choices_help_text=STATUSES_HELP_TEXT,
         widget=forms.RadioSelect,
-        error_messages={"required": "Choose a status"},
+        error_messages={"required": "Select the barrier status"},
         subform_classes=status_to_form_class_map,
     )
 
