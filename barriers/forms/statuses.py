@@ -39,8 +39,8 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
             1,
         )
         if status_date > datetime.date.today():
-            self.add_error("month", "Resolution date must be this month or in the past")
-            self.add_error("year", "Resolution date must be this month or in the past")
+            self.add_error("month", "Date resolved must be this month or in the past")
+            self.add_error("year", "Date resolved must be this month or in the past")
         else:
             self.cleaned_data["status_date"] = status_date
 
@@ -110,7 +110,7 @@ class OpenPendingForm(APIMappingMixin, forms.Form):
         label="Who is due to take action?",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={"required": "Select a pending action"},
+        error_messages={"required": "Select who is due to take action"},
     )
     pending_type_other = forms.CharField(
         label="Please specify",
@@ -141,7 +141,7 @@ class OpenPendingForm(APIMappingMixin, forms.Form):
         pending_type_other = cleaned_data.get("pending_type_other")
 
         if pending_type == "OTHER" and not pending_type_other:
-            self.add_error("pending_type_other", "Enter who will be taking action")
+            self.add_error("pending_type_other", "Enter who is due to take action")
 
     def get_api_params(self):
         params = super().get_api_params()
@@ -182,8 +182,8 @@ class ResolvedInPartForm(APIMappingMixin, forms.Form):
 
     part_resolved_date = MonthYearField(
         error_messages={
-            "required": "Enter a month and year.",
-            "incomplete": "Enter a month and year.",
+            "required": "Enter date barrier was part resolved",
+            "incomplete": "Enter date barrier was part resolved",
         },
     )
     part_resolved_summary = forms.CharField(
@@ -208,8 +208,8 @@ class ResolvedInFullForm(APIMappingMixin, forms.Form):
 
     resolved_date = MonthYearField(
         error_messages={
-            "required": "Enter a month and year.",
-            "incomplete": "Enter a month and year.",
+            "required": "Enter date barrier was resolved",
+            "incomplete": "Enter date barrier was resolved",
         },
     )
     resolved_summary = forms.CharField(
@@ -264,7 +264,7 @@ class BarrierChangeStatusForm(SubformMixin, forms.Form):
         choices=STATUSES,
         choices_help_text=STATUSES_HELP_TEXT,
         widget=forms.RadioSelect,
-        error_messages={"required": "Choose a status"},
+        error_messages={"required": "Select the barrier status"},
         subform_classes={
             STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
             STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
