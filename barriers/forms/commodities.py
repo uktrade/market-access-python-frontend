@@ -52,7 +52,7 @@ class CommodityLookupForm(forms.Form):
                 code=code, location=location
             )
         except APIHttpException:
-            raise forms.ValidationError("HS commodity code not found")
+            raise forms.ValidationError("Enter a real HS commodity code")
 
     def get_commodity_data(self):
         return self.commodity.to_dict()
@@ -96,7 +96,7 @@ class MultiCommodityLookupForm(forms.Form):
                 for commodity in client.commodities.list(codes=",".join(hs6_codes))
             }
         except APIHttpException:
-            raise forms.ValidationError("HS commodity code not found")
+            raise forms.ValidationError("Enter a real HS commodity code")
 
         self.commodities = []
         for code in codes:
