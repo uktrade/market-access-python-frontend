@@ -19,14 +19,14 @@ class NewReportBarrierSummaryForm(forms.Form):
             "laws or measures, which government body imposed them and any "
             "political context; the HS code; and when the problem started."
         ),
-        error_messages={"required": "Enter a brief description for this barrier"},
+        error_messages={"required": "Enter a description"},
     )
     is_summary_sensitive = TrueFalseBooleanField(
         required=True,
         label="Does the summary contain OFFICIAL-SENSITIVE information?",
         error_messages={
             "required": (
-                "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
+                "Select yes or no"
             )
         },
         widget=forms.RadioSelect(
