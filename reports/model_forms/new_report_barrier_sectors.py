@@ -26,9 +26,7 @@ class NewReportBarrierHasSectorsForm(NewReportBaseForm):
     sectors_affected = forms.ChoiceField(
         label="Do you know the sector or sectors affected by the barrier?",
         choices=AreSecorsAffectedKnown.choices(),
-        error_messages={
-            "required": "Select yes or no"
-        },
+        error_messages={"required": "Select yes or no"},
     )
 
     @staticmethod

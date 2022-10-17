@@ -24,11 +24,7 @@ class NewReportBarrierSummaryForm(forms.Form):
     is_summary_sensitive = TrueFalseBooleanField(
         required=True,
         label="Does the summary contain OFFICIAL-SENSITIVE information?",
-        error_messages={
-            "required": (
-                "Select yes or no"
-            )
-        },
+        error_messages={"required": ("Select yes or no")},
         widget=forms.RadioSelect(
             choices=[
                 (True, "Yes"),
