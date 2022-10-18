@@ -51,17 +51,16 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
             assert field_name in form.errors
 
     @patch("utils.api.resources.ActionPlanTaskResource.create_task")
-    @patch("utils.sso.SSOClient.search_users")
+    @patch("utils.sso.SSOClient.get_user_by_email")
     def test_create_milestone_task_succeeds(
-        self, mock_search_users_method: Mock, mock_create_method: Mock
+        self, mock_get_user_by_email_method: Mock, mock_create_method: Mock
     ):
         mock_create_method.return_value = self.action_plan_task
-        mock_search_users_method.return_value = [
-            {
-                "email": self.action_plan_task.assigned_to,
-                "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
-            }
-        ]
+        mock_get_user_by_email_method.return_value = {
+            "email": self.action_plan_task.assigned_to,
+            "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
+        }
+
         url = reverse(
             "barriers:action_plan_add_task",
             kwargs={
@@ -95,17 +94,16 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         assert response["Location"] == expected_url
 
     @patch("utils.api.resources.ActionPlanTaskResource.update_task")
-    @patch("utils.sso.SSOClient.search_users")
+    @patch("utils.sso.SSOClient.get_user_by_email")
     def test_changed_completion_date_shows_page_asking_for_reason(
-        self, mock_search_users_method: Mock, mock_update_method: Mock
+        self, mock_get_user_by_email_method: Mock, mock_update_method: Mock
     ):
         mock_update_method.return_value = self.action_plan_task
-        mock_search_users_method.return_value = [
-            {
-                "email": self.action_plan_task.assigned_to,
-                "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
-            }
-        ]
+        mock_get_user_by_email_method.return_value = {
+            "email": self.action_plan_task.assigned_to,
+            "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
+        }
+
         url = reverse(
             "barriers:action_plan_edit_task",
             kwargs={
@@ -223,17 +221,16 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         assert response["Location"] == expected_url
 
     @patch("utils.api.resources.ActionPlanTaskResource.update_task")
-    @patch("utils.sso.SSOClient.search_users")
+    @patch("utils.sso.SSOClient.get_user_by_email")
     def test_unchanged_completion_date_needs_no_reason(
-        self, mock_search_users_method: Mock, mock_update_method: Mock
+        self, mock_get_user_by_email_method: Mock, mock_update_method: Mock
     ):
         mock_update_method.return_value = self.action_plan_task
-        mock_search_users_method.return_value = [
-            {
-                "email": self.action_plan_task.assigned_to,
-                "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
-            }
-        ]
+        mock_get_user_by_email_method.return_value = {
+            "email": self.action_plan_task.assigned_to,
+            "user_id": "b44e4818-0c96-4133-99e5-defacf4892bd",
+        }
+
         url = reverse(
             "barriers:action_plan_edit_task",
             kwargs={
