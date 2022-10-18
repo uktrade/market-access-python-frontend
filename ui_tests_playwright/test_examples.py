@@ -32,6 +32,8 @@ def test_example_patch_api(mock_history: Mock, page: Page, barrier_history):
     """
     This example shows how to patch an API call to return a value from a fixture
     Fixtures are defined in conftest.py
+    N.B. Although this successfully mocks the patched method, other API calls
+         still happen, such as to /whoami.
     """
     mock_history.return_value = barrier_history
     history_path = reverse(
