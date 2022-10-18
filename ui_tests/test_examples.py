@@ -3,8 +3,8 @@ from unittest.mock import Mock, patch
 from django.urls import reverse
 from playwright.sync_api import Page, expect
 
-from ui_tests_playwright import settings
-from ui_tests_playwright.settings import BASE_URL
+from ui_tests import settings
+from ui_tests.settings import BASE_URL
 
 
 def test_example(page: Page):

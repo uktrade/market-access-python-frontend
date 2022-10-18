@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 from django.urls import reverse
 from playwright.sync_api import Page, expect
 
-from ui_tests_playwright.settings import BASE_URL
+from ui_tests.settings import BASE_URL
 
 
 @patch("utils.api.resources.BarriersResource.get_full_history")

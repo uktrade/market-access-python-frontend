@@ -1,11 +1,5 @@
 import os
 
 BASE_URL = os.environ.get("TEST_BASE_URL")
-WEB_DRIVER_URL = os.environ.get("WEB_DRIVER_URL")
-
-TEST_BARRIER_ID = os.environ.get("TEST_BARRIER_ID")
-
-TEST_SSO_LOGIN_URL = os.environ.get("TEST_SSO_LOGIN_URL")
-TEST_SSO_EMAIL = os.environ.get("TEST_SSO_EMAIL")
-TEST_SSO_PASSWORD = os.environ.get("TEST_SSO_PASSWORD")
-TEST_SSO_NAME = os.environ.get("TEST_SSO_NAME")
+LIVE_SERVER_URL = "0.0.0.0:9000"
+SSO_AUTHORIZE_URI = "http://mocksso:8888/o/authorize/"
