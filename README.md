@@ -122,6 +122,7 @@ Example usage.:
 
 **Warning**
 This section is obsolete as UI tests now use Playwright. It is left here for reference, should anybody be courageous enough to try to get the Playwright tests running against UAT.
+
 1. Ensure you are on the VPN.
 
 2. Edit docker-compose.test.env:
