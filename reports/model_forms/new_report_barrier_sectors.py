@@ -26,9 +26,7 @@ class NewReportBarrierHasSectorsForm(NewReportBaseForm):
     sectors_affected = forms.ChoiceField(
         label="Do you know the sector or sectors affected by the barrier?",
         choices=AreSecorsAffectedKnown.choices(),
-        error_messages={
-            "required": "Select if you are aware of a sector affected by the barrier"
-        },
+        error_messages={"required": "Select yes or no"},
     )
 
     @staticmethod
@@ -83,7 +81,7 @@ class NewReportBarrierSectorsForm(NewReportBaseForm):
     def clean_sectors(self):
         sectors = self.cleaned_data["sectors"]
         if not sectors:
-            raise forms.ValidationError("Please select at least one sector")
+            raise forms.ValidationError("Select one or more sectors")
         sectors = sectors.split(",")
         if "all" in sectors:
             return ["all"]
@@ -99,7 +97,7 @@ class NewReportBarrierAddSectorsForm(NewReportBaseForm):
     sectors = forms.ChoiceField(
         label="Which sector is affected by the barrier?",
         choices=(),
-        error_messages={"required": "Select a sector affected by the barrier"},
+        error_messages={"required": "Select a sector"},
     )
 
     def __init__(self, *args, **kwargs):

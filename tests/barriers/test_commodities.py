@@ -97,7 +97,7 @@ class CommoditiesTestCase(MarketAccessTestCase):
         response_data = response.json()
         assert response_data == {
             "status": "error",
-            "message": "HS commodity code not found",
+            "message": "Enter a real HS commodity code",
         }
 
     @patch("utils.api.resources.CommoditiesResource.list")
