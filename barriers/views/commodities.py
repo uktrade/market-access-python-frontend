@@ -46,7 +46,7 @@ class BarrierEditCommodities(BarrierMixin, FormView):
             )
         else:
             return JsonResponse(
-                {"status": "error", "message": "HS commodity code not found"}
+                {"status": "error", "message": "Enter a real HS commodity code"}
             )
 
     def screen_reader_mode(self):

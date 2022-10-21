@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class NewReportBarrierLocationForm(NewReportBaseForm):
     location = forms.CharField(
         label="Which location is affected by this issue?",
-        error_messages={"required": "Select a location for this barrier"},
+        error_messages={"required": "Select a location"},
         help_text=(
             "A trading bloc should be selected if the barrier applies to the whole "
             "trading bloc. Select a country if the barrier is a national "
