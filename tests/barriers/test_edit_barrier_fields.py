@@ -261,7 +261,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["priority"] == self.barrier["priority"]["code"]
+        assert form.initial["priority_level"] == self.barrier["priority_level"]
         assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVED
 
     @patch("utils.api.resources.APIResource.patch")
@@ -275,7 +275,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "priority" in form.errors
+        assert "priority_level" in form.errors
         assert "priority_summary" in form.errors
         assert form.errors["priority_summary"] == ["Top priority status is required"]
         assert mock_patch.called is False
@@ -291,13 +291,14 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "priority" in form.errors
+        assert "priority_level" in form.errors
         assert "priority_summary" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.UsersResource.get_current")
     def test_edit_priority_calls_api(self, mock_user, mock_patch):
+        self.barrier["top_priority_status"] = "NONE"
         mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -305,18 +306,17 @@ class EditPriorityTestCase(MarketAccessTestCase):
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
             data={
-                "priority": "LOW",
-                "priority_summary": "test summary",
-                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
+                "priority_level": "WATCHLIST",
+                "top_barrier": "NONE",
             },
         )
 
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            priority="LOW",
+            priority_level="WATCHLIST",
             tags=[1],
-            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
-            priority_summary="test summary",
+            top_priority_status="NONE",
+            priority_summary="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -330,19 +330,40 @@ class EditPriorityTestCase(MarketAccessTestCase):
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
             data={
-                "priority": "HIGH",
+                "priority_level": "REGIONAL",
                 "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
                 "priority_summary": "New summary",
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            priority="HIGH",
+            priority_level="REGIONAL",
             tags=[1],
             top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
             priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND
+
+    @patch("utils.api.resources.APIResource.patch")
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_top_priority_barrier_cannot_be_watchlist(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
+        mock_patch.return_value = self.barrier
+        response = self.client.post(
+            reverse(
+                "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
+            ),
+            data={
+                "priority_level": "WATCHLIST",
+                "top_barrier": "NONE",
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+        form = response.context["form"]
+        assert form.is_valid() is False
+        assert "priority_level" in form.errors
+        assert "priority_summary" in form.errors
+        assert mock_patch.called is False
 
 
 class EditTermTestCase(MarketAccessTestCase):

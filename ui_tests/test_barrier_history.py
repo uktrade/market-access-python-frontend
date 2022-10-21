@@ -5,15 +5,17 @@ from playwright.sync_api import Page, expect
 
 from ui_tests.settings import BASE_URL
 
+# make ui-test path=test_barrier_history.py
+
 
 @patch("utils.api.resources.BarriersResource.get_full_history")
 def test_history_page_has_all_top_priority_items(
-    mock_history: Mock, page: Page, barrier_history
+    mock_history: Mock, page: Page, barrier_history, test_barrier_id
 ):
     mock_history.return_value = barrier_history
     url = reverse(
         "barriers:history",
-        kwargs={"barrier_id": "7daba55b-f421-4952-98ee-4f5b408f0af3"},
+        kwargs={"barrier_id": test_barrier_id},
     )
     page.goto(f"{BASE_URL}{url}")
     pb100_history_items = page.locator(
