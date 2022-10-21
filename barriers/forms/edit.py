@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 
 from barriers.constants import (
@@ -20,6 +22,8 @@ from utils.forms import (
 )
 
 from .mixins import APIFormMixin
+
+logger = logging.getLogger(__name__)
 
 
 class UpdateCommercialValueForm(APIFormMixin, forms.Form):
@@ -258,23 +262,50 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         )
 
 
-class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
+class EditBarrierPriorityForm(APIFormMixin, forms.Form):
+    regional_help_text = "For example, it could be relevant to several countries or part of a regional trade plan."
+    country_help_text = "Actively being worked on by you or your team."
+    watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
-        ("UNKNOWN", "<strong>Unknown</strong> priority"),
-        ("HIGH", "<strong>High</strong> priority"),
-        ("MEDIUM", "<strong>Medium</strong> priority"),
-        ("LOW", "<strong>Low</strong> priority"),
-    ]
-    priority = forms.ChoiceField(
-        label="What is the priority of the barrier?",
-        help_text=(
-            "Note: The high, medium, low rating is currently under review, so you do"
-            " not need to provide this."
+        (
+            "REGIONAL",
+            f"<span class='govuk-body'>Regional priority</span> <span class='govuk-hint'>{regional_help_text}</span>",
         ),
+        (
+            "COUNTRY",
+            f"<span class='govuk-body'>Country priority</span> <span class='govuk-hint'>{country_help_text}</span>",
+        ),
+        (
+            "WATCHLIST",
+            f"<span class='govuk-body'>Watch list</span> <span class='govuk-hint'>{watchlist_help_text}</span>",
+        ),
+    ]
+    priority_level = forms.ChoiceField(
+        label="Which priority type is most relevant to you and your team?",
         choices=CHOICES,
         widget=forms.RadioSelect,
         error_messages={"required": "Select a barrier priority"},
     )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        priority_level = cleaned_data.get("priority_level")
+        top_priority = cleaned_data.get("top_priority")
+
+        # Need to check that the barrier is not already a Top 100 or awaiting approval
+        client = MarketAccessAPIClient(self.token)
+        existing_top_priority_status = getattr(
+            client.barriers.get(id=self.id), "top_priority_status"
+        )
+
+        # Potential bug; attempting to change priority to watchlist while PB100 approval pending
+        if priority_level == "WATCHLIST" and (
+            top_priority is not None or existing_top_priority_status != "NONE"
+        ):
+            self.add_error(
+                "priority_level",
+                "Top 100 barriers must have regional or country level priority",
+            )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -287,7 +318,7 @@ class UpdateBarrierPriorityForm(APIFormMixin, forms.Form):
 
         patch_args = {
             "id": self.id,
-            "priority": self.cleaned_data["priority"],
+            "priority_level": self.cleaned_data["priority_level"],
             "tags": tag_ids,
         }
         if self.fields.get("top_barrier"):
@@ -339,10 +370,10 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
 
 
 def update_barrier_priority_form_factory(
-    barrier, is_user_admin=False, BaseFormClass=UpdateBarrierPriorityForm
+    barrier, is_user_admin=False, BaseFormClass=EditBarrierPriorityForm
 ):
     """
-    type: (Barrier, bool) -> UpdateBarrierPriorityForm
+    type: (Barrier, bool) -> EditBarrierPriorityForm
 
     Return a form for updating the priority of a barrier based on
     a barrier's Top priority status and if the user has moderator permissions.
