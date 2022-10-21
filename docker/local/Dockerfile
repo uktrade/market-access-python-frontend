@@ -86,3 +86,7 @@ RUN pip install poetry==$POETRY_VERSION \
 COPY package.json package-lock.json ./
 RUN npm install -g npm \
     && npm ci
+
+# Set up Playwright
+RUN playwright install
+RUN playwright install-deps
