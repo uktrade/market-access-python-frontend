@@ -15,7 +15,7 @@ class SearchTestCase(MarketAccessTestCase):
     saved_search_data = {
         "id": "a18f6ddc-d4fe-48cc-afbe-8fb2e5de806f",
         "name": "Search Name",
-        "filters": {"priority": ["MEDIUM"]},
+        "filters": {"status": "OPEN_IN_PROGRESS"},
         "notify_about_additions": True,
         "notify_about_updates": False,
     }
@@ -59,10 +59,6 @@ class SearchTestCase(MarketAccessTestCase):
         region_choices = form.fields["region"].choices
         assert len(region_choices) == len(region_list)
 
-        priority_list = metadata.data["barrier_priorities"]
-        priority_choices = form.fields["priority"].choices
-        assert len(priority_choices) == len(priority_list)
-
         status_choices = form.fields["status"].choices
         assert len(status_choices) == 6
 
@@ -86,7 +82,6 @@ class SearchTestCase(MarketAccessTestCase):
                     "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
                     "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
                 ],
-                "priority": ["HIGH", "MEDIUM"],
                 "status": ["1", "2", "7"],
                 "user": "1",
                 "ordering": "-reported",
@@ -110,7 +105,6 @@ class SearchTestCase(MarketAccessTestCase):
             "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
             "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
         ]
-        assert form.cleaned_data["priority"] == ["HIGH", "MEDIUM"]
         assert form.cleaned_data["status"] == ["1", "2", "7"]
         assert form.cleaned_data["user"] == "1"
 
@@ -131,7 +125,6 @@ class SearchTestCase(MarketAccessTestCase):
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
             category="130,141",
-            priority="HIGH,MEDIUM",
             status="1,2,7",
             user="1",
             archived="0",
@@ -271,11 +264,11 @@ class SearchTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse("barriers:search"),
-            data={"priority": "MEDIUM", "search_id": saved_search.id},
+            data={"status": "2", "search_id": saved_search.id},
         )
         assert response.status_code == HTTPStatus.OK
         assert response.context["saved_search"].id == saved_search.id
-        assert response.context["have_filters_changed"] is False
+        assert response.context["have_filters_changed"] is True
         assert response.context["search_title"] is saved_search.name
 
     @patch("utils.api.resources.APIResource.get")
@@ -286,7 +279,7 @@ class SearchTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse("barriers:search"),
-            data={"priority": "MEDIUM", "search": "yo", "search_id": saved_search.id},
+            data={"status": "2", "search": "yo", "search_id": saved_search.id},
         )
         assert response.status_code == HTTPStatus.OK
         assert response.context["saved_search"].id == saved_search.id
