@@ -259,6 +259,11 @@ TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES = Choices(
     ("APPROVED", "No"),
 )
 
+TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES = Choices(
+    ("APPROVAL_PENDING", "Yes"),  # Would need approval to put back to top priority
+    ("RESOLVED", "No"),  # Keep as a resolved barrier
+)
+
 TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"
 
 # Deprecated tags are tags we do not want future barriers to be able to use,

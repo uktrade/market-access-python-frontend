@@ -16,11 +16,11 @@ help: ## This help.
 # ==================================================
 .PHONY: django-run
 django-run: ## Run django's dev server (tailing).
-	docker-compose exec web bash -c "./manage.py runserver 0:9000"
+	docker-compose exec web bash -c "./manage.py runserver 0:9001"
 
 .PHONY: django-run-detached
 django-run-detached: ## Run django's dev server (silently).
-	docker-compose exec -d web bash -c "./manage.py runserver 0:9000"
+	docker-compose exec -d web bash -c "./manage.py runserver 0:9001"
 
 .PHONY: django-shell
 django-shell: ## Drop into django's shell (with iphython).
@@ -39,18 +39,8 @@ django-test: ## Run django tests. (Use path=appname/filename::class::test) to na
 	docker-compose exec web pytest -n 6 tests/$(path)
 
 .PHONY: django-ui-test
-django-run-test-server: ## Run django ui test server
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "./manage.py runserver 0:9000"
-
-.PHONY: django-ui-test
-django-ui-test: ## Run django ui tests.
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pytest ui_tests"
-
-.PHONY: django-ui-test
-django-ui-test-with-server: ## Run locla server and run django ui tests against it.
-	docker-compose -f docker-compose.test.yml -p market-access-test exec -d web-test bash -c "./manage.py runserver 0:9000"
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pytest ui_tests || pkill -f runserver"
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pkill -f runserver"
+ui-test: ## Run django ui tests.
+	docker-compose exec web bash -c "pytest ui_tests/$(path)"
 
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
