@@ -109,6 +109,8 @@ Example usage.:
 
 2. Ensure the front end Docker container is up and has reached the point where the Django development server is running.
 
+    - You'll need to update the Barrier IDs that appear in the tests to match one you have locally. This is clearly impractical in the long run, so maybe something like a set of fixtures against which to run would be a good idea?
+
 3. Run the tests:
 `make ui-test`
 
