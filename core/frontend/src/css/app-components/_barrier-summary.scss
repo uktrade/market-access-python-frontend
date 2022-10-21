@@ -65,22 +65,6 @@
 	}
 }
 
-.barrier-summary__status__badge {
-	width: 100%;
-	box-sizing: border-box;
-	margin-bottom: govuk-em( 10, 16 );
-}
-
-.barrier-summary__priority {
-	display: block;
-	background: white;
-	padding: govuk-em( 8, 16 );
-	width: 100%;
-	box-sizing: border-box;
-	margin-top: govuk-em( 8, 16 );
-	color: $govuk-black;
-}
-
 .barrier-summary__status__edit-links {
 	@include govuk-font( $size: 14);
 }
