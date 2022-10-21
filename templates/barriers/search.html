@@ -339,13 +339,7 @@
                         </div>
 
                         <div class="filter-results-list__item__sub-content">
-                            <div class="barrier-status-badge barrier-status-badge--compact barrier-status-badge--{{ barrier.status.modifier }}">
-                                <strong>{{ barrier.status.name }}</strong>
-                                <div class="priority-marker-wrapper">
-                                    <span class="priority-marker priority-marker--{{ barrier.priority.code|lower }}"></span><strong>{{ barrier.priority.name }}</strong> priority
-                                </div>
-                            </div>
-
+                            {# TODO: fix the following so the tags and priorities match the designs #}
                             {% if barrier.tags or barrier.top_priority_status != "NONE" %}
                                 <ul class="barrier-tag-list">
                                     {% spaceless %}

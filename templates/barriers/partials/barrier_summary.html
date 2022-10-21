@@ -16,10 +16,12 @@
 
     {% if not hide_priority %}
         <div class="barrier-summary__status">
-            <div class="barrier-summary__status__badge barrier-status-badge barrier-status-badge--{{ barrier.status.modifier }}">
-                <strong>{{ barrier.status.name }}</strong>
-                <div class="barrier-summary__priority">
-                    <span class="priority-marker priority-marker--{{ barrier.priority.code|lower}}"></span><strong>{{ barrier.priority.name }}</strong> priority
+        <div class="barrier-summary__status">
+          {# TODO: The new tags and things will go in here #}
+            <div class="">
+                <div class="barrier-priority govuk-tag govuk-tag--green">
+                    {# {{ barrier.priority.name }}  #}
+                  priority tag goes here
                 </div>
             </div>
 
