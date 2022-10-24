@@ -107,7 +107,7 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         add_priority_confirmation = self.request.GET.get("confirm-priority", "")
         if (
             add_priority_confirmation == "yes"
-            or self.barrier.priority_level is not None
+            or self.barrier.priority_level != "NONE"
             or self.request.method == "POST"
         ):
             # Reload the page and display the full priority form

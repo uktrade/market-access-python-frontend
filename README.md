@@ -105,6 +105,7 @@ Example usage.:
 2. To run tests with coverage use `make django-test-coverage` - this will output the report to the console.
 
 #### Running Playwright Tests Locally
+Playwright documentation - https://playwright.dev/python/docs/api/class-playwright
 1. Ensure the API is running locally.
 
 2. Ensure the front end Docker container is up and has reached the point where the Django development server is running.
