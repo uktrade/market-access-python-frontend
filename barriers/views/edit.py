@@ -118,10 +118,8 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
 
         # SITUATIONS:
         # ADMIN - NO TOP 100 - WORKS - show pb100 request when country/region selected
-        # ADMIN - TOP 100 APPROVAL PENDING - show admin approval/disapprove box AT ALL TIMES
-        #   - DOESN'T WORK, HIDES WHEN CLICKING WATCHLIST
-        # ADMIN - TOP 100 REMOVAL PENDING - show admin approval/disapprove box AT ALL TIMES
-        #   - DOESN'T WORK, HIDES WHEN CLICKING WATCHLIST
+        # ADMIN - TOP 100 APPROVAL PENDING - WORKS - show admin approval/disapprove box AT ALL TIMES
+        # ADMIN - TOP 100 REMOVAL PENDING - WORKS - show admin approval/disapprove box AT ALL TIMES
         # ADMIN - TOP 100 PRIORITY BARRIER - show pb100 remove request AT ALL TIMES
         #   - DOESN'T WORK, IT HIDES WHEN CLICKING WATCHLIST AND THE 'NO' FOR REMOVAL
         # USER - NO TOP 100 - WORKS -  show pb100 request when country/region selected
@@ -146,6 +144,9 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
 
         kwargs["user_is_top_priority_moderator"] = is_user_admin
         kwargs["is_top_priority_requested"] = is_top_priority_requested
+        kwargs["is_top_priority"] = (
+            self.barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.APPROVED
+        )
         kwargs["is_approval_pending"] = (
             self.barrier.top_priority_status
             == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING

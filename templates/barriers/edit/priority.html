@@ -13,7 +13,10 @@
                 "top_barrier",
                 "top-priority-request-notice"
             );
-            ma.pages.topBarrierPriority.toggleTopPriorityForValidBasicPriorites();
+            ma.pages.topBarrierPriority.toggleTopPriorityForValidBasicPriorites(
+                "{{is_top_priority_requested}}",
+                "{{is_top_priority}}"
+            );
         }
         if ( ma.pages.barrier.priority ){
             ma.pages.barrier.priority.priorityFormReveal()

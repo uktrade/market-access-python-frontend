@@ -39,7 +39,10 @@ ma.pages.topBarrierPriority = {
             handleRejectionVisibility();
         });
     },
-    toggleTopPriorityForValidBasicPriorites: function () {
+    toggleTopPriorityForValidBasicPriorites: function (
+        top_priority_requested,
+        is_top_priority
+    ) {
         // Get page components
         const topPriorityConsiderationContainer =
             document.getElementById("top_barrier");
@@ -54,15 +57,9 @@ ma.pages.topBarrierPriority = {
         const topPriorityConsiderationNoRadio =
             document.getElementById("top_barrier-2");
 
-        // we need topPriorityConsiderationContainer to be visible if these django variables are true: user_is_top_priority_moderator and is_top_priority_requested
-        const moderatorInformation = document.getElementById(
-            "requested-top-priority-moderator-display"
-        );
-        if (moderatorInformation != null) {
-            console.log("HERE");
-        }
-        //console.log("Is admin = " + is_top_priority_requested)
-        //console.log("Is requested = " + `${is_top_priority_requested}`)
+        //const moderatorInformation = document.getElementById(
+        //    "requested-top-priority-moderator-display"
+        //);
 
         // Set initial visibility of collapsable sections
         if (topPriorityConsiderationContainer != null) {
@@ -70,7 +67,8 @@ ma.pages.topBarrierPriority = {
             if (
                 regionalRadioInput.checked == true ||
                 countryRadioInput.checked == true ||
-                moderatorInformation != null
+                top_priority_requested == true ||
+                is_top_priority == true
             ) {
                 topPriorityConsiderationContainer.style = "display: block";
             } else {
@@ -118,9 +116,11 @@ ma.pages.topBarrierPriority = {
         watchlistRadioInput.addEventListener("change", function () {
             if (
                 topPriorityConsiderationContainer != null &&
-                moderatorInformation == null
+                top_priority_requested == false &&
+                is_top_priority == false
             ) {
                 // Hide the top_barrier container as long as the viewer is not an admin being asked for approval
+                // Don't hide if the barrier is already a top priority barrier
                 hideTopPriorityConsideration();
             }
         });
