@@ -5,17 +5,8 @@
 {% block body_script %}
     <script>
         if( ma.pages.topBarrierPriority ){
-            ma.pages.topBarrierPriority.optionalRejectionSummary(
-                "top_barrier",
-                "top_priority_rejection_summary-container"
-            );
-            ma.pages.topBarrierPriority.toggleDescriptionOnPriorityRadioChange(
-                "top_barrier",
-                "top-priority-request-notice"
-            );
-            ma.pages.topBarrierPriority.toggleTopPriorityForValidBasicPriorites(
-                "{{is_top_priority_requested}}",
-                "{{is_top_priority}}"
+            ma.pages.topBarrierPriority.topPriorityVisiblity(
+                "{{top_priority_status}}"
             );
         }
         if ( ma.pages.barrier.priority ){
@@ -112,7 +103,7 @@
 
             {% comment %} Pending approval & non admin case {% endcomment %}
             {% if not user_is_top_priority_moderator and is_top_priority_requested %}
-                <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
                     <div class="govuk-notification-banner__header">
                         <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
                             Top 100 priority barrier - pending {% if is_approval_pending %}approval{% else %}removal{% endif %}
@@ -128,18 +119,18 @@
             {% comment %} End - Pending approval & non admin case {% endcomment %}
 
             {% if not user_is_top_priority_moderator and not is_top_priority_requested %}
-            <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                <div class="govuk-notification-banner__header">
-                    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                        Notice
-                    </h2>
+                <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                    <div class="govuk-notification-banner__header">
+                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                            Notice
+                        </h2>
+                    </div>
+                    <div class="govuk-notification-banner__content">
+                        <p class="govuk-notification-banner__heading">
+                            Top 100 priority barriers are reviewed quarterly and you'll be notified when the review is complete.
+                        </p>
+                    </div>
                 </div>
-                <div class="govuk-notification-banner__content">
-                    <p class="govuk-notification-banner__heading">
-                        Top 100 priority barriers are reviewed quarterly and you'll be notified when the review is complete.
-                    </p>
-                </div>
-            </div>
             {% endif %}
 
             <!-- 'Reason for the top 100 priority barrier assessment' -->
@@ -154,6 +145,7 @@
             </div>
             {% endif %}
 
+            <!-- 'Reason for rejecting the barrier change request' -->
             {% if form.top_priority_rejection_summary %}
             <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
