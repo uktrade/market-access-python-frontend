@@ -33,8 +33,6 @@ ma.pages.barrier.priority = {
                 const cancelPriorityButton =
                     document.getElementById("cancel-priority");
                 window.location.href = cancelPriorityButton.href;
-            } else {
-                // Neither option selected, Error - pick an answer
             }
         };
 

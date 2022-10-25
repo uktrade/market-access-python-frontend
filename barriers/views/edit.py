@@ -113,6 +113,25 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             # Reload the page and display the full priority form
             kwargs["confirm_priority"] = "yes"
 
+        # THERE IS A BUG SURROUNDING SHOWING FORM WHEN WANTING TO REQUEST REMOVAL OF TOP 100.
+        # THIS MIGHT AFFECT OTHER STATES - ADMIN LOOKING AT APPROVING FOR EXAMPLE.
+
+        # SITUATIONS:
+        # ADMIN - NO TOP 100 - WORKS - show pb100 request when country/region selected
+        # ADMIN - TOP 100 APPROVAL PENDING - show admin approval/disapprove box AT ALL TIMES
+        #   - DOESN'T WORK, HIDES WHEN CLICKING WATCHLIST
+        # ADMIN - TOP 100 REMOVAL PENDING - show admin approval/disapprove box AT ALL TIMES
+        #   - DOESN'T WORK, HIDES WHEN CLICKING WATCHLIST
+        # ADMIN - TOP 100 PRIORITY BARRIER - show pb100 remove request AT ALL TIMES
+        #   - DOESN'T WORK, IT HIDES WHEN CLICKING WATCHLIST AND THE 'NO' FOR REMOVAL
+        # USER - NO TOP 100 - WORKS -  show pb100 request when country/region selected
+        # USER - TOP 100 APPROVAL PENDING - WORKS - show pending decision AT ALL TIMES
+        # USER - TOP 100 REMOVAL PENDING - WORKS - show pending decision AT ALL TIMES
+        # USER - TOP 100 PRIORITY BARRIER - show pb100 remove request AT ALL TIMES
+        #   - DOESN'T WORK, IT HIDES WHEN CLICKING WATCHLIST AND THE 'NO' FOR REMOVAL
+
+        # Test locally by giving user permission to approve or reject top 100
+
         # Add info on the user's permissions
         user = user_scope(self.request)["current_user"]
         is_user_admin = user.has_permission("set_topprioritybarrier")

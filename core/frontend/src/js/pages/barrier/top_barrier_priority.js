@@ -54,11 +54,23 @@ ma.pages.topBarrierPriority = {
         const topPriorityConsiderationNoRadio =
             document.getElementById("top_barrier-2");
 
-        // Set initial visibility of collapsable sections - these will not exist if top 100 status already set
+        // we need topPriorityConsiderationContainer to be visible if these django variables are true: user_is_top_priority_moderator and is_top_priority_requested
+        const moderatorInformation = document.getElementById(
+            "requested-top-priority-moderator-display"
+        );
+        if (moderatorInformation != null) {
+            console.log("HERE");
+        }
+        //console.log("Is admin = " + is_top_priority_requested)
+        //console.log("Is requested = " + `${is_top_priority_requested}`)
+
+        // Set initial visibility of collapsable sections
         if (topPriorityConsiderationContainer != null) {
+            // Show the panel if either valid priority level checked, or the barrier is existing Top Priority
             if (
                 regionalRadioInput.checked == true ||
-                countryRadioInput.checked == true
+                countryRadioInput.checked == true ||
+                moderatorInformation != null
             ) {
                 topPriorityConsiderationContainer.style = "display: block";
             } else {
@@ -104,7 +116,11 @@ ma.pages.topBarrierPriority = {
             }
         });
         watchlistRadioInput.addEventListener("change", function () {
-            if (topPriorityConsiderationContainer != null) {
+            if (
+                topPriorityConsiderationContainer != null &&
+                moderatorInformation == null
+            ) {
+                // Hide the top_barrier container as long as the viewer is not an admin being asked for approval
                 hideTopPriorityConsideration();
             }
         });
