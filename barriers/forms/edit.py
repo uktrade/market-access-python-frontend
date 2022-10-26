@@ -1,5 +1,3 @@
-import logging
-
 from django import forms
 
 from barriers.constants import (
@@ -22,8 +20,6 @@ from utils.forms import (
 )
 
 from .mixins import APIFormMixin
-
-logger = logging.getLogger(__name__)
 
 
 class UpdateCommercialValueForm(APIFormMixin, forms.Form):
@@ -298,7 +294,7 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             client.barriers.get(id=self.id), "top_priority_status"
         )
 
-        # Potential bug; attempting to change priority to watchlist while PB100 approval pending
+        # Need to catch attempts to change a top priority barrier to watchlist priority level
         if priority_level == "WATCHLIST" and (
             top_priority is not None or existing_top_priority_status != "NONE"
         ):

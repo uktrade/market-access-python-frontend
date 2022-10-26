@@ -1,5 +1,3 @@
-import logging
-
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import FormView
@@ -24,8 +22,6 @@ from utils.context_processors import user_scope
 from utils.metadata import MetadataMixin
 
 from .mixins import APIBarrierFormViewMixin
-
-logger = logging.getLogger(__name__)
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
