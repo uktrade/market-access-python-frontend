@@ -103,33 +103,15 @@
 
             {% comment %} Pending approval & non admin case {% endcomment %}
             {% if not user_is_top_priority_moderator and is_top_priority_requested %}
-                <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
-                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                            Top 100 priority barrier - pending {% if is_approval_pending %}approval{% else %}removal{% endif %}
-                        </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
-                        <p class="govuk-notification-banner__heading">
-                            This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier
-                        </p>
-                    </div>
+                <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
+                    This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier
                 </div>
             {% endif %}
             {% comment %} End - Pending approval & non admin case {% endcomment %}
 
             {% if not user_is_top_priority_moderator and not is_top_priority_requested %}
-                <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
-                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                            Notice
-                        </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
-                        <p class="govuk-notification-banner__heading">
-                            Top 100 priority barriers are reviewed quarterly and you'll be notified when the review is complete.
-                        </p>
-                    </div>
+                <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
+                    We review top 100 priority barrier requests every quarter. We'll notify you of the outcome once the review is complete.
                 </div>
             {% endif %}
 
