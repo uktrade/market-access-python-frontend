@@ -55,6 +55,14 @@
                 </dd>
             </div>
 
+            <dt class="summary-group__list__key">Example things</dt>
+            <dd class="summary-group__list__value">
+              <ul>
+                {% for example_thing in barrier.example_things %}
+                  <li>{{ example_thing.name }}</li>
+                {% endfor %}
+              </ul>
+            </dd>
             <dt class="summary-group__list__key">Barrier summary</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.summary|escape|linebreaksbr }}
