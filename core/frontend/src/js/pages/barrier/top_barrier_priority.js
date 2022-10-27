@@ -130,20 +130,38 @@ ma.pages.topBarrierPriority = {
         });
 
         // The consider top priority question radio buttons
-        // - Yes shows the notice and priority summary/rejection summary
-        // - No hides the notice and priority summary/rejection summary
         topPriorityConsiderationYesRadio.addEventListener(
             "change",
             function () {
-                showPriorityNotice();
-                showSummaryInput();
-                showRejectionInput();
+                if (
+                    top_priority_status == "NONE" ||
+                    top_priority_status == "RESOLVED"
+                ) {
+                    showPriorityNotice();
+                    showSummaryInput();
+                }
+                if (
+                    top_priority_status == "APPROVAL_PENDING" ||
+                    top_priority_status == "REMOVAL_PENDING"
+                ) {
+                    hideRejectionInput();
+                }
             }
         );
         topPriorityConsiderationNoRadio.addEventListener("change", function () {
-            hidePriorityNotice();
-            hideSummaryInput();
-            hideRejectionInput();
+            if (
+                top_priority_status == "NONE" ||
+                top_priority_status == "RESOLVED"
+            ) {
+                hidePriorityNotice();
+                hideSummaryInput();
+            }
+            if (
+                top_priority_status == "APPROVAL_PENDING" ||
+                top_priority_status == "REMOVAL_PENDING"
+            ) {
+                showRejectionInput();
+            }
         });
     },
     optionalRejectionSummary: function (
