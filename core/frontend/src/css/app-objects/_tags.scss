@@ -5,15 +5,134 @@
     border-bottom: 1px solid $govuk-light-grey;
 }
 
+.flex{
+    display: flex;
+}
+
+.flex-wrap{
+    flex-wrap: wrap;
+}
+
+.flex-column{
+    flex-direction: column;
+}
+
+.justify-end{
+    justify-content: flex-end;
+}
+
+.gap-2{
+    gap: 5px;
+}
+
+.mt-2{
+    margin-top: 5px;
+}
+
+.grid{
+    display: grid;
+}
+
+.grid-cols-1{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.align-start{
+    align-items: flex-start;
+}
+
+.align-end{
+    align-items: flex-end;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.float-right{
+    float: right;
+}
+
+.overflow-hidden{
+    overflow: hidden;
+}
+
+.inline-block{
+    display: inline-block;
+}
+
 .barrier-tag-list {
     list-style: none;
     padding: 0;
-    margin: 0 0 govuk-em( -8, 16 );
-    float: left;
+    // margin: 0 0 govuk-em( 0, 0 );
+    margin-right: 0px;
+    float: right;
+    width: 100%;
+    text-align: right;
 
     &--in-banner {
         margin-right: govuk-em( 16, 16 );
     }
+
+    .govuk-tag{
+        margin-bottom: govuk-em( 8, 16 );
+        background-color: #fff;
+        border-radius: 3px;
+        border: 1px solid $govuk-mid-grey;
+        color: $govuk-dark-grey;
+        margin: 0;
+        display: inline-block;
+        width: auto;
+        margin-top: 12px;
+        margin-left: 12px;
+
+        &--top-100-priority-approval-pending {
+            background-color: #fcd6c3;
+            border-color: #fcd6c3;
+            color: #6e3619;
+        }
+        &--top-100-priority {
+            background-color: #fcd6c3;
+            border-color: #fcd6c3;
+            color: #6e3619;
+        }
+        &--top-100-priority-removal-pending {
+            background-color: #fcd6c3;
+            border-color: #fcd6c3;
+            color: #6e3619;
+        }
+        &--top-100-resolved {
+            background-color: #cce2d8;
+            border-color: #cce2d8;
+            color: #21704b
+        }
+        &--resolved-in-part {
+            background-color: #cce2d8;
+            border-color: #cce2d8;
+            color: #21704b
+        }
+        &--resolved-in-full {
+            background-color: #cce2d8;
+            border-color: #cce2d8;
+            color: #21704b
+        }
+        &--country-priority{
+            background-color: #dbd5e9;
+            border-color: #dbd5e9;
+            color: #3d2375;
+        }
+        &--regional-priority{
+            background-color: #fff7bf;
+            border-color: #fff7bf;
+            color: #594d00;
+        }
+        &--watch-list{
+            background-color: #d2e2f1;
+            border-color: #d2e2f1;
+            color: #144e81;
+        }
+    }
+
 }
 
 .barrier-tag-list > .govuk-tag {
