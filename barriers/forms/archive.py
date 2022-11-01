@@ -8,7 +8,7 @@ from utils.forms import SubformChoiceField, SubformMixin
 
 class DuplicateBarrierForm(forms.Form):
     duplicate_explanation = forms.CharField(
-        label="Please specify",
+        label="Provide a reason",
         widget=forms.Textarea,
         max_length=1000,
         required=True,
@@ -28,7 +28,7 @@ class DuplicateBarrierForm(forms.Form):
 
 class NotABarrierForm(forms.Form):
     not_a_barrier_explanation = forms.CharField(
-        label="Please specify",
+        label="Provide a reason",
         widget=forms.Textarea,
         max_length=1000,
         required=True,
@@ -48,7 +48,7 @@ class NotABarrierForm(forms.Form):
 
 class OtherForm(forms.Form):
     other_explanation = forms.CharField(
-        label="Please specify",
+        label="Provide a reason",
         widget=forms.Textarea,
         max_length=1000,
         required=True,
