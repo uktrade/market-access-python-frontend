@@ -27,16 +27,16 @@ class UpdateCommercialValueForm(APIFormMixin, forms.Form):
         min_value=0,
         max_value=1000000000000,
         localize=True,
-        label="What is the value of the barrier to the affected business(es) in GBP?",
+        label="What is the value of the barrier to affected businesses?",
         error_messages={
-            "required": "Enter a value",
-            "min_value": "Enter a valid number",
-            "max_value": "Enter a valid number",
+            "required": "Enter the value of the barrier",
+            "min_value": "Value must be 0 or more",
+            "max_value": "Value must be 1000000000000 or less",
         },
     )
     commercial_value_explanation = forms.CharField(
         widget=forms.Textarea,
-        error_messages={"required": "Enter a value description and timescale"},
+        error_messages={"required": "Enter details of the estimated value"},
     )
 
     def save(self):
@@ -642,14 +642,12 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
         label="Is the barrier eligible for an initial economic assessment?",
         error_messages={
             "required": (
-                "Select yes if the barrier is eligible for an initial economic"
-                " assessment"
+                "Select yes or no"
             )
         },
     )
     economic_assessment_eligibility_summary = forms.CharField(
-        label="Why is this barrier not eligible for an initial economic assessment?",
-        help_text="Please explain why this barrier is not eligible",
+        label="Provide the reason this barrier is not eligible",
         max_length=1500,
         widget=forms.Textarea,
         required=False,
@@ -668,7 +666,7 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
             if not economic_assessment_eligibility_summary:
                 self.add_error(
                     "economic_assessment_eligibility_summary",
-                    "Enter why this barrier is not eligible",
+                    "Enter the reason this barrier is not eligible",
                 )
         else:
             cleaned_data["economic_assessment_eligibility_summary"] = ""
