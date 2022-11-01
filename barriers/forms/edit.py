@@ -114,7 +114,7 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
         label="Delivery confidence",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={"required": "Delivery confidence is required"},
+        error_messages={"required": "Select if delivery is on track, at risk of delay or delayed"},
     )
     update = forms.CharField(
         label="Current status",
@@ -125,7 +125,7 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
         ),
         widget=forms.Textarea,
         error_messages={
-            "required": "Progress update is required",
+            "required": "Enter a status update",
         },
     )
     next_steps = forms.CharField(
@@ -137,7 +137,7 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
             " senior stakeholders (including Ministers)."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Next steps is required"},
+        error_messages={"required": "Enter an outline of your next steps"},
     )
 
     def __init__(self, barrier_id, progress_update_id=None, *args, **kwargs):
@@ -174,7 +174,7 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
         ),
         widget=forms.Textarea,
         error_messages={
-            "required": "Milestones and deliverables is required",
+            "required": "Enter your milestones and deliverables",
         },
     )
     expenditure = forms.CharField(
@@ -185,7 +185,7 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
             " whether there’s a risk of over or underspend for this financial year."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Expenditure is required"},
+        error_messages={"required": "Enter your expenditure"},
     )
 
     def __init__(self, barrier_id, programme_fund_update_id=None, *args, **kwargs):
@@ -232,7 +232,7 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         required=False,
         max_length=255,
         error_messages={
-            "max_length": "Other source should be %(limit_value)d characters or fewer",
+            "max_length": "Entry should be %(limit_value)d characters or less",
         },
     )
 
@@ -534,8 +534,8 @@ class UpdateBarrierEstimatedResolutionDateForm(
 ):
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
-        help_text="For example, 11 2020",
-        error_messages={"required": "Enter the estimated resolution date"},
+        help_text="For example, 11 2024",
+        error_messages={"required": "Enter an estimated resolution date"},
     )
 
     def __init__(self, *args, **kwargs):
