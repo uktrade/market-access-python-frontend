@@ -8,7 +8,7 @@ class ChooseUpdateTypeForm(forms.Form):
             ("programme_fund", "Programme Fund"),
         ),
         error_messages={
-            "required": "You must select a project",
+            "required": "Select top 100 priority barrier or Programme Fund",
         },
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
         label="What is your progress update for?",
