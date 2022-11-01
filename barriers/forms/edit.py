@@ -32,16 +32,16 @@ class UpdateCommercialValueForm(APIFormMixin, forms.Form):
         min_value=0,
         max_value=1000000000000,
         localize=True,
-        label="What is the value of the barrier to the affected business(es) in GBP?",
+        label="What is the value of the barrier to affected businesses?",
         error_messages={
-            "required": "Enter a value",
-            "min_value": "Enter a valid number",
-            "max_value": "Enter a valid number",
+            "required": "Enter the value of the barrier",
+            "min_value": "Value must be 0 or more",
+            "max_value": "Value must be 1000000000000 or less",
         },
     )
     commercial_value_explanation = forms.CharField(
         widget=forms.Textarea,
-        error_messages={"required": "Enter a value description and timescale"},
+        error_messages={"required": "Enter details of the estimated value"},
     )
 
     def save(self):
@@ -119,7 +119,7 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
         label="Delivery confidence",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={"required": "Delivery confidence is required"},
+        error_messages={"required": "Select if delivery is on track, at risk of delay or delayed"},
     )
     update = forms.CharField(
         label="Current status",
@@ -130,7 +130,7 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
         ),
         widget=forms.Textarea,
         error_messages={
-            "required": "Progress update is required",
+            "required": "Enter a status update",
         },
     )
     next_steps = forms.CharField(
@@ -142,7 +142,7 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
             " senior stakeholders (including Ministers)."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Next steps is required"},
+        error_messages={"required": "Enter an outline of your next steps"},
     )
 
     def __init__(self, barrier_id, progress_update_id=None, *args, **kwargs):
@@ -179,7 +179,7 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
         ),
         widget=forms.Textarea,
         error_messages={
-            "required": "Milestones and deliverables is required",
+            "required": "Enter your milestones and deliverables",
         },
     )
     expenditure = forms.CharField(
@@ -190,7 +190,7 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
             " whether there’s a risk of over or underspend for this financial year."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Expenditure is required"},
+        error_messages={"required": "Enter your expenditure"},
     )
 
     def __init__(self, barrier_id, programme_fund_update_id=None, *args, **kwargs):
@@ -237,7 +237,7 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
         required=False,
         max_length=255,
         error_messages={
-            "max_length": "Other source should be %(limit_value)d characters or fewer",
+            "max_length": "Entry should be %(limit_value)d characters or less",
         },
     )
 
@@ -620,8 +620,8 @@ class UpdateBarrierEstimatedResolutionDateForm(
 ):
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
-        help_text="For example, 11 2020",
-        error_messages={"required": "Enter the estimated resolution date"},
+        help_text="For example, 11 2024",
+        error_messages={"required": "Enter an estimated resolution date"},
     )
 
     def __init__(self, *args, **kwargs):
@@ -728,14 +728,12 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
         label="Is the barrier eligible for an initial economic assessment?",
         error_messages={
             "required": (
-                "Select yes if the barrier is eligible for an initial economic"
-                " assessment"
+                "Select yes or no"
             )
         },
     )
     economic_assessment_eligibility_summary = forms.CharField(
-        label="Why is this barrier not eligible for an initial economic assessment?",
-        help_text="Please explain why this barrier is not eligible",
+        label="Provide the reason this barrier is not eligible",
         max_length=1500,
         widget=forms.Textarea,
         required=False,
@@ -754,7 +752,7 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
             if not economic_assessment_eligibility_summary:
                 self.add_error(
                     "economic_assessment_eligibility_summary",
-                    "Enter why this barrier is not eligible",
+                    "Enter the reason this barrier is not eligible",
                 )
         else:
             cleaned_data["economic_assessment_eligibility_summary"] = ""

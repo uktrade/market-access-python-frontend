@@ -8,13 +8,13 @@ from utils.forms import SubformChoiceField, SubformMixin
 
 class DuplicateBarrierForm(forms.Form):
     duplicate_explanation = forms.CharField(
-        label="Please specify",
+        label="Provide a reason",
         widget=forms.Textarea,
         max_length=1000,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "Reason should be %(limit_value)d characters or less",
+            "required": "Enter a reason",
         },
     )
 
@@ -28,13 +28,13 @@ class DuplicateBarrierForm(forms.Form):
 
 class NotABarrierForm(forms.Form):
     not_a_barrier_explanation = forms.CharField(
-        label="Please specify",
+        label="Provide a reason",
         widget=forms.Textarea,
         max_length=1000,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "Reason should be %(limit_value)d characters or less",
+            "required": "Enter a reason",
         },
     )
 
@@ -48,13 +48,13 @@ class NotABarrierForm(forms.Form):
 
 class OtherForm(forms.Form):
     other_explanation = forms.CharField(
-        label="Please specify",
+        label="Provide a reason",
         widget=forms.Textarea,
         max_length=1000,
         required=True,
         error_messages={
-            "max_length": "Explanation should be %(limit_value)d characters or fewer",
-            "required": "Enter an explanation",
+            "max_length": "Reason should be %(limit_value)d characters or less",
+            "required": "Enter a reason",
         },
     )
 
@@ -68,10 +68,10 @@ class OtherForm(forms.Form):
 
 class ArchiveBarrierForm(SubformMixin, forms.Form):
     reason = SubformChoiceField(
-        label="You must tell us why you are archiving this barrier",
+        label="Why are you archiving this barrier?",
         help_text=(
-            "Archived barriers will only appear in search when the "
-            "'Show only archived barriers' filter is enabled."
+            "You can find archived barriers in search by "
+            "selecting the 'Show' filter 'Only archived barriers'."
         ),
         choices=ARCHIVED_REASON,
         subform_classes={
@@ -80,7 +80,7 @@ class ArchiveBarrierForm(SubformMixin, forms.Form):
             ARCHIVED_REASON.OTHER: OtherForm,
         },
         widget=forms.RadioSelect,
-        error_messages={"required": "Select a reason for archiving this barrier"},
+        error_messages={"required": "Select duplicate, not a barrier or other"},
     )
 
     def __init__(self, id, token, *args, **kwargs):
@@ -100,12 +100,12 @@ class ArchiveBarrierForm(SubformMixin, forms.Form):
 
 class UnarchiveBarrierForm(forms.Form):
     reason = forms.CharField(
-        label="You must give a reason why you are unarchiving this barrier",
+        label="Why are you unarchiving this barrier?",
         widget=forms.Textarea,
         max_length=1000,
         required=True,
         error_messages={
-            "max_length": "Reason should be %(limit_value)d characters or fewer",
+            "max_length": "Reason should be %(limit_value)d characters or less",
             "required": "Enter a reason",
         },
     )
