@@ -11,7 +11,7 @@ class AddNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
         label=("Add notes on an interaction or event"),
         widget=forms.Textarea,
-        error_messages={"required": "Add text for the note."},
+        error_messages={"required": "Add a note"},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
@@ -44,7 +44,7 @@ class AddPublicBarrierNoteForm(forms.Form):
             "update the barrier."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Add text for the note."},
+        error_messages={"required": "Add a note"},
     )
 
     def __init__(self, token, barrier_id, *args, **kwargs):
@@ -63,7 +63,7 @@ class AddPublicBarrierNoteForm(forms.Form):
 class EditNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
         widget=forms.Textarea,
-        error_messages={"required": "Add text for the note."},
+        error_messages={"required": "Add a note"},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
@@ -97,7 +97,7 @@ class EditPublicBarrierNoteForm(forms.Form):
             "update the barrier."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Add text for the note."},
+        error_messages={"required": "Add a note"},
     )
 
     def __init__(self, token, note_id, *args, **kwargs):
