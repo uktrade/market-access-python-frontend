@@ -16,6 +16,9 @@ ma.pages.topBarrierPriority = {
         const topPriorityNotice = document.getElementById(
             "top-priority-request-notice"
         );
+        const topPriorityWatchlistWarning = document.getElementById(
+            "top-priority-request-not-available-notice"
+        );
 
         // Radio buttons for the "Which priority type" question
         const regionalRadioInput = document.getElementById("priority_level-1");
@@ -49,6 +52,16 @@ ma.pages.topBarrierPriority = {
                 topPriorityNotice.style = "display: none";
             }
         };
+        const showPriorityWatchlistNotice = function () {
+            if (topPriorityWatchlistWarning != null) {
+                topPriorityWatchlistWarning.style = "display: block";
+            }
+        };
+        const hidePriorityWatchlistNotice = function () {
+            if (topPriorityWatchlistWarning != null) {
+                topPriorityWatchlistWarning.style = "display: none";
+            }
+        };
         const showSummaryInput = function () {
             if (topPrioritySummaryDescriptionContainer != null) {
                 topPrioritySummaryDescriptionContainer.style = "display: block";
@@ -75,6 +88,7 @@ ma.pages.topBarrierPriority = {
         // Set initial visibility.
         hideConsiderationQuestion();
         hidePriorityNotice();
+        hidePriorityWatchlistNotice();
         hideSummaryInput();
         hideRejectionInput();
         // If any of the situations are true, we need to display the consider Top Priority question
@@ -111,9 +125,11 @@ ma.pages.topBarrierPriority = {
         // - Watchlist button hides top priority question, sets it to 'no' and hides the description UNLESS we have a top priority status already
         regionalRadioInput.addEventListener("change", function () {
             showConsiderationQuestion();
+            hidePriorityWatchlistNotice();
         });
         countryRadioInput.addEventListener("change", function () {
             showConsiderationQuestion();
+            hidePriorityWatchlistNotice();
         });
         watchlistRadioInput.addEventListener("change", function () {
             if (
@@ -126,6 +142,8 @@ ma.pages.topBarrierPriority = {
                 hidePriorityNotice();
                 hideSummaryInput();
                 hideRejectionInput();
+            } else {
+                showPriorityWatchlistNotice();
             }
         });
 
@@ -164,6 +182,7 @@ ma.pages.topBarrierPriority = {
             }
         });
     },
+    // SHOULD DELETE THE FOLLOWING JS METHODS WHEN PB100 IS REMOVED FROM STATUS PAGE
     optionalRejectionSummary: function (
         top_barrier_status_id,
         rejection_summary_id

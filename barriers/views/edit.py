@@ -157,7 +157,6 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             "priority_level": self.barrier.priority_level,
             "top_barrier": top_barrier_initial,
             "existing_tags_list": self.barrier.tags,
-            "test_value": 123,
         }
 
 

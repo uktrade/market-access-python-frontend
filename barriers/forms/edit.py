@@ -280,7 +280,7 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
         label="Which priority type is most relevant to you and your team?",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={"required": "Select a barrier priority"},
+        error_messages={"required": "Select a priority type"},
     )
 
     def clean(self):
@@ -386,9 +386,7 @@ def update_barrier_priority_form_factory(
     - admin user + request status
         -> show form for accepting/refusing PB100
     """
-    top_barrier_status_field_label = (
-        "Should this barrier be considered for the Top 100 priority barriers list?"
-    )
+    top_barrier_status_field_label = "Should this be a top 100 priority barrier?"
     top_barrier_status_field_choices = (
         TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES
     )
@@ -458,12 +456,10 @@ def update_barrier_priority_form_factory(
 
         if show_reason_for_top_priority_field:
             priority_summary = forms.CharField(
-                label="Reason for the top 100 priority barrier assessment.",
+                label="Describe why this should be a top 100 priority barrier",
                 help_text=(
-                    "If you are"
-                    " suggesting a potential addition, please outline the barrier’s"
-                    " economic value (including any relevant data), any strategic"
-                    " importance, and an estimated date of resolution (month and year)."
+                    "Provide the barrier's economic value with any supporting data, strategic importance,"
+                    " and estimated resolution month and year."
                 ),
                 widget=forms.Textarea,
                 required=False,
@@ -494,7 +490,7 @@ def update_barrier_priority_form_factory(
                 cleaned_top_priority_status != barrier.top_priority_status
             )
             if has_top_priority_status_changed:
-                raise forms.ValidationError("This field is required.")
+                raise forms.ValidationError("Enter a description")
             return cleaned_priority_summary
 
         def clean_top_priority_rejection_summary(self):
