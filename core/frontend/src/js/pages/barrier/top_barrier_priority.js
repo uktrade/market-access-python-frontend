@@ -17,7 +17,7 @@ ma.pages.topBarrierPriority = {
             "top-priority-request-notice"
         );
         const topPriorityWatchlistWarning = document.getElementById(
-            "top-priority-request-not-available-notice"
+            "watchlist-warning-text"
         );
 
         // Radio buttons for the "Which priority type" question
@@ -147,40 +147,45 @@ ma.pages.topBarrierPriority = {
             }
         });
 
-        // The consider top priority question radio buttons
-        topPriorityConsiderationYesRadio.addEventListener(
-            "change",
-            function () {
-                if (
-                    top_priority_status == "NONE" ||
-                    top_priority_status == "RESOLVED"
-                ) {
-                    showPriorityNotice();
-                    showSummaryInput();
+        // The consider top priority question radio buttons - not present if top_priority
+        if (topPriorityConsiderationYesRadio != null) {
+            topPriorityConsiderationYesRadio.addEventListener(
+                "change",
+                function () {
+                    if (
+                        top_priority_status == "NONE" ||
+                        top_priority_status == "RESOLVED"
+                    ) {
+                        showPriorityNotice();
+                        showSummaryInput();
+                    }
+                    if (
+                        top_priority_status == "APPROVAL_PENDING" ||
+                        top_priority_status == "REMOVAL_PENDING"
+                    ) {
+                        hideRejectionInput();
+                    }
                 }
-                if (
-                    top_priority_status == "APPROVAL_PENDING" ||
-                    top_priority_status == "REMOVAL_PENDING"
-                ) {
-                    hideRejectionInput();
+            );
+            topPriorityConsiderationNoRadio.addEventListener(
+                "change",
+                function () {
+                    if (
+                        top_priority_status == "NONE" ||
+                        top_priority_status == "RESOLVED"
+                    ) {
+                        hidePriorityNotice();
+                        hideSummaryInput();
+                    }
+                    if (
+                        top_priority_status == "APPROVAL_PENDING" ||
+                        top_priority_status == "REMOVAL_PENDING"
+                    ) {
+                        showRejectionInput();
+                    }
                 }
-            }
-        );
-        topPriorityConsiderationNoRadio.addEventListener("change", function () {
-            if (
-                top_priority_status == "NONE" ||
-                top_priority_status == "RESOLVED"
-            ) {
-                hidePriorityNotice();
-                hideSummaryInput();
-            }
-            if (
-                top_priority_status == "APPROVAL_PENDING" ||
-                top_priority_status == "REMOVAL_PENDING"
-            ) {
-                showRejectionInput();
-            }
-        });
+            );
+        }
     },
     // SHOULD DELETE THE FOLLOWING JS METHODS WHEN PB100 IS REMOVED FROM STATUS PAGE
     optionalRejectionSummary: function (

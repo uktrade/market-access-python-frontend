@@ -117,20 +117,18 @@
             {% comment %} Pending approval & non admin case {% endcomment %}
             {% if not user_is_top_priority_moderator and is_top_priority_requested %}
                 <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
-                    This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier
+                    <p class="top-priority-notice-text">This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier</p>
+                    <p id="watchlist-warning-text">Top 100 priority must be removed or rejected if you wish to change this barriers priority to "Watchlist"</p>
                 </div>
             {% endif %}
             {% comment %} End - Pending approval & non admin case {% endcomment %}
 
             {% if not user_is_top_priority_moderator and not is_top_priority_requested %}
                 <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
-                    We review top 100 priority barrier requests every quarter. We'll notify you of the outcome once the review is complete.
+                    <p class="top-priority-notice-text">We review top 100 priority barrier requests every quarter. We'll notify you of the outcome once the review is complete.</p>
+                    <p id="watchlist-warning-text">Top 100 priority must be removed or rejected if you wish to change this barriers priority to "Watchlist"</p>
                 </div>
             {% endif %}
-
-            <div id="top-priority-request-not-available-notice" class="govuk-inset-text priority-page-hidden" role="region" data-module="govuk-notification-banner">
-                Top 100 priority must be removed or rejected if you wish to change this barriers priority to "Watchlist"
-            </div>
 
             <!-- 'Reason for the top 100 priority barrier assessment' -->
             {% if form.priority_summary %}

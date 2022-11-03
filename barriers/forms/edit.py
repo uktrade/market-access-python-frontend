@@ -449,9 +449,7 @@ def update_barrier_priority_form_factory(
                 label=top_barrier_status_field_label,
                 choices=top_barrier_status_field_choices,
                 widget=forms.RadioSelect,
-                error_messages={
-                    "required": "Please indicate if this is a top priority barrier"
-                },
+                required=False,
             )
 
         if show_reason_for_top_priority_field:
@@ -473,6 +471,20 @@ def update_barrier_priority_form_factory(
                 required=False,
             )
 
+        def clean_top_barrier(self):
+            cleaned_priority_input = self.cleaned_data.get("priority_level")
+            cleaned_top_priority_status = self.cleaned_data.get("top_barrier")
+
+            # If user has entered a priority other than Watchlist, we need an answer for
+            # top priority status.
+            if (
+                cleaned_priority_input in ["COUNTRY", "REGIONAL"]
+                and cleaned_top_priority_status == ""
+            ):
+                raise forms.ValidationError(
+                    "Please indicate if this is a top priority barrier"
+                )
+
         def clean_priority_summary(self):
             cleaned_priority_summary = self.cleaned_data["priority_summary"]
             if cleaned_priority_summary:
@@ -484,6 +496,11 @@ def update_barrier_priority_form_factory(
             # we should raise a ValidationError
 
             cleaned_top_priority_status = self.cleaned_data.get("top_barrier")
+
+            # If top priority not given, return as we don't need to continue
+            if cleaned_top_priority_status is None:
+                return ""
+
             if not cleaned_top_priority_status:
                 raise forms.ValidationError("Top priority status is required")
             has_top_priority_status_changed = (
@@ -502,8 +519,6 @@ def update_barrier_priority_form_factory(
             # we need to raise a ValidationError if the admin rejected a request
             # but did not supply a rejection summary
             admins_decision = self.cleaned_data.get("top_barrier")
-            if not admins_decision:
-                raise forms.ValidationError("Top priority status is required")
             if (
                 barrier.top_priority_status
                 == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
