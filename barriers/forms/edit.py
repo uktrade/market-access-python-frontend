@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 
 from barriers.constants import (
@@ -20,6 +22,8 @@ from utils.forms import (
 )
 
 from .mixins import APIFormMixin
+
+logger = logging.getLogger(__name__)
 
 
 class UpdateCommercialValueForm(APIFormMixin, forms.Form):
@@ -286,7 +290,7 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         priority_level = cleaned_data.get("priority_level")
-        top_priority = cleaned_data.get("top_priority")
+        top_priority = cleaned_data.get("top_barrier")
 
         # Need to check that the barrier is not already a Top 100 or awaiting approval
         client = MarketAccessAPIClient(self.token)
@@ -294,9 +298,15 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             client.barriers.get(id=self.id), "top_priority_status"
         )
 
+        logger.critical("***************")
+        logger.critical(str(cleaned_data))
+        # logger.critical(cleaned_data["priority_level"])
+        logger.critical(existing_top_priority_status)
+        logger.critical("***************")
+
         # Need to catch attempts to change a top priority barrier to watchlist priority level
         if priority_level == "WATCHLIST" and (
-            top_priority is not None or existing_top_priority_status != "NONE"
+            top_priority != "NONE" or existing_top_priority_status != "NONE"
         ):
             self.add_error(
                 "priority_level",
@@ -484,6 +494,7 @@ def update_barrier_priority_form_factory(
                 raise forms.ValidationError(
                     "Please indicate if this is a top priority barrier"
                 )
+            return cleaned_top_priority_status
 
         def clean_priority_summary(self):
             cleaned_priority_summary = self.cleaned_data["priority_summary"]

@@ -31,6 +31,9 @@ ma.pages.topBarrierPriority = {
         const topPriorityConsiderationNoRadio =
             document.getElementById("top_barrier-2");
 
+        // Button to submit form
+        const submitButton = document.getElementById("submit-priority-form");
+
         // Functions to show/hide individual page componenets
         const showConsiderationQuestion = function () {
             if (topPriorityConsiderationContainer != null) {
@@ -102,6 +105,17 @@ ma.pages.topBarrierPriority = {
             top_priority_status == "APPROVED"
         ) {
             showConsiderationQuestion();
+        }
+
+        // If the page has defaulted to watchlist with a Top Priority status (such as an error message triggering)
+        // Need to display watchlist/top priority warning
+        if (
+            watchlistRadioInput.checked == true &&
+            (top_priority_status == "APPROVAL_PENDING" ||
+                top_priority_status == "REMOVAL_PENDING" ||
+                top_priority_status == "APPROVED")
+        ) {
+            showPriorityWatchlistNotice();
         }
 
         // If any of the following situations are true, we need to display the priority notice
@@ -186,6 +200,36 @@ ma.pages.topBarrierPriority = {
                 }
             );
         }
+
+        // Check before submitting that summary is present, if required
+        submitButton.addEventListener("click", function (event) {
+            const descriptionSection = document.getElementById(
+                "priority_summary-container"
+            );
+            const descriptionValue =
+                document.getElementById("priority_summary").value;
+            if (
+                descriptionValue.length < 1 &&
+                topPriorityConsiderationYesRadio.checked == true
+            ) {
+                // Stop button submitting
+                event.preventDefault();
+                // Get error elements
+                const errorBanner = document.getElementById(
+                    "add-priority-errors"
+                );
+                const errorText = document.getElementById(
+                    "missing-description-error"
+                );
+                // Make error visible
+                errorBanner.style = "display: inline-block";
+                errorText.style = "display: inline-block";
+                // Move user to top of form to see error message
+                window.scrollTo(0, 0);
+                // Add error focus bar to description section
+                descriptionSection.classList.add("govuk-form-group--error");
+            }
+        });
     },
     // SHOULD DELETE THE FOLLOWING JS METHODS WHEN PB100 IS REMOVED FROM STATUS PAGE
     optionalRejectionSummary: function (

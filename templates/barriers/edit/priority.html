@@ -24,14 +24,17 @@
     {% include 'partials/heading.html' with text='Add a priority to this barrier' %}
     {% form_error_banner form %}
     <!-- Inclue error section for problems outside of Django form framework -->
-    <div id="add-priority-initial-question-error" class="govuk-error-summary priority-page-hidden" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+    <div id="add-priority-errors" class="govuk-error-summary priority-page-hidden" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
         <h2 class="govuk-error-summary__title" id="error-summary-title">
         There is a problem
         </h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
-                <li>
+                <li id="confirm-priority-error" class="priority-page-hidden">
                     <a href="#confirm-priority-yes">Select yes or no</a>
+                </li>
+                <li id="missing-description-error" class="priority-page-hidden">
+                    <a href="#priority_summary">Enter a description</a>
                 </li>
             </ul>
         </div>
@@ -159,7 +162,7 @@
             </div>
             {% endif %}
 
-            <input type="submit" value="Save and return" class="govuk-button">
+            <input id="submit-priority-form" type="submit" value="Save and return" class="govuk-button">
             <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
         </form>
 

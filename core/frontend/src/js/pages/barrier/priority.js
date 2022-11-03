@@ -9,9 +9,7 @@ ma.pages.barrier.priority = {
         const confirmPriorityButtonJs = document.getElementById(
             "confirm-priority-button-js"
         );
-        const errorBanner = document.getElementById(
-            "add-priority-initial-question-error"
-        );
+        const errorBanner = document.getElementById("add-priority-errors");
 
         // if container doesn't exist, return
         if (!confirmPrioritySection) {
@@ -40,7 +38,11 @@ ma.pages.barrier.priority = {
                 window.location.href = cancelPriorityButton.href;
             } else {
                 // make error appear
+                const errorText = document.getElementById(
+                    "confirm-priority-error"
+                );
                 errorBanner.style = "display: inline-block";
+                errorText.style = "display: inline-block";
             }
         };
 
