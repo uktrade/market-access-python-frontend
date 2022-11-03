@@ -23,19 +23,32 @@
 
     {% include 'partials/heading.html' with text='Add a priority to this barrier' %}
     {% form_error_banner form %}
+    <!-- Inclue error section for problems outside of Django form framework -->
+    <div id="add-priority-initial-question-error" class="govuk-error-summary priority-page-hidden" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+        There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li>
+                    <a href="#confirm-priority-yes">Select yes or no</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
         <!-- Disply the initial form if; the user has not selected an answer yet OR the barrier does not have a priority set-->
+        <!-- create error tag above this div - under form error banner form, use JS to add govuk-form-group--error if button is clicked with no radio selected-->
         <div id="confirm-priority-form-section" {% if confirm_priority == "yes" %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
             <form id="confirm-priority-form" name="confirm-priority-form" action="">
                 <span class="govuk-heading-s govuk-!-margin-bottom-1">Is this barrier a priority?</span>
-                <span class="govuk-hint">Consider the economic value, strategic impact and how long it will take to resolve.</span>
                 <div class="govuk-radios">
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input" id="confirm-priority-yes" name="confirm-priority" type="radio" value="yes">
                         <label class="govuk-label govuk-radios__label" for="confirm-priority"></span>Yes</label>
                     </div>
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="confirm-priority-no" name="confirm-priority" type="radio" value="no" checked="checked">
+                        <input class="govuk-radios__input" id="confirm-priority-no" name="confirm-priority" type="radio" value="no">
                         <label class="govuk-label govuk-radios__label" for="confirm-priority">No</label>
                     </div>
                     <div class="govuk-body govuk-!-margin-top-5">
@@ -93,7 +106,7 @@
                     <div class="govuk-radios">
                         {% for value, name in form.fields.top_barrier.choices %}
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value %}checked="checked"{% endif %}>
+                                <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value and form.top_barrier.vale != NONE %}checked="checked"{% endif %}>
                                 <label class="govuk-label govuk-radios__label" for="{{ form.top_barrier.name }}-{{ forloop.counter }}">{{ name }}</label>
                             </div>
                         {% endfor %}
@@ -103,35 +116,21 @@
 
             {% comment %} Pending approval & non admin case {% endcomment %}
             {% if not user_is_top_priority_moderator and is_top_priority_requested %}
-                <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
-                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                            Top 100 priority barrier - pending {% if is_approval_pending %}approval{% else %}removal{% endif %}
-                        </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
-                        <p class="govuk-notification-banner__heading">
-                            This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier
-                        </p>
-                    </div>
+                <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
+                    This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier
                 </div>
             {% endif %}
             {% comment %} End - Pending approval & non admin case {% endcomment %}
 
             {% if not user_is_top_priority_moderator and not is_top_priority_requested %}
-                <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                    <div class="govuk-notification-banner__header">
-                        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                            Notice
-                        </h2>
-                    </div>
-                    <div class="govuk-notification-banner__content">
-                        <p class="govuk-notification-banner__heading">
-                            Top 100 priority barriers are reviewed quarterly and you'll be notified when the review is complete.
-                        </p>
-                    </div>
+                <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
+                    We review top 100 priority barrier requests every quarter. We'll notify you of the outcome once the review is complete.
                 </div>
             {% endif %}
+
+            <div id="top-priority-request-not-available-notice" class="govuk-inset-text priority-page-hidden" role="region" data-module="govuk-notification-banner">
+                Top 100 priority must be removed or rejected if you wish to change this barriers priority to "Watchlist"
+            </div>
 
             <!-- 'Reason for the top 100 priority barrier assessment' -->
             {% if form.priority_summary %}
@@ -156,7 +155,7 @@
             </div>
             {% endif %}
 
-            <input type="submit" value="Save and exit to barrier" class="govuk-button">
+            <input type="submit" value="Save and return" class="govuk-button">
             <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
         </form>
 
