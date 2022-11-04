@@ -57,10 +57,20 @@ class BarrierSearchForm(forms.Form):
         label="Top 100 priority barrier",
         choices=(
             ("APPROVED", "Top 100 priority barrier"),
-            ("PENDING", "Pending approval/removal"),
+            ("RAPPROVAL_PENDING", "Pending removal"),
+            ("REMOVAL_PENDING", "Pending removal"),
             ("RESOLVED", "Resolved top 100 priority barrier"),
         ),
         required=False,
+    )
+    priority_level = forms.MultipleChoiceField(
+        label="Barrier priority",
+        choices=(
+            ("REGIONAL", "Regional priority"),
+            ("COUNTRY", "Country priority"),
+            ("WATCHLIST", "Watch list"),
+            ("NONE", "No priority assigned"),
+        ),
     )
     status = forms.MultipleChoiceField(
         label="Barrier status",
@@ -264,6 +274,7 @@ class BarrierSearchForm(forms.Form):
             "category": data.getlist("category"),
             "region": data.getlist("region"),
             "top_priority_status": data.getlist("top_priority_status"),
+            "priority_level": data.getlist("priority_level"),
             "status": data.getlist("status"),
             "tags": data.getlist("tags"),
             "delivery_confidence": data.getlist("delivery_confidence"),
@@ -328,7 +339,9 @@ class BarrierSearchForm(forms.Form):
     def set_country_trading_bloc_choices(self):
         trading_bloc_labels = {
             "TB00016": "Include country specific implementations of EU regulations",
-            "TB00026": "Include country specific implementations of Mercosur regulations",
+            "TB00026": (
+                "Include country specific implementations of Mercosur regulations"
+            ),
             "TB00013": "Include country specific implementations of EAEU regulations",
             "TB00017": "Include country specific implementations of GCC regulations",
         }
@@ -496,6 +509,7 @@ class BarrierSearchForm(forms.Form):
         params["top_priority_status"] = ",".join(
             self.cleaned_data.get("top_priority_status", [])
         )
+        params["priority_level"] = ",".join(self.cleaned_data.get("priority_level", []))
         params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
