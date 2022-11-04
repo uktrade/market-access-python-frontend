@@ -161,6 +161,7 @@ ma.pages.topBarrierPriority = {
         });
         watchlistRadioInput.addEventListener("change", function () {
             if (
+                top_priority_status == "" ||
                 top_priority_status == "NONE" ||
                 top_priority_status == "RESOLVED"
             ) {
@@ -181,6 +182,7 @@ ma.pages.topBarrierPriority = {
                 "change",
                 function () {
                     if (
+                        top_priority_status == "" ||
                         top_priority_status == "NONE" ||
                         top_priority_status == "RESOLVED"
                     ) {
@@ -199,6 +201,7 @@ ma.pages.topBarrierPriority = {
                 "change",
                 function () {
                     if (
+                        top_priority_status == "" ||
                         top_priority_status == "NONE" ||
                         top_priority_status == "RESOLVED"
                     ) {

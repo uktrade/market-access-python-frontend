@@ -335,7 +335,7 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             self.cleaned_data["priority_level"] == "WATCHLIST"
             and existing_top_priority_status == "APPROVAL_PENDING"
         ):
-            patch_args["top_priority_status"] = TOP_PRIORITY_BARRIER_STATUS.NONE
+            patch_args["top_priority_status"] = "NONE"
 
         # Set additional args depending on if questions are answered
         if self.fields.get("top_barrier"):
