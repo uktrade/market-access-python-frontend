@@ -365,6 +365,29 @@ class EditPriorityTestCase(MarketAccessTestCase):
         ]
         assert mock_patch.called is False
 
+    @patch("utils.api.resources.APIResource.patch")
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_approval_pending_barrier_cannot_be_watchlist(self, mock_user, mock_patch):
+        self.barrier["top_priority_status"] = "APPROVAL_PENDING"
+        mock_user.return_value = self.administrator
+        mock_patch.return_value = self.barrier
+        response = self.client.post(
+            reverse(
+                "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
+            ),
+            data={
+                "priority_level": "WATCHLIST",
+            },
+        )
+        mock_patch.assert_called_with(
+            id=self.barrier["id"],
+            priority_level="WATCHLIST",
+            tags=[1],
+            top_priority_status="",
+            top_priority_rejection_summary="",
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
 
 class EditTermTestCase(MarketAccessTestCase):
     def test_edit_term_has_initial_data(self):

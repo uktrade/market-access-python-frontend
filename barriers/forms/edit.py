@@ -298,15 +298,14 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             client.barriers.get(id=self.id), "top_priority_status"
         )
 
-        logger.critical("***************")
-        logger.critical(str(cleaned_data))
-        # logger.critical(cleaned_data["priority_level"])
-        logger.critical(existing_top_priority_status)
-        logger.critical("***************")
+        # If top 100 question not answered, default to "NONE"
+        if top_priority is None or top_priority == "":
+            top_priority = "NONE"
 
         # Need to catch attempts to change a top priority barrier to watchlist priority level
         if priority_level == "WATCHLIST" and (
-            top_priority != "NONE" or existing_top_priority_status != "NONE"
+            top_priority != "NONE"
+            or existing_top_priority_status not in ["NONE", "APPROVAL_PENDING"]
         ):
             self.add_error(
                 "priority_level",
@@ -327,6 +326,18 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             "priority_level": self.cleaned_data["priority_level"],
             "tags": tag_ids,
         }
+
+        # Need to be able to wipe Top 100 APPROVAL_PENDING with a change to the watchlist priority
+        existing_top_priority_status = getattr(
+            client.barriers.get(id=self.id), "top_priority_status"
+        )
+        if (
+            self.cleaned_data["priority_level"] == "WATCHLIST"
+            and existing_top_priority_status == "APPROVAL_PENDING"
+        ):
+            patch_args["top_priority_status"] = TOP_PRIORITY_BARRIER_STATUS.NONE
+
+        # Set additional args depending on if questions are answered
         if self.fields.get("top_barrier"):
             patch_args["top_priority_status"] = self.cleaned_data["top_barrier"]
 

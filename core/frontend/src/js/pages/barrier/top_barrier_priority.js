@@ -88,6 +88,20 @@ ma.pages.topBarrierPriority = {
             }
         };
 
+        // Functions to handle errors
+        const showError = function () {
+            // Get error elements
+            const errorBanner = document.getElementById("add-priority-errors");
+            const errorText = document.getElementById(
+                "missing-description-error"
+            );
+            // Make error visible
+            errorBanner.style = "display: inline-block";
+            errorText.style = "display: inline-block";
+            // Move user to top of form to see error message
+            window.scrollTo(0, 0);
+        };
+
         // Set initial visibility.
         hideConsiderationQuestion();
         hidePriorityNotice();
@@ -206,28 +220,41 @@ ma.pages.topBarrierPriority = {
             const descriptionSection = document.getElementById(
                 "priority_summary-container"
             );
-            const descriptionValue =
-                document.getElementById("priority_summary").value;
-            if (
-                descriptionValue.length < 1 &&
-                topPriorityConsiderationYesRadio.checked == true
-            ) {
-                // Stop button submitting
-                event.preventDefault();
-                // Get error elements
-                const errorBanner = document.getElementById(
-                    "add-priority-errors"
-                );
-                const errorText = document.getElementById(
-                    "missing-description-error"
-                );
-                // Make error visible
-                errorBanner.style = "display: inline-block";
-                errorText.style = "display: inline-block";
-                // Move user to top of form to see error message
-                window.scrollTo(0, 0);
-                // Add error focus bar to description section
-                descriptionSection.classList.add("govuk-form-group--error");
+            const rejectionSection = document.getElementById(
+                "top_priority_rejection_summary-container"
+            );
+
+            if (descriptionSection != null) {
+                const descriptionValue =
+                    document.getElementById("priority_summary").value;
+                if (
+                    descriptionValue.length < 1 &&
+                    topPriorityConsiderationYesRadio.checked == true
+                ) {
+                    // Stop button submitting
+                    event.preventDefault();
+                    // Show error box and scroll to top of page
+                    showError();
+                    // Add error focus bar to description section
+                    descriptionSection.classList.add("govuk-form-group--error");
+                }
+            }
+
+            if (rejectionSection != null) {
+                const rejectionValue = document.getElementById(
+                    "top_priority_rejection_summary"
+                ).value;
+                if (
+                    rejectionValue.length < 1 &&
+                    topPriorityConsiderationNoRadio.checked == true
+                ) {
+                    // Stop button submitting
+                    event.preventDefault();
+                    // Show error box and scroll to top of page
+                    showError();
+                    // Add error focus bar to description section
+                    rejectionSection.classList.add("govuk-form-group--error");
+                }
             }
         });
     },

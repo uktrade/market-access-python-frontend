@@ -44,7 +44,7 @@
         <!-- create error tag above this div - under form error banner form, use JS to add govuk-form-group--error if button is clicked with no radio selected-->
         <div id="confirm-priority-form-section" {% if confirm_priority == "yes" %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
             <form id="confirm-priority-form" name="confirm-priority-form" action="">
-                <span class="govuk-heading-s govuk-!-margin-bottom-1">Is this barrier a priority?</span>
+                <span class="govuk-heading-s govuk-!-margin-bottom-3">Is this barrier a priority?</span>
                 <div class="govuk-radios">
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input" id="confirm-priority-yes" name="confirm-priority" type="radio" value="yes">
@@ -120,7 +120,7 @@
             {% comment %} Pending approval & non admin case {% endcomment %}
             {% if not user_is_top_priority_moderator and is_top_priority_requested %}
                 <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
-                    <p class="top-priority-notice-text">This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier</p>
+                    <p class="top-priority-notice-text">This barrier has a top 100 priority request pending</p>
                 </div>
             {% endif %}
             {% comment %} End - Pending approval & non admin case {% endcomment %}
@@ -135,7 +135,11 @@
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                 <strong class="govuk-warning-text__text">
                     <span class="govuk-warning-text__assistive">Warning</span>
-                    Top 100 priority must be removed or rejected if you wish to change this barriers priority to "Watchlist"
+                        {% if is_approval_pending %}
+                            The top 100 priority request will be cancelled if you select "Watch list"
+                        {% else %}
+                            Top 100 priority must be removed or rejected if you wish to change this barriers priority to "Watch list"
+                        {% endif %}
                 </strong>
             </div>
 
