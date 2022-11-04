@@ -42,7 +42,7 @@
 
         <!-- Disply the initial form if; the user has not selected an answer yet OR the barrier does not have a priority set-->
         <!-- create error tag above this div - under form error banner form, use JS to add govuk-form-group--error if button is clicked with no radio selected-->
-        <div id="confirm-priority-form-section" {% if confirm_priority == "yes" %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
+        <div id="confirm-priority-form-section" {% if confirm_priority == "yes" or is_top_priority or is_approval_pending or is_removal_pending %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
             <form id="confirm-priority-form" name="confirm-priority-form" action="">
                 <span class="govuk-heading-s govuk-!-margin-bottom-3">Is this barrier a priority?</span>
                 <div class="govuk-radios">
@@ -65,7 +65,7 @@
         </div>
 
         <!-- Form is hidden until first question is answered -->
-        <form id="priority-form" action="" method="POST" {% if confirm_priority != "yes" %}class="restrict-width priority-page-hidden"{% else %}class="restrict-width"{% endif %}>
+        <form id="priority-form" action="" method="POST" {% if confirm_priority != "yes" and not is_top_priority and not is_approval_pending and not is_removal_pending %}class="restrict-width priority-page-hidden"{% else %}class="restrict-width"{% endif %}>
             {% csrf_token %}
 
             <!-- Priority assignment section -->

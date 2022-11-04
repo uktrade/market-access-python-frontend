@@ -474,12 +474,22 @@ def update_barrier_priority_form_factory(
             )
 
         if show_reason_for_top_priority_field:
+            label_text = "Describe why this should be a top 100 priority barrier"
+            label_hint = (
+                "Provide the barrier's economic value with any supporting data, strategic importance,"
+                " and estimated resolution month and year."
+            )
+
+            # If barrier is already top priority, change the labeling to reflect removal request
+            if barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.APPROVED:
+                label_text = (
+                    "Describe why this should be removed as a top 100 priority barrier"
+                )
+                label_hint = ""
+
             priority_summary = forms.CharField(
-                label="Describe why this should be a top 100 priority barrier",
-                help_text=(
-                    "Provide the barrier's economic value with any supporting data, strategic importance,"
-                    " and estimated resolution month and year."
-                ),
+                label=label_text,
+                help_text=label_hint,
                 widget=forms.Textarea,
                 required=False,
             )
