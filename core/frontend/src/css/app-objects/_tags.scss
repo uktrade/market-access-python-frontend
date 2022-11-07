@@ -66,12 +66,31 @@
     padding: 0;
     // margin: 0 0 govuk-em( 0, 0 );
     margin-right: 0px;
-    float: right;
-    width: 100%;
-    text-align: right;
 
     &--in-banner {
         margin-right: govuk-em( 16, 16 );
+    }
+
+    &--search{
+        float: right;
+        width: 100%;
+        text-align: right;
+    }
+
+    &--inline{
+        display: inline-block;
+
+        .govuk-tag{
+            max-width: none !important;
+            margin-left: 0px !important;
+        }
+        // width: 30%;
+        // text-align: left;
+        // // float: left;
+        // display: flex;
+        // justify-content: flex-start;
+        // flex-wrap: wrap;
+        // max-width: 30%;
     }
 
     .govuk-tag{
@@ -82,9 +101,15 @@
         color: $govuk-dark-grey;
         margin: 0;
         display: inline-block;
+        // display: table-caption;
         width: auto;
         margin-top: 12px;
         margin-left: 12px;
+        max-width: 250px;
+
+        &--asia-pacific-cross-government-pilot{
+            max-width: 180px;
+        }
 
         &--top-100-priority-approval-pending {
             background-color: #fcd6c3;

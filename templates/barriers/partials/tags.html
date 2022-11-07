@@ -1,5 +1,5 @@
 <div class="barrier-tag-banner">
-    {% if barrier.tags or barrier.top_priority_status != "NONE" %}
+    {% comment %} {% if barrier.tags or barrier.top_priority_status != "NONE" %}
         <ul class="barrier-tag-list barrier-tag-list--in-banner">
             {% spaceless %}
                 {% for tag in barrier.tags %}
@@ -16,6 +16,38 @@
             {% elif barrier.top_priority_status == "RESOLVED" %}
                 <li class="resolved-barrier-top-priority-tag">RESOLVED TOP 100 PRIORITY BARRIER</li>
             {% endif %}
+        </ul>
+    {% endif %} {% endcomment %}
+    {% if barrier.tags or barrier.top_priority_status != "NONE" %}
+        <ul class="barrier-tag-list barrier-tag-list--inline">
+            {% spaceless %}
+                {% comment %} <div class="overflow-hidden"> {% endcomment %}
+                    {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
+                        {% comment %} <div class="text-right"> {% endcomment %}
+                            <li class="govuk-tag govuk-tag--top-100-priority-approval-pending text-right">>TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
+                        {% comment %} </div> {% endcomment %}
+                    {% elif barrier.top_priority_status == "APPROVED" %}
+                        {% comment %} <div class="text-right"> {% endcomment %}
+                            <li class="govuk-tag govuk-tag--top-100-priority text-right">TOP 100 PRIORITY BARRIER</li>
+                        {% comment %} </div> {% endcomment %}
+                    {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
+                        {% comment %} <div class="text-right"> {% endcomment %}
+                            <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+                        {% comment %} </div> {% endcomment %}
+                    {% elif barrier.top_priority_status == "RESOLVED" %}
+                        {% comment %} <div class="text-right"> {% endcomment %}
+                            <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY BARRIER</li>
+                        {% comment %} </div> {% endcomment %}
+                    {% endif %}
+                {% comment %} </div>
+                <div class=""> {% endcomment %}
+                    {% for tag in barrier.tags %}
+                        {% comment %} <div class="text-right"> {% endcomment %}
+                            <li class="govuk-tag govuk-tag--{{ tag.title|slugify }} text-right">{{ tag.title }}</li>
+                        {% comment %} </div> {% endcomment %}
+                    {% endfor %}
+                {% comment %} </div> {% endcomment %}
+            {% endspaceless %}
         </ul>
     {% endif %}
     <a class="barrier-tag-edit" href="{% url 'barriers:edit_tags' barrier.id %}">Edit tags</a>
