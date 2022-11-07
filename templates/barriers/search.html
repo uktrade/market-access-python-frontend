@@ -360,8 +360,7 @@
                                                 <div class="text-right">
                                                     <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY BARRIER</li>
                                                 </div>
-                                            {% endif %}
-                                            {% if barrier.priority_level %}
+                                            {% elif barrier.priority_level %}
                                                 {% if barrier.priority_level == "REGIONAL" %}
                                                     <li class="govuk-tag govuk-tag--regional-priority">REGIONAL PRIORITY</li>
                                                 {% elif barrier.priority_level == "COUNTRY" %}
