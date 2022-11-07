@@ -276,8 +276,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.is_valid() is False
         assert "priority_level" in form.errors
-        assert "priority_summary" in form.errors
-        assert form.errors["priority_summary"] == ["Top priority status is required"]
+        assert form.errors["priority_level"] == ["Select a priority type"]
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
@@ -286,13 +285,12 @@ class EditPriorityTestCase(MarketAccessTestCase):
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
-            data={"priority": "MEOW", "priority_summary": ""},
+            data={"priority_level": "MEOW", "priority_summary": ""},
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
         assert "priority_level" in form.errors
-        assert "priority_summary" in form.errors
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
@@ -307,7 +305,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
             ),
             data={
                 "priority_level": "WATCHLIST",
-                "top_barrier": "NONE",
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
             },
         )
 
@@ -331,8 +329,8 @@ class EditPriorityTestCase(MarketAccessTestCase):
             ),
             data={
                 "priority_level": "REGIONAL",
-                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
                 "priority_summary": "New summary",
+                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
             },
         )
         mock_patch.assert_called_with(
@@ -362,8 +360,33 @@ class EditPriorityTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.is_valid() is False
         assert "priority_level" in form.errors
-        assert "priority_summary" in form.errors
+        assert form.errors["priority_level"] == [
+            "Top 100 barriers must have regional or country level priority"
+        ]
         assert mock_patch.called is False
+
+    @patch("utils.api.resources.APIResource.patch")
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_approval_pending_barrier_cannot_be_watchlist(self, mock_user, mock_patch):
+        self.barrier["top_priority_status"] = "APPROVAL_PENDING"
+        mock_user.return_value = self.administrator
+        mock_patch.return_value = self.barrier
+        response = self.client.post(
+            reverse(
+                "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
+            ),
+            data={
+                "priority_level": "WATCHLIST",
+            },
+        )
+        mock_patch.assert_called_with(
+            id=self.barrier["id"],
+            priority_level="WATCHLIST",
+            tags=[1],
+            top_priority_status="",
+            top_priority_rejection_summary="",
+        )
+        assert response.status_code == HTTPStatus.FOUND
 
 
 class EditTermTestCase(MarketAccessTestCase):

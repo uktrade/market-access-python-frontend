@@ -17,7 +17,7 @@ ma.pages.topBarrierPriority = {
             "top-priority-request-notice"
         );
         const topPriorityWatchlistWarning = document.getElementById(
-            "top-priority-request-not-available-notice"
+            "watchlist-warning-text"
         );
 
         // Radio buttons for the "Which priority type" question
@@ -30,6 +30,9 @@ ma.pages.topBarrierPriority = {
             document.getElementById("top_barrier-1");
         const topPriorityConsiderationNoRadio =
             document.getElementById("top_barrier-2");
+
+        // Button to submit form
+        const submitButton = document.getElementById("submit-priority-form");
 
         // Functions to show/hide individual page componenets
         const showConsiderationQuestion = function () {
@@ -85,6 +88,20 @@ ma.pages.topBarrierPriority = {
             }
         };
 
+        // Functions to handle errors
+        const showError = function () {
+            // Get error elements
+            const errorBanner = document.getElementById("add-priority-errors");
+            const errorText = document.getElementById(
+                "missing-description-error"
+            );
+            // Make error visible
+            errorBanner.style = "display: inline-block";
+            errorText.style = "display: inline-block";
+            // Move user to top of form to see error message
+            window.scrollTo(0, 0);
+        };
+
         // Set initial visibility.
         hideConsiderationQuestion();
         hidePriorityNotice();
@@ -102,6 +119,17 @@ ma.pages.topBarrierPriority = {
             top_priority_status == "APPROVED"
         ) {
             showConsiderationQuestion();
+        }
+
+        // If the page has defaulted to watchlist with a Top Priority status (such as an error message triggering)
+        // Need to display watchlist/top priority warning
+        if (
+            watchlistRadioInput.checked == true &&
+            (top_priority_status == "APPROVAL_PENDING" ||
+                top_priority_status == "REMOVAL_PENDING" ||
+                top_priority_status == "APPROVED")
+        ) {
+            showPriorityWatchlistNotice();
         }
 
         // If any of the following situations are true, we need to display the priority notice
@@ -133,6 +161,7 @@ ma.pages.topBarrierPriority = {
         });
         watchlistRadioInput.addEventListener("change", function () {
             if (
+                top_priority_status == "" ||
                 top_priority_status == "NONE" ||
                 top_priority_status == "RESOLVED"
             ) {
@@ -147,38 +176,88 @@ ma.pages.topBarrierPriority = {
             }
         });
 
-        // The consider top priority question radio buttons
-        topPriorityConsiderationYesRadio.addEventListener(
-            "change",
-            function () {
-                if (
-                    top_priority_status == "NONE" ||
-                    top_priority_status == "RESOLVED"
-                ) {
-                    showPriorityNotice();
-                    showSummaryInput();
+        // The consider top priority question radio buttons - not present if top_priority
+        if (topPriorityConsiderationYesRadio != null) {
+            topPriorityConsiderationYesRadio.addEventListener(
+                "change",
+                function () {
+                    if (
+                        top_priority_status == "" ||
+                        top_priority_status == "NONE" ||
+                        top_priority_status == "RESOLVED"
+                    ) {
+                        showPriorityNotice();
+                        showSummaryInput();
+                    }
+                    if (
+                        top_priority_status == "APPROVAL_PENDING" ||
+                        top_priority_status == "REMOVAL_PENDING"
+                    ) {
+                        hideRejectionInput();
+                    }
                 }
+            );
+            topPriorityConsiderationNoRadio.addEventListener(
+                "change",
+                function () {
+                    if (
+                        top_priority_status == "" ||
+                        top_priority_status == "NONE" ||
+                        top_priority_status == "RESOLVED"
+                    ) {
+                        hidePriorityNotice();
+                        hideSummaryInput();
+                    }
+                    if (
+                        top_priority_status == "APPROVAL_PENDING" ||
+                        top_priority_status == "REMOVAL_PENDING"
+                    ) {
+                        showRejectionInput();
+                    }
+                }
+            );
+        }
+
+        // Check before submitting that summary is present, if required
+        submitButton.addEventListener("click", function (event) {
+            const descriptionSection = document.getElementById(
+                "priority_summary-container"
+            );
+            const rejectionSection = document.getElementById(
+                "top_priority_rejection_summary-container"
+            );
+
+            if (descriptionSection != null) {
+                const descriptionValue =
+                    document.getElementById("priority_summary").value;
                 if (
-                    top_priority_status == "APPROVAL_PENDING" ||
-                    top_priority_status == "REMOVAL_PENDING"
+                    descriptionValue.length < 1 &&
+                    topPriorityConsiderationYesRadio.checked == true
                 ) {
-                    hideRejectionInput();
+                    // Stop button submitting
+                    event.preventDefault();
+                    // Show error box and scroll to top of page
+                    showError();
+                    // Add error focus bar to description section
+                    descriptionSection.classList.add("govuk-form-group--error");
                 }
             }
-        );
-        topPriorityConsiderationNoRadio.addEventListener("change", function () {
-            if (
-                top_priority_status == "NONE" ||
-                top_priority_status == "RESOLVED"
-            ) {
-                hidePriorityNotice();
-                hideSummaryInput();
-            }
-            if (
-                top_priority_status == "APPROVAL_PENDING" ||
-                top_priority_status == "REMOVAL_PENDING"
-            ) {
-                showRejectionInput();
+
+            if (rejectionSection != null) {
+                const rejectionValue = document.getElementById(
+                    "top_priority_rejection_summary"
+                ).value;
+                if (
+                    rejectionValue.length < 1 &&
+                    topPriorityConsiderationNoRadio.checked == true
+                ) {
+                    // Stop button submitting
+                    event.preventDefault();
+                    // Show error box and scroll to top of page
+                    showError();
+                    // Add error focus bar to description section
+                    rejectionSection.classList.add("govuk-form-group--error");
+                }
             }
         });
     },
