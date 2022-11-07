@@ -57,7 +57,7 @@ class BarrierSearchForm(forms.Form):
         label="Top 100 priority barrier",
         choices=(
             ("APPROVED", "Top 100 priority barrier"),
-            ("APPROVAL_PENDING", "Pending removal"),
+            ("APPROVAL_PENDING", "Pending approval"),
             ("REMOVAL_PENDING", "Pending removal"),
             ("RESOLVED", "Resolved top 100 priority barrier"),
         ),
