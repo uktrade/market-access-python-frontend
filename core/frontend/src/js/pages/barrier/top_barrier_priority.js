@@ -132,6 +132,15 @@ ma.pages.topBarrierPriority = {
             showPriorityWatchlistNotice();
         }
 
+        // If we reload the page with a Top Priority barrier and watchlist selected
+        // Need to hide the consideration question
+        if (
+            watchlistRadioInput.checked == true &&
+            top_priority_status == "APPROVED"
+        ) {
+            hideConsiderationQuestion();
+        }
+
         // If any of the following situations are true, we need to display the priority notice
         // - If barrier is awaiting change approval
         if (
@@ -142,8 +151,11 @@ ma.pages.topBarrierPriority = {
         }
 
         // If any of the following situations are true, we need to display the priority summary
-        // - If barrier is already a top priority barrier
-        if (top_priority_status == "APPROVED") {
+        // - If barrier is already a top priority barrier and no is selected for top priority confirmation
+        if (
+            top_priority_status == "APPROVED" &&
+            topPriorityConsiderationNoRadio.checked == true
+        ) {
             showSummaryInput();
         }
 
@@ -171,6 +183,11 @@ ma.pages.topBarrierPriority = {
                 hidePriorityNotice();
                 hideSummaryInput();
                 hideRejectionInput();
+            } else if (top_priority_status == "APPROVED") {
+                topPriorityConsiderationYesRadio.checked = false;
+                topPriorityConsiderationNoRadio.checked = true;
+                hideConsiderationQuestion();
+                showPriorityWatchlistNotice();
             } else {
                 showPriorityWatchlistNotice();
             }
@@ -195,6 +212,9 @@ ma.pages.topBarrierPriority = {
                     ) {
                         hideRejectionInput();
                     }
+                    if (top_priority_status == "APPROVED") {
+                        hideSummaryInput();
+                    }
                 }
             );
             topPriorityConsiderationNoRadio.addEventListener(
@@ -214,6 +234,9 @@ ma.pages.topBarrierPriority = {
                     ) {
                         showRejectionInput();
                     }
+                    if (top_priority_status == "APPROVED") {
+                        showSummaryInput();
+                    }
                 }
             );
         }
@@ -232,8 +255,11 @@ ma.pages.topBarrierPriority = {
                     document.getElementById("priority_summary").value;
                 if (
                     descriptionValue.length < 1 &&
-                    topPriorityConsiderationYesRadio.checked == true
+                    topPriorityConsiderationYesRadio.checked == true &&
+                    top_priority_status != "APPROVED"
                 ) {
+                    // Description is required when requesting top priority - ignore when
+                    // the form is submitted for a barrier already in top priority status
                     // Stop button submitting
                     event.preventDefault();
                     // Show error box and scroll to top of page
