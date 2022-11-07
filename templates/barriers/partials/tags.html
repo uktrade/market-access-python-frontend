@@ -18,7 +18,7 @@
             {% endif %}
         </ul>
     {% endif %} {% endcomment %}
-    {% if barrier.tags or barrier.top_priority_status != "NONE" %}
+    {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
         <ul class="barrier-tag-list barrier-tag-list--inline">
             {% spaceless %}
                 {% comment %} <div class="overflow-hidden"> {% endcomment %}
@@ -39,6 +39,15 @@
                             <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY BARRIER</li>
                         {% comment %} </div> {% endcomment %}
                     {% endif %}
+                    {% if barrier.priority_level %}
+                    {% if barrier.priority_level == "REGIONAL" %}
+                        <li class="govuk-tag govuk-tag--regional-priority">REGIONAL PRIORITY</li>
+                    {% elif barrier.priority_level == "COUNTRY" %}
+                        <li class="govuk-tag govuk-tag--country-priority">COUNTRY PRIORITY</li>
+                    {% elif barrier.priority_level == "WATCHLIST" %}
+                        <li class="govuk-tag govuk-tag--watch-list">WATCHLIST</li>
+                    {% endif %}
+                {% endif %}
                 {% comment %} </div>
                 <div class=""> {% endcomment %}
                     {% for tag in barrier.tags %}
