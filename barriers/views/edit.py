@@ -222,16 +222,16 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
         )
         return super().get_context_data(**kwargs)
 
-    def get_form_class(self):
-        user = user_scope(self.request)["current_user"]
-        is_user_admin = user.has_permission("set_topprioritybarrier")
-        barrier = self.barrier
-        form_class = update_barrier_priority_form_factory(
-            barrier=barrier,
-            is_user_admin=is_user_admin,
-            BaseFormClass=UpdateBarrierTagsForm,
-        )
-        return form_class
+    # def get_form_class(self):
+    #     user = user_scope(self.request)["current_user"]
+    #     is_user_admin = user.has_permission("set_topprioritybarrier")
+    #     barrier = self.barrier
+    #     form_class = update_barrier_priority_form_factory(
+    #         barrier=barrier,
+    #         is_user_admin=is_user_admin,
+    #         BaseFormClass=UpdateBarrierTagsForm,
+    #     )
+    #     return form_class
 
 
 class BarrierEditTradeDirection(MetadataMixin, APIBarrierFormViewMixin, FormView):

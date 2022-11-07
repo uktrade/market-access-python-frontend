@@ -21,23 +21,18 @@
     {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
         <ul class="barrier-tag-list barrier-tag-list--inline">
             {% spaceless %}
-                {% comment %} <div class="overflow-hidden"> {% endcomment %}
-                    {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
-                        {% comment %} <div class="text-right"> {% endcomment %}
+                    {% comment %} {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
                             <li class="govuk-tag govuk-tag--top-100-priority-approval-pending text-right">>TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
-                        {% comment %} </div> {% endcomment %}
+
                     {% elif barrier.top_priority_status == "APPROVED" %}
-                        {% comment %} <div class="text-right"> {% endcomment %}
                             <li class="govuk-tag govuk-tag--top-100-priority text-right">TOP 100 PRIORITY BARRIER</li>
-                        {% comment %} </div> {% endcomment %}
+
                     {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                        {% comment %} <div class="text-right"> {% endcomment %}
                             <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
-                        {% comment %} </div> {% endcomment %}
+
                     {% elif barrier.top_priority_status == "RESOLVED" %}
-                        {% comment %} <div class="text-right"> {% endcomment %}
                             <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY BARRIER</li>
-                        {% comment %} </div> {% endcomment %}
+
                     {% endif %}
                     {% if barrier.priority_level %}
                     {% if barrier.priority_level == "REGIONAL" %}
@@ -47,7 +42,7 @@
                     {% elif barrier.priority_level == "WATCHLIST" %}
                         <li class="govuk-tag govuk-tag--watch-list">WATCHLIST</li>
                     {% endif %}
-                {% endif %}
+                {% endif %} {% endcomment %}
                 {% comment %} </div>
                 <div class=""> {% endcomment %}
                     {% for tag in barrier.tags %}
