@@ -8,7 +8,6 @@
 .barrier-tag-list {
     list-style: none;
     padding: 0;
-    // margin: 0 0 govuk-em( 0, 0 );
     margin-right: 0px;
 
     &--in-banner {
@@ -28,13 +27,6 @@
             max-width: none !important;
             margin-left: 0px !important;
         }
-        // width: 30%;
-        // text-align: left;
-        // // float: left;
-        // display: flex;
-        // justify-content: flex-start;
-        // flex-wrap: wrap;
-        // max-width: 30%;
     }
 
     .govuk-tag{

@@ -20,23 +20,14 @@
                     <ul class="barrier-tag-list barrier-tag-list--inline m0">
                         {% spaceless %}
                         {% if barrier.top_priority_status != "NONE" %}
-                            {% comment %} <div class="overflow-hidden"> {% endcomment %}
                                 {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
-                                    {% comment %} <div class="text-right"> {% endcomment %}
                                         <li class="govuk-tag govuk-tag--top-100-priority-approval-pending ">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
-                                    {% comment %} </div> {% endcomment %}
                                 {% elif barrier.top_priority_status == "APPROVED" %}
-                                    {% comment %} <div class=""> {% endcomment %}
                                         <li class="govuk-tag govuk-tag--top-100-priority ">TOP 100 PRIORITY BARRIER</li>
-                                    {% comment %} </div> {% endcomment %}
                                 {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                                    {% comment %} <div class=""> {% endcomment %}
                                         <li class="govuk-tag govuk-tag--top-100-priority-removal-pending ">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
-                                    {% comment %} </div> {% endcomment %}
                                 {% elif barrier.top_priority_status == "RESOLVED" %}
-                                    {% comment %} <div class=""> {% endcomment %}
                                         <li class="govuk-tag govuk-tag--top-100-priority-resolved ">RESOLVED TOP 100 PRIORITY BARRIER</li>
-                                    {% comment %} </div> {% endcomment %}
                                 {% endif %}
                             {% elif barrier.priority_level != "NONE" %}
                             {% if barrier.priority_level == "REGIONAL" %}

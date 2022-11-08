@@ -1,56 +1,10 @@
 <div class="barrier-tag-banner">
-    {% comment %} {% if barrier.tags or barrier.top_priority_status != "NONE" %}
-        <ul class="barrier-tag-list barrier-tag-list--in-banner">
-            {% spaceless %}
-                {% for tag in barrier.tags %}
-                <li class="govuk-tag">{{ tag.title }}</li>
-                {% endfor %}
-            {% endspaceless %}
-
-            {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
-                <li class="govuk-tag govuk-tag--yellow">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
-            {% elif barrier.top_priority_status == "APPROVED" %}
-                <li class="govuk-tag">TOP 100 PRIORITY BARRIER</li>
-            {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                <li class="govuk-tag govuk-tag--red">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
-            {% elif barrier.top_priority_status == "RESOLVED" %}
-                <li class="resolved-barrier-top-priority-tag">RESOLVED TOP 100 PRIORITY BARRIER</li>
-            {% endif %}
-        </ul>
-    {% endif %} {% endcomment %}
     {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
         <ul class="barrier-tag-list barrier-tag-list--inline">
             {% spaceless %}
-                    {% comment %} {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
-                            <li class="govuk-tag govuk-tag--top-100-priority-approval-pending text-right">>TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
-
-                    {% elif barrier.top_priority_status == "APPROVED" %}
-                            <li class="govuk-tag govuk-tag--top-100-priority text-right">TOP 100 PRIORITY BARRIER</li>
-
-                    {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                            <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
-
-                    {% elif barrier.top_priority_status == "RESOLVED" %}
-                            <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY BARRIER</li>
-
-                    {% endif %}
-                    {% if barrier.priority_level %}
-                    {% if barrier.priority_level == "REGIONAL" %}
-                        <li class="govuk-tag govuk-tag--regional-priority">REGIONAL PRIORITY</li>
-                    {% elif barrier.priority_level == "COUNTRY" %}
-                        <li class="govuk-tag govuk-tag--country-priority">COUNTRY PRIORITY</li>
-                    {% elif barrier.priority_level == "WATCHLIST" %}
-                        <li class="govuk-tag govuk-tag--watch-list">WATCHLIST</li>
-                    {% endif %}
-                {% endif %} {% endcomment %}
-                {% comment %} </div>
-                <div class=""> {% endcomment %}
                     {% for tag in barrier.tags %}
-                        {% comment %} <div class="text-right"> {% endcomment %}
                             <li class="govuk-tag govuk-tag--{{ tag.title|slugify }} text-right">{{ tag.title }}</li>
-                        {% comment %} </div> {% endcomment %}
                     {% endfor %}
-                {% comment %} </div> {% endcomment %}
             {% endspaceless %}
         </ul>
     {% endif %}
