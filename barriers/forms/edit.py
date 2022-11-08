@@ -173,8 +173,8 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
         label="Milestones and deliverables",
         help_text=(
             "Tell us whether your milestones and deliverables from your project plan"
-            " are on track or not, any new risks or issues and how you’re managing them,"
-            " and if you need any support."
+            " are on track or not, any new risks or issues and how you’re managing"
+            " them, and if you need any support."
         ),
         widget=forms.Textarea,
         error_messages={
@@ -263,21 +263,27 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
 
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
-    regional_help_text = "For example, it could be relevant to several countries or part of a regional trade plan."
+    regional_help_text = (
+        "For example, it could be relevant to several countries or part of a regional"
+        " trade plan."
+    )
     country_help_text = "Actively being worked on by you or your team."
     watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
         (
             "REGIONAL",
-            f"<span class='govuk-body'>Regional priority</span> <span class='govuk-hint'>{regional_help_text}</span>",
+            "<span class='govuk-body'>Regional priority</span> <span"
+            f" class='govuk-hint'>{regional_help_text}</span>",
         ),
         (
             "COUNTRY",
-            f"<span class='govuk-body'>Country priority</span> <span class='govuk-hint'>{country_help_text}</span>",
+            "<span class='govuk-body'>Country priority</span> <span"
+            f" class='govuk-hint'>{country_help_text}</span>",
         ),
         (
             "WATCHLIST",
-            f"<span class='govuk-body'>Watch list</span> <span class='govuk-hint'>{watchlist_help_text}</span>",
+            "<span class='govuk-body'>Watch list</span> <span"
+            f" class='govuk-hint'>{watchlist_help_text}</span>",
         ),
     ]
     priority_level = forms.ChoiceField(
@@ -372,17 +378,6 @@ class UpdateBarrierTagsForm(APIFormMixin, forms.Form):
             "tags": self.cleaned_data["tags"],
         }
 
-        if self.fields.get("top_barrier"):
-            patch_args["top_priority_status"] = self.cleaned_data["top_barrier"]
-
-        if self.fields.get("priority_summary"):
-            patch_args["priority_summary"] = self.cleaned_data["priority_summary"]
-
-        if self.fields.get("top_priority_rejection_summary"):
-            patch_args["top_priority_rejection_summary"] = self.cleaned_data[
-                "top_priority_rejection_summary"
-            ]
-
         client.barriers.patch(**patch_args)
 
 
@@ -476,8 +471,8 @@ def update_barrier_priority_form_factory(
         if show_reason_for_top_priority_field:
             label_text = "Describe why this should be a top 100 priority barrier"
             label_hint = (
-                "Provide the barrier's economic value with any supporting data, strategic importance,"
-                " and estimated resolution month and year."
+                "Provide the barrier's economic value with any supporting data,"
+                " strategic importance, and estimated resolution month and year."
             )
 
             # If barrier is already top priority, change the labeling to reflect removal request
