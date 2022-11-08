@@ -237,8 +237,6 @@ class EditTagsTestCase(MarketAccessTestCase):
             reverse("barriers:edit_tags", kwargs={"barrier_id": self.barrier["id"]}),
             data={
                 "tags": [1],
-                "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
-                "priority_summary": "New summary",
             },
         )
 
@@ -247,8 +245,6 @@ class EditTagsTestCase(MarketAccessTestCase):
             tags=[
                 "1",
             ],
-            priority_summary="New summary",
-            top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
         )
         assert response.status_code == HTTPStatus.FOUND
 
