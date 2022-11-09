@@ -264,8 +264,8 @@ class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
     regional_help_text = (
-        "For example, it could be relevant to several countries or part of a regional"
-        " trade plan."
+        "It could be relevant to several countries or part of a regional trade plan,"
+        " for example, but should be agreed with your regional market access coordinator"
     )
     country_help_text = "Actively being worked on by you or your team."
     watchlist_help_text = "Of potential interest but not actively being worked on."
@@ -478,6 +478,7 @@ def update_barrier_priority_form_factory(
         if show_top_priority_status_field:
             top_barrier = forms.ChoiceField(
                 label=top_barrier_status_field_label,
+                help_text="This is the government's global list of priority market access barriers",
                 choices=top_barrier_status_field_choices,
                 widget=forms.RadioSelect,
                 required=False,

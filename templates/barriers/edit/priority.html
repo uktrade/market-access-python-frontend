@@ -91,6 +91,7 @@
             <div id="{{ form.top_barrier.name }}" class="govuk-form-group{% if form.top_barrier.errors %} govuk-form-group--error{% endif %}">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.top_barrier.label }}</legend>
+                    <span class="govuk-hint">{{ form.top_priority.help_text }}</span>
 
                     {% form_field_error form "top_barrier" %}
 
