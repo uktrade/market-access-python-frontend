@@ -188,6 +188,7 @@ ma.pages.topBarrierPriority = {
                 topPriorityConsiderationNoRadio.checked = true;
                 hideConsiderationQuestion();
                 showPriorityWatchlistNotice();
+                showSummaryInput();
             } else {
                 showPriorityWatchlistNotice();
             }
