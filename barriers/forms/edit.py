@@ -10,6 +10,7 @@ from barriers.constants import (
     TOP_PRIORITY_BARRIER_STATUS_APPROVE_REQUEST_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES,
+    TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES,
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
@@ -458,8 +459,10 @@ def update_barrier_priority_form_factory(
             )
             show_reason_for_rejection_field = True
             show_reason_for_top_priority_field = False
-
-        # Show regular label for admin
+        elif barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.RESOLVED:
+            top_barrier_status_field_choices = (
+                TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES
+            )
     else:
         # regular user
         if is_top_priority_in_request_phase:
@@ -468,6 +471,10 @@ def update_barrier_priority_form_factory(
         elif barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.NONE:
             top_barrier_status_field_choices = (
                 TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES
+            )
+        elif barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.RESOLVED:
+            top_barrier_status_field_choices = (
+                TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES
             )
         else:
             top_barrier_status_field_choices = (
