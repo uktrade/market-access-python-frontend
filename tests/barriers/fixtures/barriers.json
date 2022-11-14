@@ -85,6 +85,7 @@
             "name": "Medium",
             "order": 2
         },
+        "priority_level": "COUNTRY",
         "priority_summary": "",
         "trade_category": "",
         "wto_profile": {
@@ -344,6 +345,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "NONE",
         "is_summary_sensitive": false,
         "categories": [
             {
@@ -403,6 +405,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "REGIONAL",
         "is_summary_sensitive": false,
         "categories": [
             {
@@ -463,6 +466,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "WATCHLIST",
         "is_summary_sensitive": false,
         "categories": [],
         "created_on": "2019-06-19T15:17:23.776000Z",

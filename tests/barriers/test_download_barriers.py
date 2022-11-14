@@ -27,7 +27,6 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
                     "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
                     "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
                 ],
-                "priority": ["HIGH", "MEDIUM"],
                 "status": ["1", "2", "7"],
                 "user": "1",
                 "ordering": "-reported",
@@ -48,7 +47,6 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
             category="130,141",
-            priority="HIGH,MEDIUM",
             status="1,2,7",
             user="1",
             archived="0",

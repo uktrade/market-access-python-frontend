@@ -93,6 +93,7 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/barrier/status.js`,
                         `${assetsSrcPath}/js/pages/barrier/type.js`,
                         `${assetsSrcPath}/js/pages/barrier/edit.js`,
+                        `${assetsSrcPath}/js/pages/barrier/priority.js`,
                         `${assetsSrcPath}/js/pages/barrier/top_barrier_priority.js`,
                         `${assetsSrcPath}/js/pages/barrier/detail.js`,
                         `${assetsSrcPath}/js/pages/barrier/team.js`,

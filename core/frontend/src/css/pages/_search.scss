@@ -183,15 +183,15 @@
 
 	@include mq( $from: 550px ){
 		float: left;
-		width: 60%;
+		width: 65%;
 	}
 
 	@include mq( $from: tablet ){
-		width: 55%;
+		width: 70%;
 	}
 
 	@include mq( $from: 1024px ){
-		width: 72%;
+		width: 70%;
 	}
 }
 
@@ -213,7 +213,7 @@
 	}
 
 	@include mq( $from: 1024px ){
-		width: 25%;
+		width: 30%;
 	}
 
 	.barrier-status-badge {
