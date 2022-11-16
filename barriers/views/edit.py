@@ -107,7 +107,7 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
     def remove_all_priorities(self, is_admin=False, rejection_reason=""):
         # Remove all priority tags
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        if not is_admin:
+        if is_admin:
             client.barriers.patch(
                 self.barrier.id, priority_level="NONE", top_priority_status="NONE"
             )
