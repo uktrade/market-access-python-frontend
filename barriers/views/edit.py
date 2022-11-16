@@ -112,12 +112,18 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
                 self.barrier.id, priority_level="NONE", top_priority_status="NONE"
             )
         else:
-            client.barriers.patch(
-                self.barrier.id,
-                priority_level="NONE",
-                top_priority_status="REMOVAL_PENDING",
-                rejection_reason=rejection_reason,
-            )
+            if self.barrier.top_priority_status == "APPROVED":
+                client.barriers.patch(
+                    self.barrier.id,
+                    priority_level="NONE",
+                    top_priority_status="REMOVAL_PENDING",
+                    rejection_reason=rejection_reason,
+                )
+            else:
+                client.barriers.patch(
+                    self.barrier.id,
+                    priority_level="NONE",
+                )
 
     def get_context_data(self, **kwargs):
 
