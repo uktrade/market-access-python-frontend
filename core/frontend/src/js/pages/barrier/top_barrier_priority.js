@@ -1,6 +1,7 @@
 ma.pages.topBarrierPriority = {
     topPriorityVisiblity: function (top_priority_status) {
         console.log("top priority status: " + top_priority_status);
+
         // Collect HTML components
         // Section which will ask either for admins to approve a barrier top priority change, or anyone to request a change
         const topPriorityConsiderationContainer =
@@ -34,6 +35,9 @@ ma.pages.topBarrierPriority = {
 
         // Button to submit form
         const submitButton = document.getElementById("submit-priority-form");
+
+        const rejectTopPriorityRequestRadio =
+            document.getElementById("top_barrier-2");
 
         // Functions to show/hide individual page componenets
         const showConsiderationQuestion = function () {
@@ -194,6 +198,21 @@ ma.pages.topBarrierPriority = {
                 showPriorityWatchlistNotice();
             }
         });
+
+        if (rejectTopPriorityRequestRadio != null) {
+            rejectTopPriorityRequestRadio.addEventListener(
+                "change",
+                function () {
+                    const checked = rejectTopPriorityRequestRadio.checked;
+                    console.log("rejection value", checked);
+                    if (checked) {
+                        showRejectionInput();
+                    } else {
+                        hideRejectionInput();
+                    }
+                }
+            );
+        }
 
         // The consider top priority question radio buttons - not present if top_priority
         if (topPriorityConsiderationYesRadio != null) {
