@@ -73,7 +73,7 @@ ma.pages.barrier.priority = {
                         confirmPrioritySection.style = "display: none";
                         priorityRejectionForm.style = "display: block";
                     } else {
-                        window.location.href + "?confirm-priority=no";
+                        window.location.href = "?confirm-priority=no";
                         // console.log("Cancelling form");
                         // const cancelPriorityButton =
                         //     document.getElementById("cancel-priority");
