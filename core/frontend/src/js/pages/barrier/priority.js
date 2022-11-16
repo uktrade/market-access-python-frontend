@@ -23,9 +23,18 @@ ma.pages.barrier.priority = {
             console.log("User is not admin");
         }
 
+        const showYesNo = top_priority_status == "APPROVED" || "NONE";
+
         // if container doesn't exist, return
         if (!confirmPrioritySection) {
             return;
+        }
+        if (showYesNo) {
+            priorityForm.style = "display: none";
+            confirmPrioritySection.style = "display: block";
+        } else {
+            priorityForm.style = "display: block";
+            confirmPrioritySection.style = "display: none";
         }
         // Hide non-js button, display JS enabled button
         confirmPriorityButton.style = "display: none";
@@ -58,6 +67,7 @@ ma.pages.barrier.priority = {
                     window.location.href = "?confirm-priority=no";
                 } else {
                     if (top_priority_status == "APPROVED") {
+                        confirmPrioritySection.style = "display: none";
                         priorityRejectionForm.style = "display: block";
                     } else {
                         window.location.href + "?confirm-priority=no";
