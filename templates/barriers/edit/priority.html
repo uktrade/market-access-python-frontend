@@ -64,11 +64,14 @@
             </form>
         </div>
 
-        <form id="priority-rejection-form" action="" method="POST" class="restrict-width priority-page-hidden">
-
+        <form id="priority-rejection-form" action="" method="GET" class="restrict-width priority-page-hidden">
+            {% csrf_token %}
+            <input type="hidden" name="confirm-priority" value="no">
+            <input type="hidden" name="top_barrier" value="REMOVAL_PENDING" />
+            <input type="hidden" name="priority_level" value="NONE" />
             <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
                 <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
-                    <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
+                    <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">Describe why this should be removed as a top 100 priority barrier</label>
 
                     {% form_field_error form "top_priority_rejection_summary" %}
 

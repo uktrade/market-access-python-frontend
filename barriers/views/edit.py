@@ -94,19 +94,30 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             user = user_scope(self.request)["current_user"]
             is_user_admin = user.has_permission("set_topprioritybarrier")
             # if the user is admin remove all priorities
-            if is_user_admin:
-                self.remove_all_priorities()
-                return redirect("barriers:barrier_detail", barrier_id=self.barrier.id)
+            rejection_reason = self.request.GET.get("rejection-reason", "")
+            self.remove_all_priorities(
+                is_admin=is_user_admin, rejection_reason=rejection_reason
+            )
+            return redirect("barriers:barrier_detail", barrier_id=self.barrier.id)
+
             return super().get(request, *args, **kwargs)
         else:
             return super().get(request, *args, **kwargs)
 
-    def remove_all_priorities(self):
+    def remove_all_priorities(self, is_admin=False, rejection_reason=""):
         # Remove all priority tags
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        client.barriers.patch(
-            self.barrier.id, priority_level="NONE", top_priority_status="NONE"
-        )
+        if not is_admin:
+            client.barriers.patch(
+                self.barrier.id, priority_level="NONE", top_priority_status="NONE"
+            )
+        else:
+            client.barriers.patch(
+                self.barrier.id,
+                priority_level="NONE",
+                top_priority_status="REMOVAL_PENDING",
+                rejection_reason=rejection_reason,
+            )
 
     def get_context_data(self, **kwargs):
 
