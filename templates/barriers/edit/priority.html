@@ -41,7 +41,6 @@
     </div>
         <!-- Disply the initial form if; the user has not selected an answer yet OR the barrier does not have a priority set-->
         <!-- create error tag above this div - under form error banner form, use JS to add govuk-form-group--error if button is clicked with no radio selected-->
-        confirm priority {{ confirm_priority }}
         <input type="hidden" name="is_user_admin" id="is_user_admin" value="{{ is_user_admin }}">
         <div id="confirm-priority-form-section" {% if confirm_priority == "yes" or confirm_priority == "no" %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
             <form id="confirm-priority-form" name="confirm-priority-form" action="">
@@ -68,11 +67,13 @@
         <form id="priority-rejection-form" action="" method="POST" class="restrict-width priority-page-hidden">
 
             <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
-                <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
+                <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
+                    <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
 
-                {% form_field_error form "top_priority_rejection_summary" %}
+                    {% form_field_error form "top_priority_rejection_summary" %}
 
-                <textarea class="govuk-textarea" id="{{ form.top_priority_rejection_summary.name }}" name="{{ form.top_priority_rejection_summary.name }}" rows="5">{% if form.description.value %}{{ form.top_priority_rejection_summary.value }}{% endif %}</textarea>
+                    <textarea class="govuk-textarea" id="{{ form.top_priority_rejection_summary.name }}" name="{{ form.top_priority_rejection_summary.name }}" rows="5">{% if form.description.value %}{{ form.top_priority_rejection_summary.value }}{% endif %}</textarea>
+                </div>
             </div>
 
             <input id="submit-priority-form" type="submit" value="Save and return" class="govuk-button">
