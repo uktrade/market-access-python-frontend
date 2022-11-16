@@ -10,7 +10,7 @@
             );
         }
         if ( ma.pages.barrier.priority ){
-            ma.pages.barrier.priority.priorityFormReveal()
+            ma.pages.barrier.priority.priorityFormReveal("{{top_priority_status}}")
         }
     </script>
 {% endblock %}
@@ -39,10 +39,11 @@
             </ul>
         </div>
     </div>
-
         <!-- Disply the initial form if; the user has not selected an answer yet OR the barrier does not have a priority set-->
         <!-- create error tag above this div - under form error banner form, use JS to add govuk-form-group--error if button is clicked with no radio selected-->
-        <div id="confirm-priority-form-section" {% if confirm_priority == "yes" or confirm_priority == "no" or is_top_priority or is_approval_pending or is_removal_pending %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
+        confirm priority {{ confirm_priority }}
+        <input type="hidden" name="is_user_admin" id="is_user_admin" value="{{ is_user_admin }}">
+        <div id="confirm-priority-form-section" {% if confirm_priority == "yes" or confirm_priority == "no" %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
             <form id="confirm-priority-form" name="confirm-priority-form" action="">
                 <span class="govuk-heading-s govuk-!-margin-bottom-3">Is this barrier a priority?</span>
                 <div class="govuk-radios">
@@ -64,9 +65,22 @@
             </form>
         </div>
 
+        <form id="priority-rejection-form" action="" method="POST" class="restrict-width priority-page-hidden">
+
+            <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
+
+                {% form_field_error form "top_priority_rejection_summary" %}
+
+                <textarea class="govuk-textarea" id="{{ form.top_priority_rejection_summary.name }}" name="{{ form.top_priority_rejection_summary.name }}" rows="5">{% if form.description.value %}{{ form.top_priority_rejection_summary.value }}{% endif %}</textarea>
+            </div>
+
+            <input id="submit-priority-form" type="submit" value="Save and return" class="govuk-button">
+            <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
+        </form>
+
         <!-- Form is hidden until first question is answered -->
-        {% comment %} <form id="priority-form" action="" method="POST" {% if confirm_priority != "yes" and not is_top_priority and not is_approval_pending and not is_removal_pending %}class="restrict-width priority-page-hidden"{% else %}class="restrict-width"{% endif %}> {% endcomment %}
-        <form id="priority-form" action="" method="POST" {% if is_top_priority and not is_approval_pending and not is_removal_pending %}class="restrict-width priority-page-hidden"{% else %}class="restrict-width"{% endif %}>
+        <form id="priority-form" action="" method="POST" class="restrict-width priority-page-hidden">
             {% csrf_token %}
 
             <!-- Priority assignment section -->

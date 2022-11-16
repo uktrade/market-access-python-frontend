@@ -1,5 +1,5 @@
 ma.pages.barrier.priority = {
-    priorityFormReveal: function () {
+    priorityFormReveal: function (top_priority_status) {
         const confirmPrioritySection = document.getElementById(
             "confirm-priority-form-section"
         );
@@ -10,6 +10,18 @@ ma.pages.barrier.priority = {
             "confirm-priority-button-js"
         );
         const errorBanner = document.getElementById("add-priority-errors");
+        const isUserAdmin =
+            document.getElementById("is_user_admin").value == "True";
+
+        const priorityRejectionForm = document.getElementById(
+            "priority-rejection-form"
+        );
+
+        if (isUserAdmin) {
+            console.log("User is admin");
+        } else {
+            console.log("User is not admin");
+        }
 
         // if container doesn't exist, return
         if (!confirmPrioritySection) {
@@ -24,6 +36,7 @@ ma.pages.barrier.priority = {
                 "confirm-priority-yes"
             );
             const noRadioInput = document.getElementById("confirm-priority-no");
+            console.log("handleInitialAnswerSubmission");
             if (yesRadioInput.checked == true) {
                 // Yes selected, show form proper, hide initial question
                 const priorityForm = document.getElementById("priority-form");
@@ -33,12 +46,27 @@ ma.pages.barrier.priority = {
                 errorBanner.style = "display: none";
             } else if (noRadioInput.checked == true) {
                 // No selected, redirect back to barrier page, copy behaviour of cancel button
-                const priorityForm = document.getElementById("priority-form");
-                priorityForm.style = "display: block";
-                confirmPrioritySection.style = "display: none";
+                // const priorityForm = document.getElementById("priority-form");
+                // priorityForm.style = "display: block";
+                // confirmPrioritySection.style = "display: none";
                 // const cancelPriorityButton =
                 //     document.getElementById("cancel-priority");
                 // window.location.href = cancelPriorityButton.href;
+                if (isUserAdmin) {
+                    console.log("Redirecting to admin barrier page");
+                    // window.location.href =
+                    window.location.href = "?confirm-priority=no";
+                } else {
+                    if (top_priority_status == "APPROVED") {
+                        priorityRejectionForm.style = "display: block";
+                    } else {
+                        window.location.href + "?confirm-priority=no";
+                        // console.log("Cancelling form");
+                        // const cancelPriorityButton =
+                        //     document.getElementById("cancel-priority");
+                        // window.location.href = cancelPriorityButton.href;
+                    }
+                }
             } else {
                 // make error appear
                 const errorText = document.getElementById(

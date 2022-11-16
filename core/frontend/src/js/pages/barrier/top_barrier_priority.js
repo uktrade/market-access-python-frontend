@@ -1,5 +1,6 @@
 ma.pages.topBarrierPriority = {
     topPriorityVisiblity: function (top_priority_status) {
+        console.log("top priority status: " + top_priority_status);
         // Collect HTML components
         // Section which will ask either for admins to approve a barrier top priority change, or anyone to request a change
         const topPriorityConsiderationContainer =
