@@ -25,6 +25,7 @@ ma.pages.barrier.priority = {
 
         const showYesNo = top_priority_status == "APPROVED" || "NONE";
 
+        const priorityForm = document.getElementById("priority-form");
         // if container doesn't exist, return
         if (!confirmPrioritySection) {
             return;
@@ -48,7 +49,6 @@ ma.pages.barrier.priority = {
             console.log("handleInitialAnswerSubmission");
             if (yesRadioInput.checked == true) {
                 // Yes selected, show form proper, hide initial question
-                const priorityForm = document.getElementById("priority-form");
                 priorityForm.style = "display: block";
                 confirmPrioritySection.style = "display: none";
                 // Ensure error for initial form is not visible
