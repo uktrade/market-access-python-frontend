@@ -58,15 +58,8 @@ ma.pages.barrier.priority = {
                 errorBanner.style = "display: none";
             } else if (noRadioInput.checked == true) {
                 // No selected, redirect back to barrier page, copy behaviour of cancel button
-                // const priorityForm = document.getElementById("priority-form");
-                // priorityForm.style = "display: block";
-                // confirmPrioritySection.style = "display: none";
-                // const cancelPriorityButton =
-                //     document.getElementById("cancel-priority");
-                // window.location.href = cancelPriorityButton.href;
                 if (isUserAdmin) {
                     console.log("Redirecting to admin barrier page");
-                    // window.location.href =
                     window.location.href = "?confirm-priority=no";
                 } else {
                     if (top_priority_status == "APPROVED") {
@@ -74,10 +67,6 @@ ma.pages.barrier.priority = {
                         priorityRejectionForm.style = "display: block";
                     } else {
                         window.location.href = "?confirm-priority=no";
-                        // console.log("Cancelling form");
-                        // const cancelPriorityButton =
-                        //     document.getElementById("cancel-priority");
-                        // window.location.href = cancelPriorityButton.href;
                     }
                 }
             } else {
