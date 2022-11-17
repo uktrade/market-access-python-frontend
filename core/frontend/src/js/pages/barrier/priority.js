@@ -1,6 +1,5 @@
 ma.pages.barrier.priority = {
     priorityFormReveal: function (top_priority_status) {
-        console.log("top priority status: " + top_priority_status);
         const confirmPrioritySection = document.getElementById(
             "confirm-priority-form-section"
         );
@@ -18,15 +17,8 @@ ma.pages.barrier.priority = {
             "priority-rejection-form"
         );
 
-        if (isUserAdmin) {
-            console.log("User is admin");
-        } else {
-            console.log("User is not admin");
-        }
-
         const showYesNo =
             top_priority_status == "APPROVED" || top_priority_status == "NONE";
-        console.log("show yes no: " + showYesNo);
 
         const priorityForm = document.getElementById("priority-form");
         // if container doesn't exist, return
@@ -49,7 +41,6 @@ ma.pages.barrier.priority = {
                 "confirm-priority-yes"
             );
             const noRadioInput = document.getElementById("confirm-priority-no");
-            console.log("handleInitialAnswerSubmission");
             if (yesRadioInput.checked == true) {
                 // Yes selected, show form proper, hide initial question
                 priorityForm.style = "display: block";
@@ -59,7 +50,6 @@ ma.pages.barrier.priority = {
             } else if (noRadioInput.checked == true) {
                 // No selected, redirect back to barrier page, copy behaviour of cancel button
                 if (isUserAdmin) {
-                    console.log("Redirecting to admin barrier page");
                     window.location.href = "?confirm-priority=no";
                 } else {
                     if (top_priority_status == "APPROVED") {
