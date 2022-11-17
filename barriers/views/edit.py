@@ -133,14 +133,6 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         # If there is an error in the submission, we also do not re-display the first question.
         add_priority_confirmation = self.request.GET.get("confirm-priority", "")
         kwargs["confirm_priority"] = add_priority_confirmation
-        # if (
-        #     add_priority_confirmation == "yes"
-        #     or self.barrier.priority_level != "NONE"
-        #     or self.request.method == "POST"
-        # ):
-        #     # Reload the page and display the full priority form
-        #     kwargs["confirm_priority"] = "yes"
-
         # Add info on the user's permissions
         user = user_scope(self.request)["current_user"]
         is_user_admin = user.has_permission("set_topprioritybarrier")
