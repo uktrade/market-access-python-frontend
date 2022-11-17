@@ -1,5 +1,5 @@
 ma.pages.barrier.priority = {
-    priorityFormReveal: function () {
+    priorityFormReveal: function (top_priority_status) {
         const confirmPrioritySection = document.getElementById(
             "confirm-priority-form-section"
         );
@@ -10,10 +10,27 @@ ma.pages.barrier.priority = {
             "confirm-priority-button-js"
         );
         const errorBanner = document.getElementById("add-priority-errors");
+        const isUserAdmin =
+            document.getElementById("is_user_admin").value == "True";
 
+        const priorityRejectionForm = document.getElementById(
+            "priority-rejection-form"
+        );
+
+        const showYesNo =
+            top_priority_status == "APPROVED" || top_priority_status == "NONE";
+
+        const priorityForm = document.getElementById("priority-form");
         // if container doesn't exist, return
         if (!confirmPrioritySection) {
             return;
+        }
+        if (showYesNo) {
+            priorityForm.style = "display: none";
+            confirmPrioritySection.style = "display: block";
+        } else {
+            priorityForm.style = "display: block";
+            confirmPrioritySection.style = "display: none";
         }
         // Hide non-js button, display JS enabled button
         confirmPriorityButton.style = "display: none";
@@ -26,16 +43,22 @@ ma.pages.barrier.priority = {
             const noRadioInput = document.getElementById("confirm-priority-no");
             if (yesRadioInput.checked == true) {
                 // Yes selected, show form proper, hide initial question
-                const priorityForm = document.getElementById("priority-form");
                 priorityForm.style = "display: block";
                 confirmPrioritySection.style = "display: none";
                 // Ensure error for initial form is not visible
                 errorBanner.style = "display: none";
             } else if (noRadioInput.checked == true) {
                 // No selected, redirect back to barrier page, copy behaviour of cancel button
-                const cancelPriorityButton =
-                    document.getElementById("cancel-priority");
-                window.location.href = cancelPriorityButton.href;
+                if (isUserAdmin) {
+                    window.location.href = "?confirm-priority=no";
+                } else {
+                    if (top_priority_status == "APPROVED") {
+                        confirmPrioritySection.style = "display: none";
+                        priorityRejectionForm.style = "display: block";
+                    } else {
+                        window.location.href = "?confirm-priority=no";
+                    }
+                }
             } else {
                 // make error appear
                 const errorText = document.getElementById(
