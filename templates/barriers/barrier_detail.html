@@ -452,6 +452,7 @@
     <section class="barrier-content">
 
         {% if barrier.is_resolved or barrier.is_partially_resolved or barrier.is_hibernated %}
+        {% endif %}
 
             <div class="barrier-status-details">
                 <span class="barrier-status-details__icon barrier-status-details__icon--{{ barrier.status.modifier }}">
@@ -461,21 +462,33 @@
                             <path d="M21.6 0L9.6 12L4 6.4L0 10.4L9.6 20L25.6 4L21.6 0Z" fill="#006435" />
                         </svg>
 
-                    {% else %}
+                    {% endif %}
+
+                    {% if barrier.is_dormant %}
 
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10.9573 9.37476C10.9573 8.03905 11.3176 6.78937 11.9416 5.71059C12.0928 5.44964 11.8648 5.12717 11.5725 5.20195C8.20306 6.06723 5.76604 9.25092 6.07886 12.9581C6.37479 16.4566 9.20223 19.3122 12.6983 19.6395C15.1229 19.8667 17.3291 18.9113 18.8184 17.2881C19.0195 17.0686 18.8478 16.7124 18.5506 16.7248C18.4718 16.7284 18.3918 16.7301 18.3118 16.7301C14.2508 16.7301 10.9573 13.4374 10.9573 9.37476ZM25 12.5C25 14.1415 24.6767 15.767 24.0485 17.2835C23.4203 18.8001 22.4996 20.1781 21.3388 21.3388C20.1781 22.4996 18.8001 23.4203 17.2835 24.0485C15.767 24.6767 14.1415 25 12.5 25C10.8585 25 9.23303 24.6767 7.71646 24.0485C6.19989 23.4203 4.8219 22.4996 3.66116 21.3388C2.50043 20.1781 1.57969 18.8001 0.951505 17.2835C0.323321 15.767 -4.75086e-07 14.1415 5.29359e-08 12.5C-4.75086e-07 10.8585 0.323321 9.23303 0.951505 7.71646C1.57969 6.19989 2.50043 4.8219 3.66116 3.66116C4.8219 2.50043 6.19989 1.57969 7.71646 0.951505C9.23303 0.323321 10.8585 -4.99897e-07 12.5 2.81248e-08C14.1415 -4.99897e-07 15.767 0.323321 17.2835 0.951505C18.8001 1.57969 20.1781 2.50043 21.3388 3.66116C22.4996 4.8219 23.4203 6.19989 24.0485 7.71646C24.6767 9.23303 25 10.8585 25 12.5Z" fill="#6F777B" />
                     </svg>
+                    {% endif %}
+
+                    {% if barrier.is_open %}
+                        <svg width="20" height="20" viewBox="0 0 100 100" fill="#00703c" xmlns="http://www.w3.org/2000/svg" style="position:relative;top:3px;">
+                        <circle cx="50" cy="50" r="50" fill="#00703c"/>
+                      </svg>
 
                     {% endif %}
                 </span>
-                <h2 class="barrier-status-details__heading">Barrier {% if barrier.is_partially_resolved %}partially resolved{% elif barrier.is_resolved %}resolved{% else %}dormant{% endif %} <span class="barrier-status-details__heading__caption">in {{ barrier.status_date|date:"F Y" }}</span></h2>
+                <h2 class="barrier-status-details__heading">Barrier
+                    {% if barrier.is_partially_resolved %}partially resolved
+                    {% elif barrier.is_resolved %}resolved
+                    {% elif barrier.is_open %}open
+                    {% else %}dormant{% endif %}
+                    <span class="barrier-status-details__heading__caption">in {{ barrier.status_date|date:"F Y" }}</span></h2>
                 <h3 class="barrier-status-details__sub-heading">Summary {% if barrier.is_resolved or barrier.is_partially_resolved %} of resolution{% endif %}</h3>
                 <p class="barrier-status-details__text">{{ barrier.status_summary|linebreaksbr }}</p>
                 <a href="{% url 'barriers:edit_status' barrier.id %}"> Edit</a>
             </div>
 
-        {% endif %}
         <div class="information-completeness">
             <h2 class="section-heading">
                 Information completeness

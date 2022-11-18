@@ -313,6 +313,8 @@
                                 <dt class="filter-results-list__item__definitions__key">Updated:</dt>
                                 <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
 
+                                <dt class="filter-results-list__item__definitions__key">Status:</dt>
+                                <dd class="filter-results-list__item__definitions__value">{{ barrier.status.name }}</dd>
                                 {% if barrier.status.id == '4' %}{# 4: RESOLVED_IN_FULL #}
                                     <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
                                     <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
