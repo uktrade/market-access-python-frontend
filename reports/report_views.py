@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 
-from barriers.constants import STATUSES
 from barriers.views.commodities import BarrierEditCommodities
 from reports.model_forms.new_report_barrier_about_and_summary import (
     NewReportBarrierAboutAndSummary,
@@ -246,7 +245,7 @@ class NewReportBarrierStatusView(ReportFormViewBase):
         form = context_data["form"]
         context_data.update(
             {
-                "OPEN_PENDING_ACTION": STATUSES.OPEN_PENDING_ACTION,
+                "OPEN_PENDING_ACTION": "1",
                 "valid_status_values": [
                     choice[0] for choice in form.fields["status"].choices
                 ],

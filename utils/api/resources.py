@@ -145,8 +145,8 @@ class BarriersResource(APIResource):
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
             url = f"barriers/{barrier_id}/unknown"
-        elif status == Statuses.OPEN_PENDING_ACTION:
-            url = f"barriers/{barrier_id}/open-action_required"
+        # elif status == Statuses.OPEN_PENDING_ACTION:
+        #     url = f"barriers/{barrier_id}/open-action_required"
         elif status == Statuses.OPEN_IN_PROGRESS:
             url = f"barriers/{barrier_id}/open-in-progress"
         elif status == Statuses.RESOLVED_IN_PART:

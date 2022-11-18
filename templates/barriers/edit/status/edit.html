@@ -6,6 +6,15 @@
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
+{% block body_script %}
+    <script>
+        ma.pages.barrier.status( {
+            validTypes: {{ valid_status_values|safe }},
+            openPendingActionValue: "{{ OPEN_PENDING_ACTION }}"
+        } );
+    </script>
+{% endblock %}
+
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Barrier status' %}
@@ -13,6 +22,8 @@
 
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
+
+        {{ valid_status_values|safe }}
 
         {% if object.is_resolved or object.is_partially_resolved %}
             <div id="{{ form.status_date.name }}" class="govuk-form-group{% if form.status_date.errors %} govuk-form-group--error{% endif %}">
@@ -27,6 +38,41 @@
                 </fieldset>
             </div>
         {% endif %}
+
+
+        <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
+
+                {% form_field_error form "status" %}
+
+                <div class="govuk-radios status govuk-radios--conditional" data-module="radios">
+                    {% for choice in form.fields.status.enhanced_choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                   id="{{ choice.value }}"
+                                   name="{{ form.status.name }}"
+                                   type="radio"
+                                   value="{{ choice.value }}"
+                                   {% if form.status.value == choice.value %}
+                                   checked="checked"
+                                   {% endif %}
+                                   data-aria-controls="conditional-{{ choice.value }}"
+                                   aria-controls="conditional-{{ choice.value }}"
+                                   aria-describedby="{{ choice.value }}-item-hint"
+                            >
+                            <label class="govuk-label govuk-radios__label" for="{{ choice.value }}">{{ choice.name }}</label>
+                            <span id="{{ choice.value }}-item-hint" class="govuk-hint govuk-radios__hint">{{ choice.help_text }}</span>
+                        </div>
+
+                        <div class="govuk-radios__conditional -govuk-radios__conditional--hidden" id="conditional-{{ choice.value }}">
+                            suboform:
+                            {{ choice.subform.as_html }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
 
         <div id="{{ form.status_summary.name }}" class="govuk-form-group{% if form.status_summary.errors %} govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-label--s" for="status_summary">{{ form.status_summary.label }}</label>

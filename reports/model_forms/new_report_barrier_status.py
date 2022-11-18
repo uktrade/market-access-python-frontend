@@ -8,7 +8,6 @@ from barriers.constants import STATUSES, STATUSES_HELP_TEXT
 from barriers.forms.statuses import (
     DormantForm,
     OpenInProgressForm,
-    OpenPendingForm,
     ResolvedInFullForm,
     ResolvedInPartForm,
 )
@@ -60,7 +59,7 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
     """
 
     status_to_form_class_map = {
-        STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
+        # STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
         STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
         STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
         STATUSES.RESOLVED_IN_FULL: ResolvedInFullForm,

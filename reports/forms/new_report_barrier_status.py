@@ -1,10 +1,9 @@
 from django import forms
 
 from barriers.constants import STATUSES, STATUSES_HELP_TEXT
-from barriers.forms.statuses import (
+from barriers.forms.statuses import (  # OpenPendingForm,
     DormantForm,
     OpenInProgressForm,
-    OpenPendingForm,
     ResolvedInFullForm,
     ResolvedInPartForm,
 )
@@ -64,7 +63,7 @@ class NewReportBarrierStatusForm(SubformMixin, forms.Form):
         widget=forms.RadioSelect,
         error_messages={"required": "Choose a status"},
         subform_classes={
-            STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
+            # STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
             STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
             STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
             STATUSES.RESOLVED_IN_FULL: ResolvedInFullForm,

@@ -47,7 +47,7 @@ class CausedByTradingBlocHistoryItem(BaseHistoryItem):
         country_trading_bloc = self.get_country_trading_bloc()
         if country_trading_bloc:
             self.field_name = (
-                f"Was this barrier caused by a regulation introduced by "
+                "Was this barrier caused by a regulation introduced by "
                 f"{country_trading_bloc['name']}?"
             )
 
@@ -246,7 +246,7 @@ class StatusHistoryItem(BaseHistoryItem):
         value["show_summary"] = value["status"] in (
             Statuses.OPEN_IN_PROGRESS,
             Statuses.UNKNOWN,
-            Statuses.OPEN_PENDING_ACTION,
+            # Statuses.OPEN_PENDING_ACTION,
         )
         return value
 
