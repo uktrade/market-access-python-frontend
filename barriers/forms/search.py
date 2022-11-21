@@ -386,7 +386,7 @@ class BarrierSearchForm(forms.Form):
         self.fields["region"].choices = choices
 
     def set_status_choices(self):
-        status_ids = ("1", "2", "3", "4", "5", "7")
+        status_ids = ("2", "3", "4", "5")
         choices = [
             (id, value)
             for id, value in self.metadata.data["barrier_status"].items()
