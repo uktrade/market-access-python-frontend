@@ -307,15 +307,10 @@ class BarrierChangeStatusForm(SubformMixin, forms.Form):
     def __init__(self, barrier, token, *args, **kwargs):
         self.barrier = barrier
         self.token = token
+        kwargs["initial"] = {
+            "status": barrier.status,
+        }
         super().__init__(*args, **kwargs)
-        # self.remove_current_status_from_choices()
-
-    def remove_current_status_from_choices(self):
-        self.fields["status"].choices = [
-            choice
-            for choice in self.fields["status"].choices
-            if choice[0] != self.barrier.status["id"]
-        ]
 
     def save(self):
         from utils.api.client import MarketAccessAPIClient

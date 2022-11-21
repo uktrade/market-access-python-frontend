@@ -306,6 +306,10 @@ class Barrier(APIModel):
         return self.status["id"] == "5"
 
     @property
+    def is_uknown(self):
+        return self.status["id"] == "7"
+
+    @property
     def progress_status(self):
         return self.data.get("progress_status")
 
