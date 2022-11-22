@@ -7,16 +7,6 @@ from core.tests import MarketAccessTestCase
 
 
 class ChangeStatusTestCase(MarketAccessTestCase):
-    def test_existing_status_not_in_choices(self):
-        response = self.client.get(
-            reverse("barriers:change_status", kwargs={"barrier_id": self.barrier["id"]})
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        status_choice_values = [choice[0] for choice in form.fields["status"].choices]
-        assert str(self.barrier["status"]["id"]) not in status_choice_values
-
     @patch("utils.api.client.BarriersResource.set_status")
     def test_no_status_gets_error(self, mock_set_status):
         response = self.client.post(
