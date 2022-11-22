@@ -60,7 +60,7 @@ class SearchTestCase(MarketAccessTestCase):
         assert len(region_choices) == len(region_list)
 
         status_choices = form.fields["status"].choices
-        assert len(status_choices) == 6
+        assert len(status_choices) == 4
 
     @patch("utils.api.resources.APIResource.list")
     def test_search_filters(self, mock_list):
@@ -82,7 +82,7 @@ class SearchTestCase(MarketAccessTestCase):
                     "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
                     "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
                 ],
-                "status": ["1", "2", "7"],
+                "status": ["1", "2"],
                 "user": "1",
                 "ordering": "-reported",
             },
@@ -105,7 +105,7 @@ class SearchTestCase(MarketAccessTestCase):
             "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
             "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
         ]
-        assert form.cleaned_data["status"] == ["1", "2", "7"]
+        assert form.cleaned_data["status"] == ["1", "2"]
         assert form.cleaned_data["user"] == "1"
 
         mock_list.assert_called_with(
@@ -125,7 +125,7 @@ class SearchTestCase(MarketAccessTestCase):
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
             category="130,141",
-            status="1,2,7",
+            status="1,2",
             user="1",
             archived="0",
         )
