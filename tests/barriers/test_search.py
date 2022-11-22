@@ -125,7 +125,7 @@ class SearchTestCase(MarketAccessTestCase):
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
             category="130,141",
-            status="1,2",
+            status="2",
             user="1",
             archived="0",
         )
@@ -332,7 +332,7 @@ class SearchTestCase(MarketAccessTestCase):
         assert pagination["total_pages"] == 13
         assert pagination["pages"][0]["label"] == 1
         assert pagination["pages"][0]["url"] == (
-            "status=1&status=2&status=3&status=4&status=5&ordering=-reported&page=1"
+            "status=2&status=3&status=4&status=5&ordering=-reported&page=1"
         )
         page_labels = [page["label"] for page in pagination["pages"]]
         assert page_labels == [1, "...", 5, 6, 7, 8, "...", 13]
@@ -523,31 +523,6 @@ class SearchTestCase(MarketAccessTestCase):
             archived="0",
             status="3",
             status_date_resolved_in_part="2021-01-01,2022-01-31",
-        )
-
-    @patch("utils.api.resources.APIResource.list")
-    def test_resolution_date_filters_open_pending_action(self, mock_list):
-        response = self.client.get(
-            reverse("barriers:search"),
-            data={
-                "status": ["2"],
-                "resolved_date_from_month_open_pending_action": "01",
-                "resolved_date_from_year_open_pending_action": "2021",
-                "resolved_date_to_month_open_pending_action": "01",
-                "resolved_date_to_year_open_pending_action": "2022",
-                "ordering": "-reported",
-            },
-        )
-
-        assert response.status_code == HTTPStatus.OK
-
-        mock_list.assert_called_with(
-            ordering="-reported",
-            limit=settings.API_RESULTS_LIMIT,
-            offset=0,
-            archived="0",
-            status="2",
-            status_date_open_pending_action="2021-01-01,2022-01-31",
         )
 
     @patch("utils.api.resources.APIResource.list")

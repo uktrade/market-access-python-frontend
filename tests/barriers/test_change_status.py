@@ -31,90 +31,6 @@ class ChangeStatusTestCase(MarketAccessTestCase):
         assert mock_set_status.called is False
 
     @patch("utils.api.client.BarriersResource.set_status")
-    def test_open_pending_errors(self, mock_set_status):
-        response = self.client.post(
-            reverse(
-                "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={"status": "1"},
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "status" not in form.errors
-        assert "pending_summary" in form.errors
-        assert "pending_type" in form.errors
-        assert "pending_type_other" not in form.errors
-        assert len(form.errors) == 2
-        assert mock_set_status.called is False
-
-    @patch("utils.api.client.BarriersResource.set_status")
-    def test_open_pending_success(self, mock_set_status):
-        response = self.client.post(
-            reverse(
-                "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={
-                "status": "1",
-                "pending_summary": "Test pending summary",
-                "pending_type": "FOR_GOVT",
-            },
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        mock_set_status.assert_called_with(
-            barrier_id=self.barrier["id"],
-            status="1",
-            sub_status="FOR_GOVT",
-            status_summary="Test pending summary",
-        )
-
-    @patch("utils.api.client.BarriersResource.set_status")
-    def test_open_pending_errors_other(self, mock_set_status):
-        response = self.client.post(
-            reverse(
-                "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={
-                "status": "1",
-                "pending_summary": "Test pending summary",
-                "pending_type": "OTHER",
-            },
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "status" not in form.errors
-        assert "pending_summary" not in form.errors
-        assert "pending_type" not in form.errors
-        assert "pending_type_other" in form.errors
-        assert len(form.errors) == 1
-        assert mock_set_status.called is False
-
-    @patch("utils.api.client.BarriersResource.set_status")
-    def test_open_pending_success_other(self, mock_set_status):
-        response = self.client.post(
-            reverse(
-                "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={
-                "status": "1",
-                "pending_summary": "Test pending summary",
-                "pending_type": "OTHER",
-                "pending_type_other": "Other test",
-            },
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        mock_set_status.assert_called_with(
-            barrier_id=self.barrier["id"],
-            status="1",
-            sub_status="OTHER",
-            sub_status_other="Other test",
-            status_summary="Test pending summary",
-        )
-
-    @patch("utils.api.client.BarriersResource.set_status")
     def test_open_in_progress_errors(self, mock_set_status):
         response = self.client.post(
             reverse(
@@ -151,7 +67,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
 
     @patch("utils.api.client.BarriersResource.set_status")
     def test_partially_resolved_errors(self, mock_set_status):
-        self.barrier["status"]["id"] = 1
+        self.barrier["status"]["id"] = 2
         response = self.client.post(
             reverse(
                 "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
@@ -237,7 +153,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
 
     @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_errors(self, mock_set_status):
-        self.barrier["status"]["id"] = 1
+        self.barrier["status"]["id"] = 2
         response = self.client.post(
             reverse(
                 "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
@@ -256,7 +172,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
 
     @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_future_date_error(self, mock_set_status):
-        self.barrier["status"]["id"] = 1
+        self.barrier["status"]["id"] = 2
         response = self.client.post(
             reverse(
                 "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
@@ -280,7 +196,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
 
     @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_bad_date_error(self, mock_set_status):
-        self.barrier["status"]["id"] = 1
+        self.barrier["status"]["id"] = 2
         response = self.client.post(
             reverse(
                 "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
@@ -304,7 +220,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
 
     @patch("utils.api.client.BarriersResource.set_status")
     def test_fully_resolved_success(self, mock_set_status):
-        self.barrier["status"]["id"] = 1
+        self.barrier["status"]["id"] = 2
         response = self.client.post(
             reverse(
                 "barriers:change_status", kwargs={"barrier_id": self.barrier["id"]}
