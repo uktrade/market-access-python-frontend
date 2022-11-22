@@ -59,7 +59,6 @@ class NewReportBarrierStatusForm(SubformMixin, NewReportBaseForm):
     """
 
     status_to_form_class_map = {
-        # STATUSES.OPEN_PENDING_ACTION: OpenPendingForm,
         STATUSES.OPEN_IN_PROGRESS: OpenInProgressForm,
         STATUSES.RESOLVED_IN_PART: ResolvedInPartForm,
         STATUSES.RESOLVED_IN_FULL: ResolvedInFullForm,
