@@ -238,7 +238,6 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
         super().__init__(*args, **kwargs)
         self.is_resolved = is_resolved
         self.barrier = barrier
-        # self.token = token
         if is_resolved:
             self.fields[
                 "status_summary"
@@ -261,7 +260,7 @@ class UpdateBarrierStatusForm(APIFormMixin, forms.Form):
         )
         if status_date > datetime.date.today():
             self.add_error("month", "Date resolved must be this month or in the past")
-            self.add_error("year", "Date resolved must be this month or in the past")
+            self.add_error("year", "Date resolved must be this year or in the past")
         else:
             self.cleaned_data["status_date"] = status_date
 
