@@ -226,7 +226,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                     "sub_status_other": None,
                 },
                 "new_value": {
-                    "status": "1",
+                    "status": "2",
                     "status_date": "2019-10-28",
                     "status_summary": "It's pending action.",
                     "sub_status": "UK_GOVT",
@@ -237,7 +237,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         )
         assert item.field_name == "Status"
         assert item.old_value["status_text"] == "Unknown"
-        assert item.new_value["status_text"] == "Open: Pending action (UK government)"
+        assert item.new_value["status_text"] == "Open"
 
     def test_tags(self):
         item = HistoryItem(

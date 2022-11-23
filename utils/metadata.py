@@ -62,11 +62,6 @@ class Metadata:
             "modifier": "unfinished",
             "hint": "Barrier is unfinished",
         },
-        # Statuses.OPEN_PENDING_ACTION: {
-        #     "name": "Pending",
-        #     "modifier": "open-pending-action",
-        #     "hint": "Barrier is awaiting action",
-        # },
         Statuses.OPEN_IN_PROGRESS: {
             "name": "Open",
             "modifier": "open-in-progress",
@@ -217,15 +212,7 @@ class Metadata:
         sub_status_other=None,
     ):
         if status_id in self.STATUS_INFO.keys():
-            name = self.get_status(status_id)["name"]
-            # if sub_status and status_id == Statuses.OPEN_PENDING_ACTION:
-            #     sub_status_text = self.get_sub_status_text(
-            #         sub_status,
-            #         sub_status_other,
-            #     )
-            #     return f"{name} ({sub_status_text})"
-            # return name
-
+            return self.get_status(status_id)["name"]
         return status_id
 
     def get_status_choices(self):

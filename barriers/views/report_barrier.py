@@ -130,18 +130,6 @@ def get_report_barrier_answers(barrier: Report):
                     "name": "What is the status of the barrier?",
                     "value": barrier.status_display,
                 },
-                # {
-                #     "name": "Who is due to take action?",
-                #     "hide": not barrier.is_status(Statuses.OPEN_PENDING_ACTION),
-                #     "value": barrier.sub_status_display or "-",
-                # },
-                # {
-                #     "name": "Describe briefly why this barrier is pending action",
-                #     "hide": not barrier.is_status(Statuses.OPEN_PENDING_ACTION),
-                #     "value": barrier.status_summary
-                #     if barrier.is_status(Statuses.OPEN_PENDING_ACTION)
-                #     else "-",
-                # },
                 {
                     "name": "Describe briefly why work on this barrier is in progress",
                     "hide": not barrier.is_status(Statuses.OPEN_IN_PROGRESS),

@@ -246,7 +246,6 @@ class StatusHistoryItem(BaseHistoryItem):
         value["show_summary"] = value["status"] in (
             Statuses.OPEN_IN_PROGRESS,
             Statuses.UNKNOWN,
-            # Statuses.OPEN_PENDING_ACTION,
         )
         return value
 

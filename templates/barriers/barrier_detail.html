@@ -490,7 +490,7 @@
                     <span class="barrier-status-details__heading__caption">in {{ barrier.status_date|date:"F Y" }}</span></h2>
                 <h3 class="barrier-status-details__sub-heading">Summary</h3>
                 <p class="barrier-status-details__text">{{ barrier.status_summary|linebreaksbr }}</p>
-                <a href="{% url 'barriers:change_status' barrier.id %}"> Edit</a>
+                <a href="{% url 'barriers:change_status' barrier.id %}"> Edit status</a>
             </div>
 
         <div class="information-completeness">

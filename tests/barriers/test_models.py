@@ -98,7 +98,7 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
         }
         assert saved_search.readable_filters["status"] == {
             "label": "Barrier status",
-            "readable_value": "Open: In progress, Resolved: In part",
+            "readable_value": "Open, Resolved: In part",
             "value": ["2", "3"],
         }
         assert saved_search.readable_filters["show"] == {
