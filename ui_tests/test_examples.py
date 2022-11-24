@@ -28,7 +28,9 @@ def test_example_2(page: Page):
 
 
 @patch("utils.api.resources.BarriersResource.get_full_history")
-def test_example_patch_api(mock_history: Mock, page: Page, barrier_history):
+def test_example_patch_api(
+    mock_history: Mock, page: Page, barrier_history, test_barrier_id
+):
     """
     This example shows how to patch an API call to return a value from a fixture
     Fixtures are defined in conftest.py
@@ -38,7 +40,7 @@ def test_example_patch_api(mock_history: Mock, page: Page, barrier_history):
     mock_history.return_value = barrier_history
     history_path = reverse(
         "barriers:history",
-        kwargs={"barrier_id": "7daba55b-f421-4952-98ee-4f5b408f0af3"},
+        kwargs={"barrier_id": test_barrier_id},
     )
     page.goto(f"{BASE_URL}{history_path}")
     history_items = page.locator(".history-item")

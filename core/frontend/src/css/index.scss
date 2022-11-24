@@ -7,6 +7,7 @@ $govuk-fonts-path: '../govuk-public/fonts/';
 @import 'layout';
 @import "spacing";
 @import 'error';
+@import 'utility';
 
 @import 'vendor/all';
 @import 'govuk-custom/all';

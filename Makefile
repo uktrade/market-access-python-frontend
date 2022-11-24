@@ -16,11 +16,11 @@ help: ## This help.
 # ==================================================
 .PHONY: django-run
 django-run: ## Run django's dev server (tailing).
-	docker-compose exec web bash -c "./manage.py runserver 0:9000"
+	docker-compose exec web bash -c "./manage.py runserver 0:9001"
 
 .PHONY: django-run-detached
 django-run-detached: ## Run django's dev server (silently).
-	docker-compose exec -d web bash -c "./manage.py runserver 0:9000"
+	docker-compose exec -d web bash -c "./manage.py runserver 0:9001"
 
 .PHONY: django-shell
 django-shell: ## Drop into django's shell (with iphython).

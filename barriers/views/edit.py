@@ -1,10 +1,11 @@
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import FormView
 
 from barriers.constants import TOP_PRIORITY_BARRIER_STATUS
 from barriers.forms.edit import (
+    EditBarrierPriorityForm,
     UpdateBarrierEstimatedResolutionDateForm,
-    UpdateBarrierPriorityForm,
     UpdateBarrierProductForm,
     UpdateBarrierSourceForm,
     UpdateBarrierSummaryForm,
@@ -17,6 +18,7 @@ from barriers.forms.edit import (
     UpdateTradeDirectionForm,
     update_barrier_priority_form_factory,
 )
+from utils.api.client import MarketAccessAPIClient
 from utils.context_processors import user_scope
 from utils.metadata import MetadataMixin
 
@@ -83,14 +85,58 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
     """
 
     template_name = "barriers/edit/priority.html"
-    # form_class = UpdateBarrierPriorityForm
+
+    def get(self, request, *args, **kwargs):
+        # For non-js users, if they have submitted the first question, the page reloads
+        # If confirm_priority is no, then redirect to the barrier detail page.
+        add_priority_confirmation = self.request.GET.get("confirm-priority", "")
+        if add_priority_confirmation == "no":
+            user = user_scope(self.request)["current_user"]
+            is_user_admin = user.has_permission("set_topprioritybarrier")
+            # if the user is admin remove all priorities
+            rejection_reason = self.request.GET.get("rejection-reason", "")
+            self.remove_all_priorities(
+                is_admin=is_user_admin, rejection_reason=rejection_reason
+            )
+            return redirect("barriers:barrier_detail", barrier_id=self.barrier.id)
+
+            return super().get(request, *args, **kwargs)
+        else:
+            return super().get(request, *args, **kwargs)
+
+    def remove_all_priorities(self, is_admin=False, rejection_reason=""):
+        # Remove all priority tags
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        if is_admin:
+            client.barriers.patch(
+                self.barrier.id, priority_level="NONE", top_priority_status="NONE"
+            )
+        else:
+            if self.barrier.top_priority_status == "APPROVED":
+                client.barriers.patch(
+                    self.barrier.id,
+                    priority_level="NONE",
+                    top_priority_status="REMOVAL_PENDING",
+                    rejection_reason=rejection_reason,
+                )
+            else:
+                client.barriers.patch(
+                    self.barrier.id,
+                    priority_level="NONE",
+                )
 
     def get_context_data(self, **kwargs):
-        # Add info on the user's permissions
 
+        # For non-js users, if they have submitted the first question, the page reloads
+        # If yes, then confirm_priority is set to 'yes' so the frontend displays the full form.
+        # We will display the full form if the barrier already has a set priority.
+        # If there is an error in the submission, we also do not re-display the first question.
+        add_priority_confirmation = self.request.GET.get("confirm-priority", "")
+        kwargs["confirm_priority"] = add_priority_confirmation
+        # Add info on the user's permissions
         user = user_scope(self.request)["current_user"]
         is_user_admin = user.has_permission("set_topprioritybarrier")
-        # is_user_admin = False
+        kwargs["is_user_admin"] = is_user_admin
 
         REQUEST_PHASE_STATUSES = [
             TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING,
@@ -102,6 +148,10 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
 
         kwargs["user_is_top_priority_moderator"] = is_user_admin
         kwargs["is_top_priority_requested"] = is_top_priority_requested
+        kwargs["top_priority_status"] = self.barrier.top_priority_status
+        kwargs["is_top_priority"] = (
+            self.barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.APPROVED
+        )
         kwargs["is_approval_pending"] = (
             self.barrier.top_priority_status
             == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
@@ -119,7 +169,7 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         form_class = update_barrier_priority_form_factory(
             barrier=barrier,
             is_user_admin=is_user_admin,
-            BaseFormClass=UpdateBarrierPriorityForm,
+            BaseFormClass=EditBarrierPriorityForm,
         )
         return form_class
 
@@ -129,10 +179,9 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         )
 
         return {
-            "priority": self.barrier.priority["code"],
+            "priority_level": self.barrier.priority_level,
             "top_barrier": top_barrier_initial,
             "existing_tags_list": self.barrier.tags,
-            "test_value": 123,
         }
 
 
@@ -197,17 +246,6 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
             == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
         )
         return super().get_context_data(**kwargs)
-
-    def get_form_class(self):
-        user = user_scope(self.request)["current_user"]
-        is_user_admin = user.has_permission("set_topprioritybarrier")
-        barrier = self.barrier
-        form_class = update_barrier_priority_form_factory(
-            barrier=barrier,
-            is_user_admin=is_user_admin,
-            BaseFormClass=UpdateBarrierTagsForm,
-        )
-        return form_class
 
 
 class BarrierEditTradeDirection(MetadataMixin, APIBarrierFormViewMixin, FormView):

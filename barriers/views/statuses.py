@@ -1,7 +1,6 @@
 from django.urls import reverse
 from django.views.generic import FormView
 
-from barriers.constants import Statuses
 from barriers.forms.statuses import BarrierChangeStatusForm, UpdateBarrierStatusForm
 
 from .mixins import APIBarrierFormViewMixin, BarrierMixin
@@ -14,6 +13,19 @@ class BarrierEditStatus(APIBarrierFormViewMixin, FormView):
     def is_barrier_resolved(self):
         return self.object.is_resolved or self.object.is_partially_resolved
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        form = context_data["form"]
+        context_data.update(
+            {
+                "barrier": self.barrier,
+                "valid_status_values": [
+                    choice[0] for choice in form.fields["status"].choices
+                ],
+            }
+        )
+        return context_data
+
     def get_initial(self):
         initial = {"status_summary": self.object.status_summary}
 
@@ -23,6 +35,8 @@ class BarrierEditStatus(APIBarrierFormViewMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs["barrier"] = self.barrier
+        kwargs["token"] = self.request.session.get("sso_token")
         kwargs["is_resolved"] = self.is_barrier_resolved()
         return kwargs
 
@@ -37,7 +51,6 @@ class BarrierChangeStatus(BarrierMixin, FormView):
         context_data.update(
             {
                 "barrier": self.barrier,
-                "OPEN_PENDING_ACTION": Statuses.OPEN_PENDING_ACTION,
                 "valid_status_values": [
                     choice[0] for choice in form.fields["status"].choices
                 ],

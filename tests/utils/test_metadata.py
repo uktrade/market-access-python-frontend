@@ -78,8 +78,7 @@ class MetadataTestCase(MarketAccessTestCase):
     def test_get_status(self):
         metadata = get_metadata()
         assert metadata.get_status("0")["name"] == "Unfinished"
-        assert metadata.get_status("1")["name"] == "Open: Pending action"
-        assert metadata.get_status("2")["name"] == "Open: In progress"
+        assert metadata.get_status("2")["name"] == "Open"
         assert metadata.get_status("3")["name"] == "Resolved: In part"
         assert metadata.get_status("4")["name"] == "Resolved: In full"
         assert metadata.get_status("5")["name"] == "Dormant"
@@ -88,13 +87,7 @@ class MetadataTestCase(MarketAccessTestCase):
 
     def test_get_status_text(self):
         metadata = get_metadata()
-        assert metadata.get_status_text("2") == "Open: In progress"
-        assert metadata.get_status_text("1", "UK_GOVT") == (
-            "Open: Pending action (UK government)"
-        )
-        assert metadata.get_status_text("1", "OTHER", "Pending other") == (
-            "Open: Pending action (Pending other)"
-        )
+        assert metadata.get_status_text("2") == "Open"
 
     def test_get_term(self):
         metadata = get_metadata()

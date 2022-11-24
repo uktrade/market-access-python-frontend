@@ -55,20 +55,3 @@ class EditStatusTestCase(MarketAccessTestCase):
         assert "status_summary" not in form.errors
         assert "status_date" in form.errors
         assert mock_patch.called is False
-
-    @patch("utils.api.resources.APIResource.patch")
-    def test_success(self, mock_patch):
-        response = self.client.post(
-            reverse("barriers:edit_status", kwargs={"barrier_id": self.barrier["id"]}),
-            data={
-                "status_date_0": "1",
-                "status_date_1": "2020",
-                "status_summary": "Test summary",
-            },
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        mock_patch.assert_called_with(
-            id=self.barrier["id"],
-            status_date="2020-01-01",
-            status_summary="Test summary",
-        )

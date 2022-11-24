@@ -1,42 +1,57 @@
 <section class="barrier-summary">
 
-    <div class="barrier-summary__heading">
-        <p class="barrier-summary__code">{{ barrier.code }}</p>
-        <h1 class="barrier-summary__heading__text">{{ barrier.title }}</h1>
-        <p class="barrier-summary__heading__country"> in {{ barrier.location }}</p>
-
-        {% if not hide_links and not barrier.archived %}
-            <p class="barrier-summary__edit-links">
-                <a href="{% url 'barriers:edit_title' barrier.id %}">Edit title</a>
-                or
-                <a href="{% url 'barriers:edit_location' barrier.id %}">location</a>
-            </p>
-        {% endif %}
+    <div class="barrier-summary__heading flex justify-between align-end">
+        <div>
+            <p class="barrier-summary__code">{{ barrier.code }}</p>
+            <h1 class="barrier-summary__heading__text">{{ barrier.title }}</h1>
+            <p class="barrier-summary__heading__country"> in {{ barrier.location }}</p>
+            <!-- Tag work will go here to be above the change links in layout -->
+            {% if not hide_links and not barrier.archived %}
+                <div class="barrier-summary__edit-links">
+                    <a href="{% url 'barriers:edit_title' barrier.id %}">Edit title</a>
+                    or
+                    <a href="{% url 'barriers:edit_location' barrier.id %}">location</a>
+                </div>
+            {% endif %}
+        </div>
+        <div>
+            {% if not hide_priority %}
+                <div class="barrier-summary__status">
+                    <ul class="barrier-tag-list barrier-tag-list--inline m0">
+                        {% spaceless %}
+                        {% if barrier.top_priority_status != "NONE" %}
+                                {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
+                                        <li class="govuk-tag govuk-tag--top-100-priority-approval-pending ">TOP 100 PRIORITY BARRIER - APPROVAL PENDING</li>
+                                {% elif barrier.top_priority_status == "APPROVED" %}
+                                        <li class="govuk-tag govuk-tag--top-100-priority ">TOP 100 PRIORITY BARRIER</li>
+                                {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
+                                        <li class="govuk-tag govuk-tag--top-100-priority-removal-pending ">TOP 100 PRIORITY BARRIER - REMOVAL PENDING</li>
+                                {% elif barrier.top_priority_status == "RESOLVED" %}
+                                        <li class="govuk-tag govuk-tag--top-100-priority-resolved ">RESOLVED TOP 100 PRIORITY BARRIER</li>
+                                {% endif %}
+                            {% elif barrier.priority_level != "NONE" %}
+                            {% if barrier.priority_level == "REGIONAL" %}
+                        <li class="govuk-tag govuk-tag--regional-priority">REGIONAL PRIORITY</li>
+                    {% elif barrier.priority_level == "COUNTRY" %}
+                        <li class="govuk-tag govuk-tag--country-priority">COUNTRY PRIORITY</li>
+                    {% elif barrier.priority_level == "WATCHLIST" %}
+                        <li class="govuk-tag govuk-tag--watch-list">WATCH LIST</li>
+                    {% endif %}
+                            {% endif %}
+                        {% endspaceless %}
+                    </ul>
+                    <div class="barrier-summary__status__edit-links">
+                    {% if not hide_links and not barrier.archived %}
+                        <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">
+                            <span class="sr-only govuk-visually-hidden">Activate link to change barrier priority.</span>
+                            Change priority
+                        </a>
+                    {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
 
-    {% if not hide_priority %}
-        <div class="barrier-summary__status">
-            <div class="barrier-summary__status__badge barrier-status-badge barrier-status-badge--{{ barrier.status.modifier }}">
-                <strong>{{ barrier.status.name }}</strong>
-                <div class="barrier-summary__priority">
-                    <span class="priority-marker priority-marker--{{ barrier.priority.code|lower}}"></span><strong>{{ barrier.priority.name }}</strong> priority
-                </div>
-            </div>
 
-            <div class="barrier-summary__status__edit-links">
-            {% if not hide_links and not barrier.archived %}
-                Change
-                <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:change_status' barrier.id %}">
-                    <span class="sr-only govuk-visually-hidden">Activate link to change barrier status.</span>
-                    status
-                </a>
-                or
-                <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">
-                    <span class="sr-only govuk-visually-hidden">Activate link to change barrier priority.</span>
-                    priority
-                </a>
-            {% endif %}
-            </div>
-        </div>
-    {% endif %}
 </section>

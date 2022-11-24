@@ -5,14 +5,12 @@
 {% block body_script %}
     <script>
         if( ma.pages.topBarrierPriority ){
-            ma.pages.topBarrierPriority.optionalRejectionSummary(
-                "top_barrier",
-                "top_priority_rejection_summary-container"
+            ma.pages.topBarrierPriority.topPriorityVisiblity(
+                "{{top_priority_status}}"
             );
-            ma.pages.topBarrierPriority.toggleNoticeOnPriorityRadioChange(
-                "top_barrier",
-                "top-priority-request-notice"
-            );
+        }
+        if ( ma.pages.barrier.priority ){
+            ma.pages.barrier.priority.priorityFormReveal("{{top_priority_status}}")
         }
     </script>
 {% endblock %}
@@ -23,114 +21,172 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Change priority of the barrier' %}
+    {% include 'partials/heading.html' with text='Add a priority to this barrier' %}
     {% form_error_banner form %}
-
-    <form action="" method="POST" class="restrict-width">
-        {% csrf_token %}
-
-        <div id="{{ form.priority.name }}" class="govuk-form-group{% if form.priority.errors %} govuk-form-group--error{% endif %}">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.priority.label }}</legend>
-                <span class="govuk-hint">{{ form.priority.help_text }}</span>
-
-                {% form_field_error form "priority" %}
-
+    <!-- Inclue error section for problems outside of Django form framework -->
+    <div id="add-priority-errors" class="govuk-error-summary priority-page-hidden" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li id="confirm-priority-error" class="priority-page-hidden">
+                    <a href="#confirm-priority-yes">Select yes or no</a>
+                </li>
+                <li id="missing-description-error" class="priority-page-hidden">
+                    <a href="#priority_summary">Enter a description</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <!-- Disply the initial form if; the user has not selected an answer yet OR the barrier does not have a priority set-->
+        <!-- create error tag above this div - under form error banner form, use JS to add govuk-form-group--error if button is clicked with no radio selected-->
+        <input type="hidden" name="is_user_admin" id="is_user_admin" value="{{ is_user_admin }}">
+        <div id="confirm-priority-form-section" {% if confirm_priority == "yes" or confirm_priority == "no" %}class="govuk-form-group priority-page-hidden"{% else %}class="govuk-form-group"{% endif %}>
+            <form id="confirm-priority-form" name="confirm-priority-form" action="">
+                <span class="govuk-heading-s govuk-!-margin-bottom-3">Is this barrier a priority?</span>
                 <div class="govuk-radios">
-                    {% for value, name in form.fields.priority.choices %}
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="{{ form.priority.name }}-{{ forloop.counter }}" name="{{ form.priority.name }}" type="radio" value="{{ value }}" {% if form.priority.value == value %}checked="checked"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="{{ form.priority.name }}-{{ forloop.counter }}"><span class="priority-marker priority-marker--{{ value|lower }}"></span>{{ name|safe }}</label>
+                        <input class="govuk-radios__input" id="confirm-priority-yes" name="confirm-priority" type="radio" value="yes">
+                        <label class="govuk-label govuk-radios__label" for="confirm-priority"></span>Yes</label>
                     </div>
-                    {% endfor %}
-                </div>
-            </fieldset>
-        </div>
-
-        <div id="{{ form.top_barrier.name }}" class="govuk-form-group{% if form.top_barrier.errors %} govuk-form-group--error{% endif %}">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.top_barrier.label }}</legend>
-
-                {% form_field_error form "top_barrier" %}
-
-                {% if user_is_top_priority_moderator and is_top_priority_requested %}
-                <div class="quoted-text">
-                    <p class="quoted-text__heading">
-                        Reason for the change
-                    </p>
-                    <p class="quoted-text__body">
-                        {{ barrier.priority_summary }}
-                    </p>
-                </div>
-                {% endif %}
-
-                <div class="govuk-radios">
-                    {% for value, name in form.fields.top_barrier.choices %}
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value %}checked="checked"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="{{ form.top_barrier.name }}-{{ forloop.counter }}">{{ name }}</label>
+                        <input class="govuk-radios__input" id="confirm-priority-no" name="confirm-priority" type="radio" value="no">
+                        <label class="govuk-label govuk-radios__label" for="confirm-priority">No</label>
                     </div>
-                    {% endfor %}
+                    <div class="govuk-body govuk-!-margin-top-5">
+                        <!-- Button for non-js users refresh page with confirm-priority parameter, js does the job in-page -->
+                        <input id="confirm-priority-button" type="submit" value="Continue" class="govuk-button govuk-!-margin-right-3">
+                        <input id="confirm-priority-button-js" type="button" value="Continue" class="govuk-button govuk-!-margin-right-3 priority-page-hidden">
+                        <a id="cancel-priority" href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
+                    </div>
                 </div>
-            </fieldset>
+            </form>
         </div>
 
-        {% comment %} Pending approval & non admin case {% endcomment %}
-        {% if not user_is_top_priority_moderator and is_top_priority_requested %}
-            <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-                <div class="govuk-notification-banner__header">
-                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                    Top 100 priority barrier - pending {% if is_approval_pending %}approval{% else %}removal{% endif %}
-                </h2>
+        <form id="priority-rejection-form" action="" method="GET" class="restrict-width priority-page-hidden">
+            {% csrf_token %}
+            <input type="hidden" name="confirm-priority" value="no">
+            <input type="hidden" name="top_barrier" value="REMOVAL_PENDING" />
+            <input type="hidden" name="priority_level" value="NONE" />
+            <div id="{{ form.top_priority_rejection_summary.name }}-no-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
+                    <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">Describe why this should be removed as a top 100 priority barrier</label>
+
+                    {% form_field_error form "top_priority_rejection_summary" %}
+
+                    <textarea class="govuk-textarea" id="{{ form.top_priority_rejection_summary.name }}" name="{{ form.top_priority_rejection_summary.name }}" rows="5">{% if form.description.value %}{{ form.top_priority_rejection_summary.value }}{% endif %}</textarea>
+
+            </div>
+
+            <input id="submit-priority-form" type="submit" value="Save and return" class="govuk-button">
+            <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
+        </form>
+
+        <!-- Form is hidden until first question is answered -->
+        <form id="priority-form" action="" method="POST" class="restrict-width priority-page-hidden">
+            {% csrf_token %}
+
+            <!-- Priority assignment section -->
+            <div id="{{ form.priority_level.name }}" class="govuk-form-group{% if form.priority.errors %} govuk-form-group--error{% endif %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.priority_level.label }}</legend>
+                    <span class="govuk-hint">{{ form.priority_level.help_text }}</span>
+
+                    {% form_field_error form "priority_level" %}
+
+                    <div class="govuk-radios">
+                        {% for value, name in form.fields.priority_level.choices %}
+                            <div class="govuk-radios__item govuk-!-margin-bottom-0">
+                                <input class="govuk-radios__input" id="{{ form.priority_level.name }}-{{ forloop.counter }}" name="{{ form.priority_level.name }}" type="radio" value="{{ value }}" {% if form.priority_level.value == value %}checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="{{ form.priority_level.name }}-{{ forloop.counter }}">{{ name|safe }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- Top Priority assignment section -->
+            <div id="{{ form.top_barrier.name }}" class="govuk-form-group{% if form.top_barrier.errors %} govuk-form-group--error{% endif %}">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.top_barrier.label }}</legend>
+                    <span class="govuk-hint">{{ form.top_barrier.help_text }}</span>
+
+                    {% form_field_error form "top_barrier" %}
+
+                    {% if user_is_top_priority_moderator and is_top_priority_requested %}
+                        <div id="requested-top-priority-moderator-display" class="quoted-text">
+                            <p class="quoted-text__heading">
+                                Reason for the change
+                            </p>
+                            <p class="quoted-text__body">
+                                {{ barrier.priority_summary }}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <!-- 'Should this barrier be considered for the Top 100 priority barriers list' -->
+                    <div class="govuk-radios">
+                        {% for value, name in form.fields.top_barrier.choices %}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="{{ form.top_barrier.name }}-{{ forloop.counter }}" name="{{ form.top_barrier.name }}" type="radio" value="{{ value }}" {% if form.top_barrier.value == value and form.top_barrier.value != NONE %}checked="checked"{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="{{ form.top_barrier.name }}-{{ forloop.counter }}">{{ name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+
+            {% comment %} Pending approval & non admin case {% endcomment %}
+            {% if not user_is_top_priority_moderator and is_top_priority_requested %}
+                <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
+                    <p class="top-priority-notice-text">This barrier has a top 100 priority request pending</p>
                 </div>
-                <div class="govuk-notification-banner__content">
-                <p class="govuk-notification-banner__heading">
-                    This barrier is pending {% if is_approval_pending %}approval{% else %}removal{% endif %} from the barrier owner as a Top 100 priority barrier
-                </p>
+            {% endif %}
+            {% comment %} End - Pending approval & non admin case {% endcomment %}
+
+            {% if not user_is_top_priority_moderator and not is_top_priority_requested %}
+                <div id="top-priority-request-notice" class="govuk-inset-text" role="region"data-module="govuk-notification-banner">
+                    <p class="top-priority-notice-text">We review top 100 priority barrier requests every quarter. We'll notify you of the outcome once the review is complete.</p>
                 </div>
+            {% endif %}
+
+            <div id="watchlist-warning-text" class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                        {% if is_approval_pending %}
+                            The top 100 priority request will be cancelled if you select "Watch list"
+                        {% else %}
+                            Top 100 priority must be removed or rejected if you wish to change this barriers priority to "Watch list"
+                        {% endif %}
+                </strong>
             </div>
-        {% endif %}
-        {% comment %} End - Pending approval & non admin case {% endcomment %}
 
-        {% if not user_is_top_priority_moderator and not is_top_priority_requested %}
-        <div id="top-priority-request-notice" class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-            <div class="govuk-notification-banner__header">
-              <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                Notice
-              </h2>
+            <!-- 'Reason for the top 100 priority barrier assessment' -->
+            {% if form.priority_summary %}
+            <div id="{{ form.priority_summary.name }}-container" class="govuk-form-group {% if form.priority_summary.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.priority_summary.name }}">{{ form.priority_summary.label }}</label>
+                <span class="govuk-hint">{{ form.priority_summary.help_text }}</span>
+
+                {% form_field_error form "priority_summary" %}
+
+                <textarea class="govuk-textarea" id="{{ form.priority_summary.name }}" name="{{ form.priority_summary.name }}" rows="5">{% if form.description.value %}{{ form.priority_summary.value }}{% endif %}</textarea>
             </div>
-            <div class="govuk-notification-banner__content">
-              <p class="govuk-notification-banner__heading">
-                Top 100 priority barriers are reviewed quarterly and you'll be notified when the review is complete.
-              </p>
+            {% endif %}
+
+            <!-- 'Reason for rejecting the barrier change request' -->
+            {% if form.top_priority_rejection_summary %}
+            <div id="{{ form.top_priority_rejection_summary.name }}-container" class="priority-page-hidden govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
+
+                {% form_field_error form "top_priority_rejection_summary" %}
+
+                <textarea class="govuk-textarea" id="{{ form.top_priority_rejection_summary.name }}" name="{{ form.top_priority_rejection_summary.name }}" rows="5">{% if form.description.value %}{{ form.top_priority_rejection_summary.value }}{% endif %}</textarea>
             </div>
-          </div>
-          {% endif %}
+            {% endif %}
 
-
-        {% if form.priority_summary %}
-        <div id="{{ form.priority_summary.name }}-container" class="govuk-form-group{% if form.priority_summary.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="{{ form.priority_summary.name }}">{{ form.priority_summary.label }}</label>
-            <span class="govuk-hint">{{ form.priority_summary.help_text }}</span>
-
-            {% form_field_error form "priority_summary" %}
-
-            <textarea class="govuk-textarea" id="{{ form.priority_summary.name }}" name="{{ form.priority_summary.name }}" rows="5">{% if form.description.value %}{{ form.priority_summary.value }}{% endif %}</textarea>
-        </div>
-        {% endif %}
-
-        {% if form.top_priority_rejection_summary %}
-        <div id="{{ form.top_priority_rejection_summary.name }}-container" class="govuk-form-group{% if form.top_priority_rejection_summary.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="{{ form.top_priority_rejection_summary.name }}">{{ form.top_priority_rejection_summary.label }}</label>
-
-            {% form_field_error form "top_priority_rejection_summary" %}
-
-            <textarea class="govuk-textarea" id="{{ form.top_priority_rejection_summary.name }}" name="{{ form.top_priority_rejection_summary.name }}" rows="5">{% if form.description.value %}{{ form.top_priority_rejection_summary.value }}{% endif %}</textarea>
-        </div>
-        {% endif %}
-
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
-        <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
-    </form>
+            <input id="submit-priority-form" type="submit" value="Save and return" class="govuk-button">
+            <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
+        </form>
 
 {% endblock %}

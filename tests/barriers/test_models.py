@@ -96,19 +96,9 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
             "readable_value": "Europe",
             "value": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
         }
-        assert saved_search.readable_filters["priority"] == {
-            "label": "Barrier priority",
-            "readable_value": (
-                "<span class='priority-marker priority-marker--high'>"
-                "</span>High, "
-                "<span class='priority-marker priority-marker--medium'>"
-                "</span>Medium"
-            ),
-            "value": ["HIGH", "MEDIUM"],
-        }
         assert saved_search.readable_filters["status"] == {
             "label": "Barrier status",
-            "readable_value": "Open: In progress, Resolved: In part",
+            "readable_value": "Open, Resolved: In part",
             "value": ["2", "3"],
         }
         assert saved_search.readable_filters["show"] == {

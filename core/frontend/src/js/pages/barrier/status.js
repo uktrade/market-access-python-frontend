@@ -17,17 +17,6 @@ ma.pages.barrier.status = function (data) {
                     return value == type;
                 },
             });
-
-            if (type === data.openPendingActionValue) {
-                new ma.components.ConditionalRadioContent({
-                    inputContainer: ".js-pending-type",
-                    inputName: "pending_type",
-                    conditionalElem: "#conditional-OTHER",
-                    shouldShow: function (value) {
-                        return value == "OTHER";
-                    },
-                });
-            }
         })(validTypes[i]);
     }
 };

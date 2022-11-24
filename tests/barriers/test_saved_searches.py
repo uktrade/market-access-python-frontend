@@ -11,7 +11,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
     saved_search_data = {
         "id": "a18f6ddc-d4fe-48cc-afbe-8fb2e5de806f",
         "name": "Search Name",
-        "filters": {"priority": ["MEDIUM"]},
+        "filters": {"status": "OPEN_IN_PROGRESS"},
         "notify_about_additions": True,
         "notify_about_updates": False,
     }
@@ -144,8 +144,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
         mock_create.return_value = SavedSearch(self.saved_search_data)
 
         response = self.client.post(
-            f"{reverse('barriers:new_saved_search')}"
-            "?search=Test&priority=HIGH&status=2",
+            f"{reverse('barriers:new_saved_search')}" "?search=Test&status=2",
             data={"name": "New Name"},
         )
 
@@ -155,7 +154,6 @@ class SavedSearchTestCase(MarketAccessTestCase):
             name="New Name",
             filters={
                 "search": "Test",
-                "priority": ["HIGH"],
                 "status": ["2"],
             },
         )
@@ -170,7 +168,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
         search_id = self.saved_search_data["id"]
         response = self.client.post(
             f"{reverse('barriers:search')}"
-            f"?search=Test&priority=HIGH&status=2&search_id={search_id}",
+            f"?search=Test&status=2&search_id={search_id}",
             data={"update_search": "1"},
         )
 
@@ -180,7 +178,6 @@ class SavedSearchTestCase(MarketAccessTestCase):
             id=search_id,
             filters={
                 "search": "Test",
-                "priority": ["HIGH"],
                 "status": ["2"],
             },
         )
@@ -191,7 +188,7 @@ class NotificationsTestCase(MarketAccessTestCase):
     saved_search_data = {
         "id": "a18f6ddc-d4fe-48cc-afbe-8fb2e5de806f",
         "name": "Search Name",
-        "filters": {"priority": ["MEDIUM"]},
+        "filters": {"status": "OPEN_IN_PROGRESS"},
         "notify_about_additions": True,
         "notify_about_updates": False,
     }
