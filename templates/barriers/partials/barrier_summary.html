@@ -42,15 +42,9 @@
                     </ul>
                     <div class="barrier-summary__status__edit-links">
                     {% if not hide_links and not barrier.archived %}
-                        Change
-                        <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:change_status' barrier.id %}">
-                            <span class="sr-only govuk-visually-hidden">Activate link to change barrier status.</span>
-                            status
-                        </a>
-                        or
                         <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">
                             <span class="sr-only govuk-visually-hidden">Activate link to change barrier priority.</span>
-                            priority
+                            Change priority
                         </a>
                     {% endif %}
                     </div>

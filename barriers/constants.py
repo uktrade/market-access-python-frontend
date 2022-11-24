@@ -4,7 +4,6 @@ from model_utils import Choices
 
 class Statuses:
     UNFINISHED = "0"
-    OPEN_PENDING_ACTION = "1"
     OPEN_IN_PROGRESS = "2"
     RESOLVED_IN_PART = "3"
     RESOLVED_IN_FULL = "4"
@@ -21,8 +20,7 @@ ARCHIVED_REASON = Choices(
 
 
 STATUSES = Choices(
-    ("1", "OPEN_PENDING_ACTION", "Open: Pending action"),
-    ("2", "OPEN_IN_PROGRESS", "Open: In progress"),
+    ("2", "OPEN_IN_PROGRESS", "Open"),
     ("3", "RESOLVED_IN_PART", "Resolved: In part"),
     ("4", "RESOLVED_IN_FULL", "Resolved: In full"),
     ("5", "DORMANT", "Dormant"),
@@ -30,7 +28,6 @@ STATUSES = Choices(
 
 
 STATUS_WITH_DATE_FILTER = [
-    "open_pending_action",
     "open_in_progress",
     "resolved_in_part",
     "resolved_in_full",
@@ -46,7 +43,6 @@ ALL_STATUSES = (
 
 
 STATUSES_HELP_TEXT = Choices(
-    (STATUSES.OPEN_PENDING_ACTION, "Barrier is awaiting action"),
     (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on"),
     (
         STATUSES.RESOLVED_IN_PART,

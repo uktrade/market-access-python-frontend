@@ -8556,8 +8556,7 @@
   ],
   "barrier_status": {
     "0": "Unfinished",
-    "1": "Open: Pending action",
-    "2": "Open: In progress",
+    "2": "Open",
     "5": "Dormant",
     "6": "Archived",
     "7": "Unknown",
