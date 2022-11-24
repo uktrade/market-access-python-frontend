@@ -245,7 +245,6 @@ class NewReportBarrierStatusView(ReportFormViewBase):
         form = context_data["form"]
         context_data.update(
             {
-                "OPEN_PENDING_ACTION": "1",
                 "valid_status_values": [
                     choice[0] for choice in form.fields["status"].choices
                 ],

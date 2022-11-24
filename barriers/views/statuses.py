@@ -19,7 +19,6 @@ class BarrierEditStatus(APIBarrierFormViewMixin, FormView):
         context_data.update(
             {
                 "barrier": self.barrier,
-                "OPEN_PENDING_ACTION": "1",
                 "valid_status_values": [
                     choice[0] for choice in form.fields["status"].choices
                 ],
@@ -52,7 +51,6 @@ class BarrierChangeStatus(BarrierMixin, FormView):
         context_data.update(
             {
                 "barrier": self.barrier,
-                "OPEN_PENDING_ACTION": "1",
                 "valid_status_values": [
                     choice[0] for choice in form.fields["status"].choices
                 ],

@@ -306,7 +306,7 @@ class Barrier(APIModel):
         return self.status["id"] == "5"
 
     @property
-    def is_uknown(self):
+    def is_unknown(self):
         return self.status["id"] == "7"
 
     @property
