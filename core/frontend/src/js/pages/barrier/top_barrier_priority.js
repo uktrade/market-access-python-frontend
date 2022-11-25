@@ -1,5 +1,8 @@
 ma.pages.topBarrierPriority = {
-    topPriorityVisiblity: function (top_priority_status) {
+    topPriorityVisiblity: function (
+        top_priority_status,
+        existing_top_priority_summary
+    ) {
         // Collect HTML components
         // Section which will ask either for admins to approve a barrier top priority change, or anyone to request a change
         const topPriorityConsiderationContainer =
@@ -8,6 +11,9 @@ ma.pages.topBarrierPriority = {
         // Sections that contains the text box to let users add a summary justifying the top priority change
         const topPrioritySummaryDescriptionContainer = document.getElementById(
             "priority_summary-container"
+        );
+        const topPrioritySummaryInputLabel = document.getElementById(
+            "priority-summary-input-label"
         );
         const topPriorityRejectionDescriptionContainer =
             document.getElementById("top_priority_rejection_summary-container");
@@ -137,12 +143,21 @@ ma.pages.topBarrierPriority = {
             showComponent(topPrioritySummaryDescriptionInput);
         }
 
-        // If any of the following situations are true, we need to display the priority summary section
+        // If any of the following situations are true, we need to display the editable priority summary section
         // - If barrier is awaiting approval, show the summary section so it can be edited
-        if (top_priority_status == "APPROVAL_PENDING") {
+        if (
+            top_priority_status == "APPROVAL_PENDING" ||
+            top_priority_status == "APPROVED" ||
+            top_priority_status == "REMOVAL_PENDING"
+        ) {
             showComponent(topPrioritySummaryDescriptionContainer);
             showComponent(topPrioritySummaryExistingText);
             showComponent(topPrioritySummaryDates);
+            // Additionally, barriers with a removal pending need updated text label
+            if (top_priority_status == "REMOVAL_PENDING") {
+                topPrioritySummaryInputLabel.innerHTML =
+                    "Describe why this should be removed as a top 100 priority barrier";
+            }
         }
 
         // Set event listeners.
@@ -192,6 +207,7 @@ ma.pages.topBarrierPriority = {
                     ) {
                         showComponent(topPriorityNotice);
                         showComponent(topPrioritySummaryDescriptionContainer);
+                        showComponent(topPrioritySummaryHintText);
                         showComponent(topPrioritySummaryDescriptionInput);
                     }
                     if (
@@ -201,7 +217,15 @@ ma.pages.topBarrierPriority = {
                         hideComponent(topPriorityRejectionDescriptionContainer);
                     }
                     if (top_priority_status == "APPROVED") {
-                        hideComponent(topPrioritySummaryDescriptionContainer);
+                        showComponent(topPrioritySummaryDescriptionContainer);
+                        hideComponent(topPrioritySummaryDescriptionInput);
+                        showComponent(topPrioritySummaryHintText);
+                        showComponent(topPrioritySummaryExistingText);
+                        showComponent(topPrioritySummaryDates);
+                        topPrioritySummaryInputLabel.innerHTML =
+                            "Reason provided why this should be a potential top 100 barrier";
+                        topPrioritySummaryDescriptionInput.value =
+                            existing_top_priority_summary;
                     }
                 }
             );
@@ -214,6 +238,7 @@ ma.pages.topBarrierPriority = {
                         top_priority_status == "RESOLVED"
                     ) {
                         hideComponent(topPriorityNotice);
+                        hideComponent(topPrioritySummaryHintText);
                         hideComponent(topPrioritySummaryDescriptionContainer);
                     }
                     if (
@@ -224,6 +249,13 @@ ma.pages.topBarrierPriority = {
                     }
                     if (top_priority_status == "APPROVED") {
                         showComponent(topPrioritySummaryDescriptionContainer);
+                        showComponent(topPrioritySummaryDescriptionInput);
+                        showComponent(topPrioritySummaryHintText);
+                        hideComponent(topPrioritySummaryExistingText);
+                        hideComponent(topPrioritySummaryDates);
+                        topPrioritySummaryInputLabel.innerHTML =
+                            "Describe why this should be removed as a top 100 priority barrier";
+                        topPrioritySummaryDescriptionInput.value = "";
                     }
                 }
             );

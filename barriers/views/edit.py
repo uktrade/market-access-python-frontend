@@ -166,10 +166,11 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         )
 
         # Get an existing priority summary to allow for editing if pending approval
-        if (
-            self.barrier.top_priority_status
-            == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
-        ):
+        if self.barrier.top_priority_status in [
+            TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING,
+            TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING,
+            TOP_PRIORITY_BARRIER_STATUS.APPROVED,
+        ]:
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             existing_top_priority_summary = client.barriers.get_top_priority_summary(
                 barrier=self.barrier.id
