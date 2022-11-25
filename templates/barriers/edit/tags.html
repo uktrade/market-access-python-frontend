@@ -6,21 +6,6 @@
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
-{% block body_script %}
-    <script>
-        if( ma.pages.topBarrierPriority ){
-            ma.pages.topBarrierPriority.optionalRejectionSummary(
-                "top_barrier",
-                "top_priority_rejection_summary-container"
-            );
-            ma.pages.topBarrierPriority.toggleNoticeOnPriorityRadioChange(
-                "top_barrier",
-                "top-priority-request-notice"
-            );
-        }
-    </script>
-{% endblock %}
-
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Tags' %}

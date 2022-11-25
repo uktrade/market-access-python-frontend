@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import FormView
@@ -23,6 +25,8 @@ from utils.context_processors import user_scope
 from utils.metadata import MetadataMixin
 
 from .mixins import APIBarrierFormViewMixin
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierEditTitle(APIBarrierFormViewMixin, FormView):
@@ -160,6 +164,24 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             self.barrier.top_priority_status
             == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
         )
+
+        # Get an existing priority summary to allow for editing if pending approval
+        if (
+            self.barrier.top_priority_status
+            == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
+        ):
+            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+            existing_top_priority_summary = client.barriers.get_top_priority_summary(
+                barrier=self.barrier.id
+            )
+            kwargs["existing_top_priority_summary"] = existing_top_priority_summary[
+                "top_priority_summary_text"
+            ]
+            kwargs["created_by"] = existing_top_priority_summary["created_by"]
+            kwargs["created_on"] = existing_top_priority_summary["created_on"]
+            kwargs["modified_by"] = existing_top_priority_summary["modified_by"]
+            kwargs["modified_on"] = existing_top_priority_summary["modified_on"]
+
         return super().get_context_data(**kwargs)
 
     def get_form_class(self):
