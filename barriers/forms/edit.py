@@ -373,8 +373,8 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
         # Update the priority summary if it is present/amended
         if self.fields.get("priority_summary"):
             submitted_summary = self.cleaned_data["priority_summary"]
-            existing_top_priority_summary = getattr(
-                client.barriers.get(id=self.id), "top_priority_summary"
+            existing_top_priority_summary = client.barriers.get_top_priority_summary(
+                barrier=self.id
             )
             summary_patch_args = {
                 "top_priority_summary": {
@@ -382,15 +382,21 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
                     "barrier": self.id,
                 }
             }
-            if existing_top_priority_summary:
-                if existing_top_priority_summary != submitted_summary:
-                    client.barriers.patch_top_priority_summary(
+
+            # Patch if the existing summary has a creation date, otherwise create new
+            if submitted_summary:
+                if existing_top_priority_summary["top_priority_summary_text"]:
+                    if (
+                        existing_top_priority_summary["top_priority_summary_text"]
+                        != submitted_summary
+                    ):
+                        client.barriers.patch_top_priority_summary(
+                            **summary_patch_args["top_priority_summary"]
+                        )
+                else:
+                    client.barriers.create_top_priority_summary(
                         **summary_patch_args["top_priority_summary"]
                     )
-            else:
-                client.barriers.create_top_priority_summary(
-                    **summary_patch_args["top_priority_summary"]
-                )
 
         client.barriers.patch(**patch_args)
 
