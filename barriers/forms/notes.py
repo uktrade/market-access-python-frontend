@@ -12,7 +12,7 @@ class AddNoteForm(DocumentMixin, forms.Form):
         help_text=(
             "You can mention someone in your note by typing '@' and their name, "
             "then selecting their email address from the list. "
-             "They will get a notification with a link to your note."
+            "They will get a notification with a link to your note."
         ),
         widget=forms.Textarea,
         error_messages={"required": "Enter a note or update"},
@@ -43,10 +43,7 @@ class AddNoteForm(DocumentMixin, forms.Form):
 
 class AddPublicBarrierNoteForm(forms.Form):
     note = forms.CharField(
-        label=(
-            "Tell us if  "
-            "update the barrier."
-        ),
+        label=("Tell us if update the barrier."),
         widget=forms.Textarea,
         error_messages={"required": "Add a note"},
     )
@@ -96,9 +93,7 @@ class EditNoteForm(DocumentMixin, forms.Form):
 
 class EditPublicBarrierNoteForm(forms.Form):
     note = forms.CharField(
-        label=(
-            "Tell us if the public view needs to be updated "
-        ),
+        label=("Tell us if the public view needs to be updated "),
         widget=forms.Textarea,
         error_messages={"required": "Enter a note or update"},
     )

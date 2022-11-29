@@ -81,8 +81,7 @@ class RestrictedFileField(forms.FileField):
             and extension not in allowed_extensions
         ):
             raise forms.ValidationError(
-                "The selected file must be a "
-                f"{', '.join(allowed_extensions)}"
+                f"The selected file must be a {', '.join(allowed_extensions)}"
             )
 
         if data.size > self.max_upload_size:

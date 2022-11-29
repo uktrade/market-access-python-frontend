@@ -119,7 +119,9 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
         label="Delivery confidence",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={"required": "Select if delivery is on track, at risk of delay or delayed"},
+        error_messages={
+            "required": "Select if delivery is on track, at risk of delay or delayed"
+        },
     )
     update = forms.CharField(
         label="Current status",
@@ -726,11 +728,7 @@ class UpdateCausedByTradingBlocForm(APIFormMixin, CausedByTradingBlocForm):
 class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
     economic_assessment_eligibility = YesNoBooleanField(
         label="Is the barrier eligible for an initial economic assessment?",
-        error_messages={
-            "required": (
-                "Select yes or no"
-            )
-        },
+        error_messages={"required": ("Select yes or no")},
     )
     economic_assessment_eligibility_summary = forms.CharField(
         label="Provide the reason this barrier is not eligible",
