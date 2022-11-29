@@ -81,14 +81,12 @@ class RestrictedFileField(forms.FileField):
             and extension not in allowed_extensions
         ):
             raise forms.ValidationError(
-                "Unsupported file format. The following file formats are "
-                f"accepted {', '.join(allowed_extensions)}"
+                f"The selected file must be a {', '.join(allowed_extensions)}"
             )
 
         if data.size > self.max_upload_size:
             raise forms.ValidationError(
-                f"File size exceeds the {filesizeformat(self.max_upload_size)}"
-                " limit. Reduce file size and upload the document again."
+                f"The selected file must be smaller than {filesizeformat(self.max_upload_size)}"
             )
 
         return data
