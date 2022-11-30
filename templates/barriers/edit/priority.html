@@ -7,7 +7,7 @@
         if( ma.pages.topBarrierPriority ){
             ma.pages.topBarrierPriority.topPriorityVisiblity(
                 "{{top_priority_status}}",
-                "{{existing_top_priority_summary}}"
+                "{{existing_top_priority_summary|linebreaksbr}}"
             );
         }
         if ( ma.pages.barrier.priority ){
@@ -172,7 +172,7 @@
                         <!-- Editable Summary Version-->
                             <label id="priority-summary-input-label" class="govuk-label govuk-label--s">Reason provided why this should be a potential top 100 barrier</label>
                             <div id="priority-summary-existing" class="govuk-body">
-                                {{ existing_top_priority_summary }}<br>
+                                {{ existing_top_priority_summary|linebreaksbr }}<br>
                                 <a id="edit-priority-summary-button" href="#priority_summary">Edit</a>
                             </div>
                             <span id="priority-summary-hint" class="govuk-hint">{{ form.priority_summary.help_text }}</span>
