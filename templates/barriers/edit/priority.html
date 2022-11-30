@@ -11,7 +11,10 @@
             );
         }
         if ( ma.pages.barrier.priority ){
-            ma.pages.barrier.priority.priorityFormReveal("{{top_priority_status}}")
+            ma.pages.barrier.priority.priorityFormReveal(
+                "{{top_priority_status}}",
+                "{{form.priority_level.value}}"
+            );
         }
     </script>
 {% endblock %}
