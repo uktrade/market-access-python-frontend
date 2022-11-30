@@ -1,5 +1,5 @@
 ma.pages.barrier.priority = {
-    priorityFormReveal: function (top_priority_status, priority_level) {
+    priorityFormReveal: function (top_priority_status) {
         const confirmPrioritySection = document.getElementById(
             "confirm-priority-form-section"
         );
@@ -18,7 +18,7 @@ ma.pages.barrier.priority = {
         );
 
         const showYesNo =
-            priority_level == "NONE" && top_priority_status == "NONE";
+            top_priority_status == "APPROVED" || top_priority_status == "NONE";
 
         const priorityForm = document.getElementById("priority-form");
         // if container doesn't exist, return
