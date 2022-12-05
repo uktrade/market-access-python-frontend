@@ -4,18 +4,6 @@
 
 {% block page_title %}{{ block.super }} - Barrier history{% endblock %}
 
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        if( ma.components.ToggleLinks ){
-            new ma.components.ToggleLinks( {
-                text: 'Update the barrier',
-                linkClass: 'js-barrier-summary-link'
-            } );
-        }
-    </script>
-{% endblock %}
-
 {% block masthead %}
     <div class="ma-masthead">
         {% include 'barriers/partials/barrier_summary.html' %}

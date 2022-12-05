@@ -11,18 +11,6 @@
     {% include 'barriers/partials/tags.html' %}
 {% endblock %}
 
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        if( ma.components.ToggleLinks ){
-            new ma.components.ToggleLinks( {
-                text: 'Update the barrier',
-                linkClass: 'js-barrier-summary-link'
-            } );
-        }
-    </script>
-{% endblock %}
-
 {% block page_content %}
 
     {% include 'barriers/partials/barrier_tabs.html' with active='assessment' %}

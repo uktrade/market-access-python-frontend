@@ -86,10 +86,6 @@ ma.pages.barrier.detail = (function (doc, jessie) {
             setupForm(form, opts.noteErrorText);
         }
 
-        if (ma.components.ToggleLinks) {
-            new ma.components.ToggleLinks(opts.toggleLinks);
-        }
-
         if (ma.components.DeleteModal) {
             new ma.components.DeleteModal();
         }
