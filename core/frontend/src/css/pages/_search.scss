@@ -322,3 +322,29 @@
 	from {margin-top: 0px;}
 	to {margin-top: var(--csv-box-height);}
 }
+
+.search-accordion{
+	.search-accordion-header{
+		font-weight: bold;
+		cursor: pointer;
+		padding-top: 8px;
+		padding-bottom: 8px;
+		padding-left: 28px;
+		position: relative;
+
+		&:after{
+			content: "🢓";
+			font-size: 40px;
+			position: absolute;
+			left: 0px;
+			top: 4px;
+		}
+	}
+	.search-accordion-content{
+		display: none;
+
+		&.open{
+			display: block;
+		}
+	}
+}

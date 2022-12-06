@@ -156,6 +156,24 @@ function renderRisksAndMitigationForm() {
     ReactDOM.render(<RisksAndMitigationForm />, container);
 }
 
+const setupSearchAccordion = () => {
+    const accordionClass = "search-accordion";
+    const accordionHeaderClass = "search-accordion-header";
+    const accordionContentClass = "search-accordion-content";
+
+    // when clicking on the accordion header, toggle "open" class on the accordion content div
+    document
+        .querySelectorAll(`.${accordionHeaderClass}`)
+        .forEach((accordionHeader) => {
+            accordionHeader.addEventListener("click", () => {
+                const accordionContent = accordionHeader.nextElementSibling;
+                console.log("content div", accordionContent);
+                accordionContent.classList.toggle("open");
+                accordionHeader.classList.toggle("open");
+            });
+        });
+};
+
 export {
     renderCommodityForm,
     renderLocationFilter,
@@ -166,5 +184,6 @@ export {
     renderEmailSearchAutocomplete,
     renderRisksAndMitigationForm,
     renderAsyncSearchResults,
+    setupSearchAccordion,
     GDSTabs,
 };

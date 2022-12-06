@@ -17,7 +17,17 @@
             ReactApp.renderMultiSelectFilter("category", "Search categories")
             ReactApp.renderMultiSelectFilter("region")
             ReactApp.renderAsyncSearchResults()
+            ReactApp.setupSearchAccordion()
         })
+    </script>
+{% endblock %}
+
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        console.log("Test", ma.pages)
+        {% comment %} ma.pages {% endcomment %}
     </script>
 {% endblock %}
 
@@ -43,57 +53,104 @@
                     <input id="{{ form.search.name }}" class="govuk-input" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
                 </div>
 
-                {% include "partials/forms/checkbox_filter.html" with field=form.country %}
-                {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
-                {% include "partials/forms/checkbox_filter.html" with field=form.trade_direction %}
-                {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
-                {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
-                {% include "partials/forms/checkbox_filter.html" with field=form.category %}
-                {% include "partials/forms/checkbox_filter.html" with field=form.region %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.priority_level %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
+                <div class="search-accordion">
+                    <div class="search-accordion-header">
+                        Location and direction
+                    </div>
+                    <div class="search-accordion-content">
 
-                <!-- Include JS component for resolved date filtering -->
-                {% render_bundle 'date_filter_component' %}
-
-                <div id="show" class="govuk-form-group filter-group">
-                    <fieldset class="govuk-fieldset filter-group__inner">
-                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Show</legend>
-
-                        <div class="checkbox-filter govuk-!-width-full">
-                            {% include 'partials/forms/checkbox.html' with field=form.user %}
-                            {% include 'partials/forms/checkbox.html' with field=form.team %}
-                            {% include 'partials/forms/checkbox.html' with field=form.only_archived %}
-                        </div>
-                    </fieldset>
+                        {% include "partials/forms/checkbox_filter.html" with field=form.country %}
+                        {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
+                        {% include "partials/forms/checkbox_filter.html" with field=form.trade_direction %}
+                        {% include "partials/forms/checkbox_filter.html" with field=form.region %}
+                    </div>
                 </div>
 
-                {% if current_user|has_permission:"view_action_plans" %}
-                <div id="show" class="govuk-form-group filter-group">
-                    <fieldset class="govuk-fieldset filter-group__inner">
-                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Action plans</legend>
 
-                        <div class="checkbox-filter govuk-!-width-full">
-                            {% include 'partials/forms/checkbox.html' with field=form.has_action_plan %}
-                        </div>
-                    </fieldset>
+                <div class="search-accordion">
+                    <div class="search-accordion-header">
+                        Priority and progress​
+                    </div>
+                    <div class="search-accordion-content">
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.priority_level %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
+                    </div>
                 </div>
-                {% endif %}
 
-                {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment_eligibility %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.economic_impact_assessment %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.commodity_code %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.commercial_value_estimate %}
+                <div class="search-accordion">
+                    <div class="search-accordion-header">
+                        Barrier category and type​
+                    </div>
+                    <div class="search-accordion-content">
+                        {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
+                        {% include "partials/forms/checkbox_filter.html" with field=form.category %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
-                {% if filters %}
-                <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
-                {% endif %}
+
+                        <!-- Include JS component for resolved date filtering -->
+                        {% render_bundle 'date_filter_component' %}
+
+                        <div id="show" class="govuk-form-group filter-group">
+                            <fieldset class="govuk-fieldset filter-group__inner">
+                                <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Show</legend>
+
+                                <div class="checkbox-filter govuk-!-width-full">
+                                    {% include 'partials/forms/checkbox.html' with field=form.user %}
+                                    {% include 'partials/forms/checkbox.html' with field=form.team %}
+                                    {% include 'partials/forms/checkbox.html' with field=form.only_archived %}
+                                </div>
+                            </fieldset>
+                        </div>
+
+
+                        {% if current_user|has_permission:"view_action_plans" %}
+                        <div id="show" class="govuk-form-group filter-group">
+                            <fieldset class="govuk-fieldset filter-group__inner">
+                                <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Action plans</legend>
+
+                                <div class="checkbox-filter govuk-!-width-full">
+                                    {% include 'partials/forms/checkbox.html' with field=form.has_action_plan %}
+                                </div>
+                            </fieldset>
+                        </div>
+                        {% endif %}
+
+
+                        {% if filters %}
+                        <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="search-accordion">
+                    <div class="search-accordion-header">
+                        Assessment information ​
+                    </div>
+                    <div class="search-accordion-content">
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment_eligibility %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.economic_impact_assessment %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.commodity_code %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.commercial_value_estimate %}
+                    </div>
+                </div>
+
+                <div class="search-accordion">
+                    <div class="search-accordion-header">
+                        Affected or interested parties
+                    </div>
+                    <div class="search-accordion-content">
+                        {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
+                        {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
+                    </div>
+                </div>
+
+
+
 
                 <input type="submit" value="Apply filters" id="apply-filters-button" class="govuk-button govuk-button--full-width js-filter-submit">
         </div>
