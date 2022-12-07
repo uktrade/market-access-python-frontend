@@ -1,5 +1,8 @@
 ma.pages.topBarrierPriority = {
-    topPriorityVisiblity: function (top_priority_status) {
+    topPriorityVisiblity: function (
+        top_priority_status,
+        existing_top_priority_summary
+    ) {
         // Collect HTML components
         // Section which will ask either for admins to approve a barrier top priority change, or anyone to request a change
         const topPriorityConsiderationContainer =
@@ -9,8 +12,25 @@ ma.pages.topBarrierPriority = {
         const topPrioritySummaryDescriptionContainer = document.getElementById(
             "priority_summary-container"
         );
+        const topPrioritySummaryInputLabel = document.getElementById(
+            "priority-summary-input-label"
+        );
         const topPriorityRejectionDescriptionContainer =
             document.getElementById("top_priority_rejection_summary-container");
+        const topPrioritySummaryDescriptionInput =
+            document.getElementById("priority_summary");
+        const topPrioritySummaryEditButton = document.getElementById(
+            "edit-priority-summary-button"
+        );
+        const topPrioritySummaryExistingText = document.getElementById(
+            "priority-summary-existing"
+        );
+        const topPrioritySummaryHintText = document.getElementById(
+            "priority-summary-hint"
+        );
+        const topPrioritySummaryDates = document.getElementById(
+            "priority-summary-existing-dates"
+        );
 
         // Notice for users regarding the process of top priority approval
         const topPriorityNotice = document.getElementById(
@@ -35,56 +55,14 @@ ma.pages.topBarrierPriority = {
         const submitButton = document.getElementById("submit-priority-form");
 
         // Functions to show/hide individual page componenets
-        const showConsiderationQuestion = function () {
-            if (topPriorityConsiderationContainer != null) {
-                topPriorityConsiderationContainer.style = "display: block";
+        const showComponent = function (component) {
+            if (component != null) {
+                component.style = "display: block";
             }
         };
-        const hideConsiderationQuestion = function () {
-            if (topPriorityConsiderationContainer != null) {
-                topPriorityConsiderationContainer.style = "display: none";
-            }
-        };
-        const showPriorityNotice = function () {
-            if (topPriorityNotice != null) {
-                topPriorityNotice.style = "display: block";
-            }
-        };
-        const hidePriorityNotice = function () {
-            if (topPriorityNotice != null) {
-                topPriorityNotice.style = "display: none";
-            }
-        };
-        const showPriorityWatchlistNotice = function () {
-            if (topPriorityWatchlistWarning != null) {
-                topPriorityWatchlistWarning.style = "display: block";
-            }
-        };
-        const hidePriorityWatchlistNotice = function () {
-            if (topPriorityWatchlistWarning != null) {
-                topPriorityWatchlistWarning.style = "display: none";
-            }
-        };
-        const showSummaryInput = function () {
-            if (topPrioritySummaryDescriptionContainer != null) {
-                topPrioritySummaryDescriptionContainer.style = "display: block";
-            }
-        };
-        const hideSummaryInput = function () {
-            if (topPrioritySummaryDescriptionContainer != null) {
-                topPrioritySummaryDescriptionContainer.style = "display: none";
-            }
-        };
-        const showRejectionInput = function () {
-            if (topPriorityRejectionDescriptionContainer != null) {
-                topPriorityRejectionDescriptionContainer.style =
-                    "display: block";
-            }
-        };
-        const hideRejectionInput = function () {
-            if (topPriorityRejectionDescriptionContainer != null) {
-                topPriorityRejectionDescriptionContainer.style =
-                    "display: none";
+        const hideComponent = function (component) {
+            if (component != null) {
+                component.style = "display: none";
             }
         };
 
@@ -103,11 +81,16 @@ ma.pages.topBarrierPriority = {
         };
 
         // Set initial visibility.
-        hideConsiderationQuestion();
-        hidePriorityNotice();
-        hidePriorityWatchlistNotice();
-        hideSummaryInput();
-        hideRejectionInput();
+        hideComponent(topPriorityConsiderationContainer);
+        hideComponent(topPriorityNotice);
+        hideComponent(topPriorityWatchlistWarning);
+        hideComponent(topPrioritySummaryDescriptionContainer);
+        hideComponent(topPrioritySummaryDescriptionInput);
+        hideComponent(topPrioritySummaryExistingText);
+        hideComponent(topPrioritySummaryHintText);
+        hideComponent(topPrioritySummaryDates);
+        hideComponent(topPriorityRejectionDescriptionContainer);
+
         // If any of the situations are true, we need to display the consider Top Priority question
         // - Country or regional priority levels selected already
         // - Barrier is already Top Priority
@@ -118,7 +101,7 @@ ma.pages.topBarrierPriority = {
             top_priority_status == "REMOVAL_PENDING" ||
             top_priority_status == "APPROVED"
         ) {
-            showConsiderationQuestion();
+            showComponent(topPriorityConsiderationContainer);
         }
 
         // If the page has defaulted to watchlist with a Top Priority status (such as an error message triggering)
@@ -129,7 +112,7 @@ ma.pages.topBarrierPriority = {
                 top_priority_status == "REMOVAL_PENDING" ||
                 top_priority_status == "APPROVED")
         ) {
-            showPriorityWatchlistNotice();
+            showComponent(topPriorityWatchlistWarning);
         }
 
         // If we reload the page with a Top Priority barrier and watchlist selected
@@ -138,7 +121,7 @@ ma.pages.topBarrierPriority = {
             watchlistRadioInput.checked == true &&
             top_priority_status == "APPROVED"
         ) {
-            hideConsiderationQuestion();
+            hideComponent(topPriorityConsiderationContainer);
         }
 
         // If any of the following situations are true, we need to display the priority notice
@@ -147,16 +130,34 @@ ma.pages.topBarrierPriority = {
             top_priority_status == "APPROVAL_PENDING" ||
             top_priority_status == "REMOVAL_PENDING"
         ) {
-            showPriorityNotice();
+            showComponent(topPriorityNotice);
         }
 
-        // If any of the following situations are true, we need to display the priority summary
+        // If any of the following situations are true, we need to display the priority summary section and its contents
         // - If barrier is already a top priority barrier and no is selected for top priority confirmation
         if (
             top_priority_status == "APPROVED" &&
             topPriorityConsiderationNoRadio.checked == true
         ) {
-            showSummaryInput();
+            showComponent(topPrioritySummaryDescriptionContainer);
+            showComponent(topPrioritySummaryDescriptionInput);
+        }
+
+        // If any of the following situations are true, we need to display the editable priority summary section
+        // - If barrier is awaiting approval, show the summary section so it can be edited
+        if (
+            top_priority_status == "APPROVAL_PENDING" ||
+            top_priority_status == "APPROVED" ||
+            top_priority_status == "REMOVAL_PENDING"
+        ) {
+            showComponent(topPrioritySummaryDescriptionContainer);
+            showComponent(topPrioritySummaryExistingText);
+            showComponent(topPrioritySummaryDates);
+            // Additionally, barriers with a removal pending need updated text label
+            if (top_priority_status == "REMOVAL_PENDING") {
+                topPrioritySummaryInputLabel.innerHTML =
+                    "Describe why this should be removed as a top 100 priority barrier";
+            }
         }
 
         // Set event listeners.
@@ -164,12 +165,12 @@ ma.pages.topBarrierPriority = {
         // - Regional and Country buttons show the consider top priority question
         // - Watchlist button hides top priority question, sets it to 'no' and hides the description UNLESS we have a top priority status already
         regionalRadioInput.addEventListener("change", function () {
-            showConsiderationQuestion();
-            hidePriorityWatchlistNotice();
+            showComponent(topPriorityConsiderationContainer);
+            hideComponent(topPriorityWatchlistWarning);
         });
         countryRadioInput.addEventListener("change", function () {
-            showConsiderationQuestion();
-            hidePriorityWatchlistNotice();
+            showComponent(topPriorityConsiderationContainer);
+            hideComponent(topPriorityWatchlistWarning);
         });
         watchlistRadioInput.addEventListener("change", function () {
             if (
@@ -179,18 +180,18 @@ ma.pages.topBarrierPriority = {
             ) {
                 topPriorityConsiderationYesRadio.checked = false;
                 topPriorityConsiderationNoRadio.checked = true;
-                hideConsiderationQuestion();
-                hidePriorityNotice();
-                hideSummaryInput();
-                hideRejectionInput();
+                hideComponent(topPriorityConsiderationContainer);
+                hideComponent(topPriorityNotice);
+                hideComponent(topPrioritySummaryDescriptionContainer);
+                hideComponent(topPriorityRejectionDescriptionContainer);
             } else if (top_priority_status == "APPROVED") {
                 topPriorityConsiderationYesRadio.checked = false;
                 topPriorityConsiderationNoRadio.checked = true;
-                hideConsiderationQuestion();
-                showPriorityWatchlistNotice();
-                showSummaryInput();
+                hideComponent(topPriorityConsiderationContainer);
+                showComponent(topPriorityWatchlistWarning);
+                showComponent(topPrioritySummaryDescriptionContainer);
             } else {
-                showPriorityWatchlistNotice();
+                showComponent(topPriorityWatchlistWarning);
             }
         });
 
@@ -204,17 +205,27 @@ ma.pages.topBarrierPriority = {
                         top_priority_status == "NONE" ||
                         top_priority_status == "RESOLVED"
                     ) {
-                        showPriorityNotice();
-                        showSummaryInput();
+                        showComponent(topPriorityNotice);
+                        showComponent(topPrioritySummaryDescriptionContainer);
+                        showComponent(topPrioritySummaryHintText);
+                        showComponent(topPrioritySummaryDescriptionInput);
                     }
                     if (
                         top_priority_status == "APPROVAL_PENDING" ||
                         top_priority_status == "REMOVAL_PENDING"
                     ) {
-                        hideRejectionInput();
+                        hideComponent(topPriorityRejectionDescriptionContainer);
                     }
                     if (top_priority_status == "APPROVED") {
-                        hideSummaryInput();
+                        showComponent(topPrioritySummaryDescriptionContainer);
+                        hideComponent(topPrioritySummaryDescriptionInput);
+                        showComponent(topPrioritySummaryHintText);
+                        showComponent(topPrioritySummaryExistingText);
+                        showComponent(topPrioritySummaryDates);
+                        topPrioritySummaryInputLabel.innerHTML =
+                            "Reason provided why this should be a potential top 100 barrier";
+                        topPrioritySummaryDescriptionInput.value =
+                            existing_top_priority_summary;
                     }
                 }
             );
@@ -226,34 +237,47 @@ ma.pages.topBarrierPriority = {
                         top_priority_status == "NONE" ||
                         top_priority_status == "RESOLVED"
                     ) {
-                        hidePriorityNotice();
-                        hideSummaryInput();
+                        hideComponent(topPriorityNotice);
+                        hideComponent(topPrioritySummaryHintText);
+                        hideComponent(topPrioritySummaryDescriptionContainer);
                     }
                     if (
                         top_priority_status == "APPROVAL_PENDING" ||
                         top_priority_status == "REMOVAL_PENDING"
                     ) {
-                        showRejectionInput();
+                        showComponent(topPriorityRejectionDescriptionContainer);
                     }
                     if (top_priority_status == "APPROVED") {
-                        showSummaryInput();
+                        showComponent(topPrioritySummaryDescriptionContainer);
+                        showComponent(topPrioritySummaryDescriptionInput);
+                        showComponent(topPrioritySummaryHintText);
+                        hideComponent(topPrioritySummaryExistingText);
+                        hideComponent(topPrioritySummaryDates);
+                        topPrioritySummaryInputLabel.innerHTML =
+                            "Describe why this should be removed as a top 100 priority barrier";
+                        topPrioritySummaryDescriptionInput.value = "";
                     }
+                }
+            );
+        }
+
+        // Clicking the edit button will show/hide the existing text and summary input area
+        if (topPrioritySummaryEditButton != null) {
+            topPrioritySummaryEditButton.addEventListener(
+                "click",
+                function (event) {
+                    showComponent(topPrioritySummaryDescriptionInput);
+                    hideComponent(topPrioritySummaryExistingText);
+                    showComponent(topPrioritySummaryHintText);
                 }
             );
         }
 
         // Check before submitting that summary is present, if required
         submitButton.addEventListener("click", function (event) {
-            const descriptionSection = document.getElementById(
-                "priority_summary-container"
-            );
-            const rejectionSection = document.getElementById(
-                "top_priority_rejection_summary-container"
-            );
-
-            if (descriptionSection != null) {
+            if (topPrioritySummaryDescriptionContainer != null) {
                 const descriptionValue =
-                    document.getElementById("priority_summary").value;
+                    topPrioritySummaryDescriptionInput.value;
                 if (
                     descriptionValue.length < 1 &&
                     topPriorityConsiderationYesRadio.checked == true &&
@@ -270,7 +294,7 @@ ma.pages.topBarrierPriority = {
                 }
             }
 
-            if (rejectionSection != null) {
+            if (topPriorityRejectionDescriptionContainer != null) {
                 const rejectionValue = document.getElementById(
                     "top_priority_rejection_summary"
                 ).value;
@@ -283,79 +307,11 @@ ma.pages.topBarrierPriority = {
                     // Show error box and scroll to top of page
                     showError();
                     // Add error focus bar to description section
-                    rejectionSection.classList.add("govuk-form-group--error");
+                    topPriorityRejectionDescriptionContainer.classList.add(
+                        "govuk-form-group--error"
+                    );
                 }
             }
-        });
-    },
-    // SHOULD DELETE THE FOLLOWING JS METHODS WHEN PB100 IS REMOVED FROM STATUS PAGE
-    optionalRejectionSummary: function (
-        top_barrier_status_id,
-        rejection_summary_id
-    ) {
-        const topBarrierStatusInputContainer = jessie.queryOne(
-            `#${top_barrier_status_id}`
-        );
-        const rejectionSummaryInputContainer = jessie.queryOne(
-            `#${rejection_summary_id}`
-        );
-
-        // if rejection container doesn't exist, return
-        if (
-            !topBarrierStatusInputContainer ||
-            !rejectionSummaryInputContainer
-        ) {
-            return;
-        }
-        rejectionSummaryInputContainer.style = "display: none";
-
-        // get radio input that has No as label
-        const yesRadioInput = jessie.queryOne(`#${top_barrier_status_id}-1`);
-        const noRadioInput = jessie.queryOne(`#${top_barrier_status_id}-2`);
-
-        const handleRejectionVisibility = function () {
-            if (noRadioInput.checked) {
-                rejectionSummaryInputContainer.style = "display: block";
-            } else {
-                rejectionSummaryInputContainer.style = "display: none";
-            }
-        };
-
-        // add event listener to top barrier status
-        yesRadioInput.addEventListener("change", function () {
-            handleRejectionVisibility();
-        });
-        noRadioInput.addEventListener("change", function () {
-            handleRejectionVisibility();
-        });
-    },
-    toggleNoticeOnPriorityRadioChange: function (
-        top_barrier_status_id,
-        notice_id
-    ) {
-        const topBarrierStatusInputContainer = jessie.queryOne(
-            `#${top_barrier_status_id}`
-        );
-        const noticeContainer = jessie.queryOne(`#${notice_id}`);
-        if (!topBarrierStatusInputContainer || !noticeContainer) {
-            // if notice container doesn't exist, return
-            return;
-        }
-        noticeContainer.style = "display: none";
-
-        const yesRadioInput = jessie.queryOne(`#${top_barrier_status_id}-1`);
-        const noRadioInput = jessie.queryOne(`#${top_barrier_status_id}-2`);
-
-        const handleRejectionVisibility = function () {
-            noticeContainer.style = "display: block";
-        };
-
-        // add event listener to top barrier status
-        yesRadioInput.addEventListener("change", function () {
-            handleRejectionVisibility();
-        });
-        noRadioInput.addEventListener("change", function () {
-            handleRejectionVisibility();
         });
     },
 };
