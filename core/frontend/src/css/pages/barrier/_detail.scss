@@ -1,17 +1,17 @@
 .barrier-status-details {
 	border: 2px solid $govuk-light-grey;
-	padding: govuk-em( 15, 16 );
-	margin-bottom: govuk-em( 30, 16 );
+	padding: govuk-em(15, 16);
+	margin-bottom: govuk-em(30, 16);
 }
 
 .barrier-status-details__icon {
 	float: left;
-	margin-right: govuk-em( 8, 16 );
+	margin-right: govuk-em(8, 16);
 }
 
 .barrier-status-details__heading {
-	@include govuk-font( 19, $weight: bold );
-	margin: 0 0 govuk-em( 15, 19 ) 0;
+	@include govuk-font(19, $weight: bold);
+	margin: 0 0 govuk-em(15, 19) 0;
 }
 
 .barrier-status-details__heading__caption {
@@ -19,8 +19,8 @@
 }
 
 .barrier-status-details__sub-heading {
-	@include govuk-font( 16, $weight: bold);
-	margin: 0 0 govuk-em( 5, 16 ) 0;
+	@include govuk-font(16, $weight: bold);
+	margin: 0 0 govuk-em(5, 16) 0;
 }
 
 .barrier-status-details__text {
@@ -31,58 +31,65 @@
 .barrier-content {
 	max-width: 100%;
 	display: inline-block;
+
 	@include mq($from: 768px) {
 		width: calc(100% - 435px);
 	}
-	@include mq( $from: 1024px ){
+
+	@include mq($from: 1024px) {
 		width: calc(100% - 535px);
 	}
+
 	.section-heading {
 		border-bottom: none;
 	}
 
-	.review-progress-checkboxes{
-		h3{
+	.review-progress-checkboxes {
+		h3 {
 			margin-bottom: 0px;
 		}
-		p{
+
+		p {
 			margin: 0px;
 		}
 
-		.checkbox-option{
+		.checkbox-option {
 			padding: 10px 5px;
 			border-top: 1px solid #ddd;
 		}
-		.govuk-checkboxes{
+
+		.govuk-checkboxes {
 			margin-top: 15px;
 			margin-bottom: 15px;
 
-			.checkbox-note{
+			.checkbox-note {
 				font-size: 16px;
 				position: absolute;
 				right: 5px;
 				color: $govuk-red;
 			}
 		}
-		.govuk-checkboxes__item{
+
+		.govuk-checkboxes__item {
 			display: flex;
 			justify-content: flex-start;
 			flex-direction: row;
 			align-items: center;
 			position: relative;
 
-			.checkbox-wrapper{
+			.checkbox-wrapper {
 				position: relative;
 				margin: 4px;
 			}
 
 
-			.remove{
+			.remove {
 				position: absolute;
 				right: 5px;
 			}
 		}
-		.add-approval-link{
+
+		.add-approval-link {
 			padding: 10px 0px 5px;
 		}
 	}
@@ -90,8 +97,8 @@
 
 .interaction-panel {
 	background-color: $govuk-light-grey;
-	padding: govuk-em( 15, 16 );
-	margin-bottom: govuk-em( 30, 16 );
+	padding: govuk-em(15, 16);
+	margin-bottom: govuk-em(30, 16);
 }
 
 .event-list__item--unseen {
@@ -105,69 +112,81 @@
 	float: right;
 }
 
-.information-completeness{
+.information-completeness {
 	margin-bottom: 25px;
-	.section-heading{
+
+	.section-heading {
 		margin: 0;
 		padding: 0;
 	}
-	&__percentage{
+
+	&__percentage {
 		margin: 0;
 		font-size: 3rem;
 		line-height: 4.5rem;
 	}
 
-	.outstanding-information__header{
+	.outstanding-information__header {
 		font-size: 16px;
 		margin: 0;
 	}
 
-	.outstanding-information{
-		margin: 0; /* Remove margins */
+	.outstanding-information {
+		margin: 0;
+		/* Remove margins */
 		padding-left: 18px;
-		li{
-			margin: 0; /* Remove margins */
+
+		li {
+			margin: 0;
+			/* Remove margins */
 		}
 	}
 }
 
-.barrier-progress-update{
+.barrier-progress-update {
 	background: #ECF8FF;
 	padding: 0px;
 	padding-top: 2px;
-	&__cta{
+
+	&__cta {
 		margin: 12px 0px;
 	}
 
-	&__section{
+	&__section {
 		margin: 12px;
 		border-bottom: 1px solid #B1B4B6;
 
-		&__dates{
+		&__dates {
 			color: #505A5F;
 		}
 
-		&__heading{
+		&__heading {
 			margin: 0px;
 
 		}
-		&__text{
+
+		&__text {
 			margin: 8px 0px;
 		}
-		&__date{
+
+		&__date {
 			font-weight: normal;
 		}
-		&__user{
+
+		&__user {
 			font-weight: bold;
 		}
 	}
-	&__actions{
+
+	&__actions {
 		margin: 12px;
-		a{
+
+		a {
 			display: block;
 		}
 	}
 }
+
 .dmas-barrier-progress-tabs {
 	.govuk-tabs__list-item .govuk-body-s {
 		font-size: 16px;
@@ -183,4 +202,108 @@
 		background-color: #ECF8FF;
 
 	}
+}
+
+.barrier-rating {
+
+	text-align: center;
+	width: 100%;
+	margin: auto;
+	border: 2px solid #f3f2f1;
+	padding: 0.9em;
+
+
+	input[type="radio"] {
+		position: fixed;
+		top: 0;
+		right: 100%;
+	}
+
+	label {
+		font-size: 1.5em;
+		padding: 0.4em;
+		margin: 0;
+		float: left;
+		cursor: pointer;
+	}
+
+	input[type="radio"]:checked~input+label {
+		background: none;
+		color: #aaa;
+	}
+
+	input+label {
+		background: #fff;
+		color: orange;
+	}
+
+	input+label:first-of-type {
+		border-top-left-radius: 8px;
+		border-bottom-left-radius: 8px;
+	}
+
+	input:checked+label {
+		border-top-right-radius: 8px;
+		border-bottom-right-radius: 8px;
+	}
+
+	hr {
+		clear: both;
+		border: 0;
+		//border-top: 2px solid #999;
+
+	}
+
+	.rating-box {
+		margin: auto;
+		display: inline-block;
+		min-width: 365px;
+	}
+
+	#rating1,
+	#rating2,
+	#rating3,
+	#rating4,
+	#rating5 {
+		display: none;
+		min-width: 365px;
+	}
+
+
+	input[type="radio"]:checked#one~#rating1 {
+		display: flex;
+		justify-content: center;
+		z-index: 2;
+		margin-left: -10px;
+	}
+
+	input[type="radio"]:checked#two~#rating2 {
+		display: flex;
+		justify-content: center;
+		z-index: 2;
+		margin-left: -10px;
+	}
+
+	input[type="radio"]:checked#three~#rating3 {
+		display: flex;
+		justify-content: center;
+		z-index: 2;
+		margin-left: -10px;
+	}
+
+	input[type="radio"]:checked#four~#rating4 {
+		display: flex;
+		justify-content: center;
+		z-index: 2;
+		margin-left: -10px;
+	}
+
+	input[type="radio"]:checked#five~#rating5 {
+		display: flex;
+		justify-content: center;
+		z-index: 2;
+		margin-left: -10px;
+	}
+
+
 }

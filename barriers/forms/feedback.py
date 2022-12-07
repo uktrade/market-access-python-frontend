@@ -1,6 +1,7 @@
 from django import forms
 
 from utils.api.client import MarketAccessAPIClient
+from django.core.exceptions import ValidationError
 
 
 class FeedbackForm(forms.Form):
@@ -38,13 +39,22 @@ class FeedbackForm(forms.Form):
         label="3. How could we improve the service?",
         help_text="Don't include any personal information, like your name or email address.",
         max_length=3000,
-        widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
         required=False,
+        widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
     )
 
     def __init__(self, *args, **kwargs):
         self.token = kwargs.pop("token", None)
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        satisfaction = cleaned_data.get("satisfaction", None)
+        feedback_text = cleaned_data.get("feedback_text", None)
+        if satisfaction != "VERY_SATISFIED" and feedback_text == "":
+            # Request extra feedback if not very satisfied
+            # TODO : Ideally we would target the feedback text field here
+            self.add_error("satisfaction", "Let us know how we can improve")
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
