@@ -87,6 +87,7 @@
         <div id="more-detail-hint" class="govuk-hint">
           {{ form.feedback_text.help_text }}
         </div>
+        {% form_field_error form "feedback_text" %}
         {{ form.feedback_text }}
       </div>
     </div>
