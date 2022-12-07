@@ -80,6 +80,13 @@
             }
         ],
         "top_priority_status": "APPROVED",
+        "top_priority_summary": {
+            "top_priority_summary_text": "Barrier of extreme importance",
+            "created_on": "2019-10-28T11:36:39.469000Z",
+            "created_by": "Ted Moseby",
+            "modified_on": "2019-10-28T11:36:39.469000Z",
+            "modified_by": "Ted Moseby"
+        },
         "priority": {
             "code": "MEDIUM",
             "name": "Medium",
