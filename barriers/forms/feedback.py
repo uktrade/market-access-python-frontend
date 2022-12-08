@@ -1,7 +1,6 @@
 from django import forms
 
 from utils.api.client import MarketAccessAPIClient
-from django.core.exceptions import ValidationError
 
 
 class FeedbackForm(forms.Form):
