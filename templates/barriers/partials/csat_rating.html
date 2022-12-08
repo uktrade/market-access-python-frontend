@@ -1,0 +1,43 @@
+{% if "complete" in request.path %}
+    <form method="POST" novalidate action="{% url 'core:feedback' %}?return={% url 'barriers:barrier_detail' barrier.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="attempted_actions" value="REPORT_BARRIER">
+        <div class="govuk-panel govuk-panel--confirmation">
+            <h1 class="govuk-panel__title">
+                Barrier Reported
+            </h1>
+
+        </div>
+
+        <div class="govuk-panel">
+            <h2>Overall, how would you rate the experience of creating your report?</h2>
+            <div class="barrier-rating">
+                <div class="rating-box govuk-heading-xl">
+                    <input type="radio" name="satisfaction" id="one" value="VERY_DISSATISFIED" checked />
+                    <label for="one">  </label>
+                    <input type="radio" name="satisfaction" id="two" value="DISSATISFIED" />
+                    <label for="two">  </label>
+                    <input type="radio" name="satisfaction" id="three" value="NEITHER"  />
+                    <label for="three">  </label>
+                    <input type="radio" name="satisfaction" id="four" value="SATISFIED" />
+                    <label for="four">  </label>
+                    <input type="radio" name="satisfaction" id="five" value="VERY_SATISFIED"  />
+                    <label for="five">  </label>
+                    <div id="rating1" class="govuk-body-l">Very dissatisfied</div>
+                    <div id="rating2" class="govuk-body-l">Dissatisfied</div>
+                    <div id="rating3" class="govuk-body-l">Neither satisfied or dissatisfied </div>
+                    <div id="rating4" class="govuk-body-l">Satisfied</div>
+                    <div id="rating5" class="govuk-body-l">Very satisfied</div>
+                </div>
+                
+               
+
+                <hr />
+
+                <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">Leave feedback</button>
+            </div>
+
+           
+        </div>
+    </form>
+    {% endif %}
