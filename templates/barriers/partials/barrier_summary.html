@@ -6,7 +6,7 @@
             <h1 class="barrier-summary__heading__text">{{ barrier.title }}</h1>
             <p class="barrier-summary__heading__country"> in {{ barrier.location }}</p>
             <!-- Tag work will go here to be above the change links in layout -->
-            {% if not hide_links and not barrier.archived %}
+            {% if not barrier.archived %}
                 <div class="barrier-summary__edit-links">
                     <a href="{% url 'barriers:edit_title' barrier.id %}">Edit title</a>
                     or
@@ -41,7 +41,7 @@
                         {% endspaceless %}
                     </ul>
                     <div class="barrier-summary__status__edit-links">
-                    {% if not hide_links and not barrier.archived %}
+                    {% if not barrier.archived %}
                         <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">
                             <span class="sr-only govuk-visually-hidden">Activate link to change barrier priority.</span>
                             Change priority
