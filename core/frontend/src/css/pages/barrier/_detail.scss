@@ -212,7 +212,6 @@
 	border: 2px solid #f3f2f1;
 	padding-top: 2em;
 
-
 	input[type="radio"] {
 		position: fixed;
 		top: 0;
@@ -278,10 +277,8 @@
 	.rating-box {
 		margin: auto;
 		display: inline-block;
-
 		width: 350px;
 		white-space: nowrap;
-
 
 		@include mq($from: desktop) {
 			width: 500px;
@@ -294,16 +291,13 @@
 	#rating4,
 	#rating5 {
 		display: none;
-
 		white-space: nowrap;
 		width: 350px;
-
 
 		@include mq($from: desktop) {
 			width: 500px;
 		}
 	}
-
 
 	input[type="radio"]:checked#one~#rating1 {
 		display: flex;
@@ -339,6 +333,4 @@
 		z-index: 2;
 		margin-left: -10px;
 	}
-
-
 }
