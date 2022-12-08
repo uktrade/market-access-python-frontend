@@ -161,10 +161,32 @@ const setupSearchAccordion = () => {
     const accordionHeaderClass = "search-accordion-header";
     const accordionContentClass = "search-accordion-content";
 
+    const findFormFieldsInsideContainer = (container) => {
+        return container.querySelectorAll("input, select, textarea");
+    };
+
+    const checkIfOneFormFieldHasAValue = (formFields) => {
+        return Array.from(formFields).some((field) => {
+            if (field.type === "checkbox") {
+                return field.checked;
+            } else {
+                return field.value;
+            }
+        });
+    };
+
+    const openIfFieldsHaveValues = (accordionContainer) => {
+        const formFields = findFormFieldsInsideContainer(accordionContainer);
+        if (checkIfOneFormFieldHasAValue(formFields)) {
+            accordionContainer.classList.add("open");
+        }
+    };
+
     // when clicking on the accordion header, toggle "open" class on the accordion content div
     document
         .querySelectorAll(`.${accordionHeaderClass}`)
         .forEach((accordionHeader) => {
+            openIfFieldsHaveValues(accordionHeader.parentElement);
             accordionHeader.addEventListener("click", () => {
                 const accordionContent = accordionHeader.nextElementSibling;
                 console.log("content div", accordionContent);

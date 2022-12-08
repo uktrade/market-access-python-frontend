@@ -347,4 +347,10 @@
 			display: block;
 		}
 	}
+
+	&.open{
+		.search-accordion-content{
+			display: block;
+		}
+	}
 }
