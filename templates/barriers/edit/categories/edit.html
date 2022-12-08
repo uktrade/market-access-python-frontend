@@ -1,7 +1,7 @@
 {% extends "barriers/edit/base.html" %}
 {% load govuk_forms %}
 
-{% block page_title %}{{ block.super }} - Define barrier category{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier category{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -9,7 +9,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Define category' %}
+    {% include 'partials/heading.html' with text='Barrier category' %}
     {% form_error_banner form %}
 
     <h3 class="report-sectors-heading">Save or add another category</h3>
@@ -38,6 +38,6 @@
     <form action="" method="POST">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
     </form>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier - Edit Trade Direction{% endblock %}
+{% block page_title %}{{ block.super }} - Trade direction{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -39,7 +39,7 @@
             </fieldset>
         </div>
 
-        <input type="submit" value="Save changes" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
 {% endblock %}

@@ -46,7 +46,7 @@
     <form action="" method="POST">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
         <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 {% endblock %}
