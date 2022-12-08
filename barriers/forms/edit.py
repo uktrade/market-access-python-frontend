@@ -622,12 +622,12 @@ class UpdateBarrierTermForm(APIFormMixin, forms.Form):
         (
             1,
             "A procedural, short-term barrier",
-            "for example, goods stuck at the border or documentation issue",
+            "For example, goods stuck at the border or documentation issue",
         ),
         (
             2,
             "A long-term strategic barrier",
-            "for example, a change of regulation",
+            "For example, a change of regulation",
         ),
     ]
     term = ChoiceFieldWithHelpText(

@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier - Add category{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier category{% endblock %}
 
 {% block body_script %}
     <script>
@@ -14,7 +14,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Define barrier category' %}
+    {% include 'partials/heading.html' with text='Barrier category' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -42,7 +42,7 @@
             </fieldset>
         </div>
 
-        <input type="submit" value="Add category" class="govuk-button">
+        <input type="submit" value="Add" class="govuk-button">
         <a class="form-cancel" href="{% url 'barriers:edit_categories_session' barrier.id %}">cancel</a>
     </form>
 {% endblock %}
