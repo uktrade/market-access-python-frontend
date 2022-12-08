@@ -42,6 +42,7 @@ class FeedbackForm(forms.Form):
         required=False,
         widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
     )
+    csat_submission = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         self.token = kwargs.pop("token", None)
@@ -50,11 +51,10 @@ class FeedbackForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         satisfaction = cleaned_data.get("satisfaction", None)
-        feedback_text = cleaned_data.get("feedback_text", None)
-        if satisfaction != "VERY_SATISFIED" and feedback_text == "":
+        csat_submission = cleaned_data.get("csat_submission", False)
+        if satisfaction != "VERY_SATISFIED" and csat_submission == "True":
             # Request extra feedback if not very satisfied
-            # TODO : Ideally we would target the feedback text field here
-            self.add_error("satisfaction", "Let us know how we can improve")
+            raise forms.ValidationError("Let us know how we can improve")
 
     def save(self):
         client = MarketAccessAPIClient(self.token)

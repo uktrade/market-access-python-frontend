@@ -2,6 +2,7 @@
     <form method="POST" novalidate action="{% url 'core:feedback' %}?return={% url 'barriers:barrier_detail' barrier.id %}">
         {% csrf_token %}
         <input type="hidden" name="attempted_actions" value="REPORT_BARRIER">
+        <input type="hidden" name="csat_submission" value="True">
         <div class="govuk-panel govuk-panel--confirmation">
             <h1 class="govuk-panel__title">
                 Barrier Reported
@@ -34,7 +35,7 @@
 
                 <hr />
 
-                <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">Leave feedback</button>
+                <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">Continue</button>
             </div>
 
            
