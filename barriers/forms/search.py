@@ -111,20 +111,6 @@ class BarrierSearchForm(forms.Form):
     )
     resolved_date_to_year_open_in_progress = forms.CharField(required=False)
 
-    # Estimated resolution date filter inputs for status: 'Open: Pending action' - status_id is 1
-    resolved_date_from_month_open_pending_action = forms.CharField(
-        label="Estimated resolution date from",
-        help_text="Example, 01 2021",
-        required=False,
-    )
-    resolved_date_from_year_open_pending_action = forms.CharField(required=False)
-    resolved_date_to_month_open_pending_action = forms.CharField(
-        label="Estimated resolution date to",
-        help_text="Example, 01 2022",
-        required=False,
-    )
-    resolved_date_to_year_open_pending_action = forms.CharField(required=False)
-
     tags = forms.MultipleChoiceField(
         label="Tags",
         required=False,
