@@ -210,7 +210,7 @@
 	width: 100%;
 	margin: auto;
 	border: 2px solid #f3f2f1;
-	padding: 0.9em;
+	padding-top: 2em;
 
 
 	input[type="radio"] {
@@ -220,21 +220,45 @@
 	}
 
 	label {
-		font-size: 1.5em;
+		//font-size: 1.5em;
 		padding: 0.4em;
-		margin: 0;
+		//margin: 0;
 		float: left;
 		cursor: pointer;
+
 	}
 
 	input[type="radio"]:checked~input+label {
 		background: none;
 		color: #aaa;
+		position: relative;
+		background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='white' stroke='grey' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+		background-size: 6rem 4rem;
+		height: 1rem;
+		width: 2.1rem;
+		margin-bottom: 5px;
+
+		@include mq($from: desktop) {
+			background-size: 7rem 5rem;
+			height: 2rem;
+			width: 3rem;
+		}
 	}
 
 	input+label {
 		background: #fff;
 		color: orange;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='%23ffdd00' stroke='grey' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+		background-size: 6rem 4rem;
+		height: 1rem;
+		width: 2.1rem;
+		margin-bottom: 5px;
+
+		@include mq($from: desktop) {
+			background-size: 7rem 5rem;
+			height: 2rem;
+			width: 3rem;
+		}
 	}
 
 	input+label:first-of-type {
@@ -257,7 +281,14 @@
 	.rating-box {
 		margin: auto;
 		display: inline-block;
-		min-width: 365px;
+		//min-width: 300px;
+		width: 375px;
+		white-space: nowrap;
+		//width: 80rem;
+
+		@include mq($from: desktop) {
+			width: 500px;
+		}
 	}
 
 	#rating1,
@@ -266,7 +297,14 @@
 	#rating4,
 	#rating5 {
 		display: none;
-		min-width: 365px;
+		//min-width: 300px;
+		white-space: nowrap;
+		width: 375px;
+		//width: 80rem;
+
+		@include mq($from: desktop) {
+			width: 500px;
+		}
 	}
 
 
