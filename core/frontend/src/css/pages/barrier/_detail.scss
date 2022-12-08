@@ -220,9 +220,7 @@
 	}
 
 	label {
-		//font-size: 1.5em;
 		padding: 0.4em;
-		//margin: 0;
 		float: left;
 		cursor: pointer;
 
@@ -274,17 +272,16 @@
 	hr {
 		clear: both;
 		border: 0;
-		//border-top: 2px solid #999;
 
 	}
 
 	.rating-box {
 		margin: auto;
 		display: inline-block;
-		//min-width: 300px;
-		width: 375px;
+
+		width: 350px;
 		white-space: nowrap;
-		//width: 80rem;
+
 
 		@include mq($from: desktop) {
 			width: 500px;
@@ -297,10 +294,10 @@
 	#rating4,
 	#rating5 {
 		display: none;
-		//min-width: 300px;
+
 		white-space: nowrap;
-		width: 375px;
-		//width: 80rem;
+		width: 350px;
+
 
 		@include mq($from: desktop) {
 			width: 500px;
