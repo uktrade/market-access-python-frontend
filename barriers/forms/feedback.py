@@ -54,6 +54,7 @@ class FeedbackForm(forms.Form):
         csat_submission = cleaned_data.get("csat_submission", False)
         if satisfaction != "VERY_SATISFIED" and csat_submission == "True":
             # Request extra feedback if not very satisfied
+            self.add_error("feedback_text", "Tell us how we can improve")
             raise forms.ValidationError("Let us know how we can improve")
 
     def save(self):
