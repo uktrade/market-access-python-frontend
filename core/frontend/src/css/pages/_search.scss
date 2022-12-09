@@ -155,7 +155,6 @@
 }
 
 .filter-results-list__item {
-
 	border-bottom: 1px solid $govuk-mid-grey;
 	padding: govuk-em( 15, 16 ) 0;
 	overflow: hidden;
@@ -324,21 +323,18 @@
 }
 
 .search-accordion{
+	&-icon{
+		width: 28px;
+		position: relative;
+		animation: rotate 0.5s;
+	}
 	.search-accordion-header{
 		font-weight: bold;
 		cursor: pointer;
 		padding-top: 8px;
 		padding-bottom: 8px;
-		padding-left: 28px;
+		padding-left: 0px;
 		position: relative;
-
-		&:after{
-			content: "🢓";
-			font-size: 40px;
-			position: absolute;
-			left: 0px;
-			top: 4px;
-		}
 	}
 	.search-accordion-content{
 		display: none;
@@ -351,6 +347,12 @@
 	&.open{
 		.search-accordion-content{
 			display: block;
+		}
+		.search-accordion-icon{
+			width: 28px;
+			position: relative;
+			transform: rotate(180deg);
+			top: 8px;
 		}
 	}
 }

@@ -189,9 +189,8 @@ const setupSearchAccordion = () => {
             openIfFieldsHaveValues(accordionHeader.parentElement);
             accordionHeader.addEventListener("click", () => {
                 const accordionContent = accordionHeader.nextElementSibling;
-                console.log("content div", accordionContent);
-                accordionContent.classList.toggle("open");
-                accordionHeader.classList.toggle("open");
+                const accordionContainer = accordionContent.parentElement;
+                accordionContainer.classList.toggle("open");
             });
         });
 };
