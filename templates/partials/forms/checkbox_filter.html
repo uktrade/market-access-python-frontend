@@ -22,13 +22,7 @@
                     </label>
 
                     <!-- Sections to display resolved date input, only displayed when loading the barrier status block-->
-                    {% if text == "Open: Pending action" %}
-                        <div id="resolved_date_filter_open_pending_action" hidden>
-                            {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_open_pending_action field_year=form.resolved_date_from_year_open_pending_action %}
-                            {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_open_pending_action field_year=form.resolved_date_to_year_open_pending_action %}
-                        </div>
-                    {% endif %}
-                    {% if text == "Open: In progress" %}
+                    {% if text == "Open" %}
                         <div id="resolved_date_filter_open_in_progress" hidden>
                             {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_open_in_progress field_year=form.resolved_date_from_year_open_in_progress %}
                             {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_open_in_progress field_year=form.resolved_date_to_year_open_in_progress %}
