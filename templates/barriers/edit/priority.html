@@ -6,11 +6,14 @@
     <script>
         if( ma.pages.topBarrierPriority ){
             ma.pages.topBarrierPriority.topPriorityVisiblity(
-                "{{top_priority_status}}"
+                "{{top_priority_status}}",
+                "{{existing_top_priority_summary|linebreaksbr}}"
             );
         }
         if ( ma.pages.barrier.priority ){
-            ma.pages.barrier.priority.priorityFormReveal("{{top_priority_status}}")
+            ma.pages.barrier.priority.priorityFormReveal(
+                "{{top_priority_status}}"
+            );
         }
     </script>
 {% endblock %}
@@ -164,14 +167,38 @@
 
             <!-- 'Reason for the top 100 priority barrier assessment' -->
             {% if form.priority_summary %}
-            <div id="{{ form.priority_summary.name }}-container" class="govuk-form-group {% if form.priority_summary.errors %} govuk-form-group--error{% endif %}">
-                <label class="govuk-label govuk-label--s" for="{{ form.priority_summary.name }}">{{ form.priority_summary.label }}</label>
-                <span class="govuk-hint">{{ form.priority_summary.help_text }}</span>
+                <div id="{{ form.priority_summary.name }}-container" class="govuk-form-group {% if form.priority_summary.errors %} govuk-form-group--error{% endif %}">
 
-                {% form_field_error form "priority_summary" %}
+                    {% if existing_top_priority_summary %}
+                        {% if is_approval_pending or is_top_priority or is_removal_pending %}
+                        <!-- Editable Summary Version-->
+                            <label id="priority-summary-input-label" class="govuk-label govuk-label--s">Reason provided why this should be a potential top 100 barrier</label>
+                            <div id="priority-summary-existing" class="govuk-body">
+                                {{ existing_top_priority_summary|linebreaksbr }}<br>
+                                <a id="edit-priority-summary-button" href="#priority_summary">Edit</a>
+                            </div>
+                            <span id="priority-summary-hint" class="govuk-hint">{{ form.priority_summary.help_text }}</span>
+                            <textarea class="govuk-textarea" id="{{ form.priority_summary.name }}" name="{{ form.priority_summary.name }}" rows="5">{% if existing_top_priority_summary %}{{ existing_top_priority_summary }}{% endif %}</textarea>
+                            <div id="priority-summary-existing-dates" class="govuk-body">
+                                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                                <p id="priority-summary-hint" class="govuk-hint govuk-!-font-size-16"><span class="govuk-body-s">Date submitted:</span> {{ created_on }} by <span class="govuk-body-s">{{ created_by }}</span></p>
+                                <p id="priority-summary-hint" class="govuk-hint govuk-!-font-size-16"><span class="govuk-body-s">Date modified:</span> {{ modified_on }} by <span class="govuk-body-s">{{ modified_by }}</span></p>
+                            </div>
+                        {% else %}
+                            <!-- Regular Summary Version - in case barriers have an existing priority status (eg when barrier is resolved) -->
+                            <label class="govuk-label govuk-label--s" for="{{ form.priority_summary.name }}">{{ form.priority_summary.label }}</label>
+                            <span id="priority-summary-hint" class="govuk-hint">{{ form.priority_summary.help_text }}</span>
+                            <textarea class="govuk-textarea" id="{{ form.priority_summary.name }}" name="{{ form.priority_summary.name }}" rows="5"></textarea>
+                        {% endif %}
+                    {% else %}
 
-                <textarea class="govuk-textarea" id="{{ form.priority_summary.name }}" name="{{ form.priority_summary.name }}" rows="5">{% if form.description.value %}{{ form.priority_summary.value }}{% endif %}</textarea>
-            </div>
+                        <!-- Regular Summary Version -->
+                        <label class="govuk-label govuk-label--s" for="{{ form.priority_summary.name }}">{{ form.priority_summary.label }}</label>
+                        <span id="priority-summary-hint" class="govuk-hint">{{ form.priority_summary.help_text }}</span>
+                        <textarea class="govuk-textarea" id="{{ form.priority_summary.name }}" name="{{ form.priority_summary.name }}" rows="5"></textarea>
+                    {% endif %}
+
+                </div>
             {% endif %}
 
             <!-- 'Reason for rejecting the barrier change request' -->

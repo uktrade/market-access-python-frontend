@@ -7,6 +7,13 @@
 
 {% block page_title %}{{ block.super }} - Action plan{% endblock %}
 
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' %}
+    </div>
+    {% include 'barriers/partials/tags.html' %}
+{% endblock %}
+
 {% block head %}
 {% render_bundle 'main' 'js' 'REACT' %}
 <script>
