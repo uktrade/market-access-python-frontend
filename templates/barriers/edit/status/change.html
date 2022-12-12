@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier edit status{% endblock %}
+{% block page_title %}{{ block.super }} - barrier status{% endblock %}
 
 {% block body_script %}
     <script>
@@ -17,7 +17,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Barrier Status' %}
+    {% include 'partials/heading.html' with text='Barrier status' %}
     {% form_error_banner form %}
 
     <form action="" method="POST">
@@ -56,7 +56,7 @@
             </fieldset>
         </div>
 
-        <input type="submit" class="govuk-button" value="Change barrier status">
+        <input type="submit" class="govuk-button" value="Save and return">
         <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 
