@@ -9,14 +9,9 @@
       </div>
   </div>
 
-  {% if form.errors %}
+  {% if form.errors and not form.non_field_errors %}
     <div class="govuk-error-summary restrict-width" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-        {% if form.non_field_errors %}
-          <h2 class="govuk-error-summary__title" id="error-summary-title">How can we improve the service?</h2>
-        {% else %}
-          <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
-        {% endif %}
-
+        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
               {% for field in form %}
@@ -93,7 +88,9 @@
         <div id="more-detail-hint" class="govuk-hint">
           {{ form.feedback_text.help_text }}
         </div>
-        {% form_field_error form "feedback_text" %}
+
+        <!-- Do not display errors for feedback_text as non required field
+          {% form_field_error form "feedback_text" %} -->
         {{ form.feedback_text }}
       </div>
     </div>
