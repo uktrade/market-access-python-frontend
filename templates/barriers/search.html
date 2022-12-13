@@ -23,14 +23,6 @@
 {% endblock %}
 
 
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        console.log("Test", ma.pages)
-        {% comment %} ma.pages {% endcomment %}
-    </script>
-{% endblock %}
-
 {% block page_title %}{{ block.super }} - Search{% endblock %}
 
 {% block page_content %}

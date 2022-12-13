@@ -74,6 +74,9 @@ class BarrierSearch(PaginationMixin, SearchFormView):
         context_data = self.update_context_data_for_member(context_data, form)
         return context_data
 
+    def get_active_search_field_groups(self, context_data):
+        pass
+
     def get_barriers(self, form):
         return self.client.barriers.list(
             limit=self.get_pagination_limit(),
