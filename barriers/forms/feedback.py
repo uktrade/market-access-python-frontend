@@ -38,13 +38,24 @@ class FeedbackForm(forms.Form):
         label="3. How could we improve the service?",
         help_text="Don't include any personal information, like your name or email address.",
         max_length=3000,
-        widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
         required=False,
+        widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
     )
+    csat_submission = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         self.token = kwargs.pop("token", None)
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        satisfaction = cleaned_data.get("satisfaction", None)
+        csat_submission = cleaned_data.get("csat_submission", False)
+        if satisfaction != "VERY_SATISFIED" and csat_submission == "True":
+            # Request extra feedback if not very satisfied
+            #
+            # self.add_error("feedback_text", "Tell us how we can improve")
+            raise forms.ValidationError("Let us know how we can improve")
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
