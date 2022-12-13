@@ -365,13 +365,38 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             patch_args["top_priority_status"] = "REMOVAL_PENDING"
 
         # Set additional args depending on if questions are answered
-        if self.fields.get("priority_summary"):
-            patch_args["priority_summary"] = self.cleaned_data["priority_summary"]
-
         if self.fields.get("top_priority_rejection_summary"):
             patch_args["top_priority_rejection_summary"] = self.cleaned_data[
                 "top_priority_rejection_summary"
             ]
+
+        # Update the priority summary if it is present/amended
+        if self.fields.get("priority_summary"):
+            submitted_summary = self.cleaned_data["priority_summary"]
+            existing_top_priority_summary = client.barriers.get_top_priority_summary(
+                barrier=self.id
+            )
+            summary_patch_args = {
+                "top_priority_summary": {
+                    "top_priority_summary_text": submitted_summary,
+                    "barrier": self.id,
+                }
+            }
+
+            # Patch if the existing summary has a creation date, otherwise create new
+            if submitted_summary:
+                if existing_top_priority_summary["top_priority_summary_text"]:
+                    if (
+                        existing_top_priority_summary["top_priority_summary_text"]
+                        != submitted_summary
+                    ):
+                        client.barriers.patch_top_priority_summary(
+                            **summary_patch_args["top_priority_summary"]
+                        )
+                else:
+                    client.barriers.create_top_priority_summary(
+                        **summary_patch_args["top_priority_summary"]
+                    )
 
         client.barriers.patch(**patch_args)
 
@@ -468,7 +493,7 @@ def update_barrier_priority_form_factory(
     else:
         # regular user
         if is_top_priority_in_request_phase:
-            show_reason_for_top_priority_field = False
+            show_reason_for_top_priority_field = True
             show_top_priority_status_field = False
         elif barrier.top_priority_status == TOP_PRIORITY_BARRIER_STATUS.NONE:
             top_barrier_status_field_choices = (

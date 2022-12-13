@@ -250,7 +250,9 @@ class EditTagsTestCase(MarketAccessTestCase):
 
 
 class EditPriorityTestCase(MarketAccessTestCase):
-    def test_edit_priority_has_initial_data(self):
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_edit_priority_has_initial_data(self, mock_priority_get):
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
         response = self.client.get(
             reverse("barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]})
         )
@@ -261,7 +263,9 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVED
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_priority_cannot_be_empty(self, mock_patch):
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_priority_cannot_be_empty(self, mock_priority_get, mock_patch):
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
@@ -276,7 +280,9 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_bad_priority_gets_error(self, mock_patch):
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_bad_priority_gets_error(self, mock_priority_get, mock_patch):
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
@@ -291,10 +297,15 @@ class EditPriorityTestCase(MarketAccessTestCase):
 
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.UsersResource.get_current")
-    def test_edit_priority_calls_api(self, mock_user, mock_patch):
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    @patch("utils.api.resources.BarriersResource.create_top_priority_summary")
+    def test_edit_priority_calls_api(
+        self, mock_priority_patch, mock_priority_get, mock_user, mock_patch
+    ):
         self.barrier["top_priority_status"] = "NONE"
         mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
+        mock_priority_get.return_value = {"top_priority_summary_text": "", "id": ""}
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
@@ -305,20 +316,26 @@ class EditPriorityTestCase(MarketAccessTestCase):
             },
         )
 
+        mock_priority_patch.assert_not_called()
+
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority_level="WATCHLIST",
             tags=[1],
             top_priority_status="NONE",
-            priority_summary="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.UsersResource.get_current")
-    def test_edit_priority_calls_api_with_summary(self, mock_user, mock_patch):
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    @patch("utils.api.resources.BarriersResource.patch_top_priority_summary")
+    def test_edit_priority_calls_api_with_summary(
+        self, mock_priority_patch, mock_priority_get, mock_user, mock_patch
+    ):
         mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
@@ -329,22 +346,30 @@ class EditPriorityTestCase(MarketAccessTestCase):
                 "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
             },
         )
+
+        mock_priority_patch.assert_called_with(
+            top_priority_summary_text="New summary",
+            barrier=self.barrier["id"],
+        )
+
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority_level="REGIONAL",
             tags=[1],
             top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
-            priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND
 
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.UsersResource.get_current")
+    @patch("utils.api.resources.BarriersResource.create_top_priority_summary")
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
     def test_top_priority_barrier_to_watchlist_changes_to_removal_pending(
-        self, mock_user, mock_patch
+        self, mock_priority_get, mock_priority_patch, mock_user, mock_patch
     ):
         mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
         response = self.client.post(
             reverse(
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
@@ -352,15 +377,17 @@ class EditPriorityTestCase(MarketAccessTestCase):
             data={
                 "priority_level": "WATCHLIST",
                 "top_barrier": "APPROVED",
-                "priority_summary": "New summary",
+                "priority_summary": "Barrier of extreme importance",
             },
         )
+
+        mock_priority_patch.assert_not_called()
+
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             priority_level="WATCHLIST",
             tags=[1],
             top_priority_status="REMOVAL_PENDING",
-            priority_summary="New summary",
         )
         assert response.status_code == HTTPStatus.FOUND
 
