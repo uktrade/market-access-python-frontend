@@ -336,6 +336,7 @@
 		padding-bottom: 8px;
 		padding-left: 0px;
 		position: relative;
+		color: #1d70b8;
 	}
 	.search-accordion-content{
 		display: none;
@@ -347,12 +348,15 @@
 
 	&.open{
 		.search-accordion-header{
-			outline: 3px solid rgba(0,0,0,0);
-			color: #0b0c0c;
-			background-color: #fd0;
-			-webkit-box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
-			box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
-			text-decoration: none;;
+			span{
+				display: inline-block;
+				outline: 3px solid rgba(0,0,0,0);
+				color: #0b0c0c;
+				background-color: #fd0;
+				-webkit-box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+				box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+				text-decoration: none;
+			}
 		}
 		.search-accordion-content{
 			display: block;
