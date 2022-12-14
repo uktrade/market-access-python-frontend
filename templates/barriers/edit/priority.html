@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier - Edit priority{% endblock %}
+{% block page_title %}{{ block.super }} - Change barrier priority{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -58,7 +58,7 @@
             <textarea class="govuk-textarea" id="{{ form.priority_summary.name }}" name="{{ form.priority_summary.name }}" rows="5">{% if form.description.value %}{{ form.priority_summary.value }}{% endif %}</textarea>
         </div>
 
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
         <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 
