@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - estimated resolution date{% endblock %}
+{% block page_title %}{{ block.super }} - Add estimated resolution date{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='When will the barrier be resolved?' %}
+    {% include 'partials/heading.html' with text='Add estimated resolution date' %}
 
     {% if barrier.estimated_resolution_date %}
         <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
