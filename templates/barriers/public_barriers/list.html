@@ -30,7 +30,11 @@
         <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.organisation from_group_classes="pb-filter" %}</div>
         <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.status from_group_classes="pb-filter" %}</div>
         <div class="govuk-grid-column-one-third">{% include "partials/forms/checkbox_filter.html" with field=form.awaiting_review_from from_group_classes="pb-filter" %}</div>
-        <div class="govuk-grid-column-one-third"><input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit"></div>
+        <div class="govuk-grid-column-full">
+            <div class="govuk-grid-column-one-third">
+                <input type="submit" value="Apply filters" class="govuk-button govuk-button--full-width js-filter-submit">
+            </div>
+        </div>
     </form>
 </section>
 
