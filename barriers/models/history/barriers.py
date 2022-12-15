@@ -47,7 +47,7 @@ class CausedByTradingBlocHistoryItem(BaseHistoryItem):
         country_trading_bloc = self.get_country_trading_bloc()
         if country_trading_bloc:
             self.field_name = (
-                f"Was this barrier caused by a regulation introduced by "
+                "Was this barrier caused by a regulation introduced by "
                 f"{country_trading_bloc['name']}?"
             )
 
@@ -246,7 +246,6 @@ class StatusHistoryItem(BaseHistoryItem):
         value["show_summary"] = value["status"] in (
             Statuses.OPEN_IN_PROGRESS,
             Statuses.UNKNOWN,
-            Statuses.OPEN_PENDING_ACTION,
         )
         return value
 
@@ -300,6 +299,15 @@ class TradeDirectionHistoryItem(BaseHistoryItem):
         return self.metadata.get_trade_direction(str(value))
 
 
+class TopPriorityStatusHistoryItem(BaseHistoryItem):
+    field = "top_priority_status"
+    field_name = "PB100 Priority Status"
+
+    def get_value(self, value):
+        if value["value"]:
+            return value
+
+
 class BarrierHistoryItem(PolymorphicBase):
     """
     Polymorphic wrapper for HistoryItem classes
@@ -333,6 +341,16 @@ class BarrierHistoryItem(PolymorphicBase):
         TitleHistoryItem,
         TradeCategoryHistoryItem,
         TradeDirectionHistoryItem,
+        TopPriorityStatusHistoryItem,
     )
     default_subclass = GenericHistoryItem
     class_lookup = {}
+
+
+class ProgressUpdateHistoryItem(BaseHistoryItem):
+    model = "progress_update"
+    field = "status"
+    field_name = "Delivery Confidence"
+
+    def get_value(self, value):
+        return value

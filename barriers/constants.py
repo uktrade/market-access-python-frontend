@@ -1,9 +1,9 @@
+from django.db.models import TextChoices
 from model_utils import Choices
 
 
 class Statuses:
     UNFINISHED = "0"
-    OPEN_PENDING_ACTION = "1"
     OPEN_IN_PROGRESS = "2"
     RESOLVED_IN_PART = "3"
     RESOLVED_IN_FULL = "4"
@@ -20,8 +20,7 @@ ARCHIVED_REASON = Choices(
 
 
 STATUSES = Choices(
-    ("1", "OPEN_PENDING_ACTION", "Open: Pending action"),
-    ("2", "OPEN_IN_PROGRESS", "Open: In progress"),
+    ("2", "OPEN_IN_PROGRESS", "Open"),
     ("3", "RESOLVED_IN_PART", "Resolved: In part"),
     ("4", "RESOLVED_IN_FULL", "Resolved: In full"),
     ("5", "DORMANT", "Dormant"),
@@ -29,7 +28,6 @@ STATUSES = Choices(
 
 
 STATUS_WITH_DATE_FILTER = [
-    "open_pending_action",
     "open_in_progress",
     "resolved_in_part",
     "resolved_in_full",
@@ -45,7 +43,6 @@ ALL_STATUSES = (
 
 
 STATUSES_HELP_TEXT = Choices(
-    (STATUSES.OPEN_PENDING_ACTION, "Barrier is awaiting action"),
     (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on"),
     (
         STATUSES.RESOLVED_IN_PART,
@@ -137,7 +134,7 @@ ACTION_PLAN_TASK_CATEGORIES = {
     ACTION_PLAN_TASK_TYPE_CHOICES.BILATERAL_ENGAGEMENT: Choices(
         *[
             "Creating and maintaining trade agreements",
-            "Buidling partnerships",
+            "Building partnerships",
             "Market liberalisation forums",
             "Other",
         ]
@@ -190,3 +187,81 @@ ACTION_PLAN_RAG_STATUS_CHOICES = Choices(
     ("RISK_OF_DELAY", "Risk of delay"),
     ("DELAYED", "Delayed"),
 )
+
+ACTION_PLAN_RISK_LEVEL_CHOICES = Choices(
+    ("LOW", "Low"),
+    ("MEDIUM", "Medium"),
+    ("HIGH", "High"),
+)
+
+ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES", "INDIVIDUAL ORGANISATION"
+)
+
+ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES", "FRIEND NEUTRAL TARGET BLOCKER"
+)
+
+ACTION_PLAN_RISK_LEVEL_CHOICES = Choices(
+    ("LOW", "Low"),
+    ("MEDIUM", "Medium"),
+    ("HIGH", "High"),
+)
+
+ACTION_PLAN_HAS_RISKS_CHOICES = Choices(
+    ("YES", "Yes"),
+    ("NO", "No"),
+)
+
+ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_TYPE_CHOICES", "INDIVIDUAL ORGANISATION"
+)
+
+ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES = TextChoices(
+    "ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES", "FRIEND NEUTRAL TARGET BLOCKER"
+)
+
+TOP_PRIORITY_BARRIER_STATUS = Choices(
+    ("NONE", ""),
+    ("APPROVAL_PENDING", "Top 100 Priority Barrier - Approval Pending"),
+    ("REMOVAL_PENDING", "Top 100 Priority Barrier - Removal Pending"),
+    ("APPROVED", "Top 100 Priority Barrier"),
+    ("RESOLVED", "Top 100 Priority Barrier - Resolved"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES = Choices(
+    ("APPROVAL_PENDING", "Yes"),
+    ("NONE", "No"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES = Choices(
+    ("APPROVED", "Yes"),
+    ("REMOVAL_PENDING", "No"),
+)
+
+# Default choice field for a user that can moderate top priority
+TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES = Choices(
+    ("APPROVED", "Yes"),
+    ("NONE", "No"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_APPROVE_REQUEST_CHOICES = Choices(
+    ("APPROVED", "Yes"),  # Set to APPROVED when Yes is selected
+    ("NONE", "No"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES = Choices(
+    ("NONE", "Yes"),  # Set to NONE when Yes is selected
+    ("APPROVED", "No"),
+)
+
+TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES = Choices(
+    ("APPROVAL_PENDING", "Yes"),  # Would need approval to put back to top priority
+    ("RESOLVED", "No"),  # Keep as a resolved barrier
+)
+
+TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"
+
+# Deprecated tags are tags we do not want future barriers to be able to use,
+# but need to keep for older and archived barriers.
+DEPRECATED_TAGS = ["COVID-19"]

@@ -124,7 +124,7 @@
 
 .filter-results-download {
 	overflow: hidden;
-	margin: govuk-em( 10, 16 ) 0 govuk-em( 5, 16 ) 0;
+	margin: 0 0 govuk-em( 5, 16 ) 0;
 	padding: govuk-em( 10, 16 ) 0 0 0;
 	border-top: 1px solid $govuk-mid-grey;
 }
@@ -183,15 +183,15 @@
 
 	@include mq( $from: 550px ){
 		float: left;
-		width: 60%;
+		width: 65%;
 	}
 
 	@include mq( $from: tablet ){
-		width: 55%;
+		width: 70%;
 	}
 
 	@include mq( $from: 1024px ){
-		width: 72%;
+		width: 70%;
 	}
 }
 
@@ -213,7 +213,7 @@
 	}
 
 	@include mq( $from: 1024px ){
-		width: 25%;
+		width: 30%;
 	}
 
 	.barrier-status-badge {
@@ -272,4 +272,53 @@
 	@include mq( $from: tablet ){
 		margin-bottom: 0;
 	}
+}
+
+.dmas-sort-widget {
+	text-align: right;
+	margin-top: govuk-spacing(2);
+
+	.govuk-label {
+		margin-right: govuk-spacing(2);
+	}
+}
+
+.js-enabled .dmas-search-ordering-select + button {
+	/* Hate using !important, but the GovUK inline block class forces it upon me :-( */
+	display: none !important;
+}
+
+.csv-box-animate {
+	animation: csv-confirmation-animation 1s forwards;
+	-webkit-animation: csv-confirmation-animation 1s forwards;
+}
+
+.csv-box-barrier-list-animate {
+	animation: csv-confirmation-list-animation 1s forwards;
+	-webkit-animation: csv-confirmation-list-animation 1s forwards;
+}
+
+.csv-box-post-animation-state {
+	position: relative;
+	z-index: -10;
+}
+
+@-webkit-keyframes csv-confirmation-animation {
+	from {opacity: 100%;}
+	to {opacity: 0%;}
+}
+
+@keyframes csv-confirmation-animation {
+	from {opacity: 100%;}
+	to {opacity: 0%;}
+}
+
+@-webkit-keyframes csv-confirmation-list-animation {
+	from {margin-top: 0px;}
+	to {margin-top: var(--csv-box-height);}
+}
+
+@keyframes csv-confirmation-list-animation {
+	from {margin-top: 0px;}
+	to {margin-top: var(--csv-box-height);}
 }

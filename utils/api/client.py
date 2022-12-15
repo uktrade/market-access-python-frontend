@@ -7,12 +7,16 @@ from django.conf import settings
 from utils.exceptions import APIHttpException, APIJsonException
 
 from .resources import (
+    ActionPlanMilestoneResource,
     ActionPlanResource,
+    ActionPlanStakeholderResource,
+    ActionPlanTaskResource,
     BarriersResource,
     CommoditiesResource,
     DocumentsResource,
     EconomicAssessmentResource,
     EconomicImpactAssessmentResource,
+    FeedbackResource,
     GroupsResource,
     MentionResource,
     NotesResource,
@@ -49,6 +53,10 @@ class MarketAccessAPIClient:
         self.mentions = MentionResource(self)
         self.notification_exclusion = NotificationExclusionResource(self)
         self.action_plans = ActionPlanResource(self)
+        self.action_plan_milestones = ActionPlanMilestoneResource(self)
+        self.action_plan_tasks = ActionPlanTaskResource(self)
+        self.action_plan_stakeholders = ActionPlanStakeholderResource(self)
+        self.feedback = FeedbackResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

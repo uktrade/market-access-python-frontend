@@ -60,7 +60,7 @@
         ],
         "public_eligibility": true,
         "public_eligibility_summary": "Eligible",
-        "reported_on": "2019-10-28T11:45:44.720000Z",
+        "reported_on": "2019-10-30T11:45:44.720000Z",
         "reported_by": {
             "id": 1,
             "name": "Boris Karaberberov"
@@ -77,19 +77,22 @@
                 "title": "COVID-19",
                 "description": "Barrier related to Covid pandemic.",
                 "order": 1
-            },
-            {
-                "id": 4,
-                "title": "Top 100 Priority Barrier",
-                "description": "Barrier considered a top priority",
-                "order": 4
             }
         ],
+        "top_priority_status": "APPROVED",
+        "top_priority_summary": {
+            "top_priority_summary_text": "Barrier of extreme importance",
+            "created_on": "2019-10-28T11:36:39.469000Z",
+            "created_by": "Ted Moseby",
+            "modified_on": "2019-10-28T11:36:39.469000Z",
+            "modified_by": "Ted Moseby"
+        },
         "priority": {
             "code": "MEDIUM",
             "name": "Medium",
             "order": 2
         },
+        "priority_level": "COUNTRY",
         "priority_summary": "",
         "trade_category": "",
         "wto_profile": {
@@ -104,6 +107,32 @@
         "modified_on": "2020-01-21T15:39:34.137208Z",
         "commercial_value": 250000,
         "commercial_value_explanation": "Wibble wobble!",
+        "valuation_assessments": [
+
+            {
+                "id": "08410280-b342-4fe1-9f24-13b8df508e25",
+                "archived": false,
+                "archived_by": null,
+                "archived_on": null,
+                "created_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "created_on": "2020-11-20T15:12:49.978614Z",
+                "modified_on": "2020-11-20T15:12:49.978641Z",
+                "modified_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "economic_assessment_id": 38,
+                "impact": {
+                    "id": 4,
+                    "name": "4: \u00a3 millions"
+                },
+                "explanation": "uk"
+            }
+
+        ],
         "economic_assessments": [
             {
                 "id": 15,
@@ -323,6 +352,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "NONE",
         "is_summary_sensitive": false,
         "categories": [
             {
@@ -382,6 +412,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "REGIONAL",
         "is_summary_sensitive": false,
         "categories": [
             {
@@ -442,6 +473,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "WATCHLIST",
         "is_summary_sensitive": false,
         "categories": [],
         "created_on": "2019-06-19T15:17:23.776000Z",

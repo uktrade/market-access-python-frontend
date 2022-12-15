@@ -79,6 +79,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_extensions",
     "webpack_loader",
+    "formtools",
 ]
 
 LOCAL_APPS = [
@@ -151,7 +152,9 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        ),
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -262,6 +265,10 @@ ALLOWED_FILE_TYPES = env.list("ALLOWED_FILE_TYPES", default=["text/csv", "image/
 
 API_RESULTS_LIMIT = env.int("API_RESULTS_LIMIT", default=100)
 
+API_BARRIER_LIST_DEFAULT_SORT = env.str(
+    "API_BARRIER_LIST_DEFAULT_SORT", default="-reported_on"
+)
+
 # Logging
 # ============================================
 DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="info").upper()
@@ -336,9 +343,9 @@ DLFE_APP_NAME = True
 DLFE_LOG_SENSITIVE_USER_DATA = True
 
 # Google Tag Manager
-GTM_ID = env("GTM_ID")
-GTM_AUTH = env("GTM_AUTH")
-GTM_PREVIEW = env("GTM_PREVIEW")
+GTM_ID = env("GTM_ID", default=None)
+GTM_AUTH = env("GTM_AUTH", default=None)
+GTM_PREVIEW = env("GTM_PREVIEW", default=None)
 
 if not DEBUG:
     sentry_sdk.init(
@@ -356,11 +363,10 @@ SETTINGS_EXPORT = (
     "GTM_ID",
     "GTM_AUTH",
     "GTM_PREVIEW",
-    "MINISTERIAL_REPORTS_FUNCTIONALITY",
 )
 
 ACTION_PLANS_ENABLED = env.bool("ACTION_PLANS_ENABLED", default=False)
-MINISTERIAL_REPORTS_ENABLED = env.bool("MINISTERIAL_REPORTS_ENABLED", default=False)
+NEW_ACTION_PLANS_ENABLED = env.bool("NEW_ACTION_PLANS_ENABLED", default=False)
 
 # Webpack config
 
@@ -385,10 +391,28 @@ WEBPACK_LOADER = {
 
 # The following are extra-permission groups (not roles)
 # Adding a user to these groups should not remove the role from the user
-USER_ADDITIONAL_PERMISSION_GROUPS = ["Download approved user", "Action plan user"]
+USER_ADDITIONAL_PERMISSION_GROUPS = [
+    "Download approved user",
+    "Action plan user",
+    "PB100 barrier approver",
+]
+
+REGIONAL_LEAD_PERMISSION_GROUPS = [
+    "Regional Lead - LATAC",
+    "Regional Lead - APAC",
+    "Regional Lead - China/Hong Kong",
+    "Regional Lead - South Asia",
+    "Regional Lead - EECAN",
+    "Regional Lead - MEAP",
+    "Regional Lead - Africa",
+    "Regional Lead - North America",
+    "Regional Lead - Europe",
+    "Regional Lead - Wider Europe",
+]
 
 # External URLs used within the app
 EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
 
-# Feature flag for Ministerial Reports
-MINISTERIAL_REPORTS_FUNCTIONALITY = env.str("MINISTERIAL_REPORTS_FUNCTIONALITY", "")
+# Company house config
+COMPANIES_HOUSE_API_KEY = env("COMPANIES_HOUSE_API_KEY")
+COMPANIES_HOUSE_API_ENDPOINT = env("COMPANIES_HOUSE_API_ENDPOINT")

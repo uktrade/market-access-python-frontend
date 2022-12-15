@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import time
+from typing import TYPE_CHECKING
 
 import requests
 from django.conf import settings
@@ -17,18 +20,25 @@ from barriers.models import (
     PublicBarrierNote,
     ResolvabilityAssessment,
     SavedSearch,
+    Stakeholder,
     StrategicAssessment,
 )
+from barriers.models.action_plans import ActionPlanTask, Milestone
+from barriers.models.feedback import Feedback
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
 from utils.exceptions import ScanError
 from utils.models import ModelList
 
+if TYPE_CHECKING:
+    from utils.api.client import MarketAccessAPIClient
+
 
 class APIResource:
     resource_name = None
     model = None
+    client: MarketAccessAPIClient
 
     def __init__(self, client):
         self.client = client
@@ -135,8 +145,6 @@ class BarriersResource(APIResource):
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
             url = f"barriers/{barrier_id}/unknown"
-        elif status == Statuses.OPEN_PENDING_ACTION:
-            url = f"barriers/{barrier_id}/open-action_required"
         elif status == Statuses.OPEN_IN_PROGRESS:
             url = f"barriers/{barrier_id}/open-in-progress"
         elif status == Statuses.RESOLVED_IN_PART:
@@ -147,14 +155,43 @@ class BarriersResource(APIResource):
             url = f"barriers/{barrier_id}/hibernate"
         return self.client.put(url, json=kwargs)
 
-    def create_progress_update(self, **kwargs):
+    def create_top_100_progress_update(self, **kwargs):
         return self.client.post(
-            f"barriers/{kwargs['barrier']}/progress_updates", data=kwargs
+            f"barriers/{kwargs['barrier']}/top_100_progress_updates", data=kwargs
         )
 
-    def patch_progress_update(self, **kwargs):
+    def patch_top_100_progress_update(self, **kwargs):
         return self.client.patch(
-            f"barriers/{kwargs['barrier']}/progress_updates/{kwargs['id']}", data=kwargs
+            f"barriers/{kwargs['barrier']}/top_100_progress_updates/{kwargs['id']}",
+            data=kwargs,
+        )
+
+    def get_top_priority_summary(self, **kwargs):
+        return self.client.get(
+            f"barriers/{kwargs['barrier']}/top_priority_summary/{kwargs['barrier']}",
+            data=kwargs,
+        )
+
+    def create_top_priority_summary(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/top_priority_summary", data=kwargs
+        )
+
+    def patch_top_priority_summary(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/top_priority_summary/{kwargs['barrier']}",
+            data=kwargs,
+        )
+
+    def create_programme_fund_progress_update(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/programme_fund_progress_updates", data=kwargs
+        )
+
+    def patch_programme_fund_progress_update(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/programme_fund_progress_updates/{kwargs['id']}",
+            data=kwargs,
         )
 
 
@@ -387,13 +424,18 @@ class ActionPlanResource(APIResource):
         url = f"barriers/{barrier_id}/action_plan"
         return self.model(self.client.patch(url, json={**kwargs}))
 
-    def add_milestone(self, barrier_id, *args, **kwargs):
+
+class ActionPlanMilestoneResource(APIResource):
+    resource_name = "action_plan_milestones"
+    model = Milestone
+
+    def create_milestone(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones"
         return self.model(
             self.client.post(url, json={"barrier": str(barrier_id), **kwargs})
         )
 
-    def edit_milestone(self, barrier_id, milestone_id, *args, **kwargs):
+    def update_milestone(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
         return self.model(self.client.patch(url, json={**kwargs}))
 
@@ -401,19 +443,62 @@ class ActionPlanResource(APIResource):
         url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
         return self.model(self.client.delete(url))
 
-    def add_task(self, barrier_id, milestone_id, *args, **kwargs):
+
+class ActionPlanTaskResource(APIResource):
+    resource_name = "action_plan_tasks"
+    model = ActionPlanTask
+
+    def create_task(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks"
         return self.model(
             self.client.post(
                 url,
-                json={"barrier": str(barrier_id), "milestone": milestone_id, **kwargs},
+                json={
+                    "barrier": str(barrier_id),
+                    "milestone": str(milestone_id),
+                    **kwargs,
+                },
             )
         )
 
-    def edit_task(self, barrier_id, task_id, *args, **kwargs):
+    def update_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.patch(url, json={**kwargs}))
 
     def delete_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
         return self.model(self.client.delete(url))
+
+
+class ActionPlanStakeholderResource(APIResource):
+    resource_name = "stakeholders"
+    model = Stakeholder
+
+    def create_stakeholder(self, *args, **kwargs):
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/"
+        response = self.client.post(url, json={**kwargs})
+        return self.model(response)
+
+    def update_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
+        response = self.client.patch(url, json={**kwargs})
+        return self.model(response)
+
+    def delete_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
+        self.client.delete(url, json={**kwargs})
+
+
+class FeedbackResource(APIResource):
+    resource_name = "feedback"
+    model = Feedback
+
+    def send_feedback(self, *args, **kwargs):
+        return self.client.post("feedback/", json={**kwargs})

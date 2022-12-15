@@ -104,18 +104,28 @@ Example usage.:
 	- `make django-test path=assessments/test_assessment_detail.py::EmptyAssessmentDetailTestCase::test_view` - run a specific test case
 2. To run tests with coverage use `make django-test-coverage` - this will output the report to the console.
 
-#### Running Selenium Tests Locally
+#### Running Playwright Tests Locally
+Playwright documentation - https://playwright.dev/python/docs/api/class-playwright
 1. Ensure the API is running locally.
 
-2. Spin up the testing container:
-`docker-compose -f docker-compose.test.yml -p market-access-test up -d`
-This consists of the python frontend and the selenium chrome driver.
+2. Ensure the front end Docker container is up and has reached the point where the Django development server is running.
+
+    - You'll need to update the Barrier IDs that appear in the tests to match one you have locally. This is clearly impractical in the long run, so maybe something like a set of fixtures against which to run would be a good idea?
 
 3. Run the tests:
-`make django-ui-test-with-server`
-This will start the frontend `runserver`, run the tests, then end `runserver`
+`make ui-test`
+
+4. To run a specific suite of UI tests, specify the desired module:
+`make ui-test path=test_examples.py`
+
+5. To run a specific UI test, speicfy it using Pytest's standard syntax in the `path`:
+`make ui-test path=test_examples.py::test_example_2`
 
 #### Running Selenium Tests Against UAT
+
+**Warning**
+This section is obsolete as UI tests now use Playwright. It is left here for reference, should anybody be courageous enough to try to get the Playwright tests running against UAT.
+
 1. Ensure you are on the VPN.
 
 2. Edit docker-compose.test.env:

@@ -1,6 +1,10 @@
+import logging
+
 from django import forms
 
 from utils.api.client import MarketAccessAPIClient
+
+logger = logging.getLogger(__name__)
 
 
 class AddCategoryForm(forms.Form):

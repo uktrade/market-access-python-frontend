@@ -1,0 +1,61 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Edit Programme Fund update{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block body_script %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.milestones_and_deliverables.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.expenditure.name }}-form-group.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Edit Programme Fund update' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.milestones_and_deliverables.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div  class="govuk-form-group{% if form.milestones_and_deliverables.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.milestones_and_deliverables.id_for_label }}">{{ form.milestones_and_deliverables.label }}</label>
+
+                {% form_field_error form "milestones_and_deliverables" %}
+                <span class="govuk-hint">{{ form.milestones_and_deliverables.help_text }}</span>
+
+
+                <textarea id="{{ form.milestones_and_deliverables.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.milestones_and_deliverables.name }}" rows="5" maxlength="1250">{% if form.milestones_and_deliverables.value %}{{ form.milestones_and_deliverables.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.milestones_and_deliverables.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+              You can enter up to 1250 characters
+            </div>
+        </div>
+
+        <div id="{{ form.expenditure.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div class="govuk-form-group{% if form.expenditure.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.expenditure.id_for_label }}">{{ form.expenditure.label }}</label>
+
+                {% form_field_error form "expenditure" %}
+                <span class="govuk-hint">{{ form.expenditure.help_text }}</span>
+
+                <textarea  id="{{ form.expenditure.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.expenditure.name }}" rows="5" maxlength="1250">{% if form.expenditure.value %}{{ form.expenditure.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.expenditure.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            You can enter up to 1250 characters
+            </div>
+        </div>
+
+
+        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:barrier_detail' barrier_id=barrier.id %}">Cancel</a>
+
+    </form>
+
+{% endblock %}

@@ -46,18 +46,24 @@ class BarrierEditCommodities(BarrierMixin, FormView):
             )
         else:
             return JsonResponse(
-                {"status": "error", "message": "HS commodity code not found"}
+                {"status": "error", "message": "Enter a real HS commodity code"}
             )
 
     def screen_reader_mode(self):
         # detect screen reader mode
         return "sr" == self.kwargs.get("mode", "")
 
+    def _to_dict(self, obj):
+        if isinstance(obj, dict):
+            return obj
+        return obj.to_dict()
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["confirmed_commodities"] = self.get_confirmed_commodities()
         context_data["confirmed_commodities_data"] = [
-            commodity.to_dict() for commodity in context_data["confirmed_commodities"]
+            self._to_dict(commodity)
+            for commodity in context_data["confirmed_commodities"]
         ]
         context_data["screen_reader_mode"] = self.screen_reader_mode()
         return context_data

@@ -26,6 +26,6 @@ def feature_flags(request):
     return {
         "feature_flags": {
             "action_plans_enabled": settings.ACTION_PLANS_ENABLED,
-            "ministerial_reports_enabled": settings.MINISTERIAL_REPORTS_ENABLED,
+            "new_action_plans_enabled": settings.NEW_ACTION_PLANS_ENABLED,
         }
     }

@@ -6,7 +6,7 @@ import requests
 from django.conf import settings
 from mohawk import Sender
 
-from barriers.constants import Statuses
+from barriers.constants import DEPRECATED_TAGS, Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
 
@@ -62,11 +62,6 @@ class Metadata:
             "modifier": "unfinished",
             "hint": "Barrier is unfinished",
         },
-        Statuses.OPEN_PENDING_ACTION: {
-            "name": "Pending",
-            "modifier": "open-pending-action",
-            "hint": "Barrier is awaiting action",
-        },
         Statuses.OPEN_IN_PROGRESS: {
             "name": "Open",
             "modifier": "open-in-progress",
@@ -75,9 +70,7 @@ class Metadata:
         Statuses.RESOLVED_IN_PART: {
             "name": "Part resolved",
             "modifier": "resolved",
-            "hint": (
-                "Barrier impact has been significantly reduced but remains " "in part"
-            ),
+            "hint": "Barrier impact has been significantly reduced but remains in part",
         },
         Statuses.RESOLVED_IN_FULL: {
             "name": "Resolved",
@@ -103,6 +96,9 @@ class Metadata:
 
     def __init__(self, data):
         self.data = data
+
+    def get_admin_area_list(self):
+        return self.data["admin_areas"]
 
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data["admin_areas"]:
@@ -202,6 +198,8 @@ class Metadata:
 
     def get_status(self, status_id):
         for id, name in self.data["barrier_status"].items():
+            if id == "1":
+                continue
             self.STATUS_INFO[id]["id"] = id
             self.STATUS_INFO[id]["name"] = name
 
@@ -214,15 +212,7 @@ class Metadata:
         sub_status_other=None,
     ):
         if status_id in self.STATUS_INFO.keys():
-            name = self.get_status(status_id)["name"]
-            if sub_status and status_id == Statuses.OPEN_PENDING_ACTION:
-                sub_status_text = self.get_sub_status_text(
-                    sub_status,
-                    sub_status_other,
-                )
-                return f"{name} ({sub_status_text})"
-            return name
-
+            return self.get_status(status_id)["name"]
         return status_id
 
     def get_status_choices(self):
@@ -317,6 +307,13 @@ class Metadata:
         for tag in self.get_barrier_tags():
             if str(tag["id"]) == str(tag_id):
                 return tag
+        return {
+            "id": tag_id,
+            "title": "[unknown tag]",
+            "description": "No such tag exists",
+            "show_at_reporting": False,
+            "order": 9999,
+        }
 
     def get_barrier_tags(self):
         tags = self.data.get("barrier_tags", [])
@@ -329,10 +326,6 @@ class Metadata:
         """
 
         tag_list = self.get_barrier_tags()
-        for tag in tag_list:
-            # remove 'top priority' tag from this list as we assign it through a seperate radio button
-            if tag["title"] == "TOP 100 PRIORITY BARRIER":
-                tag_list.remove(tag)
 
         if list_use == "edit":
             # If this list is for the edit pages, return as generator
@@ -349,7 +342,7 @@ class Metadata:
         return (
             (tag["id"], tag["title"], tag["description"])
             for tag in self.get_barrier_tags()
-            if tag["show_at_reporting"] is True
+            if tag["show_at_reporting"] is True and tag["title"] not in DEPRECATED_TAGS
         )
 
     def get_trade_categories(self):
@@ -417,6 +410,14 @@ class Metadata:
         return (
             org for org in self.get_gov_organisations() if str(org["id"]) in list_of_ids
         )
+
+    def get_top_priority_status(self, status):
+        for status in self.data["top_priority_status"]:
+            if str(status["id"]) == str(status):
+                return status
+
+    def get_search_ordering_choices(self):
+        return self.data["search_ordering_choices"]
 
 
 class MetadataMixin:

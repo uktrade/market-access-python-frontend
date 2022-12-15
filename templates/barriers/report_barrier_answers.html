@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Check answers{% endblock %}
+
+{% block page_content %}
+    <div class="back-link">
+        <a href="{{ urls.back }}" class="govuk-back-link ma-back-link">Back</a>
+    </div>
+    <div class="page-heading">
+        <h1 class="govuk-heading-md">Check your answers</h1>
+    </div>
+    {% for questions_section in report_barrier_answers %}
+        {% if not questions_section.hide %}
+        <div class="report-barrier-questions__section">
+            <h2 class="govuk-heading-m">{{ questions_section.name }}</h2>
+            {% if questions_section.type == "hs_commodity_codes" %}
+                {% for question in questions_section.questions %}
+                    <div class="report-barrier-questions__question">
+                        <h3 class="govuk-heading-s question-label">{{ question.name }}</h3>
+                    </div>
+                    {% for commodity in question.value %}
+                    <div class="report-barrier-questions__question">
+                        <h3 class="govuk-heading-s govuk-!-font-weight-regular question-label">{{ commodity.code }}</h3>
+                        <div class="answer">
+                            {{ commodity.name }}
+                        </div>
+                        <div class="edit-url"><a href="{{ questions_section.url }}" class="govuk-link">Change</a></div>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                {% for question in questions_section.questions %}
+                {% if not question.hide %}
+                    <div class="report-barrier-questions__question">
+                        <h3 class="govuk-heading-s question-label">{{ question.name }}</h3>
+                        <div class="answer">{{ question.value|linebreaksbr }}</div>
+                        <div class="edit-url"><a href="{% if question.url %}{{ question.url }}{% else %}{{ questions_section.url }}{% endif %}" class="govuk-link">Change</a></div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+    {% endfor %}
+
+    {% comment %} {{ barrier.data }} {% endcomment %}
+
+    <div class="page-actions">
+
+        <form action="" method="post">{% csrf_token %}<button type="submit" href="" class="govuk-button govuk-button--primary">Confirm</button></form>
+    </div>
+
+{% endblock %}

@@ -1,10 +1,10 @@
 <div class="barrier-tag-banner">
-    {% if barrier.tags %}
-        <ul class="barrier-tag-list barrier-tag-list--in-banner">
+    {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
+        <ul class="barrier-tag-list barrier-tag-list--inline">
             {% spaceless %}
-                {% for tag in barrier.tags %}
-                <li class="barrier-tag-list__tag">{{ tag.title }}</li>
-                {% endfor %}
+                    {% for tag in barrier.tags %}
+                            <li class="govuk-tag govuk-tag--{{ tag.title|slugify }} text-right">{{ tag.title }}</li>
+                    {% endfor %}
             {% endspaceless %}
         </ul>
     {% endif %}

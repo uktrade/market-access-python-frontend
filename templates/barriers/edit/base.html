@@ -3,6 +3,14 @@
 {% block masthead %}
     <div class="ma-masthead">
         {% block back_link %}{% endblock %}
-        {% include 'barriers/partials/barrier_summary.html' with hide_priority=True hide_links=True %}
+        {% include 'barriers/partials/barrier_summary.html' with hide_priority=True %}
     </div>
 {% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ block.super }}
+    </div>
+  </div>
+{% endblock content %}

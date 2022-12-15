@@ -6,7 +6,6 @@
     <script>
         ma.pages.barrier.status( {
             validTypes: {{ valid_status_values|safe }},
-            openPendingActionValue: "{{ OPEN_PENDING_ACTION }}"
         } );
     </script>
 {% endblock %}
@@ -37,7 +36,7 @@
                                    name="{{ form.status.name }}"
                                    type="radio"
                                    value="{{ choice.value }}"
-                                   {% if form.status.value == choice.value %}
+                                   {% if form.status.value.id == choice.value %}
                                    checked="checked"
                                    {% endif %}
                                    data-aria-controls="conditional-{{ choice.value }}"

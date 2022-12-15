@@ -5,17 +5,17 @@ from utils.api.client import MarketAccessAPIClient
 
 class CompanySearchForm(forms.Form):
     query = forms.CharField(
-        label="Find details of the company affected",
+        label="Find the affected company",
         max_length=255,
         error_messages={
-            "max_length": "Company should be %(limit_value)d characters or fewer",
-            "required": "Enter a company or organisation affected by the barrier",
+            "max_length": "Entry should be %(limit_value)d characters or less",
+            "required": "Enter a company name, address or number",
         },
     )
 
 
 class AddCompanyForm(forms.Form):
-    company_id = forms.UUIDField()
+    company_id = forms.CharField()
 
     def clean_company_id(self):
         return str(self.cleaned_data["company_id"])

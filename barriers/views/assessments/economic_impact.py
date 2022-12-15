@@ -38,6 +38,7 @@ class AddEconomicImpactAssessment(APIPermissionMixin, EconomicImpactAssessmentEd
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["economic_assessment"] = self.barrier.current_economic_assessment
+        kwargs["barrier"] = self.barrier
         return kwargs
 
 

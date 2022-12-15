@@ -36,10 +36,14 @@ class RestrictedFileField(forms.FileField):
         "application/pdf": ".pdf",
         "application/vnd.oasis.opendocument.text": ".odt",
         "application/msword": ".doc",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": (
+            ".docx"
+        ),
         "application/vnd.oasis.opendocument.presentation": ".odp",
         "application/vnd.ms-powerpoint": ".ppt",
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation": ".pptx",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": (
+            ".pptx"
+        ),
         "application/vnd.oasis.opendocument.spreadsheet": ".ods",
         "application/vnd.ms-excel": ".xls",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
@@ -77,14 +81,12 @@ class RestrictedFileField(forms.FileField):
             and extension not in allowed_extensions
         ):
             raise forms.ValidationError(
-                f"Unsupported file format. The following file formats are "
-                f"accepted {', '.join(allowed_extensions)}"
+                f"The selected file must be a {', '.join(allowed_extensions)}"
             )
 
         if data.size > self.max_upload_size:
             raise forms.ValidationError(
-                f"File size exceeds the {filesizeformat(self.max_upload_size)}"
-                " limit. Reduce file size and upload the document again."
+                f"The selected file must be smaller than {filesizeformat(self.max_upload_size)}"
             )
 
         return data
@@ -153,6 +155,22 @@ class YesNoBooleanField(forms.ChoiceField):
         return super().valid_value(value)
 
 
+class TrueFalseBooleanField(forms.NullBooleanField):
+    """
+    Well Django doesn't have a BooleanField that only accepts True or False!
+    This is a Form Field that only accepts True or False.
+    """
+
+    def clean(self, value):
+        if (value == "True") or (value is True):
+            return True
+        elif (value == "False") or (value is False):
+            return False
+        if self.required:
+            raise ValidationError("This field is required.")
+        return super().clean(value)
+
+
 class YesNoDontKnowBooleanField(YesNoBooleanField):
     default_choices = (
         ("yes", "Yes"),
@@ -215,8 +233,8 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1,
                 max_value=12,
                 error_messages={
-                    "min_value": "Enter a real month",
-                    "max_value": "Enter a real month",
+                    "min_value": "Date resolved must be a real date",
+                    "max_value": "Date resolved must be a real date",
                     "incomplete": "Enter a month",
                 },
             ),
@@ -225,8 +243,8 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1990,
                 max_value=2100,
                 error_messages={
-                    "min_value": "Enter a real year",
-                    "max_value": "Enter a real year",
+                    "min_value": "Date resolved must be after 1990",
+                    "max_value": "Date resolved must be before 2100",
                     "incomplete": "Enter a year",
                 },
             ),
@@ -392,14 +410,14 @@ class SubformChoiceField(forms.ChoiceField):
                 choice["help_text"] = self.choices_help_text[value]
             yield choice
 
-    def init_subforms(self, initial, data, selected_value=None):
+    def init_subforms(self, selected_value=None, **kwargs):
         for value, subform_class in self.subform_classes.items():
             if value == selected_value:
-                subform = subform_class(initial=initial, data=data)
+                subform = subform_class(**kwargs)
                 self.subform = subform
                 self.subforms[value] = subform
             else:
-                self.subforms[value] = subform_class()
+                self.subforms[value] = subform_class(**kwargs)
 
 
 class SubformMixin:
@@ -420,9 +438,8 @@ class SubformMixin:
                     selected_value = kwargs.get("initial", {}).get(name)
                 self.subform_fields[name] = field
                 field.init_subforms(
-                    initial=kwargs.get("initial"),
-                    data=kwargs.get("data"),
                     selected_value=selected_value,
+                    **kwargs,
                 )
 
     @property

@@ -2,7 +2,6 @@ import uuid
 
 import requests
 
-from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
 
 
@@ -61,6 +60,9 @@ class DocumentMixin:
             return f"{field_name}_ids"
 
     def upload_document(self, field_name="document"):
+        # to avoid circular imports
+        from utils.api.client import MarketAccessAPIClient
+
         document = self.cleaned_data[field_name]
 
         client = MarketAccessAPIClient(self.token)

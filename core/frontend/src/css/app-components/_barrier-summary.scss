@@ -51,11 +51,19 @@
 }
 
 .barrier-summary__edit-links {
+	margin-top: govuk-spacing(3);
 	margin-bottom: 0;
+	width: 100%;
+	box-sizing: border-box;
+	@include mq( $from: tablet ){
+		float: left;
+		width: govuk-em( 288, 16 );
+	}
 }
 
 .barrier-summary__status {
-
+	margin-top: govuk-spacing(3);
+	margin-bottom: 0;
 	width: 100%;
 	box-sizing: border-box;
 
@@ -63,22 +71,6 @@
 		float: right;
 		width: govuk-em( 288, 16 );
 	}
-}
-
-.barrier-summary__status__badge {
-	width: 100%;
-	box-sizing: border-box;
-	margin-bottom: govuk-em( 10, 16 );
-}
-
-.barrier-summary__priority {
-	display: block;
-	background: white;
-	padding: govuk-em( 8, 16 );
-	width: 100%;
-	box-sizing: border-box;
-	margin-top: govuk-em( 8, 16 );
-	color: $govuk-black;
 }
 
 .barrier-summary__status__edit-links {

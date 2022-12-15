@@ -1,27 +1,38 @@
 {% if pagination.total_pages > 1 %}
-    <nav class="pagination" aria-label="pagination: total {{ total_pages }} pages">
-        {% if pagination.previous %}
-            <a href="?{{ pagination.previous }}" class="pagination__label pagination__label--prev">Previous</a>
-        {% endif %}
-
-        <ul class="pagination__list">
-            {% for page in pagination.pages %}
-                <li class="pagination__list-item">
-                    {% if page.url %}
-                        <a href="?{{ page.url }}" class="pagination__label{% if page.label == pagination.current_page %} is-current{% endif %}">
-                            {{ page.label }}
-                        </a>
-                    {% else %}
-                        <span class="pagination__label pagination__label--truncation">
-                            {{ page.label }}
-                        </span>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <nav class="moj-pagination" aria-label="pagination: total {{ pagination.total_pages }} pages">
+                <ol class="moj-pagination__list">
+                    {% if pagination.previous %}
+                        <li class="moj-pagination__item  moj-pagination__item--prev">
+                            <a href="?{{ pagination.previous }}" class="moj-pagination__link">Previous<span class="govuk-visually-hidden"> page</span></a>
+                        </li>
                     {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-
-        {% if pagination.next %}
-            <a href="?{{ pagination.next }}" class="pagination__label pagination__label--next">Next</a>
-        {% endif %}
-    </nav>
-{% endif %}
+                    {% for page in pagination.pages %}
+                        <li class="moj-pagination__item">
+                            {% if pagination.current_page != page.label and page.url %}
+                                <a class="moj-pagination__link" href="?{{ page.url }}"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
+                                    {{ page.label }}
+                                </a>
+                            {% elif page.url %}
+                                <span class="moj-pagination__item--active" aria-current="page"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
+                                    {{ page.label }}
+                                </span>
+                            {% else %}
+                                <span class="moj-pagination__item" aria-current="page"  aria-label="Page {{ page.label }} of {{ pagination.total_pages }}">
+                                    {{ page.label }}
+                                </span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                    {% if pagination.next %}
+                        <li class="moj-pagination__item  moj-pagination__item--next">
+                            <a href="?{{ pagination.next }}" class="moj-pagination__link">Next<span class="govuk-visually-hidden"> page</span></a>
+                        </li>
+                    {% endif %}
+                </ol>
+                <p class="moj-pagination__results">Showing <b>{{ pagination.start_position }}</b> to <b>{{ pagination.end_position }}</b> of <b>{{ pagination.total_items }}</b> results</p>
+            </nav>
+        </div>
+    </div>
+{% endif  %}

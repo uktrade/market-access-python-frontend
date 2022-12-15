@@ -1,11 +1,15 @@
+import logging
 from http import HTTPStatus
+from unittest.mock import patch
 
 import pytest
 from django.urls import reverse
-from mock import patch
 
 from core.tests import MarketAccessTestCase
 from users.models import Group, User
+from utils.models import ModelList
+
+logger = logging.getLogger(__name__)
 
 
 class ManageUsersPermissionsTestCase(MarketAccessTestCase):
@@ -120,6 +124,35 @@ class ManageUsersTestCase(MarketAccessTestCase):
         assert mock_search_users.called is False
         self.assertEqual(response.json(), {"count": 0, "results": []})
 
+    @patch("utils.api.resources.APIResource.list")
+    def test_inactive_users_excluded(self, mock_list):
+        mock_list.return_value = ModelList(
+            model=User,
+            data=[
+                {
+                    "id": 75,
+                    "full_name": "Timmy",
+                    "groups": [{"id": 2, "name": "Editor"}],
+                    "email": "tim@hotmail.com",
+                    "is_active": False,
+                },
+                {
+                    "id": 76,
+                    "full_name": "Jimmy",
+                    "groups": [{"id": 2, "name": "Editor"}],
+                    "email": "jim@hotmail.com",
+                    "is_active": True,
+                },
+            ],
+            total_count=2,
+        )
+        response = self.client.get(reverse("users:manage_users"))
+        assert response.status_code == HTTPStatus.OK
+        assert mock_list.called is True
+
+        self.assertIn("'is_active': True", str(response.context_data["users"]))
+        self.assertNotIn("'is_active': False", str(response.context_data["users"]))
+
     @patch("utils.sso.SSOClient.search_users")
     def test_with_results(self, mock_search_users):
         results = [
@@ -213,6 +246,54 @@ class ManageUsersTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.get")
     @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.patch")
+    def test_change_role_additional_permissions(self, mock_patch, mock_list, mock_get):
+        mock_patch.return_value = self.editor
+        mock_get.return_value = self.editor
+        mock_list.return_value = [
+            Group({"id": 1, "name": "Sifter"}),
+            Group({"id": 2, "name": "Editor"}),
+            Group({"id": 3, "name": "Download approved user"}),
+        ]
+        response = self.client.post(
+            reverse("users:edit_user", kwargs={"user_id": 75}),
+            data={
+                "group": "2",
+                "additional_permissions": "3",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+        mock_patch.assert_called_with(id="75", groups=[{"id": "2"}, {"id": "3"}])
+
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.APIResource.patch")
+    def test_make_regional_lead(self, mock_patch, mock_list, mock_get):
+        mock_patch.return_value = self.editor
+        mock_get.return_value = self.editor
+        mock_list.return_value = [
+            Group({"id": 1, "name": "Sifter"}),
+            Group({"id": 2, "name": "Editor"}),
+            Group({"id": 3, "name": "Download approved user"}),
+            Group({"id": 4, "name": "Regional Lead - Europe"}),
+        ]
+        response = self.client.post(
+            reverse("users:edit_user", kwargs={"user_id": 75}),
+            data={
+                "group": "2",
+                "additional_permissions": "3",
+                "regional_lead_groups": "4",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+
+        mock_patch.assert_called_with(
+            id="75", groups=[{"id": "2"}, {"id": "3"}, {"id": "4"}]
+        )
+
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.APIResource.patch")
     def test_remove_role(self, mock_patch, mock_list, mock_get):
         mock_patch.return_value = self.editor
         mock_get.return_value = self.editor
@@ -227,3 +308,11 @@ class ManageUsersTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(id="75", groups=[])
+
+    @patch("utils.api.resources.APIResource.patch")
+    def test_delete_user(self, mock_patch):
+        response = self.client.post(
+            reverse("users:delete_user", kwargs={"user_id": 56}),
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        mock_patch.assert_called_with(id="56", is_active=False, groups=[])

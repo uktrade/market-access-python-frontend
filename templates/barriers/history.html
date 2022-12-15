@@ -4,18 +4,6 @@
 
 {% block page_title %}{{ block.super }} - Barrier history{% endblock %}
 
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        if( ma.components.ToggleLinks ){
-            new ma.components.ToggleLinks( {
-                text: 'Update the barrier',
-                linkClass: 'js-barrier-summary-link'
-            } );
-        }
-    </script>
-{% endblock %}
-
 {% block masthead %}
     <div class="ma-masthead">
         {% include 'barriers/partials/barrier_summary.html' %}
@@ -40,14 +28,16 @@
                 </p>
 
                 <div class="history-item__container">
+                  {% if item.non_standard_layout %}
+                        {% history_item item %}
+                  {% else %}
                     <h4 class="history-item__field">{{ item.field_name }}</h4>
                     <div class="history-item__change">
                         {% history_item item %}
                     </div>
+                  {% endif %}
                 </div>
-
             </div>
-
         {% endfor %}
     </div>
 

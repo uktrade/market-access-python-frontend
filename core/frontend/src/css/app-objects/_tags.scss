@@ -8,21 +8,105 @@
 .barrier-tag-list {
     list-style: none;
     padding: 0;
-    margin: 0 0 govuk-em( -8, 16 );
-    float: left;
+    margin-right: 0px;
 
     &--in-banner {
         margin-right: govuk-em( 16, 16 );
     }
+
+    &--search{
+        float: right;
+        width: 100%;
+        text-align: right;
+    }
+
+    &--inline{
+        display: inline-block;
+
+        .govuk-tag{
+            max-width: none !important;
+            margin-left: 0px !important;
+        }
+    }
+
+    .govuk-tag{
+        margin-bottom: govuk-em( 8, 16 );
+        background-color: #fff;
+        border-radius: 3px;
+        border: 1px solid $govuk-mid-grey;
+        color: $govuk-dark-grey;
+        margin: 0;
+        display: inline-block;
+        // display: table-caption;
+        width: auto;
+        margin-top: 12px;
+        margin-left: 12px;
+        max-width: 250px;
+
+        &--asia-pacific-cross-government-pilot{
+            max-width: 180px;
+        }
+
+        &--top-100-priority-approval-pending {
+            background-color: #fcd6c3;
+            border-color: #fcd6c3;
+            color: #6e3619;
+        }
+        &--top-100-priority {
+            background-color: #fcd6c3;
+            border-color: #fcd6c3;
+            color: #6e3619;
+        }
+        &--top-100-priority-removal-pending {
+            background-color: #fcd6c3;
+            border-color: #fcd6c3;
+            color: #6e3619;
+        }
+        &--top-100-priority-resolved {
+            background-color: #cce2d8;
+            border-color: #cce2d8;
+            color: #21704b
+        }
+        &--resolved-in-part {
+            background-color: #cce2d8;
+            border-color: #cce2d8;
+            color: #21704b
+        }
+        &--resolved-in-full {
+            background-color: #cce2d8;
+            border-color: #cce2d8;
+            color: #21704b
+        }
+        &--country-priority{
+            background-color: #dbd5e9;
+            border-color: #dbd5e9;
+            color: #3d2375;
+        }
+        &--regional-priority{
+            background-color: #fff7bf;
+            border-color: #fff7bf;
+            color: #594d00;
+        }
+        &--watch-list{
+            background-color: #d2e2f1;
+            border-color: #d2e2f1;
+            color: #144e81;
+        }
+    }
+
 }
 
-.barrier-tag-list__tag {
-    display: inline-block;
-    margin-bottom: govuk-em( 8, 16 );
-    margin-right: govuk-em( 8, 16 );
-    background-color: $govuk-blue;
-    padding: govuk-em( 4, 16 ) govuk-em( 8, 16 );
-    color: $govuk-white;
-    line-height: 1;
-    font-weight: bold;
+.barrier-tag-list > .govuk-tag {
+    margin-right: govuk-spacing(3);
+    margin-bottom: govuk-spacing(2);
+}
+
+.resolved-barrier-top-priority-tag {
+	@extend .govuk-tag;
+	background-color:govuk-colour("dark-grey");
+    color:govuk-colour("white");
+}
+
+.hidden-tag {
+    display: none;
 }

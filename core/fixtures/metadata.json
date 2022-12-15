@@ -32,12 +32,13 @@
     "4": "Archived"
   },
   "report_stages": {
-    "1.0": "Add a barrier",
-    "1.1": "Barrier status",
-    "1.2": "Location of the barrier",
-    "1.3": "Sectors affected by the barrier",
-    "1.4": "About the barrier",
-    "1.5": "Barrier summary"
+    "1.0": "Report a barrier",
+    "1.1": "About the barrier",
+    "1.2": "Barrier status",
+    "1.3": "Location of the barrier",
+    "1.4": "Sectors affected by the barrier",
+    "1.5": "Define barrier category",
+    "1.6": "Add HS commodity codes"
   },
   "support_type": {
     "1": "Market access team to provide support on next steps",
@@ -8555,8 +8556,7 @@
   ],
   "barrier_status": {
     "0": "Unfinished",
-    "1": "Open: Pending action",
-    "2": "Open: In progress",
+    "2": "Open",
     "5": "Dormant",
     "6": "Archived",
     "7": "Unknown",
@@ -8578,25 +8578,53 @@
       "order": 1
     },
     {
-      "id": 2,
+      "id": 3,
       "title": "Brexit",
       "description": "",
       "show_at_reporting": true,
       "order": 2
     },
     {
-      "id": 3,
+      "id": 2,
       "title": "NI Protocol",
       "description": "Special provisions applied to goods from GB to avoid a hard border with Ireland when the UK leaves the EU.",
       "show_at_reporting": true,
       "order": 3
     },
     {
-      "id": 4,
-      "title": "TOP 100 PRIORITY BARRIER",
-      "description": "Indicator that the barrier is marked as a top priority for resolution.",
+      "id": 35,
+      "title": "Asia Pacific Cross-Government Pilot",
+      "description": "",
       "show_at_reporting": true,
       "order": 4
+    },
+    {
+      "id": 5,
+      "title": "Programme Fund",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 5
+    },
+    {
+      "id": 6,
+      "title": "International Standards",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 6
+    },
+    {
+      "id": 7,
+      "title": "Clean Growth",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 7
+    },
+    {
+      "id": 8,
+      "title": "Regional Trade Plan",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 8
     }
   ],
   "barrier_type_categories": {
@@ -8965,7 +8993,7 @@
         "5661b8be-5d95-e211-a939-e4115bead28a",
         "1a0be5c4-5d95-e211-a939-e4115bead28a",
         "b46ee1ca-5d95-e211-a939-e4115bead28a"
-    ]
+      ]
     },
     {
       "code": "TB00013",
@@ -8977,7 +9005,7 @@
         "786a9ab2-5d95-e211-a939-e4115bead28a",
         "7e6a9ab2-5d95-e211-a939-e4115bead28a",
         "5961b8be-5d95-e211-a939-e4115bead28a"
-    ]
+      ]
     },
     {
       "code": "TB00026",
@@ -8988,7 +9016,7 @@
         "b05f66a0-5d95-e211-a939-e4115bead28a",
         "4f61b8be-5d95-e211-a939-e4115bead28a",
         "9c5f66a0-5d95-e211-a939-e4115bead28a"
-    ]
+      ]
     }
   ],
   "government_organisations": [
@@ -9237,5 +9265,74 @@
       "name": "Medicines and Healthcare products Regulatory Agency",
       "organisation_type": 4
     }
+  ],
+  "top_priority_status": [
+    {
+      "code": "NONE",
+      "name": "None",
+      "order": 0
+    },
+    {
+      "code": "APPROVAL_PENDING",
+      "name": "Top 100 Priority Barrier - Approval Pending",
+      "order": 1
+    },
+    {
+      "code": "REMOVAL_PENDING",
+      "name": "Top 100 Priority Barrier - Removal Pending",
+      "order": 2
+    },
+    {
+      "code": "APPROVED",
+      "name": "Top 100 Priority Barrier",
+      "order": 3
+    },
+    {
+      "code": "RESOLVED",
+      "name": "Top 100 Priority Barrier - Resolved",
+      "order": 4
+    }
+  ],
+  "search_ordering_choices": [
+    [
+      "-reported",
+      "Date reported (newest)"
+    ],
+    [
+      "reported",
+      "Date reported (oldest)"
+    ],
+    [
+      "-updated",
+      "Last updated (most recent)"
+    ],
+    [
+      "updated",
+      "Last updated (least recent)"
+    ],
+    [
+      "-value",
+      "Value (highest)"
+    ],
+    [
+      "value",
+      "Value (lowest)"
+    ],
+    [
+      "-resolution",
+      "Estimated resolution date (most recent)"
+    ],
+    [
+      "resolution",
+      "Estimated resolution date (least recent)"
+    ],
+    [
+      "-resolved",
+      "Date resolved (most recent)"
+    ],
+    [
+      "resolved",
+      "Date resolved (least recent)"
+    ]
   ]
 }

@@ -5,9 +5,10 @@ from operator import itemgetter
 from urllib.parse import urlencode
 
 from django import forms
+from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import STATUS_WITH_DATE_FILTER
+from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER
 
 logger = logging.getLogger(__name__)
 
@@ -52,14 +53,24 @@ class BarrierSearchForm(forms.Form):
         label="Overseas region",
         required=False,
     )
-    top_priority = forms.MultipleChoiceField(
-        label="Top priority barrier",
-        choices=(("4", "Top 100 priority barrier"),),
+    top_priority_status = forms.MultipleChoiceField(
+        label="Top 100 priority barrier",
+        choices=(
+            ("APPROVED", "Top 100 priority barrier"),
+            ("APPROVAL_PENDING", "Pending approval"),
+            ("REMOVAL_PENDING", "Pending removal"),
+            ("RESOLVED", "Resolved top 100 priority barrier"),
+        ),
         required=False,
     )
-    priority = forms.MultipleChoiceField(
+    priority_level = forms.MultipleChoiceField(
         label="Barrier priority",
-        required=False,
+        choices=(
+            ("REGIONAL", "Regional priority"),
+            ("COUNTRY", "Country priority"),
+            ("WATCHLIST", "Watch list"),
+            ("NONE", "No priority assigned"),
+        ),
     )
     status = forms.MultipleChoiceField(
         label="Barrier status",
@@ -86,29 +97,19 @@ class BarrierSearchForm(forms.Form):
     )
     resolved_date_to_year_resolved_in_part = forms.CharField(required=False)
 
-    # Estimated resolved date filter inputs for status: 'Open: In progress' - status_id is 2
+    # Estimated resolution date filter inputs for status: 'Open: In progress' - status_id is 2
     resolved_date_from_month_open_in_progress = forms.CharField(
-        label="Estimated resolved date from",
+        label="Estimated resolution date from",
         help_text="Example, 01 2021",
         required=False,
     )
     resolved_date_from_year_open_in_progress = forms.CharField(required=False)
     resolved_date_to_month_open_in_progress = forms.CharField(
-        label="Estimated resolved date to", help_text="Example, 01 2022", required=False
-    )
-    resolved_date_to_year_open_in_progress = forms.CharField(required=False)
-
-    # Estimated resolved date filter inputs for status: 'Open: Pending action' - status_id is 1
-    resolved_date_from_month_open_pending_action = forms.CharField(
-        label="Estimated resolved date from",
-        help_text="Example, 01 2021",
+        label="Estimated resolution date to",
+        help_text="Example, 01 2022",
         required=False,
     )
-    resolved_date_from_year_open_pending_action = forms.CharField(required=False)
-    resolved_date_to_month_open_pending_action = forms.CharField(
-        label="Estimated resolved date to", help_text="Example, 01 2022", required=False
-    )
-    resolved_date_to_year_open_pending_action = forms.CharField(required=False)
+    resolved_date_to_year_open_in_progress = forms.CharField(required=False)
 
     tags = forms.MultipleChoiceField(
         label="Tags",
@@ -204,6 +205,14 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
+    ordering = forms.ChoiceField(
+        label="Sort by",
+        choices=(),
+        required=False,
+        widget=forms.Select(
+            attrs={"class": "govuk-select dmas-search-ordering-select"}
+        ),
+    )
 
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
@@ -229,9 +238,9 @@ class BarrierSearchForm(forms.Form):
         self.set_organisation_choices()
         self.set_category_choices()
         self.set_region_choices()
-        self.set_priority_choices()
         self.set_status_choices()
         self.set_tags_choices()
+        self.set_ordering_choices()
         self.index_filter_groups()
 
     def get_data_from_querydict(self, data):
@@ -250,8 +259,8 @@ class BarrierSearchForm(forms.Form):
             "organisation": data.getlist("organisation"),
             "category": data.getlist("category"),
             "region": data.getlist("region"),
-            "top_priority": data.getlist("top_priority"),
-            "priority": data.getlist("priority"),
+            "top_priority_status": data.getlist("top_priority_status"),
+            "priority_level": data.getlist("priority_level"),
             "status": data.getlist("status"),
             "tags": data.getlist("tags"),
             "delivery_confidence": data.getlist("delivery_confidence"),
@@ -269,6 +278,7 @@ class BarrierSearchForm(forms.Form):
             "economic_impact_assessment": data.getlist("economic_impact_assessment"),
             "commodity_code": data.getlist("commodity_code"),
             "commercial_value_estimate": data.getlist("commercial_value_estimate"),
+            "ordering": data.get("ordering"),
         }
 
         for status_value in STATUS_WITH_DATE_FILTER:
@@ -315,7 +325,9 @@ class BarrierSearchForm(forms.Form):
     def set_country_trading_bloc_choices(self):
         trading_bloc_labels = {
             "TB00016": "Include country specific implementations of EU regulations",
-            "TB00026": "Include country specific implementations of Mercosur regulations",
+            "TB00026": (
+                "Include country specific implementations of Mercosur regulations"
+            ),
             "TB00013": "Include country specific implementations of EAEU regulations",
             "TB00017": "Include country specific implementations of GCC regulations",
         }
@@ -359,24 +371,8 @@ class BarrierSearchForm(forms.Form):
         ]
         self.fields["region"].choices = choices
 
-    def set_priority_choices(self):
-        priorities = self.metadata.data["barrier_priorities"]
-        priorities.sort(key=itemgetter("order"))
-        choices = [
-            (
-                priority["code"],
-                (
-                    f"<span class='priority-marker "
-                    f"priority-marker--{ priority['code'].lower() }'>"
-                    f"</span>{priority['name']}"
-                ),
-            )
-            for priority in priorities
-        ]
-        self.fields["priority"].choices = choices
-
     def set_status_choices(self):
-        status_ids = ("1", "2", "3", "4", "5", "7")
+        status_ids = ("2", "3", "4", "5")
         choices = [
             (id, value)
             for id, value in self.metadata.data["barrier_status"].items()
@@ -389,9 +385,14 @@ class BarrierSearchForm(forms.Form):
         choices = [
             (str(tag["id"]), tag["title"])
             for tag in self.metadata.get_barrier_tag_choices("search")
+            if tag["title"] not in DEPRECATED_TAGS
         ]
         choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
+
+    def set_ordering_choices(self):
+        choices = self.metadata.get_search_ordering_choices()
+        self.fields["ordering"].choices = self.metadata.get_search_ordering_choices()
 
     def clean_country(self):
         data = self.cleaned_data["country"]
@@ -482,12 +483,8 @@ class BarrierSearchForm(forms.Form):
         params["ignore_all_sectors"] = self.cleaned_data.get("ignore_all_sectors")
         params["organisation"] = ",".join(self.cleaned_data.get("organisation", []))
         params["category"] = ",".join(self.cleaned_data.get("category", []))
-        params["priority"] = ",".join(self.cleaned_data.get("priority", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
-        params["tags"] = ",".join(
-            self.cleaned_data.get("tags", [])
-            + self.cleaned_data.get("top_priority", [])
-        )
+        params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         for status_value in STATUS_WITH_DATE_FILTER:
             params[f"status_date_{status_value}"] = self.format_resolved_date(
                 status_value
@@ -495,6 +492,10 @@ class BarrierSearchForm(forms.Form):
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
         )
+        params["top_priority_status"] = ",".join(
+            self.cleaned_data.get("top_priority_status", [])
+        )
+        params["priority_level"] = ",".join(self.cleaned_data.get("priority_level", []))
         params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")
@@ -517,6 +518,9 @@ class BarrierSearchForm(forms.Form):
         params["commodity_code"] = ",".join(self.cleaned_data.get("commodity_code", []))
         params["commercial_value_estimate"] = ",".join(
             self.cleaned_data.get("commercial_value_estimate", [])
+        )
+        params["ordering"] = self.cleaned_data.get(
+            "ordering", settings.API_BARRIER_LIST_DEFAULT_SORT
         )
 
         return {k: v for k, v in params.items() if v}
@@ -553,7 +557,7 @@ class BarrierSearchForm(forms.Form):
         return {
             key: value
             for key, value in self.cleaned_data.items()
-            if value and not self.fields[key].widget.is_hidden
+            if value and not self.fields[key].widget.is_hidden and not key == "ordering"
         }
 
     def get_raw_filters_querystring(self):

@@ -3,6 +3,7 @@ import dateutil.parser
 from barriers.constants import PUBLIC_BARRIER_STATUSES
 from barriers.models.assessments import (
     EconomicAssessment,
+    EconomicImpactAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
 )
@@ -31,6 +32,30 @@ class Barrier(APIModel):
 
     def __init__(self, data):
         self.data = data
+
+    @property
+    def title(self):
+        return self.data["title"]
+
+    @property
+    def summary(self):
+        return self.data["summary"]
+
+    @property
+    def is_summary_sensitive(self):
+        return self.data["is_summary_sensitive"]
+
+    @property
+    def product(self):
+        return self.data["product"]
+
+    @property
+    def sub_status(self):
+        return self.data["sub_status"]
+
+    @property
+    def source(self):
+        return self.data.get("source")
 
     @property
     def metadata(self):
@@ -75,6 +100,10 @@ class Barrier(APIModel):
         return self.data.get("public_eligibility_postponed")
 
     @property
+    def top_priority_status(self):
+        return self.data.get("top_priority_status")
+
+    @property
     def commodities_grouped_by_country(self):
         grouped_commodities = {}
         for barrier_commodity in self.commodities:
@@ -111,7 +140,7 @@ class Barrier(APIModel):
 
     @property
     def reported_on(self):
-        return self.created_on
+        return dateutil.parser.parse(self.data["reported_on"])
 
     @property
     def archived_economic_assessments(self):
@@ -153,13 +182,10 @@ class Barrier(APIModel):
     @property
     def economic_impact_assessments(self):
         if self._economic_impact_assessments is None:
-            self._economic_impact_assessments = []
-            for economic_assessment in self.economic_assessments:
-                for (
-                    economic_impact_assessment
-                ) in economic_assessment.economic_impact_assessments:
-                    economic_impact_assessment.economic_assessment = economic_assessment
-                    self._economic_impact_assessments.append(economic_impact_assessment)
+            self._economic_impact_assessments = [
+                EconomicImpactAssessment(assessment)
+                for assessment in self.data.get("valuation_assessments", [])
+            ]
         return self._economic_impact_assessments
 
     @property
@@ -276,6 +302,14 @@ class Barrier(APIModel):
         return self.status["id"] == "5"
 
     @property
+    def is_dormant(self):
+        return self.status["id"] == "5"
+
+    @property
+    def is_unknown(self):
+        return self.status["id"] == "7"
+
+    @property
     def progress_status(self):
         return self.data.get("progress_status")
 
@@ -292,9 +326,19 @@ class Barrier(APIModel):
         return self.data.get("progress_updates")
 
     @property
-    def latest_progress_update(self):
+    def latest_top_100_progress_update(self):
         if self.progress_updates:
             return self.progress_updates[0]
+        return None
+
+    @property
+    def programme_fund_progress_updates(self):
+        return self.data.get("programme_fund_progress_updates")
+
+    @property
+    def latest_programme_fund_progress_update(self):
+        if self.programme_fund_progress_updates:
+            return self.programme_fund_progress_updates[0]
         return None
 
 

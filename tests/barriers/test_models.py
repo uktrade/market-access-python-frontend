@@ -12,7 +12,7 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.admin_areas[1]["name"] == "Sao Paulo"
 
         assert barrier.created_on.date() == datetime.date(2019, 10, 28)
-        assert barrier.reported_on.date() == datetime.date(2019, 10, 28)
+        assert barrier.reported_on.date() == datetime.date(2019, 10, 30)
         assert barrier.modified_on.date() == datetime.date(2020, 1, 21)
 
         assert barrier.location == "Rio de Janeiro, Sao Paulo (Brazil)"
@@ -96,19 +96,9 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
             "readable_value": "Europe",
             "value": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
         }
-        assert saved_search.readable_filters["priority"] == {
-            "label": "Barrier priority",
-            "readable_value": (
-                "<span class='priority-marker priority-marker--high'>"
-                "</span>High, "
-                "<span class='priority-marker priority-marker--medium'>"
-                "</span>Medium"
-            ),
-            "value": ["HIGH", "MEDIUM"],
-        }
         assert saved_search.readable_filters["status"] == {
             "label": "Barrier status",
-            "readable_value": "Open: In progress, Resolved: In part",
+            "readable_value": "Open, Resolved: In part",
             "value": ["2", "3"],
         }
         assert saved_search.readable_filters["show"] == {
