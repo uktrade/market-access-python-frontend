@@ -233,8 +233,8 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1,
                 max_value=12,
                 error_messages={
-                    "min_value": "Date resolved must be a real date",
-                    "max_value": "Date resolved must be a real date",
+                    "min_value": "Date must be a real date",
+                    "max_value": "Date must be a real date",
                     "incomplete": "Enter a month",
                 },
             ),
@@ -243,8 +243,8 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1990,
                 max_value=2100,
                 error_messages={
-                    "min_value": "Date resolved must be after 1990",
-                    "max_value": "Date resolved must be before 2100",
+                    "min_value": "Date must be after 1990",
+                    "max_value": "Date must be before 2100",
                     "incomplete": "Enter a year",
                 },
             ),

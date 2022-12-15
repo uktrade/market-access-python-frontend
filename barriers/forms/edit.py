@@ -37,6 +37,7 @@ class UpdateCommercialValueForm(APIFormMixin, forms.Form):
             "required": "Enter the value of the barrier",
             "min_value": "Value must be 0 or more",
             "max_value": "Value must be 1000000000000 or less",
+            "invalid": "Enter a whole number",
         },
     )
     commercial_value_explanation = forms.CharField(
