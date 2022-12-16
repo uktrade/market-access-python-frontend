@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit estimated resolution date{% endblock %}
+{% block page_title %}{{ block.super }} - Add estimated resolution date{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,10 +8,10 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Update the Barrier' %}
+    {% include 'partials/heading.html' with text='Add estimated resolution date' %}
 
     {% if barrier.estimated_resolution_date %}
-        <div class="govuk-inset-text">Current estimated resolution date is <strong>{{ barrier.estimated_resolution_date|date:"j F Y" }}</strong></div>
+        <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
     {% endif %}
 
     {% form_error_banner form %}
@@ -36,12 +36,12 @@
         {% if barrier.estimated_resolution_date %}
             <div>
                 <button class="govuk-button govuk-button--secondary" data-module="govuk-button" name="clear" value="1">
-                    Remove estimated resolution date and exit to barrier
+                    Remove date and return
                 </button>
             </div>
         {% endif %}
 
-        <button class="govuk-button" data-module="govuk-button">Save and exit to barrier</button>
+        <button class="govuk-button" data-module="govuk-button">Save and return</button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
 

@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit source{% endblock %}
+{% block page_title %}{{ block.super }} - Information source{% endblock %}
 
 {% block body_script %}
     <script>
@@ -14,7 +14,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit barrier header' %}
+    {% include 'partials/heading.html' with text='Information source' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -49,7 +49,7 @@
             </fieldset>
         </div>
 
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
     </form>
 
 {% endblock %}

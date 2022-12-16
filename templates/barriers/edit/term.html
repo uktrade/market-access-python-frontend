@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit barrier scope{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier type{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit barrier scope' %}
+    {% include 'partials/heading.html' with text='Barrier type' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -32,7 +32,7 @@
             </fieldset>
         </div>
 
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
     </form>
 
 {% endblock %}
