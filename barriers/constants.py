@@ -57,21 +57,21 @@ UK_COUNTRY_ID = "80756b9a-5d95-e211-a939-e4115bead28a"
 
 
 PUBLIC_BARRIER_STATUSES = Choices(
-    (0, "UNKNOWN", "To be decided"),
-    (10, "INELIGIBLE", "Not allowed"),
-    (20, "ELIGIBLE", "Allowed"),
-    (30, "READY", "Ready"),
-    (40, "PUBLISHED", "Published"),
-    (50, "UNPUBLISHED", "Unpublished"),
-    (60, "REVIEW_LATER", "Barriers marked as 'review later'"),
+    ("0", "UNKNOWN", "To be decided"),
+    ("10", "INELIGIBLE", "Not allowed"),
+    ("20", "ELIGIBLE", "Allowed"),
+    ("30", "READY", "Ready"),
+    ("40", "PUBLISHED", "Published"),
+    ("50", "UNPUBLISHED", "Unpublished"),
+    ("60", "REVIEW_LATER", "Barriers marked as 'review later'"),
 )
 
 
 AWAITING_REVIEW_FROM = Choices(
-    (0, "CONTENT", "Content"),
-    (10, "CONTENT_AFTER_CHANGES", "Content (edited since last review)"),
-    (20, "HM_TRADE_COMMISSION", "HM Trade Commission"),
-    (30, "GOVERNMENT_ORGANISATION", "Government organisation"),
+    ("0", "CONTENT", "Content"),
+    ("10", "CONTENT_AFTER_CHANGES", "Content (edited since last review)"),
+    ("20", "HM_TRADE_COMMISSION", "HM Trade Commission"),
+    ("30", "GOVERNMENT_ORGANISATION", "Government organisation"),
 )
 
 ACTION_PLAN_TASK_CHOICES = Choices(
