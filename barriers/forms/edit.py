@@ -110,7 +110,7 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         )
 
 
-class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
+class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     CHOICES = [
         ("ON_TRACK", "On track"),
         ("RISK_OF_DELAY", "Risk of delay"),
@@ -150,7 +150,11 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
 
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
-        help_text="For example, 11 2024",
+        help_text=(
+            "Add a new estimated resolution date as part of this update or leave the"
+            " fields blank to keep the current date. The date should be no more than"
+            " 5 years in the future. Enter the date in the format, 11 2024."
+        ),
         error_messages={"required": "Enter an estimated resolution date"},
         required=False,
     )
@@ -166,6 +170,9 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
             self.fields[
                 "estimated_resolution_date"
             ].label = "Change estimated resolution date"
+
+    def clean_estimated_resolution_date(self):
+        return self.cleaned_data["estimated_resolution_date"].isoformat()
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -184,7 +191,7 @@ class Top100ProgressUpdateForm(APIFormMixin, forms.Form):
                 message=self.cleaned_data["update"],
                 next_steps=self.cleaned_data["next_steps"],
             )
-        if self.estimated_resolution_date:
+        if self.cleaned_data.get("estimated_resolution_date"):
             client.barriers.patch(
                 id=self.barrier_id,
                 estimated_resolution_date=self.cleaned_data.get(
@@ -218,7 +225,11 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
     )
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
-        help_text="For example, 11 2024",
+        help_text=(
+            "Add a new estimated resolution date as part of this update or leave the"
+            " fields blank to keep the current date. The date should be no more than"
+            " 5 years in the future. Enter the date in the format, 11 2024."
+        ),
         error_messages={"required": "Enter an estimated resolution date"},
         required=False,
     )
@@ -234,6 +245,9 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
             self.fields[
                 "estimated_resolution_date"
             ].label = "Change estimated resolution date"
+
+    def clean_estimated_resolution_date(self):
+        return self.cleaned_data["estimated_resolution_date"].isoformat()
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -254,7 +268,7 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
                 ],
                 expenditure=self.cleaned_data["expenditure"],
             )
-        if self.estimated_resolution_date:
+        if self.cleaned_data.get("estimated_resolution_date"):
             client.barriers.patch(
                 id=self.barrier_id,
                 estimated_resolution_date=self.cleaned_data.get(
