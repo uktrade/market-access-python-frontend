@@ -36,6 +36,13 @@ class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/progress_updates/add_top_100_update.html"
     form_class = Top100ProgressUpdateForm
 
+    def get_initial(self):
+        initial = super().get_initial()
+        estimated_resolution_date = self.barrier.estimated_resolution_date
+        if estimated_resolution_date:
+            initial["estimated_resolution_date"] = estimated_resolution_date
+        return initial
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
@@ -52,6 +59,13 @@ class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
 class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/progress_updates/add_programme_fund_update.html"
     form_class = ProgrammeFundProgressUpdateForm
+
+    def get_initial(self):
+        initial = super().get_initial()
+        estimated_resolution_date = self.barrier.estimated_resolution_date
+        if estimated_resolution_date:
+            initial["estimated_resolution_date"] = estimated_resolution_date
+        return initial
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

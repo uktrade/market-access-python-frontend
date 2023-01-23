@@ -155,7 +155,6 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             " fields blank to keep the current date. The date should be no more than"
             " 5 years in the future. Enter the date in the format, 11 2024."
         ),
-        error_messages={"required": "Enter an estimated resolution date"},
         required=False,
     )
 
@@ -172,7 +171,9 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             ].label = "Change estimated resolution date"
 
     def clean_estimated_resolution_date(self):
-        return self.cleaned_data["estimated_resolution_date"].isoformat()
+        if self.cleaned_data["estimated_resolution_date"]:
+            return self.cleaned_data["estimated_resolution_date"].isoformat()
+        return self.cleaned_data["estimated_resolution_date"]
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -230,7 +231,6 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
             " fields blank to keep the current date. The date should be no more than"
             " 5 years in the future. Enter the date in the format, 11 2024."
         ),
-        error_messages={"required": "Enter an estimated resolution date"},
         required=False,
     )
 
@@ -247,7 +247,9 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
             ].label = "Change estimated resolution date"
 
     def clean_estimated_resolution_date(self):
-        return self.cleaned_data["estimated_resolution_date"].isoformat()
+        if self.cleaned_data["estimated_resolution_date"]:
+            return self.cleaned_data["estimated_resolution_date"].isoformat()
+        return self.cleaned_data["estimated_resolution_date"]
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
