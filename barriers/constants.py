@@ -223,10 +223,10 @@ ACTION_PLAN_STAKEHOLDER_STATUS_CHOICES = TextChoices(
 
 TOP_PRIORITY_BARRIER_STATUS = Choices(
     ("NONE", ""),
-    ("APPROVAL_PENDING", "Top 100 Priority Barrier - Approval Pending"),
-    ("REMOVAL_PENDING", "Top 100 Priority Barrier - Removal Pending"),
-    ("APPROVED", "Top 100 Priority Barrier"),
-    ("RESOLVED", "Top 100 Priority Barrier - Resolved"),
+    ("APPROVAL_PENDING", "Top 100 Priority Approval Pending"),
+    ("REMOVAL_PENDING", "Top 100 Priority Removal Pending"),
+    ("APPROVED", "Top 100 Priority"),
+    ("RESOLVED", "Resolved Top 100 Priority"),
 )
 
 TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES = Choices(
