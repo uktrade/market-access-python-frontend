@@ -61,6 +61,8 @@ class BarrierSearchForm(forms.Form):
             ("REMOVAL_PENDING", "Removal pending"),
             ("RESOLVED", "Resolved top 100 priority"),
         ),
+        # Provide tuple and match to choices to display help text relevent to choice
+        help_text=(("APPROVED", "Includes removal pending"),),
         required=False,
     )
     priority_level = forms.MultipleChoiceField(
