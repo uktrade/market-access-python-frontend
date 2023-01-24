@@ -155,6 +155,10 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             " fields blank to keep the current date. The date should be no more than"
             " 5 years in the future. Enter the date in the format, 11 2024."
         ),
+        error_messages={
+            "invalid_year": "Enter an estimated resolution date",
+            "invalid_month": "Enter an estimated resolution date",
+        },
         required=False,
     )
 
@@ -231,6 +235,10 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
             " fields blank to keep the current date. The date should be no more than"
             " 5 years in the future. Enter the date in the format, 11 2024."
         ),
+        error_messages={
+            "invalid_year": "Enter an estimated resolution date",
+            "invalid_month": "Enter an estimated resolution date",
+        },
         required=False,
     )
 
