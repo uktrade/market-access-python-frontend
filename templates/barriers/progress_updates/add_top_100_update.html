@@ -77,11 +77,11 @@
 
         <div id="{{ form.estimated_resolution_date.name }}" class="{% form_group_classes form.estimated_resolution_date.errors %}">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.estimated_resolution_date.label }}</legend>
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ form.estimated_resolution_date.label }}</legend>
 
 
                 {% if barrier.estimated_resolution_date %}
-                    <span class="govuk-hint">Current estimated resolution date:</span>
+                    <span class="govuk-hint mt-2" >Current estimated resolution date:</span>
 
                     <div class="idented-box">
                         {{ barrier.estimated_resolution_date|date:"F o" }}
