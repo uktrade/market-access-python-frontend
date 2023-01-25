@@ -149,7 +149,7 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     )
 
     estimated_resolution_date = MonthYearInFutureField(
-        label="Estimated resolution date",
+        label="Estimated resolution date (optional)",
         help_text=(
             "Add a new estimated resolution date as part of this update or leave the"
             " fields blank to keep the current date. The date should be no more than"
@@ -229,7 +229,7 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter your expenditure"},
     )
     estimated_resolution_date = MonthYearInFutureField(
-        label="Estimated resolution date",
+        label="Estimated resolution date (optional)",
         help_text=(
             "Add a new estimated resolution date as part of this update or leave the"
             " fields blank to keep the current date. The date should be no more than"
