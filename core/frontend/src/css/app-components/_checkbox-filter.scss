@@ -126,9 +126,8 @@ $default-spacing-unit: 5px;
 
 .checkbox-filter__hint {
 
-	@include govuk-font(16);
+	@include govuk-font(14);
 	display: block;
-	margin-top: 5px;
 	color: $govuk-dark-grey;
 
 	a {
