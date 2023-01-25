@@ -2,37 +2,37 @@
     <div class="history-item__new-value">
         {% if item.new_value.value == "APPROVAL_PENDING" %}
             <span class="diff__ins">
-                Top 100 Priority Barrier - Approval Pending
+                Top 100 Approval Pending
                 <br/>
                 {{ item.new_value.reason }}
             </span>
         {% elif item.new_value.value == "APPROVED" %}
             <span class="diff__ins">
-                Top 100 Priority Barrier - Approved
+                Top 100 Priority
                 <br/>
                 {{ item.new_value.reason }}
             </span>
         {% elif item.new_value.value == "RESOLVED" %}
             <span class="diff__ins">
-                Top 100 Priority Barrier - Resolved
+                Resolved Top 100 Priority
                 <br/>
                 {{ item.new_value.reason }}
             </span>
         {% elif item.new_value.value == "REMOVAL_PENDING" %}
             <span class="diff__ins">
-                Top 100 Priority Barrier - Removal pending
+                Top 100 Priority Removal pending
                 <br/>
                 {{ item.new_value.reason }}
             </span>
         {% elif item.new_value.value == "NONE" %}
             <span class="diff__ins">
-                Top 100 Priority Barrier
+                Top 100 Priority
                 <br/>
                 {{ item.new_value.reason }}
             </span>
         {% else %}
             <span class="diff__del">
-                Top 100 Priority Barrier
+                Top 100 Priority
             </span>
         {% endif %}
     </div>

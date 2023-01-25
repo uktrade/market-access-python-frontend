@@ -8592,8 +8592,8 @@
       "order": 3
     },
     {
-      "id": 35,
-      "title": "Asia Pacific Cross-Government Pilot",
+      "id": 4,
+      "title": "Asia Pacific Pilot",
       "description": "",
       "show_at_reporting": true,
       "order": 4
@@ -9274,22 +9274,22 @@
     },
     {
       "code": "APPROVAL_PENDING",
-      "name": "Top 100 Priority Barrier - Approval Pending",
+      "name": "Top 100 Priority Approval Pending",
       "order": 1
     },
     {
       "code": "REMOVAL_PENDING",
-      "name": "Top 100 Priority Barrier - Removal Pending",
+      "name": "Top 100 Priority Removal Pending",
       "order": 2
     },
     {
       "code": "APPROVED",
-      "name": "Top 100 Priority Barrier",
+      "name": "Top 100 Priority",
       "order": 3
     },
     {
       "code": "RESOLVED",
-      "name": "Top 100 Priority Barrier - Resolved",
+      "name": "Resolved Top 100 Priority",
       "order": 4
     }
   ],
