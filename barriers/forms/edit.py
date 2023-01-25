@@ -166,13 +166,6 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
         self.barrier_id = barrier_id
         self.progress_update_id = progress_update_id
         super().__init__(*args, **kwargs)
-        estimated_resolution_date = kwargs.get("initial", {}).get(
-            "estimated_resolution_date"
-        )
-        if estimated_resolution_date:
-            self.fields[
-                "estimated_resolution_date"
-            ].label = "Change estimated resolution date"
 
     def clean_estimated_resolution_date(self):
         if self.cleaned_data["estimated_resolution_date"]:
@@ -246,13 +239,6 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
         self.barrier_id = barrier_id
         self.programme_fund_update_id = programme_fund_update_id
         super().__init__(*args, **kwargs)
-        estimated_resolution_date = kwargs.get("initial", {}).get(
-            "estimated_resolution_date"
-        )
-        if estimated_resolution_date:
-            self.fields[
-                "estimated_resolution_date"
-            ].label = "Change estimated resolution date"
 
     def clean_estimated_resolution_date(self):
         if self.cleaned_data["estimated_resolution_date"]:
