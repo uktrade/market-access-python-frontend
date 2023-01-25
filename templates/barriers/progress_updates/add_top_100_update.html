@@ -75,6 +75,30 @@
         </div>
 
 
+        <div id="{{ form.estimated_resolution_date.name }}" class="{% form_group_classes form.estimated_resolution_date.errors %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ form.estimated_resolution_date.label }}</legend>
+
+
+                {% if barrier.estimated_resolution_date %}
+                    <span class="govuk-hint mt-2" >Current estimated resolution date:</span>
+
+                    <div class="indented-box">
+                        {{ barrier.estimated_resolution_date|date:"F o" }}
+                    </div>
+
+                {% endif %}
+
+                <span class="govuk-hint">{{ form.estimated_resolution_date.help_text }}</span>
+
+                {% form_field_error form "estimated_resolution_date" %}
+
+                <div class="govuk-date-input">
+                    {{ form.estimated_resolution_date }}
+                </div>
+            </fieldset>
+        </div>
+
         <input type="submit" value="Save and exit to barrier" class="govuk-button">
         <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:barrier_detail' barrier_id=barrier.id %}">Cancel</a>
 
