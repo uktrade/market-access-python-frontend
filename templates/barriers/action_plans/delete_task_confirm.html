@@ -1,20 +1,20 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Delete intervention{% endblock %}
+{% block page_title %}{{ block.super }} - Delete task confirmation{% endblock %}
 
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:action_plan_edit_task' barrier.id milestone_id task_id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Are you sure you want to delete this intervention?' %}
-    {% include 'partials/sub_heading.html' with text=milestone.objective %}
+    {% include 'partials/heading.html' with text='Do you want to delete this objective task?' %}
+    {% include 'partials/sub_heading.html' with text='Arrange discussion with key local stakeholders to plan potential solutions' %}
 
     <form action="" method="POST" novalidate>
         {% csrf_token %}
-        <button class="govuk-button" data-module="govuk-button">Confirm</button>
-        <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
+        <button class="delete-button" data-module="govuk-button">Delete</button>
+        <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
     </form>
 
 {% endblock %}

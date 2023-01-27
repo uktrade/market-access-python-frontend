@@ -14,7 +14,7 @@
     <div class="restrict-width">
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
-            <button class="delete-user-button">Yes, i'm sure - delete this profile</button>
+            <button class="delete-button">Yes, i'm sure - delete this profile</button>
             <a class="form-cancel govuk-link" href="{% url 'users:user_detail' user.id %}">Cancel</a>
         </form>
     </div>

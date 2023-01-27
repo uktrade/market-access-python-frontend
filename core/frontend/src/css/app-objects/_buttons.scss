@@ -48,7 +48,7 @@
 	}
 }
 
-.delete-user-button {
+.delete-button {
 	@extend .govuk-button;
 	background-color: $govuk-error-colour;
 
@@ -57,7 +57,7 @@
 	}
 }
 
-.delete-user-link {
+.delete-link {
 	@extend .govuk-link;
 	color: $govuk-error-colour;
 

@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 from django.http import Http404, HttpResponseRedirect
@@ -25,6 +26,8 @@ from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from users.mixins import UserSearchMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
+
+logger = logging.getLogger(__name__)
 
 
 class ActionPlanFormSuccessUrlMixin:
@@ -262,27 +265,33 @@ class ActionPlanMilestoneFormView(
 class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
     template_name = "barriers/action_plans/delete_milestone_confirm.html"
 
-    def get_milestone(self):
+    def get_related_tasks(self):
         milestones = self.action_plan.milestones
         found = list(
             filter(
-                lambda milestone: milestone["id"] == str(self.kwargs.get("id")),
+                lambda milestone: milestone.id == str(self.kwargs.get("milestone_id")),
                 milestones,
             )
         )
-        return found[0]
+
+        task_list = found[0].tasks
+        task_names = []
+        for task in task_list:
+            task_names.append(task.action_text)
+
+        return task_names
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["action_plan"] = self.action_plan
-        context_data["milestone"] = self.get_milestone()
+        context_data["objective_tasks"] = self.get_related_tasks()
         return context_data
 
     def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        milestone_id = str(self.kwargs.get("id"))
+        milestone_id = str(self.kwargs.get("milestone_id"))
         barrier_id = str(self.kwargs.get("barrier_id"))
-        client.action_plans.delete_milestone(barrier_id, milestone_id)
+        client.action_plan_milestones.delete_milestone(barrier_id, milestone_id)
         return HttpResponseRedirect(
             reverse(
                 "barriers:action_plan",
@@ -318,6 +327,8 @@ class ActionPlanTaskFormView(
         if task:
             initial.update(task.data)
             initial["assigned_to"] = task.assigned_to_email
+            initial["task_id"] = str(task.id)
+            initial["milestone_id"] = str(task.milestone)
         if "action_type" in initial and initial["action_type"]:
             action_type = initial["action_type"]
             initial[f"action_type_category_{action_type}"] = initial[
@@ -442,7 +453,6 @@ class EditActionPlanTaskProgressFormView(
 
 
 class DeleteActionPlanTaskView(
-    # ActionPlanTaskFormViewMixin,
     BarrierMixin,
     TemplateView,
 ):
@@ -450,15 +460,13 @@ class DeleteActionPlanTaskView(
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["action_plan"] = self.action_plan
-        context_data["task"] = self.get_task()
         return context_data
 
     def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        task_id = str(self.kwargs.get("id"))
+        task_id = str(self.kwargs.get("task_id"))
         barrier_id = str(self.kwargs.get("barrier_id"))
-        client.action_plans.delete_task(barrier_id, task_id)
+        client.action_plan_tasks.delete_task(barrier_id, task_id)
         return HttpResponseRedirect(
             reverse(
                 "barriers:action_plan",

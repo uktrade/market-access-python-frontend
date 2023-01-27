@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import time
 from typing import TYPE_CHECKING
 
@@ -33,6 +34,8 @@ from utils.models import ModelList
 
 if TYPE_CHECKING:
     from utils.api.client import MarketAccessAPIClient
+
+logger = logging.getLogger(__name__)
 
 
 class APIResource:
@@ -441,7 +444,7 @@ class ActionPlanMilestoneResource(APIResource):
 
     def delete_milestone(self, barrier_id, milestone_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
-        return self.model(self.client.delete(url))
+        return self.client.delete(url)
 
 
 class ActionPlanTaskResource(APIResource):
@@ -468,8 +471,7 @@ class ActionPlanTaskResource(APIResource):
 
     def delete_task(self, barrier_id, task_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
-        kwargs["milestone_id"] = str(kwargs["milestone_id"])
-        return self.model(self.client.delete(url))
+        return self.client.delete(url)
 
 
 class ActionPlanStakeholderResource(APIResource):
