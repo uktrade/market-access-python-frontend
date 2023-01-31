@@ -265,7 +265,7 @@ class ActionPlanMilestoneFormView(
 class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
     template_name = "barriers/action_plans/delete_milestone_confirm.html"
 
-    def get_related_tasks(self):
+    def get_milestone(self):
         milestones = self.action_plan.milestones
         found = list(
             filter(
@@ -273,8 +273,10 @@ class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
                 milestones,
             )
         )
+        return found[0]
 
-        task_list = found[0].tasks
+    def get_related_tasks(self, milestone):
+        task_list = milestone.tasks
         task_names = []
         for task in task_list:
             task_names.append(task.action_text)
@@ -284,7 +286,10 @@ class DeleteActionPlanMilestoneView(BarrierMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["action_plan"] = self.action_plan
-        context_data["objective_tasks"] = self.get_related_tasks()
+        context_data["milestone"] = self.get_milestone()
+        context_data["objective_tasks"] = self.get_related_tasks(
+            context_data["milestone"]
+        )
         return context_data
 
     def post(self, request, *args, **kwargs):
@@ -458,8 +463,29 @@ class DeleteActionPlanTaskView(
 ):
     template_name = "barriers/action_plans/delete_task_confirm.html"
 
+    def get_milestone(self):
+        milestones = self.action_plan.milestones
+        found = list(
+            filter(
+                lambda milestone: milestone.id == str(self.kwargs.get("milestone_id")),
+                milestones,
+            )
+        )
+        return found[0]
+
+    def get_task(self):
+        milestone = self.get_milestone()
+        task_list = milestone.tasks
+
+        found = list(
+            filter(lambda task: task.id == str(self.kwargs.get("task_id")), task_list)
+        )
+
+        return found[0]
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        context_data["task"] = self.get_task()
         return context_data
 
     def post(self, request, *args, **kwargs):
