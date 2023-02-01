@@ -262,3 +262,27 @@ class ActionPlanMilestoneTasksTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
         assert "Location" in response
         assert response["Location"] == expected_url
+
+    @patch("utils.api.resources.ActionPlanTaskResource.delete_task")
+    def test_delete_task(self, mock_delete_method: Mock):
+        mock_delete_method.return_value = True
+
+        barrier_id = self.barrier["id"]
+
+        url = reverse(
+            "barriers:action_plan_delete_task",
+            kwargs={
+                "barrier_id": barrier_id,
+                "milestone_id": self.action_plan_milestone.id,
+                "task_id": self.action_plan_task.id,
+            },
+        )
+        response = self.client.post(
+            url,
+        )
+
+        assert response.status_code == 302
+        assert response.url == f"/barriers/{barrier_id}/action_plan"
+
+        assert mock_delete_method.call_args[0][0] == barrier_id
+        assert mock_delete_method.call_args[0][1] == self.action_plan_task.id

@@ -689,7 +689,7 @@ urlpatterns = [
         name="action_plan_edit_milestone",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/delete_milestone",
+        "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/delete_milestone",
         DeleteActionPlanMilestoneView.as_view(),
         name="action_plan_delete_milestone",
     ),
@@ -719,7 +719,7 @@ urlpatterns = [
         name="action_plan_edit_progress",
     ),
     path(
-        "barriers/<uuid:barrier_id>/action_plan/<uuid:id>/delete_task",
+        "barriers/<uuid:barrier_id>/action_plan/milestones/<uuid:milestone_id>/tasks/<uuid:task_id>/delete_task",
         DeleteActionPlanTaskView.as_view(),
         name="action_plan_delete_task",
     ),

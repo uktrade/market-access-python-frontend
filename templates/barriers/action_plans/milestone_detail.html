@@ -31,6 +31,9 @@
           <div class="govuk-button-group">
             <button class="govuk-button" data-module="govuk-button">Confirm</button>
             <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier.id %}">Cancel</a>
+            {% if form.milestone_id %}
+              <a class="delete-link" href="{% url 'barriers:action_plan_delete_milestone' barrier.id form.milestone_id %}">Delete</a>
+            {% endif %}
           </div>
       </form>
     </div>
