@@ -65,7 +65,7 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
     strategic_context = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Action plan overview",
-        help_text="Provide a brief description of your action plan",
+        help_text="Give a short summary of how you plan to resolve this barrier. You can add specific tasks and actions to the objective section of your action plan.",
         required=True,
     )
 
@@ -89,11 +89,11 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
 
     objective = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
-        label="Describe the objective",
-        error_messages={"required": "Enter your milestone objective"},
+        label="Add an objective",
+        error_messages={"required": "Enter an objective"},
         help_text=(
-            "Describe the objective. For example ‘Scope the extent of this barrier via"
-            " engagement with businesses’."
+            "Name your objective. For example, ‘Engage with companies to scope extent"
+            " of barrier."
         ),
     )
 
@@ -139,7 +139,7 @@ def action_plan_action_type_category_form_class_factory(action_type: str):
                     widget=forms.TextInput(attrs={"class": "govuk-input"}),
                     max_length=100,
                     label="Describe the task type",
-                    error_messages={"required": "Enter your task type description"},
+                    error_messages={"required": "Enter a description"},
                 )
 
         @property
@@ -303,7 +303,7 @@ class ActionPlanTaskForm(
         label="Provide a summary of the task and what it will involve",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         error_messages={
-            "required": "You must provide a summary of the task",
+            "required": "Enter a summary",
         },
     )
 
@@ -348,7 +348,7 @@ class ActionPlanTaskForm(
     assigned_to = forms.CharField(
         widget=forms.TextInput(attrs={"class": "govuk-input govuk-input--width-20"}),
         error_messages={
-            "required": "You must provide an assignee",
+            "required": "Assign this task to someone",
         },
     )
 
@@ -396,9 +396,9 @@ class ActionPlanTaskDateChangeReasonForm(
             }
         ),
         error_messages={
-            "required": "You must provide a reason for changing the completion date",
+            "required": "Enter a reason",
         },
-        help_text="Provide a reason for changing the completion date",
+        help_text="Provide the reason the estimated completion date has changed.",
     )
 
     status = forms.CharField(widget=forms.HiddenInput)
@@ -545,7 +545,7 @@ class ActionPlanRisksAndMitigationForm(
 ):
 
     has_risks = forms.ChoiceField(
-        label="Are there any risks in progressing this market access barrier?",
+        label="Could trying to resolve this barrier lead to outcomes that are not good for the UK?",
         choices=ACTION_PLAN_HAS_RISKS_CHOICES,
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
@@ -614,7 +614,7 @@ class ActionPlanRisksAndMitigationIntroForm(
     ClearableMixin, SubformMixin, APIFormMixin, forms.Form
 ):
     has_risks = forms.ChoiceField(
-        label="Are there any risks in progressing this market access barrier?",
+        label="Could trying to resolve this barrier lead to outcomes that are not good for the UK?",
         choices=ACTION_PLAN_HAS_RISKS_CHOICES,
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
