@@ -350,6 +350,7 @@ class ActionPlanTaskForm(
         error_messages={
             "required": "Assign this task to someone",
         },
+        help_text="Enter an email address and press return to assign this task to someone.",
     )
 
     assigned_stakeholders = forms.MultipleChoiceField(
@@ -357,7 +358,7 @@ class ActionPlanTaskForm(
         choices=[],
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
         label="Stakeholders",
-        help_text="Add relevant stakeholders to the task.",
+        help_text="Select relevant stakeholders to add their name to this task. This information is only viewable within the action plan.",
     )
 
     def clean_start_date(self):
