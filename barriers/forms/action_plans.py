@@ -357,7 +357,7 @@ class ActionPlanTaskForm(
         choices=[],
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
         label="Stakeholders",
-        help_text="Add relevant stakeholders to the task",
+        help_text="Add relevant stakeholders to the task.",
     )
 
     def clean_start_date(self):
@@ -551,9 +551,10 @@ class ActionPlanRisksAndMitigationForm(
     )
 
     potential_risks = forms.CharField(
-        label="Describe the risks",
+        label="What are the risks?",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         required=False,
+        help_text="For example, could our efforts make the barrier worse or cause tensions with the affected country.",
     )
 
     risk_level = forms.ChoiceField(
@@ -567,6 +568,7 @@ class ActionPlanRisksAndMitigationForm(
         label="How will you mitigate the risks?",
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         required=False,
+        help_text="Are there actions you can take to avoid a negative outcome?",
     )
 
     def __init__(self, barrier_id, action_plan, *args, **kwargs):
@@ -579,13 +581,13 @@ class ActionPlanRisksAndMitigationForm(
         has_risks = cleaned_data.get("has_risks")
         if has_risks == ACTION_PLAN_HAS_RISKS_CHOICES.YES:
             if not cleaned_data.get("potential_risks"):
-                self.add_error("potential_risks", "Please describe the risks")
+                self.add_error("potential_risks", "Enter the risks")
             if not cleaned_data.get("risk_level"):
-                self.add_error("risk_level", "Please select the risk level")
+                self.add_error("risk_level", "Select a risk level")
             if not cleaned_data.get("risk_mitigation_measures"):
                 self.add_error(
                     "risk_mitigation_measures",
-                    "Please describe the mitigation measures",
+                    "Enter actions to mitigate the risks",
                 )
         return cleaned_data
 
