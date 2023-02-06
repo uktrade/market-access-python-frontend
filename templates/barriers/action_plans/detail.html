@@ -168,6 +168,9 @@
                                 <p class="govuk-body">
                                     <a class="govuk-link govuk-!-font-size-19 govuk-!-font-weight-bold" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
                                 </p>
+                                {% if milestone.estimated_completion_date %}
+                                <div class="indented-box p-4 text-m">Estimated completion date: <strong>{{ milestone.estimated_completion_date }}</strong></div>
+                                {% endif %}
                                 <div class="govuk-body action_plans_task_list">
                                   {% if milestone.tasks %}
                                     <table class="govuk-table">
