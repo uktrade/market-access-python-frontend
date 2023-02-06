@@ -166,7 +166,7 @@
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">
                                 <p class="govuk-body">
-                                    <a class="govuk-link govuk-!-font-size-19 govuk-!-font-weight-bold" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
+                                    <a class="govuk-link govuk-!-font-size-19 govuk-!-font-weight-bold max-w-70 inline-block" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
 
                                     <span class="action_plan__objective_status">
                                         {% if milestone.status == "NOT_STARTED" %}

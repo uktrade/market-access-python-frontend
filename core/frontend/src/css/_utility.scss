@@ -7,6 +7,10 @@
     flex-wrap: wrap;
 }
 
+.inline-block{
+    display: inline-block;
+}
+
 .flex-column{
     flex-direction: column;
 }
@@ -77,6 +81,10 @@
 
 .inline-block{
     display: inline-block;
+}
+
+.max-w-70{
+    max-width: 70%;
 }
 
 .indented-box{
