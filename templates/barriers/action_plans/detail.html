@@ -167,6 +167,22 @@
                             <td class="govuk-table__cell">
                                 <p class="govuk-body">
                                     <a class="govuk-link govuk-!-font-size-19 govuk-!-font-weight-bold" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
+
+                                    <span class="action_plan__objective_status">
+                                        {% if milestone.status == "NOT_STARTED" %}
+                                            <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                                Not Started
+                                            </strong>
+                                        {% elif milestone.status == "IN_PROGRESS" %}
+                                            <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                                In Progress
+                                            </strong>
+                                        {% elif milestone.status == "COMPLETED" %}
+                                            <strong class="govuk-tag govuk-tag--green action_plans_tag">
+                                                Complete
+                                            </strong>
+                                        {% endif %}
+                                      </span>
                                 </p>
                                 {% if milestone.estimated_completion_date %}
                                 <div class="indented-box p-4 text-m">Estimated completion date: <strong>{{ milestone.estimated_completion_date }}</strong></div>
