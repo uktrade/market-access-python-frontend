@@ -297,7 +297,13 @@ class ActionPlanTaskForm(
     )
 
     start_date = MonthYearInFutureField()
-    completion_date = MonthYearInFutureField()
+    completion_date = MonthYearInFutureField(
+        label="Estimated completion date",
+        help_text=(
+            "When do you expect to finish this task? You can change this date if the"
+            " situation changes."
+        ),
+    )
 
     action_text = forms.CharField(
         label="Provide a summary of the task and what it will involve",
