@@ -65,7 +65,8 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
     strategic_context = forms.CharField(
         widget=forms.Textarea(attrs={"class": "govuk-textarea"}),
         label="Action plan overview",
-        help_text="Give a short summary of how you plan to resolve this barrier. You can add specific tasks and actions to the objective section of your action plan.",
+        help_text="Give a short summary of how you plan to resolve this barrier."
+        " You can add specific tasks and actions to the objective section of your action plan.",
         required=True,
     )
 
@@ -364,7 +365,8 @@ class ActionPlanTaskForm(
         choices=[],
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
         label="Stakeholders",
-        help_text="Select relevant stakeholders to add their name to this task. This information is only viewable within the action plan.",
+        help_text="Select relevant stakeholders to add their name to this task. "
+        "This information is only viewable within the action plan.",
     )
 
     def clean_start_date(self):
