@@ -57,3 +57,12 @@ class Milestone(APIModel):
         if tasks:
             return tasks[0]
         return None
+
+    # def estimated_completion_date(self):
+    #     # estimated_completion_date is a string in the format YYYY-MM-DD
+    #     # return a datetime.date object
+    #     completion_date = self.data["estimated_completion_date"]
+    #     if completion_date:
+    #         year, month, day = completion_date.split("-")
+    #         return date(int(year), int(month), int(day)).strftime("%d %B %Y")
+    #     return None

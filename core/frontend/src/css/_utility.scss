@@ -7,6 +7,10 @@
     flex-wrap: wrap;
 }
 
+.inline-block{
+    display: inline-block;
+}
+
 .flex-column{
     flex-direction: column;
 }
@@ -33,6 +37,18 @@
 
 .m0{
     margin: 0px;
+}
+
+.p-2{
+    padding: 6px;
+}
+
+.p-3{
+    padding: 10px;
+}
+
+.p-4{
+    padding: 14px;
 }
 
 .grid{
@@ -67,8 +83,19 @@
     display: inline-block;
 }
 
+.max-w-70{
+    max-width: 70%;
+}
+
 .indented-box{
-    border-left: 5px solid #b1b4b6;
-    padding: 15px 15px;
+    border-left: 6px solid #b1b4b6;
     margin-bottom: 10px;
+}
+.border-left-pad{
+    border-left: 6px solid #b1b4b6;
+    padding-left: 10px;
+}
+
+.text-m{
+    font-size: 19px;
 }
