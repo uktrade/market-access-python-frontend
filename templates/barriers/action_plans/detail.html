@@ -53,7 +53,7 @@
     {% include 'barriers/partials/barrier_tabs.html' with active='action_plan' %}
 
     <section class="action_plan">
-        <h2 class="govuk-heading-l"> Action Plan </h2>
+        <h2 class="govuk-heading-l"> Action plan </h2>
         <div class="action_plans_stategic_context">
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -158,6 +158,8 @@
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="col">
                             <h2 class="govuk-heading-m"> Objectives </h2>
+                            <p class="govuk-body">Add milestones you can work towards to solve this barrier. You can then add the tasks, or actions, that will help you reach them.</p>
+                            <p class="govuk-body">You can add more than one objective and more than one task to each objective.</p>
                         </th>
                     </tr>
                 </thead>
@@ -166,8 +168,27 @@
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">
                                 <p class="govuk-body">
-                                    <a class="govuk-link govuk-!-font-size-19 govuk-!-font-weight-bold" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
+                                    <a class="govuk-link govuk-!-font-size-19 govuk-!-font-weight-bold max-w-70 inline-block" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
+
+                                    <span class="action_plan__objective_status">
+                                        {% if milestone.status == "NOT_STARTED" %}
+                                            <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                                Not Started
+                                            </strong>
+                                        {% elif milestone.status == "IN_PROGRESS" %}
+                                            <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                                In Progress
+                                            </strong>
+                                        {% elif milestone.status == "COMPLETED" %}
+                                            <strong class="govuk-tag govuk-tag--green action_plans_tag">
+                                                Complete
+                                            </strong>
+                                        {% endif %}
+                                      </span>
                                 </p>
+                                {% if milestone.estimated_completion_date %}
+                                <div class="indented-box p-4 text-m">Estimated completion date: <strong>{{ milestone.estimated_completion_date }}</strong></div>
+                                {% endif %}
                                 <div class="govuk-body action_plans_task_list">
                                   {% if milestone.tasks %}
                                     <table class="govuk-table">
