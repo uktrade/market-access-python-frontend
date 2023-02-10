@@ -792,7 +792,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
 
     @property
     def is_user_admin(self):
-        return self.user.has_permission("can_approve_estimated_completion_datexxx")
+        return self.user.has_permission("can_approve_estimated_completion_date")
 
     def is_estimated_resolution_date_in_future(self, cleaned_data):
         estimated_resolution_date = cleaned_data.get("estimated_resolution_date")
