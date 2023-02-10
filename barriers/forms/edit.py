@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from django import forms
 
@@ -797,6 +796,8 @@ class UpdateBarrierEstimatedResolutionDateForm(
 
     def is_estimated_resolution_date_in_future(self, cleaned_data):
         estimated_resolution_date = cleaned_data.get("estimated_resolution_date")
+        if not self.barrier.estimated_resolution_date:
+            return False
         existing_estimated_resolution_date = (
             self.barrier.estimated_resolution_date.strftime("%Y-%m-%d")
         )
@@ -840,31 +841,22 @@ class UpdateBarrierEstimatedResolutionDateForm(
                     "Enter a reason for changing the estimated resolution date"
                 )
 
-        change_reason_not_provided = not cleaned_data.get(
-            "estimated_resolution_date_change_reason"
-        )
-
-        # raise Exception(
-        #     f"is_admin: {self.is_user_admin}, is_future_date: {is_future_date},"
-        #     f" change_reason_not_provided: {change_reason_not_provided}"
-        # )
-
         return cleaned_data
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        # user = client.users.get(self.token.user_id)
-        is_admin = self.user.has_permission("set_topprioritybarrier")
 
         estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
         is_future_date = self.is_estimated_resolution_date_in_future(self.cleaned_data)
 
-        if (not is_admin) and (is_future_date):
+        # raise Exception(f"User id: {self.user.id}")
+
+        if (not self.is_user_admin) and (is_future_date):
             client.barriers.patch(
                 id=self.barrier_id,
                 proposed_estimated_resolution_date=estimated_resolution_date,
-                proposed_estimated_resolution_date_user=self.user.id,
-                proposed_estimated_resolution_date_created=datetime.now().isoformat(),
+                # proposed_estimated_resolution_date_user=self.user.id,
+                # proposed_estimated_resolution_date_created=datetime.now().isoformat(),
                 estimated_resolution_date_change_reason=self.cleaned_data.get(
                     "estimated_resolution_date_change_reason"
                 ),

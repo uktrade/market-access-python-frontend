@@ -10,12 +10,9 @@
 
     {% include 'partials/heading.html' with text='Add estimated resolution date' %}
 
-    {% if barrier.estimated_resolution_date %}
-        <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
-    {% endif %}
 
     {% if barrier.proposed_estimated_resolution_date %}
-    <div class="govuk-inset-text">
+    <div class="govuk-inset-text text-dark">
         <p>
             A request has been submitted to change the estimated resolution date to {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}.
         </p>
@@ -32,6 +29,10 @@
         </p>
 
     </div>
+    {% else %}
+        {% if barrier.estimated_resolution_date %}
+            <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
+        {% endif %}
     {% endif %}
 
     {% form_error_banner form %}
