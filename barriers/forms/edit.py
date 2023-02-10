@@ -798,12 +798,14 @@ class UpdateBarrierEstimatedResolutionDateForm(
         estimated_resolution_date = cleaned_data.get("estimated_resolution_date")
         if not self.barrier.estimated_resolution_date:
             return False
+
+        if not estimated_resolution_date:
+            return False
+
         existing_estimated_resolution_date = (
             self.barrier.estimated_resolution_date.strftime("%Y-%m-%d")
         )
-        # raise Exception(
-        #     f"{estimated_resolution_date} {existing_estimated_resolution_date}"
-        # )
+
         return existing_estimated_resolution_date and (
             estimated_resolution_date > existing_estimated_resolution_date
         )
