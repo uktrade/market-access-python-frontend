@@ -14,6 +14,26 @@
         <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
     {% endif %}
 
+    {% if barrier.proposed_estimated_resolution_date %}
+    <div class="govuk-inset-text">
+        <p>
+            A request has been submitted to change the estimated resolution date to {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}.
+        </p>
+        <p>
+            Reason for change:
+        </p>
+        <p>
+            {{ barrier.estimated_resolution_date_change_reason }}
+        </p>
+        <hr/>
+        <p class="text-sm">
+            Date submitted: {{ barrier.proposed_estimated_resolution_date_created|date:"j F Y" }}
+            by {{ barrier.proposed_estimated_resolution_date_user.name }}
+        </p>
+
+    </div>
+    {% endif %}
+
     {% form_error_banner form %}
 
     <form action="" method="POST">
@@ -31,6 +51,20 @@
                     {{ form.estimated_resolution_date }}
                 </div>
             </fieldset>
+        </div>
+
+        <div id="{{ form.estimated_resolution_date_change_reason.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div  class="govuk-form-group{% if form.estimated_resolution_date_change_reason.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="update">{{ form.estimated_resolution_date_change_reason.label }}</label>
+
+                {% form_field_error form "update" %}
+                <span class="govuk-hint">{{ form.estimated_resolution_date_change_reason.help_text }}</span>
+
+                <textarea id="{{ form.estimated_resolution_date_change_reason.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.estimated_resolution_date_change_reason.name }}" rows="5" maxlength="1250">{% if form.estimated_resolution_date_change_reason.value %}{{ form.estimated_resolution_date_change_reason.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.estimated_resolution_date_change_reason.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+              You can enter up to 1250 characters
+            </div>
         </div>
 
         {% if barrier.estimated_resolution_date %}
