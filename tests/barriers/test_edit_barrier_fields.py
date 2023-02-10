@@ -493,7 +493,9 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         )
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_estimated_resolution_date_cannot_be_empty(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_estimated_resolution_date_cannot_be_empty(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         response = self.client.post(
             reverse(
                 "barriers:edit_estimated_resolution_date",
@@ -507,7 +509,9 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_estimated_resolution_date_bad_data_gets_error(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_estimated_resolution_date_bad_data_gets_error(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         response = self.client.post(
             reverse(
                 "barriers:edit_estimated_resolution_date",
@@ -525,7 +529,11 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_estimated_resolution_date_incomplete_data_gets_error(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_estimated_resolution_date_incomplete_data_gets_error(
+        self, mock_user, mock_patch
+    ):
+        mock_user.return_value = self.administrator
         response = self.client.post(
             reverse(
                 "barriers:edit_estimated_resolution_date",
@@ -543,7 +551,9 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_edit_estimated_resolution_date_calls_api(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_edit_estimated_resolution_date_calls_api(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
@@ -562,7 +572,9 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_clear_estimated_resolution_date_calls_api(self, mock_patch):
+    @patch("utils.api.resources.UsersResource.get_current")
+    def test_clear_estimated_resolution_date_calls_api(self, mock_user, mock_patch):
+        mock_user.return_value = self.administrator
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
