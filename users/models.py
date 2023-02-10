@@ -33,7 +33,7 @@ class User(APIModel):
     def has_permission(self, permission_name):
         if not self.is_active:
             return False
-        return permission_name in self.permissions
+        # return permission_name in self.permissions
         return self.is_superuser or permission_name in self.permissions
 
     def get_apps(self):
