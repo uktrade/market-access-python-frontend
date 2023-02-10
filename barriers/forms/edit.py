@@ -794,7 +794,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
     def is_user_admin(self):
         return self.user.has_permission("can_approve_estimated_completion_date")
 
-    def is_estimated_resolution_date_in_future(self, cleaned_data):
+    def does_new_estimated_date_require_approval(self, cleaned_data):
         estimated_resolution_date = cleaned_data.get("estimated_resolution_date")
         if not self.barrier.estimated_resolution_date:
             return False
@@ -812,7 +812,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
 
     def does_change_require_approval(self, cleaned_data):
         return (not self.is_user_admin) and (
-            not self.is_estimated_resolution_date_in_future(cleaned_data)
+            not self.does_new_estimated_date_require_approval(cleaned_data)
         )
 
     def __init__(self, barrier_id, user, *args, **kwargs):
@@ -833,9 +833,13 @@ class UpdateBarrierEstimatedResolutionDateForm(
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
 
-        is_future_date = self.is_estimated_resolution_date_in_future(cleaned_data)
+        # raise Exception("User id: {self.user.id}")
 
-        if (not self.is_user_admin) and (is_future_date):
+        change_requires_approval = self.does_new_estimated_date_require_approval(
+            cleaned_data
+        )
+
+        if (not self.is_user_admin) and change_requires_approval:
             # only admin users can change the estimated resolution date to a date in the past
             # without approval
             if not cleaned_data.get("estimated_resolution_date_change_reason"):
@@ -849,23 +853,21 @@ class UpdateBarrierEstimatedResolutionDateForm(
         client = MarketAccessAPIClient(self.token)
 
         estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
-        is_future_date = self.is_estimated_resolution_date_in_future(self.cleaned_data)
-
-        # raise Exception(f"User id: {self.user.id}")
+        is_future_date = self.does_new_estimated_date_require_approval(
+            self.cleaned_data
+        )
 
         if (not self.is_user_admin) and (is_future_date):
             client.barriers.patch(
-                id=self.barrier_id,
+                id=str(self.barrier_id),
                 proposed_estimated_resolution_date=estimated_resolution_date,
-                # proposed_estimated_resolution_date_user=self.user.id,
-                # proposed_estimated_resolution_date_created=datetime.now().isoformat(),
                 estimated_resolution_date_change_reason=self.cleaned_data.get(
                     "estimated_resolution_date_change_reason"
                 ),
             )
         else:
             client.barriers.patch(
-                id=self.barrier_id,
+                id=str(self.barrier_id),
                 estimated_resolution_date=estimated_resolution_date,
             )
 
