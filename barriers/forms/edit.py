@@ -1,6 +1,8 @@
 import logging
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from barriers.constants import (
     DEPRECATED_TAGS,
@@ -132,10 +134,42 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             " senior stakeholders (including Ministers)."
         ),
         widget=forms.Textarea,
-        error_messages={
-            "required": "Enter a status update",
-        },
+        required=False,
     )
+    update_1 = forms.CharField(
+        label="Current status",
+        help_text=(
+            "Include the barrier status, recent progress, and any obstacles. Content"
+            " will be used for monthly reports and therefore should be appropriate for"
+            " senior stakeholders (including Ministers)."
+        ),
+        widget=forms.Textarea,
+        error_messages={"missing_update": "missing update"},
+        required=False,
+    )
+
+    update_2 = forms.CharField(
+        label="Reason for the barrier being at risk of delay",
+        help_text=(
+            "Include the barrier status, recent progress, and any obstacles. Content"
+            " will be used for monthly reports and therefore should be appropriate for"
+            " senior stakeholders (including Ministers)."
+        ),
+        widget=forms.Textarea,
+        required=False,
+    )
+
+    update_3 = forms.CharField(
+        label="Reason for barrier being delayed",
+        help_text=(
+            "Include the barrier status, recent progress, and any obstacles. Content"
+            " will be used for monthly reports and therefore should be appropriate for"
+            " senior stakeholders (including Ministers)."
+        ),
+        widget=forms.Textarea,
+        required=False,
+    )
+
     next_steps = forms.CharField(
         label="Next steps",
         help_text=(
@@ -172,6 +206,40 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             return self.cleaned_data["estimated_resolution_date"].isoformat()
         return self.cleaned_data["estimated_resolution_date"]
 
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get("status")
+        update_1 = cleaned_data.get("update_1")
+        update_2 = cleaned_data.get("update_2")
+        update_3 = cleaned_data.get("update_3")
+        print("data : ", cleaned_data)
+        print("cleaned fields", status, update_1)
+
+        if status == "ON_TRACK":
+            if update_1:
+                self.message = update_1
+            else:
+                self.add_error(
+                    "update_1",
+                    ValidationError(_("Enter a status update"), code="missing_update"),
+                )
+        elif status == "RISK_OF_DELAY":
+            if update_2:
+                self.message = update_2
+            else:
+                self.add_error(
+                    "update_2",
+                    ValidationError(_("Enter a status update"), code="missing_update"),
+                )
+        if status == "DELAYED":
+            if update_3:
+                self.message = update_3
+            else:
+                self.add_error(
+                    "update_3",
+                    ValidationError(_("Enter a status update"), code="missing_update"),
+                )
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.progress_update_id:
@@ -186,7 +254,7 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             client.barriers.create_top_100_progress_update(
                 barrier=self.barrier_id,
                 status=self.cleaned_data["status"],
-                message=self.cleaned_data["update"],
+                message=self.message,
                 next_steps=self.cleaned_data["next_steps"],
             )
         if self.cleaned_data.get("estimated_resolution_date"):
