@@ -1,0 +1,16 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Add estimated resolution date{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='To manage reporting and resolution expectations, your update has been sent to the Bilateral Trade Relations team for review.' %}
+
+    <a class="govuk-button" href="{% url 'barriers:barrier_detail' barrier.id %}">Return to barrier summary</a>
+
+
+{% endblock %}
