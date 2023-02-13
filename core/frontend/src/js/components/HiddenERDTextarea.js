@@ -25,7 +25,7 @@ ma.components.setupHiddenERDTextarea = function (props) {
     const editErdButton = document.getElementById("edit-erd-link");
 
     // if user clicks edit button, show textarea
-    editErdButton.addEventListener("click", () => {
+    editErdButton?.addEventListener("click", () => {
         textarea.style.display = "block";
     });
 
@@ -39,12 +39,14 @@ ma.components.setupHiddenERDTextarea = function (props) {
 
     // use
     const referenceDate = new Date(referenceYear, referenceMonth, 1);
+    console.log("referenceDate", referenceDate);
 
     const updateTextarea = () => {
         const currentMonth = getMonthValue();
         const currentYear = getYearValue();
         const currentDate = new Date(currentYear, currentMonth, 1);
         // if date is later than reference date, show textarea otherwise hide it
+        console.log("currentDate", currentDate);
         if (currentDate > referenceDate) {
             textarea.style.display = "block";
         } else {
