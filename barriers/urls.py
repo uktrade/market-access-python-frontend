@@ -95,6 +95,7 @@ from .views.edit import (
     BarrierEditCommercialValue,
     BarrierEditEconomicAssessmentEligibility,
     BarrierEditEstimatedResolutionDate,
+    BarrierEditEstimatedResolutionDateConfirmationPage,
     BarrierEditPriority,
     BarrierEditProduct,
     BarrierEditSource,
@@ -275,6 +276,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/estimated-resolution-date/",
         BarrierEditEstimatedResolutionDate.as_view(),
         name="edit_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/estimated-resolution-date/confirmation/",
+        BarrierEditEstimatedResolutionDateConfirmationPage.as_view(),
+        name="edit_estimated_resolution_date_confirmation_page",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/commercial-value/",

@@ -6,12 +6,19 @@
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
+{% block body_script %}
+    <script>
+        new ma.components.setupHiddenERDTextarea({
+            is_admin: '{{ current_user|has_permission:"can_approve_estimated_completion_date" }}'
+        });
+    </script>
+{% endblock %}
+
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Add estimated resolution date' %}
 
-
-    {% if barrier.proposed_estimated_resolution_date %}
+    {% if barrier.has_active_estimated_resolution_date_proposal %}
     <div class="govuk-inset-text text-dark">
         <p>
             A request has been submitted to change the estimated resolution date to {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}.
@@ -21,6 +28,9 @@
         </p>
         <p>
             {{ barrier.estimated_resolution_date_change_reason }}
+        </p>
+        <p>
+            <a href="#estimated_resolution_date_change_reason" class="govuk-link" id="edit-erd-link">Edit</a>
         </p>
         <hr/>
         <p class="text-sm">
@@ -54,7 +64,7 @@
             </fieldset>
         </div>
 
-        <div id="{{ form.estimated_resolution_date_change_reason.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+        <div id="{{ form.estimated_resolution_date_change_reason.name }}-form-group" style="display:none;" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
             <div  class="govuk-form-group{% if form.estimated_resolution_date_change_reason.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s" for="update">{{ form.estimated_resolution_date_change_reason.label }}</label>
 

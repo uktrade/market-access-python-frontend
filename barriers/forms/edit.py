@@ -792,7 +792,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
 
     @property
     def is_user_admin(self):
-        return self.user.has_permission("can_approve_estimated_completion_date")
+        return self.user.has_permission("can_approve_estimated_completion_datexxx")
 
     def does_new_estimated_date_require_approval(self, cleaned_data):
         estimated_resolution_date = cleaned_data.get("estimated_resolution_date")
@@ -858,6 +858,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
         )
 
         if (not self.is_user_admin) and (is_future_date):
+            self.requested_change = True
             client.barriers.patch(
                 id=str(self.barrier_id),
                 proposed_estimated_resolution_date=estimated_resolution_date,
@@ -866,6 +867,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
                 ),
             )
         else:
+            self.requested_change = False
             client.barriers.patch(
                 id=str(self.barrier_id),
                 estimated_resolution_date=estimated_resolution_date,

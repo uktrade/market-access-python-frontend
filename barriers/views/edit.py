@@ -1,8 +1,8 @@
 import logging
 
 from django.shortcuts import redirect
-from django.urls import reverse
-from django.views.generic import FormView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import FormView, TemplateView
 
 from barriers.constants import TOP_PRIORITY_BARRIER_STATUS
 from barriers.forms.edit import (
@@ -222,6 +222,28 @@ class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/estimated_resolution_date.html"
     form_class = UpdateBarrierEstimatedResolutionDateForm
 
+    def get_success_url(self):
+        if self.form.requested_change:
+            return reverse_lazy(
+                "barriers:edit_estimated_resolution_date_confirmation_page",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        else:
+            return reverse_lazy(
+                "barriers:barrier_detail",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+
+    def form_valid(self, form):
+        self.form = form
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["barrier"] = self.barrier
+        context["current_user"] = user_scope(self.request)["current_user"]
+        return context
+
     def get_initial(self):
         return {"estimated_resolution_date": self.barrier.estimated_resolution_date}
 
@@ -231,6 +253,26 @@ class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         kwargs["user"] = user_scope(self.request)["current_user"]
         return kwargs
+
+
+class BarrierEditEstimatedResolutionDateConfirmationPage(TemplateView):
+    template_name = "barriers/edit/estimated_resolution_date_confirmation_page.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        barrier_id = kwargs.get("barrier_id")
+        kwargs["token"] = self.request.session.get("sso_token")
+        client = MarketAccessAPIClient(kwargs["token"])
+        barrier = client.barriers.get(id=barrier_id)
+        context["barrier"] = barrier
+        return context
+
+    # def get(self, request, *args, **kwargs):
+    #     barrier_id = kwargs.get("barrier_id")
+    #     kwargs["token"] = self.request.session.get("sso_token")
+    #     client = MarketAccessAPIClient(kwargs["token"])
+    #     barrier = client.barriers.get(id=barrier_id)
+    #     return render(request, self.template_name, {"barrier": barrier})
 
 
 class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):

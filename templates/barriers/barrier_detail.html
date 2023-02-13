@@ -247,7 +247,7 @@
                     {% endif %}
                 {% endif %}
 
-                {% if barrier.proposed_estimated_resolution_date %}
+                {% if barrier.has_active_estimated_resolution_date_proposal %}
                     <div class="govuk-inset-text text-sm m-2 text-dark">
                         <p>
                             A request has been submitted to change the estimated resolution date to {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}.
