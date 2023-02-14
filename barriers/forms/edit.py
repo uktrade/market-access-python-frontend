@@ -871,6 +871,10 @@ class UpdateBarrierEstimatedResolutionDateForm(
             client.barriers.patch(
                 id=str(self.barrier_id),
                 estimated_resolution_date=estimated_resolution_date,
+                proposed_estimated_resolution_date=estimated_resolution_date,
+                estimated_resolution_date_change_reason=self.cleaned_data.get(
+                    "estimated_resolution_date_change_reason", ""
+                ),
             )
 
 

@@ -9,7 +9,8 @@
 {% block body_script %}
     <script>
         new ma.components.setupHiddenERDTextarea({
-            is_admin: '{{ current_user|has_permission:"can_approve_estimated_completion_date" }}'
+            is_admin: '{{ current_user|has_permission:"can_approve_estimated_completion_date" }}',
+            proposedDate: '{{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}',
         });
     </script>
 {% endblock %}
@@ -50,11 +51,21 @@
     <form action="" method="POST">
         {% csrf_token %}
 
+
         <div id="{{ form.estimated_resolution_date.name }}" class="{% form_group_classes form.estimated_resolution_date.errors %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.estimated_resolution_date.label }}</legend>
 
                 <span class="govuk-hint">{{ form.estimated_resolution_date.help_text }}</span>
+
+
+                <div class="govuk-warning-text govuk-!-margin-bottom-0 govuk-!-margin-top-2" id="erd-requires-approval-warning" style="display:none;">
+                    <span class="govuk-warning-text__icon govuk-warning-text__icon--small mt-2" aria-hidden="true">!</span>
+                    <strong class="govuk-warning-text__text govuk-warning-text__text--medium">
+                        {% comment %} <span class="govuk-warning-text__assistive">Warning</span> {% endcomment %}
+                        To manage reporting and resolution expectations, delayed estimated resolution dates will be sent to the Bilateral Trade Relations team for review.
+                    </strong>
+                </div>
 
                 {% form_field_error form "estimated_resolution_date" %}
 
