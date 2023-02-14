@@ -138,7 +138,7 @@ class Top100ProgressUpdateForm(
         required=False,
     )
     update_1 = forms.CharField(
-        label="Current status",
+        label="Status update",
         help_text=(
             "Include the barrier status, recent progress, and any obstacles. Content"
             " will be used for monthly reports and therefore should be appropriate for"
@@ -221,12 +221,11 @@ class Top100ProgressUpdateForm(
         update_1 = cleaned_data.get("update_1")
         update_2 = cleaned_data.get("update_2")
         update_3 = cleaned_data.get("update_3")
-        print("data : ", cleaned_data)
-        print("cleaned fields", status, update_1)
 
         if status == "ON_TRACK":
             if update_1:
                 self.message = update_1
+                self.update = update_1
             else:
                 self.add_error(
                     "update_1",
@@ -235,6 +234,7 @@ class Top100ProgressUpdateForm(
         elif status == "RISK_OF_DELAY":
             if update_2:
                 self.message = update_2
+                self.update = update_2
             else:
                 self.add_error(
                     "update_2",
@@ -243,6 +243,7 @@ class Top100ProgressUpdateForm(
         if status == "DELAYED":
             if update_3:
                 self.message = update_3
+                self.update = update_3
             else:
                 self.add_error(
                     "update_3",
@@ -256,7 +257,8 @@ class Top100ProgressUpdateForm(
                 barrier=self.barrier_id,
                 id=self.progress_update_id,
                 status=self.cleaned_data["status"],
-                message=self.cleaned_data["update"],
+                message=self.message,
+                # message=self.cleaned_data["update"],
                 next_steps=self.cleaned_data["next_steps"],
             )
         else:
