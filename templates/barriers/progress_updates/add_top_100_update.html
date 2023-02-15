@@ -1,6 +1,12 @@
 {% extends "barriers/edit/base.html" %}
 {% load render_bundle from webpack_loader %}
-{% block page_title %}{{ block.super }} - Add Top 100 priority barrier update{% endblock %}
+{% block page_title %}{{ block.super }}
+    {% if "edit" in request.path %}
+    - Edit Top 100 priority barrier update
+    {% else %}
+    - Add Top 100 priority barrier update
+    {% endif %}
+{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -25,8 +31,12 @@
 {% endblock %}
 
 {% block page_content %}
+    {% if "edit" in request.path %}
+        {% include 'partials/heading.html' with text='Edit Top 100 priority barrier update' %}
+    {% else %}
+        {% include 'partials/heading.html' with text='Add Top 100 priority barrier update' %}
+    {% endif %}
 
-    {% include 'partials/heading.html' with text='Add Top 100 priority barrier update' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
