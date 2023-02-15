@@ -1,22 +1,28 @@
-const monthInputID = "status-date-group-estimated_resolution_date_0";
-const yearInputID = "status-date-group-estimated_resolution_date_1";
+const defaultMonthInputID = "status-date-group-estimated_resolution_date_0";
+const defaultYearInputID = "status-date-group-estimated_resolution_date_1";
 const erdRequiredApprovalWarningID = "erd-requires-approval-warning";
 
-const getMonthValue = () => {
+const getMonthValue = (monthInputID) => {
     const monthInput = document.getElementById(monthInputID);
     return monthInput.value;
 };
 
-const getYearValue = () => {
+const getYearValue = (yearInputID) => {
     const yearInput = document.getElementById(yearInputID);
     return yearInput.value;
 };
 
 ma.components.setupHiddenERDTextarea = function (props) {
-    const { isAdmin, proposedDate } = props;
+    let { isAdmin, proposedDate, monthInputID, yearInputID } = props;
     if (isAdmin === "True") {
         // if user is admin, don't run this code
         return;
+    }
+    if (!monthInputID) {
+        monthInputID = defaultMonthInputID;
+    }
+    if (!yearInputID) {
+        yearInputID = defaultYearInputID;
     }
     const proposedDateObject = new Date(proposedDate);
 
@@ -32,12 +38,12 @@ ma.components.setupHiddenERDTextarea = function (props) {
     editErdButton?.addEventListener("click", () => {
         textarea.style.display = "block";
         // set month and year inputs to proposed date
-        monthInput.value = proposedDateObject.getMonth();
+        monthInput.value = proposedDateObject.getMonth() + 1;
         yearInput.value = proposedDateObject.getFullYear();
     });
 
-    const referenceMonth = getMonthValue();
-    const referenceYear = getYearValue();
+    const referenceMonth = getMonthValue(monthInputID);
+    const referenceYear = getYearValue(yearInputID);
 
     // if month and year are empty, exit early
     if (!referenceMonth || !referenceYear) {
@@ -49,8 +55,8 @@ ma.components.setupHiddenERDTextarea = function (props) {
     console.log("referenceDate", referenceDate);
 
     const updateTextarea = () => {
-        const currentMonth = getMonthValue();
-        const currentYear = getYearValue();
+        const currentMonth = getMonthValue(monthInputID);
+        const currentYear = getYearValue(yearInputID);
         const currentDate = new Date(currentYear, currentMonth, 1);
         // if date is later than reference date, show textarea otherwise hide it
         if (currentDate > referenceDate) {
