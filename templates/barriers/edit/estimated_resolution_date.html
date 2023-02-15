@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        {% if barrier.estimated_resolution_date %}
+        {% if barrier.estimated_resolution_date and current_user|has_permission:"can_approve_estimated_completion_date" %}
             <div>
                 <button class="govuk-button govuk-button--secondary" data-module="govuk-button" name="clear" value="1">
                     Remove date and return
