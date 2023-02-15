@@ -24,6 +24,10 @@
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Edit Top 100 priority barrier update' %}
+    <p class="govuk-body">
+        This update will be used to brief senior stakeholders, including ministers.
+    </p>
+
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -84,7 +88,7 @@
                 <label class="govuk-label govuk-label--s" for="update">{{ form.update.label }}</label>
 
                 {% form_field_error form "update" %}
-                <span class="govuk-hint">{{ form.update.help_text }}</span>
+                <span class="govuk-hint">{{ form.update.help_text|linebreaks  }}</span>
 
 
                 <textarea id="{{ form.update.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.update.name }}" rows="5" maxlength="1250">{% if form.update.value %}{{ form.update.value }}{% endif %}</textarea>
@@ -99,7 +103,7 @@
                 <label class="govuk-label govuk-label--s" for="next_steps">{{ form.next_steps.label }}</label>
 
                 {% form_field_error form "next_steps" %}
-                <span class="govuk-hint">{{ form.next_steps.help_text }}</span>
+                <span class="govuk-hint">{{ form.next_steps.help_text|linebreaks  }}</span>
 
                 <textarea  id="{{ form.next_steps.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_steps.name }}" rows="5" maxlength="1250">{% if form.next_steps.value %}{{ form.next_steps.value }}{% endif %}</textarea>
             </div>

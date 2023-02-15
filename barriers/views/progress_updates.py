@@ -92,7 +92,7 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
 
 
 class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/progress_updates/edit_top_100.html"
+    template_name = "barriers/progress_updates/add_top_100_update.html"
     form_class = Top100ProgressUpdateForm
 
     def get_form_kwargs(self):
