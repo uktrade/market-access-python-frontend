@@ -9,7 +9,9 @@ from utils.forms import MonthYearInFutureField
 
 
 class APIFormMixin:
-    def __init__(self, id, token, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        id = kwargs.pop("id", None)
+        token = kwargs.pop("token", None)
         if isinstance(id, uuid.UUID):
             id = str(id)
         self.id = id
@@ -157,17 +159,17 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
             not self.does_new_estimated_date_require_approval(cleaned_data)
         )
 
-    def __init__(self, barrier_id, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.barrier_id = kwargs.pop("barrier_id")
+        self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
-        self.barrier_id = barrier_id
-        self.user = user
-        estimated_resolution_date = kwargs.get("initial", {}).get(
-            "estimated_resolution_date"
-        )
-        if estimated_resolution_date:
-            self.fields[
-                "estimated_resolution_date"
-            ].label = "Change estimated resolution date"
+        # estimated_resolution_date = kwargs.get("initial", {}).get(
+        #     "estimated_resolution_date"
+        # )
+        # if estimated_resolution_date:
+        #     self.fields[
+        #         "estimated_resolution_date"
+        #     ].label = "Change estimated resolution date"
 
     def clean_estimated_resolution_date(self):
         return self.cleaned_data["estimated_resolution_date"].isoformat()

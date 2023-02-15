@@ -71,13 +71,6 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/progress_updates/add_programme_fund_update.html"
     form_class = ProgrammeFundProgressUpdateForm
 
-    def get_initial(self):
-        initial = super().get_initial()
-        estimated_resolution_date = self.barrier.estimated_resolution_date
-        if estimated_resolution_date:
-            initial["estimated_resolution_date"] = estimated_resolution_date
-        return initial
-
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
@@ -96,10 +89,6 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
         if self.barrier.latest_top_100_progress_update:
             success_url = f"{success_url}#barrier-programme-fund-update-tab"
         return success_url
-
-    def form_valid(self, form):
-        self.form = form
-        return super().form_valid(form)
 
 
 class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
