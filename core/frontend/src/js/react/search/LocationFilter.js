@@ -36,10 +36,77 @@ function TradingBlocFilter(props) {
     );
 }
 
+function AdminAreaFilter(props) {
+    const adminAreas = props.adminAreas;
+    const selectedCountriesWithAdminAreas = props.selectedAdminAreaCountryIds;
+    const countriesList = props.countryNames;
+
+    const getCountryName = (adminAreasCountry) => {
+        for (let i = 0; i < countriesList.length; i++) {
+            if (countriesList[i]["id"] == adminAreasCountry) {
+                return countriesList[i]["name"];
+            }
+        }
+    };
+
+    const getDefaultValue = (adminAreasList, adminAreasCountry) => {
+        const defaultValues = [];
+        for (let i = 0; i < adminAreasList.length; i++) {
+            if (
+                props.selectedAdminAreaIds[adminAreasCountry].includes(
+                    adminAreasList[i]["value"]
+                )
+            ) {
+                defaultValues.push(adminAreasList[i]);
+            }
+        }
+        return defaultValues;
+    };
+
+    return (
+        <div id="admin_areas_container" className="govuk-!-padding-top-2">
+            <input
+                type="hidden"
+                id="admin_areas"
+                name="admin_areas"
+                value={JSON.stringify(props.selectedAdminAreaIds)}
+            />
+            {selectedCountriesWithAdminAreas.map((adminAreasCountry, index) => (
+                <div
+                    id={"admin_areas_" + adminAreasCountry}
+                    key={adminAreasCountry + "_admin_areas_search"}
+                    className="govuk-fieldset__legend filter-items__label filter-group__label govuk-!-width-full govuk-!-margin-bottom-0"
+                >
+                    {getCountryName(adminAreasCountry)} admin area
+                    <div className="govuk-!-padding-top-1 govuk-!-margin-bottom-1 govuk-body">
+                        <TypeAhead
+                            inputId={"admin_areas_" + adminAreasCountry}
+                            containerClasses="govuk-!-width-full"
+                            options={adminAreas[adminAreasCountry]}
+                            onChange={(event) =>
+                                props.handleChangeFunction(
+                                    event,
+                                    adminAreasCountry
+                                )
+                            }
+                            placeholder="Search admin area"
+                            defaultValue={getDefaultValue(
+                                adminAreas[adminAreasCountry],
+                                adminAreasCountry
+                            )}
+                        />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
 function LocationFilter(props) {
     const tradingBlocIds = props.tradingBlocs.map(
         (tradingBloc) => tradingBloc.value
     );
+
     const initialSelectedLocations = props.countries.reduce(
         (selected, location) => {
             if (location.checked) selected.push(location);
@@ -63,6 +130,10 @@ function LocationFilter(props) {
             setSelectedLocationIds(
                 selectedLocationIds.filter((item) => item !== location)
             );
+            // Must also clear the child admin areas if country is removed
+            if (selectedAdminAreaIds[location]) {
+                selectedAdminAreaIds[location] = [];
+            }
         }
     };
 
@@ -76,6 +147,19 @@ function LocationFilter(props) {
             }[tradingBloc.code] || "Include " + tradingBloc.name + " barriers"
         );
     };
+
+    const validAdminAreaIds = [];
+    for (let i = 0; i < props.adminAreasCountries.length; i++) {
+        validAdminAreaIds.push(props.adminAreasCountries[i]["id"]);
+    }
+
+    const selectedAdminAreaCountryIds = selectedLocationIds.reduce(
+        (selected, location) => {
+            if (validAdminAreaIds.includes(location)) selected.push(location);
+            return selected;
+        },
+        []
+    );
 
     const selectedTradingBlocIds = selectedLocationIds.reduce(
         (selected, location) => {
@@ -153,6 +237,41 @@ function LocationFilter(props) {
         }
     };
 
+    const initialSelectedAdminAreaValues = () => {
+        // Get the requested admin areas from the GET request parameters
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const admin_areas = urlParams.get("admin_areas");
+
+        if (admin_areas && selectedLocationIds.length) {
+            // If there are admin_areas in the request, format the URL parameter to a JS object
+            // Skip over this if there are no countries selected.
+            var admin_areas_formatted = JSON.parse(admin_areas);
+            return admin_areas_formatted;
+        } else {
+            // If there are not admin_areas, create an empty object with the correct key structure
+            const selectedAdminAreaIds = {};
+            for (let i = 0; i < props.adminAreasCountries.length; i++) {
+                selectedAdminAreaIds[props.adminAreasCountries[i]["id"]] = [];
+            }
+            return selectedAdminAreaIds;
+        }
+    };
+
+    const [selectedAdminAreaIds, setselectedAdminAreaIds] = useState(
+        initialSelectedAdminAreaValues
+    );
+
+    const handleAdminAreaSelect = (event, country) => {
+        var selectedAreasList = [];
+        for (let i = 0; i < event.length; i++) {
+            selectedAreasList.push(event[i]["value"]);
+        }
+        selectedAdminAreaIds[country] = selectedAreasList;
+        document.getElementById("admin_areas").value =
+            JSON.stringify(selectedAdminAreaIds);
+    };
+
     return (
         <div className="govuk-form-group">
             <fieldset className="govuk-fieldset">
@@ -180,6 +299,18 @@ function LocationFilter(props) {
                     <TradingBlocFilter
                         tradingBlocs={props.tradingBlocs}
                         selectedTradingBlocIds={selectedTradingBlocIds}
+                    />
+                ) : null}
+
+                {selectedAdminAreaCountryIds.length ? (
+                    <AdminAreaFilter
+                        adminAreas={props.adminAreaData}
+                        selectedAdminAreaCountryIds={
+                            selectedAdminAreaCountryIds
+                        }
+                        selectedAdminAreaIds={selectedAdminAreaIds}
+                        countryNames={props.adminAreasCountries}
+                        handleChangeFunction={handleAdminAreaSelect}
                     />
                 ) : null}
 
