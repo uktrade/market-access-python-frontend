@@ -139,7 +139,7 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
         label="Next steps",
         help_text=(
             "Provide a numbered list of the actions you are planning to "
-            "resolve this barrier including when, who and what.\n"
+            "resolve this barrier including when, who and what."
             "For example:\n"
             "1. March 23: Embassy in France to host workshop sharing UK best practice with "
             "the French Ministry of Economy, Trade and Industry (METI)."
