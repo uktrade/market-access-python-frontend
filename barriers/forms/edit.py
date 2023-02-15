@@ -127,9 +127,8 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     update = forms.CharField(
         label="Current status",
         help_text=(
-            "Include the barrier status, recent progress, and any obstacles. Content"
-            " will be used for monthly reports and therefore should be appropriate for"
-            " senior stakeholders (including Ministers)."
+            "Provide an explanation of your delivery confidence for the barrier, "
+            "including recent progress and any obstacles."
         ),
         widget=forms.Textarea,
         error_messages={
@@ -139,10 +138,11 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     next_steps = forms.CharField(
         label="Next steps",
         help_text=(
-            "Outline planned actions over the coming months, including internal to"
-            " Government, with industry, and with foreign governments/agencies. Content"
-            " will be used for monthly reports and therefore should be appropriate for"
-            " senior stakeholders (including Ministers)."
+            "Provide a numbered list of the actions you are planning to "
+            "resolve this barrier including when, who and what."
+            "For example:\n"
+            "1. March 23: Embassy in France to host workshop sharing UK best practice with "
+            "the French Ministry of Economy, Trade and Industry (METI)."
         ),
         widget=forms.Textarea,
         error_messages={"required": "Enter an outline of your next steps"},
