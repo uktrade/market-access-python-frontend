@@ -89,14 +89,6 @@
             </div>
         </div>
 
-        {% if barrier.estimated_resolution_date and current_user|has_permission:"can_approve_estimated_completion_date" %}
-            <div>
-                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" name="clear" value="1">
-                    Remove date and return
-                </button>
-            </div>
-        {% endif %}
-
         <button class="govuk-button" data-module="govuk-button">Save and return</button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
