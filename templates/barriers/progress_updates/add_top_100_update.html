@@ -77,7 +77,11 @@
                                             <label class="govuk-label govuk-label--s" for="update_1">{{ form.update_1.label }}</label>
                                             {% form_field_error form "update_1" %}
                                             <span class="govuk-hint">{{ form.update_1.help_text }}</span>
-                                            <textarea id="{{ form.update_1.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="update_{{ forloop.counter}}" rows="5" maxlength="1250">{% if form.update_1.value %}{{ form.update_1.value }}{% endif %}</textarea>
+                                            <textarea id="{{ form.update_1.name }}"
+                                            class="govuk-textarea govuk-js-character-count js-character-count"
+                                            name="update_{{ forloop.counter}}"
+                                            rows="5"
+                                            maxlength="1250">{% if form.update_1.value %}{{ form.update_1.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
                                         </div>
                                         <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
                                           You can enter up to 1250 characters
@@ -94,9 +98,11 @@
                                             <label class="govuk-label govuk-label--s" for="update_2">{{ form.update_2.label }}</label>
                                             {% form_field_error form "update_2" %}
                                             <span class="govuk-hint">{{ form.update_2.help_text }}</span>
-                                            <textarea id="{{ form.update_2.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="update_{{ forloop.counter}}" rows="5" maxlength="1250">
-                                                {% if form.update_2.value %}{{ form.update_2.value }}{% endif %}
-                                            </textarea>
+                                            <textarea id="{{ form.update_2.name }}"
+                                            class="govuk-textarea govuk-js-character-count js-character-count"
+                                            name="update_{{ forloop.counter}}"
+                                            rows="5"
+                                            maxlength="1250">{% if form.update_2.value %}{{ form.update_2.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
                                         </div>
                                         <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
                                           You can enter up to 1250 characters
@@ -114,7 +120,11 @@
                                             <label class="govuk-label govuk-label--s" for="update_3">{{ form.update_3.label }}</label>
                                             {% form_field_error form "update_3" %}
                                             <span class="govuk-hint">{{ form.update_3.help_text }}</span>
-                                            <textarea id="{{ form.update_3.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="update_{{ forloop.counter}}" rows="5" maxlength="1250">{{form.update.value}}</textarea>
+                                            <textarea id="{{ form.update_3.name }}"
+                                            class="govuk-textarea govuk-js-character-count js-character-count"
+                                            name="update_{{ forloop.counter}}"
+                                            rows="5"
+                                            maxlength="1250">{% if form.update_3.value %}{{ form.update_3.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
                                         </div>
                                         <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
                                           You can enter up to 1250 characters

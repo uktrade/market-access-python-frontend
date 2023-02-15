@@ -128,43 +128,25 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     )
     update = forms.CharField(
         label="Current status",
-        help_text=(
-            "Provide an explanation of your delivery confidence for the barrier, "
-            "including recent progress and any obstacles."
-        ),
+        help_text=("Provide more detail including recent progress and any obstacles"),
         widget=forms.Textarea,
         required=False,
     )
     update_1 = forms.CharField(
-        label="Status update",
-        help_text=(
-            "Include the barrier status, recent progress, and any obstacles. Content"
-            " will be used for monthly reports and therefore should be appropriate for"
-            " senior stakeholders (including Ministers)."
-        ),
+        label="Provide more detail including recent progress and any obstacles",
         widget=forms.Textarea,
         error_messages={"missing_update": "missing update"},
         required=False,
     )
 
     update_2 = forms.CharField(
-        label="Reason for the barrier being at risk of delay",
-        help_text=(
-            "Include the barrier status, recent progress, and any obstacles. Content"
-            " will be used for monthly reports and therefore should be appropriate for"
-            " senior stakeholders (including Ministers)."
-        ),
+        label="Provide more detail including recent progress and any obstacles",
         widget=forms.Textarea,
         required=False,
     )
 
     update_3 = forms.CharField(
-        label="Reason for barrier being delayed",
-        help_text=(
-            "Include the barrier status, recent progress, and any obstacles. Content"
-            " will be used for monthly reports and therefore should be appropriate for"
-            " senior stakeholders (including Ministers)."
-        ),
+        label="Provide more detail including recent progress and any obstacles",
         widget=forms.Textarea,
         required=False,
     )
@@ -173,9 +155,9 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
         label="Next steps",
         help_text=(
             "Provide a numbered list of the actions you are planning to "
-            "resolve this barrier including when, who and what."
+            "resolve this barrier including when, who and what. "
             "For example:\n"
-            "1. March 23: Embassy in France to host workshop sharing UK best practice with "
+            "1) March 23: Embassy in France to host workshop sharing UK best practice with "
             "the French Ministry of Economy, Trade and Industry (METI)."
         ),
         widget=forms.Textarea,
