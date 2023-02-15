@@ -161,7 +161,7 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             "the French Ministry of Economy, Trade and Industry (METI)."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Enter an outline of your next steps"},
+        error_messages={"required": "Enter next steps"},
     )
 
     estimated_resolution_date = MonthYearInFutureField(
@@ -202,7 +202,10 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             else:
                 self.add_error(
                     "update_1",
-                    ValidationError(_("Enter a status update"), code="missing_update"),
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
                 )
         elif status == "RISK_OF_DELAY":
             if update_2:
@@ -211,7 +214,10 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             else:
                 self.add_error(
                     "update_2",
-                    ValidationError(_("Enter a status update"), code="missing_update"),
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
                 )
         if status == "DELAYED":
             if update_3:
@@ -220,7 +226,10 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
             else:
                 self.add_error(
                     "update_3",
-                    ValidationError(_("Enter a status update"), code="missing_update"),
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
                 )
 
     def save(self):
