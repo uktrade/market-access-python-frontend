@@ -14,6 +14,7 @@ const getYearValue = (yearInputID) => {
 
 ma.components.setupHiddenERDTextarea = function (props) {
     let { isAdmin, proposedDate, monthInputID, yearInputID } = props;
+    console.log("Is user admin?: ", isAdmin);
     if (isAdmin === "True") {
         // if user is admin, don't run this code
         return;
