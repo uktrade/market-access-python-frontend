@@ -1,6 +1,8 @@
 import logging
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from barriers.constants import (
     DEPRECATED_TAGS,
@@ -128,26 +130,40 @@ class Top100ProgressUpdateForm(
     )
     update = forms.CharField(
         label="Current status",
-        help_text=(
-            "Include the barrier status, recent progress, and any obstacles. Content"
-            " will be used for monthly reports and therefore should be appropriate for"
-            " senior stakeholders (including Ministers)."
-        ),
+        help_text=("Provide more detail including recent progress and any obstacles"),
         widget=forms.Textarea,
-        error_messages={
-            "required": "Enter a status update",
-        },
+        required=False,
     )
+    update_1 = forms.CharField(
+        label="Provide more detail including recent progress and any obstacles",
+        widget=forms.Textarea,
+        error_messages={"missing_update": "missing update"},
+        required=False,
+    )
+
+    update_2 = forms.CharField(
+        label="Provide more detail including recent progress and any obstacles",
+        widget=forms.Textarea,
+        required=False,
+    )
+
+    update_3 = forms.CharField(
+        label="Provide more detail including recent progress and any obstacles",
+        widget=forms.Textarea,
+        required=False,
+    )
+
     next_steps = forms.CharField(
         label="Next steps",
         help_text=(
-            "Outline planned actions over the coming months, including internal to"
-            " Government, with industry, and with foreign governments/agencies. Content"
-            " will be used for monthly reports and therefore should be appropriate for"
-            " senior stakeholders (including Ministers)."
+            "Provide a numbered list of the actions you are planning to "
+            "resolve this barrier including when, who and what. "
+            "For example:\n"
+            "1) March 23: Embassy in France to host workshop sharing UK best practice with "
+            "the French Ministry of Economy, Trade and Industry (METI)."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Enter an outline of your next steps"},
+        error_messages={"required": "Enter next steps"},
     )
 
     estimated_resolution_date = MonthYearInFutureField(
@@ -181,6 +197,50 @@ class Top100ProgressUpdateForm(
             return self.cleaned_data["estimated_resolution_date"].isoformat()
         return self.cleaned_data["estimated_resolution_date"]
 
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get("status")
+        update_1 = cleaned_data.get("update_1")
+        update_2 = cleaned_data.get("update_2")
+        update_3 = cleaned_data.get("update_3")
+
+        if status == "ON_TRACK":
+            if update_1:
+                self.message = update_1
+                self.update = update_1
+            else:
+                self.add_error(
+                    "update_1",
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
+                )
+        elif status == "RISK_OF_DELAY":
+            if update_2:
+                self.message = update_2
+                self.update = update_2
+            else:
+                self.add_error(
+                    "update_2",
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
+                )
+        if status == "DELAYED":
+            if update_3:
+                self.message = update_3
+                self.update = update_3
+            else:
+                self.add_error(
+                    "update_3",
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
+                )
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.progress_update_id:
@@ -188,14 +248,15 @@ class Top100ProgressUpdateForm(
                 barrier=self.barrier_id,
                 id=self.progress_update_id,
                 status=self.cleaned_data["status"],
-                message=self.cleaned_data["update"],
+                message=self.message,
+                # message=self.cleaned_data["update"],
                 next_steps=self.cleaned_data["next_steps"],
             )
         else:
             client.barriers.create_top_100_progress_update(
                 barrier=self.barrier_id,
                 status=self.cleaned_data["status"],
-                message=self.cleaned_data["update"],
+                message=self.message,
                 next_steps=self.cleaned_data["next_steps"],
             )
 
