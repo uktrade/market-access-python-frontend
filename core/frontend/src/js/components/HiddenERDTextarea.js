@@ -16,18 +16,19 @@ ma.components.setupHiddenERDTextarea = function (props) {
     //let [isAdmin, proposedDate, monthInputID, yearInputID] = props;
     console.log("Props ", props);
     console.log("Is user admin?: ", props.is_admin);
+    console.log("input month", props.monthInput);
     if (props.is_admin == "True") {
         // if user is admin, don't run this code
         console.log("User is an admin, exit prompt");
         return;
     }
-    if (!props.monthInputID) {
+    if (typeof props.monthInput == "undefined") {
         monthInputID = defaultMonthInputID;
     }
-    if (!props.yearInputID) {
+    if (typeof props.yearInput == "undefined") {
         yearInputID = defaultYearInputID;
     }
-    const proposedDateObject = new Date(proposedDate);
+    const proposedDateObject = new Date(props.proposedDate);
 
     let monthInput = document.getElementById(monthInputID);
     let yearInput = document.getElementById(yearInputID);
