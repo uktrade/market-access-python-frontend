@@ -89,6 +89,13 @@
             </div>
         </div>
 
+
+        {% if current_user|has_permission:"can_approve_estimated_completion_date" %}
+        <div class="govuk-inset-text">{{ current_user.username }}, as an adminstrator your
+            changes to the estimated resolution date will be effective immediately and not subject to review.
+        </div>
+        {% endif %}
+
         <button class="govuk-button" data-module="govuk-button">Save and return</button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
