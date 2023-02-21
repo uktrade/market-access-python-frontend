@@ -156,8 +156,8 @@ class ProgrammeFundEditProgressUpdate(APIBarrierFormViewMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
-        kwargs["programme_fund_update_id"] = str(
-            kwargs.pop("progress_update_id", self.kwargs.get("progress_update_id"))
+        kwargs["progress_update_id"] = str(
+            kwargs.get("progress_update_id", self.kwargs.get("progress_update_id"))
         )
         kwargs["user"] = user_scope(self.request)["current_user"]
         return kwargs
