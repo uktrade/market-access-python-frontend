@@ -286,7 +286,9 @@ class Top100ProgressUpdateForm(
             )
 
 
-class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
+class ProgrammeFundProgressUpdateForm(
+    EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
+):
     milestones_and_deliverables = forms.CharField(
         label="Milestones and deliverables",
         help_text=(
@@ -311,9 +313,9 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        self.barrier_id = kwargs.pop("barrier_id")
-        self.progress_update_id = kwargs.pop("progress_update_id", None)
-        self.user = kwargs.pop("user", None)
+        self.barrier_id = kwargs.get("barrier_id")
+        self.progress_update_id = kwargs.get("progress_update_id", None)
+        self.user = kwargs.get("user", None)
         super().__init__(*args, **kwargs)
 
     def save(self):

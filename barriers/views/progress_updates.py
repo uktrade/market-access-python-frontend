@@ -1,4 +1,6 @@
 # add and edit views for progress updates
+import logging
+
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 
@@ -9,6 +11,8 @@ from barriers.forms.edit import (
 from barriers.forms.various import ChooseUpdateTypeForm
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
 from utils.context_processors import user_scope
+
+logger = logging.getLogger(__name__)
 
 
 class ChooseProgressUpdateTypeView(BarrierMixin, FormView):
@@ -78,12 +82,13 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        kwargs["user"] = user_scope(self.request)["current_user"]
         return kwargs
 
     def get_success_url(self):
         success_url = super().get_success_url()
 
-        if self.form.requested_change:
+        if hasattr(self.form, "requested_change") and self.form.requested_change:
             return reverse_lazy(
                 "barriers:edit_estimated_resolution_date_confirmation_page",
                 kwargs={"barrier_id": self.kwargs.get("barrier_id")},
@@ -92,6 +97,10 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
         if self.barrier.latest_top_100_progress_update:
             success_url = f"{success_url}#barrier-programme-fund-update-tab"
         return success_url
+
+    def form_valid(self, form):
+        self.form = form
+        return super().form_valid(form)
 
 
 class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
@@ -146,10 +155,11 @@ class ProgrammeFundEditProgressUpdate(APIBarrierFormViewMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         kwargs["programme_fund_update_id"] = str(
             kwargs.pop("progress_update_id", self.kwargs.get("progress_update_id"))
         )
+        kwargs["user"] = user_scope(self.request)["current_user"]
         return kwargs
 
     def get_success_url(self):
@@ -168,7 +178,7 @@ class ProgrammeFundEditProgressUpdate(APIBarrierFormViewMixin, FormView):
             None,
         )
         updates = self.barrier.programme_fund_progress_updates
-        progress_update_id = self.kwargs.get("progress_update_id")
+        self.progress_update_id = self.kwargs.get("progress_update_id")
         return {
             "milestones_and_deliverables": progress_update[
                 "milestones_and_deliverables"
