@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 import requests
@@ -6,6 +7,8 @@ from django import forms
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
 from utils.forms import MonthYearInFutureField
+
+logger = logging.getLogger(__name__)
 
 
 class APIFormMixin:
