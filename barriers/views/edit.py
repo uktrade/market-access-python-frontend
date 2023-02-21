@@ -246,8 +246,18 @@ class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         initial = super().get_initial()
+        if self.barrier.proposed_estimated_resolution_date:
+            proposed_date = self.barrier.proposed_estimated_resolution_date
+        else:
+            proposed_date = self.barrier.estimated_resolution_date
+        if self.barrier.estimated_resolution_date_change_reason:
+            proposed_reason = self.barrier.estimated_resolution_date_change_reason
+        else:
+            proposed_reason = None
+
         return {
-            "estimated_resolution_date": self.barrier.proposed_estimated_resolution_date
+            "estimated_resolution_date": proposed_date,
+            "estimated_resolution_date_change_reason": proposed_reason,
         }
 
     def get_form_kwargs(self):

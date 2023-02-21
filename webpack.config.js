@@ -82,7 +82,7 @@ const mainConfig = {
                         `${assetsSrcPath}/js/components/Modal.js`,
                         `${assetsSrcPath}/js/components/DeleteModal.js`,
                         `${assetsSrcPath}/js/components/AttachmentForm.js`,
-                        `${assetsSrcPath}/js/components/HiddenERDTextarea.js`,
+                        `${assetsSrcPath}/js/components/HiddenEstimatedResolutionDateTextarea.js`,
                         `${assetsSrcPath}/js/pages/index.js`,
                         `${assetsSrcPath}/js/pages/report/index.js`,
                         `${assetsSrcPath}/js/pages/report/is-resolved.js`,

@@ -587,6 +587,7 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
                 "clear": "1",
             },
         )
+        print(response)
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             estimated_resolution_date=None,
