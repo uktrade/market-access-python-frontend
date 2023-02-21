@@ -39,10 +39,13 @@ class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        estimated_resolution_date = self.barrier.estimated_resolution_date
-        if estimated_resolution_date:
-            initial["estimated_resolution_date"] = estimated_resolution_date
-        return initial
+        if self.barrier.proposed_estimated_resolution_date:
+            proposed_date = self.barrier.proposed_estimated_resolution_date
+        else:
+            proposed_date = self.barrier.estimated_resolution_date
+        return {
+            "estimated_resolution_date": self.barrier.proposed_estimated_resolution_date
+        }
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

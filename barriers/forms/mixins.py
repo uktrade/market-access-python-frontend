@@ -163,13 +163,9 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
         self.barrier_id = kwargs.pop("barrier_id")
         self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
-        # estimated_resolution_date = kwargs.get("initial", {}).get(
-        #     "estimated_resolution_date"
-        # )
-        # if estimated_resolution_date:
-        #     self.fields[
-        #         "estimated_resolution_date"
-        #     ].label = "Change estimated resolution date"
+        estimated_resolution_date = kwargs.get("initial", {}).get(
+            "estimated_resolution_date"
+        )
 
     def clean_estimated_resolution_date(self):
         return self.cleaned_data["estimated_resolution_date"].isoformat()

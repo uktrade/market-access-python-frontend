@@ -1,0 +1,23 @@
+ {% if barrier.has_active_estimated_resolution_date_proposal %}
+<div class="govuk-inset-text text-dark">
+    <p>
+        A date change is waiting to be published.<br/>
+        Current estimated resolution date: {{ barrier.estimated_resolution_date|date:"j F Y" }}<br/>
+        Pending estimated resolution date: {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}<br/>
+        Reason for the change: {{ barrier.estimated_resolution_date_change_reason }}
+    </p>
+    <p>
+        <a href="#estimated_resolution_date_change_reason" class="govuk-link" id="edit-erd-link">Edit</a>
+    </p>
+    <hr/>
+    <p class="text-sm">
+        Date submitted: {{ barrier.proposed_estimated_resolution_date_created|date:"j F Y" }}
+        by {{ barrier.proposed_estimated_resolution_date_user.name }}
+    </p>
+
+</div>
+{% else %}
+    {% if barrier.estimated_resolution_date %}
+        <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
+    {% endif %}
+{% endif %}

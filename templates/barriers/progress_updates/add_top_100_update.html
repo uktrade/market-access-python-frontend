@@ -53,32 +53,7 @@
         {% csrf_token %}
 
 
-        {% if barrier.has_active_estimated_resolution_date_proposal %}
-        <div class="govuk-inset-text text-dark">
-            <p>
-                A request has been submitted to change the estimated resolution date to {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}.
-            </p>
-            <p>
-                Reason for change:
-            </p>
-            <p>
-                {{ barrier.estimated_resolution_date_change_reason }}
-            </p>
-            <p>
-                <a href="#estimated_resolution_date_change_reason" class="govuk-link" id="edit-erd-link">Edit</a>
-            </p>
-            <hr/>
-            <p class="text-sm">
-                Date submitted: {{ barrier.proposed_estimated_resolution_date_created|date:"j F Y" }}
-                by {{ barrier.proposed_estimated_resolution_date_user.name }}
-            </p>
-
-        </div>
-        {% else %}
-            {% if barrier.estimated_resolution_date %}
-                <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
-            {% endif %}
-        {% endif %}
+        {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
 
         <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
 
