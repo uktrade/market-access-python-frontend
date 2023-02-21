@@ -245,13 +245,17 @@ class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
         return context
 
     def get_initial(self):
-        return {"estimated_resolution_date": self.barrier.estimated_resolution_date}
+        initial = super().get_initial()
+        return {
+            "estimated_resolution_date": self.barrier.proposed_estimated_resolution_date
+        }
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["barrier_id"] = self.kwargs.get("barrier_id")
         kwargs["user"] = user_scope(self.request)["current_user"]
+
         return kwargs
 
 

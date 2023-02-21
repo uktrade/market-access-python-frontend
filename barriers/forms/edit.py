@@ -768,12 +768,12 @@ class UpdateBarrierEstimatedResolutionDateForm(
 
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
-        help_text="For example, 11 2024",
+        help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
         error_messages={"required": "Enter an estimated resolution date"},
     )
     estimated_resolution_date_change_reason = forms.CharField(
-        label="Reason for delaying the estimated resolution date",
-        help_text="Tell us why you’re changing the estimated resolution date",
+        label="What has caused the change in estimated resolution date?",
+        # help_text="Tell us why you’re changing the estimated resolution date",
         widget=forms.Textarea,
         required=False,
     )
