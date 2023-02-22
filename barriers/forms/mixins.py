@@ -3,6 +3,8 @@ import uuid
 
 import requests
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
@@ -126,7 +128,7 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
         error_messages={"required": "Enter an estimated resolution date"},
     )
     estimated_resolution_date_change_reason = forms.CharField(
-        label="Reason for delaying the estimated resolution date",
+        label="What has caused the change in estimated resolution date?",
         help_text="Tell us why you’re changing the estimated resolution date",
         widget=forms.Textarea,
         required=False,
@@ -177,9 +179,6 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
 
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
-
-        # raise Exception("User id: {self.user.id}")
-
         change_requires_approval = self.does_new_estimated_date_require_approval(
             cleaned_data
         )
@@ -188,9 +187,14 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
             # only admin users can change the estimated resolution date to a date in the past
             # without approval
             if not cleaned_data.get("estimated_resolution_date_change_reason"):
-                raise forms.ValidationError(
-                    "Enter a reason for changing the estimated resolution date"
+                self.add_error(
+                    "estimated_resolution_date_change_reason",
+                    ValidationError(
+                        _("Enter what has caused the change in date"),
+                        code="missing_update",
+                    ),
                 )
+                # raise forms.ValidationError("Enter what has caused the change in date")
 
         return cleaned_data
 

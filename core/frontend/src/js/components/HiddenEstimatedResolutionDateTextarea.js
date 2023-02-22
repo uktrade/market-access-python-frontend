@@ -57,6 +57,13 @@ ma.components.setupHiddenERDTextarea = function (props) {
     // use
     const referenceDate = new Date(referenceYear, referenceMonth, 1);
     console.log("referenceDate", referenceDate);
+    const formError = document.getElementById("error-summary-title");
+
+    if (formError) {
+        console.log("there is an error therefore display reason");
+        textarea.style.display = "block";
+        //erdWarning.style.display = "block";
+    }
 
     const updateTextarea = () => {
         const currentMonth = getMonthValue(monthInputID);

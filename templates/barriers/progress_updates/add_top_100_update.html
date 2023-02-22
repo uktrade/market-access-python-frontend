@@ -43,7 +43,7 @@
         {% include 'partials/heading.html' with text='Add Top 100 priority barrier update' %}
     {% endif %}
 
-    <p class="govuk-body">
+    <p class="govuk-body-l">
         This update will be used to brief senior stakeholders, including ministers.
     </p>
 
@@ -51,9 +51,6 @@
 
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-
-
-        {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
 
         <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
 
@@ -186,14 +183,16 @@
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ form.estimated_resolution_date.label }}</legend>
 
 
-                {% if barrier.estimated_resolution_date %}
+               <!--{% if barrier.estimated_resolution_date %}
                     <span class="govuk-hint mt-2" >Current estimated resolution date:</span>
 
                     <div class="indented-box p-4">
                         {{ barrier.estimated_resolution_date|date:"F o" }}
                     </div>
 
-                {% endif %}
+                {% endif %} -->
+
+                {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
 
                 <span class="govuk-hint">{{ form.estimated_resolution_date.help_text }}</span>
 
