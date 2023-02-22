@@ -568,6 +568,8 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             estimated_resolution_date="2022-06-01",
+            proposed_estimated_resolution_date="2022-06-01",
+            estimated_resolution_date_change_reason="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -591,6 +593,8 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             estimated_resolution_date=None,
+            proposed_estimated_resolution_date=None,
+            estimated_resolution_date_change_reason="",
         )
         assert response.status_code == HTTPStatus.FOUND
 
