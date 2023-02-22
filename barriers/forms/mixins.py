@@ -129,7 +129,6 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
     )
     estimated_resolution_date_change_reason = forms.CharField(
         label="What has caused the change in estimated resolution date?",
-        help_text="Tell us why you’re changing the estimated resolution date",
         widget=forms.Textarea,
         required=False,
     )
