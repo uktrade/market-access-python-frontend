@@ -181,7 +181,6 @@ class Top100ProgressUpdateForm(
     )
     estimated_resolution_date_change_reason = forms.CharField(
         label="What has caused the change in estimated resolution date?",
-        help_text="Tell us why you’re changing the estimated resolution date",
         widget=forms.Textarea,
         required=False,
     )
@@ -775,7 +774,6 @@ class UpdateBarrierEstimatedResolutionDateForm(
     )
     estimated_resolution_date_change_reason = forms.CharField(
         label="What has caused the change in estimated resolution date?",
-        # help_text="Tell us why you’re changing the estimated resolution date",
         widget=forms.Textarea,
         required=False,
     )
