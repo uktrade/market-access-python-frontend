@@ -1,10 +1,11 @@
  {% if barrier.has_active_estimated_resolution_date_proposal %}
 <div class="govuk-inset-text text-dark">
-    <p>
-        A date change is waiting to be published.<br/>
-        Current estimated resolution date: {{ barrier.estimated_resolution_date|date:"j F Y" }}<br/>
-        Pending estimated resolution date: {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}<br/>
-        Reason for the change: {{ barrier.estimated_resolution_date_change_reason }}
+    <p class="govuk-body">
+        A date change is waiting to be published.</p>
+        <p class="govuk-body"><span class="govuk-!-font-weight-bold">Current estimated resolution date:</span> {{ barrier.estimated_resolution_date|date:"j F Y" }}</p>
+        <p class="govuk-body"><span class="govuk-!-font-weight-bold">Pending estimated resolution date:</span>  {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}</p>
+        <p class="govuk-body"><span class="govuk-!-font-weight-bold">Reason for the change:</span></p>
+        <p class="govuk-body"> {{ barrier.estimated_resolution_date_change_reason }}</p>
     </p>
     <p>
         <a href="#estimated_resolution_date_change_reason" class="govuk-link" id="edit-erd-link">Edit</a>

@@ -180,7 +180,7 @@ class Top100ProgressUpdateForm(
         required=False,
     )
     estimated_resolution_date_change_reason = forms.CharField(
-        label="Reason for delaying the estimated resolution date",
+        label="What has caused the change in estimated resolution date?",
         help_text="Tell us why you’re changing the estimated resolution date",
         widget=forms.Textarea,
         required=False,
@@ -779,69 +779,6 @@ class UpdateBarrierEstimatedResolutionDateForm(
         widget=forms.Textarea,
         required=False,
     )
-    # @property
-    # def barrier(self):
-    #     client = MarketAccessAPIClient(self.token)
-    #     return client.barriers.get(id=self.barrier_id)
-
-    # @property
-    # def is_user_admin(self):
-    #     return self.user.has_permission("can_approve_estimated_completion_datexxx")
-
-    # def does_new_estimated_date_require_approval(self, cleaned_data):
-    #     estimated_resolution_date = cleaned_data.get("estimated_resolution_date")
-    #     if not self.barrier.estimated_resolution_date:
-    #         return False
-
-    #     if not estimated_resolution_date:
-    #         return False
-
-    #     existing_estimated_resolution_date = (
-    #         self.barrier.estimated_resolution_date.strftime("%Y-%m-%d")
-    #     )
-
-    #     return existing_estimated_resolution_date and (
-    #         estimated_resolution_date > existing_estimated_resolution_date
-    #     )
-
-    # def does_change_require_approval(self, cleaned_data):
-    #     return (not self.is_user_admin) and (
-    #         not self.does_new_estimated_date_require_approval(cleaned_data)
-    #     )
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.barrier_id = kwargs.get("barrier_id")
-    #     self.user = kwargs.get("user")
-    #     estimated_resolution_date = kwargs.get("initial", {}).get(
-    #         "estimated_resolution_date"
-    #     )
-    #     if estimated_resolution_date:
-    #         self.fields[
-    #             "estimated_resolution_date"
-    #         ].label = "Change estimated resolution date"
-
-    # def clean_estimated_resolution_date(self):
-    #     return self.cleaned_data["estimated_resolution_date"].isoformat()
-
-    # def clean(self, *args, **kwargs):
-    #     cleaned_data = super().clean(*args, **kwargs)
-
-    #     # raise Exception("User id: {self.user.id}")
-
-    #     change_requires_approval = self.does_new_estimated_date_require_approval(
-    #         cleaned_data
-    #     )
-
-    #     if (not self.is_user_admin) and change_requires_approval:
-    #         # only admin users can change the estimated resolution date to a date in the past
-    #         # without approval
-    #         if not cleaned_data.get("estimated_resolution_date_change_reason"):
-    #             raise forms.ValidationError(
-    #                 "Enter a reason for changing the estimated resolution date"
-    #             )
-
-    #     return cleaned_data
 
     def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs)

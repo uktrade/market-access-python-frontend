@@ -24,7 +24,7 @@
     <div  class="govuk-form-group{% if form.estimated_resolution_date_change_reason.errors %} govuk-form-group--error{% endif %}">
         <label class="govuk-label govuk-label--s" for="update">{{ form.estimated_resolution_date_change_reason.label }}</label>
 
-        {% form_field_error form "update" %}
+        {% form_field_error form "estimated_resolution_date_change_reason" %}
         <span class="govuk-hint">{{ form.estimated_resolution_date_change_reason.help_text }}</span>
 
         <textarea id="{{ form.estimated_resolution_date_change_reason.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.estimated_resolution_date_change_reason.name }}" rows="5" maxlength="1250">{% if form.estimated_resolution_date_change_reason.value %}{{ form.estimated_resolution_date_change_reason.value }}{% endif %}</textarea>
@@ -34,9 +34,9 @@
     </div>
 </div>
 
-
+<!--
 {% if current_user|has_permission:"can_approve_estimated_completion_date" %}
 <div class="govuk-inset-text">{{ current_user.username }}, as an adminstrator your
     changes to the estimated resolution date will be effective immediately and not subject to review.
 </div>
-{% endif %}
+{% endif %}-->
