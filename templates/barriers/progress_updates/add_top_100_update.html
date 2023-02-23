@@ -182,16 +182,6 @@
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ form.estimated_resolution_date.label }}</legend>
 
-
-               <!--{% if barrier.estimated_resolution_date %}
-                    <span class="govuk-hint mt-2" >Current estimated resolution date:</span>
-
-                    <div class="indented-box p-4">
-                        {{ barrier.estimated_resolution_date|date:"F o" }}
-                    </div>
-
-                {% endif %} -->
-
                 {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
 
                 <span class="govuk-hint">{{ form.estimated_resolution_date.help_text }}</span>
