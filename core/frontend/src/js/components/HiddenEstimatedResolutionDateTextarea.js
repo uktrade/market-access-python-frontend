@@ -13,13 +13,8 @@ const getYearValue = (yearInputID) => {
 };
 
 ma.components.setupHiddenERDTextarea = function (props) {
-    //let [isAdmin, proposedDate, monthInputID, yearInputID] = props;
-    console.log("Props ", props);
-    console.log("Is user admin?: ", props.is_admin);
-    console.log("input month", props.monthInput);
     if (props.is_admin == "True") {
         // if user is admin, don't run this code
-        console.log("User is an admin, exit prompt");
         return;
     }
     if (typeof props.monthInput == "undefined") {
@@ -56,11 +51,10 @@ ma.components.setupHiddenERDTextarea = function (props) {
 
     // use
     const referenceDate = new Date(referenceYear, referenceMonth, 1);
-    console.log("referenceDate", referenceDate);
     const formError = document.getElementById("error-summary-title");
 
     if (formError) {
-        console.log("there is an error therefore display reason");
+        console.log("Form error therefore display ERD reason");
         textarea.style.display = "block";
         //erdWarning.style.display = "block";
     }
