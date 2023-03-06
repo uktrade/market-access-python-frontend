@@ -60,6 +60,16 @@
                         </h4>
                         {% endif %}
                     </div>
+                    <div class="barrier-progress-update__section">
+                        <h4 class="barrier-progress-update__section__heading">Status</h4>
+                        <p class="barrier-progress-update__section__text">
+                            {% if progress_update.status is not empty %}
+                                {{ progress_update.status }}
+                            {% else %}
+                                No detail
+                            {% endif %}
+                        </p>
+                    </div>
                     <div class="barrier-progress-update__actions">
                         <a class="" href="{% url 'barriers:edit_next_steps' barrier.id progress_update.id %}">Edit</a>
                     </div>

@@ -932,7 +932,6 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
 class NextStepsItemForm(APIFormMixin, forms.Form):
 
     NEXT_STEPS_ITEMS_STATUS_CHOICES = [
-        ("NOT_STARTED", "Not started"),
         ("IN_PROGRESS", "In progress"),
         ("COMPLETED", "Completed"),
     ]
@@ -943,10 +942,6 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         widget=forms.RadioSelect,
         error_messages={"required": "Select the current status of this item"},
     )
-
-    # TODO
-    # start_date = models.DateField(blank=True, null=True, auto_now_add=True)
-    # completion_date = models.DateField(blank=True, null=True)
 
     next_step_item = forms.CharField(
         label="What is the activity?",

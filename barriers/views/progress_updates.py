@@ -249,10 +249,14 @@ class BarrierEditNextStepItem(APIBarrierFormViewMixin, FormView):
         kwargs = super(BarrierEditNextStepItem, self).get_form_kwargs()
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
-        # kwargs["item_id"] = str(self.kwargs.get("item_id"))
-        # print("got form kwargs", str(self.kwargs.get("item_id")))
-        # kwargs["user"] = user_scope(self.request)["current_user"]
         return kwargs
+
+    def get_initial(self):
+        initial = super().get_initial()
+        print("getting initial form values", self.object.status)
+        initial["next_step_owner"] = self.object.next_step_owner
+        initial["status"] = self.object.status
+        return initial
 
 
 class ProgrammeFundListProgressUpdate(BarrierMixin, TemplateView):
