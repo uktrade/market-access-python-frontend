@@ -1,8 +1,12 @@
+import logging
 from urllib.parse import urlencode
 
 from barriers.forms.search import BarrierSearchForm
+from utils.helpers import format_dict_for_url_querystring
 from utils.metadata import get_metadata
 from utils.models import APIModel
+
+logger = logging.getLogger(__name__)
 
 
 class SavedSearch(APIModel):
@@ -29,7 +33,11 @@ class SavedSearch(APIModel):
 
     @property
     def querystring(self):
-        return urlencode(self.filters, doseq=True)
+        # In some instances, filters need reformatting before being encoded
+        filters_for_encode = format_dict_for_url_querystring(
+            self.filters, ["admin_areas"]
+        )
+        return urlencode(filters_for_encode, doseq=True)
 
     @property
     def notifications_text(self):

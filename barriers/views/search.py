@@ -1,3 +1,4 @@
+import logging
 from urllib.parse import urlencode
 
 from django.forms import Form
@@ -11,6 +12,8 @@ from utils.pagination import PaginationMixin
 from utils.tools import nested_sort
 
 from ..forms.search import BarrierSearchForm
+
+logger = logging.getLogger(__name__)
 
 
 class SearchFormMixin:
@@ -56,6 +59,10 @@ class BarrierSearch(PaginationMixin, SearchFormView):
             {
                 "barriers": barriers,
                 "trading_blocs": metadata.get_trading_bloc_list(),
+                "admin_areas": self.get_admin_areas_data(
+                    metadata.get_admin_area_list()
+                ),
+                "countries_with_admin_areas": metadata.get_countries_with_admin_areas_list(),
                 "filters": form.get_readable_filters(with_remove_links=True),
                 "pagination": self.get_pagination_data(object_list=barriers),
                 "pageless_querystring": self.get_pageless_querystring(),
@@ -80,6 +87,26 @@ class BarrierSearch(PaginationMixin, SearchFormView):
             offset=self.get_pagination_offset(),
             **form.get_api_search_parameters(),
         )
+
+    def get_admin_areas_data(self, admin_areas_metadata):
+        # Admin area data works differently to both trading blocs and countries
+        # We only want admin areas for specific countries and we need them formatted and
+        # sorted in a particular way so the Javascript and HTML can display them correctly
+        # in seperate drop down lists.
+        filtered_areas = {}
+
+        for area in admin_areas_metadata:
+            country = area["country"]["id"]
+            if filtered_areas.get(f"{country}") is None:
+                filtered_areas[f"{country}"] = [
+                    {"value": area["id"], "label": area["name"]}
+                ]
+            else:
+                filtered_areas[f"{country}"].append(
+                    {"value": area["id"], "label": area["name"]}
+                )
+
+        return filtered_areas
 
     def get_saved_search(self, form):
         if form.cleaned_data.get("search_id") is not None:

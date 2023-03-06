@@ -6,12 +6,16 @@
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
     {{ trading_blocs|json_script:"trading-blocs-data" }}
+    {{ admin_areas|json_script:"admin-areas-data" }}
+    {{ countries_with_admin_areas|json_script:"countries-with-admin-areas-data" }}
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
             let countryElement = document.getElementById("country")
             let tradingBlocElement = document.getElementById("country_trading_bloc")
             let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent)
-            ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs)
+            let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent)
+            let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent)
+            ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries)
             ReactApp.renderMultiSelectFilter("sector", null, null, null, {fieldName: "ignore_all_sectors", label: "Exclude barriers marked as 'all sectors'"})
             ReactApp.renderMultiSelectFilter("organisation")
             ReactApp.renderMultiSelectFilter("category", "Search categories")
@@ -153,6 +157,7 @@
                     <ul class="active-filters">
                         {% include 'barriers/partials/active_filter.html' with filter=filters.member %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
+                        {% include 'barriers/partials/active_filter.html' with filter=filters.admin_areas %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.trade_direction %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.organisation %}
