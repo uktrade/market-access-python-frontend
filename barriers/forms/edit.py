@@ -927,3 +927,86 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
                 "economic_assessment_eligibility_summary"
             ],
         )
+
+
+class NextStepsItemForm(APIFormMixin, forms.Form):
+
+    NEXT_STEPS_ITEMS_STATUS_CHOICES = [
+        ("NOT_STARTED", "Not started"),
+        ("IN_PROGRESS", "In progress"),
+        ("COMPLETED", "Completed"),
+    ]
+
+    status = forms.ChoiceField(
+        label="Status",
+        choices=NEXT_STEPS_ITEMS_STATUS_CHOICES,
+        widget=forms.RadioSelect,
+        error_messages={"required": "Select the current status of this item"},
+    )
+
+    # TODO
+    # start_date = models.DateField(blank=True, null=True, auto_now_add=True)
+    # completion_date = models.DateField(blank=True, null=True)
+
+    next_step_item = forms.CharField(
+        label="What is the activity?",
+        help_text=("What are the action being taken"),
+        widget=forms.Textarea,
+        required=True,
+    )
+
+    next_step_owner = forms.CharField(
+        label="Who's doing the activity?",
+        help_text=("Who will be responsible for completing this item"),
+        widget=forms.Textarea,
+        required=True,
+    )
+
+    completion_date = MonthYearInFutureField(
+        label="When will the activity be completed?",
+        help_text=("Add the target date for the completion of this item"),
+        error_messages={
+            "invalid_year": "Enter a completion date",
+            "invalid_month": "Enter a completion date",
+        },
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(NextStepsItemForm, self).__init__(*args, **kwargs)
+        self.barrier_id = kwargs.get("barrier_id")
+        self.item_id = kwargs.get("item_id")
+        print("got barrier id", kwargs.get("barrier_id"))
+        print("got item id", kwargs.get("item_id"))
+        self.user = kwargs.get("user")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        print("trying to save :", cleaned_data)
+
+        status = cleaned_data.get("status")
+
+    # TODO UPDATE ENDPIONTS
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        if self.item_id:
+            print("patching next step, barrier", self.barrier_id)
+            client.barriers.patch_next_steps_item(
+                barrier=self.barrier_id,
+                id=self.item_id,
+                status=self.cleaned_data["status"],
+                next_step_owner=self.cleaned_data["next_step_owner"],
+                next_step_item=self.cleaned_data["next_step_item"],
+                completion_date=self.cleaned_data["completion_date"],
+                # message=self.message,
+                # message=self.cleaned_data["update"],
+                # next_steps=self.cleaned_data["next_steps"],
+            )
+        else:
+            client.barriers.create_next_steps_item(
+                barrier=self.barrier_id,
+                status=self.cleaned_data["status"],
+                next_step_owner=self.cleaned_data["next_step_owner"],
+                next_step_item=self.cleaned_data["next_step_item"],
+                completion_date=self.cleaned_data["completion_date"],
+            )

@@ -17,10 +17,15 @@ class APIFormMixin:
     def __init__(self, *args, **kwargs):
         id = kwargs.pop("id", None)
         token = kwargs.pop("token", None)
+        item_id = kwargs.pop("item_id", None)
         if isinstance(id, uuid.UUID):
             id = str(id)
         self.id = id
         self.token = token
+        # TODO: Need to move this higher up the chain as not needed for all api forms @santino?
+        self.item_id = item_id
+        # this should be set higher in up too
+        self.barrier_id = kwargs.pop("barrier_id", None)
         super().__init__(*args, **kwargs)
 
 
