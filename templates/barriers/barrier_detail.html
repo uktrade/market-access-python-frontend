@@ -140,6 +140,9 @@
                                       No monthly next steps
                                   {% endif %}
                               </p>
+                              <p>Next steps items : {{barrier.next_steps_items}}</br>
+                                <a class="" href="{% url 'barriers:list_next_steps' barrier.id %}">View next steps</a>
+                            </p>
                           </div>
 
                           <div class="barrier-progress-update__section barrier-progress-update__section__dates">

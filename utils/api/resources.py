@@ -197,6 +197,17 @@ class BarriersResource(APIResource):
             data=kwargs,
         )
 
+    def create_next_steps_item(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/next_steps_items", data=kwargs
+        )
+
+    def patch_next_steps_item(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/next_steps_items/{kwargs['id']}",
+            data=kwargs,
+        )
+
 
 class NotesResource(APIResource):
     resource_name = "interactions"

@@ -5,6 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 
 from barriers.forms.edit import (
+    NextStepsItemForm,
     ProgrammeFundProgressUpdateForm,
     Top100ProgressUpdateForm,
 )
@@ -214,6 +215,44 @@ class BarrierListProgressUpdate(BarrierMixin, TemplateView):
             }
         )
         return context_data
+
+
+class BarrierListNextStepsItems(BarrierMixin, TemplateView):
+    template_name = "barriers/progress_updates/list_next_steps_items.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data.update(
+            {
+                "page": "next_step_items",
+                "next_steps_items": self.barrier.next_steps_items,
+            }
+        )
+        return context_data
+
+
+class BarrierEditNextStepItem(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/progress_updates/add_next_steps_item.html"
+    form_class = NextStepsItemForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        form = context_data["form"]
+        context_data.update(
+            {
+                "barrier": self.barrier,
+            }
+        )
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super(BarrierEditNextStepItem, self).get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
+        # kwargs["item_id"] = str(self.kwargs.get("item_id"))
+        # print("got form kwargs", str(self.kwargs.get("item_id")))
+        # kwargs["user"] = user_scope(self.request)["current_user"]
+        return kwargs
 
 
 class ProgrammeFundListProgressUpdate(BarrierMixin, TemplateView):

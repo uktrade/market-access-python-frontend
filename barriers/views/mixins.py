@@ -72,7 +72,9 @@ class BarrierMixin:
         return client.notes.list(barrier_id=self.barrier.id)
 
     def get_context_data(self, **kwargs):
+        print("got here trying to get context")
         context_data = super().get_context_data(**kwargs)
+        print("got context")
         context_data["barrier"] = self.barrier
         context_data["action_plan"] = self.action_plan
         if self.include_interactions:
@@ -171,7 +173,10 @@ class APIFormViewMixin:
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
+        print("the error is here!")
+        print("got item id", kwargs.get("item_id"))
         context_data = super().get_context_data(**kwargs)
+        print("doesn't get here")
         context_data["object"] = self.object
         return context_data
 
