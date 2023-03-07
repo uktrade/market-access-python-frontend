@@ -143,7 +143,7 @@
 }
 
 .barrier-progress-update {
-    background: #ecf8ff;
+    background: #fbfafa;
     padding: 0px;
     padding-top: 2px;
 
@@ -153,7 +153,12 @@
 
     &__section {
         margin: 12px;
-        border-bottom: 1px solid #b1b4b6;
+        padding: 5px;
+        background: #f3f2f1;
+
+        &__clear {
+            background: #f8f8f8;
+        }
 
         &__dates {
             color: #505a5f;
@@ -197,7 +202,7 @@
     }
 
     .govuk-tabs__list-item {
-        background-color: #ecf8ff;
+        background-color: #fafbfb;
     }
 }
 
