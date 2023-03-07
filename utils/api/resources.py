@@ -159,6 +159,7 @@ class BarriersResource(APIResource):
         return self.client.put(url, json=kwargs)
 
     def create_top_100_progress_update(self, **kwargs):
+        print("call api ", kwargs)
         return self.client.post(
             f"barriers/{kwargs['barrier']}/top_100_progress_updates", data=kwargs
         )
