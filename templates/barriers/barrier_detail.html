@@ -90,149 +90,149 @@
 
                 <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:choose_progress_update_type' barrier.id %}">Add progress update</a>
 
-              {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}
-                <div class="govuk-tabs dmas-barrier-progress-tabs" data-module="govuk-tabs">
-                  <ul class="govuk-tabs__list">
-                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                      <a class="govuk-tabs__tab govuk-body-s" href="#barrier-top-100-update-tab">
-                        Top 100 priority barrier
-                      </a>
-                    </li>
-                    <li class="govuk-tabs__list-item">
-                      <a class="govuk-tabs__tab govuk-body-s" href="#barrier-programme-fund-update-tab">
-                        Programme Fund
-                      </a>
-                    </li>
-                  </ul>
-              {% endif %}
-                  {% if barrier.latest_top_100_progress_update %}
-                  {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}<div class="govuk-tabs__panel" id="barrier-top-100-update-tab">{% endif %}
-                    <div class="barrier-progress-update summary-group__list__value">
-                      <div class="barrier-progress-update">
-                          <div class="barrier-progress-update__section">
-                              <h4 class="barrier-progress-update__section__heading">Delivery confidence</h4>
-                              <p class="barrier-progress-update__section__text">
-                                  {% if barrier.latest_top_100_progress_update.status is not empty %}
-                                      {{ barrier.latest_top_100_progress_update.status_display|linebreaksbr }}
-                                  {% else %}
-                                      No monthly delivery confidence summary
-                                  {% endif %}
-                              </p>
-                          </div>
+                {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}
+                    <div class="govuk-tabs dmas-barrier-progress-tabs" data-module="govuk-tabs">
+                        <ul class="govuk-tabs__list">
+                            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+                                <a class="govuk-tabs__tab govuk-body-s" href="#barrier-top-100-update-tab">
+                                    Top 100 priority barrier
+                                </a>
+                            </li>
+                            <li class="govuk-tabs__list-item">
+                                <a class="govuk-tabs__tab govuk-body-s" href="#barrier-programme-fund-update-tab">
+                                    Programme Fund
+                                </a>
+                            </li>
+                        </ul>
+                {% endif %}
 
-                          <div class="barrier-progress-update__section">
-                              <h4 class="barrier-progress-update__section__heading">Current status</h4>
-                              <p class="barrier-progress-update__section__text">
-                                  {% if barrier.latest_top_100_progress_update.message is not empty %}
-                                      {{ barrier.latest_top_100_progress_update.message|linebreaksbr }}
-                                  {% else %}
-                                      No monthly progress update
-                                  {% endif %}
-                              </p>
-                          </div>
+                {% if barrier.latest_top_100_progress_update %}
+                    {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}<div class="govuk-tabs__panel" id="barrier-top-100-update-tab">{% endif %}
+                        <div class="barrier-progress-update summary-group__list__value">
+                            <div class="barrier-progress-update">
+                                <div class="barrier-progress-update__section">
+                                    <h4 class="barrier-progress-update__section__heading">Delivery confidence</h4>
+                                    <p class="barrier-progress-update__section__text">
+                                        {% if barrier.latest_top_100_progress_update.status is not empty %}
+                                            {{ barrier.latest_top_100_progress_update.status_display|linebreaksbr }}
+                                        {% else %}
+                                            No monthly delivery confidence summary
+                                        {% endif %}
+                                    </p>
+                                    <details class="govuk-details govuk-!-margin-bottom-2" data-module="govuk-details">
+                                        <summary class="govuk-details__summary">
+                                            <span class="govuk-details__summary-text">
+                                                Reason for this delivery confidence
+                                            </span>
+                                        </summary>
+                                        <div class="barrier-progress-update__section__text govuk-!-padding-left-5">
+                                            {% if barrier.latest_top_100_progress_update.message is not empty %}
+                                                {{ barrier.latest_top_100_progress_update.message|linebreaksbr }}
+                                            {% else %}
+                                                No monthly progress update
+                                            {% endif %}
+                                        </div>
+                                    </details>
+                                    <a class="govuk-!-margin-bottom-2" href="{% url 'barriers:edit_top_100_progress_update' barrier.id barrier.latest_top_100_progress_update.id %}">Edit</a>
+                                </div>
 
-                          <div class="barrier-progress-update__section">
-                              <h4 class="barrier-progress-update__section__heading">Next steps</h4>
-                              <p class="barrier-progress-update__section__text">
-                                  {% if barrier.latest_top_100_progress_update.next_steps is not empty %}
-                                      {{ barrier.latest_top_100_progress_update.next_steps|linebreaksbr }}
-                                  {% else %}
-                                      No monthly next steps
-                                  {% endif %}
-                              </p>
-                              <p>Next steps items : {{barrier.next_steps_items}}</br>
-                                <a class="" href="{% url 'barriers:list_next_steps' barrier.id %}">View next steps</a>
-                            </p>
-                          </div>
+                                <div class="barrier-progress-update__section">
+                                    <h4 class="barrier-progress-update__section__heading">Next steps</h4>
 
-                          <div class="barrier-progress-update__section barrier-progress-update__section__dates">
-                              {% timezone "Europe/London" %}
-                              <h4 class="barrier-progress-update__section__heading">
-                                  Date created: <span class="barrier-progress-update__section__date">
-                                      {{ barrier.latest_top_100_progress_update.created_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_top_100_progress_update.created_on|parse_iso|date:"P (e)" }}
-                                  by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_top_100_progress_update.created_by }}</span>
-                              </h4>
-                              {% if barrier.latest_top_100_progress_update.created_on != barrier.latest_top_100_progress_update.modified_on %}
-                              <h4 class="barrier-progress-update__section__heading">
-                                  Date modified: <span class="barrier-progress-update__section__date">
-                                      {{ barrier.latest_top_100_progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_top_100_progress_update.modified_on|parse_iso|date:"P (e)" }}
-                                  by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_top_100_progress_update.modified_by }}</span>
-                              </h4>
-                              {% endif %}
-                              {% endtimezone %}
-                          </div>
+                                    {% for item in barrier.next_steps_items %}
+                                        <div class="govuk-!-margin-bottom-2">
+                                            <a class="" href="{% url 'barriers:edit_next_steps' barrier.id item.id %}">
+                                                <h4 class="govuk-!-margin-top-2 govuk-!-margin-bottom-1">{{item.next_step_item}}</h4>
+                                            </a>
+                                            {{item.next_step_owner}}
+                                            <h4 class="govuk-!-margin-top-1 govuk-!-margin-bottom-1">Due date:</h4>
+                                            {{ item.completion_date|parse_iso|date:"j F Y" }}
+                                        </div>
+                                        <hr class="govuk-section-break govuk-section-break--visible">
+                                    {% endfor %}
 
-                          <div class="barrier-progress-update__actions">
-                              <a class="" href="{% url 'barriers:edit_top_100_progress_update' barrier.id barrier.latest_top_100_progress_update.id %}">Edit</a>
-                              <a class="" href="{% url 'barriers:list_top_100_progress_update' barrier.id %}">View previous updates</a>
-                          </div>
+                                    <div class="govuk-!-margin-top-3 govuk-!-margin-bottom-3">
+                                        <a class="" href="{% url 'barriers:list_next_steps' barrier.id %}">View all steps</a>
+                                    </div>
+                                </div>
 
-                          {% if not barrier.archived %}
-                              {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_progress_update' barrier.id %}">Edit</a> {% endcomment %}
-                          {% endif %}
-                      </div>
-                    </div>
-                  {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}</div>{% endif %}
-                  {% endif %}
-                  {% if barrier.latest_programme_fund_progress_update %}
-                  {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}<div class="govuk-tabs__panel" id="barrier-programme-fund-update-tab">{% endif %}
-                    <div class="barrier-progress-update summary-group__list__value">
-                      <div class="barrier-progress-update">
-                          <div class="barrier-progress-update__section">
-                              <h4 class="barrier-progress-update__section__heading">Milestones and deliverables</h4>
-                              <p class="barrier-progress-update__section__text">
-                                  {% if barrier.latest_programme_fund_progress_update.milestones_and_deliverables is not empty %}
-                                      {{ barrier.latest_programme_fund_progress_update.milestones_and_deliverables|linebreaksbr }}
-                                  {% else %}
-                                      No monthly delivery confidence summary
-                                  {% endif %}
-                              </p>
-                          </div>
+                                <div class="barrier-progress-update__section barrier-progress-update__section__clear barrier-progress-update__section__dates">
 
-                          <div class="barrier-progress-update__section">
-                              <h4 class="barrier-progress-update__section__heading">Expenditure</h4>
-                              <p class="barrier-progress-update__section__text">
-                                  {% if barrier.latest_programme_fund_progress_update.expenditure is not empty %}
-                                      {{ barrier.latest_programme_fund_progress_update.expenditure|linebreaksbr }}
-                                  {% else %}
-                                      No monthly progress update
-                                  {% endif %}
-                              </p>
-                          </div>
+                                    <a class="" href="{% url 'barriers:list_top_100_progress_update' barrier.id %}">View previous updates</a>
+                                    {% timezone "Europe/London" %}
+                                    <h4 class="barrier-progress-update__section__heading">
+                                        Date created: <span class="barrier-progress-update__section__date">
+                                        {{ barrier.latest_top_100_progress_update.created_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_top_100_progress_update.created_on|parse_iso|date:"P (e)" }}
+                                        by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_top_100_progress_update.created_by }}</span>
+                                    </h4>
+                                    {% if barrier.latest_top_100_progress_update.created_on != barrier.latest_top_100_progress_update.modified_on %}
+                                        <h4 class="barrier-progress-update__section__heading">
+                                            Date modified: <span class="barrier-progress-update__section__date">
+                                            {{ barrier.latest_top_100_progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_top_100_progress_update.modified_on|parse_iso|date:"P (e)" }}
+                                            by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_top_100_progress_update.modified_by }}</span>
+                                        </h4>
+                                    {% endif %}
+                                    {% endtimezone %}
+                                </div>
+                            </div>
+                        </div>
+                    {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}</div>{% endif %}
 
+                {% endif %}
 
-                          <div class="barrier-progress-update__section barrier-progress-update__section__dates">
-                              {% timezone "Europe/London" %}
-                              <h4 class="barrier-progress-update__section__heading">
-                                  Date created: <span class="barrier-progress-update__section__date">
-                                      {{ barrier.latest_programme_fund_progress_update.created_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_programme_fund_progress_update.created_on|parse_iso|date:"P (e)" }}
-                                  by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_programme_fund_progress_update.created_by }}</span>
-                              </h4>
-                              {% if barrier.latest_programme_fund_progress_update.created_on != barrier.latest_programme_fund_progress_update.modified_on %}
-                              <h4 class="barrier-progress-update__section__heading">
-                                  Date modified: <span class="barrier-progress-update__section__date">
-                                      {{ barrier.latest_programme_fund_progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_programme_fund_progress_update.modified_on|parse_iso|date:"P (e)" }}
-                                  by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_programme_fund_progress_update.modified_by }}</span>
-                              </h4>
-                              {% endif %}
-                              {% endtimezone %}
-                          </div>
+                {% if barrier.latest_programme_fund_progress_update %}
+                    {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}<div class="govuk-tabs__panel" id="barrier-programme-fund-update-tab">{% endif %}
+                        <div class="barrier-progress-update summary-group__list__value">
+                            <div class="barrier-progress-update">
+                                <div class="barrier-progress-update__section">
+                                    <h4 class="barrier-progress-update__section__heading">Milestones and deliverables</h4>
+                                    <p class="barrier-progress-update__section__text">
+                                        {% if barrier.latest_programme_fund_progress_update.milestones_and_deliverables is not empty %}
+                                            {{ barrier.latest_programme_fund_progress_update.milestones_and_deliverables|linebreaksbr }}
+                                        {% else %}
+                                            No monthly delivery confidence summary
+                                        {% endif %}
+                                    </p>
+                                </div>
 
-                          <div class="barrier-progress-update__actions">
-                              <a class="" href="{% url 'barriers:edit_barrier_fund_progress_update' barrier.id barrier.latest_programme_fund_progress_update.id %}">Edit</a>
-                              <a class="" href="{% url 'barriers:list_barrier_fund_progress_update' barrier.id %}">View previous updates</a>
-                          </div>
+                                <div class="barrier-progress-update__section">
+                                    <h4 class="barrier-progress-update__section__heading">Expenditure</h4>
+                                    <p class="barrier-progress-update__section__text">
+                                        {% if barrier.latest_programme_fund_progress_update.expenditure is not empty %}
+                                            {{ barrier.latest_programme_fund_progress_update.expenditure|linebreaksbr }}
+                                        {% else %}
+                                            No monthly progress update
+                                        {% endif %}
+                                    </p>
+                                </div>
 
-                          {% if not barrier.archived %}
-                              {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_progress_update' barrier.id %}">Edit</a> {% endcomment %}
-                          {% endif %}
-                      </div>
-                    </div>
-                  {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}</div>{% endif %}
-                  {% endif %}
-              {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}
-                </div>
-              {% endif %}
+                                <div class="barrier-progress-update__section barrier-progress-update__section__clear barrier-progress-update__section__dates">
+                                    {% timezone "Europe/London" %}
+                                        <h4 class="barrier-progress-update__section__heading">
+                                            Date created: <span class="barrier-progress-update__section__date">
+                                            {{ barrier.latest_programme_fund_progress_update.created_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_programme_fund_progress_update.created_on|parse_iso|date:"P (e)" }}
+                                            by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_programme_fund_progress_update.created_by }}</span>
+                                        </h4>
+                                        {% if barrier.latest_programme_fund_progress_update.created_on != barrier.latest_programme_fund_progress_update.modified_on %}
+                                            <h4 class="barrier-progress-update__section__heading">
+                                                Date modified: <span class="barrier-progress-update__section__date">
+                                                {{ barrier.latest_programme_fund_progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ barrier.latest_programme_fund_progress_update.modified_on|parse_iso|date:"P (e)" }}
+                                                by </span> <span class="barrier-progress-update__section__user">{{ barrier.latest_programme_fund_progress_update.modified_by }}</span>
+                                            </h4>
+                                        {% endif %}
+                                    {% endtimezone %}
+                                </div>
+
+                                <div class="barrier-progress-update__actions">
+                                    <a class="" href="{% url 'barriers:edit_barrier_fund_progress_update' barrier.id barrier.latest_programme_fund_progress_update.id %}">Edit</a>
+                                    <a class="" href="{% url 'barriers:list_barrier_fund_progress_update' barrier.id %}">View previous updates</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}</div>{% endif %}
+                {% endif %}
+                {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}</div>{% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Estimated resolution date</dt>
