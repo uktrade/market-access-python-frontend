@@ -186,10 +186,11 @@ class Top100ProgressUpdateForm(
     )
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id")
         self.user = kwargs.get("user")
-        super().__init__(*args, **kwargs)
+        print("got barrier  id: ", self.barrier_id)
 
     def clean_estimated_resolution_date(self):
         if self.cleaned_data["estimated_resolution_date"]:
@@ -252,6 +253,7 @@ class Top100ProgressUpdateForm(
                 next_steps=self.cleaned_data["next_steps"],
             )
         else:
+            print("Trying to save barrier id:", self.barrier_id)
             client.barriers.create_top_100_progress_update(
                 barrier=self.barrier_id,
                 status=self.cleaned_data["status"],
@@ -971,21 +973,16 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         super(NextStepsItemForm, self).__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
         self.item_id = kwargs.get("item_id")
-        print("got barrier id", kwargs.get("barrier_id"))
-        print("got item id", kwargs.get("item_id"))
         self.user = kwargs.get("user")
 
     def clean(self):
         cleaned_data = super().clean()
-        print("trying to save :", cleaned_data)
-
         status = cleaned_data.get("status")
 
     # TODO UPDATE ENDPIONTS
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.item_id:
-            print("patching next step, barrier", self.barrier_id)
             client.barriers.patch_next_steps_item(
                 barrier=self.barrier_id,
                 id=self.item_id,
