@@ -13,115 +13,53 @@
     <p class="govuk-body-l"> For each next step add the activity, who'll be doing it and when it will be completed.</p>
     {% timezone "Europe/London" %}
 
+    {% for item in next_steps_items %}
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            <a class="" href="{% url 'barriers:edit_next_steps' barrier.id item.id %}">
+            {% if item.next_step_item is not empty %}
+                {{ item.next_step_item|linebreaksbr }}
+            {% else %}
+                No detail
+            {% endif %}
+            </a>
+            <p class="govuk-body-s govuk-!-padding-top-5">
+                <span class="govuk-!-font-weight-bold">Who's doing the activity?</span>
+                {% if item.next_step_owner is not empty %}
+                    {{ item.next_step_owner|linebreaksbr }}
+                {% else %}
+                    Unassigned
+                {% endif %}
+                </p>
+                <p class="govuk-body-s">
+                <span class="govuk-!-font-weight-bold" >Due date:</span>
 
-
-<!--
-
-    <table class="govuk-table">
-       <caption class="govuk-table__caption govuk-table__caption--m">Dates and amounts</caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Item</th>
-            <th scope="col" class="govuk-table__header">Status</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-
-          {% for item in next_steps_items %}
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-                {% if item.next_step_item is not empty %}
-                    {{ item.next_step_item|linebreaksbr }}
+                {% if item.completion_date is not empty %}
+                    {{ item.completion_date|linebreaksbr }}
                 {% else %}
                     No detail
                 {% endif %}
-
-                <p>
-                    {{ item.next_step_owner}}
                 </p>
-                <p>
-                    Due date: {{ item.completion_date|parse_iso|date:"j F Y" }}
-                </p>
+          </dt>
 
-            </th>
-            <td class="govuk-table__cell--numeric">Mark Complete</td>
-          </tr>
-          {% endfor %}
+          <dd class="govuk-summary-list__actions">
+            {% if item.status == "COMPLETED"%}
+                <strong class="govuk-tag">{{ item.status }}</strong>
+            {% elif item.status is not empty %}
+                <a class="govuk-link" href="#">
+                    Mark as complete<span class="govuk-visually-hidden"> name</span>
+                </a>
+            {% else  %}
+                No detail
+            {% endif %}
+          </dd>
+        </div>
+      </dl>
+      {% endfor %}
+    {% endtimezone %}
 
-        </tbody>
-      </table>
-
-    -->
-    <div class="event-list">
-        {% for progress_update in next_steps_items %}
-            <div class="barrier-progress-update summary-group__list__value event-list__item">
-                <div class="barrier-progress-update">
-                    <div class="barrier-progress-update__section">
-                        <h4 class="barrier-progress-update__section__heading">Who</h4>
-                        <p class="barrier-progress-update__section__text">
-                            {% if progress_update.next_step_owner is not empty %}
-                                {{ progress_update.next_step_owner|linebreaksbr }}
-                            {% else %}
-                                Unassinged
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div class="barrier-progress-update__section">
-                        <h4 class="barrier-progress-update__section__heading">What</h4>
-                        <p class="barrier-progress-update__section__text">
-                            {% if progress_update.next_step_item is not empty %}
-                                {{ progress_update.next_step_item|linebreaksbr }}
-                            {% else %}
-                                No detail
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div class="barrier-progress-update__section">
-                        <h4 class="barrier-progress-update__section__heading">When</h4>
-                        <p class="barrier-progress-update__section__text">
-                            {% if progress_update.completion_date is not empty %}
-                                {{ progress_update.completion_date|linebreaksbr }}
-                            {% else %}
-                                No detail
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div class="barrier-progress-update__section barrier-progress-update__section__dates">
-                        <h4 class="barrier-progress-update__section__heading">
-                            Date created: <span class="barrier-progress-update__section__date">
-                                {{ progress_update.created_on|parse_iso|date:"j F Y" }} at {{ progress_update.created_on|parse_iso|date:"P (e)" }}
-                            by </span> <span class="barrier-progress-update__section__user">{{ progress_update.created_by }}</span>
-                        </h4>
-                        {% if progress_update.created_on != progress_update.modified_on %}
-                        <h4 class="barrier-progress-update__section__heading">
-                            Date modified: <span class="barrier-progress-update__section__date">
-                                {{ progress_update.modified_on|parse_iso|date:"j F Y" }} at {{ progress_update.modified_on|parse_iso|date:"P (e)" }}
-                            by </span> <span class="barrier-progress-update__section__user">{{ progress_update.modified_by }}</span>
-                        </h4>
-                        {% endif %}
-                    </div>
-                    <div class="barrier-progress-update__section">
-                        <h4 class="barrier-progress-update__section__heading">Status</h4>
-                        <p class="barrier-progress-update__section__text">
-                            {% if progress_update.status is not empty %}
-                                {{ progress_update.status }}
-                            {% else %}
-                                No detail
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div class="barrier-progress-update__actions">
-                        <a class="" href="{% url 'barriers:edit_next_steps' barrier.id progress_update.id %}">Edit</a>
-                    </div>
-
-                </div>
-            </div>
-            {% endfor %}
-    </div>
-        {% endtimezone %}
-
-        <a class="govuk-button button--secondary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add next step</a>
-        <a class="govuk-button button--primary" href="{% url 'barriers:barrier_detail' barrier.id %}">Confirm</a>
-
-
+    <a class="govuk-button button--secondary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add</a>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <a class="govuk-button button--primary" href="{% url 'barriers:barrier_detail' barrier.id %}">Confirm</a>
 {% endblock %}

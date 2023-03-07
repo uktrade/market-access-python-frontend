@@ -164,6 +164,7 @@ class Top100ProgressUpdateForm(
         ),
         widget=forms.Textarea,
         error_messages={"required": "Enter next steps"},
+        required=False,
     )
 
     estimated_resolution_date = MonthYearInFutureField(
@@ -314,10 +315,10 @@ class ProgrammeFundProgressUpdateForm(
     )
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id", None)
         self.user = kwargs.get("user", None)
-        super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -949,6 +950,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         label="What is the activity?",
         help_text=("What are the action being taken"),
         widget=forms.Textarea,
+        error_messages={"required": "Enter an activity"},
         required=True,
     )
 
@@ -956,6 +958,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         label="Who's doing the activity?",
         help_text=("Who will be responsible for completing this item"),
         widget=forms.Textarea,
+        error_messages={"required": "Enter who's doing the activity"},
         required=True,
     )
 
@@ -963,6 +966,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         label="When will the activity be completed?",
         help_text=("Add the target date for the completion of this item"),
         error_messages={
+            "required": "Enter when the activity will be completed",
             "invalid_year": "Enter a completion date",
             "invalid_month": "Enter a completion date",
         },
