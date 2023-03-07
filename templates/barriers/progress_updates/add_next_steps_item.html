@@ -30,9 +30,7 @@
                 <span class="govuk-hint">{{ form.next_step_item.help_text }}</span>
 
 
-                <textarea id="{{ form.next_step_item.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_item.name }}" rows="5" maxlength="1250">
-                    {% if form.next_step_item.value %}{{ form.next_step_item.value }}{% endif %}
-                </textarea>
+                <textarea id="{{ form.next_step_item.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_item.name }}" rows="5" maxlength="1250">{% if form.next_step_item.value %}{{ form.next_step_item.value }}{% endif %}</textarea>
             </div>
             <div id="{{ form.next_step_item.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
               You can enter up to 150 characters
@@ -46,9 +44,7 @@
                 {% form_field_error form "next_step_owner" %}
                 <span class="govuk-hint">{{ form.next_step_owner.help_text }}</span>
 
-                <textarea  id="{{ form.next_step_owner.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_owner.name }}" rows="5" maxlength="1250">
-                    {% if form.next_step_owner.value %}{{ form.next_step_owner.value }}{% endif %}
-                </textarea>
+                <textarea  id="{{ form.next_step_owner.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_owner.name }}" rows="5" maxlength="1250">{% if form.next_step_owner.value %}{{ form.next_step_owner.value }}{% endif %}</textarea>
             </div>
             <div id="{{ form.next_step_owner.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
             You can enter up to 150 characters
@@ -98,7 +94,7 @@
         {% endif %}
 
 
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save" class="govuk-button">
         <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:barrier_detail' barrier_id=barrier.id %}">Cancel</a>
 
     </form>

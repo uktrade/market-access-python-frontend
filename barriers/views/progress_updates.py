@@ -71,9 +71,14 @@ class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
                 "barriers:edit_estimated_resolution_date_confirmation_page",
                 kwargs={"barrier_id": self.kwargs.get("barrier_id")},
             )
+
         if self.barrier.latest_programme_fund_progress_update:
-            success_url = f"{success_url}#barrier-top-100-update-tab"
-        return success_url
+            #     success_url = f"{success_url}#barrier-top-100-update-tab"
+            # return success_url
+            return reverse_lazy(
+                "barriers:list_next_steps",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
 
     def form_valid(self, form):
         self.form = form
@@ -253,10 +258,31 @@ class BarrierEditNextStepItem(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        print("getting initial form values", self.object.status)
-        initial["next_step_owner"] = self.object.next_step_owner
-        initial["status"] = self.object.status
-        return initial
+        next_step_item = next(
+            (
+                item
+                for item in self.barrier.next_steps_items
+                if item["id"] == str(self.kwargs.get("item_id"))
+            ),
+            None,
+        )
+
+        if next_step_item is None:
+            return initial
+        else:
+            return {
+                "next_step_owner": next_step_item["next_step_owner"],
+                "next_step_item": next_step_item["next_step_item"],
+                "status": next_step_item["status"],
+                "completion_date": next_step_item["completion_date"],
+            }
+
+    def get_success_url(self):
+
+        return reverse_lazy(
+            "barriers:list_next_steps",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
 
 
 class ProgrammeFundListProgressUpdate(BarrierMixin, TemplateView):

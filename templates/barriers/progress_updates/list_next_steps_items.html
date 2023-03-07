@@ -12,6 +12,46 @@
     {% include 'partials/heading.html' with text='Next steps' %}
     <p class="govuk-body-l"> For each next step add the activity, who'll be doing it and when it will be completed.</p>
     {% timezone "Europe/London" %}
+
+
+
+<!--
+
+    <table class="govuk-table">
+       <caption class="govuk-table__caption govuk-table__caption--m">Dates and amounts</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Item</th>
+            <th scope="col" class="govuk-table__header">Status</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+
+          {% for item in next_steps_items %}
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                {% if item.next_step_item is not empty %}
+                    {{ item.next_step_item|linebreaksbr }}
+                {% else %}
+                    No detail
+                {% endif %}
+
+                <p>
+                    {{ item.next_step_owner}}
+                </p>
+                <p>
+                    Due date: {{ item.completion_date|parse_iso|date:"j F Y" }}
+                </p>
+
+            </th>
+            <td class="govuk-table__cell--numeric">Mark Complete</td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+    -->
     <div class="event-list">
         {% for progress_update in next_steps_items %}
             <div class="barrier-progress-update summary-group__list__value event-list__item">
@@ -80,8 +120,8 @@
     </div>
         {% endtimezone %}
 
-        <a class="govuk-button button--primary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add next step</a>
-        <a class="govuk-button button--secondary" href="{% url 'barriers:barrier_detail' barrier.id %}">Back to barrier</a>
+        <a class="govuk-button button--secondary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add next step</a>
+        <a class="govuk-button button--primary" href="{% url 'barriers:barrier_detail' barrier.id %}">Confirm</a>
 
 
 {% endblock %}
