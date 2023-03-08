@@ -140,15 +140,17 @@
                                     <h4 class="barrier-progress-update__section__heading">Next steps</h4>
 
                                     {% for item in barrier.next_steps_items %}
-                                        <div class="govuk-!-margin-bottom-2">
-                                            <a class="" href="{% url 'barriers:edit_next_steps' barrier.id item.id %}">
-                                                <h4 class="govuk-!-margin-top-2 govuk-!-margin-bottom-1">{{item.next_step_item}}</h4>
-                                            </a>
-                                            {{item.next_step_owner}}
-                                            <h4 class="govuk-!-margin-top-1 govuk-!-margin-bottom-1">Due date:</h4>
-                                            {{ item.completion_date|parse_iso|date:"j F Y" }}
-                                        </div>
-                                        <hr class="govuk-section-break govuk-section-break--visible">
+                                        {% if item.status != "COMPLETED" %}
+                                            <div class="govuk-!-margin-bottom-2">
+                                                <a class="" href="{% url 'barriers:edit_next_steps' barrier.id item.id %}">
+                                                    <h4 class="govuk-!-margin-top-2 govuk-!-margin-bottom-1">{{item.next_step_item}}</h4>
+                                                </a>
+                                                {{item.next_step_owner}}
+                                                <h4 class="govuk-!-margin-top-1 govuk-!-margin-bottom-1">Due date:</h4>
+                                                {{ item.completion_date|parse_iso|date:"j F Y" }}
+                                            </div>
+                                            <hr class="govuk-section-break govuk-section-break--visible">
+                                        {% endif %}
                                     {% endfor %}
 
                                     <div class="govuk-!-margin-top-3 govuk-!-margin-bottom-3">
