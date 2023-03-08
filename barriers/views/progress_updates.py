@@ -1,8 +1,9 @@
 # add and edit views for progress updates
 import logging
 
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, View
 
 from barriers.forms.edit import (
     NextStepsItemForm,
@@ -11,6 +12,7 @@ from barriers.forms.edit import (
 )
 from barriers.forms.various import ChooseUpdateTypeForm
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
+from utils.api.client import MarketAccessAPIClient
 from utils.context_processors import user_scope
 
 logger = logging.getLogger(__name__)
@@ -305,3 +307,19 @@ class ProgrammeFundListProgressUpdate(BarrierMixin, TemplateView):
             }
         )
         return context_data
+
+
+class BarrierCompleteNextStepItem(View):
+    def get(self, request, **kwargs):
+        # Get ids from URL arguments
+        barrier_id = kwargs["barrier_id"]
+        item_id = kwargs["item_id"]
+        # Patch next step item in DB to complete
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        client.barriers.patch_next_steps_item(
+            barrier=barrier_id,
+            id=item_id,
+            status="COMPLETED",
+        )
+        # Redirect back to list of next steps
+        return HttpResponseRedirect(f"/barriers/{barrier_id}/list/next_steps_items/")

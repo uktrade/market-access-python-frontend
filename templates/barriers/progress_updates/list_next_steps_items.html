@@ -47,7 +47,7 @@
             {% if item.status == "COMPLETED"%}
                 <strong class="govuk-tag">{{ item.status }}</strong>
             {% elif item.status is not empty %}
-                <a class="govuk-link" href="#">
+                <a class="govuk-link" href="{% url 'barriers:complete_next_steps' barrier.id item.id %}">
                     Mark as complete<span class="govuk-visually-hidden"> name</span>
                 </a>
             {% else  %}

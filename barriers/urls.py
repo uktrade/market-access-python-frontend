@@ -37,6 +37,7 @@ from barriers.views.mentions import (
 from barriers.views.progress_updates import (
     BarrierAddProgrammeFundProgressUpdate,
     BarrierAddTop100ProgressUpdate,
+    BarrierCompleteNextStepItem,
     BarrierEditNextStepItem,
     BarrierEditProgressUpdate,
     BarrierListNextStepsItems,
@@ -283,6 +284,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/add/next_step_item_update/",
         BarrierEditNextStepItem.as_view(),
         name="add_next_steps",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/next_step_item_complete/<uuid:item_id>/",
+        BarrierCompleteNextStepItem.as_view(),
+        name="complete_next_steps",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/economic-assessment-eligibility/",
