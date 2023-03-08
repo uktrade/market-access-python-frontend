@@ -2,6 +2,7 @@ import logging
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxLengthValidator
 from django.utils.translation import gettext as _
 
 from barriers.constants import (
@@ -18,6 +19,7 @@ from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ChoiceFieldWithHelpText,
     ClearableMixin,
+    DayMonthYearField,
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
@@ -130,42 +132,42 @@ class Top100ProgressUpdateForm(
     )
     update = forms.CharField(
         label="Current status",
-        help_text=("Provide more detail including recent progress and any obstacles"),
+        help_text=("Provide more detail"),
         widget=forms.Textarea,
         required=False,
     )
     update_1 = forms.CharField(
-        label="Provide more detail including recent progress and any obstacles",
+        label="Provide more detail",
         widget=forms.Textarea,
         error_messages={"missing_update": "missing update"},
         required=False,
     )
 
     update_2 = forms.CharField(
-        label="Provide more detail including recent progress and any obstacles",
+        label="Provide more detail",
         widget=forms.Textarea,
         required=False,
     )
 
     update_3 = forms.CharField(
-        label="Provide more detail including recent progress and any obstacles",
+        label="Provide more detail",
         widget=forms.Textarea,
         required=False,
     )
 
-    next_steps = forms.CharField(
-        label="Next steps",
-        help_text=(
-            "Provide a numbered list of the actions you are planning to "
-            "resolve this barrier including when, who and what. "
-            "For example:\n"
-            "1) March 23: Embassy in France to host workshop sharing UK best practice with "
-            "the French Ministry of Economy, Trade and Industry (METI)."
-        ),
-        widget=forms.Textarea,
-        error_messages={"required": "Enter next steps"},
-        required=False,
-    )
+    # next_steps = forms.CharField(
+    #     label="Next steps",
+    #     help_text=(
+    #         "Provide a numbered list of the actions you are planning to "
+    #         "resolve this barrier including when, who and what. "
+    #         "For example:\n"
+    #         "1) March 23: Embassy in France to host workshop sharing UK best practice with "
+    #         "the French Ministry of Economy, Trade and Industry (METI)."
+    #     ),
+    #     widget=forms.Textarea,
+    #     error_messages={"required": "Enter next steps"},
+    #     required=False,
+    # )
 
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date (optional)",
@@ -245,13 +247,14 @@ class Top100ProgressUpdateForm(
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.progress_update_id:
+            print("got message ", self.message)
             client.barriers.patch_top_100_progress_update(
                 barrier=self.barrier_id,
                 id=self.progress_update_id,
                 status=self.cleaned_data["status"],
                 message=self.message,
                 # message=self.cleaned_data["update"],
-                next_steps=self.cleaned_data["next_steps"],
+                # next_steps=self.cleaned_data["next_steps"],
             )
         else:
             print("Trying to save barrier id:", self.barrier_id)
@@ -259,7 +262,7 @@ class Top100ProgressUpdateForm(
                 barrier=self.barrier_id,
                 status=self.cleaned_data["status"],
                 message=self.message,
-                next_steps=self.cleaned_data["next_steps"],
+                # next_steps=self.cleaned_data["next_steps"],
             )
 
         estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
@@ -952,6 +955,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter an activity"},
         required=True,
+        validators=[MaxLengthValidator(150)],
     )
 
     next_step_owner = forms.CharField(
@@ -960,9 +964,10 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter who's doing the activity"},
         required=True,
+        validators=[MaxLengthValidator(150)],
     )
 
-    completion_date = MonthYearInFutureField(
+    completion_date = DayMonthYearField(
         label="When will the activity be completed?",
         help_text=("Add the target date for the completion of this item"),
         error_messages={
@@ -983,7 +988,6 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
         cleaned_data = super().clean()
         status = cleaned_data.get("status")
 
-    # TODO UPDATE ENDPIONTS
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.item_id:
