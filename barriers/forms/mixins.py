@@ -21,12 +21,11 @@ class APIFormMixin:
             id = str(id)
         self.id = id
         self.token = token
-        # TODO: Need to move this higher up the chain as not needed for all api forms @santino?
+        # TODO: Need to move this higher up the chain as not needed for all api forms
         item_id = kwargs.pop("item_id", None)
         self.item_id = item_id
-        # this should be set higher in up too
         self.barrier_id = kwargs.pop("barrier_id", None)
-        self.barrier_id = kwargs.pop("progress_update_id", None)
+        self.progress_update_id = kwargs.pop("progress_update_id", None)
         super().__init__(*args, **kwargs)
 
 
