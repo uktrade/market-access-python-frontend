@@ -68,10 +68,17 @@ class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         success_url = super().get_success_url()
-        return reverse_lazy(
-            "barriers:list_next_steps",
-            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
-        )
+        print("current next steps :", self.barrier.next_steps_items)
+        if not self.barrier.next_steps_items:
+            return reverse_lazy(
+                "barriers:add_next_steps",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        else:
+            return reverse_lazy(
+                "barriers:list_next_steps",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
         # Always route to next steps page
         # if self.form.requested_change:
         #     print(
