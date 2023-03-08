@@ -59,7 +59,7 @@
       {% endfor %}
     {% endtimezone %}
 
-    <a class="govuk-button button--secondary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add</a>
+    <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add</a>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <a class="govuk-button button--primary" href="{% url 'barriers:barrier_detail' barrier.id %}">Confirm</a>
 {% endblock %}

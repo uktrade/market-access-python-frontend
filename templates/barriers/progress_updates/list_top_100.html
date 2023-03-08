@@ -26,7 +26,7 @@
                         </p>
                     </div>
                     <div class="barrier-progress-update__section">
-                        <h4 class="barrier-progress-update__section__heading">Current status</h4>
+                        <h4 class="barrier-progress-update__section__heading">Status update</h4>
                         <p class="barrier-progress-update__section__text">
                             {% if progress_update.message is not empty %}
                                 {{ progress_update.message|linebreaksbr }}
@@ -35,6 +35,7 @@
                             {% endif %}
                         </p>
                     </div>
+                    {% if progress_update.next_steps is not empty %}
                     <div class="barrier-progress-update__section">
                         <h4 class="barrier-progress-update__section__heading">Next steps</h4>
                         <p class="barrier-progress-update__section__text">
@@ -45,6 +46,7 @@
                             {% endif %}
                         </p>
                     </div>
+                    {% endif %}
                     <div class="barrier-progress-update__section barrier-progress-update__section__dates">
                         <h4 class="barrier-progress-update__section__heading">
                             Date created: <span class="barrier-progress-update__section__date">

@@ -26,6 +26,7 @@ class APIFormMixin:
         self.item_id = item_id
         # this should be set higher in up too
         self.barrier_id = kwargs.pop("barrier_id", None)
+        self.barrier_id = kwargs.pop("progress_update_id", None)
         super().__init__(*args, **kwargs)
 
 
