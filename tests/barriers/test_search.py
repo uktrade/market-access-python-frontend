@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 from django.conf import settings
@@ -8,6 +9,8 @@ from barriers.models import Barrier, SavedSearch
 from core.tests import MarketAccessTestCase
 from utils.metadata import get_metadata
 from utils.models import ModelList
+
+logger = logging.getLogger(__name__)
 
 
 @patch("utils.pagination.PaginationMixin.pagination_limit", 10)
@@ -153,6 +156,48 @@ class SearchTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             location="82756b9a-5d95-e211-a939-e4115bead28a,TB00016",
+            archived="0",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_admin_areas_search_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "country": [
+                    "63af72a6-5d95-e211-a939-e4115bead28a",
+                    "5961b8be-5d95-e211-a939-e4115bead28a",
+                ],
+                "admin_areas": (
+                    '{"63af72a6-5d95-e211-a939-e4115bead28a":["56f5f425-e3e3-4c9a-b886-ecb671b81503"],'
+                    '"5961b8be-5d95-e211-a939-e4115bead28a":["2384702f-01e9-4792-857b-026b2623f2fa"]}'
+                ),
+                "ordering": "-reported",
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+
+        form = response.context["form"]
+        logger.critical(form.cleaned_data)
+        assert form.cleaned_data["country"] == [
+            "63af72a6-5d95-e211-a939-e4115bead28a",
+            "5961b8be-5d95-e211-a939-e4115bead28a",
+        ]
+        assert form.cleaned_data["admin_areas"] == {
+            "63af72a6-5d95-e211-a939-e4115bead28a": [
+                "56f5f425-e3e3-4c9a-b886-ecb671b81503"
+            ],
+            "5961b8be-5d95-e211-a939-e4115bead28a": [
+                "2384702f-01e9-4792-857b-026b2623f2fa"
+            ],
+        }
+
+        mock_list.assert_called_with(
+            ordering="-reported",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            location="63af72a6-5d95-e211-a939-e4115bead28a,5961b8be-5d95-e211-a939-e4115bead28a",
+            admin_areas="56f5f425-e3e3-4c9a-b886-ecb671b81503,2384702f-01e9-4792-857b-026b2623f2fa",
             archived="0",
         )
 

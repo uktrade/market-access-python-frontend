@@ -125,6 +125,20 @@ class Metadata:
             if admin_area["country"]["id"] == country_id
         ]
 
+    def get_countries_with_admin_areas_list(self):
+        countries_list = []
+        results_list = []
+        for admin_area in self.data["admin_areas"]:
+            if admin_area["country"]["id"] not in countries_list:
+                countries_list.append(admin_area["country"]["id"])
+                results_list.append(
+                    {
+                        "id": admin_area["country"]["id"],
+                        "name": admin_area["country"]["name"],
+                    }
+                )
+        return results_list
+
     def get_country(self, country_id):
         for country in self.data["countries"]:
             if country["id"] == country_id:

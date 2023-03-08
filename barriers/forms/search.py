@@ -9,6 +9,7 @@ from django.conf import settings
 from django.http import QueryDict
 
 from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER
+from utils.helpers import format_dict_for_url_querystring
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,10 @@ class BarrierSearchForm(forms.Form):
     )
     country_trading_bloc = forms.MultipleChoiceField(
         label="Country trading blocs",
+        required=False,
+    )
+    admin_areas = forms.JSONField(
+        label="Barrier region/state",
         required=False,
     )
     extra_location = forms.MultipleChoiceField(
@@ -254,6 +259,7 @@ class BarrierSearchForm(forms.Form):
             "search": data.get("search"),
             "country": data.getlist("country"),
             "country_trading_bloc": data.getlist("country_trading_bloc"),
+            "admin_areas": data.get("admin_areas"),
             "extra_location": data.getlist("extra_location"),
             "trade_direction": data.getlist("trade_direction"),
             "sector": data.getlist("sector"),
@@ -478,6 +484,7 @@ class BarrierSearchForm(forms.Form):
             + self.cleaned_data.get("region", [])
             + self.cleaned_data.get("extra_location", [])
         )
+        params["admin_areas"] = ",".join(self.format_admin_areas())
         params["trade_direction"] = ",".join(
             self.cleaned_data.get("trade_direction", [])
         )
@@ -527,6 +534,14 @@ class BarrierSearchForm(forms.Form):
 
         return {k: v for k, v in params.items() if v}
 
+    def format_admin_areas(self):
+        admin_areas = []
+        if self.cleaned_data.get("admin_areas"):
+            for key, value in self.cleaned_data.get("admin_areas").items():
+                for admin_area_id in value:
+                    admin_areas.append(admin_area_id)
+        return admin_areas
+
     def format_resolved_date(self, status):
         """
         Format the resolved date input to be compatible with the API's queryset filter
@@ -563,16 +578,34 @@ class BarrierSearchForm(forms.Form):
         }
 
     def get_raw_filters_querystring(self):
-        return urlencode(self.get_raw_filters(), doseq=True)
+
+        # In some instances, filters need reformatting before being encoded
+        filters_for_encode = format_dict_for_url_querystring(
+            self.get_raw_filters(), ["admin_areas"]
+        )
+
+        return urlencode(filters_for_encode, doseq=True)
 
     def get_filter_readable_value(self, field_name, value):
         field = self.fields[field_name]
+
         if hasattr(field, "choices"):
             field_lookup = dict(field.choices)
             return ", ".join([field_lookup.get(x) for x in value])
         elif isinstance(field, forms.BooleanField):
             return field.label
+        elif field.label == "Barrier region/state":
+            return self.get_readable_admin_area_filter(value)
+
         return value
+
+    def get_readable_admin_area_filter(self, admin_area_selections):
+        admin_areas_selected = []
+        for country in admin_area_selections:
+            for admin_area_id in admin_area_selections[country]:
+                admin_area_detail = self.metadata.get_admin_area(admin_area_id)
+                admin_areas_selected.append(admin_area_detail["name"])
+        return ", ".join(admin_areas_selected)
 
     def get_readable_filters(self, with_remove_links=False):
         """
@@ -587,10 +620,14 @@ class BarrierSearchForm(forms.Form):
             value = copy.copy(value)
             key = self.get_filter_key(name)
             if key not in filters:
+                readable_value = self.get_filter_readable_value(name, value)
+                if readable_value == "":
+                    # Do not add filter tag if the readable value is empty, move to next filter
+                    continue
                 filters[key] = {
                     "label": self.get_filter_label(name),
                     "value": self.get_filter_value(name, value),
-                    "readable_value": self.get_filter_readable_value(name, value),
+                    "readable_value": readable_value,
                 }
 
                 if with_remove_links:

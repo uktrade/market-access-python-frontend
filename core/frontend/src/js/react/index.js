@@ -39,7 +39,9 @@ function renderCommodityForm(
 function renderLocationFilter(
     countryElement,
     tradingBlocElement,
-    tradingBlocData
+    tradingBlocData,
+    adminAreaData,
+    adminAreasCountries
 ) {
     const label = countryElement.querySelector("legend").textContent.trim();
     const countries = getCheckboxValues(countryElement);
@@ -52,6 +54,8 @@ function renderLocationFilter(
             countries={countries}
             tradingBlocs={tradingBlocs}
             tradingBlocData={tradingBlocData}
+            adminAreaData={adminAreaData}
+            adminAreasCountries={adminAreasCountries}
         />,
         countryElement
     );

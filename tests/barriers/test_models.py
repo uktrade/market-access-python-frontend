@@ -1,7 +1,10 @@
 import datetime
+import logging
 
 from barriers.models import Barrier, Company, SavedSearch
 from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierModelTestCase(MarketAccessTestCase):
@@ -54,6 +57,14 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
         "filters": {
             "search": "Test",
             "country": ["9f5f66a0-5d95-e211-a939-e4115bead28a"],
+            "admin_areas": {
+                "63af72a6-5d95-e211-a939-e4115bead28a": [
+                    "56f5f425-e3e3-4c9a-b886-ecb671b81503"
+                ],
+                "5961b8be-5d95-e211-a939-e4115bead28a": [
+                    "2384702f-01e9-4792-857b-026b2623f2fa"
+                ],
+            },
             "sector": [
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
@@ -68,6 +79,19 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
 
     def test_readable_filters(self):
         saved_search = SavedSearch(self.saved_search_data)
+        logger.critical(saved_search.readable_filters["admin_areas"])
+        assert saved_search.readable_filters["admin_areas"] == {
+            "label": "Barrier region/state",
+            "readable_value": "Beijing, Moscow",
+            "value": {
+                "63af72a6-5d95-e211-a939-e4115bead28a": [
+                    "56f5f425-e3e3-4c9a-b886-ecb671b81503"
+                ],
+                "5961b8be-5d95-e211-a939-e4115bead28a": [
+                    "2384702f-01e9-4792-857b-026b2623f2fa"
+                ],
+            },
+        }
         assert saved_search.readable_filters["search"] == {
             "label": "Search barrier title, summary, code or PID",
             "readable_value": "Test",
