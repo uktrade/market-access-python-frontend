@@ -10,7 +10,7 @@
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Next steps' %}
-    <p class="govuk-body-l"> For each next step add the activity, who'll be doing it and when it will be completed.</p>
+    <p class="govuk-body"> For each next step add the activity, who'll be doing it and when it will be completed.</p>
     {% timezone "Europe/London" %}
 
     {% for item in next_steps_items %}

@@ -155,20 +155,6 @@ class Top100ProgressUpdateForm(
         required=False,
     )
 
-    # next_steps = forms.CharField(
-    #     label="Next steps",
-    #     help_text=(
-    #         "Provide a numbered list of the actions you are planning to "
-    #         "resolve this barrier including when, who and what. "
-    #         "For example:\n"
-    #         "1) March 23: Embassy in France to host workshop sharing UK best practice with "
-    #         "the French Ministry of Economy, Trade and Industry (METI)."
-    #     ),
-    #     widget=forms.Textarea,
-    #     error_messages={"required": "Enter next steps"},
-    #     required=False,
-    # )
-
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date (optional)",
         help_text=(
@@ -193,7 +179,6 @@ class Top100ProgressUpdateForm(
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id")
         self.user = kwargs.get("user")
-        print("got barrier  id: ", self.barrier_id)
 
     def clean_estimated_resolution_date(self):
         if self.cleaned_data["estimated_resolution_date"]:
@@ -247,22 +232,17 @@ class Top100ProgressUpdateForm(
     def save(self):
         client = MarketAccessAPIClient(self.token)
         if self.progress_update_id:
-            print("got message ", self.message)
             client.barriers.patch_top_100_progress_update(
                 barrier=self.barrier_id,
                 id=self.progress_update_id,
                 status=self.cleaned_data["status"],
                 message=self.message,
-                # message=self.cleaned_data["update"],
-                # next_steps=self.cleaned_data["next_steps"],
             )
         else:
-            print("Trying to save barrier id:", self.barrier_id)
             client.barriers.create_top_100_progress_update(
                 barrier=self.barrier_id,
                 status=self.cleaned_data["status"],
                 message=self.message,
-                # next_steps=self.cleaned_data["next_steps"],
             )
 
         estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
@@ -998,9 +978,6 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
                 next_step_owner=self.cleaned_data["next_step_owner"],
                 next_step_item=self.cleaned_data["next_step_item"],
                 completion_date=self.cleaned_data["completion_date"],
-                # message=self.message,
-                # message=self.cleaned_data["update"],
-                # next_steps=self.cleaned_data["next_steps"],
             )
         else:
             client.barriers.create_next_steps_item(
