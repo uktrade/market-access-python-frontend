@@ -127,11 +127,6 @@ class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         success_url = super().get_success_url()
-        # if self.form.requested_change:
-        #     return reverse_lazy(
-        #         "barriers:edit_estimated_resolution_date_confirmation_page",
-        #         kwargs={"barrier_id": self.kwargs.get("barrier_id")},
-        #     )
         if self.barrier.latest_programme_fund_progress_update:
             success_url = f"{success_url}#barrier-top-100-update-tab"
         return success_url
