@@ -119,13 +119,13 @@
                                             No monthly delivery confidence summary
                                         {% endif %}
                                     </p>
-                                    <details class="govuk-details govuk-!-margin-bottom-2" data-module="govuk-details">
-                                        <summary class="govuk-details__summary barrier-progress-update__section__text">
+                                    <details class="govuk-details barrier-progress-update-dropdown govuk-!-margin-bottom-2" data-module="govuk-details">
+                                        <summary class="govuk-details__summary govuk-!-font-size-16">
                                             <span class="barrier-progress-update__section__text">
                                                 Reason for this delivery confidence
                                             </span>
                                         </summary>
-                                        <div class="barrier-progress-update__section__text govuk-!-padding-left-5">
+                                        <div class="barrier-progress-update__section__text govuk-!-padding-left-5 govuk-!-font-size-16">
                                             {% if barrier.latest_top_100_progress_update.message is not empty %}
                                                 {{ barrier.latest_top_100_progress_update.message|linebreaksbr }}
                                             {% else %}
