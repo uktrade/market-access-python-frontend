@@ -158,7 +158,7 @@ class Top100ProgressUpdateForm(
         label="Estimated resolution date (optional)",
         help_text=(
             "You can change the estimated resolution date as part of this update."
-            "The date should be no more than 5 years in the future. Enter the date in the format, 11 2024."
+            " The date should be no more than 5 years in the future. Enter the date in the format, 11 2024."
         ),
         error_messages={
             "invalid_year": "Enter an estimated resolution date",
@@ -947,7 +947,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
 
     completion_date = MonthYearInFutureField(
         label="When will the activity be completed?",
-        help_text=("Add the target date for the completion of this item"),
+        # help_text=("Add the target date for the completion of this item"),
         error_messages={
             "required": "Enter when the activity will be completed",
             "invalid_year": "Enter a completion date",
