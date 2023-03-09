@@ -19,7 +19,6 @@ from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ChoiceFieldWithHelpText,
     ClearableMixin,
-    DayMonthYearField,
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
@@ -158,9 +157,8 @@ class Top100ProgressUpdateForm(
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date (optional)",
         help_text=(
-            "Add a new estimated resolution date as part of this update or leave the"
-            " fields blank to keep the current date. The date should be no more than"
-            " 5 years in the future. Enter the date in the format, 11 2024."
+            "You can change the estimated resolution date as part of this update."
+            "The date should be no more than 5 years in the future. Enter the date in the format, 11 2024."
         ),
         error_messages={
             "invalid_year": "Enter an estimated resolution date",
@@ -931,7 +929,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
 
     next_step_item = forms.CharField(
         label="What is the activity?",
-        help_text=("What are the action being taken"),
+        # help_text=("What are the action being taken"),
         widget=forms.Textarea,
         error_messages={"required": "Enter an activity"},
         required=True,
@@ -940,14 +938,14 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
 
     next_step_owner = forms.CharField(
         label="Who's doing the activity?",
-        help_text=("Who will be responsible for completing this item"),
+        # help_text=("Who will be responsible for completing this item"),
         widget=forms.Textarea,
         error_messages={"required": "Enter who's doing the activity"},
         required=True,
         validators=[MaxLengthValidator(150)],
     )
 
-    completion_date = DayMonthYearField(
+    completion_date = MonthYearInFutureField(
         label="When will the activity be completed?",
         help_text=("Add the target date for the completion of this item"),
         error_messages={

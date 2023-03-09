@@ -36,7 +36,7 @@
                 <span class="govuk-!-font-weight-bold" >Due date:</span>
 
                 {% if item.completion_date is not empty %}
-                    {{ item.completion_date|linebreaksbr }}
+                    {{ item.completion_date|parse_iso|date:"j F Y" }}
                 {% else %}
                     No detail
                 {% endif %}

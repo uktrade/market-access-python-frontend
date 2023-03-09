@@ -43,17 +43,17 @@
             </div>
         </div>
 
-        <div id="{{ form.next_step_owner.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="100">
+        <div id="{{ form.next_step_owner.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="50">
             <div class="govuk-form-group{% if form.next_step_owner.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s" for="{{ form.next_step_owner.id_for_label }}">{{ form.next_step_owner.label }}</label>
 
                 {% form_field_error form "next_step_owner" %}
                 <span class="govuk-hint">{{ form.next_step_owner.help_text }}</span>
 
-                <textarea  id="{{ form.next_step_owner.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_owner.name }}" rows="2" maxlength="100">{% if form.next_step_owner.value %}{{ form.next_step_owner.value }}{% endif %}</textarea>
+                <textarea  id="{{ form.next_step_owner.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_owner.name }}" rows="2" maxlength="50">{% if form.next_step_owner.value %}{{ form.next_step_owner.value }}{% endif %}</textarea>
             </div>
             <div id="{{ form.next_step_owner.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
-            You can enter up to 100 characters
+            You can enter up to 50 characters
             </div>
         </div>
 
