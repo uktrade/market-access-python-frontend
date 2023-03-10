@@ -6,40 +6,27 @@
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
+{% block body_script %}
+    <script>
+        new ma.components.setupHiddenERDTextarea({
+            is_admin: '{{ current_user|has_permission:"can_approve_estimated_completion_date" }}',
+            proposedDate: '{{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}',
+        });
+    </script>
+{% endblock %}
+
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Add estimated resolution date' %}
 
-    {% if barrier.estimated_resolution_date %}
-        <div class="govuk-inset-text">{{ barrier.estimated_resolution_date|date:"j F Y" }} is the current estimated resolution date</div>
-    {% endif %}
 
     {% form_error_banner form %}
 
-    <form action="" method="POST">
+    <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.estimated_resolution_date.name }}" class="{% form_group_classes form.estimated_resolution_date.errors %}">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.estimated_resolution_date.label }}</legend>
-
-                <span class="govuk-hint">{{ form.estimated_resolution_date.help_text }}</span>
-
-                {% form_field_error form "estimated_resolution_date" %}
-
-                <div class="govuk-date-input">
-                    {{ form.estimated_resolution_date }}
-                </div>
-            </fieldset>
-        </div>
-
-        {% if barrier.estimated_resolution_date %}
-            <div>
-                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" name="clear" value="1">
-                    Remove date and return
-                </button>
-            </div>
-        {% endif %}
+        {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
+        {% include 'barriers/partials/edit_estimated_resolution_date.html' %}
 
         <button class="govuk-button" data-module="govuk-button">Save and return</button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>

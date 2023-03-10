@@ -85,6 +85,29 @@ class Barrier(APIModel):
             return dateutil.parser.parse(self.data["estimated_resolution_date"])
 
     @property
+    def proposed_estimated_resolution_date(self):
+        if self.data.get("proposed_estimated_resolution_date"):
+            return dateutil.parser.parse(
+                self.data["proposed_estimated_resolution_date"]
+            )
+
+    @property
+    def has_active_estimated_resolution_date_proposal(self):
+        estimated_resolution_date = self.estimated_resolution_date
+        proposed_estimated_resolution_date = self.proposed_estimated_resolution_date
+        if proposed_estimated_resolution_date:
+            if estimated_resolution_date != proposed_estimated_resolution_date:
+                return True
+        return False
+
+    @property
+    def proposed_estimated_resolution_date_created(self):
+        if self.data.get("proposed_estimated_resolution_date_created"):
+            return dateutil.parser.parse(
+                self.data["proposed_estimated_resolution_date_created"]
+            )
+
+    @property
     def commodities(self):
         return [
             BarrierCommodity(commodity)
