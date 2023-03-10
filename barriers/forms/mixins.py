@@ -200,7 +200,6 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
                         code="missing_update",
                     ),
                 )
-                # raise forms.ValidationError("Enter what has caused the change in date")
 
         return cleaned_data
 

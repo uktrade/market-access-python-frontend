@@ -281,13 +281,6 @@ class BarrierEditEstimatedResolutionDateConfirmationPage(TemplateView):
         context["barrier"] = barrier
         return context
 
-    # def get(self, request, *args, **kwargs):
-    #     barrier_id = kwargs.get("barrier_id")
-    #     kwargs["token"] = self.request.session.get("sso_token")
-    #     client = MarketAccessAPIClient(kwargs["token"])
-    #     barrier = client.barriers.get(id=barrier_id)
-    #     return render(request, self.template_name, {"barrier": barrier})
-
 
 class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/tags.html"
