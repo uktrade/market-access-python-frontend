@@ -110,7 +110,7 @@ jobs:
 
     format_and_secrets_checks:
         docker:
-            - image: circleci/python:3.8
+            - image: circleci/python:3.8.0-node
         working_directory: ~/market-access-python-frontend
         steps:
             - checkout
