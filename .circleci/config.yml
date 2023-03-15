@@ -82,7 +82,7 @@ jobs:
 
     pep8:
         docker:
-            - image: circleci/python:3.8.0-node
+            - image: circleci/python:3.8
 
         working_directory: ~/market-access-python-frontend
 
@@ -110,7 +110,7 @@ jobs:
 
     format_and_secrets_checks:
         docker:
-            - image: circleci/python:3.8.0-node
+            - image: circleci/python:3.8
         working_directory: ~/market-access-python-frontend
         steps:
             - checkout
