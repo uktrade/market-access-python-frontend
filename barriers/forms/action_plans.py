@@ -71,9 +71,9 @@ class ActionPlanStrategicContextForm(ClearableMixin, APIFormMixin, forms.Form):
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.barrier_id = barrier_id
         self.action_plan = kwargs.pop("action_plan", None)
-        super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -99,10 +99,10 @@ class ActionPlanMilestoneForm(ClearableMixin, APIFormMixin, forms.Form):
     )
 
     def __init__(self, barrier_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.barrier_id = barrier_id
         self.milestone_id = kwargs.pop("milestone_id", None)
         self.action_plan = kwargs.pop("action_plan")
-        super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -129,7 +129,11 @@ def action_plan_action_type_category_form_class_factory(action_type: str):
         def __init__(self, *args, **kwargs):
             id = kwargs.pop("id", None)
             token = kwargs.pop("token", None)
+            milestone_id = kwargs.pop("milestone_id", None)
+            action_plan = kwargs.pop("action_plan", None)
+            task_id = kwargs.pop("task_id", None)
             super().__init__(*args, **kwargs)
+
             if action_type != "OTHER":
                 self.fields[field_name] = forms.ChoiceField(
                     label="Select category",
@@ -162,11 +166,11 @@ def action_plan_action_type_category_form_class_factory(action_type: str):
 
 class ActionPlanTaskFormMixin:
     def __init__(self, barrier_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.barrier_id = barrier_id
         self.action_plan = kwargs.pop("action_plan", None)
         self.milestone_id = kwargs.pop("milestone_id", None)
         self.task_id = kwargs.pop("task_id", None)
-        super().__init__(*args, **kwargs)
 
         stakeholders = self.action_plan.stakeholders
         self.fields["assigned_stakeholders"].choices = [
@@ -547,6 +551,10 @@ class ActionPlanIndividualStakeholderDetailsForm(
         request_data["job_title"] = self.cleaned_data["job_title"]
         request_data["is_organisation"] = False
         return request_data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.barrier_id = kwargs.pop("barrier_id", None)
 
 
 class ActionPlanRisksAndMitigationForm(
