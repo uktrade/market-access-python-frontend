@@ -589,9 +589,9 @@ class ActionPlanRisksAndMitigationForm(
     )
 
     def __init__(self, barrier_id, action_plan, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.barrier_id = barrier_id
         # self.action_plan_id = action_plan_id
-        super().__init__(*args, **kwargs)
 
     def clean(self):
         cleaned_data = super().clean()
