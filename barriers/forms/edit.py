@@ -1,6 +1,9 @@
 import logging
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxLengthValidator
+from django.utils.translation import gettext as _
 
 from barriers.constants import (
     DEPRECATED_TAGS,
@@ -22,7 +25,7 @@ from utils.forms import (
     YesNoDontKnowBooleanField,
 )
 
-from .mixins import APIFormMixin
+from .mixins import APIFormMixin, EstimatedResolutionDateApprovalMixin
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +113,9 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         )
 
 
-class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
+class Top100ProgressUpdateForm(
+    ClearableMixin, EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
+):
     CHOICES = [
         ("ON_TRACK", "On track"),
         ("RISK_OF_DELAY", "Risk of delay"),
@@ -126,34 +131,34 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     )
     update = forms.CharField(
         label="Current status",
-        help_text=(
-            "Provide an explanation of your delivery confidence for the barrier, "
-            "including recent progress and any obstacles."
-        ),
+        help_text=("Provide more detail"),
         widget=forms.Textarea,
-        error_messages={
-            "required": "Enter a status update",
-        },
+        required=False,
     )
-    next_steps = forms.CharField(
-        label="Next steps",
-        help_text=(
-            "Provide a numbered list of the actions you are planning to "
-            "resolve this barrier including when, who and what."
-            "For example:\n"
-            "1. March 23: Embassy in France to host workshop sharing UK best practice with "
-            "the French Ministry of Economy, Trade and Industry (METI)."
-        ),
+    update_1 = forms.CharField(
+        label="Provide more detail",
         widget=forms.Textarea,
-        error_messages={"required": "Enter an outline of your next steps"},
+        error_messages={"missing_update": "missing update"},
+        required=False,
+    )
+
+    update_2 = forms.CharField(
+        label="Provide more detail",
+        widget=forms.Textarea,
+        required=False,
+    )
+
+    update_3 = forms.CharField(
+        label="Provide more detail",
+        widget=forms.Textarea,
+        required=False,
     )
 
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date (optional)",
         help_text=(
-            "Add a new estimated resolution date as part of this update or leave the"
-            " fields blank to keep the current date. The date should be no more than"
-            " 5 years in the future. Enter the date in the format, 11 2024."
+            "You can change the estimated resolution date as part of this update."
+            " The date should be no more than 5 years in the future. Enter the date in the format, 11 2024."
         ),
         error_messages={
             "invalid_year": "Enter an estimated resolution date",
@@ -161,16 +166,66 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
         },
         required=False,
     )
+    estimated_resolution_date_change_reason = forms.CharField(
+        label="What has caused the change in estimated resolution date?",
+        widget=forms.Textarea,
+        required=False,
+    )
 
-    def __init__(self, barrier_id, progress_update_id=None, *args, **kwargs):
-        self.barrier_id = barrier_id
-        self.progress_update_id = progress_update_id
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.barrier_id = kwargs.get("barrier_id")
+        self.progress_update_id = kwargs.get("progress_update_id")
+        self.user = kwargs.get("user")
 
     def clean_estimated_resolution_date(self):
         if self.cleaned_data["estimated_resolution_date"]:
             return self.cleaned_data["estimated_resolution_date"].isoformat()
         return self.cleaned_data["estimated_resolution_date"]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get("status")
+        update_1 = cleaned_data.get("update_1")
+        update_2 = cleaned_data.get("update_2")
+        update_3 = cleaned_data.get("update_3")
+
+        if status == "ON_TRACK":
+            if update_1:
+                self.message = update_1
+                self.update = update_1
+            else:
+                self.add_error(
+                    "update_1",
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
+                )
+        elif status == "RISK_OF_DELAY":
+            if update_2:
+                self.message = update_2
+                self.update = update_2
+            else:
+                self.add_error(
+                    "update_2",
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
+                )
+        if status == "DELAYED":
+            if update_3:
+                self.message = update_3
+                self.update = update_3
+            else:
+                self.add_error(
+                    "update_3",
+                    ValidationError(
+                        _("Enter detail about your delivery confidence"),
+                        code="missing_update",
+                    ),
+                )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -179,26 +234,44 @@ class Top100ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
                 barrier=self.barrier_id,
                 id=self.progress_update_id,
                 status=self.cleaned_data["status"],
-                message=self.cleaned_data["update"],
-                next_steps=self.cleaned_data["next_steps"],
+                message=self.message,
             )
         else:
             client.barriers.create_top_100_progress_update(
                 barrier=self.barrier_id,
                 status=self.cleaned_data["status"],
-                message=self.cleaned_data["update"],
-                next_steps=self.cleaned_data["next_steps"],
+                message=self.message,
             )
-        if self.cleaned_data.get("estimated_resolution_date"):
+
+        estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
+        is_future_date = self.does_new_estimated_date_require_approval(
+            self.cleaned_data
+        )
+
+        if (not self.is_user_admin) and (is_future_date):
+            self.requested_change = True
             client.barriers.patch(
-                id=self.barrier_id,
-                estimated_resolution_date=self.cleaned_data.get(
-                    "estimated_resolution_date"
+                id=str(self.barrier_id),
+                proposed_estimated_resolution_date=estimated_resolution_date,
+                estimated_resolution_date_change_reason=self.cleaned_data.get(
+                    "estimated_resolution_date_change_reason"
+                ),
+            )
+        else:
+            self.requested_change = False
+            client.barriers.patch(
+                id=str(self.barrier_id),
+                estimated_resolution_date=estimated_resolution_date,
+                proposed_estimated_resolution_date=estimated_resolution_date,
+                estimated_resolution_date_change_reason=self.cleaned_data.get(
+                    "estimated_resolution_date_change_reason", ""
                 ),
             )
 
 
-class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
+class ProgrammeFundProgressUpdateForm(
+    EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
+):
     milestones_and_deliverables = forms.CharField(
         label="Milestones and deliverables",
         help_text=(
@@ -221,33 +294,16 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter your expenditure"},
     )
-    estimated_resolution_date = MonthYearInFutureField(
-        label="Estimated resolution date (optional)",
-        help_text=(
-            "Add a new estimated resolution date as part of this update or leave the"
-            " fields blank to keep the current date. The date should be no more than"
-            " 5 years in the future. Enter the date in the format, 11 2024."
-        ),
-        error_messages={
-            "invalid_year": "Enter an estimated resolution date",
-            "invalid_month": "Enter an estimated resolution date",
-        },
-        required=False,
-    )
 
-    def __init__(self, barrier_id, programme_fund_update_id=None, *args, **kwargs):
-        self.barrier_id = barrier_id
-        self.programme_fund_update_id = programme_fund_update_id
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def clean_estimated_resolution_date(self):
-        if self.cleaned_data["estimated_resolution_date"]:
-            return self.cleaned_data["estimated_resolution_date"].isoformat()
-        return self.cleaned_data["estimated_resolution_date"]
+        self.barrier_id = kwargs.get("barrier_id")
+        self.progress_update_id = kwargs.get("progress_update_id", None)
+        self.user = kwargs.get("user", None)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        if self.programme_fund_update_id:
+        if hasattr(self, "programme_fund_update_id"):
             client.barriers.patch_programme_fund_progress_update(
                 barrier=self.barrier_id,
                 id=self.programme_fund_update_id,
@@ -263,13 +319,6 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
                     "milestones_and_deliverables"
                 ],
                 expenditure=self.cleaned_data["expenditure"],
-            )
-        if self.cleaned_data.get("estimated_resolution_date"):
-            client.barriers.patch(
-                id=self.barrier_id,
-                estimated_resolution_date=self.cleaned_data.get(
-                    "estimated_resolution_date"
-                ),
             )
 
 
@@ -699,35 +748,50 @@ class UpdateBarrierTermForm(APIFormMixin, forms.Form):
 
 
 class UpdateBarrierEstimatedResolutionDateForm(
-    ClearableMixin, APIFormMixin, forms.Form
+    EstimatedResolutionDateApprovalMixin, ClearableMixin, APIFormMixin, forms.Form
 ):
+
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
-        help_text="For example, 11 2024",
+        help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
         error_messages={"required": "Enter an estimated resolution date"},
+    )
+    estimated_resolution_date_change_reason = forms.CharField(
+        label="What has caused the change in estimated resolution date?",
+        widget=forms.Textarea,
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        estimated_resolution_date = kwargs.get("initial", {}).get(
-            "estimated_resolution_date"
-        )
-        if estimated_resolution_date:
-            self.fields[
-                "estimated_resolution_date"
-            ].label = "Change estimated resolution date"
-
-    def clean_estimated_resolution_date(self):
-        return self.cleaned_data["estimated_resolution_date"].isoformat()
+        return super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id,
-            estimated_resolution_date=self.cleaned_data.get(
-                "estimated_resolution_date"
-            ),
+
+        estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
+        is_future_date = self.does_new_estimated_date_require_approval(
+            self.cleaned_data
         )
+
+        if (not self.is_user_admin) and (is_future_date):
+            self.requested_change = True
+            client.barriers.patch(
+                id=str(self.barrier_id),
+                proposed_estimated_resolution_date=estimated_resolution_date,
+                estimated_resolution_date_change_reason=self.cleaned_data.get(
+                    "estimated_resolution_date_change_reason"
+                ),
+            )
+        else:
+            self.requested_change = False
+            client.barriers.patch(
+                id=str(self.barrier_id),
+                estimated_resolution_date=estimated_resolution_date,
+                proposed_estimated_resolution_date=estimated_resolution_date,
+                estimated_resolution_date_change_reason=self.cleaned_data.get(
+                    "estimated_resolution_date_change_reason", ""
+                ),
+            )
 
 
 class UpdateTradeDirectionForm(APIFormMixin, forms.Form):
@@ -847,3 +911,77 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
                 "economic_assessment_eligibility_summary"
             ],
         )
+
+
+class NextStepsItemForm(APIFormMixin, forms.Form):
+
+    NEXT_STEPS_ITEMS_STATUS_CHOICES = [
+        ("IN_PROGRESS", "In progress"),
+        ("COMPLETED", "Completed"),
+    ]
+
+    status = forms.ChoiceField(
+        label="Status",
+        choices=NEXT_STEPS_ITEMS_STATUS_CHOICES,
+        widget=forms.RadioSelect,
+        error_messages={"required": "Select the current status of this item"},
+    )
+
+    next_step_item = forms.CharField(
+        label="What is the activity?",
+        # help_text=("What are the action being taken"),
+        widget=forms.Textarea,
+        error_messages={"required": "Enter an activity"},
+        required=True,
+        validators=[MaxLengthValidator(150)],
+    )
+
+    next_step_owner = forms.CharField(
+        label="Who's doing the activity?",
+        # help_text=("Who will be responsible for completing this item"),
+        widget=forms.Textarea,
+        error_messages={"required": "Enter who's doing the activity"},
+        required=True,
+        validators=[MaxLengthValidator(150)],
+    )
+
+    completion_date = MonthYearInFutureField(
+        label="When will the activity be completed?",
+        # help_text=("Add the target date for the completion of this item"),
+        error_messages={
+            "required": "Enter when the activity will be completed",
+            "invalid_year": "Enter a completion date",
+            "invalid_month": "Enter a completion date",
+        },
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(NextStepsItemForm, self).__init__(*args, **kwargs)
+        self.barrier_id = kwargs.get("barrier_id")
+        self.item_id = kwargs.get("item_id")
+        self.user = kwargs.get("user")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get("status")
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        if self.item_id:
+            client.barriers.patch_next_steps_item(
+                barrier=self.barrier_id,
+                id=self.item_id,
+                status=self.cleaned_data["status"],
+                next_step_owner=self.cleaned_data["next_step_owner"],
+                next_step_item=self.cleaned_data["next_step_item"],
+                completion_date=self.cleaned_data["completion_date"],
+            )
+        else:
+            client.barriers.create_next_steps_item(
+                barrier=self.barrier_id,
+                status=self.cleaned_data["status"],
+                next_step_owner=self.cleaned_data["next_step_owner"],
+                next_step_item=self.cleaned_data["next_step_item"],
+                completion_date=self.cleaned_data["completion_date"],
+            )

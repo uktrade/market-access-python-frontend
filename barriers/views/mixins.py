@@ -1,3 +1,4 @@
+import logging
 import urllib.parse
 from http import HTTPStatus
 
@@ -7,6 +8,8 @@ from django.urls import reverse
 from barriers.models import PublicBarrier
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierMixin:

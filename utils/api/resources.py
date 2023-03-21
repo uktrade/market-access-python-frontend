@@ -159,6 +159,7 @@ class BarriersResource(APIResource):
         return self.client.put(url, json=kwargs)
 
     def create_top_100_progress_update(self, **kwargs):
+        print("call api ", kwargs)
         return self.client.post(
             f"barriers/{kwargs['barrier']}/top_100_progress_updates", data=kwargs
         )
@@ -194,6 +195,17 @@ class BarriersResource(APIResource):
     def patch_programme_fund_progress_update(self, **kwargs):
         return self.client.patch(
             f"barriers/{kwargs['barrier']}/programme_fund_progress_updates/{kwargs['id']}",
+            data=kwargs,
+        )
+
+    def create_next_steps_item(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/next_steps_items", data=kwargs
+        )
+
+    def patch_next_steps_item(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/next_steps_items/{kwargs['id']}",
             data=kwargs,
         )
 

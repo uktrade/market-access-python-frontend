@@ -35,6 +35,10 @@
     margin-bottom: 5px;
 }
 
+.m-2{
+    margin: 5px;
+}
+
 .m0{
     margin: 0px;
 }
@@ -96,6 +100,16 @@
     padding-left: 10px;
 }
 
+.text-dark{
+    color: #0B0C0C;
+}
+
 .text-m{
     font-size: 19px;
+}
+.text-sm{
+    font-size: 16px;
+}
+.text-xs{
+    font-size: 14px;
 }

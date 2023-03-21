@@ -11,6 +11,7 @@ import { renderLocationForm } from "./reports/LocationForm";
 import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
+import GDSRadios from "./gds/Radios";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -171,4 +172,5 @@ export {
     renderRisksAndMitigationForm,
     renderAsyncSearchResults,
     GDSTabs,
+    GDSRadios,
 };

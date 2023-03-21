@@ -37,7 +37,10 @@ from barriers.views.mentions import (
 from barriers.views.progress_updates import (
     BarrierAddProgrammeFundProgressUpdate,
     BarrierAddTop100ProgressUpdate,
+    BarrierCompleteNextStepItem,
+    BarrierEditNextStepItem,
     BarrierEditProgressUpdate,
+    BarrierListNextStepsItems,
     BarrierListProgressUpdate,
     ChooseProgressUpdateTypeView,
     ProgrammeFundEditProgressUpdate,
@@ -95,6 +98,7 @@ from .views.edit import (
     BarrierEditCommercialValue,
     BarrierEditEconomicAssessmentEligibility,
     BarrierEditEstimatedResolutionDate,
+    BarrierEditEstimatedResolutionDateConfirmationPage,
     BarrierEditPriority,
     BarrierEditProduct,
     BarrierEditSource,
@@ -267,6 +271,26 @@ urlpatterns = [
         name="edit_barrier_fund_progress_update",
     ),
     path(
+        "barriers/<uuid:barrier_id>/list/next_steps_items/",
+        BarrierListNextStepsItems.as_view(),
+        name="list_next_steps",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/next_step_item_update/<uuid:item_id>/",
+        BarrierEditNextStepItem.as_view(),
+        name="edit_next_steps",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/add/next_step_item_update/",
+        BarrierEditNextStepItem.as_view(),
+        name="add_next_steps",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/next_step_item_complete/<uuid:item_id>/",
+        BarrierCompleteNextStepItem.as_view(),
+        name="complete_next_steps",
+    ),
+    path(
         "barriers/<uuid:barrier_id>/edit/economic-assessment-eligibility/",
         BarrierEditEconomicAssessmentEligibility.as_view(),
         name="economic_assessment_eligibility",
@@ -275,6 +299,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/estimated-resolution-date/",
         BarrierEditEstimatedResolutionDate.as_view(),
         name="edit_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/estimated-resolution-date/confirmation/",
+        BarrierEditEstimatedResolutionDateConfirmationPage.as_view(),
+        name="edit_estimated_resolution_date_confirmation_page",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/commercial-value/",

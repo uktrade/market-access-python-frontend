@@ -29,7 +29,12 @@ class MarketAccessTestCase(TestCase):
         {
             "is_superuser": False,
             "is_active": True,
-            "permissions": ["change_user", "list_users", "set_topprioritybarrier"],
+            "permissions": [
+                "change_user",
+                "list_users",
+                "set_topprioritybarrier",
+                "can_approve_estimated_completion_date",
+            ],
         }
     )
     general_user = User(

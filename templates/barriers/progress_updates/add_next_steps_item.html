@@ -1,0 +1,108 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Edit next step{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block body_script %}
+<script>
+    if( ma.components.CharacterCount ){
+        new ma.components.CharacterCount( '#{{ form.next_step_item.name  }}-form-group.govuk-character-count' );
+        new ma.components.CharacterCount( '#{{ form.next_step_owner.name}}-form-group.govuk-character-count' );
+    }
+</script>
+
+{% endblock %}
+
+{% block page_content %}
+    {% if "edit" in request.path %}
+         {% include 'partials/heading.html' with text='Edit next step' %}
+    {% else %}
+        {% include 'partials/heading.html' with text='Add next step' %}
+    {% endif %}
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.next_step_item.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="100">
+            <div  class="govuk-form-group{% if form.next_step_item.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.next_step_item.id_for_label }}">{{ form.next_step_item.label }}</label>
+
+                {% form_field_error form "next_step_item" %}
+                <span class="govuk-hint">{{ form.next_step_item.help_text }}</span>
+
+
+                <textarea id="{{ form.next_step_item.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_item.name }}" rows="2" maxlength="100">{% if form.next_step_item.value %}{{ form.next_step_item.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.next_step_item.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+              You can enter up to 100 characters
+            </div>
+        </div>
+
+        <div id="{{ form.next_step_owner.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="50">
+            <div class="govuk-form-group{% if form.next_step_owner.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.next_step_owner.id_for_label }}">{{ form.next_step_owner.label }}</label>
+
+                {% form_field_error form "next_step_owner" %}
+                <span class="govuk-hint">{{ form.next_step_owner.help_text }}</span>
+
+                <textarea  id="{{ form.next_step_owner.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_owner.name }}" rows="2" maxlength="50">{% if form.next_step_owner.value %}{{ form.next_step_owner.value }}{% endif %}</textarea>
+            </div>
+            <div id="{{ form.next_step_owner.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            You can enter up to 50 characters
+            </div>
+        </div>
+
+        <div id="{{ form.completion_date.name }}" class="{% form_group_classes form.completion_date.errors %}">
+            <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                {{ form.completion_date.label }}
+            </legend>
+
+            <span class="govuk-hint">{{ form.completion_date.help_text }}</span>
+
+            {% form_field_error form "completion_date" %}
+
+            <div class="govuk-date-input">{{ form.completion_date }}</div>
+            </fieldset>
+        </div>
+
+        {% if "edit" in request.path %}
+        <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
+                <span id="{{ form.status.name }}-item-hint" class="govuk-hint">{{ form.status.help_text }}</span>
+                {% form_field_error form "status" %}
+
+                <div class="govuk-radios status govuk-radios--conditional" data-module="radios">
+
+                    {% for choice_value, choice_name in form.fields.status.choices %}
+
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="{{ choice_value }}" name="{{ form.status.name }}"
+                                    type="radio" value="{{ choice_value }}"
+                                    {% if form.status.value == choice_value %}checked="checked"{% endif %}
+                                    data-aria-controls="conditional-{{ choice_value }}"
+                                    aria-describedby="{{ choice_value }}-item-hint">
+                            <label class="govuk-label govuk-radios__label"
+                                    for="{{ choice_value }}">{{ choice_name }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+        {% else %}
+            <input type="hidden" name="status" value="IN_PROGRESS">
+        {% endif %}
+
+
+        <input type="submit" value="Save" class="govuk-button">
+        <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:barrier_detail' barrier_id=barrier.id %}">Cancel</a>
+
+    </form>
+
+{% endblock %}
