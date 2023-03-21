@@ -14,9 +14,7 @@ class FeedbackForm(forms.Form):
             ("VERY_DISSATISFIED", "Very dissatisfied"),
         ),
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
-        error_messages={
-            "required": "You must select a level of satisfaction",
-        },
+        required=False,
     )
     attempted_actions = forms.MultipleChoiceField(
         label="2. What were you trying to do today?",
@@ -51,6 +49,8 @@ class FeedbackForm(forms.Form):
         cleaned_data = super().clean()
         satisfaction = cleaned_data.get("satisfaction", None)
         csat_submission = cleaned_data.get("csat_submission", False)
+        if csat_submission == "False" and (satisfaction is None or satisfaction == ""):
+            self.add_error("satisfaction", "You must select a level of satisfaction")
         if satisfaction != "VERY_SATISFIED" and csat_submission == "True":
             # Request extra feedback if not very satisfied
             #
