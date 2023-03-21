@@ -54,13 +54,13 @@
 
         <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
 
-            {% form_field_error form "status" %}
-
             <div class="govuk-form-group" data-module="govuk-radios">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                         {{ form.status.label }}
                     </legend>
+
+                    {% form_field_error form "status" %}
 
                     <div class="govuk-radios" data-module="govuk-radios">
                         {% for value, name in form.fields.status.choices %}
