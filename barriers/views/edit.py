@@ -104,7 +104,6 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             )
             return redirect("barriers:barrier_detail", barrier_id=self.barrier.id)
 
-            return super().get(request, *args, **kwargs)
         else:
             return super().get(request, *args, **kwargs)
 
