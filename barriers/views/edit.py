@@ -98,7 +98,7 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             user = user_scope(self.request)["current_user"]
             is_user_admin = user.has_permission("set_topprioritybarrier")
             # if the user is admin remove all priorities
-            rejection_reason = self.request.GET.get("rejection-reason", "")
+            rejection_reason = self.request.GET.get("priority_summary", "")
             self.remove_all_priorities(
                 is_admin=is_user_admin, rejection_reason=rejection_reason
             )
@@ -120,7 +120,10 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
                     self.barrier.id,
                     priority_level="NONE",
                     top_priority_status="REMOVAL_PENDING",
-                    rejection_reason=rejection_reason,
+                )
+                client.barriers.patch_top_priority_summary(
+                    top_priority_summary_text=rejection_reason,
+                    barrier=self.barrier.id,
                 )
             else:
                 client.barriers.patch(
