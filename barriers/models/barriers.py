@@ -462,19 +462,19 @@ class PublicBarrier(APIModel):
 
     @property
     def is_eligible(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.ELIGIBLE)
 
     @property
     def is_published(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.PUBLISHED)
 
     @property
     def is_ready(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.READY
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.READY)
 
     @property
     def is_unpublished(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.UNPUBLISHED
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.UNPUBLISHED)
 
     @property
     def latest_published_version(self):
@@ -495,7 +495,7 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "Published",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "Unpublished",
             PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
-        }.get(self.public_view_status)
+        }.get(str(self.public_view_status))
 
     @property
     def ready_text(self):
@@ -507,7 +507,7 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
             PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
-        }.get(self.public_view_status)
+        }.get(str(self.public_view_status))
 
     @property
     def internal_all_sectors(self):
@@ -539,11 +539,11 @@ class PublicBarrier(APIModel):
 
     @property
     def tab_badge(self):
-        if self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
+        if str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
             return "Allowed"
-        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.READY:
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.READY:
             return "Ready"
-        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.PUBLISHED:
             return "Published"
 
     @property
