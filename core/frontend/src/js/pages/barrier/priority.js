@@ -16,6 +16,9 @@ ma.pages.barrier.priority = {
         const priorityRejectionForm = document.getElementById(
             "priority-rejection-form"
         );
+        const priorityRejectionSummaryForm = document.getElementById(
+            "priority_summary-rejection"
+        );
 
         const showYesNo =
             top_priority_status == "APPROVED" || top_priority_status == "NONE";
@@ -55,6 +58,7 @@ ma.pages.barrier.priority = {
                     if (top_priority_status == "APPROVED") {
                         confirmPrioritySection.style = "display: none";
                         priorityRejectionForm.style = "display: block";
+                        priorityRejectionSummaryForm.style = "display: block";
                     } else {
                         window.location.href = "?confirm-priority=no";
                     }
