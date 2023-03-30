@@ -154,7 +154,10 @@ ma.pages.topBarrierPriority = {
             showComponent(topPrioritySummaryExistingText);
             showComponent(topPrioritySummaryDates);
             // Additionally, barriers with a removal pending need updated text label
-            if (top_priority_status == "REMOVAL_PENDING") {
+            if (
+                top_priority_status == "REMOVAL_PENDING" &&
+                topPrioritySummaryInputLabel !== null
+            ) {
                 topPrioritySummaryInputLabel.innerHTML =
                     "Describe why this should be removed as a top 100 priority barrier";
             }
