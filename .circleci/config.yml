@@ -41,7 +41,6 @@ jobs:
             GTM_ID: ""
             GTM_AUTH: ""
             GTM_PREVIEW: ""
-            PIP_USE_FEATURE: 2020-resolver
             COMPANIES_HOUSE_API_KEY: ""
             COMPANIES_HOUSE_API_ENDPOINT: ""
 
@@ -59,7 +58,9 @@ jobs:
                       - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
             - run:
-                  command: sudo pip install poetry==1.1.8
+                  command: |
+                    sudo pip install --upgrade pip
+                    sudo pip install poetry==1.1.8
 
             - run:
                   name: Install dependencies

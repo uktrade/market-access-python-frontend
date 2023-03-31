@@ -40,6 +40,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "async-timeout"
+version = "4.0.2"
+description = "Timeout context manager for asyncio programs"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "attrs"
 version = "22.2.0"
 description = "Classes Without Boilerplate"
@@ -133,7 +141,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7
 
 [[package]]
 name = "coverage"
-version = "7.2.1"
+version = "7.2.2"
 description = "Code coverage measurement for Python"
 category = "dev"
 optional = false
@@ -144,7 +152,7 @@ toml = ["tomli"]
 
 [[package]]
 name = "cryptography"
-version = "39.0.2"
+version = "40.0.1"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
 category = "dev"
 optional = false
@@ -156,10 +164,10 @@ cffi = ">=1.12"
 [package.extras]
 docs = ["sphinx (>=5.3.0)", "sphinx-rtd-theme (>=1.1.1)"]
 docstest = ["pyenchant (>=1.6.11)", "twine (>=1.12.0)", "sphinxcontrib-spelling (>=4.0.1)"]
-pep8test = ["black", "ruff", "mypy", "types-pytz", "types-requests", "check-manifest"]
+pep8test = ["black", "ruff", "mypy", "check-manifest"]
 sdist = ["setuptools-rust (>=0.11.4)"]
 ssh = ["bcrypt (>=3.1.5)"]
-test = ["pytest (>=6.2.0)", "pytest-shard (>=0.1.2)", "pytest-benchmark", "pytest-cov", "pytest-subtests", "pytest-xdist", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,!=3.79.2)"]
+test = ["pytest (>=6.2.0)", "pytest-shard (>=0.1.2)", "pytest-benchmark", "pytest-cov", "pytest-subtests", "pytest-xdist", "pretend", "iso8601"]
 test-randomorder = ["pytest-randomly"]
 tox = ["tox"]
 
@@ -636,7 +644,7 @@ python-versions = "*"
 
 [[package]]
 name = "platformdirs"
-version = "3.1.1"
+version = "3.2.0"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
@@ -644,7 +652,7 @@ python-versions = ">=3.7"
 
 [package.extras]
 docs = ["furo (>=2022.12.7)", "proselint (>=0.13)", "sphinx-autodoc-typehints (>=1.22,!=1.23.4)", "sphinx (>=6.1.3)"]
-test = ["appdirs (==1.4.4)", "covdefaults (>=2.2.2)", "pytest-cov (>=4)", "pytest-mock (>=3.10)", "pytest (>=7.2.1)"]
+test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest-cov (>=4)", "pytest-mock (>=3.10)", "pytest (>=7.2.2)"]
 
 [[package]]
 name = "playwright"
@@ -950,7 +958,7 @@ unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytz"
-version = "2022.7.1"
+version = "2023.3"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
@@ -958,14 +966,18 @@ python-versions = "*"
 
 [[package]]
 name = "redis"
-version = "3.5.3"
-description = "Python client for Redis key-value store"
+version = "4.5.3"
+description = "Python client for Redis database and key-value store"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = ">=3.7"
+
+[package.dependencies]
+async-timeout = {version = ">=4.0.2", markers = "python_version < \"3.11\""}
 
 [package.extras]
-hiredis = ["hiredis (>=0.1.3)"]
+hiredis = ["hiredis (>=1.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"]
 
 [[package]]
 name = "requests"
@@ -987,7 +999,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
 name = "selenium"
-version = "4.8.2"
+version = "4.8.3"
 description = ""
 category = "dev"
 optional = false
@@ -1147,7 +1159,7 @@ sortedcontainers = "*"
 
 [[package]]
 name = "trio-websocket"
-version = "0.10.0"
+version = "0.10.2"
 description = "WebSocket library for Trio"
 category = "dev"
 optional = false
@@ -1184,11 +1196,11 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "watchdog"
-version = "2.3.1"
+version = "3.0.0"
 description = "Filesystem events monitoring"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.extras]
 watchmedo = ["PyYAML (>=3.10)"]
@@ -1267,11 +1279,11 @@ test = ["zope.testrunner"]
 
 [[package]]
 name = "zope.interface"
-version = "5.5.2"
+version = "6.0"
 description = "Interfaces for Python"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = ">=3.7"
 
 [package.extras]
 docs = ["sphinx", "repoze.sphinx.autointerface"]
@@ -1281,7 +1293,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b23f08543d75c023bd1b9dd6f0599f9ae3923aa89b9baf403aa1b3b5e9aa5c93"
+content-hash = "897e370564dc853c9dc5f6b79bd1afe17d4852a0170fdc80a959fd4d3c09119f"
 
 [metadata.files]
 appnope = [
@@ -1291,6 +1303,10 @@ appnope = [
 asgiref = []
 asttokens = []
 async-generator = []
+async-timeout = [
+    {file = "async-timeout-4.0.2.tar.gz", hash = "sha256:2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15"},
+    {file = "async_timeout-4.0.2-py3-none-any.whl", hash = "sha256:8ca1e4fcf50d07413d66d1a5e416e42cfdf5851c981d679a09851a6853383b3c"},
+]
 attrs = []
 backcall = [
     {file = "backcall-0.2.0-py2.py3-none-any.whl", hash = "sha256:fbbce6a29f263178a1f7915c1940bde0ec2b2a967566fe1c65c1dfb7422bd255"},
