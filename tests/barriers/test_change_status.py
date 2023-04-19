@@ -82,8 +82,9 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             ),
             data={
                 "status": "3",
-                "part_resolved_date_0": "5",
-                "part_resolved_date_1": "2050",
+                "part_resolved_date_0": "15",
+                "part_resolved_date_1": "5",
+                "part_resolved_date_2": "2050",
                 "part_resolved_summary": "Part resolved summary",
             },
         )
@@ -105,8 +106,9 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             ),
             data={
                 "status": "3",
-                "part_resolved_date_0": "5",
-                "part_resolved_date_1": "20xx",
+                "part_resolved_date_0": "15",
+                "part_resolved_date_1": "5",
+                "part_resolved_date_2": "20xx",
                 "part_resolved_summary": "Part resolved summary",
             },
         )
@@ -128,8 +130,9 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             ),
             data={
                 "status": "3",
-                "part_resolved_date_0": "12",
-                "part_resolved_date_1": "2015",
+                "part_resolved_date_0": "16",
+                "part_resolved_date_1": "12",
+                "part_resolved_date_2": "2015",
                 "part_resolved_summary": "Part resolved summary",
             },
         )
@@ -137,7 +140,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
         mock_set_status.assert_called_with(
             barrier_id=self.barrier["id"],
             status="3",
-            status_date="2015-12-01",
+            status_date="2015-12-16",
             status_summary="Part resolved summary",
         )
 
@@ -169,8 +172,9 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             ),
             data={
                 "status": "4",
-                "resolved_date_0": "5",
-                "resolved_date_1": "2050",
+                "resolved_date_0": "15",
+                "resolved_date_1": "5",
+                "resolved_date_2": "2050",
                 "resolved_summary": "Test resolved summary",
             },
         )
@@ -193,8 +197,9 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             ),
             data={
                 "status": "4",
-                "resolved_date_0": "5",
-                "resolved_date_1": "20xx",
+                "resolved_date_0": "15",
+                "resolved_date_1": "5",
+                "resolved_date_2": "20xx",
                 "resolved_summary": "Test resolved summary",
             },
         )
@@ -217,8 +222,9 @@ class ChangeStatusTestCase(MarketAccessTestCase):
             ),
             data={
                 "status": "4",
-                "resolved_date_0": "5",
-                "resolved_date_1": "2019",
+                "resolved_date_0": "10",
+                "resolved_date_1": "5",
+                "resolved_date_2": "2019",
                 "resolved_summary": "Test resolved summary",
             },
         )
@@ -226,7 +232,7 @@ class ChangeStatusTestCase(MarketAccessTestCase):
         mock_set_status.assert_called_with(
             barrier_id=self.barrier["id"],
             status="4",
-            status_date="2019-05-01",
+            status_date="2019-05-10",
             status_summary="Test resolved summary",
         )
 
