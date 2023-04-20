@@ -24,7 +24,7 @@ RUN apt-get install -y nodejs
 # Installing Python
 ENV PYTHON_VERSION 3.8
 # Configure the Deadsnakes Python apt repository
-RUN add-apt-repository -y ppa:deadsnakes/ppa
+#RUN add-apt-repository -y ppa:deadsnakes/ppa
 
 
 # Install pip
@@ -56,9 +56,9 @@ RUN curl -sLO https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Set locale to en GB
-RUN localedef -c -i en_GB -f UTF-8 en_GB.UTF-8
-ENV LANG en_GB.utf-8
-ENV LC_ALL en_GB.utf-8
+# RUN localedef -c -i en_GB -f UTF-8 en_GB.UTF-8
+# ENV LANG en_GB.utf-8
+# ENV LC_ALL en_GB.utf-8
 
 # Set PYTHONUNBUFFERED so output is displayed in the Docker log
 ENV PYTHONUNBUFFERED=1 \
