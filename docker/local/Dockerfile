@@ -2,16 +2,16 @@ FROM python:3.8
 
 # Install system stuff
 RUN apt-get update
-RUN apt-get -y install \
-    software-properties-common \
-    build-essential \
-    gcc \
-    curl \
-    dirmngr \
-    apt-transport-https \
-    lsb-release \
-    ca-certificates \
-    locales
+# RUN apt-get -y install \
+#     software-properties-common \
+#     build-essential \
+#     gcc \
+#     curl \
+#     dirmngr \
+#     apt-transport-https \
+#     lsb-release \
+#     ca-certificates \
+#     locales
 
 # Installing Node
 # We do this first as it has the regrettable habit of installing Python 2.7
