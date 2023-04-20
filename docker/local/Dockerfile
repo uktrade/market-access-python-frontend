@@ -16,9 +16,9 @@ RUN apt-get -y install \
 # Installing Node
 # We do this first as it has the regrettable habit of installing Python 2.7
 # and symlinking it in place of the version we actually want
-ENV NODE_VERSION 14
+ENV NODE_VERSION 18
 # Configure the node apt repository
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 
 # Installing Python
