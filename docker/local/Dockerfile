@@ -1,4 +1,6 @@
-FROM python:3.8
+#FROM python:3.8
+#Using non standard build to enable Playwright tests
+FROM mcr.microsoft.com/playwright/python:v1.21.0-focal
 
 # Install system stuff
 RUN apt-get update
@@ -28,7 +30,7 @@ ENV PYTHON_VERSION 3.8
 
 
 # Install pip
-RUN python3.8 -m ensurepip
+#RUN python3.8 -m ensurepip
 # Ensure we use the right copies of python and pip
 # In particular, get rid of the /usr/bin/python symlink to 2.7 that Node installation kindly created
 RUN rm -f /usr/bin/python \
