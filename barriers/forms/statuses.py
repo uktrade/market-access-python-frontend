@@ -28,23 +28,6 @@ class APIMappingMixin:
         return params
 
 
-class UnknownForm(APIMappingMixin, forms.Form):
-    """
-    Subform of BarrierStatusForm
-    """
-
-    unknown_summary = forms.CharField(
-        label="Describe briefly why this barrier status is unknown",
-        widget=forms.Textarea,
-        error_messages={"required": "Enter a description"},
-    )
-    api_mapping = {"unknown_summary": "status_summary"}
-
-    def as_html(self):
-        template_name = "barriers/forms/statuses/unknown.html"
-        return render_to_string(template_name, context={"form": self})
-
-
 class OpenInProgressForm(APIMappingMixin, forms.Form):
     """
     Subform of BarrierStatusForm
@@ -78,8 +61,8 @@ class ResolvedInPartForm(APIMappingMixin, forms.Form):
     part_resolved_date = DayMonthYearField(
         help_text="Enter '01' if you aren't sure of the day.",
         error_messages={
-            "required": "Enter date barrier was part resolved",
-            "incomplete": "Enter date barrier was part resolved",
+            "required": "Enter the date the barrier was partially resolved",
+            "incomplete": "Enter the date the barrier was partially resolved",
         },
     )
     part_resolved_summary = forms.CharField(
@@ -105,8 +88,8 @@ class ResolvedInFullForm(APIMappingMixin, forms.Form):
     resolved_date = DayMonthYearField(
         help_text="Enter '01' if you aren't sure of the day.",
         error_messages={
-            "required": "Enter date barrier was resolved",
-            "incomplete": "Enter date barrier was resolved",
+            "required": "Enter the date the barrier was resolved",
+            "incomplete": "Enter the date the barrier was resolved",
         },
     )
     resolved_summary = forms.CharField(
