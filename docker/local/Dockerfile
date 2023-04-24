@@ -33,9 +33,9 @@ ENV PYTHON_VERSION 3.8
 #RUN python3.8 -m ensurepip
 # Ensure we use the right copies of python and pip
 # In particular, get rid of the /usr/bin/python symlink to 2.7 that Node installation kindly created
-RUN rm -f /usr/bin/python \
-    && ln -s /usr/bin/python3.8 /usr/bin/python \
-    && ln -s /usr/local/bin/pip3.8 /usr/bin/pip
+# RUN rm -f /usr/bin/python \
+#     && ln -s /usr/bin/python3.8 /usr/bin/python \
+#     && ln -s /usr/local/bin/pip3.8 /usr/bin/pip
 
 # SSH
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
