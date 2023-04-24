@@ -154,7 +154,7 @@ from .views.sectors import (
     BarrierEditSectorsSession,
     BarrierRemoveSector,
 )
-from .views.statuses import BarrierChangeStatus, BarrierEditStatus
+from .views.statuses import BarrierChangeStatus
 from .views.teams import (
     BarrierTeam,
     ChangeOwnerView,
@@ -319,11 +319,6 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/commodities/<str:mode>/",
         BarrierEditCommodities.as_view(),
         name="edit_commodities_sr",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/edit/status/",
-        BarrierEditStatus.as_view(),
-        name="edit_status",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/tags/",
