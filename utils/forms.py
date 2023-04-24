@@ -299,6 +299,7 @@ class DayMonthYearField(forms.MultiValueField):
         "required": "Enter a day, month and year",
         "invalid": "Enter a real date",
     }
+    default_validators = [validate_date_not_in_future]
 
     def __init__(self, **kwargs):
         fields = (
