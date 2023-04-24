@@ -32,7 +32,7 @@ def test_cancel_redirects_to_barrier_page(page: Page, test_barrier_id):
 
     # Expect to be redirected to the barrier details page
     redirect_url = redirect.value.request.url
-    assert redirect_url == f"{BASE_URL}barriers/{test_barrier_id}/"
+    assert redirect_url == f"{BASE_URL}/barriers/{test_barrier_id}/"
 
 
 def test_no_priority_redirects_to_barrier_page(page: Page, test_barrier_id):
@@ -48,7 +48,7 @@ def test_no_priority_redirects_to_barrier_page(page: Page, test_barrier_id):
 
     # Expect to be redirected to the barrier details page
     redirect_url = redirect.value.request.url
-    assert redirect_url == f"{BASE_URL}barriers/{test_barrier_id}/"
+    assert redirect_url == f"{BASE_URL}/barriers/{test_barrier_id}/"
 
 
 def test_yes_priority_display_secondary_questions(page: Page, test_barrier_id):

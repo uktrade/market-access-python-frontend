@@ -1,44 +1,18 @@
-FROM ubuntu:18.04
+#FROM python:3.8
+#Using non standard build to enable Playwright tests
+FROM mcr.microsoft.com/playwright/python:v1.21.0-focal
 
 # Install system stuff
 RUN apt-get update
-RUN apt-get install -y  software-properties-common \
-                        build-essential \
-                        gcc \
-                        curl \
-                        dirmngr \
-                        apt-transport-https \
-                        lsb-release \
-                        ca-certificates \
-                        locales
 
 # Installing Node
-# We do this first as it has the regrettable habit of installing Python 2.7
-# and symlinking it in place of the version we actually want
-ENV NODE_VERSION 14
+ENV NODE_VERSION 18
 # Configure the node apt repository
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
-#RUN apt-get -y module enable nodejs:$NODE_VERSION \
-#    && apt-get -y install nodejs
 
 # Installing Python
 ENV PYTHON_VERSION 3.8
-# Configure the Deadsnakes Python apt repository
-RUN add-apt-repository -y ppa:deadsnakes/ppa
-
-RUN apt-get update
-RUN apt-get install -y  python3.8 \
-                        python3.8-dev \
-                        python3.8-venv
-
-# Install pip
-RUN python3.8 -m ensurepip
-# Ensure we use the right copies of python and pip
-# In particular, get rid of the /usr/bin/python symlink to 2.7 that Node installation kindly created
-RUN rm -f /usr/bin/python \
- && ln -s /usr/bin/python3.8 /usr/bin/python \
- && ln -s /usr/local/bin/pip3.8 /usr/bin/pip
 
 # SSH
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
@@ -60,11 +34,6 @@ RUN curl -sLO https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-# Set locale to en GB
-RUN localedef -c -i en_GB -f UTF-8 en_GB.UTF-8
-ENV LANG en_GB.utf-8
-ENV LC_ALL en_GB.utf-8
-
 # Set PYTHONUNBUFFERED so output is displayed in the Docker log
 ENV PYTHONUNBUFFERED=1 \
     POETRY_VERSION=1.1.8 \
@@ -79,9 +48,9 @@ WORKDIR /usr/src/app
 # Poetry commands reference https://python-poetry.org/docs/cli/#run
 COPY pyproject.toml poetry.lock ./
 RUN pip install poetry==$POETRY_VERSION \
- && poetry export --without-hashes -f requirements.txt -o requirements.txt \
- && poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt \
- && pip install -r requirements-dev.txt
+    && poetry export --without-hashes -f requirements.txt -o requirements.txt \
+    && poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt \
+    && pip install -r requirements-dev.txt
 
 COPY package.json package-lock.json ./
 RUN npm install -g npm \
