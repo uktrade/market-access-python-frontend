@@ -34,7 +34,7 @@ as they currently share some dependencies (this only applies for local developme
 1. Build the images and spin up the containers by running - `docker-compose up --build`
 2. Set up git hooks by running - `make git-hooks`
 3. Enter bash within the django container using `docker-compose exec web bash`
-then create a superuser `py3 manage.py createsuperuser --email your@email.here` 
+then create a superuser `py3 manage.py createsuperuser --email your@email.here`
 4. Whilst still in the container `run npm install` then `exit` the container
 4. To start the dev server run - `make django-run`
 5. The fronted client is now accessible via http://market-access.local:9880
@@ -147,6 +147,5 @@ Note that webops have told us to use the lite team's test SSO user for now.
 `make django-ui-test`
 
 Ideally we would be able to run this from CircleCI and change WEB_DRIVER_URL to point to BrowserStack (https://USERNAME:API_KEY@hub-cloud.browserstack.com/wd/hub). However this presents a few difficulties, such as getting around the VPN, so for now we can just run the end to end tests from our local machines against UAT.
-
 
 -----
