@@ -1,6 +1,7 @@
 <div id="{{ form.resolved_date.name }}" class="govuk-form-group{% if form.resolved_date.errors %} govuk-form-group--error{% endif %}">
     <fieldset class="govuk-fieldset" {% if form.resolved_date.errors %}aria-desribedby="status-date-group-error"{% endif %} role="group">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date the barrier was resolved</legend>
+        <span id="resolved-in-full-date-hint" class="govuk-hint">{{ form.resolved_date.help_text}}</span>
 
         {% form_field_error form "resolved_date" %}
 

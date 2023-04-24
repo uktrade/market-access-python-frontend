@@ -36,7 +36,7 @@
                                    name="{{ form.status.name }}"
                                    type="radio"
                                    value="{{ choice.value }}"
-                                   {% if form.status.value.id == choice.value %}
+                                   {% if form.status.value == choice.value %}
                                    checked="checked"
                                    {% endif %}
                                    data-aria-controls="conditional-{{ choice.value }}"
