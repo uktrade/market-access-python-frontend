@@ -1,8 +1,11 @@
 import base64
+import logging
 
 import requests
 
 from companies_house.dataclasses import CompanyHouseCompany, CompanyHouseSearchResult
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_API_ENDPOINT = "https://api.companieshouse.gov.uk"
 
@@ -25,7 +28,7 @@ class CompaniesHouseAPIClient(object):
         response = requests.get(url, headers=headers)
         return CompanyHouseCompany(**response.json())
 
-    def search_companies(self, query: str, page: int = 1, limit: int = 20):
+    def search_companies(self, query: str, limit: int = 100):
         """
         Search company house companies
         """
@@ -33,7 +36,10 @@ class CompaniesHouseAPIClient(object):
         headers = {
             "Authorization": "Basic " + base64.b64encode(self.api_key.encode()).decode()
         }
-        params = {"q": query, "page": page, "limit": limit}
+        params = {"q": query, "items_per_page": limit}
+
         response = requests.get(url, params=params, headers=headers)
+
         results = CompanyHouseSearchResult(**response.json())
+
         return results

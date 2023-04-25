@@ -74,17 +74,21 @@
                             <dd class="search-card__values__value">{{ company.title|highlight:form.query.value }}</dd>
                             {% endif %}
 
+                            {% if company.date_of_creation %}
                             <dt class="search-card__values__key">Incorporated on</dt>
                             <dd class="search-card__values__value">{{ company.date_of_creation|date:"j F Y" }}</dd>
+                            {% endif %}
 
                             {% if company.date_of_cessation %}
                             <dt class="search-card__values__key">Terminated on</dt>
                             <dd class="search-card__values__value">{{ company.date_of_cessation|date:"j F Y" }}</dd>
                             {% endif %}
+                            {% if company.address_display %}
                             <dt class="search-card__values__key">Primary address</dt>
                             <dd class="search-card__values__value">
                                 {{ company.address_display|highlight:form.query.value }}
                             </dd>
+                            {% endif %}
                         </dl>
                     </a>
                 </li>
