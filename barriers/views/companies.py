@@ -25,7 +25,7 @@ class BarrierSearchCompany(BarrierMixin, FormView):
         )
         try:
             results = companies_house_api_client.search_companies(
-                form.cleaned_data["query"], 1, 100
+                form.cleaned_data["query"], 100
             )
         except APIException:
             error = "There was an error finding the company"

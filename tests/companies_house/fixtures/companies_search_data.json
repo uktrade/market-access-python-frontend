@@ -1,0 +1,204 @@
+[
+    {
+        "address": {
+            "address_line_1": "1 Little New Street",
+            "address_line_2": "",
+            "care_of_name": "",
+            "country": "England",
+            "locality": "London",
+            "po_box": "38972A",
+            "postal_code": "EC4A 3TR",
+            "region": "London",
+            "premises":"Hill House"
+        },
+        "address_snippet": "Hill House, 1 Little New Street, London, EC4A 3TR",
+        "company_number": "00148821",
+        "company_status": "dissolved",
+        "company_type": "ltd",
+        "date_of_cessation": "2011-05-07",
+        "date_of_creation": "1917-11-05",
+        "description": "00148821 - Dissolved on  7 May 2011",
+        "description_identifier": [
+            "dissolved-on"
+        ],
+        "kind": "searchresults#company",
+        "links": {
+            "self": "/company/00148821"
+        },
+        "matches": {
+            "address_snippet": [
+                "integer"
+            ],
+            "snippet": [
+                "integer"
+            ],
+            "title": [
+                "integer"
+            ]
+        },
+        "snippet": "string",
+        "title": "COMPANY WITH FULL DETAILS"
+    },
+    {
+        "address": {
+            "address_line_1": "1 Little New Street",
+            "address_line_2": "",
+            "care_of_name": "",
+            "country": "England",
+            "locality": "London",
+            "po_box": "38972A",
+            "postal_code": "EC4A 3TR",
+            "region": "London",
+            "premises":"Hill House"
+        },
+        "address_snippet": "Hill House, 1 Little New Street, London, EC4A 3TR",
+        "company_status": "dissolved",
+        "company_type": "ltd",
+        "date_of_cessation": "2011-05-07",
+        "date_of_creation": "1917-11-05",
+        "description": "00148821 - Dissolved on  7 May 2011",
+        "description_identifier": [
+            "dissolved-on"
+        ],
+        "kind": "searchresults#company",
+        "links": {
+            "self": "/company/00148821"
+        },
+        "matches": {
+            "address_snippet": [
+                "integer"
+            ],
+            "snippet": [
+                "integer"
+            ],
+            "title": [
+                "integer"
+            ]
+        },
+        "snippet": "string",
+        "title": "COMPANY WITH MISSING FIELD"
+    },
+    {
+        "address": {
+            "address_line_1": "1 Little New Street",
+            "address_line_2": "",
+            "care_of_name": "",
+            "country": "England",
+            "locality": "London",
+            "po_box": "38972A",
+            "postal_code": "EC4A 3TR",
+            "region": "London",
+            "premises":"Hill House"
+        },
+        "address_snippet": "Hill House, 1 Little New Street, London, EC4A 3TR",
+        "company_number": "00148821",
+        "company_status": "dissolved",
+        "company_type": "ltd",
+        "date_of_cessation": "broken formatting",
+        "date_of_creation": "1917-11-05",
+        "description": {
+            "key":"00148821 - Dissolved on  7 May 2011"
+        },
+        "description_identifier": [
+            "dissolved-on"
+        ],
+        "kind": "searchresults#company",
+        "links": ["This should be a dict"],
+        "matches": {
+            "address_snippet": [
+                "integer"
+            ],
+            "snippet": [
+                "integer"
+            ],
+            "title": [
+                "integer"
+            ]
+        },
+        "snippet": "string",
+        "title": "COMPANY WITH INCORRECT FORMATTING"
+    },
+    {
+        "address": {
+            "address_line_1": "1 Little New Street",
+            "address_line_2": "",
+            "care_of_name": "",
+            "country": "England",
+            "locality": "London",
+            "po_box": "38972A",
+            "postal_code": "EC4A 3TR",
+            "region": "London",
+            "premises":"Hill House",
+            "planet":"shouldn't be here"
+        },
+        "address_snippet": "Hill House, 1 Little New Street, London, EC4A 3TR",
+        "company_number": "00148821",
+        "company_status": "dissolved",
+        "company_type": "ltd",
+        "date_of_cessation": "2011-05-07",
+        "date_of_creation": "1917-11-05",
+        "description": "00148821 - Dissolved on  7 May 2011",
+        "description_identifier": [
+            "dissolved-on"
+        ],
+        "kind": "searchresults#company",
+        "links": ["This should be a dict"],
+        "matches": {
+            "address_snippet": [
+                "integer"
+            ],
+            "snippet": [
+                "integer"
+            ],
+            "title": [
+                "integer"
+            ]
+        },
+        "snippet": "string",
+        "sector": "sector shouldn't be here",
+        "title": "COMPANY WITH EXTRA FIELD"
+    },
+    {
+        "address": "1 Little New Street",
+        "address_snippet": "Hill House, 1 Little New Street, London, EC4A 3TR",
+        "company_number": "00148821",
+        "company_status": "dissolved",
+        "company_type": "ltd",
+        "date_of_cessation": "2011-05-07",
+        "date_of_creation": "1917-11-05",
+        "description": "00148821 - Dissolved on  7 May 2011",
+        "description_identifier": [
+            "dissolved-on"
+        ],
+        "kind": "searchresults#company",
+        "links": ["This should be a dict"],
+        "matches": {
+            "address_snippet": [
+                "integer"
+            ],
+            "snippet": [
+                "integer"
+            ],
+            "title": [
+                "integer"
+            ]
+        },
+        "snippet": "string",
+        "title": "COMPANY WITH INCORRECT SUBTYPE"
+    },
+    {
+        "address": {
+            "address_line_1": "1 Little New Street"
+        },
+        "address_snippet": "Hill House, 1 Little New Street, London, EC4A 3TR",
+        "company_number": "00148821",
+        "company_status": "dissolved",
+        "company_type": "ltd",
+        "date_of_creation": "1917-11-05",
+        "kind": "searchresults#company",
+        "links": {
+            "self": "/company/00148821"
+        },
+        "title": "COMPANY WITH REQUIRED DETAILS"
+    }
+]
