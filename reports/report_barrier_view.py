@@ -100,14 +100,16 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
 
         logger.critical(self.draft_barrier.__dict__)
 
-        self.storage.existing_draft = self._draft_barrier
+        #set_step_data(self, step, cleaned_data):
 
-        self.storage = get_storage(
-            self.storage_name, self.prefix, request,
-            getattr(self, 'file_storage', None),
-        )
+        self.storage.set_step_data("barrier-name", {"title": "wahaha"})
+
+        #self.storage.extra_data = self._draft_barrier
+
         logger.critical("-")
-        logger.critical(self.storage.__dict__)
+        #logger.critical(self.storage.extra_data)
+        logger.critical(self.storage.get_step_data("barrier-name"))
+        logger.critical(self.storage.get_step_data("barrier-summary"))
 
 
         logger.critical("*********************")
@@ -145,10 +147,13 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
+        #context.update(self.storage.extra_data)
 
         logger.critical("==============================")
         logger.critical("GETTING CONTEXT:")
         logger.critical("KWARGS: " + str(kwargs))
+        logger.critical(self.storage.get_step_data("barrier-name"))
+        logger.critical(self.storage.get_step_data("barrier-summary"))
         #logger.critical("GOT DRAFT: " + str(self.draft_barrier.__dict__))
         for line in context:
             logger.critical(context[line])
