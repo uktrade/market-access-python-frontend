@@ -8,7 +8,7 @@ from reports.report_barrier_forms import (
     BarrierSummaryForm
 )
 from django.http import HttpResponseRedirect
-from formtools.wizard.views import NamedUrlSessionWizardView
+from formtools.wizard.views import NamedUrlSessionWizardView, get_storage
 from formtools.preview import FormPreview
 
 logger = logging.getLogger(__name__)
@@ -93,12 +93,22 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         logger.critical(str(kwargs))
         
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        if kwargs["barrier_id"]:
+        if 'barrier_id' in kwargs.keys():
             self._draft_barrier = client.reports.get(id=kwargs["barrier_id"])
         else:
             self._draft_barrier = client.reports.create()
 
         logger.critical(self.draft_barrier.__dict__)
+
+        self.storage.existing_draft = self._draft_barrier
+
+        self.storage = get_storage(
+            self.storage_name, self.prefix, request,
+            getattr(self, 'file_storage', None),
+        )
+        logger.critical("-")
+        logger.critical(self.storage.__dict__)
+
 
         logger.critical("*********************")
         return self.render(self.get_form())
@@ -119,11 +129,11 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         form wizard, an empty dictionary will be returned.
         """
 
-        logger.critical("------------------------------")
-        logger.critical("GETTING INITIAL DATA:")
-        #logger.critical(self.kwargs)
-        logger.critical(self.__dict__)
-        logger.critical("GOT DRAFT: " + str(self.draft_barrier.__dict__))
+        #logger.critical("------------------------------")
+        #logger.critical("GETTING INITIAL DATA:")
+        ##logger.critical(self.kwargs)
+        #logger.critical(self.__dict__)
+        #logger.critical("GOT DRAFT: " + str(self.draft_barrier.__dict__))
 
         # if we pass the view a barrier id, we can call the API here and pre-fill details?
 
