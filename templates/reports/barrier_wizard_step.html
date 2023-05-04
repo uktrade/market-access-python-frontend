@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} Report A Barrier - Wizard Framework {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+<div class="govuk-width-container">
+    <form method="post" novalidate>
+        {% block back_button %}
+            <!-- need an if here to decide whether we are in existing path or new path-->
+            <!--<a class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>-->
+            <!--<a class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step-existing-draft" step=wizard.steps.prev %}">Back</a>-->
+        {% endblock %}
+        <main id="main-content" class="govuk-main-wrapper">
+            <div>
+                {% csrf_token %}
+                {{ wizard.management_form }}
+                {% block current_step %}
+                    <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
+                {% endblock %}
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        {% block fields %}
+                        {% endblock %}
+                    </div>
+                </div>
+                <div class="govuk-!-margin-top-6">
+                    {% block actions %}
+                        <button class="govuk-button">
+                            Continue
+                        </button>
+                    {% endblock %}
+                </div>
+            </div>
+        </main>
+    </form>
+</div>
+{% endblock %}
+
+
