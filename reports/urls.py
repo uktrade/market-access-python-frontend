@@ -52,26 +52,23 @@ urlpatterns = [
     #),
     # Two routes into form - one provides a barrier_id (if the draft already exists), one where
     # we make a new 'report' object in the DB
-    path(
-        "report-a-barrier/<str:step>",
-        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
-        name="report-barrier-wizard-step",
-    ),
-    path(
-        "report-a-barrier-existing-draft/<uuid:barrier_id>/<str:step>",
-        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step-existing-draft"),
-        name="report-barrier-wizard-step-existing-draft",
-    ),
+
     path(
         "report-a-barrier/",
         ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
         name="report-barrier-wizard",
     ),
     path(
-        "report-a-barrier-existing-draft/<uuid:barrier_id>/",
-        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step-existing-draft"),
-        name="report-barrier-wizard-existing-draft",
+        "report-a-barrier/draft/<uuid:barrier_id>/",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
+        name="report-barrier-wizard",
     ),
+    path(
+        "report-a-barrier/<str:step>",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
+        name="report-barrier-wizard-step",
+    ),
+
 
 
     path("draft-barriers/", DraftBarriers.as_view(), name="draft_barriers"),
