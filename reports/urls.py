@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from barriers.views.report_barrier import ReportBarrierAnswersView
 from reports.location_views import NewReportBarrierLocationMasterView
@@ -30,10 +30,50 @@ from reports.views import (
     NewReportBarrierLocationRemoveAdminAreasView,
     NewReportStartRedirect,
 )
+from reports.report_barrier_view import (
+    ReportBarrierWizardView
+)
+
 
 app_name = "reports"
 
 urlpatterns = [
+
+
+    #re_path(
+    #    r"^report-a-barrier/(?P<step>.+)$",
+    #    ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
+    #    name="report-barrier-wizard-step",
+    #),
+    #re_path(
+    #    r"^report-a-barrier/(?P<barrier_id>)/(?P<step>.+)$",
+    #    ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step-existing"),
+    #    name="report-barrier-wizard-step-existing",
+    #),
+    # Two routes into form - one provides a barrier_id (if the draft already exists), one where
+    # we make a new 'report' object in the DB
+    path(
+        "report-a-barrier/<str:step>",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
+        name="report-barrier-wizard-step",
+    ),
+    path(
+        "report-a-barrier-existing-draft/<uuid:barrier_id>/<str:step>",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step-existing-draft"),
+        name="report-barrier-wizard-step-existing-draft",
+    ),
+    path(
+        "report-a-barrier/",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
+        name="report-barrier-wizard",
+    ),
+    path(
+        "report-a-barrier-existing-draft/<uuid:barrier_id>/",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step-existing-draft"),
+        name="report-barrier-wizard-existing-draft",
+    ),
+
+
     path("draft-barriers/", DraftBarriers.as_view(), name="draft_barriers"),
     path("reports/new/", NewReport.as_view(), name="new_report"),
     path(
