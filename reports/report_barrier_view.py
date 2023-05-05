@@ -84,30 +84,35 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         just starts at the first step or wants to restart the process.
         The data of the wizard will be resetted before rendering the first step
         """
-        self.storage.reset()
+        #self.storage.reset()
         # reset the current step to the first step.
-        self.storage.current_step = self.steps.first
+        #self.storage.current_step = self.steps.first
 
         logger.critical("*********************")
         logger.critical("DOING GET")
         logger.critical(str(kwargs))
         
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        # Barrier passed in kwarg, we are resuming an existing barrier
         if 'barrier_id' in kwargs.keys():
             self._draft_barrier = client.reports.get(id=kwargs["barrier_id"])
-        else:
+            self.set_existing_barrier_fields(self._draft_barrier)
+        # No step or barrier ID passed means we are starting a new barrier
+        if 'barrier_id' not in kwargs.keys() and 'step' not in kwargs.keys():
+            self.storage.reset()
+            # reset the current step to the first step.
+            self.storage.current_step = self.steps.first
             self._draft_barrier = client.reports.create()
+        # Other scenarios; we're mid flow and alrady have a barrier loaded into self.storage.step_data
 
-        logger.critical(self.draft_barrier.__dict__)
-
-        #set_step_data(self, step, cleaned_data):
-
-        self.storage.set_step_data("barrier-name", {"title": "wahaha"})
+        #logger.critical(self.draft_barrier.__dict__)
 
         #self.storage.extra_data = self._draft_barrier
 
         logger.critical("-")
         #logger.critical(self.storage.extra_data)
+        logger.critical(self.steps.current)
+        logger.critical(self.steps.prev)
         logger.critical(self.storage.get_step_data("barrier-name"))
         logger.critical(self.storage.get_step_data("barrier-summary"))
 
@@ -115,11 +120,24 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         logger.critical("*********************")
         return self.render(self.get_form())
 
+    def set_existing_barrier_fields(self, barrier):
+        # Custom method for us to translate an existing barrier drafts details
+        # into field values
+
+        self.storage.set_step_data("barrier-name", {"title": barrier.title})
+
+        self.storage.set_step_data("barrier-summary", {"summary": barrier.summary})
+
+
     def get_template_names(self):
         templates = {
             form_name: f"reports/{form_name.replace('-', '_')}_wizard_step.html"
             for form_name in self.form_list
         }
+        logger.critical("........................")
+        # problem; back button isn't loading the last template
+        logger.critical("SELECTING TEMPLATE: " + self.steps.current)
+        logger.critical("........................")
         return [templates[self.steps.current]]
 
 
@@ -137,7 +155,6 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         #logger.critical(self.__dict__)
         #logger.critical("GOT DRAFT: " + str(self.draft_barrier.__dict__))
 
-        # if we pass the view a barrier id, we can call the API here and pre-fill details?
 
 
         logger.critical("------------------------------")
@@ -145,25 +162,25 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
 
 
 
-    def get_context_data(self, form, **kwargs):
-        context = super().get_context_data(form=form, **kwargs)
-        #context.update(self.storage.extra_data)
-
-        logger.critical("==============================")
-        logger.critical("GETTING CONTEXT:")
-        logger.critical("KWARGS: " + str(kwargs))
-        logger.critical(self.storage.get_step_data("barrier-name"))
-        logger.critical(self.storage.get_step_data("barrier-summary"))
-        #logger.critical("GOT DRAFT: " + str(self.draft_barrier.__dict__))
-        for line in context:
-            logger.critical(context[line])
-
-        # can add extra attributes here
-        #if self.steps.current == 'my_step_name':
-        #    context.update({'another_var': True})
-
-        logger.critical("==============================")
-        return context
+    #def get_context_data(self, form, **kwargs):
+    #    context = super().get_context_data(form=form, **kwargs)
+    #    #context.update(self.storage.extra_data)
+#
+    #    logger.critical("==============================")
+    #    logger.critical("GETTING CONTEXT:")
+    #    #logger.critical("KWARGS: " + str(kwargs))
+    #    #logger.critical(self.storage.get_step_data("barrier-name"))
+    #    #logger.critical(self.storage.get_step_data("barrier-summary"))
+    #    #logger.critical("GOT DRAFT: " + str(self.draft_barrier.__dict__))
+    #    #for line in context:
+    #    #    logger.critical(context[line])
+#
+    #    # can add extra attributes here
+    #    #if self.steps.current == 'my_step_name':
+    #    #    context.update({'another_var': True})
+#
+    #    logger.critical("==============================")
+    #    return context
 
 
 
