@@ -31,7 +31,8 @@ from reports.views import (
     NewReportStartRedirect,
 )
 from reports.report_barrier_view import (
-    ReportBarrierWizardView
+    ReportBarrierWizardView,
+    ReportBarrierVanillaWizardView
 )
 
 
@@ -68,6 +69,23 @@ urlpatterns = [
         ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
         name="report-barrier-wizard-step",
     ),
+
+
+
+
+
+    path(
+        "report-a-barrier-vanilla/",
+        ReportBarrierVanillaWizardView.as_view(url_name="reports:report-barrier-vanilla-wizard-step"),
+        name="report-barrier-vanilla-wizard",
+    ),
+    path(
+        "report-a-barrier-vanilla/<str:step>",
+        ReportBarrierVanillaWizardView.as_view(url_name="reports:report-barrier-vanilla-wizard-step"),
+        name="report-barrier-vanilla-wizard-step",
+    ),
+
+
 
 
 
