@@ -5,13 +5,57 @@ from django.views.generic import RedirectView
 from utils.api.client import MarketAccessAPIClient
 from reports.report_barrier_forms import (
     BarrierNameForm,
-    BarrierSummaryForm
+    BarrierSummaryForm,
+    BarrierReviewForm
 )
 from django.http import HttpResponseRedirect
 from formtools.wizard.views import NamedUrlSessionWizardView, get_storage
 from formtools.preview import FormPreview
 
 logger = logging.getLogger(__name__)
+
+
+
+class ReportBarrierVanillaWizardView(NamedUrlSessionWizardView, FormPreview):
+    form_list = [
+        ("barrier-name", BarrierNameForm),
+        ("barrier-summary", BarrierSummaryForm),
+        ("barrier-review", BarrierReviewForm),
+    ]
+
+    def get_template_names(self):
+        templates = {
+            form_name: f"reports/{form_name.replace('-', '_')}_wizard_step.html"
+            for form_name in self.form_list
+        }
+        return [templates[self.steps.current]]
+
+    def done(self, form_list, form_dict, **kwargs):
+
+        submitted_values = {}
+        for form in form_list:
+            submitted_values = {**submitted_values, **form.clean()}
+
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        new_barrier_report = client.reports.create()
+
+        client.reports.patch(
+            id=new_barrier_report.id,
+            **submitted_values
+        )
+
+        return HttpResponseRedirect(reverse("barriers:dashboard"))
+
+
+
+
+
+
+
+
+
+
+
 
 # How draft barriers work;
 # Clicking 'Report A Barrier'->'Start' creates a barrier in the DB, it has a status of 0, a code and created/modified dates & creator
@@ -40,6 +84,7 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
     form_list = [
         ("barrier-name", BarrierNameForm),
         ("barrier-summary", BarrierSummaryForm),
+        ("barrier-review", BarrierReviewForm),
     ]
 
 
@@ -49,13 +94,17 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
     # theory; navigating back to this page manually through url bar will take you to the one stored in session,
     # going through the report_a_barrier button (or the draft list) will load into the session the new data
     #
-    _draft_barrier = None
+    #_draft_barrier = None
 
-    @property
-    def draft_barrier(self):
-        #if not self._draft_barrier:
-        #    self._draft_barrier = self.get_draft_barrier()
-        return self._draft_barrier
+    #@property
+    #def draft_barrier(self):
+    #    #if not self._draft_barrier:
+    #    #    self._draft_barrier = self.get_draft_barrier()
+    #    return self._draft_barrier
+
+    def __init__(self, *args, **kwargs):
+        super(ReportBarrierWizardView, self).__init__(*args, **kwargs)
+        self.draft_barrier = None
 
     #def get_draft_barrier(self):
     #    client = MarketAccessAPIClient(self.request.session.get("sso_token"))
@@ -96,13 +145,15 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         # Barrier passed in kwarg, we are resuming an existing barrier
         if 'barrier_id' in kwargs.keys():
             self._draft_barrier = client.reports.get(id=kwargs["barrier_id"])
-            self.set_existing_barrier_fields(self._draft_barrier)
+            self.set_existing_barrier_fields(self.draft_barrier)
         # No step or barrier ID passed means we are starting a new barrier
         if 'barrier_id' not in kwargs.keys() and 'step' not in kwargs.keys():
             self.storage.reset()
             # reset the current step to the first step.
             self.storage.current_step = self.steps.first
-            self._draft_barrier = client.reports.create()
+            #self.draft_barrier = client.reports.create()
+            new_barrier_report = client.reports.create()
+            request.session['draft_barrier'] = new_barrier_report.id
         # Other scenarios; we're mid flow and alrady have a barrier loaded into self.storage.step_data
 
         #logger.critical(self.draft_barrier.__dict__)
@@ -111,10 +162,11 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
 
         logger.critical("-")
         #logger.critical(self.storage.extra_data)
-        logger.critical(self.steps.current)
-        logger.critical(self.steps.prev)
-        logger.critical(self.storage.get_step_data("barrier-name"))
-        logger.critical(self.storage.get_step_data("barrier-summary"))
+        #logger.critical(self.steps.current)
+        #logger.critical(self.steps.prev)
+        #logger.critical(self.storage.get_step_data("barrier-name"))
+        #logger.critical(self.storage.get_step_data("barrier-summary"))
+        logger.critical(request.session['draft_barrier'])
 
 
         logger.critical("*********************")
@@ -149,11 +201,15 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         form wizard, an empty dictionary will be returned.
         """
 
-        #logger.critical("------------------------------")
-        #logger.critical("GETTING INITIAL DATA:")
-        ##logger.critical(self.kwargs)
-        #logger.critical(self.__dict__)
+        logger.critical("------------------------------")
+        logger.critical("GETTING INITIAL DATA:")
+        #logger.critical(self.kwargs)
+        logger.critical(self.initial_dict)
         #logger.critical("GOT DRAFT: " + str(self.draft_barrier.__dict__))
+        
+        self.initial_dict[step] = self.storage.get_step_data(step)
+        #self.storage.set_step_data("barrier-name", {"title": barrier.title})
+        #self.storage.set_step_data("barrier-summary", {"summary": barrier.summary})
 
 
 
@@ -191,17 +247,23 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         """
         logger.critical("+++++++++++++++++++++++++++++++++")
         logger.critical("PROCESSING STEP:")
-        logger.critical(self.__dict__)
+        #logger.critical(self.__dict__)
+        logger.critical(str(self.request.session['draft_barrier']))
+        #logger.critical("-")
         logger.critical("-")
-        logger.critical("-")
-        logger.critical(form.__dict__)
+        #logger.critical(form.__dict__)
 
         # Get dictionary of submitted values
         submitted_values = form.clean()
 
         client = MarketAccessAPIClient(form.token)
 
-        # THIS IS WHERE WE CAN UPDATE THE MODEL IN THE DB WITH THE INPUT INFORMATION
+        logger.critical(submitted_values)
+
+        client.reports.patch(
+            id=self.request.session['draft_barrier'],
+            **submitted_values
+        )
 
         logger.critical("+++++++++++++++++++++++++++++++++")
         return self.get_form_step_data(form)
@@ -213,5 +275,9 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
 
         # We call the 'report' function in api to turn the draft into a barrier
         # check convert_to_barrier in market-access-api
+
+        logger.critical("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        logger.critical("DOING THE DONE: ")
+        logger.critical("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 
         return HttpResponseRedirect(reverse("barriers:dashboard"))
