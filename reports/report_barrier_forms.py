@@ -31,14 +31,12 @@ class BarrierSummaryForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter a description"},
     )
 
-class BarrierPreviewForm(APIFormMixin, forms.Form):
-    summary = forms.CharField(
-        label="Describe the barrier",
-        help_text=(
-            "Include how the barrier is affecting the export or investment "
-            "and why the barrier exists. For example, because of specific "
-            "laws or measures, which government body imposed them and any "
-            "political context; the HS code; and when the problem started."
-        ),
-        error_messages={"required": "Enter a description"},
+class BarrierReviewForm(APIFormMixin, forms.Form):
+    confirm = forms.ChoiceField(
+        label="Are these details correct?",
+        choices={
+            ("YES", "Yes"),
+            ("NO", "No"),
+        },
+        widget=forms.RadioSelect,
     )

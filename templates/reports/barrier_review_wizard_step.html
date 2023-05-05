@@ -1,0 +1,21 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Name{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Barrier Details
+                </h1>
+            </legend>
+            <p class="govuk-body">
+                Please review the details you provided in the form
+            </p>
+                {{ form.confirm }}
+            </div>
+
+        </fieldset>
+    </div>
+{% endblock %}
