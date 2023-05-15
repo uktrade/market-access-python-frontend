@@ -8625,6 +8625,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 8
+    },
+    {
+      "id": 9,
+      "title": "EU Market Access Board",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 9
     }
   ],
   "barrier_type_categories": {
