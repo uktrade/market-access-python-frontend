@@ -26,6 +26,9 @@
                         <button class="govuk-button">
                             Continue
                         </button>
+                        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">First Step</button>
+                        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Previous Step</button>
+                        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.done }}">Save and Exit</button>
                     {% endblock %}
                 </div>
             </div>
@@ -33,5 +36,3 @@
     </form>
 </div>
 {% endblock %}
-
-
