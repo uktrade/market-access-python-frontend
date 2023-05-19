@@ -33,6 +33,7 @@
                     <th class="standard-table__heading">Resolved?</th>
                     <th class="standard-table__heading">Barrier title</th>
                     <th class="standard-table__heading">Started by</th>
+                    <th class="standard-table__heading">Session Data</th>
                     <th class="standard-table__heading">Action</th>
                 </tr>
             </thead>
@@ -62,6 +63,10 @@
                         {{ report.created_by.name|default:'---' }}
                     </td>
                     <td class="standard-table__cell">
+                        {{ report.new_report_session_data|default:'---' }}
+                    </td>
+                    <td class="standard-table__cell">
+                        <a class="table__link" href="{% url 'reports:report-barrier-drafts' report.id %}">Continue Vanilla</a>
                         <a class="table__link" href="{% url 'reports:draft_barrier_details_uuid' report.id %}">Continue</a>
                         {% if report.created_by.id == current_user.id %}
                             <a class="table__link js-delete-modal" href="{% url 'reports:delete_report' report.id %}">Delete</a>

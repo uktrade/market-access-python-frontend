@@ -1,0 +1,38 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Name{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Barrier Status
+                </h1>
+            </legend>
+            <p class="govuk-body">
+                Please provide status of the barrier
+            </p>
+
+            <div class="govuk-form-group {% if form.confirm.errors %}govuk-form-group--error{% endif %}" id="form-group-{{ form.prefix }}">
+                {% if form.confirm.help_text %}
+                    <div class="govuk-hint">
+                        {{ form.confirm.help_text }}
+                    </div>
+                {% endif %}
+                {% if form.confirm.errors %}
+                    <div>
+                        <a id="{{ form.confirm.prefix }}-{{ form.confirm.name }}_errors"></a>
+                        {% for error in form.confirm.errors %}
+                            <span class="govuk-error-message">
+                                <span class="govuk-visually-hidden">Error:</span> {{ error }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {{ form.confirm }}
+            </div>
+
+        </fieldset>
+    </div>
+{% endblock %}
