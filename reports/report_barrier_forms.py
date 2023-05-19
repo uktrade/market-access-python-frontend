@@ -19,6 +19,17 @@ class BarrierNameForm(APIFormMixin, forms.Form):
     )
 
 
+class BarrierStatusForm(APIFormMixin, forms.Form):
+    confirm = forms.ChoiceField(
+        label="Are these details correct?",
+        choices={
+            ("YES", "Yes"),
+            ("NO", "No"),
+        },
+        widget=forms.RadioSelect,
+    )
+
+
 class BarrierSummaryForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
         label="Describe the barrier",
@@ -30,6 +41,7 @@ class BarrierSummaryForm(APIFormMixin, forms.Form):
         ),
         error_messages={"required": "Enter a description"},
     )
+
 
 class BarrierReviewForm(APIFormMixin, forms.Form):
     confirm = forms.ChoiceField(

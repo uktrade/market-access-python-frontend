@@ -1,7 +1,8 @@
-from django.urls import path, re_path
+from django.urls import path
 
 from barriers.views.report_barrier import ReportBarrierAnswersView
 from reports.location_views import NewReportBarrierLocationMasterView
+from reports.report_barrier_view import ReportBarrierWizardView
 from reports.report_views import (
     NewReportBarrierAboutView,
     NewReportBarrierCategoriesAddView,
@@ -30,37 +31,14 @@ from reports.views import (
     NewReportBarrierLocationRemoveAdminAreasView,
     NewReportStartRedirect,
 )
-from reports.report_barrier_view import (
-    ReportBarrierWizardView,
-    ReportBarrierVanillaWizardView
-)
-
 
 app_name = "reports"
 
 urlpatterns = [
-
-
-    #re_path(
-    #    r"^report-a-barrier/(?P<step>.+)$",
-    #    ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
-    #    name="report-barrier-wizard-step",
-    #),
-    #re_path(
-    #    r"^report-a-barrier/(?P<barrier_id>)/(?P<step>.+)$",
-    #    ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step-existing"),
-    #    name="report-barrier-wizard-step-existing",
-    #),
     # Two routes into form - one provides a barrier_id (if the draft already exists), one where
     # we make a new 'report' object in the DB
-
     path(
         "report-a-barrier/",
-        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
-        name="report-barrier-wizard",
-    ),
-    path(
-        "report-a-barrier/draft/<uuid:barrier_id>/",
         ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
         name="report-barrier-wizard",
     ),
@@ -69,26 +47,11 @@ urlpatterns = [
         ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
         name="report-barrier-wizard-step",
     ),
-
-
-
-
-
     path(
-        "report-a-barrier-vanilla/",
-        ReportBarrierVanillaWizardView.as_view(url_name="reports:report-barrier-vanilla-wizard-step"),
-        name="report-barrier-vanilla-wizard",
+        "report-a-barrier/drafts/<uuid:draft_barrier_id>",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
+        name="report-barrier-drafts",
     ),
-    path(
-        "report-a-barrier-vanilla/<str:step>",
-        ReportBarrierVanillaWizardView.as_view(url_name="reports:report-barrier-vanilla-wizard-step"),
-        name="report-barrier-vanilla-wizard-step",
-    ),
-
-
-
-
-
     path("draft-barriers/", DraftBarriers.as_view(), name="draft_barriers"),
     path("reports/new/", NewReport.as_view(), name="new_report"),
     path(
