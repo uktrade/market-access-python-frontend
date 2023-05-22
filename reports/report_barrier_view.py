@@ -128,12 +128,16 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
             if barrier_id:
                 # get draft barrier
                 barrier_report = client.reports.get(barrier_id)
-
             else:
                 barrier_report = client.reports.create()
 
+            # We should at least have passed the first step and have a barrier title
+
+            barrier_title_form = self.get_cleaned_data_for_step("barrier-name")
+
             client.reports.patch(
                 id=barrier_report.id,
+                **barrier_title_form,
                 new_report_session_data=json.dumps(self.storage.data),
             )
 
