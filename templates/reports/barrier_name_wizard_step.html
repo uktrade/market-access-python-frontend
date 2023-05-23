@@ -15,29 +15,29 @@
                 <div class="{% form_group_classes form.title.errors %}">
                     <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">
                         {{ form.title.label }}
+                        <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
+                            Public
+                        </span>
                     </label>
-                    <strong class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
-                        public
-                    </strong>
+                    {% form_field_error form "title" %}
+                    <span id="{{ form.title.name }}_hint" class="govuk-hint">
+                        {{ form.title.help_text }}
+                    </span>
+                    <input class="govuk-input" id="{{ form.title.name }}"
+                           name="{{ form.title.name }}"
+                           type="text"
+                           value="{{ form.title.value }}"
+                           aria-describedby="{{ form.title.name }}_hint">
                 </div>
-                {% form_field_error form "title" %}
-                <span id="{{ form.title.name }}_hint" class="govuk-hint">
-                    {{ form.title.help_text }}
-                </span>
-                <input class="govuk-input" id="{{ form.title.name }}"
-                       name="{{ form.title.name }}"
-                       type="text"
-                       value="{{ form.title.value }}"
-                       aria-describedby="{{ form.title.name }}_hint">
             </div>
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
                 <div class="{% form_group_classes form.summary.errors %}">
                     <label class="govuk-label govuk-label--s" for="{{form.summary.name}}">
                         {{ form.summary.label }}
+                        <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
+                            Public
+                        </span>
                     </label>
-                    <strong class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
-                        public
-                    </strong>
                     {% form_field_error form "summary" %}
                     <span id="description-hint" class="govuk-hint">
                         {{ form.summary.help_text }}
