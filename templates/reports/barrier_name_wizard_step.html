@@ -1,4 +1,5 @@
 {% extends "reports/barrier_wizard_step.html" %}
+{% load report_urls %}
 
 {% block page_title %} Report A Barrier - Wizard Framework - Barrier Name{% endblock %}
 
@@ -7,32 +8,93 @@
         <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
-                    Barrier Name
+                    About the barrier
                 </h1>
             </legend>
-            <p class="govuk-body">
-                Please provide a name for the barrier.
-            </p>
-
-            <div class="govuk-form-group {% if form.title.errors %}govuk-form-group--error{% endif %}" id="form-group-{{ form.prefix }}">
-                {% if form.title.help_text %}
-                    <div class="govuk-hint">
+            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
+                <div class="{% form_group_classes form.title.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">
+                        {{ form.title.label }}
+                        <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
+                            Public
+                        </span>
+                    </label>
+                    {% form_field_error form "title" %}
+                    <span id="{{ form.title.name }}_hint" class="govuk-hint">
                         {{ form.title.help_text }}
-                    </div>
-                {% endif %}
-                {% if form.title.errors %}
-                    <div>
-                        <a id="{{ form.title.prefix }}-{{ form.title.name }}_errors"></a>
-                        {% for error in form.title.errors %}
-                            <span class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span> {{ error }}
-                            </span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {{ form.title }}
+                    </span>
+                    <input class="govuk-input" id="{{ form.title.name }}"
+                           name="{{ form.title.name }}"
+                           type="text"
+                           value="{{ form.title.value }}"
+                           aria-describedby="{{ form.title.name }}_hint">
+                </div>
             </div>
-
+            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
+                <div class="{% form_group_classes form.summary.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{form.summary.name}}">
+                        {{ form.summary.label }}
+                        <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
+                            Public
+                        </span>
+                    </label>
+                    {% form_field_error form "summary" %}
+                    <span id="description-hint" class="govuk-hint">
+                        {{ form.summary.help_text }}
+                    </span>
+                    <textarea class="govuk-textarea js-character-count" id="description"
+                              name="{{ form.summary.name }}"
+                              rows="5"
+                              aria-describedby="description-hint description-info">{{ form.summary.value }}</textarea>
+                </div>
+            </div>
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div id="{{form.is_not_published_to_public.name}}" class="govuk-hint">
+                </div>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="{{form.is_not_published_to_public.value}}" name="{{form.is_not_published_to_public.name}}" type="checkbox" value="{{form.is_not_published_to_public.value}}">
+                    <label class="govuk-label govuk-checkboxes__label" for="{{form.is_not_published_to_public.name}}">
+                        {{ form.is_not_published_to_public.label }}
+                    </label>
+                </div>
+            </div>
+            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
+                <div class="{% form_group_classes form.description.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{form.description.name}}">
+                        {{ form.description.label }}
+                    </label>
+                    {% form_field_error form "summary" %}
+                    <span id="description-hint" class="govuk-hint">
+                        {{ form.description.help_text }}
+                    </span>
+                    <textarea class="govuk-textarea js-character-count" id="{{form.description.name}}"
+                              name="{{ form.description.name }}"
+                              rows="5"
+                              aria-describedby="description-hint description-info">{{ form.description.value }}</textarea>
+                </div>
+            </div>
         </fieldset>
     </div>
+{% endblock %}
+
+{% block body_end %}
+    {{block.super}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var radios = document.querySelectorAll('input[name="{{form.is_not_published_to_public.name}}"]');
+            // Set the value to 'true' (Yes)
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    console.log(radio.checked)
+                    if (radio.checked) {
+                        radio.value = 'yes'
+                        console.log("Set value to " + radio.checked)
+                    } else {
+                        radio.value = 'no'
+                        console.log("Set value to " + radio.checked)
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

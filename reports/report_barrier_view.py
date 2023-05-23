@@ -9,6 +9,7 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 
 from reports.report_barrier_forms import (
     BarrierNameForm,
+    BarrierAboutForm,
     BarrierReviewForm,
     BarrierStatusForm,
     BarrierSummaryForm,
@@ -41,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
     form_list = [
-        ("barrier-name", BarrierNameForm),
+        ("barrier-name", BarrierAboutForm),
         ("barrier-status", BarrierStatusForm),
         ("barrier-summary", BarrierSummaryForm),
         ("barrier-review", BarrierReviewForm),
