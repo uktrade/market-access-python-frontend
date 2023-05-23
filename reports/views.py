@@ -201,7 +201,7 @@ class NewReport(ReportsTemplateView):
         ),
         text="You can save your information and come back later to complete.",
         button=CalloutButton(
-            href=reverse_lazy("reports:barrier_start"),
+            href=reverse_lazy("reports:report-barrier-wizard"),
             text="Start now",
             button_type="start",
         ),
