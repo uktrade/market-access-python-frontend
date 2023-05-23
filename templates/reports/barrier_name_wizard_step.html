@@ -76,3 +76,25 @@
         </fieldset>
     </div>
 {% endblock %}
+
+{% block body_end %}
+    {{block.super}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var radios = document.querySelectorAll('input[name="{{form.is_not_published_to_public.name}}"]');
+            // Set the value to 'true' (Yes)
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    console.log(radio.checked)
+                    if (radio.checked) {
+                        radio.value = 'yes'
+                        console.log("Set value to " + radio.checked)
+                    } else {
+                        radio.value = 'no'
+                        console.log("Set value to " + radio.checked)
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

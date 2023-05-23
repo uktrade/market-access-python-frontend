@@ -29,7 +29,7 @@ class BarrierNameForm(APIFormMixin, forms.Form):
             ("yes", "Yes"),
             ("no", "No"),
         ),
-        initial="yes",
+        initial="no",
     )
 
 
@@ -41,7 +41,7 @@ class BarrierSummaryForm(APIFormMixin, forms.Form):
         Describe the barrier in a way that is suitable for the public to read on GOV.UK. The summary will only be published once it has been reviewed internally.
         """
         ),
-        error_messages={"required": "Enter a brief description for this barrier"},
+        error_messages={"required": "Enter a public barrier summary"},
         initial="",
     )
     description = forms.CharField(
@@ -52,6 +52,7 @@ class BarrierSummaryForm(APIFormMixin, forms.Form):
         This description will only be used internally. Explain how the barrier is affecting trade, and why it exists. Where relevant include the specific laws or measures blocking trade, and any political context.
         """
         ),
+        error_messages={"required": "Enter a barrier description"},
         initial="",
     )
 
