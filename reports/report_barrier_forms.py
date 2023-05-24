@@ -1,7 +1,7 @@
 from django import forms
 
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import MultipleChoiceFieldWithHelpText, YesNoBooleanField
+from utils.forms import MultipleChoiceFieldWithHelpText, YesNoBooleanField, MonthYearField
 
 from reports.forms.new_report_barrier_about import BarrierSource
 
@@ -62,22 +62,103 @@ class BarrierAboutForm(BarrierNameForm, BarrierSummaryForm):
 
 
 class BarrierStatusForm(APIFormMixin, forms.Form):
-    confirm = forms.ChoiceField(
-        label="Are these details correct?",
+    barrier_status = forms.ChoiceField(
+        label="Choose barrier status",
+        choices={
+            ("OPEN", "Open"),
+            ("RESOLVED_IN_PART", "Resolved: In part"),
+            ("RESOLVED_IN_FULL", "Resolved: In full")
+        },
+        widget=forms.RadioSelect,
+    )
+    start_date = MonthYearField(
+        label="When did or will the barrier start to affect trade?",
+        help_text="If you aren't sure of the date, give an estimate"
+    )
+    currently_active = forms.ChoiceField(
+        label="Is this barrier currently affecting trade?",
         choices={
             ("YES", "Yes"),
-            ("NO", "No"),
+            ("NO", "No, not yet"),
         },
         widget=forms.RadioSelect,
     )
 
 
-class BarrierReviewForm(APIFormMixin, forms.Form):
-    confirm = forms.ChoiceField(
-        label="Are these details correct?",
+class BarrierLocationForm(APIFormMixin, forms.Form):
+    # TODO get the existing location search stuff into this page
+    location = forms.CharField(
+        label="Which location does the barrier relate to?",
+        help_text=(
+            "Select a trading bloc if the barrier applies to the whole "
+            "trading bloc. Select a country if the barrier is a trading "
+            "bloc regulation that only applies to that country."
+        ),
+    )
+
+
+class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
+    trade_direction = forms.ChoiceField(
+        label="Which trade direction does this barrier affect?",
         choices={
-            ("YES", "Yes"),
-            ("NO", "No"),
+            ("EXPORTING", "Exporting from th UK or investing overseas"),
+            ("IMPORTING", "Importing or investing into the UK"),
         },
         widget=forms.RadioSelect,
+    )
+
+
+class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
+    # TODO get the existing sectors selectors stuff into this page
+    main_sectors_affected = forms.CharField(
+        label="Main sector affected",
+        help_text=(
+            "Add the sector you think the barrier affects the most"
+        ),
+    )
+    other_sectors_affected = forms.CharField(
+        label="Other sectors (optional)",
+        help_text=(
+            "Add all the other sectors affected by the barrier"
+        ),
+    )
+
+
+class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
+    # TODO get the existing companies search stuff into this page
+    companies_affected = forms.CharField(
+        label="Name of company affected by the barrier",
+        help_text=(
+            "You can search by name, address or company number"
+        ),
+    )
+
+
+class BarrierExportTypeForm(APIFormMixin, forms.Form):
+    export_type = forms.MultipleChoiceField(
+        label="Which types of exports does the barrier affect?",
+        help_text="Select all that apply",
+        choices=(
+            ("GOODS", "Goods"),
+            ("SERIVCES", "Services"),
+            ("INVESTMENTS", "Investments"),
+        ),
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
+        error_messages={
+            "required": "You must select one or more affected exports.",
+        },
+    )
+    export_description = forms.CharField(
+        label="Which goods, services or investments does the barrier affect?",
+        help_text=(
+            "Enter all goods, services or investments affected. "
+            "Be as specific as you can."
+        ),
+    )
+    # TODO - Somehow get the existing HS code component into this page.
+    hs_code_input = forms.CharField(
+        label="put the hs code search component here",
+        help_text=(
+            "tricky stuff!"
+        ),
     )

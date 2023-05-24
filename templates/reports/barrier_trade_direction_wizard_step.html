@@ -1,0 +1,18 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Name{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Trade direction affected
+                </h1>
+            </legend>
+            {{ form.trade_direction }}
+            </div>
+
+        </fieldset>
+    </div>
+{% endblock %}
