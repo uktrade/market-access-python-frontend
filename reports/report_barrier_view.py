@@ -8,11 +8,13 @@ from formtools.preview import FormPreview
 from formtools.wizard.views import NamedUrlSessionWizardView
 
 from reports.report_barrier_forms import (
-    BarrierNameForm,
     BarrierAboutForm,
-    BarrierReviewForm,
     BarrierStatusForm,
-    BarrierSummaryForm,
+    BarrierLocationForm,
+    BarrierTradeDirectionForm,
+    BarrierSectorsAffectedForm,
+    BarrierCompaniesAffectedForm,
+    BarrierExportTypeForm,
 )
 from utils.api.client import MarketAccessAPIClient
 
@@ -44,8 +46,11 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
     form_list = [
         ("barrier-name", BarrierAboutForm),
         ("barrier-status", BarrierStatusForm),
-        ("barrier-summary", BarrierSummaryForm),
-        ("barrier-review", BarrierReviewForm),
+        ("barrier-location", BarrierLocationForm),
+        ("barrier-trade-direction", BarrierTradeDirectionForm),
+        ("barrier-sectors-affected", BarrierSectorsAffectedForm),
+        ("barrier-companies-affected", BarrierCompaniesAffectedForm),
+        ("barrier-export-type", BarrierExportTypeForm),
     ]
 
     def get_template_names(self):
