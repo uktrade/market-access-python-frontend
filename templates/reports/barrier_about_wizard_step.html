@@ -11,7 +11,9 @@
                     About the barrier
                 </h1>
             </legend>
-            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
+
+            <!-- Barrier Title Question -->
+            <div class="govuk-character-count" data-module="character-count" data-maxlength="150">
                 <div class="{% form_group_classes form.barrier_title.errors %}">
                     <label class="govuk-label govuk-label--s" for="{{ form.barrier_title.name }}">
                         {{ form.barrier_title.label }}
@@ -30,6 +32,8 @@
                            aria-describedby="{{ form.barrier_title.name }}_hint">
                 </div>
             </div>
+
+            <!-- Barrier Summary Question-->
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
                 <div class="{% form_group_classes form.barrier_summary.errors %}">
                     <label class="govuk-label govuk-label--s" for="{{form.barrier_summary.name}}">
@@ -38,7 +42,7 @@
                             Public
                         </span>
                     </label>
-                    {% form_field_error form "summary" %}
+                    {% form_field_error form "barrier_summary" %}
                     <span id="description-hint" class="govuk-hint">
                         {{ form.barrier_summary.help_text }}
                     </span>
@@ -48,22 +52,50 @@
                               aria-describedby="description-hint description-info">{{ form.barrier_summary.value }}</textarea>
                 </div>
             </div>
+
+            <!-- Not For Public Question-->
             <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                <div id="{{form.is_not_published_to_public.name}}" class="govuk-hint">
-                </div>
                 <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="{{form.is_not_published_to_public.value}}" name="{{form.is_not_published_to_public.name}}" type="checkbox" value="{{form.is_not_published_to_public.value}}">
-                    <label class="govuk-label govuk-checkboxes__label" for="{{form.is_not_published_to_public.name}}">
-                        {{ form.is_not_published_to_public.label }}
-                    </label>
+                  <input class="govuk-checkboxes__input" id="{{ form.is_not_published_to_public.name }}" name="{{ form.is_not_published_to_public.name }}" type="checkbox" value="{{form.is_not_published_to_public.value}}" data-aria-controls="conditional-{{ form.is_not_published_to_public.name }}">
+                  <label class="govuk-label govuk-checkboxes__label" for="{{ form.is_not_published_to_public.name }}">
+                    {{ form.is_not_published_to_public.label }}
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-{{ form.is_not_published_to_public.name }}">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="{{ form.is_not_published_reason.name }}">
+                            {{ form.is_not_published_reason.label }}
+                        </label>
+
+                        <!-- Not For Public Reason Conditional Question-->
+                        <div class="govuk-character-count" data-module="character-count" data-maxlength="150">
+                            <div class="{% form_group_classes form.form.is_not_published_reason.errors %}">
+                                <label class="govuk-label govuk-label--s" for="{{ form.form.is_not_published_reason.name }}">
+                                    {{ form.form.is_not_published_reason.label }}
+                                </label>
+                                {% form_field_error form "form.is_not_published_reason" %}
+                                <span id="{{ form.form.is_not_published_reason.name }}_hint" class="govuk-hint">
+                                    {{ form.form.is_not_published_reason.help_text }}
+                                </span>
+                                <input class="govuk-input" id="{{ form.form.is_not_published_reason.name }}"
+                                       name="{{ form.form.is_not_published_reason.name }}"
+                                       type="text"
+                                       value="{{ form.form.is_not_published_reason.value }}"
+                                       aria-describedby="{{ form.form.is_not_published_reason.name }}_hint">
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+
+            <!-- Barrier Description Question -->
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
                 <div class="{% form_group_classes form.barrier_description.errors %}">
                     <label class="govuk-label govuk-label--s" for="{{form.barrier_description.name}}">
                         {{ form.barrier_description.label }}
                     </label>
-                    {% form_field_error form "summary" %}
+                    {% form_field_error form "barrier_description" %}
                     <span id="description-hint" class="govuk-hint">
                         {{ form.barrier_description.help_text }}
                     </span>
@@ -75,26 +107,5 @@
             </div>
         </fieldset>
     </div>
-{% endblock %}
 
-{% block body_end %}
-    {{block.super}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var radios = document.querySelectorAll('input[name="{{form.is_not_published_to_public.name}}"]');
-            // Set the value to 'true' (Yes)
-            radios.forEach(function(radio) {
-                radio.addEventListener('change', function() {
-                    console.log(radio.checked)
-                    if (radio.checked) {
-                        radio.value = 'yes'
-                        console.log("Set value to " + radio.checked)
-                    } else {
-                        radio.value = 'no'
-                        console.log("Set value to " + radio.checked)
-                    }
-                });
-            });
-        });
-    </script>
 {% endblock %}
