@@ -1,7 +1,7 @@
 {% extends "reports/barrier_wizard_step.html" %}
 {% load report_urls %}
 
-{% block page_title %} Report A Barrier - Wizard Framework - Barrier Name{% endblock %}
+{% block page_title %} Report A Barrier - Wizard Framework - About the Barrier{% endblock %}
 
 {% block fields %}
     <div class="govuk-form-group">
@@ -12,40 +12,40 @@
                 </h1>
             </legend>
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
-                <div class="{% form_group_classes form.title.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{ form.title.name }}">
-                        {{ form.title.label }}
+                <div class="{% form_group_classes form.barrier_title.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{ form.barrier_title.name }}">
+                        {{ form.barrier_title.label }}
                         <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
                             Public
                         </span>
                     </label>
-                    {% form_field_error form "title" %}
-                    <span id="{{ form.title.name }}_hint" class="govuk-hint">
-                        {{ form.title.help_text }}
+                    {% form_field_error form "barrier_title" %}
+                    <span id="{{ form.barrier_title.name }}_hint" class="govuk-hint">
+                        {{ form.barrier_title.help_text }}
                     </span>
-                    <input class="govuk-input" id="{{ form.title.name }}"
-                           name="{{ form.title.name }}"
+                    <input class="govuk-input" id="{{ form.barrier_title.name }}"
+                           name="{{ form.barrier_title.name }}"
                            type="text"
-                           value="{{ form.title.value }}"
-                           aria-describedby="{{ form.title.name }}_hint">
+                           value="{{ form.barrier_title.value }}"
+                           aria-describedby="{{ form.barrier_title.name }}_hint">
                 </div>
             </div>
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
-                <div class="{% form_group_classes form.summary.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{form.summary.name}}">
-                        {{ form.summary.label }}
+                <div class="{% form_group_classes form.barrier_summary.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{form.barrier_summary.name}}">
+                        {{ form.barrier_summary.label }}
                         <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
                             Public
                         </span>
                     </label>
                     {% form_field_error form "summary" %}
                     <span id="description-hint" class="govuk-hint">
-                        {{ form.summary.help_text }}
+                        {{ form.barrier_summary.help_text }}
                     </span>
                     <textarea class="govuk-textarea js-character-count" id="description"
-                              name="{{ form.summary.name }}"
+                              name="{{ form.barrier_summary.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.summary.value }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.barrier_summary.value }}</textarea>
                 </div>
             </div>
             <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -59,18 +59,18 @@
                 </div>
             </div>
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
-                <div class="{% form_group_classes form.description.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{form.description.name}}">
-                        {{ form.description.label }}
+                <div class="{% form_group_classes form.barrier_description.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{form.barrier_description.name}}">
+                        {{ form.barrier_description.label }}
                     </label>
                     {% form_field_error form "summary" %}
                     <span id="description-hint" class="govuk-hint">
-                        {{ form.description.help_text }}
+                        {{ form.barrier_description.help_text }}
                     </span>
-                    <textarea class="govuk-textarea js-character-count" id="{{form.description.name}}"
-                              name="{{ form.description.name }}"
+                    <textarea class="govuk-textarea js-character-count" id="{{form.barrier_description.name}}"
+                              name="{{ form.barrier_description.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.description.value }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.barrier_description.value }}</textarea>
                 </div>
             </div>
         </fieldset>

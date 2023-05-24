@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 
 class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
     form_list = [
-        ("barrier-name", BarrierAboutForm),
+        ("barrier-about", BarrierAboutForm),
         ("barrier-status", BarrierStatusForm),
         ("barrier-location", BarrierLocationForm),
         ("barrier-trade-direction", BarrierTradeDirectionForm),
