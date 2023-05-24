@@ -6,13 +6,15 @@ from utils.forms import MultipleChoiceFieldWithHelpText, YesNoBooleanField, Mont
 from reports.forms.new_report_barrier_about import BarrierSource
 
 
-class BarrierNameForm(APIFormMixin, forms.Form):
-    BS = BarrierSource()
-    title = forms.CharField(
+class BarrierAboutForm(APIFormMixin, forms.Form):
+    barrier_title = forms.CharField(
         label="Barrier title",
         help_text=(
             """
-            The title should be suitable for the public to read on GOV.UK. It will only be published once it has been reviewed internally. Include the product, service or investment and the type of problem. For example, Import quotas for steel rods.
+            The title should be suitable for the public to read on GOV.UK.
+            It will only be published once it has been reviewed internally. 
+            Include the product, service or investment and the type of problem. 
+            For example, Import quotas for steel rods.
             """
         ),
         max_length=255,
@@ -20,31 +22,39 @@ class BarrierNameForm(APIFormMixin, forms.Form):
             "max_length": "Name should be %(limit_value)d characters or less",
             "required": "Enter a barrier title",
         },
-        initial="",
+    )
+    barrier_summary = forms.CharField(
+        label="Public barrier summary",
+        help_text=(
+            """
+            Describe the barrier in a way that is suitable for the public to read
+            on GOV.UK. The summary will only be published once it has been 
+            reviewed internally.
+            """
+        ),
+        error_messages={"required": "Enter a public barrier summary"},
     )
     is_not_published_to_public = forms.ChoiceField(
         label="This barrier should not be published on GOV.UK",
         widget=forms.RadioSelect,
         choices=(
-            ("yes", "Yes"),
-            ("no", "No"),
+            ("YES", "Yes"),
+            ("NO", "No"),
         ),
-        initial="no",
     )
-
-
-class BarrierSummaryForm(APIFormMixin, forms.Form):
-    summary = forms.CharField(
-        label="Public barrier summary",
+    # This field needs to be conditionally required - error if empty and
+    # 'is_not_published_to_public' is ticked
+    is_not_published_reason = forms.CharField(
+        label="Explain why the barrier should not be published on GOV.UK",
         help_text=(
             """
-        Describe the barrier in a way that is suitable for the public to read on GOV.UK. The summary will only be published once it has been reviewed internally.
-        """
+            Describe the barrier in a way that is suitable for the public to read
+            on GOV.UK. The summary will only be published once it has been 
+            reviewed internally.
+            """
         ),
-        error_messages={"required": "Enter a public barrier summary"},
-        initial="",
     )
-    description = forms.CharField(
+    barrier_description = forms.CharField(
         label="Barrier description",
         widget=forms.Textarea,
         help_text=(
@@ -55,10 +65,6 @@ class BarrierSummaryForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter a barrier description"},
         initial="",
     )
-
-
-class BarrierAboutForm(BarrierNameForm, BarrierSummaryForm):
-    ...
 
 
 class BarrierStatusForm(APIFormMixin, forms.Form):
