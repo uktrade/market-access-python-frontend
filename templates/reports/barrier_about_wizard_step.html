@@ -1,7 +1,7 @@
 {% extends "reports/barrier_wizard_step.html" %}
 {% load report_urls %}
 
-{% block page_title %} Report A Barrier - Wizard Framework - About the Barrier{% endblock %}
+{% block page_title %} Report A Barrier - About the Barrier{% endblock %}
 
 {% block fields %}
     <div class="govuk-form-group">
@@ -23,11 +23,12 @@
                     <span id="{{ form.barrier_title.name }}_hint" class="govuk-hint">
                         {{ form.barrier_title.help_text }}
                     </span>
-                    <input class="govuk-input" id="{{ form.barrier_title.name }}"
+                    {{ form.barrier_title }}
+                    <!-- <input class="govuk-input" id="{{ form.barrier_title.name }}"
                            name="{{ form.barrier_title.name }}"
                            type="text"
                            value="{{ form.barrier_title.value }}"
-                           aria-describedby="{{ form.barrier_title.name }}_hint">
+                           aria-describedby="{{ form.barrier_title.name }}_hint"> -->
                 </div>
             </div>
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
@@ -42,17 +43,19 @@
                     <span id="description-hint" class="govuk-hint">
                         {{ form.barrier_summary.help_text }}
                     </span>
-                    <textarea class="govuk-textarea js-character-count" id="description"
+                    {{ form.barrier_summary }}
+                    <!-- <textarea class="govuk-textarea js-character-count" id="description"
                               name="{{ form.barrier_summary.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.barrier_summary.value }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.barrier_summary.value }}</textarea> -->
                 </div>
             </div>
             <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                 <div id="{{form.is_not_published_to_public.name}}" class="govuk-hint">
                 </div>
                 <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="{{form.is_not_published_to_public.value}}" name="{{form.is_not_published_to_public.name}}" type="checkbox" value="{{form.is_not_published_to_public.value}}">
+                    <!-- <input class="govuk-checkboxes__input" id="{{form.is_not_published_to_public.value}}" name="{{form.is_not_published_to_public.name}}" type="checkbox" value="{{form.is_not_published_to_public.value}}"> -->
+                    {{ form.is_not_published_to_public}}
                     <label class="govuk-label govuk-checkboxes__label" for="{{form.is_not_published_to_public.name}}">
                         {{ form.is_not_published_to_public.label }}
                     </label>
@@ -67,34 +70,13 @@
                     <span id="description-hint" class="govuk-hint">
                         {{ form.barrier_description.help_text }}
                     </span>
-                    <textarea class="govuk-textarea js-character-count" id="{{form.barrier_description.name}}"
+                    {{form.barrier_description }}
+                    <!-- <textarea class="govuk-textarea js-character-count" id="{{form.barrier_description.name}}"
                               name="{{ form.barrier_description.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.barrier_description.value }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.barrier_description.value }}</textarea> -->
                 </div>
             </div>
         </fieldset>
     </div>
-{% endblock %}
-
-{% block body_end %}
-    {{block.super}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var radios = document.querySelectorAll('input[name="{{form.is_not_published_to_public.name}}"]');
-            // Set the value to 'true' (Yes)
-            radios.forEach(function(radio) {
-                radio.addEventListener('change', function() {
-                    console.log(radio.checked)
-                    if (radio.checked) {
-                        radio.value = 'yes'
-                        console.log("Set value to " + radio.checked)
-                    } else {
-                        radio.value = 'no'
-                        console.log("Set value to " + radio.checked)
-                    }
-                });
-            });
-        });
-    </script>
 {% endblock %}
