@@ -17,6 +17,9 @@
                 {% block current_step %}
                     <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
                 {% endblock %}
+
+                {% form_error_banner form %}
+
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
                         {% block fields %}
