@@ -1,7 +1,7 @@
 from django import forms
 
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import MultipleChoiceFieldWithHelpText, YesNoBooleanField, MonthYearField
+from utils.forms import MonthYearField
 
 from reports.forms.new_report_barrier_about import BarrierSource
 
