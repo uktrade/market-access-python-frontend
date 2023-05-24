@@ -1,0 +1,132 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Name{% endblock %}
+
+
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Goods, services or investments affected
+                </h1>
+            </legend>
+
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes" id="export_type">
+                <p class="govuk-body">{{ form.export_type.label}}</p>
+                {% for type in form.export_type %}
+                    <div class="govuk-checkboxes__item">
+                        {% if type.value is "GOODS" %}
+                            <!-- The 'Goods' option needs to control the conditional HS code input area below.-->
+                            <input class="govuk-checkboxes__input" 
+                                id="id_barrier-export-type-export_type_0" 
+                                name="barrier-export-type-export_type" 
+                                type="checkbox" 
+                                value={{type.value}} 
+                                data-aria-controls="conditional-id_barrier-export-type-export_type_0">
+                        {% else %}
+                            {{ type.tag }}
+                        {% endif %}
+                        <label class="govuk-label govuk-checkboxes__label" for="{{ type.id_for_label }}">
+                            {{ type.choice_label }}
+                        </label>
+                  </div>
+                {% endfor %}
+            </div>
+            <div class="govuk-form-group" id="export_description">
+                <p class="govuk-body">{{ form.export_description.label}}</p>
+                <div class="govuk-hint">
+                    {{ form.export_description.help_text }}
+                </div>
+                {{ form.export_description }}
+            </div>
+
+            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-id_barrier-export-type-export_type_0">
+                <div class="govuk-form-group" id="hs_code_input">
+                    <p class="govuk-body">{{ form.hs_code_input.label}}</p>
+                    <div class="govuk-hint">
+                        {{ form.hs_code_input.help_text }}
+                    </div>
+                    {{ form.hs_code_input }}
+                </div>
+            </div>
+        </fieldset>
+
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                  How would you like to be contacted?
+                </h1>
+              </legend>
+              <div id="contact-hint" class="govuk-hint">
+                Select all options that are relevant to you.
+              </div>
+              <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="contact" name="contact" type="checkbox" value="email" data-aria-controls="conditional-contact">
+                  <label class="govuk-label govuk-checkboxes__label" for="contact">
+                    Email
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-contact">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="contact-by-email">
+                      Email address
+                    </label>
+                    <input class="govuk-input govuk-!-width-one-third" id="contact-by-email" name="contact-by-email" type="email" spellcheck="false" autocomplete="email">
+                  </div>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="contact-2" name="contact" type="checkbox" value="phone" data-aria-controls="conditional-contact-2">
+                  <label class="govuk-label govuk-checkboxes__label" for="contact-2">
+                    Phone
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-contact-2">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="contact-by-phone">
+                      Phone number
+                    </label>
+                    <input class="govuk-input govuk-!-width-one-third" id="contact-by-phone" name="contact-by-phone" type="tel" autocomplete="tel">
+                  </div>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="contact-3" name="contact" type="checkbox" value="text message" data-aria-controls="conditional-contact-3">
+                  <label class="govuk-label govuk-checkboxes__label" for="contact-3">
+                    Text message
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-contact-3">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="contact-by-text">
+                      Mobile phone number
+                    </label>
+                    <input class="govuk-input govuk-!-width-one-third" id="contact-by-text" name="contact-by-text" type="tel" autocomplete="tel">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+
+
+    </div>
+{% endblock %}

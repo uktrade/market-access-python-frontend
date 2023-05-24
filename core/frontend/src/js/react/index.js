@@ -12,6 +12,7 @@ import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
+import GDSCheckboxes from "./gds/Checkboxes";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -173,4 +174,5 @@ export {
     renderAsyncSearchResults,
     GDSTabs,
     GDSRadios,
+    GDSCheckboxes,
 };
