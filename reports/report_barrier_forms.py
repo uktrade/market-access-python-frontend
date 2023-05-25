@@ -1,11 +1,9 @@
 from django import forms
 
 from barriers.forms.mixins import APIFormMixin
-
-from utils.forms import MonthYearField
-
-import logging
-logger = logging.getLogger(__name__)
+from utils.forms import (  # MultipleChoiceFieldWithHelpText,; YesNoBooleanField,
+    MonthYearField,
+)
 
 
 class BarrierAboutForm(APIFormMixin, forms.Form):
@@ -24,7 +22,12 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             "max_length": "Name should be %(limit_value)d characters or less",
             "required": "Enter a barrier title",
         },
-        initial="",
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-input",
+                "rows": 10,
+            },
+        ),
     )
     barrier_summary = forms.CharField(
         label="Public barrier summary",
@@ -36,7 +39,6 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             """
         ),
         error_messages={"required": "Enter a public barrier summary"},
-        initial="",
     )
     is_not_published_to_public = forms.ChoiceField(
         label="This barrier should not be published on GOV.UK",
@@ -57,22 +59,33 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             reviewed internally.
             """
         ),
-        initial="",
         error_messages={"required": "Enter why this barrier should not be public"},
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
         required=False,
     )
     barrier_description = forms.CharField(
         label="Barrier description",
-        widget=forms.Textarea,
         help_text=(
             """
-            This description will only be used internally. 
-            Explain how the barrier is affecting trade, and why it exists. 
-            Where relevant include the specific laws or measures blocking 
-            trade, and any political context.
-            """
+        This description will only be used internally.
+        Explain how the barrier is affecting trade,
+        and why it exists. Where relevant include the specific laws
+        or measures blocking trade,
+        and any political context.
+        """
         ),
         error_messages={"required": "Enter a barrier description"},
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
         initial="",
     )
 

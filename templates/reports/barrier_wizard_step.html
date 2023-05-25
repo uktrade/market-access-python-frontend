@@ -15,16 +15,15 @@
 
 {% block page_content %}
 <div class="govuk-width-container">
-    <form method="post" novalidate>
-        {% block back_button %}
-            <a class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
-        {% endblock %}
-        <main id="main-content" class="govuk-main-wrapper">
+        <form method="post" novalidate>
+                {% block back_button %}
+                    <a class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
+                {% endblock %}
             <div>
                 {% csrf_token %}
                 {{ wizard.management_form }}
                 {% block current_step %}
-                    <span class="govuk-caption-l">Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
+                    <span class="govuk-caption-l">Section {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
                 {% endblock %}
 
                 {% form_error_banner form %}
@@ -40,13 +39,11 @@
                         <button class="govuk-button">
                             Continue
                         </button>
-                        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">First Step</button>
-                        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Previous Step</button>
-                        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.done }}">Save and Exit</button>
+                        <a class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' 'step=skip' %}">Save and exit </a>
                     {% endblock %}
                 </div>
             </div>
-        </main>
-    </form>
+        </form>
+
 </div>
 {% endblock %}
