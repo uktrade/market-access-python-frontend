@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% load render_bundle from webpack_loader %}
-{% render_bundle 'main' 'js' 'REACT' %}
+
+{% block body_script %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <!-- Import GDS Javascript components -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSCheckboxes();
+        })
+    </script>
+{% endblock %}
 
 {% block page_title %}{{ block.super }} Report A Barrier - Wizard Framework {{ heading.text }}{% endblock %}
 
