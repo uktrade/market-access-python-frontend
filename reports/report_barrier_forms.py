@@ -1,9 +1,17 @@
 from django import forms
 
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import (  # MultipleChoiceFieldWithHelpText,; YesNoBooleanField,
-    MonthYearField,
+from barriers.forms.statuses import(
+    ResolvedInPartForm,
+    ResolvedInFullForm,
 )
+from utils.forms import (
+    SubformChoiceField,
+    MonthYearField,
+    SubformMixin,
+)
+from barriers.forms.statuses import BarrierChangeStatusForm
+from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT
 
 
 class BarrierAboutForm(APIFormMixin, forms.Form):
@@ -71,7 +79,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
     barrier_description = forms.CharField(
         label="Barrier description",
         help_text=(
-            """
+        """
         This description will only be used internally.
         Explain how the barrier is affecting trade,
         and why it exists. Where relevant include the specific laws
@@ -97,24 +105,44 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
 class BarrierStatusForm(APIFormMixin, forms.Form):
     barrier_status = forms.ChoiceField(
         label="Choose barrier status",
-        choices={
-            ("OPEN", "Open"),
-            ("RESOLVED_IN_PART", "Resolved: In part"),
-            ("RESOLVED_IN_FULL", "Resolved: In full"),
-        },
+        choices=REPORTABLE_STATUSES,
+        help_text=REPORTABLE_STATUSES_HELP_TEXT,
         widget=forms.RadioSelect,
+    )
+    # will need bespoke error catching in the clean method for these resolved fields
+    partially_resolved_date = MonthYearField(
+        label="Date the barrier was partially resolved",
+        required=False,
+    )
+    partially_resolved_description = forms.CharField(
+        label="Describe briefly how this barrier was partially resolved",
+        widget=forms.Textarea,
+        required=False,
+        initial="",
+    )
+    resolved_date = MonthYearField(
+        label="Date the barrier was resolved",
+        required=False,
+    )
+    resolved_description = forms.CharField(
+        label="Describe briefly how this barrier was resolved",
+        widget=forms.Textarea,
+        required=False,
+        initial="",
     )
     start_date = MonthYearField(
         label="When did or will the barrier start to affect trade?",
         help_text="If you aren't sure of the date, give an estimate",
+        error_messages={"required": "Enter a date"},
     )
     currently_active = forms.ChoiceField(
         label="Is this barrier currently affecting trade?",
-        choices={
+        choices=(
             ("YES", "Yes"),
             ("NO", "No, not yet"),
-        },
-        widget=forms.RadioSelect,
+        ),
+        widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+        required=False,
     )
 
 

@@ -26,6 +26,12 @@ STATUSES = Choices(
     ("5", "DORMANT", "Dormant"),
 )
 
+REPORTABLE_STATUSES = Choices(
+    ("2", "OPEN_IN_PROGRESS", "Open"),
+    ("3", "RESOLVED_IN_PART", "Resolved: In part"),
+    ("4", "RESOLVED_IN_FULL", "Resolved: In full"),
+)
+
 
 STATUS_WITH_DATE_FILTER = [
     "open_in_progress",
@@ -49,7 +55,15 @@ STATUSES_HELP_TEXT = Choices(
         "Barrier impact has been significantly reduced but remains in part",
     ),
     (STATUSES.RESOLVED_IN_FULL, "Barrier has been resolved for all UK companies"),
-    (STATUSES.DORMANT, "Barrier is present but not being pursued"),
+)
+
+REPORTABLE_STATUSES_HELP_TEXT = Choices(
+    (REPORTABLE_STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on"),
+    (
+        REPORTABLE_STATUSES.RESOLVED_IN_PART,
+        "Barrier impact has been significantly reduced but remains in part",
+    ),
+    (REPORTABLE_STATUSES.RESOLVED_IN_FULL, "Barrier has been resolved for all UK companies"),
 )
 
 
