@@ -11,18 +11,86 @@
                 </h1>
             </legend>
 
-            {{ form.barrier_status }}
-            {{ form.start_date }}
+            <div class="govuk-radios" data-module="govuk-radios">
+                {% for value, name in form.fields.barrier_status.choices %}
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="{{ name }}" name="{{ name }}" type="radio" {% if value in "3 4" %}data-aria-controls="conditional-{{ value }}"{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="{{ name }}">
+                            {{ name }}
+                        </label>
+                        {% for help_text in form.barrier_status.help_text %}
+                            {% if help_text.0 == value %}
+                                <span id="{{ name }}_hint" class="govuk-hint govuk-radios__hint">
+                                    {{ help_text.1 }}
+                                </span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{value}}">
+                        {% if value == "3" %}                            
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-label--s" for="partially_resolved_date">
+                                    {{ form.partially_resolved_date.label }}
+                                </label>
+                                {{ form.partially_resolved_date }}
+                            </div>
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-label--s" for="partially_resolved_description">
+                                    {{ form.partially_resolved_description.label }}
+                                </label>
+                                {{ form.partially_resolved_description }}
+                            </div>
+                        {% endif %}
+                        {% if value == "4" %}
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-label--s" for="resolved_date">
+                                    {{ form.resolved_date.label }}
+                                </label>
+                                {{ form.resolved_date }}
+                            </div>
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-label--s" for="resolved_description">
+                                    {{ form.resolved_description.label }}
+                                </label>
+                                {{ form.resolved_description }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-label--s" for="start_date">
+                    {{ form.start_date.label }}
+                </label>
+                <span id="{{ name }}_hint" class="govuk-hint">
+                    {{ form.start_date.help_text }}
+                </span>
+                {{ form.start_date }}
+            </div>
             <p>Or</p>
             <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="contact" name="contact" type="checkbox" value="email" data-aria-controls="conditional-contact">
+                  <input class="govuk-checkboxes__input" id="contact" name="contact" type="checkbox" value="email" data-aria-controls="conditional-current-active">
                   <label class="govuk-label govuk-checkboxes__label" for="contact">
                     I don't know
                   </label>
                 </div>
-                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-contact">
-                    {{ form.currently_active }}
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-current-active">
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <label class="govuk-label govuk-label--s" for="start_date">
+                            {{ form.currently_active.label }}
+                        </label>
+                        {% for value, name in form.fields.currently_active.choices %}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="{{ name }}" name="{{ name }}" type="radio">
+                                <label class="govuk-label govuk-radios__label" for="{{ name }}">
+                                    {{ name }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
             
