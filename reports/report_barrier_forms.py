@@ -1,9 +1,11 @@
 from django import forms
 
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import (  # MultipleChoiceFieldWithHelpText,; YesNoBooleanField,
-    MonthYearField,
-)
+
+from utils.forms import MonthYearField
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class BarrierAboutForm(APIFormMixin, forms.Form):
@@ -17,11 +19,12 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             For example, Import quotas for steel rods.
             """
         ),
-        max_length=255,
+        max_length=150,
         error_messages={
             "max_length": "Name should be %(limit_value)d characters or less",
             "required": "Enter a barrier title",
         },
+        initial="",
     )
     barrier_summary = forms.CharField(
         label="Public barrier summary",
@@ -33,6 +36,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             """
         ),
         error_messages={"required": "Enter a public barrier summary"},
+        initial="",
     )
     is_not_published_to_public = forms.ChoiceField(
         label="This barrier should not be published on GOV.UK",
@@ -53,6 +57,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             reviewed internally.
             """
         ),
+        initial="",
         error_messages={"required": "Enter why this barrier should not be public"},
         required=False,
     )
@@ -61,16 +66,19 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         help_text=(
             """
-        This description will only be used internally.
-        Explain how the barrier is affecting trade,
-        and why it exists. Where relevant include the specific laws
-        or measures blocking trade,
-        and any political context.
-        """
+            This description will only be used internally. 
+            Explain how the barrier is affecting trade, and why it exists. 
+            Where relevant include the specific laws or measures blocking 
+            trade, and any political context.
+            """
         ),
         error_messages={"required": "Enter a barrier description"},
         initial="",
     )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
 
 
 class BarrierStatusForm(APIFormMixin, forms.Form):
@@ -102,9 +110,11 @@ class BarrierLocationForm(APIFormMixin, forms.Form):
     location = forms.CharField(
         label="Which location does the barrier relate to?",
         help_text=(
-            "Select a trading bloc if the barrier applies to the whole "
-            "trading bloc. Select a country if the barrier is a trading "
-            "bloc regulation that only applies to that country."
+            """
+            Select a trading bloc if the barrier applies to the whole
+            trading bloc. Select a country if the barrier is a trading
+            bloc regulation that only applies to that country.
+            """
         ),
     )
 
@@ -157,8 +167,10 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
     export_description = forms.CharField(
         label="Which goods, services or investments does the barrier affect?",
         help_text=(
-            "Enter all goods, services or investments affected. "
-            "Be as specific as you can."
+            """
+            Enter all goods, services or investments affected.
+            Be as specific as you can.
+            """
         ),
     )
     # TODO - Somehow get the existing HS code component into this page.
