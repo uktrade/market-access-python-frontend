@@ -1,7 +1,7 @@
 {% extends "reports/barrier_wizard_step.html" %}
 {% load report_urls %}
 
-{% block page_title %} Report A Barrier - Wizard Framework - About the Barrier{% endblock %}
+{% block page_title %} Report A Barrier - About the Barrier{% endblock %}
 
 {% block fields %}
     <div class="govuk-form-group">
@@ -25,11 +25,12 @@
                     <span id="{{ form.barrier_title.name }}_hint" class="govuk-hint">
                         {{ form.barrier_title.help_text }}
                     </span>
-                    <input class="govuk-input" id="{{ form.barrier_title.name }}"
+                    {{ form.barrier_title }}
+                    <!-- <input class="govuk-input" id="{{ form.barrier_title.name }}"
                            name="{{ form.barrier_title.name }}"
                            type="text"
                            value="{{ form.barrier_title.value }}"
-                           aria-describedby="{{ form.barrier_title.name }}_hint">
+                           aria-describedby="{{ form.barrier_title.name }}_hint"> -->
                 </div>
             </div>
 
@@ -46,10 +47,11 @@
                     <span id="description-hint" class="govuk-hint">
                         {{ form.barrier_summary.help_text }}
                     </span>
-                    <textarea class="govuk-textarea js-character-count" id="description"
+                    {{ form.barrier_summary }}
+                    <!-- <textarea class="govuk-textarea js-character-count" id="description"
                               name="{{ form.barrier_summary.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.barrier_summary.value }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.barrier_summary.value }}</textarea> -->
                 </div>
             </div>
 
@@ -100,10 +102,11 @@
                     <span id="description-hint" class="govuk-hint">
                         {{ form.barrier_description.help_text }}
                     </span>
-                    <textarea class="govuk-textarea js-character-count" id="{{form.barrier_description.name}}"
+                    {{form.barrier_description }}
+                    <!-- <textarea class="govuk-textarea js-character-count" id="{{form.barrier_description.name}}"
                               name="{{ form.barrier_description.name }}"
                               rows="5"
-                              aria-describedby="description-hint description-info">{{ form.barrier_description.value }}</textarea>
+                              aria-describedby="description-hint description-info">{{ form.barrier_description.value }}</textarea> -->
                 </div>
             </div>
         </fieldset>

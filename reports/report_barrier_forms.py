@@ -1,9 +1,8 @@
 from django import forms
 
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import MonthYearField
 
-from reports.forms.new_report_barrier_about import BarrierSource
+from utils.forms import MonthYearField
 
 import logging
 logger = logging.getLogger(__name__)
@@ -15,8 +14,8 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         help_text=(
             """
             The title should be suitable for the public to read on GOV.UK.
-            It will only be published once it has been reviewed internally. 
-            Include the product, service or investment and the type of problem. 
+            It will only be published once it has been reviewed internally.
+            Include the product, service or investment and the type of problem.
             For example, Import quotas for steel rods.
             """
         ),
@@ -32,7 +31,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         help_text=(
             """
             Describe the barrier in a way that is suitable for the public to read
-            on GOV.UK. The summary will only be published once it has been 
+            on GOV.UK. The summary will only be published once it has been
             reviewed internally.
             """
         ),
@@ -54,11 +53,13 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         help_text=(
             """
             Describe the barrier in a way that is suitable for the public to read
-            on GOV.UK. The summary will only be published once it has been 
+            on GOV.UK. The summary will only be published once it has been
             reviewed internally.
             """
         ),
         initial="",
+        error_messages={"required": "Enter why this barrier should not be public"},
+        required=False,
     )
     barrier_description = forms.CharField(
         label="Barrier description",
@@ -86,13 +87,13 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         choices={
             ("OPEN", "Open"),
             ("RESOLVED_IN_PART", "Resolved: In part"),
-            ("RESOLVED_IN_FULL", "Resolved: In full")
+            ("RESOLVED_IN_FULL", "Resolved: In full"),
         },
         widget=forms.RadioSelect,
     )
     start_date = MonthYearField(
         label="When did or will the barrier start to affect trade?",
-        help_text="If you aren't sure of the date, give an estimate"
+        help_text="If you aren't sure of the date, give an estimate",
     )
     currently_active = forms.ChoiceField(
         label="Is this barrier currently affecting trade?",
@@ -133,15 +134,11 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
     # TODO get the existing sectors selectors stuff into this page
     main_sectors_affected = forms.CharField(
         label="Main sector affected",
-        help_text=(
-            "Add the sector you think the barrier affects the most"
-        ),
+        help_text=("Add the sector you think the barrier affects the most"),
     )
     other_sectors_affected = forms.CharField(
         label="Other sectors (optional)",
-        help_text=(
-            "Add all the other sectors affected by the barrier"
-        ),
+        help_text=("Add all the other sectors affected by the barrier"),
     )
 
 
@@ -149,9 +146,7 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
     # TODO get the existing companies search stuff into this page
     companies_affected = forms.CharField(
         label="Name of company affected by the barrier",
-        help_text=(
-            "You can search by name, address or company number"
-        ),
+        help_text=("You can search by name, address or company number"),
     )
 
 
@@ -181,7 +176,5 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
     # TODO - Somehow get the existing HS code component into this page.
     hs_code_input = forms.CharField(
         label="put the hs code search component here",
-        help_text=(
-            "tricky stuff!"
-        ),
+        help_text=("tricky stuff!"),
     )
