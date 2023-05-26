@@ -12,90 +12,26 @@
                 </h1>
             </legend>
 
+            {% form_error_banner form %}
+
             <!-- Barrier Title Question -->
             <div class="govuk-character-count" data-module="character-count" data-maxlength="150">
                 <div class="{% form_group_classes form.barrier_title.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{ form.barrier_title.name }}">
+                    <label class="govuk-label govuk-label--s" for="{{ form.barrier_title.id_for_label }}">
                         {{ form.barrier_title.label }}
-                        <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
-                            Public
-                        </span>
                     </label>
                     {% form_field_error form "barrier_title" %}
                     <span id="{{ form.barrier_title.name }}_hint" class="govuk-hint">
                         {{ form.barrier_title.help_text }}
                     </span>
                     {{ form.barrier_title }}
-                    <!-- <input class="govuk-input" id="{{ form.barrier_title.name }}"
-                           name="{{ form.barrier_title.name }}"
-                           type="text"
-                           value="{{ form.barrier_title.value }}"
-                           aria-describedby="{{ form.barrier_title.name }}_hint"> -->
-                </div>
-            </div>
-
-            <!-- Barrier Summary Question-->
-            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
-                <div class="{% form_group_classes form.barrier_summary.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{form.barrier_summary.name}}">
-                        {{ form.barrier_summary.label }}
-                        <span class="govuk-tag govuk-phase-banner__content__tag" style="background-color: #f47738;">
-                            Public
-                        </span>
-                    </label>
-                    {% form_field_error form "barrier_summary" %}
-                    <span id="description-hint" class="govuk-hint">
-                        {{ form.barrier_summary.help_text }}
-                    </span>
-                    {{ form.barrier_summary }}
-                    <!-- <textarea class="govuk-textarea js-character-count" id="description"
-                              name="{{ form.barrier_summary.name }}"
-                              rows="5"
-                              aria-describedby="description-hint description-info">{{ form.barrier_summary.value }}</textarea> -->
-                </div>
-            </div>
-
-            <!-- Not For Public Question-->
-            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="{{ form.is_not_published_to_public.name }}" name="{{ form.is_not_published_to_public.name }}" type="checkbox" value="{{form.is_not_published_to_public.value}}" data-aria-controls="conditional-{{ form.is_not_published_to_public.name }}">
-                  <label class="govuk-label govuk-checkboxes__label" for="{{ form.is_not_published_to_public.name }}">
-                    {{ form.is_not_published_to_public.label }}
-                  </label>
-                </div>
-                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-{{ form.is_not_published_to_public.name }}">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="{{ form.is_not_published_reason.name }}">
-                            {{ form.is_not_published_reason.label }}
-                        </label>
-
-                        <!-- Not For Public Reason Conditional Question-->
-                        <!-- TODO - Move this out into its own section - but gds checkbox might only hide/unhide child sections... -->
-                        <div class="govuk-character-count" data-module="character-count" data-maxlength="150">
-                            <div class="{% form_group_classes form.form.is_not_published_reason.errors %}">
-                                <label class="govuk-label govuk-label--s" for="{{ form.form.is_not_published_reason.name }}">
-                                    {{ form.form.is_not_published_reason.label }}
-                                </label>
-                                {% form_field_error form "form.is_not_published_reason" %}
-                                <span id="{{ form.form.is_not_published_reason.name }}_hint" class="govuk-hint">
-                                    {{ form.form.is_not_published_reason.help_text }}
-                                </span>
-                                <input class="govuk-input" id="{{ form.form.is_not_published_reason.name }}"
-                                       name="{{ form.form.is_not_published_reason.name }}"
-                                       type="text"
-                                       value="{{ form.form.is_not_published_reason.value }}"
-                                       aria-describedby="{{ form.form.is_not_published_reason.name }}_hint">
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
             </div>
 
             <!-- Barrier Description Question -->
             <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
                 <div class="{% form_group_classes form.barrier_description.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{form.barrier_description.name}}">
+                    <label class="govuk-label govuk-label--s" for="{{form.barrier_description.id_for_label }}">
                         {{ form.barrier_description.label }}
                     </label>
                     {% form_field_error form "barrier_description" %}
@@ -103,10 +39,7 @@
                         {{ form.barrier_description.help_text }}
                     </span>
                     {{form.barrier_description }}
-                    <!-- <textarea class="govuk-textarea js-character-count" id="{{form.barrier_description.name}}"
-                              name="{{ form.barrier_description.name }}"
-                              rows="5"
-                              aria-describedby="description-hint description-info">{{ form.barrier_description.value }}</textarea> -->
+
                 </div>
             </div>
         </fieldset>

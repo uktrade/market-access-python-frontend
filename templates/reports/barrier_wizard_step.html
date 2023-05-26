@@ -15,35 +15,32 @@
 
 {% block page_content %}
 <div class="govuk-width-container">
-        <form method="post" novalidate>
-                {% block back_button %}
-                    <a class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
-                {% endblock %}
-            <div>
-                {% csrf_token %}
-                {{ wizard.management_form }}
-                {% block current_step %}
-                    <span class="govuk-caption-l">Section {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
-                {% endblock %}
+    <form method="post" novalidate>
+            {% block back_button %}
+                <a class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
+            {% endblock %}
+        <div>
+            {% csrf_token %}
+            {{ wizard.management_form }}
+            {% block current_step %}
+                <span class="govuk-caption-l">Section {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
+            {% endblock %}
 
-                {% form_error_banner form %}
-
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        {% block fields %}
-                        {% endblock %}
-                    </div>
-                </div>
-                <div class="govuk-!-margin-top-6">
-                    {% block actions %}
-                        <button class="govuk-button">
-                            Continue
-                        </button>
-                        <a class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' 'step=skip' %}">Save and exit </a>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    {% block fields %}
                     {% endblock %}
                 </div>
             </div>
-        </form>
-
+            <div class="govuk-!-margin-top-6">
+                {% block actions %}
+                    <button class="govuk-button">
+                        Continue
+                    </button>
+                    <a class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' 'step=skip' %}">Save and exit </a>
+                {% endblock %}
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}

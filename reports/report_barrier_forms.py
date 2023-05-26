@@ -37,45 +37,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             },
         ),
     )
-    barrier_summary = forms.CharField(
-        label="Public barrier summary",
-        help_text=(
-            """
-            Describe the barrier in a way that is suitable for the public to read
-            on GOV.UK. The summary will only be published once it has been
-            reviewed internally.
-            """
-        ),
-        error_messages={"required": "Enter a public barrier summary"},
-    )
-    is_not_published_to_public = forms.ChoiceField(
-        label="This barrier should not be published on GOV.UK",
-        widget=forms.RadioSelect,
-        choices=(
-            ("YES", "Yes"),
-            ("NO", "No"),
-        ),
-    )
-    # This field needs to be conditionally required - error if empty and
-    # 'is_not_published_to_public' is ticked
-    is_not_published_reason = forms.CharField(
-        label="Explain why the barrier should not be published on GOV.UK",
-        help_text=(
-            """
-            Describe the barrier in a way that is suitable for the public to read
-            on GOV.UK. The summary will only be published once it has been
-            reviewed internally.
-            """
-        ),
-        error_messages={"required": "Enter why this barrier should not be public"},
-        widget=forms.Textarea(
-            attrs={
-                "class": "govuk-textarea",
-                "rows": 5,
-            },
-        ),
-        required=False,
-    )
+
     barrier_description = forms.CharField(
         label="Barrier description",
         help_text=(
