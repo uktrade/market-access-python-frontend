@@ -70,6 +70,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         choices=REPORTABLE_STATUSES,
         help_text=REPORTABLE_STATUSES_HELP_TEXT,
         widget=forms.RadioSelect,
+        error_messages={"required": "Select barrier status"},
     )
     # will need bespoke error catching in the clean method for these resolved fields
     partially_resolved_date = MonthYearField(

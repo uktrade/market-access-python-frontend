@@ -8,6 +8,9 @@
         document.addEventListener("DOMContentLoaded", function (event) {
             ReactApp.GDSCheckboxes();
         })
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSRadios();
+        })
     </script>
 {% endblock %}
 
@@ -37,7 +40,7 @@
                     <button class="govuk-button">
                         Continue
                     </button>
-                    <a class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' 'step=skip' %}">Save and exit </a>
+                    <a class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' step='skip' %}">Save and exit </a>
                 {% endblock %}
             </div>
         </div>
