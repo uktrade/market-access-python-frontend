@@ -76,27 +76,50 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
     partially_resolved_date = MonthYearField(
         label="Date the barrier was partially resolved",
         required=False,
+        error_messages={
+            "invalid_year": "Enter a valid date",
+            "invalid_month": "Enter a valid date",
+        },
     )
     partially_resolved_description = forms.CharField(
         label="Describe briefly how this barrier was partially resolved",
-        widget=forms.Textarea,
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
         required=False,
         initial="",
     )
     resolved_date = MonthYearField(
         label="Date the barrier was resolved",
         required=False,
+        error_messages={
+            "invalid_year": "Enter a valid date",
+            "invalid_month": "Enter a valid date",
+        },
     )
     resolved_description = forms.CharField(
         label="Describe briefly how this barrier was resolved",
-        widget=forms.Textarea,
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
         required=False,
         initial="",
+    )
+    start_date_known = forms.BooleanField(
+        label="I don't know",
+        required=False,
     )
     start_date = MonthYearField(
         label="When did or will the barrier start to affect trade?",
         help_text="If you aren't sure of the date, give an estimate",
         error_messages={"required": "Enter a date"},
+        required=False,
     )
     currently_active = forms.ChoiceField(
         label="Is this barrier currently affecting trade?",
@@ -107,6 +130,45 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
         required=False,
     )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get("barrier_status")
+        partially_resolved_date = cleaned_data.get("partially_resolved_date")
+        partially_resolved_description = cleaned_data.get(
+            "partially_resolved_description"
+        )
+        resolved_date = cleaned_data.get("resolved_date")
+        resolved_description = cleaned_data.get("resolved_description")
+        start_date_known = cleaned_data.get("start_date_known")
+        start_date = cleaned_data.get("start_date")
+        currently_active = cleaned_data.get("currently_active")
+
+        if status == "3":
+            # Partially resolved date and reason requried
+            if partially_resolved_date is None:
+                msg = "Enter a date the barrier was partially resolved"
+                self.add_error("partially_resolved_date", msg)
+            if partially_resolved_description == "":
+                msg = "Enter a description for partially resolved"
+                self.add_error("partially_resolved_description", msg)
+
+        if status == "4":
+            # Resolved date and reason requried
+            if resolved_date is None:
+                msg = "Enter a date the barrier was resolved"
+                self.add_error("resolved_date", msg)
+            if resolved_description == "":
+                msg = "Enter a description for resolved"
+                self.add_error("resolved_description", msg)
+
+        if start_date is None and start_date_known is False:
+            msg = "Enter a date the barrier started to affect trade or I don't know"
+            self.add_error("start_date", msg)
+
+        if start_date_known and currently_active == "":
+            msg = "Is the barrier affecting trade"
+            self.add_error("currently_active", msg)
 
 
 class BarrierLocationForm(APIFormMixin, forms.Form):
