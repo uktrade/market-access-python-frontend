@@ -11,13 +11,23 @@
                 </h1>
             </legend>
 
+            {% form_error_banner form %}
+
             <div class="govuk-radios" data-module="govuk-radios">
+
                 {% for value, name in form.fields.barrier_status.choices %}
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="{{ name }}" name="{{ name }}" type="radio" {% if value in "3 4" %}data-aria-controls="conditional-{{ value }}"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="{{ name }}">
+                        <input class="govuk-radios__input"
+                         id="{{ form.barrier_status.id_for_label }}"
+                         name="barrier-status-barrier_status"
+                         type="radio"
+                         value="{{ value }}"
+                         {% if form.status.value == value %} checked="checked"{% endif %}
+                         {% if value in "3 4" %} data-aria-controls="conditional-{{ value }}"{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="{{ form.barrier_status.id_for_label }}">
                             {{ name }}
                         </label>
+                        {% form_field_error form "barrier_status" %}
                         {% for help_text in form.barrier_status.help_text %}
                             {% if help_text.0 == value %}
                                 <span id="{{ name }}_hint" class="govuk-hint govuk-radios__hint">
@@ -26,8 +36,9 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{value}}">
-                        {% if value == "3" %}                            
+
+                    {% if forloop.counter == 2 %}
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{value}}">
                             <div class="govuk-form-group">
                                 <label class="govuk-label govuk-label--s" for="partially_resolved_date">
                                     {{ form.partially_resolved_date.label }}
@@ -40,8 +51,10 @@
                                 </label>
                                 {{ form.partially_resolved_description }}
                             </div>
-                        {% endif %}
-                        {% if value == "4" %}
+                        </div>
+
+                        {% elif forloop.counter == 3  %}
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{value}}">
                             <div class="govuk-form-group">
                                 <label class="govuk-label govuk-label--s" for="resolved_date">
                                     {{ form.resolved_date.label }}
@@ -54,16 +67,18 @@
                                 </label>
                                 {{ form.resolved_description }}
                             </div>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
+
                 {% endfor %}
             </div>
 
-            
+
             <div class="govuk-form-group">
                 <label class="govuk-label govuk-label--s" for="start_date">
                     {{ form.start_date.label }}
                 </label>
+                {% form_field_error form "start_date" %}
                 <span id="{{ name }}_hint" class="govuk-hint">
                     {{ form.start_date.help_text }}
                 </span>
@@ -93,7 +108,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
         </fieldset>
     </div>
