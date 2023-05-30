@@ -9,12 +9,12 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 
 from reports.report_barrier_forms import (
     BarrierAboutForm,
-    BarrierStatusForm,
-    BarrierLocationForm,
-    BarrierTradeDirectionForm,
-    BarrierSectorsAffectedForm,
     BarrierCompaniesAffectedForm,
     BarrierExportTypeForm,
+    BarrierLocationForm,
+    BarrierSectorsAffectedForm,
+    BarrierStatusForm,
+    BarrierTradeDirectionForm,
 )
 from utils.api.client import MarketAccessAPIClient
 
@@ -61,7 +61,6 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         return [templates[self.steps.current]]
 
     def get(self, request, *args, **kwargs):
-
         """
         At this piont we should check if the user is returning via a draft url and clear the current session
         via self.storage.reset(), get the draft barrier and
@@ -106,6 +105,7 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
 
         elif step_url == "skip":
             # Save draft and exit
+            print("! skip and exit ")
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             # Check to see if it is an existing draft barrier otherwise create
             meta_data = self.storage.data.get("step_data").get("meta", None)
@@ -121,7 +121,7 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
                 barrier_report = client.reports.create()
 
             # We should at least have passed the first step and have a barrier title
-            barrier_title_form = self.get_cleaned_data_for_step("barrier-name")
+            barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
             if barrier_title_form is None:
                 # We don't have a barrire title therefore nothing to save
                 # Send user to first step
