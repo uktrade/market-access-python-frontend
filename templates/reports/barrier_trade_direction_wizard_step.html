@@ -3,16 +3,47 @@
 {% block page_title %} Report A Barrier - Wizard Framework - Trade Direction{% endblock %}
 
 {% block fields %}
-    <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    Trade direction affected
-                </h1>
-            </legend>
-            {{ form.trade_direction }}
-            </div>
+<div class="govuk-form-group">
+    <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+                Trade direction affected
+            </h1>
+        </legend>
 
-        </fieldset>
-    </div>
+        {% form_error_banner form %}
+
+        <div class="govuk-radios" data-module="govuk-radios">
+
+            {% for value, name in form.fields.trade_direction.choices %}
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input"
+                     id="{{ form.trade_direction.id_for_label }}"
+                     name="barrier-trade-direction-trade_direction"
+                     type="radio"
+                     value="{{ value }}"
+                     {% if form.trade_direction.value == value %} checked="checked"{% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="{{ form.trade_direction.id_for_label }}">
+                        {{ name }}
+                    </label>
+                    {% form_field_error form "trade_direction" %}
+                    <!-- TODO Refine help text-->
+                    {% for help_text in form.trade_direction.help_text %}
+                        {% if help_text.0 == value %}
+                            <span id="{{ name }}_hint" class="govuk-hint govuk-radios__hint">
+                                {{ help_text.1 }}
+                            </span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            {% endfor %}
+        </div>
+
+
+
+
+
+    </fieldset>
+</div>
 {% endblock %}
