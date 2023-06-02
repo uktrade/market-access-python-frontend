@@ -168,7 +168,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
 
 class BarrierLocationForm(APIFormMixin, forms.Form):
     # TODO get the existing location search stuff into this page
-    location = forms.CharField(
+    trade_location = forms.CharField(
         label="Which location does the barrier relate to?",
         help_text=(
             """
