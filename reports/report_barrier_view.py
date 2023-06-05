@@ -17,6 +17,7 @@ from reports.report_barrier_forms import (
     BarrierTradeDirectionForm,
 )
 from utils.api.client import MarketAccessAPIClient
+from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,7 @@ logger = logging.getLogger(__name__)
 # get_context_data? get_form_initial?
 
 
-class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
+class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPreview):
     form_list = [
         ("barrier-about", BarrierAboutForm),
         ("barrier-status", BarrierStatusForm),
@@ -178,6 +179,17 @@ class ReportBarrierWizardView(NamedUrlSessionWizardView, FormPreview):
         else:
             self.storage.current_step = self.steps.first
             return redirect(self.get_step_url(self.steps.first))
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+
+        if self.steps.current == "barrier-sectors-affected":
+            sectors = [
+                (sector["id"], sector["name"])
+                for sector in self.metadata.get_sector_list(level=0)
+            ]
+            context.update({"sectors_list": sectors})
+        return context
 
     def process_step(self, form):
         return self.get_form_step_data(form)
