@@ -337,6 +337,7 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
                 "rows": 3,
             }
         ),
+        required=False,
     )
 
 
