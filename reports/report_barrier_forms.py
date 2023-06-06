@@ -243,6 +243,12 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
             Be as specific as you can.
             """
         ),
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
     )
     # TODO - Somehow get the existing HS code component into this page.
     hs_code_input = forms.CharField(

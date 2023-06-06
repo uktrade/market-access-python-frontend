@@ -189,6 +189,11 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 for sector in self.metadata.get_sector_list(level=0)
             ]
             context.update({"sectors_list": sectors})
+
+        if self.steps.current == "barrier-export-type":
+            confirmed_commodities_data = []
+            context.update({"confirmed-commodities-data": confirmed_commodities_data})
+
         return context
 
     def process_step(self, form):
