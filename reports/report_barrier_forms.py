@@ -5,6 +5,7 @@ from django import forms
 from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT
 from barriers.forms.mixins import APIFormMixin
 from utils.forms import MonthYearField
+from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
 
@@ -166,18 +167,135 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             self.add_error("currently_active", msg)
 
 
-class BarrierLocationForm(APIFormMixin, forms.Form):
-    # TODO get the existing location search stuff into this page
-    trade_location = forms.CharField(
-        label="Which location does the barrier relate to?",
+class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
+    location_select = forms.ChoiceField(
+        label="Which location is affected by this issue?",
+        error_messages={"required": "Select a location for this barrier"},
         help_text=(
-            """
-            Select a trading bloc if the barrier applies to the whole
-            trading bloc. Select a country if the barrier is a trading
-            bloc regulation that only applies to that country.
-            """
+            "A trading bloc should be selected if the barrier applies to the whole "
+            "trading bloc. Select a country if the barrier is a national "
+            "implementation of a trading bloc regulation (so only applies to that "
+            "country)"
         ),
     )
+    admin_areas = forms.CharField(
+        label="Which admin area does the barrier apply to?",
+        help_text="Select all that apply",
+        widget=forms.HiddenInput(),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Get data we need for options
+        self.countries_options = self.metadata.get_country_list()
+        self.trading_blocs = self.metadata.get_trading_bloc_list()
+        self.admin_areas = self.metadata.get_trading_bloc_list()
+
+        # Set the choices for the country select box
+        self.fields["location_select"].choices = (
+            (0, "Choose a location"),
+            (
+                "Trading blocs",
+                tuple([(bloc["code"], bloc["name"]) for bloc in self.trading_blocs]),
+            ),
+            (
+                "Countries",
+                tuple(
+                    (country["id"], country["name"])
+                    for country in self.countries_options
+                ),
+            ),
+        )
+
+        # Set dictionary to pass to frontend so JS knows which countries need
+        # to see trading bloc sections
+        self.trading_bloc_countries = {}
+
+        # Need to dynamically create the trading blocs questions
+        for trading_bloc in self.trading_blocs:
+            bloc_name = trading_bloc["name"]
+            short_bloc_name = trading_bloc["short_name"].split()[1]
+
+            # Add to trading bloc countries dictionary for the JS frontend
+            self.trading_bloc_countries[short_bloc_name] = trading_bloc["country_ids"]
+
+            field_name = "trading_bloc_" + short_bloc_name
+            self.fields[field_name] = forms.ChoiceField(
+                label=f"Was this barrier caused by a regulation introduced by the {short_bloc_name}",
+                help_text=(
+                    f"""
+                    Yes should be selected if the barrier is a local application
+                    of an {short_bloc_name} regulation. If it is an {short_bloc_name}-wide barrier, the
+                    country location should be changed to {bloc_name} in the
+                    location screen.
+                    """
+                ),
+                choices=(
+                    ("YES", "Yes"),
+                    ("NO", "No"),
+                    ("UNKNOWN", "Don't know"),
+                ),
+                widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
+                required=False,
+            )
+
+        # Create lists for selection dropdowns
+        countries_with_admin_areas = self.metadata.get_countries_with_admin_areas_list()
+        admin_area_choices_dict = {}
+        for admin_area_country in countries_with_admin_areas:
+            admin_areas = self.metadata.get_admin_areas_by_country(
+                admin_area_country["id"]
+            )
+            country_name = admin_area_country["name"]
+            field_name = "admin_areas_" + country_name
+
+            admin_area_choices = [(0, "Choose an admin area")] + [
+                (area["id"], area["name"]) for area in admin_areas
+            ]
+            admin_area_choices_dict[field_name] = admin_area_choices
+        self.admin_area_choices = admin_area_choices_dict
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Map the location selected to the correct DB field
+        location = self.cleaned_data["location_select"]
+        trading_bloc_codes = [
+            trading_bloc["code"] for trading_bloc in self.trading_blocs
+        ]
+        if location in trading_bloc_codes:
+            self.cleaned_data["country"] = None
+            self.cleaned_data["trading_bloc"] = location
+        else:
+            self.cleaned_data["country"] = location
+            self.cleaned_data["trading_bloc"] = ""
+
+        # TODO: What do we do with the trading bloc questions?
+        # are these supposed to automatically select the trading bloc instead of the country?
+        # or mean added information? could be self.cleaned_data["trading_bloc"] needs to be set to
+        # the submitted value ASWELL AS the country being selected.
+        if (
+            self.cleaned_data["trading_bloc_EU"]
+            or self.cleaned_data["trading_bloc_GCC"]
+            or self.cleaned_data["trading_bloc_Mercosur"]
+            or self.cleaned_data["trading_bloc_EAEU"]
+        ):
+            self.cleaned_data["caused_by_trading_bloc"] = True
+
+        # admin_areas comes through in a [] array/list format and SHOULD go into the DB fine like this...
+
+        logger.critical("****")
+        logger.critical("CLEANING DATA:")
+        logger.critical(str(cleaned_data))
+        logger.critical("****")
+
+        return cleaned_data
+
+    def get_trading_bloc_fields(self):
+        for field_name in self.fields:
+            if field_name.startswith("trading_bloc_"):
+                yield self[field_name]
 
 
 class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
