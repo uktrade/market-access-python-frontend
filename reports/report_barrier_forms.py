@@ -311,13 +311,23 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
 
 class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
     # TODO get the existing sectors selectors stuff into this page
-    main_sectors_affected = forms.CharField(
+    main_sector = forms.CharField(
         label="Main sector affected",
         help_text=("Add the sector you think the barrier affects the most"),
+        # choices=[],
+        # widget=forms.MultipleHiddenInput(),
     )
-    other_sectors_affected = forms.CharField(
+    sectors = forms.CharField(
         label="Other sectors (optional)",
         help_text=("Add all the other sectors affected by the barrier"),
+        # choices=[],
+        # widget=forms.MultipleHiddenInput(),
+        widget=forms.Textarea(
+            attrs={
+                "rows": 3,
+            }
+        ),
+        required=False,
     )
 
 
