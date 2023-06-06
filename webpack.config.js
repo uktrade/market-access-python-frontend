@@ -88,7 +88,7 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/report/is-resolved.js`,
                         `${assetsSrcPath}/js/pages/report/about-problem.js`,
                         `${assetsSrcPath}/js/pages/report/barrier-location-form.js`,
-                        `${assetsSrcPath}/js/pages/report/location-form-react.js`,
+                        `${assetsSrcPath}/js/pages/report/location-wizard-step.js`,
                         `${assetsSrcPath}/js/pages/barrier/status.js`,
                         `${assetsSrcPath}/js/pages/barrier/type.js`,
                         `${assetsSrcPath}/js/pages/barrier/edit.js`,
