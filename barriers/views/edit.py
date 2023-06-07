@@ -18,6 +18,7 @@ from barriers.forms.edit import (
     UpdateCommercialValueForm,
     UpdateEconomicAssessmentEligibilityForm,
     UpdateTradeDirectionForm,
+    UpdateBarrierStartDateForm,
     update_barrier_priority_form_factory,
 )
 from utils.api.client import MarketAccessAPIClient
@@ -389,3 +390,42 @@ class BarrierEditEconomicAssessmentEligibility(APIBarrierFormViewMixin, FormView
             "barriers:assessment_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
+
+
+class BarrierEditStartDate(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/edit/start_date.html"
+    form_class = UpdateBarrierStartDateForm
+
+    def get_success_url(self):
+        if self.form.requested_change:
+            return reverse_lazy(
+                "barriers:edit_start_date_confirmation_page",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+        else:
+            return reverse_lazy(
+                "barriers:barrier_detail",
+                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+            )
+
+    def form_valid(self, form):
+        self.form = form
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["barrier"] = self.barrier
+        context["current_user"] = user_scope(self.request)["current_user"]
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["barrier_id"] = self.kwargs.get("barrier_id")
+        kwargs["user"] = user_scope(self.request)["current_user"]
+
+        return kwargs
+
+
+class NewReportBarrierExportTypeView(APIBarrierFormViewMixin, FormView):
+    pass

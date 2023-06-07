@@ -107,6 +107,7 @@ from .views.edit import (
     BarrierEditTerm,
     BarrierEditTitle,
     BarrierEditTradeDirection,
+    BarrierEditStartDate,
 )
 from .views.government_organisations import (
     BarrierAddGovernmentOrganisation,
@@ -806,6 +807,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/progress_updates/programme_fund",
         BarrierAddProgrammeFundProgressUpdate.as_view(),
         name="add_programme_fund_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/start-date/",
+        BarrierEditStartDate.as_view(),
+        name="edit_start_date",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(

@@ -23,6 +23,7 @@ from utils.forms import (
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
     YesNoDontKnowBooleanField,
+    DayMonthYearField,
 )
 
 from .mixins import APIFormMixin, EstimatedResolutionDateApprovalMixin
@@ -985,3 +986,26 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
                 next_step_item=self.cleaned_data["next_step_item"],
                 completion_date=self.cleaned_data["completion_date"],
             )
+
+
+class UpdateBarrierStartDateForm(
+    EstimatedResolutionDateApprovalMixin, ClearableMixin, APIFormMixin, forms.Form
+):
+
+    start_date = DayMonthYearField(
+        label="Barrier Start date",
+        help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
+        error_messages={"required": "Enter a barrier start date"},
+    )
+
+    def __init__(self, *args, **kwargs):
+        return super().__init__(*args, **kwargs)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        start_date = self.cleaned_data.get("start_date")
+        client.barriers.patch(
+            id=str(self.barrier_id),
+            start_date=start_date,
+        )
