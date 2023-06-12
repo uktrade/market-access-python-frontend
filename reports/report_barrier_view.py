@@ -194,7 +194,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         else:
             return JsonResponse({"status": "error", "message": "Bad request"})
 
-        lookup_form = self.get_lookup_form(form_class)
+        lookup_form = self.get_commodity_lookup_form(form_class)
         print(lookup_form.is_valid())
         if lookup_form.is_valid():
             return JsonResponse(
@@ -208,7 +208,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 {"status": "error", "message": "Enter a real HS commodity code"}
             )
 
-    def get_lookup_form(self, form_class=None):
+    def get_commodity_lookup_form(self, form_class=None):
         if form_class is None:
             form_class = CommodityLookupForm
 
@@ -216,6 +216,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         #     initial = {"location": self.barrier.country["id"]}
         # elif self.barrier.trading_bloc:
         #     initial = {"location": self.barrier.trading_bloc["code"]}
+        print("form class default location :  ", self.get_default_location())
+        # default_location = dict((x, y) for x, y in self.get_default_location())
 
         initial = {"location": UK_COUNTRY_ID}
 
@@ -223,8 +225,11 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             initial=initial,
             data=self.request.GET.dict() or None,
             token=self.request.session.get("sso_token"),
-            locations=self.get_locations(),
-            # locations=({"id": UK_COUNTRY_ID, "name": "United Kingdom"},),
+            # locations=[
+            #     default_location,
+            #     {UK_COUNTRY_ID, "United Kingdom"},
+            # ],
+            locations=({"id": UK_COUNTRY_ID, "name": "United Kingdom"},),
         )
 
     def get_context_data(self, form, **kwargs):
@@ -238,9 +243,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             context.update({"sectors_list": sectors})
 
         if self.steps.current == "barrier-export-type":
-            pass
-            # confirmed_commodities_data = []
-            # context.update({"confirmed-commodities-data": confirmed_commodities_data})
+            print("Setting empty commodities data")
+            confirmed_commodities_data = []
+            context.update({"confirmed_commodities_data": confirmed_commodities_data})
 
         return context
 
@@ -273,7 +278,12 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         self.countries_options = self.metadata.get_country_list()
         # print("country list", self.countries_options)
         self.trading_blocs = self.metadata.get_trading_bloc_list()
-        print("block list", self.trading_blocs)
+        # print("block list", self.trading_blocs)
+        # TODO - use get cleaned data here instead
+        print(
+            "cleaned location data ",
+            self.get_cleaned_data_for_step("barrier_location"),
+        )
         location_data = self.storage.get_step_data("barrier-location")
         print("location fields:", location_data)
         if location_data:
