@@ -988,9 +988,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
             )
 
 
-class UpdateBarrierStartDateForm(
-    EstimatedResolutionDateApprovalMixin, ClearableMixin, APIFormMixin, forms.Form
-):
+class UpdateBarrierStartDateForm(ClearableMixin, APIFormMixin, forms.Form):
 
     start_date = DayMonthYearField(
         label="Barrier Start date",
@@ -999,7 +997,13 @@ class UpdateBarrierStartDateForm(
     )
 
     def __init__(self, *args, **kwargs):
-        return super().__init__(*args, **kwargs)
+        self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+
+    @property
+    def barrier(self):
+        client = MarketAccessAPIClient(self.token)
+        return client.barriers.get(id=self.barrier_id)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -1007,5 +1011,5 @@ class UpdateBarrierStartDateForm(
         start_date = self.cleaned_data.get("start_date")
         client.barriers.patch(
             id=str(self.barrier_id),
-            start_date=start_date,
+            start_date=str(start_date.isoformat()),
         )

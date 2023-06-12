@@ -397,16 +397,10 @@ class BarrierEditStartDate(APIBarrierFormViewMixin, FormView):
     form_class = UpdateBarrierStartDateForm
 
     def get_success_url(self):
-        if self.form.requested_change:
-            return reverse_lazy(
-                "barriers:edit_start_date_confirmation_page",
-                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
-            )
-        else:
-            return reverse_lazy(
-                "barriers:barrier_detail",
-                kwargs={"barrier_id": self.kwargs.get("barrier_id")},
-            )
+        return reverse_lazy(
+            "barriers:barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
 
     def form_valid(self, form):
         self.form = form
