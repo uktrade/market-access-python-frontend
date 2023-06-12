@@ -1,0 +1,32 @@
+{% extends "barriers/edit/base.html" %}
+{% load govuk_forms %}
+
+{% block page_title %}{{ block.super }} - Export Types{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Barrier Export Types' %}
+    {% form_error_banner form %}
+
+    <h3 class="report-export_types-heading">Save or add {% if export_types %}another{% else %}a{% endif %} export type</h3>
+
+    <div class="selection-list restrict-width">
+        <h3 class="selection-list__heading">Selected export types</h3>
+        {% if export_types %}
+            {% include 'barriers/partials/export_type_list.html' with export_types=export_types show_remove_links=True %}
+        {% endif %}
+
+        <a href="{% url 'barriers:add_export_types' barrier.id %}" id="add-export_type-button" class="govuk-button button--secondary selection-list__add-button">Add specific export type</a>
+
+    </div>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save and return" class="govuk-button">
+    </form>
+{% endblock %}

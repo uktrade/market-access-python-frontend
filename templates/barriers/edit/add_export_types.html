@@ -1,0 +1,39 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Export Types{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Barrier Export Types' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.export_type.name }}" class="govuk-form-group {% if form.export_type.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="export_types">Selected export types</label>
+
+            {% form_field_error form "export_type" %}
+
+            <select class="govuk-select govuk-!-width-full{% if form.export_type.errors %} govuk-select--error{% endif %}" id="export_type" name="export_type"{% if form.export_type.errors %} aria-describedby="export_types-error"{% endif %}>
+                {% for id, name in form.fields.export_type.choices %}
+                <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if export_types %}
+            <div class="selection-list restrict-width">
+                <h3 class="selection-list__heading">Selected export types</h3>
+                {% include 'barriers/partials/export_type_list.html' with show_remove_links=False %}
+            </div>
+        {% endif %}
+
+        <input type="submit" value="Add export type" class="govuk-button">
+        <a class="form-cancel" href="{% url 'barriers:edit_export_types_session' barrier.id %}">cancel</a>
+    </form>
+{% endblock %}

@@ -107,6 +107,7 @@ from .views.edit import (
     BarrierEditTerm,
     BarrierEditTitle,
     BarrierEditTradeDirection,
+    BarrierEditStartDate,
 )
 from .views.government_organisations import (
     BarrierAddGovernmentOrganisation,
@@ -167,6 +168,13 @@ from .views.wto import (
     DeleteWTODocument,
     EditWTOProfile,
     EditWTOStatus,
+)
+
+from .views.export_types import (
+    BarrierRemoveExportType,
+    BarrierAddExportTypes,
+    BarrierEditExportType,
+    BarrierEditExportTypeSession,
 )
 
 app_name = "barriers"
@@ -806,6 +814,31 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/progress_updates/programme_fund",
         BarrierAddProgrammeFundProgressUpdate.as_view(),
         name="add_programme_fund_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/start-date/",
+        BarrierEditStartDate.as_view(),
+        name="edit_start_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/export-types/",
+        BarrierEditExportTypeSession.as_view(),
+        name="edit_export_types_session",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/export-type/add/",
+        BarrierAddExportTypes.as_view(),
+        name="add_export_types",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/export-types/edit/",
+        BarrierEditExportType.as_view(),
+        name="edit_export_types",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/export-type/remove/",
+        BarrierRemoveExportType.as_view(),
+        name="remove_export_type",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(
