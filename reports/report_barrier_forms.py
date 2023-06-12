@@ -16,6 +16,7 @@ from utils.forms import (
 from barriers.forms.statuses import BarrierChangeStatusForm
 from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT
 from utils.forms import MonthYearField
+from utils.forms import CommodityCodeWidget, MonthYearField
 from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
@@ -423,7 +424,19 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         ),
     )
     # TODO - Somehow get the existing HS code component into this page.
-    hs_code_input = forms.CharField(
-        label="put the hs code search component here",
-        help_text=("tricky stuff!"),
+    code = forms.CharField(
+        label="Enter an HS commodity code",
+        help_text=(
+            "Enter your HS commodity code below ignoring any spaces or full stops. "
+            "You can also copy and paste multiple codes separated by commas "
+            "into the first box (there is no limit). Only numbers and commas "
+            "will be recognised, all other punctuation and characters will be ignored."
+        ),
+        error_messages={"required": "Enter an HS commodity code"},
+        widget=CommodityCodeWidget,
+    )
+    location = forms.ChoiceField(
+        label="Which location are the HS commodity codes from?",
+        choices=[],
+        error_messages={"required": "Select a location"},
     )
