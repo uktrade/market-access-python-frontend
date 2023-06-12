@@ -1,12 +1,14 @@
 import json
 import logging
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from formtools.preview import FormPreview
 from formtools.wizard.views import NamedUrlSessionWizardView
 
+from barriers.constants import UK_COUNTRY_ID
+from barriers.forms.commodities import CommodityLookupForm
 from reports.report_barrier_forms import (
     BarrierAboutForm,
     BarrierCompaniesAffectedForm,
@@ -82,6 +84,10 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         step_url = kwargs.get("step", None)
         draft_barrier_id = kwargs.get("draft_barrier_id", None)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        # Handle legacy React app calls
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return self.ajax(request, *args, **kwargs)
 
         # Is it resuming a draft barrier
         if draft_barrier_id is not None:
@@ -180,6 +186,47 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             self.storage.current_step = self.steps.first
             return redirect(self.get_step_url(self.steps.first))
 
+    def ajax(self, request, *args, **kwargs):
+        if request.GET.get("code"):
+            form_class = CommodityLookupForm
+        # elif request.GET.get("codes"):
+        #     form_class = MultiCommodityLookupForm
+        else:
+            return JsonResponse({"status": "error", "message": "Bad request"})
+
+        lookup_form = self.get_lookup_form(form_class)
+        print(lookup_form.is_valid())
+        if lookup_form.is_valid():
+            return JsonResponse(
+                {
+                    "status": "ok",
+                    "data": lookup_form.get_commodity_data(),
+                }
+            )
+        else:
+            return JsonResponse(
+                {"status": "error", "message": "Enter a real HS commodity code"}
+            )
+
+    def get_lookup_form(self, form_class=None):
+        if form_class is None:
+            form_class = CommodityLookupForm
+
+        # if self.barrier.country:
+        #     initial = {"location": self.barrier.country["id"]}
+        # elif self.barrier.trading_bloc:
+        #     initial = {"location": self.barrier.trading_bloc["code"]}
+
+        initial = {"location": UK_COUNTRY_ID}
+
+        return form_class(
+            initial=initial,
+            data=self.request.GET.dict() or None,
+            token=self.request.session.get("sso_token"),
+            locations=self.get_locations(),
+            # locations=({"id": UK_COUNTRY_ID, "name": "United Kingdom"},),
+        )
+
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
 
@@ -191,13 +238,75 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             context.update({"sectors_list": sectors})
 
         if self.steps.current == "barrier-export-type":
-            confirmed_commodities_data = []
-            context.update({"confirmed-commodities-data": confirmed_commodities_data})
+            pass
+            # confirmed_commodities_data = []
+            # context.update({"confirmed-commodities-data": confirmed_commodities_data})
 
         return context
 
     def process_step(self, form):
         return self.get_form_step_data(form)
+
+    def get_form(self, step=None, data=None, files=None):
+        form = super().get_form(step, data, files)
+        print("current step :", step)
+        # determine the step if not given
+        if step is None:
+            step = self.steps.current
+
+        if step == "barrier-export-type":
+            location_data = self.storage.get_step_data("barrier-location")
+            print("location fields:", location_data)
+            if location_data:
+                default_location = self.get_default_location()
+
+                location_choices = [
+                    default_location,
+                    (UK_COUNTRY_ID, "United Kingdom"),
+                ]
+                print("got locations :", location_choices)
+                form.fields["location"].choices = location_choices
+
+        return form
+
+    def get_default_location(self):
+        self.countries_options = self.metadata.get_country_list()
+        # print("country list", self.countries_options)
+        self.trading_blocs = self.metadata.get_trading_bloc_list()
+        print("block list", self.trading_blocs)
+        location_data = self.storage.get_step_data("barrier-location")
+        print("location fields:", location_data)
+        if location_data:
+            default_location_code = location_data.get(
+                "barrier-location-location_select", None
+            )
+            print("default location code :", default_location_code)
+            # Search country list
+
+            default_location_name = next(
+                (
+                    country["name"]
+                    for country in self.countries_options
+                    if country["id"] == default_location_code
+                ),
+                None,
+            )
+            if default_location_name is None:
+                # If country not found search Trading Blocks
+                print("got here")
+
+                default_location_name = next(
+                    (
+                        country["name"]
+                        for country in self.trading_blocs
+                        if country["code"] == str(default_location_code)
+                    ),
+                    None,
+                )
+
+            print("got name", default_location_name)
+
+            return (default_location_code, default_location_name)
 
     def done(self, form_list, form_dict, **kwargs):
         submitted_values = {}

@@ -5,17 +5,21 @@
   {{ confirmed_commodities_data|json_script:"confirmed-commodities-data" }}
   <script>
     document.addEventListener("DOMContentLoaded", function(event) {
-      let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
+      //let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
+      let confirmedCommodities = []
       let locations = [
-        {"id": "{{ lookup_form.location.field.choices.0.0 }}", "name": "{{ lookup_form.location.field.choices.0.1 }}"},
-        {"id": "{{ lookup_form.location.field.choices.1.0 }}", "name": "{{ lookup_form.location.field.choices.1.1 }}"},
+        {"id": "{{ form.location.field.choices.0.0 }}", "name": "{{ form.location.field.choices.0.1 }}"},
+        {"id": "{{ form.location.field.choices.1.0 }}", "name": "{{ form.location.field.choices.1.1 }}"},
       ]
+      console.log('initialising locations', locations)
       ReactApp.renderCommodityForm(
         confirmedCommodities=confirmedCommodities,
         locations=locations,
-        label="{{ lookup_form.code.label }}",
-        helpText="{{ lookup_form.code.help_text }}",
-      )
+        label="{{ form.code.label }}",
+        helpText="{{ form.code.help_text }}",
+        nextUrl=false,
+        isReportJourney=false,
+        showActions=false,      )
     })
   </script>
 
@@ -75,22 +79,11 @@
                 {{ form.export_description }}
               </div>
             </div>
-
-            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-id_barrier-export-type-export_type_0">
-                <div class="govuk-form-group" id="hs_code_input">
-                    <p class="govuk-body">{{ form.hs_code_input.label}}</p>
-                    <div class="govuk-hint">
-                        {{ form.hs_code_input.help_text }}
-                    </div>
-                    {{ form.hs_code_input }}
-                </div>
-            </div>
         </fieldset>
     </div>
 
     <!-- HS Codes -->
-React
-{{ confirmed_commodities_data }}
+    {{ form.location }}
     <div id="react-app" class="commodities-form__container">
     </div>
 
