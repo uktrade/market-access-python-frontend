@@ -19,7 +19,7 @@ function CommodityForm(props) {
     const boxCount = 5;
     const inputRefContainer = useRef(new Array(boxCount));
 
-    const { isReportJourney, nextUrl } = props;
+    const { isReportJourney, nextUrl, showActions } = props;
 
     const handleLocationChange = (event) => {
         setLocationId(event.target.value);
@@ -348,7 +348,7 @@ function CommodityForm(props) {
                     </div>
                 ) : null}
 
-                {!nextUrl && isReportJourney && (
+                {!nextUrl && isReportJourney && showActions && (
                     <div>
                         <button
                             name="action"
@@ -368,7 +368,7 @@ function CommodityForm(props) {
                     </div>
                 )}
 
-                {!nextUrl && !isReportJourney && (
+                {!nextUrl && !isReportJourney && showActions && (
                     <div>
                         <button
                             name="action"

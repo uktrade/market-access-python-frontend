@@ -5,7 +5,7 @@ from django import forms
 
 from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import MonthYearField
+from utils.forms import CommodityCodeWidget, MonthYearField, MultipleValueField
 from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
@@ -405,9 +405,37 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
             Be as specific as you can.
             """
         ),
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
     )
     # TODO - Somehow get the existing HS code component into this page.
-    hs_code_input = forms.CharField(
-        label="put the hs code search component here",
-        help_text=("tricky stuff!"),
+    code = forms.CharField(
+        label="Enter an HS commodity code - Optional",
+        help_text=(
+            "Enter your HS commodity code below ignoring any spaces or full stops. "
+            "You can also copy and paste multiple codes separated by commas "
+            "into the first box (there is no limit). Only numbers and commas "
+            "will be recognised, all other punctuation and characters will be ignored."
+        ),
+        error_messages={"required": "Enter an HS commodity code"},
+        widget=CommodityCodeWidget,
+        required=False,
     )
+    location = forms.ChoiceField(
+        label="Which location are the HS commodity codes from?",
+        choices=[],
+        error_messages={"required": "Select a location"},
+        required=False,
+    )
+
+    codes = MultipleValueField(required=False)
+    countries = MultipleValueField(required=False)
+    trading_blocs = MultipleValueField(required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        print("export type cleaned data: ", self.cleaned_data)

@@ -11,12 +11,13 @@
         {% include 'partials/callout.html' with callout=callout %}
 
         <div class="task-list">
-            <h2 class="task-list__section-heading">Report a barrier</h2>
-            <ul class="task-list__items">
+            <h2 class="task-list__section-heading">You will be asked</h2>
+            <ul class="govuk-list govuk-list--bullet">
             {% for key, stage_name in stages.items %}
-                <li class="task-list__item">
-                    <span class="task-list__item__number">{{ forloop.counter }}</span>
-                    <span class="task-list__item__name">{{ stage_name }}</span>
+                <li>
+                    <!-- <span class="task-list__item__number">{{ forloop.counter }}</span> -->
+                    <!-- <span class="task-list__item__name">{{ stage_name }}</span> -->
+                    {{ stage_name }}
                 </li>
             {% endfor %}
             </ul>
