@@ -116,6 +116,8 @@ function CompaniesForm(props) {
         hiddenDjangoInputUnrecognised.value = JSON.stringify(addedCompaniesList)
         
         // Remove list entry of removed company
+        // TODO:
+        // This should be automatically updated via React, need to get this to work ractively rather than manually amending page.
         const companyListElement = document.getElementById(company)
         companyListElement.remove();
 
@@ -173,11 +175,9 @@ function CompaniesForm(props) {
         var passedAddedCompanies = JSON.parse(hiddenDjangoInputUnrecognised.value)
 
         if (passedInputCompanies != []) {
-            console.log("setting passed companies")
             setSelectedCompaniesList(passedInputCompanies)
         }
         if (passedAddedCompanies != []) {
-            console.log("setting passed added companies")
             setAddedCompaniesList(passedAddedCompanies)
         }
         if (passedInputCompanies != [] || passedAddedCompanies != []) {
@@ -194,8 +194,10 @@ function CompaniesForm(props) {
                 <div id="companies-search-bar-section" className="govuk-form-group">
                     <label className="govuk-label govuk-label--s">{props.searchLabel}</label>
                     <span className="govuk-hint">{props.searchHelpText}</span>
-                    <input id="companies-search" className="govuk-input govuk-!-width-three-quarters"  name="companies-search" type="text"/>
-                    <div id="search-companies-button" className="search-form__button govuk-button" onClick={searchCompany}>Search</div>
+                    <div className="search-form__input-group">
+                        <input id="companies-search" className="govuk-input search-form__input"  name="companies-search" type="text"/>
+                        <div id="search-companies-button" className="search-form__button govuk-button" onClick={searchCompany}>Search</div>
+                    </div>
                     {selectedCompaniesList.length>0 || addedCompaniesList.length>0 ?
                         <div id="cancel-search-companies-button" className="govuk-link" onClick={cancelSearch}>Cancel</div>
                     : null}
@@ -254,7 +256,7 @@ function CompaniesForm(props) {
             : null }
 
             { showAddCompanySection ?
-                <div id="add-unrecognised-company-section" className="govuk-form-group govuk-cookie-banner">
+                <div id="add-unrecognised-company-section" className="govuk-form-group govuk-cookie-banner govuk-!-padding-5">
                     <label className="govuk-label govuk-label--s">Can't find the company?</label>
                     <span className="govuk-hint">
                         If you can't find the company or organisation you're looking for, 
@@ -265,7 +267,7 @@ function CompaniesForm(props) {
                     <div id="or-add-text" className="govuk-label--s">Or</div>
                     <label className="govuk-label govuk-label--s">Add a company</label>
                     <input id="add-unrecognised-company-input" className="govuk-input govuk-!-width-one-half"  name="add-unrecognised-company-input" type="text" onChange={event => setUnrecognisedCompany(event.target.value)}/>
-                    <div id="add-companies-button" className="search-form__button govuk-button" onClick={addUnrecognisedCompany}>Add company</div>
+                    <div id="add-companies-button" className="search-form__button govuk-button govuk-!-margin-0" onClick={addUnrecognisedCompany}>Add company</div>
                 </div>
             : null }
 
@@ -312,22 +314,24 @@ function CompaniesForm(props) {
 
             { showSelectedList ?
                 <div id="selected-companies-section" className="govuk-form-group">
-                    <h3 className="selection-list__heading">Selected companies</h3>
-                    <ul className="selection-list__list">
-                        {selectedCompaniesList && selectedCompaniesList.map(company =>
-                            <li id={company.company_number} className="selection-list__list__item" key={company.company_number}>
-                                <span>{company.title}</span>
-                                <span id="remove-company-button" className="selection-list__list__item__remove-form" onClick={event => removeCompany(company)}>Remove</span>
-                            </li>
-                        )}
-                        {addedCompaniesList && addedCompaniesList.map(company =>
-                            <li id={company} className="selection-list__list__item" key={company}>
-                                <span>{company}</span>
-                                <span id="remove-company-button" className="selection-list__list__item__remove-form" onClick={event => removeAddedCompany(company)}>Remove</span>
-                            </li>
-                        )}
-                        <div id="add-another-company-button" className="search-form__button govuk-button" onClick={addAnotherCompany}>Add another company</div>
-                    </ul>
+                    <div id="selected-companies-list" className="selection-list restrict-width">
+                        <h3 className="selection-list__heading">Selected companies</h3>
+                        <ul className="selection-list__list">
+                            {selectedCompaniesList && selectedCompaniesList.map(company =>
+                                <li id={company.company_number} className="selection-list__list__item" key={company.company_number}>
+                                    <span>{company.title}</span>
+                                    <span id="remove-company-button" className="selection-list__list__item__remove-form__submit" onClick={event => removeCompany(company)}>remove</span>
+                                </li>
+                            )}
+                            {addedCompaniesList && addedCompaniesList.map(company =>
+                                <li id={company} className="selection-list__list__item" key={company}>
+                                    <span>{company}</span>
+                                    <span id="remove-company-button" className="selection-list__list__item__remove-form__submit" onClick={event => removeAddedCompany(company)}>remove</span>
+                                </li>
+                            )}
+                            <div id="add-another-company-button" className="govuk-button button--secondary selection-list__add-button" onClick={addAnotherCompany}>Add another company</div>
+                        </ul>
+                    </div>
                 </div>
             : null }
 
