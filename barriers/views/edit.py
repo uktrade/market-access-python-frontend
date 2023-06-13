@@ -10,6 +10,7 @@ from barriers.forms.edit import (
     UpdateBarrierEstimatedResolutionDateForm,
     UpdateBarrierProductForm,
     UpdateBarrierSourceForm,
+    UpdateBarrierStartDateForm,
     UpdateBarrierSummaryForm,
     UpdateBarrierTagsForm,
     UpdateBarrierTermForm,
@@ -18,7 +19,6 @@ from barriers.forms.edit import (
     UpdateCommercialValueForm,
     UpdateEconomicAssessmentEligibilityForm,
     UpdateTradeDirectionForm,
-    UpdateBarrierStartDateForm,
     update_barrier_priority_form_factory,
 )
 from utils.api.client import MarketAccessAPIClient

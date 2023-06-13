@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from barriers.forms.export_types import EditExportTypesForm, AddExportTypesForm
+from barriers.forms.export_types import AddExportTypesForm, EditExportTypesForm
 from utils.metadata import MetadataMixin
 
 from .mixins import BarrierMixin

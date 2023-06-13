@@ -102,12 +102,18 @@ from .views.edit import (
     BarrierEditPriority,
     BarrierEditProduct,
     BarrierEditSource,
+    BarrierEditStartDate,
     BarrierEditSummary,
     BarrierEditTags,
     BarrierEditTerm,
     BarrierEditTitle,
     BarrierEditTradeDirection,
-    BarrierEditStartDate,
+)
+from .views.export_types import (
+    BarrierAddExportTypes,
+    BarrierEditExportType,
+    BarrierEditExportTypeSession,
+    BarrierRemoveExportType,
 )
 from .views.government_organisations import (
     BarrierAddGovernmentOrganisation,
@@ -168,13 +174,6 @@ from .views.wto import (
     DeleteWTODocument,
     EditWTOProfile,
     EditWTOStatus,
-)
-
-from .views.export_types import (
-    BarrierRemoveExportType,
-    BarrierAddExportTypes,
-    BarrierEditExportType,
-    BarrierEditExportTypeSession,
 )
 
 app_name = "barriers"
