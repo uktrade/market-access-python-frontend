@@ -171,16 +171,21 @@ function CompaniesForm(props) {
     // Use effect hook to set initial state of react component - in case returning to form from
     // other pages. Passing empty array to useEffect means it will run once on page load.
     useEffect(() => {
-        var passedInputCompanies = JSON.parse(hiddenDjangoInput.value)
-        var passedAddedCompanies = JSON.parse(hiddenDjangoInputUnrecognised.value)
-
-        if (passedInputCompanies != []) {
-            setSelectedCompaniesList(passedInputCompanies)
+        var passedInputCompanies = []
+        if (hiddenDjangoInput.value != "None") {
+            passedInputCompanies = JSON.parse(hiddenDjangoInput.value)
+            if (passedInputCompanies != []) {
+                setSelectedCompaniesList(passedInputCompanies)
+            }
         }
-        if (passedAddedCompanies != []) {
-            setAddedCompaniesList(passedAddedCompanies)
+        var passedAddedCompanies = []
+        if (hiddenDjangoInput.value != "None") {
+            passedAddedCompanies = JSON.parse(hiddenDjangoInputUnrecognised.value)
+            if (passedAddedCompanies != []) {
+                setAddedCompaniesList(passedAddedCompanies)
+            }
         }
-        if (passedInputCompanies != [] || passedAddedCompanies != []) {
+        if (passedInputCompanies.length > 0 || passedAddedCompanies.length > 0) {
             setShowSearchBox(false)
             setShowSelectedList(true)
         }
