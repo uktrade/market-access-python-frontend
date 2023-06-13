@@ -369,6 +369,10 @@ class Barrier(APIModel):
         if self.data.get("start_date") is not None:
             return dateutil.parser.parse(self.data.get("start_date"))
 
+    @property
+    def export_types(self):
+        return self.data.get("export_types", [])
+
 
 class PublicBarrier(APIModel):
     _country = None

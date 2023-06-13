@@ -10,7 +10,7 @@ from .mixins import BarrierMixin
 EXPORT_TYPES = (
     ("goods", "Goods"),
     ("services", "Services"),
-    ("investment", "Investment"),
+    ("investments", "Investments"),
 )
 
 
@@ -21,7 +21,7 @@ class BarrierEditExportType(MetadataMixin, BarrierMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         if not self.use_session_export_types:
-            request.session["export_types"] = self.barrier.export_types
+            request.session["export_types"] = self.barrier.export_types or []
 
         return super().get(request, *args, **kwargs)
 
@@ -88,9 +88,13 @@ class BarrierAddExportTypes(MetadataMixin, BarrierMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        export_types = self.request.session.get("export_types", [])
-        export_types.append(form.cleaned_data["export_type"])
-        self.request.session.save()
+        if self.request.session.get("export_types"):
+            self.request.session["export_types"].append(
+                form.cleaned_data["export_type"]
+            )
+        else:
+            self.request.session["export_types"] = [form.cleaned_data["export_type"]]
+        self.request.session.modified = True
         return super().form_valid(form)
 
     def get_success_url(self):

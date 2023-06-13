@@ -448,11 +448,11 @@
                 {% if barrier.export_types %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.export_types %}
-                        <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                        <li class="summary-group__list__value__list__item">{{ item }}</li>
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:export_types' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}

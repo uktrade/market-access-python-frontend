@@ -30,7 +30,7 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
 
     def test_add_export_types_choices(self):
         """
-        Add Sector page should not include current sectors in choices
+        Add export type page should not include current sectors in choices
         """
         self.update_session(
             {
@@ -56,7 +56,7 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.patch")
     def test_add_export_type(self, mock_patch):
         """
-        Add Sector page should add a sector to the session, not call the API
+        Add export type page should add an export type to the session, not call the API
         """
         self.update_session(
             {
@@ -80,15 +80,9 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
 
     def test_edit_export_type_confirmation_form(self):
         """
-        Edit Sectors form should match the sectors in the session
+        Edit export type form should match the export types in the session
         """
-        self.update_session(
-            {
-                "export_types": [
-                    export_type for export_type in self.barrier["export_types"]
-                ]
-            }
-        )
+        self.update_session({"export_types": []})
 
         response = self.client.get(
             reverse(
@@ -97,15 +91,13 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
             ),
         )
         assert response.status_code == HTTPStatus.OK
-        assert self.client.session["export_types"] == (
-            [export_type for export_type in self.barrier["export_types"]]
-            + [self.new_export_type]
-        )
+        form = response.context["form"]
+        assert form.initial["export_types"] == []
 
     @patch("utils.api.resources.APIResource.patch")
     def test_edit_export_type_confirm(self, mock_patch):
         """
-        Saving sectors should call the API
+        Saving export_types should call the API
         """
         new_export_types = [self.new_export_type]
         response = self.client.post(
@@ -123,7 +115,7 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.patch")
     def test_remove_export_type(self, mock_patch):
         """
-        Removing a sector should remove it from the session, not call the API
+        Removing an export type should remove it from the session, not call the API
         """
         self.update_session(
             {
