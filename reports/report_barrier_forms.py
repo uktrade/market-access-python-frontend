@@ -130,6 +130,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        print(cleaned_data)
         status = cleaned_data.get("barrier_status")
         partially_resolved_date = cleaned_data.get("partially_resolved_date")
         partially_resolved_description = cleaned_data.get(
@@ -358,22 +359,19 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
         cleaned_companies_list = []
         cleaned_added_companies_list = []
 
-        # Loop the passed companies, get their ID and name, 
+        # Loop the passed companies, get their ID and name,
         # put them into a dict and append to the list
         for company in companies_list:
             cleaned_company = {
                 "id": company["company_number"],
-                "name": company["title"]
+                "name": company["title"],
             }
             cleaned_companies_list.append(cleaned_company)
 
         # Loop through added companies and convert the string in the existing
         # data to objects
         for company in added_companies_list:
-            cleaned_company = {
-                "id": "",
-                "name": company
-            }
+            cleaned_company = {"id": "", "name": company}
             cleaned_added_companies_list.append(cleaned_company)
 
         # Update cleaned_data
