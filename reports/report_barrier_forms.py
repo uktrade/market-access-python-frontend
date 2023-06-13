@@ -142,7 +142,6 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        print(cleaned_data)
         status = cleaned_data.get("barrier_status")
         partially_resolved_date = cleaned_data.get("partially_resolved_date")
         partially_resolved_description = cleaned_data.get(
@@ -448,4 +447,3 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        print("export type cleaned data: ", self.cleaned_data)
