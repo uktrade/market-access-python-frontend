@@ -32,6 +32,7 @@ class BarrierEditExportType(MetadataMixin, BarrierMixin, FormView):
         context_data.update(
             {
                 "export_types": export_types,
+                "has_all_export_types_selected": len(export_types) == 3,
             }
         )
         return context_data
@@ -53,11 +54,7 @@ class BarrierEditExportType(MetadataMixin, BarrierMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["export_types"] = [
-            (key, value)
-            for key, value in EXPORT_TYPES
-            if key not in self.barrier.export_types
-        ]
+        kwargs["export_types"] = [(key, value) for key, value in EXPORT_TYPES]
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
         kwargs["token"] = self.request.session.get("sso_token")
         return kwargs

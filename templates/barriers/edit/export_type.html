@@ -20,7 +20,9 @@
             {% include 'barriers/partials/export_type_list.html' with export_types=export_types show_remove_links=True %}
         {% endif %}
 
-        <a href="{% url 'barriers:add_export_types' barrier.id %}" id="add-export_type-button" class="govuk-button button--secondary selection-list__add-button">Add specific export type</a>
+        {% if not has_all_export_types_selected %}
+            <a href="{% url 'barriers:add_export_types' barrier.id %}" id="add-export_type-button" class="govuk-button button--secondary selection-list__add-button">Add specific export type</a>
+        {% endif %}
 
     </div>
 
