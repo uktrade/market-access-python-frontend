@@ -210,13 +210,13 @@ class NewReport(ReportsTemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["stages"] = {
-            "1.1": "About the barrier",
-            "1.2": "Barrier status",
-            "1.3": "Location of the barrier",
-            "1.4": "Trade direction",
-            "1.5": "Sectors affected by the barrier",
-            # "1.6": "Define barrier category",
-            "1.6": "Add HS commodity codes",
+            "1.1": "to describe the barrier",
+            "1.2": "what the status of the is",
+            "1.3": "which countries the barrier relates to",
+            "1.4": "whether the barrier affects exporting or importing",
+            "1.5": "which sectors the barrier affects",
+            "1.6": "which companies the barrier affects",
+            "1.7": "which goods and services or investments the barrier affects",
         }
         return context_data
 

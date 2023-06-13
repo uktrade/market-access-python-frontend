@@ -82,6 +82,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         This renders the form or, if needed, does the http redirects.
         """
         step_url = kwargs.get("step", None)
+        print("step url", step_url)
         draft_barrier_id = kwargs.get("draft_barrier_id", None)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
@@ -140,6 +141,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 **barrier_title_form,
                 new_report_session_data=json.dumps(self.storage.data),
             )
+
+            # Clear the cache for new report
+            self.storage.reset()
 
             return HttpResponseRedirect(reverse("barriers:dashboard"))
 
