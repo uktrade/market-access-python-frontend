@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import CommodityForm from "./commodities/CommodityForm";
+import CompaniesForm from "./companies/CompaniesForm";
 import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
@@ -32,6 +33,19 @@ function renderCommodityForm(
             helpText={helpText}
             isReportJourney={isReportJourney}
             nextUrl={nextUrl}
+        />,
+        document.getElementById("react-app")
+    );
+}
+
+function renderCompaniesForm(
+    searchLabel,
+    searchHelpText,
+) {
+    ReactDOM.render(
+        <CompaniesForm
+            searchLabel={searchLabel}
+            searchHelpText={searchHelpText}
         />,
         document.getElementById("react-app")
     );
@@ -164,6 +178,7 @@ function renderRisksAndMitigationForm() {
 
 export {
     renderCommodityForm,
+    renderCompaniesForm,
     renderLocationFilter,
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
