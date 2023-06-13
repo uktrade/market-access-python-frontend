@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django import forms
@@ -295,11 +296,6 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 
         # admin_areas comes through in a [] array/list format and SHOULD go into the DB fine like this...
 
-        logger.critical("****")
-        logger.critical("CLEANING DATA:")
-        logger.critical(str(cleaned_data))
-        logger.critical("****")
-
         return cleaned_data
 
     def get_trading_bloc_fields(self):
@@ -342,11 +338,59 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
 
 
 class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
-    # TODO get the existing companies search stuff into this page
     companies_affected = forms.CharField(
         label="Name of company affected by the barrier",
         help_text=("You can search by name, address or company number"),
+        widget=forms.HiddenInput(),
     )
+    unrecognised_company = forms.CharField(
+        widget=forms.HiddenInput(),
+        required=False,
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Convert the passed companies string to list of dictionaries
+        companies_list = []
+        if cleaned_data["companies_affected"] != "":
+            companies_list = json.loads(cleaned_data["companies_affected"])
+        added_companies_list = []
+        if cleaned_data["unrecognised_company"] != "":
+            added_companies_list = json.loads(cleaned_data["unrecognised_company"])
+
+        # Need to error if none detected in lists
+        if companies_list == [] and added_companies_list == []:
+            msg = "Please search for a company that has been affected by the barrier."
+            self.add_error("companies_affected", msg)
+
+        # Setup list to contain the cleaned company information
+        cleaned_companies_list = []
+        cleaned_added_companies_list = []
+
+        # Loop the passed companies, get their ID and name, 
+        # put them into a dict and append to the list
+        for company in companies_list:
+            cleaned_company = {
+                "id": company["company_number"],
+                "name": company["title"]
+            }
+            cleaned_companies_list.append(cleaned_company)
+
+        # Loop through added companies and convert the string in the existing
+        # data to objects
+        for company in added_companies_list:
+            cleaned_company = {
+                "id": "",
+                "name": company
+            }
+            cleaned_added_companies_list.append(cleaned_company)
+
+        # Update cleaned_data
+        cleaned_data["companies"] = cleaned_companies_list
+        cleaned_data["related_organisations"] = cleaned_added_companies_list
+
+        return cleaned_data
 
 
 class BarrierExportTypeForm(APIFormMixin, forms.Form):

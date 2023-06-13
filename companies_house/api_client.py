@@ -28,7 +28,7 @@ class CompaniesHouseAPIClient(object):
         response = requests.get(url, headers=headers)
         return CompanyHouseCompany(**response.json())
 
-    def search_companies(self, query: str, limit: int = 100):
+    def search_companies(self, query: str, limit: int = 100, raw_json: bool = False):
         """
         Search company house companies
         """
@@ -40,6 +40,7 @@ class CompaniesHouseAPIClient(object):
 
         response = requests.get(url, params=params, headers=headers)
 
-        results = CompanyHouseSearchResult(**response.json())
-
-        return results
+        if raw_json is True:
+            return response.json()
+        else:
+            return CompanyHouseSearchResult(**response.json())
