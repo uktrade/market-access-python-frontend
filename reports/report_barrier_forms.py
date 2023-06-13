@@ -435,3 +435,10 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        print("export type cleaned data: ", self.cleaned_data)
+
+
+class BarrierDetailsSummaryForm(forms.Form):
+    details_confirmation = forms.CharField(
+        widget=forms.HiddenInput(),
+    )

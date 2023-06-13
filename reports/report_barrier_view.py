@@ -12,6 +12,7 @@ from barriers.forms.commodities import CommodityLookupForm
 from reports.report_barrier_forms import (
     BarrierAboutForm,
     BarrierCompaniesAffectedForm,
+    BarrierDetailsSummaryForm,
     BarrierExportTypeForm,
     BarrierLocationForm,
     BarrierSectorsAffectedForm,
@@ -54,6 +55,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         ("barrier-sectors-affected", BarrierSectorsAffectedForm),
         ("barrier-companies-affected", BarrierCompaniesAffectedForm),
         ("barrier-export-type", BarrierExportTypeForm),
+        ("barrier-details-summary", BarrierDetailsSummaryForm),
     ]
 
     def get_template_names(self):
@@ -246,6 +248,14 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             confirmed_commodities_data = []
             context.update({"confirmed_commodities_data": confirmed_commodities_data})
 
+
+        logger.critical("*****************")
+        logger.critical(self.steps.current)
+        logger.critical("*****************")
+        if self.steps.current == "barrier-details-summary":
+            self.storage.data
+
+        
         return context
 
     def process_step(self, form):
