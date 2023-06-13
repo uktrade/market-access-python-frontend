@@ -82,7 +82,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         This renders the form or, if needed, does the http redirects.
         """
         step_url = kwargs.get("step", None)
-        print("step url", step_url)
         draft_barrier_id = kwargs.get("draft_barrier_id", None)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
@@ -113,7 +112,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         elif step_url == "skip":
             # Save draft and exit
-            print("! skip and exit ")
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             # Check to see if it is an existing draft barrier otherwise create
             meta_data = self.storage.data.get("step_data").get("meta", None)
@@ -199,7 +197,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             return JsonResponse({"status": "error", "message": "Bad request"})
 
         lookup_form = self.get_commodity_lookup_form(form_class)
-        print(lookup_form.is_valid())
         if lookup_form.is_valid():
             return JsonResponse(
                 {
@@ -220,7 +217,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         #     initial = {"location": self.barrier.country["id"]}
         # elif self.barrier.trading_bloc:
         #     initial = {"location": self.barrier.trading_bloc["code"]}
-        print("form class default location :  ", self.get_default_location())
         # default_location = dict((x, y) for x, y in self.get_default_location())
 
         initial = {"location": UK_COUNTRY_ID}
@@ -247,7 +243,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             context.update({"sectors_list": sectors})
 
         if self.steps.current == "barrier-export-type":
-            print("Setting empty commodities data")
             confirmed_commodities_data = []
             context.update({"confirmed_commodities_data": confirmed_commodities_data})
 
@@ -258,14 +253,12 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)
-        print("current step :", step)
         # determine the step if not given
         if step is None:
             step = self.steps.current
 
         if step == "barrier-export-type":
             location_data = self.storage.get_step_data("barrier-location")
-            print("location fields:", location_data)
             if location_data:
                 default_location = self.get_default_location()
 
@@ -273,28 +266,19 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                     default_location,
                     (UK_COUNTRY_ID, "United Kingdom"),
                 ]
-                print("got locations :", location_choices)
                 form.fields["location"].choices = location_choices
 
         return form
 
     def get_default_location(self):
         self.countries_options = self.metadata.get_country_list()
-        # print("country list", self.countries_options)
         self.trading_blocs = self.metadata.get_trading_bloc_list()
-        # print("block list", self.trading_blocs)
-        # TODO - use get cleaned data here instead
-        print(
-            "cleaned location data ",
-            self.get_cleaned_data_for_step("barrier_location"),
-        )
+        # TODO - use get_step_cleaned_data() here instead
         location_data = self.storage.get_step_data("barrier-location")
-        print("location fields:", location_data)
         if location_data:
             default_location_code = location_data.get(
                 "barrier-location-location_select", None
             )
-            print("default location code :", default_location_code)
             # Search country list
 
             default_location_name = next(
@@ -307,7 +291,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             )
             if default_location_name is None:
                 # If country not found search Trading Blocks
-                print("got here")
 
                 default_location_name = next(
                     (
@@ -317,8 +300,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                     ),
                     None,
                 )
-
-            print("got name", default_location_name)
 
             return (default_location_code, default_location_name)
 
