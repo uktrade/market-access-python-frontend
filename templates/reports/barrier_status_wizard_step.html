@@ -109,7 +109,11 @@
                         {% form_field_error form "currently_active" %}
                         {% for value, name in form.fields.currently_active.choices %}
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="{{ name }}" name="{{ name }}" type="radio">
+                                <input class="govuk-radios__input"
+                                id="{{ name }}"
+                                name="{{wizard.steps.current}}-currently_active"
+                                type="radio"
+                                value="{{ value }}">
                                 <label class="govuk-label govuk-radios__label" for="{{ name }}">
                                     {{ name }}
                                 </label>
