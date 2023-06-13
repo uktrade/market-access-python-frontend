@@ -378,7 +378,7 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
 
         # Update cleaned_data
         cleaned_data["companies"] = cleaned_companies_list
-        cleaned_data["unrecognised_company"] = cleaned_added_companies_list
+        cleaned_data["related_organisations"] = cleaned_added_companies_list
 
         return cleaned_data
 
