@@ -251,9 +251,18 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         logger.critical("*****************")
         logger.critical(self.steps.current)
+        #logger.critical(self.storage.data["step_data"])
         logger.critical("*****************")
         if self.steps.current == "barrier-details-summary":
-            self.storage.data
+            for step in self.storage.data["step_data"]:
+                for key, value in self.storage.data["step_data"][step].items():
+                    context_key_name = key.replace("-", "_")
+                    context[context_key_name] = value
+                    logger.critical("--")
+                    logger.critical(key + ":")
+                    logger.critical(value)
+                    logger.critical("--")
+
 
         
         return context
