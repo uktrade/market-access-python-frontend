@@ -443,12 +443,12 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Export Type</dt>
+            <dt class="summary-group__list__key">Export Types</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.export_types %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.export_types %}
-                        <li class="summary-group__list__value__list__item">{{ item }}</li>
+                        <li class="summary-group__list__value__list__item">{{ item|capfirst }}</li>
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
