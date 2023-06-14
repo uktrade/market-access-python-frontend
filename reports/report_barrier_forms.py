@@ -298,7 +298,7 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
     trade_direction = forms.ChoiceField(
         label="Which trade direction does this barrier affect?",
         choices={
-            ("EXPORTING", "Exporting from th UK or investing overseas"),
+            ("EXPORTING", "Exporting from the UK or investing overseas"),
             ("IMPORTING", "Importing or investing into the UK"),
         },
         widget=forms.RadioSelect,

@@ -7,7 +7,7 @@ from django.urls import reverse
 from formtools.preview import FormPreview
 from formtools.wizard.views import NamedUrlSessionWizardView
 
-from barriers.constants import UK_COUNTRY_ID
+from barriers.constants import UK_COUNTRY_ID, REPORTABLE_STATUSES
 from barriers.forms.commodities import CommodityLookupForm
 from reports.report_barrier_forms import (
     BarrierAboutForm,
@@ -248,23 +248,61 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             confirmed_commodities_data = []
             context.update({"confirmed_commodities_data": confirmed_commodities_data})
 
-
-        logger.critical("*****************")
-        logger.critical(self.steps.current)
-        #logger.critical(self.storage.data["step_data"])
-        logger.critical("*****************")
+        # Put cleaned data into context for the details summary final step
         if self.steps.current == "barrier-details-summary":
             for step in self.storage.data["step_data"]:
-                for key, value in self.storage.data["step_data"][step].items():
-                    context_key_name = key.replace("-", "_")
-                    context[context_key_name] = value
-                    logger.critical("--")
-                    logger.critical(key + ":")
-                    logger.critical(value)
-                    logger.critical("--")
+                for key, value in self.get_cleaned_data_for_step(step).items():
+                    # Some keys will need formatting to be front-end friendly
+                    # while they are currently database friendly.
+                    if key == "barrier_status":
+                        # Barrier status - currently a number, need to turn it to the word representation
+                        # We can get this from the choice object used in the form
+                        for choice in REPORTABLE_STATUSES:
+                            if value in choice:
+                                context[key] = choice[1]
+                    elif key == "country" or key == "trading_bloc":
+                        # Barrier location - currently country/bloc UUID/id, need to get country/bloc name
+                        # Can use the metadata methods to get this information from given UUID
+                        country_details = self.metadata.get_country(value)
+                        trading_bloc_details = self.metadata.get_trading_bloc(value)
+                        if country_details != None:
+                            context["barrier_location"] = country_details["name"]
+                        elif trading_bloc_details != None:
+                            context["barrier_location"] = trading_bloc_details["name"]
+                        else:
+                            continue
+                    elif key == "trade_direction":
+                        # Trade direction - currently all caps - needs to be readble version
+                        # Use long readable values - same as options in form question
+                        if value == "EXPORTING":
+                            context[key] = "Exporting from the UK or investing overseas"
+                        else:
+                            context[key] = "Importing or investing into the UK"
+                    elif key == "main_sector":
+                        # Main sector affected - currently sector UUID, needs to be readble name
+                        # Can use metadata method to get name
+                        sector_information = self.metadata.get_sector(value)
+                        context[key] = sector_information["name"]
+                    elif key == "sectors":
+                        # Other sectors affected - currently list of UUIDs, needs to be readable names list
+                        # Can use metadata method to get list of names
+                        other_sector_names = []
+                        other_sectors_information = self.metadata.get_sectors_by_ids(value)
+                        for sector in other_sectors_information:
+                            other_sector_names.append(sector["name"])
+                        context[key] = other_sector_names
+                    elif key == "companies" or key == "related_organisations":
+                        # Name of companies - currently list of dictionaries, needs to be readable names list
+                        company_names = []
+                        for company in value:
+                            company_names.append(company["name"])
+                        context[key] = company_names
+                    elif key == "codes":
+                        # TODO: What format do these come in? Just the raw code or a dict with product name? 
+                        context[key] = value
+                    else:
+                        context[key] = value
 
-
-        
         return context
 
     def process_step(self, form):
