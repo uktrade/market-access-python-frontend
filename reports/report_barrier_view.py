@@ -85,7 +85,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         """
         step_url = kwargs.get("step", None)
         draft_barrier_id = kwargs.get("draft_barrier_id", None)
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
         # Handle legacy React app calls
         if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -93,7 +93,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         # Is it resuming a draft barrier
         if draft_barrier_id is not None:
-            draft_barrier = client.reports.get(id=draft_barrier_id)
+            draft_barrier = self.client.reports.get(id=draft_barrier_id)
             session_data = draft_barrier.new_report_session_data.strip()
             self.storage.reset()
             self.storage.set_step_data("meta", {"barrier_id": str(draft_barrier_id)})
@@ -114,7 +114,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         elif step_url == "skip":
             # Save draft and exit
-            client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             # Check to see if it is an existing draft barrier otherwise create
             meta_data = self.storage.data.get("step_data").get("meta", None)
             if meta_data:
@@ -124,9 +123,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             if barrier_id:
                 # get draft barrier
-                barrier_report = client.reports.get(barrier_id)
+                barrier_report = self.client.reports.get(barrier_id)
             else:
-                barrier_report = client.reports.create()
+                barrier_report = self.client.reports.create()
 
             # We should at least have passed the first step and have a barrier title
             barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
@@ -136,7 +135,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 self.storage.current_step = self.steps.first
                 return redirect(self.get_step_url(self.steps.first))
 
-            client.reports.patch(
+            self.client.reports.patch(
                 id=barrier_report.id,
                 **barrier_title_form,
                 new_report_session_data=json.dumps(self.storage.data),
@@ -298,7 +297,41 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                             company_names.append(company["name"])
                         context[key] = company_names
                     elif key == "codes":
-                        # TODO: What format do these come in? Just the raw code or a dict with product name? 
+                        # TODO: What format do these come in? Just the raw code or a dict with product name?
+
+
+                        # If we are given a list of codes, we SHOULD be able to query the API for them
+                        # formatting is very weird though, it can't seem to find the given code -
+                        # code/codes doesn't even work as a .get() parameter, does the API serializer need
+                        # updating too? might be easier to store all entered HS code details into clean/session
+                        # data rather than making a whole new lookup
+                        # Files to check: barriers/forms/commodities.py and barriers/views/commodities.py
+                        logger.critical("******************")
+                        logger.critical(value)
+                        logger.critical("******************")
+                        hs6_codes = []
+                        for commodity_code in value:
+                            hs6_code = commodity_code[:6].ljust(10, "0")
+                            hs6_codes.append(hs6_code)
+
+                        logger.critical("******************")
+                        logger.critical(hs6_codes)
+                        logger.critical(",".join(hs6_codes))
+                        logger.critical("******************")
+                        commodities_details = self.client.commodities.list(codes=hs6_codes)
+                        logger.critical("******************")
+                        logger.critical(commodities_details)
+                        logger.critical("******************")
+
+                        #commodity_details_list = self.client.commodities.list(codes=",".join(value))
+                        #logger.critical("-----")
+                        #logger.critical(commodity_details_list)
+                        #logger.critical("-----")
+                        #for commodity in commodity_details_list:
+                        #    logger.critical("******************")
+                        #    logger.critical(commodity.__dict__)
+                        #    logger.critical("******************")
+
                         context[key] = value
                     else:
                         context[key] = value

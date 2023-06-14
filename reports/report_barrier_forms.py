@@ -437,6 +437,27 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         cleaned_data = super().clean()
         print("export type cleaned data: ", self.cleaned_data)
 
+        #
+        # TEST DATA FOR DISPLAY PAGE
+        #
+        # Cleaned data structure for HS codes:
+        #{
+        #   'export_type': ['GOODS'], 
+        #   'export_description': 'gsgfh', 
+        #   'code': '', 
+        #   'location': '', 
+        #   'codes': [
+        #   ], 
+        #   'countries': [
+        #   ], 
+        #   'trading_blocs': [
+        #   ]
+        #}
+        cleaned_data["codes"] = [
+            "10202100000",
+            "10301920000"
+        ]
+
 
 class BarrierDetailsSummaryForm(forms.Form):
     details_confirmation = forms.CharField(
