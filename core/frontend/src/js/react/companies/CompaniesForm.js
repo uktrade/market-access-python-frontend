@@ -179,7 +179,7 @@ function CompaniesForm(props) {
             }
         }
         var passedAddedCompanies = []
-        if (hiddenDjangoInput.value != "None") {
+        if (hiddenDjangoInputUnrecognised.value) {
             passedAddedCompanies = JSON.parse(hiddenDjangoInputUnrecognised.value)
             if (passedAddedCompanies != []) {
                 setAddedCompaniesList(passedAddedCompanies)

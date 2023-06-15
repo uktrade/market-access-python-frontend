@@ -1,0 +1,121 @@
+{% extends "reports/barrier_wizard_step.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Details confirmation{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Check your answers
+                </h1>
+            </legend>
+
+            <!-- About a barrier section -->
+            <div class="report-barrier-questions__section">
+                <h2 class="govuk-heading-m">About the barrier</h2>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Barrier title</h3>
+                    <div class="answer">{{barrier_title}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-about" class="govuk-link">Change</a></div>
+                </div>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Barrier description</h3>
+                    <div class="answer">{{barrier_description}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-about" class="govuk-link">Change</a></div>
+                </div>
+                <!-- Public barrier summary in later version release -->
+                <!--<div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Public barrier summary</h3>
+                    <div class="answer"></div>
+                    <div class="edit-url"><a href="/reports/barrier-about" class="govuk-link">Change</a></div>
+                </div>-->
+            </div>
+
+            <!-- Barrier status section-->
+            <div class="report-barrier-questions__section">
+                <h2 class="govuk-heading-m">Barrier status</h2>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Barrier status</h3>
+                    <div class="answer">{{barrier_status}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-status" class="govuk-link">Change</a></div>
+                </div>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Barrier start date</h3>
+                    <div class="answer">{{start_date|date:"F Y"}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-status" class="govuk-link">Change</a></div>
+                </div>
+            </div>
+
+            <!-- Location section -->
+            <div class="report-barrier-questions__section">
+                <h2 class="govuk-heading-m">Barrier location</h2>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Barrier location</h3>
+                    <div class="answer">{{barrier_location}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-location" class="govuk-link">Change</a></div>
+                </div>
+            </div>
+
+            <!-- Trade direction section -->
+            <div class="report-barrier-questions__section">
+                <h2 class="govuk-heading-m">Trade direction affected</h2>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Trade direction</h3>
+                    <div class="answer">{{trade_direction}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-trade-direction" class="govuk-link">Change</a></div>
+                </div>
+            </div>
+
+            <!-- Sectors affected section -->
+            <div class="report-barrier-questions__section">
+                <h2 class="govuk-heading-m">Sectors affected</h2>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Main sector affected</h3>
+                    <div class="answer">{{main_sector}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-sectors-affected" class="govuk-link">Change</a></div>
+                </div>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Other sectors affected</h3>
+                    <div class="answer">{% for sector in sectors %}{{sector}} <br> {% endfor %}</div>
+                    <div class="edit-url"><a href="/reports/barrier-sectors-affected" class="govuk-link">Change</a></div>
+                </div>
+            </div>
+
+            <!-- Companies affected section -->
+            <div class="report-barrier-questions__section">
+                <h2 class="govuk-heading-m">Companies affected</h2>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Name of companies affected by the barrier</h3>
+                    <div class="answer">{% for company in companies %}{{company}} <br> {% endfor %}{% for company in related_organisations %}{{company}} <br> {% endfor %}</div>
+                    <div class="edit-url"><a href="/reports/barrier-companies-affected" class="govuk-link">Change</a></div>
+                </div>
+            </div>
+
+            <!-- Goods/services/hs-codes section -->
+            <div class="report-barrier-questions__section">
+                <h2 class="govuk-heading-m">Goods, services or investments affected</h2>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Export type</h3>
+                    <div class="answer">{% for type in export_type %}{{type|lower|capfirst}} <br> {% endfor %}</div>
+                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change</a></div>
+                </div>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">Goods, services or investments affected</h3>
+                    <div class="answer">{{export_description}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change</a></div>
+                </div>
+                <div class="report-barrier-questions__question">
+                    <h3 class="govuk-heading-s question-label">HS Commodity codes</h3>
+                    <div class="answer">{{codes}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change</a></div>
+                </div>
+            </div>
+
+            <!-- Confirm input to conmplete process -->
+            <input type="hidden" id="barrier--details-summary-input" name="barrier-details-summary-details_confirmation" value="{{ form.details_confirmation.value }}">
+
+        </fieldset>
+    </div>
+{% endblock %}
