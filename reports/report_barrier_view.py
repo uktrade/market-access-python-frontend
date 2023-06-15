@@ -455,6 +455,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         else:
             print("creating final barrier")
             # TODO need to use the submit endpiont
+            submitted_values["new_report_session_data"] = None
             # self.client.put(f"reports/{barrier_id}/submit")
             # self.client.reports.submit(self.barrier_id)
             client.reports.submit(
