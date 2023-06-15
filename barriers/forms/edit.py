@@ -21,9 +21,9 @@ from utils.forms import (
     ClearableMixin,
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
+    TrueFalseBooleanField,
     YesNoBooleanField,
     YesNoDontKnowBooleanField,
-    TrueFalseBooleanField,
 )
 
 from .mixins import APIFormMixin, EstimatedResolutionDateApprovalMixin
