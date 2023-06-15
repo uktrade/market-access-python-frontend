@@ -178,6 +178,7 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
             "implementation of a trading bloc regulation (so only applies to that "
             "country)"
         ),
+        required=True,
     )
     admin_areas = forms.CharField(
         label="Which admin area does the barrier apply to?",
@@ -260,8 +261,13 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
+        if self.cleaned_data["location_select"] == "0":
+            msg = "Select a country or trading bloc."
+            self.add_error("location_select", msg)
+
         # Map the location selected to the correct DB field
         location = self.cleaned_data["location_select"]
+
         trading_bloc_codes = [
             trading_bloc["code"] for trading_bloc in self.trading_blocs
         ]
@@ -270,7 +276,7 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
             self.cleaned_data["trading_bloc"] = location
         else:
             self.cleaned_data["country"] = location
-            self.cleaned_data["trading_bloc"] = ""
+            self.cleaned_data["trading_bloc"] = None
 
         if (
             self.cleaned_data["trading_bloc_EU"] == "YES"

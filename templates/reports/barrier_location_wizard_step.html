@@ -57,7 +57,7 @@
                             </div>
                             {% for value, name in trading_bloc_field.field.choices %}
                                 <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input" id="{{ name }}" name="barrier-location-{{ trading_bloc_field.name }}" value="{{ value }}" type="radio" {% if trading_bloc_field.field.value == value%}checked="checked"{% endif %}>
+                                    <input class="govuk-radios__input" id="{{ name }}" name="barrier-location-{{ trading_bloc_field.name }}" value="{{ value }}" type="radio" {% if value == trading_bloc_field.value %}checked="checked"{% endif %}>
                                     <label class="govuk-label govuk-radios__label" for="{{ name }}">
                                         {{ name }}
                                     </label>
