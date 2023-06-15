@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 
@@ -7,7 +8,7 @@ from django.urls import reverse
 from formtools.preview import FormPreview
 from formtools.wizard.views import NamedUrlSessionWizardView
 
-from barriers.constants import UK_COUNTRY_ID, REPORTABLE_STATUSES
+from barriers.constants import REPORTABLE_STATUSES, UK_COUNTRY_ID
 from barriers.forms.commodities import CommodityLookupForm
 from reports.report_barrier_forms import (
     BarrierAboutForm,
@@ -264,9 +265,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         # Can use the metadata methods to get this information from given UUID
                         country_details = self.metadata.get_country(value)
                         trading_bloc_details = self.metadata.get_trading_bloc(value)
-                        if country_details != None:
+                        if country_details is not None:
                             context["barrier_location"] = country_details["name"]
-                        elif trading_bloc_details != None:
+                        elif trading_bloc_details is not None:
                             context["barrier_location"] = trading_bloc_details["name"]
                         else:
                             continue
@@ -286,7 +287,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         # Other sectors affected - currently list of UUIDs, needs to be readable names list
                         # Can use metadata method to get list of names
                         other_sector_names = []
-                        other_sectors_information = self.metadata.get_sectors_by_ids(value)
+                        other_sectors_information = self.metadata.get_sectors_by_ids(
+                            value
+                        )
                         for sector in other_sectors_information:
                             other_sector_names.append(sector["name"])
                         context[key] = other_sector_names
@@ -298,7 +301,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         context[key] = company_names
                     elif key == "codes":
                         # TODO: What format do these come in? Just the raw code or a dict with product name?
-
 
                         # If we are given a list of codes, we SHOULD be able to query the API for them
                         # formatting is very weird though, it can't seem to find the given code -
@@ -318,16 +320,18 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         logger.critical(hs6_codes)
                         logger.critical(",".join(hs6_codes))
                         logger.critical("******************")
-                        commodities_details = self.client.commodities.list(codes=hs6_codes)
+                        commodities_details = self.client.commodities.list(
+                            codes=hs6_codes
+                        )
                         logger.critical("******************")
                         logger.critical(commodities_details)
                         logger.critical("******************")
 
-                        #commodity_details_list = self.client.commodities.list(codes=",".join(value))
-                        #logger.critical("-----")
-                        #logger.critical(commodity_details_list)
-                        #logger.critical("-----")
-                        #for commodity in commodity_details_list:
+                        # commodity_details_list = self.client.commodities.list(codes=",".join(value))
+                        # logger.critical("-----")
+                        # logger.critical(commodity_details_list)
+                        # logger.critical("-----")
+                        # for commodity in commodity_details_list:
                         #    logger.critical("******************")
                         #    logger.critical(commodity.__dict__)
                         #    logger.critical("******************")
@@ -398,6 +402,30 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         for form in form_list:
             submitted_values = {**submitted_values, **form.clean()}
 
+        # Exclude list for meta fields not required for barrier creation
+        exclude_fields = [
+            "admin_areas",
+            "trade_direction",
+            "sectors",
+            "companies",
+            "related_organisations",
+            "export_type",
+            "export_description",
+            "code",
+            "location",
+            "codes",
+            "countries",
+            "trading_blocs",
+        ]
+
+        # Clean date values
+        for name, value in submitted_values.items():
+            if isinstance(value, datetime.date):
+                submitted_values[name] = value.isoformat()
+
+        for name in exclude_fields:
+            submitted_values.pop(name)
+
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         # Check to see if it is an existing draft barrier otherwise create
         meta_data = self.storage.data.get("step_data").get("meta", None)
@@ -414,10 +442,63 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         else:
             barrier_report = client.reports.create()
 
+        submitted_values["id"] = barrier_report.id
+        # TODO Need to add this to journey
+        # submitted_values["is_draft"] = False
+
+        if getattr(submitted_values, "is_draft", True) is True:
+            client.reports.patch(
+                # id=barrier_report.id,
+                new_report_session_data=json.dumps(self.storage.data),
+                **submitted_values,
+            )
+        else:
+            print("creating final barrier")
+            # TODO need to use the submit endpiont
+            submitted_values["new_report_session_data"] = None
+            # self.client.put(f"reports/{barrier_id}/submit")
+            # self.client.reports.submit(self.barrier_id)
+            client.reports.submit(
+                **submitted_values,
+            )
+
+        # client.reports.patch(
+        #     barrier_title="Test barrier",
+        #     barrier_description="Description",
+        #     barrier_status="2",
+        #     partially_resolved_date=None,
+        #     partially_resolved_description=None,
+        #     resolved_date=None,
+        #     resolved_description=None,
+        #     start_date_known=False,
+        #     start_date="2022-08-01",
+        #     currently_active=None,
+        #     location_select="TB00016",
+        #     # admin_areas=None,
+        #     trading_bloc_EU=None,
+        #     trading_bloc_GCC=None,
+        #     trading_bloc_EAEU=None,
+        #     trading_bloc_Mercosur=None,
+        #     country=None,
+        #     trading_bloc="TB00016",
+        #     # trade_direction="EXPORTING",
+        #     main_sector="af959812-6095-e211-a939-e4115bead28a",
+        #     # sectors=None,
+        #     companies_affected=None,
+        #     unrecognised_company=None,
+        #     # companies=None,
+        #     # related_organisations=None,
+        #     # export_type=None,
+        #     # export_description="eewwe",
+        #     # code=None,
+        #     # location=None,
+        #     # codes=None,
+        #     # countries=None,
+        #     # trading_blocs=None,
+        #     id=barrier_report.id,
+        # )
+        # Todo Remove once submit and is_draft is handled
         client.reports.patch(
-            id=barrier_report.id,
-            new_report_session_data=json.dumps(self.storage.data),
-            # draft=False,
             **submitted_values,
         )
 

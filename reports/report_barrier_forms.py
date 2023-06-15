@@ -3,7 +3,11 @@ import logging
 
 from django import forms
 
-from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT, EXPORT_TYPES
+from barriers.constants import (
+    EXPORT_TYPES,
+    REPORTABLE_STATUSES,
+    REPORTABLE_STATUSES_HELP_TEXT,
+)
 from barriers.forms.mixins import APIFormMixin
 from utils.forms import CommodityCodeWidget, MonthYearField, MultipleValueField
 from utils.metadata import MetadataMixin
@@ -166,6 +170,8 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         if start_date_known and currently_active == "":
             msg = "Is the barrier affecting trade"
             self.add_error("currently_active", msg)
+
+        return cleaned_data
 
 
 class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
@@ -431,6 +437,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        return cleaned_data
 
 
 class BarrierDetailsSummaryForm(forms.Form):
