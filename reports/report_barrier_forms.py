@@ -180,6 +180,8 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             msg = "Is the barrier affecting trade"
             self.add_error("currently_active", msg)
 
+        return cleaned_data
+
 
 class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     location_select = forms.ChoiceField(
@@ -444,6 +446,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        return cleaned_data
 
 
 class BarrierDetailsSummaryForm(forms.Form):
