@@ -310,7 +310,7 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
     trade_direction = forms.ChoiceField(
         label="Which trade direction does this barrier affect?",
         choices={
-            ("EXPORTING", "Exporting from th UK or investing overseas"),
+            ("EXPORTING", "Exporting from the UK or investing overseas"),
             ("IMPORTING", "Importing or investing into the UK"),
         },
         widget=forms.RadioSelect,
@@ -447,3 +447,9 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+
+
+class BarrierDetailsSummaryForm(forms.Form):
+    details_confirmation = forms.CharField(
+        widget=forms.HiddenInput(),
+    )
