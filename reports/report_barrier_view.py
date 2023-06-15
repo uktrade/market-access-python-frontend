@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 
@@ -398,6 +399,30 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         for form in form_list:
             submitted_values = {**submitted_values, **form.clean()}
 
+        # Exclude list for meta fields not required for barrier creation
+        exclude_fields = [
+            "admin_areas",
+            "trade_direction",
+            "sectors",
+            "companies",
+            "related_organisations",
+            "export_type",
+            "export_description",
+            "code",
+            "location",
+            "codes",
+            "countries",
+            "trading_blocs",
+        ]
+
+        # Clean date values
+        for name, value in submitted_values.items():
+            if isinstance(value, datetime.date):
+                submitted_values[name] = value.isoformat()
+
+        for name in exclude_fields:
+            submitted_values.pop(name)
+
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         # Check to see if it is an existing draft barrier otherwise create
         meta_data = self.storage.data.get("step_data").get("meta", None)
@@ -414,10 +439,62 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         else:
             barrier_report = client.reports.create()
 
+        submitted_values["id"] = barrier_report.id
+        # TODO Need to add this to journey
+        # submitted_values["is_draft"] = False
+
+        if getattr(submitted_values, "is_draft", True) is True:
+            client.reports.patch(
+                # id=barrier_report.id,
+                new_report_session_data=json.dumps(self.storage.data),
+                **submitted_values,
+            )
+        else:
+            print("creating final barrier")
+            # TODO need to use the submit endpiont
+            # self.client.put(f"reports/{barrier_id}/submit")
+            # self.client.reports.submit(self.barrier_id)
+            client.reports.submit(
+                **submitted_values,
+            )
+
+        # client.reports.patch(
+        #     barrier_title="Test barrier",
+        #     barrier_description="Description",
+        #     barrier_status="2",
+        #     partially_resolved_date=None,
+        #     partially_resolved_description=None,
+        #     resolved_date=None,
+        #     resolved_description=None,
+        #     start_date_known=False,
+        #     start_date="2022-08-01",
+        #     currently_active=None,
+        #     location_select="TB00016",
+        #     # admin_areas=None,
+        #     trading_bloc_EU=None,
+        #     trading_bloc_GCC=None,
+        #     trading_bloc_EAEU=None,
+        #     trading_bloc_Mercosur=None,
+        #     country=None,
+        #     trading_bloc="TB00016",
+        #     # trade_direction="EXPORTING",
+        #     main_sector="af959812-6095-e211-a939-e4115bead28a",
+        #     # sectors=None,
+        #     companies_affected=None,
+        #     unrecognised_company=None,
+        #     # companies=None,
+        #     # related_organisations=None,
+        #     # export_type=None,
+        #     # export_description="eewwe",
+        #     # code=None,
+        #     # location=None,
+        #     # codes=None,
+        #     # countries=None,
+        #     # trading_blocs=None,
+        #     id=barrier_report.id,
+        # )
+        # Todo Remove once submit and is_draft is handled
         client.reports.patch(
-            id=barrier_report.id,
-            new_report_session_data=json.dumps(self.storage.data),
-            # draft=False,
             **submitted_values,
         )
 
