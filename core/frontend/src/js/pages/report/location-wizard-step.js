@@ -100,19 +100,24 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
             );
             var adminAreasInputValue = adminAreasInput.value.split(",");
             for (let i = 0; i < adminAreasInputValue.length; i++) {
-                selectedAdminAreasIds.push(adminAreasInputValue[i]);
+                if (adminAreasInputValue[i] != ""){
+                    selectedAdminAreasIds.push(adminAreasInputValue[i]);
+                }
             }
             // get the selection box, find the name for the area base on the list of selections and compare the value
             const adminAreaSelector = document.getElementById(
                 "admin_areas_" + countrySelectedName
             );
-            adminAreas = adminAreaSelector.children;
-            for (i = 0; i < adminAreas.length; i++) {
-                adminAreas[i].innerHTML;
-                if (selectedAdminAreasIds.includes(adminAreas[i].value)) {
-                    selectedAdminAreasNames.push(adminAreas[i].innerHTML);
+            if (adminAreaSelector){
+                adminAreas = adminAreaSelector.children;
+                for (i = 0; i < adminAreas.length; i++) {
+                    adminAreas[i].innerHTML;
+                    if (selectedAdminAreasIds.includes(adminAreas[i].value)) {
+                        selectedAdminAreasNames.push(adminAreas[i].innerHTML);
+                    }
                 }
             }
+
             // pre-select the reveal option if there are admin-areas selected
             const adminAreaReveal =
                 document.getElementById("admin-area-reveal");
@@ -137,7 +142,6 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
             showComponent(adminAreaForCountry);
         } else {
             // 6. The country selected has no admin area selector, so hide the whole section
-            console.log("should be hiding now");
             const adminAreaReveal =
                 document.getElementById("admin-area-reveal");
             if (selectedAdminAreasIds.length > 0) {
