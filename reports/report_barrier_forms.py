@@ -3,6 +3,7 @@ import logging
 
 from django import forms
 
+from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT, EXPORT_TYPES
 from barriers.forms.mixins import APIFormMixin
 from barriers.forms.statuses import(
     ResolvedInPartForm,
@@ -284,19 +285,13 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
             self.cleaned_data["country"] = location
             self.cleaned_data["trading_bloc"] = ""
 
-        # TODO: What do we do with the trading bloc questions?
-        # are these supposed to automatically select the trading bloc instead of the country?
-        # or mean added information? could be self.cleaned_data["trading_bloc"] needs to be set to
-        # the submitted value ASWELL AS the country being selected.
         if (
-            self.cleaned_data["trading_bloc_EU"]
-            or self.cleaned_data["trading_bloc_GCC"]
-            or self.cleaned_data["trading_bloc_Mercosur"]
-            or self.cleaned_data["trading_bloc_EAEU"]
+            self.cleaned_data["trading_bloc_EU"] == "YES"
+            or self.cleaned_data["trading_bloc_GCC"] == "YES"
+            or self.cleaned_data["trading_bloc_Mercosur"] == "YES"
+            or self.cleaned_data["trading_bloc_EAEU"] == "YES"
         ):
             self.cleaned_data["caused_by_trading_bloc"] = True
-
-        # admin_areas comes through in a [] array/list format and SHOULD go into the DB fine like this...
 
         return cleaned_data
 
@@ -396,11 +391,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
     export_type = forms.MultipleChoiceField(
         label="Which types of exports does the barrier affect?",
         help_text="Select all that apply",
-        choices=(
-            ("GOODS", "Goods"),
-            ("SERIVCES", "Services"),
-            ("INVESTMENTS", "Investments"),
-        ),
+        choices=EXPORT_TYPES,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
         error_messages={
             "required": "You must select one or more affected exports.",
