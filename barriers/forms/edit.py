@@ -19,7 +19,6 @@ from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
     ChoiceFieldWithHelpText,
     ClearableMixin,
-    DayMonthYearField,
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
     YesNoBooleanField,
@@ -990,7 +989,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
 
 class UpdateBarrierStartDateForm(ClearableMixin, APIFormMixin, forms.Form):
 
-    start_date = DayMonthYearField(
+    start_date = MonthYearInFutureField(
         label="Barrier Start date",
         help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
         error_messages={"required": "Enter a barrier start date"},
