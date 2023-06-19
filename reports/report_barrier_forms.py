@@ -437,6 +437,55 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        codes = cleaned_data.get("codes", [])
+
+        countries = cleaned_data["countries"]
+        trading_blocs = cleaned_data["trading_blocs"]
+
+        print("cleaning commodity codes", codes, countries, trading_blocs)
+        # Mixed lists length will not match maybe some countries and some trading blocs
+        # In that case take first country code
+        matched_lists = True
+        if len(codes) != len(countries) or len(codes) != len(trading_blocs):
+            # lists don't match use first country in list
+            matched_lists = False
+            if len(countries):
+                default_country = countries[0]
+            else:
+                # No country available we should have a trading bloc
+                default_trading = trading_blocs[0]
+
+        self.commodities = []
+        for index, code in enumerate(codes):
+            try:
+                if matched_lists:
+                    self.commodities.append(
+                        {
+                            "code": code,
+                            "country": countries[index] or None,
+                            "trading_bloc": trading_blocs[index] or None,
+                        }
+                    )
+                elif default_country:
+                    self.commodities.append(
+                        {
+                            "code": code,
+                            "country": default_country,
+                            "trading_bloc": None,
+                        }
+                    )
+                else:
+                    self.commodities.append(
+                        {
+                            "code": code,
+                            "country": None,
+                            "trading_bloc": default_trading,
+                        }
+                    )
+
+            except IndexError:
+                raise forms.ValidationError("Code/country mismatch")
+        cleaned_data["commodities"] = self.commodities
         return cleaned_data
 
 

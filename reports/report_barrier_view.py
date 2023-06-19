@@ -199,6 +199,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             return JsonResponse({"status": "error", "message": "Bad request"})
 
         lookup_form = self.get_commodity_lookup_form(form_class)
+
         if lookup_form.is_valid():
             return JsonResponse(
                 {
@@ -221,17 +222,20 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         #     initial = {"location": self.barrier.trading_bloc["code"]}
         # default_location = dict((x, y) for x, y in self.get_default_location())
 
+        selected_location = self.get_default_location()
+        default_location = {"id": selected_location[0], "name": selected_location[1]}
+
         initial = {"location": UK_COUNTRY_ID}
 
         return form_class(
             initial=initial,
             data=self.request.GET.dict() or None,
             token=self.request.session.get("sso_token"),
-            # locations=[
-            #     default_location,
-            #     {UK_COUNTRY_ID, "United Kingdom"},
-            # ],
-            locations=({"id": UK_COUNTRY_ID, "name": "United Kingdom"},),
+            locations=[
+                default_location,
+                {"id": UK_COUNTRY_ID, "name": "United Kingdom"},
+            ],
+            # locations=({"id": UK_COUNTRY_ID, "name": "United Kingdom"},),
         )
 
     def get_context_data(self, form, **kwargs):
@@ -246,7 +250,27 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         if self.steps.current == "barrier-export-type":
             confirmed_commodities_data = []
-            context.update({"confirmed_commodities_data": confirmed_commodities_data})
+            confirmed_commodities = (
+                json.dumps(
+                    self.get_cleaned_data_for_step("barrier-export-type")["commodities"]
+                )
+                or None
+            )
+            print(
+                "cleaned_data",
+                self.get_cleaned_data_for_step("barrier-export-type")["commodities"],
+            )
+            # TODO: Get the comfirmed commodities from cleaned data - may need to add a hidden field
+            # context.update({"confirmed_commodities": confirmed_commodities})
+            # context.update(
+            #     {
+            #         "confirmed_commodities_data": [
+            #             self._to_dict(commodity) for commodity in confirmed_commodities
+            #         ]
+            #     }
+            # )
+
+            context.update({"confirmed_commodities_data": []})
 
         # Put cleaned data into context for the details summary final step
         if self.steps.current == "barrier-details-summary":
