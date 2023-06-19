@@ -251,12 +251,12 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         if self.steps.current == "barrier-export-type":
             # TODO: Get the comfirmed commodities from cleaned data - may need to add a hidden field
             confirmed_commodities_data = []
-            confirmed_commodities = (
-                json.dumps(
-                    self.get_cleaned_data_for_step("barrier-export-type")["commodities"]
-                )
-                or None
-            )
+            # confirmed_commodities = (
+            #     json.dumps(
+            #         self.get_cleaned_data_for_step("barrier-export-type")["commodities"]
+            #     )
+            #     or None
+            # )
             # print(
             #     "cleaned_data",
             #     self.get_cleaned_data_for_step("barrier-export-type")["commodities"],
@@ -467,21 +467,20 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         else:
             barrier_report = self.client.reports.create()
 
-        #submitted_values["id"] = barrier_report.id
+        # submitted_values["id"] = barrier_report.id
         # TODO Need to add this to journey
         # submitted_values["is_draft"] = False
 
         if submitted_values["details_confirmation"] == "completed":
             submitted_values.pop("details_confirmation")
-            #client.reports.patch(
+            # client.reports.patch(
             #    id=barrier_report.id,
             #    **submitted_values,
-            #)
-
+            # )
 
             print("creating final barrier")
             # TODO need to use the submit endpiont
-            #submitted_values["new_report_session_data"] = None
+            # submitted_values["new_report_session_data"] = None
             # self.client.put(f"reports/{barrier_id}/submit")
             # self.client.reports.submit(self.barrier_id)
 
@@ -489,21 +488,20 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             logger.critical(submitted_values)
             logger.critical("-")
             logger.critical(str(barrier_report.id) + " == " + str(barrier_id))
-            #logger.critical("-")
-            #logger.critical(form_list)
+            # logger.critical("-")
+            # logger.critical(form_list)
             logger.critical("***********************************")
 
             # Submit method pass takes barrier_id, api side uses that ID to get all
             # the data it has on the report and validate it. Kind of redundant if we've
-            # validated it at point of entry. 
-            #client.reports.submit(
+            # validated it at point of entry.
+            # client.reports.submit(
             #    **submitted_values,
-            #)
-            #client.reports.patch(
+            # )
+            # client.reports.patch(
             #    id=barrier_report.id,
             #    **submitted_values,
-            #)
-
+            # )
 
             logger.critical("+++++++++++++++++++++++++++++++++")
             logger.critical("Starting PATCH BATCH(tm)")
@@ -529,18 +527,20 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             )
             logger.critical("Status form PATCH BATCHED(tm)")
 
-            #logger.critical("-")
-            #logger.critical(submitted_values["country"])
-            #self.client.reports.patch(id=barrier_report.id, country=submitted_values["country"])
-            #logger.critical(submitted_values["admin_areas"])
-            #self.client.reports.patch(id=barrier_report.id, admin_areas=submitted_values["admin_areas"])
-            #logger.critical(submitted_values["caused_by_admin_areas"])
-            #self.client.reports.patch(id=barrier_report.id, caused_by_admin_areas=submitted_values["caused_by_admin_areas"])
-            #logger.critical(submitted_values["trading_bloc"])
-            #self.client.reports.patch(id=barrier_report.id, trading_bloc=submitted_values["trading_bloc"])
-            #logger.critical(submitted_values["caused_by_trading_bloc"])
-            #self.client.reports.patch(id=barrier_report.id, caused_by_trading_bloc=submitted_values["caused_by_trading_bloc"])
-            #logger.critical("-")
+            # logger.critical("-")
+            # logger.critical(submitted_values["country"])
+            # self.client.reports.patch(id=barrier_report.id, country=submitted_values["country"])
+            # logger.critical(submitted_values["admin_areas"])
+            # self.client.reports.patch(id=barrier_report.id, admin_areas=submitted_values["admin_areas"])
+            # logger.critical(submitted_values["caused_by_admin_areas"])
+            # self.client.reports.patch(id=barrier_report.id,
+            # caused_by_admin_areas=submitted_values["caused_by_admin_areas"])
+            # logger.critical(submitted_values["trading_bloc"])
+            # self.client.reports.patch(id=barrier_report.id, trading_bloc=submitted_values["trading_bloc"])
+            # logger.critical(submitted_values["caused_by_trading_bloc"])
+            # self.client.reports.patch(id=barrier_report.id,
+            #  caused_by_trading_bloc=submitted_values["caused_by_trading_bloc"])
+            # logger.critical("-")
             # Location form
             self.client.reports.patch(
                 id=barrier_report.id,
@@ -566,14 +566,14 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 id=barrier_report.id,
                 # NEW FIELD; MAIN SECTORS =submitted_values["main_sector"],
                 sectors=json.loads(submitted_values["sectors"]),
-                sectors_affected = True,
+                sectors_affected=True,
             )
             logger.critical("Sectors form PATCH BATCHED(tm)")
 
             # Companies form
             self.client.reports.patch(
                 id=barrier_report.id,
-                companies = submitted_values["companies"],
+                companies=submitted_values["companies"],
                 # COMPANIES NOT IN SERIALISER YET =submitted_values["related_organisations"],
             )
             logger.critical("Companies form PATCH BATCHED(tm)")
@@ -589,25 +589,11 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             logger.critical("+++++++++++++++++++++++++++++++++")
 
-            self.client.reports.submit(
-                barrier_report.id
-            )
+            self.client.reports.submit(barrier_report.id)
 
-
-
-
-
-    # TODO MONDAY:
-    # add new fields not added by Uka to the api
-    # add new fields to the report serialiser
-
-
-
-
-
-
-
-
+        # TODO MONDAY:
+        # add new fields not added by Uka to the api
+        # add new fields to the report serialiser
 
         else:
             self.client.reports.patch(
@@ -617,7 +603,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             )
 
         # BarrierReportSerializer fields:
-        #fields = (
+        # fields = (
         #    "admin_areas",
         #    "all_sectors",
         #    "caused_by_trading_bloc",
@@ -653,8 +639,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         #    "commodities",
         #    "draft",
         #    "caused_by_admin_areas",
-        #)
-
+        # )
 
         # client.reports.patch(
         #     barrier_title="Test barrier",
@@ -692,8 +677,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         #     id=barrier_report.id,
         # )
         # Todo Remove once submit and is_draft is handled
-        #client.reports.patch(
+        # client.reports.patch(
         #    **submitted_values,
-        #)
+        # )
 
         return HttpResponseRedirect(reverse("barriers:dashboard"))
