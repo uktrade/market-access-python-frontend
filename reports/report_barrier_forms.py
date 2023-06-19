@@ -411,7 +411,6 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
             },
         ),
     )
-    # TODO - Somehow get the existing HS code component into this page.
     code = forms.CharField(
         label="Enter an HS commodity code - Optional",
         help_text=(
