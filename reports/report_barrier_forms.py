@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 
@@ -154,6 +155,10 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         start_date = cleaned_data.get("start_date")
         currently_active = cleaned_data.get("currently_active")
 
+        # Setup keys for status date and summary
+        cleaned_data["status_date"] = datetime.date.today()
+        cleaned_data["status_summary"] = ""
+
         if status == "3":
             # Partially resolved date and reason requried
             if partially_resolved_date is None:
@@ -162,6 +167,8 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             if partially_resolved_description == "":
                 msg = "Enter a description for partially resolved"
                 self.add_error("partially_resolved_description", msg)
+            cleaned_data["status_date"] = partially_resolved_date
+            cleaned_data["status_summary"] = partially_resolved_description
 
         if status == "4":
             # Resolved date and reason requried
@@ -171,6 +178,8 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             if resolved_description == "":
                 msg = "Enter a description for resolved"
                 self.add_error("resolved_description", msg)
+            cleaned_data["status_date"] = resolved_date
+            cleaned_data["status_summary"] = resolved_description
 
         if start_date is None and start_date_known is False:
             msg = "Enter a date the barrier started to affect trade or I don't know"
@@ -207,7 +216,6 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
         # Get data we need for options
         self.countries_options = self.metadata.get_country_list()
         self.trading_blocs = self.metadata.get_trading_bloc_list()
-        self.admin_areas = self.metadata.get_trading_bloc_list()
 
         # Set the choices for the country select box
         self.fields["location_select"].choices = (
@@ -276,9 +284,9 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        if self.cleaned_data["location_select"] == "0":
-            msg = "Select a country or trading bloc."
-            self.add_error("location_select", msg)
+        #if self.cleaned_data["location_select"] == "0":
+        #    msg = "Select a country or trading bloc."
+        #    self.add_error("location_select", msg)
 
         # Map the location selected to the correct DB field
         location = self.cleaned_data["location_select"]
@@ -287,19 +295,34 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
             trading_bloc["code"] for trading_bloc in self.trading_blocs
         ]
         if location in trading_bloc_codes:
-            self.cleaned_data["country"] = None
+            self.cleaned_data["country"] = ""
             self.cleaned_data["trading_bloc"] = location
         else:
             self.cleaned_data["country"] = location
-            self.cleaned_data["trading_bloc"] = None
+            self.cleaned_data["trading_bloc"] = ""
 
-        if (
-            self.cleaned_data["trading_bloc_EU"] == "YES"
-            or self.cleaned_data["trading_bloc_GCC"] == "YES"
-            or self.cleaned_data["trading_bloc_Mercosur"] == "YES"
-            or self.cleaned_data["trading_bloc_EAEU"] == "YES"
-        ):
+        # Set trading bloc values if it is indicated a trading bloc is the cause
+        self.cleaned_data["caused_by_trading_bloc"] = False
+        if (self.cleaned_data["trading_bloc_EU"] == "YES"):
+            self.cleaned_data["trading_bloc"] = "TB00016"
             self.cleaned_data["caused_by_trading_bloc"] = True
+        if (self.cleaned_data["trading_bloc_GCC"] == "YES"):
+            self.cleaned_data["trading_bloc"] = "TB00017"
+            self.cleaned_data["caused_by_trading_bloc"] = True
+        if (self.cleaned_data["trading_bloc_Mercosur"] == "YES"):
+            self.cleaned_data["trading_bloc"] = "TB00026"
+            self.cleaned_data["caused_by_trading_bloc"] = True
+        if (self.cleaned_data["trading_bloc_EAEU"] == "YES"):
+            self.cleaned_data["trading_bloc"] = "TB00013"
+            self.cleaned_data["caused_by_trading_bloc"] = True
+
+        # Turn admin areas data to list & set caused by value
+        self.cleaned_data["admin_areas"] = self.cleaned_data["admin_areas"].split(",")
+        if self.cleaned_data["admin_areas"] != [""]:
+            self.cleaned_data["caused_by_admin_areas"] = True
+        else:
+            self.cleaned_data["admin_areas"] = []
+            self.cleaned_data["caused_by_admin_areas"] = False
 
         return cleaned_data
 
@@ -313,8 +336,8 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
     trade_direction = forms.ChoiceField(
         label="Which trade direction does this barrier affect?",
         choices={
-            ("EXPORTING", "Exporting from the UK or investing overseas"),
-            ("IMPORTING", "Importing or investing into the UK"),
+            ("1", "Exporting from the UK or investing overseas"),
+            ("2", "Importing or investing into the UK"),
         },
         widget=forms.RadioSelect,
     )
@@ -356,9 +379,15 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
+        logger.critical("xxxxxxxxxxx")
+        logger.critical(cleaned_data["companies_affected"])
+        logger.critical(type(cleaned_data["companies_affected"]))
+        logger.critical(cleaned_data["unrecognised_company"])
+        logger.critical("xxxxxxxxxxx")
+
         # Convert the passed companies string to list of dictionaries
         companies_list = []
-        if cleaned_data["companies_affected"] != "":
+        if cleaned_data["companies_affected"] != "None":
             companies_list = json.loads(cleaned_data["companies_affected"])
         added_companies_list = []
         if cleaned_data["unrecognised_company"] != "":

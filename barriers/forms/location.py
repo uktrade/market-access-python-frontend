@@ -43,9 +43,6 @@ class EditLocationForm(forms.Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        logger.critical("-----------")
-        logger.critical(self.cleaned_data)
-        logger.critical("-----------")
         client.barriers.patch(
             id=self.barrier_id,
             country=self.cleaned_data["country"] or None,
