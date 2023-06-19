@@ -249,6 +249,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             context.update({"sectors_list": sectors})
 
         if self.steps.current == "barrier-export-type":
+            # TODO: Get the comfirmed commodities from cleaned data - may need to add a hidden field
             confirmed_commodities_data = []
             confirmed_commodities = (
                 json.dumps(
@@ -256,11 +257,11 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 )
                 or None
             )
-            print(
-                "cleaned_data",
-                self.get_cleaned_data_for_step("barrier-export-type")["commodities"],
-            )
-            # TODO: Get the comfirmed commodities from cleaned data - may need to add a hidden field
+            # print(
+            #     "cleaned_data",
+            #     self.get_cleaned_data_for_step("barrier-export-type")["commodities"],
+            # )
+
             # context.update({"confirmed_commodities": confirmed_commodities})
             # context.update(
             #     {

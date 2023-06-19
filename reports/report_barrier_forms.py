@@ -438,12 +438,9 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         codes = cleaned_data.get("codes", [])
-
         countries = cleaned_data["countries"]
         trading_blocs = cleaned_data["trading_blocs"]
-
-        print("cleaning commodity codes", codes, countries, trading_blocs)
-        # Mixed lists length will not match maybe some countries and some trading blocs
+        # Mixed lists length will not match could have some countries and some trading blocs
         # In that case take first country code
         matched_lists = True
         if len(codes) != len(countries) or len(codes) != len(trading_blocs):
