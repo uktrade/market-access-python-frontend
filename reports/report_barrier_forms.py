@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class BarrierAboutForm(APIFormMixin, forms.Form):
-    barrier_title = forms.CharField(
+    title = forms.CharField(
         label="Barrier title",
         help_text=(
             """
@@ -34,13 +34,13 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         },
         widget=forms.Textarea(
             attrs={
-                "class": "govuk-input",
+                "class": "govuk-input govuk-js-character-count js-character-count",
                 "rows": 10,
             },
         ),
     )
 
-    barrier_description = forms.CharField(
+    summary = forms.CharField(
         label="Barrier description",
         help_text=(
             """
@@ -51,10 +51,11 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         and any political context.
         """
         ),
+        max_length=300,
         error_messages={"required": "Enter a barrier description"},
         widget=forms.Textarea(
             attrs={
-                "class": "govuk-textarea",
+                "class": "govuk-textarea govuk-textarea govuk-js-character-count js-character-count",
                 "rows": 5,
             },
         ),
@@ -275,7 +276,7 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        #if self.cleaned_data["location_select"] == "0":
+        # if self.cleaned_data["location_select"] == "0":
         #    msg = "Select a country or trading bloc."
         #    self.add_error("location_select", msg)
 
@@ -294,16 +295,16 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 
         # Set trading bloc values if it is indicated a trading bloc is the cause
         self.cleaned_data["caused_by_trading_bloc"] = False
-        if (self.cleaned_data["trading_bloc_EU"] == "YES"):
+        if self.cleaned_data["trading_bloc_EU"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00016"
             self.cleaned_data["caused_by_trading_bloc"] = True
-        if (self.cleaned_data["trading_bloc_GCC"] == "YES"):
+        if self.cleaned_data["trading_bloc_GCC"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00017"
             self.cleaned_data["caused_by_trading_bloc"] = True
-        if (self.cleaned_data["trading_bloc_Mercosur"] == "YES"):
+        if self.cleaned_data["trading_bloc_Mercosur"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00026"
             self.cleaned_data["caused_by_trading_bloc"] = True
-        if (self.cleaned_data["trading_bloc_EAEU"] == "YES"):
+        if self.cleaned_data["trading_bloc_EAEU"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00013"
             self.cleaned_data["caused_by_trading_bloc"] = True
 
