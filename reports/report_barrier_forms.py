@@ -379,12 +379,6 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        logger.critical("xxxxxxxxxxx")
-        logger.critical(cleaned_data["companies_affected"])
-        logger.critical(type(cleaned_data["companies_affected"]))
-        logger.critical(cleaned_data["unrecognised_company"])
-        logger.critical("xxxxxxxxxxx")
-
         # Convert the passed companies string to list of dictionaries
         companies_list = []
         if cleaned_data["companies_affected"] != "None":
@@ -480,6 +474,8 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         # Mixed lists length will not match could have some countries and some trading blocs
         # In that case take first country code
         matched_lists = True
+        default_country = ""
+        default_trading = ""
         if len(codes) != len(countries) or len(codes) != len(trading_blocs):
             # lists don't match use first country in list
             matched_lists = False
@@ -496,8 +492,8 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
                     self.commodities.append(
                         {
                             "code": code,
-                            "country": countries[index] or None,
-                            "trading_bloc": trading_blocs[index] or None,
+                            "country": countries[index] or "",
+                            "trading_bloc": trading_blocs[index] or "",
                         }
                     )
                 elif default_country:
@@ -505,14 +501,14 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
                         {
                             "code": code,
                             "country": default_country,
-                            "trading_bloc": None,
+                            "trading_bloc": "",
                         }
                     )
                 else:
                     self.commodities.append(
                         {
                             "code": code,
-                            "country": None,
+                            "country": "",
                             "trading_bloc": default_trading,
                         }
                     )
