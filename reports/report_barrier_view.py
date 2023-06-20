@@ -251,12 +251,12 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         if self.steps.current == "barrier-export-type":
             # TODO: Get the comfirmed commodities from cleaned data - may need to add a hidden field
             confirmed_commodities_data = []
-            confirmed_commodities = (
-                json.dumps(
-                    self.get_cleaned_data_for_step("barrier-export-type")["commodities"]
-                )
-                or None
-            )
+            #confirmed_commodities = (
+            #    json.dumps(
+            #        self.get_cleaned_data_for_step("barrier-export-type")["commodities"]
+            #    )
+            #    or None
+            #)
             # print(
             #     "cleaned_data",
             #     self.get_cleaned_data_for_step("barrier-export-type")["commodities"],
@@ -333,24 +333,24 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         # updating too? might be easier to store all entered HS code details into clean/session
                         # data rather than making a whole new lookup
                         # Files to check: barriers/forms/commodities.py and barriers/views/commodities.py
-                        logger.critical("******************")
-                        logger.critical(value)
-                        logger.critical("******************")
+                        #logger.critical("******************")
+                        #logger.critical(value)
+                        #logger.critical("******************")
                         hs6_codes = []
                         for commodity_code in value:
                             hs6_code = commodity_code[:6].ljust(10, "0")
                             hs6_codes.append(hs6_code)
 
-                        logger.critical("******************")
-                        logger.critical(hs6_codes)
-                        logger.critical(",".join(hs6_codes))
-                        logger.critical("******************")
+                        #logger.critical("******************")
+                        #logger.critical(hs6_codes)
+                        #logger.critical(",".join(hs6_codes))
+                        #logger.critical("******************")
                         commodities_details = self.client.commodities.list(
                             codes=hs6_codes
                         )
-                        logger.critical("******************")
-                        logger.critical(commodities_details)
-                        logger.critical("******************")
+                        #logger.critical("******************")
+                        #logger.critical(commodities_details)
+                        #logger.critical("******************")
 
                         # commodity_details_list = self.client.commodities.list(codes=",".join(value))
                         # logger.critical("-----")
@@ -441,6 +441,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             "companies_affected",
             "unrecognised_company",
             "code",
+            "codes",
             "location",
             "countries",
             "trading_blocs",
@@ -506,7 +507,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             #    id=barrier_report.id,
             #    **submitted_values,
             #)
-
 
             logger.critical("+++++++++++++++++++++++++++++++++")
             logger.critical("Starting PATCH BATCH(tm)")
@@ -586,7 +586,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 id=barrier_report.id,
                 # NEW FIELD EXPORT TYPE export_types = submitted_values["export_type"],
                 # NEW FIELD EXPORT DESCRIPTION = submitted_values["export_description"],
-                commodities=submitted_values["codes"],
+                commodities=submitted_values["commodities"],
             )
             logger.critical("Commodities form PATCH BATCHED(tm)")
 
@@ -595,22 +595,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             self.client.reports.submit(
                 barrier_report.id
             )
-
-
-
-
-
-    # TODO MONDAY:
-    # add new fields not added by Uka to the api
-    # add new fields to the report serialiser
-
-
-
-
-
-
-
-
 
         else:
             self.client.reports.patch(
