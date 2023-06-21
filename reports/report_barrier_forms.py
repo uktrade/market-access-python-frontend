@@ -68,7 +68,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
 
 
 class BarrierStatusForm(APIFormMixin, forms.Form):
-    barrier_status = forms.ChoiceField(
+    status = forms.ChoiceField(
         label="Choose barrier status",
         choices=REPORTABLE_STATUSES,
         help_text=REPORTABLE_STATUSES_HELP_TEXT,
