@@ -295,7 +295,7 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
             trading_bloc["code"] for trading_bloc in self.trading_blocs
         ]
         if location in trading_bloc_codes:
-            self.cleaned_data["country"] = ""
+            self.cleaned_data["country"] = None
             self.cleaned_data["trading_bloc"] = location
         else:
             self.cleaned_data["country"] = location
@@ -363,6 +363,14 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
         ),
         required=False,
     )
+    def clean(self):
+        cleaned_data = super().clean()
+        logger.critical(cleaned_data["sectors"])
+        cleaned_sectors = []
+        if cleaned_data["sectors"]:
+            cleaned_sectors = json.loads(cleaned_data["sectors"])
+        logger.critical(cleaned_sectors)
+        cleaned_data["sectors"] = cleaned_sectors
 
 
 class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
