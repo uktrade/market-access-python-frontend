@@ -6,20 +6,7 @@ from django import forms
 
 from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT, EXPORT_TYPES
 from barriers.forms.mixins import APIFormMixin
-from barriers.forms.statuses import(
-    ResolvedInPartForm,
-    ResolvedInFullForm,
-)
-from utils.forms import (
-    SubformChoiceField,
-    MonthYearField,
-    SubformMixin,
-)
-from barriers.forms.statuses import BarrierChangeStatusForm
-from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT
-from utils.forms import MonthYearField
-from utils.forms import CommodityCodeWidget, MonthYearField
-from utils.forms import CommodityCodeWidget, MonthYearField, MultipleValueField
+from utils.forms import CommodityCodeWidget, MonthYearField, MultipleValueField, MonthYearInFutureField
 from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
@@ -126,7 +113,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         label="I don't know",
         required=False,
     )
-    start_date = MonthYearField(
+    start_date = MonthYearInFutureField(
         label="When did or will the barrier start to affect trade?",
         help_text="If you aren't sure of the date, give an estimate",
         error_messages={"required": "Enter a date"},
@@ -188,6 +175,12 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         if start_date_known and currently_active == "":
             msg = "Is the barrier affecting trade"
             self.add_error("currently_active", msg)
+
+        if start_date < datetime.date.today():
+            cleaned_data["currently_active"] = True
+        else:
+            cleaned_data["currently_active"] = False
+
 
         return cleaned_data
 
