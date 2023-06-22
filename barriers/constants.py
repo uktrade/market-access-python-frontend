@@ -281,7 +281,7 @@ TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"
 DEPRECATED_TAGS = ["COVID-19"]
 
 EXPORT_TYPES = Choices(
-    ("GOODS", "Goods"),
-    ("SERIVCES", "Services"),
-    ("INVESTMENTS", "Investments"),
+    ("goods", "Goods"),
+    ("services", "Services"),
+    ("investments", "Investments"),
 )

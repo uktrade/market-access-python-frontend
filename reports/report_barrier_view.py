@@ -493,29 +493,18 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             # Status form
             logger.critical("THE STATUS FORM: ")
+            logger.critical(submitted_values["currently_active"])
             self.client.reports.patch(
                 id=barrier_report.id,
                 status=submitted_values["barrier_status"],
                 status_date=submitted_values["status_date"],
                 status_summary=submitted_values["status_summary"],
                 # NEW FIELD; START DATE KNOWN is_start_date_known = submitted_values["start_date_known"],
-                # NEW FIELD; START DATE start_date = submitted_values["start_date"],
-                # NEW FIELD; CURRENTLY ACTIVE is_currently_active = submitted_values["currently_active"],
+                start_date = submitted_values["start_date"],
+                is_currently_active = submitted_values["currently_active"],
             )
             logger.critical("Status form PATCH BATCHED(tm)")
 
-            #logger.critical("-")
-            #logger.critical(submitted_values["country"])
-            #self.client.reports.patch(id=barrier_report.id, country=submitted_values["country"])
-            #logger.critical(submitted_values["admin_areas"])
-            #self.client.reports.patch(id=barrier_report.id, admin_areas=submitted_values["admin_areas"])
-            #logger.critical(submitted_values["caused_by_admin_areas"])
-            #self.client.reports.patch(id=barrier_report.id, caused_by_admin_areas=submitted_values["caused_by_admin_areas"])
-            #logger.critical(submitted_values["trading_bloc"])
-            #self.client.reports.patch(id=barrier_report.id, trading_bloc=submitted_values["trading_bloc"])
-            #logger.critical(submitted_values["caused_by_trading_bloc"])
-            #self.client.reports.patch(id=barrier_report.id, caused_by_trading_bloc=submitted_values["caused_by_trading_bloc"])
-            #logger.critical("-")
             # Location form
             self.client.reports.patch(
                 id=barrier_report.id,
@@ -535,12 +524,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             logger.critical("Trade direction form PATCH BATCHED(tm)")
 
             # Sectors form
-            logger.critical("-")
-            logger.critical(submitted_values["sectors"])
             self.client.reports.patch(
                 id=barrier_report.id,
                 # NEW FIELD; MAIN SECTORS =submitted_values["main_sector"],
-                #sectors=json.loads(submitted_values["sectors"]),
                 sectors=submitted_values["sectors"],
                 sectors_affected=True,
             )
@@ -555,9 +541,12 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             logger.critical("Companies form PATCH BATCHED(tm)")
 
             # Commodities and export types form
+            logger.critical("THE EXPORTS FORM: ")
+            logger.critical(submitted_values["export_type"])
+            logger.critical("-")
             self.client.reports.patch(
                 id=barrier_report.id,
-                # NEW FIELD EXPORT TYPE export_types = submitted_values["export_type"],
+                #export_types = submitted_values["export_type"],
                 # NEW FIELD EXPORT DESCRIPTION = submitted_values["export_description"],
                 commodities=submitted_values["commodities"],
             )
