@@ -251,12 +251,12 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         if self.steps.current == "barrier-export-type":
             # TODO: Get the comfirmed commodities from cleaned data - may need to add a hidden field
             confirmed_commodities_data = []
-            #confirmed_commodities = (
+            # confirmed_commodities = (
             #    json.dumps(
             #        self.get_cleaned_data_for_step("barrier-export-type")["commodities"]
             #    )
             #    or None
-            #)
+            # )
             # print(
             #     "cleaned_data",
             #     self.get_cleaned_data_for_step("barrier-export-type")["commodities"],
@@ -478,7 +478,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             #    id=barrier_report.id,
             #    **submitted_values,
             # )
-            #)
+            # )
 
             logger.critical("+++++++++++++++++++++++++++++++++")
             logger.critical("Starting PATCH BATCH(tm)")
@@ -500,8 +500,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 status_date=submitted_values["status_date"],
                 status_summary=submitted_values["status_summary"],
                 # NEW FIELD; START DATE KNOWN is_start_date_known = submitted_values["start_date_known"],
-                start_date = submitted_values["start_date"],
-                is_currently_active = submitted_values["currently_active"],
+                start_date=submitted_values["start_date"],
+                is_currently_active=submitted_values["currently_active"],
             )
             logger.critical("Status form PATCH BATCHED(tm)")
 
@@ -546,7 +546,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             logger.critical("-")
             self.client.reports.patch(
                 id=barrier_report.id,
-                #export_types = submitted_values["export_type"],
+                export_types=submitted_values["export_type"],
                 # NEW FIELD EXPORT DESCRIPTION = submitted_values["export_description"],
                 commodities=submitted_values["commodities"],
             )
@@ -554,9 +554,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             logger.critical("+++++++++++++++++++++++++++++++++")
 
-            self.client.reports.submit(
-                barrier_report.id
-            )
+            self.client.reports.submit(barrier_report.id)
 
         else:
             self.client.reports.patch(
