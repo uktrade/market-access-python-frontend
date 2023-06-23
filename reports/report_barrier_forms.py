@@ -6,7 +6,12 @@ from django import forms
 
 from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT, EXPORT_TYPES
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import CommodityCodeWidget, MonthYearField, MultipleValueField, MonthYearInFutureField
+from utils.forms import (
+    CommodityCodeWidget,
+    MonthYearField,
+    MonthYearInFutureField,
+    MultipleValueField,
+)
 from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
@@ -168,7 +173,9 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             cleaned_data["status_date"] = resolved_date
             cleaned_data["status_summary"] = resolved_description
 
-        if start_date is None and start_date_known is False:
+        if (start_date is None and start_date_known is False) or (
+            start_date and start_date_known is True
+        ):
             msg = "Enter a date the barrier started to affect trade or I don't know"
             self.add_error("start_date", msg)
 
@@ -176,11 +183,21 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             msg = "Is the barrier affecting trade"
             self.add_error("currently_active", msg)
 
-        if start_date < datetime.date.today():
-            cleaned_data["currently_active"] = True
+        if start_date:
+            cleaned_data["start_date"] = start_date
+            cleaned_data["start_date_known"] = True
+            # If the given start date is in the past, currently active is true
+            if start_date <= datetime.date.today():
+                cleaned_data["currently_active"] = True
+            else:
+                cleaned_data["currently_active"] = False
         else:
-            cleaned_data["currently_active"] = False
+            cleaned_data["start_date"] = None
 
+        if start_date_known:
+            # 'I don't know' has been checked
+            cleaned_data["start_date_known"] = False
+            cleaned_data["currently_active"] = currently_active
 
         return cleaned_data
 
@@ -277,7 +294,7 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        #if self.cleaned_data["location_select"] == "0":
+        # if self.cleaned_data["location_select"] == "0":
         #    msg = "Select a country or trading bloc."
         #    self.add_error("location_select", msg)
 
@@ -296,16 +313,16 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 
         # Set trading bloc values if it is indicated a trading bloc is the cause
         self.cleaned_data["caused_by_trading_bloc"] = False
-        if (self.cleaned_data["trading_bloc_EU"] == "YES"):
+        if self.cleaned_data["trading_bloc_EU"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00016"
             self.cleaned_data["caused_by_trading_bloc"] = True
-        if (self.cleaned_data["trading_bloc_GCC"] == "YES"):
+        if self.cleaned_data["trading_bloc_GCC"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00017"
             self.cleaned_data["caused_by_trading_bloc"] = True
-        if (self.cleaned_data["trading_bloc_Mercosur"] == "YES"):
+        if self.cleaned_data["trading_bloc_Mercosur"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00026"
             self.cleaned_data["caused_by_trading_bloc"] = True
-        if (self.cleaned_data["trading_bloc_EAEU"] == "YES"):
+        if self.cleaned_data["trading_bloc_EAEU"] == "YES":
             self.cleaned_data["trading_bloc"] = "TB00013"
             self.cleaned_data["caused_by_trading_bloc"] = True
 
@@ -356,6 +373,7 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
         ),
         required=False,
     )
+
     def clean(self):
         cleaned_data = super().clean()
         logger.critical(cleaned_data["sectors"])
