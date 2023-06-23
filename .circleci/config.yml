@@ -59,8 +59,8 @@ jobs:
 
             - run:
                   command: |
-                    sudo pip install --upgrade pip
-                    sudo pip install poetry==1.1.8
+                      sudo pip install --upgrade pip
+                      sudo pip install poetry
 
             - run:
                   name: Install dependencies
