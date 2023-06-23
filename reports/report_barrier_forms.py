@@ -136,7 +136,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        status = cleaned_data.get("barrier_status")
+        status = cleaned_data.get("status")
         partially_resolved_date = cleaned_data.get("partially_resolved_date")
         partially_resolved_description = cleaned_data.get(
             "partially_resolved_description"
@@ -282,6 +282,10 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 
         # Map the location selected to the correct DB field
         location = self.cleaned_data["location_select"]
+
+        if location == "0":
+            msg = "Select which location the barrier relates to"
+            self.add_error("location_select", msg)
 
         trading_bloc_codes = [
             trading_bloc["code"] for trading_bloc in self.trading_blocs
