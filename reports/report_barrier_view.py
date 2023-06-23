@@ -457,14 +457,14 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             # About form
             self.client.reports.patch(
                 id=barrier_report.id,
-                title=submitted_values["barrier_title"],
-                summary=submitted_values["barrier_description"],
+                title=submitted_values["title"],
+                summary=submitted_values["summary"],
             )
 
             # Status form
             self.client.reports.patch(
                 id=barrier_report.id,
-                status=submitted_values["barrier_status"],
+                status=submitted_values["status"],
                 status_date=submitted_values["status_date"],
                 status_summary=submitted_values["status_summary"],
                 is_start_date_known=submitted_values["start_date_known"],
