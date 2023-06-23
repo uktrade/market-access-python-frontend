@@ -1,7 +1,23 @@
 {% extends "reports/barrier_wizard_step.html" %}
+{% load render_bundle from webpack_loader %}
 {% load report_urls %}
 
+
+
 {% block page_title %} Report A Barrier - About the Barrier{% endblock %}
+
+{% block body_script %}
+{% render_bundle 'main' 'js' 'REACT' %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.title.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.summary.name }}-form-group.govuk-character-count' );
+
+        }
+
+    </script>
+
+{% endblock %}
 
 {% block fields %}
     <div class="govuk-form-group">
@@ -15,31 +31,36 @@
             {% form_error_banner form %}
 
             <!-- Barrier Title Question -->
-            <div class="govuk-character-count" data-module="character-count" data-maxlength="150">
-                <div class="{% form_group_classes form.barrier_title.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{ form.barrier_title.id_for_label }}">
-                        {{ form.barrier_title.label }}
+            <div id="{{ form.title.name }}-form-group" class="govuk-character-count" data-module="character-count" data-maxlength="150">
+                <div class="{% form_group_classes form.title.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{ form.title.id_for_label }}">
+                        {{ form.title.label }}
                     </label>
-                    {% form_field_error form "barrier_title" %}
-                    <span id="{{ form.barrier_title.name }}_hint" class="govuk-hint">
-                        {{ form.barrier_title.help_text }}
+                    {% form_field_error form "title" %}
+                    <span id="{{ form.title.name }}_hint" class="govuk-hint">
+                        {{ form.title.help_text }}
                     </span>
-                    {{ form.barrier_title }}
+                    {{ form.title }}
+                    <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+                        You can enter up to 150 characters
+                    </div>
                 </div>
             </div>
 
             <!-- Barrier Description Question -->
-            <div class="govuk-character-count" data-module="character-count" data-maxlength="300">
-                <div class="{% form_group_classes form.barrier_description.errors %}">
-                    <label class="govuk-label govuk-label--s" for="{{form.barrier_description.id_for_label }}">
-                        {{ form.barrier_description.label }}
+            <div id="{{ form.summary.name }}-form-group" class="govuk-character-count" data-module="character-count" data-maxlength="300">
+                <div class="{% form_group_classes form.summary.errors %}">
+                    <label class="govuk-label govuk-label--s" for="{{form.summary.id_for_label }}">
+                        {{ form.summary.label }}
                     </label>
-                    {% form_field_error form "barrier_description" %}
+                    {% form_field_error form "summary" %}
                     <span id="description-hint" class="govuk-hint">
-                        {{ form.barrier_description.help_text }}
+                        {{ form.summary.help_text }}
                     </span>
-                    {{ form.barrier_description }}
-
+                    {{ form.summary }}
+                    <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+                        You can enter up to 300 characters
+                    </div>
                 </div>
             </div>
         </fieldset>

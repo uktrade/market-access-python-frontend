@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class BarrierAboutForm(APIFormMixin, forms.Form):
-    barrier_title = forms.CharField(
+    title = forms.CharField(
         label="Barrier title",
         help_text=(
             """
@@ -35,13 +35,13 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         },
         widget=forms.Textarea(
             attrs={
-                "class": "govuk-input",
+                "class": "govuk-input govuk-js-character-count js-character-count",
                 "rows": 10,
             },
         ),
     )
 
-    barrier_description = forms.CharField(
+    summary = forms.CharField(
         label="Barrier description",
         help_text=(
         """
@@ -52,10 +52,11 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         and any political context.
         """
         ),
+        max_length=300,
         error_messages={"required": "Enter a barrier description"},
         widget=forms.Textarea(
             attrs={
-                "class": "govuk-textarea",
+                "class": "govuk-textarea govuk-textarea govuk-js-character-count js-character-count",
                 "rows": 5,
             },
         ),
@@ -68,7 +69,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
 
 
 class BarrierStatusForm(APIFormMixin, forms.Form):
-    barrier_status = forms.ChoiceField(
+    status = forms.ChoiceField(
         label="Choose barrier status",
         choices=REPORTABLE_STATUSES,
         help_text=REPORTABLE_STATUSES_HELP_TEXT,
@@ -136,7 +137,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        status = cleaned_data.get("barrier_status")
+        status = cleaned_data.get("status")
         partially_resolved_date = cleaned_data.get("partially_resolved_date")
         partially_resolved_description = cleaned_data.get(
             "partially_resolved_description"
@@ -300,6 +301,10 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 
         # Map the location selected to the correct DB field
         location = self.cleaned_data["location_select"]
+
+        if location == "0":
+            msg = "Select which location the barrier relates to"
+            self.add_error("location_select", msg)
 
         trading_bloc_codes = [
             trading_bloc["code"] for trading_bloc in self.trading_blocs
