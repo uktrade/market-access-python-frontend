@@ -453,57 +453,24 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         if submitted_values["details_confirmation"] == "completed":
             submitted_values.pop("details_confirmation")
-            # client.reports.patch(
-            #    id=barrier_report.id,
-            #    **submitted_values,
-            # )
 
-            print("creating final barrier")
-
-            logger.critical("***********************************")
-            logger.critical(submitted_values)
-            logger.critical("-")
-            logger.critical(str(barrier_report.id) + " == " + str(barrier_id))
-            # logger.critical("-")
-            # logger.critical(form_list)
-            logger.critical("***********************************")
-
-            # Submit method pass takes barrier_id, api side uses that ID to get all
-            # the data it has on the report and validate it. Kind of redundant if we've
-            # validated it at point of entry.
-            # client.reports.submit(
-            #    **submitted_values,
-            # )
-            # client.reports.patch(
-            #    id=barrier_report.id,
-            #    **submitted_values,
-            # )
-            # )
-
-            logger.critical("+++++++++++++++++++++++++++++++++")
-            logger.critical("Starting PATCH BATCH(tm)")
-            # TIME FOR PATCH BATCH:
             # About form
             self.client.reports.patch(
                 id=barrier_report.id,
                 title=submitted_values["barrier_title"],
                 summary=submitted_values["barrier_description"],
             )
-            logger.critical("About form PATCH BATCHED(tm)")
 
             # Status form
-            logger.critical("THE STATUS FORM: ")
-            logger.critical(submitted_values["currently_active"])
             self.client.reports.patch(
                 id=barrier_report.id,
                 status=submitted_values["barrier_status"],
                 status_date=submitted_values["status_date"],
                 status_summary=submitted_values["status_summary"],
-                # NEW FIELD; START DATE KNOWN is_start_date_known = submitted_values["start_date_known"],
+                is_start_date_known=submitted_values["start_date_known"],
                 start_date=submitted_values["start_date"],
                 is_currently_active=submitted_values["currently_active"],
             )
-            logger.critical("Status form PATCH BATCHED(tm)")
 
             # Location form
             self.client.reports.patch(
@@ -514,45 +481,35 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 trading_bloc=submitted_values["trading_bloc"],
                 caused_by_trading_bloc=submitted_values["caused_by_trading_bloc"],
             )
-            logger.critical("Location form PATCH BATCHED(tm)")
 
             # Trade direction form
             self.client.reports.patch(
                 id=barrier_report.id,
                 trade_direction=submitted_values["trade_direction"],
             )
-            logger.critical("Trade direction form PATCH BATCHED(tm)")
 
             # Sectors form
             self.client.reports.patch(
                 id=barrier_report.id,
-                # NEW FIELD; MAIN SECTORS =submitted_values["main_sector"],
+                main_sector=submitted_values["main_sector"],
                 sectors=submitted_values["sectors"],
                 sectors_affected=True,
             )
-            logger.critical("Sectors form PATCH BATCHED(tm)")
 
             # Companies form
             self.client.reports.patch(
                 id=barrier_report.id,
                 companies=submitted_values["companies"],
-                # NEW FIELD =submitted_values["related_organisations"],
+                related_organisations=submitted_values["related_organisations"],
             )
-            logger.critical("Companies form PATCH BATCHED(tm)")
 
             # Commodities and export types form
-            logger.critical("THE EXPORTS FORM: ")
-            logger.critical(submitted_values["export_type"])
-            logger.critical("-")
             self.client.reports.patch(
                 id=barrier_report.id,
                 export_types=submitted_values["export_type"],
-                # NEW FIELD EXPORT DESCRIPTION = submitted_values["export_description"],
+                export_description=submitted_values["export_description"],
                 commodities=submitted_values["commodities"],
             )
-            logger.critical("Commodities form PATCH BATCHED(tm)")
-
-            logger.critical("+++++++++++++++++++++++++++++++++")
 
             self.client.reports.submit(barrier_report.id)
 
