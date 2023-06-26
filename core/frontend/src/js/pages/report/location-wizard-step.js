@@ -100,7 +100,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
             );
             var adminAreasInputValue = adminAreasInput.value.split(",");
             for (let i = 0; i < adminAreasInputValue.length; i++) {
-                if (adminAreasInputValue[i] != ""){
+                if (adminAreasInputValue[i] != "") {
                     selectedAdminAreasIds.push(adminAreasInputValue[i]);
                 }
             }
@@ -108,7 +108,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
             const adminAreaSelector = document.getElementById(
                 "admin_areas_" + countrySelectedName
             );
-            if (adminAreaSelector){
+            if (adminAreaSelector) {
                 adminAreas = adminAreaSelector.children;
                 for (i = 0; i < adminAreas.length; i++) {
                     adminAreas[i].innerHTML;

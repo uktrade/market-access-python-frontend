@@ -1,7 +1,7 @@
-from django.http import HttpResponse
-from django.views.generic import View
 from companies_house.api_client import CompaniesHouseAPIClient
 from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_API_KEY
+from django.http import HttpResponse
+from django.views.generic import View
 from utils.exceptions import APIException
 
 import logging
@@ -9,8 +9,8 @@ import json
 
 logger = logging.getLogger(__name__)
 
-class SearchCompany(View):
 
+class SearchCompany(View):
     def get(self, request, *args, **kwargs):
         error = None
         companies_house_api_client = CompaniesHouseAPIClient(
