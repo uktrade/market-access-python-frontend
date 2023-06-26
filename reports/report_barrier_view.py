@@ -279,7 +279,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 for key, value in self.get_cleaned_data_for_step(step).items():
                     # Some keys will need formatting to be front-end friendly
                     # while they are currently database friendly.
-                    if key == "barrier_status":
+                    if key == "status":
                         # Barrier status - currently a number, need to turn it to the word representation
                         # We can get this from the choice object used in the form
                         for choice in REPORTABLE_STATUSES:
@@ -325,27 +325,31 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                     elif key == "codes":
                         # HS Codes - currently list of IDs, needs to be list of commodity details
                         # Get the 10 digit code from the given 6 digit codes
-                        hs6_codes = []
-                        for commodity_code in value:
-                            hs6_code = commodity_code[:6].ljust(10, "0")
-                            hs6_codes.append(hs6_code)
+                        if value:
+                            hs6_codes = []
+                            for commodity_code in value:
+                                hs6_code = commodity_code[:6].ljust(10, "0")
+                                hs6_codes.append(hs6_code)
 
-                        # Query the api for the full details of the list of 10 digit codes
-                        commodities_details = self.client.commodities.list(
-                            codes=",".join(hs6_codes)
-                        )
+                            # Query the api for the full details of the list of 10 digit codes
+                            commodities_details = self.client.commodities.list(
+                                codes=",".join(hs6_codes)
+                            )
 
-                        # Build a context data list, eliminating any duplicates retrieved in the api call
-                        commodity_context_data = []
-                        for commodity in commodities_details:
-                            commodity_object = {
-                                "code": commodity.code,
-                                "description": commodity.description,
-                            }
-                            if commodity_object not in commodity_context_data:
-                                commodity_context_data.append(commodity_object)
+                            # Build a context data list, eliminating any duplicates retrieved in the api call
+                            commodity_context_data = []
+                            for commodity in commodities_details:
+                                commodity_object = {
+                                    "code": commodity.code,
+                                    "description": commodity.description,
+                                }
+                                if commodity_object not in commodity_context_data:
+                                    commodity_context_data.append(commodity_object)
 
-                        context[key] = commodity_context_data
+                            context[key] = commodity_context_data
+                        else:
+                            # If no HS codes provided (it is an optional field) set context as empty list 
+                            context[key] = []
                     else:
                         context[key] = value
 
