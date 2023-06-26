@@ -290,9 +290,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         # Can use the metadata methods to get this information from given UUID
                         country_details = self.metadata.get_country(value)
                         trading_bloc_details = self.metadata.get_trading_bloc(value)
-                        if country_details != None:
+                        if country_details is not None:
                             context["barrier_location"] = country_details["name"]
-                        elif trading_bloc_details != None:
+                        elif trading_bloc_details is not None:
                             context["barrier_location"] = trading_bloc_details["name"]
                         else:
                             continue
