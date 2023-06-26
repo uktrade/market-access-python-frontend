@@ -38,10 +38,7 @@ function renderCommodityForm(
     );
 }
 
-function renderCompaniesForm(
-    searchLabel,
-    searchHelpText,
-) {
+function renderCompaniesForm(searchLabel, searchHelpText) {
     ReactDOM.render(
         <CompaniesForm
             searchLabel={searchLabel}
