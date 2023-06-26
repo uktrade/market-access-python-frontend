@@ -8,7 +8,7 @@ from django.urls import reverse
 from formtools.preview import FormPreview
 from formtools.wizard.views import NamedUrlSessionWizardView
 
-from barriers.constants import UK_COUNTRY_ID, REPORTABLE_STATUSES
+from barriers.constants import REPORTABLE_STATUSES, UK_COUNTRY_ID
 from barriers.forms.commodities import CommodityLookupForm
 from reports.report_barrier_forms import (
     BarrierAboutForm,
@@ -131,7 +131,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             # We should at least have passed the first step and have a barrier title
             barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
             if barrier_title_form is None:
-                # We don't have a barrire title therefore nothing to save
+                # We don't have a barrier title therefore nothing to save
                 # Send user to first step
                 self.storage.current_step = self.steps.first
                 return redirect(self.get_step_url(self.steps.first))
@@ -312,7 +312,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         # Other sectors affected - currently list of UUIDs, needs to be readable names list
                         # Can use metadata method to get list of names
                         other_sector_names = []
-                        other_sectors_information = self.metadata.get_sectors_by_ids(value)
+                        other_sectors_information = self.metadata.get_sectors_by_ids(
+                            value
+                        )
                         for sector in other_sectors_information:
                             other_sector_names.append(sector["name"])
                         context[key] = other_sector_names
@@ -348,7 +350,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
                             context[key] = commodity_context_data
                         else:
-                            # If no HS codes provided (it is an optional field) set context as empty list 
+                            # If no HS codes provided (it is an optional field) set context as empty list
                             context[key] = []
                     else:
                         context[key] = value

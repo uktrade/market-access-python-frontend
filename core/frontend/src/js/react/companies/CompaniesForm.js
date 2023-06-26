@@ -344,12 +344,12 @@ function CompaniesForm(props) {
                     className="govuk-form-group govuk-cookie-banner govuk-!-padding-5"
                 >
                     <label className="govuk-label govuk-label--s">
-                        Can't find the company?
+                        Can&apos;t find the company?
                     </label>
                     <span className="govuk-hint">
-                        If you can't find the company or organisation you're
+                        If you can&apos;t find the company or organisation you&apos;re
                         looking for, try a different search query, check the
-                        company's website or any email correspondence that
+                        company&apos;s website or any email correspondence that
                         contains company registration details.
                     </span>
                     <div id="or-add-text" className="govuk-label--s">

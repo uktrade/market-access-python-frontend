@@ -4,7 +4,11 @@ import logging
 
 from django import forms
 
-from barriers.constants import REPORTABLE_STATUSES, REPORTABLE_STATUSES_HELP_TEXT, EXPORT_TYPES
+from barriers.constants import (
+    EXPORT_TYPES,
+    REPORTABLE_STATUSES,
+    REPORTABLE_STATUSES_HELP_TEXT,
+)
 from barriers.forms.mixins import APIFormMixin
 from utils.forms import (
     CommodityCodeWidget,
@@ -44,7 +48,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
         label="Barrier description",
         help_text=(
-        """
+            """
         This description will only be used internally.
         Explain how the barrier is affecting trade,
         and why it exists. Where relevant include the specific laws
