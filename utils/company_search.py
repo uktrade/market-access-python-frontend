@@ -1,11 +1,12 @@
-from companies_house.api_client import CompaniesHouseAPIClient
-from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_API_KEY
+import json
+import logging
+
 from django.http import HttpResponse
 from django.views.generic import View
-from utils.exceptions import APIException
 
-import logging
-import json
+from companies_house.api_client import CompaniesHouseAPIClient
+from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_API_KEY
+from utils.exceptions import APIException
 
 logger = logging.getLogger(__name__)
 

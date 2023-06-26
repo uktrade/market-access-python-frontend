@@ -63,7 +63,10 @@ REPORTABLE_STATUSES_HELP_TEXT = Choices(
         REPORTABLE_STATUSES.RESOLVED_IN_PART,
         "Barrier impact has been significantly reduced but remains in part",
     ),
-    (REPORTABLE_STATUSES.RESOLVED_IN_FULL, "Barrier has been resolved for all UK companies"),
+    (
+        REPORTABLE_STATUSES.RESOLVED_IN_FULL,
+        "Barrier has been resolved for all UK companies",
+    ),
 )
 
 
