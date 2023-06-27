@@ -385,11 +385,9 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        logger.critical(cleaned_data["sectors"])
         cleaned_sectors = []
         if cleaned_data["sectors"]:
             cleaned_sectors = json.loads(cleaned_data["sectors"])
-        logger.critical(cleaned_sectors)
         cleaned_data["sectors"] = cleaned_sectors
         cleaned_data["sectors_affected"] = True
 
