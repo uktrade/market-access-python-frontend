@@ -91,17 +91,14 @@ class UpdateBarrierProductForm(APIFormMixin, forms.Form):
 
 class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
-        label="Give us a summary of the barrier and how you found out about it",
+        label="Description",
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
-    )
-    is_summary_sensitive = YesNoBooleanField(
-        label="Does the summary contain OFFICIAL-SENSITIVE information?",
-        error_messages={
-            "required": (
-                "Indicate if summary contains OFFICIAL-SENSITIVE information or not"
-            )
-        },
+        help_text=(
+            "This description will only be used internally."
+            "Explain how the barrier is affecting trade, and why it exists"
+            "Where relevant include the specific laws or measures blocking trade, and any political context."
+        ),
     )
 
     def save(self):
@@ -109,7 +106,6 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         client.barriers.patch(
             id=self.id,
             summary=self.cleaned_data["summary"],
-            is_summary_sensitive=self.cleaned_data["is_summary_sensitive"],
         )
 
 
