@@ -415,34 +415,36 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
     def done(self, form_list, form_dict, **kwargs):
         submitted_values = {}
         for form in form_list:
-            submitted_values = {**submitted_values, **form.cleaned_data}
 
-        # Exclude list for meta fields not required for barrier creation
-        exclude_fields = [
-            "partially_resolved_date",
-            "partially_resolved_description",
-            "resolved_date",
-            "resolved_description",
-            "location_select",
-            "trading_bloc_EU",
-            "trading_bloc_GCC",
-            "trading_bloc_EAEU",
-            "trading_bloc_Mercosur",
-            "companies_affected",
-            "unrecognised_company",
-            "code",
-            "codes",
-            "location",
-            "countries",
-            "trading_blocs",
-        ]
-        for name in exclude_fields:
-            submitted_values.pop(name)
+            submitted_values[form.prefix] = form.cleaned_data
 
-        # Clean date values
-        for name, value in submitted_values.items():
-            if isinstance(value, datetime.date):
-                submitted_values[name] = value.isoformat()
+            # Exclude list for meta fields not required for barrier creation
+            exclude_fields = [
+                "partially_resolved_date",
+                "partially_resolved_description",
+                "resolved_date",
+                "resolved_description",
+                "location_select",
+                "trading_bloc_EU",
+                "trading_bloc_GCC",
+                "trading_bloc_EAEU",
+                "trading_bloc_Mercosur",
+                "companies_affected",
+                "unrecognised_company",
+                "code",
+                "codes",
+                "location",
+                "countries",
+                "trading_blocs",
+            ]
+            for name in exclude_fields:
+                if name in submitted_values[form.prefix].keys():
+                    submitted_values[form.prefix].pop(name)
+
+            # Clean date values
+            for name, value in submitted_values[form.prefix].items():
+                if isinstance(value, datetime.date):
+                    submitted_values[form.prefix][name] = value.isoformat()
 
         # Check to see if it is an existing draft barrier otherwise create
         meta_data = self.storage.data.get("step_data").get("meta", None)
@@ -457,71 +459,25 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         else:
             barrier_report = self.client.reports.create()
 
-        if submitted_values["details_confirmation"] == "completed":
-            submitted_values.pop("details_confirmation")
+        # Loop through form data, patch barrier with the cleaned data
+        if (
+            submitted_values["barrier-details-summary"]["details_confirmation"]
+            == "completed"
+        ):
+            # Remove form with no data to commit to the DB
+            submitted_values.pop("barrier-details-summary")
 
-            # About form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                title=submitted_values["title"],
-                summary=submitted_values["summary"],
-            )
+            for form_submission in submitted_values:
+                self.client.reports.patch(
+                    id=barrier_report.id, **submitted_values[form_submission]
+                )
 
-            # Status form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                status=submitted_values["status"],
-                status_date=submitted_values["status_date"],
-                status_summary=submitted_values["status_summary"],
-                is_start_date_known=submitted_values["start_date_known"],
-                start_date=submitted_values["start_date"],
-                is_currently_active=submitted_values["currently_active"],
-            )
-
-            # Location form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                country=submitted_values["country"],
-                admin_areas=submitted_values["admin_areas"],
-                caused_by_admin_areas=submitted_values["caused_by_admin_areas"],
-                trading_bloc=submitted_values["trading_bloc"],
-                caused_by_trading_bloc=submitted_values["caused_by_trading_bloc"],
-            )
-
-            # Trade direction form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                trade_direction=submitted_values["trade_direction"],
-            )
-
-            # Sectors form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                main_sector=submitted_values["main_sector"],
-                sectors=submitted_values["sectors"],
-                sectors_affected=True,
-            )
-
-            # Companies form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                companies=submitted_values["companies"],
-                related_organisations=submitted_values["related_organisations"],
-            )
-
-            # Commodities and export types form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                export_types=submitted_values["export_type"],
-                export_description=submitted_values["export_description"],
-                commodities=submitted_values["commodities"],
-            )
-
+            # When report/barrier patched fully, call submit
             self.client.reports.submit(barrier_report.id)
 
         else:
             self.client.reports.patch(
-                # id=barrier_report.id,
+                id=barrier_report.id,
                 new_report_session_data=json.dumps(self.storage.data),
                 **submitted_values,
             )
