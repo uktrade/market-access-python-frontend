@@ -76,7 +76,6 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         widget=forms.RadioSelect,
         error_messages={"required": "Select barrier status"},
     )
-    # will need bespoke error catching in the clean method for these resolved fields
     partially_resolved_date = MonthYearField(
         label="Date the barrier was partially resolved",
         required=False,

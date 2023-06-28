@@ -25,26 +25,24 @@ from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
 
-# How draft barriers work;
-# Clicking 'Report A Barrier'->'Start' creates a barrier in the DB, it has a status of 0, a code and created/modified
-# dates & creator it also has an attribute 'draft' that is set to 't'
-# this is updated to 'f' once all the needed sections are completeand the report-a-barrier flow is complete.
-# Assume draft list is a list based on querying by user-id and 'draft'='t'
-
-# Docs for formWizard
+# Report-A-Barrier journey uses formtools wizard to provide multi-step form so users can
+# enter required data for a new barrier to be added to the DB, and edited/searchable by
+# other users.
+#
+# Docs for formWizard:
 # https://django-formtools.readthedocs.io/en/latest/wizard.html#advanced-wizardview-methods
-
-# process_step is form_wizard method we can use to update stored draft barrier each time a page-form is submitted
-# by getting the input details and calling the MarketAccessAPIClient
-
-# Can't use formpreview with formwizard:
-# https://forum.djangoproject.com/t/django-form-wizard-preview-before-submission/5582
-#  called. The last form page can be a summary of previously entered values (with links back to previous pages)
-#  and done() is
-# on submitting that last page, done method then updates the API by setting 'draft' to 'f'
-
-# Multiple forms in SessionWizard which we can re-call-upon?
-# get_context_data? get_form_initial?
+#
+# We use formtools session data to hold entered data between steps. This session data
+# is saved to the barrier in the DB when user selects to save and exit the process. It is
+# also saved to the barrier in the DB when moving to the next step of the multi-part form.
+#
+# Data is validated and put into the correct format for DB entry in the clean method of
+# each form.
+#
+# Final done method called when submitting the final form page. This method patches the
+# data from each step before calling the submit method in the API - which will perform
+# further validation and update the barriers "is_draft" value to false, making the barrier
+# visible to other users.
 
 
 class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPreview):
@@ -78,12 +76,11 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         if it is the last step.
         If it is the last step then we save to barrier as normal if not we save the storage object and barrier
         status as draft
-
         """
-
         """
         This renders the form or, if needed, does the http redirects.
         """
+
         step_url = kwargs.get("step", None)
         draft_barrier_id = kwargs.get("draft_barrier_id", None)
         self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
@@ -98,10 +95,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             session_data = draft_barrier.new_report_session_data.strip()
             self.storage.reset()
             self.storage.set_step_data("meta", {"barrier_id": str(draft_barrier_id)})
+
             if session_data == "":
-                # TODO - we coould try and map the legacy data here to the relevant steps
-                # Step through the formlist and fields and map to value in legact draft
-                # e.g setting barrier title on the first form
                 self.storage.set_step_data(
                     "barrier-name", {"title": draft_barrier.title}
                 )
@@ -110,7 +105,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             else:
                 self.storage.data = json.loads(draft_barrier.new_report_session_data)
 
-            # self.storage.current_step = self.steps.first
             return redirect(self.get_step_url(self.steps.current))
 
         elif step_url == "skip":
@@ -132,7 +126,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 query_string = ""
             return redirect(self.get_step_url(self.steps.current) + query_string)
 
-        # is the current step the "done" name/view?
+        # Is the current step the "done" name/view?
         elif step_url == self.done_step_name:
             last_step = self.steps.last
             form = self.get_form(
@@ -142,7 +136,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             )
             return self.render_done(form, **kwargs)
 
-        # is the url step name not equal to the step in the storage?
+        # Is the url step name not equal to the step in the storage?
         # if yes, change the step in the storage (if name exists)
         elif step_url == self.steps.current:
             # When passing into the step, we need to save our previously entered
@@ -165,7 +159,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 ),
                 **kwargs,
             )
-        # invalid step name, reset to first and redirect.
+        # Invalid step name, reset to first and redirect.
         else:
             self.storage.current_step = self.steps.first
             return redirect(self.get_step_url(self.steps.first))
@@ -173,8 +167,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
     def ajax(self, request, *args, **kwargs):
         if request.GET.get("code"):
             form_class = CommodityLookupForm
-        # elif request.GET.get("codes"):
-        #     form_class = MultiCommodityLookupForm
         else:
             return JsonResponse({"status": "error", "message": "Bad request"})
 
@@ -293,6 +285,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         for choice in REPORTABLE_STATUSES:
                             if value in choice:
                                 context[key] = choice[1]
+
                     elif key == "country" or key == "trading_bloc":
                         # Barrier location - currently country/bloc UUID/id, need to get country/bloc name
                         # Can use the metadata methods to get this information from given UUID
@@ -304,6 +297,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                             context["barrier_location"] = trading_bloc_details["name"]
                         else:
                             continue
+
                     elif key == "trade_direction":
                         # Trade direction - currently all caps - needs to be readble version
                         # Use long readable values - same as options in form question
@@ -311,11 +305,13 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                             context[key] = "Exporting from the UK or investing overseas"
                         else:
                             context[key] = "Importing or investing into the UK"
+
                     elif key == "main_sector":
                         # Main sector affected - currently sector UUID, needs to be readble name
                         # Can use metadata method to get name
                         sector_information = self.metadata.get_sector(value)
                         context[key] = sector_information["name"]
+
                     elif key == "sectors":
                         # Other sectors affected - currently list of UUIDs, needs to be readable names list
                         # Can use metadata method to get list of names
@@ -326,12 +322,14 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         for sector in other_sectors_information:
                             other_sector_names.append(sector["name"])
                         context[key] = other_sector_names
+
                     elif key == "companies" or key == "related_organisations":
                         # Name of companies - currently list of dictionaries, needs to be readable names list
                         company_names = []
                         for company in value:
                             company_names.append(company["name"])
                         context[key] = company_names
+
                     elif key == "codes":
                         # HS Codes - currently list of IDs, needs to be list of commodity details
                         # Get the 10 digit code from the given 6 digit codes
@@ -370,7 +368,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)
-        # determine the step if not given
+        # Determine the step if not given
         if step is None:
             step = self.steps.current
 
