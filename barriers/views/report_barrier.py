@@ -244,22 +244,6 @@ def get_report_barrier_answers(barrier: Report):
                 },
             ],
         },
-        # Uncomment this to enable categorie
-        # {
-        #     "name": "Barrier category",
-        #     "url": reverse(
-        #         "reports:barrier_categories_uuid", kwargs={"barrier_id": barrier.id}
-        #     )
-        #     + qs,
-        #     "questions": [
-        #         {
-        #             "name": "Define barrier category",
-        #             "value": ",\n".join(
-        #                 [category.get("title") for category in barrier.categories]
-        #             ),
-        #         }
-        #     ],
-        # },
         {
             "name": "Add HS commodity codes (optional)",
             "hide": not barrier.commodities,
@@ -271,29 +255,3 @@ def get_report_barrier_answers(barrier: Report):
             "questions": get_hs_commodity_answers(barrier),
         },
     ]
-
-
-class ReportBarrierAnswersView(ReportViewBase):
-    template_name = "barriers/report_barrier_answers.html"
-    _client: MarketAccessAPIClient = None
-    extra_paths = {
-        "back": "reports:barrier_commodities",
-    }
-
-    def post(self, request, *args, **kwargs):
-        if self.barrier.draft:
-            self.client.reports.submit(self.barrier.id)
-        return HttpResponseRedirect(
-            reverse(
-                "barriers:barrier_detail_from_complete",
-                kwargs={"barrier_id": self.barrier.id},
-            )
-        )
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        barrier_id = kwargs.get("barrier_id")
-        barrier = self.get_draft_barrier(barrier_id)
-        context_data["barrier"] = barrier
-        context_data["report_barrier_answers"] = get_report_barrier_answers(barrier)
-        return context_data
