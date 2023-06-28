@@ -125,7 +125,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
     )
     start_date = MonthYearInFutureField(
         label="When did or will the barrier start to affect trade?",
-        help_text="If you aren't sure of the date, give an estimate",
+        help_text="If you aren't sure of the date, give an estimate.",
         error_messages={"required": "Enter a date"},
         required=False,
     )
@@ -181,7 +181,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         if (start_date is None and start_date_known is False) or (
             start_date and start_date_known is True
         ):
-            msg = "Enter a date the barrier started to affect trade or I don't know"
+            msg = "Enter a date or select 'I don't know'."
             self.add_error("start_date", msg)
 
         if start_date_known and currently_active == "":
@@ -209,13 +209,14 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
 
 class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     location_select = forms.ChoiceField(
-        label="Which location is affected by this issue?",
+        label="Which location does the barrier relate to?",
         error_messages={"required": "Select a location for this barrier"},
         help_text=(
-            "A trading bloc should be selected if the barrier applies to the whole "
-            "trading bloc. Select a country if the barrier is a national "
-            "implementation of a trading bloc regulation (so only applies to that "
-            "country)"
+            """
+            Select a trading bloc if the barrier applies to the whole trading bloc.
+            Select a country if the barrier is a trading bloc regulation that only
+            applies to that country.
+            """
         ),
         required=True,
     )
@@ -262,7 +263,7 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 
             field_name = "trading_bloc_" + short_bloc_name
             self.fields[field_name] = forms.ChoiceField(
-                label=f"Was this barrier caused by a regulation introduced by the {short_bloc_name}",
+                label=f"Was this barrier caused by a regulation introduced by the {short_bloc_name}?",
                 help_text=(
                     f"""
                     Yes should be selected if the barrier is a local application
@@ -363,18 +364,13 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
 
 
 class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
-    # TODO get the existing sectors selectors stuff into this page
     main_sector = forms.CharField(
         label="Main sector affected",
         help_text=("Add the sector you think the barrier affects the most"),
-        # choices=[],
-        # widget=forms.MultipleHiddenInput(),
     )
     sectors = forms.CharField(
         label="Other sectors (optional)",
         help_text=("Add all the other sectors affected by the barrier"),
-        # choices=[],
-        # widget=forms.MultipleHiddenInput(),
         widget=forms.Textarea(
             attrs={
                 "rows": 3,

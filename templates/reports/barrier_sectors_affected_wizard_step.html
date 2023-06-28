@@ -1,5 +1,12 @@
 {% extends "reports/barrier_wizard_step.html" %}
 
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.report.sectorsWizardStep();
+    </script>
+{% endblock %}
+
 {% block page_title %} Report A Barrier - Wizard Framework - Sectors Affected{% endblock %}
 
 {% block fields %}
@@ -22,17 +29,16 @@
                     {% form_field_error form "main_sector" %}
 
                     <select class="govuk-select govuk-!-width-full{% if form.sector.errors %} govuk-select--error{% endif %}" id="main_sector_select" name="barrier-sectors-affected-main_sector"{% if form.main_sector.errors %} aria-describedby="main_sector-error"{% endif %}>
+                        <option value="" disabled selected>Select a sector</option>
                         {% for id, name in sectors_list %}
-                        <option value="{{ id }}">{{ name }}</option>
+                            <option value="{{ id }}">{{ name }}</option>
                         {% endfor %}
-
                     </select>
 
                 </div>
 
-
                 <!-- Add Other Sector-->
-                <div id="{{ form.sectors.name }}_edit" class="govuk-form-group selection-list {% if form.sectors.errors %} govuk-form-group--error{% endif %}">
+                <div id="sectors_edit" class="govuk-form-group selection-list {% if form.sectors.errors %} govuk-form-group--error{% endif %}">
                     <label class="govuk-label govuk-label--s" for="{{ form.sectors.id_for_label }}">
                         Add sector
                     </label>
@@ -40,18 +46,17 @@
                     {% form_field_error form "sectors" %}
 
                     <select class="govuk-select govuk-!-width-full  {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
+                        <option value="" disabled selected>Select a sector</option>
                         {% for id, name in sectors_list %}
-                        <option value="{{ id }}">{{ name }}</option>
+                            <option value="{{ id }}">{{ name }}</option>
                         {% endfor %}
-
                     </select>
 
-                    <a href="#" onclick="append_sector('id_barrier-sectors-affected-sectors', 'sectors_select', 'sectors_list_display')" class="govuk-button govuk-!-margin-top-5 "> Add sector</a>
+                    <div id="add-other-sector-button" class="govuk-button govuk-!-margin-top-5 ">Add sector</div>
                 </div>
 
                 <!-- Display Other Sector-->
-
-                <div class="selection-list restrict-width" id="{{ form.sectors.name }}_display" >
+                <div class="selection-list restrict-width" id="sectors_display" >
                     <label class="govuk-label govuk-label--s" for="{{form.sectors.id_for_label }}">
                         {{ form.sectors.label }}
                     </label>
@@ -69,135 +74,12 @@
                             </li>
 
                     </ul>
-                    <a href="#" onclick="toggle_mode('edit')" class="govuk-button"> Add sector</a>
+                    <div id="display-other-sector-button" class="govuk-button">Add sector</div>
                 </div>
-
 
                 <!-- Hidden formtools fields -->
                 {{ form.sectors.as_hidden }}
 
-
-
         </fieldset>
     </div>
-{% endblock %}
-
-{% block body_script %}
-<script>
-
-    function append_sector(fieldname, select, display_list) {
-        let sector_select = document.getElementById(select)
-        let sector = sector_select.value;
-        let sector_name = sector_select.options[sector_select.selectedIndex].text;
-        let current_sector_list = document.getElementById(fieldname)
-        console.log("current sector values :", current_sector_list.value)
-        if (!!current_sector_list.value ){
-            const new_list= JSON.parse(current_sector_list.value);
-            console.log( new_list.length, " items so far")
-            console.log("entries found adding, ", sector)
-            if ( new_list.includes(sector)){
-                // Already selected do nothing
-                console.log("Entry Already present")
-            } else {
-                new_list.push(sector);
-                current_sector_list.value= JSON.stringify(new_list)
-            }
-        } else {
-            const new_list =[];
-            console.log("empty sector ");
-            new_list.push(sector);
-            console.log("empty sector : ", new_list);
-            current_sector_list.value = JSON.stringify(new_list);
-        }
-        update_sector_display()
-        toggle_mode('display')
-
-    }
-
-    function update_sector_display(){
-        const sector_list = document.getElementById("sectors_select")
-        const current_selected_list = document.getElementById("id_barrier-sectors-affected-sectors")
-        //const selected_list = JSON.parse(current_selected_list.value);
-        const display_list = document.getElementById("sectors_list_display")
-        if (current_selected_list.value == ""){
-            const selected_list = current_selected_list.value;
-        } else {
-            const selected_list = JSON.parse(current_selected_list.value);
-            console.log("change detected", selected_list);
-            display_list.innerHTML = "";
-            for (let i = 0; i < selected_list.length; i++) {
-                console.log("update display : ", selected_list[i]);
-                for (let x = 0; x < sector_list.length; x++) {
-                    let option = sector_list.options[x];
-                    if (option.value == selected_list[i]) {
-                        let sector_entry = document.createElement("li");
-                        sector_entry.classList.add("selection-list__list__item");
-                        sector_entry.appendChild(document.createTextNode(option.text));
-                        let remove_link = document.createElement("a");
-                        let remove_link_text = document.createTextNode("remove");
-                        remove_link.setAttribute("href", "#");
-                        remove_link.setAttribute("onclick", "remove_item('" + option.value + "');");
-                        remove_link.appendChild(remove_link_text);
-                        remove_link.classList.add("selection-list__list__item__remove-form");
-                        sector_entry.appendChild(remove_link);
-                        display_list.appendChild(sector_entry);
-                        console.log("display text :", option.text);
-                    }
-                }
-
-            }
-        }
-
-    }
-
-    function toggle_mode(mode){
-        const edit_div = document.getElementById("sectors_edit")
-        const display_div = document.getElementById("sectors_display")
-        console.log("edit div : ",  window.getComputedStyle(edit_div).display)
-        if (mode === 'edit'){
-            edit_div.style.display = 'block';
-            display_div.style.display = 'none';
-        } else {
-            console.log("switch to display mode")
-            display_div.style.display = 'block';
-            edit_div.style.display = 'none';
-        }
-        if ( window.getComputedStyle(edit_div).display === 'block'){
-            console.log("hide display ");
-            display_div.style.display = 'none';
-        } else if (( window.getComputedStyle(display_div).display === 'block')) {
-            console.log("hide edit ");
-            edit_div.style.display = 'none';
-
-        }
-    }
-
-    function remove_item(item){
-        //pass
-        console.log('removing : ', item)
-        const current_selected_list = document.getElementById("id_barrier-sectors-affected-sectors")
-        if (current_selected_list.value == ""){
-            const selected_list = current_selected_list.value;
-        } else {
-            let selected_list = JSON.parse(current_selected_list.value);
-            console.log("current list :", selected_list)
-            const index = selected_list.indexOf(item);
-            if (index > -1) { // only splice array when item is found
-                selected_list.splice(index, 1);
-                }
-            current_selected_list.value = JSON.stringify(selected_list);
-            console.log("updated list :", selected_list)
-            update_sector_display();
-
-        }
-    }
-
-    document.addEventListener('readystatechange', function(event) {
-        if (document.readyState === "complete") {
-            update_sector_display();
-            toggle_mode('display');
-
-        }
-    });
-</script>
 {% endblock %}
