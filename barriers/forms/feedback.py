@@ -40,6 +40,7 @@ class FeedbackForm(forms.Form):
         widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
     )
     csat_submission = forms.CharField()
+    csat_submission_id = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.token = kwargs.pop("token", None)
@@ -51,12 +52,24 @@ class FeedbackForm(forms.Form):
         csat_submission = cleaned_data.get("csat_submission", False)
         if csat_submission == "False" and (satisfaction is None or satisfaction == ""):
             self.add_error("satisfaction", "You must select a level of satisfaction")
-        if satisfaction != "VERY_SATISFIED" and csat_submission == "True":
-            # Request extra feedback if not very satisfied
-            #
+        if csat_submission == "True":
+            client = MarketAccessAPIClient(self.token)
+            feedback = client.feedback.send_feedback(
+                token=self.token, **self.cleaned_data
+            )
+            self.data = self.data.copy()
+            self.data["csat_submission_id"] = feedback["id"]
+            # Request extra feedback
             # self.add_error("feedback_text", "Tell us how we can improve")
             raise forms.ValidationError("Let us know how we can improve")
+        return cleaned_data
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.feedback.send_feedback(token=self.token, **self.cleaned_data)
+        csat_submission_id = self.cleaned_data.get("csat_submission_id")
+        if csat_submission_id == "None":
+            client.feedback.send_feedback(token=self.token, **self.cleaned_data)
+        else:
+            client.feedback.add_comments(
+                token=self.token, feedback_id=csat_submission_id, **self.cleaned_data
+            )

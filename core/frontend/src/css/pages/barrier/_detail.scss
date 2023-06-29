@@ -285,6 +285,7 @@
 
         @include mq($from: desktop) {
             width: 500px;
+            margin-left: 75px;
         }
     }
 
