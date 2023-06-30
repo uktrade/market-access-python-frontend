@@ -1196,7 +1196,7 @@ wsproto = ">=0.14"
 
 [[package]]
 name = "typing-extensions"
-version = "4.6.3"
+version = "4.7.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
 category = "main"
 optional = false
