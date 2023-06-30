@@ -25,6 +25,9 @@
                     <label class="govuk-label govuk-label--s" for="{{ form.main_sector.id_for_label }}">
                         {{ form.main_sector.label }}
                     </label>
+                    <span id="main-sector-hint" class="govuk-hint">
+                        {{ form.main_sector.help_text }}
+                    </span>
 
                     {% form_field_error form "main_sector" %}
 
@@ -39,9 +42,13 @@
 
                 <!-- Add Other Sector-->
                 <div id="sectors_edit" class="govuk-form-group selection-list {% if form.sectors.errors %} govuk-form-group--error{% endif %}">
-                    <label class="govuk-label govuk-label--s" for="{{ form.sectors.id_for_label }}">
-                        Add sector
+                    <label class="govuk-label govuk-label--s" for="{{form.sectors.id_for_label }}">
+                        {{ form.sectors.label }}
                     </label>
+
+                    <span id="description-hint" class="govuk-hint">
+                        {{ form.sectors.help_text }}
+                    </span>
 
                     {% form_field_error form "sectors" %}
 

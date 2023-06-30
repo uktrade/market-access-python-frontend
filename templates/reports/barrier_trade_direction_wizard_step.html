@@ -14,7 +14,8 @@
         {% form_error_banner form %}
 
         <div class="govuk-radios" data-module="govuk-radios">
-
+            <label class="govuk-label govuk-label--s" for="{{ form.trade_direction.name }}">{{ form.trade_direction.label }}</label>
+            {% form_field_error form "trade_direction" %}
             {% for value, name in form.fields.trade_direction.choices %}
                 <div class="govuk-radios__item">
                     <input class="govuk-radios__input"
@@ -26,7 +27,7 @@
                     <label class="govuk-label govuk-radios__label" for="{{ form.trade_direction.id_for_label }}">
                         {{ name }}
                     </label>
-                    {% form_field_error form "trade_direction" %}
+
                     <!-- TODO Refine help text-->
                     {% for help_text in form.trade_direction.help_text %}
                         {% if help_text.0 == value %}

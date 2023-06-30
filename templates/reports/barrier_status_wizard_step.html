@@ -1,5 +1,12 @@
 {% extends "reports/barrier_wizard_step.html" %}
 
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.report.statusWizardStep();
+    </script>
+{% endblock %}
+
 {% block page_title %} Report A Barrier - Wizard Framework - Barrier Status{% endblock %}
 
 {% block fields %}
@@ -21,16 +28,15 @@
                         {{ form.status.label }}
                     </legend>
 
-
                     {% for value, name in form.fields.status.choices %}
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input"
-                            id="{{ form.status.id_for_label }}"
-                            name="barrier-status-status"
-                            type="radio"
-                            value="{{ value }}"
-                            {% if form.status.value == value %} checked="checked"{% endif %}
-                            {% if value in "3 4" %} data-aria-controls="conditional-{{ value }}"{% endif %}>
+                                id="status-radio-{{ value }}"
+                                name="barrier-status-status"
+                                type="radio"
+                                value="{{ value }}"
+                                {% if form.status.value == value %} checked="checked"{% endif %}
+                                {% if value in "3 4" %} data-aria-controls="conditional-{{ value }}"{% endif %}>
                             <label class="govuk-label govuk-radios__label" for="{{ form.status.id_for_label }}">
                                 {{ name }}
                             </label>
@@ -87,7 +93,7 @@
 
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
-                    <label class="govuk-label govuk-label--s" for="start_date">
+                    <label id="start-date-heading" class="govuk-label govuk-label--s" for="start_date">
                         {{ form.start_date.label }}
                     </label>
                     {% form_field_error form "start_date" %}
@@ -107,7 +113,7 @@
                             value="1"
                             {% if form.start_date_known.value %}checked="checked"{% endif %}
                             data-aria-controls="conditional-current-active">
-                            <label class="govuk-label govuk-checkboxes__label" for="barrier-status-start_date_known">{{ form.start_date_known.label  }}</label>
+                            <label class="govuk-label govuk-checkboxes__label" for="barrier-status-start_date_known">{{ form.start_date_known.label }}</label>
                         </div>
                         <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-current-active">
                             <div class="govuk-radios" data-module="govuk-radios">

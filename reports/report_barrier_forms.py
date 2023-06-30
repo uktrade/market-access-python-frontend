@@ -26,8 +26,6 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         label="Barrier title",
         help_text=(
             """
-            The title should be suitable for the public to read on GOV.UK.
-            It will only be published once it has been reviewed internally.
             Include the product, service or investment and the type of problem.
             For example, Import quotas for steel rods.
             """
@@ -49,12 +47,10 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
         label="Barrier description",
         help_text=(
             """
-        This description will only be used internally.
-        Explain how the barrier is affecting trade,
-        and why it exists. Where relevant include the specific laws
-        or measures blocking trade,
-        and any political context.
-        """
+            Explain how the barrier is affecting trade and why it exists.
+            Where relevant include the specific laws or measures blocking trade,
+            and any political context.
+            """
         ),
         max_length=300,
         error_messages={"required": "Enter a barrier description"},
@@ -85,8 +81,8 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         label="Date the barrier was partially resolved",
         required=False,
         error_messages={
-            "invalid_year": "Enter a valid date",
-            "invalid_month": "Enter a valid date",
+            "invalid_year": "Enter a date in the format 01 2023",
+            "invalid_month": "Enter a date in the format 01 2023",
         },
     )
     partially_resolved_description = forms.CharField(
@@ -104,8 +100,8 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         label="Date the barrier was resolved",
         required=False,
         error_messages={
-            "invalid_year": "Enter a valid date",
-            "invalid_month": "Enter a valid date",
+            "invalid_year": "Enter a date in the format 01 2023",
+            "invalid_month": "Enter a date in the format 01 2023",
         },
     )
     resolved_description = forms.CharField(
@@ -156,6 +152,11 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         cleaned_data["status_date"] = datetime.date.today()
         cleaned_data["status_summary"] = ""
 
+        if partially_resolved_date and resolved_date:
+            msg = "Enter either a date the barrier was partially resolved or a date the barrier was fully resolved"
+            self.add_error("partially_resolved_date", msg)
+            self.add_error("resolved_date", msg)
+
         if status == "3":
             # Partially resolved date and reason requried
             if partially_resolved_date is None:
@@ -173,7 +174,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
                 msg = "Enter a date the barrier was resolved"
                 self.add_error("resolved_date", msg)
             if resolved_description == "":
-                msg = "Enter a description for resolved"
+                msg = "Enter a description"
                 self.add_error("resolved_description", msg)
             cleaned_data["status_date"] = resolved_date
             cleaned_data["status_summary"] = resolved_description
@@ -185,7 +186,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             self.add_error("start_date", msg)
 
         if start_date_known and currently_active == "":
-            msg = "Is the barrier affecting trade"
+            msg = "Select yes if the barrier is currently affecting trade"
             self.add_error("currently_active", msg)
 
         if start_date:
@@ -213,15 +214,19 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
         error_messages={"required": "Select a location for this barrier"},
         help_text=(
             """
-            Select a trading bloc if the barrier applies to the whole trading bloc.
+            Select a trading bloc if the barrier relates to the whole trading bloc.
             Select a country if the barrier is a trading bloc regulation that only
             applies to that country.
             """
         ),
         required=True,
     )
+    affect_whole_country = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=False,
+    )
     admin_areas = forms.CharField(
-        label="Which admin area does the barrier apply to?",
+        label="Which admin area does the barrier relate to?",
         help_text="Select all that apply",
         widget=forms.HiddenInput(),
         required=False,
@@ -300,12 +305,9 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        # if self.cleaned_data["location_select"] == "0":
-        #    msg = "Select a country or trading bloc."
-        #    self.add_error("location_select", msg)
-
         # Map the location selected to the correct DB field
         location = self.cleaned_data["location_select"]
+        selected_admin_areas = self.cleaned_data["admin_areas"]
 
         if location == "0":
             msg = "Select which location the barrier relates to"
@@ -336,8 +338,17 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
             self.cleaned_data["trading_bloc"] = "TB00013"
             self.cleaned_data["caused_by_trading_bloc"] = True
 
+        # Trigger error if admin areas haven't been selected but user has indicated
+        # barrier is not country-wide
+        if (
+            self.cleaned_data["affect_whole_country"] is False
+            and selected_admin_areas == ""
+        ):
+            msg = "Select all admin areas the barrier relates to"
+            self.add_error("admin_areas", msg)
+
         # Turn admin areas data to list & set caused by value
-        self.cleaned_data["admin_areas"] = self.cleaned_data["admin_areas"].split(",")
+        self.cleaned_data["admin_areas"] = selected_admin_areas.split(",")
         if self.cleaned_data["admin_areas"] != [""]:
             self.cleaned_data["caused_by_admin_areas"] = True
         else:
@@ -359,6 +370,7 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
             ("1", "Exporting from the UK or investing overseas"),
             ("2", "Importing or investing into the UK"),
         },
+        error_messages={"required": "Select the trade direction this barrier affects"},
         widget=forms.RadioSelect,
     )
 
@@ -366,7 +378,8 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
 class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
     main_sector = forms.CharField(
         label="Main sector affected",
-        help_text=("Add the sector you think the barrier affects the most"),
+        help_text=("Add the sector affected the most by the barrier"),
+        error_messages={"required": "Select the sector affected the most"},
     )
     sectors = forms.CharField(
         label="Other sectors (optional)",
@@ -391,7 +404,9 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
 class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
     companies_affected = forms.CharField(
         label="Name of company affected by the barrier",
-        help_text=("You can search by name, address or company number"),
+        help_text=(
+            "Add at least one company. You can search by name, address or company number"
+        ),
         widget=forms.HiddenInput(),
     )
     unrecognised_company = forms.CharField(
@@ -412,7 +427,7 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
 
         # Need to error if none detected in lists
         if companies_list == [] and added_companies_list == []:
-            msg = "Please search for a company that has been affected by the barrier."
+            msg = "Add all companies affected by the barrier."
             self.add_error("companies_affected", msg)
 
         # Setup list to contain the cleaned company information
@@ -448,7 +463,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         choices=EXPORT_TYPES,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
         error_messages={
-            "required": "You must select one or more affected exports.",
+            "required": "Select the types of exports the barrier affects.",
         },
     )
     export_description = forms.CharField(
@@ -459,6 +474,9 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
             Be as specific as you can.
             """
         ),
+        error_messages={
+            "required": "Enter all goods, services or investments the barrier affects.",
+        },
         widget=forms.Textarea(
             attrs={
                 "class": "govuk-textarea",
@@ -467,7 +485,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         ),
     )
     code = forms.CharField(
-        label="Enter an HS commodity code - Optional",
+        label="Enter an HS commodity code (optional)",
         help_text=(
             "Enter your HS commodity code below ignoring any spaces or full stops. "
             "You can also copy and paste multiple codes separated by commas "

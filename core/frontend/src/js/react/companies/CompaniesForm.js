@@ -43,6 +43,7 @@ function CompaniesForm(props) {
         setShowSearchBox(false);
         setShowCompanyList(false);
         setShowCompanyDetails(true);
+        setShowAddCompanySection(false);
 
         // Set the selected company state to the clicked-on company
         setSelectedCompany(company);
@@ -164,12 +165,7 @@ function CompaniesForm(props) {
             .then((res) => res.json())
             .then((result) => {
                 setCompaniesList(result);
-                // If there are no results, show the add company blox
-                if (result.length < 1) {
-                    setShowAddCompanySection(true);
-                } else {
-                    setShowAddCompanySection(false);
-                }
+                setShowAddCompanySection(true);
             })
             .then(() => {
                 setShowCompanyList(true);
