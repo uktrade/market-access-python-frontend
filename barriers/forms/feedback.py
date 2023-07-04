@@ -5,7 +5,7 @@ from utils.api.client import MarketAccessAPIClient
 
 class FeedbackForm(forms.Form):
     satisfaction = forms.ChoiceField(
-        label="1. Overall, how do you feel about your use of the Digital Market Access Service (DMAS) today?",
+        label="Overall, how do you feel about your use of the Digital Market Access Service (DMAS) today?",
         choices=(
             ("VERY_SATISFIED", "Very satisfied"),
             ("SATISFIED", "Satisfied"),
@@ -17,7 +17,7 @@ class FeedbackForm(forms.Form):
         required=False,
     )
     attempted_actions = forms.MultipleChoiceField(
-        label="2. What were you trying to do today?",
+        label="What were you trying to do today?",
         help_text="Select all that apply.",
         choices=(
             ("REPORT_BARRIER", "Report a barrier"),
@@ -33,7 +33,7 @@ class FeedbackForm(forms.Form):
         },
     )
     feedback_text = forms.CharField(
-        label="3. How could we improve the service?",
+        label="How could we improve the service?",
         help_text="Don't include any personal information, like your name or email address.",
         max_length=3000,
         required=False,
