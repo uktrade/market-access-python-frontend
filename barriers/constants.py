@@ -58,7 +58,10 @@ STATUSES_HELP_TEXT = Choices(
 )
 
 REPORTABLE_STATUSES_HELP_TEXT = Choices(
-    (REPORTABLE_STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on, or work will begin soon"),
+    (
+        REPORTABLE_STATUSES.OPEN_IN_PROGRESS,
+        "Barrier is being worked on, or work will begin soon",
+    ),
     (
         REPORTABLE_STATUSES.RESOLVED_IN_PART,
         "Barrier has been partially resolved and is still being worked on",
