@@ -39,6 +39,11 @@ urlpatterns = [
         name="report-barrier-wizard",
     ),
     path(
+        "reports/start?reset=true",
+        ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
+        name="report-barrier-wizard-reset",
+    ),
+    path(
         "reports/<str:step>",
         ReportBarrierWizardView.as_view(url_name="reports:report-barrier-wizard-step"),
         name="report-barrier-wizard-step",

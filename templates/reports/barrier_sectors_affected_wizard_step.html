@@ -34,7 +34,7 @@
                     <select class="govuk-select govuk-!-width-full{% if form.sector.errors %} govuk-select--error{% endif %}" id="main_sector_select" name="barrier-sectors-affected-main_sector"{% if form.main_sector.errors %} aria-describedby="main_sector-error"{% endif %}>
                         <option value="" disabled selected>Select a sector</option>
                         {% for id, name in sectors_list %}
-                            <option value="{{ id }}">{{ name }}</option>
+                            <option value="{{ id }}" {% if form.main_sector.value == id %}selected{% endif %} >{{ name }}</option>
                         {% endfor %}
                     </select>
 
@@ -59,7 +59,7 @@
                         {% endfor %}
                     </select>
 
-                    <div id="add-other-sector-button" class="govuk-button govuk-!-margin-top-5 ">Add sector</div>
+                    <div id="add-other-sector-button" class="govuk-button govuk-button--secondary govuk-!-margin-top-5 ">Add sector</div>
                 </div>
 
                 <!-- Display Other Sector-->
@@ -81,7 +81,7 @@
                             </li>
 
                     </ul>
-                    <div id="display-other-sector-button" class="govuk-button">Add sector</div>
+                    <div id="display-other-sector-button" class="govuk-button govuk-button--secondary">Add sector</div>
                 </div>
 
                 <!-- Hidden formtools fields -->

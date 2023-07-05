@@ -27,12 +27,14 @@ ma.pages.report.statusWizardStep = function () {
         var selected = document.querySelector(
             'input[name="barrier-status-status"]:checked'
         );
-        if (selected.value == 2) {
-            startDateHeading.innerHTML =
-                "When did or will the barrier start to affect trade?";
-        } else {
-            startDateHeading.innerHTML =
-                "When did the barrier start to affect trade?";
+        if (selected) {
+            if (selected.value == 2) {
+                startDateHeading.innerHTML =
+                    "When did or will the barrier start to affect trade?";
+            } else {
+                startDateHeading.innerHTML =
+                    "When did the barrier start to affect trade?";
+            }
         }
     };
 
@@ -68,7 +70,6 @@ ma.pages.report.statusWizardStep = function () {
             barrierDateInputPartialYear.value = null;
             barrierDateInputResolvedMonth.value = null;
             barrierDateInputResolvedYear.value = null;
-            console.log(storedDateVariables);
         } else if (selected.value == 3) {
             // Partial resolve selected, clear resolved dates
             storeValue(barrierDateInputResolvedMonth, "storedResolvedMonth");

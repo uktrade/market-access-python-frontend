@@ -65,7 +65,9 @@ ma.pages.report.sectorsWizardStep = function () {
             // Create empty list
             const new_list = [];
             // Push sector ID into list
-            new_list.push(sector);
+            if (sector) {
+                new_list.push(sector);
+            }
             // Set hidden input value to contain the list
             current_sector_list.value = JSON.stringify(new_list);
         }
