@@ -200,6 +200,13 @@ function CompaniesForm(props) {
         }
     }, []);
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("search-companies-button").click();
+        }
+    };
+
     return (
         <div>
             {showSearchBox ? (
@@ -217,6 +224,8 @@ function CompaniesForm(props) {
                             className="govuk-input search-form__input"
                             name="companies-search"
                             type="text"
+                            placeholder="Search Company"
+                            onKeyDown={handleKeyDown}
                         />
                         <div
                             id="search-companies-button"

@@ -114,33 +114,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             return redirect(self.get_step_url(self.steps.current))
 
         elif step_url == "skip":
-            # Save draft and exit
-            # Check to see if it is an existing draft barrier otherwise create
-            meta_data = self.storage.data.get("step_data").get("meta", None)
-            if meta_data:
-                barrier_id = meta_data.get("barrier_id", None)
-            else:
-                barrier_id = None
-
-            if barrier_id:
-                # get draft barrier
-                barrier_report = self.client.reports.get(barrier_id)
-            else:
-                barrier_report = self.client.reports.create()
-
-            # We should at least have passed the first step and have a barrier title
-            barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
-            if barrier_title_form is None:
-                # We don't have a barrier title therefore nothing to save
-                # Send user to first step
-                self.storage.current_step = self.steps.first
-                return redirect(self.get_step_url(self.steps.first))
-
-            self.client.reports.patch(
-                id=barrier_report.id,
-                **barrier_title_form,
-                new_report_session_data=json.dumps(self.storage.data),
-            )
+            # Save the previously entered data
+            self.save_report_progress()
 
             # Clear the cache for new report
             self.storage.reset()
@@ -170,12 +145,17 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         # is the url step name not equal to the step in the storage?
         # if yes, change the step in the storage (if name exists)
         elif step_url == self.steps.current:
+            # When passing into the step, we need to save our previously entered
+            # data.
+            self.save_report_progress()
+
             # URL step name and storage step name are equal, render!
             form = self.get_form(
                 data=self.storage.current_step_data,
                 files=self.storage.current_step_files,
             )
             return self.render(form, **kwargs)
+
         elif step_url in self.get_form_list():
             self.storage.current_step = step_url
             return self.render(
@@ -412,6 +392,41 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             return (default_location_code, default_location_name)
 
+    def save_report_progress(self):
+        # Function to save the current session data for later resume
+        # This function is called when clicking "save and exit" button, and when completing
+        # each form step.
+
+        # Ensure we have input data to save by checking we have passed at least
+        # the first form page some input data
+        barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
+        if barrier_title_form is None:
+            # We don't have a barrier title therefore nothing to save
+            # Send user to first step
+            self.storage.current_step = self.steps.first
+            return redirect(self.get_step_url(self.steps.first))
+        else:
+            # Check to see if it is an existing draft barrier/report otherwise create
+            meta_data = self.storage.data.get("meta")
+            if meta_data:
+                barrier_id = meta_data.get("barrier_id", None)
+            else:
+                barrier_id = None
+            # If we have an ID stored in metadata, get this barrier/report
+            # otherwise, create a new one.
+            if barrier_id:
+                barrier_report = self.client.reports.get(barrier_id)
+            else:
+                barrier_report = self.client.reports.create()
+                self.storage.data["meta"] = {"barrier_id": str(barrier_report.id)}
+
+        # Patch the session data to the barrier/report in the DB
+        self.client.reports.patch(
+            id=barrier_report.id,
+            **barrier_title_form,
+            new_report_session_data=json.dumps(self.storage.data),
+        )
+
     def done(self, form_list, form_dict, **kwargs):
         submitted_values = {}
         for form in form_list:
@@ -447,7 +462,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                     submitted_values[form.prefix][name] = value.isoformat()
 
         # Check to see if it is an existing draft barrier otherwise create
-        meta_data = self.storage.data.get("step_data").get("meta", None)
+        meta_data = self.storage.data.get("meta")
 
         if meta_data:
             barrier_id = meta_data.get("barrier_id", None)
@@ -482,4 +497,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 **submitted_values,
             )
 
-        return HttpResponseRedirect(reverse("barriers:dashboard"))
+        return HttpResponseRedirect(
+            reverse(
+                "barriers:barrier_detail_from_complete",
+                kwargs={"barrier_id": barrier_report.id},
+            )
+        )
