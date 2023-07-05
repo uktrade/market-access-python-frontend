@@ -54,7 +54,6 @@ ma.pages.report.sectorsWizardStep = function () {
             // Current sector hidden input has value
             // Parse the existing list so we can add to it
             const new_list = JSON.parse(current_sector_list.value);
-            console.log(sector);
             if (!new_list.includes(sector)) {
                 // Sector ID not in hidden input list, so add this to the list
                 new_list.push(sector);
