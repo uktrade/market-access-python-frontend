@@ -2,16 +2,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from barriers.forms.export_types import AddExportTypesForm, EditExportTypesForm
+from barriers.forms.export_types import (
+    AddExportTypesForm,
+    EditExportTypesForm,
+    EXPORT_TYPES,
+)
 from utils.metadata import MetadataMixin
 
 from .mixins import BarrierMixin
-
-EXPORT_TYPES = (
-    ("goods", "Goods"),
-    ("services", "Services"),
-    ("investments", "Investments"),
-)
 
 
 class BarrierEditExportType(MetadataMixin, BarrierMixin, FormView):

@@ -3,6 +3,13 @@ from django import forms
 from utils.api.client import MarketAccessAPIClient
 
 
+EXPORT_TYPES = (
+    ("goods", "Goods"),
+    ("services", "Services"),
+    ("investments", "Investments"),
+)
+
+
 class AddExportTypesForm(forms.Form):
     export_type = forms.ChoiceField(
         label="",
