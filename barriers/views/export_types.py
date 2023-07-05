@@ -3,9 +3,9 @@ from django.urls import reverse
 from django.views.generic import FormView, View
 
 from barriers.forms.export_types import (
+    EXPORT_TYPES,
     AddExportTypesForm,
     EditExportTypesForm,
-    EXPORT_TYPES,
 )
 from utils.metadata import MetadataMixin
 

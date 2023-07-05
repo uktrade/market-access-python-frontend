@@ -2,7 +2,6 @@ from django import forms
 
 from utils.api.client import MarketAccessAPIClient
 
-
 EXPORT_TYPES = (
     ("goods", "Goods"),
     ("services", "Services"),
