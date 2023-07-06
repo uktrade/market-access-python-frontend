@@ -1,0 +1,131 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script>
+        ma.pages.report.locationWizardStep(
+            "{{form.trading_bloc_countries|safe}}"
+        );
+    </script>
+{% endblock %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Location{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Barrier Location
+                </h1>
+            </legend>
+
+            {% form_error_banner form %}
+
+            <!-- Country select -->
+            <div id="{{ form.location_select.name }}" class="{% form_group_classes form.location_select.errors %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.location_select.name }}">{{ form.location_select.label }}</label>
+                {% if form.location_select.help_text %}<span class="govuk-hint">{{ form.location_select.help_text }}</span>{% endif %}
+                {% form_field_error form.location_select %}
+                <select class="govuk-select{% if form.location_select.errors %} govuk-select--error{% endif %}" id="{{ form.location_select.name }}" name="barrier-location-location_select"{% if form.location_select.errors %} aria-describedby="{{ form.location_select.name }}-error"{% endif %}>
+                    {% for value, label in form.location_select.field.choices %}
+                        {% if label.0|add:"x" == "" %}
+                            {% with group_name=value group_choices=label %}
+                                <optgroup label="{{ group_name }}">
+                                    {% for value, label in group_choices %}
+                                        <option{% if option_classes %} class="{{ option_classes }}"{% endif %} value="{{ value }}"{% if value == form.location_select.value %} selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endwith %}
+                        {% else %}
+                            <option value="{{ value }}"{% if value == form.location_select.value %} selected{% endif %}>{{ label }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Trading bloc questions -->
+            <div class="govuk-form-group govuk-visually-hidden" id="trading-bloc-section">
+                {% for trading_bloc_field in form.get_trading_bloc_fields %}
+                    <div class="govuk-form-group" id="{{ trading_bloc_field.name }}">
+                        <div class="govuk-radios" data-module="govuk-radios">
+                            <label class="govuk-label govuk-label--s" for="subject">
+                                {{ trading_bloc_field.label }}
+                            </label>
+                            <div id="subject-hint" class="govuk-hint">
+                                {{ trading_bloc_field.help_text }}
+                            </div>
+                            {% for value, name in trading_bloc_field.field.choices %}
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="{{ name }}" name="barrier-location-{{ trading_bloc_field.name }}" value="{{ value }}" type="radio" {% if value == trading_bloc_field.value %}checked="checked"{% endif %}>
+                                    <label class="govuk-label govuk-radios__label" for="{{ name }}">
+                                        {{ name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Admin area question reveal -->
+            <div id="admin-area-section" class="govuk-radios govuk-visually-hidden" data-module="govuk-radios">
+                <label class="govuk-label govuk-label--s" for="admin-area-reveal">
+                    Does it relate to the entire country?
+                </label>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="admin-area-reveal-2" name="admin-area-reveal" type="radio" value="phone">
+                    <label class="govuk-label govuk-radios__label" for="admin-area-reveal-2">
+                        Yes
+                    </label>
+                </div>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="admin-area-reveal" name="admin-area-reveal" type="radio" value="email" data-aria-controls="conditional-admin-area-reveal">
+                    <label class="govuk-label govuk-radios__label" for="admin-area-reveal">
+                        No - just part of the country
+                    </label>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-admin-area-reveal">
+                    <!-- Admin area select dropdowns -->
+                    {% for admin_area_country_choices in form.admin_area_choices.items %}
+                        <div id="{{ admin_area_country_choices.0 }}-section" name="admin-area-selector-section" class="{% form_group_classes form.admin_areas.errors %}">
+                            <label class="govuk-label govuk-label--s" for="{{ admin_area_country_choices.0 }}">{{ form.admin_areas.label }}</label>
+                            <span class="govuk-hint">{{ form.admin_areas.help_text }}</span>
+                            {% form_field_error form.admin_areas %}
+                            <select class="govuk-select{% if form.admin_areas.errors %} govuk-select--error{% endif %}" id="{{ admin_area_country_choices.0 }}" name="{{ admin_area_country_choices.0 }}"{% if field.errors %} aria-describedby="{{ form.admin_areas.name }}-error"{% endif %}>
+                                {% for value, label in admin_area_country_choices.1 %}
+                                    {% if label.0|add:"x" == "" %}
+                                        {% with group_name=value group_choices=label %}
+                                            <optgroup label="{{ group_name }}">
+                                                {% for value, label in group_choices %}
+                                                    <option{% if option_classes %} class="{{ option_classes }}"{% endif %} value="{{ value }}"{% if value == field.value %} selected{% endif %}>{{ label }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endwith %}
+                                    {% else %}
+                                        <option value="{{ value }}"{% if value == field.value %} selected{% endif %}>{{ label }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <!-- Add admin area button -->
+                            <p>
+                                <div id="admin-area-choices-button" name="{{ admin_area_country_choices.0 }}" class="govuk-button govuk-button--secondary">Add admin area</div>
+                            </p>
+                        </div>
+                    {% endfor %}
+                    <!-- Selected admin area list box -->
+                    <div class="selection-list restrict-width" id="selected-admin-areas-container">
+                        <h3 class="selection-list__heading">Selected admin areas</h3>
+                        <ul id="selection-list" class="selection-list__list">
+                            <!-- Items added/removed via Javascript -->
+                        </ul>
+                    </div>
+                    <!-- Admin area select input for form -->
+                    <input type="hidden" id="admin-areas-selection-input" name="barrier-location-admin_areas" value="{{ form.admin_areas.value }}">
+                    <input type="hidden" id="affect-whole-country-input" name="barrier-location-affect_whole_country" value="{{ form.affect_whole_country.value }}">
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+{% endblock %}
