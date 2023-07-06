@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 
 import dateutil.parser
@@ -9,6 +10,8 @@ from django.forms import widgets
 from django.template.defaultfilters import filesizeformat
 
 from .validators import validate_date_not_in_future
+
+logger = logging.getLogger(__name__)
 
 
 class MultipleValueField(forms.MultipleChoiceField):
@@ -233,8 +236,8 @@ class MonthYearField(forms.MultiValueField):
                 min_value=1,
                 max_value=12,
                 error_messages={
-                    "min_value": "Date must be a real date",
-                    "max_value": "Date must be a real date",
+                    "min_value": "Enter a date in the format 01 2023",
+                    "max_value": "Enter a date in the format 01 2023",
                     "incomplete": "Enter a month",
                 },
             ),
