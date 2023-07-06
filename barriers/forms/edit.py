@@ -21,6 +21,7 @@ from utils.forms import (
     ClearableMixin,
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
+    TrueFalseBooleanField,
     YesNoBooleanField,
     YesNoDontKnowBooleanField,
 )
@@ -990,25 +991,75 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
 class UpdateBarrierStartDateForm(ClearableMixin, APIFormMixin, forms.Form):
 
     start_date = MonthYearInFutureField(
-        label="Barrier Start date",
-        help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
+        label="When did or will the barrier start to affect trade?",
+        help_text="If you aren't sure of the date, give an estimate",
         error_messages={"required": "Enter a barrier start date"},
+        required=False,
+    )
+
+    is_dont_know = TrueFalseBooleanField(
+        label="I don't know",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "govuk-checkboxes__input",
+                "aria-describedby": "is_dont_know-hint",
+            },
+        ),
+    )
+
+    is_currently_active = YesNoBooleanField(
+        label="Is the barrier currently affecting trade?",
+        required=False,
+        error_messages={"required": "Enter yes or no"},
+        widget=forms.RadioSelect(
+            attrs={
+                "class": "govuk-radios__input",
+                "aria-describedby": "is_currently_active-hint",
+            },
+        ),
+        choices=(("yes", "Yes"), ("no", "No, not yet")),
     )
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
+        self.fields["start_date"].initial = self.barrier.start_date
+        self.fields["is_dont_know"].initial = (
+            "True" if not self.barrier.start_date else "False"
+        )
+        self.fields["is_currently_active"].initial = (
+            "yes" if self.barrier.is_currently_active else "no"
+        )
 
     @property
     def barrier(self):
         client = MarketAccessAPIClient(self.token)
         return client.barriers.get(id=self.barrier_id)
 
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get("start_date")
+        is_dont_know = cleaned_data.get("is_dont_know")
+
+        if not start_date and not is_dont_know:
+            raise forms.ValidationError(
+                "Enter a barrier start date or select I don't know"
+            )
+
+        return cleaned_data
+
+    def clean_start_date(self):
+        return self.cleaned_data["start_date"].isoformat()
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
         start_date = self.cleaned_data.get("start_date")
+        is_currently_active = self.cleaned_data.get("is_currently_active")
+
         client.barriers.patch(
             id=str(self.barrier_id),
-            start_date=str(start_date.isoformat()),
+            start_date=start_date,
+            is_currently_active=is_currently_active,
         )
