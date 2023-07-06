@@ -533,7 +533,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
                     self.commodities.append(
                         {
                             "code": code,
-                            "country": countries[index] or "",
+                            "country": countries[index] or None,
                             "trading_bloc": trading_blocs[index] or "",
                         }
                     )
@@ -549,7 +549,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
                     self.commodities.append(
                         {
                             "code": code,
-                            "country": "",
+                            "country": None,
                             "trading_bloc": default_trading,
                         }
                     )
