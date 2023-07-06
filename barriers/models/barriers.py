@@ -364,6 +364,15 @@ class Barrier(APIModel):
             return self.programme_fund_progress_updates[0]
         return None
 
+    @property
+    def start_date(self):
+        if self.data.get("start_date") is not None:
+            return dateutil.parser.parse(self.data.get("start_date"))
+
+    @property
+    def export_types(self):
+        return self.data.get("export_types", [])
+
 
 class PublicBarrier(APIModel):
     _country = None

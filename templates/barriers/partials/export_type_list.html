@@ -1,0 +1,15 @@
+<ul class="selection-list__list">
+    {% for item in export_types %}
+        <li class="selection-list__list__item">
+            <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item|capfirst }}
+
+            {% if show_remove_links %}
+            <form action="{% url 'barriers:remove_export_type' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="export_type" value="{{ item }}">
+                {% action_remove_list_item forloop.counter item %}
+            </form>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
