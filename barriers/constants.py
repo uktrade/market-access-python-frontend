@@ -49,12 +49,12 @@ ALL_STATUSES = (
 
 
 STATUSES_HELP_TEXT = Choices(
-    (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on"),
+    (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on, or work will begin soon"),
     (
         STATUSES.RESOLVED_IN_PART,
-        "Barrier impact has been significantly reduced but remains in part",
+        "Barrier has been partially rresolved and is still being worked on",
     ),
-    (STATUSES.RESOLVED_IN_FULL, "Barrier has been resolved for all UK companies"),
+    (STATUSES.RESOLVED_IN_FULL, "Barrier has been fully resolved"),
 )
 
 REPORTABLE_STATUSES_HELP_TEXT = Choices(
