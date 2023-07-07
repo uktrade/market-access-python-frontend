@@ -35,7 +35,7 @@
                     {% endblock %}
                 </div>
             </div>
-            <div class="govuk-!-margin-top-6">
+            <div id="continue-actions-section" class="govuk-!-margin-top-6">
                 {% block actions %}
                     <button id="continue-button" class="govuk-button">Continue</button>
                     <a id="save-exit-button" class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' step='skip' %}">Save and exit </a>

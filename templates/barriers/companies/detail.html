@@ -4,7 +4,7 @@
 
 {% block page_content %}
 
-    <a href="{% url 'barriers:search_company' barrier.id %}" class="govuk-back-link">Back</a>
+    <a href="{% url 'barriers:edit_companies' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'partials/heading.html' with caption=barrier.title text='Name of company affected' %}
     {% form_error_banner form %}
 
@@ -55,6 +55,6 @@
 
     <span class="govuk-heading-s">Or</span>
 
-    <a href="{% url 'barriers:search_company' barrier.id %}">Search again</a>
+    <a href="{% url 'barriers:edit_companies' barrier.id %}">Search again</a>
 
 {% endblock %}

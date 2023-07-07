@@ -17,9 +17,7 @@ function CompaniesForm(props) {
     const [showAddCompanySection, setShowAddCompanySection] = useState(false);
 
     // Setup identifying the Django hidden input element
-    const hiddenDjangoInput = document.getElementById(
-        "barrier-companies-affected-input"
-    );
+    const hiddenDjangoInput = document.getElementById("id_companies-affected");
     const hiddenDjangoInputUnrecognised = document.getElementById(
         "id_barrier-companies-affected-unrecognised_company"
     );
@@ -45,6 +43,9 @@ function CompaniesForm(props) {
         setShowCompanyDetails(true);
         setShowAddCompanySection(false);
 
+        // Hide 'continue' and 'save & exit' buttons on parent HTML page
+        updateContinueActionsDisplay("hide");
+
         // Set the selected company state to the clicked-on company
         setSelectedCompany(company);
     };
@@ -55,6 +56,9 @@ function CompaniesForm(props) {
         setShowSearchBox(true);
         setShowCompanyList(true);
         setShowCompanyDetails(false);
+
+        // Show 'continue' and 'save & exit' buttons on parent HTML page
+        updateContinueActionsDisplay("show");
     };
 
     // Onclick event for add company button - updates selected companies list & hidden input field
@@ -70,6 +74,9 @@ function CompaniesForm(props) {
         // Change sections being displayed
         setShowCompanyDetails(false);
         setShowSelectedList(true);
+
+        // Show 'continue' and 'save & exit' buttons on parent HTML page
+        updateContinueActionsDisplay("show");
     };
 
     const addUnrecognisedCompany = (event) => {
@@ -154,6 +161,20 @@ function CompaniesForm(props) {
         setShowSelectedList(true);
     };
 
+    // Function to show/hide 'continue' and 'save & exit' buttons on parent HTML page
+    const updateContinueActionsDisplay = (action) => {
+        // Get section of parent page containing continue/save&exit buttons
+        const continueActionsDisplay = document.getElementById(
+            "continue-actions-section"
+        );
+        // Depending on passed action value, either show or remove section
+        if (action == "show") {
+            continueActionsDisplay.style = "display: block";
+        } else {
+            continueActionsDisplay.style = "display: none";
+        }
+    };
+
     // Async function - calls django view wrapper which will call companies house
     async function callCompaniesHouse(searchTerm) {
         const url = "/companies/search/" + searchTerm + "/";
@@ -176,7 +197,10 @@ function CompaniesForm(props) {
     // other pages. Passing empty array to useEffect means it will run once on page load.
     useEffect(() => {
         var passedInputCompanies = [];
-        if (hiddenDjangoInput.value != "None") {
+        if (
+            hiddenDjangoInput.value != "None" &&
+            hiddenDjangoInput.value != ""
+        ) {
             passedInputCompanies = JSON.parse(hiddenDjangoInput.value);
             if (passedInputCompanies != []) {
                 setSelectedCompaniesList(passedInputCompanies);

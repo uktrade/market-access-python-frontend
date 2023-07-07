@@ -294,9 +294,16 @@
                 {% if barrier.companies %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.companies %}
-                        <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                            <li class="summary-group__list__value__list__item">{{ item.name }}</li>
                         {% endfor %}
                     </ul>
+                    {% if barrier.related_organisations %}
+                        <ul class="summary-group__list__value__list">
+                            {% for item in barrier.related_organisations %}
+                                <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_companies' barrier.id %}">Edit</a>
                     {% endif %}
@@ -304,7 +311,7 @@
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No companies</span>
                     {% else %}
-                        <a href="{% url 'barriers:search_company' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
+                        <a href="{% url 'barriers:edit_companies' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
                     {% endif %}
                 {% endif %}
             </dd>
