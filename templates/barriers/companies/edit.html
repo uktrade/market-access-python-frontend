@@ -1,4 +1,17 @@
 {% extends "barriers/edit/base.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block head %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderCompaniesForm(
+                searchLabel="{{ form.companies_affected.label }}",
+                searchHelpText="{{ form.companies_affected.help_text }}"
+            )
+        })
+    </script>
+{% endblock %}
 
 {% block page_title %}{{ block.super }} - Barrier - Save or add another company{% endblock %}
 
@@ -14,12 +27,21 @@
     <div class="restrict-width">
 
         <h3 class="">Save or add another company</h3>
-
-        {% include 'barriers/partials/company_list.html' with show_remove_links=True show_add_button=True %}
-
         <form action="" method="POST">
+
+            <div id="react-app" class="govuk-form-group"></div>
+
+            <input type="hidden" name="{{ form.companies_affected.name }}" id="id_companies-affected" value="{{ companies_affected }}">
+
+            <!-- Input for unrecognised company name for when search fails -->
+            <div id="barrier-unknown-company-section" class="govuk-form-group">
+                <label class="govuk-label govuk-label--s" for="unrecognised_company">
+                    Add a company
+                </label>
+                <input type="hidden" id="id_barrier-companies-affected-unrecognised_company" name="{{ form.unrecognised_company.name }}" {% if unrecognised_company %}value="{{ unrecognised_company }}"{% endif %}>
+            </div>
+
             {% csrf_token %}
-            {{ form }}
             <input type="submit" class="govuk-button" value="Save and exit to barrier">
         </form>
     </div>

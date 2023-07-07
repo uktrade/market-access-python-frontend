@@ -17,9 +17,7 @@ function CompaniesForm(props) {
     const [showAddCompanySection, setShowAddCompanySection] = useState(false);
 
     // Setup identifying the Django hidden input element
-    const hiddenDjangoInput = document.getElementById(
-        "barrier-companies-affected-input"
-    );
+    const hiddenDjangoInput = document.getElementById("id_companies-affected");
     const hiddenDjangoInputUnrecognised = document.getElementById(
         "id_barrier-companies-affected-unrecognised_company"
     );
@@ -176,7 +174,10 @@ function CompaniesForm(props) {
     // other pages. Passing empty array to useEffect means it will run once on page load.
     useEffect(() => {
         var passedInputCompanies = [];
-        if (hiddenDjangoInput.value != "None") {
+        if (
+            hiddenDjangoInput.value != "None" &&
+            hiddenDjangoInput.value != ""
+        ) {
             passedInputCompanies = JSON.parse(hiddenDjangoInput.value);
             if (passedInputCompanies != []) {
                 setSelectedCompaniesList(passedInputCompanies);
