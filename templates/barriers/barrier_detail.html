@@ -270,7 +270,7 @@
             <dt class="summary-group__list__key">Barrier start date</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.start_date %}
-                    {{ barrier.start_date|date:"j F Y" }}
+                    {{ barrier.start_date|date:"F Y" }}
                     {% if not barrier.archived %}
                         <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_start_date' barrier.id %}">Edit</a>
                     {% endif %}

@@ -34,7 +34,7 @@ class OpenInProgressForm(APIMappingMixin, forms.Form):
     """
 
     open_in_progress_summary = forms.CharField(
-        label="Describe briefly why work on this barrier is in progress",
+        label="Describe briefly the status of the barrier, including recent progress and any obstacles",
         widget=forms.Textarea,
         error_messages={"required": "Enter a description"},
     )
