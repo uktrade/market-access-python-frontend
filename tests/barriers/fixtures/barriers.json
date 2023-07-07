@@ -40,6 +40,10 @@
             "id": "79baa06b-9217-4178-8c05-0c294aab355e",
             "name": "Christmas Tree Wholesale Ltd"
         }],
+        "related_organisations": [{
+            "id": "",
+            "name": "Christmas Tree Disposal Ltd"
+        }],
         "product": "McLaren",
         "source": {
             "code": "UK_GOVT",
