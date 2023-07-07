@@ -41,8 +41,10 @@
                 <input type="hidden" id="id_barrier-companies-affected-unrecognised_company" name="{{ form.unrecognised_company.name }}" {% if unrecognised_company %}value="{{ unrecognised_company }}"{% endif %}>
             </div>
 
-            {% csrf_token %}
-            <input type="submit" class="govuk-button" value="Save and exit to barrier">
+            <div id="continue-actions-section">
+                {% csrf_token %}
+                <input type="submit" class="govuk-button" value="Save and exit to barrier">
+            </div>
         </form>
     </div>
 

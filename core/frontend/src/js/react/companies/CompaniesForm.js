@@ -43,6 +43,9 @@ function CompaniesForm(props) {
         setShowCompanyDetails(true);
         setShowAddCompanySection(false);
 
+        // Hide 'continue' and 'save & exit' buttons on parent HTML page
+        updateContinueActionsDisplay("hide");
+
         // Set the selected company state to the clicked-on company
         setSelectedCompany(company);
     };
@@ -53,6 +56,9 @@ function CompaniesForm(props) {
         setShowSearchBox(true);
         setShowCompanyList(true);
         setShowCompanyDetails(false);
+
+        // Show 'continue' and 'save & exit' buttons on parent HTML page
+        updateContinueActionsDisplay("show");
     };
 
     // Onclick event for add company button - updates selected companies list & hidden input field
@@ -68,6 +74,9 @@ function CompaniesForm(props) {
         // Change sections being displayed
         setShowCompanyDetails(false);
         setShowSelectedList(true);
+
+        // Show 'continue' and 'save & exit' buttons on parent HTML page
+        updateContinueActionsDisplay("show");
     };
 
     const addUnrecognisedCompany = (event) => {
@@ -150,6 +159,20 @@ function CompaniesForm(props) {
         setShowCompanyList(false);
         setShowAddCompanySection(false);
         setShowSelectedList(true);
+    };
+
+    // Function to show/hide 'continue' and 'save & exit' buttons on parent HTML page
+    const updateContinueActionsDisplay = (action) => {
+        // Get section of parent page containing continue/save&exit buttons
+        const continueActionsDisplay = document.getElementById(
+            "continue-actions-section"
+        );
+        // Depending on passed action value, either show or remove section
+        if (action == "show") {
+            continueActionsDisplay.style = "display: block";
+        } else {
+            continueActionsDisplay.style = "display: none";
+        }
     };
 
     // Async function - calls django view wrapper which will call companies house
