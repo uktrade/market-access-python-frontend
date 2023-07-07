@@ -6,6 +6,14 @@
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
+{% block body_script %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.summary.name }}-form-group.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Barrier description' %}
@@ -14,13 +22,18 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <div id="{{ form.summary.name }}" class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="summary">{{ form.summary.label }}</label>
-            <span id="{{ form.summary.name }}-item-hint" class="govuk-hint">{{ form.summary.help_text }}</span>
+        <div id="{{ form.summary.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+            <div  class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.summary.id_for_label }}">{{ form.summary.label }}</label>
 
-            {% form_field_error form "summary" %}
+                {% form_field_error form "summary" %}
+                <span class="govuk-hint">{{ form.summary.help_text }}</span>
 
-            <textarea class="govuk-textarea" name="summary" rows="5">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
+                <textarea id="{{ form.summary.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.summary.name }}" rows="5" maxlength="1250">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
+            </div>
+        </div>
+        <div id="{{ form.summary.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            You can enter up to 1250 characters
         </div>
 
         <input type="submit" value="Save and return" class="govuk-button">
