@@ -457,7 +457,7 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
 
 
 class BarrierExportTypeForm(APIFormMixin, forms.Form):
-    export_type = forms.MultipleChoiceField(
+    export_types = forms.MultipleChoiceField(
         label="Which types of exports does the barrier affect?",
         help_text="Select all that apply",
         choices=EXPORT_TYPES,

@@ -9,26 +9,60 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Barrier Export Types' %}
+    {% include 'partials/heading.html' with text='Goods, services or investments affected' %}
     {% form_error_banner form %}
 
-    <h3 class="report-export_types-heading">Save or add {% if export_types %}another{% else %}a{% endif %} export type</h3>
+    <div class="restrict-width">
+        <form method="post">
+            {% csrf_token %}
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    {% form_error_banner form %}
 
-    <div class="selection-list restrict-width">
-        <h3 class="selection-list__heading">Selected export types</h3>
-        {% if export_types %}
-            {% include 'barriers/partials/export_type_list.html' with export_types=export_types show_remove_links=True %}
-        {% endif %}
+                    <div class="govuk-form-group govuk-checkboxes" data-module="govuk-checkboxes" id="export_types">
+                        <div class="{% form_group_classes form.export_types.errors %}">
+                            <label class="govuk-label govuk-label--s" for="{{ form.export_types.id_for_label }}">
+                                {{ form.export_types.label }}
+                            </label>
+                            <span id="{{ form.export_types.name }}_hint" class="govuk-hint">
+                  {{ form.export_types.help_text }}
+                </span>
 
-        {% if not has_all_export_types_selected %}
-            <a href="{% url 'barriers:add_export_types' barrier.id %}" id="add-export_type-button" class="govuk-button button--secondary selection-list__add-button">Add specific export type</a>
-        {% endif %}
+                            {% for type in form.export_types %}
+                                <div class="govuk-checkboxes__item">
+                                    {% if type.value is "GOODS" %}
+                                        <!-- The 'Goods' option needs to control the conditional HS code input area below.-->
+                                        <input class="govuk-checkboxes__input"
+                                               id="id_barrier-export-type-export_types_0"
+                                               name="barrier-export-type-export_types"
+                                               type="checkbox"
+                                               value={{ type.value }}
+                                                       data-aria-controls="conditional-id_barrier-export-type-export_types_0">
+                                    {% else %}
+                                        {{ type.tag }}
+                                    {% endif %}
+                                    <label class="govuk-label govuk-checkboxes__label" for="{{ type.id_for_label }}">
+                                        {{ type.choice_label }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
 
+                    <div class="govuk-form-group" id="export_description">
+                        <div class="{% form_group_classes form.export_description.errors %}">
+                            <label class="govuk-label govuk-label--s" for="{{ form.export_description.id_for_label }}">
+                                {{ form.export_description.label }}
+                            </label>
+                            <span id="{{ form.export_description.name }}_hint" class="govuk-hint">
+                  {{ form.export_description.help_text }}
+                </span>
+                            {{ form.export_description }}
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <input type="submit" value="Save and return" class="govuk-button">
+        </form>
     </div>
-
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Save and return" class="govuk-button">
-    </form>
 {% endblock %}

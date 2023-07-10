@@ -373,6 +373,10 @@ class Barrier(APIModel):
     def export_types(self):
         return self.data.get("export_types", [])
 
+    @property
+    def export_description(self):
+        return self.data.get("export_description", "")
+
 
 class PublicBarrier(APIModel):
     _country = None
