@@ -64,6 +64,8 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
             },
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], export_description=new_description, export_types=self.barrier["export_types"]
+            id=self.barrier["id"],
+            export_description=new_description,
+            export_types=self.new_export_type
         )
         assert response.status_code == HTTPStatus.FOUND

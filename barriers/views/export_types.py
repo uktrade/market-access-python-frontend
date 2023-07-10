@@ -16,7 +16,7 @@ class BarrierEditExportType(MetadataMixin, BarrierMixin, FormView):
         client.barriers.patch(
             id=form.barrier_id,
             export_types=form.cleaned_data["export_types"],
-            export_description=form.cleaned_data["export_description"]
+            export_description=form.cleaned_data["export_description"],
         )
         return super().form_valid(form)
 
