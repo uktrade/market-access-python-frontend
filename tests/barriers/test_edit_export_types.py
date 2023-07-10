@@ -39,11 +39,13 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
             ),
             data={
                 "export_types": self.new_export_type,
-                "export_description": self.barrier["export_description"]
+                "export_description": self.barrier["export_description"],
             },
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], export_types=self.new_export_type, export_description=self.barrier["export_description"]
+            id=self.barrier["id"],
+            export_types=self.new_export_type,
+            export_description=self.barrier["export_description"],
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -60,12 +62,12 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
             ),
             data={
                 "export_types": self.new_export_type,
-                "export_description": new_description
+                "export_description": new_description,
             },
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             export_description=new_description,
-            export_types=self.new_export_type
+            export_types=self.new_export_type,
         )
         assert response.status_code == HTTPStatus.FOUND
