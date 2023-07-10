@@ -8,6 +8,7 @@ from core.tests import MarketAccessTestCase
 
 class EditBarrierExportTypesTestCase(MarketAccessTestCase):
     new_export_type = ["goods"]
+
     def test_edit_export_types_landing_page(self):
         """
         Landing page should load the barrier's export types into the session
@@ -42,7 +43,7 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
             },
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], export_types=self.new_export_type
+            id=self.barrier["id"], export_types=self.new_export_type, export_description=self.barrier["export_description"]
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -63,6 +64,6 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
             },
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], export_description=new_description
+            id=self.barrier["id"], export_description=new_description, export_types=self.barrier["export_types"]
         )
         assert response.status_code == HTTPStatus.FOUND

@@ -172,7 +172,7 @@ class MarketAccessTestCase(TestCase):
         return self._history
 
     @property
-    def     barrier(self):
+    def barrier(self):
         return self.barriers[self.barrier_index]
 
     @property
