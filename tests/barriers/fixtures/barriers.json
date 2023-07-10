@@ -35,9 +35,14 @@
                 "name": "Automotive"
             }
         ],
+        "export_types": ["goods", "investment"],
         "companies": [{
             "id": "79baa06b-9217-4178-8c05-0c294aab355e",
             "name": "Christmas Tree Wholesale Ltd"
+        }],
+        "related_organisations": [{
+            "id": "",
+            "name": "Christmas Tree Disposal Ltd"
         }],
         "product": "McLaren",
         "source": {
@@ -447,6 +452,7 @@
                 "name": "Sector name"
             }
         ],
+        "export_types": ["goods", "services"],
         "country": {
             "id": "62af72a6-5d95-e211-a939-e4115bead28a",
             "name": "Country Name"

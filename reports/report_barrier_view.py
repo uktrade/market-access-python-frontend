@@ -114,33 +114,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             return redirect(self.get_step_url(self.steps.current))
 
         elif step_url == "skip":
-            # Save draft and exit
-            # Check to see if it is an existing draft barrier otherwise create
-            meta_data = self.storage.data.get("step_data").get("meta", None)
-            if meta_data:
-                barrier_id = meta_data.get("barrier_id", None)
-            else:
-                barrier_id = None
-
-            if barrier_id:
-                # get draft barrier
-                barrier_report = self.client.reports.get(barrier_id)
-            else:
-                barrier_report = self.client.reports.create()
-
-            # We should at least have passed the first step and have a barrier title
-            barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
-            if barrier_title_form is None:
-                # We don't have a barrier title therefore nothing to save
-                # Send user to first step
-                self.storage.current_step = self.steps.first
-                return redirect(self.get_step_url(self.steps.first))
-
-            self.client.reports.patch(
-                id=barrier_report.id,
-                **barrier_title_form,
-                new_report_session_data=json.dumps(self.storage.data),
-            )
+            # Save the previously entered data
+            self.save_report_progress()
 
             # Clear the cache for new report
             self.storage.reset()
@@ -170,12 +145,17 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         # is the url step name not equal to the step in the storage?
         # if yes, change the step in the storage (if name exists)
         elif step_url == self.steps.current:
+            # When passing into the step, we need to save our previously entered
+            # data.
+            self.save_report_progress()
+
             # URL step name and storage step name are equal, render!
             form = self.get_form(
                 data=self.storage.current_step_data,
                 files=self.storage.current_step_files,
             )
             return self.render(form, **kwargs)
+
         elif step_url in self.get_form_list():
             self.storage.current_step = step_url
             return self.render(
@@ -412,40 +392,77 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             return (default_location_code, default_location_name)
 
+    def save_report_progress(self):
+        # Function to save the current session data for later resume
+        # This function is called when clicking "save and exit" button, and when completing
+        # each form step.
+
+        # Ensure we have input data to save by checking we have passed at least
+        # the first form page some input data
+        barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
+        if barrier_title_form is None:
+            # We don't have a barrier title therefore nothing to save
+            # Send user to first step
+            self.storage.current_step = self.steps.first
+            return redirect(self.get_step_url(self.steps.first))
+        else:
+            # Check to see if it is an existing draft barrier/report otherwise create
+            meta_data = self.storage.data.get("meta")
+            if meta_data:
+                barrier_id = meta_data.get("barrier_id", None)
+            else:
+                barrier_id = None
+            # If we have an ID stored in metadata, get this barrier/report
+            # otherwise, create a new one.
+            if barrier_id:
+                barrier_report = self.client.reports.get(barrier_id)
+            else:
+                barrier_report = self.client.reports.create()
+                self.storage.data["meta"] = {"barrier_id": str(barrier_report.id)}
+
+        # Patch the session data to the barrier/report in the DB
+        self.client.reports.patch(
+            id=barrier_report.id,
+            **barrier_title_form,
+            new_report_session_data=json.dumps(self.storage.data),
+        )
+
     def done(self, form_list, form_dict, **kwargs):
         submitted_values = {}
         for form in form_list:
-            submitted_values = {**submitted_values, **form.cleaned_data}
 
-        # Exclude list for meta fields not required for barrier creation
-        exclude_fields = [
-            "partially_resolved_date",
-            "partially_resolved_description",
-            "resolved_date",
-            "resolved_description",
-            "location_select",
-            "trading_bloc_EU",
-            "trading_bloc_GCC",
-            "trading_bloc_EAEU",
-            "trading_bloc_Mercosur",
-            "companies_affected",
-            "unrecognised_company",
-            "code",
-            "codes",
-            "location",
-            "countries",
-            "trading_blocs",
-        ]
-        for name in exclude_fields:
-            submitted_values.pop(name)
+            submitted_values[form.prefix] = form.cleaned_data
 
-        # Clean date values
-        for name, value in submitted_values.items():
-            if isinstance(value, datetime.date):
-                submitted_values[name] = value.isoformat()
+            # Exclude list for meta fields not required for barrier creation
+            exclude_fields = [
+                "partially_resolved_date",
+                "partially_resolved_description",
+                "resolved_date",
+                "resolved_description",
+                "location_select",
+                "trading_bloc_EU",
+                "trading_bloc_GCC",
+                "trading_bloc_EAEU",
+                "trading_bloc_Mercosur",
+                "companies_affected",
+                "unrecognised_company",
+                "code",
+                "codes",
+                "location",
+                "countries",
+                "trading_blocs",
+            ]
+            for name in exclude_fields:
+                if name in submitted_values[form.prefix].keys():
+                    submitted_values[form.prefix].pop(name)
+
+            # Clean date values
+            for name, value in submitted_values[form.prefix].items():
+                if isinstance(value, datetime.date):
+                    submitted_values[form.prefix][name] = value.isoformat()
 
         # Check to see if it is an existing draft barrier otherwise create
-        meta_data = self.storage.data.get("step_data").get("meta", None)
+        meta_data = self.storage.data.get("meta")
 
         if meta_data:
             barrier_id = meta_data.get("barrier_id", None)
@@ -457,73 +474,32 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         else:
             barrier_report = self.client.reports.create()
 
-        if submitted_values["details_confirmation"] == "completed":
-            submitted_values.pop("details_confirmation")
+        # Loop through form data, patch barrier with the cleaned data
+        if (
+            submitted_values["barrier-details-summary"]["details_confirmation"]
+            == "completed"
+        ):
+            # Remove form with no data to commit to the DB
+            submitted_values.pop("barrier-details-summary")
 
-            # About form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                title=submitted_values["title"],
-                summary=submitted_values["summary"],
-            )
+            for form_submission in submitted_values:
+                self.client.reports.patch(
+                    id=barrier_report.id, **submitted_values[form_submission]
+                )
 
-            # Status form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                status=submitted_values["status"],
-                status_date=submitted_values["status_date"],
-                status_summary=submitted_values["status_summary"],
-                is_start_date_known=submitted_values["start_date_known"],
-                start_date=submitted_values["start_date"],
-                is_currently_active=submitted_values["currently_active"],
-            )
-
-            # Location form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                country=submitted_values["country"],
-                admin_areas=submitted_values["admin_areas"],
-                caused_by_admin_areas=submitted_values["caused_by_admin_areas"],
-                trading_bloc=submitted_values["trading_bloc"],
-                caused_by_trading_bloc=submitted_values["caused_by_trading_bloc"],
-            )
-
-            # Trade direction form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                trade_direction=submitted_values["trade_direction"],
-            )
-
-            # Sectors form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                main_sector=submitted_values["main_sector"],
-                sectors=submitted_values["sectors"],
-                sectors_affected=True,
-            )
-
-            # Companies form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                companies=submitted_values["companies"],
-                related_organisations=submitted_values["related_organisations"],
-            )
-
-            # Commodities and export types form
-            self.client.reports.patch(
-                id=barrier_report.id,
-                export_types=submitted_values["export_type"],
-                export_description=submitted_values["export_description"],
-                commodities=submitted_values["commodities"],
-            )
-
+            # When report/barrier patched fully, call submit
             self.client.reports.submit(barrier_report.id)
 
         else:
             self.client.reports.patch(
-                # id=barrier_report.id,
+                id=barrier_report.id,
                 new_report_session_data=json.dumps(self.storage.data),
                 **submitted_values,
             )
 
-        return HttpResponseRedirect(reverse("barriers:dashboard"))
+        return HttpResponseRedirect(
+            reverse(
+                "barriers:barrier_detail_from_complete",
+                kwargs={"barrier_id": barrier_report.id},
+            )
+        )
