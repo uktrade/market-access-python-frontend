@@ -9,18 +9,6 @@ EXPORT_TYPES = (
 )
 
 
-class AddExportTypesForm(forms.Form):
-    export_type = forms.ChoiceField(
-        label="",
-        choices=[],
-        error_messages={"required": "Select a export type affected by the barrier"},
-    )
-
-    def __init__(self, export_types, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["export_type"].choices = export_types
-
-
 class EditExportTypesForm(forms.Form):
     export_types = forms.MultipleChoiceField(
         label="",
