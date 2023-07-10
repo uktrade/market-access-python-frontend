@@ -4,6 +4,7 @@ from django.views.generic import FormView
 from reports.report_barrier_forms import BarrierExportTypeForm
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
+
 from .mixins import BarrierMixin
 
 

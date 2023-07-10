@@ -109,9 +109,7 @@ from .views.edit import (
     BarrierEditTitle,
     BarrierEditTradeDirection,
 )
-from .views.export_types import (
-    BarrierEditExportType,
-)
+from .views.export_types import BarrierEditExportType
 from .views.government_organisations import (
     BarrierAddGovernmentOrganisation,
     BarrierEditGovernmentOrganisations,
