@@ -17,7 +17,6 @@
             {% csrf_token %}
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
-                    {% form_error_banner form %}
 
                     <div class="govuk-form-group govuk-checkboxes" data-module="govuk-checkboxes" id="export_types">
                         <div class="{% form_group_classes form.export_types.errors %}">
@@ -25,24 +24,14 @@
                                 {{ form.export_types.label }}
                             </label>
                             <span id="{{ form.export_types.name }}_hint" class="govuk-hint">
-                  {{ form.export_types.help_text }}
-                </span>
+                              {{ form.export_types.help_text }}
+                            </span>
 
-                            {% for type in form.export_types %}
+                            {% for export_type in form.export_types %}
                                 <div class="govuk-checkboxes__item">
-                                    {% if type.value is "GOODS" %}
-                                        <!-- The 'Goods' option needs to control the conditional HS code input area below.-->
-                                        <input class="govuk-checkboxes__input"
-                                               id="id_barrier-export-type-export_types_0"
-                                               name="barrier-export-type-export_types"
-                                               type="checkbox"
-                                               value={{ type.value }}
-                                                       data-aria-controls="conditional-id_barrier-export-type-export_types_0">
-                                    {% else %}
-                                        {{ type.tag }}
-                                    {% endif %}
-                                    <label class="govuk-label govuk-checkboxes__label" for="{{ type.id_for_label }}">
-                                        {{ type.choice_label }}
+                                    {{ export_type.tag }}
+                                    <label class="govuk-label govuk-checkboxes__label" for="{{ export_type.id_for_label }}">
+                                        {{ export_type.choice_label }}
                                     </label>
                                 </div>
                             {% endfor %}
@@ -55,8 +44,8 @@
                                 {{ form.export_description.label }}
                             </label>
                             <span id="{{ form.export_description.name }}_hint" class="govuk-hint">
-                  {{ form.export_description.help_text }}
-                </span>
+                              {{ form.export_description.help_text }}
+                            </span>
                             {{ form.export_description }}
                         </div>
                     </div>

@@ -7,8 +7,6 @@ from core.tests import MarketAccessTestCase
 
 
 class EditBarrierExportTypesTestCase(MarketAccessTestCase):
-    new_export_type = "services"
-
     def test_edit_export_types_landing_page(self):
         """
         Landing page should load the barrier's export types into the session
@@ -21,116 +19,44 @@ class EditBarrierExportTypesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         form = response.context["form"]
+
         assert form.initial["export_types"] == [
-            export_type for export_type in self.barrier["export_types"]
+            each["name"] for each in self.barrier["export_types"]
         ]
-        assert self.client.session["export_types"] == [
-            export_type for export_type in self.barrier["export_types"]
-        ]
-
-    def test_add_export_types_choices(self):
-        """
-        Add export type page should not include current sectors in choices
-        """
-        self.update_session(
-            {
-                "export_types": [
-                    export_type for export_type in self.barrier["export_types"]
-                ],
-            }
-        )
-
-        response = self.client.get(
-            reverse(
-                "barriers:add_export_types", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-
-        choice_values = [k for k, v in form.fields["export_type"].choices]
-        for export_type in self.barrier["export_types"]:
-            assert export_type not in choice_values
+        assert form.initial["export_description"] == self.barrier["export_description"]
 
     @patch("utils.api.resources.APIResource.patch")
     def test_add_export_type(self, mock_patch):
         """
-        Add export type page should add an export type to the session, not call the API
-        """
-        self.update_session(
-            {
-                "export_types": [
-                    export_type for export_type in self.barrier["export_types"]
-                ],
-            }
-        )
-        response = self.client.post(
-            reverse(
-                "barriers:add_export_types", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={"export_type": self.new_export_type},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert self.client.session["export_types"] == (
-            [export_type for export_type in self.barrier["export_types"]]
-            + [self.new_export_type]
-        )
-        assert mock_patch.called is False
-
-    def test_edit_export_type_confirmation_form(self):
-        """
-        Edit export type form should match the export types in the session
-        """
-        self.update_session({"export_types": []})
-
-        response = self.client.get(
-            reverse(
-                "barriers:edit_export_types_session",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-        )
-        assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
-        assert form.initial["export_types"] == []
-
-    @patch("utils.api.resources.APIResource.patch")
-    def test_edit_export_type_confirm(self, mock_patch):
-        """
         Saving export_types should call the API
         """
-        new_export_types = [self.new_export_type]
+        new_export_type = ["commodities"]
         response = self.client.post(
             reverse(
-                "barriers:edit_export_types_session",
+                "barriers:edit_export_types",
                 kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"export_types": new_export_types},
+            data={"export_types": new_export_type},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], export_types=new_export_types
+            id=self.barrier["id"], export_types=new_export_type
         )
         assert response.status_code == HTTPStatus.FOUND
 
     @patch("utils.api.resources.APIResource.patch")
-    def test_remove_export_type(self, mock_patch):
+    def test_update_export_description(self, mock_patch):
         """
-        Removing an export type should remove it from the session, not call the API
+        Saving export_descriptions should call the API
         """
-        self.update_session(
-            {
-                "export_types": [
-                    export_type for export_type in self.barrier["export_types"]
-                ]
-            }
-        )
-
+        new_description = "new description"
         response = self.client.post(
             reverse(
-                "barriers:remove_export_type", kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_export_types",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
-            data={"export_type": "goods"},
+            data={"export_description": new_description},
+        )
+        mock_patch.assert_called_with(
+            id=self.barrier["id"], export_description=new_description
         )
         assert response.status_code == HTTPStatus.FOUND
-        assert self.client.session["export_types"] == ["investment"]
-        assert mock_patch.called is False

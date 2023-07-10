@@ -111,7 +111,6 @@ from .views.edit import (
 )
 from .views.export_types import (
     BarrierEditExportType,
-    BarrierEditExportTypeSession,
 )
 from .views.government_organisations import (
     BarrierAddGovernmentOrganisation,
@@ -816,11 +815,6 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/start-date/",
         BarrierEditStartDate.as_view(),
         name="edit_start_date",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/export-types/",
-        BarrierEditExportTypeSession.as_view(),
-        name="edit_export_types_session",
     ),
     path(
         "barriers/<uuid:barrier_id>/export-types/edit/",
