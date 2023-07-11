@@ -196,12 +196,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         if form_class is None:
             form_class = CommodityLookupForm
 
-        # if self.barrier.country:
-        #     initial = {"location": self.barrier.country["id"]}
-        # elif self.barrier.trading_bloc:
-        #     initial = {"location": self.barrier.trading_bloc["code"]}
-        # default_location = dict((x, y) for x, y in self.get_default_location())
-
         selected_location = self.get_default_location()
         default_location = {"id": selected_location[0], "name": selected_location[1]}
 
@@ -215,7 +209,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 default_location,
                 {"id": UK_COUNTRY_ID, "name": "United Kingdom"},
             ],
-            # locations=({"id": UK_COUNTRY_ID, "name": "United Kingdom"},),
         )
 
     def get_context_data(self, form, **kwargs):
@@ -229,29 +222,64 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             context.update({"sectors_list": sectors})
 
         if self.steps.current == "barrier-export-type":
-            # TODO: Get the comfirmed commodities from cleaned data - may need to add a hidden field
-            confirmed_commodities_data = []
-            # confirmed_commodities = (
-            #    json.dumps(
-            #        self.get_cleaned_data_for_step("barrier-export-type")["commodities"]
-            #    )
-            #    or None
-            # )
-            # print(
-            #     "cleaned_data",
-            #     self.get_cleaned_data_for_step("barrier-export-type")["commodities"],
-            # )
+            export_data = self.get_cleaned_data_for_step("barrier-export-type")
 
-            # context.update({"confirmed_commodities": confirmed_commodities})
-            # context.update(
-            #     {
-            #         "confirmed_commodities_data": [
-            #             self._to_dict(commodity) for commodity in confirmed_commodities
-            #         ]
-            #     }
-            # )
+            if export_data:
+                if export_data["commodities"]:
+                    # User has entered HS codes previously
+                    # so we need to display these
+                    hs6_session_codes = [
+                        commodity["code"][:6].ljust(10, "0")
+                        for commodity in export_data["commodities"]
+                    ]
+                    commodity_lookup = {
+                        commodity.code: commodity
+                        for commodity in self.client.commodities.list(
+                            codes=",".join(hs6_session_codes)
+                        )
+                    }
 
-            context.update({"confirmed_commodities_data": []})
+                    barrier_commodities = []
+                    for commodity_data in export_data["commodities"]:
+                        code = commodity_data.get("code")
+                        hs6_code = code[:6].ljust(10, "0")
+                        commodity = commodity_lookup.get(hs6_code)
+
+                        # If commodity exists, format the information so HS component can interpret correctly
+                        if commodity:
+                            # Frontend component needs JSON compatible country information, we only have the
+                            # code, so we need to get the country/bloc object from metadata
+                            country_location = {}
+                            trading_bloc_location = {}
+                            if commodity_data.get("country"):
+                                # location is a country
+                                logger.critical("got country")
+                                country_location = self.metadata.get_country(
+                                    commodity_data.get("country")
+                                )
+                            else:
+                                # location is a trading bloc
+                                logger.critical("got trading bloc")
+                                trading_bloc_location = self.metadata.get_trading_bloc(
+                                    commodity_data.get("trading_bloc")
+                                )
+
+                            # Create dictionary object to contain information, push to array to pass to JS component
+                            commodity_obj = {
+                                "code": code,
+                                "code_display": commodity.code_display,
+                                "commodity": commodity.data,
+                                "country": country_location,
+                                "trading_bloc": trading_bloc_location,
+                            }
+                            barrier_commodities.append(commodity_obj)
+
+                    confirmed_commodities_data = barrier_commodities
+            else:
+                # User has not specified HS codes, or is entering the form for the first time
+                confirmed_commodities_data = []
+
+            context.update({"confirmed_commodities_data": confirmed_commodities_data})
 
         # Put cleaned data into context for the details summary final step
         if self.steps.current == "barrier-details-summary":
@@ -362,12 +390,10 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
     def get_default_location(self):
         self.countries_options = self.metadata.get_country_list()
         self.trading_blocs = self.metadata.get_trading_bloc_list()
-        # TODO - use get_step_cleaned_data() here instead
-        location_data = self.storage.get_step_data("barrier-location")
+        location_data = self.get_cleaned_data_for_step("barrier-location")
+
         if location_data:
-            default_location_code = location_data.get(
-                "barrier-location-location_select", None
-            )
+            default_location_code = location_data.get("location_select", None)
             # Search country list
 
             default_location_name = next(

@@ -133,8 +133,6 @@ function CompaniesForm(props) {
             JSON.stringify(addedCompaniesList);
 
         // Remove list entry of removed company
-        // TODO:
-        // This should be automatically updated via React, need to get this to work ractively rather than manually amending page.
         const companyListElement = document.getElementById(company);
         companyListElement.remove();
 
