@@ -363,26 +363,26 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Sector{{ barrier.sectors|pluralize }} affected</dt>
+            <dt class="summary-group__list__key">Main sector affected:</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.sectors or barrier.all_sectors %}
+                {% if barrier.main_sector or barrier.all_sectors %}
+                    {% if barrier.all_sectors %}
+                        <span class="summary-group__list__value__list__item">All sectors</span>
+                    {% else %}
+                        <span class="summary-group__list__value__list__item">{{ barrier.main_sector.name|default:"Unknown"}}</span>
+                    {% endif %}
+                    {% if not barrier.archived %}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:add_main_sector' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
+            <dt class="summary-group__list__key">Other sector{{ barrier.sectors|pluralize }} affected:</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.sectors %}
                     <ul class="summary-group__list__value__list">
-                        {% if barrier.all_sectors %}
-                            <span class="summary-group__list__key">Main sector affected:</span>
-                            <li class="summary-group__list__value__list__item">All sectors</li>
-                        {% else %}
-                            {% for item in barrier.sectors %}
-                            {% if forloop.first %}
-                                <span class="summary-group__list__key">Main sector affected:</span>
-                                <li class="summary-group__list__value__list__item">{{ item.name|default:"Unknown" }}</li>
-                            {% else %}
-                                {% if forloop.counter == 2 %}
-                                <span class="summary-group__list__key">Other sectors affected:</span>
-                                {% endif %}
-                                <li class="summary-group__list__value__list__item">{{ item.name|default:"Unknown" }}</li>
-                            {% endif %}
-                            {% endfor %}
-                        {% endif %}
+                        {% for item in barrier.sectors %}
+                            <li class="summary-group__list__value__list__item">{{ item.name|default:"Unknown" }}</li>
+                        {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_sectors' barrier.id %}">Edit</a>

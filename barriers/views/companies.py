@@ -95,17 +95,19 @@ class BarrierEditCompanies(BarrierMixin, FormView):
 
         # Build JSON with fields matching companies house keys
         companies_context_list = []
-        for company in self.barrier.companies:
-            companies_context_list.append(
-                {
-                    "company_number": company["id"],
-                    "title": company["name"],
-                }
-            )
+        if self.barrier.companies:
+            for company in self.barrier.companies:
+                companies_context_list.append(
+                    {
+                        "company_number": company["id"],
+                        "title": company["name"],
+                    }
+                )
 
         related_organisations_context_list = []
-        for related_organisation in self.barrier.related_organisations:
-            related_organisations_context_list.append(related_organisation["name"])
+        if self.barrier.related_organisations:
+            for related_organisation in self.barrier.related_organisations:
+                related_organisations_context_list.append(related_organisation["name"])
 
         context_data["companies_affected"] = json.dumps(companies_context_list)
         context_data["unrecognised_company"] = json.dumps(

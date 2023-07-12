@@ -6,12 +6,10 @@
   <script>
     document.addEventListener("DOMContentLoaded", function(event) {
       let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
-      //let confirmedCommodities = []
       let locations = [
         {"id": "{{ form.location.field.choices.0.0 }}", "name": "{{ form.location.field.choices.0.1 }}"},
         {"id": "{{ form.location.field.choices.1.0 }}", "name": "{{ form.location.field.choices.1.1 }}"},
       ]
-      console.log('initialising locations', locations)
       ReactApp.renderCommodityForm(
         confirmedCommodities=confirmedCommodities,
         locations=locations,

@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from barriers.forms.sectors import AddSectorsForm, EditSectorsForm
+from barriers.forms.sectors import AddMainSectorForm, AddSectorsForm, EditSectorsForm
 from utils.metadata import MetadataMixin
 
 from .mixins import BarrierMixin
@@ -90,6 +90,41 @@ class BarrierAddSectors(MetadataMixin, BarrierMixin, FormView):
     def get_success_url(self):
         return reverse(
             "barriers:edit_sectors_session",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class BarrierAddMainSector(MetadataMixin, BarrierMixin, FormView):
+    template_name = "barriers/edit/add_main_sector.html"
+    form_class = AddMainSectorForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        sector_ids = self.request.session.get("sectors", [])
+        context_data["sectors"] = self.metadata.get_sectors_by_ids(sector_ids)
+        main_sector = self.request.session.get("main_sector", None)
+        context_data["main_sector"] = self.metadata.get_sector(main_sector)
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["sectors"] = [
+            (sector["id"], sector["name"])
+            for sector in self.metadata.get_sector_list(level=0)
+            if sector["id"] not in self.request.session.get("sectors", [])
+        ]
+        kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
+    def form_valid(self, form):
+        self.request.session["main_sector"] = form.cleaned_data["main_sector"]
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 
