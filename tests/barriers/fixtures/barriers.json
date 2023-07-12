@@ -35,7 +35,11 @@
                 "name": "Automotive"
             }
         ],
-        "export_types": ["goods", "investment"],
+        "export_types": [
+            {"id": 1, "name": "goods"},
+            {"id": 2, "name": "investment"}
+        ],
+        "export_description": "Cars",
         "companies": [{
             "id": "79baa06b-9217-4178-8c05-0c294aab355e",
             "name": "Christmas Tree Wholesale Ltd"
@@ -452,7 +456,11 @@
                 "name": "Sector name"
             }
         ],
-        "export_types": ["goods", "services"],
+        "export_types": [
+            {"id": 1, "name": "goods"},
+            {"id": 3, "name": "services"}
+        ],
+        "export_description": "Tigers",
         "country": {
             "id": "62af72a6-5d95-e211-a939-e4115bead28a",
             "name": "Country Name"

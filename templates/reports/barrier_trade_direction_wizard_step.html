@@ -28,7 +28,6 @@
                         {{ name }}
                     </label>
 
-                    <!-- TODO Refine help text-->
                     {% for help_text in form.trade_direction.help_text %}
                         {% if help_text.0 == value %}
                             <span id="{{ name }}_hint" class="govuk-hint govuk-radios__hint">
@@ -40,10 +39,6 @@
 
             {% endfor %}
         </div>
-
-
-
-
 
     </fieldset>
 </div>

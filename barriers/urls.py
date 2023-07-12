@@ -109,12 +109,7 @@ from .views.edit import (
     BarrierEditTitle,
     BarrierEditTradeDirection,
 )
-from .views.export_types import (
-    BarrierAddExportTypes,
-    BarrierEditExportType,
-    BarrierEditExportTypeSession,
-    BarrierRemoveExportType,
-)
+from .views.export_types import BarrierEditExportType
 from .views.government_organisations import (
     BarrierAddGovernmentOrganisation,
     BarrierEditGovernmentOrganisations,
@@ -826,24 +821,9 @@ urlpatterns = [
         name="edit_start_date",
     ),
     path(
-        "barriers/<uuid:barrier_id>/export-types/",
-        BarrierEditExportTypeSession.as_view(),
-        name="edit_export_types_session",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/export-type/add/",
-        BarrierAddExportTypes.as_view(),
-        name="add_export_types",
-    ),
-    path(
         "barriers/<uuid:barrier_id>/export-types/edit/",
         BarrierEditExportType.as_view(),
         name="edit_export_types",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/export-type/remove/",
-        BarrierRemoveExportType.as_view(),
-        name="remove_export_type",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(

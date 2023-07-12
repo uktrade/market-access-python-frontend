@@ -325,17 +325,12 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 
         # Set trading bloc values if it is indicated a trading bloc is the cause
         self.cleaned_data["caused_by_trading_bloc"] = False
-        if self.cleaned_data["trading_bloc_EU"] == "YES":
-            self.cleaned_data["trading_bloc"] = "TB00016"
-            self.cleaned_data["caused_by_trading_bloc"] = True
-        if self.cleaned_data["trading_bloc_GCC"] == "YES":
-            self.cleaned_data["trading_bloc"] = "TB00017"
-            self.cleaned_data["caused_by_trading_bloc"] = True
-        if self.cleaned_data["trading_bloc_Mercosur"] == "YES":
-            self.cleaned_data["trading_bloc"] = "TB00026"
-            self.cleaned_data["caused_by_trading_bloc"] = True
-        if self.cleaned_data["trading_bloc_EAEU"] == "YES":
-            self.cleaned_data["trading_bloc"] = "TB00013"
+        if (
+            self.cleaned_data["trading_bloc_EU"] == "YES"
+            or self.cleaned_data["trading_bloc_GCC"] == "YES"
+            or self.cleaned_data["trading_bloc_Mercosur"] == "YES"
+            or self.cleaned_data["trading_bloc_EAEU"] == "YES"
+        ):
             self.cleaned_data["caused_by_trading_bloc"] = True
 
         # Trigger error if admin areas haven't been selected but user has indicated
@@ -457,7 +452,7 @@ class BarrierCompaniesAffectedForm(APIFormMixin, forms.Form):
 
 
 class BarrierExportTypeForm(APIFormMixin, forms.Form):
-    export_type = forms.MultipleChoiceField(
+    export_types = forms.MultipleChoiceField(
         label="Which types of exports does the barrier affect?",
         help_text="Select all that apply",
         choices=EXPORT_TYPES,
