@@ -1,0 +1,39 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Sectors affected by the barrier{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Main sector affected by the barrier' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.main_sector.name }}" class="govuk-form-group {% if form.main_sector.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="main_sector">Which main sector is affected by the barrier?</label>
+
+            {% form_field_error form "sector" %}
+
+            <select class="govuk-select govuk-!-width-full{% if form.main_sector.errors %} govuk-select--error{% endif %}" id="main_sector" name="main_sector"{% if form.main_sector.errors %} aria-describedby="main_sector-error"{% endif %}>
+                {% for id, name in form.fields.main_sector.choices %}
+                <option value="{{ id }}" {%  if name == main_sector.name %} selected="selected" {% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if sectors %}
+            <div class="selection-list restrict-width">
+                <h3 class="selection-list__heading">Other sectors related to the barrier</h3>
+                {% include 'barriers/partials/sector_list.html' with show_remove_links=False %}
+            </div>
+        {% endif %}
+
+        <input type="submit" value="Add main sector" class="govuk-button">
+        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">cancel</a>
+    </form>
+{% endblock %}

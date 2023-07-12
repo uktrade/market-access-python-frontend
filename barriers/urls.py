@@ -151,6 +151,7 @@ from .views.search import (
 )
 from .views.sectors import (
     BarrierAddAllSectors,
+    BarrierAddMainSector,
     BarrierAddSectors,
     BarrierEditSectors,
     BarrierEditSectorsSession,
@@ -472,6 +473,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/sectors/add/",
         BarrierAddSectors.as_view(),
         name="add_sectors",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/main-sector/add/",
+        BarrierAddMainSector.as_view(),
+        name="add_main_sector",
     ),
     path(
         "barriers/<uuid:barrier_id>/sectors/add/all/",
