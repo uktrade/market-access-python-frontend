@@ -155,11 +155,6 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         cleaned_data["status_date"] = datetime.date.today()
         cleaned_data["status_summary"] = ""
 
-        if partially_resolved_date and resolved_date:
-            msg = "Enter either a date the barrier was partially resolved or a date the barrier was fully resolved"
-            self.add_error("partially_resolved_date", msg)
-            self.add_error("resolved_date", msg)
-
         if status == "3":
             # Partially resolved date and reason requried
             if partially_resolved_date is None:
