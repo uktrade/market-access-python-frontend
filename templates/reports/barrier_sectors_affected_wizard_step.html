@@ -55,7 +55,7 @@
                     <select class="govuk-select govuk-!-width-full  {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
                         <option value="" disabled selected>Select a sector</option>
                         {% for id, name in sectors_list %}
-                            <option value="{{ id }}">{{ name }}</option>
+                            <option id="other-sectors-select-{{ id }}" value="{{ id }}">{{ name }}</option>
                         {% endfor %}
                     </select>
 

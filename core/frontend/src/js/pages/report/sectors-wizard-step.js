@@ -1,8 +1,15 @@
 ma.pages.report.sectorsWizardStep = function () {
     // Get buttons from sections and assign them onclick events to call relevant function
+    const mainSectorSelect = document.getElementById("main_sector_select");
+    var currentMainSectorSelected = mainSectorSelect.value;
+    console.log(currentMainSectorSelected);
+    mainSectorSelect.addEventListener("change", function () {
+        updateOtherSectorsList(mainSectorSelect.value);
+        removeItem(mainSectorSelect.value);
+    });
     const addSectorButton = document.getElementById("add-other-sector-button");
     addSectorButton.addEventListener("click", function () {
-        append_sector(
+        appendSector(
             "id_barrier-sectors-affected-sectors",
             "sectors_select",
             "sectors_list_display"
@@ -12,10 +19,10 @@ ma.pages.report.sectorsWizardStep = function () {
         "display-other-sector-button"
     );
     displayOtherSectorButton.addEventListener("click", function () {
-        toggle_mode("edit");
+        toggleMode("edit");
     });
 
-    const toggle_mode = function (mode) {
+    const toggleMode = function (mode) {
         // Function that switches display between 'edit' and 'display'
         // 'display' = box listing all selected sectors is visible
         // 'edit' = box where you can select and add sector is visible
@@ -44,10 +51,9 @@ ma.pages.report.sectorsWizardStep = function () {
         }
     };
 
-    const append_sector = function (fieldname, select, display_list) {
+    const appendSector = function (fieldname, select, display_list) {
         let sector_select = document.getElementById(select);
         let sector = sector_select.value;
-        //let sector_name = sector_select.options[sector_select.selectedIndex].text;
         let current_sector_list = document.getElementById(fieldname);
 
         if (current_sector_list.value) {
@@ -73,12 +79,12 @@ ma.pages.report.sectorsWizardStep = function () {
         }
 
         // Update the display box with the new updated list
-        update_sector_display();
+        updateSectorDisplay();
         // Toggle back to display mode
-        toggle_mode("display");
+        toggleMode("display");
     };
 
-    const update_sector_display = function () {
+    const updateSectorDisplay = function () {
         const sector_list = document.getElementById("sectors_select");
         const current_selected_list = document.getElementById(
             "id_barrier-sectors-affected-sectors"
@@ -105,7 +111,7 @@ ma.pages.report.sectorsWizardStep = function () {
                             document.createTextNode("remove");
                         remove_link.setAttribute("href", "#");
                         remove_link.addEventListener("click", function () {
-                            remove_item(option.value);
+                            removeItem(option.value);
                         });
                         remove_link.appendChild(remove_link_text);
                         remove_link.classList.add(
@@ -119,7 +125,35 @@ ma.pages.report.sectorsWizardStep = function () {
         }
     };
 
-    const remove_item = function (item) {
+    const updateOtherSectorsList = function (sector) {
+        // Want to prevent item selected as main sector to be available as an option for other sector
+        if (sector != "") {
+            // Hide newly selected option in the other sectors selection box
+            otherSectorItemElementName = "other-sectors-select-".concat(sector);
+            const otherSectorItem = document.getElementById(
+                otherSectorItemElementName
+            );
+            otherSectorItem.style.display = "none";
+            // Show previously selected option in the other sectors selection box
+            if (
+                currentMainSectorSelected != sector &&
+                currentMainSectorSelected != ""
+            ) {
+                previousSectorItemElementName = "other-sectors-select-".concat(
+                    currentMainSectorSelected
+                );
+                console.log(previousSectorItemElementName);
+                const previousSectorItem = document.getElementById(
+                    previousSectorItemElementName
+                );
+                previousSectorItem.style.display = "block";
+            }
+            // Set variable tracking selected sector to the new value
+            currentMainSectorSelected = sector;
+        }
+    };
+
+    const removeItem = function (item) {
         const current_selected_list = document.getElementById(
             "id_barrier-sectors-affected-sectors"
         );
@@ -133,11 +167,12 @@ ma.pages.report.sectorsWizardStep = function () {
                 selected_list.splice(index, 1);
             }
             current_selected_list.value = JSON.stringify(selected_list);
-            update_sector_display();
+            updateSectorDisplay();
         }
     };
 
     // Set initial visibility mode & initial list of selected sectors
-    toggle_mode("display");
-    update_sector_display();
+    toggleMode("display");
+    updateOtherSectorsList(currentMainSectorSelected);
+    updateSectorDisplay();
 };
