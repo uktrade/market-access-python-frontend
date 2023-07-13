@@ -436,7 +436,7 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Export Types</dt>
+            <dt class="summary-group__list__key">Export type</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.export_types %}
                     <ul class="summary-group__list__value__list">
@@ -456,11 +456,11 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Product, service or investment affected</dt>
+            <dt class="summary-group__list__key">Goods, services or investments affected</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.product }}
                 {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_product' barrier.id %}">Edit</a>
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
                 {% endif %}
             </dd>
 
