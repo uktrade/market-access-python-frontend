@@ -20,7 +20,7 @@
 <div class="govuk-width-container">
     <form method="post" novalidate>
             {% block back_button %}
-                <a class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
+                <a id="form-wizard-back-button" class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
             {% endblock %}
         <div>
             {% csrf_token %}

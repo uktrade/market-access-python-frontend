@@ -12,9 +12,8 @@
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '#{{ form.title.name }}-form-group.govuk-character-count' );
             new ma.components.CharacterCount( '#{{ form.summary.name }}-form-group.govuk-character-count' );
-
+            ma.pages.report.aboutWizardStep();
         }
-
     </script>
 
 {% endblock %}

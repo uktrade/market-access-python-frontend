@@ -222,6 +222,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             context.update({"sectors_list": sectors})
 
         if self.steps.current == "barrier-export-type":
+
+            confirmed_commodities_data = []
+
             export_data = self.get_cleaned_data_for_step("barrier-export-type")
 
             if export_data:
@@ -275,9 +278,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                             barrier_commodities.append(commodity_obj)
 
                     confirmed_commodities_data = barrier_commodities
-            else:
-                # User has not specified HS codes, or is entering the form for the first time
-                confirmed_commodities_data = []
 
             context.update({"confirmed_commodities_data": confirmed_commodities_data})
 
