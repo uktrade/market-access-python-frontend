@@ -20,7 +20,9 @@
 <div class="govuk-width-container">
     <form method="post" novalidate>
             {% block back_button %}
-                <a id="form-wizard-back-button" class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
+                {% if wizard.steps.current != wizard.steps.first%}
+                    <a id="form-wizard-back-button" class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
+                {% endif %}
             {% endblock %}
         <div>
             {% csrf_token %}
@@ -28,7 +30,6 @@
             {% block current_step %}
                 <span class="govuk-caption-l">Section {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
             {% endblock %}
-
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                     {% block fields %}
@@ -38,7 +39,9 @@
             <div id="continue-actions-section" class="govuk-!-margin-top-6">
                 {% block actions %}
                     <button id="continue-button" class="govuk-button">Continue</button>
-                    <a id="save-exit-button" class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' step='skip' %}">Save and exit </a>
+                    {% if wizard.steps.current != wizard.steps.first%}
+                        <a id="save-exit-button" class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' step='skip' %}">Save and exit </a>
+                    {% endif %}
                 {% endblock %}
             </div>
         </div>

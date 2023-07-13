@@ -127,7 +127,8 @@
                                         id="{{ name }}"
                                         name="{{wizard.steps.current}}-currently_active"
                                         type="radio"
-                                        value="{{ value }}">
+                                        value="{{ value }}"
+                                        {% if form.currently_active.value == value %}checked="checked"{% endif %} >
                                         <label class="govuk-label govuk-radios__label" for="{{ name }}">
                                             {{ name }}
                                         </label>
