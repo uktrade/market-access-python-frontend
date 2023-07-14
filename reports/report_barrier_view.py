@@ -248,13 +248,11 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                             trading_bloc_location = {}
                             if commodity_data.get("country"):
                                 # location is a country
-                                logger.critical("got country")
                                 country_location = self.metadata.get_country(
                                     commodity_data.get("country")
                                 )
                             else:
                                 # location is a trading bloc
-                                logger.critical("got trading bloc")
                                 trading_bloc_location = self.metadata.get_trading_bloc(
                                     commodity_data.get("trading_bloc")
                                 )
