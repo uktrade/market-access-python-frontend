@@ -13,7 +13,7 @@
     {% form_error_banner form %}
 
     <div class="restrict-width">
-        <form method="post">
+        <form method="post" novalidate>
             {% csrf_token %}
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">

@@ -1046,7 +1046,9 @@ class UpdateBarrierStartDateForm(ClearableMixin, APIFormMixin, forms.Form):
         return cleaned_data
 
     def clean_start_date(self):
-        return self.cleaned_data["start_date"].isoformat()
+        if start_data := self.cleaned_data["start_date"]:
+            return start_data.isoformat()
+        return None
 
     def save(self):
         client = MarketAccessAPIClient(self.token)

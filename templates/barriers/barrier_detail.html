@@ -371,9 +371,9 @@
                     {% else %}
                         <span class="summary-group__list__value__list__item">{{ barrier.main_sector.name|default:"Unknown"}}</span>
                     {% endif %}
-                    {% if not barrier.archived %}
+                {% endif %}
+                {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:add_main_sector' barrier.id %}">Edit</a>
-                    {% endif %}
                 {% endif %}
             </dd>
             <dt class="summary-group__list__key">Other sector{{ barrier.sectors|pluralize }} affected:</dt>
