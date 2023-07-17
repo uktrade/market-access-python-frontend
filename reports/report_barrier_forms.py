@@ -160,10 +160,10 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         if status == "3":
             # Partially resolved date and reason requried
             if partially_resolved_date is None:
-                msg = "Enter a date the barrier was partially resolved"
+                msg = "Enter the date the barrier was partially resolved"
                 self.add_error("partially_resolved_date", msg)
             if partially_resolved_description == "":
-                msg = "Enter a description for partially resolved"
+                msg = "Enter a description"
                 self.add_error("partially_resolved_description", msg)
             cleaned_data["status_date"] = partially_resolved_date
             cleaned_data["status_summary"] = partially_resolved_description
@@ -171,7 +171,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         if status == "4":
             # Resolved date and reason requried
             if resolved_date is None:
-                msg = "Enter a date the barrier was resolved"
+                msg = "Enter the date the barrier was resolved"
                 self.add_error("resolved_date", msg)
             if resolved_description == "":
                 msg = "Enter a description"
@@ -362,8 +362,8 @@ class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
     trade_direction = forms.ChoiceField(
         label="Which trade direction does this barrier affect?",
         choices={
-            ("1", "Exporting from the UK or investing overseas"),
             ("2", "Importing or investing into the UK"),
+            ("1", "Exporting from the UK or investing overseas"),
         },
         error_messages={"required": "Select the trade direction this barrier affects"},
         widget=forms.RadioSelect,
@@ -482,10 +482,9 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
     code = forms.CharField(
         label="Enter an HS commodity code (optional)",
         help_text=(
-            "Enter your HS commodity code below ignoring any spaces or full stops. "
-            "You can also copy and paste multiple codes separated by commas "
-            "into the first box (there is no limit). Only numbers and commas "
-            "will be recognised, all other punctuation and characters will be ignored."
+            "HS codes help DBT analysts evaluate and prioritise barriers."
+            "Find the right codes for your goods if you aren't sure which to use."
+            "You can copy and paste multiple codes separated by commas into the first box."
         ),
         error_messages={"required": "Enter an HS commodity code"},
         widget=CommodityCodeWidget,
