@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block fields %}
-    <div class="govuk-form-group">
+    <div class="govuk-form-group govuk-!-margin-0">
         <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
@@ -44,7 +44,7 @@
             </div>
 
             <!-- Barrier Description Question -->
-            <div id="{{ form.summary.name }}-form-group" class="govuk-character-count" data-module="character-count" data-maxlength="300">
+            <div id="{{ form.summary.name }}-form-group" class="govuk-character-count govuk-!-margin-0" data-module="character-count" data-maxlength="300">
                 <div class="{% form_group_classes form.summary.errors %}">
                     <label class="govuk-label govuk-label--s" for="{{form.summary.id_for_label }}">
                         {{ form.summary.label }}

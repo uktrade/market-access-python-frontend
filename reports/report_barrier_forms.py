@@ -10,12 +10,7 @@ from barriers.constants import (
     REPORTABLE_STATUSES_HELP_TEXT,
 )
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import (
-    CommodityCodeWidget,
-    MonthYearField,
-    MonthYearInFutureField,
-    MultipleValueField,
-)
+from utils.forms import CommodityCodeWidget, MonthYearField, MultipleValueField
 from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
@@ -119,10 +114,14 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         label="I don't know",
         required=False,
     )
-    start_date = MonthYearInFutureField(
+    start_date = MonthYearField(
         label="When did or will the barrier start to affect trade?",
-        help_text="If you aren't sure of the date, give an estimate.",
-        error_messages={"required": "Enter a date"},
+        help_text="If you don’t know the month, enter 06.",
+        error_messages={
+            "required": "Enter a date",
+            "invalid_year": "Enter a date in the format 01 2023",
+            "invalid_month": "Enter a date in the format 01 2023",
+        },
         required=False,
     )
     currently_active = forms.ChoiceField(
@@ -379,11 +378,6 @@ class BarrierSectorsAffectedForm(APIFormMixin, forms.Form):
     sectors = forms.CharField(
         label="Other sectors (optional)",
         help_text=("Add all the other sectors affected by the barrier"),
-        widget=forms.Textarea(
-            attrs={
-                "rows": 3,
-            }
-        ),
         required=False,
     )
 
@@ -466,7 +460,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         help_text=(
             """
             Enter all goods, services or investments affected.
-            Be as specific as you can.
+            Be as specific as you can. Put each item on a new line.
             """
         ),
         error_messages={

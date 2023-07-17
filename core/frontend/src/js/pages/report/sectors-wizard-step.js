@@ -9,45 +9,20 @@ ma.pages.report.sectorsWizardStep = function () {
     });
     const addSectorButton = document.getElementById("add-other-sector-button");
     addSectorButton.addEventListener("click", function () {
-        appendSector(
-            "id_barrier-sectors-affected-sectors",
-            "sectors_select",
-            "sectors_list_display"
-        );
+        additionMode();
     });
-    const displayOtherSectorButton = document.getElementById(
-        "display-other-sector-button"
-    );
-    displayOtherSectorButton.addEventListener("click", function () {
-        toggleMode("edit");
-    });
+    const otherSectorSelect = document.getElementById("sectors_select");
 
-    const toggleMode = function (mode) {
-        // Function that switches display between 'edit' and 'display'
-        // 'display' = box listing all selected sectors is visible
-        // 'edit' = box where you can select and add sector is visible
-        const edit_div = document.getElementById("sectors_edit");
-        const display_div = document.getElementById("sectors_display");
-
-        if (mode === "edit") {
-            // Toggling to edit mode
-            edit_div.style.display = "block";
-            display_div.style.display = "none";
+    const additionMode = function () {
+        if (otherSectorSelect.style.display == "none") {
+            otherSectorSelect.style.display = "block";
         } else {
-            // Toggling to display mode
-            display_div.style.display = "block";
-            edit_div.style.display = "none";
-
-            // Hide or show the list of sectors depending if we have any selected
-            const sectorsList = document.getElementById("sectors_list_display");
-            let current_sector_list = document.getElementById(
-                "id_barrier-sectors-affected-sectors"
+            appendSector(
+                "id_barrier-sectors-affected-sectors",
+                "sectors_select",
+                "sectors_list_display"
             );
-            if (current_sector_list.value === "") {
-                sectorsList.style.display = "none";
-            } else {
-                sectorsList.style.display = "block";
-            }
+            otherSectorSelect.style.display = "none";
         }
     };
 
@@ -80,8 +55,6 @@ ma.pages.report.sectorsWizardStep = function () {
 
         // Update the display box with the new updated list
         updateSectorDisplay();
-        // Toggle back to display mode
-        toggleMode("display");
     };
 
     const updateSectorDisplay = function () {
@@ -90,6 +63,7 @@ ma.pages.report.sectorsWizardStep = function () {
             "id_barrier-sectors-affected-sectors"
         );
         const display_list = document.getElementById("sectors_list_display");
+
         if (current_selected_list.value == "") {
             const selected_list = current_selected_list.value;
         } else {
@@ -172,7 +146,7 @@ ma.pages.report.sectorsWizardStep = function () {
     };
 
     // Set initial visibility mode & initial list of selected sectors
-    toggleMode("display");
+    otherSectorSelect.style.display = "none";
     updateOtherSectorsList(currentMainSectorSelected);
     updateSectorDisplay();
 };

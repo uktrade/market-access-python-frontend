@@ -194,15 +194,29 @@ function CommodityForm(props) {
                     id=""
                     className={
                         codeLookupError
-                            ? "govuk-form-group govuk-form-group--error"
-                            : "govuk-form-group"
+                            ? "govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0"
+                            : "govuk-form-group govuk-!-margin-bottom-0"
                     }
                 >
                     <fieldset className="govuk-fieldset">
                         <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">
                             {props.label}
                         </legend>
-                        <span className="govuk-hint">{props.helpText}</span>
+                        <span className="govuk-hint">
+                            HS codes help DBT analysts evaluate an prioritise
+                            barriers.{" "}
+                            <a
+                                href="https://www.gov.uk/check-duties-customs-exporting"
+                                className="govuk-link"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Find the right codes for your goods
+                            </a>{" "}
+                            if you aren&apos;t sure which to use. You can copy
+                            and paste multiple codes separated by commas into
+                            the first box.
+                        </span>
 
                         <LocationInput
                             locations={props.locations}
@@ -237,17 +251,6 @@ function CommodityForm(props) {
                 </div>
             </form>
 
-            <p className="govuk-body">
-                Need help?{" "}
-                <a
-                    href="https://www.gov.uk/check-duties-customs-exporting"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    Look up codes
-                </a>
-            </p>
-
             {unconfirmedCommodities.length ? (
                 <CommodityList
                     confirmed={false}
@@ -280,10 +283,6 @@ function CommodityForm(props) {
                     onClick={removeCommodity}
                 />
             ) : null}
-
-            <span className="govuk-hint govuk-!-margin-bottom-6">
-                Descriptions are only shown for codes up to HS6.
-            </span>
 
             {!isReportJourney ? (
                 <form action="" method="POST">
@@ -384,13 +383,13 @@ function CommodityForm(props) {
                             <button
                                 name="action"
                                 value="save"
-                                className="govuk-button"
+                                className="govuk-button govuk-!-margin-top-6 govuk-!-margin-right-2"
                                 data-module="govuk-button"
                             >
                                 Done
                             </button>
                             <button
-                                className="form-cancel govuk-button button--secondary m-l-2"
+                                className="govuk-button button--secondary govuk-!-margin-top-6"
                                 name="action"
                                 value="cancel"
                             >
