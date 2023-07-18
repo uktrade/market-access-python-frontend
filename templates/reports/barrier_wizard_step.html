@@ -14,6 +14,16 @@
     </script>
 {% endblock %}
 
+{% block gtag_events %}
+    {% if barrier_id %}
+        <script type="text/javascript">
+            gtag('set', {
+              'barrier_id': {{ barrier_id }},
+            });
+        </script>
+    {% endif %}
+{% endblock gtag_events %}
+
 {% block page_title %}{{ block.super }} Report A Barrier - Wizard Framework {{ heading.text }}{% endblock %}
 
 {% block page_content %}
