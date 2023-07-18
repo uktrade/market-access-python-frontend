@@ -988,7 +988,7 @@ class UpdateBarrierStartDateForm(ClearableMixin, APIFormMixin, forms.Form):
 
     start_date = MonthYearInFutureField(
         label="When did or will the barrier start to affect trade?",
-        help_text="If you aren't sure of the date, give an estimate",
+        help_text="If you don’t know the month, enter 06.",
         error_messages={"required": "Enter a barrier start date"},
         required=False,
     )

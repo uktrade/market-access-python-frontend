@@ -10,7 +10,7 @@
 {% block page_title %} Report A Barrier - Wizard Framework - Sectors Affected{% endblock %}
 
 {% block fields %}
-    <div class="govuk-form-group">
+    <div class="govuk-form-group govuk-!-margin-0">
         <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
@@ -40,30 +40,8 @@
 
                 </div>
 
-                <!-- Add Other Sector-->
-                <div id="sectors_edit" class="govuk-form-group selection-list {% if form.sectors.errors %} govuk-form-group--error{% endif %}">
-                    <label class="govuk-label govuk-label--s" for="{{form.sectors.id_for_label }}">
-                        {{ form.sectors.label }}
-                    </label>
-
-                    <span id="description-hint" class="govuk-hint">
-                        {{ form.sectors.help_text }}
-                    </span>
-
-                    {% form_field_error form "sectors" %}
-
-                    <select class="govuk-select govuk-!-width-full  {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
-                        <option value="" disabled selected>Select a sector</option>
-                        {% for id, name in sectors_list %}
-                            <option id="other-sectors-select-{{ id }}" value="{{ id }}">{{ name }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <div id="add-other-sector-button" class="govuk-button govuk-button--secondary govuk-!-margin-top-5 ">Add sector</div>
-                </div>
-
                 <!-- Display Other Sector-->
-                <div class="selection-list restrict-width" id="sectors_display" >
+                <div class="selection-list restrict-width govuk-!-margin-0" id="sectors_display" >
                     <label class="govuk-label govuk-label--s" for="{{form.sectors.id_for_label }}">
                         {{ form.sectors.label }}
                     </label>
@@ -75,13 +53,16 @@
                     {% form_field_error form "sectors" %}
 
                     <ul class="selection-list__list" id="sectors_list_display">
-
-                            <li class="selection-list__list__item">
-                                {{ item.name }}
-                            </li>
-
                     </ul>
-                    <div id="display-other-sector-button" class="govuk-button govuk-button--secondary">Add sector</div>
+
+                    <select class="govuk-select govuk-!-width-full govuk-!-margin-bottom-3 {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
+                        <option value="" disabled selected>Select a sector</option>
+                        {% for id, name in sectors_list %}
+                            <option id="other-sectors-select-{{ id }}" value="{{ id }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <div id="add-other-sector-button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2">Add sector</div>
                 </div>
 
                 <!-- Hidden formtools fields -->
