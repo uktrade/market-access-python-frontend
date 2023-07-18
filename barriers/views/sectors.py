@@ -101,8 +101,7 @@ class BarrierAddMainSector(MetadataMixin, BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        sector_ids = self.barrier.sector_ids
-        context_data["sectors"] = self.metadata.get_sectors_by_ids(sector_ids)
+        context_data["sectors"] = self.metadata.get_sectors_by_ids(self.barrier.sector_ids)
         context_data["main_sector"] = self.barrier.main_sector
         return context_data
 
@@ -111,7 +110,7 @@ class BarrierAddMainSector(MetadataMixin, BarrierMixin, FormView):
         kwargs["sectors"] = [
             (sector["id"], sector["name"])
             for sector in self.metadata.get_sector_list(level=0)
-            if sector["id"] not in self.request.session.get("sectors", [])
+            if sector["id"] not in self.barrier.sector_ids
         ]
         kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
         kwargs["token"] = self.request.session.get("sso_token")
