@@ -57,7 +57,6 @@ class AddMainSectorForm(APIFormMixin, forms.Form):
     )
 
     def __init__(self, sectors, barrier_id, *args, **kwargs):
-        self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
         self.barrier_id = barrier_id
         self.fields["main_sector"].choices = sectors
