@@ -360,10 +360,10 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
 class BarrierTradeDirectionForm(APIFormMixin, forms.Form):
     trade_direction = forms.ChoiceField(
         label="Which trade direction does this barrier affect?",
-        choices={
+        choices=(
             ("1", "Exporting from the UK or investing overseas"),
             ("2", "Importing or investing into the UK"),
-        },
+        ),
         error_messages={"required": "Select the trade direction this barrier affects"},
         widget=forms.RadioSelect,
     )
