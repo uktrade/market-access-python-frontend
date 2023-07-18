@@ -4,6 +4,7 @@ from django.views.generic import FormView, View
 
 from barriers.forms.sectors import AddMainSectorForm, AddSectorsForm, EditSectorsForm
 from utils.metadata import MetadataMixin
+
 from .mixins import BarrierMixin
 
 
