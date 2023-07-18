@@ -100,10 +100,9 @@ class BarrierAddMainSector(MetadataMixin, BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        sector_ids = self.request.session.get("sectors", [])
+        sector_ids = self.barrier.sector_ids
         context_data["sectors"] = self.metadata.get_sectors_by_ids(sector_ids)
-        main_sector = self.request.session.get("main_sector", None)
-        context_data["main_sector"] = self.metadata.get_sector(main_sector)
+        context_data["main_sector"] = self.barrier.main_sector
         return context_data
 
     def get_form_kwargs(self):
@@ -118,7 +117,6 @@ class BarrierAddMainSector(MetadataMixin, BarrierMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        self.request.session["main_sector"] = form.cleaned_data["main_sector"]
         form.save()
         return super().form_valid(form)
 
