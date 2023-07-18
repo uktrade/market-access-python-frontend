@@ -1,11 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
-from sentry_sdk import capture_message
 
 from barriers.forms.sectors import AddMainSectorForm, AddSectorsForm, EditSectorsForm
 from utils.metadata import MetadataMixin
-
 from .mixins import BarrierMixin
 
 
@@ -119,10 +117,6 @@ class BarrierAddMainSector(MetadataMixin, BarrierMixin, FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
-
-    def form_invalid(self, form):
-        capture_message(form.errors)
-        return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse(
