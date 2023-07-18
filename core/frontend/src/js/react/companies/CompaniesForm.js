@@ -240,7 +240,7 @@ function CompaniesForm(props) {
                         {props.searchLabel}
                     </label>
                     <span className="govuk-hint">{props.searchHelpText}</span>
-                    <div className="search-form__input-group">
+                    <div className="search-form__input-group govuk-!-margin-bottom-0">
                         <input
                             id="companies-search"
                             className="govuk-input search-form__input"
@@ -251,7 +251,7 @@ function CompaniesForm(props) {
                         />
                         <div
                             id="search-companies-button"
-                            className="search-form__button govuk-button"
+                            className="search-form__button govuk-button govuk-!-margin-bottom-0"
                             onClick={searchCompany}
                         >
                             Search
@@ -259,13 +259,16 @@ function CompaniesForm(props) {
                     </div>
                     {selectedCompaniesList.length > 0 ||
                     addedCompaniesList.length > 0 ? (
-                        <div
-                            id="cancel-search-companies-button"
-                            className="govuk-link"
-                            onClick={cancelSearch}
-                        >
-                            Cancel
-                        </div>
+                        <p className="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+                            <a
+                                href="#"
+                                id="cancel-search-companies-button"
+                                className="govuk-link"
+                                onClick={cancelSearch}
+                            >
+                                Cancel
+                            </a>
+                        </p>
                     ) : null}
                 </div>
             ) : null}
@@ -460,7 +463,7 @@ function CompaniesForm(props) {
                     </dl>
                     <div
                         id="add-company-button"
-                        className="search-form__button govuk-button"
+                        className="govuk-button"
                         onClick={addCompany}
                     >
                         Add company
@@ -468,13 +471,16 @@ function CompaniesForm(props) {
                     <div id="or-text" className="govuk-label--s">
                         Or
                     </div>
-                    <div
-                        id="search-again-button"
-                        className="govuk-link"
-                        onClick={searchAgain}
-                    >
-                        Search again
-                    </div>
+                    <p className="govuk-body">
+                        <a
+                            href="#"
+                            id="search-again-button"
+                            className="govuk-link"
+                            onClick={searchAgain}
+                        >
+                            Search again
+                        </a>
+                    </p>
                 </div>
             ) : null}
 
@@ -485,7 +491,7 @@ function CompaniesForm(props) {
                 >
                     <div
                         id="selected-companies-list"
-                        className="selection-list restrict-width"
+                        className="selection-list restrict-width govuk-!-margin-bottom-0"
                     >
                         <h3 className="selection-list__heading">
                             Selected companies

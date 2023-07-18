@@ -2,7 +2,7 @@ import React from "react";
 
 function CommodityList(props) {
     return (
-        <ul className="commodities-list restrict-width">
+        <ul className="commodities-list restrict-width govuk-!-margin-bottom-0">
             {props.commodities.map((commodity, index) => {
                 return (
                     <li className="commodities-list__item">

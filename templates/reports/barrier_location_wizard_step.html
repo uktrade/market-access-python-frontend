@@ -12,7 +12,7 @@
 {% block page_title %} Report A Barrier - Wizard Framework - Barrier Location{% endblock %}
 
 {% block fields %}
-    <div class="govuk-form-group">
+    <div class="govuk-form-group govuk-!-margin-0">
         <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
@@ -23,7 +23,7 @@
             {% form_error_banner form %}
 
             <!-- Country select -->
-            <div id="{{ form.location_select.name }}" class="{% form_group_classes form.location_select.errors %}">
+            <div id="{{ form.location_select.name }}" class="{% form_group_classes form.location_select.errors %} govuk-!-margin-bottom-0">
                 <label class="govuk-label govuk-label--s" for="{{ form.location_select.name }}">{{ form.location_select.label }}</label>
                 {% if form.location_select.help_text %}<span class="govuk-hint">{{ form.location_select.help_text }}</span>{% endif %}
                 {% form_field_error form.location_select %}
@@ -45,7 +45,7 @@
             </div>
 
             <!-- Trading bloc questions -->
-            <div class="govuk-form-group govuk-visually-hidden" id="trading-bloc-section">
+            <div class="govuk-form-group govuk-visually-hidden govuk-!-margin-top-6" id="trading-bloc-section">
                 {% for trading_bloc_field in form.get_trading_bloc_fields %}
                     <div class="govuk-form-group" id="{{ trading_bloc_field.name }}">
                         <div class="govuk-radios" data-module="govuk-radios">
@@ -85,10 +85,10 @@
                         No - just part of the country
                     </label>
                 </div>
-                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-admin-area-reveal">
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden govuk-!-margin-bottom-0" id="conditional-admin-area-reveal">
                     <!-- Admin area select dropdowns -->
                     {% for admin_area_country_choices in form.admin_area_choices.items %}
-                        <div id="{{ admin_area_country_choices.0 }}-section" name="admin-area-selector-section" class="{% form_group_classes form.admin_areas.errors %}">
+                        <div id="{{ admin_area_country_choices.0 }}-section" name="admin-area-selector-section" class="{% form_group_classes form.admin_areas.errors %} govuk-!-margin-bottom-0">
                             <label class="govuk-label govuk-label--s" for="{{ admin_area_country_choices.0 }}">{{ form.admin_areas.label }}</label>
                             <span class="govuk-hint">{{ form.admin_areas.help_text }}</span>
                             {% form_field_error form.admin_areas %}
@@ -108,13 +108,15 @@
                                 {% endfor %}
                             </select>
                             <!-- Add admin area button -->
-                            <p>
-                                <div id="admin-area-choices-button" name="{{ admin_area_country_choices.0 }}" class="govuk-button govuk-button--secondary">Add admin area</div>
-                            </p>
+
+                            <div>
+                                <div id="admin-area-choices-button" name="{{ admin_area_country_choices.0 }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-top-3">Add admin area</div>
+                            </div>
+
                         </div>
                     {% endfor %}
                     <!-- Selected admin area list box -->
-                    <div class="selection-list restrict-width" id="selected-admin-areas-container">
+                    <div class="selection-list restrict-width govuk-!-margin-bottom-0 govuk-!-margin-top-3" id="selected-admin-areas-container">
                         <h3 class="selection-list__heading">Selected admin areas</h3>
                         <ul id="selection-list" class="selection-list__list">
                             <!-- Items added/removed via Javascript -->
