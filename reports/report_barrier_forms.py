@@ -10,7 +10,12 @@ from barriers.constants import (
     REPORTABLE_STATUSES_HELP_TEXT,
 )
 from barriers.forms.mixins import APIFormMixin
-from utils.forms import CommodityCodeWidget, MonthYearField, MultipleValueField
+from utils.forms import (
+    CommodityCodeWidget,
+    MonthYearField,
+    MonthYearInFutureField,
+    MultipleValueField,
+)
 from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
@@ -110,11 +115,11 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         required=False,
         initial="",
     )
-    start_date_known = forms.BooleanField(
+    start_date_unknown = forms.BooleanField(
         label="I don't know",
         required=False,
     )
-    start_date = MonthYearField(
+    start_date = MonthYearInFutureField(
         label="When did or will the barrier start to affect trade?",
         help_text="If you don’t know the month, enter 06.",
         error_messages={
@@ -143,7 +148,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         )
         resolved_date = cleaned_data.get("resolved_date")
         resolved_description = cleaned_data.get("resolved_description")
-        start_date_known = cleaned_data.get("start_date_known")
+        start_date_unknown = cleaned_data.get("start_date_unknown")
         start_date = cleaned_data.get("start_date")
         currently_active = cleaned_data.get("currently_active")
 
@@ -162,7 +167,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
                 msg = "Enter a date the barrier was partially resolved"
                 self.add_error("partially_resolved_date", msg)
             if partially_resolved_description == "":
-                msg = "Enter a description for partially resolved"
+                msg = "Enter a description"
                 self.add_error("partially_resolved_description", msg)
             cleaned_data["status_date"] = partially_resolved_date
             cleaned_data["status_summary"] = partially_resolved_description
@@ -178,13 +183,13 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             cleaned_data["status_date"] = resolved_date
             cleaned_data["status_summary"] = resolved_description
 
-        if (start_date is None and start_date_known is False) or (
-            start_date and start_date_known is True
+        if (start_date is None and start_date_unknown is False) or (
+            start_date and start_date_unknown is True
         ):
             msg = "Enter a date or select 'I don't know'."
             self.add_error("start_date", msg)
 
-        if start_date_known and currently_active == "":
+        if start_date_unknown and currently_active == "":
             msg = "Select yes if the barrier is currently affecting trade"
             self.add_error("currently_active", msg)
 
@@ -193,16 +198,16 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
             cleaned_data["start_date_known"] = True
             # If the given start date is in the past, currently active is true
             if start_date <= datetime.date.today():
-                cleaned_data["currently_active"] = True
+                cleaned_data["is_currently_active"] = True
             else:
-                cleaned_data["currently_active"] = False
+                cleaned_data["is_currently_active"] = False
         else:
             cleaned_data["start_date"] = None
 
-        if start_date_known:
+        if start_date_unknown:
             # 'I don't know' has been checked
             cleaned_data["start_date_known"] = False
-            cleaned_data["currently_active"] = currently_active
+            cleaned_data["is_currently_active"] = currently_active
 
         return cleaned_data
 
