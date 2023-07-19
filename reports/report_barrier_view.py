@@ -465,6 +465,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 "partially_resolved_description",
                 "resolved_date",
                 "resolved_description",
+                "start_date_unknown",
                 "location_select",
                 "trading_bloc_EU",
                 "trading_bloc_GCC",
