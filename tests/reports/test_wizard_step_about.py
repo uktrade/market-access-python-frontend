@@ -7,8 +7,9 @@
 import logging
 import random
 import string
-from reports.report_barrier_forms import BarrierAboutForm
+
 from core.tests import MarketAccessTestCase
+from reports.report_barrier_forms import BarrierAboutForm
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
 
     def test_title_too_long_entry(self):
 
-        test_title = ''.join(random.choices(string.ascii_letters, k=200))
+        test_title = "".join(random.choices(string.ascii_letters, k=200))
         test_summary = "This is the description the the barrier"
         form = BarrierAboutForm(
             {
@@ -45,7 +46,7 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
                 "summary": test_summary,
             }
         )
-        
+
         assert form.is_valid() is False
 
         error_message = "Name should be 150 characters or less"
@@ -61,7 +62,7 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
                 "summary": test_summary,
             }
         )
-        
+
         assert form.is_valid() is False
 
         error_message = "Enter a barrier title"
@@ -70,14 +71,14 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
     def test_summary_too_long_entry(self):
 
         test_title = "New barrier test title"
-        test_summary = ''.join(random.choices(string.ascii_letters, k=400))
+        test_summary = "".join(random.choices(string.ascii_letters, k=400))
         form = BarrierAboutForm(
             {
                 "title": test_title,
                 "summary": test_summary,
             }
         )
-        
+
         assert form.is_valid() is False
 
         error_message = "Ensure this value has at most 300 characters (it has 400)"
@@ -93,7 +94,7 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
                 "summary": test_summary,
             }
         )
-        
+
         assert form.is_valid() is False
 
         error_message = "Enter a barrier description"
