@@ -44,16 +44,17 @@ class SSOMiddleware:
         return HttpResponseRedirect(reverse("users:login"))
 
     def process_exception(self, request, exception):
-        if exception.status_code == 403:
-            # it's a 403 unauthorised, log the user out
-            request.session.pop("sso_token", None)
-            request.session["return_path"] = request.path
-            return HttpResponseRedirect(reverse("users:login"))
+        if exception_status_code := getattr(exception, "status_code", None):
+            if exception_status_code == 403:
+                # it's a 403 unauthorised, log the user out
+                request.session.pop("sso_token", None)
+                request.session["return_path"] = request.path
+                return HttpResponseRedirect(reverse("users:login"))
 
-        elif exception.status_code == 401:
-            # it's a 401 forbidden, the token was not passed in the request
-            # let's flag this to Sentry as it's probably a bug
-            sentry_sdk.capture_exception(exception)
+            elif exception_status_code == 401:
+                # it's a 401 forbidden, the token was not passed in the request
+                # let's flag this to Sentry as it's probably a bug
+                sentry_sdk.capture_exception(exception)
 
         # returning None so the exception bubbles up
         return None
