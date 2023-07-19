@@ -37,14 +37,9 @@
     <meta property="og:image" content="{% webpack_static '../images/govuk-opengraph-image.png' %}">
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
     </script>
     {% block gtag_events %}
     {% endblock gtag_events %}
-    <script>
-        gtag('config', '{{ settings.GTM_ID }}-{{ settings.GTM_PREVIEW }}');
-    </script>
   </head>
   <body class="govuk-template__body {{ bodyClasses }}">
     <!-- Google Tag Manager (noscript) -->

@@ -17,9 +17,9 @@
 {% block gtag_events %}
     {% if barrier_id %}
         <script type="text/javascript">
-            gtag('set', {
-              'barrier_id': {{ barrier_id }},
-            });
+            window.dataLayer.push({
+                 'barrier_id': {{ barrier_id }},
+             });
         </script>
     {% endif %}
 {% endblock gtag_events %}
