@@ -99,7 +99,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             self.storage.reset()
             self.storage.set_step_data("meta", {"barrier_id": str(draft_barrier_id)})
             if session_data == "":
-                # TODO - we coould try and map the legacy data here to the relevant steps
+                # TODO - we could try and map the legacy data here to the relevant steps
                 # Step through the formlist and fields and map to value in legact draft
                 # e.g setting barrier title on the first form
                 self.storage.set_step_data(
@@ -213,6 +213,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
+
+        barrier_id = self.storage.data.get("meta", {}).get("barrier_id", None)
+        context["barrier_id"] = barrier_id
 
         if self.steps.current == "barrier-sectors-affected":
             sectors = [
