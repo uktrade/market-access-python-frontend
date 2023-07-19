@@ -459,8 +459,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         # Loop through form data, patch barrier with the cleaned data
         if (
-                submitted_values["barrier-details-summary"]["details_confirmation"]
-                == "completed"
+            submitted_values["barrier-details-summary"]["details_confirmation"]
+            == "completed"
         ):
             # Remove form with no data to commit to the DB
             submitted_values.pop("barrier-details-summary")
