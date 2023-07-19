@@ -30,7 +30,6 @@ class ReportWizardTradeDirectionStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
         error_message = "Select a valid choice"
         assert error_message in str(form.errors["trade_direction"])
@@ -43,7 +42,6 @@ class ReportWizardTradeDirectionStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
         error_message = "Select the trade direction this barrier affects"
         assert error_message in form.errors["trade_direction"]

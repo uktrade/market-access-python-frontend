@@ -96,7 +96,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
         assert form.is_valid()
         result = form.clean()
 
-        # Partially Resolved status takes todays date for status date
+        # Partially Resolved status takes given date for status date
         input_month = int(self.test_partially_resolved_date.split()[0])
         input_year = int(self.test_partially_resolved_date.split()[1])
         assert result["status_date"] == datetime.date(input_year, input_month, 1)
@@ -127,7 +127,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
         assert form.is_valid()
         result = form.clean()
 
-        # Open status takes todays date for status date
+        # Resolved status takes given date for status date
         input_month = int(self.test_resolved_date.split()[0])
         input_year = int(self.test_resolved_date.split()[1])
         assert result["status_date"] == datetime.date(input_year, input_month, 1)
@@ -156,9 +156,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Select barrier status"
         assert expected_error_message in form.errors["status"]
 
@@ -178,9 +176,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Date must be after 1990"
         assert expected_error_message in form.errors["partially_resolved_date"]
 
@@ -200,9 +196,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Date must be before 2100"
         assert expected_error_message in form.errors["partially_resolved_date"]
 
@@ -222,9 +216,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Date must be after 1990"
         assert expected_error_message in form.errors["resolved_date"]
 
@@ -244,9 +236,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Date must be before 2100"
         assert expected_error_message in form.errors["resolved_date"]
 
@@ -266,9 +256,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Date must be after 1990"
         assert expected_error_message in form.errors["start_date"]
 
@@ -288,9 +276,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Date must be before 2100"
         assert expected_error_message in form.errors["start_date"]
 
@@ -310,9 +296,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Enter a date the barrier was partially resolved"
         assert expected_error_message in form.errors["partially_resolved_date"]
 
@@ -332,9 +316,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Enter a description"
         assert expected_error_message in form.errors["partially_resolved_description"]
 
@@ -354,9 +336,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Enter a date the barrier was resolved"
         assert expected_error_message in form.errors["resolved_date"]
 
@@ -376,9 +356,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Enter a description"
         assert expected_error_message in form.errors["resolved_description"]
 
@@ -398,9 +376,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Enter a date or select 'I don't know'."
         assert expected_error_message in form.errors["start_date"]
 
@@ -419,9 +395,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = "Enter a date or select 'I don't know'."
         assert expected_error_message in form.errors["start_date"]
 
@@ -442,9 +416,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid() is False
-
         expected_error_message = (
             "Select yes if the barrier is currently affecting trade"
         )

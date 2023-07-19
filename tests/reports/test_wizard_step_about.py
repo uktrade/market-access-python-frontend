@@ -30,7 +30,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
 
         # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid()
-
         form.clean()
 
         assert test_title in form.cleaned_data["title"]
@@ -48,7 +47,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-
         error_message = "Name should be 150 characters or less"
         assert error_message in form.errors["title"]
 
@@ -64,7 +62,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-
         error_message = "Enter a barrier title"
         assert error_message in form.errors["title"]
 
@@ -80,7 +77,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-
         error_message = "Ensure this value has at most 300 characters (it has 400)"
         assert error_message in str(form.errors["summary"])
 
@@ -96,6 +92,5 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-
         error_message = "Enter a barrier description"
         assert error_message in form.errors["summary"]
