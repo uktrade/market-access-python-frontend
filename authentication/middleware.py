@@ -1,7 +1,10 @@
-import sentry_sdk
+from http import HTTPStatus
+
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+
+from utils.exceptions import APIHttpException
 
 
 class SSOMiddleware:
@@ -44,17 +47,15 @@ class SSOMiddleware:
         return HttpResponseRedirect(reverse("users:login"))
 
     def process_exception(self, request, exception):
-        if exception_status_code := getattr(exception, "status_code", None):
-            if exception_status_code == 403:
-                # it's a 403 unauthorised, log the user out
-                request.session.pop("sso_token", None)
-                request.session["return_path"] = request.path
-                return HttpResponseRedirect(reverse("users:login"))
+        if not isinstance(exception, APIHttpException):
+            return
 
-            elif exception_status_code == 401:
-                # it's a 401 forbidden, the token was not passed in the request
-                # let's flag this to Sentry as it's probably a bug
-                sentry_sdk.capture_exception(exception)
+        if exception.status_code != HTTPStatus.UNAUTHORIZED:
+            return
 
-        # returning None so the exception bubbles up
-        return None
+        try:
+            del request.session["sso_token"]
+        except KeyError:
+            pass
+        request.session["return_path"] = request.path
+        return HttpResponseRedirect(reverse("users:login"))
