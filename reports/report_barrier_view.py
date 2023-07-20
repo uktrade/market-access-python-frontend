@@ -10,6 +10,7 @@ from formtools.wizard.views import NamedUrlSessionWizardView
 
 from barriers.constants import REPORTABLE_STATUSES, UK_COUNTRY_ID
 from barriers.forms.commodities import CommodityLookupForm
+from barriers.models import Barrier
 from reports.report_barrier_forms import (
     BarrierAboutForm,
     BarrierCompaniesAffectedForm,
@@ -24,6 +25,7 @@ from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
 
 logger = logging.getLogger(__name__)
+
 
 # How draft barriers work;
 # Clicking 'Report A Barrier'->'Start' creates a barrier in the DB, it has a status of 0, a code and created/modified
@@ -60,32 +62,25 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
     ]
 
     def get_template_names(self):
-        templates = {
-            form_name: f"reports/{form_name.replace('-', '_')}_wizard_step.html"
-            for form_name in self.form_list
-        }
-        return [templates[self.steps.current]]
+        return [f"reports/{self.steps.current.replace('-', '_')}_wizard_step.html"]
 
     def get(self, request, *args, **kwargs):
         """
-        At this piont we should check if the user is returning via a draft url and clear the current session
-        via self.storage.reset(), get the draft barrier and
-        convert the data into step data use self.storage.data to resume the drafting process.
+        At this point we should check if the user is returning via a draft url and clear
+        the current session via self.storage.reset(), get the draft barrier and
+        convert the data into step data using self.storage.data to resume the drafting process.
+
         For legacy drafts we need to populate each step.
-        This is cumbersome though and all the fields would need to be mapped to the right step
+        This is cumbersome though and all the fields would need to be mapped to the right step.
 
         We save the whole storage object on 'save and exit' skip to done and check to see
         if it is the last step.
-        If it is the last step then we save to barrier as normal if not we save the storage object and barrier
-        status as draft
-
+        If it is the last step then we save to barrier as normal if not we save
+        the storage object and barrier status as draft.
         """
 
-        """
-        This renders the form or, if needed, does the http redirects.
-        """
+        # This renders the form or, if needed, does the http redirects.
         step_url = kwargs.get("step", None)
-        draft_barrier_id = kwargs.get("draft_barrier_id", None)
         self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
         # Handle legacy React app calls
@@ -93,7 +88,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             return self.ajax(request, *args, **kwargs)
 
         # Is it resuming a draft barrier
-        if draft_barrier_id is not None:
+        if draft_barrier_id := kwargs.get("draft_barrier_id", None):
             draft_barrier = self.client.reports.get(id=draft_barrier_id)
             session_data = draft_barrier.new_report_session_data.strip()
             self.storage.reset()
@@ -106,7 +101,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                     "barrier-name", {"title": draft_barrier.title}
                 )
                 self.storage.current_step = self.steps.first
-                return redirect(self.get_step_url(self.steps.current))
             else:
                 self.storage.data = json.loads(draft_barrier.new_report_session_data)
 
@@ -172,44 +166,31 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
     def ajax(self, request, *args, **kwargs):
         if request.GET.get("code"):
-            form_class = CommodityLookupForm
-        # elif request.GET.get("codes"):
-        #     form_class = MultiCommodityLookupForm
+            selected_location = self.get_default_location()
+
+            lookup_form = CommodityLookupForm(
+                initial={"location": UK_COUNTRY_ID},
+                data=self.request.GET.dict() or None,
+                token=self.request.session.get("sso_token"),
+                locations=[
+                    {"id": selected_location[0], "name": selected_location[1]},
+                    {"id": UK_COUNTRY_ID, "name": "United Kingdom"},
+                ],
+            )
+
+            if lookup_form.is_valid():
+                return JsonResponse(
+                    {
+                        "status": "ok",
+                        "data": lookup_form.get_commodity_data(),
+                    }
+                )
+            else:
+                return JsonResponse(
+                    {"status": "error", "message": "Enter a real HS commodity code"}
+                )
         else:
             return JsonResponse({"status": "error", "message": "Bad request"})
-
-        lookup_form = self.get_commodity_lookup_form(form_class)
-
-        if lookup_form.is_valid():
-            return JsonResponse(
-                {
-                    "status": "ok",
-                    "data": lookup_form.get_commodity_data(),
-                }
-            )
-        else:
-            return JsonResponse(
-                {"status": "error", "message": "Enter a real HS commodity code"}
-            )
-
-    def get_commodity_lookup_form(self, form_class=None):
-        if form_class is None:
-            form_class = CommodityLookupForm
-
-        selected_location = self.get_default_location()
-        default_location = {"id": selected_location[0], "name": selected_location[1]}
-
-        initial = {"location": UK_COUNTRY_ID}
-
-        return form_class(
-            initial=initial,
-            data=self.request.GET.dict() or None,
-            token=self.request.session.get("sso_token"),
-            locations=[
-                default_location,
-                {"id": UK_COUNTRY_ID, "name": "United Kingdom"},
-            ],
-        )
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
@@ -368,8 +349,10 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         return context
 
-    def process_step(self, form):
-        return self.get_form_step_data(form)
+    def get_form_kwargs(self, step=None):
+        form_kwargs = super().get_form_kwargs(step)
+        form_kwargs.setdefault("token", self.request.session.get("sso_token"))
+        return form_kwargs
 
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)
@@ -429,25 +412,14 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         # Ensure we have input data to save by checking we have passed at least
         # the first form page some input data
         barrier_title_form = self.get_cleaned_data_for_step("barrier-about")
-        if barrier_title_form is None:
+        if barrier_title_form:
+            # Check to see if it is an existing draft barrier/report otherwise create
+            barrier_report = self.get_or_create_barrier()
+        else:
             # We don't have a barrier title therefore nothing to save
             # Send user to first step
             self.storage.current_step = self.steps.first
             return redirect(self.get_step_url(self.steps.first))
-        else:
-            # Check to see if it is an existing draft barrier/report otherwise create
-            meta_data = self.storage.data.get("meta")
-            if meta_data:
-                barrier_id = meta_data.get("barrier_id", None)
-            else:
-                barrier_id = None
-            # If we have an ID stored in metadata, get this barrier/report
-            # otherwise, create a new one.
-            if barrier_id:
-                barrier_report = self.client.reports.get(barrier_id)
-            else:
-                barrier_report = self.client.reports.create()
-                self.storage.data["meta"] = {"barrier_id": str(barrier_report.id)}
 
         # Patch the session data to the barrier/report in the DB
         self.client.reports.patch(
@@ -492,17 +464,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                     submitted_values[form.prefix][name] = value.isoformat()
 
         # Check to see if it is an existing draft barrier otherwise create
-        meta_data = self.storage.data.get("meta")
-
-        if meta_data:
-            barrier_id = meta_data.get("barrier_id", None)
-        else:
-            barrier_id = None
-
-        if barrier_id:
-            barrier_report = self.client.reports.get(barrier_id)
-        else:
-            barrier_report = self.client.reports.create()
+        barrier_report = self.get_or_create_barrier()
 
         # Loop through form data, patch barrier with the cleaned data
         if (
@@ -533,3 +495,15 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 kwargs={"barrier_id": barrier_report.id},
             )
         )
+
+    def get_or_create_barrier(self) -> Barrier:
+        """
+        Gets or creates a new barrier based on the presence of the barrier_id in self.storage.meta
+        """
+        if barrier_id := self.storage.data.get("meta", {}).get("barrier_id", None):
+            barrier = self.client.reports.get(barrier_id)
+        else:
+            barrier = self.client.reports.create()
+            self.storage.data["meta"] = {"barrier_id": str(barrier.id)}
+
+        return barrier
