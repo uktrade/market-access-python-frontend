@@ -30,8 +30,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
 
         # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid()
-        form.clean()
-
         assert test_title in form.cleaned_data["title"]
         assert test_summary in form.cleaned_data["summary"]
 

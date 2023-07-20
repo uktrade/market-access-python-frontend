@@ -19,7 +19,6 @@ class ReportWizardTradeDirectionStepTestCase(MarketAccessTestCase):
 
         # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid()
-        form.clean()
         assert test_trade_direction in form.cleaned_data["trade_direction"]
 
     def test_invalid_form_entry(self):

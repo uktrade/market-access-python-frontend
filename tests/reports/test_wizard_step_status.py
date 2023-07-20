@@ -58,22 +58,20 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid()
-        result = form.clean()
 
         # Open status takes todays date for status date
         todays_date = datetime.date.today()
-        assert result["status_date"] == todays_date
-        assert result["status_summary"] == ""
+        assert form.cleaned_data["status_date"] == todays_date
+        assert form.cleaned_data["status_summary"] == ""
 
         # When start date is given, this ends up in cleaned_data
         input_month = int(self.test_start_date.split()[0])
         input_year = int(self.test_start_date.split()[1])
-        assert result["start_date"] == datetime.date(input_year, input_month, 1)
-        assert result["start_date_known"] is True
+        assert form.cleaned_data["start_date"] == datetime.date(input_year, input_month, 1)
+        assert form.cleaned_data["start_date_known"] is True
         # If start date is in the past, currently active is automatically set
-        assert result["is_currently_active"] is True
+        assert form.cleaned_data["is_currently_active"] is True
 
     def test_valid_form_entry_partially_resolved_and_unknown_active_date(self):
         self.test_status = "3"
@@ -92,20 +90,18 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid()
-        result = form.clean()
 
         # Partially Resolved status takes given date for status date
         input_month = int(self.test_partially_resolved_date.split()[0])
         input_year = int(self.test_partially_resolved_date.split()[1])
-        assert result["status_date"] == datetime.date(input_year, input_month, 1)
-        assert result["status_summary"] == self.test_partially_resolved_description
+        assert form.cleaned_data["status_date"] == datetime.date(input_year, input_month, 1)
+        assert form.cleaned_data["status_summary"] == self.test_partially_resolved_description
 
         # When start date unknown is set, we expect these values for start date
-        assert result["start_date"] is None
-        assert result["start_date_known"] is False
-        assert result["is_currently_active"] == self.test_currently_active
+        assert form.cleaned_data["start_date"] is None
+        assert form.cleaned_data["start_date_known"] is False
+        assert form.cleaned_data["is_currently_active"] == self.test_currently_active
 
     def test_valid_form_entry_resolved_and_start_date_in_future(self):
         self.test_status = "4"
@@ -123,23 +119,21 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
             }
         )
 
-        # Assert is_valid first before running clean so cleaned_data is set
         assert form.is_valid()
-        result = form.clean()
 
         # Resolved status takes given date for status date
         input_month = int(self.test_resolved_date.split()[0])
         input_year = int(self.test_resolved_date.split()[1])
-        assert result["status_date"] == datetime.date(input_year, input_month, 1)
-        assert result["status_summary"] == self.test_resolved_description
+        assert form.cleaned_data["status_date"] == datetime.date(input_year, input_month, 1)
+        assert form.cleaned_data["status_summary"] == self.test_resolved_description
 
         # When start date is given, this ends up in cleaned_data
         input_month = int(self.test_start_date.split()[0])
         input_year = int(self.test_start_date.split()[1])
-        assert result["start_date"] == datetime.date(input_year, input_month, 1)
-        assert result["start_date_known"] is True
+        assert form.cleaned_data["start_date"] == datetime.date(input_year, input_month, 1)
+        assert form.cleaned_data["start_date_known"] is True
         # If start date is in the future, currently active is automatically set
-        assert result["is_currently_active"] is False
+        assert form.cleaned_data["is_currently_active"] is False
 
     def test_error_no_status_selected(self):
         self.test_status = None
