@@ -36,9 +36,7 @@ class FeedbackTestCase(MarketAccessTestCase):
     def test_csat_redirect_does_not_require_satisfaction_level(
         self, mock_send_feedback_method: Mock
     ):
-        mock_send_feedback_method.return_value = {
-            "id": str(uuid.uuid4())
-        }
+        mock_send_feedback_method.return_value = {"id": str(uuid.uuid4())}
         url = reverse(
             "core:feedback",
         )
