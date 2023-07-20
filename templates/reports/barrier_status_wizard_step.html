@@ -107,13 +107,13 @@
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input"
-                            id="{{ form.start_date_known.name }}"
-                            name="barrier-status-start_date_known"
+                            id="{{ form.start_date_unknown.name }}"
+                            name="barrier-status-start_date_unknown"
                             type="checkbox"
                             value="1"
                             {% if form.start_date_known.value %}checked="checked"{% endif %}
                             data-aria-controls="conditional-current-active">
-                            <label class="govuk-label govuk-checkboxes__label" for="barrier-status-start_date_known">{{ form.start_date_known.label }}</label>
+                            <label class="govuk-label govuk-checkboxes__label" for="barrier-status-start_date_unknown">{{ form.start_date_unknown.label }}</label>
                         </div>
                         <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden govuk-!-margin-bottom-0" id="conditional-current-active">
                             <div class="govuk-radios" data-module="govuk-radios">
