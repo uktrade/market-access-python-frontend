@@ -349,11 +349,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         return context
 
-    def get_form_kwargs(self, step=None):
-        form_kwargs = super().get_form_kwargs(step)
-        form_kwargs.setdefault("token", self.request.session.get("sso_token"))
-        return form_kwargs
-
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)
         # determine the step if not given
