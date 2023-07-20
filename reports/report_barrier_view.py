@@ -346,11 +346,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         return context
 
-    def get_form_kwargs(self, step=None):
-        form_kwargs = super().get_form_kwargs(step)
-        form_kwargs.setdefault("token", self.request.session.get("sso_token"))
-        return form_kwargs
-
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)
         # determine the step if not given
@@ -464,8 +459,8 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         # Loop through form data, patch barrier with the cleaned data
         if (
-            submitted_values["barrier-details-summary"]["details_confirmation"]
-            == "completed"
+                submitted_values["barrier-details-summary"]["details_confirmation"]
+                == "completed"
         ):
             # Remove form with no data to commit to the DB
             submitted_values.pop("barrier-details-summary")

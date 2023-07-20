@@ -19,16 +19,7 @@ class APIFormMixin:
         if isinstance(id, uuid.UUID):
             id = str(id)
         self.id = id
-
-        if token := kwargs.pop("token", None):
-            self.token = token
-        else:
-            # a token needs to be passed, raise an exception
-            raise ValueError(
-                "A token must be passed to any form that inherits from APIFormMixin, "
-                "it's likely that the token was popped in the child's __init__ method "
-                "and not passed to the parent"
-            )
+        self.token = kwargs.pop("token", None)
 
         # Explore moving this higher up the chain as not needed for all api forms
         self.item_id = kwargs.pop("item_id", None)
