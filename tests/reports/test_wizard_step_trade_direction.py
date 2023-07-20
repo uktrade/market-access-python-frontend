@@ -30,8 +30,8 @@ class ReportWizardTradeDirectionStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        error_message = "Select a valid choice"
-        assert error_message in str(form.errors["trade_direction"])
+        expected_error_message = "Select a valid choice"
+        assert expected_error_message in str(form.errors["trade_direction"])
 
     def test_missing_form_entry(self):
         test_trade_direction = None
@@ -42,5 +42,5 @@ class ReportWizardTradeDirectionStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        error_message = "Select the trade direction this barrier affects"
-        assert error_message in form.errors["trade_direction"]
+        expected_error_message = "Select the trade direction this barrier affects"
+        assert expected_error_message in form.errors["trade_direction"]

@@ -45,8 +45,8 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        error_message = "Name should be 150 characters or less"
-        assert error_message in form.errors["title"]
+        expected_error_message = "Name should be 150 characters or less"
+        assert expected_error_message in form.errors["title"]
 
     def test_title_missing_entry(self):
 
@@ -60,8 +60,8 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        error_message = "Enter a barrier title"
-        assert error_message in form.errors["title"]
+        expected_error_message = "Enter a barrier title"
+        assert expected_error_message in form.errors["title"]
 
     def test_summary_too_long_entry(self):
 
@@ -75,8 +75,10 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        error_message = "Ensure this value has at most 300 characters (it has 400)"
-        assert error_message in str(form.errors["summary"])
+        expected_error_message = (
+            "Ensure this value has at most 300 characters (it has 400)"
+        )
+        assert expected_error_message in str(form.errors["summary"])
 
     def test_summary_missing_entry(self):
 
@@ -90,5 +92,5 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        error_message = "Enter a barrier description"
-        assert error_message in form.errors["summary"]
+        expected_error_message = "Enter a barrier description"
+        assert expected_error_message in form.errors["summary"]
