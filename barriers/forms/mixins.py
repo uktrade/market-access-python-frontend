@@ -21,7 +21,7 @@ class APIFormMixin:
         self.id = id
         self.token = kwargs.pop("token", None)
 
-        # Explore moving this higher up the chain as not needed for all api forms
+        # todo - Explore moving this higher up the chain as not needed for all api forms
         self.item_id = kwargs.pop("item_id", None)
         self.barrier_id = kwargs.pop("barrier_id", None)
         self.progress_update_id = kwargs.pop("progress_update_id", None)
