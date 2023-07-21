@@ -68,7 +68,9 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
         # When start date is given, this ends up in cleaned_data
         input_month = int(self.test_start_date.split()[0])
         input_year = int(self.test_start_date.split()[1])
-        assert form.cleaned_data["start_date"] == datetime.date(input_year, input_month, 1)
+        assert form.cleaned_data["start_date"] == datetime.date(
+            input_year, input_month, 1
+        )
         assert form.cleaned_data["start_date_known"] is True
         # If start date is in the past, currently active is automatically set
         assert form.cleaned_data["is_currently_active"] is True
@@ -95,8 +97,13 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
         # Partially Resolved status takes given date for status date
         input_month = int(self.test_partially_resolved_date.split()[0])
         input_year = int(self.test_partially_resolved_date.split()[1])
-        assert form.cleaned_data["status_date"] == datetime.date(input_year, input_month, 1)
-        assert form.cleaned_data["status_summary"] == self.test_partially_resolved_description
+        assert form.cleaned_data["status_date"] == datetime.date(
+            input_year, input_month, 1
+        )
+        assert (
+            form.cleaned_data["status_summary"]
+            == self.test_partially_resolved_description
+        )
 
         # When start date unknown is set, we expect these values for start date
         assert form.cleaned_data["start_date"] is None
@@ -124,13 +131,17 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
         # Resolved status takes given date for status date
         input_month = int(self.test_resolved_date.split()[0])
         input_year = int(self.test_resolved_date.split()[1])
-        assert form.cleaned_data["status_date"] == datetime.date(input_year, input_month, 1)
+        assert form.cleaned_data["status_date"] == datetime.date(
+            input_year, input_month, 1
+        )
         assert form.cleaned_data["status_summary"] == self.test_resolved_description
 
         # When start date is given, this ends up in cleaned_data
         input_month = int(self.test_start_date.split()[0])
         input_year = int(self.test_start_date.split()[1])
-        assert form.cleaned_data["start_date"] == datetime.date(input_year, input_month, 1)
+        assert form.cleaned_data["start_date"] == datetime.date(
+            input_year, input_month, 1
+        )
         assert form.cleaned_data["start_date_known"] is True
         # If start date is in the future, currently active is automatically set
         assert form.cleaned_data["is_currently_active"] is False

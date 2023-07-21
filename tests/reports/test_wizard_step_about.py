@@ -1,9 +1,3 @@
-# CASES TO TEST #
-#
-# 5. Test that save and exit saves when title has been given value
-#
-# 6. Test that save and exit does not save when no details entered for title
-
 import logging
 import random
 import string

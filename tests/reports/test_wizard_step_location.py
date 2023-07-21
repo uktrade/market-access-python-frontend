@@ -44,7 +44,6 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
         assert self.location_select in form.cleaned_data["country"]
         assert form.cleaned_data["caused_by_trading_bloc"] is False
 
-
     def test_valid_form_entry_trading_bloc_affected(self):
         self.location_select = "TB00016"
         form = BarrierLocationForm(
@@ -83,7 +82,9 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
     def test_valid_form_entry_with_admin_areas(self):
         self.trading_bloc_Mercosur = "NO"
         self.affect_whole_country = False
-        self.admin_areas = "b5d03d97-fef5-4da6-9117-98a4d633b581,b0dd060f-4627-499a-a298-7289c5abb89b"
+        self.admin_areas = (
+            "b5d03d97-fef5-4da6-9117-98a4d633b581,b0dd060f-4627-499a-a298-7289c5abb89b"
+        )
         form = BarrierLocationForm(
             {
                 "location_select": self.location_select,
@@ -102,7 +103,7 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
         assert form.cleaned_data["caused_by_admin_areas"] is True
         assert form.cleaned_data["admin_areas"] == [
             "b5d03d97-fef5-4da6-9117-98a4d633b581",
-            "b0dd060f-4627-499a-a298-7289c5abb89b"
+            "b0dd060f-4627-499a-a298-7289c5abb89b",
         ]
 
     def test_error_admin_areas_missing(self):
