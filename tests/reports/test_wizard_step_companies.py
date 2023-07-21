@@ -1,7 +1,3 @@
-# CASES TO TEST #
-
-# 4. Error - Continue with no companies added
-
 import logging
 
 from core.tests import MarketAccessTestCase

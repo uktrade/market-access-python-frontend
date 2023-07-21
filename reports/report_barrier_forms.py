@@ -500,6 +500,12 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         codes = cleaned_data.get("codes", [])
         countries = cleaned_data["countries"]
         trading_blocs = cleaned_data["trading_blocs"]
+
+        # TODO - think its a problem with the original component, but setting a trading bloc code
+        # and a country code in the same request incorrectly assigns all codes to the country. Needs
+        # a way to be passed the correct ordering over 2 arrays, or we won't know which code needs
+        # which country code
+
         # Mixed lists length will not match could have some countries and some trading blocs
         # In that case take first country code
         matched_lists = True
@@ -545,6 +551,11 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
             except IndexError:
                 raise forms.ValidationError("Code/country mismatch")
         cleaned_data["commodities"] = self.commodities
+
+        logger.critical("-----------")
+        logger.critical(cleaned_data)
+        logger.critical("-----------")
+
         return cleaned_data
 
 
