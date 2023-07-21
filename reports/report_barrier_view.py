@@ -81,6 +81,18 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         This renders the form or, if needed, does the http redirects.
         """
 
+
+        logger.critical("-------------")
+        logger.critical(request)
+        logger.critical("-------------")
+        logger.critical("*************")
+        logger.critical(args)
+        logger.critical("*************")
+        logger.critical("+++++++++++++")
+        logger.critical(kwargs)
+        logger.critical("+++++++++++++")
+
+
         step_url = kwargs.get("step", None)
         draft_barrier_id = kwargs.get("draft_barrier_id", None)
         self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
@@ -91,20 +103,32 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
         # Is it resuming a draft barrier
         if draft_barrier_id is not None:
+            logger.critical("GETTING DRAFT NOW.")
             draft_barrier = self.client.reports.get(id=draft_barrier_id)
+            logger.critical("====")
+            logger.critical(draft_barrier)
+            logger.critical("====")
             session_data = draft_barrier.new_report_session_data.strip()
+            logger.critical("1")
             self.storage.reset()
+            logger.critical("2")
             self.storage.set_step_data("meta", {"barrier_id": str(draft_barrier_id)})
+            logger.critical("3")
+
+            logger.critical(session_data)
 
             if session_data == "":
+                logger.critical("4.1")
                 self.storage.set_step_data(
                     "barrier-name", {"title": draft_barrier.title}
                 )
                 self.storage.current_step = self.steps.first
                 return redirect(self.get_step_url(self.steps.current))
             else:
+                logger.critical("4.2")
                 self.storage.data = json.loads(draft_barrier.new_report_session_data)
 
+            logger.critical("5")
             return redirect(self.get_step_url(self.steps.current))
 
         elif step_url == "skip":

@@ -552,10 +552,6 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
                 raise forms.ValidationError("Code/country mismatch")
         cleaned_data["commodities"] = self.commodities
 
-        logger.critical("-----------")
-        logger.critical(cleaned_data)
-        logger.critical("-----------")
-
         return cleaned_data
 
 
