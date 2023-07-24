@@ -1,6 +1,0 @@
-[run]
-omit =
-    */tests/*
-    */migrations/*
-    *__init__*
-    *test_*
