@@ -14,6 +14,7 @@ from utils.api.resources import (
     BarriersResource,
     NotesResource,
     PublicBarriersResource,
+    ReportsResource,
     UsersResource,
 )
 
@@ -21,6 +22,7 @@ from utils.api.resources import (
 @override_settings(API_RESULTS_LIMIT=10)
 class MarketAccessTestCase(TestCase):
     _barriers = None
+    _draft_barriers = ()
     _history = None
     _team_members = None
     _users = None
@@ -79,6 +81,7 @@ class MarketAccessTestCase(TestCase):
     def setUp(self):
         self.init_session()
         self.init_get_barrier_patcher()
+        self.init_get_draft_barrier_patcher()
         self.init_get_activity_patcher()
         self.init_get_interactions_patcher()
         self.init_get_current_user_patcher()
@@ -105,6 +108,16 @@ class MarketAccessTestCase(TestCase):
             self.barriers[self.barrier_index]
         )
         self.addCleanup(self.get_barrier_patcher.stop)
+
+    def init_get_draft_barrier_patcher(self):
+        self.get_draft_barrier_patcher = patch(
+            "utils.api.resources.ReportsResource.get"
+        )
+        self.mock_get_draft_barrier = self.get_draft_barrier_patcher.start()
+        self.mock_get_draft_barrier.return_value = ReportsResource.model(
+            self.draft_barriers[self.barrier_index]
+        )
+        self.addCleanup(self.get_draft_barrier_patcher.stop)
 
     def init_get_activity_patcher(self):
         self.get_activity_patcher = patch(
@@ -174,6 +187,17 @@ class MarketAccessTestCase(TestCase):
     @property
     def barrier(self):
         return self.barriers[self.barrier_index]
+
+    @property
+    def draft_barriers(self):
+        if not self._draft_barriers:
+            file = f"{settings.BASE_DIR}/../tests/reports/fixtures/draft_barriers.json"
+            self._draft_barriers = json.loads(memfiles.open(file))
+        return self._draft_barriers
+
+    @property
+    def draft_barrier(self):
+        return self.draft_barriers[self.barrier_index]
 
     @property
     def public_barrier(self):
