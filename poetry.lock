@@ -116,7 +116,7 @@ python-versions = ">=3.7.0"
 
 [[package]]
 name = "click"
-version = "8.1.4"
+version = "8.1.6"
 description = "Composable command line interface toolkit"
 category = "dev"
 optional = false
@@ -650,7 +650,7 @@ python-versions = "*"
 
 [[package]]
 name = "platformdirs"
-version = "3.8.1"
+version = "3.9.1"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
@@ -662,11 +662,11 @@ test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest-cov (>=4.1)", "pytes
 
 [[package]]
 name = "playwright"
-version = "1.35.0"
+version = "1.36.0"
 description = "A high-level API to automate web browsers"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 
 [package.dependencies]
 greenlet = "2.0.2"
@@ -1157,7 +1157,7 @@ test = ["argcomplete (>=2.0)", "pre-commit", "pytest", "pytest-mock"]
 
 [[package]]
 name = "trio"
-version = "0.22.1"
+version = "0.22.2"
 description = "A friendly Python library for async concurrency and I/O"
 category = "dev"
 optional = false
@@ -1300,7 +1300,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "7f383083e78f87ce47195a418226fefc53cfdb0dbe2a2f6d5079785d90a64717"
+content-hash = "4f676b1bc0575b6476d0562a8948405ebce8b7e214267267d1bb6e944a301401"
 
 [metadata.files]
 appnope = []
