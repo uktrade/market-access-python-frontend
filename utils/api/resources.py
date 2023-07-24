@@ -516,3 +516,7 @@ class FeedbackResource(APIResource):
 
     def send_feedback(self, *args, **kwargs):
         return self.client.post("feedback/", json={**kwargs})
+
+    def add_comments(self, feedback_id, *args, **kwargs):
+        url = f"feedback/{feedback_id}/"
+        return self.client.put(url, json={**kwargs})
