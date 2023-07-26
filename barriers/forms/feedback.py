@@ -5,7 +5,7 @@ from utils.api.client import MarketAccessAPIClient
 
 class FeedbackForm(forms.Form):
     satisfaction = forms.ChoiceField(
-        label="1. Overall, how do you feel about your use of the Digital Market Access Service (DMAS) today?",
+        label="Overall, how do you feel about your use of the Digital Market Access Service (DMAS) today?",
         choices=(
             ("VERY_SATISFIED", "Very satisfied"),
             ("SATISFIED", "Satisfied"),
@@ -17,7 +17,7 @@ class FeedbackForm(forms.Form):
         required=False,
     )
     attempted_actions = forms.MultipleChoiceField(
-        label="2. What were you trying to do today?",
+        label="What were you trying to do today?",
         help_text="Select all that apply.",
         choices=(
             ("REPORT_BARRIER", "Report a barrier"),
@@ -33,13 +33,14 @@ class FeedbackForm(forms.Form):
         },
     )
     feedback_text = forms.CharField(
-        label="3. How could we improve the service?",
+        label="How could we improve the service?",
         help_text="Don't include any personal information, like your name or email address.",
         max_length=3000,
         required=False,
         widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
     )
     csat_submission = forms.CharField()
+    csat_submission_id = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.token = kwargs.pop("token", None)
@@ -51,12 +52,24 @@ class FeedbackForm(forms.Form):
         csat_submission = cleaned_data.get("csat_submission", False)
         if csat_submission == "False" and (satisfaction is None or satisfaction == ""):
             self.add_error("satisfaction", "You must select a level of satisfaction")
-        if satisfaction != "VERY_SATISFIED" and csat_submission == "True":
-            # Request extra feedback if not very satisfied
-            #
+        if csat_submission == "True":
+            client = MarketAccessAPIClient(self.token)
+            feedback = client.feedback.send_feedback(
+                token=self.token, **self.cleaned_data
+            )
+            self.data = self.data.copy()
+            self.data["csat_submission_id"] = feedback["id"]
+            # Request extra feedback
             # self.add_error("feedback_text", "Tell us how we can improve")
             raise forms.ValidationError("Let us know how we can improve")
+        return cleaned_data
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.feedback.send_feedback(token=self.token, **self.cleaned_data)
+        csat_submission_id = self.cleaned_data.get("csat_submission_id")
+        if csat_submission_id == "None":
+            client.feedback.send_feedback(token=self.token, **self.cleaned_data)
+        else:
+            client.feedback.add_comments(
+                token=self.token, feedback_id=csat_submission_id, **self.cleaned_data
+            )
