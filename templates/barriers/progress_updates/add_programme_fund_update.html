@@ -34,7 +34,7 @@
 
                 <textarea id="{{ form.milestones_and_deliverables.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.milestones_and_deliverables.name }}" rows="5" maxlength="1250">{% if form.milestones_and_deliverables.value %}{{ form.milestones_and_deliverables.value }}{% endif %}</textarea>
             </div>
-            <div id="{{ form.milestones_and_deliverables.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            <div id="{{ form.milestones_and_deliverables.name }}-info" class="govuk-hint govuk-character-count__message">
               You can enter up to 1250 characters
             </div>
         </div>
@@ -48,7 +48,7 @@
 
                 <textarea  id="{{ form.expenditure.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.expenditure.name }}" rows="5" maxlength="1250">{% if form.expenditure.value %}{{ form.expenditure.value }}{% endif %}</textarea>
             </div>
-            <div id="{{ form.expenditure.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            <div id="{{ form.expenditure.name }}-info" class="govuk-hint govuk-character-count__message">
             You can enter up to 1250 characters
             </div>
         </div>
