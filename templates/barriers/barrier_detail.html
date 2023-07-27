@@ -43,37 +43,23 @@
 
         <div class="summary-group__list">
             <div class="summary-group__list-item-50">
-                <dt class="summary-group__list__key">Last Modified</dt>
-                <dd class="summary-group__list__value">
-                    {{ barrier.modified_on|date:"j F Y" }}
-                </dd>
-            </div>
-            <div class="summary-group__list-item-50">
                 <dt class="summary-group__list__key">Date reported</dt>
                 <dd class="summary-group__list__value">
                     {{ barrier.reported_on|date:"j F Y" }}
                 </dd>
             </div>
+            <div class="summary-group__list-item-50">
+                <dt class="summary-group__list__key">Date Modified</dt>
+                <dd class="summary-group__list__value">
+                    {{ barrier.modified_on|date:"j F Y" }}
+                </dd>
+            </div>
 
-            <dt class="summary-group__list__key">Barrier summary</dt>
+            <dt class="summary-group__list__key">Barrier description</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.summary|escape|linebreaksbr }}
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_summary' barrier.id %}">Edit</a>
-                {% endif %}
-
-                {% if barrier.is_summary_sensitive is not False %}
-                    <div class="govuk-warning-text govuk-!-margin-bottom-0 govuk-!-margin-top-2">
-                        <span class="govuk-warning-text__icon govuk-warning-text__icon--small" aria-hidden="true">!</span>
-                        <strong class="govuk-warning-text__text govuk-warning-text__text--small">
-                            <span class="govuk-warning-text__assistive">Warning</span>
-                            {% if barrier.is_summary_sensitive is True %}
-                                This summary contains OFFICIAL-SENSITIVE information.
-                            {% else %}
-                                This summary has not been given a security classification.
-                            {% endif %}
-                        </strong>
-                    </div>
                 {% endif %}
             </dd>
 
@@ -267,6 +253,22 @@
                 {% endif %}
             </dd>
 
+            <dt class="summary-group__list__key">Barrier start date</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.start_date %}
+                    {{ barrier.start_date|date:"F Y" }}
+                    {% if not barrier.archived %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_start_date' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No start date</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_start_date' barrier.id %}" class="summary-group__list__value__add">Add Barrier Start Date</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
+
             {% if barrier.country.trading_bloc %}
                 <dt class="summary-group__list__key">
                     Was this barrier caused by a regulation introduced by {{ barrier.country.trading_bloc.short_name }}?
@@ -292,9 +294,16 @@
                 {% if barrier.companies %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.companies %}
-                        <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                            <li class="summary-group__list__value__list__item">{{ item.name }}</li>
                         {% endfor %}
                     </ul>
+                    {% if barrier.related_organisations %}
+                        <ul class="summary-group__list__value__list">
+                            {% for item in barrier.related_organisations %}
+                                <li class="summary-group__list__value__list__item">{{ item.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_companies' barrier.id %}">Edit</a>
                     {% endif %}
@@ -302,7 +311,7 @@
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No companies</span>
                     {% else %}
-                        <a href="{% url 'barriers:search_company' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
+                        <a href="{% url 'barriers:edit_companies' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -354,17 +363,26 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Sector{{ barrier.sectors|pluralize }} affected</dt>
+            <dt class="summary-group__list__key">Main sector affected:</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.sectors or barrier.all_sectors %}
+                {% if barrier.main_sector or barrier.all_sectors %}
+                    {% if barrier.all_sectors %}
+                        <span class="summary-group__list__value__list__item">All sectors</span>
+                    {% else %}
+                        <span class="summary-group__list__value__list__item">{{ barrier.main_sector.name|default:"Unknown"}}</span>
+                    {% endif %}
+                {% endif %}
+                {% if not barrier.archived %}
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:add_main_sector' barrier.id %}">Edit</a>
+                {% endif %}
+            </dd>
+            <dt class="summary-group__list__key">Other sector{{ barrier.sectors|pluralize }} affected:</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.sectors %}
                     <ul class="summary-group__list__value__list">
-                        {% if barrier.all_sectors %}
-                            <li class="summary-group__list__value__list__item">All sectors</li>
-                        {% else %}
-                            {% for item in barrier.sectors %}
+                        {% for item in barrier.sectors %}
                             <li class="summary-group__list__value__list__item">{{ item.name|default:"Unknown" }}</li>
-                            {% endfor %}
-                        {% endif %}
+                        {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
                     <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_sectors' barrier.id %}">Edit</a>
@@ -418,11 +436,31 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Product, service or investment affected</dt>
+            <dt class="summary-group__list__key">Export type</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.export_types %}
+                    <ul class="summary-group__list__value__list">
+                        {% for export_type in barrier.export_types %}
+                            <li class="summary-group__list__value__list__item">{{ export_type.name|capfirst }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if not barrier.archived %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No barrier categories</span>
+                    {% else %}
+                        <a href="{% url 'barriers:edit_export_types' barrier.id %}" class="summary-group__list__value__add">Add barrier export type</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Goods, services or investments affected</dt>
             <dd class="summary-group__list__value">
                 {{ barrier.product }}
                 {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_product' barrier.id %}">Edit</a>
+                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
                 {% endif %}
             </dd>
 

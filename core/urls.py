@@ -2,6 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from barriers.views.feedback import FeedbackFormView, FeedbackGratitudeView
+from utils.company_search import SearchCompany
 
 app_name = "core"
 
@@ -20,5 +21,10 @@ urlpatterns = [
         "feedback/thankyou/",
         FeedbackGratitudeView.as_view(),
         name="feedback-thanks",
+    ),
+    path(
+        "companies/search/<str:search_term>/",
+        SearchCompany.as_view(),
+        name="search_company",
     ),
 ]

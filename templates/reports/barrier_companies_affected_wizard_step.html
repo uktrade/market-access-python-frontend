@@ -1,0 +1,43 @@
+{% extends "reports/barrier_wizard_step.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block head %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderCompaniesForm(
+                searchLabel="{{ form.companies_affected.label }}",
+                searchHelpText="{{ form.companies_affected.help_text }}"
+            )
+        })
+    </script>
+{% endblock %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Companies Affected{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group govuk-!-margin-0">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Companies affected
+                </h1>
+            </legend>
+
+            {% form_error_banner form %}
+
+            <div id="react-app" class="govuk-form-group govuk-!-margin-0"></div>
+
+            <!-- Hidden input field for companies to submit -->
+            <input type="hidden" id="id_companies-affected" name="barrier-companies-affected-companies_affected" value="{{ form.companies_affected.value }}">
+
+            <!-- Input for unrecognised company name for when search fails -->
+            <div id="barrier-unknown-company-section" class="govuk-form-group">
+                <label class="govuk-label govuk-label--s" for="unrecognised_company">
+                    Add a company
+                </label>
+                {{ form.unrecognised_company }}
+            </div>
+
+        </fieldset>
+    </div>
+{% endblock %}

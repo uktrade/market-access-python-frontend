@@ -1,5 +1,6 @@
 .search-form__input-group {
 	position: relative;
+	margin-bottom: govuk-spacing(4);
 }
 
 .search-form__input {
@@ -10,4 +11,5 @@
 .search-form__button {
 	display: inline-block;
 	min-width: 14%;
+	float: right;
 }

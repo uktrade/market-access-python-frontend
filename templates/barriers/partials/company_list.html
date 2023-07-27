@@ -21,6 +21,6 @@
     {% endif %}
 
     {% if show_add_button %}
-        <a href="{% url 'barriers:search_company' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another company</a>
+        <a href="{% url 'barriers:edit_companies' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another company</a>
     {% endif %}
 </div>

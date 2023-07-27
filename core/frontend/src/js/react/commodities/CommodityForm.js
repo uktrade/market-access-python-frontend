@@ -19,7 +19,7 @@ function CommodityForm(props) {
     const boxCount = 5;
     const inputRefContainer = useRef(new Array(boxCount));
 
-    const { isReportJourney, nextUrl } = props;
+    const { isReportJourney, nextUrl, showActions } = props;
 
     const handleLocationChange = (event) => {
         setLocationId(event.target.value);
@@ -194,15 +194,29 @@ function CommodityForm(props) {
                     id=""
                     className={
                         codeLookupError
-                            ? "govuk-form-group govuk-form-group--error"
-                            : "govuk-form-group"
+                            ? "govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0"
+                            : "govuk-form-group govuk-!-margin-bottom-0"
                     }
                 >
                     <fieldset className="govuk-fieldset">
                         <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">
                             {props.label}
                         </legend>
-                        <span className="govuk-hint">{props.helpText}</span>
+                        <span className="govuk-hint">
+                            HS codes help DBT analysts evaluate an prioritise
+                            barriers.{" "}
+                            <a
+                                href="https://www.gov.uk/check-duties-customs-exporting"
+                                className="govuk-link"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Find the right codes for your goods
+                            </a>{" "}
+                            if you aren&apos;t sure which to use. You can copy
+                            and paste multiple codes separated by commas into
+                            the first box.
+                        </span>
 
                         <LocationInput
                             locations={props.locations}
@@ -237,17 +251,6 @@ function CommodityForm(props) {
                 </div>
             </form>
 
-            <p className="govuk-body">
-                Need help?{" "}
-                <a
-                    href="https://www.gov.uk/check-duties-customs-exporting"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    Look up codes
-                </a>
-            </p>
-
             {unconfirmedCommodities.length ? (
                 <CommodityList
                     confirmed={false}
@@ -281,75 +284,82 @@ function CommodityForm(props) {
                 />
             ) : null}
 
-            <span className="govuk-hint govuk-!-margin-bottom-6">
-                Descriptions are only shown for codes up to HS6.
-            </span>
+            {!isReportJourney ? (
+                <form action="" method="POST">
+                    <input
+                        type="hidden"
+                        name="csrfmiddlewaretoken"
+                        value={props.csrfToken}
+                    />
+                    {confirmedCommodities.map((commodity, index) => (
+                        <input
+                            type="hidden"
+                            name="codes"
+                            value={commodity.code}
+                        />
+                    ))}
+                    {confirmedCommodities.map((commodity, index) => {
+                        if (commodity.country) {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="countries"
+                                    value={commodity.country.id}
+                                />
+                            );
+                        } else {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="countries"
+                                    value=""
+                                />
+                            );
+                        }
+                    })}
+                    {confirmedCommodities.map((commodity, index) => {
+                        if (commodity.trading_bloc) {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="trading_blocs"
+                                    value={commodity.trading_bloc.code}
+                                />
+                            );
+                        } else {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="trading_blocs"
+                                    value=""
+                                />
+                            );
+                        }
+                    })}
 
-            <form action="" method="POST">
-                <input
-                    type="hidden"
-                    name="csrfmiddlewaretoken"
-                    value={props.csrfToken}
-                />
-                {confirmedCommodities.map((commodity, index) => (
-                    <input type="hidden" name="codes" value={commodity.code} />
-                ))}
-                {confirmedCommodities.map((commodity, index) => {
-                    if (commodity.country) {
-                        return (
-                            <input
-                                type="hidden"
-                                name="countries"
-                                value={commodity.country.id}
-                            />
-                        );
-                    } else {
-                        return (
-                            <input type="hidden" name="countries" value="" />
-                        );
-                    }
-                })}
-                {confirmedCommodities.map((commodity, index) => {
-                    if (commodity.trading_bloc) {
-                        return (
-                            <input
-                                type="hidden"
-                                name="trading_blocs"
-                                value={commodity.trading_bloc.code}
-                            />
-                        );
-                    } else {
-                        return (
-                            <input
-                                type="hidden"
-                                name="trading_blocs"
-                                value=""
-                            />
-                        );
-                    }
-                })}
+                    {nextUrl ? (
+                        <div>
+                            <button
+                                type="submit"
+                                className="govuk-button"
+                                name="action"
+                                value="save-and-go-to-summary"
+                            >
+                                Save
+                            </button>
+                            <a
+                                href={nextUrl}
+                                className="govuk-button button--secondary m-l-2"
+                            >
+                                Cancel
+                            </a>
+                        </div>
+                    ) : null}
 
-                {nextUrl ? (
+                    {/* {!nextUrl && isReportJourney && (
+
                     <div>
-                        <button
-                            type="submit"
-                            className="govuk-button"
-                            name="action"
-                            value="save-and-go-to-summary"
-                        >
-                            Save
-                        </button>
-                        <a
-                            href={nextUrl}
-                            className="govuk-button button--secondary m-l-2"
-                        >
-                            Cancel
-                        </a>
-                    </div>
-                ) : null}
 
-                {!nextUrl && isReportJourney && (
-                    <div>
                         <button
                             name="action"
                             value="save"
@@ -366,28 +376,79 @@ function CommodityForm(props) {
                             Save and exit
                         </button>
                     </div>
-                )}
+                )} */}
 
-                {!nextUrl && !isReportJourney && (
-                    <div>
-                        <button
-                            name="action"
-                            value="save"
-                            className="govuk-button"
-                            data-module="govuk-button"
-                        >
-                            Done
-                        </button>
-                        <button
-                            className="form-cancel govuk-button button--secondary m-l-2"
-                            name="action"
-                            value="cancel"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                )}
-            </form>
+                    {!nextUrl && !isReportJourney && (
+                        <div>
+                            <button
+                                name="action"
+                                value="save"
+                                className="govuk-button govuk-!-margin-top-6 govuk-!-margin-right-2"
+                                data-module="govuk-button"
+                            >
+                                Done
+                            </button>
+                            <button
+                                className="govuk-button button--secondary govuk-!-margin-top-6"
+                                name="action"
+                                value="cancel"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    )}
+                </form>
+            ) : null}
+
+            {isReportJourney ? (
+                <div>
+                    {confirmedCommodities.map((commodity, index) => (
+                        <input
+                            type="hidden"
+                            name="barrier-export-type-codes"
+                            value={commodity.code}
+                        />
+                    ))}
+                    {confirmedCommodities.map((commodity, index) => {
+                        if (commodity.country) {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="barrier-export-type-countries"
+                                    value={commodity.country.id}
+                                />
+                            );
+                        } else {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="countries"
+                                    value="None"
+                                />
+                            );
+                        }
+                    })}
+                    {confirmedCommodities.map((commodity, index) => {
+                        if (commodity.trading_bloc) {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="barrier-export-type-trading_blocs"
+                                    value={commodity.trading_bloc.code}
+                                />
+                            );
+                        } else {
+                            return (
+                                <input
+                                    type="hidden"
+                                    name="trading_blocs"
+                                    value="None"
+                                />
+                            );
+                        }
+                    })}
+                </div>
+            ) : null}
         </div>
     );
 }
