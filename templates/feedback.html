@@ -30,6 +30,9 @@
   <form method="post" novalidate action="{{ request.build_absolute_uri }}">
   {% csrf_token %}
   <input type="hidden" name="csat_submission" value="False">
+  <input type="hidden" name="csat_submission_id" value={{form.csat_submission_id.value}}>
+
+  {% if form.csat_submission_id.value == None or form.csat_submission_id.value == "None" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half-from-desktop">
     <div class="govuk-form-group{% if form.satisfaction.errors %} govuk-form-group--error{% endif %}">
@@ -54,6 +57,10 @@
       </div>
     </div>
   </div>
+  {% else %}
+    <input type="hidden" name="satisfaction" value={{form.satisfaction.value}}>
+  {%  endif %}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half-from-desktop">
     <div class="govuk-form-group{% if form.attempted_actions.errors %} govuk-form-group--error{% endif %}">
@@ -78,6 +85,7 @@
       </div>
     </div>
   </div>
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half-from-desktop">
       <div class="govuk-form-group{% if form.feedback_text.errors %} govuk-form-group--error{% endif %}">
