@@ -111,7 +111,7 @@
                             name="barrier-status-start_date_unknown"
                             type="checkbox"
                             value="1"
-                            {% if form.start_date_known.value %}checked="checked"{% endif %}
+                            {% if form.start_date_unknown.value %}checked{% endif %}
                             data-aria-controls="conditional-current-active">
                             <label class="govuk-label govuk-checkboxes__label" for="barrier-status-start_date_unknown">{{ form.start_date_unknown.label }}</label>
                         </div>

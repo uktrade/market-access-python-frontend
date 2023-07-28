@@ -79,7 +79,6 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
 
     def test_readable_filters(self):
         saved_search = SavedSearch(self.saved_search_data)
-        logger.critical(saved_search.readable_filters["admin_areas"])
         assert saved_search.readable_filters["admin_areas"] == {
             "label": "Barrier region/state",
             "readable_value": "Beijing, Moscow",
