@@ -178,7 +178,6 @@ class SearchTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
 
         form = response.context["form"]
-        logger.critical(form.cleaned_data)
         assert form.cleaned_data["country"] == [
             "63af72a6-5d95-e211-a939-e4115bead28a",
             "5961b8be-5d95-e211-a939-e4115bead28a",

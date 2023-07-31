@@ -458,7 +458,7 @@
 
             <dt class="summary-group__list__key">Goods, services or investments affected</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.product }}
+                {{ barrier.export_description }}
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_export_types' barrier.id %}" aria-label="edit goods, services, or investments affected">Edit</a>
                 {% endif %}
