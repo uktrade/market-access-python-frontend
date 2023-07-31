@@ -103,7 +103,8 @@ class BarrierViewOutstandingSectorsTestCase(MarketAccessTestCase):
         sectors_affected_url = reverse(
             "barriers:edit_sectors", kwargs={"barrier_id": self.barrier["id"]}
         )
-        sectors_affected_link = f'<a href="{sectors_affected_url}" class="govuk-link--no-visited-state">Sectors affected</a>'
+        sectors_affected_link = f'<a href="{sectors_affected_url}" ' \
+                                f'class="govuk-link--no-visited-state">Sectors affected</a>'
 
         response = self.client.get(
             reverse(
