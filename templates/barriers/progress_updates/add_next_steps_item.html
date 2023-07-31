@@ -38,7 +38,7 @@
 
                 <textarea id="{{ form.next_step_item.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_item.name }}" rows="2" maxlength="100">{% if form.next_step_item.value %}{{ form.next_step_item.value }}{% endif %}</textarea>
             </div>
-            <div id="{{ form.next_step_item.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            <div id="{{ form.next_step_item.name }}-info" class="govuk-hint govuk-character-count__message">
               You can enter up to 100 characters
             </div>
         </div>
@@ -52,7 +52,7 @@
 
                 <textarea  id="{{ form.next_step_owner.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.next_step_owner.name }}" rows="2" maxlength="50">{% if form.next_step_owner.value %}{{ form.next_step_owner.value }}{% endif %}</textarea>
             </div>
-            <div id="{{ form.next_step_owner.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+            <div id="{{ form.next_step_owner.name }}-info" class="govuk-hint govuk-character-count__message">
             You can enter up to 50 characters
             </div>
         </div>
