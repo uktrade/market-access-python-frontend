@@ -1,18 +1,19 @@
 {% if item.old_value.sectors or item.old_value.all_sectors %}
-    <p class="diff__del history-item__old-value" tabindex="0">
-        <span class="govuk-visually-hidden">old value:</span>
-        {% if item.old_value.all_sectors %}
-            All sectors
-        {% elif item.old_value.sectors %}
-            {{ item.old_value.sectors|join:", " }}
-        {% endif %}
-        <span class="govuk-visually-hidden">end of old value</span>
-    </p>
+    <div class="history-item__old-value">
+        <span class="diff__del" tabindex="0">
+            <p class="govuk-visually-hidden">old value: </p>
+            {% if item.old_value.all_sectors %}
+                All sectors
+            {% elif item.old_value.sectors %}
+                {{ item.old_value.sectors|join:", " }}
+            {% endif %}
+        </span>
+    </div>
 {% endif %}
 {% if item.new_value.sectors or item.new_value.all_sectors %}
-    <div class="history-item__new-value" tabindex="0">
-        <span class="diff__ins">
-            <span class="govuk-visually-hidden">new value: </span>
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
             {% if item.new_value.all_sectors %}
                 All sectors
             {% elif item.new_value.sectors %}
