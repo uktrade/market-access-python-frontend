@@ -458,9 +458,9 @@
 
             <dt class="summary-group__list__key">Goods, services or investments affected</dt>
             <dd class="summary-group__list__value">
-                {{ barrier.product }}
+                {{ barrier.export_description }}
                 {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
                 {% endif %}
             </dd>
 
