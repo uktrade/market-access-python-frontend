@@ -4,6 +4,7 @@ from collections import namedtuple
 
 from mock import patch
 
+from barriers.models.commodities import BarrierCommodity
 from core.tests import MarketAccessTestCase
 from reports.report_barrier_forms import (
     BarrierAboutForm,
@@ -20,6 +21,183 @@ from utils.api.client import MarketAccessAPIClient
 from utils.api.resources import ReportsResource
 
 logger = logging.getLogger(__name__)
+
+
+class SummaryPageLoadTestCase(MarketAccessTestCase):
+    # Test suite for loading the summary step of the form
+    # make django-test path=reports/test_wizard_step_summary_and_submit.py::SummaryPageLoadTestCase
+
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch(
+        "reports.report_barrier_view.ReportBarrierWizardView.get_cleaned_data_for_step"
+    )
+    @patch("utils.api.resources.CommoditiesResource.list")
+    def test_load_summary_page(
+        self, commodity_api_call_patch, report_get_cleaned_data_patch, report_get_patch
+    ):
+
+        # NEED TO STUB: self.client.commodities.list
+
+        # Create mock session data - use named tuple method to create object, not dict
+        session_mock = namedtuple("session_mock", "prefix data extra_data")
+        session_data = session_mock(
+            prefix="wizard_report_barrier_wizard_view",
+            extra_data={},
+            data={
+                "step": "barrier-details-summary",
+                "step_data": {
+                    "barrier-about": {},
+                    "barrier-status": {},
+                    "barrier-location": {},
+                    "barrier-trade-direction": {},
+                    "barrier-sectors-affected": {},
+                    "barrier-companies-affected": {},
+                    "barrier-export-type": {},
+                },
+                "meta": {"barrier_id": "b9bc718d-f535-413a-a2c0-8868351b44f2"},
+            },
+        )
+
+        # Create mock steps data - use named tuple method to create object, not dict
+        steps_mock = namedtuple("steps_mock", "steps current")
+        steps_data = steps_mock(
+            steps={
+                "barrier-about",
+                "barrier-status",
+                "barrier-location",
+                "barrier-trade-direction",
+                "barrier-sectors-affected",
+                "barrier-companies-affected",
+                "barrier-export-type",
+                "barrier-details-summary",
+            },
+            current="barrier-details-summary",
+        )
+
+        # Create mock commodity response object
+        commodity_mock_object = BarrierCommodity(
+            {
+                "commodity": "A Thing",
+                "code": "1002000000",
+                "description": "A Thing",
+            }
+        )
+
+        about_cleaned_data = {"title": "vvvcvcvvbc", "summary": "cbcbcvbcbvc"}
+        status_cleaned_data = {
+            "status": "2",
+            "partially_resolved_date": None,
+            "partially_resolved_description": "",
+            "resolved_date": None,
+            "resolved_description": "",
+            "start_date_unknown": True,
+            "start_date": None,
+            "currently_active": "NO",
+            "status_date": datetime.date(2023, 7, 31),
+            "status_summary": "",
+            "start_date_known": False,
+            "is_currently_active": "NO",
+        }
+        location_cleaned_data = {
+            "location_select": "TB00016",
+            "affect_whole_country": True,
+            "admin_areas": [],
+            "trading_bloc_EU": "",
+            "trading_bloc_GCC": "",
+            "trading_bloc_EAEU": "",
+            "trading_bloc_Mercosur": "",
+            "country": None,
+            "trading_bloc": "TB00016",
+            "caused_by_trading_bloc": False,
+            "caused_by_admin_areas": False,
+        }
+        trade_direction_cleaned_data = {"trade_direction": "1"}
+        sector_cleaned_data = {
+            "main_sector": "af959812-6095-e211-a939-e4115bead28a",
+            "sectors": [
+                "9738cecc-5f95-e211-a939-e4115bead28a",
+                "9838cecc-5f95-e211-a939-e4115bead28a",
+            ],
+            "sectors_affected": True,
+        }
+        companies_cleaned_data = {
+            "companies_affected": (
+                "[{"
+                '"company_number":"10590916",'
+                '"address":{'
+                '"premises":"26",'
+                '"region":"Essex",'
+                '"postal_code":"RM5 2SP",'
+                '"address_line_1":"Warden Avenue",'
+                "},"
+                '"company_type":"ltd",'
+                '"description_identifier":["incorporated-on"],'
+                '"company_status":"active",'
+                '"links":{"self":"/company/10590916"},'
+                '"address_snippet":"26 Warden Avenue, Romford, Essex, United Kingdom, RM5 2SP",'
+                '"title":"BLAH LTD",'
+                '"date_of_creation":"2017-01-30",'
+                "}]"
+            ),
+            "unrecognised_company": '["Fake Company"]',
+            "companies": [{"id": "10590916", "name": "BLAH LTD"}],
+            "related_organisations": [{"id": "", "name": "Fake Company"}],
+        }
+        export_types_cleaned_data = {
+            "export_types": ["goods"],
+            "export_description": "cvbcvbcvb",
+            "code": "",
+            "location": "",
+            "codes": ["1002000000"],
+            "countries": ["80756b9a-5d95-e211-a939-e4115bead28a"],
+            "trading_blocs": [],
+            "commodities": [
+                {
+                    "code": "1002000000",
+                    "country": "80756b9a-5d95-e211-a939-e4115bead28a",
+                    "trading_bloc": "",
+                }
+            ],
+        }
+
+        # Mock the return of get_cleaned_data method but return different
+        # dictionary depending on the passed step name.
+        report_get_cleaned_data_patch.side_effect = lambda *step_cleaned_data: {
+            ("barrier-about",): about_cleaned_data,
+            ("barrier-status",): status_cleaned_data,
+            ("barrier-location",): location_cleaned_data,
+            ("barrier-trade-direction",): trade_direction_cleaned_data,
+            ("barrier-sectors-affected",): sector_cleaned_data,
+            ("barrier-companies-affected",): companies_cleaned_data,
+            ("barrier-export-type",): export_types_cleaned_data,
+        }[step_cleaned_data]
+
+        # Initialise view for test
+        view = ReportBarrierWizardView()
+        view.storage = session_data
+        view.steps = steps_data
+        view.prefix = ("wizard_report_barrier_wizard_view",)
+        view.client = MarketAccessAPIClient()
+
+        # Set mock return values
+        commodity_api_call_patch.return_value = [commodity_mock_object]
+        report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
+        summary_form = BarrierDetailsSummaryForm()
+
+        result = view.get_context_data(summary_form)
+
+        # Assert the transformations of stored data to readble values for the summary table
+        # have taken place and have been passed to the form in context.
+        assert result["status"] == "Open"
+        assert result["barrier_location"] == "European Union"
+        assert (
+            result["trade_direction"] == "Exporting from the UK or investing overseas"
+        )
+        assert result["main_sector"] == "Advanced Engineering"
+        assert result["sectors"] == ["Airports", "Automotive"]
+        assert result["companies"] == ["BLAH LTD"]
+        assert result["related_organisations"] == ["Fake Company"]
+        assert result["codes"] == [{"code": "1002000000", "description": "A Thing"}]
 
 
 class SubmitReportTestCase(MarketAccessTestCase):
