@@ -48,7 +48,33 @@ pytest-xdist = "~=2.1.0"
 splinter = "~=0.17.0"
 werkzeug = "~=2.2.3"
 selenium = "^4.1.3"
+coverage = "^7.2.7"
 
 [build-system]
 requires = ["poetry>=1.1.7"]
 build-backend = "poetry.masonry.api"
+
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+testpaths = "tests"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+
+addopts = """
+    --reuse-db
+    --ds=config.settings.test
+    --cov=.
+    --no-cov-on-fail
+    --cov-branch
+"""
+
+[tool.coverage.run]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*__init__*",
+    "*test_*",
+]
+
+[tool.isort]
+profile = "black"
