@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 from django.urls import reverse
@@ -5,6 +6,8 @@ from mock import patch
 
 from companies_house.dataclasses import CompanyHouseCompany, CompanyHouseSearchResult
 from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class EditCompaniesTestCase(MarketAccessTestCase):
@@ -53,8 +56,8 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
         company_ids = [company["id"] for company in self.barrier["companies"]]
-        assert response.context["form"].initial["companies"] == company_ids
-        assert self.client.session["companies"] == self.barrier["companies"]
+        for id in company_ids:
+            assert str(id) in response.context_data["companies_affected"]
 
     def test_company_search_page_loads(self):
         """
@@ -193,37 +196,29 @@ class EditCompaniesTestCase(MarketAccessTestCase):
 
     @patch("utils.api.resources.APIResource.patch")
     def test_confirm_companies(self, mock_patch):
-        """
-        Saving should call the API
-        """
-        self.update_session(
-            {
-                "companies": [
-                    {
-                        "id": self.company_id,
-                        "name": self.company_name,
-                    }
-                ]
-            }
+        companies_entry = (
+            '[{"company_number":"000011111","title":"company_name_goes_here"}]'
         )
 
         response = self.client.post(
             reverse(
-                "barriers:edit_companies_session",
+                "barriers:edit_companies",
                 kwargs={
                     "barrier_id": self.barrier["id"],
                 },
             ),
-            data={"companies": [self.company_id]},
+            data={"companies_affected": companies_entry, "unrecognised_company": []},
         )
+
         assert response.status_code == HTTPStatus.FOUND
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             companies=[
                 {
-                    "id": self.company_id,
-                    "name": self.company_name,
+                    "id": "000011111",
+                    "name": "company_name_goes_here",
                 }
             ],
+            related_organisations=[],
         )
         assert "companies" not in self.client.session

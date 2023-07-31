@@ -1,0 +1,57 @@
+{% extends "barriers/edit/base.html" %}
+{% load govuk_forms %}
+
+{% block page_title %}{{ block.super }} - Export Types{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Goods, services or investments affected' %}
+    {% form_error_banner form %}
+
+    <div class="restrict-width">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+
+                    <div class="govuk-form-group govuk-checkboxes" data-module="govuk-checkboxes" id="export_types">
+                        <div class="{% form_group_classes form.export_types.errors %}">
+                            <label class="govuk-label govuk-label--s" for="{{ form.export_types.id_for_label }}">
+                                {{ form.export_types.label }}
+                            </label>
+                            <span id="{{ form.export_types.name }}_hint" class="govuk-hint">
+                              {{ form.export_types.help_text }}
+                            </span>
+
+                            {% for export_type in form.export_types %}
+                                <div class="govuk-checkboxes__item">
+                                    {{ export_type.tag }}
+                                    <label class="govuk-label govuk-checkboxes__label" for="{{ export_type.id_for_label }}">
+                                        {{ export_type.choice_label }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="govuk-form-group" id="export_description">
+                        <div class="{% form_group_classes form.export_description.errors %}">
+                            <label class="govuk-label govuk-label--s" for="{{ form.export_description.id_for_label }}">
+                                {{ form.export_description.label }}
+                            </label>
+                            <span id="{{ form.export_description.name }}_hint" class="govuk-hint">
+                              {{ form.export_description.help_text }}
+                            </span>
+                            {{ form.export_description }}
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <input type="submit" value="Save and return" class="govuk-button">
+        </form>
+    </div>
+{% endblock %}

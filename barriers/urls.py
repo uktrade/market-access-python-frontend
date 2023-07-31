@@ -102,12 +102,14 @@ from .views.edit import (
     BarrierEditPriority,
     BarrierEditProduct,
     BarrierEditSource,
+    BarrierEditStartDate,
     BarrierEditSummary,
     BarrierEditTags,
     BarrierEditTerm,
     BarrierEditTitle,
     BarrierEditTradeDirection,
 )
+from .views.export_types import BarrierEditExportType
 from .views.government_organisations import (
     BarrierAddGovernmentOrganisation,
     BarrierEditGovernmentOrganisations,
@@ -149,6 +151,7 @@ from .views.search import (
 )
 from .views.sectors import (
     BarrierAddAllSectors,
+    BarrierAddMainSector,
     BarrierAddSectors,
     BarrierEditSectors,
     BarrierEditSectorsSession,
@@ -470,6 +473,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/sectors/add/",
         BarrierAddSectors.as_view(),
         name="add_sectors",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/main-sector/add/",
+        BarrierAddMainSector.as_view(),
+        name="add_main_sector",
     ),
     path(
         "barriers/<uuid:barrier_id>/sectors/add/all/",
@@ -806,6 +814,16 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/progress_updates/programme_fund",
         BarrierAddProgrammeFundProgressUpdate.as_view(),
         name="add_programme_fund_progress_update",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/start-date/",
+        BarrierEditStartDate.as_view(),
+        name="edit_start_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/export-types/edit/",
+        BarrierEditExportType.as_view(),
+        name="edit_export_types",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(
