@@ -99,6 +99,7 @@ class BarrierViewOutstandingSectorsTestCase(MarketAccessTestCase):
     def test_barrier_view_shows_sectors_outstanding_if_no_sectors_specified(self):
         self.barrier["all_sectors"] = False
         self.barrier["sectors"] = []
+
         sectors_affected_url = reverse(
             "barriers:edit_sectors", kwargs={"barrier_id": self.barrier["id"]}
         )
