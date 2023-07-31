@@ -59,7 +59,7 @@
             <dd class="summary-group__list__value">
                 {{ barrier.summary|escape|linebreaksbr }}
                 {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_summary' barrier.id %}">Edit</a>
+                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_summary' barrier.id %}" aria-label="edit barrier description">Edit</a>
                 {% endif %}
             </dd>
 
@@ -67,25 +67,25 @@
             <dd class="summary-group__list__value">
                 {{ barrier.term.name }}
                 {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_term' barrier.id %}">Edit</a>
+                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_term' barrier.id %}" aria-label="edit barrier type">Edit</a>
                 {% endif %}
             </dd>
 
             <dt class="summary-group__list__key">Progress update</dt>
             <dd class="summary-group__list__value">
 
-                <a class="govuk-button button--primary barrier-progress-update__cta" href="{% url 'barriers:choose_progress_update_type' barrier.id %}">Add progress update</a>
+                <a class="govuk-button button--primary barrier-progress-update__cta govuk-link--no-visited-state" href="{% url 'barriers:choose_progress_update_type' barrier.id %}">Add progress update</a>
 
                 {% if barrier.latest_top_100_progress_update and barrier.latest_programme_fund_progress_update %}
                     <div class="govuk-tabs dmas-barrier-progress-tabs" data-module="govuk-tabs">
                         <ul class="govuk-tabs__list">
                             <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                                <a class="govuk-tabs__tab govuk-body-s" href="#barrier-top-100-update-tab">
+                                <a class="govuk-tabs__tab govuk-body-s govuk-link--no-visited-state" href="#barrier-top-100-update-tab">
                                     Top 100 priority barrier
                                 </a>
                             </li>
                             <li class="govuk-tabs__list-item">
-                                <a class="govuk-tabs__tab govuk-body-s" href="#barrier-programme-fund-update-tab">
+                                <a class="govuk-tabs__tab govuk-body-s govuk-link--no-visited-state" href="#barrier-programme-fund-update-tab">
                                     Programme Fund
                                 </a>
                             </li>
@@ -119,7 +119,7 @@
                                             {% endif %}
                                         </div>
                                     </details>
-                                    <a class="govuk-!-margin-bottom-2" href="{% url 'barriers:edit_top_100_progress_update' barrier.id barrier.latest_top_100_progress_update.id %}">Edit</a>
+                                    <a class="govuk-!-margin-bottom-2 govuk-link--no-visited-state" href="{% url 'barriers:edit_top_100_progress_update' barrier.id barrier.latest_top_100_progress_update.id %}" aria-label="edit delivery confidence">Edit</a>
                                 </div>
 
                                 <div class="barrier-progress-update__section">
@@ -128,7 +128,7 @@
                                     {% for item in barrier.next_steps_items %}
                                         {% if item.status != "COMPLETED" %}
                                             <div class="govuk-!-margin-bottom-2">
-                                                <a class="" href="{% url 'barriers:edit_next_steps' barrier.id item.id %}">
+                                                <a class="govuk-link--no-visited-state" href="{% url 'barriers:edit_next_steps' barrier.id item.id %}">
                                                     <h4 class="govuk-!-margin-top-2 govuk-!-margin-bottom-1">{{item.next_step_item}}</h4>
                                                 </a>
                                                 {{item.next_step_owner}}
@@ -140,13 +140,13 @@
                                     {% endfor %}
 
                                     <div class="govuk-!-margin-top-3 govuk-!-margin-bottom-3">
-                                        <a class="" href="{% url 'barriers:list_next_steps' barrier.id %}">View all steps</a>
+                                        <a class="govuk-link--no-visited-state" href="{% url 'barriers:list_next_steps' barrier.id %}">View all steps</a>
                                     </div>
                                 </div>
 
                                 <div class="barrier-progress-update__section barrier-progress-update__section__clear barrier-progress-update__section__dates">
 
-                                    <a class="" href="{% url 'barriers:list_top_100_progress_update' barrier.id %}">View previous updates</a>
+                                    <a class="govuk-link--no-visited-state" href="{% url 'barriers:list_top_100_progress_update' barrier.id %}">View previous updates</a>
                                     {% timezone "Europe/London" %}
                                     <h4 class="barrier-progress-update__section__heading">
                                         Date created: <span class="barrier-progress-update__section__date">
@@ -212,8 +212,8 @@
                                 </div>
 
                                 <div class="barrier-progress-update__actions">
-                                    <a class="" href="{% url 'barriers:edit_barrier_fund_progress_update' barrier.id barrier.latest_programme_fund_progress_update.id %}">Edit</a>
-                                    <a class="" href="{% url 'barriers:list_barrier_fund_progress_update' barrier.id %}">View previous updates</a>
+                                    <a class="govuk-link--no-visited-state" href="{% url 'barriers:edit_barrier_fund_progress_update' barrier.id barrier.latest_programme_fund_progress_update.id %}" aria-label="edit progress update">Edit</a>
+                                    <a class="govuk-link--no-visited-state" href="{% url 'barriers:list_barrier_fund_progress_update' barrier.id %}">View previous updates</a>
                                 </div>
 
                             </div>
@@ -228,13 +228,13 @@
                 {% if barrier.estimated_resolution_date %}
                     {{ barrier.estimated_resolution_date|date:"j F Y" }}
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}" aria-label="edit estimated resolution date">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No estimated resolution date</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}" class="summary-group__list__value__add">Add estimated resolution date if applicable</a>
+                        <a href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add estimated resolution date if applicable</a>
                     {% endif %}
                 {% endif %}
 
@@ -258,13 +258,13 @@
                 {% if barrier.start_date %}
                     {{ barrier.start_date|date:"F Y" }}
                     {% if not barrier.archived %}
-                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_start_date' barrier.id %}">Edit</a>
+                        <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_start_date' barrier.id %}" aria-label="edit start date">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No start date</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_start_date' barrier.id %}" class="summary-group__list__value__add">Add Barrier Start Date</a>
+                        <a href="{% url 'barriers:edit_start_date' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add Barrier Start Date</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -277,13 +277,13 @@
                     {% if barrier.caused_by_trading_bloc is not None %}
                         {{ barrier.caused_by_trading_bloc|yesno:"Yes,No" }}
                         {% if not barrier.archived %}
-                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_caused_by_trading_bloc' barrier.id %}">Edit</a>
+                        <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_caused_by_trading_bloc' barrier.id %}" aria-label="edit if barrier was caused by a trading block">Edit</a>
                         {% endif %}
                     {% else %}
                         {% if barrier.archived %}
                             <span class="summary-group__list__value__none">No information</span>
                         {% else %}
-                            <a href="{% url 'barriers:edit_caused_by_trading_bloc' barrier.id %}" class="summary-group__list__value__add">Add information</a>
+                            <a href="{% url 'barriers:edit_caused_by_trading_bloc' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add information</a>
                         {% endif %}
                     {% endif %}
                 </dd>
@@ -305,13 +305,13 @@
                         </ul>
                     {% endif %}
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_companies' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_companies' barrier.id %}" aria-label="edit companies known to be affected">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No companies</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_companies' barrier.id %}" class="summary-group__list__value__add">Add one or more companies</a>
+                        <a href="{% url 'barriers:edit_companies' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add one or more companies</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -336,13 +336,13 @@
                     {% endfor %}
 
                     {% if not barrier.archived %}
-                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_commodities' barrier.id %}">Edit</a>
+                        <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_commodities' barrier.id %}" aria-label="edit HS commodity codes">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No HS commodity codes</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="summary-group__list__value__add">Add HS commodity codes</a>
+                        <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add HS commodity codes</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -352,13 +352,13 @@
                 {% if barrier.trade_direction.name %}
                     {{ barrier.trade_direction.name }}
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_trade_direction' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_trade_direction' barrier.id %}" aria-label="edit trade direction">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No trade direction</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_trade_direction' barrier.id %}" class="summary-group__list__value__add">Add the trade direction</a>
+                        <a href="{% url 'barriers:edit_trade_direction' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add the trade direction</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -373,7 +373,7 @@
                     {% endif %}
                 {% endif %}
                 {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:add_main_sector' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:add_main_sector' barrier.id %}"  aria-label="edit main sector">Edit</a>
                 {% endif %}
             </dd>
             <dt class="summary-group__list__key">Other sector{{ barrier.sectors|pluralize }} affected:</dt>
@@ -385,13 +385,13 @@
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_sectors' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_sectors' barrier.id %}" aria-label="edit other sectors">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No sectors</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="summary-group__list__value__add">Add one or more sectors</a>
+                        <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add one or more sectors</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -405,13 +405,13 @@
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_gov_orgs' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_gov_orgs' barrier.id %}" aria-label="edit government organisations related to the barrier">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No related government organisations</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="summary-group__list__value__add">Add government organisations</a>
+                        <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add government organisations</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -425,13 +425,13 @@
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_categories' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_categories' barrier.id %}" aria-label="edit categories">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No barrier categories</span>
                     {% else %}
-                        <a href="{% url 'barriers:add_category' barrier.id %}" class="summary-group__list__value__add">Add barrier category</a>
+                        <a href="{% url 'barriers:add_category' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add barrier category</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -445,13 +445,13 @@
                         {% endfor %}
                     </ul>
                     {% if not barrier.archived %}
-                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
+                        <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_export_types' barrier.id %}" aria-label="edit export type">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No barrier categories</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_export_types' barrier.id %}" class="summary-group__list__value__add">Add barrier export type</a>
+                        <a href="{% url 'barriers:edit_export_types' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add barrier export type</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -460,7 +460,7 @@
             <dd class="summary-group__list__value">
                 {{ barrier.export_description }}
                 {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_export_types' barrier.id %}">Edit</a>
+                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_export_types' barrier.id %}" aria-label="edit goods, services, or investments affected">Edit</a>
                 {% endif %}
             </dd>
 
@@ -468,7 +468,7 @@
             <dd class="summary-group__list__value">
                 {{ barrier.source.name }}{% if barrier.other_source %}<br>{{ barrier.other_source }}{% endif %}
                 {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_source' barrier.id %}">Edit</a>
+                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_source' barrier.id %}" aria-label="edit information source">Edit</a>
                 {% endif %}
             </dd>
 
@@ -478,13 +478,13 @@
                 {% if barrier.wto_profile %}
                     {{ barrier.wto_profile.status_text }}
                     {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_wto_status' barrier.id %}">Edit</a>
+                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_wto_status' barrier.id %}" aria-label="edit W.T.O. status">Edit</a>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No information</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_wto_status' barrier.id %}" class="summary-group__list__value__add">Add information</a>
+                        <a href="{% url 'barriers:edit_wto_status' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add information</a>
                     {% endif %}
                 {% endif %}
             </dd>
@@ -493,14 +493,14 @@
             <dd class="summary-group__list__value">
                 {{ barrier.reported_by.name }}
             </dd>
-        </dl>
+        </div>
 
         {% if not barrier.archived and not barrier.public_barrier.is_published %}
             <a href="{% url 'barriers:archive' barrier.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive this barrier</a>
         {% endif %}
 
         {% if not barrier.archived and barrier.public_barrier.is_published %}
-            <p>Archiving is disabled. Please remove the barrier from <a href="{% url 'barriers:public_barrier_detail' barrier.id %}">Public View</a> prior to archiving.</p>
+            <p>Archiving is disabled. Please remove the barrier from <a href="{% url 'barriers:public_barrier_detail' barrier.id %}" class="govuk-link--no-visited-state">Public View</a> prior to archiving.</p>
             <a class="govuk-button govuk-button--secondary" data-module="govuk-button" disabled="true">Archive this barrier</a>
         {% endif %}
 
@@ -547,7 +547,7 @@
                     <span class="barrier-status-details__heading__caption">on {{ barrier.status_date|date:"j F Y" }}</span></h2>
                 <h3 class="barrier-status-details__sub-heading">Summary</h3>
                 <p class="barrier-status-details__text">{{ barrier.status_summary|linebreaksbr }}</p>
-                <a href="{% url 'barriers:change_status' barrier.id %}"> Edit status</a>
+                <a href="{% url 'barriers:change_status' barrier.id %}" class="govuk-link--no-visited-state"> Edit status</a>
             </div>
 
         <div class="information-completeness">
@@ -555,36 +555,36 @@
                 Information completeness
             </h2>
             <h3 class="information-completeness__percentage">{{ barrier.completion_percent }}%</h3>
-            <h4 class="outstanding-information__header">Outstanding infomation:</h4>
+            <h4 class="outstanding-information__header">Outstanding information:</h4>
             <ul class="outstanding-information">
                 {% if not barrier.location %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_location' barrier.id %}">Location of the barrier</a>
+                    <a href="{% url 'barriers:edit_location' barrier.id %}" class="govuk-link--no-visited-state">Location of the barrier</a>
                 </li>
                 {% endif %}
                 {% if not barrier.sectors and not barrier.all_sectors %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_sectors' barrier.id %}">Sectors affected</a>
+                    <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="govuk-link--no-visited-state">Sectors affected</a>
                 </li>
                 {% endif %}
                 {% if not barrier.summary %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_summary' barrier.id %}">Barrier description</a>
+                    <a href="{% url 'barriers:edit_summary' barrier.id %}" class="govuk-link--no-visited-state">Barrier description</a>
                 </li>
                 {% endif %}
                 {% if not barrier.source %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_source' barrier.id %}">Information source</a>
+                    <a href="{% url 'barriers:edit_source' barrier.id %}" class="govuk-link--no-visited-state">Information source</a>
                 </li>
                 {% endif %}
                 {% if not barrier.categories %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:add_category' barrier.id %}">Barrier category</a>
+                    <a href="{% url 'barriers:add_category' barrier.id %}" class="govuk-link--no-visited-state">Barrier category</a>
                 </li>
                 {% endif %}
                 {% if not barrier.commodities %}
                 <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_commodities' barrier.id %}">HS codes</a>
+                    <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="govuk-link--no-visited-state">HS codes</a>
                 </li>
                 {% endif %}
             </ul>
@@ -598,7 +598,7 @@
         {% block note_form %}
             {% if not barrier.archived %}
                 <p class="govuk-!-margin-top-0">You can mention someone in your note by typing '@' and their name, then selecting their email address from the list. They will get a notification with a link to your note.</p>
-                <a class="govuk-button button--primary" href="{% url 'barriers:add_note' barrier.id %}">Add note</a>
+                <a class="govuk-button button--primary govuk-link--no-visited-state" href="{% url 'barriers:add_note' barrier.id %}">Add note</a>
             {% endif %}
         {% endblock %}
 
@@ -621,7 +621,7 @@
                         </p>
                     {% endif %}
 
-                    <a href="{% url 'barriers:add_note' barrier.id %}">Add your first note</a>
+                    <a href="{% url 'barriers:add_note' barrier.id %}" class="govuk-link--no-visited-state">Add your first note</a>
                 </li>
             {% endfor %}
         </ol>
