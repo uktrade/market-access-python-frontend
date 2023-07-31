@@ -119,7 +119,7 @@ ma.components.CharacterCount = (function (doc, jessie) {
                 "afterend",
                 '<span id="' +
                     elementId +
-                    '-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>'
+                    '-info" class="govuk-hint govuk-character-count__message"></span>'
             );
             this.describedBy = countElement.getAttribute("aria-describedby");
             this.describedByInfo = this.describedBy + " " + elementId + "-info";
