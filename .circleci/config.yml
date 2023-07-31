@@ -2,7 +2,11 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@3
+
 jobs:
     tests:
         docker:
@@ -73,9 +77,12 @@ jobs:
                       - /home/circleci/.cache/pypoetry/virtualenvs
 
             - run:
-                  name: run tests
+                  name: run tests & save coverage
                   command: |
                       poetry run pytest tests
+                      poetry run coverage json
+
+            - codecov/upload
 
             - store_artifacts:
                   path: test-reports

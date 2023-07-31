@@ -35,6 +35,11 @@
     {# The default og:image is added below head so that scrapers see any custom metatags first, and this is just a fallback #}
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
     <meta property="og:image" content="{% webpack_static '../images/govuk-opengraph-image.png' %}">
+    <script>
+        window.dataLayer = window.dataLayer || [];
+    </script>
+    {% block gtag_events %}
+    {% endblock gtag_events %}
   </head>
   <body class="govuk-template__body {{ bodyClasses }}">
     <!-- Google Tag Manager (noscript) -->

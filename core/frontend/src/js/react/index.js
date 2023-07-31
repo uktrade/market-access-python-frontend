@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import CommodityForm from "./commodities/CommodityForm";
+import CompaniesForm from "./companies/CompaniesForm";
 import LocationFilter from "./search/LocationFilter";
 import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
@@ -12,6 +13,7 @@ import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
+import GDSCheckboxes from "./gds/Checkboxes";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -31,6 +33,16 @@ function renderCommodityForm(
             helpText={helpText}
             isReportJourney={isReportJourney}
             nextUrl={nextUrl}
+        />,
+        document.getElementById("react-app")
+    );
+}
+
+function renderCompaniesForm(searchLabel, searchHelpText) {
+    ReactDOM.render(
+        <CompaniesForm
+            searchLabel={searchLabel}
+            searchHelpText={searchHelpText}
         />,
         document.getElementById("react-app")
     );
@@ -163,6 +175,7 @@ function renderRisksAndMitigationForm() {
 
 export {
     renderCommodityForm,
+    renderCompaniesForm,
     renderLocationFilter,
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
@@ -173,4 +186,5 @@ export {
     renderAsyncSearchResults,
     GDSTabs,
     GDSRadios,
+    GDSCheckboxes,
 };

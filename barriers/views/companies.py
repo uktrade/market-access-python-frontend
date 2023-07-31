@@ -1,3 +1,6 @@
+import json
+import logging
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
@@ -12,6 +15,8 @@ from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_A
 from utils.exceptions import APIException
 
 from .mixins import BarrierMixin
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierSearchCompany(BarrierMixin, FormView):
@@ -83,31 +88,35 @@ class BarrierEditCompanies(BarrierMixin, FormView):
     use_session_companies = False
 
     def get(self, request, *args, **kwargs):
-        if not self.use_session_companies:
-            request.session["companies"] = self.barrier.companies
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["companies"] = self.request.session.get("companies", [])
+
+        # Build JSON with fields matching companies house keys
+        companies_context_list = []
+        if self.barrier.companies:
+            for company in self.barrier.companies:
+                companies_context_list.append(
+                    {
+                        "company_number": company["id"],
+                        "title": company["name"],
+                    }
+                )
+
+        related_organisations_context_list = []
+        if self.barrier.related_organisations:
+            for related_organisation in self.barrier.related_organisations:
+                related_organisations_context_list.append(related_organisation["name"])
+
+        context_data["companies_affected"] = json.dumps(companies_context_list)
+        context_data["unrecognised_company"] = json.dumps(
+            related_organisations_context_list
+        )
         return context_data
 
-    def get_initial(self):
-        companies = self.request.session.get("companies", [])
-        return {
-            "companies": [company["id"] for company in companies],
-        }
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
-        kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["companies"] = self.request.session.get("companies", [])
-        return kwargs
-
     def form_valid(self, form):
-        form.save()
-        del self.request.session["companies"]
+        form.save(self.barrier.id, self.request.session.get("sso_token"))
         return super().form_valid(form)
 
     def get_success_url(self):
