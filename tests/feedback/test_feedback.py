@@ -32,7 +32,10 @@ class FeedbackTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert "satisfaction" in form.errors
 
-    def test_csat_redirect_requires_satisfaction_level(self):
+    @patch("utils.api.resources.FeedbackResource.send_feedback")
+    def test_csat_redirect_requires_satisfaction_level(
+        self, mock_send_feedback_method: Mock
+    ):
         url = reverse(
             "core:feedback",
         )
@@ -44,6 +47,7 @@ class FeedbackTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert "satisfaction" in form.errors
+        mock_send_feedback_method.assert_not_called()
 
     @patch("utils.api.resources.FeedbackResource.send_feedback")
     def test_csat_redirect_with_satisfaction_level(
