@@ -35,9 +35,6 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
     def test_load_summary_page(
         self, commodity_api_call_patch, report_get_cleaned_data_patch, report_get_patch
     ):
-
-        # NEED TO STUB: self.client.commodities.list
-
         # Create mock session data - use named tuple method to create object, not dict
         session_mock = namedtuple("session_mock", "prefix data extra_data")
         session_data = session_mock(
@@ -145,7 +142,7 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
         }
         export_types_cleaned_data = {
             "export_types": ["goods"],
-            "export_description": "cvbcvbcvb",
+            "export_description": "An export description",
             "code": "",
             "location": "",
             "codes": ["1002000000"],
