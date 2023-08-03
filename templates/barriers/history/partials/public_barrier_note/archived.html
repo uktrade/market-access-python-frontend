@@ -8,7 +8,7 @@
 {% elif item.old_value.archived is False and item.new_value.archived is True %}
     <div class="history-item__old-value">
         <span class="diff__del" tabindex="0">
-            <p class="govuk-visually-hidden">new value: </p>
+            <p class="govuk-visually-hidden">old value: </p>
             {{ item.new_value.text|linebreaksbr }}
         </span>
     </div>
