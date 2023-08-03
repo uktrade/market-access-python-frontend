@@ -50,9 +50,9 @@ class FeedbackForm(forms.Form):
         cleaned_data = super().clean()
         satisfaction = cleaned_data.get("satisfaction", None)
         csat_submission = cleaned_data.get("csat_submission", False)
-        if csat_submission == "False" and (satisfaction is None or satisfaction == ""):
+        if not satisfaction:
             self.add_error("satisfaction", "You must select a level of satisfaction")
-        if csat_submission == "True":
+        elif csat_submission == "True":
             client = MarketAccessAPIClient(self.token)
             feedback = client.feedback.send_feedback(
                 token=self.token, **self.cleaned_data
