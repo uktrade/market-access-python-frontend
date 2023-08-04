@@ -74,7 +74,7 @@ class BarrierViewTestCase(MarketAccessTestCase):
         # Only APPROVED and REMOVED should be displayed
         mock_history.return_value = [HistoryItem(result) for result in self.history]
         top_priority_history_item_class = (
-            '<h4 class="history-item__field">PB100 Priority Status</h4>'
+            '<h4 class="history-item__field" tabindex="0">PB100 Priority Status</h4>'
         )
         response = self.client.get(
             reverse("barriers:history", kwargs={"barrier_id": self.barrier["id"]})

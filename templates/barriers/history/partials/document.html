@@ -1,11 +1,17 @@
 {% if item.old_value %}
-    <div class="history-item__value">
-        <a class="history-item__link history-item__link--old" href="{% url 'barriers:download_document' item.old_value.id %}">{{ item.old_value.name }}</a>
+    <div class="history-item__value" tabindex="0">
+        <a class="history-item__link history-item__link--old" href="{% url 'barriers:download_document' item.old_value.id %}">
+            <p class="govuk-visually-hidden">old value: </p>
+            {{ item.old_value.name }}
+        </a>
     </div>
 {% endif %}
 
 {% if item.new_value %}
-    <div class="history-item__value">
-        <a class="history-item__link history-item__link--new" href="{% url 'barriers:download_document' item.new_value.id %}">{{ item.new_value.name }}</a>
+    <div class="history-item__value" tabindex="0">
+        <a class="history-item__link history-item__link--new" href="{% url 'barriers:download_document' item.new_value.id %}">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value.name }}
+        </a>
     </div>
 {% endif %}
