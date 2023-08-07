@@ -109,7 +109,6 @@
                 <input type="hidden" name="countries" value="{{ confirmed_commodity.country.id }}" />
                 <input type="hidden" name="trading_blocs" value="{{ confirmed_commodity.trading_bloc.code }}" />
             {% endfor %}
-            {% include 'reports/partials/new_report_submit_buttons.html' with has_next=has_next next_url=next_url %}
         </form>
     </div>
 
