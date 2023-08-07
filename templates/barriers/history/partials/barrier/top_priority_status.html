@@ -1,5 +1,6 @@
 {% if item.new_value != None %}
-    <div class="history-item__new-value">
+    <div class="history-item__new-value" tabindex="0">
+        <p class="govuk-visually-hidden">new value: </p>
         {% if item.new_value.value == "APPROVAL_PENDING" %}
             <span class="diff__ins">
                 Top 100 Approval Pending

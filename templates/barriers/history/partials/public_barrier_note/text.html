@@ -1,1 +1,4 @@
-<div class="history-item__new-value">{{ item.diff|safe|linebreaksbr }}</div>
+<div class="history-item__new-value" tabindex="0">
+    <p class="govuk-visually-hidden">new value: </p>
+    {{ item.diff|safe|linebreaksbr }}
+</div>
