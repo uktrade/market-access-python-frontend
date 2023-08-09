@@ -9,8 +9,8 @@ from django.conf import settings
 from django.http import QueryDict
 
 from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER
-from utils.helpers import format_dict_for_url_querystring
 from utils.forms import DateRangeField
+from utils.helpers import format_dict_for_url_querystring
 
 logger = logging.getLogger(__name__)
 
