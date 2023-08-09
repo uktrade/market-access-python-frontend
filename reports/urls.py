@@ -1,31 +1,7 @@
 from django.urls import path
 
-# from barriers.views.report_barrier import ReportBarrierAnswersView
-# from reports.location_views import NewReportBarrierLocationMasterView
 from reports.report_barrier_view import ReportBarrierWizardView
-
-# from reports.report_views import (
-#    NewReportBarrierAboutView,
-#    NewReportBarrierCategoriesAddView,
-#    NewReportBarrierCategoriesDeleteView,
-#    NewReportBarrierCategoriesView,
-#    NewReportBarrierCommoditiesView,
-#    NewReportBarrierHasSectorsView,
-#    NewReportBarrierLocationView,
-#    NewReportBarrierSectorsAddAllView,
-#    NewReportBarrierSectorsAddView,
-#    NewReportBarrierSectorsRemoveView,
-#    NewReportBarrierSectorsView,
-#    NewReportBarrierStatusView,
-#    NewReportBarrierSummaryView,
-#    NewReportBarrierTradeDirectionView,
-#    ReportDetail,
-# )
-from reports.views import (  # NewReportBarrierAdminAreasView,; NewReportBarrierCausedByTradingBlocView,; NewReportBarrierLocationAddAdminAreasView,; NewReportBarrierLocationHasAdminAreasView,; NewReportBarrierLocationRemoveAdminAreasView,; NewReportStartRedirect,
-    DeleteReport,
-    DraftBarriers,
-    NewReport,
-)
+from reports.views import DeleteReport, DraftBarriers, NewReport
 
 app_name = "reports"
 

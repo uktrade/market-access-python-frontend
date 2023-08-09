@@ -8,7 +8,6 @@ import { getCSRFToken, getCheckboxValues } from "./utils";
 import MultiSelectFilter from "./search/MultiSelectFilter";
 import TextAreaWithMentions from "./forms/TextAreaWithMentions";
 import RisksAndMitigationForm from "./forms/RisksAndMitigationForm";
-import { renderLocationForm } from "./reports/LocationForm";
 import EmailSearchAutocomplete from "./forms/EmailSearchAutocomplete";
 import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
@@ -180,7 +179,6 @@ export {
     renderMultiSelectFilter,
     renderTextAreaWithMentions,
     renderInputSelectWithMentions,
-    renderLocationForm,
     renderEmailSearchAutocomplete,
     renderRisksAndMitigationForm,
     renderAsyncSearchResults,
