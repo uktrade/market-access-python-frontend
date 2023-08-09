@@ -1,0 +1,56 @@
+$default-spacing-unit: 5px;
+
+.date-input-filter {
+
+	transform: translateZ(0); // Enforcing GPU acceleration fixes overflow cropping caused by CSS columns
+	border-bottom: 1px solid $govuk-mid-grey;
+	max-height: govuk-em( 200, 16 );
+	overflow-y: auto;
+	padding-left: 1rem;
+	background-color: #fff;
+
+	&:last-child {
+		border-bottom: 0;
+	}
+
+	&__label {
+		display: block;
+		font-size: 1rem;
+    line-height: 1.25;
+		margin-bottom: $default-spacing-unit;
+		&.title {
+			font-weight: bold;
+		}
+	}
+
+	&__item {
+		position: relative;
+		background-color: white;
+		border-bottom: 1px solid $govuk-mid-grey;
+
+		&:last-of-type {
+			border-bottom: none;
+		}
+	}
+
+	&__input {
+		border: 2px solid black;
+    background-color: #fff;
+		height: 1.5rem;
+		width: 5rem;
+		&.month {
+			width: 2rem;
+		}
+	}
+
+	& + & {
+		margin-top: 0;
+	}
+}
+
+.govuk-hint-small {
+	font-size: 0.9rem;
+  line-height: 1.25;
+	display: block;
+	color: $govuk-dark-grey;
+}
