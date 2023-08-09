@@ -528,7 +528,10 @@ class DateRangeField(forms.MultiValueField):
     def clean(self, value):
         # First, ensure that the parent's clean method is called for any built-in cleaning and validation
         value = super().clean(value)
-        # start_date, end_date = value
-        # if start_date and end_date and end_date <= start_date:
-        #     raise forms.ValidationError("The end date must be after the start date.")
+        if value:
+            start_date, end_date = value
+            if start_date and end_date and end_date <= start_date:
+                raise forms.ValidationError(
+                    "The end date must be after the start date."
+                )
         return value

@@ -617,10 +617,6 @@ class BarrierSearchForm(forms.Form):
             to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
             to_date = to_year + "-" + to_month + "-" + str(to_date_day)
 
-            print("------------start-date-value------------")
-            # print(from_date)
-            # print(to_date)
-
             return from_date + "," + to_date
         else:
             return []
