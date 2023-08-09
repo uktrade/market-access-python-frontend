@@ -13,10 +13,6 @@ class BarrierHistory(BarrierMixin, TemplateView):
 
         full_history = self.get_full_history()
 
-        for item in full_history[:]:
-            # This loop allows us to exclude certain history items from the display if un-wanted
-            pass
-
         context_data["history_items"] = full_history
         return context_data
 
