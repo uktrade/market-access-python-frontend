@@ -492,3 +492,43 @@ class CommodityCodeWidget(forms.MultiWidget):
                 has_values = True
                 formatted_values.insert(0, value.zfill(2))
         return "".join(formatted_values)
+
+
+class DateRangeWidget(forms.MultiWidget):
+    def __init__(self, attrs=None):
+        widgets = [
+            MonthYearWidget(attrs=attrs),
+            MonthYearWidget(attrs=attrs),
+        ]
+        super().__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value:
+            return value.split(",")
+        return [None, None]
+
+    def format_output(self, rendered_widgets):
+        return "-".join(rendered_widgets)
+
+
+class DateRangeField(forms.MultiValueField):
+    def __init__(self, *args, **kwargs):
+        fields = [
+            MonthYearField(),
+            MonthYearField(),
+        ]
+        super().__init__(fields, *args, **kwargs)
+        self.widget = DateRangeWidget()
+
+    def compress(self, data_list):
+        if data_list and all(data_list):
+            return ",".join(map(str, data_list))
+        return None
+
+    def clean(self, value):
+        # First, ensure that the parent's clean method is called for any built-in cleaning and validation
+        value = super().clean(value)
+        # start_date, end_date = value
+        # if start_date and end_date and end_date <= start_date:
+        #     raise forms.ValidationError("The end date must be after the start date.")
+        return value

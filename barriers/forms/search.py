@@ -10,6 +10,7 @@ from django.http import QueryDict
 
 from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER
 from utils.helpers import format_dict_for_url_querystring
+from utils.forms import DateRangeField
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 class BarrierSearchForm(forms.Form):
     search_id = forms.UUIDField(required=False, widget=forms.HiddenInput())
     search = forms.CharField(
-        label="Search barrier title, summary, code or PID",
+        label="Search barrier title, summary, company, export description, code or PID",
         max_length=255,
         required=False,
     )
@@ -131,6 +132,15 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
+    export_types = forms.MultipleChoiceField(
+        label="Export types",
+        choices=(
+            ("goods", "Goods"),
+            ("services", "Services"),
+            ("investments", "Investments"),
+        ),
+        required=False,
+    )
     has_action_plan = forms.BooleanField(label="Has action plan", required=False)
     user = forms.BooleanField(
         label="Barriers I have created",
@@ -221,6 +231,20 @@ class BarrierSearchForm(forms.Form):
         ),
     )
 
+    start_date = DateRangeField(label="Barrier Start date", required=False)
+    start_date_from_month = forms.CharField(
+        label="Barrier Start date from",
+        help_text="Example, 01 2021",
+        required=False,
+    )
+    start_date_from_year = forms.CharField(required=False)
+    start_date_to_month = forms.CharField(
+        label="Barrier Start date to",
+        help_text="Example, 01 2022",
+        required=False,
+    )
+    start_date_to_year = forms.CharField(required=False)
+
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
         "country": {
@@ -287,6 +311,11 @@ class BarrierSearchForm(forms.Form):
             "commodity_code": data.getlist("commodity_code"),
             "commercial_value_estimate": data.getlist("commercial_value_estimate"),
             "ordering": data.get("ordering"),
+            "start_date_from_month": data.get("start_date_from_month"),
+            "start_date_from_year": data.get("start_date_from_year"),
+            "start_date_to_month": data.get("start_date_to_month"),
+            "start_date_to_year": data.get("start_date_to_year"),
+            "export_types": data.getlist("export_types"),
         }
 
         for status_value in STATUS_WITH_DATE_FILTER:
@@ -531,6 +560,8 @@ class BarrierSearchForm(forms.Form):
         params["ordering"] = self.cleaned_data.get(
             "ordering", settings.API_BARRIER_LIST_DEFAULT_SORT
         )
+        params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
+        params["start_date"] = self.format_start_date()
 
         return {k: v for k, v in params.items() if v}
 
@@ -564,6 +595,33 @@ class BarrierSearchForm(forms.Form):
 
             return from_date + "," + to_date
 
+        else:
+            return []
+
+    def format_start_date(self):
+        """
+        Format the start date input to be compatible with the API's queryset filter
+        Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates
+        Users only input the month and year, so we need to generate a day value.
+        """
+        from_year = self.cleaned_data.get("start_date_from_year")
+        from_month = self.cleaned_data.get("start_date_from_month")
+        to_year = self.cleaned_data.get("start_date_to_year")
+        to_month = self.cleaned_data.get("start_date_to_month")
+
+        if from_year and from_month and to_year and to_month:
+
+            from_date = from_year + "-" + from_month + "-01"
+
+            # calendar has function to identify last day of a given month in a year
+            to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
+            to_date = to_year + "-" + to_month + "-" + str(to_date_day)
+
+            print("------------start-date-value------------")
+            # print(from_date)
+            # print(to_date)
+
+            return from_date + "," + to_date
         else:
             return []
 

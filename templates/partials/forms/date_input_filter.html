@@ -1,0 +1,71 @@
+{% if from_group_classes %}
+  <div id="{{ field.name }}" class="govuk-form-group {{ form_group_classes }}">
+{% else %}
+  <div id="{{ field.name }}" class="govuk-form-group filter-group">
+{% endif %}
+<fieldset class="govuk-fieldset filter-group__inner">
+  <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
+    {{ field.label }}
+  </legend>
+
+  <div class="date-input-filter govuk-!-width-full{% if extra_classes %} {{ extra_classes }}{% endif %}">
+    <!-- From Date Section -->
+    <div class="date-input-filter__item">
+      <div class="govuk-form-group">
+        <label class="govuk-label date-input-filter__label">
+          Date from
+        </label>
+        <div id="start-date-hint" class="govuk-hint">
+          Example, 01 2021
+        </div>
+        <div class="govuk-date-input">
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="{{ field.name }}_from_month">
+                Month
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ field.name }}_from_month" name="{{ field.name }}_from_month" type="text" inputmode="numeric">
+            </div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="{{ field.name }}_from_year">
+                Year
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ field.name }}_from_year" name="{{ field.name }}_from_year" type="text" inputmode="numeric">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- To Date Section -->
+      <div class="date-input-filter__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label date-input-filter__label">
+            Date to
+          </label>
+          <div id="start-date-hint" class="govuk-hint">
+            Example, 01 2022
+          </div>
+          <div class="govuk-date-input" id="{{ field.name }}_to_month">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="{{ field.name }}_to_month">
+                  Month
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ field.name }}_to_month" name="{{ field.name }}_to_month" type="text" inputmode="numeric">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="{{ field.name }}_to_year">
+                  Year
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ field.name }}_to_year" name="{{ field.name }}_to_year" type="text" inputmode="numeric">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
