@@ -63,7 +63,7 @@
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
                 <!-- include date filters -->
-                {% include 'partials/forms/date_input_filter.html' with field=form.start_date %}
+                {% include 'partials/forms/start_date_filter.html' with field=form.start_date %}
 
                 <!-- Include JS component for resolved date filtering -->
                 {% render_bundle 'date_filter_component' %}
