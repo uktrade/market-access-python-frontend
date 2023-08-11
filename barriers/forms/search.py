@@ -499,6 +499,11 @@ class BarrierSearchForm(forms.Form):
                     params.pop(f"resolved_date_from_year_{status}", None)
                     params.pop(f"resolved_date_to_month_{status}", None)
                     params.pop(f"resolved_date_to_year_{status}", None)
+            elif field_name == "start_date":
+                params.pop("start_date_from_month", None)
+                params.pop("start_date_from_year", None)
+                params.pop("start_date_to_month", None)
+                params.pop("start_date_to_year", None)
 
             del params[field_name]
 
@@ -675,7 +680,7 @@ class BarrierSearchForm(forms.Form):
             key = self.get_filter_key(name)
             if key not in filters:
                 readable_value = self.get_filter_readable_value(name, value)
-                if readable_value == "":
+                if readable_value == "" or readable_value is None:
                     # Do not add filter tag if the readable value is empty, move to next filter
                     continue
                 filters[key] = {

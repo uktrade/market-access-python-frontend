@@ -348,7 +348,6 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         )
 
         result = client_obj.get_company_from_id("1")
-        print(result)
 
         assert type(result) == CompanyHouseCompany
         assert result.company_name == "CRUCIAL DETAILS"
