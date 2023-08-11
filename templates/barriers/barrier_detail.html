@@ -354,21 +354,25 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Main sector affected:</dt>
+            <dt class="summary-group__list__key">Sectors affected:</dt>
             <dd class="summary-group__list__value">
+                <span>Main sector affected:</span>
                 {% if barrier.main_sector or barrier.all_sectors %}
                     {% if barrier.all_sectors %}
                         <span class="summary-group__list__value__list__item">All sectors</span>
                     {% else %}
-                        <span class="summary-group__list__value__list__item">{{ barrier.main_sector.name|default:"Unknown"}}</span>
+                        <ul class="summary-group__list__value__list">
+                            <li class="summary-group__list__value__list__item">{{ barrier.main_sector.name|default:"Unknown"}}</li>
+                        </ul>
                     {% endif %}
+                    {% if not barrier.archived %}
+                        <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:add_main_sector' barrier.id %}"  aria-label="edit main sector">Edit</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'barriers:add_main_sector' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add main sectors</a>
                 {% endif %}
-                {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:add_main_sector' barrier.id %}"  aria-label="edit main sector">Edit</a>
-                {% endif %}
-            </dd>
-            <dt class="summary-group__list__key">Other sector{{ barrier.sectors|pluralize }} affected:</dt>
-            <dd class="summary-group__list__value">
+
+                <span>Other sectors affected:</span>
                 {% if barrier.sectors %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.sectors %}
