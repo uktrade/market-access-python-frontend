@@ -2,7 +2,6 @@
 
 {% load activity %}
 {% load static %}
-{% load completeness %}
 {% load render_bundle from webpack_loader %}
 {% load dates %}
 {% load tz %}
@@ -60,14 +59,6 @@
                 {{ barrier.summary|escape|linebreaksbr }}
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_summary' barrier.id %}" aria-label="edit barrier description">Edit</a>
-                {% endif %}
-            </dd>
-
-            <dt class="summary-group__list__key">Barrier type</dt>
-            <dd class="summary-group__list__value">
-                {{ barrier.term.name }}
-                {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_term' barrier.id %}" aria-label="edit barrier type">Edit</a>
                 {% endif %}
             </dd>
 
@@ -464,14 +455,6 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Information source</dt>
-            <dd class="summary-group__list__value">
-                {{ barrier.source.name }}{% if barrier.other_source %}<br>{{ barrier.other_source }}{% endif %}
-                {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_source' barrier.id %}" aria-label="edit information source">Edit</a>
-                {% endif %}
-            </dd>
-
             <dt class="summary-group__list__key">Has this barrier been notified to the WTO?</dt>
             <dd class="summary-group__list__value">
 
@@ -552,40 +535,63 @@
 
         <div class="information-completeness">
             <h2 class="section-heading">
-                Information completeness
+                Outstanding information:
             </h2>
-            <h3 class="information-completeness__percentage">{{ barrier.completion_percent }}%</h3>
-            <h4 class="outstanding-information__header">Outstanding information:</h4>
-            <ul class="outstanding-information">
+            <ul>
                 {% if not barrier.location %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_location' barrier.id %}" class="govuk-link--no-visited-state">Location of the barrier</a>
-                </li>
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_location' barrier.id %}" class="govuk-link--no-visited-state">Location of the barrier</a>
+                    </li>
                 {% endif %}
-                {% if not barrier.sectors and not barrier.all_sectors %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="govuk-link--no-visited-state">Sectors affected</a>
-                </li>
+                {% if not barrier.main_sector %}
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:add_main_sector' barrier.id %}" class="govuk-link--no-visited-state">Main sector affected</a>
+                    </li>
                 {% endif %}
                 {% if not barrier.summary %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_summary' barrier.id %}" class="govuk-link--no-visited-state">Barrier description</a>
-                </li>
-                {% endif %}
-                {% if not barrier.source %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_source' barrier.id %}" class="govuk-link--no-visited-state">Information source</a>
-                </li>
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_summary' barrier.id %}" class="govuk-link--no-visited-state">Barrier description</a>
+                    </li>
                 {% endif %}
                 {% if not barrier.categories %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:add_category' barrier.id %}" class="govuk-link--no-visited-state">Barrier category</a>
-                </li>
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:add_category' barrier.id %}" class="govuk-link--no-visited-state">Barrier category</a>
+                    </li>
                 {% endif %}
                 {% if not barrier.commodities %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="govuk-link--no-visited-state">HS codes</a>
-                </li>
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="govuk-link--no-visited-state">HS codes</a>
+                    </li>
+                {% endif %}
+                {% if not barrier.status %}
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:change_status' barrier.id %}" class="govuk-link--no-visited-state">Barrier status</a>
+                    </li>
+                {% endif %}
+                {% if not barrier.start_date %}
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_start_date' barrier.id %}" class="govuk-link--no-visited-state">Barrier start date</a>
+                    </li>
+                {% endif %}
+                {% if not barrier.trade_direction %}
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_trade_direction' barrier.id %}" class="govuk-link--no-visited-state">Barrier trade direction</a>
+                    </li>
+                {% endif %}
+                {% if not barrier.companies %}
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_companies' barrier.id %}" class="govuk-link--no-visited-state">Companies affected</a>
+                    </li>
+                {% endif %}
+                {% if not barrier.export_types %}
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_export_types' barrier.id %}" class="govuk-link--no-visited-state">Export type</a>
+                    </li>
+                {% endif %}
+                {% if not barrier.export_description %}
+                    <li class="outstanding-formation__link">
+                        <a href="{% url 'barriers:edit_export_types' barrier.id %}" class="govuk-link--no-visited-state">Goods, services or investments affected</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
