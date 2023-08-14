@@ -233,17 +233,21 @@ class BarrierSearchForm(forms.Form):
 
     start_date = DateRangeField(label="Barrier Start date", required=False)
     start_date_from_month = forms.CharField(
-        label="Barrier Start date from",
+        label="Barrier Start date from month",
         help_text="Example, 01 2021",
         required=False,
     )
-    start_date_from_year = forms.CharField(required=False)
+    start_date_from_year = forms.CharField(
+        label="Barrier Start date from year", required=False
+    )
     start_date_to_month = forms.CharField(
-        label="Barrier Start date to",
+        label="Barrier Start date to month",
         help_text="Example, 01 2022",
         required=False,
     )
-    start_date_to_year = forms.CharField(required=False)
+    start_date_to_year = forms.CharField(
+        label="Barrier Start date to year", required=False
+    )
 
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
