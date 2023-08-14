@@ -8632,6 +8632,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 9
+    },
+    {
+      "id": 10,
+      "title": "Wales Priority",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 10
     }
   ],
   "barrier_type_categories": {
