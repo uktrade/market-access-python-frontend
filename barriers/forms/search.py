@@ -8,7 +8,7 @@ from django import forms
 from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER, EXPORT_TYPES
+from barriers.constants import DEPRECATED_TAGS, EXPORT_TYPES, STATUS_WITH_DATE_FILTER
 from utils.forms import DateRangeField
 from utils.helpers import format_dict_for_url_querystring
 
