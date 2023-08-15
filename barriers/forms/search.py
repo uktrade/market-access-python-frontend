@@ -8,7 +8,7 @@ from django import forms
 from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER
+from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER, EXPORT_TYPES
 from utils.forms import DateRangeField
 from utils.helpers import format_dict_for_url_querystring
 
@@ -134,11 +134,7 @@ class BarrierSearchForm(forms.Form):
     )
     export_types = forms.MultipleChoiceField(
         label="Export types",
-        choices=(
-            ("goods", "Goods"),
-            ("services", "Services"),
-            ("investments", "Investments"),
-        ),
+        choices=EXPORT_TYPES,
         required=False,
     )
     has_action_plan = forms.BooleanField(label="Has action plan", required=False)
