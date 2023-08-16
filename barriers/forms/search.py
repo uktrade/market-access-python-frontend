@@ -133,7 +133,7 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     export_types = forms.MultipleChoiceField(
-        label="Export types",
+        label="Export type",
         choices=EXPORT_TYPES,
         required=False,
     )
@@ -227,7 +227,7 @@ class BarrierSearchForm(forms.Form):
         ),
     )
 
-    start_date = DateRangeField(label="Barrier Start date", required=False)
+    start_date = DateRangeField(label="Barrier start date", required=False)
     start_date_from_month = forms.CharField(
         label="Barrier Start date from month",
         help_text="Example, 01 2021",
