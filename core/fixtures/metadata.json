@@ -370,6 +370,10 @@
     {
       "name": "China",
       "id": "b97749fb-2273-4447-a239-62dd8fb29e01"
+    },
+    {
+      "name": "Wider Europe",
+      "id": "wider_europe"
     }
   ],
   "countries": [
