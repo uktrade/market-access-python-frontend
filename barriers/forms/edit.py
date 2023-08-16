@@ -17,7 +17,6 @@ from barriers.constants import (
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import (
-    ChoiceFieldWithHelpText,
     ClearableMixin,
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
@@ -317,50 +316,6 @@ class ProgrammeFundProgressUpdateForm(
                 ],
                 expenditure=self.cleaned_data["expenditure"],
             )
-
-
-class UpdateBarrierSourceForm(APIFormMixin, forms.Form):
-    CHOICES = [
-        ("COMPANY", "Company"),
-        ("TRADE", "Trade association"),
-        ("GOVT", "Government entity"),
-        ("OTHER", "Other "),
-    ]
-    source = forms.ChoiceField(
-        label="How did you find out about the barrier?",
-        choices=CHOICES,
-        widget=forms.RadioSelect,
-        error_messages={"required": "Select how you became aware of the barrier"},
-    )
-    other_source = forms.CharField(
-        label="Please specify",
-        required=False,
-        max_length=255,
-        error_messages={
-            "max_length": "Entry should be %(limit_value)d characters or less",
-        },
-    )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        source = cleaned_data.get("source")
-        other_source = cleaned_data.get("other_source")
-
-        if source == "OTHER":
-            if not other_source and "other_source" not in self.errors:
-                self.add_error(
-                    "other_source", "Enter how you became aware of the barrier"
-                )
-        else:
-            cleaned_data["other_source"] = ""
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(
-            id=self.id,
-            source=self.cleaned_data["source"],
-            other_source=self.cleaned_data["other_source"],
-        )
 
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
@@ -717,31 +672,6 @@ def update_barrier_priority_form_factory(
             return rejection_summary
 
     return CustomizedUpdateBarrierPriorityForm
-
-
-class UpdateBarrierTermForm(APIFormMixin, forms.Form):
-    CHOICES = [
-        (
-            1,
-            "A procedural, short-term barrier",
-            "For example, goods stuck at the border or documentation issue",
-        ),
-        (
-            2,
-            "A long-term strategic barrier",
-            "For example, a change of regulation",
-        ),
-    ]
-    term = ChoiceFieldWithHelpText(
-        label="What is the scope of the barrier?",
-        choices=CHOICES,
-        widget=forms.RadioSelect,
-        error_messages={"required": "Select a barrier scope"},
-    )
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, term=self.cleaned_data["term"])
 
 
 class UpdateBarrierEstimatedResolutionDateForm(

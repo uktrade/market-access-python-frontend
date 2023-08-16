@@ -9,11 +9,9 @@ from barriers.forms.edit import (
     EditBarrierPriorityForm,
     UpdateBarrierEstimatedResolutionDateForm,
     UpdateBarrierProductForm,
-    UpdateBarrierSourceForm,
     UpdateBarrierStartDateForm,
     UpdateBarrierSummaryForm,
     UpdateBarrierTagsForm,
-    UpdateBarrierTermForm,
     UpdateBarrierTitleForm,
     UpdateCausedByTradingBlocForm,
     UpdateCommercialValueForm,
@@ -54,18 +52,6 @@ class BarrierEditSummary(APIBarrierFormViewMixin, FormView):
         return {
             "summary": self.barrier.summary,
         }
-
-
-class BarrierEditSource(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/source.html"
-    form_class = UpdateBarrierSourceForm
-
-    def get_initial(self):
-        if self.barrier.source:
-            return {
-                "source": self.barrier.source.get("code"),
-                "other_source": self.barrier.other_source,
-            }
 
 
 class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
@@ -209,15 +195,6 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             "top_barrier": top_barrier_initial,
             "existing_tags_list": self.barrier.tags,
         }
-
-
-class BarrierEditTerm(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/edit/term.html"
-    form_class = UpdateBarrierTermForm
-
-    def get_initial(self):
-        if self.barrier.term:
-            return {"term": self.barrier.term["id"]}
 
 
 class BarrierEditEstimatedResolutionDate(APIBarrierFormViewMixin, FormView):
