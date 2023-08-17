@@ -124,7 +124,7 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     delivery_confidence = forms.MultipleChoiceField(
-        label="Delivery Confidence",
+        label="Delivery confidence",
         choices=(
             ("ON_TRACK", "On Track"),
             ("RISK_OF_DELAY", "Risk of delay"),
