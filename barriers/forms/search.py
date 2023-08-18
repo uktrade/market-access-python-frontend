@@ -605,8 +605,8 @@ class BarrierSearchForm(forms.Form):
 
     def format_start_date(self):
         """
-        Format the start date input to be compatible with the API's queryset filter
-        Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates
+        Format the start date input to be compatible with the API's queryset filter.
+        Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates.
         Users only input the month and year, so we need to generate a day value.
         """
         from_year = self.cleaned_data.get("start_date_from_year")
@@ -617,11 +617,13 @@ class BarrierSearchForm(forms.Form):
         if from_year and from_month and to_year and to_month:
 
             from_date = from_year + "-" + from_month + "-01"
-
             # calendar has function to identify last day of a given month in a year
             to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
             to_date = to_year + "-" + to_month + "-" + str(to_date_day)
 
+            # Ensure that the from_date is earlier than the to_date
+            if from_date >= to_date:
+                return []
             return from_date + "," + to_date
         else:
             return []
@@ -666,6 +668,18 @@ class BarrierSearchForm(forms.Form):
                 admin_areas_selected.append(admin_area_detail["name"])
         return ", ".join(admin_areas_selected)
 
+    @property
+    def exclude_from_readability(self):
+        """
+        Return a list of filter keys to exclude from the readable filters.
+        """
+        return [
+            "start_date_from_year",
+            "start_date_from_month",
+            "start_date_to_year",
+            "start_date_to_month",
+        ]
+
     def get_readable_filters(self, with_remove_links=False):
         """
         Get the currently applied filters with their readable values.
@@ -676,6 +690,8 @@ class BarrierSearchForm(forms.Form):
         filters = {}
 
         for name, value in self.get_raw_filters().items():
+            if name in self.exclude_from_readability:
+                continue
             value = copy.copy(value)
             key = self.get_filter_key(name)
             if key not in filters:

@@ -35,12 +35,16 @@ $default-spacing-unit: 5px;
 	}
 
 	&__input {
-		border: 2px solid black;
     background-color: #fff;
-		height: 1.5rem;
-		width: 5rem;
+		@include govuk-font($size: 16);
+		$input-size: 16px * 2;
+		width: $input-size * 3;
+		height: $input-size;
 		&.month {
-			width: 2rem;
+			@include govuk-font($size: 16);
+			$input-size: 16px * 2;
+			width: $input-size * 2;
+			height: $input-size;
 		}
 	}
 

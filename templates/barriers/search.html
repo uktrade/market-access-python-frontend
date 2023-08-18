@@ -62,11 +62,11 @@
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
 
-                <!-- include date filters -->
-                {% include 'partials/forms/date_input_filter.html' with field=form.start_date %}
-
                 <!-- Include JS component for resolved date filtering -->
                 {% render_bundle 'date_filter_component' %}
+
+                <!-- include date filters -->
+                {% include 'partials/forms/date_input_filter.html' with field=form.start_date field_from_month=form.start_date_from_month field_from_year=form.start_date_from_year field_to_month=form.start_date_to_month field_to_year=form.start_date_to_year %}
 
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
