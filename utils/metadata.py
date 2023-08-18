@@ -151,15 +151,8 @@ class Metadata:
         return [(country["id"], country["name"]) for country in self.get_country_list()]
 
     def get_overseas_region_list(self):
-        regions = {
-            country["overseas_region"]["id"]: country["overseas_region"]
-            for country in self.get_country_list()
-            if country["disabled_on"] is None
-            and country.get("overseas_region") is not None
-        }
-        regions = list(regions.values())
-        regions.sort(key=itemgetter("name"))
-        return regions
+        self.data["overseas_regions"].sort(key=itemgetter("name"))
+        return self.data["overseas_regions"]
 
     def get_overseas_region_by_id(self, region_id):
         for region in self.get_overseas_region_list():
