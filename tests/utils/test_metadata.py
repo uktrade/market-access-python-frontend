@@ -43,6 +43,7 @@ class MetadataTestCase(MarketAccessTestCase):
             "Middle East",
             "North America",
             "South Asia",
+            "Wider Europe",
         ]
 
     def test_get_sector(self):
