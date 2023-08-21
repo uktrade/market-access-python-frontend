@@ -282,7 +282,7 @@
 
             <dt class="summary-group__list__key">Companies known to be affected</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.companies %}
+                {% if barrier.companies or barrier.related_organisations %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.companies %}
                             <li class="summary-group__list__value__list__item">{{ item.name }}</li>
