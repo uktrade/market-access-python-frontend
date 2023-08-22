@@ -181,11 +181,9 @@
                         {% include 'barriers/partials/active_filter.html' with filter=filters.economic_impact_assessment %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.commodity_code %}
                         {% include 'barriers/partials/active_filter.html' with filter=filters.commercial_value_estimate %}
-                        {% include 'barriers/partials/active_filter.html' with filter=filters.start_date_from_month %}
-                        {% include 'barriers/partials/active_filter.html' with filter=filters.start_date_from_year %}
-                        {% include 'barriers/partials/active_filter.html' with filter=filters.start_date_to_month %}
-                        {% include 'barriers/partials/active_filter.html' with filter=filters.start_date_to_year %}
-
+                        {% if filters.start_date_from_month or filters.start_date_from_year or filters.start_date_to_month or filters.start_date_to_year %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.start_date %}
+                        {% endif %}
                     </ul>
                 {% endif %}
             </div>

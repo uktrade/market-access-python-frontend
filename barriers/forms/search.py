@@ -621,12 +621,8 @@ class BarrierSearchForm(forms.Form):
             to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
             to_date = to_year + "-" + to_month + "-" + str(to_date_day)
 
-            # Ensure that the from_date is earlier than the to_date
-            if from_date >= to_date:
-                return []
             return from_date + "," + to_date
-        else:
-            return []
+        return []
 
     def get_raw_filters(self):
         """
@@ -669,9 +665,9 @@ class BarrierSearchForm(forms.Form):
         return ", ".join(admin_areas_selected)
 
     @property
-    def exclude_from_readability(self):
+    def start_date_search_fields(self):
         """
-        Return a list of filter keys to exclude from the readable filters.
+        Return a list of filter keys to for start date .
         """
         return [
             "start_date_from_year",
@@ -690,8 +686,6 @@ class BarrierSearchForm(forms.Form):
         filters = {}
 
         for name, value in self.get_raw_filters().items():
-            if name in self.exclude_from_readability:
-                continue
             value = copy.copy(value)
             key = self.get_filter_key(name)
             if key not in filters:
@@ -717,5 +711,16 @@ class BarrierSearchForm(forms.Form):
                     filters[key]["value"] += value
                 else:
                     filters[key]["value"].append(value)
+
+        start_date_range = (
+            self.format_start_date().replace(",", " to ")
+            if isinstance(self.format_start_date(), str)
+            else None
+        )
+        filters["start_date"] = {
+            "label": "Start date",
+            "value": start_date_range,
+            "readable_value": start_date_range,
+        }
 
         return filters
