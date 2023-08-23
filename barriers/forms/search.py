@@ -8,7 +8,8 @@ from django import forms
 from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import DEPRECATED_TAGS, STATUS_WITH_DATE_FILTER
+from barriers.constants import DEPRECATED_TAGS, EXPORT_TYPES, STATUS_WITH_DATE_FILTER
+from utils.forms import DateRangeField
 from utils.helpers import format_dict_for_url_querystring
 
 logger = logging.getLogger(__name__)
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 class BarrierSearchForm(forms.Form):
     search_id = forms.UUIDField(required=False, widget=forms.HiddenInput())
     search = forms.CharField(
-        label="Search barrier title, summary, code or PID",
+        label="Search barrier title, summary, company, export description, code or PID",
         max_length=255,
         required=False,
     )
@@ -123,12 +124,17 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     delivery_confidence = forms.MultipleChoiceField(
-        label="Delivery Confidence",
+        label="Delivery confidence",
         choices=(
             ("ON_TRACK", "On Track"),
             ("RISK_OF_DELAY", "Risk of delay"),
             ("DELAYED", "Delayed"),
         ),
+        required=False,
+    )
+    export_types = forms.MultipleChoiceField(
+        label="Export type",
+        choices=EXPORT_TYPES,
         required=False,
     )
     has_action_plan = forms.BooleanField(label="Has action plan", required=False)
@@ -221,6 +227,24 @@ class BarrierSearchForm(forms.Form):
         ),
     )
 
+    start_date = DateRangeField(label="Barrier start date", required=False)
+    start_date_from_month = forms.CharField(
+        label="Barrier Start date from month",
+        help_text="Example, 01 2021",
+        required=False,
+    )
+    start_date_from_year = forms.CharField(
+        label="Barrier Start date from year", required=False
+    )
+    start_date_to_month = forms.CharField(
+        label="Barrier Start date to month",
+        help_text="Example, 01 2022",
+        required=False,
+    )
+    start_date_to_year = forms.CharField(
+        label="Barrier Start date to year", required=False
+    )
+
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
         "country": {
@@ -287,6 +311,11 @@ class BarrierSearchForm(forms.Form):
             "commodity_code": data.getlist("commodity_code"),
             "commercial_value_estimate": data.getlist("commercial_value_estimate"),
             "ordering": data.get("ordering"),
+            "start_date_from_month": data.get("start_date_from_month"),
+            "start_date_from_year": data.get("start_date_from_year"),
+            "start_date_to_month": data.get("start_date_to_month"),
+            "start_date_to_year": data.get("start_date_to_year"),
+            "export_types": data.getlist("export_types"),
         }
 
         for status_value in STATUS_WITH_DATE_FILTER:
@@ -470,6 +499,11 @@ class BarrierSearchForm(forms.Form):
                     params.pop(f"resolved_date_from_year_{status}", None)
                     params.pop(f"resolved_date_to_month_{status}", None)
                     params.pop(f"resolved_date_to_year_{status}", None)
+            elif field_name == "start_date":
+                params.pop("start_date_from_month", None)
+                params.pop("start_date_from_year", None)
+                params.pop("start_date_to_month", None)
+                params.pop("start_date_to_year", None)
 
             del params[field_name]
 
@@ -531,6 +565,8 @@ class BarrierSearchForm(forms.Form):
         params["ordering"] = self.cleaned_data.get(
             "ordering", settings.API_BARRIER_LIST_DEFAULT_SORT
         )
+        params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
+        params["start_date"] = self.format_start_date()
 
         return {k: v for k, v in params.items() if v}
 
@@ -566,6 +602,27 @@ class BarrierSearchForm(forms.Form):
 
         else:
             return []
+
+    def format_start_date(self):
+        """
+        Format the start date input to be compatible with the API's queryset filter.
+        Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates.
+        Users only input the month and year, so we need to generate a day value.
+        """
+        from_year = self.cleaned_data.get("start_date_from_year")
+        from_month = self.cleaned_data.get("start_date_from_month")
+        to_year = self.cleaned_data.get("start_date_to_year")
+        to_month = self.cleaned_data.get("start_date_to_month")
+
+        if from_year and from_month and to_year and to_month:
+
+            from_date = from_year + "-" + from_month + "-01"
+            # calendar has function to identify last day of a given month in a year
+            to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
+            to_date = to_year + "-" + to_month + "-" + str(to_date_day)
+
+            return from_date + "," + to_date
+        return []
 
     def get_raw_filters(self):
         """
@@ -607,6 +664,18 @@ class BarrierSearchForm(forms.Form):
                 admin_areas_selected.append(admin_area_detail["name"])
         return ", ".join(admin_areas_selected)
 
+    @property
+    def start_date_search_fields(self):
+        """
+        Return a list of filter keys to for start date .
+        """
+        return [
+            "start_date_from_year",
+            "start_date_from_month",
+            "start_date_to_year",
+            "start_date_to_month",
+        ]
+
     def get_readable_filters(self, with_remove_links=False):
         """
         Get the currently applied filters with their readable values.
@@ -621,7 +690,7 @@ class BarrierSearchForm(forms.Form):
             key = self.get_filter_key(name)
             if key not in filters:
                 readable_value = self.get_filter_readable_value(name, value)
-                if readable_value == "":
+                if readable_value == "" or readable_value is None:
                     # Do not add filter tag if the readable value is empty, move to next filter
                     continue
                 filters[key] = {
@@ -642,5 +711,16 @@ class BarrierSearchForm(forms.Form):
                     filters[key]["value"] += value
                 else:
                     filters[key]["value"].append(value)
+
+        start_date_range = (
+            self.format_start_date().replace(",", " to ")
+            if isinstance(self.format_start_date(), str)
+            else None
+        )
+        filters["start_date"] = {
+            "label": "Start date",
+            "value": start_date_range,
+            "readable_value": start_date_range,
+        }
 
         return filters
