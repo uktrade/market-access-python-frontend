@@ -43,7 +43,6 @@ class BarrierSearch(PaginationMixin, SearchFormView):
     template_name = "barriers/search.html"
     form_class = BarrierSearchForm
     _client = None
-    pagination_limit = 50
 
     @property
     def client(self):
