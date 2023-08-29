@@ -92,7 +92,7 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
             },
         }
         assert saved_search.readable_filters["search"] == {
-            "label": "Search barrier title, summary, code or PID",
+            "label": "Search barrier title, summary, company, export description, code or PID",
             "readable_value": "Test",
             "value": "Test",
         }

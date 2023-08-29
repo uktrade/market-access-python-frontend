@@ -610,3 +610,43 @@ class SearchTestCase(MarketAccessTestCase):
             archived="0",
             delivery_confidence="ON_TRACK",
         )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_start_date_range_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "start_date_from_month": "01",
+                "start_date_from_year": "2021",
+                "start_date_to_month": "01",
+                "start_date_to_year": "2022",
+                "ordering": "-reported",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            start_date="2021-01-01,2022-01-31",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_export_types_filter(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"export_types": ["goods", "services"], "ordering": "-reported"},
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            export_types="goods,services",
+        )

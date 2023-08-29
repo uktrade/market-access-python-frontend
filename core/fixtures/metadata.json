@@ -370,6 +370,10 @@
     {
       "name": "China",
       "id": "b97749fb-2273-4447-a239-62dd8fb29e01"
+    },
+    {
+      "name": "Wider Europe",
+      "id": "wider_europe"
     }
   ],
   "countries": [
@@ -8632,6 +8636,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 9
+    },
+    {
+      "id": 10,
+      "title": "Wales Priority",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 10
     }
   ],
   "barrier_type_categories": {

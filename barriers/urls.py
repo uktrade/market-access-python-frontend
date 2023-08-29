@@ -101,11 +101,9 @@ from .views.edit import (
     BarrierEditEstimatedResolutionDateConfirmationPage,
     BarrierEditPriority,
     BarrierEditProduct,
-    BarrierEditSource,
     BarrierEditStartDate,
     BarrierEditSummary,
     BarrierEditTags,
-    BarrierEditTerm,
     BarrierEditTitle,
     BarrierEditTradeDirection,
 )
@@ -239,19 +237,9 @@ urlpatterns = [
         name="edit_summary",
     ),
     path(
-        "barriers/<uuid:barrier_id>/edit/source/",
-        BarrierEditSource.as_view(),
-        name="edit_source",
-    ),
-    path(
         "barriers/<uuid:barrier_id>/edit/priority/",
         BarrierEditPriority.as_view(),
         name="edit_priority",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/edit/term/",
-        BarrierEditTerm.as_view(),
-        name="edit_term",
     ),
     path(
         "barriers/<uuid:barrier_id>/list/top_100_progress_update/",

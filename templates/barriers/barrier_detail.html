@@ -2,7 +2,6 @@
 
 {% load activity %}
 {% load static %}
-{% load completeness %}
 {% load render_bundle from webpack_loader %}
 {% load dates %}
 {% load tz %}
@@ -60,14 +59,6 @@
                 {{ barrier.summary|escape|linebreaksbr }}
                 {% if not barrier.archived %}
                 <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_summary' barrier.id %}" aria-label="edit barrier description">Edit</a>
-                {% endif %}
-            </dd>
-
-            <dt class="summary-group__list__key">Barrier type</dt>
-            <dd class="summary-group__list__value">
-                {{ barrier.term.name }}
-                {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_term' barrier.id %}" aria-label="edit barrier type">Edit</a>
                 {% endif %}
             </dd>
 
@@ -291,7 +282,7 @@
 
             <dt class="summary-group__list__key">Companies known to be affected</dt>
             <dd class="summary-group__list__value">
-                {% if barrier.companies %}
+                {% if barrier.companies or barrier.related_organisations %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.companies %}
                             <li class="summary-group__list__value__list__item">{{ item.name }}</li>
@@ -363,21 +354,25 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Main sector affected:</dt>
+            <dt class="summary-group__list__key">Sectors affected:</dt>
             <dd class="summary-group__list__value">
+                <span>Main sector affected:</span>
                 {% if barrier.main_sector or barrier.all_sectors %}
                     {% if barrier.all_sectors %}
                         <span class="summary-group__list__value__list__item">All sectors</span>
                     {% else %}
-                        <span class="summary-group__list__value__list__item">{{ barrier.main_sector.name|default:"Unknown"}}</span>
+                        <ul class="summary-group__list__value__list">
+                            <li class="summary-group__list__value__list__item">{{ barrier.main_sector.name|default:"Unknown"}}</li>
+                        </ul>
                     {% endif %}
+                    {% if not barrier.archived %}
+                        <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:add_main_sector' barrier.id %}"  aria-label="edit main sector">Edit</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'barriers:add_main_sector' barrier.id %}" class="summary-group__list__value__add govuk-link--no-visited-state">Add main sectors</a>
                 {% endif %}
-                {% if not barrier.archived %}
-                    <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:add_main_sector' barrier.id %}"  aria-label="edit main sector">Edit</a>
-                {% endif %}
-            </dd>
-            <dt class="summary-group__list__key">Other sector{{ barrier.sectors|pluralize }} affected:</dt>
-            <dd class="summary-group__list__value">
+
+                <span>Other sectors affected:</span>
                 {% if barrier.sectors %}
                     <ul class="summary-group__list__value__list">
                         {% for item in barrier.sectors %}
@@ -464,14 +459,6 @@
                 {% endif %}
             </dd>
 
-            <dt class="summary-group__list__key">Information source</dt>
-            <dd class="summary-group__list__value">
-                {{ barrier.source.name }}{% if barrier.other_source %}<br>{{ barrier.other_source }}{% endif %}
-                {% if not barrier.archived %}
-                <a class="summary-group__list__value__edit govuk-link--no-visited-state" href="{% url 'barriers:edit_source' barrier.id %}" aria-label="edit information source">Edit</a>
-                {% endif %}
-            </dd>
-
             <dt class="summary-group__list__key">Has this barrier been notified to the WTO?</dt>
             <dd class="summary-group__list__value">
 
@@ -549,46 +536,6 @@
                 <p class="barrier-status-details__text">{{ barrier.status_summary|linebreaksbr }}</p>
                 <a href="{% url 'barriers:change_status' barrier.id %}" class="govuk-link--no-visited-state"> Edit status</a>
             </div>
-
-        <div class="information-completeness">
-            <h2 class="section-heading">
-                Information completeness
-            </h2>
-            <h3 class="information-completeness__percentage">{{ barrier.completion_percent }}%</h3>
-            <h4 class="outstanding-information__header">Outstanding information:</h4>
-            <ul class="outstanding-information">
-                {% if not barrier.location %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_location' barrier.id %}" class="govuk-link--no-visited-state">Location of the barrier</a>
-                </li>
-                {% endif %}
-                {% if not barrier.sectors and not barrier.all_sectors %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_sectors' barrier.id %}" class="govuk-link--no-visited-state">Sectors affected</a>
-                </li>
-                {% endif %}
-                {% if not barrier.summary %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_summary' barrier.id %}" class="govuk-link--no-visited-state">Barrier description</a>
-                </li>
-                {% endif %}
-                {% if not barrier.source %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_source' barrier.id %}" class="govuk-link--no-visited-state">Information source</a>
-                </li>
-                {% endif %}
-                {% if not barrier.categories %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:add_category' barrier.id %}" class="govuk-link--no-visited-state">Barrier category</a>
-                </li>
-                {% endif %}
-                {% if not barrier.commodities %}
-                <li class="outstanding-formation__link">
-                    <a href="{% url 'barriers:edit_commodities' barrier.id %}" class="govuk-link--no-visited-state">HS codes</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
 
         <h2 class="section-heading govuk-!-margin-bottom-0">
             Internal notes and updates
