@@ -8643,6 +8643,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 10
+    },
+    {
+      "id": 12,
+      "title": "Scoping",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 12
     }
   ],
   "barrier_type_categories": {
