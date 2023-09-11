@@ -128,6 +128,7 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         # Add info on the user's permissions
         user = user_scope(self.request)["current_user"]
         is_user_admin = user.has_permission("set_topprioritybarrier")
+
         kwargs["is_user_admin"] = is_user_admin
 
         REQUEST_PHASE_STATUSES = [

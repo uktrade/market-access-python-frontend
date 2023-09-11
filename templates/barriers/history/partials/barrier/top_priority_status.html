@@ -1,40 +1,21 @@
-{% if item.new_value != None %}
+{% if item.old_value %}
+    <div class="history-item__old-value">
+        <span class="diff__del" tabindex="0">
+            <p class="govuk-visually-hidden">old value: </p>
+            {{ item.old_value.value }}
+        </span>
+    </div>
+{% endif %}
+
+{% if item.new_value %}
     <div class="history-item__new-value" tabindex="0">
-        <p class="govuk-visually-hidden">new value: </p>
-        {% if item.new_value.value == "APPROVAL_PENDING" %}
-            <span class="diff__ins">
-                Top 100 Approval Pending
-                <br/>
+        <span class="diff__ins">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value.value }}
+            {% if item.new_value.reason %}
+                <br />
                 {{ item.new_value.reason }}
-            </span>
-        {% elif item.new_value.value == "APPROVED" %}
-            <span class="diff__ins">
-                Top 100 Priority
-                <br/>
-                {{ item.new_value.reason }}
-            </span>
-        {% elif item.new_value.value == "RESOLVED" %}
-            <span class="diff__ins">
-                Resolved Top 100 Priority
-                <br/>
-                {{ item.new_value.reason }}
-            </span>
-        {% elif item.new_value.value == "REMOVAL_PENDING" %}
-            <span class="diff__ins">
-                Top 100 Priority Removal pending
-                <br/>
-                {{ item.new_value.reason }}
-            </span>
-        {% elif item.new_value.value == "NONE" %}
-            <span class="diff__ins">
-                Top 100 Priority
-                <br/>
-                {{ item.new_value.reason }}
-            </span>
-        {% else %}
-            <span class="diff__del">
-                Top 100 Priority
-            </span>
-        {% endif %}
+            {% endif %}
+        </span>
     </div>
 {% endif %}
