@@ -42,6 +42,6 @@ class HistoryItem(PolymorphicBase):
         ActionPlanMilestoneHistoryItem,
         ActionPlanTaskHistoryItem,
         ProgressUpdateHistoryItem,
-        BarrierTopPrioritySummaryItem
+        BarrierTopPrioritySummaryItem,
     )
     class_lookup = {}
