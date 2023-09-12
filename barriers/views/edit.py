@@ -271,13 +271,8 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
         return kwargs
 
     def get_initial(self):
-        top_barrier_initial = (
-            self.barrier.top_priority_status or TOP_PRIORITY_BARRIER_STATUS.NONE
-        )
-
         return {
             "tags": [tag["id"] for tag in self.barrier.tags],
-            "top_barrier": top_barrier_initial,
         }
 
 
