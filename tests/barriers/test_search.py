@@ -663,5 +663,5 @@ class SearchTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
-            only_main_sector="yes",
+            only_main_sector=True,
         )
