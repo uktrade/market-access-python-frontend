@@ -569,7 +569,7 @@ class BarrierSearchForm(forms.Form):
         params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
         params["start_date"] = self.format_start_date()
         params["only_main_sector"] = (
-            "yes" if self.cleaned_data.get("only_main_sector") else "no"
+            "yes" if self.cleaned_data.get("only_main_sector") else None
         )
 
         return {k: v for k, v in params.items() if v}
