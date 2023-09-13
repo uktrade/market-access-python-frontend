@@ -51,3 +51,9 @@ repos:
       rev: v0.0.17
       hooks:
           - id: circleci-config-validate
+    - repo: https://github.com/rtts/djhtml
+      rev: '3.0.6'
+      hooks:
+        - id: djhtml
+        - id: djcss
+        - id: djjs
