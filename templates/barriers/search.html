@@ -339,9 +339,15 @@
                                         {% endif %}
                                     {% endif %}
 
-                                    {% if barrier.sector_names %}
+                                    {% if barrier.sector_names or barrier.main_sector_name %}
                                         <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
-                                        <dd class="filter-results-list__item__definitions__value">{{ barrier.sector_names|join:', ' }}</dd>
+                                        <dd class="filter-results-list__item__definitions__value">
+                                            {% if barrier.main_sector %}
+                                                {{barrier.main_sector_name}} (main sector){% if barrier.sector_names %},
+                                                {% endif %}
+                                            {% endif %}
+                                            {{ barrier.sector_names|join:', ' }}
+                                        </dd>
                                     {% endif %}
 
                                     {% if barrier.current_valuation_assessment %}
