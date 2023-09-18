@@ -5,7 +5,7 @@ from utils.api.client import MarketAccessAPIClient
 
 class FeedbackForm(forms.Form):
     satisfaction = forms.ChoiceField(
-        label="Overall, how do you feel about your use of the Digital Market Access Service (DMAS) today?",
+        label="Overall, how would you rate your experience with Digital Market Access Service (DMAS) today?",
         choices=(
             ("VERY_SATISFIED", "Very satisfied"),
             ("SATISFIED", "Satisfied"),
@@ -32,6 +32,26 @@ class FeedbackForm(forms.Form):
             "required": "You must select one or more activities",
         },
     )
+    experienced_issues = forms.MultipleChoiceField(
+        label="Did you experience any of the following issues?",
+        help_text="Select all that apply.",
+        choices=(
+            ("NO_ISSUE", "I did not experience any issues"),
+            ("UNABLE_TO_FIND", "I did not find what I was looking for"),
+            ("DIFFICULT_TO_NAVIGATE", "I found it difficult to navigate"),
+            ("LACKS_FEATURE", "The system lacks the feature I need"),
+            ("OTHER", "Other"),
+        ),
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
+        required=False,
+    )
+    other_detail = forms.CharField(
+        label="Describe the issue you faced",
+        # help_text="",
+        max_length=3000,
+        required=False,
+        widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
+    )
     feedback_text = forms.CharField(
         label="How could we improve the service?",
         help_text="Don't include any personal information, like your name or email address.",
@@ -50,8 +70,14 @@ class FeedbackForm(forms.Form):
         cleaned_data = super().clean()
         satisfaction = cleaned_data.get("satisfaction", None)
         csat_submission = cleaned_data.get("csat_submission", False)
+        issues = cleaned_data.get("experienced_issues", None)
         if not satisfaction:
             self.add_error("satisfaction", "You must select a level of satisfaction")
+        elif not issues and csat_submission != "True":
+            self.add_error(
+                "experienced_issues",
+                'Select the type of issue you experienced, or select "I did not experience any issues"',
+            )
         elif csat_submission == "True":
             client = MarketAccessAPIClient(self.token)
             feedback = client.feedback.send_feedback(
