@@ -14,12 +14,12 @@
 {% endblock %}
 
 {% block head %}
-{% render_bundle 'main' 'js' 'REACT' %}
-<script>
-    document.addEventListener("DOMContentLoaded", function (event) {
-        ReactApp.renderTextAreaWithMentions("note-textarea-container")
-    })
-</script>
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderTextAreaWithMentions("note-textarea-container")
+        })
+    </script>
 {% endblock %}
 
 {% block body_script %}
@@ -57,22 +57,22 @@
         </h2>
 
         {% if public_barrier.public_view_status == 20 %}
-        <div class="public-barrier-approved-warning">
-            <div class="govuk-warning-text govuk-!-margin-bottom-2">
-                                        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <div class="public-barrier-approved-warning">
+                <div class="govuk-warning-text govuk-!-margin-bottom-2">
+                    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
 
 
-                            <span class="govuk-warning-text__assistive">Warning</span> <strong class="govuk-warning-text__text">Updating the public view status to ‘allowed’ does not mean the barrier will be published.</strong>
+                    <span class="govuk-warning-text__assistive">Warning</span> <strong class="govuk-warning-text__text">Updating the public view status to ‘allowed’ does not mean the barrier will be published.</strong>
+                </div>
+                <div class="public-barrier-approved-warning__body">
+                    <p>The barrier will only be published once it has gone through quality assurance checks by BTR, Post, OGDs, DAs, HMTCs and the content team.</p>
+
+                    <p>Choosing the option “allowed, it can be viewed by the public” confirms that the barrier will be viewable by the public once it has been published.</p>
+
+                    <p>You can check the progress of these quality assurance checks in the “Public view” tab on the barrier’s page.</p>
+
+                </div>
             </div>
-            <div class="public-barrier-approved-warning__body">
-            <p>The barrier will only be published once it has gone through quality assurance checks by BTR, Post, OGDs, DAs, HMTCs and the content team.</p>
-
-            <p>Choosing the option “allowed, it can be viewed by the public” confirms that the barrier will be viewable by the public once it has been published.</p>
-
-            <p>You can check the progress of these quality assurance checks in the “Public view” tab on the barrier’s page.</p>
-
-                                    </div>
-        </div>
         {% endif %}
 
         {% if public_barrier.first_published_on %}
@@ -287,80 +287,80 @@
         <span class="govuk-caption-m govuk-!-margin-bottom-6">These are not shown to the public.</span>
 
         {% if public_barrier.light_touch_reviews.enabled %}
-        <div class="review-progress-checkboxes">
-            <h3>Review progress</h3>
-            <p class="description">Keep track of outstanding approvals</p>
+            <div class="review-progress-checkboxes">
+                <h3>Review progress</h3>
+                <p class="description">Keep track of outstanding approvals</p>
 
 
-            <form class="govuk-checkboxes" id="tags" action="{% url 'barriers:edit_public_barrier_reviews' barrier.id %}" method="get">
-                <fieldset class="govuk-fieldset">
-                    {% if public_barrier.title and public_barrier.summary %}
-                    <div class="checkbox-option">
-                        <div class="govuk-checkboxes__item">
+                <form class="govuk-checkboxes" id="tags" action="{% url 'barriers:edit_public_barrier_reviews' barrier.id %}" method="get">
+                    <fieldset class="govuk-fieldset">
+                        {% if public_barrier.title and public_barrier.summary %}
+                            <div class="checkbox-option">
+                                <div class="govuk-checkboxes__item">
 
-                                <input class="govuk-checkboxes__input"
-                                        name="content_approval"
-                                        onChange="this.form.submit()"
-                                        type="checkbox"
-                                        {% if public_barrier.light_touch_reviews.content_team_approval %}checked{% endif %}>
-                                        <label class="govuk-label govuk-checkboxes__label">
-                            Content team</label>
-                            {% if public_barrier.light_touch_reviews.has_content_changed_since_approval %}<span class="checkbox-note">Edited since last content review</span>{% endif %}
+                                    <input class="govuk-checkboxes__input"
+                                           name="content_approval"
+                                           onChange="this.form.submit()"
+                                           type="checkbox"
+                                           {% if public_barrier.light_touch_reviews.content_team_approval %}checked{% endif %}>
+                                    <label class="govuk-label govuk-checkboxes__label">
+                                        Content team</label>
+                                    {% if public_barrier.light_touch_reviews.has_content_changed_since_approval %}<span class="checkbox-note">Edited since last content review</span>{% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="checkbox-option">
+                                <p class="add-approval-link">
+                                    <span>Public barrier has no title or summary content to review</span>
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval_enabled %}
+                            <div class="checkbox-option">
+                                <div class="govuk-checkboxes__item">
+                                    <input class="govuk-checkboxes__input"
+                                           name="hm_trade_comm_approval"
+                                           onChange="this.form.submit()"
+                                           type="checkbox"
+                                           {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval %}checked{% endif %}>
+                                    <label class="govuk-label govuk-checkboxes__label">HM Trade Commissioner</label>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="checkbox-option">
+                                <p class="add-approval-link">
+                                    <a href="{% url 'barriers:enable_hm_trade_commissioner_approvals' barrier.id %}?enabled=1">Add HM Trade Commissioner</a>
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% for government_organisation in barrier.government_organisations %}
+                            <div class="checkbox-option">
+                                <div class="govuk-checkboxes__item">
+                                    <input class="govuk-checkboxes__input"
+                                           name="organisation_approval__{{ government_organisation.id }}"
+                                           onChange="this.form.submit()"
+                                           type="checkbox"
+                                           {% if government_organisation.id in public_barrier.light_touch_reviews.government_organisation_approvals %}checked{% endif %}>
+                                    <label class="govuk-label govuk-checkboxes__label">{{ government_organisation.name }}</label>
+                                    <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail" class="remove">Edit</a>
+                                </div>
+                            </div>
+                        {% empty %}
+                        {% endfor %}
+                        {% if not public_barrier.light_touch_reviews.hm_trade_commissioner_approval_enabled %}
+                        {% endif %}
+                        <div class="checkbox-option">
+                            <p class="add-approval-link">
+                                <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail">Add government organisation</a>
+                            </p>
                         </div>
-                    </div>
-                    {% else %}
-                    <div class="checkbox-option">
-                        <p class="add-approval-link">
-                            <span>Public barrier has no title or summary content to review</span>
-                        </p>
-                    </div>
-                    {% endif %}
-                    {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval_enabled %}
-                    <div class="checkbox-option">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input"
-                                    name="hm_trade_comm_approval"
-                                    onChange="this.form.submit()"
-                                    type="checkbox"
-                                    {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval %}checked{% endif %}>
-                            <label class="govuk-label govuk-checkboxes__label">HM Trade Commissioner</label>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="checkbox-option">
-                        <p class="add-approval-link">
-                            <a href="{% url 'barriers:enable_hm_trade_commissioner_approvals' barrier.id %}?enabled=1">Add HM Trade Commissioner</a>
-                        </p>
-                    </div>
-                    {% endif %}
-                    {% for government_organisation in barrier.government_organisations %}
-                    <div class="checkbox-option">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input"
-                                    name="organisation_approval__{{ government_organisation.id }}"
-                                    onChange="this.form.submit()"
-                                    type="checkbox"
-                                    {% if government_organisation.id in public_barrier.light_touch_reviews.government_organisation_approvals %}checked{% endif %}>
-                            <label class="govuk-label govuk-checkboxes__label">{{ government_organisation.name }}</label>
-                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail" class="remove">Edit</a>
-                        </div>
-                    </div>
-                    {% empty %}
-                    {% endfor %}
-                    {% if not public_barrier.light_touch_reviews.hm_trade_commissioner_approval_enabled %}
-                    {% endif %}
-                    <div class="checkbox-option">
-                        <p class="add-approval-link">
-                            <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail">Add government organisation</a>
-                        </p>
-                    </div>
-                </fieldset>
-                <noscript>
-                    <br/>
-                    <input type="submit" class="govuk-button button--primary" value="Save"/>
-                </noscript>
-            </form>
-        </div>
+                    </fieldset>
+                    <noscript>
+                        <br/>
+                        <input type="submit" class="govuk-button button--primary" value="Save"/>
+                    </noscript>
+                </form>
+            </div>
         {% endif %}
 
         {% if add_note %}

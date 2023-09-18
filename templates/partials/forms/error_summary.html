@@ -6,11 +6,11 @@
                 {% for field, errors in custom_errors.items %}
                     {% for error in errors %}
                         <li>
-                        {% if error.id %}
-                            <a href="#{{ error.id }}">{{ error.text }}</a>
-                        {% else %}
-                            {{ error.text }}
-                        {% endif %}
+                            {% if error.id %}
+                                <a href="#{{ error.id }}">{{ error.text }}</a>
+                            {% else %}
+                                {{ error.text }}
+                            {% endif %}
                         </li>
                     {% endfor %}
                 {% endfor %}

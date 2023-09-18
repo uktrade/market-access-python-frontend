@@ -14,105 +14,105 @@
     {% include 'barriers/partials/dashboard_tabs.html' with active=active new_mentions_count=new_mentions_count %}
 
     {% if active == 'barriers' %}
-    <section>
-        <ul class="ma-card-list">
-            <li class="ma-card-list__item">
-                <div class="saved-search__content">
-                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?user=1">Barriers I have created</a></h3>
-                    <p class="saved-search__description">You will always appear as the reporter in the 'barrier team' tab</p>
-                    {% include "barriers/partials/saved_search_badges.html" with saved_search=my_barriers_saved_search my_barriers=True %}
-                </div>
+        <section>
+            <ul class="ma-card-list">
+                <li class="ma-card-list__item">
+                    <div class="saved-search__content">
+                        <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?user=1">Barriers I have created</a></h3>
+                        <p class="saved-search__description">You will always appear as the reporter in the 'barrier team' tab</p>
+                        {% include "barriers/partials/saved_search_badges.html" with saved_search=my_barriers_saved_search my_barriers=True %}
+                    </div>
 
-                <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'my-barriers' %}">Notifications: {{ my_barriers_saved_search.notifications_text }}</a>
-            </li>
-            <li class="ma-card-list__item">
-                <div class="saved-search__content">
-                    <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?team=1">Barriers I own or am working on</a></h3>
-                    <p class="saved-search__description">When you add, update or comment on a barrier you will appear in the 'barrier team' tab.</p>
-                    <p class="saved-search__description">In this tab you can change ownership or add or remove yourself from a barrier.</p>
-                    {% include "barriers/partials/saved_search_badges.html" with saved_search=team_barriers_saved_search team_barriers=True %}
-                </div>
+                    <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'my-barriers' %}">Notifications: {{ my_barriers_saved_search.notifications_text }}</a>
+                </li>
+                <li class="ma-card-list__item">
+                    <div class="saved-search__content">
+                        <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?team=1">Barriers I own or am working on</a></h3>
+                        <p class="saved-search__description">When you add, update or comment on a barrier you will appear in the 'barrier team' tab.</p>
+                        <p class="saved-search__description">In this tab you can change ownership or add or remove yourself from a barrier.</p>
+                        {% include "barriers/partials/saved_search_badges.html" with saved_search=team_barriers_saved_search team_barriers=True %}
+                    </div>
 
-                <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'team-barriers' %}">Notifications: {{ team_barriers_saved_search.notifications_text }}</a>
-            </li>
-            <li class="ma-card-list__item">
-                <h3 class="saved-search__title"><a href="{% url 'reports:draft_barriers' %}">Draft barriers</a></h3>
-                <p class="saved-search__description">Barriers I have created and not yet submitted.</p>
-                <p><span class="ma-badge">{{ draft_barriers|length }} total</span></p>
-            </li>
-        </ul>
-    </section>
+                    <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' 'team-barriers' %}">Notifications: {{ team_barriers_saved_search.notifications_text }}</a>
+                </li>
+                <li class="ma-card-list__item">
+                    <h3 class="saved-search__title"><a href="{% url 'reports:draft_barriers' %}">Draft barriers</a></h3>
+                    <p class="saved-search__description">Barriers I have created and not yet submitted.</p>
+                    <p><span class="ma-badge">{{ draft_barriers|length }} total</span></p>
+                </li>
+            </ul>
+        </section>
     {% endif %}
 
     {% if active == 'mentions' %}
-    <section>
-        <h2 class="ma-list-heading">
-            <div class="ma-list-heading__heading"><span class="ma-list-heading__count">{{ mentions|length }}</span> mentions</div>
+        <section>
+            <h2 class="ma-list-heading">
+                <div class="ma-list-heading__heading"><span class="ma-list-heading__count">{{ mentions|length }}</span> mentions</div>
 
-            <div class="ma-list-heading__actions">
+                <div class="ma-list-heading__actions">
 
-                <span class="ma-list-heading__action">
-                    {% if notification_exclusion.mention_notifications_enabled %}
-                    <a href="{% url 'barriers:mention_turn_notifications_off' %}">Email notifications: On</a>
-                    {% else %}
-                    <a href="{% url 'barriers:mention_turn_notifications_on' %}">Email notifications: Off</a>
-                    {% endif %}
-                </span>
-                <span class="ma-list-heading__action">
-                    {% if are_all_mentions_read %}
-                    <a href="{% url 'barriers:mention_mark_all_as_unread' %}">Mark all as unread</a>
-                    {% else %}
-                    <a href="{% url 'barriers:mention_mark_all_as_read' %}">Mark all as read</a>
-                    {% endif %}
-                </span>
-            </div>
+                    <span class="ma-list-heading__action">
+                        {% if notification_exclusion.mention_notifications_enabled %}
+                            <a href="{% url 'barriers:mention_turn_notifications_off' %}">Email notifications: On</a>
+                        {% else %}
+                            <a href="{% url 'barriers:mention_turn_notifications_on' %}">Email notifications: Off</a>
+                        {% endif %}
+                    </span>
+                    <span class="ma-list-heading__action">
+                        {% if are_all_mentions_read %}
+                            <a href="{% url 'barriers:mention_mark_all_as_unread' %}">Mark all as unread</a>
+                        {% else %}
+                            <a href="{% url 'barriers:mention_mark_all_as_read' %}">Mark all as read</a>
+                        {% endif %}
+                    </span>
+                </div>
 
-        </h2>
+            </h2>
 
 
-        <ul class="ma-card-list">
-            {% for mention in mentions %}
-                {% include "barriers/partials/mention.html" with mention=mention %}
+            <ul class="ma-card-list">
+                {% for mention in mentions %}
+                    {% include "barriers/partials/mention.html" with mention=mention %}
                 {% empty %}
-                <li class="mention-item ma-card-list__item">
-                    <p>You have no mentions</p>
-                </li>
-            {% endfor %}
-        </ul>
-    </section>
+                    <li class="mention-item ma-card-list__item">
+                        <p>You have no mentions</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
     {% endif %}
 
     {% if active == 'saved_searches' %}
-    <section>
-        <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ saved_searches|length }}</span> saved search{{ saved_searches|length|pluralize:"es" }}</h2>
+        <section>
+            <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ saved_searches|length }}</span> saved search{{ saved_searches|length|pluralize:"es" }}</h2>
 
-        <ul class="ma-card-list">
-            {% for saved_search in saved_searches %}
-                <li class="ma-card-list__item saved-search">
-                    <div class="saved-search__content">
-                        <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a></h3>
+            <ul class="ma-card-list">
+                {% for saved_search in saved_searches %}
+                    <li class="ma-card-list__item saved-search">
+                        <div class="saved-search__content">
+                            <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a></h3>
 
-                        {% include "barriers/partials/saved_search_badges.html" %}
+                            {% include "barriers/partials/saved_search_badges.html" %}
 
-                        {% if saved_search.filters %}
-                            <ul class="saved-search__filter-list">
-                                {% for name, value in saved_search.readable_filters.items %}
-                                    <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
+                            {% if saved_search.filters %}
+                                <ul class="saved-search__filter-list">
+                                    {% for name, value in saved_search.readable_filters.items %}
+                                        <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
 
-                    <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' saved_search.id %}">Notifications: {{ saved_search.notifications_text }}</a>
+                        <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' saved_search.id %}">Notifications: {{ saved_search.notifications_text }}</a>
 
-                    <div class="saved-search__actions">
-                        <a class="saved-search__action-item" href="{% url 'barriers:rename_saved_search' saved_search.id %}">Rename</a>
-                        <a class="saved-search__action-item" href="{% url 'barriers:delete_saved_search' saved_search.id %}">Delete</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </section>
+                        <div class="saved-search__actions">
+                            <a class="saved-search__action-item" href="{% url 'barriers:rename_saved_search' saved_search.id %}">Rename</a>
+                            <a class="saved-search__action-item" href="{% url 'barriers:delete_saved_search' saved_search.id %}">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
     {% endif %}
 
 {% endblock %}

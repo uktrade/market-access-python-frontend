@@ -21,20 +21,20 @@
                 {% form_field_error form "trade_direction" %}
 
                 <div class="govuk-radios trade-direction">
-                {% for choice_id, choice_label in form.fields.trade_direction.choices %}
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input"
-                               name="trade_direction"
-                               type="radio"
-                               id="trade-direction-{{ choice_id }}"
-                               value="{{ choice_id }}"
-                               aria-describedby="{{ choice_id }}-item-hint"
-                               {% if form.initial.trade_direction == choice_id %}checked="checked"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="trade-direction-{{ choice_id }}">
-                            {{ choice_label }}
-                        </label>
-                    </div>
-                {% endfor %}
+                    {% for choice_id, choice_label in form.fields.trade_direction.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                   name="trade_direction"
+                                   type="radio"
+                                   id="trade-direction-{{ choice_id }}"
+                                   value="{{ choice_id }}"
+                                   aria-describedby="{{ choice_id }}-item-hint"
+                                   {% if form.initial.trade_direction == choice_id %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="trade-direction-{{ choice_id }}">
+                                {{ choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
                 </div>
             </fieldset>
         </div>
