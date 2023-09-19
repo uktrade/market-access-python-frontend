@@ -411,7 +411,7 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
         ):
             patch_args["top_priority_status"] = "NONE"
 
-        # Need to be able to request removal automatically if changine a Top 100 barrier to watchlist
+        # Need to be able to request removal automatically if changing a Top 100 barrier to watchlist
         if (
             self.cleaned_data["priority_level"] == "WATCHLIST"
             and existing_top_priority_status == "APPROVED"
