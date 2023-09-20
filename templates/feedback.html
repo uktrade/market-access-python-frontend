@@ -11,7 +11,7 @@
             new ma.components.CharacterCount( '#{{ form.other_detail.name }}-form-group.govuk-character-count' );
         }
         document.addEventListener("DOMContentLoaded", function (event) {
-            ReactApp.GDSRadios();
+            ReactApp.GDSCheckboxes();
         })
     </script>
 
@@ -87,17 +87,20 @@
         </legend>
         {% form_field_error form "experienced_issues" %}
         <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes" id="experienced_issues">
-          {% for issue in form.experienced_issues %}
+          {% for value, name in form.fields.experienced_issues.choices %}
             <div class="govuk-checkboxes__item">
-              {{  issue.tag }}
-              <label class="govuk-label govuk-checkboxes__label" for="{{ issue.id_for_label }}">
-                {{ issue.choice_label }}
-              </label>
+                <input class="govuk-checkboxes__input"
+                 id="{{ form.experienced_issues.name }}-{{ value }}"
+                 name="{{ form.experienced_issues.name }}"
+                 type="checkbox" value="{{ value }}"
+                 {% if value in form.experienced_issues.value %} checked="checked"{% endif %}
+                 data-aria-controls="conditional-experienced_issues-{{ value}}">
+                <label class="govuk-label govuk-checkboxes__label" for="{{ form.experienced_issues.name }}-{{ value }}">{{ name }}</label>
             </div>
 
             {% if forloop.counter == 5 %}
 
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-id_experienced_issues_4">
+            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-{{form.experienced_issues.name}}-OTHER">
                 <div class="govuk-form-group">
                     <div id="{{ form.other_detail.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
                         <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
@@ -106,7 +109,7 @@
                             <span class="govuk-hint">{{ form.other_detail.help_text }}</span>
                             <textarea id="{{ form.other_detail.name }}"
                             class="govuk-textarea govuk-js-character-count js-character-count"
-                            name="update_{{ forloop.counter}}"
+                            name="{{ form.other_detail.name }}"
                             rows="5"
                             maxlength="1250">{% if form.other_detail.value %}{{ form.other_detail.value}}{% endif %}</textarea>
                         </div>
@@ -118,8 +121,6 @@
             </div>
 
             {% endif %}
-
-
 
           {% endfor %}
         </div>

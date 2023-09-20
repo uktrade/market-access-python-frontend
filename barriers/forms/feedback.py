@@ -48,7 +48,7 @@ class FeedbackForm(forms.Form):
     other_detail = forms.CharField(
         label="Describe the issue you faced",
         # help_text="",
-        max_length=3000,
+        max_length=1250,
         required=False,
         widget=forms.Textarea(attrs={"class": "govuk-textarea", "rows": 7}),
     )
