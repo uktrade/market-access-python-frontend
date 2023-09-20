@@ -367,15 +367,15 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
 
         # Need to catch attempts to change a top priority barrier to watchlist priority level
         # But only when adding a new status
-        if (
-            priority_level == "WATCHLIST"
-            and top_priority != "NONE"
-            and existing_top_priority_status == "NONE"
-        ):
-            self.add_error(
-                "priority_level",
-                "Top 100 barriers must have regional or country level priority",
-            )
+        # if (
+        #    priority_level == "WATCHLIST"
+        #    and top_priority != "NONE"
+        #    and existing_top_priority_status == "NONE"
+        # ):
+        #    self.add_error(
+        #        "priority_level",
+        #        "Top 100 barriers must have regional or country level priority",
+        #    )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
