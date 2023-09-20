@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
 
 {% block page_title %}{{ block.super }} - Feedback{% endblock %}
+
+
+{% block body_script %}
+{% render_bundle 'main' 'js' 'REACT' %}
+    <script>
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.other_detail.name }}-form-group.govuk-character-count' );
+        }
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSRadios();
+        })
+    </script>
+
+{% endblock %}
 
 {% block page_content %}
   <div class="govuk-grid-row">
@@ -79,6 +94,33 @@
                 {{ issue.choice_label }}
               </label>
             </div>
+
+            {% if forloop.counter == 5 %}
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-id_experienced_issues_4">
+                <div class="govuk-form-group">
+                    <div id="{{ form.other_detail.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+                        <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                            <label class="govuk-label govuk-label--s" for="other_detail">{{ form.other_detail.label }}</label>
+                            {% form_field_error form "other_detail" %}
+                            <span class="govuk-hint">{{ form.other_detail.help_text }}</span>
+                            <textarea id="{{ form.other_detail.name }}"
+                            class="govuk-textarea govuk-js-character-count js-character-count"
+                            name="update_{{ forloop.counter}}"
+                            rows="5"
+                            maxlength="1250">{% if form.other_detail.value %}{{ form.other_detail.value}}{% endif %}</textarea>
+                        </div>
+                        <div id="other_detail-info" class="govuk-hint govuk-character-count__message">
+                          You can enter up to 1250 characters
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endif %}
+
+
+
           {% endfor %}
         </div>
       </fieldset>
