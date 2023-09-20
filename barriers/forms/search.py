@@ -47,6 +47,7 @@ class BarrierSearchForm(forms.Form):
         label="Sector",
         required=False,
     )
+    only_main_sector = forms.BooleanField(label="Only main sector", required=False)
     organisation = forms.MultipleChoiceField(
         label="Government organisations",
         required=False,
@@ -316,6 +317,7 @@ class BarrierSearchForm(forms.Form):
             "start_date_to_month": data.get("start_date_to_month"),
             "start_date_to_year": data.get("start_date_to_year"),
             "export_types": data.getlist("export_types"),
+            "only_main_sector": data.get("only_main_sector"),
         }
 
         for status_value in STATUS_WITH_DATE_FILTER:
@@ -566,6 +568,7 @@ class BarrierSearchForm(forms.Form):
         )
         params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
         params["start_date"] = self.format_start_date()
+        params["only_main_sector"] = self.cleaned_data.get("only_main_sector")
 
         return {k: v for k, v in params.items() if v}
 

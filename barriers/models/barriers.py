@@ -270,6 +270,10 @@ class Barrier(APIModel):
         return []
 
     @property
+    def main_sector_name(self):
+        return self.main_sector.get("name", "Unknown")
+
+    @property
     def status(self):
         if self._status is None:
             self.data["status"]["id"] = str(self.data["status"]["id"])

@@ -13,6 +13,7 @@ from .notes import NoteHistoryItem
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
 from .public_barriers import PublicBarrierHistoryItem
 from .team_members import TeamMemberHistoryItem
+from .top_priority_summary import BarrierTopPrioritySummaryItem
 from .utils import PolymorphicBase
 from .wto import WTOHistoryItem
 
@@ -41,5 +42,6 @@ class HistoryItem(PolymorphicBase):
         ActionPlanMilestoneHistoryItem,
         ActionPlanTaskHistoryItem,
         ProgressUpdateHistoryItem,
+        BarrierTopPrioritySummaryItem,
     )
     class_lookup = {}

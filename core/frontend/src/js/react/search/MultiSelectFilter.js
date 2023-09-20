@@ -19,15 +19,28 @@ function MultiSelectFilter(props) {
 
     // A multi-select field can have a checkbox below it called secondary option
     // if props are provided generated below with appropriate details
-    const { secondaryOptionLabel, secondaryOptionFieldName } = props;
+
+    const { secondaryOptions } = props;
     const urlSearchParams = new URLSearchParams(window.location.search);
     const queryParams = Object.fromEntries(urlSearchParams.entries());
-    const defaultSecondaryOptionValue = secondaryOptionFieldName
-        ? queryParams[secondaryOptionFieldName]
-        : false;
-    const [secondaryOptionValue, setSecondaryOptionValue] = useState(
-        defaultSecondaryOptionValue
+    const defaultSecondaryOptionValues = secondaryOptions
+        ? secondaryOptions.reduce((accum, option) => {
+              accum[option.fieldName] = queryParams[option.fieldName] || false;
+              return accum;
+          }, {})
+        : {};
+
+    const [secondaryOptionValues, setSecondaryOptionValues] = useState(
+        defaultSecondaryOptionValues
     );
+
+    // To update a specific checkbox state, you can use a function like:
+    const handleSecondaryOptionChange = (fieldName) => {
+        setSecondaryOptionValues((prevValues) => ({
+            ...prevValues,
+            [fieldName]: !prevValues[fieldName],
+        }));
+    };
 
     const handleOptionSelect = (value, meta) => {
         if (meta.action === "select-option") {
@@ -62,28 +75,32 @@ function MultiSelectFilter(props) {
                     containerClasses={props.containerClasses}
                 />
 
-                {secondaryOptionFieldName && secondaryOptionLabel ? (
+                {secondaryOptions && secondaryOptions.length > 0 ? (
                     <div className="checkbox-filter govuk-!-width-full">
-                        <div className="checkbox-filter__item">
-                            <input
-                                className="checkbox-filter__input"
-                                id={`secondary-option-${secondaryOptionFieldName}`}
-                                name={secondaryOptionFieldName}
-                                type="checkbox"
-                                checked={secondaryOptionValue}
-                                onChange={(event) =>
-                                    setSecondaryOptionValue(
-                                        !secondaryOptionValue
-                                    )
-                                }
-                            />
-                            <label
-                                className="govuk-label checkbox-filter__label"
-                                htmlFor={`secondary-option-${secondaryOptionFieldName}`}
-                            >
-                                {secondaryOptionLabel}
-                            </label>
-                        </div>
+                        {props.secondaryOptions.map((option, index) => (
+                            <div className="checkbox-filter__item" key={index}>
+                                <input
+                                    className="checkbox-filter__input"
+                                    id={`secondary-option-${option.fieldName}`}
+                                    name={option.fieldName}
+                                    type="checkbox"
+                                    checked={
+                                        secondaryOptionValues[option.fieldName]
+                                    }
+                                    onChange={() =>
+                                        handleSecondaryOptionChange(
+                                            option.fieldName
+                                        )
+                                    }
+                                />
+                                <label
+                                    className="govuk-label checkbox-filter__label"
+                                    htmlFor={`secondary-option-${option.fieldName}`}
+                                >
+                                    {option.label}
+                                </label>
+                            </div>
+                        ))}
                     </div>
                 ) : null}
             </fieldset>
