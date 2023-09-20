@@ -26,7 +26,7 @@
                             <input class="govuk-checkboxes__input" id="tag-{{ value }}" name="{{ form.tags.name }}" type="checkbox" value="{{ value }}"  {% if value in form.tags.value %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label" for="tag-{{ value }}">{{ name }}</label>
                             <span id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                              {{ help_text }}
+                                {{ help_text }}
                             </span>
                         </div>
                     {% endfor %}

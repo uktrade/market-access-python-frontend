@@ -63,7 +63,7 @@
         <li class="page-tabs__tab">
             <a class="page-tabs__tab__text" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Public view
                 {% if barrier.public_barrier.tab_badge %}
-                <span class="ma-badge ma-badge--in-tab">{{ barrier.public_barrier.tab_badge }}</span>
+                    <span class="ma-badge ma-badge--in-tab">{{ barrier.public_barrier.tab_badge }}</span>
                 {% endif %}</a>
         </li>
     {% endif %}

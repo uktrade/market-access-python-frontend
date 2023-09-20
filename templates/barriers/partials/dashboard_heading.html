@@ -5,19 +5,19 @@
 {% now 'c' as tz_now %}
 {% comment %} c formats current time to ISO 8601 format e.g. 2008-01-02T10:30:00.000123+02:00 {% endcomment %}
 {% if tz_now < '2022-05-06T22:45:00.000000+00:00' %}
-<div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-    <div class="govuk-notification-banner__header">
-      <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-        Share your thoughts on DMAS {{tz_now}}
-      </h2>
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Share your thoughts on DMAS {{tz_now}}
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-notification-banner__heading">
+                Your feedback helps us to improve the service <br>
+                <a class="govuk-notification-banner__link" href="https://ditresearch.eu.qualtrics.com/jfe/form/SV_b9gwVSZhIX6JmE6" target="_blank">Please complete the DMAS survey</a>
+            </p>
+        </div>
     </div>
-    <div class="govuk-notification-banner__content">
-      <p class="govuk-notification-banner__heading">
-        Your feedback helps us to improve the service <br>
-        <a class="govuk-notification-banner__link" href="https://ditresearch.eu.qualtrics.com/jfe/form/SV_b9gwVSZhIX6JmE6" target="_blank">Please complete the DMAS survey</a>
-      </p>
-    </div>
-  </div>
 {% endif %}
 
 <section class="dash-buttons-cards-container">
@@ -38,7 +38,7 @@
     <a href="{% url 'barriers:public_barriers' %}" role="button" class="dash-button">
         <span class="dash-button__heading">Find barriers for publishing</span>
         <span class="dash-button__text">
-          Table view with public title, summary and comments
+            Table view with public title, summary and comments
         </span>
     </a>
 

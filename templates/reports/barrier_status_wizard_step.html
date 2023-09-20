@@ -31,12 +31,12 @@
                     {% for value, name in form.fields.status.choices %}
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input"
-                                id="status-radio-{{ value }}"
-                                name="barrier-status-status"
-                                type="radio"
-                                value="{{ value }}"
-                                {% if form.status.value == value %} checked="checked"{% endif %}
-                                {% if value in "3 4" %} data-aria-controls="conditional-{{ value }}"{% endif %}>
+                                   id="status-radio-{{ value }}"
+                                   name="barrier-status-status"
+                                   type="radio"
+                                   value="{{ value }}"
+                                   {% if form.status.value == value %} checked="checked"{% endif %}
+                                   {% if value in "3 4" %} data-aria-controls="conditional-{{ value }}"{% endif %}>
                             <label class="govuk-label govuk-radios__label" for="{{ form.status.id_for_label }}">
                                 {{ name }}
                             </label>
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
 
-                            {% elif forloop.counter == 3  %}
+                        {% elif forloop.counter == 3  %}
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{value}}">
                                 <div class="govuk-form-group">
                                     <label class="govuk-label govuk-label--s" for="resolved_date">
@@ -107,12 +107,12 @@
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input"
-                            id="{{ form.start_date_unknown.name }}"
-                            name="barrier-status-start_date_unknown"
-                            type="checkbox"
-                            value="1"
-                            {% if form.start_date_unknown.value %}checked{% endif %}
-                            data-aria-controls="conditional-current-active">
+                                   id="{{ form.start_date_unknown.name }}"
+                                   name="barrier-status-start_date_unknown"
+                                   type="checkbox"
+                                   value="1"
+                                   {% if form.start_date_unknown.value %}checked{% endif %}
+                                   data-aria-controls="conditional-current-active">
                             <label class="govuk-label govuk-checkboxes__label" for="barrier-status-start_date_unknown">{{ form.start_date_unknown.label }}</label>
                         </div>
                         <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden govuk-!-margin-bottom-0" id="conditional-current-active">
@@ -124,11 +124,11 @@
                                 {% for value, name in form.fields.currently_active.choices %}
                                     <div class="govuk-radios__item">
                                         <input class="govuk-radios__input"
-                                        id="{{ name }}"
-                                        name="{{wizard.steps.current}}-currently_active"
-                                        type="radio"
-                                        value="{{ value }}"
-                                        {% if form.currently_active.value == value %}checked="checked"{% endif %} >
+                                               id="{{ name }}"
+                                               name="{{wizard.steps.current}}-currently_active"
+                                               type="radio"
+                                               value="{{ value }}"
+                                               {% if form.currently_active.value == value %}checked="checked"{% endif %} >
                                         <label class="govuk-label govuk-radios__label" for="{{ name }}">
                                             {{ name }}
                                         </label>

@@ -21,7 +21,7 @@
 
             <select class="govuk-select govuk-!-width-full{% if form.admin_area.errors %} govuk-select--error{% endif %}" id="{{ form.admin_area.name }}" name="{{ form.admin_area.name }}"{% if form.admin_area.errors %} aria-describedby="{{ form.admin_area.name }}-error"{% endif %}>
                 {% for id, name in form.fields.admin_area.choices %}
-                <option value="{{ id }}">{{ name }}</option>
+                    <option value="{{ id }}">{{ name }}</option>
                 {% endfor %}
             </select>
         </div>

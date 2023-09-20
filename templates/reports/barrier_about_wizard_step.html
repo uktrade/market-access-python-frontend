@@ -7,7 +7,7 @@
 {% block page_title %} Report A Barrier - About the Barrier{% endblock %}
 
 {% block body_script %}
-{% render_bundle 'main' 'js' 'REACT' %}
+    {% render_bundle 'main' 'js' 'REACT' %}
     <script>
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '#{{ form.title.name }}-form-group.govuk-character-count' );
