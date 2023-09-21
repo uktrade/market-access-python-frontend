@@ -29,7 +29,7 @@ class FeedbackForm(forms.Form):
         ),
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
         error_messages={
-            "required": "You must select one or more activities",
+            "required": "Select one or more activities",
         },
     )
     experienced_issues = forms.MultipleChoiceField(
@@ -43,7 +43,9 @@ class FeedbackForm(forms.Form):
             ("OTHER", "Other"),
         ),
         widget=forms.CheckboxSelectMultiple(attrs={"class": "govuk-checkboxes__input"}),
-        required=False,
+        error_messages={
+            "required": 'Select the type of issue you experienced, or select "I did not experience any issues"',
+        },
     )
     other_detail = forms.CharField(
         label="Describe the issue you faced",
@@ -72,7 +74,7 @@ class FeedbackForm(forms.Form):
         csat_submission = cleaned_data.get("csat_submission", False)
         issues = cleaned_data.get("experienced_issues", None)
         if not satisfaction:
-            self.add_error("satisfaction", "You must select a level of satisfaction")
+            self.add_error("satisfaction", "Select a level of satisfaction")
         elif not issues and csat_submission != "True":
             self.add_error(
                 "experienced_issues",
