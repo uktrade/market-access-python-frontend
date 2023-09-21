@@ -46,6 +46,7 @@ class FeedbackForm(forms.Form):
         error_messages={
             "required": 'Select the type of issue you experienced, or select "I did not experience any issues"',
         },
+        required=False,
     )
     other_detail = forms.CharField(
         label="Describe the issue you faced",
