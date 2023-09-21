@@ -74,13 +74,14 @@ class FeedbackForm(forms.Form):
         satisfaction = cleaned_data.get("satisfaction", None)
         csat_submission = cleaned_data.get("csat_submission", False)
         issues = cleaned_data.get("experienced_issues", None)
-        if not satisfaction:
-            self.add_error("satisfaction", "Select a level of satisfaction")
-        elif not issues and csat_submission != "True":
-            self.add_error(
-                "experienced_issues",
-                'Select the type of issue you experienced, or select "I did not experience any issues"',
-            )
+        if not satisfaction or not issues and csat_submission != "True":
+            if not satisfaction:
+                self.add_error("satisfaction", "Select a level of satisfaction")
+            if not issues:
+                self.add_error(
+                    "experienced_issues",
+                    'Select the type of issue you experienced, or select "I did not experience any issues"',
+                )
         elif csat_submission == "True":
             client = MarketAccessAPIClient(self.token)
             feedback = client.feedback.send_feedback(
