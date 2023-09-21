@@ -2,7 +2,7 @@
     <label class="govuk-label{% if label_classes %} {{ label_classes }}{% else %} govuk-label--s{% endif %}" for="{{ field.name }}">{{ field.label }}</label>
 
     {% if field.help_text %}
-    <span class="govuk-hint">{{ field.help_text|safe }}</span>
+        <span class="govuk-hint">{{ field.help_text|safe }}</span>
     {% endif %}
 
     {% form_field_error field %}

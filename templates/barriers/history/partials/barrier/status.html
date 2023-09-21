@@ -11,7 +11,7 @@
 {% if item.new_value.status != None %}
     <div class="history-item__new-value">
         <span class="diff__ins" tabindex="0">
-        <p class="govuk-visually-hidden">new value: </p>
+            <p class="govuk-visually-hidden">new value: </p>
             {{ item.new_value.status_text }} {% if item.new_value.is_resolved and item.new_value.status_date %}({{ item.new_value.status_date|date:"F Y" }}){% endif %}
             <br/>
             {% if item.new_value.status_summary %}{{ item.new_value.status_summary }}{% endif %}

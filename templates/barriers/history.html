@@ -28,14 +28,14 @@
                 </p>
 
                 <div class="history-item__container">
-                  {% if item.non_standard_layout %}
+                    {% if item.non_standard_layout %}
                         {% history_item item %}
-                  {% else %}
-                    <h4 class="history-item__field" tabindex="0">{{ item.field_name }}</h4>
-                    <div class="history-item__change">
-                        {% history_item item %}
-                    </div>
-                  {% endif %}
+                    {% else %}
+                        <h4 class="history-item__field" tabindex="0">{{ item.field_name }}</h4>
+                        <div class="history-item__change">
+                            {% history_item item %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

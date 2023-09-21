@@ -650,3 +650,18 @@ class SearchTestCase(MarketAccessTestCase):
             archived="0",
             export_types="goods,services",
         )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_only_main_sector(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={"only_main_sector": True, "ordering": "-reported"},
+        )
+        assert response.status_code == HTTPStatus.OK
+        mock_list.assert_called_with(
+            ordering="-reported",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            only_main_sector=True,
+        )

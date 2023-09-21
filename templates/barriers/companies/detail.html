@@ -14,34 +14,34 @@
 
         <dl class="details-list">
             {% if company.company_name %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Registered name</dt>
-                <dd class="details-list__value">{{ company.company_name }}</dd>
-            </div>
+                <div class="details-list__group">
+                    <dt class="details-list__key">Registered name</dt>
+                    <dd class="details-list__value">{{ company.company_name }}</dd>
+                </div>
             {% endif %}
             {% if company.company_number %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Companies House number</dt>
-                <dd class="details-list__value">{{ company.company_number }}</dd>
-            </div>
+                <div class="details-list__group">
+                    <dt class="details-list__key">Companies House number</dt>
+                    <dd class="details-list__value">{{ company.company_number }}</dd>
+                </div>
             {% endif %}
             {% if company.address_display %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Primary address</dt>
-                <dd class="details-list__value">{{ company.address_display }}</dd>
-            </div>
+                <div class="details-list__group">
+                    <dt class="details-list__key">Primary address</dt>
+                    <dd class="details-list__value">{{ company.address_display }}</dd>
+                </div>
             {% endif %}
             {% if company.sic_codes %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Sector</dt>
-                <dd class="details-list__value">{{ company.sic_codes|join:", " }}</dd>
-            </div>
+                <div class="details-list__group">
+                    <dt class="details-list__key">Sector</dt>
+                    <dd class="details-list__value">{{ company.sic_codes|join:", " }}</dd>
+                </div>
             {% endif %}
             {% if company.date_of_creation %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Incorporated on</dt>
-                <dd class="details-list__value">{{ company.date_of_creation|date:"j F Y" }}</dd>
-            </div>
+                <div class="details-list__group">
+                    <dt class="details-list__key">Incorporated on</dt>
+                    <dd class="details-list__value">{{ company.date_of_creation|date:"j F Y" }}</dd>
+                </div>
             {% endif %}
         </dl>
 
