@@ -319,18 +319,17 @@ class ProgrammeFundProgressUpdateForm(
 
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
-    regional_help_text = (
-        "It could be relevant to several countries or part of a regional trade plan,"
-        " for example, but should be agreed with your regional market access"
-        " coordinator."
+    overseas_help_text = (
+        "Barrier can be worked on by officials at Post, with no or limited support needed from "
+        "policy teams in London departments."
     )
     country_help_text = "Actively being worked on by you or your team."
     watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
         (
-            "REGIONAL",
-            "<span class='govuk-body'>Regional priority</span> <span"
-            f" class='govuk-hint'>{regional_help_text}</span>",
+            "OVERSEAS",
+            "<span class='govuk-body'>Overseas Delivery</span> <span"
+            f" class='govuk-hint'>{overseas_help_text}</span>",
         ),
         (
             "COUNTRY",
@@ -374,7 +373,7 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
         ):
             self.add_error(
                 "priority_level",
-                "Top 100 barriers must have regional or country level priority",
+                "Top 100 barriers must have overseas or country level priority",
             )
 
     def save(self):
@@ -611,7 +610,7 @@ def update_barrier_priority_form_factory(
             # If user has entered a priority other than Watchlist, we need an answer for
             # top priority status.
             if (
-                cleaned_priority_input in ["COUNTRY", "REGIONAL"]
+                cleaned_priority_input in ["COUNTRY", "OVERSEAS"]
                 and cleaned_top_priority_status == ""
             ):
                 raise forms.ValidationError(

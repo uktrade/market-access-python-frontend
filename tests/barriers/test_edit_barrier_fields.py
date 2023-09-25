@@ -246,7 +246,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
                 "barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]}
             ),
             data={
-                "priority_level": "REGIONAL",
+                "priority_level": "OVERSEAS",
                 "priority_summary": "New summary",
                 "top_barrier": TOP_PRIORITY_BARRIER_STATUS.NONE,
             },
@@ -259,7 +259,7 @@ class EditPriorityTestCase(MarketAccessTestCase):
 
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            priority_level="REGIONAL",
+            priority_level="OVERSEAS",
             tags=[1],
             top_priority_status=TOP_PRIORITY_BARRIER_STATUS.NONE,
         )

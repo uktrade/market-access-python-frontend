@@ -92,7 +92,7 @@ ma.pages.topBarrierPriority = {
         hideComponent(topPriorityRejectionDescriptionContainer);
 
         // If any of the situations are true, we need to display the consider Top Priority question
-        // - Country or regional priority levels selected already
+        // - Country or overseas priority levels selected already
         // - Barrier is already Top Priority
         if (
             regionalRadioInput.checked == true ||
@@ -165,7 +165,7 @@ ma.pages.topBarrierPriority = {
 
         // Set event listeners.
         // The priority radio buttons
-        // - Regional and Country buttons show the consider top priority question
+        // - Overseas and Country buttons show the consider top priority question
         // - Watchlist button hides top priority question, sets it to 'no' and hides the description UNLESS we have a top priority status already
         regionalRadioInput.addEventListener("change", function () {
             showComponent(topPriorityConsiderationContainer);
