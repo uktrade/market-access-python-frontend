@@ -6,12 +6,12 @@
 {% block body_script %}
   {% render_bundle 'main' 'js' 'REACT' %}
   <script>
-        if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '#{{ form.other_detail.name }}-form-group.govuk-character-count' );
-        }
-        document.addEventListener("DOMContentLoaded", function (event) {
-            ReactApp.GDSCheckboxes();
-        })
+    if( ma.components.CharacterCount ){
+      new ma.components.CharacterCount( '#{{ form.other_detail.name }}-form-group.govuk-character-count' );
+    }
+    document.addEventListener("DOMContentLoaded", function (event) {
+      ReactApp.GDSCheckboxes();
+    })
   </script>
 {% endblock body_script %}
 {% block page_content %}
