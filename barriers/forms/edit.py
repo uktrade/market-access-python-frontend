@@ -320,13 +320,11 @@ class ProgrammeFundProgressUpdateForm(
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
 
-    top_priority_help_text = "This is the government's global list of priority market access barriers."
+    top_priority_help_text = "Barrier needs significant input from DBT policy teams, other government departments or regulators to resolve."
     regional_help_text = (
-        "It could be relevant to several countries or part of a regional trade plan,"
-        " for example, but should be agreed with your regional market access"
-        " coordinator."
+        "Barrier can be resolved by officials at Post, with no or limited support needed from policy teams in London departments."
     )
-    country_help_text = "Actively being worked on by you or your team."
+    country_help_text = "Category currently under review. Please do not assign new barriers as Country priority."
     watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
         (

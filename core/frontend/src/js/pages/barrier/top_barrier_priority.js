@@ -103,40 +103,42 @@ ma.pages.topBarrierPriority = {
             top_priority_status == "NONE" ||
             top_priority_status == "RESOLVED"
         ) {
-                showComponent(priorityLevelChoiceContainer);
+            showComponent(priorityLevelChoiceContainer);
         }
 
-        // If any of the situations are true, we need to display the consider Top Priority question
-        // - Country or regional priority levels selected already
-        // - Barrier is already Top Priority
+        // If we have entered the page with Top100 radio checked, (such as in an error state)
+        // we need to display extra PB100 summary question
         if (
-            top100RadioInput.checked == true ||
-            top_priority_status == "APPROVAL_PENDING" ||
-            top_priority_status == "REMOVAL_PENDING" ||
-            top_priority_status == "APPROVED"
+            top100RadioInput.checked == true &&
+            (top_priority_status == "" ||
+            top_priority_status == "NONE" ||
+            top_priority_status == "RESOLVED")
         ) {
-            showComponent(topPriorityConsiderationContainer);
+            showComponent(topPriorityNotice);
+            showComponent(topPrioritySummaryDescriptionContainer);
+            showComponent(topPrioritySummaryHintText);
+            showComponent(topPrioritySummaryDescriptionInput);
         }
 
         // If the page has defaulted to watchlist with a Top Priority status (such as an error message triggering)
         // Need to display watchlist/top priority warning
-        if (
-            watchlistRadioInput.checked == true &&
-            (top_priority_status == "APPROVAL_PENDING" ||
-                top_priority_status == "REMOVAL_PENDING" ||
-                top_priority_status == "APPROVED")
-        ) {
-            showComponent(topPriorityWatchlistWarning);
-        }
+        //if (
+        //    watchlistRadioInput.checked == true &&
+        //    (top_priority_status == "APPROVAL_PENDING" ||
+        //        top_priority_status == "REMOVAL_PENDING" ||
+        //        top_priority_status == "APPROVED")
+        //) {
+        //    showComponent(topPriorityWatchlistWarning);
+        //}
 
         // If we reload the page with a Top Priority barrier and watchlist selected
         // Need to hide the consideration question
-        if (
-            watchlistRadioInput.checked == true &&
-            top_priority_status == "APPROVED"
-        ) {
-            hideComponent(topPriorityConsiderationContainer);
-        }
+        //if (
+        //    watchlistRadioInput.checked == true &&
+        //    top_priority_status == "APPROVED"
+        //) {
+        //    hideComponent(topPriorityConsiderationContainer);
+        //}
 
         // If any of the following situations are true, we need to display the priority notice
         // - If barrier is awaiting change approval
@@ -149,13 +151,13 @@ ma.pages.topBarrierPriority = {
 
         // If any of the following situations are true, we need to display the priority summary section and its contents
         // - If barrier is already a top priority barrier and no is selected for top priority confirmation
-        if (
-            top_priority_status == "APPROVED" &&
-            topPriorityConsiderationNoRadio.checked == true
-        ) {
-            showComponent(topPrioritySummaryDescriptionContainer);
-            showComponent(topPrioritySummaryDescriptionInput);
-        }
+        //if (
+        //    top_priority_status == "APPROVED" //&&
+        //    //topPriorityConsiderationNoRadio.checked == true
+        //) {
+        //    showComponent(topPrioritySummaryDescriptionContainer);
+        //    //showComponent(topPrioritySummaryDescriptionInput);
+        //}
 
         // If any of the following situations are true, we need to display the editable priority summary section
         // - If barrier is awaiting approval, show the summary section so it can be edited
@@ -164,6 +166,7 @@ ma.pages.topBarrierPriority = {
             top_priority_status == "APPROVED" ||
             top_priority_status == "REMOVAL_PENDING"
         ) {
+            showComponent(topPriorityConsiderationContainer);
             showComponent(topPrioritySummaryDescriptionContainer);
             showComponent(topPrioritySummaryExistingText);
             showComponent(topPrioritySummaryDates);
