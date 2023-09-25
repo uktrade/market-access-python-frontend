@@ -1,13 +1,13 @@
 {% if filter.value %}
-<li class="active-filters__item">
-    <a href="{% if filter.remove_url %}?{{ filter.remove_url }}{% else %}{% url 'barriers:search' %}{% endif %}" class="active-filters__item__link" title="Remove {{ filter.label }} filter">
-        <h4 class="active-filter__heading">{{ filter.label }}:</h4>
-        <p class="active-filter__text">
-            {{ filter.readable_value|striptags }}
-        </p>
-        <span class="sr-only govuk-visually-hidden">
-            Activate link to remove {{ filter.label }} filter with value open quote {{ filter.readable_value|striptags }} end quote.
-        </span>
-    </a>
-</li>
+    <li class="active-filters__item">
+        <a href="{% if filter.remove_url %}?{{ filter.remove_url }}{% else %}{% url 'barriers:search' %}{% endif %}" class="active-filters__item__link" title="Remove {{ filter.label }} filter">
+            <h4 class="active-filter__heading">{{ filter.label }}:</h4>
+            <p class="active-filter__text">
+                {{ filter.readable_value|striptags }}
+            </p>
+            <span class="sr-only govuk-visually-hidden">
+                Activate link to remove {{ filter.label }} filter with value open quote {{ filter.readable_value|striptags }} end quote.
+            </span>
+        </a>
+    </li>
 {% endif %}

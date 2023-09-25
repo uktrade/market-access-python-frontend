@@ -16,7 +16,7 @@
         {% csrf_token %}
 
         <div id="{{ form.status.name }}"
-        class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+             class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
                 <span id="{{ form.status.name }}-item-hint" class="govuk-hint">{{ form.status.help_text }}</span>
@@ -28,12 +28,12 @@
 
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input" id="{{ choice_value }}" name="{{ form.status.name }}"
-                                    type="radio" value="{{ choice_value }}"
-                                    {% if form.status.value == choice_value %}checked="checked"{% endif %}
-                                    data-aria-controls="conditional-{{ choice_value }}"
-                                    aria-describedby="{{ choice_value }}-item-hint">
+                                   type="radio" value="{{ choice_value }}"
+                                   {% if form.status.value == choice_value %}checked="checked"{% endif %}
+                                   data-aria-controls="conditional-{{ choice_value }}"
+                                   aria-describedby="{{ choice_value }}-item-hint">
                             <label class="govuk-label govuk-radios__label"
-                                    for="{{ choice_value }}">{{ choice_name }}</label>
+                                   for="{{ choice_value }}">{{ choice_name }}</label>
                         </div>
                     {% endfor %}
                 </div>

@@ -26,7 +26,7 @@
                     {% if form.sector.errors %}aria-describedby="organisations-error"{% endif %}>
                 <option value selected>Select a government organisation</option>
                 {% for id, name in form.fields.organisation.choices %}
-                <option value="{{ id }}">{{ name }}</option>
+                    <option value="{{ id }}">{{ name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -36,9 +36,9 @@
                 <h3 class="selection-list__heading">Selected government organisations</h3>
                 <ul class="selection-list__list">
                     {% for item in selected_organisation %}
-                    <li class="selection-list__list__item">
-                        <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
-                    </li>
+                        <li class="selection-list__list__item">
+                            <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
+                        </li>
                     {% endfor %}
                 </ul>
             </div>

@@ -2,9 +2,9 @@
 {% load render_bundle from webpack_loader %}
 {% block page_title %}{{ block.super }}
     {% if "edit" in request.path %}
-    - Edit Top 100 priority barrier update
+        - Edit Top 100 priority barrier update
     {% else %}
-    - Add Top 100 priority barrier update
+        - Add Top 100 priority barrier update
     {% endif %}
 {% endblock %}
 
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block body_script %}
-{% render_bundle 'main' 'js' 'REACT' %}
+    {% render_bundle 'main' 'js' 'REACT' %}
     <script>
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '#{{ form.update.name }}-form-group.govuk-character-count' );
@@ -66,78 +66,78 @@
                         {% for value, name in form.fields.status.choices %}
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input"
-                                 id="{{ form.status.name }}-{{ value }}"
-                                 name="{{ form.status.name }}"
-                                 type="radio" value="{{ value }}"
-                                 {% if form.status.value == value %} checked="checked"{% endif %}
-                                 data-aria-controls="conditional-status-{{ value}}">
+                                       id="{{ form.status.name }}-{{ value }}"
+                                       name="{{ form.status.name }}"
+                                       type="radio" value="{{ value }}"
+                                       {% if form.status.value == value %} checked="checked"{% endif %}
+                                       data-aria-controls="conditional-status-{{ value}}">
                                 <label class="govuk-label govuk-radios__label" for="{{ form.status.name }}-{{ value }}">{{ name }}</label>
                             </div>
 
                             {% if forloop.counter == 1 %}
 
-                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-ON_TRACK">
-                                <div class="govuk-form-group">
-                                    <div id="{{ form.update_1.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
-                                        <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
-                                            <label class="govuk-label govuk-label--s" for="update_1">{{ form.update_1.label }}</label>
-                                            {% form_field_error form "update_1" %}
-                                            <span class="govuk-hint">{{ form.update_1.help_text }}</span>
-                                            <textarea id="{{ form.update_1.name }}"
-                                            class="govuk-textarea govuk-js-character-count js-character-count"
-                                            name="update_{{ forloop.counter}}"
-                                            rows="5"
-                                            maxlength="1250">{% if form.update_1.value %}{{ form.update_1.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
-                                        </div>
-                                        <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message">
-                                          You can enter up to 1250 characters
+                                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-ON_TRACK">
+                                    <div class="govuk-form-group">
+                                        <div id="{{ form.update_1.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+                                            <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                                                <label class="govuk-label govuk-label--s" for="update_1">{{ form.update_1.label }}</label>
+                                                {% form_field_error form "update_1" %}
+                                                <span class="govuk-hint">{{ form.update_1.help_text }}</span>
+                                                <textarea id="{{ form.update_1.name }}"
+                                                          class="govuk-textarea govuk-js-character-count js-character-count"
+                                                          name="update_{{ forloop.counter}}"
+                                                          rows="5"
+                                                          maxlength="1250">{% if form.update_1.value %}{{ form.update_1.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
+                                            </div>
+                                            <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message">
+                                                You can enter up to 1250 characters
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             {% elif forloop.counter == 2  %}
 
-                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-RISK_OF_DELAY">
-                                <div class="govuk-form-group">
-                                    <div id="{{ form.update_2.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
-                                        <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
-                                            <label class="govuk-label govuk-label--s" for="update_2">{{ form.update_2.label }}</label>
-                                            {% form_field_error form "update_2" %}
-                                            <span class="govuk-hint">{{ form.update_2.help_text }}</span>
-                                            <textarea id="{{ form.update_2.name }}"
-                                            class="govuk-textarea govuk-js-character-count js-character-count"
-                                            name="update_{{ forloop.counter}}"
-                                            rows="5"
-                                            maxlength="1250">{% if form.update_2.value %}{{ form.update_2.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
-                                        </div>
-                                        <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message">
-                                          You can enter up to 1250 characters
+                                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-RISK_OF_DELAY">
+                                    <div class="govuk-form-group">
+                                        <div id="{{ form.update_2.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+                                            <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                                                <label class="govuk-label govuk-label--s" for="update_2">{{ form.update_2.label }}</label>
+                                                {% form_field_error form "update_2" %}
+                                                <span class="govuk-hint">{{ form.update_2.help_text }}</span>
+                                                <textarea id="{{ form.update_2.name }}"
+                                                          class="govuk-textarea govuk-js-character-count js-character-count"
+                                                          name="update_{{ forloop.counter}}"
+                                                          rows="5"
+                                                          maxlength="1250">{% if form.update_2.value %}{{ form.update_2.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
+                                            </div>
+                                            <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message">
+                                                You can enter up to 1250 characters
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
                             {% elif forloop.counter == 3  %}
 
-                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-DELAYED">
-                                <div class="govuk-form-group">
-                                    <div id="{{ form.update_3.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
-                                        <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
-                                            <label class="govuk-label govuk-label--s" for="update_3">{{ form.update_3.label }}</label>
-                                            {% form_field_error form "update_3" %}
-                                            <span class="govuk-hint">{{ form.update_3.help_text }}</span>
-                                            <textarea id="{{ form.update_3.name }}"
-                                            class="govuk-textarea govuk-js-character-count js-character-count"
-                                            name="update_{{ forloop.counter}}"
-                                            rows="5"
-                                            maxlength="1250">{% if form.update_3.value %}{{ form.update_3.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
-                                        </div>
-                                        <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message">
-                                          You can enter up to 1250 characters
+                                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-DELAYED">
+                                    <div class="govuk-form-group">
+                                        <div id="{{ form.update_3.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+                                            <div  class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                                                <label class="govuk-label govuk-label--s" for="update_3">{{ form.update_3.label }}</label>
+                                                {% form_field_error form "update_3" %}
+                                                <span class="govuk-hint">{{ form.update_3.help_text }}</span>
+                                                <textarea id="{{ form.update_3.name }}"
+                                                          class="govuk-textarea govuk-js-character-count js-character-count"
+                                                          name="update_{{ forloop.counter}}"
+                                                          rows="5"
+                                                          maxlength="1250">{% if form.update_3.value %}{{ form.update_3.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
+                                            </div>
+                                            <div id="update_{{ forloop.counter}}-info" class="govuk-hint govuk-character-count__message">
+                                                You can enter up to 1250 characters
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             {% endif %}
 
                         {% endfor %}
@@ -173,7 +173,7 @@
                 <textarea id="{{ form.estimated_resolution_date_change_reason.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.estimated_resolution_date_change_reason.name }}" rows="5" maxlength="1250">{% if form.estimated_resolution_date_change_reason.value %}{{ form.estimated_resolution_date_change_reason.value }}{% endif %}</textarea>
             </div>
             <div id="{{ form.estimated_resolution_date_change_reason.name }}-info" class="govuk-hint govuk-character-count__message">
-              You can enter up to 1250 characters
+                You can enter up to 1250 characters
             </div>
 
         </div>
