@@ -182,7 +182,6 @@ ma.pages.topBarrierPriority = {
         // - Regional and Country buttons show the consider top priority question
         // - Watchlist button hides top priority question, sets it to 'no' and hides the description UNLESS we have a top priority status already
         top100RadioInput.addEventListener("change", function () {
-            console.log("TOP100 SELECTED")
             topPriorityConsiderationYesRadio.checked = true;
             hideComponent(topPriorityConsiderationContainer);
             hideComponent(topPriorityWatchlistWarning);
