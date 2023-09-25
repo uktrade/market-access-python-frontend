@@ -319,6 +319,8 @@ class ProgrammeFundProgressUpdateForm(
 
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
+
+    top_priority_help_text = "This is the government's global list of priority market access barriers."
     regional_help_text = (
         "It could be relevant to several countries or part of a regional trade plan,"
         " for example, but should be agreed with your regional market access"
@@ -327,6 +329,11 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
     country_help_text = "Actively being worked on by you or your team."
     watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
+        (
+            "PB100",
+            "<span class='govuk-body'>Top 100 priority barrier</span> <span"
+            f" class='govuk-hint'>{top_priority_help_text}</span>",
+        ),
         (
             "REGIONAL",
             "<span class='govuk-body'>Regional priority</span> <span"
