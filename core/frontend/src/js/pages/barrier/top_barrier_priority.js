@@ -8,7 +8,7 @@ ma.pages.topBarrierPriority = {
         const topPriorityConsiderationContainer =
             document.getElementById("top_barrier");
 
-        const priorityLevelChoiceContainer = 
+        const priorityLevelChoiceContainer =
             document.getElementById("priority_level");
 
         // Sections that contains the text box to let users add a summary justifying the top priority change
@@ -111,8 +111,8 @@ ma.pages.topBarrierPriority = {
         if (
             top100RadioInput.checked == true &&
             (top_priority_status == "" ||
-            top_priority_status == "NONE" ||
-            top_priority_status == "RESOLVED")
+                top_priority_status == "NONE" ||
+                top_priority_status == "RESOLVED")
         ) {
             showComponent(topPriorityNotice);
             showComponent(topPrioritySummaryDescriptionContainer);
@@ -189,7 +189,7 @@ ma.pages.topBarrierPriority = {
             hideComponent(topPriorityConsiderationContainer);
             hideComponent(topPriorityWatchlistWarning);
 
-            if (top100RadioInput.checked == true){
+            if (top100RadioInput.checked == true) {
                 if (
                     top_priority_status == "" ||
                     top_priority_status == "NONE" ||
@@ -244,8 +244,6 @@ ma.pages.topBarrierPriority = {
                 //    topPrioritySummaryDescriptionInput.value = "";
                 //}
             }
-
-            
         });
         regionalRadioInput.addEventListener("change", function () {
             lowLevelPriorityClickedEvent();

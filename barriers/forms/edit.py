@@ -320,11 +320,18 @@ class ProgrammeFundProgressUpdateForm(
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
 
-    top_priority_help_text = "Barrier needs significant input from DBT policy teams, other government departments or regulators to resolve."
-    regional_help_text = (
-        "Barrier can be resolved by officials at Post, with no or limited support needed from policy teams in London departments."
+    top_priority_help_text = (
+        "Barrier needs significant input from DBT policy teams, other "
+        "government departments or regulators to resolve."
     )
-    country_help_text = "Category currently under review. Please do not assign new barriers as Country priority."
+    regional_help_text = (
+        "Barrier can be resolved by officials at Post, with no or limited "
+        "support needed from policy teams in London departments."
+    )
+    country_help_text = (
+        "Category currently under review. Please do not assign new "
+        "barriers as Country priority."
+    )
     watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
         (
