@@ -170,7 +170,7 @@ ma.pages.topBarrierPriority = {
                 }
             }
         });
-        regionalRadioInput.addEventListener("change", function () {
+        overseasRadioInput.addEventListener("change", function () {
             lowLevelPriorityClickedEvent();
         });
         countryRadioInput.addEventListener("change", function () {
