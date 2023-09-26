@@ -8,6 +8,9 @@ ma.pages.topBarrierPriority = {
         const topPriorityConsiderationContainer =
             document.getElementById("top_barrier");
 
+        const priorityLevelChoiceContainer =
+            document.getElementById("priority_level");
+
         // Sections that contains the text box to let users add a summary justifying the top priority change
         const topPrioritySummaryDescriptionContainer = document.getElementById(
             "priority_summary-container"
@@ -41,9 +44,10 @@ ma.pages.topBarrierPriority = {
         );
 
         // Radio buttons for the "Which priority type" question
-        const overseasRadioInput = document.getElementById("priority_level-1");
-        const countryRadioInput = document.getElementById("priority_level-2");
-        const watchlistRadioInput = document.getElementById("priority_level-3");
+        const top100RadioInput = document.getElementById("priority_level-1");
+        const overseasRadioInput = document.getElementById("priority_level-2");
+        const countryRadioInput = document.getElementById("priority_level-3");
+        const watchlistRadioInput = document.getElementById("priority_level-4");
 
         // Yes/No radio buttons for the "Is this barrer considered a top priority" question
         const topPriorityConsiderationYesRadio =
@@ -81,6 +85,9 @@ ma.pages.topBarrierPriority = {
         };
 
         // Set initial visibility.
+
+        // Hide all components and selectively reveal depending on barriers current priorities
+        hideComponent(priorityLevelChoiceContainer);
         hideComponent(topPriorityConsiderationContainer);
         hideComponent(topPriorityNotice);
         hideComponent(topPriorityWatchlistWarning);
@@ -91,12 +98,19 @@ ma.pages.topBarrierPriority = {
         hideComponent(topPrioritySummaryDates);
         hideComponent(topPriorityRejectionDescriptionContainer);
 
+        if (
+            top_priority_status == "" ||
+            top_priority_status == "NONE" ||
+            top_priority_status == "RESOLVED"
+        ) {
+            showComponent(priorityLevelChoiceContainer);
+        }
+
         // If any of the situations are true, we need to display the consider Top Priority question
         // - Country or overseas delivery priority levels selected already
         // - Barrier is already Top Priority
         if (
-            overseasRadioInput.checked == true ||
-            countryRadioInput.checked == true ||
+            top100RadioInput.checked == true ||
             top_priority_status == "APPROVAL_PENDING" ||
             top_priority_status == "REMOVAL_PENDING" ||
             top_priority_status == "APPROVED"
@@ -167,15 +181,79 @@ ma.pages.topBarrierPriority = {
         // The priority radio buttons
         // - Overseas and Country buttons show the consider top priority question
         // - Watchlist button hides top priority question, sets it to 'no' and hides the description UNLESS we have a top priority status already
-        overseasRadioInput.addEventListener("change", function () {
-            showComponent(topPriorityConsiderationContainer);
+        top100RadioInput.addEventListener("change", function () {
+            console.log("TOP100 SELECTED");
+            topPriorityConsiderationYesRadio.checked = true;
+            hideComponent(topPriorityConsiderationContainer);
             hideComponent(topPriorityWatchlistWarning);
+
+            if (top100RadioInput.checked == true) {
+                if (
+                    top_priority_status == "" ||
+                    top_priority_status == "NONE" ||
+                    top_priority_status == "RESOLVED"
+                ) {
+                    showComponent(topPriorityNotice);
+                    showComponent(topPrioritySummaryDescriptionContainer);
+                    showComponent(topPrioritySummaryHintText);
+                    showComponent(topPrioritySummaryDescriptionInput);
+                }
+                //if (
+                //    top_priority_status == "APPROVAL_PENDING" ||
+                //    top_priority_status == "REMOVAL_PENDING"
+                //) {
+                //    hideComponent(topPriorityRejectionDescriptionContainer);
+                //}
+                //if (top_priority_status == "APPROVED") {
+                //    showComponent(topPrioritySummaryDescriptionContainer);
+                //    hideComponent(topPrioritySummaryDescriptionInput);
+                //    showComponent(topPrioritySummaryHintText);
+                //    showComponent(topPrioritySummaryExistingText);
+                //    showComponent(topPrioritySummaryDates);
+                //    topPrioritySummaryInputLabel.innerHTML =
+                //        "Reason provided why this should be a potential top 100 barrier";
+                //    topPrioritySummaryDescriptionInput.value =
+                //        existing_top_priority_summary;
+                //}
+            } else {
+                if (
+                    top_priority_status == "" ||
+                    top_priority_status == "NONE" ||
+                    top_priority_status == "RESOLVED"
+                ) {
+                    hideComponent(topPriorityNotice);
+                    hideComponent(topPrioritySummaryHintText);
+                    hideComponent(topPrioritySummaryDescriptionContainer);
+                }
+                //if (
+                //    top_priority_status == "APPROVAL_PENDING" ||
+                //    top_priority_status == "REMOVAL_PENDING"
+                //) {
+                //    showComponent(topPriorityRejectionDescriptionContainer);
+                //}
+                //if (top_priority_status == "APPROVED") {
+                //    showComponent(topPrioritySummaryDescriptionContainer);
+                //    showComponent(topPrioritySummaryDescriptionInput);
+                //    showComponent(topPrioritySummaryHintText);
+                //    hideComponent(topPrioritySummaryExistingText);
+                //    hideComponent(topPrioritySummaryDates);
+                //    topPrioritySummaryInputLabel.innerHTML =
+                //        "Describe why this should be removed as a top 100 priority barrier";
+                //    topPrioritySummaryDescriptionInput.value = "";
+                //}
+            }
+        });
+        regionalRadioInput.addEventListener("change", function () {
+            lowLevelPriorityClickedEvent();
         });
         countryRadioInput.addEventListener("change", function () {
-            showComponent(topPriorityConsiderationContainer);
-            hideComponent(topPriorityWatchlistWarning);
+            lowLevelPriorityClickedEvent();
         });
         watchlistRadioInput.addEventListener("change", function () {
+            lowLevelPriorityClickedEvent();
+        });
+
+        const lowLevelPriorityClickedEvent = function () {
             if (
                 top_priority_status == "" ||
                 top_priority_status == "NONE" ||
@@ -196,23 +274,23 @@ ma.pages.topBarrierPriority = {
             } else {
                 showComponent(topPriorityWatchlistWarning);
             }
-        });
+        };
 
         // The consider top priority question radio buttons - not present if top_priority
         if (topPriorityConsiderationYesRadio != null) {
             topPriorityConsiderationYesRadio.addEventListener(
                 "change",
                 function () {
-                    if (
-                        top_priority_status == "" ||
-                        top_priority_status == "NONE" ||
-                        top_priority_status == "RESOLVED"
-                    ) {
-                        showComponent(topPriorityNotice);
-                        showComponent(topPrioritySummaryDescriptionContainer);
-                        showComponent(topPrioritySummaryHintText);
-                        showComponent(topPrioritySummaryDescriptionInput);
-                    }
+                    //if (
+                    //    top_priority_status == "" ||
+                    //    top_priority_status == "NONE" ||
+                    //    top_priority_status == "RESOLVED"
+                    //) {
+                    //    showComponent(topPriorityNotice);
+                    //    showComponent(topPrioritySummaryDescriptionContainer);
+                    //    showComponent(topPrioritySummaryHintText);
+                    //    showComponent(topPrioritySummaryDescriptionInput);
+                    //}
                     if (
                         top_priority_status == "APPROVAL_PENDING" ||
                         top_priority_status == "REMOVAL_PENDING"

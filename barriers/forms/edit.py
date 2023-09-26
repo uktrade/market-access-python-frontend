@@ -319,6 +319,10 @@ class ProgrammeFundProgressUpdateForm(
 
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
+
+    top_priority_help_text = (
+        "This is the government's global list of priority market access barriers."
+    )
     overseas_help_text = (
         "Barrier can be resolved by officials at Post, with no or limited support needed from policy teams "
         "in London departments. "
@@ -326,6 +330,11 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
     country_help_text = "Category currently under review. Please do not assign new barriers as Country Priority."
     watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
+        (
+            "PB100",
+            "<span class='govuk-body'>Top 100 priority barrier</span> <span"
+            f" class='govuk-hint'>{top_priority_help_text}</span>",
+        ),
         (
             "OVERSEAS",
             "<span class='govuk-body'>Overseas Delivery</span> <span"
