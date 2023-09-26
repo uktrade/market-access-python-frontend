@@ -321,7 +321,8 @@ class ProgrammeFundProgressUpdateForm(
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
 
     top_priority_help_text = (
-        "This is the government's global list of priority market access barriers."
+        "Barrier needs significant input from DBT policy teams, other "
+        "government departments or regulators to resolve."
     )
     overseas_help_text = (
         "Barrier can be resolved by officials at Post, with no or limited support needed from policy teams "
@@ -358,46 +359,16 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
         error_messages={"required": "Select a priority type"},
     )
 
-    def clean(self):
-        cleaned_data = super().clean()
-        priority_level = cleaned_data.get("priority_level")
-        top_priority = cleaned_data.get("top_barrier")
-
-        # Need to check that the barrier is not already a Top 100 or awaiting approval
-        client = MarketAccessAPIClient(self.token)
-        existing_top_priority_status = getattr(
-            client.barriers.get(id=self.id), "top_priority_status"
-        )
-
-        # If top 100 question not answered, default to "NONE"
-        if top_priority is None or top_priority == "":
-            top_priority = "NONE"
-
-        # Need to catch attempts to change a top priority barrier to watchlist priority level
-        # But only when adding a new status
-        if (
-            priority_level == "WATCHLIST"
-            and top_priority != "NONE"
-            and existing_top_priority_status == "NONE"
-        ):
-            self.add_error(
-                "priority_level",
-                "Top 100 barriers must have overseas or country level priority",
-            )
-
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        # Get a list of the tag ids already attached to the barrier
-        existing_tags = getattr(client.barriers.get(id=self.id), "tags")
-        tag_ids = []
-        for tag in existing_tags:
-            tag_ids.append(tag["id"])
+        # PB100 setting does not go into priority_level field, it is recorded seperately
+        if self.cleaned_data["priority_level"] == "PB100":
+            self.cleaned_data["priority_level"] = "NONE"
 
         patch_args = {
             "id": self.id,
             "priority_level": self.cleaned_data["priority_level"],
-            "tags": tag_ids,
         }
 
         existing_top_priority_status = getattr(
@@ -411,20 +382,6 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
                 patch_args["top_priority_status"] = existing_top_priority_status
             else:
                 patch_args["top_priority_status"] = self.cleaned_data["top_barrier"]
-
-        # Need to be able to wipe Top 100 APPROVAL_PENDING with a change to the watchlist priority
-        if (
-            self.cleaned_data["priority_level"] == "WATCHLIST"
-            and existing_top_priority_status == "APPROVAL_PENDING"
-        ):
-            patch_args["top_priority_status"] = "NONE"
-
-        # Need to be able to request removal automatically if changing a Top 100 barrier to watchlist
-        if (
-            self.cleaned_data["priority_level"] == "WATCHLIST"
-            and existing_top_priority_status == "APPROVED"
-        ):
-            patch_args["top_priority_status"] = "REMOVAL_PENDING"
 
         # Set additional args depending on if questions are answered
         if self.fields.get("top_priority_rejection_summary"):
@@ -611,21 +568,6 @@ def update_barrier_priority_form_factory(
                 widget=forms.Textarea,
                 required=False,
             )
-
-        def clean_top_barrier(self):
-            cleaned_priority_input = self.cleaned_data.get("priority_level")
-            cleaned_top_priority_status = self.cleaned_data.get("top_barrier")
-
-            # If user has entered a priority other than Watchlist, we need an answer for
-            # top priority status.
-            if (
-                cleaned_priority_input in ["COUNTRY", "OVERSEAS"]
-                and cleaned_top_priority_status == ""
-            ):
-                raise forms.ValidationError(
-                    "Please indicate if this is a top priority barrier"
-                )
-            return cleaned_top_priority_status
 
         def clean_priority_summary(self):
             cleaned_priority_summary = self.cleaned_data["priority_summary"]
