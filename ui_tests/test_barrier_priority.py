@@ -83,7 +83,7 @@ def test_regional_level_opens_top_priority_section(page: Page, test_barrier_id):
     consideration_question = page.locator("id=top_barrier")
     expect(consideration_question).not_to_be_visible()
 
-    # Click Overseas priority option
+    # Click Overseas delivery option
     priority_radio = page.locator("id=priority_level-1")
     priority_radio.click()
 
