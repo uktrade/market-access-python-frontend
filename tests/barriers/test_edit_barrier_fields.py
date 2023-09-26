@@ -181,6 +181,161 @@ class EditPriorityTestCase(MarketAccessTestCase):
         assert form.initial["priority_level"] == self.barrier["priority_level"]
         assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.NONE
 
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_edit_priority_approval_pending_admin_form(
+        self, mock_priority_get, mock_user
+    ):
+        self.barrier["top_priority_status"] = "APPROVAL_PENDING"
+        self.barrier["top_priority_summary"] = self.barrier["top_priority_summary"]
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
+        mock_user.return_value = self.administrator
+
+        response = self.client.get(
+            reverse("barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]})
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["priority_level"] == "PB100"
+        assert (
+            form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
+        )
+        admin_question_approve_request = (
+            "This barrier has been tagged as a Top 100 priority barrier. "
+            "Do you agree with this status?"
+        )
+        assert form.fields["top_barrier"].label == admin_question_approve_request
+        assert form.fields["top_barrier"].choices == [
+            ("APPROVED", "Yes"),
+            ("NONE", "No"),
+        ]
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_edit_priority_removal_pending_admin_form(
+        self, mock_priority_get, mock_user
+    ):
+        self.barrier["top_priority_status"] = "REMOVAL_PENDING"
+        self.barrier["top_priority_summary"] = self.barrier["top_priority_summary"]
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
+        mock_user.return_value = self.administrator
+
+        response = self.client.get(
+            reverse("barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]})
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["priority_level"] == "PB100"
+        assert (
+            form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
+        )
+        admin_question_approve_request = (
+            "This barrier has been requested to be removed as a Top 100 priority barrier.  "
+            "Do you agree with this status?"
+        )
+        assert form.fields["top_barrier"].label == admin_question_approve_request
+        assert form.fields["top_barrier"].choices == [
+            ("NONE", "Yes"),
+            ("APPROVED", "No"),
+        ]
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_edit_priority_resolved_admin_form(self, mock_priority_get, mock_user):
+        self.barrier["top_priority_status"] = "RESOLVED"
+        self.barrier["top_priority_summary"] = self.barrier["top_priority_summary"]
+        self.barrier["priority_level"] = "NONE"
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
+        mock_user.return_value = self.administrator
+
+        response = self.client.get(
+            reverse("barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]})
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["priority_level"] == "NONE"
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.RESOLVED
+        assert form.fields["top_barrier"].choices == [
+            ("APPROVAL_PENDING", "Yes"),
+            ("RESOLVED", "No"),
+        ]
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_edit_priority_approval_pending_general_user_form(
+        self, mock_priority_get, mock_user
+    ):
+        self.barrier["top_priority_status"] = "APPROVAL_PENDING"
+        self.barrier["top_priority_summary"] = self.barrier["top_priority_summary"]
+        self.barrier["priority_level"] = "NONE"
+        self.barrier["status"] = {"id": 2, "name": "Open"}
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
+        mock_user.return_value = self.general_user
+
+        response = self.client.get(
+            reverse("barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]})
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["priority_level"] == "PB100"
+        assert (
+            form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
+        )
+        assert "top_barrier" not in form.fields
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_edit_priority_removal_pending_general_user_form(
+        self, mock_priority_get, mock_user
+    ):
+        self.barrier["top_priority_status"] = "REMOVAL_PENDING"
+        self.barrier["top_priority_summary"] = self.barrier["top_priority_summary"]
+        self.barrier["priority_level"] = "NONE"
+        self.barrier["status"] = {"id": 2, "name": "Open"}
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
+        mock_user.return_value = self.general_user
+
+        response = self.client.get(
+            reverse("barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]})
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["priority_level"] == "PB100"
+        assert (
+            form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
+        )
+        assert "top_barrier" not in form.fields
+
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
+    def test_edit_priority_resolved_general_user_form(
+        self, mock_priority_get, mock_user
+    ):
+        self.barrier["top_priority_status"] = "RESOLVED"
+        self.barrier["top_priority_summary"] = self.barrier["top_priority_summary"]
+        self.barrier["priority_level"] = "NONE"
+        self.barrier["status"] = {"id": 2, "name": "Open"}
+        mock_priority_get.return_value = self.barrier["top_priority_summary"]
+        mock_user.return_value = self.general_user
+
+        response = self.client.get(
+            reverse("barriers:edit_priority", kwargs={"barrier_id": self.barrier["id"]})
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+        assert form.initial["priority_level"] == "NONE"
+        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.RESOLVED
+        assert form.fields["top_barrier"].choices == [
+            ("APPROVAL_PENDING", "Yes"),
+            ("RESOLVED", "No"),
+        ]
+
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.BarriersResource.get_top_priority_summary")
     def test_priority_cannot_be_empty(self, mock_priority_get, mock_patch):
