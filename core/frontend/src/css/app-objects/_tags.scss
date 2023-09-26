@@ -102,8 +102,8 @@
 }
 
 .resolved-barrier-top-priority-tag {
-	@extend .govuk-tag;
-	background-color:govuk-colour("dark-grey");
+    @extend .govuk-tag;
+    background-color:govuk-colour("dark-grey");
     color:govuk-colour("white");
 }
 
