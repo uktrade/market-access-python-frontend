@@ -17,7 +17,7 @@
     {% form_field_error field %}
 
     <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
-    (file size limit <strong>{{ field.field.max_upload_size|filesizeformat }}</strong>)
+        (file size limit <strong>{{ field.field.max_upload_size|filesizeformat }}</strong>)
     </span>
 
     <input class="govuk-file-upload file-upload__input js-file-input" id="{{ field.name }}" name="{{ field.name }}" type="file" aria-describedby="document-hint">

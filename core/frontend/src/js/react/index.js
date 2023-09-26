@@ -77,7 +77,7 @@ function renderMultiSelectFilter(
     placeholder = null,
     labelClasses = null,
     containerClasses = null,
-    secondaryOption = null
+    secondaryOptions = null
 ) {
     let placeholderString = placeholder
         ? placeholder
@@ -94,8 +94,7 @@ function renderMultiSelectFilter(
             placeholder={placeholderString}
             labelClasses={labelClasses}
             containerClasses={containerClasses}
-            secondaryOptionFieldName={secondaryOption?.fieldName}
-            secondaryOptionLabel={secondaryOption?.label}
+            secondaryOptions={secondaryOptions}
         />,
         htmlElement
     );

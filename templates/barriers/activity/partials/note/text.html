@@ -2,7 +2,7 @@
 
 <h4 class="event-list__item__heading">{{ item.date|date:"j F Y" }}<span class="event-list__item__heading__recede"> at {{ item.date | time }} (GMT)</span>
     {% if item.user.name %}
-    <span class="event-list__item__heading__recede"> by </span>{{ item.user.name }}
+        <span class="event-list__item__heading__recede"> by </span>{{ item.user.name }}
     {% endif %}
 </h4>
 

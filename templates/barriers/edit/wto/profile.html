@@ -8,14 +8,14 @@
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
     <script>
-    document.addEventListener("DOMContentLoaded", function (event) {
-        ReactApp.renderMultiSelectFilter(
-            "member_states",
-            "Search member states",
-            "govuk-label--s",
-            "govuk-!-width-two-thirds"
-        )
-    })
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderMultiSelectFilter(
+                "member_states",
+                "Search member states",
+                "govuk-label--s",
+                "govuk-!-width-two-thirds"
+            )
+        })
     </script>
 {% endblock %}
 

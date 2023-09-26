@@ -6,9 +6,9 @@
         </div>
 
         {% if show_unarchive_button %}
-        <div class="archived-banner__unarchive">
-            <a href="{% url 'barriers:unarchive' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-1">Unarchive this barrier</a>
-        </div>
+            <div class="archived-banner__unarchive">
+                <a href="{% url 'barriers:unarchive' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-1">Unarchive this barrier</a>
+            </div>
         {% endif %}
     </section>
 {% endif %}

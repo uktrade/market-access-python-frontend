@@ -5,21 +5,21 @@
 
 {% if item.old_value.content_team_approval != item.new_value.content_team_approval %}
     <p class="event-list__item__text">
-    {% if item.new_value.content_team_approval %}
-        Content <strong>Approved</strong> by {{ item.user.name }}
-    {% else %}
-        Content <strong>Approval removed</strong> by {{ item.user.name }}
-    {% endif %}
+        {% if item.new_value.content_team_approval %}
+            Content <strong>Approved</strong> by {{ item.user.name }}
+        {% else %}
+            Content <strong>Approval removed</strong> by {{ item.user.name }}
+        {% endif %}
     </p>
 {% endif %}
 
 {% if item.old_value.hm_trade_commissioner_approval != item.new_value.hm_trade_commissioner_approval %}
     <p class="event-list__item__text" class="event-list__item__text">
-    {% if item.new_value.hm_trade_commissioner_approval %}
-        <strong>Approved</strong> HM Trade Commissioner
-    {% else %}
-        <strong>Approval removed</strong> HM Trade Commissioner
-    {% endif %}
+        {% if item.new_value.hm_trade_commissioner_approval %}
+            <strong>Approved</strong> HM Trade Commissioner
+        {% else %}
+            <strong>Approval removed</strong> HM Trade Commissioner
+        {% endif %}
     </p>
 {% endif %}
 
@@ -32,7 +32,7 @@
 {% for organisation_id in item.new_value.government_organisation_approvals %}
     {% if not organisation_id in item.old_value.government_organisation_approvals %}
         <p class="event-list__item__text">
-        <strong>Approved</strong> {{ gov_organisations|keyvalue:organisation_id }}
+            <strong>Approved</strong> {{ gov_organisations|keyvalue:organisation_id }}
         </p>
     {% endif %}
 {% endfor %}
@@ -41,7 +41,7 @@
 {% for organisation_id in item.old_value.government_organisation_approvals %}
     {% if not organisation_id in item.new_value.government_organisation_approvals %}
         <p class="event-list__item__text">
-        <strong>Approval removed</strong> {{ gov_organisations|keyvalue:organisation_id }}
+            <strong>Approval removed</strong> {{ gov_organisations|keyvalue:organisation_id }}
         </p>
     {% endif %}
 {% endfor %}

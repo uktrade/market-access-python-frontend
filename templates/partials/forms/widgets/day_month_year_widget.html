@@ -1,8 +1,8 @@
 {% for widget in widget.subwidgets %}
-<div class="govuk-date-input__item">
-    <div class="govuk-form-group">
-        <label class="govuk-label govuk-date-input__label" for="date-group-{{ widget.name }}">{% cycle 'Day' 'Month' 'Year' %}</label>
-        <input class="govuk-input govuk-date-input__input govuk-input--width-{% cycle '2' '2' '4' %}" id="date-group-{{ widget.name }}" name="{{ widget.name }}" type="number" pattern="[0-9]*" {% if widget.value %}value="{{ widget.value }}"{% endif %}>
+    <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="date-group-{{ widget.name }}">{% cycle 'Day' 'Month' 'Year' %}</label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-{% cycle '2' '2' '4' %}" id="date-group-{{ widget.name }}" name="{{ widget.name }}" type="number" pattern="[0-9]*" {% if widget.value %}value="{{ widget.value }}"{% endif %}>
+        </div>
     </div>
-</div>
 {% endfor %}

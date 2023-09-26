@@ -14,11 +14,11 @@
 
     <dl class="restrict-width">
         {% if economic_assessment.automated_analysis_data %}
-        {% include "barriers/assessments/economic/partials/automated_analysis_data.html" with data=economic_assessment.automated_analysis_data %}
+            {% include "barriers/assessments/economic/partials/automated_analysis_data.html" with data=economic_assessment.automated_analysis_data %}
         {% endif %}
 
         <dt class="ma-data-key">Economic assessment</dt>
-            {{ economic_assessment.rating.name }}
+        {{ economic_assessment.rating.name }}
         <dd class="ma-data-value">
         </dd>
 
