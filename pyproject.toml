@@ -34,7 +34,7 @@ pytest-playwright = "^0.3.0"
 pytest-watch = "^4.2.0"
 certifi = "2023.07.22"
 sqlparse = "0.4.4"
-cryptography = "~=41.0.3"
+cryptography = "~=41.0.4"
 
 [tool.poetry.dev-dependencies]
 black = "~=22.3.0"
