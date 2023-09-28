@@ -8,6 +8,9 @@ ma.pages.topBarrierPriority = {
         const topPriorityConsiderationContainer =
             document.getElementById("top_barrier");
 
+        const priorityLevelChoiceContainer =
+            document.getElementById("priority_level");
+
         // Sections that contains the text box to let users add a summary justifying the top priority change
         const topPrioritySummaryDescriptionContainer = document.getElementById(
             "priority_summary-container"
@@ -41,9 +44,10 @@ ma.pages.topBarrierPriority = {
         );
 
         // Radio buttons for the "Which priority type" question
-        const regionalRadioInput = document.getElementById("priority_level-1");
-        const countryRadioInput = document.getElementById("priority_level-2");
-        const watchlistRadioInput = document.getElementById("priority_level-3");
+        const top100RadioInput = document.getElementById("priority_level-1");
+        const overseasRadioInput = document.getElementById("priority_level-2");
+        const countryRadioInput = document.getElementById("priority_level-3");
+        const watchlistRadioInput = document.getElementById("priority_level-4");
 
         // Yes/No radio buttons for the "Is this barrer considered a top priority" question
         const topPriorityConsiderationYesRadio =
@@ -81,6 +85,9 @@ ma.pages.topBarrierPriority = {
         };
 
         // Set initial visibility.
+
+        // Hide all components and selectively reveal depending on barriers current priorities
+        hideComponent(priorityLevelChoiceContainer);
         hideComponent(topPriorityConsiderationContainer);
         hideComponent(topPriorityNotice);
         hideComponent(topPriorityWatchlistWarning);
@@ -91,37 +98,26 @@ ma.pages.topBarrierPriority = {
         hideComponent(topPrioritySummaryDates);
         hideComponent(topPriorityRejectionDescriptionContainer);
 
-        // If any of the situations are true, we need to display the consider Top Priority question
-        // - Country or regional priority levels selected already
-        // - Barrier is already Top Priority
         if (
-            regionalRadioInput.checked == true ||
-            countryRadioInput.checked == true ||
-            top_priority_status == "APPROVAL_PENDING" ||
-            top_priority_status == "REMOVAL_PENDING" ||
-            top_priority_status == "APPROVED"
+            top_priority_status == "" ||
+            top_priority_status == "NONE" ||
+            top_priority_status == "RESOLVED"
         ) {
-            showComponent(topPriorityConsiderationContainer);
+            showComponent(priorityLevelChoiceContainer);
         }
 
-        // If the page has defaulted to watchlist with a Top Priority status (such as an error message triggering)
-        // Need to display watchlist/top priority warning
+        // If we have entered the page with Top100 radio checked, (such as in an error state)
+        // we need to display extra PB100 summary question
         if (
-            watchlistRadioInput.checked == true &&
-            (top_priority_status == "APPROVAL_PENDING" ||
-                top_priority_status == "REMOVAL_PENDING" ||
-                top_priority_status == "APPROVED")
+            top100RadioInput.checked == true &&
+            (top_priority_status == "" ||
+                top_priority_status == "NONE" ||
+                top_priority_status == "RESOLVED")
         ) {
-            showComponent(topPriorityWatchlistWarning);
-        }
-
-        // If we reload the page with a Top Priority barrier and watchlist selected
-        // Need to hide the consideration question
-        if (
-            watchlistRadioInput.checked == true &&
-            top_priority_status == "APPROVED"
-        ) {
-            hideComponent(topPriorityConsiderationContainer);
+            showComponent(topPriorityNotice);
+            showComponent(topPrioritySummaryDescriptionContainer);
+            showComponent(topPrioritySummaryHintText);
+            showComponent(topPrioritySummaryDescriptionInput);
         }
 
         // If any of the following situations are true, we need to display the priority notice
@@ -133,16 +129,6 @@ ma.pages.topBarrierPriority = {
             showComponent(topPriorityNotice);
         }
 
-        // If any of the following situations are true, we need to display the priority summary section and its contents
-        // - If barrier is already a top priority barrier and no is selected for top priority confirmation
-        if (
-            top_priority_status == "APPROVED" &&
-            topPriorityConsiderationNoRadio.checked == true
-        ) {
-            showComponent(topPrioritySummaryDescriptionContainer);
-            showComponent(topPrioritySummaryDescriptionInput);
-        }
-
         // If any of the following situations are true, we need to display the editable priority summary section
         // - If barrier is awaiting approval, show the summary section so it can be edited
         if (
@@ -150,6 +136,7 @@ ma.pages.topBarrierPriority = {
             top_priority_status == "APPROVED" ||
             top_priority_status == "REMOVAL_PENDING"
         ) {
+            showComponent(topPriorityConsiderationContainer);
             showComponent(topPrioritySummaryDescriptionContainer);
             showComponent(topPrioritySummaryExistingText);
             showComponent(topPrioritySummaryDates);
@@ -164,55 +151,49 @@ ma.pages.topBarrierPriority = {
         }
 
         // Set event listeners.
-        // The priority radio buttons
-        // - Regional and Country buttons show the consider top priority question
-        // - Watchlist button hides top priority question, sets it to 'no' and hides the description UNLESS we have a top priority status already
-        regionalRadioInput.addEventListener("change", function () {
-            showComponent(topPriorityConsiderationContainer);
+        // Selecting Top 100 radio will open up the top_priority_summary inputs
+        top100RadioInput.addEventListener("change", function () {
+            topPriorityConsiderationYesRadio.checked = true;
+            hideComponent(topPriorityConsiderationContainer);
             hideComponent(topPriorityWatchlistWarning);
-        });
-        countryRadioInput.addEventListener("change", function () {
-            showComponent(topPriorityConsiderationContainer);
-            hideComponent(topPriorityWatchlistWarning);
-        });
-        watchlistRadioInput.addEventListener("change", function () {
-            if (
-                top_priority_status == "" ||
-                top_priority_status == "NONE" ||
-                top_priority_status == "RESOLVED"
-            ) {
-                topPriorityConsiderationYesRadio.checked = false;
-                topPriorityConsiderationNoRadio.checked = true;
-                hideComponent(topPriorityConsiderationContainer);
-                hideComponent(topPriorityNotice);
-                hideComponent(topPrioritySummaryDescriptionContainer);
-                hideComponent(topPriorityRejectionDescriptionContainer);
-            } else if (top_priority_status == "APPROVED") {
-                topPriorityConsiderationYesRadio.checked = false;
-                topPriorityConsiderationNoRadio.checked = true;
-                hideComponent(topPriorityConsiderationContainer);
-                showComponent(topPriorityWatchlistWarning);
-                showComponent(topPrioritySummaryDescriptionContainer);
-            } else {
-                showComponent(topPriorityWatchlistWarning);
+
+            if (top100RadioInput.checked == true) {
+                if (
+                    top_priority_status == "" ||
+                    top_priority_status == "NONE" ||
+                    top_priority_status == "RESOLVED"
+                ) {
+                    showComponent(topPriorityNotice);
+                    showComponent(topPrioritySummaryDescriptionContainer);
+                    showComponent(topPrioritySummaryHintText);
+                    showComponent(topPrioritySummaryDescriptionInput);
+                }
             }
         });
+        overseasRadioInput.addEventListener("change", function () {
+            lowLevelPriorityClickedEvent();
+        });
+        countryRadioInput.addEventListener("change", function () {
+            lowLevelPriorityClickedEvent();
+        });
+        watchlistRadioInput.addEventListener("change", function () {
+            lowLevelPriorityClickedEvent();
+        });
+
+        const lowLevelPriorityClickedEvent = function () {
+            topPriorityConsiderationYesRadio.checked = false;
+            topPriorityConsiderationNoRadio.checked = true;
+            hideComponent(topPriorityConsiderationContainer);
+            hideComponent(topPriorityNotice);
+            hideComponent(topPrioritySummaryDescriptionContainer);
+            hideComponent(topPriorityRejectionDescriptionContainer);
+        };
 
         // The consider top priority question radio buttons - not present if top_priority
         if (topPriorityConsiderationYesRadio != null) {
             topPriorityConsiderationYesRadio.addEventListener(
                 "change",
                 function () {
-                    if (
-                        top_priority_status == "" ||
-                        top_priority_status == "NONE" ||
-                        top_priority_status == "RESOLVED"
-                    ) {
-                        showComponent(topPriorityNotice);
-                        showComponent(topPrioritySummaryDescriptionContainer);
-                        showComponent(topPrioritySummaryHintText);
-                        showComponent(topPrioritySummaryDescriptionInput);
-                    }
                     if (
                         top_priority_status == "APPROVAL_PENDING" ||
                         top_priority_status == "REMOVAL_PENDING"

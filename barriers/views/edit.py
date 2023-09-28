@@ -191,10 +191,18 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
             self.barrier.top_priority_status or TOP_PRIORITY_BARRIER_STATUS.NONE
         )
 
+        if self.barrier.top_priority_status in [
+            TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING,
+            TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING,
+            TOP_PRIORITY_BARRIER_STATUS.APPROVED,
+        ]:
+            existing_priority_level = "PB100"
+        else:
+            existing_priority_level = self.barrier.priority_level
+
         return {
-            "priority_level": self.barrier.priority_level,
+            "priority_level": existing_priority_level,
             "top_barrier": top_barrier_initial,
-            "existing_tags_list": self.barrier.tags,
         }
 
 

@@ -75,7 +75,7 @@ class BarrierSearchForm(forms.Form):
     priority_level = forms.MultipleChoiceField(
         label="Barrier priority",
         choices=(
-            ("REGIONAL", "Regional priority"),
+            ("OVERSEAS", "Overseas Delivery"),
             ("COUNTRY", "Country priority"),
             ("WATCHLIST", "Watch list"),
             ("NONE", "No priority assigned"),
