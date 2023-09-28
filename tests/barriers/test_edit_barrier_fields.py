@@ -131,7 +131,6 @@ class EditTagsTestCase(MarketAccessTestCase):
         for tag in self.barrier["tags"]:
             test_tag_list.append(tag["id"])
         assert form.initial["tags"] == test_tag_list
-        assert form.initial["top_barrier"] == TOP_PRIORITY_BARRIER_STATUS.APPROVED
 
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.UsersResource.get_current")

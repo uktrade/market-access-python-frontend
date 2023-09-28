@@ -280,40 +280,9 @@ class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
         return kwargs
 
     def get_initial(self):
-        top_barrier_initial = (
-            self.barrier.top_priority_status or TOP_PRIORITY_BARRIER_STATUS.NONE
-        )
-
         return {
             "tags": [tag["id"] for tag in self.barrier.tags],
-            "top_barrier": top_barrier_initial,
         }
-
-    def get_context_data(self, **kwargs):
-        # Add info on the user's permissions
-
-        user = user_scope(self.request)["current_user"]
-        is_user_admin = user.has_permission("set_topprioritybarrier")
-
-        REQUEST_PHASE_STATUSES = [
-            TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING,
-            TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING,
-        ]
-        is_top_priority_requested = (
-            self.barrier.top_priority_status in REQUEST_PHASE_STATUSES
-        )
-
-        kwargs["user_is_top_priority_moderator"] = is_user_admin
-        kwargs["is_top_priority_requested"] = is_top_priority_requested
-        kwargs["is_approval_pending"] = (
-            self.barrier.top_priority_status
-            == TOP_PRIORITY_BARRIER_STATUS.APPROVAL_PENDING
-        )
-        kwargs["is_removal_pending"] = (
-            self.barrier.top_priority_status
-            == TOP_PRIORITY_BARRIER_STATUS.REMOVAL_PENDING
-        )
-        return super().get_context_data(**kwargs)
 
 
 class BarrierEditTradeDirection(MetadataMixin, APIBarrierFormViewMixin, FormView):

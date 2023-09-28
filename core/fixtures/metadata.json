@@ -8579,70 +8579,77 @@
       "title": "COVID-19",
       "description": "Barrier imposed because of the COVID-19 (coronavirus) pandemic.",
       "show_at_reporting": true,
-      "order": 1
+      "order": 2
     },
     {
       "id": 3,
       "title": "Brexit",
       "description": "",
       "show_at_reporting": true,
-      "order": 2
+      "order": 3
     },
     {
       "id": 2,
       "title": "NI Protocol",
       "description": "Special provisions applied to goods from GB to avoid a hard border with Ireland when the UK leaves the EU.",
       "show_at_reporting": true,
-      "order": 3
+      "order": 4
     },
     {
       "id": 4,
       "title": "Asia Pacific Pilot",
       "description": "",
       "show_at_reporting": true,
-      "order": 4
+      "order": 5
     },
     {
       "id": 5,
       "title": "Programme Fund",
       "description": "",
       "show_at_reporting": true,
-      "order": 5
+      "order": 6
     },
     {
       "id": 6,
       "title": "International Standards",
       "description": "",
       "show_at_reporting": true,
-      "order": 6
+      "order": 7
     },
     {
       "id": 7,
       "title": "Clean Growth",
       "description": "",
       "show_at_reporting": true,
-      "order": 7
+      "order": 8
     },
     {
       "id": 8,
       "title": "Regional Trade Plan",
       "description": "",
       "show_at_reporting": true,
-      "order": 8
+      "order": 9
     },
     {
       "id": 9,
       "title": "EU Market Access Board",
       "description": "",
       "show_at_reporting": true,
-      "order": 9
+      "order": 10
     },
     {
       "id": 10,
       "title": "Wales Priority",
       "description": "",
       "show_at_reporting": true,
-      "order": 10
+      "order": 11
+    },
+    {
+      "id": 11,
+      "title": "Scoping (Top 100 priority barrier)",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 1
     }
   ],
   "barrier_type_categories": {
