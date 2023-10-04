@@ -75,7 +75,7 @@ class BarrierSearchForm(forms.Form):
     priority_level = forms.MultipleChoiceField(
         label="Barrier priority",
         choices=(
-            ("REGIONAL", "Regional priority"),
+            ("OVERSEAS", "Overseas Delivery"),
             ("COUNTRY", "Country priority"),
             ("WATCHLIST", "Watch list"),
             ("NONE", "No priority assigned"),
@@ -426,7 +426,6 @@ class BarrierSearchForm(forms.Form):
             for tag in self.metadata.get_barrier_tag_choices("search")
             if tag["title"] not in DEPRECATED_TAGS
         ]
-        choices.sort(key=itemgetter(0))
         self.fields["tags"].choices = choices
 
     def set_ordering_choices(self):

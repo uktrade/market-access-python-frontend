@@ -82,7 +82,7 @@
             border-color: #dbd5e9;
             color: #3d2375;
         }
-        &--regional-priority{
+        &--overseas-delivery{
             background-color: #fff7bf;
             border-color: #fff7bf;
             color: #594d00;
@@ -102,8 +102,8 @@
 }
 
 .resolved-barrier-top-priority-tag {
-	@extend .govuk-tag;
-	background-color:govuk-colour("dark-grey");
+    @extend .govuk-tag;
+    background-color:govuk-colour("dark-grey");
     color:govuk-colour("white");
 }
 
