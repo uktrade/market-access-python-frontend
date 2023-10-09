@@ -113,7 +113,13 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 region_resolved_counts.append(barrier_hits)
                 i = i + 1
 
-            region_name = region["name"].lower().replace(" ", "_").replace("-", "_")
+            region_name = (
+                region["name"]
+                .lower()
+                .replace(" ", "_")
+                .replace("-", "_")
+                .replace(",", "_")
+            )
             region_resolved_counts.reverse()
             graph_data_dictionary[
                 f"resolved_barrier_count_{region_name}"
