@@ -39,16 +39,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
 
         graph_context_data = self.get_graphical_data()
         for graph_data in graph_context_data:
-            # logger.critical("**************")
-            # logger.critical(graph_data)
-            # logger.critical("**************")
             context_data.update({f"{graph_data}": graph_context_data[graph_data]})
-
-            # {{top_priority_status}}
-
-        # logger.critical("**************")
-        # logger.critical(context_data)
-        # logger.critical("**************")
 
         context_data.update(
             {
