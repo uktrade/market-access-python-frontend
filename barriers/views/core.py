@@ -111,8 +111,6 @@ class Dashboard(AnalyticsMixin, TemplateView):
                                         barrier_hits = barrier_hits + 1
 
                 region_resolved_counts.append(barrier_hits)
-
-                # Iterate loop
                 i = i + 1
 
             region_name = region["name"].lower().replace(" ", "_").replace("-", "_")
@@ -121,7 +119,21 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 f"resolved_barrier_count_{region_name}"
             ] = region_resolved_counts
 
-            # graph_data_dictionary[f"resolved_barrier_cumulative_{region_name}"] = region_resolved_counts
+            region_resolved_cumulative = []
+            i = 0
+            while i < len(region_resolved_counts):
+                if i != 0:
+                    cumulative_value = (
+                        region_resolved_counts[i] + region_resolved_cumulative[i - 1]
+                    )
+                    region_resolved_cumulative.append(cumulative_value)
+                else:
+                    cumulative_value = 0 + region_resolved_counts[i]
+                    region_resolved_cumulative.append(cumulative_value)
+                i = i + 1
+            graph_data_dictionary[
+                f"resolved_barrier_cumulative_{region_name}"
+            ] = region_resolved_cumulative
 
         return graph_data_dictionary
 
