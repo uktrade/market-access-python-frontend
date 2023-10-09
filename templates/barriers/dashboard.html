@@ -14,52 +14,42 @@
             series: [
                 {
                     name: "Africa",
-                    //data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
                     data: {{resolved_barrier_count_africa}}
                 },
                 {
                     name: "APAC",
-                    //data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
                     data: {{resolved_barrier_count_asia_pacific}}
                 },
                 {
                     name: "China & HK",
-                    //data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
                     data: {{resolved_barrier_count_china}}
                 },
                 {
                     name: "EECAN",
-                    //data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
                     data: {{resolved_barrier_count_eastern_europe_and_central_asia}}
                 },
                 {
                     name: "Europe",
-                    //data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
                     data: {{resolved_barrier_count_europe}}
                 },
                 {
                     name: "LATAC",
-                    //data: [20, 29, 37, 36, 44, 45, 50, 58]
                     data: {{resolved_barrier_count_latin_america}}
                 },
                 {
                     name: "Middle East",
-                    //data: [20, 29, 37, 36, 44, 45, 50, 58]
                     data: {{resolved_barrier_count_middle_east}}
                 },
                 {
                     name: "North Ameirca",
-                    //data: [20, 29, 37, 36, 44, 45, 50, 58]
                     data: {{resolved_barrier_count_north_america}}
                 },
                 {
                     name: "South Asia",
-                    //data: [20, 29, 37, 36, 44, 45, 50, 58]
                     data: {{resolved_barrier_count_south_asia}}
                 },
                 {
                     name: "Wider Europe",
-                    //data: [20, 29, 37, 36, 44, 45, 50, 58]
                     data: {{resolved_barrier_count_wider_europe}}
                 },
             ],
@@ -67,10 +57,65 @@
                 categories: {{resolved_region_date_range|safe}}
             },
         }
-
         var testchartresolvedregions = new ApexCharts(document.querySelector("#testchartresolvedregions"), options);
-
         testchartresolvedregions.render();
+
+        var options = {
+            chart: {
+                type: 'area',
+                height: '560px'
+            },
+            stroke: {
+                curve: "straight"
+            },
+            series: [
+                {
+                    name: "Africa",
+                    data: {{resolved_barrier_cumulative_africa}}
+                },
+                {
+                    name: "APAC",
+                    data: {{resolved_barrier_cumulative_asia_pacific}}
+                },
+                {
+                    name: "China & HK",
+                    data: {{resolved_barrier_cumulative_china}}
+                },
+                {
+                    name: "EECAN",
+                    data: {{resolved_barrier_cumulative_eastern_europe_and_central_asia}}
+                },
+                {
+                    name: "Europe",
+                    data: {{resolved_barrier_cumulative_europe}}
+                },
+                {
+                    name: "LATAC",
+                    data: {{resolved_barrier_cumulative_latin_america}}
+                },
+                {
+                    name: "Middle East",
+                    data: {{resolved_barrier_cumulative_middle_east}}
+                },
+                {
+                    name: "North Ameirca",
+                    data: {{resolved_barrier_cumulative_north_america}}
+                },
+                {
+                    name: "South Asia",
+                    data: {{resolved_barrier_cumulative_south_asia}}
+                },
+                {
+                    name: "Wider Europe",
+                    data: {{resolved_barrier_cumulative_wider_europe}}
+                },
+            ],
+            xaxis: {
+                categories: {{resolved_region_date_range|safe}}
+            }
+        }
+        var testchartresolvedregionscumulative = new ApexCharts(document.querySelector("#testchartresolvedregionscumulative"), options);
+        testchartresolvedregionscumulative.render();
 
     </script>
     <script>
@@ -80,9 +125,9 @@
             integrity="sha512-6HrPqAvK+lZElIZ4mZ64fyxIBTsaX5zAFZg2V/2WT+iKPrFzTzvx6QAsLW2OaLwobhMYBog/+bvmIEEGXi0p1w=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script
-            src="https://code.jquery.com/jquery-3.7.1.js"
-            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-            crossorigin="anonymous"></script>
+        src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.jqueryui.min.css"
@@ -140,8 +185,6 @@
             redraw_table(data_table)
         })
     </script>
-
-    <!--<script src="graph_visualizer.js"></script>-->
 
 {% endblock %}
 
@@ -213,7 +256,7 @@
         </div>
     </div>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-one-half">
             <div class="govuk-tabs" data-module="govuk-tabs">
                 <h2 class="govuk-tabs__title">
                     Resolved barriers
@@ -231,12 +274,40 @@
                     </li>
                 </ul>
                 <div class="govuk-tabs__panel graph_table" id="resolved_barriers_regions_graph">
+                    <h2 class="govuk-heading-l">Resolved Barriers</h2>
+                    <h3 class="govuk-heading-m">Monthly by region</h3>
                     <div id="testchartresolvedregions">
                     </div>
                 </div>
                 <div class="govuk-tabs__panel govuk-tabs__panel--hidden graph_table" id="resolved_barriers_table">
                 </div>
-
+            </div>
+        </div>
+        <div class="govuk-grid-column-one-half">
+            <div class="govuk-tabs" data-module="govuk-tabs">
+                <h2 class="govuk-tabs__title">
+                    Resolved barriers
+                </h2>
+                <ul class="govuk-tabs__list">
+                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+                        <a class="govuk-tabs__tab" href="#resolved_barriers_regions_graph">
+                            Graph
+                        </a>
+                    </li>
+                    <li class="govuk-tabs__list-item">
+                        <a class="govuk-tabs__tab" href="#resolved_barriers_table">
+                            Data
+                        </a>
+                    </li>
+                </ul>
+                <div class="govuk-tabs__panel graph_table" id="resolved_barriers_regions_graph">
+                    <h2 class="govuk-heading-l">Resolved Barriers</h2>
+                    <h3 class="govuk-heading-m">Cumulative by region</h3>
+                    <div id="testchartresolvedregionscumulative">
+                    </div>
+                </div>
+                <div class="govuk-tabs__panel govuk-tabs__panel--hidden graph_table" id="resolved_barriers_table">
+                </div>
             </div>
         </div>
     </div>
@@ -333,7 +404,7 @@
                     <li class="ma-card-list__item saved-search">
                         <div class="saved-search__content">
                             <h3 class="saved-search__title"><a
-                                    href="{% url 'barriers:search' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a>
+                                href="{% url 'barriers:search' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a>
                             </h3>
 
                             {% include "barriers/partials/saved_search_badges.html" %}
