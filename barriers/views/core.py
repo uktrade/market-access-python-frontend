@@ -118,7 +118,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 .lower()
                 .replace(" ", "_")
                 .replace("-", "_")
-                .replace(",", "_")
+                .replace(",", "")
             )
             region_resolved_counts.reverse()
             graph_data_dictionary[
