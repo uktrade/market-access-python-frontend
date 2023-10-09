@@ -86,6 +86,9 @@
     {% block body_end %}
       <script src="{% webpack_static 'main.js' %}"></script>
       <script>ma.init();</script>
+      <script>
+        window.GOVUKFrontend.initAll()
+      </script>
       {% block body_script %}{% endblock %}
       {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
         <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">

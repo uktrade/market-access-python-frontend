@@ -2,7 +2,7 @@ import logging
 import urllib.parse
 from http import HTTPStatus
 
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
 
 from barriers.models import PublicBarrier
@@ -348,3 +348,12 @@ class StrategicAssessmentMixin:
                     return self._strategic_assessment
             raise Http404("Strategic assessment does not exist")
         return self._strategic_assessment
+
+class AjaxOnlyMixin:
+    """Restricts a view to accept only AJAX requests."""
+    def dispatch(self, request, *args, **kwargs):
+        is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        if is_ajax:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseBadRequest("Invalid request")

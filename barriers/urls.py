@@ -156,6 +156,7 @@ from .views.sectors import (
     BarrierRemoveSector,
 )
 from .views.statuses import BarrierChangeStatus
+from .views.table_data import BarrierTableData
 from .views.teams import (
     BarrierTeam,
     ChangeOwnerView,
@@ -210,6 +211,7 @@ urlpatterns = [
         name="saved_search_notifications",
     ),
     path("barriers/<uuid:barrier_id>/", BarrierDetail.as_view(), name="barrier_detail"),
+    path("barriers/table_data/<str:table_name>/", BarrierTableData.as_view(), name="barrier_table_data"),
     # Reason for double url: Analytics requested a second url pointing to the same page
     path(
         "barriers/<uuid:barrier_id>/complete/",

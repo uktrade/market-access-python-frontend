@@ -208,6 +208,11 @@ class BarriersResource(APIResource):
             data=kwargs,
         )
 
+    def get_table_data(self, table_name):
+        return self.client.get(
+            f"barriers/table_data/{table_name}"
+        )
+
 
 class NotesResource(APIResource):
     resource_name = "interactions"
