@@ -1,9 +1,15 @@
+import logging
+from datetime import date, datetime
+
+from dateutil.relativedelta import relativedelta
 from django.views.generic import TemplateView
 
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
 from .mixins import AnalyticsMixin, BarrierMixin
+
+logger = logging.getLogger(__name__)
 
 
 class Dashboard(AnalyticsMixin, TemplateView):
@@ -31,6 +37,19 @@ class Dashboard(AnalyticsMixin, TemplateView):
             not mention.read_by_recipient for mention in mentions
         )
 
+        graph_context_data = self.get_graphical_data()
+        for graph_data in graph_context_data:
+            # logger.critical("**************")
+            # logger.critical(graph_data)
+            # logger.critical("**************")
+            context_data.update({f"{graph_data}": graph_context_data[graph_data]})
+
+            # {{top_priority_status}}
+
+        # logger.critical("**************")
+        # logger.critical(context_data)
+        # logger.critical("**************")
+
         context_data.update(
             {
                 "page": "dashboard",
@@ -48,6 +67,72 @@ class Dashboard(AnalyticsMixin, TemplateView):
             }
         )
         return context_data
+
+    def get_graphical_data(self, **kwargs):
+        # Function to gather data for potential dashboard graphs
+
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        metadata = get_metadata()
+        countries_metadata = metadata.get_country_list()
+
+        resolved_barriers = client.barriers.list(**{"status": "4", "archived": "0"})
+
+        graph_data_dictionary = {}
+
+        i = 0
+        month_list = []
+        while i < 12:
+            month_key = date.today() - relativedelta(months=i)
+            month_key = month_key.strftime("%b %y")
+            month_list.append(month_key)
+            i = i + 1
+
+        month_list.reverse()
+
+        graph_data_dictionary["resolved_region_date_range"] = month_list
+
+        for region in metadata.get_overseas_region_list():
+
+            region_resolved_counts = []
+
+            i = 0
+            while i < 12:
+                # Get date range for current month in loop
+                first_day = (date.today() - relativedelta(months=i)).replace(day=1)
+                last_day = (
+                    (date.today() - relativedelta(months=i)).replace(day=1)
+                    + relativedelta(months=1)
+                    - relativedelta(days=1)
+                )
+
+                barrier_hits = 0
+                for barrier in resolved_barriers:
+                    for country in countries_metadata:
+                        if barrier.location == country["name"]:
+                            if country["overseas_region"]:
+                                if country["overseas_region"]["id"] == region["id"]:
+                                    if (
+                                        datetime.date(barrier.status_date) >= first_day
+                                        and datetime.date(barrier.status_date)
+                                        <= last_day
+                                    ):
+                                        barrier_hits = barrier_hits + 1
+
+                region_resolved_counts.append(barrier_hits)
+
+                # Iterate loop
+                i = i + 1
+
+            region_name = region["name"].lower().replace(" ", "_").replace("-", "_")
+            region_resolved_counts.reverse()
+            graph_data_dictionary[
+                f"resolved_barrier_count_{region_name}"
+            ] = region_resolved_counts
+
+            # graph_data_dictionary[f"resolved_barrier_cumulative_{region_name}"] = region_resolved_counts
+
+        return graph_data_dictionary
 
 
 class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
