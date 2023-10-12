@@ -1,20 +1,23 @@
 .summary-group {
 	max-width: 100%;
+
 	@include mq($from: 768px) {
-		max-width:400px;
-		margin-right: govuk-em( 30, 16 );
+		max-width: 400px;
+		margin-right: govuk-em(30, 16);
 		display: inline-block;
 	}
-	@include mq( $from: 1024px ){
+
+	@include mq($from: 1024px) {
 		max-width: 500px;
 	}
-    vertical-align: top;
+
+	vertical-align: top;
 
 }
 
 .summary-group__heading {
-	@include govuk-font( $size: 24, $weight: bold );
-	padding-bottom: govuk-em( 10, 24 );
+	@include govuk-font($size: 24, $weight: bold);
+	padding-bottom: govuk-em(10, 24);
 	margin-top: 0;
 	margin-bottom: 0;
 	border-bottom: 4px solid $govuk-black;
@@ -22,8 +25,8 @@
 
 .summary-group__subheading {
 	display: block;
-	@include govuk-font( $size: 16, $weight: bold );
-	margin-top: govuk-em( 8, 16 );
+	@include govuk-font($size: 16, $weight: bold);
+	margin-top: govuk-em(8, 16);
 }
 
 .summary-group__list__key {
@@ -35,6 +38,7 @@
 
 	width: 100%;
 	margin: 0;
+	overflow: auto;
 
 	.summary-group__list__value__list {
 		list-style: inside;
@@ -44,13 +48,13 @@
 
 .summary-group__list__value {
 	border-bottom: 1px solid $govuk-light-grey;
-	padding-bottom: govuk-em( 15, 16 );
-    margin-bottom: govuk-em( 12, 16 );
+	padding-bottom: govuk-em(15, 16);
+	margin-bottom: govuk-em(12, 16);
 	box-sizing: border-box;
 }
 
 .summary-group__list__value__heading {
-	@include govuk-font( $size: 16 );
+	@include govuk-font($size: 16);
 	margin: 0;
 }
 
@@ -58,10 +62,10 @@
 	border: 2px dashed $govuk-mid-grey;
 	background-color: $govuk-light-grey;
 	width: 100%;
-	padding: govuk-em( 15, 16 );
+	padding: govuk-em(15, 16);
 	display: block;
 	box-sizing: border-box;
-	margin-top: govuk-em( 5, 16 );
+	margin-top: govuk-em(5, 16);
 	text-align: center;
 }
 
@@ -69,10 +73,10 @@
 	border: 2px dashed $govuk-mid-grey;
 	background-color: $govuk-light-grey;
 	width: 100%;
-	padding: govuk-em( 15, 16 );
+	padding: govuk-em(15, 16);
 	display: block;
 	box-sizing: border-box;
-	margin-top: govuk-em( 5, 16 );
+	margin-top: govuk-em(5, 16);
 	text-align: center;
 	color: $govuk-secondary-text-colour;
 }
@@ -89,18 +93,19 @@
 .summary-group__list__value__list__item {
 	list-style: inside;
 }
+
 .summary-group__list-item-50 {
 	width: 50%;
-    float: left;
-    border-bottom: 1px solid $govuk-light-grey;
-	margin-bottom: govuk-em( 12, 16 );
+	float: left;
+	border-bottom: 1px solid $govuk-light-grey;
+	margin-bottom: govuk-em(12, 16);
 
 	.summary-group__list__value {
 		margin-bottom: 0;
 	}
 }
 
-@include mq( $from: tablet ){
+@include mq($from: tablet) {
 	.summary-group__list {
 		display: flex;
 		flex-wrap: wrap;
