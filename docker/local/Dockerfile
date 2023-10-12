@@ -5,8 +5,6 @@ FROM mcr.microsoft.com/playwright/python:v1.21.0-focal
 # Install system stuff
 RUN apt-get update
 
-# Installing Node
-ENV NODE_VERSION 18
 # Configure the node apt repository
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
