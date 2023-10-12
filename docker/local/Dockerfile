@@ -8,7 +8,7 @@ RUN apt-get update
 # Installing Node
 ENV NODE_VERSION 18
 # Configure the node apt repository
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
 
 # Installing Python
