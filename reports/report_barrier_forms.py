@@ -52,7 +52,7 @@ class BarrierAboutForm(APIFormMixin, forms.Form):
             and any political context.
             """
         ),
-        max_length=300,
+        max_length=500,
         error_messages={"required": "Enter a barrier description"},
         widget=forms.Textarea(
             attrs={
