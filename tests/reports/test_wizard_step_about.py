@@ -12,7 +12,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
     # make django-test path=reports/test_wizard_step_about.py::ReportWizardAboutStepTestCase
 
     def test_valid_form_entry(self):
-
         test_title = "New barrier test title"
         test_summary = "This is the description the the barrier"
         form = BarrierAboutForm(
@@ -28,7 +27,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         assert test_summary in form.cleaned_data["summary"]
 
     def test_title_too_long_entry(self):
-
         test_title = "".join(random.choices(string.ascii_letters, k=200))
         test_summary = "This is the description the the barrier"
         form = BarrierAboutForm(
@@ -43,7 +41,6 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         assert expected_error_message in form.errors["title"]
 
     def test_title_missing_entry(self):
-
         test_title = None
         test_summary = "This is the description the the barrier"
         form = BarrierAboutForm(
@@ -58,9 +55,8 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
         assert expected_error_message in form.errors["title"]
 
     def test_summary_too_long_entry(self):
-
         test_title = "New barrier test title"
-        test_summary = "".join(random.choices(string.ascii_letters, k=400))
+        test_summary = "".join(random.choices(string.ascii_letters, k=600))
         form = BarrierAboutForm(
             {
                 "title": test_title,
@@ -70,12 +66,11 @@ class ReportWizardAboutStepTestCase(MarketAccessTestCase):
 
         assert form.is_valid() is False
         expected_error_message = (
-            "Ensure this value has at most 300 characters (it has 400)"
+            "Ensure this value has at most 500 characters (it has 600)"
         )
         assert expected_error_message in str(form.errors["summary"])
 
     def test_summary_missing_entry(self):
-
         test_title = "New barrier test title"
         test_summary = None
         form = BarrierAboutForm(

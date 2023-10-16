@@ -8650,6 +8650,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 1
+    },
+    {
+      "id": 12,
+      "title": "EU Priority",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 12
     }
   ],
   "barrier_type_categories": {
