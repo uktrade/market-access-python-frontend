@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.template.defaultfilters import filesizeformat
 
 from utils.forms.mixins import HelpTextMixin
-from utils.forms.widgets import DayMonthYearWidget, MonthYearWidget, DateRangeWidget
+from utils.forms.widgets import DateRangeWidget, DayMonthYearWidget, MonthYearWidget
 from utils.validators import validate_date_not_in_future
 
 logger = logging.getLogger(__name__)
@@ -373,5 +373,7 @@ class MonthDateRangeField(forms.MultiValueField):
         if data_list and all(data_list):
             start_date, end_date = data_list
             if start_date and end_date and end_date <= start_date:
-                raise forms.ValidationError("The end date must be after the start date.")
+                raise forms.ValidationError(
+                    "The end date must be after the start date."
+                )
             return f"{start_date.strftime('%Y-%m-%d')},{end_date.strftime('%Y-%m-%d')}"

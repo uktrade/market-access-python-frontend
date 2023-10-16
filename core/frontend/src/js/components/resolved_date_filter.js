@@ -47,7 +47,9 @@ function hideDateFilter(date_filter) {
 }
 
 function clearDateFilter(status) {
-    for (const item of document.querySelectorAll(`input[name^="status_date_${status}"]`)) {
+    for (const item of document.querySelectorAll(
+        `input[name^="status_date_${status}"]`
+    )) {
         item.value = "";
     }
 }

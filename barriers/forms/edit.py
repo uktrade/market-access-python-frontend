@@ -17,7 +17,6 @@ from barriers.constants import (
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.forms.fields import (
-
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
     TrueFalseBooleanField,
@@ -25,6 +24,7 @@ from utils.forms.fields import (
     YesNoDontKnowBooleanField,
 )
 from utils.forms.mixins import ClearableMixin
+
 from .mixins import APIFormMixin, EstimatedResolutionDateApprovalMixin
 
 logger = logging.getLogger(__name__)

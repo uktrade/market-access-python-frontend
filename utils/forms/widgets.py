@@ -1,8 +1,10 @@
-import dateutil.parser
 import datetime
+
+import dateutil.parser
 from django import forms
-from django.forms import widgets
 from django.conf import settings
+from django.forms import widgets
+
 
 class CommodityCodeWidget(forms.MultiWidget):
     template_name = "partials/forms/widgets/commodity_code_widget.html"
@@ -94,8 +96,12 @@ class DateRangeWidget(forms.MultiWidget):
         to_help_text = f"Example, 04 {self.now.year-1}"
 
         widgets = [
-            MonthYearWidget(attrs=attrs, date_range_direction="from", help_text=from_help_text),
-            MonthYearWidget(attrs=attrs, date_range_direction="to", help_text=to_help_text),
+            MonthYearWidget(
+                attrs=attrs, date_range_direction="from", help_text=from_help_text
+            ),
+            MonthYearWidget(
+                attrs=attrs, date_range_direction="to", help_text=to_help_text
+            ),
         ]
         super().__init__(widgets, attrs)
 

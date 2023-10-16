@@ -2,58 +2,58 @@ $default-spacing-unit: 5px;
 
 .date-input-filter {
 
-	transform: translateZ(0); // Enforcing GPU acceleration fixes overflow cropping caused by CSS columns
-	border-bottom: 1px solid $govuk-mid-grey;
-	padding-left: 1rem;
-	background-color: #fff;
-	padding: 0.5rem;
-
-	&:last-child {
-		border-bottom: 0;
-	}
-
-	&__label {
-		display: block;
-		font-size: 1rem;
-    line-height: 1.25;
-		margin-bottom: $default-spacing-unit;
-		&.title {
-			font-weight: bold;
-		}
-	}
-
-	&__item {
-		position: relative;
-		background-color: white;
-		border-bottom: 1px solid $govuk-mid-grey;
-
-		&:last-of-type {
-			border-bottom: none;
-		}
-	}
-
-	&__input {
+    transform: translateZ(0); // Enforcing GPU acceleration fixes overflow cropping caused by CSS columns
+    border-bottom: 1px solid $govuk-mid-grey;
+    padding-left: 1rem;
     background-color: #fff;
-		@include govuk-font($size: 16);
-		$input-size: 16px * 2;
-		width: $input-size * 3;
-		height: $input-size;
-		&.month {
-			@include govuk-font($size: 16);
-			$input-size: 16px * 2;
-			width: $input-size * 2;
-			height: $input-size;
-		}
-	}
+    padding: 0.5rem;
 
-	& + & {
-		margin-top: 0;
-	}
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    &__label {
+        display: block;
+        font-size: 1rem;
+        line-height: 1.25;
+        margin-bottom: $default-spacing-unit;
+        &.title {
+            font-weight: bold;
+        }
+    }
+
+    &__item {
+        position: relative;
+        background-color: white;
+        border-bottom: 1px solid $govuk-mid-grey;
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+
+    &__input {
+        background-color: #fff;
+        @include govuk-font($size: 16);
+        $input-size: 16px * 2;
+        width: $input-size * 3;
+        height: $input-size;
+        &.month {
+            @include govuk-font($size: 16);
+            $input-size: 16px * 2;
+            width: $input-size * 2;
+            height: $input-size;
+        }
+    }
+
+    & + & {
+        margin-top: 0;
+    }
 }
 
 .govuk-hint-small {
-	font-size: 0.9rem;
-  line-height: 1.25;
-	display: block;
-	color: $govuk-dark-grey;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    display: block;
+    color: $govuk-dark-grey;
 }

@@ -88,13 +88,15 @@ class BarrierSearchForm(forms.Form):
         label="Resolved date", required=False
     )
     status_date_resolved_in_part = MonthDateRangeField(
-        label="Resolved in part date", required=False,
+        label="Resolved in part date",
+        required=False,
     )
     status_date_open_in_progress = MonthDateRangeField(
         label="Estimated resolution date", required=False
     )
     start_date_range = MonthDateRangeField(
-        label="Barrier start date", required=False,
+        label="Barrier start date",
+        required=False,
     )
 
     tags = forms.MultipleChoiceField(
@@ -230,7 +232,6 @@ class BarrierSearchForm(forms.Form):
         self.set_tags_choices()
         self.set_ordering_choices()
         self.index_filter_groups()
-
 
     def set_country_choices(self):
         location_choices = [
@@ -412,7 +413,9 @@ class BarrierSearchForm(forms.Form):
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         for status_value in STATUS_WITH_DATE_FILTER:
-            params[f"status_date_{status_value}"] = self.cleaned_data.get(f"status_date_{status_value}")
+            params[f"status_date_{status_value}"] = self.cleaned_data.get(
+                f"status_date_{status_value}"
+            )
 
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
