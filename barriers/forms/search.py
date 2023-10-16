@@ -214,6 +214,14 @@ class BarrierSearchForm(forms.Form):
             "fields": ("extra_location", "country_trading_bloc"),
         },
         "action_plans": {"label": "Action plans", "fields": ("has_action_plan",)},
+        "status": {
+            "label": "Barrier status",
+            "fields": (
+                "status_date_resolved_in_full",
+                "status_date_resolved_in_part",
+                "status_date_open_in_progress",
+            ),
+        },
     }
 
     def __init__(self, metadata, *args, **kwargs):
@@ -390,6 +398,11 @@ class BarrierSearchForm(forms.Form):
                     del params[field]
         else:
             del params[field_name]
+
+        if field_name == "status":
+            for status_value in STATUS_WITH_DATE_FILTER:
+                if f"status_date_{status_value}" in params:
+                    del params[f"status_date_{status_value}"]
 
         return urlencode(params, doseq=True)
 
