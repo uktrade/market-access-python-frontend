@@ -16,6 +16,12 @@ $default-spacing-unit: 5px;
 	}
 }
 
+.checkbox-filter-no-overflow {
+	@extend .checkbox-filter;
+	max-height: 100%;
+	overflow-y: visible;
+}
+
 .checkbox-filter__item {
 
 	position: relative;
@@ -182,4 +188,12 @@ $default-spacing-unit: 5px;
 	@include govuk-font($size: 14);
 	display: block;
 	color: $govuk-dark-grey;
+}
+
+.month_year_widget + .month_year_widget {
+	margin-top: 20px;
+}
+
+.month_year_widget > .govuk-label--s{
+	margin-top: 0px;
 }

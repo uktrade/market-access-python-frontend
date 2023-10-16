@@ -16,15 +16,15 @@ from barriers.constants import (
     TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES,
 )
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import (
-    ClearableMixin,
+from utils.forms.fields import (
+
     MonthYearInFutureField,
     MultipleChoiceFieldWithHelpText,
     TrueFalseBooleanField,
     YesNoBooleanField,
     YesNoDontKnowBooleanField,
 )
-
+from utils.forms.mixins import ClearableMixin
 from .mixins import APIFormMixin, EstimatedResolutionDateApprovalMixin
 
 logger = logging.getLogger(__name__)

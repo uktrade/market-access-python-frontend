@@ -47,8 +47,7 @@ function hideDateFilter(date_filter) {
 }
 
 function clearDateFilter(status) {
-    document.getElementById(`resolved_date_from_month_${status}`).value = "";
-    document.getElementById(`resolved_date_from_year_${status}`).value = "";
-    document.getElementById(`resolved_date_to_month_${status}`).value = "";
-    document.getElementById(`resolved_date_to_year_${status}`).value = "";
+    for (const item of document.querySelectorAll(`input[name^="status_date_${status}"]`)) {
+        item.value = "";
+    }
 }

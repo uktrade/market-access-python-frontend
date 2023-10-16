@@ -1,71 +1,11 @@
-{% if from_group_classes %}
-  <div id="{{ field.name }}" class="govuk-form-group {{ form_group_classes }}">
-{% else %}
-  <div id="{{ field.name }}" class="govuk-form-group filter-group">
-{% endif %}
-<fieldset class="govuk-fieldset filter-group__inner">
-  <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
-    {{ field.label }}
-  </legend>
+<div id="{{ field.name }}" class="govuk-form-group filter-group">
+    <fieldset class="govuk-fieldset filter-group__inner">
+        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
+            {{ field.label }}
+        </legend>
 
-  <div class="date-input-filter{% if extra_classes %} {{ extra_classes }}{% endif %}">
-    <!-- From Date Section -->
-    <div class="date-input-filter__item">
-      <div class="govuk-form-group">
-        <label class="govuk-label date-input-filter__label title">
-          Date from
-        </label>
-        <div id="start-date-hint" class="govuk-hint-small">
-          {{field_from_month.help_text}}
+        <div class="date-input-filter">
+            {{ field }}
         </div>
-        <div class="govuk-date-input">
-          <div class="govuk-date-input__item">
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label date-input-filter__label" for="{{ field.name }}_from_month">
-                Month
-              </label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2 date-input-filter__input month" id="{{ field.name }}_from_month" name="{{ field.name }}_from_month" type="text" pattern="^([1-9]|0[1-9]|1[0-2])$" maxlength = "2" inputmode="numeric">
-            </div>
-          </div>
-          <div class="govuk-date-input__item">
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label date-input-filter__label" for="{{ field.name }}_from_year">
-                Year
-              </label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-4 date-input-filter__input" id="{{ field.name }}_from_year" name="{{ field.name }}_from_year" type="text" pattern="^[0-9]{4}$" maxlength = "4" inputmode="numeric">
-            </div>
-          </div>
-        </div>
-      </div>
-
-    <!-- To Date Section -->
-      <div class="date-input-filter__item">
-        <div class="govuk-form-group">
-          <label class="govuk-label date-input-filter__label title">
-            Date to
-          </label>
-          <div id="start-date-hint" class="govuk-hint-small">
-            {{field_to_month.help_text}}
-          </div>
-          <div class="govuk-date-input" id="{{ field_to_month.name }}">
-            <div class="govuk-date-input__item">
-              <div class="govuk-form-group">
-                <label class="govuk-label govuk-date-input__label date-input-filter__label" for="{{ field_to_month.name }}">
-                  Month
-                </label>
-                <input class="govuk-input govuk-date-input__input govuk-input--width-2 date-input-filter__input month" id="{{ field_to_month.name }}" name="{{ field_to_month.name }}" type="text" inputmode="numeric">
-              </div>
-            </div>
-            <div class="govuk-date-input__item">
-              <div class="govuk-form-group">
-                <label class="govuk-label govuk-date-input__label date-input-filter__label" for="{{ field_to_year.name }}">
-                  Year
-                </label>
-                <input class="govuk-input govuk-date-input__input govuk-input--width-4 date-input-filter__input" id="{{ field_to_year.name }}" name="{{ field_to_year.name }}" type="text" inputmode="numeric">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </fieldset>
-  </div>
+</div>

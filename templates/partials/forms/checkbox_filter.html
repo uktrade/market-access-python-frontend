@@ -20,32 +20,29 @@
                 <label class="govuk-label checkbox-filter__label" for="{{ field.name }}-{{ forloop.counter }}">
                     {{ text|safe }}
                     {% if field.field.help_text %}
-                            <!-- Individual Choice help_text - if available, match tuple values to each other for correct text -->
+                        <!-- Individual Choice help_text - if available, match tuple values to each other for correct text -->
                         {% for help_value, help_text in field.field.help_text %}
                             {% if help_value == value %}
-                                <label class="checkbox-filter__hint">{{help_text}}</label>
+                                <label class="checkbox-filter__hint">{{ help_text }}</label>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
                 </label>
 
-                    <!-- Sections to display resolved date input, only displayed when loading the barrier status block-->
+                <!-- Sections to display resolved date input, only displayed when loading the barrier status block-->
                 {% if text == "Open" %}
-                    <div id="resolved_date_filter_open_in_progress" hidden>
-                        {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_open_in_progress field_year=form.resolved_date_from_year_open_in_progress %}
-                        {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_open_in_progress field_year=form.resolved_date_to_year_open_in_progress %}
+                    <div id="resolved_date_filter_open_in_progress" {% if "2" not in field.data %}hidden{% endif %}>
+                        {% include "partials/forms/date_input_filter.html" with field=form.status_date_open_in_progress %}
                     </div>
                 {% endif %}
                 {% if text == "Resolved: In part" %}
-                    <div id="resolved_date_filter_resolved_in_part" hidden>
-                        {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_resolved_in_part field_year=form.resolved_date_from_year_resolved_in_part %}
-                        {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_resolved_in_part field_year=form.resolved_date_to_year_resolved_in_part %}
+                    <div id="resolved_date_filter_resolved_in_part" {% if "3" not in field.data %}hidden{% endif %}>
+                        {% include "partials/forms/date_input_filter.html" with field=form.status_date_resolved_in_part %}
                     </div>
                 {% endif %}
                 {% if text == "Resolved: In full" %}
-                    <div id="resolved_date_filter_resolved_in_full" hidden>
-                        {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_from_month_resolved_in_full field_year=form.resolved_date_from_year_resolved_in_full %}
-                        {% include "partials/forms/resolved_date_filter.html" with field_month=form.resolved_date_to_month_resolved_in_full field_year=form.resolved_date_to_year_resolved_in_full %}
+                    <div id="resolved_date_filter_resolved_in_full" {% if "4" not in field.data %}hidden{% endif %}>
+                        {% include "partials/forms/date_input_filter.html" with field=form.status_date_resolved_in_full %}
                     </div>
                 {% endif %}
 

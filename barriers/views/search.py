@@ -63,7 +63,7 @@ class BarrierSearch(PaginationMixin, SearchFormView):
                     metadata.get_admin_area_list()
                 ),
                 "countries_with_admin_areas": metadata.get_countries_with_admin_areas_list(),
-                "filters": form.get_readable_filters(with_remove_links=True),
+                "filters": form.get_readable_filters(),
                 "pagination": self.get_pagination_data(object_list=barriers),
                 "pageless_querystring": self.get_pageless_querystring(),
                 "page": "search",
