@@ -498,11 +498,10 @@ class BarrierSearchForm(forms.Form):
                     admin_areas_selected.append(admin_area_detail["name"])
             return ", ".join(admin_areas_selected)
         elif isinstance(field, MonthDateRangeField):
-            # it's a string of two dates, so let's just extract the month and year manually
-            from_date, to_date = value.split(",")
-            from_date = from_date.split("-")
-            to_date = to_date.split("-")
-            return f"{from_date[1]}/{from_date[0]} to {to_date[1]}/{to_date[0]}"
+            # it's a string of two dates, so let's just use the decompress() method of the
+            # widget to get the readable value. It will return [[from_month, from_year], [to_month, to_year]
+            date_range = field.widget.decompress(value)
+            return f"{date_range[0][0]}/{date_range[0][1]} to {date_range[1][0]}/{date_range[1][1]}"
 
         return value
 
