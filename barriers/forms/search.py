@@ -464,7 +464,7 @@ class BarrierSearchForm(forms.Form):
             "ordering", settings.API_BARRIER_LIST_DEFAULT_SORT
         )
         params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
-        params["start_date"] = self.cleaned_data.get("start_date")
+        params["start_date"] = self.cleaned_data.get("start_date_range")
         params["only_main_sector"] = self.cleaned_data.get("only_main_sector")
 
         return {k: v for k, v in params.items() if v}

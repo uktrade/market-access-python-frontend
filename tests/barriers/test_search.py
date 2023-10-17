@@ -619,7 +619,7 @@ class SearchTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
-            start_date="2021-01-01,2022-01-31",
+            start_date="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")
