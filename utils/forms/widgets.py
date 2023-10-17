@@ -2,7 +2,6 @@ import datetime
 
 import dateutil.parser
 from django import forms
-from django.conf import settings
 from django.forms import widgets
 
 
