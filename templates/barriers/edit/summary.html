@@ -1,11 +1,9 @@
 {% extends "barriers/edit/base.html" %}
-
 {% block page_title %}{{ block.super }} - Barrier description{% endblock %}
-
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:barrier_detail' object.id %}"
+       class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
-
 {% block body_script %}
     <script>
         if( ma.components.CharacterCount ){
@@ -13,32 +11,32 @@
         }
     </script>
 {% endblock %}
-
 {% block page_content %}
-
     {% include 'partials/heading.html' with text='Barrier description' %}
     {% form_error_banner form %}
-
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-
-        <div id="{{ form.summary.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="300">
-            <div  class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
-                <label class="govuk-label govuk-label--s" for="{{ form.summary.id_for_label }}">{{ form.summary.label }}</label>
-
+        <div id="{{ form.summary.name }}-form-group"
+             class="govuk-character-count"
+             data-module="govuk-character-count"
+             data-maxlength="500">
+            <div class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s"
+                       for="{{ form.summary.id_for_label }}">{{ form.summary.label }}</label>
                 {% form_field_error form "summary" %}
                 <span class="govuk-hint">{{ form.summary.help_text }}</span>
-
-                <textarea id="{{ form.summary.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.summary.name }}" rows="5" maxlength="300">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
+                <textarea id="{{ form.summary.name }}"
+                          class="govuk-textarea govuk-js-character-count js-character-count"
+                          name="{{ form.summary.name }}"
+                          rows="5"
+                          maxlength="500">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
             </div>
         </div>
-        <div id="{{ form.summary.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
-            You can enter up to 300 characters
-        </div>
-
+        <div id="{{ form.summary.name }}-info"
+             class="govuk-hint govuk-character-count__message"
+             aria-live="polite">You can enter up to 500 characters</div>
         <input type="submit" value="Save and return" class="govuk-button">
-        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
-
+        <a class="form-cancel"
+           href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
-
 {% endblock %}
