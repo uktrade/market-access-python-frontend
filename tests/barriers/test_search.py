@@ -538,7 +538,7 @@ class SearchTestCase(MarketAccessTestCase):
             offset=0,
             archived="0",
             status="4",
-            status_date_resolved_in_full="2021-01-01,2022-01-31",
+            status_date_resolved_in_full="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -560,7 +560,7 @@ class SearchTestCase(MarketAccessTestCase):
             offset=0,
             archived="0",
             status="3",
-            status_date_resolved_in_part="2021-01-01,2022-01-31",
+            status_date_resolved_in_part="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -582,7 +582,7 @@ class SearchTestCase(MarketAccessTestCase):
             offset=0,
             archived="0",
             status="2",
-            status_date_open_in_progress="2021-01-01,2022-01-31",
+            status_date_open_in_progress="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")
