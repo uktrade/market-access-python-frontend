@@ -518,7 +518,7 @@ class BarrierSearchForm(forms.Form):
 
         return value
 
-    def get_readable_filters(self):
+    def get_readable_filters(self, with_remove_urls=True):
         """
         Get the currently applied filters with their readable values.
 
@@ -541,7 +541,8 @@ class BarrierSearchForm(forms.Form):
                     "readable_value": readable_value,
                 }
 
-                filters[key]["remove_url"] = self.get_remove_url(name)
+                if with_remove_urls:
+                    filters[key]["remove_url"] = self.get_remove_url(name)
             else:
                 existing_readable_value = filters[key]["readable_value"]
                 this_readable_value = self.get_filter_readable_value(name, value)
