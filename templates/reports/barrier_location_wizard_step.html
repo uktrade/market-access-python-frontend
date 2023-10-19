@@ -45,7 +45,7 @@
             </div>
 
             <!-- Trading bloc questions -->
-            <div class="govuk-form-group govuk-visually-hidden govuk-!-margin-top-6" id="trading-bloc-section">
+            <div class="govuk-form-group govuk-visually-hidden govuk-!-margin-top-6 govuk-!-margin-bottom-0" id="trading-bloc-section">
                 {% for trading_bloc_field in form.get_trading_bloc_fields %}
                     <div class="govuk-form-group" id="{{ trading_bloc_field.name }}">
                         <div class="govuk-radios" data-module="govuk-radios">
@@ -69,10 +69,11 @@
             </div>
 
             <!-- Admin area question reveal -->
-            <div id="admin-area-section" class="govuk-radios govuk-visually-hidden" data-module="govuk-radios">
+            <div id="admin-area-section" class="{% form_group_classes form.affect_whole_country.errors %} govuk-radios govuk-visually-hidden govuk-!-margin-top-6" data-module="govuk-radios">
                 <label class="govuk-label govuk-label--s" for="admin-area-reveal">
                     Does it relate to the entire country?
                 </label>
+                {% form_field_error form.affect_whole_country %}
                 <div class="govuk-radios__item">
                     <input class="govuk-radios__input" id="admin-area-reveal-2" name="admin-area-reveal" type="radio" value="phone">
                     <label class="govuk-label govuk-radios__label" for="admin-area-reveal-2">

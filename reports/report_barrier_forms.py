@@ -218,12 +218,14 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
     affect_whole_country = forms.BooleanField(
         widget=forms.HiddenInput(),
         required=False,
+        initial="None",
     )
     admin_areas = forms.CharField(
         label="Which admin area does the barrier relate to?",
         help_text="Select all that apply",
         widget=forms.HiddenInput(),
         required=False,
+        initial="",
     )
 
     def __init__(self, *args, **kwargs):
@@ -335,6 +337,16 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
         ):
             msg = "Select all admin areas the barrier relates to"
             self.add_error("admin_areas", msg)
+
+        # Trigger error if affect_whole_country question not answered but it is applicable
+        # to the selected country
+        country_admin_areas = self.metadata.get_admin_areas_by_country(location)
+        if (
+            len(country_admin_areas) > 0
+            and self.data["barrier-location-affect_whole_country"] == "None"
+        ):
+            msg = "Select yes if the barrier relates to the entire country"
+            self.add_error("affect_whole_country", msg)
 
         # Turn admin areas data to list & set caused by value
         self.cleaned_data["admin_areas"] = selected_admin_areas.split(",")

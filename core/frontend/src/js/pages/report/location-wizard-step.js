@@ -180,7 +180,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
                 // Add selected admin area to admin area list
                 var selectedAdminAreaName =
                     adminAreaSelector.options[adminAreaSelector.selectedIndex]
-                        .text;
+                    .text;
                 if (!selectedAdminAreasNames.includes(selectedAdminAreaName)) {
                     // Only add name to list if it isn't already present
                     selectedAdminAreasNames.push(selectedAdminAreaName);
@@ -294,13 +294,19 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
         affectWholeCountryInput.value = "False";
     });
     // In event of an admin_areas error, check 'no'
-    const adminAreaReveal = document.getElementById("admin-area-reveal");
     // Search page for admin_areas error message
     let adminAreasError = document.body.innerHTML.search(
         "Select all admin areas the barrier relates to"
     );
     // If the error is present, it will have a position value higher than -1
     if (adminAreasError > -1) {
-        adminAreaReveal.setAttribute("checked", "checked");
+        noEntireCountry.setAttribute("checked", "checked");
+    }
+    // Set the initial radio checked value based on initial hidden value field
+    // Coming in without value we leave both options unchecked
+    if (affectWholeCountryInput.value == "True") {
+        yesEntireCountry.setAttribute("checked", "checked");
+    } else if (affectWholeCountryInput.value == "False") {
+        noEntireCountry.setAttribute("checked", "checked");
     }
 };
