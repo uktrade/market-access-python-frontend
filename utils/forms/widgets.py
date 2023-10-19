@@ -105,6 +105,8 @@ class DateRangeWidget(forms.MultiWidget):
         super().__init__(widgets, attrs)
 
     def decompress(self, value):
+        # value is a string in the format "from_month-from_year,to_month-to_year"
+        # return a list of lists in the format [[from_month, from_year], [to_month, to_year]]
         if value:
             from_date, to_date = value.split(",")
             from_date = from_date.split("-")

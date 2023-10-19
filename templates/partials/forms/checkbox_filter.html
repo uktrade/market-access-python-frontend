@@ -31,17 +31,17 @@
 
                 <!-- Sections to display resolved date input, only displayed when loading the barrier status block-->
                 {% if text == "Open" %}
-                    <div id="resolved_date_filter_open_in_progress" {% if "2" not in field.data %}hidden{% endif %}>
+                    <div id="resolved_date_filter_open_in_progress" {% if "2" not in field.data or not field.data %}hidden{% endif %}>
                         {% include "partials/forms/date_input_filter.html" with field=form.status_date_open_in_progress %}
                     </div>
                 {% endif %}
                 {% if text == "Resolved: In part" %}
-                    <div id="resolved_date_filter_resolved_in_part" {% if "3" not in field.data %}hidden{% endif %}>
+                    <div id="resolved_date_filter_resolved_in_part" {% if "3" not in field.data or not field.data %}hidden{% endif %}>
                         {% include "partials/forms/date_input_filter.html" with field=form.status_date_resolved_in_part %}
                     </div>
                 {% endif %}
                 {% if text == "Resolved: In full" %}
-                    <div id="resolved_date_filter_resolved_in_full" {% if "4" not in field.data %}hidden{% endif %}>
+                    <div id="resolved_date_filter_resolved_in_full" {% if "4" not in field.data or not field.data %}hidden{% endif %}>
                         {% include "partials/forms/date_input_filter.html" with field=form.status_date_resolved_in_full %}
                     </div>
                 {% endif %}

@@ -197,3 +197,7 @@ $default-spacing-unit: 5px;
 .month_year_widget > .govuk-label--s{
     margin-top: 0px;
 }
+
+#search-form-fields .month_year_widget  .govuk-date-input__label{
+    font-size: 16px;
+}

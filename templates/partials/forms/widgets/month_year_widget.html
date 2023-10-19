@@ -1,8 +1,8 @@
 <div class="month_year_widget">
     {% if widget.date_range_direction %}
-        <p class="govuk-label--s govuk-!-margin-bottom-0">{{ widget.date_range_direction|title }}</p>
+        <p class="govuk-label--s govuk-!-margin-bottom-0 govuk-!-font-size-16">{{ widget.date_range_direction|title }}</p>
         {% if widget.help_text %}
-            <p class="govuk-hint govuk-!-margin-top-0">{{ widget.help_text }}</p>
+            <p class="govuk-hint govuk-!-margin-top-0 govuk-!-font-size-16">{{ widget.help_text }}</p>
         {% endif %}
     {% endif %}
     {% for sub_widget in widget.subwidgets %}
