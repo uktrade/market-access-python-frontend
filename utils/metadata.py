@@ -10,7 +10,10 @@ from barriers.constants import DEPRECATED_TAGS, Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
 
-redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
+if settings.DJANGO_ENV == "test":
+    redis_client = None
+else:
+    redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
 
 
 def get_metadata():
