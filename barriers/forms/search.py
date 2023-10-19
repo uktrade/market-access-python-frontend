@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 
 from django import forms
 from django.conf import settings
+from django.http import QueryDict
 
 from barriers.constants import DEPRECATED_TAGS, EXPORT_TYPES, STATUS_WITH_DATE_FILTER
 from utils.forms.fields import MonthDateRangeField
@@ -226,6 +227,27 @@ class BarrierSearchForm(forms.Form):
 
     def __init__(self, metadata, *args, **kwargs):
         self.metadata = metadata
+
+        # we need to use some trickery here as we're initialising the form with a QueryDict from GET data, so we need to
+        # check if the field requires multiple values, or if it only needs one. That decides how we retrieve it from the
+        # QueryDict object
+        if isinstance(kwargs["data"], QueryDict):
+            new_data = {}
+            for key, value in kwargs["data"].items():
+                mapped_field = self.declared_fields.get(key, None)
+                if isinstance(mapped_field, forms.Field):
+                    # the data in the QueryDict matches a field on the form, let's check if it's a multiple choice field
+                    # or a single-value field
+                    if isinstance(mapped_field, forms.MultipleChoiceField):
+                        # it's multiple, use getlist to get the list of values
+                        new_data[key] = kwargs["data"].getlist(key)
+                    else:
+                        # it's single, use get to get the value
+                        new_data[key] = kwargs["data"].get(key)
+                else:
+                    new_data[key] = value
+            kwargs["data"] = new_data
+
         super().__init__(*args, **kwargs)
 
         self.set_country_choices()
