@@ -215,17 +215,15 @@ class BarrierLocationForm(APIFormMixin, MetadataMixin, forms.Form):
         ),
         required=True,
     )
-    affect_whole_country = forms.BooleanField(
+    affect_whole_country = forms.NullBooleanField(
         widget=forms.HiddenInput(),
         required=False,
-        initial="None",
     )
     admin_areas = forms.CharField(
         label="Which admin area does the barrier relate to?",
         help_text="Select all that apply",
         widget=forms.HiddenInput(),
         required=False,
-        initial="",
     )
 
     def __init__(self, *args, **kwargs):
