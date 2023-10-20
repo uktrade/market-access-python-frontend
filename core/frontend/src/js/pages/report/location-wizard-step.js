@@ -180,7 +180,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
                 // Add selected admin area to admin area list
                 var selectedAdminAreaName =
                     adminAreaSelector.options[adminAreaSelector.selectedIndex]
-                    .text;
+                        .text;
                 if (!selectedAdminAreasNames.includes(selectedAdminAreaName)) {
                     // Only add name to list if it isn't already present
                     selectedAdminAreasNames.push(selectedAdminAreaName);
