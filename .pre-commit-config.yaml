@@ -56,4 +56,3 @@ repos:
       hooks:
         - id: djhtml
         - id: djcss
-        - id: djjs
