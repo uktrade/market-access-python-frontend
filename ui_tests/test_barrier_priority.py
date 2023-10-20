@@ -43,12 +43,12 @@ def test_no_priority_redirects_to_barrier_page(page: Page, test_barrier_id):
     confirm_radio.click()
 
     submit_button = page.locator("id=confirm-priority-button-js")
-    with page.expect_navigation() as redirect:
-        submit_button.click()
 
-    # Expect to be redirected to the barrier details page
-    redirect_url = redirect.value.request.url
-    assert redirect_url == f"{BASE_URL}/barriers/{test_barrier_id}/"
+    submit_button.click()
+
+    priority_summary_rejection = page.locator("id=priority_summary-rejection")
+
+    expect(priority_summary_rejection).to_be_visible()
 
 
 def test_yes_priority_display_secondary_questions(page: Page, test_barrier_id):
@@ -69,72 +69,6 @@ def test_yes_priority_display_secondary_questions(page: Page, test_barrier_id):
     expect(second_form_locator).to_be_visible()
 
 
-def test_regional_level_opens_top_priority_section(page: Page, test_barrier_id):
-    url = reverse("barriers:edit_priority", kwargs={"barrier_id": test_barrier_id})
-    page.goto(f"{BASE_URL}{url}")
-
-    # Navigate to second form page
-    confirm_radio = page.locator("id=confirm-priority-yes")
-    confirm_radio.click()
-    submit_button = page.locator("id=confirm-priority-button-js")
-    submit_button.click()
-
-    # Expect consideration question to be hidden
-    consideration_question = page.locator("id=top_barrier")
-    expect(consideration_question).not_to_be_visible()
-
-    # Click Overseas delivery option
-    priority_radio = page.locator("id=priority_level-2")
-    priority_radio.click()
-
-    # Expect consideration question to appear
-    expect(consideration_question).to_be_visible()
-
-
-def test_country_level_opens_top_priority_section(page: Page, test_barrier_id):
-    url = reverse("barriers:edit_priority", kwargs={"barrier_id": test_barrier_id})
-    page.goto(f"{BASE_URL}{url}")
-
-    # Navigate to second form page
-    confirm_radio = page.locator("id=confirm-priority-yes")
-    confirm_radio.click()
-    submit_button = page.locator("id=confirm-priority-button-js")
-    submit_button.click()
-
-    # Expect consideration question to be hidden
-    consideration_question = page.locator("id=top_barrier")
-    expect(consideration_question).not_to_be_visible()
-
-    # Click Country priority option
-    priority_radio = page.locator("id=priority_level-3")
-    priority_radio.click()
-
-    # Expect consideration question to appear
-    expect(consideration_question).to_be_visible()
-
-
-def test_watchlist_level_closes_top_priority_section(page: Page, test_barrier_id):
-    url = reverse("barriers:edit_priority", kwargs={"barrier_id": test_barrier_id})
-    page.goto(f"{BASE_URL}{url}")
-
-    # Navigate to second form page
-    confirm_radio = page.locator("id=confirm-priority-yes")
-    confirm_radio.click()
-    submit_button = page.locator("id=confirm-priority-button-js")
-    submit_button.click()
-
-    # Expect consideration question to be hidden
-    consideration_question = page.locator("id=top_barrier")
-    expect(consideration_question).not_to_be_visible()
-
-    # Click Watchlist priority option
-    priority_radio = page.locator("id=priority_level-3")
-    priority_radio.click()
-
-    # Expect consideration question to be hidden
-    expect(consideration_question).not_to_be_visible()
-
-
 def test_consideration_question_opens_summary_input(page: Page, test_barrier_id):
     url = reverse("barriers:edit_priority", kwargs={"barrier_id": test_barrier_id})
     page.goto(f"{BASE_URL}{url}")
@@ -147,22 +81,12 @@ def test_consideration_question_opens_summary_input(page: Page, test_barrier_id)
     priority_radio = page.locator("id=priority_level-2")
     priority_radio.click()
 
-    # Gather top priority elements
-    consideration_radio_yes = page.locator("id=top_barrier-1")
-    consideration_radio_no = page.locator("id=top_barrier-2")
-    top_priority_summary_input = page.locator("id=priority_summary-container")
+    # submit form
+    submit_priority_form_button = page.locator("id=submit-priority-form")
 
-    # Expect 'yes' to open summary input, expect 'no' to close it
-    expect(top_priority_summary_input).not_to_be_visible()
-    consideration_radio_yes.click()
-    expect(top_priority_summary_input).to_be_visible()
-    consideration_radio_no.click()
-    expect(top_priority_summary_input).not_to_be_visible()
+    with page.expect_navigation() as redirect:
+        submit_priority_form_button.submit()
 
-
-# Potential Tests:
-# def test_barrier_with_top_priority_has_section_locked_open
-# def test_barrier_awaiting_approval_has_notice_section
-# def test_admins_see_approval_question
-# def test_error_watchlist_top_priority_attempted
-# def test_error_top_priority_without_summary
+    # Expect to be redirected to the barrier details page
+    redirect_url = redirect.value.request.url
+    assert redirect_url == f"{BASE_URL}/barriers/{test_barrier_id}/"

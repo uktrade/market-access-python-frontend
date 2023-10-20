@@ -4,7 +4,6 @@ from django.urls import reverse
 from playwright.sync_api import Page, expect
 
 from ui_tests import settings
-from ui_tests.settings import BASE_URL
 
 
 def test_example(page: Page):
@@ -42,6 +41,6 @@ def test_example_patch_api(
         "barriers:history",
         kwargs={"barrier_id": test_barrier_id},
     )
-    page.goto(f"{BASE_URL}{history_path}")
+    page.goto(f"{settings.BASE_URL}{history_path}")
     history_items = page.locator(".history-item")
     expect(history_items).to_have_count(9)
