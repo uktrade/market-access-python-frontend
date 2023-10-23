@@ -40,7 +40,7 @@ django-test: ## Run django tests. (Use path=appname/filename::class::test) to na
 
 .PHONY: django-ui-test
 ui-test: ## Run django ui tests.
-	docker-compose exec web bash -c "pytest ui_tests/$(path)"
+	docker-compose exec web bash -c "pytest test_frontend/$(path)"
 
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
