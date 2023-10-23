@@ -1,8 +1,12 @@
-$dash-button-width: 295px;
+$dash-button-width: 290px;
 $dash-button-margin: 30px;
 
-$dash-button-from-tablet-width: ( ( $dash-button-width * 2 ) + $dash-button-margin + 60px );
-$dash-button-from-desktop-width: ( ( $dash-button-width * 3 ) + ( $dash-button-margin * 2 ) + 60px );
+$dash-button-from-tablet-width: (
+	($dash-button-width * 2) + $dash-button-margin + 60px
+);
+$dash-button-from-desktop-width: (
+	($dash-button-width * 3) + ($dash-button-margin * 2) + 60px
+);
 $tablet-width: mq-get-breakpoint-width(tablet, $mq-breakpoints);
 $desktop-width: mq-get-breakpoint-width(desktop, $mq-breakpoints);
 
@@ -16,7 +20,8 @@ $desktop-width: mq-get-breakpoint-width(desktop, $mq-breakpoints);
 
 .dash-buttons-cards-container {
 	display: flex;
-	@include mq( $until: $dash-button-from-desktop-width ){
+
+	@include mq($until: $dash-button-from-desktop-width ) {
 		flex-direction: column;
 	}
 }
@@ -26,18 +31,19 @@ $desktop-width: mq-get-breakpoint-width(desktop, $mq-breakpoints);
 	@extend .govuk-button--start;
 	text-align: left;
 	background-image: none;
-	padding: govuk-em( 15, 24 ) govuk-em( 13, 24 );
+	padding: govuk-em(15, 24) govuk-em(13, 24);
 	box-sizing: border-box;
 	width: 100%;
-	min-height: govuk-em( ( 100 - 30 ), 16 );
+	min-height: govuk-em((100 - 30), 16);
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 
-	@include mq( $from: $dash-button-from-tablet-width ){
+	@include mq($from: $dash-button-from-tablet-width ) {
 		width: $dash-button-width;
 	}
-	@include mq( $from: $dash-button-from-desktop-width ){
+
+	@include mq($from: $dash-button-from-desktop-width ) {
 		margin-left: $dash-button-margin;
 	}
 
@@ -49,12 +55,12 @@ $desktop-width: mq-get-breakpoint-width(desktop, $mq-breakpoints);
 .dash-button__heading {
 	background-repeat: no-repeat;
 	background-position: 100% 50%;
-	padding-right: govuk-em( 45, 24 );
+	padding-right: govuk-em(45, 24);
 	display: table;
 }
 
 .dash-button__text {
-	@include govuk-font( $size: 14 );
+	@include govuk-font($size: 14);
 	display: block;
-	padding-top: govuk-em( 10, 14 );
+	padding-top: govuk-em(10, 14);
 }
