@@ -9,7 +9,7 @@ DEBUG = True
 
 # Remove VPN dependency
 # metadata is pulled by the API from DataHub which is behind the VPN
-MOCK_METADATA = env.bool("MOCK_METADATA", True)
+MOCK_METADATA = True
 
 LOGGING = {
     "version": 1,
