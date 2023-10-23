@@ -1,28 +1,28 @@
 .dash-card {
-	display: inline-block;
-	border: 5px solid $govuk-green;
-	padding: govuk-em(15, 24) govuk-em(13, 24);
-	box-sizing: border-box;
-	margin-bottom: $dash-button-margin;
-	width: 100%;
+    display: inline-block;
+    border: 5px solid $govuk-green;
+    padding: govuk-em(15, 24) govuk-em(13, 24);
+    box-sizing: border-box;
+    margin-bottom: $dash-button-margin;
+    width: 100%;
 
-	@include mq($from: $dash-button-from-tablet-width ) {
-		width: ($dash-button-width * 2) + $dash-button-margin;
-	}
+    @include mq($from: $dash-button-from-tablet-width ) {
+        width: ($dash-button-width * 2) + $dash-button-margin;
+    }
 
-	@include mq($from: $dash-button-from-desktop-width ) {
-		width: ($dash-button-width * 1.2);
-		margin-left: $dash-button-margin;
-	}
+    @include mq($from: $dash-button-from-desktop-width ) {
+        width: ($dash-button-width * 1.2);
+        margin-left: $dash-button-margin;
+    }
 }
 
 .dash-card__heading {
-	@include govuk-font(24, $weight: bold, $line-height: 1.2);
-	margin: govuk-em(10, 24) 0;
-	line-height: 1.25;
+    @include govuk-font(24, $weight: bold, $line-height: 1.2);
+    margin: govuk-em(10, 24) 0;
+    line-height: 1.25;
 }
 
 .dash-card__text {
-	margin: 0;
-	@include govuk-font(14);
+    margin: 0;
+    @include govuk-font(14);
 }
