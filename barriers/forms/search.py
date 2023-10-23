@@ -95,7 +95,7 @@ class BarrierSearchForm(forms.Form):
     status_date_open_in_progress = MonthDateRangeField(
         label="Estimated resolution date", required=False
     )
-    start_date_range = MonthDateRangeField(
+    start_date = MonthDateRangeField(
         label="Barrier start date",
         required=False,
     )
@@ -486,7 +486,7 @@ class BarrierSearchForm(forms.Form):
             "ordering", settings.API_BARRIER_LIST_DEFAULT_SORT
         )
         params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
-        params["start_date"] = self.cleaned_data.get("start_date_range")
+        params["start_date"] = self.cleaned_data.get("start_date")
         params["only_main_sector"] = self.cleaned_data.get("only_main_sector")
 
         return {k: v for k, v in params.items() if v}

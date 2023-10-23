@@ -603,11 +603,11 @@ class SearchTestCase(MarketAccessTestCase):
         )
 
     @patch("utils.api.resources.APIResource.list")
-    def test_start_date_range_filter(self, mock_list):
+    def test_start_date_filter(self, mock_list):
         response = self.client.get(
             reverse("barriers:search"),
             data={
-                "start_date_range": "2021-01-01,2022-01-31",
+                "start_date": "2021-01-01,2022-01-31",
                 "ordering": "-reported",
             },
         )
