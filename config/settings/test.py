@@ -22,6 +22,6 @@ CACHES = {
     }
 }
 
-# Overrides to be able to run individual tests from PyCharm
-# TEMPLATES[0]["DIRS"].append("/usr/src/app/templates")
-# STATIC_ROOT = "/usr/src/app/static"
+BASE_FRONTEND_TESTING_URL = env.str(
+    "BASE_FRONTEND_TESTING_URL", default="http://localhost:9001"
+)

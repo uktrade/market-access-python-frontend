@@ -11,7 +11,7 @@ from playwright.sync_api import sync_playwright
 
 class PlaywrightTestBase(TransactionTestCase):
     create_test_barrier = True
-    base_url = settings.BASE_TESTING_URL
+    base_url = settings.BASE_FRONTEND_TESTING_URL
 
     @classmethod
     def setUpClass(cls):
