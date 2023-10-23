@@ -1,10 +1,10 @@
-FROM python:3.8
-#Using non standard build to enable Playwright tests
-FROM mcr.microsoft.com/playwright/python:v1.21.0-focal
+FROM python:3.9-slim-buster
+# #Using non standard build to enable Playwright tests
+FROM mcr.microsoft.com/playwright/python:v1.39.0-jammy
 
 # Install system stuff
 RUN apt-get update
-RUN apt-get install -y build-essential python3-dev libffi-dev
+RUN apt-get install -y build-essential python3-dev libffi-dev libmagic-dev
 
 # Configure the node apt repository
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
