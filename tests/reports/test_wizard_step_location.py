@@ -29,6 +29,7 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
                 "trading_bloc_GCC": self.trading_bloc_GCC,
                 "trading_bloc_EAEU": self.trading_bloc_EAEU,
                 "trading_bloc_Mercosur": self.trading_bloc_Mercosur,
+                "barrier-location-affect_whole_country": self.affect_whole_country,
             }
         )
 
@@ -64,6 +65,7 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
                 "trading_bloc_GCC": self.trading_bloc_GCC,
                 "trading_bloc_EAEU": self.trading_bloc_EAEU,
                 "trading_bloc_Mercosur": self.trading_bloc_Mercosur,
+                "barrier-location-affect_whole_country": self.affect_whole_country,
             }
         )
 
@@ -86,6 +88,7 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
                 "trading_bloc_GCC": self.trading_bloc_GCC,
                 "trading_bloc_EAEU": self.trading_bloc_EAEU,
                 "trading_bloc_Mercosur": self.trading_bloc_Mercosur,
+                "barrier-location-affect_whole_country": self.affect_whole_country,
             }
         )
 
@@ -111,6 +114,7 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
                 "trading_bloc_GCC": self.trading_bloc_GCC,
                 "trading_bloc_EAEU": self.trading_bloc_EAEU,
                 "trading_bloc_Mercosur": self.trading_bloc_Mercosur,
+                "barrier-location-affect_whole_country": self.affect_whole_country,
             }
         )
 
@@ -135,3 +139,26 @@ class ReportWizardLocationStepTestCase(MarketAccessTestCase):
         assert form.is_valid() is False
         expected_error_message = "Select which location the barrier relates to"
         assert expected_error_message in form.errors["location_select"]
+
+    def test_error_affect_whole_country_not_selected(self):
+        # Set location to USA as this has admin areas and triggers "whole country" question
+        self.location_select = "81756b9a-5d95-e211-a939-e4115bead28a"
+        self.affect_whole_country = "None"
+        form = BarrierLocationForm(
+            {
+                "location_select": self.location_select,
+                "affect_whole_country": self.affect_whole_country,
+                "admin_areas": self.admin_areas,
+                "trading_bloc_EU": self.trading_bloc_EU,
+                "trading_bloc_GCC": self.trading_bloc_GCC,
+                "trading_bloc_EAEU": self.trading_bloc_EAEU,
+                "trading_bloc_Mercosur": self.trading_bloc_Mercosur,
+                "barrier-location-affect_whole_country": self.affect_whole_country,
+            }
+        )
+
+        assert form.is_valid() is False
+        expected_error_message = (
+            "Select yes if the barrier relates to the entire country"
+        )
+        assert expected_error_message in form.errors["affect_whole_country"]

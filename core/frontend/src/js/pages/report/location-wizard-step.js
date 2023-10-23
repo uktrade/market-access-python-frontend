@@ -31,6 +31,14 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
     const selectedAdminAreasNames = [];
     const selectedAdminAreasIds = [];
 
+    // Setup hidden inputs that will pass back to python code
+    const adminAreasInput = document.getElementById(
+        "admin-areas-selection-input"
+    );
+    const affectWholeCountryInput = document.getElementById(
+        "affect-whole-country-input"
+    );
+
     // Get selected country on location_select change
     // The section in the selector component
     const countrySection = document.getElementById("location_select");
@@ -87,21 +95,18 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
         // 2. Clear admin area inputs, or load in existing values
         if (reset == "True") {
             // This route is taken when selecting a new country
-            const adminAreasInput = document.getElementById(
-                "admin-areas-selection-input"
-            );
             adminAreasInput.value = "";
             selectedAdminAreasNames.length = 0;
             selectedAdminAreasIds.length = 0;
         } else {
             // This route is taken when entering the page
-            const adminAreasInput = document.getElementById(
-                "admin-areas-selection-input"
-            );
-            var adminAreasInputValue = adminAreasInput.value.split(",");
-            for (let i = 0; i < adminAreasInputValue.length; i++) {
-                if (adminAreasInputValue[i] != "") {
-                    selectedAdminAreasIds.push(adminAreasInputValue[i]);
+            // If we are returning to the page, push the existing admin_areas selection into the id array
+            if (adminAreasInput.value != "None") {
+                var adminAreasInputValue = adminAreasInput.value.split(",");
+                for (let i = 0; i < adminAreasInputValue.length; i++) {
+                    if (adminAreasInputValue[i] != "") {
+                        selectedAdminAreasIds.push(adminAreasInputValue[i]);
+                    }
                 }
             }
             // get the selection box, find the name for the area base on the list of selections and compare the value
@@ -162,12 +167,6 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
             const adminAreaSelector = document.getElementById(
                 currentAddAdminButton.getAttribute("name")
             );
-
-            // Append selected value to hidden input list
-            const adminAreasInput = document.getElementById(
-                "admin-areas-selection-input"
-            );
-
             // Only continue if selected value is not 'choose your location'
             if (adminAreaSelector.value != 0) {
                 // If the admin area is not in the selected array, push it there and update
@@ -175,6 +174,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
                 if (!selectedAdminAreasIds.includes(adminAreaSelector.value)) {
                     selectedAdminAreasIds.push(adminAreaSelector.value);
                 }
+                // Append selected value to hidden input list
                 adminAreasInput.value = selectedAdminAreasIds;
 
                 // Add selected admin area to admin area list
@@ -266,9 +266,6 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
                     // Remove the id from the array
                     selectedAdminAreasIds.splice(idIndex, 1);
                     // Remove id from hidden input
-                    const adminAreasInput = document.getElementById(
-                        "admin-areas-selection-input"
-                    );
                     adminAreasInput.value = selectedAdminAreasIds;
                     // Re-render the admin area container
                     updateSelectedAdminAreasContainer(
@@ -282,25 +279,36 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
 
     // Change true/false hidden field so django can catch mismatch between
     // no selected admin areas and a 'no' answer to 'does it relate to entire country'
-    const affectWholeCountryInput = document.getElementById(
-        "affect-whole-country-input"
-    );
     const yesEntireCountry = document.getElementById("admin-area-reveal-2");
     yesEntireCountry.addEventListener("change", function () {
         affectWholeCountryInput.value = "True";
+        // Clear off any admin areas that were added
+        adminAreasInput.value = "";
+        selectedAdminAreasNames.length = 0;
+        selectedAdminAreasIds.length = 0;
+        updateSelectedAdminAreasContainer(
+            selectedAdminAreasNames,
+            selectedAdminAreasIds
+        );
     });
     const noEntireCountry = document.getElementById("admin-area-reveal");
     noEntireCountry.addEventListener("change", function () {
         affectWholeCountryInput.value = "False";
     });
     // In event of an admin_areas error, check 'no'
-    const adminAreaReveal = document.getElementById("admin-area-reveal");
     // Search page for admin_areas error message
     let adminAreasError = document.body.innerHTML.search(
         "Select all admin areas the barrier relates to"
     );
     // If the error is present, it will have a position value higher than -1
     if (adminAreasError > -1) {
-        adminAreaReveal.setAttribute("checked", "checked");
+        noEntireCountry.setAttribute("checked", "checked");
+    }
+    // Set the initial radio checked value based on initial hidden value field
+    // Coming in without value we leave both options unchecked
+    if (affectWholeCountryInput.value == "True") {
+        yesEntireCountry.setAttribute("checked", "checked");
+    } else if (affectWholeCountryInput.value == "False") {
+        noEntireCountry.setAttribute("checked", "checked");
     }
 };
