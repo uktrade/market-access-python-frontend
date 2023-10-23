@@ -21,21 +21,21 @@
 {% endif %}
 
 <section class="dash-buttons-cards-container">
-    <a href="{% url 'reports:new_report' %}" role="button" class="dash-button">
+    <a id="dash-button-0" href="{% url 'reports:new_report' %}" role="button" class="dash-button">
         <span class="dash-button__heading">Report a barrier</span>
         <span class="dash-button__text">
             Add a market barrier that is affecting a UK business exporting or importing.
         </span>
     </a>
 
-    <a href="{% url 'barriers:search' %}" role="button" class="dash-button">
+    <a id="dash-button-1" href="{% url 'barriers:search' %}" role="button" class="dash-button">
         <span class="dash-button__heading">Search</span>
         <span class="dash-button__text">
             Search and filter barriers.
         </span>
     </a>
 
-    <a href="{% url 'barriers:public_barriers' %}" role="button" class="dash-button">
+    <a id="dash-button-2" href="{% url 'barriers:public_barriers' %}" role="button" class="dash-button">
         <span class="dash-button__heading">Find barriers for publishing</span>
         <span class="dash-button__text">
             Table view with public title, summary and comments
