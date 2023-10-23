@@ -2,184 +2,202 @@ $default-spacing-unit: 5px;
 
 .checkbox-filter {
 
-	transform: translateZ(0); // Enforcing GPU acceleration fixes overflow cropping caused by CSS columns
-	border-bottom: 1px solid $govuk-mid-grey;
-	max-height: govuk-em( 200, 16 );
-	overflow-y: auto;
+    transform: translateZ(0); // Enforcing GPU acceleration fixes overflow cropping caused by CSS columns
+    border-bottom: 1px solid $govuk-mid-grey;
+    max-height: govuk-em( 200, 16 );
+    overflow-y: auto;
 
-	&:last-child {
-		border-bottom: 0;
-	}
+    &:last-child {
+        border-bottom: 0;
+    }
 
-	& + & {
-		margin-top: 0;
-	}
+    & + & {
+        margin-top: 0;
+    }
+}
+
+.checkbox-filter-no-overflow {
+    @extend .checkbox-filter;
+    max-height: 100%;
+    overflow-y: visible;
 }
 
 .checkbox-filter__item {
 
-	position: relative;
-	background-color: white;
-	border-bottom: 1px solid $govuk-mid-grey;
+    position: relative;
+    background-color: white;
+    border-bottom: 1px solid $govuk-mid-grey;
 
-	&:last-of-type {
-		border-bottom: none;
-	}
+    &:last-of-type {
+        border-bottom: none;
+    }
 
-	&:hover {
-		background-color: $govuk-light-grey;
-	}
+    &:hover {
+        background-color: $govuk-light-grey;
+    }
 }
 
 @mixin _scale-input($font-size) {
 
-	$input-size: $font-size * 2;
-	width: $input-size;
-	height: $input-size;
+    $input-size: $font-size * 2;
+    width: $input-size;
+    height: $input-size;
 
-	&[type="checkbox"] + .checkbox-filter__label::after {
+    &[type="checkbox"] + .checkbox-filter__label::after {
 
-		@if round($font-size) < 10 {
-			border-width: 0 0 2px 2px;
-		} @else {
-			border-width: 0 0 5px 5px;
-		}
+        @if round($font-size) < 10 {
+            border-width: 0 0 2px 2px;
+        } @else {
+            border-width: 0 0 5px 5px;
+        }
 
-		width: round($input-size / 1.7);
-		height: round($input-size / 3);
-	}
+        width: round($input-size / 1.7);
+        height: round($input-size / 3);
+    }
 
-	& + .checkbox-filter__label {
+    & + .checkbox-filter__label {
 
-		&::before {
-			height: $input-size;
-			width: $input-size;
-		}
+        &::before {
+            height: $input-size;
+            width: $input-size;
+        }
 
-		&::after {
-			border: ceil($font-size / 2) solid black;
-			left: floor($font-size * 1.4);
-			top: floor($font-size * 1.7);
-		}
-	}
+        &::after {
+            border: ceil($font-size / 2) solid black;
+            left: floor($font-size * 1.4);
+            top: floor($font-size * 1.7);
+        }
+    }
 }
 
 .checkbox-filter__input {
 
-	@include _scale-input(8px);
-	@include govuk-font( 16 );
-	position: absolute;
-	top: $default-spacing-unit;
-	left: $default-spacing-unit;
-	margin: auto;
-	opacity: 0;
+    @include _scale-input(8px);
+    @include govuk-font( 16 );
+    position: absolute;
+    top: $default-spacing-unit;
+    left: $default-spacing-unit;
+    margin: auto;
+    opacity: 0;
 
-	+ .checkbox-filter__label {
-		@include govuk-font( 16, $line-height: 1.25 );
-		padding-top: 9px;
-		padding-bottom: 8px;
-	}
+    + .checkbox-filter__label {
+        @include govuk-font( 16, $line-height: 1.25 );
+        padding-top: 9px;
+        padding-bottom: 8px;
+    }
 
-	&[ type="checkbox" ] + .checkbox-filter__label::after {
-		transform: rotate(-45deg);
-		-ms-transform: rotate(-45deg);
-	}
+    &[ type="checkbox" ] + .checkbox-filter__label::after {
+        transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+    }
 
-	& + .checkbox-filter__label {
+    & + .checkbox-filter__label {
 
-		&::before,
-		&::after {
-			content: "";
-			position: absolute;
-		}
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+        }
 
-		&::before {
-			border: 2px solid black;
-			background-color: #fff;
-			top: 8px;
-			left: 6px;
-		}
+        &::before {
+            border: 2px solid black;
+            background-color: #fff;
+            top: 8px;
+            left: 6px;
+        }
 
-		&::after {
-			height: 0;
-			width: 0;
-			visibility: hidden;
-		}
-	}
+        &::after {
+            height: 0;
+            width: 0;
+            visibility: hidden;
+        }
+    }
 
-	&:checked + .checkbox-filter__label::after {
-		visibility: visible;
-	}
+    &:checked + .checkbox-filter__label::after {
+        visibility: visible;
+    }
 
-	&:focus + .checkbox-filter__label::before {
-		box-shadow: 0 0 0 3px $govuk-focus-colour;
-	}
+    &:focus + .checkbox-filter__label::before {
+        box-shadow: 0 0 0 3px $govuk-focus-colour;
+    }
 }
 
 .checkbox-filter__label {
-	cursor: pointer;
-	display: block;
-	padding: ($default-spacing-unit / 2) ($default-spacing-unit / 2) $default-spacing-unit round($default-spacing-unit * 6.5);
-	line-height: 1.2;
-	margin-bottom: 0;
+    cursor: pointer;
+    display: block;
+    padding: ($default-spacing-unit / 2) ($default-spacing-unit / 2) $default-spacing-unit round($default-spacing-unit * 6.5);
+    line-height: 1.2;
+    margin-bottom: 0;
 }
 
 .checkbox-filter__hint {
 
-	@include govuk-font(14);
-	display: block;
-	color: $govuk-dark-grey;
+    @include govuk-font(14);
+    display: block;
+    color: $govuk-dark-grey;
 
-	a {
-		&,
-		&:active,
-		&:link,
-		&:hover,
-		&:visited {
-			color: $govuk-dark-grey;
-		}
-	}
+    a {
+        &,
+        &:active,
+        &:link,
+        &:hover,
+        &:visited {
+            color: $govuk-dark-grey;
+        }
+    }
 }
 
 .resolved_date__input {
-	background-color: white;
+    background-color: white;
 }
 
 .resolved_date__indent {
-	padding-left: govuk-spacing(7);
-	padding-bottom: govuk-spacing(4);
+    padding-left: govuk-spacing(7);
+    padding-bottom: govuk-spacing(4);
 }
 
 .resolved_date__inner_vertical_gap {
-	padding-top: govuk-spacing(2);
+    padding-top: govuk-spacing(2);
 }
 
 .resolved_date__label {
-	@include govuk-font($size: 16);
-	display: block;
-	font-weight: bold;
+    @include govuk-font($size: 16);
+    display: block;
+    font-weight: bold;
 }
 
 .resolved_date__inputs_label {
-	@include govuk-font($size: 16);
+    @include govuk-font($size: 16);
 }
 
 .resolved_date__month_input {
-	@include govuk-font($size: 16);
-	$input-size: 16px * 2;
-	width: $input-size * 2;
-	height: $input-size;
+    @include govuk-font($size: 16);
+    $input-size: 16px * 2;
+    width: $input-size * 2;
+    height: $input-size;
 }
 
 .resolved_date__year_input {
-	@include govuk-font($size: 16);
-	$input-size: 16px * 2;
-	width: $input-size * 3;
-	height: $input-size;
+    @include govuk-font($size: 16);
+    $input-size: 16px * 2;
+    width: $input-size * 3;
+    height: $input-size;
 }
 
 .govuk-hint-small {
-	@include govuk-font($size: 14);
-	display: block;
-	color: $govuk-dark-grey;
+    @include govuk-font($size: 14);
+    display: block;
+    color: $govuk-dark-grey;
+}
+
+.month_year_widget + .month_year_widget {
+    margin-top: 20px;
+}
+
+.month_year_widget > .govuk-label--s{
+    margin-top: 0px;
+}
+
+#search-form-fields .month_year_widget  .govuk-date-input__label{
+    font-size: 16px;
 }

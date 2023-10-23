@@ -71,7 +71,7 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority_level %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.status %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.status extra_classes="checkbox-filter-no-overflow" %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.export_types %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
@@ -81,7 +81,7 @@
                 {% render_bundle 'date_filter_component' %}
 
                 <!-- include date filters -->
-                {% include 'partials/forms/date_input_filter.html' with field=form.start_date field_from_month=form.start_date_from_month field_from_year=form.start_date_from_year field_to_month=form.start_date_to_month field_to_year=form.start_date_to_year %}
+                {% include 'partials/forms/date_input_filter.html' with field=form.start_date_range %}
 
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
@@ -196,9 +196,10 @@
                             {% include 'barriers/partials/active_filter.html' with filter=filters.economic_impact_assessment %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.commodity_code %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.commercial_value_estimate %}
-                            {% if filters.start_date_from_month or filters.start_date_from_year or filters.start_date_to_month or filters.start_date_to_year %}
-                                {% include 'barriers/partials/active_filter.html' with filter=filters.start_date %}
-                            {% endif %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.start_date_range %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_resolved_in_full %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_resolved_in_part %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_open_in_progress %}
                         </ul>
                     {% endif %}
                 </div>
@@ -222,11 +223,6 @@
                                     {{ form.ordering.label}}
                                 </label>
                                 {{ form.ordering }}
-{#                    <select class="govuk-select" id="dmas-barrier-list-sorting" name="sort">#}
-{#                      {% for value, label in search_ordering_choices.items %}#}
-{#                        <option value="{{ value }}" selected>{{ label }}</option>#}
-{#                      {% endfor %}#}
-{#                    </select>#}
                                 <button type="submit" class="govuk-button govuk-!-display-inline-block">Apply</button>
                             </div>
                         {% endif %}

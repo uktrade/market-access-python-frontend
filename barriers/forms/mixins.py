@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
-from utils.forms import MonthYearInFutureField
+from utils.forms.fields import MonthYearInFutureField
 
 logger = logging.getLogger(__name__)
 

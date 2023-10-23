@@ -525,10 +525,7 @@ class SearchTestCase(MarketAccessTestCase):
             reverse("barriers:search"),
             data={
                 "status": ["4"],
-                "resolved_date_from_month_resolved_in_full": "01",
-                "resolved_date_from_year_resolved_in_full": "2021",
-                "resolved_date_to_month_resolved_in_full": "01",
-                "resolved_date_to_year_resolved_in_full": "2022",
+                "status_date_resolved_in_full": "2021-01-01,2022-01-31",
                 "ordering": "-reported",
             },
         )
@@ -541,7 +538,7 @@ class SearchTestCase(MarketAccessTestCase):
             offset=0,
             archived="0",
             status="4",
-            status_date_resolved_in_full="2021-01-01,2022-01-31",
+            status_date_resolved_in_full="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -550,10 +547,7 @@ class SearchTestCase(MarketAccessTestCase):
             reverse("barriers:search"),
             data={
                 "status": ["3"],
-                "resolved_date_from_month_resolved_in_part": "01",
-                "resolved_date_from_year_resolved_in_part": "2021",
-                "resolved_date_to_month_resolved_in_part": "01",
-                "resolved_date_to_year_resolved_in_part": "2022",
+                "status_date_resolved_in_part": "2021-01-01,2022-01-31",
                 "ordering": "-reported",
             },
         )
@@ -566,7 +560,7 @@ class SearchTestCase(MarketAccessTestCase):
             offset=0,
             archived="0",
             status="3",
-            status_date_resolved_in_part="2021-01-01,2022-01-31",
+            status_date_resolved_in_part="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -575,10 +569,7 @@ class SearchTestCase(MarketAccessTestCase):
             reverse("barriers:search"),
             data={
                 "status": ["2"],
-                "resolved_date_from_month_open_in_progress": "01",
-                "resolved_date_from_year_open_in_progress": "2021",
-                "resolved_date_to_month_open_in_progress": "01",
-                "resolved_date_to_year_open_in_progress": "2022",
+                "status_date_open_in_progress": "2021-01-01,2022-01-31",
                 "ordering": "-reported",
             },
         )
@@ -591,7 +582,7 @@ class SearchTestCase(MarketAccessTestCase):
             offset=0,
             archived="0",
             status="2",
-            status_date_open_in_progress="2021-01-01,2022-01-31",
+            status_date_open_in_progress="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")
@@ -616,10 +607,7 @@ class SearchTestCase(MarketAccessTestCase):
         response = self.client.get(
             reverse("barriers:search"),
             data={
-                "start_date_from_month": "01",
-                "start_date_from_year": "2021",
-                "start_date_to_month": "01",
-                "start_date_to_year": "2022",
+                "start_date_range": "2021-01-01,2022-01-31",
                 "ordering": "-reported",
             },
         )
@@ -631,7 +619,7 @@ class SearchTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
             archived="0",
-            start_date="2021-01-01,2022-01-31",
+            start_date="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")

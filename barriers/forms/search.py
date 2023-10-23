@@ -1,4 +1,3 @@
-import calendar
 import copy
 import logging
 from operator import itemgetter
@@ -9,7 +8,7 @@ from django.conf import settings
 from django.http import QueryDict
 
 from barriers.constants import DEPRECATED_TAGS, EXPORT_TYPES, STATUS_WITH_DATE_FILTER
-from utils.forms import DateRangeField
+from utils.forms.fields import MonthDateRangeField
 from utils.helpers import format_dict_for_url_querystring
 
 logger = logging.getLogger(__name__)
@@ -86,39 +85,20 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
 
-    # Resolved date filter inputs for status: 'Resolved: In full' - status_id is 4
-    resolved_date_from_month_resolved_in_full = forms.CharField(
-        label="Resolved date from", help_text="Example, 01 2021", required=False
+    status_date_resolved_in_full = MonthDateRangeField(
+        label="Resolved date", required=False
     )
-    resolved_date_from_year_resolved_in_full = forms.CharField(required=False)
-    resolved_date_to_month_resolved_in_full = forms.CharField(
-        label="Resolved date to", help_text="Example, 01 2022", required=False
-    )
-    resolved_date_to_year_resolved_in_full = forms.CharField(required=False)
-
-    # Resolved date filter inputs for status: 'Resolved: In part' - status_id is 3
-    resolved_date_from_month_resolved_in_part = forms.CharField(
-        label="Resolved date from", help_text="Example, 01 2021", required=False
-    )
-    resolved_date_from_year_resolved_in_part = forms.CharField(required=False)
-    resolved_date_to_month_resolved_in_part = forms.CharField(
-        label="Resolved date to", help_text="Example, 01 2022", required=False
-    )
-    resolved_date_to_year_resolved_in_part = forms.CharField(required=False)
-
-    # Estimated resolution date filter inputs for status: 'Open: In progress' - status_id is 2
-    resolved_date_from_month_open_in_progress = forms.CharField(
-        label="Estimated resolution date from",
-        help_text="Example, 01 2021",
+    status_date_resolved_in_part = MonthDateRangeField(
+        label="Resolved in part date",
         required=False,
     )
-    resolved_date_from_year_open_in_progress = forms.CharField(required=False)
-    resolved_date_to_month_open_in_progress = forms.CharField(
-        label="Estimated resolution date to",
-        help_text="Example, 01 2022",
+    status_date_open_in_progress = MonthDateRangeField(
+        label="Estimated resolution date", required=False
+    )
+    start_date_range = MonthDateRangeField(
+        label="Barrier start date",
         required=False,
     )
-    resolved_date_to_year_open_in_progress = forms.CharField(required=False)
 
     tags = forms.MultipleChoiceField(
         label="Tags",
@@ -228,24 +208,6 @@ class BarrierSearchForm(forms.Form):
         ),
     )
 
-    start_date = DateRangeField(label="Barrier start date", required=False)
-    start_date_from_month = forms.CharField(
-        label="Barrier Start date from month",
-        help_text="Example, 01 2021",
-        required=False,
-    )
-    start_date_from_year = forms.CharField(
-        label="Barrier Start date from year", required=False
-    )
-    start_date_to_month = forms.CharField(
-        label="Barrier Start date to month",
-        help_text="Example, 01 2022",
-        required=False,
-    )
-    start_date_to_year = forms.CharField(
-        label="Barrier Start date to year", required=False
-    )
-
     filter_groups = {
         "show": {"label": "Show", "fields": ("user", "team", "only_archived")},
         "country": {
@@ -253,15 +215,41 @@ class BarrierSearchForm(forms.Form):
             "fields": ("extra_location", "country_trading_bloc"),
         },
         "action_plans": {"label": "Action plans", "fields": ("has_action_plan",)},
+        "status": {
+            "label": "Barrier status",
+            "fields": (
+                "status_date_resolved_in_full",
+                "status_date_resolved_in_part",
+                "status_date_open_in_progress",
+            ),
+        },
     }
 
     def __init__(self, metadata, *args, **kwargs):
         self.metadata = metadata
 
+        # we need to use some trickery here as we're initialising the form with a QueryDict from GET data, so we need to
+        # check if the field requires multiple values, or if it only needs one. That decides how we retrieve it from the
+        # QueryDict object
         if isinstance(kwargs["data"], QueryDict):
-            kwargs["data"] = self.get_data_from_querydict(kwargs["data"])
+            new_data = {}
+            for key, value in kwargs["data"].items():
+                mapped_field = self.declared_fields.get(key, None)
+                if isinstance(mapped_field, forms.Field):
+                    # the data in the QueryDict matches a field on the form, let's check if it's a multiple choice field
+                    # or a single-value field
+                    if isinstance(mapped_field, forms.MultipleChoiceField):
+                        # it's multiple, use getlist to get the list of values
+                        new_data[key] = kwargs["data"].getlist(key)
+                    else:
+                        # it's single, use get to get the value
+                        new_data[key] = kwargs["data"].get(key)
+                else:
+                    new_data[key] = value
+            kwargs["data"] = new_data
 
         super().__init__(*args, **kwargs)
+
         self.set_country_choices()
         self.set_country_trading_bloc_choices()
         self.set_extra_location_choices()
@@ -274,67 +262,6 @@ class BarrierSearchForm(forms.Form):
         self.set_tags_choices()
         self.set_ordering_choices()
         self.index_filter_groups()
-
-    def get_data_from_querydict(self, data):
-        """
-        Get form data from the GET parameters.
-        """
-        cleaned_data = {
-            "search_id": data.get("search_id"),
-            "search": data.get("search"),
-            "country": data.getlist("country"),
-            "country_trading_bloc": data.getlist("country_trading_bloc"),
-            "admin_areas": data.get("admin_areas"),
-            "extra_location": data.getlist("extra_location"),
-            "trade_direction": data.getlist("trade_direction"),
-            "sector": data.getlist("sector"),
-            "ignore_all_sectors": data.get("ignore_all_sectors"),
-            "organisation": data.getlist("organisation"),
-            "category": data.getlist("category"),
-            "region": data.getlist("region"),
-            "top_priority_status": data.getlist("top_priority_status"),
-            "priority_level": data.getlist("priority_level"),
-            "status": data.getlist("status"),
-            "tags": data.getlist("tags"),
-            "delivery_confidence": data.getlist("delivery_confidence"),
-            "has_action_plan": data.get("has_action_plan"),
-            "user": data.get("user"),
-            "team": data.get("team"),
-            "member": data.get("member"),
-            "only_archived": data.get("only_archived"),
-            "wto": data.getlist("wto"),
-            "public_view": data.getlist("public_view"),
-            "economic_assessment_eligibility": data.getlist(
-                "economic_assessment_eligibility"
-            ),
-            "economic_assessment": data.getlist("economic_assessment"),
-            "economic_impact_assessment": data.getlist("economic_impact_assessment"),
-            "commodity_code": data.getlist("commodity_code"),
-            "commercial_value_estimate": data.getlist("commercial_value_estimate"),
-            "ordering": data.get("ordering"),
-            "start_date_from_month": data.get("start_date_from_month"),
-            "start_date_from_year": data.get("start_date_from_year"),
-            "start_date_to_month": data.get("start_date_to_month"),
-            "start_date_to_year": data.get("start_date_to_year"),
-            "export_types": data.getlist("export_types"),
-            "only_main_sector": data.get("only_main_sector"),
-        }
-
-        for status_value in STATUS_WITH_DATE_FILTER:
-            cleaned_data[f"resolved_date_from_month_{status_value}"] = data.get(
-                f"resolved_date_from_month_{status_value}"
-            )
-            cleaned_data[f"resolved_date_from_year_{status_value}"] = data.get(
-                f"resolved_date_from_year_{status_value}"
-            )
-            cleaned_data[f"resolved_date_to_month_{status_value}"] = data.get(
-                f"resolved_date_to_month_{status_value}"
-            )
-            cleaned_data[f"resolved_date_to_year_{status_value}"] = data.get(
-                f"resolved_date_to_year_{status_value}"
-            )
-
-        return {k: v for k, v in cleaned_data.items() if v}
 
     def set_country_choices(self):
         location_choices = [
@@ -492,20 +419,12 @@ class BarrierSearchForm(forms.Form):
                 if field in params:
                     del params[field]
         else:
-            # Clear resolved date filters if requesting a resolved status filter removal
-            if field_name == "status":
-                for status in STATUS_WITH_DATE_FILTER:
-                    params.pop(f"resolved_date_from_month_{status}", None)
-                    params.pop(f"resolved_date_from_year_{status}", None)
-                    params.pop(f"resolved_date_to_month_{status}", None)
-                    params.pop(f"resolved_date_to_year_{status}", None)
-            elif field_name == "start_date":
-                params.pop("start_date_from_month", None)
-                params.pop("start_date_from_year", None)
-                params.pop("start_date_to_month", None)
-                params.pop("start_date_to_year", None)
-
             del params[field_name]
+
+        if field_name == "status":
+            for status_value in STATUS_WITH_DATE_FILTER:
+                if f"status_date_{status_value}" in params:
+                    del params[f"status_date_{status_value}"]
 
         return urlencode(params, doseq=True)
 
@@ -529,9 +448,10 @@ class BarrierSearchForm(forms.Form):
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         for status_value in STATUS_WITH_DATE_FILTER:
-            params[f"status_date_{status_value}"] = self.format_resolved_date(
-                status_value
+            params[f"status_date_{status_value}"] = self.cleaned_data.get(
+                f"status_date_{status_value}"
             )
+
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
         )
@@ -566,7 +486,7 @@ class BarrierSearchForm(forms.Form):
             "ordering", settings.API_BARRIER_LIST_DEFAULT_SORT
         )
         params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
-        params["start_date"] = self.format_start_date()
+        params["start_date"] = self.cleaned_data.get("start_date_range")
         params["only_main_sector"] = self.cleaned_data.get("only_main_sector")
 
         return {k: v for k, v in params.items() if v}
@@ -579,52 +499,6 @@ class BarrierSearchForm(forms.Form):
                     admin_areas.append(admin_area_id)
         return admin_areas
 
-    def format_resolved_date(self, status):
-        """
-        Format the resolved date input to be compatible with the API's queryset filter
-        Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates
-        Users only input the month and year, so we need to generate a day value.
-        """
-
-        from_year = self.cleaned_data.get(f"resolved_date_from_year_{status}")
-        from_month = self.cleaned_data.get(f"resolved_date_from_month_{status}")
-        to_year = self.cleaned_data.get(f"resolved_date_to_year_{status}")
-        to_month = self.cleaned_data.get(f"resolved_date_to_month_{status}")
-
-        if from_year and from_month and to_year and to_month:
-
-            from_date = from_year + "-" + from_month + "-01"
-
-            # calendar has function to identify last day of a given month in a year
-            to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
-            to_date = to_year + "-" + to_month + "-" + str(to_date_day)
-
-            return from_date + "," + to_date
-
-        else:
-            return []
-
-    def format_start_date(self):
-        """
-        Format the start date input to be compatible with the API's queryset filter.
-        Needs to be in this format YYYY-MM-DD,YYYY-MM-DD for "from"-"to" dates.
-        Users only input the month and year, so we need to generate a day value.
-        """
-        from_year = self.cleaned_data.get("start_date_from_year")
-        from_month = self.cleaned_data.get("start_date_from_month")
-        to_year = self.cleaned_data.get("start_date_to_year")
-        to_month = self.cleaned_data.get("start_date_to_month")
-
-        if from_year and from_month and to_year and to_month:
-
-            from_date = from_year + "-" + from_month + "-01"
-            # calendar has function to identify last day of a given month in a year
-            to_date_day = calendar.monthrange(int(to_year), int(to_month))[1]
-            to_date = to_year + "-" + to_month + "-" + str(to_date_day)
-
-            return from_date + "," + to_date
-        return []
-
     def get_raw_filters(self):
         """
         Get the currently applied filters in the same format as cleaned_data.
@@ -636,7 +510,6 @@ class BarrierSearchForm(forms.Form):
         }
 
     def get_raw_filters_querystring(self):
-
         # In some instances, filters need reformatting before being encoded
         filters_for_encode = format_dict_for_url_querystring(
             self.get_raw_filters(), ["admin_areas"]
@@ -653,31 +526,21 @@ class BarrierSearchForm(forms.Form):
         elif isinstance(field, forms.BooleanField):
             return field.label
         elif field.label == "Barrier region/state":
-            return self.get_readable_admin_area_filter(value)
+            admin_areas_selected = []
+            for country in value:
+                for admin_area_id in value[country]:
+                    admin_area_detail = self.metadata.get_admin_area(admin_area_id)
+                    admin_areas_selected.append(admin_area_detail["name"])
+            return ", ".join(admin_areas_selected)
+        elif isinstance(field, MonthDateRangeField):
+            # it's a string of two dates, so let's just use the decompress() method of the
+            # widget to get the readable value. It will return [[from_month, from_year], [to_month, to_year]
+            date_range = field.widget.decompress(value)
+            return f"{date_range[0][0]}/{date_range[0][1]} to {date_range[1][0]}/{date_range[1][1]}"
 
         return value
 
-    def get_readable_admin_area_filter(self, admin_area_selections):
-        admin_areas_selected = []
-        for country in admin_area_selections:
-            for admin_area_id in admin_area_selections[country]:
-                admin_area_detail = self.metadata.get_admin_area(admin_area_id)
-                admin_areas_selected.append(admin_area_detail["name"])
-        return ", ".join(admin_areas_selected)
-
-    @property
-    def start_date_search_fields(self):
-        """
-        Return a list of filter keys to for start date .
-        """
-        return [
-            "start_date_from_year",
-            "start_date_from_month",
-            "start_date_to_year",
-            "start_date_to_month",
-        ]
-
-    def get_readable_filters(self, with_remove_links=False):
+    def get_readable_filters(self, with_remove_urls=True):
         """
         Get the currently applied filters with their readable values.
 
@@ -700,7 +563,7 @@ class BarrierSearchForm(forms.Form):
                     "readable_value": readable_value,
                 }
 
-                if with_remove_links:
+                if with_remove_urls:
                     filters[key]["remove_url"] = self.get_remove_url(name)
             else:
                 existing_readable_value = filters[key]["readable_value"]
@@ -712,16 +575,5 @@ class BarrierSearchForm(forms.Form):
                     filters[key]["value"] += value
                 else:
                     filters[key]["value"].append(value)
-
-        start_date_range = (
-            self.format_start_date().replace(",", " to ")
-            if isinstance(self.format_start_date(), str)
-            else None
-        )
-        filters["start_date"] = {
-            "label": "Start date",
-            "value": start_date_range,
-            "readable_value": start_date_range,
-        }
 
         return filters
