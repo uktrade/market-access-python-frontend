@@ -81,7 +81,7 @@
                 {% render_bundle 'date_filter_component' %}
 
                 <!-- include date filters -->
-                {% include 'partials/forms/date_input_filter.html' with field=form.start_date_range %}
+                {% include 'partials/forms/date_input_filter.html' with field=form.start_date %}
 
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
@@ -196,7 +196,7 @@
                             {% include 'barriers/partials/active_filter.html' with filter=filters.economic_impact_assessment %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.commodity_code %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.commercial_value_estimate %}
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.start_date_range %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.start_date %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_resolved_in_full %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_resolved_in_part %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_open_in_progress %}
