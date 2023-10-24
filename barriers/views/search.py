@@ -124,6 +124,17 @@ class BarrierSearch(PaginationMixin, SearchFormView):
         context_data = {}
         saved_search = self.get_saved_search(form)
         if saved_search:
+            # If user has clicked the "update saved search" button, get the updated
+            # saved_search and continue operation using the new version
+            if "update_search" in self.request.GET and form.cleaned_data.get(
+                "search_id"
+            ):
+                self.client.saved_searches.patch(
+                    id=str(form.cleaned_data.get("search_id")),
+                    filters=form.get_raw_filters(),
+                )
+                saved_search = self.get_saved_search(form)
+
             context_data["saved_search"] = saved_search
             form_filters = form.get_raw_filters()
             context_data["have_filters_changed"] = nested_sort(
@@ -150,19 +161,6 @@ class BarrierSearch(PaginationMixin, SearchFormView):
         params = self.request.GET.copy()
         params.pop("page", None)
         return params.urlencode()
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        form.full_clean()
-
-        if "update_search" in request.POST and form.cleaned_data.get("search_id"):
-            self.client.saved_searches.patch(
-                id=str(form.cleaned_data.get("search_id")),
-                filters=form.get_raw_filters(),
-            )
-        return self.render_to_response(
-            self.get_context_data(form=form, saved_search_updated=True)
-        )
 
 
 class DownloadBarriers(SearchFormMixin, View):
