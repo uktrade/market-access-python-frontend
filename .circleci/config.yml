@@ -64,7 +64,7 @@ jobs:
             - run:
                   command: |
                     sudo pip install --upgrade pip
-                    sudo pip install poetry==1.1.8
+                    sudo pip install poetry
 
             - run:
                   name: Install dependencies
@@ -128,7 +128,7 @@ jobs:
                   command: npm install --dev
 
             - run:
-                  command: sudo pip install pre-commit poetry==1.1.8
+                  command: sudo pip install pre-commit poetry
             - restore_cache:
                   keys:
                       - pre-commit-cache-{{ arch }}-{{ .Branch }}
