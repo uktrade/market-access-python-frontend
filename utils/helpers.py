@@ -19,7 +19,7 @@ def remove_empty_values_from_dict(dictionary):
 
 def format_dict_for_url_querystring(filters_list, filter_names_to_format):
     # Using URLencode on a sub-dictionary leads to incorrectly formatted
-    # querystrings - need to convert the sub-dictionary to a string so it
+    # QueryStrings - need to convert the sub-dictionary to a string so it
     # can be correctly converted.
     for filter_name in filter_names_to_format:
         if filter_name in filters_list:
