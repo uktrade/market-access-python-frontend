@@ -166,10 +166,9 @@ class SavedSearchTestCase(MarketAccessTestCase):
         mock_get.return_value = SavedSearch(self.saved_search_data)
 
         search_id = self.saved_search_data["id"]
-        response = self.client.post(
+        response = self.client.get(
             f"{reverse('barriers:search')}"
-            f"?search=Test&status=2&search_id={search_id}",
-            data={"update_search": "1"},
+            f"?search=Test&status=2&search_id={search_id}&update_search=true",
         )
 
         assert response.status_code == HTTPStatus.OK
