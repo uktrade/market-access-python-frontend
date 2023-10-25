@@ -28,7 +28,9 @@ class SavedSearch(APIModel):
                 data=self.filters,
             )
             search_form.full_clean()
-            self._readable_filters = search_form.get_readable_filters()
+            self._readable_filters = search_form.get_readable_filters(
+                with_remove_urls=False
+            )
         return self._readable_filters
 
     @property
