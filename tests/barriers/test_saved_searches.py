@@ -1,3 +1,4 @@
+import uuid
 from http import HTTPStatus
 
 from django.urls import reverse
@@ -174,7 +175,7 @@ class SavedSearchTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.OK
 
         mock_patch.assert_called_with(
-            id=search_id,
+            id=uuid.UUID(search_id),
             filters={
                 "search": "Test",
                 "status": ["2"],
