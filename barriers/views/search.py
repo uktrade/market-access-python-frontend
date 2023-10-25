@@ -130,7 +130,7 @@ class BarrierSearch(PaginationMixin, SearchFormView):
                 "search_id"
             ):
                 self.client.saved_searches.patch(
-                    id=str(form.cleaned_data.get("search_id")),
+                    id=form.cleaned_data.get("search_id"),
                     filters=form.get_raw_filters(),
                 )
                 context_data["saved_search_updated"] = True
