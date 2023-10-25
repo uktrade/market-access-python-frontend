@@ -21,7 +21,3 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
-
-BASE_FRONTEND_TESTING_URL = env.str(
-    "BASE_FRONTEND_TESTING_URL", default="http://localhost:9001"
-)
