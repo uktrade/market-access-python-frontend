@@ -22,7 +22,7 @@ tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
 
 [[package]]
 name = "asttokens"
-version = "2.4.0"
+version = "2.4.1"
 description = "Annotate AST trees with source code positions"
 category = "dev"
 optional = false
@@ -32,7 +32,8 @@ python-versions = "*"
 six = ">=1.12.0"
 
 [package.extras]
-test = ["astroid", "pytest"]
+astroid = ["astroid (>=1,<2)", "astroid (>=2,<4)"]
+test = ["pytest", "astroid (>=1,<2)", "astroid (>=2,<4)"]
 
 [[package]]
 name = "async-timeout"
@@ -595,7 +596,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "outcome"
-version = "1.3.0"
+version = "1.3.0.post0"
 description = "Capture the outcome of Python function calls."
 category = "dev"
 optional = false
@@ -1245,17 +1246,17 @@ python-versions = ">=3.8"
 
 [[package]]
 name = "werkzeug"
-version = "2.2.3"
+version = "3.0.1"
 description = "The comprehensive WSGI web application library."
 category = "dev"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 
 [package.dependencies]
 MarkupSafe = ">=2.1.1"
 
 [package.extras]
-watchdog = ["watchdog"]
+watchdog = ["watchdog (>=2.3)"]
 
 [[package]]
 name = "whitenoise"
@@ -1315,7 +1316,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "1874be8f63e6310fae847a20c4ff69f9c09ba281f1dcb441cb8f71ebe6330daa"
+content-hash = "422c9b73920e003a0c764d3cbe16e6615579a8c46c5e44ee4368f535c9b57721"
 
 [metadata.files]
 appnope = [
