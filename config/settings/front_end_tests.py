@@ -2,9 +2,6 @@ from .test import *  # noqa
 
 DJANGO_ENV = "front_end_tests"
 
-MIDDLEWARE.remove("authentication.middleware.SSOMiddleware")
-MIDDLEWARE.remove("django.middleware.security.SecurityMiddleware")
-
 HEADLESS = env.bool("HEADLESS", default=True)
 
 BASE_FRONTEND_TESTING_URL = env.str(
