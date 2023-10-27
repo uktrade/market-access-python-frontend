@@ -21,3 +21,7 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
+
+# Playwright Integration test
+BASE_FRONTEND_TESTING_URL = env("BASE_FRONTEND_TESTING_URL")
+HEADLESS = True
