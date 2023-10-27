@@ -10,7 +10,7 @@ from playwright.sync_api import sync_playwright
 
 
 class PlaywrightTestBase(TransactionTestCase):
-    create_test_barrier = True
+    create_new_test_barrier = True
     base_url = settings.BASE_FRONTEND_TESTING_URL
 
     @classmethod
@@ -18,9 +18,9 @@ class PlaywrightTestBase(TransactionTestCase):
         os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
         super().setUpClass()
         cls.playwright = sync_playwright().start()
-        cls.browser = cls.playwright.chromium.launch(headless=True)
+        cls.browser = cls.playwright.chromium.launch(headless=settings.HEADLESS)
 
-        if cls.create_test_barrier:
+        if cls.create_new_test_barrier:
             cls.create_test_barrier()
 
     @classmethod
@@ -35,7 +35,8 @@ class PlaywrightTestBase(TransactionTestCase):
 
     @classmethod
     def create_test_barrier(cls):
-        context = cls.browser.new_context()
+        new_browser = cls.playwright.chromium.launch(headless=True)
+        context = new_browser.new_context()
         page = context.new_page()
 
         random_barrier_id = "".join(
@@ -109,6 +110,7 @@ class PlaywrightTestBase(TransactionTestCase):
         cls.TEST_BARRIER_ID = page.url.split("/")[-3]
 
         context.close()
+        new_browser.close()
 
     def get_text_content_without_line_separators(self, text_content):
         text_content = text_content.replace("\n", "")

@@ -5,8 +5,10 @@ DJANGO_ENV = "front_end_tests"
 MIDDLEWARE.remove("authentication.middleware.SSOMiddleware")
 MIDDLEWARE.remove("django.middleware.security.SecurityMiddleware")
 
+HEADLESS = env.bool("HEADLESS", default=True)
+
 BASE_FRONTEND_TESTING_URL = env.str(
-    "BASE_FRONTEND_TESTING_URL", default="http://localhost:9001"
+    "BASE_FRONTEND_TESTING_URL", default="http://web:9000"
 )
 if BASE_FRONTEND_TESTING_URL.endswith("/"):
     BASE_FRONTEND_TESTING_URL = BASE_FRONTEND_TESTING_URL[:-1]
