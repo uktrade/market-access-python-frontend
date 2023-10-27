@@ -22,7 +22,7 @@ tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
 
 [[package]]
 name = "asttokens"
-version = "2.4.0"
+version = "2.4.1"
 description = "Annotate AST trees with source code positions"
 category = "dev"
 optional = false
@@ -32,7 +32,8 @@ python-versions = "*"
 six = ">=1.12.0"
 
 [package.extras]
-test = ["astroid", "pytest"]
+astroid = ["astroid (>=1,<2)", "astroid (>=2,<4)"]
+test = ["pytest", "astroid (>=1,<2)", "astroid (>=2,<4)"]
 
 [[package]]
 name = "async-timeout"
@@ -146,7 +147,7 @@ toml = ["tomli"]
 
 [[package]]
 name = "cryptography"
-version = "41.0.4"
+version = "41.0.5"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
 category = "main"
 optional = false
@@ -595,7 +596,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "outcome"
-version = "1.3.0"
+version = "1.3.0.post0"
 description = "Capture the outcome of Python function calls."
 category = "dev"
 optional = false
@@ -809,7 +810,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pytest"
-version = "7.4.2"
+version = "7.4.3"
 description = "pytest: simple powerful testing with Python"
 category = "dev"
 optional = false
@@ -867,6 +868,20 @@ python-versions = ">=3.7"
 [package.dependencies]
 py = "*"
 pytest = ">=3.10"
+
+[[package]]
+name = "pytest-order"
+version = "1.1.0"
+description = "pytest plugin to run your tests in a specific order"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+pytest = [
+    {version = ">=5.0", markers = "python_version < \"3.10\""},
+    {version = ">=6.2.4", markers = "python_version >= \"3.10\""},
+]
 
 [[package]]
 name = "pytest-watch"
@@ -1103,7 +1118,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "traitlets"
-version = "5.11.2"
+version = "5.12.0"
 description = "Traitlets Python configuration system"
 category = "dev"
 optional = false
@@ -1111,7 +1126,7 @@ python-versions = ">=3.8"
 
 [package.extras]
 docs = ["myst-parser", "pydata-sphinx-theme", "sphinx"]
-test = ["argcomplete (>=3.0.3)", "mypy (>=1.5.1)", "pre-commit", "pytest-mock", "pytest-mypy-testing", "pytest (>=7.0,<7.5)"]
+test = ["argcomplete (>=3.0.3)", "mypy (>=1.6.0)", "pre-commit", "pytest-mock", "pytest-mypy-testing", "pytest (>=7.0,<7.5)"]
 
 [[package]]
 name = "trio"
@@ -1258,7 +1273,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "7aa6b022a29a2aa9d0f3f1dd68591ecd5f1b8c878125a04a1f0247d374e71b96"
+content-hash = "77c8aab0becf5fbc07a700a5578bce684cf68a38bc0c7744b54b0bf820827be9"
 
 [metadata.files]
 appnope = []
@@ -1335,6 +1350,7 @@ pytest = []
 pytest-cov = []
 pytest-django = []
 pytest-forked = []
+pytest-order = []
 pytest-watch = []
 pytest-xdist = []
 python-dateutil = []
