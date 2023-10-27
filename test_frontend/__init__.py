@@ -25,13 +25,32 @@ class PlaywrightTestBase(TransactionTestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # we now also want to archive the test barrier created as part of this test
+        if cls.create_new_test_barrier:
+            page = cls.browser.new_page()
+            page.goto(f"{cls.get_barrier_detail_page()}archive/")
+            page.get_by_label("Not a barrier").check()
+            page.get_by_role("textbox").click()
+            page.get_by_role("textbox").fill("test barrier")
+            page.get_by_role("button", name="Confirm").click()
+            page.close()
+
         cls.browser.close()
         cls.playwright.stop()
+
         super().tearDownClass()
 
-    @property
-    def barrier_detail_page(self):
-        return f"{self.base_url}/barriers/{self.TEST_BARRIER_ID}/"
+    def setUp(self) -> None:
+        """Create a new page for each test"""
+        self.page = self.browser.new_page()
+
+    def tearDown(self) -> None:
+        """Close the page after each test"""
+        self.page.close()
+
+    @classmethod
+    def get_barrier_detail_page(cls):
+        return f"{cls.base_url}/barriers/{cls.TEST_BARRIER_ID}/"
 
     @classmethod
     def create_test_barrier(cls):
@@ -112,7 +131,8 @@ class PlaywrightTestBase(TransactionTestCase):
         context.close()
         new_browser.close()
 
-    def get_text_content_without_line_separators(self, text_content):
+    @staticmethod
+    def get_text_content_without_line_separators(text_content):
         text_content = text_content.replace("\n", "")
         text_content = text_content.replace("\r", "")
         text_content = re.sub(r"\s+", " ", text_content)

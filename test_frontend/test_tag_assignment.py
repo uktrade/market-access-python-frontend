@@ -1,33 +1,31 @@
+import pytest
 from playwright.sync_api import expect
 
 from test_frontend import PlaywrightTestBase
 
 
 class TestTagAssignment(PlaywrightTestBase):
+    @pytest.mark.order(1)
     def test_tag_assignment(self):
-        page = self.browser.new_page()
+        self.page.goto(self.get_barrier_detail_page())
+        self.page.get_by_role("link", name="Edit tags").click()
+        self.page.get_by_label("Brexit").check()
+        self.page.get_by_label("NI Protocol").check()
+        self.page.get_by_role("button", name="Save changes").click()
 
-        page.goto(self.barrier_detail_page)
-        page.get_by_role("link", name="Edit tags").click()
-        page.get_by_label("Brexit").check()
-        page.get_by_label("NI Protocol").check()
-        page.get_by_role("button", name="Save changes").click()
+        expect(self.page.locator(".barrier-tag-list")).to_have_count(2)
 
-        expect(page.locator(".barrier-tag-list")).to_have_count(2)
+        expect(self.page.locator(".govuk-tag").nth(0)).to_have_text("Brexit")
+        expect(self.page.locator(".govuk-tag").nth(1)).to_have_text("NI Protocol")
 
-        expect(page.locator(".govuk-tag").nth(0)).to_have_text("Brexit")
-        expect(page.locator(".govuk-tag").nth(1)).to_have_text("NI Protocol")
+        self.page.close()
 
-        page.close()
-
+    @pytest.mark.order(2)
     def test_tag_removal(self):
-        page = self.browser.new_page()
-        page.goto(self.barrier_detail_page)
-        page.get_by_role("link", name="Edit tags").click()
-        page.get_by_label("Brexit").uncheck()
-        page.get_by_label("NI Protocol").uncheck()
-        page.get_by_role("button", name="Save changes").click()
+        self.page.goto(self.get_barrier_detail_page())
+        self.page.get_by_role("link", name="Edit tags").click()
+        self.page.get_by_label("Brexit").uncheck()
+        self.page.get_by_label("NI Protocol").uncheck()
+        self.page.get_by_role("button", name="Save changes").click()
 
-        assert not page.locator(".barrier-tag-list").is_visible()
-
-        page.close()
+        assert not self.page.locator(".barrier-tag-list").is_visible()
