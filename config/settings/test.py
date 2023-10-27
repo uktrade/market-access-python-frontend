@@ -21,3 +21,12 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
+
+
+HEADLESS = env.bool("HEADLESS", default=True)
+
+BASE_FRONTEND_TESTING_URL = env.str(
+    "BASE_FRONTEND_TESTING_URL", default="http://web:9000"
+)
+if BASE_FRONTEND_TESTING_URL.endswith("/"):
+    BASE_FRONTEND_TESTING_URL = BASE_FRONTEND_TESTING_URL[:-1]
