@@ -113,12 +113,12 @@ Playwright documentation - https://playwright.dev/python/docs/api/class-playwrig
 
 3. If not using Docker, set the `BASE_FRONTEND_TESTING_URL` environment variable to `http://localhost:{frontend_port}`.
 
-3. Ensure the frontend server is up and has reached the point where the Django development server is running.
+4. Ensure the frontend server is up and has reached the point where the Django development server is running.
 
-4. Run the tests:
+5. Run the tests:
 `make test-frontend`
 
-5. To run a specific suite of frontend tests, specify the desired module:
+6. To run a specific suite of frontend tests, specify the desired module:
 `make  test-frontend path=test_examples.py`
 
 ## Test Coverage
