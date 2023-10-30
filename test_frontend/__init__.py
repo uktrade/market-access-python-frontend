@@ -13,6 +13,10 @@ class PlaywrightTestBase(TransactionTestCase):
     create_new_test_barrier = True
     base_url = settings.BASE_FRONTEND_TESTING_URL
 
+    @property
+    def failureException(self):
+        return self.old_failureException
+
     @classmethod
     def setUpClass(cls):
         os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
