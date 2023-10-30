@@ -6,6 +6,8 @@ SECRET_KEY = "nothing secret about this one"  # pragma: allowlist secret
 
 TEST_RUNNER = "config.testrunner.PytestTestRunner"
 
+MOCK_METADATA = True
+
 WHITENOISE_AUTOREFRESH = True
 
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"

@@ -10,14 +10,13 @@ from barriers.constants import DEPRECATED_TAGS, Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
 
-if settings.DJANGO_ENV == "test":
-    redis_client = None
-else:
+redis_client = None
+if not settings.MOCK_METADATA:
     redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
 
 
 def get_metadata():
-    if settings.DJANGO_ENV == "test":
+    if settings.MOCK_METADATA:
         # we're testing and have no access to the API, so use the fixture.
         file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
         return Metadata(json.loads(memfiles.open(file)))
