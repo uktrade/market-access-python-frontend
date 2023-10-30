@@ -1,13 +1,11 @@
 import pytest
 
-
 from test_frontend import PlaywrightTestBase
 
 
 class TestProgressUpdateCreate(PlaywrightTestBase):
     @pytest.mark.order(1)
-    def test_change_status_unhappy_path(self):
-        raise Exception("Not implemented")
+    def test_create_progress_update(self):
         self.page.goto(self.get_barrier_detail_page())
 
         self.page.get_by_role("link", name="Add progress update").click()
