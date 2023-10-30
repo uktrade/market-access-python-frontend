@@ -2,14 +2,14 @@ import datetime
 import logging
 import os
 
-import dateutil.parser
 import magic
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import widgets
 from django.template.defaultfilters import filesizeformat
 
-from .validators import validate_date_not_in_future
+from utils.forms.mixins import HelpTextMixin
+from utils.forms.widgets import DateRangeWidget, DayMonthYearWidget, MonthYearWidget
+from utils.validators import validate_date_not_in_future
 
 logger = logging.getLogger(__name__)
 
@@ -95,28 +95,6 @@ class RestrictedFileField(forms.FileField):
         return data
 
 
-class HelpTextMixin:
-    """
-    Allow ChoiceFields to include help text for each choice
-
-    choices should be a three part tuple (value, name, help_text)
-    """
-
-    def valid_value(self, value):
-        """Check to see if the provided value is a valid choice."""
-        text_value = str(value)
-        for k, v, help_text in self.choices:
-            if isinstance(v, (list, tuple)):
-                # This is an optgroup, so look inside the group for options
-                for k2, v2 in v:
-                    if value == k2 or text_value == str(k2):
-                        return True
-            else:
-                if value == k or text_value == str(k):
-                    return True
-        return False
-
-
 class ChoiceFieldWithHelpText(HelpTextMixin, forms.ChoiceField):
     pass
 
@@ -200,100 +178,6 @@ class YesNoReviewLaterBooleanField(YesNoBooleanField):
         value = self.to_python(value)
         self.run_validators(value)
         return value
-
-
-class MonthYearWidget(forms.MultiWidget):
-    template_name = "partials/forms/widgets/month_year_widget.html"
-
-    def __init__(self, attrs=None):
-        widget = (widgets.NumberInput(), widgets.NumberInput())
-        super().__init__(widget, attrs=attrs)
-
-    def decompress(self, value):
-        if value:
-            if isinstance(value, str):
-                try:
-                    value = dateutil.parser.parse(value)
-                except ValueError:
-                    return [None, None]
-            return [value.month, value.year]
-        return [None, None]
-
-    def value_from_datadict(self, data, files, name):
-        if name in data:
-            return self.decompress(data.get(name))
-        return super().value_from_datadict(data, files, name)
-
-
-class MonthYearField(forms.MultiValueField):
-    widget = MonthYearWidget
-    default_validators = [validate_date_not_in_future]
-
-    def __init__(self, **kwargs):
-        fields = (
-            forms.IntegerField(
-                label="Month",
-                min_value=1,
-                max_value=12,
-                error_messages={
-                    "min_value": "Enter a date in the format 01 2023",
-                    "max_value": "Enter a date in the format 01 2023",
-                    "incomplete": "Enter a month",
-                },
-            ),
-            forms.IntegerField(
-                label="Year",
-                min_value=1990,
-                max_value=2100,
-                error_messages={
-                    "min_value": "Date must be after 1990",
-                    "max_value": "Date must be before 2100",
-                    "incomplete": "Enter a year",
-                },
-            ),
-        )
-        super().__init__(fields=fields, require_all_fields=True, **kwargs)
-
-    def compress(self, data_list):
-        if data_list:
-            month, year = data_list
-            if month in self.empty_values:
-                raise ValidationError(
-                    self.error_messages["invalid_month"], code="invalid_month"
-                )
-            if year in self.empty_values:
-                raise ValidationError(
-                    self.error_messages["invalid_year"], code="invalid_year"
-                )
-
-            return datetime.date(year, month, 1)
-
-
-class MonthYearInFutureField(MonthYearField):
-    default_validators = []
-
-
-class DayMonthYearWidget(forms.MultiWidget):
-    template_name = "partials/forms/widgets/day_month_year_widget.html"
-
-    def __init__(self, attrs=None):
-        widget = (widgets.NumberInput(), widgets.NumberInput(), widgets.NumberInput())
-        super().__init__(widget, attrs=attrs)
-
-    def decompress(self, value):
-        if value:
-            if isinstance(value, str):
-                try:
-                    value = dateutil.parser.parse(value)
-                except ValueError:
-                    return [None, None, None]
-            return [value.day, value.month, value.year]
-        return [None, None, None]
-
-    def value_from_datadict(self, data, files, name):
-        if name in data:
-            return self.decompress(data.get(name))
-        return super().value_from_datadict(data, files, name)
 
 
 class DayMonthYearField(forms.MultiValueField):
@@ -424,114 +308,72 @@ class SubformChoiceField(forms.ChoiceField):
                 self.subforms[value] = subform_class(**kwargs)
 
 
-class SubformMixin:
-    """
-    A form mixin to be used for forms with SubformChoiceField
-    """
+class MonthYearField(forms.MultiValueField):
+    widget = MonthYearWidget
+    default_validators = [validate_date_not_in_future]
 
-    subform_fields = {}
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            if isinstance(field, SubformChoiceField):
-                if "data" in kwargs:
-                    selected_value = kwargs.get("data", {}).get(name)
-                else:
-                    selected_value = kwargs.get("initial", {}).get(name)
-                self.subform_fields[name] = field
-                field.init_subforms(
-                    selected_value=selected_value,
-                    **kwargs,
-                )
-
-    @property
-    def errors(self):
-        form_errors = super().errors
-        if self.is_bound:
-            for name, field in self.subform_fields.items():
-                if name in self.cleaned_data and hasattr(field, "subform"):
-                    form_errors.update(field.subform.errors)
-        return form_errors
-
-
-class ClearableMixin:
-    """
-    Bypass form validation if 'clear' button was pressed
-    """
-
-    def _clean_fields(self):
-        if "clear" not in self.data:
-            return super()._clean_fields()
-
-
-class CommodityCodeWidget(forms.MultiWidget):
-    template_name = "partials/forms/widgets/commodity_code_widget.html"
-    box_count = 5
-
-    def __init__(self, attrs=None):
-        widget = (widgets.TextInput(),) * self.box_count
-        super().__init__(widget, attrs=attrs)
-
-    def decompress(self, value):
-        if value:
-            pairs = [value[i : i + 2] for i in range(0, len(value), 2)]
-            pairs += [""] * self.box_count
-            return pairs[: self.box_count]
-        return [""] * self.box_count
-
-    def value_from_datadict(self, data, files, name):
-        if data.get(name):
-            return data.get(name)
-        values = super().value_from_datadict(data, files, name)
-        formatted_values = []
-        has_values = False
-        for value in reversed(values):
-            if has_values or value:
-                has_values = True
-                formatted_values.insert(0, value.zfill(2))
-        return "".join(formatted_values)
-
-
-class DateRangeWidget(forms.MultiWidget):
-    def __init__(self, attrs=None):
-        widgets = [
-            MonthYearWidget(attrs=attrs),
-            MonthYearWidget(attrs=attrs),
-        ]
-        super().__init__(widgets, attrs)
-
-    def decompress(self, value):
-        if value:
-            return value.split(",")
-        return [None, None]
-
-    def format_output(self, rendered_widgets):
-        return "-".join(rendered_widgets)
-
-
-class DateRangeField(forms.MultiValueField):
-    def __init__(self, *args, **kwargs):
-        fields = [
-            MonthYearField(),
-            MonthYearField(),
-        ]
-        super().__init__(fields, *args, **kwargs)
-        self.widget = DateRangeWidget()
+    def __init__(self, date_range_direction="", **kwargs):
+        fields = (
+            forms.IntegerField(
+                label="Month",
+                min_value=1,
+                max_value=12,
+                error_messages={
+                    "min_value": "Enter a date in the format 01 2023",
+                    "max_value": "Enter a date in the format 01 2023",
+                    "incomplete": "Enter a month",
+                },
+            ),
+            forms.IntegerField(
+                label="Year",
+                min_value=1990,
+                max_value=2100,
+                error_messages={
+                    "min_value": "Date must be after 1990",
+                    "max_value": "Date must be before 2100",
+                    "incomplete": "Enter a year",
+                },
+            ),
+        )
+        self.date_range_direction = date_range_direction
+        super().__init__(fields=fields, require_all_fields=True, **kwargs)
 
     def compress(self, data_list):
-        if data_list and all(data_list):
-            return ",".join(map(str, data_list))
-        return None
+        if data_list:
+            month, year = data_list
+            if month in self.empty_values:
+                raise ValidationError(
+                    self.error_messages["invalid_month"], code="invalid_month"
+                )
+            if year in self.empty_values:
+                raise ValidationError(
+                    self.error_messages["invalid_year"], code="invalid_year"
+                )
 
-    def clean(self, value):
-        # First, ensure that the parent's clean method is called for any built-in cleaning and validation
-        value = super().clean(value)
-        if value:
-            start_date, end_date = value
+            return datetime.date(year, month, 1)
+
+
+class MonthYearInFutureField(MonthYearField):
+    default_validators = []
+
+
+class MonthDateRangeField(forms.MultiValueField):
+    widget = DateRangeWidget
+
+    def __init__(self, *args, **kwargs):
+        fields = [
+            MonthYearInFutureField(),
+            MonthYearInFutureField(),
+        ]
+        super().__init__(fields, *args, **kwargs)
+
+    def compress(self, data_list):
+        """As per the Django docs, we do not implement a clean() method here. compress() is used instead and is called
+        in the parent's clean method, so ValidationError is handled correctly."""
+        if data_list and all(data_list):
+            start_date, end_date = data_list
             if start_date and end_date and end_date <= start_date:
                 raise forms.ValidationError(
                     "The end date must be after the start date."
                 )
-        return value
+            return f"{start_date.strftime('%Y-%m-%d')},{end_date.strftime('%Y-%m-%d')}"

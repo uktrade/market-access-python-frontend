@@ -17,6 +17,7 @@ if not settings.MOCK_METADATA:
 
 def get_metadata():
     if settings.MOCK_METADATA:
+        # we're testing and have no access to the API, so use the fixture.
         file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
         return Metadata(json.loads(memfiles.open(file)))
 

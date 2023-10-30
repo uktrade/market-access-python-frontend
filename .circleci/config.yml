@@ -64,12 +64,12 @@ jobs:
             - run:
                   command: |
                     sudo pip install --upgrade pip
-                    sudo pip install poetry==1.1.8
+                    sudo pip install poetry==1.6.1
 
             - run:
                   name: Install dependencies
                   command: |
-                      poetry install
+                      poetry install --no-ansi
 
             - save_cache:
                   key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
@@ -102,12 +102,12 @@ jobs:
                       - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
             - run:
-                  command: sudo pip install poetry
+                  command: sudo pip install poetry==1.6.1
 
             - run:
                   name: Install dependencies
                   command: |
-                      poetry install
+                      poetry install --no-ansi
 
             - save_cache:
                   key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
@@ -128,7 +128,7 @@ jobs:
                   command: npm install --dev
 
             - run:
-                  command: sudo pip install pre-commit poetry==1.1.8
+                  command: sudo pip install pre-commit poetry
             - restore_cache:
                   keys:
                       - pre-commit-cache-{{ arch }}-{{ .Branch }}
@@ -154,12 +154,12 @@ jobs:
                       - v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
             - run:
-                  command: sudo pip install poetry
+                  command: sudo pip install poetry==1.6.1
 
             - run:
                   name: Install dependencies
                   command: |
-                      poetry install
+                      poetry install --no-ansi
 
             - save_cache:
                   key: v1-dependencies-{{ .Branch }}-{{ checksum "poetry.lock" }}
