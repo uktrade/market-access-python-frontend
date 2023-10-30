@@ -5,6 +5,7 @@ import redis
 import requests
 from django.conf import settings
 from mohawk import Sender
+from sentry_sdk import capture_message
 
 from barriers.constants import DEPRECATED_TAGS, Statuses
 from core.filecache import memfiles
@@ -22,10 +23,12 @@ def get_metadata():
         file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
         return Metadata(json.loads(memfiles.open(file)))
 
-    metadata = redis_client.get("metadata")
+    """metadata = redis_client.get("metadata")
     if metadata:
-        return Metadata(json.loads(metadata))
+        capture_message("Using cached metadata")
+        return Metadata(json.loads(metadata))"""
 
+    capture_message("Using API metadata")
     url = f"{settings.MARKET_ACCESS_API_URI}metadata"
     sender = Sender(
         settings.MARKET_ACCESS_API_HAWK_CREDS,
