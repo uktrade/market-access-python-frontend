@@ -4,6 +4,7 @@ FROM mcr.microsoft.com/playwright/python:v1.21.0-focal
 
 # Install system stuff
 RUN apt-get update
+RUN apt-get install -y build-essential python3-dev libffi-dev libmagic-dev
 
 # Configure the node apt repository
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
@@ -34,7 +35,7 @@ RUN curl -sLO https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_
 
 # Set PYTHONUNBUFFERED so output is displayed in the Docker log
 ENV PYTHONUNBUFFERED=1 \
-    POETRY_VERSION=1.1.8 \
+    POETRY_VERSION=1.6.1 \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=200 \
