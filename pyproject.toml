@@ -65,6 +65,9 @@ python_files = ["tests.py", "test_*.py", "*_tests.py"]
 addopts = """
     --reuse-db
     --ds=config.settings.test
+    --cov=.
+    --no-cov-on-fail
+    --cov-branch
 """
 
 [tool.coverage.run]
