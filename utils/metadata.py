@@ -3,6 +3,7 @@ from operator import itemgetter
 
 import redis
 import requests
+import sentry_sdk
 from django.conf import settings
 from mohawk import Sender
 
@@ -19,11 +20,14 @@ else:
 def get_metadata():
     if settings.DJANGO_ENV == "test":
         # we're testing and have no access to the API, so use the fixture.
+        sentry_sdk.capture_message("Using metadata.json")
         file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
         return Metadata(json.loads(memfiles.open(file)))
 
+    sentry_sdk.capture_message("Contacting the API for metadata")
     metadata = redis_client.get("metadata")
     if metadata:
+        sentry_sdk.capture_message("Using cached metadata")
         return Metadata(json.loads(metadata))
 
     url = f"{settings.MARKET_ACCESS_API_URI}metadata"
