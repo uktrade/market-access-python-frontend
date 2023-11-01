@@ -24,3 +24,14 @@ LOGGING = {
     },
     "loggers": {"": {"handlers": ["ecs"], "level": DJANGO_LOG_LEVEL}},
 }
+
+# The following are extra-permission groups (not roles)
+# Adding a user to these groups should not remove the role from the user
+# Dev environments have an extra user permission group to allow
+# editing of user profiles without admin access
+USER_ADDITIONAL_PERMISSION_GROUPS = [
+    "Download approved user",
+    "Action plan user",
+    "PB100 barrier approver",
+    "Role administrator",
+]
