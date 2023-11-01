@@ -1,6 +1,6 @@
-#FROM python:3.8
-#Using non standard build to enable Playwright tests
-FROM mcr.microsoft.com/playwright/python:v1.21.0-focal
+FROM python:3.9-slim-buster
+# #Using non standard build to enable Playwright tests
+FROM mcr.microsoft.com/playwright/python:v1.39.0-jammy
 
 # Install system stuff
 RUN apt-get update
@@ -9,9 +9,6 @@ RUN apt-get install -y build-essential python3-dev libffi-dev libmagic-dev
 # Configure the node apt repository
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
-
-# Installing Python
-ENV PYTHON_VERSION 3.8
 
 # SSH
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
@@ -46,7 +43,8 @@ WORKDIR /usr/src/app
 
 # Poetry commands reference https://python-poetry.org/docs/cli/#run
 COPY pyproject.toml poetry.lock ./
-RUN pip install poetry==$POETRY_VERSION \
+RUN pip install --upgrade pip \
+    && pip install poetry==$POETRY_VERSION \
     && poetry export --without-hashes -f requirements.txt -o requirements.txt \
     && poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt \
     && pip install -r requirements-dev.txt
