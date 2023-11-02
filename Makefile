@@ -38,9 +38,9 @@ django-static: ## Compress SCSS and collect static files, clears staticfiles fol
 django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down
 	docker-compose exec web pytest -n 6 tests/$(path)
 
-.PHONY: django-ui-test
-ui-test: ## Run django ui tests.
-	docker-compose exec web bash -c "pytest ui_tests/$(path)"
+.PHONY: test-frontend
+test-frontend: ## Run django ui tests.
+	docker-compose exec web bash -c "pytest test_frontend/$(path)"
 
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
