@@ -389,8 +389,6 @@ WEBPACK_LOADER = {
 
 # The following are extra-permission groups (not roles)
 # Adding a user to these groups should not remove the role from the user
-# This list is overwritten in the environment settings files so if this
-# list needs extending, you need to add there too.
 USER_ADDITIONAL_PERMISSION_GROUPS = [
     "Download approved user",
     "Action plan user",
