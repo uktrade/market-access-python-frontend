@@ -109,6 +109,7 @@ MIDDLEWARE = [
     "authentication.middleware.SSOMiddleware",
     "utils.middleware.RequestLoggingMiddleware",
     "csp.middleware.CSPMiddleware",
+    "utils.middleware.DisableClientCachingMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -405,3 +406,9 @@ EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
 # Company house config
 COMPANIES_HOUSE_API_KEY = env("COMPANIES_HOUSE_API_KEY")
 COMPANIES_HOUSE_API_ENDPOINT = env("COMPANIES_HOUSE_API_ENDPOINT")
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "https://www.googletagmanager.com/", "'unsafe-inline'")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_REPORT_URI = env.str("CSP_REPORT_URI", default=None)
+CSP_REPORT_ONLY = env.bool("CSP_REPORT_ONLY", default=True)
