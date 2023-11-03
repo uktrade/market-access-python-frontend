@@ -110,6 +110,7 @@ MIDDLEWARE = [
     "utils.middleware.RequestLoggingMiddleware",
     "csp.middleware.CSPMiddleware",
     "utils.middleware.DisableClientCachingMiddleware",
+    "utils.middleware.SetPermittedCrossDomainPolicyHeaderMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
