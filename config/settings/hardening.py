@@ -20,6 +20,7 @@ CSRF_COOKIE_HTTPONLY = True
 
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'", "https://www.googletagmanager.com/", "'unsafe-inline'")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 
 CSP_REPORT_URI = env.str("CSP_REPORT_URI", default=None)
 CSP_REPORT_ONLY = env.bool("CSP_REPORT_ONLY", default=True)
