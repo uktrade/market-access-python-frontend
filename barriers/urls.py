@@ -170,6 +170,8 @@ from .views.wto import (
     EditWTOStatus,
 )
 
+from .views.similar_barriers import SimilarBarriersView
+
 app_name = "barriers"
 
 urlpatterns = [
@@ -812,6 +814,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/export-types/edit/",
         BarrierEditExportType.as_view(),
         name="edit_export_types",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/similar-barriers/",
+        SimilarBarriersView.as_view(),
+        name="similar_barriers",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(

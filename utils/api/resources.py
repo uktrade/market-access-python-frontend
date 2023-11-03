@@ -207,6 +207,13 @@ class BarriersResource(APIResource):
             f"barriers/{kwargs['barrier']}/next_steps_items/{kwargs['id']}",
             data=kwargs,
         )
+    
+    def get_similar(self, barrier_id, **kwargs):
+        url = f"barriers/{barrier_id}/similar-barriers"
+        return [
+            Barrier(result)
+            for result in self.client.get(url, params=kwargs)["results"]
+        ]
 
 
 class NotesResource(APIResource):
