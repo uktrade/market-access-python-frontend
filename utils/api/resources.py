@@ -207,14 +207,13 @@ class BarriersResource(APIResource):
             f"barriers/{kwargs['barrier']}/next_steps_items/{kwargs['id']}",
             data=kwargs,
         )
-    
+
     def get_similar(self, barrier_id, **kwargs):
         # using the word similar her not to confuse with
         # django related objects
         url = f"barriers/{barrier_id}/related-barriers"
         return [
-            Barrier(result)
-            for result in self.client.get(url, params=kwargs)["results"]
+            Barrier(result) for result in self.client.get(url, params=kwargs)["results"]
         ]
 
 

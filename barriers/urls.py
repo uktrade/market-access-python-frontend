@@ -136,6 +136,7 @@ from .views.public_barriers import (
     PublicBarrierDetail,
     PublicBarrierListView,
 )
+from .views.related_barriers import RelatedBarriersView
 from .views.saved_searches import (
     DeleteSavedSearch,
     NewSavedSearch,
@@ -169,8 +170,6 @@ from .views.wto import (
     EditWTOProfile,
     EditWTOStatus,
 )
-
-from .views.related_barriers import RelatedBarriersView
 
 app_name = "barriers"
 
