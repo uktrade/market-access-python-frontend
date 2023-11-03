@@ -209,7 +209,9 @@ class BarriersResource(APIResource):
         )
     
     def get_similar(self, barrier_id, **kwargs):
-        url = f"barriers/{barrier_id}/similar-barriers"
+        # using the word similar her not to confuse with
+        # django related objects
+        url = f"barriers/{barrier_id}/related-barriers"
         return [
             Barrier(result)
             for result in self.client.get(url, params=kwargs)["results"]

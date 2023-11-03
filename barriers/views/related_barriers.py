@@ -1,8 +1,8 @@
-from django.views.generic import View
+from django.views.generic import TemplateView
 from utils.metadata import MetadataMixin
 from utils.api.client import MarketAccessAPIClient
 
-class SimilarBarriersView(MetadataMixin, View):
+class RelatedBarriersView(MetadataMixin, TemplateView):
     """View for the similar barriers page."""
     template_name = "barriers/similar_barriers.html"
     _client = None
@@ -18,5 +18,5 @@ class SimilarBarriersView(MetadataMixin, View):
         context["similar_barriers"] = self.get_similar_barriers(kwargs["barrier_id"])
         return self.render_to_response(context)
 
-    def get_similar_barriers(self, barrier_id):
+    def get_related_barriers(self, barrier_id):
         return self.client.barriers.get_similar(barrier_id)
