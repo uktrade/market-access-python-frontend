@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from utils.metadata import MetadataMixin
 from utils.api.client import MarketAccessAPIClient
 
+
 class RelatedBarriersView(MetadataMixin, TemplateView):
     """View for the similar barriers page."""
     template_name = "barriers/related_barriers.html"
@@ -12,7 +13,7 @@ class RelatedBarriersView(MetadataMixin, TemplateView):
         if self._client is None:
             self._client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         return self._client
-    
+
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         context["related_barriers"] = self.get_related_barriers(kwargs["barrier_id"])
