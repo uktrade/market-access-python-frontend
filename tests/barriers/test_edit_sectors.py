@@ -203,3 +203,19 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
             sectors_affected=True,
         )
         assert response.status_code == HTTPStatus.FOUND
+
+    def test_add_sector_main_sector_not_in_choices(self, patched_get_barrier):
+        """
+        Add Sector page should not include the main sector
+        """
+        self.barrier["main_sector"] = "af959812-6095-e211-a939-e4115bead28a"
+
+        response = self.client.get(
+            reverse("barriers:add_sectors", kwargs={"barrier_id": self.barrier["id"]}),
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+
+        choice_values = [v for k, v in form.fields["sector"].choices]
+        assert "af959812-6095-e211-a939-e4115bead28a" not in choice_values
