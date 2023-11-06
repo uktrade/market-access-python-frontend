@@ -105,48 +105,21 @@ Example usage.:
 	- `make django-test path=assessments/test_assessment_detail.py::EmptyAssessmentDetailTestCase::test_view` - run a specific test case
 2. To run tests with coverage use `make django-test-coverage` - this will output the report to the console.
 
-#### Running Playwright Tests Locally
+#### Running Playwright Tests
 Playwright documentation - https://playwright.dev/python/docs/api/class-playwright
-1. Ensure the API is running locally.
+1. Ensure the API is running.
 
-2. Ensure the front end Docker container is up and has reached the point where the Django development server is running.
+2. If using Docker, set the `BASE_FRONTEND_TESTING_URL` environment variable to `http://host.docker.internal:9880` in the `docker-compose.env` file.
 
-    - You'll need to update the Barrier IDs that appear in the tests to match one you have locally. This is clearly impractical in the long run, so maybe something like a set of fixtures against which to run would be a good idea?
+3. If not using Docker, set the `BASE_FRONTEND_TESTING_URL` environment variable to `http://localhost:{frontend_port}`.
 
-3. Run the tests:
-`make ui-test`
+4. Ensure the frontend server is up and has reached the point where the Django development server is running.
 
-4. To run a specific suite of UI tests, specify the desired module:
-`make ui-test path=test_examples.py`
+5. Run the tests:
+`make test-frontend`
 
-5. To run a specific UI test, speicfy it using Pytest's standard syntax in the `path`:
-`make ui-test path=test_examples.py::test_example_2`
-
-#### Running Selenium Tests Against UAT
-
-**Warning**
-This section is obsolete as UI tests now use Playwright. It is left here for reference, should anybody be courageous enough to try to get the Playwright tests running against UAT.
-
-1. Ensure you are on the VPN.
-
-2. Edit docker-compose.test.env:
-WEB_DRIVER_URL=http://chrome:4444/wd/hub
-TEST_BASE_URL=https://market-access-pyfe-uat.london.cloudapps.digital/
-TEST_BARRIER_ID=0e78b943-df63-4fa7-9620-23fdf972286e
-TEST_SSO_LOGIN_URL=https://sso.trade.uat.uktrade.io/login/
-TEST_SSO_EMAIL=lite-team-1@digital.trade.gov.uk
-TEST_SSO_PASSWORD=See lite-e2e-internal-frontend job on Jenkins
-TEST_SSO_NAME=1 Lite-team
-
-Note that webops have told us to use the lite team's test SSO user for now.
-
-3. Spin up the testing container:
-`docker-compose -f docker-compose.test.yml -p market-access-test up -d`
-
-4. Run the tests:
-`make django-ui-test`
-
-Ideally we would be able to run this from CircleCI and change WEB_DRIVER_URL to point to BrowserStack (https://USERNAME:API_KEY@hub-cloud.browserstack.com/wd/hub). However this presents a few difficulties, such as getting around the VPN, so for now we can just run the end to end tests from our local machines against UAT.
+6. To run a specific suite of frontend tests, specify the desired module:
+`make  test-frontend path=test_examples.py`
 
 ## Test Coverage
 
