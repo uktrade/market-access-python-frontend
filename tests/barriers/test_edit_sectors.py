@@ -208,7 +208,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         Add Sector page should not include the main sector
         """
-        self.barrier["main_sector"] = "af959812-6095-e211-a939-e4115bead28a"
+        self.barrier["main_sector"] = {"id": "af959812-6095-e211-a939-e4115bead28a"}
 
         response = self.client.get(
             reverse("barriers:add_sectors", kwargs={"barrier_id": self.barrier["id"]}),
