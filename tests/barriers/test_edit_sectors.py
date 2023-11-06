@@ -204,7 +204,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
 
-    def test_add_sector_main_sector_not_in_choices(self, patched_get_barrier):
+    def test_add_sector_main_sector_not_in_choices(self):
         """
         Add Sector page should not include the main sector
         """
