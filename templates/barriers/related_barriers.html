@@ -5,12 +5,16 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Related barriers</h1>
-                <p>These are the barriers that are related to this barrier.</p>
-                <ul>
-                    {% for barrier in related_barriers %}
-                        <li><a href="{{ barrier.url }}">{{ barrier.title }}</a></li>
-                    {% endfor %}
-                </ul>
+                {% if related_barriers %}
+                    <p>These are the barriers that are related to this barrier.</p>
+                    <ul>
+                        {% for barrier in related_barriers %}
+                            <li><a href="{{ barrier.url }}">{{ barrier.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>There are no related barriers.</p>
+                {% endif %}
             </div>
         </div>
     </div>
