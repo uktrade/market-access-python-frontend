@@ -15,6 +15,11 @@
             {% endif %}
         </div>
         <div>
+            {% if not barrier.archived %}
+                <a class="barrier-summary__edit-links" href="{% url 'barriers:related_barriers' barrier.id %}">Related Barriers</a>
+            {% endif %}
+        </div>
+        <div>
             {% if not hide_priority %}
                 <div class="barrier-summary__status">
                     <ul class="barrier-tag-list barrier-tag-list--inline m0">
