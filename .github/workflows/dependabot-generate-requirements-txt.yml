@@ -11,9 +11,7 @@ jobs:
     #if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
        - name: Generate new requirements.txt file
-         run: |
-            chmod +x ./.github/actions/generate-requirements-txt.sh
-            ./.github/actions/generate-requirements-txt.sh
+         run: poetry export --without-hashes -f requirements.txt -o requirements.txt
 
        - name: Commit changes
          uses: EndBug/add-and-commit@v9
