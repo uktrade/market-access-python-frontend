@@ -3,5 +3,5 @@ applications:
   - name: market-access-python-frontend
     buildpacks:
       - https://github.com/cloudfoundry/nodejs-buildpack.git#v1.8.16
-      - https://github.com/cloudfoundry/python-buildpack.git#v1.8.0
+      - https://github.com/paketo-buildpacks/poetry-install.git#v0.3.18
     stack: cflinuxfs4

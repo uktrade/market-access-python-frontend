@@ -81,9 +81,7 @@ __timestamp = $(shell date +%F_%H-%M)
 pip-install: ## Install pip requirements inside the container.
 	@echo "$$(tput setaf 3)🙈  Installing Pip Packages  🙈$$(tput sgr 0)"
 	@docker-compose exec web poetry lock
-	@docker-compose exec web poetry export --without-hashes -f requirements.txt -o requirements.txt
-	@docker-compose exec web poetry export --dev --without-hashes -f requirements.txt -o requirements-dev.txt
-	@docker-compose exec web pip install -r requirements-dev.txt
+	@docker-compose exec web poetry install
 	@docker-compose exec web sed -i '1i# ======\n# DO NOT EDIT - use pyproject.toml instead!\n# Generated: $(__timestamp)\n# ======' requirements.txt
 	@docker-compose exec web sed -i '1i# ======\n# DO NOT EDIT - use pyproject.toml instead!\n# Generated: $(__timestamp)\n# ======' requirements-dev.txt
 
