@@ -12,6 +12,7 @@ jobs:
   regenerate_requirements_txt:
     name: Regenerating the requirements.txt file
     runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
         - name: Set up Python 3.8
           uses: actions/setup-python@v4
