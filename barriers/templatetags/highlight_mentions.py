@@ -22,3 +22,17 @@ def highlight_mentions(value, user_email=None, autoescape=True):
     result = re.sub(regex, wrap_email, value, 0, re.MULTILINE)
 
     return mark_safe(result)
+
+
+@register.filter(needs_autoescape=True)
+def get_mention_emails(value, user_email=None, autoescape=True):
+
+    regex = r"(@[^ @]+@[^ @\r\n]+)"
+
+    def wrap_email(match):
+        email = match.group(1)[1:]  # Remove leading @ for a clean email value
+        return f'{email},'
+
+    result = re.sub(regex, wrap_email, value, 0, re.MULTILINE)
+
+    return result.split(',')[:-1]
