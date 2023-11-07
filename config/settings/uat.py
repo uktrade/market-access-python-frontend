@@ -3,6 +3,7 @@ import sys
 from django_log_formatter_ecs import ECSFormatter
 
 from .base import *  # noqa
+from .hardening import *  # noqa
 
 DJANGO_ENV = "uat"
 
