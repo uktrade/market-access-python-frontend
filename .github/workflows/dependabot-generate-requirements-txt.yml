@@ -10,12 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     #if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-       - name: Generate new requirements.txt file
-         run: poetry export --without-hashes -f requirements.txt -o requirements.txt
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.8.x'
 
-       - name: Commit changes
-         uses: EndBug/add-and-commit@v9
-         with:
+        - name: Install Poetry
+          uses: snok/install-poetry@v1
+
+        - name: Generate new requirements.txt file
+          run: poetry export --without-hashes -f requirements.txt -o requirements.txt
+
+        - name: Commit changes
+          uses: EndBug/add-and-commit@v9
+          with:
            author_name: TSS Dependabot
            author_email: tss-dependabot@digital.trade.gov.uk
            message: 'Your commit message'
