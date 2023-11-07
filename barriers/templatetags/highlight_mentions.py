@@ -34,9 +34,6 @@ def get_mention_emails(value, user_email=None, autoescape=True):
         return f'{email},'
 
     result = re.sub(regex, wrap_email, value, 0, re.MULTILINE)
-    print(result)
 
-    res = result.split(',')
+    return result.split(',')[:-1]
 
-    print(res)
-    return res

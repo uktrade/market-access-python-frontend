@@ -4,12 +4,12 @@
     <div class="mention-item__info">
         <h3 class="mention-item__title">{% if not mention.read_by_recipient %}<span class="govuk-tag ma-badge ma-badge--attention">NEW</span>{% endif %}
             <a class="govuk-link" href="{% url 'barriers:mention_go_to' mention_id=mention.id %}">{{ mention.created_by.full_name }} mentioned you in a comment</a></h3>
-        {% for email in mention.message|get_mention_emails %}
+        {% for email in mention.message|get_mention_emails:current_user.email %}
             <p class="mention-item__message">
                 {% if "@${current_user.email}" == email %}
-                    <span class='mention-highlight mention-highlight__me'>@{{ email }}</span>
+                    <span class='mention-highlight mention-highlight__me'>{{ email }}</span>
                 {% else %}
-                    <span class='mention-highlight'>@{{ email }}</span>
+                    <span class='mention-highlight'>{{ email }}</span>
                 {% endif %}
             </p>
         {% endfor %}
