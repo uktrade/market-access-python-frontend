@@ -12,6 +12,8 @@ jobs:
     steps:
         - name: Install Poetry
           uses: snok/install-poetry@v1
+          with:
+            version: 1.6.1
 
         - name: Checkout the repository - but just the relevant files
           uses: actions/checkout@v4
