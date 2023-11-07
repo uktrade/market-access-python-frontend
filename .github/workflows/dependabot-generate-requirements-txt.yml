@@ -11,7 +11,7 @@ jobs:
     #if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
        - name: Generate new requirements.txt file
-         run: ../../actions/generate-requirements-txt.sh
+         run: generate-requirements-txt.sh
 
        - name: Commit changes
          uses: EndBug/add-and-commit@v9
