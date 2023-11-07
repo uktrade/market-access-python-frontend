@@ -1,5 +1,9 @@
 on:
   pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - 'requirements.txt'
 
 permissions:
   contents: write
@@ -8,7 +12,7 @@ jobs:
   regenerate_requirements_txt:
     name: Regenerating the requirements.txt file
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    #if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
         - name: Set up Python 3.8
           uses: actions/setup-python@v4
@@ -27,6 +31,9 @@ jobs:
               requirements.txt
               pyproject.toml
               poetry.lock
+
+        - name: Generate new lock file
+          run: poetry lock
 
         - name: Generate new requirements.txt file
           run: poetry export --without-hashes -f requirements.txt -o requirements.txt
