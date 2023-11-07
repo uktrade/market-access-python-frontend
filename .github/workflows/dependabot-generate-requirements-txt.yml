@@ -1,0 +1,11 @@
+on:
+  pull_request:
+
+jobs:
+  generate_some_code:
+    name: Generate some code!
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+       - name: Do the code!
+         run: ../../actions/generate-requirements-txt.sh
