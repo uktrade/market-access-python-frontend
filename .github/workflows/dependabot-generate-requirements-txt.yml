@@ -11,7 +11,7 @@ jobs:
     if: ${{ github.event.head_commit.message != 'Regenerating requirements.txt file' }} and ${{ github.actor == 'dependabot[bot]' }}
     steps:
         - name: Getting Python version
-          run: echo "PYTHON_VERSION=$(grep -Eo '\d.\d..' ./runtime.txt)" >> $GITHUB_OUTPUT
+          run: echo "PYTHON_VERSION=$(grep -Eo '\d.\d..' ../../runtime.txt)" >> $GITHUB_OUTPUT
 
         - name: Set up Python ${{ env.PYTHON_VERSION }}
           uses: actions/setup-python@v4
