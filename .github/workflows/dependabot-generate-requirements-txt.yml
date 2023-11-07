@@ -10,13 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.head_commit.message != 'Regenerating requirements.txt file' }} and ${{ github.actor == 'dependabot[bot]' }}
     steps:
-        - name: Getting Python version
-          run: echo "PYTHON_VERSION=$(grep -Eo '\d.\d..' ../../runtime.txt)" >> $GITHUB_OUTPUT
-
-        - name: Set up Python ${{ env.PYTHON_VERSION }}
+        - name: Set up Python 3.8
           uses: actions/setup-python@v4
           with:
-            python-version: '${{ env.PYTHON_VERSION }}'
+            python-version: '3.8.x'
 
         - name: Install Poetry
           uses: snok/install-poetry@v1
