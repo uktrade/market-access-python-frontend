@@ -1,5 +1,8 @@
 on:
-  push:
+  pull_request:
+
+permissions:
+  pull-requests: write
 
 jobs:
   generate_some_code:
@@ -7,5 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-       - name: Do the code!
+       - name: Generate new requirements.txt file
          run: ../../actions/generate-requirements-txt.sh
+
+       - name: Commit changes
+         uses: EndBug/add-and-commit@v9
+         with:
+           author_name: TSS Dependabot
+           author_email: tss-dependabot@digital.trade.gov.uk
+           message: 'Your commit message'
+           add: 'requirements.txt'
