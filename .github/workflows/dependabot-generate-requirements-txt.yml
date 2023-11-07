@@ -9,7 +9,7 @@ jobs:
     name: Regenerating the requirements.txt file
     runs-on: ubuntu-latest
     #if: ${{ github.actor == 'dependabot[bot]' }}
-    if: ${{ github.event.head_commit.message != "Regenerating requirements.txt file" }}
+    if: ${{ github.event.head_commit.message != Regenerating requirements.txt file }}
     steps:
         - name: Install Poetry
           uses: snok/install-poetry@v1
