@@ -1,27 +1,31 @@
 on:
   pull_request:
 
-permissions: write-all
+permissions:
+  contents: write
 
 jobs:
-  generate_some_code:
-    name: Generate some code!
+  regenerate_requirements_txt:
+    name: Regenerating the requirements.txt file
     runs-on: ubuntu-latest
     #if: ${{ github.actor == 'dependabot[bot]' }}
+    if: ${{ github.event.head_commit.message != "Regenerating requirements.txt file" }}
     steps:
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v4
-          with:
-            python-version: '3.8.x'
-
         - name: Install Poetry
           uses: snok/install-poetry@v1
 
-        - uses: actions/checkout@v4
+        - name: Checkout the repository - but just the relevant files
+          uses: actions/checkout@v4
           with:
-            sparse-checkout: .
+            sparse-checkout: |
+              requirements.txt
+              pyproject.toml
+              poetry.lock
 
         - name: Generate new requirements.txt file
           run: poetry export --without-hashes -f requirements.txt -o requirements.txt
 
-        - uses: stefanzweifel/git-auto-commit-action@v5
+        - name: Committing the changes back to the branch
+          uses: stefanzweifel/git-auto-commit-action@v5
+          with:
+            commit_message: Regenerating requirements.txt file
