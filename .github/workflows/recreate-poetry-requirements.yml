@@ -27,10 +27,7 @@ jobs:
         - name: Checkout the repository - but just the relevant files
           uses: actions/checkout@v4
           with:
-            sparse-checkout: |
-              requirements.txt
-              pyproject.toml
-              poetry.lock
+            sparse-checkout: .
 
         - name: Generate new lock file
           run: poetry lock
