@@ -576,20 +576,6 @@ files = [
 django = "*"
 
 [[package]]
-name = "django-thumborize"
-version = "1.0"
-description = "Minimal interface for thumbor imaging service"
-optional = false
-python-versions = "*"
-files = [
-    {file = "django-thumborize-1.0.tar.gz", hash = "sha256:61ca155fa7adc99a4411867081bd7fbf3240cac90ae26d6827c105e30e56fcfc"},
-]
-
-[package.dependencies]
-Django = "*"
-libthumbor = "*"
-
-[[package]]
 name = "django-webpack-loader"
 version = "1.3.0"
 description = "Transparently use webpack with django"
@@ -988,20 +974,6 @@ files = [
 
 [package.dependencies]
 marshmallow = "3.19.0"
-
-[[package]]
-name = "libthumbor"
-version = "2.0.2"
-description = "libthumbor is the python extension to generate thumbor URLs"
-optional = false
-python-versions = ">=3.6,<4.0"
-files = [
-    {file = "libthumbor-2.0.2-py3-none-any.whl", hash = "sha256:4d4dc0cef2c4d5b24dd7b8b25f62097508f10820aaf31eada7d924d6ac0d5378"},
-    {file = "libthumbor-2.0.2.tar.gz", hash = "sha256:d4fb22159ad30d542acbc0379e468ce4b74f881a2b8918079249533a273337e8"},
-]
-
-[package.dependencies]
-six = ">=1.14.0,<2.0.0"
 
 [[package]]
 name = "markupsafe"
@@ -2277,4 +2249,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "1f7f5b69eda150c1ffde30810b8ff03b6effa59fe336ac140c669adbadb8722b"
+content-hash = "db626d6b98bda52772180dfb0a7be6820987d204b22ef408d0cb7ba94dfc59d6"
