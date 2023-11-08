@@ -1,3 +1,5 @@
+import json
+
 import sentry_sdk
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
@@ -11,5 +13,5 @@ from authentication.decorators import public_view
 @method_decorator(csrf_exempt, name="dispatch")
 class CSPReportView(View):
     def post(self, request, *args, **kwargs):
-        sentry_sdk.api.capture_event(request.body)
+        sentry_sdk.api.capture_event(json.loads(request.body.decode("utf-8")))
         return HttpResponse(status=200)
