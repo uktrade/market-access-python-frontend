@@ -7,7 +7,7 @@
 
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             ReactApp.renderMultiSelectFilter(
                 "member_states",
@@ -21,7 +21,7 @@
 
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.barrier.wto();
         var csrftoken = ma.get_csrf_token();
     </script>

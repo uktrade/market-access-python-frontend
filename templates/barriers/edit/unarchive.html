@@ -3,7 +3,7 @@
 {% block page_title %}{{ block.super }} - Unarchive barrier{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '.govuk-character-count' );
         }

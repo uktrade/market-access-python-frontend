@@ -16,7 +16,7 @@
 
 {% block body_script %}
   {% render_bundle 'main' 'js' 'REACT' %}
-  <script>
+  <script nonce="{{request.csp_nonce}}">
     ma.pages.barrier.action_plans_add_task();
     document.addEventListener("DOMContentLoaded", function (event) {
       console.log("Dom content loaded");

@@ -8,7 +8,7 @@
     {{ trading_blocs|json_script:"trading-blocs-data" }}
     {{ admin_areas|json_script:"admin-areas-data" }}
     {{ countries_with_admin_areas|json_script:"countries-with-admin-areas-data" }}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             let countryElement = document.getElementById("country")
             let tradingBlocElement = document.getElementById("country_trading_bloc")

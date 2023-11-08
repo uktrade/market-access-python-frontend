@@ -14,7 +14,7 @@
 
 {% block body_script %}
     {% render_bundle 'main' 'js' 'REACT' %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '#{{ form.update.name }}-form-group.govuk-character-count' );
             new ma.components.CharacterCount( '#{{ form.update_1.name }}-form-group.govuk-character-count' );

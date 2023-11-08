@@ -16,7 +16,7 @@
 
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             ReactApp.renderTextAreaWithMentions("note-textarea-container")
         })
@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.DeleteModal ){
             new ma.components.DeleteModal();
         }

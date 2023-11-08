@@ -21,7 +21,7 @@
 
 {% block body_script %}
     {% render_bundle 'main' 'js' 'REACT' %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             ReactApp.GDSTabs();
             ReactApp.renderTextAreaWithMentions("note-textarea-container")
