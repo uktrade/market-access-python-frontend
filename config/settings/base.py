@@ -409,8 +409,8 @@ COMPANIES_HOUSE_API_KEY = env("COMPANIES_HOUSE_API_KEY")
 COMPANIES_HOUSE_API_ENDPOINT = env("COMPANIES_HOUSE_API_ENDPOINT")
 
 CSP_DEFAULT_SRC = ("'self'",)
-CSP_SCRIPT_SRC = ("'self'", "https://www.googletagmanager.com/", "'unsafe-inline'")
+CSP_SCRIPT_SRC = ("'self'", "https://www.googletagmanager.com/")
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
-CSP_REPORT_URI = env.str("CSP_REPORT_URI", default=None)
+CSP_REPORT_URI = "sentry.ci.uktrade.digital/api/169/security/?sentry_key=ca86d5210d894b0f9441a9eef3428ad5"
 CSP_REPORT_ONLY = env.bool("CSP_REPORT_ONLY", default=True)
 CSP_INCLUDE_NONCE_IN = ["script-src"]
