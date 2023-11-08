@@ -31,8 +31,8 @@ def get_mention_emails(value, user_email=None, autoescape=True):
 
     def wrap_email(match):
         email = match.group(1)[1:]  # Remove leading @ for a clean email value
-        return f'{email},'
+        return f"{email},"
 
     result = re.sub(regex, wrap_email, value, 0, re.MULTILINE)
 
-    return result.split(',')[:-1]
+    return result.split(",")[:-1]
