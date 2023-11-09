@@ -412,5 +412,4 @@ CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'", "https://www.googletagmanager.com/")
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_REPORT_URI = "/csp_report"
-CSP_REPORT_ONLY = env.bool("CSP_REPORT_ONLY", default=True)
 CSP_INCLUDE_NONCE_IN = ["script-src"]
