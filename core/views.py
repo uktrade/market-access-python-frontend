@@ -16,8 +16,14 @@ logger = logging.getLogger(__name__)
 @method_decorator(csrf_exempt, name="dispatch")
 class CSPReportView(View):
     def post(self, request, *args, **kwargs):
+        report = json.loads(request.body.decode("utf-8"))["csp-report"]
         with sentry_sdk.configure_scope() as scope:
             scope.set_tag("type", "csp_report")
-            report = json.loads(request.body.decode("utf-8"))["csp-report"]
-            logger.error("CSP Blocked", extra=report)
+            extra = {
+                "blocked_uri": report.get("blocked-uri"),
+                "document_uri": report.get("document-uri"),
+                "line_number": report.get("line-number"),
+                "effective_directive": report.get("effective-directive"),
+            }
+            logger.error("CSP Blocked", extra=extra)
         return HttpResponse(status=200)
