@@ -3,8 +3,10 @@ from django.views.generic import TemplateView
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
 
+from .mixins import BarrierMixin
 
-class RelatedBarriersView(MetadataMixin, TemplateView):
+
+class RelatedBarriersView(MetadataMixin, BarrierMixin, TemplateView):
     """View for the similar barriers page."""
 
     template_name = "barriers/related_barriers.html"

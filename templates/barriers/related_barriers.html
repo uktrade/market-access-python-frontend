@@ -1,17 +1,125 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Related barriers</h1>
+                <h1>{{ barrier.title }}</h1>
+                {{ barrier.summary }}
                 {% if related_barriers %}
-                    <p>These are the barriers that are related to this barrier.</p>
-                    <ul>
+                    <h2>Related barriers:</h2>
+                    <ol id="filter-results-list" class="filter-results-list">
                         {% for barrier in related_barriers %}
-                            <li><a href="{{ barrier.url }}">{{ barrier.title }}</a></li>
+                            {% ifchanged %}
+                                <li class='filter-results-list__item' data-barrier-id="{{ barrier.id }}">
+                                    <div class="filter-results-list__item__main-content">
+                                        <h3 class='filter-results-list__item__heading'>
+                                            {% if saved_search %}
+                                                {% if barrier.id in saved_search.new_barrier_ids %}<span class="ma-badge ma-badge--new">New</span>{% endif %}
+                                                {% if barrier.id in saved_search.updated_barrier_ids %}
+                                                    <span class="ma-badge ma-badge--updated">Updated</span>
+                                                {% endif %}
+                                            {% endif %}
+                                            <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a>
+                                        </h3>
+                                        <dl class="filter-results-list__item__definitions">
+                                            <dt class="filter-results-list__item__definitions__key visually-hidden">Summary:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.summary }}
+                                            </dd>
+                                            <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.reported_on|date:"j F Y" }}
+                                            </dd>
+                                            <dt class="filter-results-list__item__definitions__key">Updated:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.modified_on|date:"j F Y" }}
+                                            </dd>
+                                            <dt class="filter-results-list__item__definitions__key">Status:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.status.name }}
+                                            </dd>
+                                            {% if barrier.status.id == '4' %}
+                                                {# 4: RESOLVED_IN_FULL #}
+                                                <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
+                                                <dd class="filter-results-list__item__definitions__value">
+                                                    {{ barrier.status_date|date:"F Y" }}
+                                                </dd>
+                                            {% else %}
+                                                {% if barrier.estimated_resolution_date %}
+                                                    <dt class="filter-results-list__item__definitions__key">Estimated resolution date:</dt>
+                                                    <dd class="filter-results-list__item__definitions__value">
+                                                        {{ barrier.estimated_resolution_date|date:"F Y" }}
+                                                    </dd>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if barrier.sector_names or barrier.main_sector_name %}
+                                                <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
+                                                <dd class="filter-results-list__item__definitions__value">
+                                                    {% if barrier.main_sector %}
+                                                        {{ barrier.main_sector_name }} (main sector)
+                                                        {% if barrier.sector_names %},{% endif %}
+                                                    {% endif %}
+                                                    {{ barrier.sector_names|join:', ' }}
+                                                </dd>
+                                            {% endif %}
+                                            {% if barrier.current_valuation_assessment %}
+                                                <dt class="filter-results-list__item__definitions__key">Value:</dt>
+                                                <dd class="filter-results-list__item__definitions__value">
+                                                    {{ barrier.current_valuation_assessment }}
+                                                </dd>
+                                            {% endif %}
+                                            <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.location }}
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div class="filter-results-list__item__sub-content">
+                                        {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
+                                            <ul class="barrier-tag-list barrier-tag-list--search">
+                                                {% spaceless %}
+                                                    <div class="overflow-hidden">
+                                                        {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
+                                                            <div class="text-right">
+                                                                <li class="govuk-tag govuk-tag--top-100-priority-approval-pending text-right">TOP 100 APPROVAL PENDING</li>
+                                                            </div>
+                                                        {% elif barrier.top_priority_status == "APPROVED" %}
+                                                            <div class="text-right">
+                                                                <li class="govuk-tag govuk-tag--top-100-priority text-right">TOP 100 PRIORITY</li>
+                                                            </div>
+                                                        {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
+                                                            <div class="text-right">
+                                                                <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right">TOP 100 REMOVAL PENDING</li>
+                                                            </div>
+                                                        {% elif barrier.top_priority_status == "RESOLVED" %}
+                                                            <div class="text-right">
+                                                                <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY</li>
+                                                            </div>
+                                                        {% elif barrier.priority_level %}
+                                                            {% if barrier.priority_level == "OVERSEAS" %}
+                                                                <li class="govuk-tag govuk-tag--overseas-delivery">OVERSEAS DELIVERY</li>
+                                                            {% elif barrier.priority_level == "COUNTRY" %}
+                                                                <li class="govuk-tag govuk-tag--country-priority">COUNTRY PRIORITY</li>
+                                                            {% elif barrier.priority_level == "WATCHLIST" %}
+                                                                <li class="govuk-tag govuk-tag--watch-list">WATCH LIST</li>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="">
+                                                        {% for tag in barrier.tags %}
+                                                            <div class="text-right">
+                                                                <li class="govuk-tag govuk-tag--{{ tag.title|slugify }} text-right">{{ tag.title }}</li>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endspaceless %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endifchanged %}
                         {% endfor %}
-                    </ul>
+                    </ol>
                 {% else %}
                     <p>There are no related barriers.</p>
                 {% endif %}
