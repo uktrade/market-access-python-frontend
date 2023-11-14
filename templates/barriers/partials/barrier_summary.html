@@ -1,10 +1,9 @@
 <section class="barrier-summary">
-
     <div class="barrier-summary__heading flex justify-between align-end">
         <div>
             <p class="barrier-summary__code">{{ barrier.code }}</p>
             <h1 class="barrier-summary__heading__text">{{ barrier.title }}</h1>
-            <p class="barrier-summary__heading__country"> in {{ barrier.location }}</p>
+            <p class="barrier-summary__heading__country">in {{ barrier.location }}</p>
             <!-- Tag work will go here to be above the change links in layout -->
             {% if not barrier.archived %}
                 <div class="barrier-summary__edit-links">
@@ -12,11 +11,6 @@
                     or
                     <a href="{% url 'barriers:edit_location' barrier.id %}">location</a>
                 </div>
-            {% endif %}
-        </div>
-        <div>
-            {% if not barrier.archived %}
-                <a class="barrier-summary__edit-links" href="{% url 'barriers:related_barriers' barrier.id %}">Related Barriers</a>
             {% endif %}
         </div>
         <div>
@@ -47,7 +41,9 @@
                     </ul>
                     <div class="barrier-summary__status__edit-links">
                         {% if not barrier.archived %}
-                            <a aria-expanded="false" class="barrier-summary__status__link js-barrier-summary-link" href="{% url 'barriers:edit_priority' barrier.id %}">
+                            <a aria-expanded="false"
+                               class="barrier-summary__status__link js-barrier-summary-link"
+                               href="{% url 'barriers:edit_priority' barrier.id %}">
                                 <span class="sr-only govuk-visually-hidden">Activate link to change barrier priority.</span>
                                 Change priority
                             </a>
@@ -57,6 +53,4 @@
             {% endif %}
         </div>
     </div>
-
-
 </section>

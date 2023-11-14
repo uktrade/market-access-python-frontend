@@ -8,5 +8,12 @@
             {% endspaceless %}
         </ul>
     {% endif %}
-    <a class="barrier-tag-edit" href="{% url 'barriers:edit_tags' barrier.id %}">Edit tags</a>
+    <a class="barrier-tag-edit"
+       href="{% url 'barriers:edit_tags' barrier.id %}">Edit tags</a>
+    <div>
+        {% if not barrier.archived %}
+            <a class="barrier-summary__edit-links"
+               href="{% url 'barriers:related_barriers' barrier.id %}">Find related barriers</a>
+        {% endif %}
+    </div>
 </div>
