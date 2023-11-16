@@ -4,6 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
 from django.utils.translation import gettext as _
+from django.utils.safestring import mark_safe
 
 from barriers.constants import (
     DEPRECATED_TAGS,
@@ -113,9 +114,27 @@ class ProgressUpdateForm(
     ClearableMixin, EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
 ):
     CHOICES = [
-        ("ON_TRACK", "On track"),
-        ("RISK_OF_DELAY", "Risk of delay"),
-        ("DELAYED", "Delayed"),
+        (
+            "ON_TRACK",
+            mark_safe(
+                "<span class='govuk-body'>On Track</span> <span class='govuk-hint'>Barrier will be resolved"
+                " in the target financial year</span>"
+            ),
+        ),
+        (
+            "RISK_OF_DELAY",
+            mark_safe(
+                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not will be"
+                " resolved in the target financial year</span>"
+            ),
+        ),
+        (
+            "DELAYED",
+            mark_safe(
+                "<span class='govuk-body'>Delayed</span> <span class='govuk-hint'>Barrier will not be"
+                " resolved in the target financial year</span>"
+            ),
+        ),
     ]
     status = forms.ChoiceField(
         label="Delivery confidence",
