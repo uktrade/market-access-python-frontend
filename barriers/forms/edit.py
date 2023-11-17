@@ -3,8 +3,8 @@ import logging
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
-from django.utils.translation import gettext as _
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext as _
 
 from barriers.constants import (
     DEPRECATED_TAGS,
