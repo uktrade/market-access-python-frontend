@@ -163,12 +163,8 @@
                 <label class="govuk-label govuk-label--s" for="update">{{ form.estimated_resolution_date_change_reason.label }}</label>
                 {% form_field_error form "update" %}
                 <span class="govuk-hint">{{ form.estimated_resolution_date_change_reason.help_text }}</span>
-                <textarea id="{{ form.estimated_resolution_date_change_reason.name }}"
-                          class="govuk-textarea govuk-js-character-count js-character-count"
-                          name="{{ form.estimated_resolution_date_change_reason.name }}"
-                          rows="5"
-                          maxlength="1250">{{ form.estimated_resolution_date_change_reason.value|default_if_none:"" }}
-</textarea>
+                <textarea id="{{ form.estimated_resolution_date_change_reason.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.estimated_resolution_date_change_reason.name }}" rows="5" maxlength="1250">{{ form.estimated_resolution_date_change_reason.value|default_if_none:"" }}
+                </textarea>
             </div>
             <div id="{{ form.estimated_resolution_date_change_reason.name }}-info"
                  class="govuk-hint govuk-character-count__message">You can enter up to 1250 characters</div>
