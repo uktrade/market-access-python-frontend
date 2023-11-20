@@ -10,6 +10,11 @@ from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
 from .assessments.strategic import StrategicAssessmentHistoryItem
 from .barriers import BarrierHistoryItem, ProgressUpdateHistoryItem
 from .notes import NoteHistoryItem
+from .programme_funds import (
+    ExpenditureHistoryItem,
+    MilestonesAndDeliverablesHistoryItem,
+    ProgrammeFundsHistoryItem,
+)
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
 from .public_barriers import PublicBarrierHistoryItem
 from .team_members import TeamMemberHistoryItem
@@ -43,5 +48,6 @@ class HistoryItem(PolymorphicBase):
         ActionPlanTaskHistoryItem,
         ProgressUpdateHistoryItem,
         BarrierTopPrioritySummaryItem,
+        ProgrammeFundsHistoryItem,
     )
     class_lookup = {}
