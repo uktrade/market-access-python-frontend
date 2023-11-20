@@ -3,6 +3,7 @@ import logging
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
 from barriers.constants import (
@@ -109,13 +110,31 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         )
 
 
-class Top100ProgressUpdateForm(
+class ProgressUpdateForm(
     ClearableMixin, EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
 ):
     CHOICES = [
-        ("ON_TRACK", "On track"),
-        ("RISK_OF_DELAY", "Risk of delay"),
-        ("DELAYED", "Delayed"),
+        (
+            "ON_TRACK",
+            mark_safe(
+                "<span class='govuk-body'>On Track</span> <span class='govuk-hint'>Barrier will be resolved"
+                " in the target financial year</span>"
+            ),
+        ),
+        (
+            "RISK_OF_DELAY",
+            mark_safe(
+                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not will be"
+                " resolved in the target financial year</span>"
+            ),
+        ),
+        (
+            "DELAYED",
+            mark_safe(
+                "<span class='govuk-body'>Delayed</span> <span class='govuk-hint'>Barrier will not be"
+                " resolved in the target financial year</span>"
+            ),
+        ),
     ]
     status = forms.ChoiceField(
         label="Delivery confidence",
@@ -319,7 +338,6 @@ class ProgrammeFundProgressUpdateForm(
 
 
 class EditBarrierPriorityForm(APIFormMixin, forms.Form):
-
     top_priority_help_text = (
         "Barrier needs significant input from DBT policy teams, other "
         "government departments or regulators to resolve."
@@ -630,7 +648,6 @@ def update_barrier_priority_form_factory(
 class UpdateBarrierEstimatedResolutionDateForm(
     EstimatedResolutionDateApprovalMixin, ClearableMixin, APIFormMixin, forms.Form
 ):
-
     estimated_resolution_date = MonthYearInFutureField(
         label="Estimated resolution date",
         help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
@@ -794,7 +811,6 @@ class UpdateEconomicAssessmentEligibilityForm(APIFormMixin, forms.Form):
 
 
 class NextStepsItemForm(APIFormMixin, forms.Form):
-
     NEXT_STEPS_ITEMS_STATUS_CHOICES = [
         ("IN_PROGRESS", "In progress"),
         ("COMPLETED", "Completed"),
@@ -868,7 +884,6 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
 
 
 class UpdateBarrierStartDateForm(ClearableMixin, APIFormMixin, forms.Form):
-
     start_date = MonthYearInFutureField(
         label="When did or will the barrier start to affect trade?",
         help_text="If you don’t know the month, enter 06.",

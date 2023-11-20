@@ -8,7 +8,7 @@ from django.views.generic import FormView, TemplateView, View
 from barriers.forms.edit import (
     NextStepsItemForm,
     ProgrammeFundProgressUpdateForm,
-    Top100ProgressUpdateForm,
+    ProgressUpdateForm,
 )
 from barriers.forms.various import ChooseUpdateTypeForm
 from barriers.views.mixins import APIBarrierFormViewMixin, BarrierMixin
@@ -22,7 +22,7 @@ class ChooseProgressUpdateTypeView(BarrierMixin, FormView):
     template_name = "barriers/progress_updates/choose_type.html"
     form_class = ChooseUpdateTypeForm
     success_url_patterns = {
-        "top_100_priority": "barriers:add_top_100_progress_update",
+        "top_100_priority": "barriers:add_progress_update",
         "programme_fund": "barriers:add_programme_fund_progress_update",
     }
 
@@ -40,9 +40,9 @@ class ChooseProgressUpdateTypeView(BarrierMixin, FormView):
         return super().form_valid(form)
 
 
-class BarrierAddTop100ProgressUpdate(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/progress_updates/add_top_100_update.html"
-    form_class = Top100ProgressUpdateForm
+class BarrierAddProgressUpdate(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/progress_updates/add_barrier_update.html"
+    form_class = ProgressUpdateForm
 
     def get_initial(self):
         initial = super().get_initial()
@@ -114,8 +114,8 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
 
 
 class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/progress_updates/add_top_100_update.html"
-    form_class = Top100ProgressUpdateForm
+    template_name = "barriers/progress_updates/add_barrier_update.html"
+    form_class = ProgressUpdateForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -272,7 +272,6 @@ class BarrierEditNextStepItem(APIBarrierFormViewMixin, FormView):
             }
 
     def get_success_url(self):
-
         return reverse_lazy(
             "barriers:list_next_steps",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
