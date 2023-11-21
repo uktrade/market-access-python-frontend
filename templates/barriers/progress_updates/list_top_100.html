@@ -2,13 +2,11 @@
 {% load dates %}
 {% load tz %}
 {% block page_title %}{{ block.super }} - Previous progress updates{% endblock %}
-
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}"
+       class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
-
 {% block page_content %}
-
     {% include 'partials/heading.html' with text='Previous progress updates' %}
     {% timezone "Europe/London" %}
         <div class="event-list">
@@ -62,7 +60,8 @@
                             {% endif %}
                         </div>
                         <div class="barrier-progress-update__actions">
-                            <a class="" href="{% url 'barriers:edit_top_100_progress_update' barrier.id progress_update.id %}">Edit</a>
+                            <a class=""
+                               href="{% url 'barriers:edit_progress_update' barrier.id progress_update.id %}">Edit</a>
                         </div>
                         {% if not barrier.archived %}
                         {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_progress_update' barrier.id %}">Edit</a> {% endcomment %}
@@ -72,8 +71,6 @@
             {% endfor %}
         </div>
     {% endtimezone %}
-
-    <a class="govuk-button button--secondary" href="{% url 'barriers:barrier_detail' barrier.id %}">Back to barrier</a>
-
-
+    <a class="govuk-button button--secondary"
+       href="{% url 'barriers:barrier_detail' barrier.id %}">Back to barrier</a>
 {% endblock %}
