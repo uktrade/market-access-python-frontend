@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '#{{ form.next_step_item.name  }}-form-group.govuk-character-count' );
             new ma.components.CharacterCount( '#{{ form.next_step_owner.name}}-form-group.govuk-character-count' );

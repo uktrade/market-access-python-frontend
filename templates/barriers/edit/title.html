@@ -3,7 +3,7 @@
 {% block page_title %}{{ block.super }} - Barrier title{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.barrier.edit.title();
     </script>
 {% endblock %}

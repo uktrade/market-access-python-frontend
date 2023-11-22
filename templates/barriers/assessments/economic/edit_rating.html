@@ -5,7 +5,7 @@
 {% block body_script %}
     {{ block.super }}
     {% if not economic_assessment.automated_analysis_data %}
-        <script>
+        <script nonce="{{request.csp_nonce}}">
             ma.pages.barrier.assessment();
             var csrftoken = ma.get_csrf_token();
         </script>

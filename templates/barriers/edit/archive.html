@@ -3,7 +3,7 @@
 {% block page_title %}{{ block.super }} - Archive this barrier{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.barrier.archive();
         if (ma.components.CharacterCount) {
             new ma.components.CharacterCount('#conditional-DUPLICATE .govuk-character-count');

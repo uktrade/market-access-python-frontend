@@ -7,7 +7,7 @@
     {% if not screen_reader_mode %}
         {% render_bundle 'main' 'js' 'REACT' %}
         {{ confirmed_commodities_data|json_script:"confirmed-commodities-data" }}
-        <script>
+        <script nonce="{{request.csp_nonce}}">
             document.addEventListener("DOMContentLoaded", function(event) {
                 let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
                 let locations = [
