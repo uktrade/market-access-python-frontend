@@ -36,7 +36,7 @@ from barriers.views.mentions import (
 )
 from barriers.views.progress_updates import (
     BarrierAddProgrammeFundProgressUpdate,
-    BarrierAddTop100ProgressUpdate,
+    BarrierAddProgressUpdate,
     BarrierCompleteNextStepItem,
     BarrierEditNextStepItem,
     BarrierEditProgressUpdate,
@@ -242,14 +242,14 @@ urlpatterns = [
         name="edit_priority",
     ),
     path(
-        "barriers/<uuid:barrier_id>/list/top_100_progress_update/",
+        "barriers/<uuid:barrier_id>/list/progress_update/",
         BarrierListProgressUpdate.as_view(),
-        name="list_top_100_progress_update",
+        name="list_progress_update",
     ),
     path(
-        "barriers/<uuid:barrier_id>/edit/top_100_progress_update/<uuid:progress_update_id>/",
+        "barriers/<uuid:barrier_id>/edit/progress_update/<uuid:progress_update_id>/",
         BarrierEditProgressUpdate.as_view(),
-        name="edit_top_100_progress_update",
+        name="edit_progress_update",
     ),
     path(
         "barriers/<uuid:barrier_id>/list/programme_fund_progress_update/",
@@ -794,9 +794,9 @@ urlpatterns = [
         name="choose_progress_update_type",
     ),
     path(
-        "barriers/<uuid:barrier_id>/progress_updates/top_100_priority",
-        BarrierAddTop100ProgressUpdate.as_view(),
-        name="add_top_100_progress_update",
+        "barriers/<uuid:barrier_id>/progress_updates/barrier_progress",
+        BarrierAddProgressUpdate.as_view(),
+        name="add_progress_update",
     ),
     path(
         "barriers/<uuid:barrier_id>/progress_updates/programme_fund",
