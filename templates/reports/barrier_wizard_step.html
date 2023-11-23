@@ -4,7 +4,7 @@
 {% block body_script %}
     {% render_bundle 'main' 'js' 'REACT' %}
     <!-- Import GDS Javascript components -->
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             ReactApp.GDSCheckboxes();
         })
@@ -16,7 +16,7 @@
 
 {% block gtag_events %}
     {% if barrier_id %}
-        <script type="text/javascript">
+        <script nonce="{{request.csp_nonce}}" type="text/javascript">
             window.dataLayer.push({
                 'barrier_id': '{{ barrier_id }}',
             });

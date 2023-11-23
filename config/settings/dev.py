@@ -3,6 +3,7 @@ import sys
 from django_log_formatter_ecs import ECSFormatter
 
 from .base import *  # noqa
+from .hardening import *  # noqa
 
 DJANGO_ENV = "dev"
 
@@ -24,3 +25,7 @@ LOGGING = {
     },
     "loggers": {"": {"handlers": ["ecs"], "level": DJANGO_LOG_LEVEL}},
 }
+
+# Dev environments have an extra user permission group to allow
+# editing of user profiles without admin access
+USER_ADDITIONAL_PERMISSION_GROUPS.append("Role administrator")

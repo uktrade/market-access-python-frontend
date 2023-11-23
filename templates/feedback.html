@@ -5,7 +5,7 @@
 {% endblock page_title %}
 {% block body_script %}
   {% render_bundle 'main' 'js' 'REACT' %}
-  <script>
+  <script nonce="{{request.csp_nonce}}">
     if( ma.components.CharacterCount ){
       new ma.components.CharacterCount( '#{{ form.other_detail.name }}-form-group.govuk-character-count' );
     }

@@ -2,7 +2,7 @@
 
 {% block body_script %}
     {{ block.super }}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.report.statusWizardStep();
     </script>
 {% endblock %}

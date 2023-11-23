@@ -7,7 +7,7 @@
 
 {% block body_script %}
     {{ block.super }}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.users.enableGroupFilter();
     </script>
 {% endblock body_script %}

@@ -79,6 +79,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     "webpack_loader",
     "formtools",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
@@ -97,6 +98,7 @@ if ELASTIC_APM_ENABLED:
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -106,6 +108,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "authentication.middleware.SSOMiddleware",
     "utils.middleware.RequestLoggingMiddleware",
+    "csp.middleware.CSPMiddleware",
+    "utils.middleware.DisableClientCachingMiddleware",
+    "utils.middleware.SetPermittedCrossDomainPolicyHeaderMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -179,18 +184,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-SECURE_BROWSER_XSS_FILTER = True
-
-X_FRAME_OPTIONS = "DENY"
-
-SESSION_COOKIE_SECURE = True
-
-CSRF_COOKIE_SECURE = True
-
-CSRF_COOKIE_HTTPONLY = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -414,3 +407,9 @@ EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
 # Company house config
 COMPANIES_HOUSE_API_KEY = env("COMPANIES_HOUSE_API_KEY")
 COMPANIES_HOUSE_API_ENDPOINT = env("COMPANIES_HOUSE_API_ENDPOINT")
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "https://www.googletagmanager.com/")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_REPORT_URI = "/csp_report"
+CSP_INCLUDE_NONCE_IN = ["script-src"]

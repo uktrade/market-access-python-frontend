@@ -3,7 +3,7 @@
 {% block page_title %}{{ block.super }} - Change priority of the barrier{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.pages.topBarrierPriority ){
             ma.pages.topBarrierPriority.topPriorityVisiblity(
                 "{{top_priority_status}}",

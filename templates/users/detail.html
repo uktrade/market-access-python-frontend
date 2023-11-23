@@ -17,6 +17,8 @@
 
     <a href="{% url 'users:edit_user' user.id %}" class="govuk-button">Edit profile</a>
     {% if user.id != request.session.user_data.id %}
-        <a href="{% url 'users:delete_user' user.id %}" class="form-cancel delete-link">Delete profile</a>
+        {% if current_user|has_permission:"delete_profile" %}
+            <a href="{% url 'users:delete_user' user.id %}" class="form-cancel delete-link">Delete profile</a>
+        {% endif %}
     {% endif %}
 {% endblock %}
