@@ -356,10 +356,6 @@
       "id": "cb2864aa-d19f-44b6-946c-d850a3fd7e3a"
     },
     {
-      "name": "Asia-Pacific",
-      "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-    },
-    {
       "name": "South Asia",
       "id": "12ed13cf-4b2c-4a46-b2f9-068e397d8c84"
     },
@@ -463,16 +459,6 @@
         "id": "cb2864aa-d19f-44b6-946c-d850a3fd7e3a"
       },
       "iso_alpha2_code": "AM"
-    },
-    {
-      "id": "9f5f66a0-5d95-e211-a939-e4115bead28a",
-      "name": "Australia",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "AU"
     },
     {
       "id": "a05f66a0-5d95-e211-a939-e4115bead28a",
@@ -632,16 +618,6 @@
       "iso_alpha2_code": "VG"
     },
     {
-      "id": "56af72a6-5d95-e211-a939-e4115bead28a",
-      "name": "Brunei",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "BN"
-    },
-    {
       "id": "57af72a6-5d95-e211-a939-e4115bead28a",
       "name": "Bulgaria",
       "disabled_on": null,
@@ -670,16 +646,6 @@
         "id": "8d4c4f31-06ce-4320-8e2f-1c13559e125f"
       },
       "iso_alpha2_code": "BI"
-    },
-    {
-      "id": "5baf72a6-5d95-e211-a939-e4115bead28a",
-      "name": "Cambodia",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "KH"
     },
     {
       "id": "5caf72a6-5d95-e211-a939-e4115bead28a",
@@ -889,16 +855,6 @@
       "iso_alpha2_code": "DO"
     },
     {
-      "id": "74af72a6-5d95-e211-a939-e4115bead28a",
-      "name": "East Timor",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "TL"
-    },
-    {
       "id": "75af72a6-5d95-e211-a939-e4115bead28a",
       "name": "Ecuador",
       "disabled_on": null,
@@ -991,16 +947,6 @@
       "disabled_on": null,
       "overseas_region": null,
       "iso_alpha2_code": "FO"
-    },
-    {
-      "id": "d9f682ac-5d95-e211-a939-e4115bead28a",
-      "name": "Fiji",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "FJ"
     },
     {
       "id": "daf682ac-5d95-e211-a939-e4115bead28a",
@@ -1210,16 +1156,6 @@
       "iso_alpha2_code": "IN"
     },
     {
-      "id": "706a9ab2-5d95-e211-a939-e4115bead28a",
-      "name": "Indonesia",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "ID"
-    },
-    {
       "id": "716a9ab2-5d95-e211-a939-e4115bead28a",
       "name": "Iran",
       "disabled_on": null,
@@ -1297,16 +1233,6 @@
       "iso_alpha2_code": "JM"
     },
     {
-      "id": "85756b9a-5d95-e211-a939-e4115bead28a",
-      "name": "Japan",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "JP"
-    },
-    {
       "id": "78756b9a-5d95-e211-a939-e4115bead28a",
       "name": "Jersey",
       "disabled_on": null,
@@ -1344,16 +1270,6 @@
       "iso_alpha2_code": "KE"
     },
     {
-      "id": "7a6a9ab2-5d95-e211-a939-e4115bead28a",
-      "name": "Kiribati",
-      "disabled_on": "2018-11-05T17:00:00Z",
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "KI"
-    },
-    {
       "id": "7a756b9a-5d95-e211-a939-e4115bead28a",
       "name": "Kosovo",
       "disabled_on": null,
@@ -1382,16 +1298,6 @@
         "id": "cb2864aa-d19f-44b6-946c-d850a3fd7e3a"
       },
       "iso_alpha2_code": "KG"
-    },
-    {
-      "id": "7f6a9ab2-5d95-e211-a939-e4115bead28a",
-      "name": "Laos",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "LA"
     },
     {
       "id": "806a9ab2-5d95-e211-a939-e4115bead28a",
@@ -1504,16 +1410,6 @@
       "iso_alpha2_code": "MW"
     },
     {
-      "id": "0550bdb8-5d95-e211-a939-e4115bead28a",
-      "name": "Malaysia",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "MY"
-    },
-    {
       "id": "0650bdb8-5d95-e211-a939-e4115bead28a",
       "name": "Maldives",
       "disabled_on": null,
@@ -1584,16 +1480,6 @@
       "iso_alpha2_code": "MX"
     },
     {
-      "id": "0f50bdb8-5d95-e211-a939-e4115bead28a",
-      "name": "Micronesia",
-      "disabled_on": "2018-11-05T17:00:00Z",
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "FM"
-    },
-    {
       "id": "1050bdb8-5d95-e211-a939-e4115bead28a",
       "name": "Moldova",
       "disabled_on": null,
@@ -1661,16 +1547,6 @@
       "iso_alpha2_code": "MZ"
     },
     {
-      "id": "59af72a6-5d95-e211-a939-e4115bead28a",
-      "name": "Myanmar (Burma)",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "MM"
-    },
-    {
       "id": "1650bdb8-5d95-e211-a939-e4115bead28a",
       "name": "Namibia",
       "disabled_on": null,
@@ -1679,16 +1555,6 @@
         "id": "8d4c4f31-06ce-4320-8e2f-1c13559e125f"
       },
       "iso_alpha2_code": "NA"
-    },
-    {
-      "id": "1750bdb8-5d95-e211-a939-e4115bead28a",
-      "name": "Nauru",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "NR"
     },
     {
       "id": "1850bdb8-5d95-e211-a939-e4115bead28a",
@@ -1721,16 +1587,6 @@
       "iso_alpha2_code": ""
     },
     {
-      "id": "1c50bdb8-5d95-e211-a939-e4115bead28a",
-      "name": "New Zealand",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "NZ"
-    },
-    {
       "id": "1d50bdb8-5d95-e211-a939-e4115bead28a",
       "name": "Nicaragua",
       "disabled_on": null,
@@ -1759,16 +1615,6 @@
         "id": "8d4c4f31-06ce-4320-8e2f-1c13559e125f"
       },
       "iso_alpha2_code": "NG"
-    },
-    {
-      "id": "7b6a9ab2-5d95-e211-a939-e4115bead28a",
-      "name": "North Korea",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "KP"
     },
     {
       "id": "896a9ab2-5d95-e211-a939-e4115bead28a",
@@ -1821,16 +1667,6 @@
       "iso_alpha2_code": "PK"
     },
     {
-      "id": "4c61b8be-5d95-e211-a939-e4115bead28a",
-      "name": "Palau",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "PW"
-    },
-    {
       "id": "4d61b8be-5d95-e211-a939-e4115bead28a",
       "name": "Panama",
       "disabled_on": null,
@@ -1839,16 +1675,6 @@
         "id": "5616ccf5-ab4a-4c2c-9624-13c69be3c46b"
       },
       "iso_alpha2_code": "PA"
-    },
-    {
-      "id": "4e61b8be-5d95-e211-a939-e4115bead28a",
-      "name": "Papua New Guinea",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "PG"
     },
     {
       "id": "4f61b8be-5d95-e211-a939-e4115bead28a",
@@ -1869,16 +1695,6 @@
         "id": "5616ccf5-ab4a-4c2c-9624-13c69be3c46b"
       },
       "iso_alpha2_code": "PE"
-    },
-    {
-      "id": "5161b8be-5d95-e211-a939-e4115bead28a",
-      "name": "Philippines",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "PH"
     },
     {
       "id": "5361b8be-5d95-e211-a939-e4115bead28a",
@@ -1961,16 +1777,6 @@
       "iso_alpha2_code": "RW"
     },
     {
-      "id": "5b61b8be-5d95-e211-a939-e4115bead28a",
-      "name": "Samoa",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "WS"
-    },
-    {
       "id": "5c61b8be-5d95-e211-a939-e4115bead28a",
       "name": "San Marino",
       "disabled_on": null,
@@ -2041,16 +1847,6 @@
       "iso_alpha2_code": "SL"
     },
     {
-      "id": "1f0be5c4-5d95-e211-a939-e4115bead28a",
-      "name": "Singapore",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "SG"
-    },
-    {
       "id": "200be5c4-5d95-e211-a939-e4115bead28a",
       "name": "Slovakia",
       "disabled_on": null,
@@ -2071,16 +1867,6 @@
       "iso_alpha2_code": "SI"
     },
     {
-      "id": "220be5c4-5d95-e211-a939-e4115bead28a",
-      "name": "Solomon Islands",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "SB"
-    },
-    {
       "id": "230be5c4-5d95-e211-a939-e4115bead28a",
       "name": "Somalia",
       "disabled_on": null,
@@ -2099,16 +1885,6 @@
         "id": "8d4c4f31-06ce-4320-8e2f-1c13559e125f"
       },
       "iso_alpha2_code": "ZA"
-    },
-    {
-      "id": "7c6a9ab2-5d95-e211-a939-e4115bead28a",
-      "name": "South Korea",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "KR"
     },
     {
       "id": "7e756b9a-5d95-e211-a939-e4115bead28a",
@@ -2231,16 +2007,6 @@
       "iso_alpha2_code": "SY"
     },
     {
-      "id": "a56ee1ca-5d95-e211-a939-e4115bead28a",
-      "name": "Taiwan",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "TW"
-    },
-    {
       "id": "a66ee1ca-5d95-e211-a939-e4115bead28a",
       "name": "Tajikistan",
       "disabled_on": null,
@@ -2259,16 +2025,6 @@
         "id": "8d4c4f31-06ce-4320-8e2f-1c13559e125f"
       },
       "iso_alpha2_code": "TZ"
-    },
-    {
-      "id": "a86ee1ca-5d95-e211-a939-e4115bead28a",
-      "name": "Thailand",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "TH"
     },
     {
       "id": "a25f66a0-5d95-e211-a939-e4115bead28a",
@@ -2299,16 +2055,6 @@
         "id": "8d4c4f31-06ce-4320-8e2f-1c13559e125f"
       },
       "iso_alpha2_code": "TG"
-    },
-    {
-      "id": "ab6ee1ca-5d95-e211-a939-e4115bead28a",
-      "name": "Tonga",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "TO"
     },
     {
       "id": "ac6ee1ca-5d95-e211-a939-e4115bead28a",
@@ -2356,16 +2102,6 @@
       "disabled_on": null,
       "overseas_region": null,
       "iso_alpha2_code": "TC"
-    },
-    {
-      "id": "b16ee1ca-5d95-e211-a939-e4115bead28a",
-      "name": "Tuvalu",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "TV"
     },
     {
       "id": "b26ee1ca-5d95-e211-a939-e4115bead28a",
@@ -2445,16 +2181,6 @@
       "iso_alpha2_code": "UZ"
     },
     {
-      "id": "b86ee1ca-5d95-e211-a939-e4115bead28a",
-      "name": "Vanuatu",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "VU"
-    },
-    {
       "id": "eef682ac-5d95-e211-a939-e4115bead28a",
       "name": "Vatican City",
       "disabled_on": null,
@@ -2473,16 +2199,6 @@
         "id": "5616ccf5-ab4a-4c2c-9624-13c69be3c46b"
       },
       "iso_alpha2_code": "VE"
-    },
-    {
-      "id": "ba6ee1ca-5d95-e211-a939-e4115bead28a",
-      "name": "Vietnam",
-      "disabled_on": null,
-      "overseas_region": {
-        "name": "Asia-Pacific",
-        "id": "04a7cff0-03dd-4677-aa3c-12dd8426f0d7"
-      },
-      "iso_alpha2_code": "VN"
     },
     {
       "id": "36afd8d0-5d95-e211-a939-e4115bead28a",
@@ -8582,14 +8298,14 @@
       "order": 2
     },
     {
-      "id": 3,
+      "id": 2,
       "title": "Brexit",
       "description": "",
       "show_at_reporting": true,
       "order": 3
     },
     {
-      "id": 2,
+      "id": 3,
       "title": "NI Protocol",
       "description": "Special provisions applied to goods from GB to avoid a hard border with Ireland when the UK leaves the EU.",
       "show_at_reporting": true,
@@ -8597,66 +8313,59 @@
     },
     {
       "id": 4,
-      "title": "Asia Pacific Pilot",
+      "title": "Programme Fund",
       "description": "",
       "show_at_reporting": true,
       "order": 5
     },
     {
       "id": 5,
-      "title": "Programme Fund",
+      "title": "International Standards",
       "description": "",
       "show_at_reporting": true,
       "order": 6
     },
     {
       "id": 6,
-      "title": "International Standards",
+      "title": "Clean Growth",
       "description": "",
       "show_at_reporting": true,
       "order": 7
     },
     {
       "id": 7,
-      "title": "Clean Growth",
+      "title": "Regional Trade Plan",
       "description": "",
       "show_at_reporting": true,
       "order": 8
     },
     {
       "id": 8,
-      "title": "Regional Trade Plan",
+      "title": "EU Market Access Board",
       "description": "",
       "show_at_reporting": true,
       "order": 9
     },
     {
       "id": 9,
-      "title": "EU Market Access Board",
+      "title": "Wales Priority",
       "description": "",
       "show_at_reporting": true,
       "order": 10
     },
     {
       "id": 10,
-      "title": "Wales Priority",
-      "description": "",
-      "show_at_reporting": true,
-      "order": 11
-    },
-    {
-      "id": 11,
       "title": "Scoping (Top 100 priority barrier)",
       "description": "",
       "show_at_reporting": true,
       "order": 1
     },
     {
-      "id": 12,
+      "id": 11,
       "title": "EU Priority",
       "description": "",
       "show_at_reporting": true,
-      "order": 12
+      "order": 11
     }
   ],
   "barrier_type_categories": {
