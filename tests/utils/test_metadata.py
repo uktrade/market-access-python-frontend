@@ -35,7 +35,6 @@ class MetadataTestCase(MarketAccessTestCase):
         region_names = [region["name"] for region in regions]
         assert region_names == [
             "Africa",
-            "Asia-Pacific",
             "China",
             "Eastern Europe and Central Asia",
             "Europe",
