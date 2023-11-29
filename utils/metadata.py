@@ -334,7 +334,7 @@ class Metadata:
         Includes all tags except Top Priority, as that is assigned seperately.
         """
 
-        tag_list = self.get_barrier_tags()
+        tag_list = [each for each in self.get_barrier_tags() if not each["archived"]]
 
         if list_use == "edit":
             # If this list is for the edit pages, return as generator
