@@ -417,3 +417,4 @@ CSP_SCRIPT_SRC = (
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_REPORT_URI = "/csp_report"
 CSP_INCLUDE_NONCE_IN = ["script-src"]
+CSP_REPORT_ONLY = True
