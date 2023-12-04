@@ -408,8 +408,7 @@ EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
 COMPANIES_HOUSE_API_KEY = env("COMPANIES_HOUSE_API_KEY")
 COMPANIES_HOUSE_API_ENDPOINT = env("COMPANIES_HOUSE_API_ENDPOINT")
 
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_SCRIPT_SRC = (
+CSP_DEFAULT_SRC = (
     "'self'",
     "https://www.googletagmanager.com/",
     "https://*.google-analytics.com",
