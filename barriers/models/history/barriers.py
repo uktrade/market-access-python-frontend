@@ -20,8 +20,8 @@ class ArchivedHistoryItem(BaseHistoryItem):
             self.modifier = "unarchived"
 
     def get_value(self, value):
-        if "archived_reason" in value:
-            value["archived_reason"] = ARCHIVED_REASON[value["archived_reason"]]
+        if archived_reason := value.get("archived_reason"):
+            return ARCHIVED_REASON[archived_reason]
         return value
 
 
