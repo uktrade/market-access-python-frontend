@@ -21,7 +21,7 @@ class ArchivedHistoryItem(BaseHistoryItem):
 
     def get_value(self, value):
         if archived_reason := value.get("archived_reason"):
-            return ARCHIVED_REASON[archived_reason]
+            value["archived_reason"] = ARCHIVED_REASON[archived_reason]
         return value
 
 
