@@ -1,3 +1,4 @@
+import json
 import logging
 
 import sentry_sdk
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 class CSPReportView(View):
     def post(self, request, *args, **kwargs):
         with sentry_sdk.configure_scope() as scope:
-            report = request.body.decode("utf-8")
+            csp_report = json.loads(request.body.decode("utf-8"))["csp-report"]
             scope.set_tag("type", "csp_report")
-            logger.error("CSP Blocked", extra={"report": report})
+            logger.error("CSP Blocked", extra=csp_report)
         return HttpResponse(status=200)
