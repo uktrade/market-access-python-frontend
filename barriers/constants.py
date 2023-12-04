@@ -52,7 +52,7 @@ STATUSES_HELP_TEXT = Choices(
     (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on, or work will begin soon"),
     (
         STATUSES.RESOLVED_IN_PART,
-        "Barrier has been partially rresolved and is still being worked on",
+        "Barrier has been partially resolved and is still being worked on",
     ),
     (STATUSES.RESOLVED_IN_FULL, "Barrier has been fully resolved"),
 )
