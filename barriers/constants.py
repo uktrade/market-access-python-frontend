@@ -284,11 +284,11 @@ TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"
 
 # Deprecated tags are tags we do not want future barriers to be able to use,
 # but need to keep for older and archived barriers.
-DEPRECATED_TAGS = [
+DEPRECATED_TAGS = (
     "COVID-19",
     "Brexit",
     "NI Protocol",
-]
+)
 
 EXPORT_TYPES = Choices(
     ("goods", "Goods"),
