@@ -246,7 +246,7 @@ TOP_PRIORITY_BARRIER_STATUS = Choices(
     ("APPROVAL_PENDING", "Top 100 Priority Approval Pending"),
     ("REMOVAL_PENDING", "Top 100 Priority Removal Pending"),
     ("APPROVED", "Top 100 Priority"),
-    ("RESOLVED", "Resolved Top 100 Priority"),
+    ("RESOLVED", "Top 100 Priority Resolved"),
 )
 
 TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES = Choices(

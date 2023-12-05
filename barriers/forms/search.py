@@ -59,27 +59,6 @@ class BarrierSearchForm(forms.Form):
         label="Overseas region",
         required=False,
     )
-    # top_priority_status = forms.MultipleChoiceField(
-    #     label="Top 100 priority barrier",
-    #     choices=(
-    #         ("APPROVED", "Top 100 priority"),
-    #         ("APPROVAL_PENDING", "Approval pending"),
-    #         ("REMOVAL_PENDING", "Removal pending"),
-    #         ("RESOLVED", "Resolved top 100 priority"),
-    #     ),
-    #     # Provide tuple and match to choices to display help text relevant to choice
-    #     help_text=(("APPROVED", "Includes removal pending"),),
-    #     required=False,
-    # )
-    # priority_level = forms.MultipleChoiceField(
-    #     label="Barrier priority",
-    #     choices=(
-    #         ("OVERSEAS", "Overseas Delivery"),
-    #         ("COUNTRY", "Country priority"),
-    #         ("WATCHLIST", "Watch list"),
-    #         ("NONE", "No priority assigned"),
-    #     ),
-    # )
     # Combined priority field combining Top 100 and Priority level
     combined_priority = forms.MultipleChoiceField(
         label="Barrier priority",
