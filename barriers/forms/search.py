@@ -426,6 +426,10 @@ class BarrierSearchForm(forms.Form):
                 if f"status_date_{status_value}" in params:
                     del params[f"status_date_{status_value}"]
 
+        # tss-1069 - we need to encode the admin_areas as string JSON in the URL
+        if "admin_areas" in params:
+            params = format_dict_for_url_querystring(params, ["admin_areas"])
+
         return urlencode(params, doseq=True)
 
     def get_api_search_parameters(self):
