@@ -413,7 +413,9 @@ CSP_SCRIPT_SRC = (
     "'self'",
     "https://www.googletagmanager.com/",
     "https://*.google-analytics.com",
+    "https://www.google-analytics.com",
 )
+CSP_CONNECT_SRC = CSP_SCRIPT_SRC
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_REPORT_URI = "/csp_report"
 CSP_INCLUDE_NONCE_IN = ["script-src"]
