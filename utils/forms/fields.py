@@ -322,6 +322,7 @@ class MonthYearField(forms.MultiValueField):
                     "min_value": "Enter a date in the format 01 2023",
                     "max_value": "Enter a date in the format 01 2023",
                     "incomplete": "Enter a month",
+                    "invalid_month": "Enter a date in the format 01 2023",
                 },
             ),
             forms.IntegerField(
@@ -332,6 +333,7 @@ class MonthYearField(forms.MultiValueField):
                     "min_value": "Date must be after 1990",
                     "max_value": "Date must be before 2100",
                     "incomplete": "Enter a year",
+                    "invalid_year": "Enter a date in the format 01 2023",
                 },
             ),
         )
