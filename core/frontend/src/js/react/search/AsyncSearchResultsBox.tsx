@@ -30,7 +30,7 @@ const AnchorElementPortal = ({ element }) => {
     );
 };
 
-export const AsyncSearchResultsBox = ({}) => {
+export const AsyncSearchResultsBox = ({ }) => {
     // get all elements with data-enhance="pagination"
 
     // const [requestCounter, setRequestCounter] = useState(0)
@@ -80,6 +80,7 @@ export const AsyncSearchResultsBox = ({}) => {
             document.querySelector("#search-filters-form") as HTMLFormElement
         );
         const queryString = new URLSearchParams(formData as any).toString();
+
 
         if (currentURLQuerystring == `?${queryString}`) {
             return;
