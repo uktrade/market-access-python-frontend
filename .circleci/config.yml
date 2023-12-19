@@ -15,8 +15,8 @@ jobs:
             - image: circleci/python:3.8.0-node
             - image: postgres:13
               environment:
-                  POSTGRES_DB=market_access_pyfe
-                  POSTGRES_HOST_AUTH_METHOD=trust
+                  POSTGRES_DB: "market_access_pyfe"
+                  POSTGRES_HOST_AUTH_METHOD: "trust"
             - image: ukti/mock-sso
               environment:
                   MOCK_SSO_PORT: "5000"
