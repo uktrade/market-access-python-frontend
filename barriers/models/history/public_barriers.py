@@ -20,7 +20,7 @@ class CategoriesHistoryItem(BaseHistoryItem):
 
 
 class LocationHistoryItem(BaseHistoryItem):
-    field = "location"
+    field = "country"
     field_name = "Public location"
 
 
