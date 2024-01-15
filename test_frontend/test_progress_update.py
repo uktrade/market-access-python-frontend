@@ -12,10 +12,12 @@ class TestProgressUpdateCreate(PlaywrightTestBase):
         self.page.get_by_text("Top 100 priority barrier").click()
         self.page.get_by_role("button", name="Continue").click()
         self.page.get_by_label("On track").check()
-        self.page.get_by_role("textbox", name="Provide more detail").click()
-        self.page.get_by_role("textbox", name="Provide more detail").fill(
-            "Playwright test"
-        )
+        self.page.get_by_role(
+            "textbox", name="Explain why barrier resolution is on track"
+        ).click()
+        self.page.get_by_role(
+            "textbox", name="Explain why barrier resolution is on track"
+        ).fill("Playwright test")
         self.page.get_by_role("button", name="Save and continue").click()
         self.page.locator("#next_step_item").click()
         self.page.locator("#next_step_item").fill("Playwright test next step")
