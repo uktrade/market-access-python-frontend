@@ -294,7 +294,9 @@
 
                 <form class="govuk-checkboxes" id="tags" action="{% url 'barriers:edit_public_barrier_reviews' barrier.id %}" method="get">
                     <fieldset class="govuk-fieldset">
-                        <legend className="govuk-fieldset__legend filter-items__label filter-group__label visually-hidden"/>
+                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label visually-hidden">
+                            Review Progress
+                        </legend>
                         {% if public_barrier.title and public_barrier.summary %}
                             <div class="checkbox-option">
                                 <div class="govuk-checkboxes__item">
