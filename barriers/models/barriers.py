@@ -603,4 +603,7 @@ class PublicBarrier(APIModel):
     
     @property
     def internal_main_sector(self):
-        return self.data.get("internal_main_sector")
+        main_sector = self.data.get("internal_main_sector")
+        if main_sector:
+            return main_sector.get("name")
+        return None
