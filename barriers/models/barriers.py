@@ -548,7 +548,9 @@ class PublicBarrier(APIModel):
         if self.internal_all_sectors:
             sectors += ["All sectors"]
         if self.internal_sectors:
-            sectors += [sector.get("name", "Unknown") for sector in self.internal_sectors]
+            sectors += [
+                sector.get("name", "Unknown") for sector in self.internal_sectors
+            ]
         return sectors
 
     @property
@@ -600,7 +602,7 @@ class PublicBarrier(APIModel):
             )
         ]
         return from_who
-    
+
     @property
     def internal_main_sector(self):
         main_sector = self.data.get("internal_main_sector")
