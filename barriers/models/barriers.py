@@ -544,11 +544,12 @@ class PublicBarrier(APIModel):
 
     @property
     def internal_sector_names(self):
+        sectors = [self.internal_main_sector] if self.internal_main_sector else []
         if self.internal_all_sectors:
-            return ["All sectors"]
+            sectors += ["All sectors"]
         if self.internal_sectors:
-            return [sector.get("name", "Unknown") for sector in self.internal_sectors]
-        return []
+            sectors += [sector.get("name", "Unknown") for sector in self.internal_sectors]
+        return sectors
 
     @property
     def internal_any_sectors_changed(self):
@@ -599,3 +600,7 @@ class PublicBarrier(APIModel):
             )
         ]
         return from_who
+    
+    @property
+    def internal_main_sector(self):
+        return self.data.get("internal_main_sector")
