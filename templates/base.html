@@ -87,13 +87,6 @@
       <script nonce="{{request.csp_nonce}}" src="{% webpack_static 'main.js' %}"></script>
       <script nonce="{{request.csp_nonce}}">ma.init();</script>
       {% block body_script %}{% endblock %}
-      {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
-        <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
-          <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
-          <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss">X</a>
-        </div>
-      {% endif %}
-
     {% endblock %}
   </body>
 </html>
