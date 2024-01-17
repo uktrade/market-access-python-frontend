@@ -39,7 +39,3 @@ LOGGING = {
         "django.server": DEFAULT_LOGGING["loggers"]["django.server"],
     },
 }
-
-# Local environments have an extra user permission group to allow
-# editing of user profiles without admin access
-USER_ADDITIONAL_PERMISSION_GROUPS.append("Role administrator")

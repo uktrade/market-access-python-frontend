@@ -22,6 +22,7 @@ from utils.sso import SSOClient
 from .forms import UserDeleteForm, UserGroupForm
 from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
 from .permissions import APIPermissionMixin
+from users.constants import REGIONAL_LEAD_PERMISSION_GROUPS, USER_ADDITIONAL_PERMISSION_GROUPS
 
 logger = logging.getLogger(__name__)
 
@@ -249,7 +250,7 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
                 group.data["name"] for group in groups if group.data["id"] == group_id
             ][0]
             is_permission_bundle_group = (
-                group_name in settings.USER_ADDITIONAL_PERMISSION_GROUPS
+                group_name in USER_ADDITIONAL_PERMISSION_GROUPS
             )
 
             if is_permission_bundle_group:
@@ -322,9 +323,9 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
         regional_lead_assignments = []
 
         for group in self.user.groups:
-            if group["name"] in settings.USER_ADDITIONAL_PERMISSION_GROUPS:
+            if group["name"] in USER_ADDITIONAL_PERMISSION_GROUPS:
                 additional_groups.append(str(group["id"]))
-            elif group["name"] in settings.REGIONAL_LEAD_PERMISSION_GROUPS:
+            elif group["name"] in REGIONAL_LEAD_PERMISSION_GROUPS:
                 regional_lead_assignments.append(str(group["id"]))
             else:
                 role_group = str(group["id"])
