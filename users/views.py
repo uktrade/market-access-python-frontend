@@ -12,6 +12,10 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, RedirectView, TemplateView
 
+from users.constants import (
+    REGIONAL_LEAD_PERMISSION_GROUPS,
+    USER_ADDITIONAL_PERMISSION_GROUPS,
+)
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
@@ -22,7 +26,6 @@ from utils.sso import SSOClient
 from .forms import UserDeleteForm, UserGroupForm
 from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
 from .permissions import APIPermissionMixin
-from users.constants import REGIONAL_LEAD_PERMISSION_GROUPS, USER_ADDITIONAL_PERMISSION_GROUPS
 
 logger = logging.getLogger(__name__)
 
@@ -249,9 +252,7 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
             group_name = [
                 group.data["name"] for group in groups if group.data["id"] == group_id
             ][0]
-            is_permission_bundle_group = (
-                group_name in USER_ADDITIONAL_PERMISSION_GROUPS
-            )
+            is_permission_bundle_group = group_name in USER_ADDITIONAL_PERMISSION_GROUPS
 
             if is_permission_bundle_group:
                 groups = [{"id": group["id"]} for group in user_groups] + [

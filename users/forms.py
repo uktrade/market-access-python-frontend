@@ -1,12 +1,13 @@
 import logging
 
 from django import forms
-from django.conf import settings
 
 from barriers.forms.mixins import APIFormMixin
+from users.constants import (
+    REGIONAL_LEAD_PERMISSION_GROUPS,
+    USER_ADDITIONAL_PERMISSION_GROUPS,
+)
 from utils.api.client import MarketAccessAPIClient
-from users.constants import REGIONAL_LEAD_PERMISSION_GROUPS, USER_ADDITIONAL_PERMISSION_GROUPS
-
 
 logger = logging.getLogger(__name__)
 
