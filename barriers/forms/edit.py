@@ -124,7 +124,7 @@ class ProgressUpdateForm(
         (
             "RISK_OF_DELAY",
             mark_safe(
-                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not will be"
+                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not be"
                 " resolved in the target financial year</span>"
             ),
         ),
