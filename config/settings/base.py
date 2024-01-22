@@ -399,3 +399,6 @@ CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_REPORT_URI = "/csp_report"
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 CSP_REPORT_ONLY = True
+
+# Override to allow admin permission group to be managed. (For local and dev envs)
+DISPLAY_ROLE_ADMIN_GROUP = False

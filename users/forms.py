@@ -1,6 +1,7 @@
 import logging
 
 from django import forms
+from django.conf import settings
 
 from barriers.forms.mixins import APIFormMixin
 from users.constants import (
@@ -47,7 +48,12 @@ class UserGroupForm(APIFormMixin, forms.Form):
         # Regional Leader permission groups are seperated so only admins can assign users
 
         for group in groups:
-            if group.name in USER_ADDITIONAL_PERMISSION_GROUPS:
+            if group.name == "Role administrator":
+                if settings.DISPLAY_ROLE_ADMIN_GROUP:
+                    self.fields["additional_permissions"].choices.append(
+                        (str(group.id), group.name)
+                    )
+            elif group.name in USER_ADDITIONAL_PERMISSION_GROUPS:
                 self.fields["additional_permissions"].choices.append(
                     (str(group.id), group.name)
                 )

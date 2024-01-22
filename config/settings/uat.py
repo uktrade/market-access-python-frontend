@@ -25,3 +25,5 @@ LOGGING = {
     },
     "loggers": {"": {"handlers": ["ecs"], "level": DJANGO_LOG_LEVEL}},
 }
+
+DISPLAY_ROLE_ADMIN_GROUP = True

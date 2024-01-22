@@ -39,3 +39,5 @@ LOGGING = {
         "django.server": DEFAULT_LOGGING["loggers"]["django.server"],
     },
 }
+
+DISPLAY_ROLE_ADMIN_GROUP = True
