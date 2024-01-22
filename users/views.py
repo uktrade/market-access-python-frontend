@@ -327,7 +327,7 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
             if group["name"] == "Role administrator":
                 if settings.DISPLAY_ROLE_ADMIN_GROUP:
                     additional_groups.append(str(group["id"]))
-            if group["name"] in USER_ADDITIONAL_PERMISSION_GROUPS:
+            elif group["name"] in USER_ADDITIONAL_PERMISSION_GROUPS:
                 additional_groups.append(str(group["id"]))
             elif group["name"] in REGIONAL_LEAD_PERMISSION_GROUPS:
                 regional_lead_assignments.append(str(group["id"]))
