@@ -26,6 +26,4 @@ LOGGING = {
     "loggers": {"": {"handlers": ["ecs"], "level": DJANGO_LOG_LEVEL}},
 }
 
-# UAT environments have an extra user permission group to allow
-# editing of user profiles without admin access
-USER_ADDITIONAL_PERMISSION_GROUPS.append("Role administrator")
+DISPLAY_ROLE_ADMIN_GROUP = True

@@ -380,27 +380,6 @@ WEBPACK_LOADER = {
     },
 }
 
-# The following are extra-permission groups (not roles)
-# Adding a user to these groups should not remove the role from the user
-USER_ADDITIONAL_PERMISSION_GROUPS = [
-    "Download approved user",
-    "Action plan user",
-    "PB100 barrier approver",
-]
-
-REGIONAL_LEAD_PERMISSION_GROUPS = [
-    "Regional Lead - LATAC",
-    "Regional Lead - APAC",
-    "Regional Lead - China/Hong Kong",
-    "Regional Lead - South Asia",
-    "Regional Lead - EECAN",
-    "Regional Lead - MEAP",
-    "Regional Lead - Africa",
-    "Regional Lead - North America",
-    "Regional Lead - Europe",
-    "Regional Lead - Wider Europe",
-]
-
 # External URLs used within the app
 EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
 
@@ -420,3 +399,6 @@ CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_REPORT_URI = "/csp_report"
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 CSP_REPORT_ONLY = True
+
+# Override to allow admin permission group to be managed. (For local and dev envs)
+DISPLAY_ROLE_ADMIN_GROUP = False
