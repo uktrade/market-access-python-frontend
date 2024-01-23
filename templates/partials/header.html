@@ -11,6 +11,14 @@
             {% endif %}
             <strong class="datahub-header__logo__tag">beta</strong>
         </div>
+
+        {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
+            <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
+                <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
+                <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss">X</a>
+            </div>
+        {% endif %}
+
         <ul id="logo-navigation" class="datahub-header__links" aria-label="Header links">
             <li class="datahub-header__links__item">
                 <a class="datahub-header__links__item__text" href="https://data.trade.gov.uk/"> Switch to Data Workspace </a>

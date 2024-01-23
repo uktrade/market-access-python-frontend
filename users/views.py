@@ -12,6 +12,10 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView, RedirectView, TemplateView
 
+from users.constants import (
+    REGIONAL_LEAD_PERMISSION_GROUPS,
+    USER_ADDITIONAL_PERMISSION_GROUPS,
+)
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
@@ -248,9 +252,7 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
             group_name = [
                 group.data["name"] for group in groups if group.data["id"] == group_id
             ][0]
-            is_permission_bundle_group = (
-                group_name in settings.USER_ADDITIONAL_PERMISSION_GROUPS
-            )
+            is_permission_bundle_group = group_name in USER_ADDITIONAL_PERMISSION_GROUPS
 
             if is_permission_bundle_group:
                 groups = [{"id": group["id"]} for group in user_groups] + [
@@ -322,9 +324,12 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
         regional_lead_assignments = []
 
         for group in self.user.groups:
-            if group["name"] in settings.USER_ADDITIONAL_PERMISSION_GROUPS:
+            if group["name"] == "Role administrator":
+                if settings.DISPLAY_ROLE_ADMIN_GROUP:
+                    additional_groups.append(str(group["id"]))
+            elif group["name"] in USER_ADDITIONAL_PERMISSION_GROUPS:
                 additional_groups.append(str(group["id"]))
-            elif group["name"] in settings.REGIONAL_LEAD_PERMISSION_GROUPS:
+            elif group["name"] in REGIONAL_LEAD_PERMISSION_GROUPS:
                 regional_lead_assignments.append(str(group["id"]))
             else:
                 role_group = str(group["id"])

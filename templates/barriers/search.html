@@ -242,7 +242,7 @@
                         <span class="filter-results-download__text">You need permission to download a spreadsheet of this search.</span>
                         <a class="govuk-button filter-results-download__button"
                            href="{% url 'barriers:request_download_approval' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
-                            Request download
+                            Request download permissions
                         </a>
                         {% if download_request_sent == "1" %}
                             <div class="govuk-panel govuk-panel--confirmation">
