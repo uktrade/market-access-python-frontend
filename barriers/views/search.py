@@ -176,13 +176,12 @@ class DownloadBarriers(SearchFormMixin, View):
 
         search_page_url = reverse("barriers:search")
         search_page_params = {
-            **request.GET.dict(),
             "search_csv_downloaded": int(resp.get("success", False)),
             "search_csv_download_error": resp.get("reason", ""),
         }
 
         return HttpResponseRedirect(
-            f"{search_page_url}?{urlencode(search_page_params)}"
+            f"{search_page_url}?{urlencode(search_page_params)}&{form.get_raw_filters_querystring()}"
         )
 
 

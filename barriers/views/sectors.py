@@ -79,6 +79,12 @@ class BarrierAddSectors(MetadataMixin, BarrierMixin, FormView):
             (sector["id"], sector["name"])
             for sector in self.metadata.get_sector_list(level=0)
             if sector["id"] not in self.request.session.get("sectors", [])
+            # don't show sector if it's already selected as the main sector
+            and (
+                sector["id"] != self.barrier.main_sector["id"]
+                if self.barrier.main_sector
+                else True
+            )
         ]
         return kwargs
 

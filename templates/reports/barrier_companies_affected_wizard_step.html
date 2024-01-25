@@ -2,7 +2,7 @@
 {% load render_bundle from webpack_loader %}
 
 {% block head %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             ReactApp.renderCompaniesForm(
                 searchLabel="{{ form.companies_affected.label }}",

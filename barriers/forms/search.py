@@ -59,27 +59,24 @@ class BarrierSearchForm(forms.Form):
         label="Overseas region",
         required=False,
     )
-    top_priority_status = forms.MultipleChoiceField(
-        label="Top 100 priority barrier",
-        choices=(
-            ("APPROVED", "Top 100 priority"),
-            ("APPROVAL_PENDING", "Approval pending"),
-            ("REMOVAL_PENDING", "Removal pending"),
-            ("RESOLVED", "Resolved top 100 priority"),
-        ),
-        # Provide tuple and match to choices to display help text relevent to choice
-        help_text=(("APPROVED", "Includes removal pending"),),
-        required=False,
-    )
-    priority_level = forms.MultipleChoiceField(
+    # Combined priority field combining Top 100 and Priority level
+    combined_priority = forms.MultipleChoiceField(
         label="Barrier priority",
         choices=(
+            ("APPROVED", "Top 100 priority"),
+            ("APPROVAL_PENDING", "Top 100 approval pending"),
+            ("REMOVAL_PENDING", "Top 100 removal pending"),
+            ("RESOLVED", "Top 100 priority resolved"),
             ("OVERSEAS", "Overseas Delivery"),
             ("COUNTRY", "Country priority"),
             ("WATCHLIST", "Watch list"),
             ("NONE", "No priority assigned"),
         ),
+        # Provide tuple and match to choices to display help text relevant to choice
+        help_text=(("APPROVED", "Includes removal pending"),),
+        required=False,
     )
+
     status = forms.MultipleChoiceField(
         label="Barrier status",
         required=False,
@@ -426,6 +423,10 @@ class BarrierSearchForm(forms.Form):
                 if f"status_date_{status_value}" in params:
                     del params[f"status_date_{status_value}"]
 
+        # tss-1069 - we need to encode the admin_areas as string JSON in the URL
+        if "admin_areas" in params:
+            params = format_dict_for_url_querystring(params, ["admin_areas"])
+
         return urlencode(params, doseq=True)
 
     def get_api_search_parameters(self):
@@ -459,6 +460,9 @@ class BarrierSearchForm(forms.Form):
             self.cleaned_data.get("top_priority_status", [])
         )
         params["priority_level"] = ",".join(self.cleaned_data.get("priority_level", []))
+        params["combined_priority"] = ",".join(
+            self.cleaned_data.get("combined_priority", [])
+        )
         params["has_action_plan"] = self.cleaned_data.get("has_action_plan")
         params["team"] = self.cleaned_data.get("team")
         params["user"] = self.cleaned_data.get("user")

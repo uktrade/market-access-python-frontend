@@ -5,7 +5,7 @@
        class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '#{{ form.summary.name }}-form-group.govuk-character-count' );
         }

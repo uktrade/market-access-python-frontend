@@ -2,6 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from barriers.views.feedback import FeedbackFormView, FeedbackGratitudeView
+from core.views import CSPReportView
 from utils.company_search import SearchCompany
 
 app_name = "core"
@@ -26,5 +27,10 @@ urlpatterns = [
         "companies/search/<str:search_term>/",
         SearchCompany.as_view(),
         name="search_company",
+    ),
+    path(
+        "csp_report",
+        CSPReportView.as_view(),
+        name="csp_report",
     ),
 ]

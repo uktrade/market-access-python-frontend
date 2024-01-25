@@ -52,7 +52,7 @@ STATUSES_HELP_TEXT = Choices(
     (STATUSES.OPEN_IN_PROGRESS, "Barrier is being worked on, or work will begin soon"),
     (
         STATUSES.RESOLVED_IN_PART,
-        "Barrier has been partially rresolved and is still being worked on",
+        "Barrier has been partially resolved and is still being worked on",
     ),
     (STATUSES.RESOLVED_IN_FULL, "Barrier has been fully resolved"),
 )
@@ -246,7 +246,7 @@ TOP_PRIORITY_BARRIER_STATUS = Choices(
     ("APPROVAL_PENDING", "Top 100 Priority Approval Pending"),
     ("REMOVAL_PENDING", "Top 100 Priority Removal Pending"),
     ("APPROVED", "Top 100 Priority"),
-    ("RESOLVED", "Resolved Top 100 Priority"),
+    ("RESOLVED", "Top 100 Priority Resolved"),
 )
 
 TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES = Choices(
@@ -284,7 +284,11 @@ TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"
 
 # Deprecated tags are tags we do not want future barriers to be able to use,
 # but need to keep for older and archived barriers.
-DEPRECATED_TAGS = ["COVID-19"]
+DEPRECATED_TAGS = (
+    "COVID-19",
+    "Brexit",
+    "NI Protocol",
+)
 
 EXPORT_TYPES = Choices(
     ("goods", "Goods"),
