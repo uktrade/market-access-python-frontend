@@ -8,7 +8,7 @@
 
 {% block body_script %}
     {{ block.super }}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.report.index();
     </script>
 {% endblock %}

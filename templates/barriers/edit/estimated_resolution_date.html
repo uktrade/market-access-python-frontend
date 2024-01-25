@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         new ma.components.setupHiddenERDTextarea({
             is_admin: '{{ current_user|has_permission:"can_approve_estimated_completion_date" }}',
             proposedDate: '{{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}',

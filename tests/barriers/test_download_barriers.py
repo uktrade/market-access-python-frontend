@@ -6,10 +6,10 @@ from mock import patch
 from core.tests import MarketAccessTestCase
 
 
-class DownloadBarriersTestCase(MarketAccessTestCase):
+class TestDownloadBarriers(MarketAccessTestCase):
     @patch("utils.api.client.BarriersResource.get_email_csv")
     def test_download_barriers(self, mock_get_email_csv):
-        mock_get_email_csv.return_value = {"successfully": True, "reason": ""}
+        mock_get_email_csv.return_value = {"success": True, "reason": ""}
         response = self.client.get(
             reverse("barriers:download"),
             data={
@@ -52,3 +52,23 @@ class DownloadBarriersTestCase(MarketAccessTestCase):
             archived="0",
             ordering="-reported",
         )
+
+    @patch("utils.api.client.BarriersResource.get_email_csv")
+    def test_download_response_contains_correct_url_encoding(self, mock_get_email_csv):
+        # tss-1359 - filters missing after download redirect
+        mock_get_email_csv.return_value = {"success": True, "reason": ""}
+        response = self.client.get(
+            reverse("barriers:download"),
+            data={
+                "search": "Test search",
+                "country": [
+                    "9f5f66a0-5d95-e211-a939-e4115bead28a",
+                    "83756b9a-5d95-e211-a939-e4115bead28a",
+                ],
+                "ordering": "-reported",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert "search_csv_downloaded=1" in response.url
+        assert "&country=9f5f66a0-5d95-e211-a939-e4115bead28a" in response.url
+        assert "&country=83756b9a-5d95-e211-a939-e4115bead28a" in response.url

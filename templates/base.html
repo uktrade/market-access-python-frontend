@@ -6,7 +6,7 @@
 <html lang="{{ htmlLang | default:'en' }}" class="govuk-template {{ htmlClasses }}">
   <head>
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script nonce="{{request.csp_nonce}}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
                                                 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl+'&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x';
@@ -35,7 +35,7 @@
     {# The default og:image is added below head so that scrapers see any custom metatags first, and this is just a fallback #}
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
     <meta property="og:image" content="{% webpack_static '../images/govuk-opengraph-image.png' %}">
-    <script>
+    <script nonce="{{request.csp_nonce}}">
       window.dataLayer = window.dataLayer || [];
     </script>
     {% block gtag_events %}
@@ -46,7 +46,7 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.GTM_ID }}&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x"
                       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    <script nonce="{{request.csp_nonce}}">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
 
     {% block skipLink %}
@@ -84,16 +84,9 @@
     {% endblock %}
 
     {% block body_end %}
-      <script src="{% webpack_static 'main.js' %}"></script>
-      <script>ma.init();</script>
+      <script nonce="{{request.csp_nonce}}" src="{% webpack_static 'main.js' %}"></script>
+      <script nonce="{{request.csp_nonce}}">ma.init();</script>
       {% block body_script %}{% endblock %}
-      {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
-        <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
-          <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
-          <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss">X</a>
-        </div>
-      {% endif %}
-
     {% endblock %}
   </body>
 </html>

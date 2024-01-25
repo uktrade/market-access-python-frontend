@@ -11,7 +11,8 @@ class BaseDocumentsHistoryItem(BaseHistoryItem):
 
     @property
     def old_document_ids(self):
-        return set([document["id"] for document in self.old_value])
+        if self.old_value:
+            return set([document["id"] for document in self.old_value])
 
     @property
     def deleted_documents(self):

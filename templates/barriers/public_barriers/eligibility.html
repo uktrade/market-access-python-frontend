@@ -1,7 +1,7 @@
 {% extends "barriers/edit/base.html" %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         new ma.components.ConditionalRadioContent({
             inputContainer: '.{{ form.public_eligibility.name }}',
             inputName: '{{ form.public_eligibility.name }}',

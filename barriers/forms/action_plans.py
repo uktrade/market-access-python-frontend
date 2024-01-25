@@ -437,8 +437,7 @@ class ActionPlanTaskDateChangeReasonForm(
 
 
 class ActionPlanStakeholderFormMixin:
-    def __init__(self, barrier_id, *args, **kwargs):
-        self.barrier_id = barrier_id
+    def __init__(self, *args, **kwargs):
         self.stakeholder_id = kwargs.pop("stakeholder_id", None)
         self.action_plan = kwargs.pop("action_plan")
         super().__init__(*args, **kwargs)
@@ -472,11 +471,6 @@ class ActionPlanStakeholderTypeForm(
         label="Stakeholder type",
         required=True,
     )
-
-    def __init__(self, barrier_id, action_plan, *args, **kwargs):
-        self.barrier_id = barrier_id
-        self.action_plan = action_plan
-        return super().__init__(*args, **kwargs)
 
     def get_request_data(self):
         request_data = super().get_request_data()
@@ -548,10 +542,6 @@ class ActionPlanIndividualStakeholderDetailsForm(
         request_data["is_organisation"] = False
         return request_data
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.barrier_id = kwargs.pop("barrier_id", None)
-
 
 class ActionPlanRisksAndMitigationForm(
     ClearableMixin, SubformMixin, APIFormMixin, forms.Form
@@ -583,11 +573,6 @@ class ActionPlanRisksAndMitigationForm(
         required=False,
         help_text="Are there actions you can take to avoid a negative outcome?",
     )
-
-    def __init__(self, barrier_id, action_plan, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.barrier_id = barrier_id
-        # self.action_plan_id = action_plan_id
 
     def clean(self):
         cleaned_data = super().clean()
@@ -633,11 +618,6 @@ class ActionPlanRisksAndMitigationIntroForm(
         choices=ACTION_PLAN_HAS_RISKS_CHOICES,
         widget=forms.RadioSelect(attrs={"class": "govuk-radios__input"}),
     )
-
-    def __init__(self, barrier_id, action_plan, *args, **kwargs):
-        self.barrier_id = barrier_id
-        # self.action_plan_id = action_plan_id
-        super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)

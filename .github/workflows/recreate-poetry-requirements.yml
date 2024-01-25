@@ -1,0 +1,44 @@
+on:
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - 'requirements.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate_requirements_txt:
+    name: Regenerating the requirements.txt file
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+        - name: Set up Python 3.8
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.8.x'
+
+        - name: Install Poetry
+          uses: snok/install-poetry@v1
+          with:
+            version: 1.6.1
+
+        - name: Checkout the repository - but just the relevant files
+          uses: actions/checkout@v4
+          with:
+            sparse-checkout: |
+              requirements.txt
+              pyproject.toml
+              poetry.lock
+
+        - name: Generate new lock file
+          run: poetry lock
+
+        - name: Generate new requirements.txt file
+          run: poetry export --without-hashes -f requirements.txt -o requirements.txt
+
+        - name: Committing the changes back to the branch
+          uses: stefanzweifel/git-auto-commit-action@v5
+          with:
+            commit_message: Regenerating requirements.txt file

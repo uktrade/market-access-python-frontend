@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% load render_bundle from webpack_loader %}
-
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
     {{ trading_blocs|json_script:"trading-blocs-data" }}
     {{ admin_areas|json_script:"admin-areas-data" }}
     {{ countries_with_admin_areas|json_script:"countries-with-admin-areas-data" }}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             let countryElement = document.getElementById("country")
             let tradingBlocElement = document.getElementById("country_trading_bloc")
@@ -39,29 +37,27 @@
         })
     </script>
 {% endblock %}
-
 {% block page_title %}{{ block.super }} - Search{% endblock %}
-
 {% block page_content %}
-
     {% include 'partials/heading.html' with caption='Market access barriers' text='Search' %}
     <form action="" method="GET" class="filter-items" id="search-filters-form">
-
         <section class="govuk-grid-row">
             <div class="govuk-grid-column-one-quarter" id="search-form-fields">
                 <h2 class="filter-list-title">Filter barriers by:</h2>
-
                 {% if form.search_id.value %}{{ form.search_id }}{% endif %}
-                {% if form.member.value %}<input type="hidden" name="{{ form.member.name }}" value="{{ form.member.value }}" />{% endif %}
-
+                {% if form.member.value %}
+                    <input type="hidden"
+                           name="{{ form.member.name }}"
+                           value="{{ form.member.value }}" />
+                {% endif %}
                 <div class="govuk-form-group filter-items-group">
-                    <label class="govuk-label filter-items__label" for="search">
-                        {{ form.search.label }}
-                    </label>
-
-                    <input id="{{ form.search.name }}" class="govuk-input" name="search" type="text" value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
+                    <label class="govuk-label filter-items__label" for="search">{{ form.search.label }}</label>
+                    <input id="{{ form.search.name }}"
+                           class="govuk-input"
+                           name="search"
+                           type="text"
+                           value="{% if form.search.value %}{{ form.search.value }}{% endif %}">
                 </div>
-
                 {% include "partials/forms/checkbox_filter.html" with field=form.country %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.trade_direction %}
@@ -69,24 +65,21 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.category %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.priority_level %}
+                {% comment %} {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.priority_level %} {% endcomment %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.combined_priority %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.status extra_classes="checkbox-filter-no-overflow" %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.delivery_confidence %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.export_types %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.wto %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.tags %}
-
                 <!-- Include JS component for resolved date filtering -->
                 {% render_bundle 'date_filter_component' %}
-
                 <!-- include date filters -->
                 {% include 'partials/forms/date_input_filter.html' with field=form.start_date %}
-
                 <div id="show" class="govuk-form-group filter-group">
                     <fieldset class="govuk-fieldset filter-group__inner">
                         <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Show</legend>
-
                         <div class="checkbox-filter govuk-!-width-full">
                             {% include 'partials/forms/checkbox.html' with field=form.user %}
                             {% include 'partials/forms/checkbox.html' with field=form.team %}
@@ -94,39 +87,34 @@
                         </div>
                     </fieldset>
                 </div>
-
                 {% if current_user|has_permission:"view_action_plans" %}
                     <div id="show" class="govuk-form-group filter-group">
                         <fieldset class="govuk-fieldset filter-group__inner">
                             <legend class="govuk-fieldset__legend filter-items__label filter-group__label">Action plans</legend>
-
                             <div class="checkbox-filter govuk-!-width-full">
                                 {% include 'partials/forms/checkbox.html' with field=form.has_action_plan %}
                             </div>
                         </fieldset>
                     </div>
                 {% endif %}
-
                 {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment_eligibility %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.economic_impact_assessment %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.commodity_code %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.commercial_value_estimate %}
-
                 {% if filters %}
                     <a class="filter-items__clear" href="{% url 'barriers:search' %}">Remove all filters</a>
                 {% endif %}
-
-                <input type="submit" value="Apply filters" id="apply-filters-button" class="govuk-button govuk-button--full-width js-filter-submit">
+                <input type="submit"
+                       value="Apply filters"
+                       id="apply-filters-button"
+                       class="govuk-button govuk-button--full-width js-filter-submit">
             </div>
-            <div class="govuk-grid-column-three-quarters" id="search-results-container">
-
+            <div class="govuk-grid-column-three-quarters"
+                 id="search-results-container">
                 <div class="filter-results-header">
-                    {% if search_title %}
-                        <h2 class="search-title">{{ search_title }}</h2>
-                    {% endif %}
-
+                    {% if search_title %}<h2 class="search-title">{{ search_title }}</h2>{% endif %}
                     {% if filters %}
                         <div class="filter-results-header__row">
                             {% if have_filters_changed %}
@@ -134,40 +122,41 @@
                                     <p class="filter-results-header__info">You have changed this search but not saved it</p>
                                 </div>
                             {% endif %}
-
                             {% if saved_search_updated or saved_search_created %}
                                 <div class="filter-results-header__row-item">
                                     <p class="filter-results-header__info">Your search has been successfully saved</p>
                                 </div>
                             {% endif %}
-
                             <div class="filter-results-header__row-item filter-results-header__row-item--right">
                                 {% if form.search_id.value is not None %}
                                     {% if have_filters_changed %}
-                                        <a href="{% url 'barriers:search' %}?{{ pageless_querystring }}&update_search=true" class="filter-results-header__update-button">Update saved search</a>
-                                        <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save as a new search</a>
+                                        <a href="{% url 'barriers:search' %}?{{ pageless_querystring }}&update_search=true"
+                                           class="filter-results-header__update-button">Update saved search</a>
+                                        <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
+                                           class="govuk-button filter-results-header__save-button">Save as a new search</a>
                                     {% endif %}
                                 {% elif filters and not search_title %}
-                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}" class="govuk-button filter-results-header__save-button">Save search</a>
+                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
+                                       class="govuk-button filter-results-header__save-button">Save search</a>
                                 {% endif %}
                             </div>
                         </div>
                     {% endif %}
-
                     <div class="filter-results-header__row">
-                        <h2 class="filter-results-title filter-results-header__row-item">{{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span></h2>
-
+                        <h2 class="filter-results-title filter-results-header__row-item">
+                            {{ barriers.total_count }}<span class="filter-results-title__caption">barrier{{ barriers.total_count|pluralize }}</span>
+                        </h2>
                         <div class="filter-results-header__row-item">
                             {% if saved_search %}
-                                <a class="filter-results-notifications-link" href="{% url 'barriers:saved_search_notifications' saved_search.id %}?next=search">Notifications: {{ saved_search.notifications_text }}</a>
+                                <a class="filter-results-notifications-link"
+                                   href="{% url 'barriers:saved_search_notifications' saved_search.id %}?next=search">Notifications: {{ saved_search.notifications_text }}</a>
                             {% endif %}
-
                             {% if filters %}
-                                <a class="filter-results-clear-link" href="{% url 'barriers:search' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
+                                <a class="filter-results-clear-link"
+                                   href="{% url 'barriers:search' %}{% if request.GET.edit %}?edit={{ request.GET.edit }}{% endif %}">Remove all filters</a>
                             {% endif %}
                         </div>
                     </div>
-
                     {% if filters %}
                         <h3 class="visually-hidden">Active filters:</h3>
                         <ul class="active-filters">
@@ -180,8 +169,7 @@
                             {% include 'barriers/partials/active_filter.html' with filter=filters.category %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.search %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.top_priority_status %}
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.priority_level %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.combined_priority %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.export_types %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.delivery_confidence %}
@@ -200,32 +188,25 @@
                         </ul>
                     {% endif %}
                 </div>
-
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-one-third">
                         {% if pagination.total_pages > 1 %}
-                            <p class="filter-results-pagination-summary">
-                                Page {{ pagination.current_page }} of {{ pagination.total_pages }}
-                            </p>
+                            <p class="filter-results-pagination-summary">Page {{ pagination.current_page }} of {{ pagination.total_pages }}</p>
                         {% else %}
-                            <p class="filter-results-pagination-summary">
-                                Page {{ pagination.current_page }} of {{ pagination.total_pages }}
-                            </p>
+                            <p class="filter-results-pagination-summary">Page {{ pagination.current_page }} of {{ pagination.total_pages }}</p>
                         {% endif %}
                     </div>
                     <div class="govuk-grid-column-two-thirds">
                         {% if search_ordering_choices %}
                             <div class="govuk-form-group dmas-sort-widget">
-                                <label class="govuk-label govuk-!-display-inline-block" for="{{ form.ordering.id_for_label }}">
-                                    {{ form.ordering.label}}
-                                </label>
+                                <label class="govuk-label govuk-!-display-inline-block"
+                                       for="{{ form.ordering.id_for_label }}">{{ form.ordering.label }}</label>
                                 {{ form.ordering }}
                                 <button type="submit" class="govuk-button govuk-!-display-inline-block">Apply</button>
                             </div>
                         {% endif %}
                     </div>
                 </div>
-
                 {% if current_user.has_approved_digital_trade_email or current_user|has_permission:"download_barriers" %}
                     <p class="filter-results-download">
                         {% if barriers %}
@@ -236,48 +217,36 @@
                                     Download these {{ barriers.total_count }} barriers to a spreadsheet
                                 {% endif %}
                             </span>
-                            <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
+                            <a class="govuk-button filter-results-download__button"
+                               href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
                                 Download
                             </a>
-
                             {% if search_csv_downloaded == "1" %}
-                                <div id="download-csv-confirmation" class="govuk-panel govuk-panel--confirmation">
-                                    <h1 class="govuk-panel__title">
-                                        Generating CSV file
-                                    </h1>
-                                    <div class="govuk-panel__body">
-                                        An email with a link to your file will be sent to you shortly.
-                                    </div>
+                                <div id="download-csv-confirmation"
+                                     class="govuk-panel govuk-panel--confirmation">
+                                    <h1 class="govuk-panel__title">Generating CSV file</h1>
+                                    <div class="govuk-panel__body">An email with a link to your file will be sent to you shortly.</div>
                                 </div>
                             {% elif search_csv_downloaded == "0" %}
                                 <div class="govuk-panel govuk-panel--confirmation">
-                                    <h1 class="govuk-panel__title">
-                                        This task has crashed
-                                    </h1>
-                                    <div class="govuk-panel__body">
-                                        No CSV will be generated got ERROR: {{ search_csv_download_error }}
-                                    </div>
+                                    <h1 class="govuk-panel__title">This task has crashed</h1>
+                                    <div class="govuk-panel__body">No CSV will be generated got ERROR: {{ search_csv_download_error }}</div>
                                 </div>
                             {% endif %}
                         {% else %}
                             <span class="filter-results-download__text">There are no barriers to download</span>
                         {% endif %}
-
                     </p>
                 {% else %}
                     <p class="filter-results-download">
-                        <span class="filter-results-download__text">
-                            You need permission to download a spreadsheet of this search.
-                        </span>
-                        <a class="govuk-button filter-results-download__button" href="{% url 'barriers:request_download_approval' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
-                            Request download
+                        <span class="filter-results-download__text">You need permission to download a spreadsheet of this search.</span>
+                        <a class="govuk-button filter-results-download__button"
+                           href="{% url 'barriers:request_download_approval' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
+                            Request download permissions
                         </a>
-
                         {% if download_request_sent == "1" %}
                             <div class="govuk-panel govuk-panel--confirmation">
-                                <h1 class="govuk-panel__title">
-                                    Your request has been submitted
-                                </h1>
+                                <h1 class="govuk-panel__title">Your request has been submitted</h1>
                                 <div class="govuk-panel__body">
                                     You will be notified by email when the request has been approved. Once your request
                                     has been approved, you will be able to come back to your search and download the
@@ -286,9 +255,7 @@
                             </div>
                         {% elif download_request_sent == "0" %}
                             <div class="govuk-panel govuk-panel--confirmation">
-                                <h1 class="govuk-panel__title">
-                                    An error occurred.
-                                </h1>
+                                <h1 class="govuk-panel__title">An error occurred.</h1>
                                 <div class="govuk-panel__body">
                                     The request for download permissions encountered an error and has failed to send.
                                     Please contact stefan.dennis@trade.gov.uk about this error and we will try to resolve the issue
@@ -298,7 +265,6 @@
                         {% endif %}
                     </p>
                 {% endif %}
-
                 <ol id="filter-results-list" class="filter-results-list">
                     {% for barrier in barriers %}
                         {% ifchanged %}
@@ -315,9 +281,7 @@
                                     {% endif %}
                                     <h3 class='filter-results-list__item__heading'>
                                         {% if saved_search %}
-                                            {% if barrier.id in saved_search.new_barrier_ids %}
-                                                <span class="ma-badge ma-badge--new">New</span>
-                                            {% endif %}
+                                            {% if barrier.id in saved_search.new_barrier_ids %}<span class="ma-badge ma-badge--new">New</span>{% endif %}
                                             {% if barrier.id in saved_search.updated_barrier_ids %}
                                                 <span class="ma-badge ma-badge--updated">Updated</span>
                                             {% endif %}
@@ -325,49 +289,58 @@
                                         <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a>
                                     </h3>
                                     <dl class="filter-results-list__item__definitions">
-
                                         <dt class="filter-results-list__item__definitions__key visually-hidden">ID:</dt>
-                                        <dd class="filter-results-list__item__definitions__value">{{ barrier.code }}</dd>
-
+                                        <dd class="filter-results-list__item__definitions__value">
+                                            {{ barrier.code }}
+                                        </dd>
                                         <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
-                                        <dd class="filter-results-list__item__definitions__value">{{ barrier.reported_on|date:"j F Y" }}</dd>
-
+                                        <dd class="filter-results-list__item__definitions__value">
+                                            {{ barrier.reported_on|date:"j F Y" }}
+                                        </dd>
                                         <dt class="filter-results-list__item__definitions__key">Updated:</dt>
-                                        <dd class="filter-results-list__item__definitions__value">{{ barrier.modified_on|date:"j F Y" }}</dd>
-
+                                        <dd class="filter-results-list__item__definitions__value">
+                                            {{ barrier.modified_on|date:"j F Y" }}
+                                        </dd>
                                         <dt class="filter-results-list__item__definitions__key">Status:</dt>
-                                        <dd class="filter-results-list__item__definitions__value">{{ barrier.status.name }}</dd>
-                                        {% if barrier.status.id == '4' %}{# 4: RESOLVED_IN_FULL #}
+                                        <dd class="filter-results-list__item__definitions__value">
+                                            {{ barrier.status.name }}
+                                        </dd>
+                                        {% if barrier.status.id == '4' %}
+                                            {# 4: RESOLVED_IN_FULL #}
                                             <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
-                                            <dd class="filter-results-list__item__definitions__value">{{ barrier.status_date|date:"F Y" }}</dd>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.status_date|date:"F Y" }}
+                                            </dd>
                                         {% else %}
                                             {% if barrier.estimated_resolution_date %}
                                                 <dt class="filter-results-list__item__definitions__key">Estimated resolution date:</dt>
-                                                <dd class="filter-results-list__item__definitions__value">{{ barrier.estimated_resolution_date|date:"F Y" }}</dd>
+                                                <dd class="filter-results-list__item__definitions__value">
+                                                    {{ barrier.estimated_resolution_date|date:"F Y" }}
+                                                </dd>
                                             {% endif %}
                                         {% endif %}
-
                                         {% if barrier.sector_names or barrier.main_sector_name %}
                                             <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
                                             <dd class="filter-results-list__item__definitions__value">
                                                 {% if barrier.main_sector %}
-                                                    {{barrier.main_sector_name}} (main sector){% if barrier.sector_names %},
-                                                    {% endif %}
+                                                    {{ barrier.main_sector_name }} (main sector)
+                                                    {% if barrier.sector_names %},{% endif %}
                                                 {% endif %}
                                                 {{ barrier.sector_names|join:', ' }}
                                             </dd>
                                         {% endif %}
-
                                         {% if barrier.current_valuation_assessment %}
                                             <dt class="filter-results-list__item__definitions__key">Value:</dt>
-                                            <dd class="filter-results-list__item__definitions__value">{{ barrier.current_valuation_assessment }}</dd>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.current_valuation_assessment }}
+                                            </dd>
                                         {% endif %}
-
                                         <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
-                                        <dd class="filter-results-list__item__definitions__value">{{ barrier.location }}</dd>
+                                        <dd class="filter-results-list__item__definitions__value">
+                                            {{ barrier.location }}
+                                        </dd>
                                     </dl>
                                 </div>
-
                                 <div class="filter-results-list__item__sub-content">
                                     {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
                                         <ul class="barrier-tag-list barrier-tag-list--search">
@@ -387,7 +360,7 @@
                                                         </div>
                                                     {% elif barrier.top_priority_status == "RESOLVED" %}
                                                         <div class="text-right">
-                                                            <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY</li>
+                                                            <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">TOP 100 PRIORITY RESOLVED</li>
                                                         </div>
                                                     {% elif barrier.priority_level %}
                                                         {% if barrier.priority_level == "OVERSEAS" %}
@@ -399,8 +372,6 @@
                                                         {% endif %}
                                                     {% endif %}
                                                 </div>
-
-
                                                 <div class="">
                                                     {% for tag in barrier.tags %}
                                                         <div class="text-right">
@@ -416,14 +387,9 @@
                         {% endifchanged %}
                     {% endfor %}
                 </ol>
-
                 {% include 'partials/pagination.html' %}
-
             </div>
-
         </section>
     </form>
-
     {% render_bundle 'csv_download_result_component' %}
-
 {% endblock %}

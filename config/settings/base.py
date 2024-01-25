@@ -79,6 +79,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     "webpack_loader",
     "formtools",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
@@ -97,6 +98,7 @@ if ELASTIC_APM_ENABLED:
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -106,6 +108,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "authentication.middleware.SSOMiddleware",
     "utils.middleware.RequestLoggingMiddleware",
+    "csp.middleware.CSPMiddleware",
+    "utils.middleware.DisableClientCachingMiddleware",
+    "utils.middleware.SetPermittedCrossDomainPolicyHeaderMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -179,18 +184,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-SECURE_BROWSER_XSS_FILTER = True
-
-X_FRAME_OPTIONS = "DENY"
-
-SESSION_COOKIE_SECURE = True
-
-CSRF_COOKIE_SECURE = True
-
-CSRF_COOKIE_HTTPONLY = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -387,30 +380,25 @@ WEBPACK_LOADER = {
     },
 }
 
-# The following are extra-permission groups (not roles)
-# Adding a user to these groups should not remove the role from the user
-USER_ADDITIONAL_PERMISSION_GROUPS = [
-    "Download approved user",
-    "Action plan user",
-    "PB100 barrier approver",
-]
-
-REGIONAL_LEAD_PERMISSION_GROUPS = [
-    "Regional Lead - LATAC",
-    "Regional Lead - APAC",
-    "Regional Lead - China/Hong Kong",
-    "Regional Lead - South Asia",
-    "Regional Lead - EECAN",
-    "Regional Lead - MEAP",
-    "Regional Lead - Africa",
-    "Regional Lead - North America",
-    "Regional Lead - Europe",
-    "Regional Lead - Wider Europe",
-]
-
 # External URLs used within the app
 EXTERNAL_URLS_FIND_EXPORTERS = env.str("EXTERNAL_URLS_FIND_EXPORTERS", "")
 
 # Company house config
 COMPANIES_HOUSE_API_KEY = env("COMPANIES_HOUSE_API_KEY")
 COMPANIES_HOUSE_API_ENDPOINT = env("COMPANIES_HOUSE_API_ENDPOINT")
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "https://www.googletagmanager.com/",
+    "https://*.google-analytics.com",
+    "https://www.google-analytics.com",
+)
+CSP_CONNECT_SRC = CSP_SCRIPT_SRC
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_REPORT_URI = "/csp_report"
+CSP_INCLUDE_NONCE_IN = ["script-src"]
+CSP_REPORT_ONLY = True
+
+# Override to allow admin permission group to be managed. (For local and dev envs)
+DISPLAY_ROLE_ADMIN_GROUP = False

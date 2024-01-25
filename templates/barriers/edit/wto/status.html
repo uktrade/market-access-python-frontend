@@ -3,7 +3,7 @@
 {% block page_title %}{{ block.super }} - World Trade Organisation (WTO) notification status{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         new ma.components.ConditionalRadioContent({
             inputContainer: '.wto_has_been_notified',
             inputName: 'wto_has_been_notified',

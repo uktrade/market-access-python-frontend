@@ -15,7 +15,7 @@
 
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         document.addEventListener("DOMContentLoaded", function (event) {
             ReactApp.renderTextAreaWithMentions("note-textarea-container")
         })
@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.DeleteModal ){
             new ma.components.DeleteModal();
         }
@@ -294,6 +294,9 @@
 
                 <form class="govuk-checkboxes" id="tags" action="{% url 'barriers:edit_public_barrier_reviews' barrier.id %}" method="get">
                     <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label visually-hidden">
+                            Review Progress
+                        </legend>
                         {% if public_barrier.title and public_barrier.summary %}
                             <div class="checkbox-option">
                                 <div class="govuk-checkboxes__item">
