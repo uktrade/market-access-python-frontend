@@ -124,7 +124,7 @@ class ProgressUpdateForm(
         (
             "RISK_OF_DELAY",
             mark_safe(
-                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not will be"
+                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not be"
                 " resolved in the target financial year</span>"
             ),
         ),
@@ -146,25 +146,24 @@ class ProgressUpdateForm(
     )
     update = forms.CharField(
         label="Current status",
-        help_text=("Provide more detail"),
         widget=forms.Textarea,
         required=False,
     )
     update_1 = forms.CharField(
-        label="Provide more detail",
+        label="Explain why barrier resolution is on track",
         widget=forms.Textarea,
         error_messages={"missing_update": "missing update"},
         required=False,
     )
 
     update_2 = forms.CharField(
-        label="Provide more detail",
+        label="Explain why there is a risk that barrier resolution may be delayed",
         widget=forms.Textarea,
         required=False,
     )
 
     update_3 = forms.CharField(
-        label="Provide more detail",
+        label="Explain why barrier resolution is delayed",
         widget=forms.Textarea,
         required=False,
     )

@@ -26,6 +26,10 @@
                                             <dd class="filter-results-list__item__definitions__value">
                                                 {{ barrier.summary }}
                                             </dd>
+                                            <dt class="filter-results-list__item__definitions__key">Similarity score:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.similarity|floatformat:2 }}
+                                            </dd>
                                             <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
                                             <dd class="filter-results-list__item__definitions__value">
                                                 {{ barrier.reported_on|date:"j F Y" }}
