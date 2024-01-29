@@ -1,0 +1,54 @@
+{% extends "reports/barrier_wizard_step.html" %}
+{% load render_bundle from webpack_loader %}
+{% load report_urls %}
+{% block page_title %}Report A Barrier - Wizard Framework - Public Summary{% endblock %}
+{% block body_script %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script nonce="{{request.csp_nonce}}">
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.summary.name }}-form-group.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+{% block fields %}
+    <div class="govuk-form-group govuk-!-margin-0">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">Public summary</h1>
+            </legend>
+            {% form_error_banner form %}
+            <div id="{{ form.summary.name }}-form-group"
+                 class="govuk-character-count"
+                 data-module="character-count"
+                 data-maxlength="2000">
+                <div class="{% form_group_classes form.summary.errors %}">
+                    {% form_field_error form "summary" %}
+                    <span id="{{ form.summary.name }}_hint" class="govuk-hint">{{ form.summary.help_text }}</span>
+                    <div class="govuk-body">
+                        <a href='https://data-services-help.trade.gov.uk/market-access/how-guides/how-prepare-market-access-barrier-report-public-view/' target='_blank'>Find out how to write a public summary (opens in a new tab)</a>
+                    </div>
+                    {{ form.summary }}
+                    <div id="update_{{ forloop.counter }}-info"
+                         class="govuk-hint govuk-character-count__message"
+                         aria-live="polite">
+                    </div>
+                </div>
+            </div>
+            <details class="govuk-details govuk-!-margin-bottom-0">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        View internal title and summary
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p class="govuk-body">
+                        <strong>Barrier title:</strong> {{ internal_title }}
+                    </p>
+                    <p class="govuk-body">
+                        <strong>Barrier description:</strong> {{ internal_summary }}
+                    </p>
+                </div>
+            </details>
+        </fieldset>
+    </div>
+{% endblock %}

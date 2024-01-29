@@ -12,6 +12,10 @@ from reports.report_barrier_forms import (
     BarrierDetailsSummaryForm,
     BarrierExportTypeForm,
     BarrierLocationForm,
+    BarrierPublicEligibilityForm,
+    BarrierPublicInformationGateForm,
+    BarrierPublicSummaryForm,
+    BarrierPublicTitleForm,
     BarrierSectorsAffectedForm,
     BarrierStatusForm,
     BarrierTradeDirectionForm,
@@ -50,6 +54,10 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
                     "barrier-sectors-affected": {},
                     "barrier-companies-affected": {},
                     "barrier-export-type": {},
+                    "barrier-public-eligibility": {},
+                    "barrier-public-information-gate": {},
+                    "barrier-public-title": {},
+                    "barrier-public-summary": {},
                 },
                 "meta": {"barrier_id": "b9bc718d-f535-413a-a2c0-8868351b44f2"},
             },
@@ -66,6 +74,10 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
                 "barrier-sectors-affected",
                 "barrier-companies-affected",
                 "barrier-export-type",
+                "barrier-public-eligibility",
+                "barrier-public-information-gate",
+                "barrier-public-title",
+                "barrier-public-summary",
                 "barrier-details-summary",
             },
             current="barrier-details-summary",
@@ -156,6 +168,19 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
                 }
             ],
         }
+        public_eligibility_cleaned_data = {
+            "public_eligibility": True,
+            "public_eligibility_summary": "",
+        }
+        public_information_gate_cleaned_data = {
+            "public_information": True,
+        }
+        public_title_cleaned_data = {
+            "title": "The public title",
+        }
+        public_summary_cleaned_data = {
+            "summary": "The public summary",
+        }
 
         # Mock the return of get_cleaned_data method but return different
         # dictionary depending on the passed step name.
@@ -167,6 +192,10 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
             ("barrier-sectors-affected",): sector_cleaned_data,
             ("barrier-companies-affected",): companies_cleaned_data,
             ("barrier-export-type",): export_types_cleaned_data,
+            ("barrier-public-eligibility",): public_eligibility_cleaned_data,
+            ("barrier-public-information-gate",): public_information_gate_cleaned_data,
+            ("barrier-public-title",): public_title_cleaned_data,
+            ("barrier-public-summary",): public_summary_cleaned_data,
         }[step_cleaned_data]
 
         # Initialise view for test
@@ -195,6 +224,8 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
         assert result["companies"] == ["BLAH LTD"]
         assert result["related_organisations"] == ["Fake Company"]
         assert result["codes"] == [{"code": "1002000000", "description": "A Thing"}]
+        assert result["public_title"] == "The public title"
+        assert result["public_summary"] == "The public summary"
 
 
 class SubmitReportTestCase(MarketAccessTestCase):
@@ -204,8 +235,13 @@ class SubmitReportTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.ReportsResource.get")
     @patch("utils.api.client.MarketAccessAPIClient.patch")
     @patch("utils.api.resources.ReportsResource.submit")
+    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
     def test_submit_full_report(
-        self, report_submit_patch, report_update_patch, report_get_patch
+        self,
+        public_barrier_patch,
+        report_submit_patch,
+        report_update_patch,
+        report_get_patch,
     ):
 
         # Initialise forms
@@ -216,6 +252,10 @@ class SubmitReportTestCase(MarketAccessTestCase):
         sectors_form = BarrierSectorsAffectedForm()
         companies_form = BarrierCompaniesAffectedForm()
         export_type_form = BarrierExportTypeForm()
+        public_eligibility_form = BarrierPublicEligibilityForm()
+        public_information_gate_form = BarrierPublicInformationGateForm()
+        public_title_form = BarrierPublicTitleForm()
+        public_summary_form = BarrierPublicSummaryForm()
         summary_form = BarrierDetailsSummaryForm()
 
         # Set form prefixes for done to identify form correctly
@@ -226,6 +266,10 @@ class SubmitReportTestCase(MarketAccessTestCase):
         sectors_form.prefix = "barrier-sectors-affected"
         companies_form.prefix = "barrier-companies-affected"
         export_type_form.prefix = "barrier-export-type"
+        public_eligibility_form.prefix = "barrier-public-eligibility"
+        public_information_gate_form.prefix = "barrier-public-information-gate"
+        public_title_form.prefix = "barrier-public-title"
+        public_summary_form.prefix = "barrier-public-summary"
         summary_form.prefix = "barrier-details-summary"
 
         # Set expected cleaned data
@@ -296,6 +340,19 @@ class SubmitReportTestCase(MarketAccessTestCase):
                 }
             ],
         }
+        public_eligibility_form.cleaned_data = {
+            "public_eligibility": True,
+            "public_eligibility_summary": "",
+        }
+        public_information_gate_form.cleaned_data = {
+            "public_information": True,
+        }
+        public_title_form.cleaned_data = {
+            "title": "The public title",
+        }
+        public_summary_form.cleaned_data = {
+            "summary": "The public summary",
+        }
         summary_form.cleaned_data = {"details_confirmation": "completed"}
 
         # Build form list for done method arg
@@ -307,6 +364,10 @@ class SubmitReportTestCase(MarketAccessTestCase):
             sectors_form,
             companies_form,
             export_type_form,
+            public_eligibility_form,
+            public_information_gate_form,
+            public_title_form,
+            public_summary_form,
             summary_form,
         ]
 
@@ -319,6 +380,10 @@ class SubmitReportTestCase(MarketAccessTestCase):
             ("barrier-sectors-affected", sectors_form),
             ("barrier-companies-affected", companies_form),
             ("barrier-export-type", export_type_form),
+            ("barrier-public-eligibility", public_eligibility_form),
+            ("barrier-public-information-gate", public_information_gate_form),
+            ("barrier-public-title", public_title_form),
+            ("barrier-public-summary", public_summary_form),
             ("barrier-details-summary", summary_form),
         ]
 
@@ -344,7 +409,7 @@ class SubmitReportTestCase(MarketAccessTestCase):
         assert result.url == f"/barriers/{self.draft_barrier['id']}/complete/"
 
         # Assert the report patch mock was called for each form page
-        assert report_update_patch.call_count == 7
+        assert report_update_patch.call_count == 10
 
         # Assert the correct fields from cleaned_data have been included in a patch call
         patch_call_list = report_update_patch.call_args_list
@@ -391,6 +456,14 @@ class SubmitReportTestCase(MarketAccessTestCase):
             "'commodities': [{'code': '1001000000', "
             "'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ''}]"
         ) in str(patch_call_list[6])
+        assert (
+            "'public_eligibility': True, " "'public_eligibility_summary': ''"
+        ) in str(patch_call_list[7])
+        assert "'title': 'The public title'" in str(patch_call_list[8])
+        assert "'summary': 'The public summary'" in str(patch_call_list[9])
 
         # Assert the report submit mock was called a single time
         report_submit_patch.assert_called_once()
+
+        # Assert the public barrier was marked as in-progress a single time
+        public_barrier_patch.assert_called_once()

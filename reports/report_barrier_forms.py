@@ -561,6 +561,106 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         return cleaned_data
 
 
+class BarrierPublicEligibilityForm(forms.Form):
+    public_eligibility = forms.ChoiceField(
+        label="Can the barrier be published on GOV.UK?",
+        help_text="All market access barriers should be published unless there is a valid reason not to.",
+        choices=(
+            ("yes", "Yes"),
+            ("no", "No"),
+        ),
+        error_messages={
+            "required": "Indicate whether the barrier can be published or not"
+        },
+        required=True,
+    )
+    public_eligibility_summary = forms.CharField(
+        label="Explain why the barrier should not be published",
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
+        required=False,
+        initial="",
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Summary required if barrier cannot be published
+        if (
+            cleaned_data["public_eligibility"] == "no"
+            and cleaned_data["public_eligibility_summary"] == ""
+        ):
+            msg = "Barriers require a reason to not be eligible for publishing"
+            self.add_error("public_eligibility_summary", msg)
+
+        if cleaned_data["public_eligibility"] == "yes":
+            # Clear summary if confirming the barrier can be published
+            cleaned_data["public_eligibility_summary"] = ""
+            cleaned_data["public_eligibility"] = True
+        else:
+            cleaned_data["public_eligibility"] = False
+
+
+class BarrierPublicInformationGateForm(forms.Form):
+    public_information = forms.ChoiceField(
+        label="Do you want to provide a public title an summary now or later?",
+        help_text=(
+            """
+            You can write the title and summary now,
+            or you can do it within 30 days after reporting the barrier.
+            """
+        ),
+        choices=(
+            ("true", "Now"),
+            ("false", "Later"),
+        ),
+        error_messages={
+            "required": "Indicate whether you will enter the public information for the barrier"
+        },
+        required=True,
+    )
+
+
+class BarrierPublicTitleForm(forms.Form):
+    title = forms.CharField(
+        label="Public title",
+        help_text=("Provide a title that is suitable for the public to read."),
+        max_length=255,
+        error_messages={
+            "max_length": "Title should be %(limit_value)d characters or less",
+            "required": "Enter a public title",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-input govuk-js-character-count js-character-count",
+                "rows": 10,
+            },
+        ),
+    )
+
+
+class BarrierPublicSummaryForm(forms.Form):
+    summary = forms.CharField(
+        label="Public summary",
+        help_text=("Provide a summary that is suitable for the public to read."),
+        max_length=2000,
+        error_messages={
+            "max_length": "Summary should be %(limit_value)d characters or less",
+            "required": "Enter a public summary",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "rows": 5,
+            },
+        ),
+    )
+
+
 class BarrierDetailsSummaryForm(forms.Form):
     details_confirmation = forms.CharField(
         widget=forms.HiddenInput(),
