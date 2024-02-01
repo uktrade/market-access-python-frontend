@@ -116,22 +116,22 @@
     {% endif %}
 
     {% if active == 'barrier_downloads' %}
-    <section>
-        <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ barrier_downloads|length }}</span> download{{ barrier_downloads|length|pluralize:"s" }}</h2>
-        {% if barrier_downloads|length == 0 %}
-            <p>You have no downloads</p>
-            <p><a href="">How do I download barriers?</a></p>
-        {% endif %}
-        {% for download in barrier_downloads %}
-            <div class="ma-card-list__item">
-                <div class="saved-search__content">
-                    <h3 class="saved-search__title"><a href="{{ download.progress_url }}">{{ download.name }}</a></h3>
-                    <p class="saved-search__description">{{download.status}}</p>
-                    <p class="saved-search__description">{{ download.created_on|date:"jS F Y" }}</p>
+        <section>
+            <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ barrier_downloads|length }}</span> download{{ barrier_downloads|length|pluralize:"s" }}</h2>
+            {% if barrier_downloads|length == 0 %}
+                <p>You have no downloads</p>
+                <p><a href="">How do I download barriers?</a></p>
+            {% endif %}
+            {% for download in barrier_downloads %}
+                <div class="ma-card-list__item">
+                    <div class="saved-search__content">
+                        <h3 class="saved-search__title"><a href="{{ download.progress_url }}">{{ download.name }}</a></h3>
+                        <p class="saved-search__description">{{download.status}}</p>
+                        <p class="saved-search__description">{{ download.created_on|date:"jS F Y" }}</p>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    </section>
+            {% endfor %}
+        </section>
     {% endif %}
 
 {% endblock %}

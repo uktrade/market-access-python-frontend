@@ -185,7 +185,8 @@ class DownloadBarriers(SearchFormMixin, View):
         return HttpResponseRedirect(
             f"{download_detail_url}?{urlencode(search_page_params)}&{form.get_raw_filters_querystring()}"
         )
-    
+
+
 class DownloadBarriersDetail(SearchFormMixin, View):
     form_class = None
     template_name = "barriers/download_detail.html"

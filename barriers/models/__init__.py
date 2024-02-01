@@ -5,6 +5,7 @@ from .assessments import (
     ResolvabilityAssessment,
     StrategicAssessment,
 )
+from .barrier_download import BarrierDownload
 from .barriers import Barrier, PublicBarrier
 from .commodities import Commodity
 from .companies import Company
@@ -13,7 +14,6 @@ from .history import HistoryItem
 from .notes import Note, PublicBarrierNote
 from .saved_searches import SavedSearch
 from .wto import WTOProfile
-from .barrier_download import BarrierDownload
 
 __all__ = [
     Barrier,

@@ -12,6 +12,7 @@ from barriers.constants import Statuses
 from barriers.models import (
     ActionPlan,
     Barrier,
+    BarrierDownload,
     Commodity,
     EconomicAssessment,
     EconomicImpactAssessment,
@@ -23,7 +24,6 @@ from barriers.models import (
     SavedSearch,
     Stakeholder,
     StrategicAssessment,
-    BarrierDownload,
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
@@ -525,7 +525,7 @@ class FeedbackResource(APIResource):
 class BarrierDownloadsResource(APIResource):
     resource_name = "barrier-downloads"
     model = BarrierDownload
-    
+
     def get_presigned_url(self, download_id):
         url = f"{self.resource_name}/{download_id}/presigned-url/"
         return self.client.get(url)

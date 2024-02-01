@@ -1,5 +1,7 @@
 from django.urls import reverse
+
 from utils.models import APIModel
+
 
 class BarrierDownload(APIModel):
     data_fields = ("created_on", "modified_on")
@@ -10,19 +12,19 @@ class BarrierDownload(APIModel):
     @property
     def id(self):
         return self.data.get("id")
-    
+
     @property
     def name(self):
         return self.data.get("name")
-    
+
     @property
     def status(self):
         return self.data.get("status")
-    
+
     @property
     def created_by(self):
         return self.data.get("created_by")
-    
+
     @property
     def progress_url(self):
         """this property is used in the template to link to the progress page"""

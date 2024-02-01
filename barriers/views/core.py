@@ -46,7 +46,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),
                 "active": active,
-                "barrier_downloads": barrier_downloads
+                "barrier_downloads": barrier_downloads,
             }
         )
         return context_data
