@@ -607,7 +607,7 @@ class BarrierPublicEligibilityForm(forms.Form):
 
 class BarrierPublicInformationGateForm(forms.Form):
     public_information = forms.ChoiceField(
-        label="Do you want to provide a public title an summary now or later?",
+        label="Do you want to provide a public title and summary now or later?",
         help_text=(
             """
             You can write the title and summary now,

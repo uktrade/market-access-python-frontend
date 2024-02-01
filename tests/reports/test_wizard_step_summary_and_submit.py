@@ -232,52 +232,41 @@ class SubmitReportTestCase(MarketAccessTestCase):
     # Test suite for starting new barriers
     # make django-test path=reports/test_wizard_step_summary_and_submit.py::SubmitReportTestCase
 
-    @patch("utils.api.resources.ReportsResource.get")
-    @patch("utils.api.client.MarketAccessAPIClient.patch")
-    @patch("utils.api.resources.ReportsResource.submit")
-    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
-    def test_submit_full_report(
-        self,
-        public_barrier_patch,
-        report_submit_patch,
-        report_update_patch,
-        report_get_patch,
-    ):
-
+    def setUp(self):
         # Initialise forms
-        about_form = BarrierAboutForm()
-        status_form = BarrierStatusForm()
-        location_form = BarrierLocationForm()
-        trade_direction_form = BarrierTradeDirectionForm()
-        sectors_form = BarrierSectorsAffectedForm()
-        companies_form = BarrierCompaniesAffectedForm()
-        export_type_form = BarrierExportTypeForm()
-        public_eligibility_form = BarrierPublicEligibilityForm()
-        public_information_gate_form = BarrierPublicInformationGateForm()
-        public_title_form = BarrierPublicTitleForm()
-        public_summary_form = BarrierPublicSummaryForm()
-        summary_form = BarrierDetailsSummaryForm()
+        self.about_form = BarrierAboutForm()
+        self.status_form = BarrierStatusForm()
+        self.location_form = BarrierLocationForm()
+        self.trade_direction_form = BarrierTradeDirectionForm()
+        self.sectors_form = BarrierSectorsAffectedForm()
+        self.companies_form = BarrierCompaniesAffectedForm()
+        self.export_type_form = BarrierExportTypeForm()
+        self.public_eligibility_form = BarrierPublicEligibilityForm()
+        self.public_information_gate_form = BarrierPublicInformationGateForm()
+        self.public_title_form = BarrierPublicTitleForm()
+        self.public_summary_form = BarrierPublicSummaryForm()
+        self.summary_form = BarrierDetailsSummaryForm()
 
         # Set form prefixes for done to identify form correctly
-        about_form.prefix = "barrier-about"
-        status_form.prefix = "barrier-status"
-        location_form.prefix = "barrier-location"
-        trade_direction_form.prefix = "barrier-trade-direction"
-        sectors_form.prefix = "barrier-sectors-affected"
-        companies_form.prefix = "barrier-companies-affected"
-        export_type_form.prefix = "barrier-export-type"
-        public_eligibility_form.prefix = "barrier-public-eligibility"
-        public_information_gate_form.prefix = "barrier-public-information-gate"
-        public_title_form.prefix = "barrier-public-title"
-        public_summary_form.prefix = "barrier-public-summary"
-        summary_form.prefix = "barrier-details-summary"
+        self.about_form.prefix = "barrier-about"
+        self.status_form.prefix = "barrier-status"
+        self.location_form.prefix = "barrier-location"
+        self.trade_direction_form.prefix = "barrier-trade-direction"
+        self.sectors_form.prefix = "barrier-sectors-affected"
+        self.companies_form.prefix = "barrier-companies-affected"
+        self.export_type_form.prefix = "barrier-export-type"
+        self.public_eligibility_form.prefix = "barrier-public-eligibility"
+        self.public_information_gate_form.prefix = "barrier-public-information-gate"
+        self.public_title_form.prefix = "barrier-public-title"
+        self.public_summary_form.prefix = "barrier-public-summary"
+        self.summary_form.prefix = "barrier-details-summary"
 
         # Set expected cleaned data
-        about_form.cleaned_data = {
+        self.about_form.cleaned_data = {
             "title": "Fake barrier name",
             "summary": "Fake barrier summary",
         }
-        status_form.cleaned_data = {
+        self.status_form.cleaned_data = {
             "status": "2",
             "partially_resolved_date": None,
             "partially_resolved_description": "",
@@ -291,7 +280,7 @@ class SubmitReportTestCase(MarketAccessTestCase):
             "start_date_known": False,
             "is_currently_active": "YES",
         }
-        location_form.cleaned_data = {
+        self.location_form.cleaned_data = {
             "location_select": "985f66a0-5d95-e211-a939-e4115bead28a",
             "affect_whole_country": True,
             "admin_areas": [],
@@ -304,13 +293,13 @@ class SubmitReportTestCase(MarketAccessTestCase):
             "caused_by_trading_bloc": False,
             "caused_by_admin_areas": False,
         }
-        trade_direction_form.cleaned_data = {"trade_direction": "1"}
-        sectors_form.cleaned_data = {
+        self.trade_direction_form.cleaned_data = {"trade_direction": "1"}
+        self.sectors_form.cleaned_data = {
             "main_sector": "9638cecc-5f95-e211-a939-e4115bead28a",
             "sectors": [],
             "sectors_affected": True,
         }
-        companies_form.cleaned_data = {
+        self.companies_form.cleaned_data = {
             "companies_affected": (
                 "[{"
                 '"company_status":"active",'
@@ -324,7 +313,7 @@ class SubmitReportTestCase(MarketAccessTestCase):
             "companies": [{"id": "10590916", "name": "BLAH LTD"}],
             "related_organisations": [],
         }
-        export_type_form.cleaned_data = {
+        self.export_type_form.cleaned_data = {
             "export_types": ["goods", "services"],
             "export_description": "A description of the export.",
             "code": "",
@@ -340,53 +329,64 @@ class SubmitReportTestCase(MarketAccessTestCase):
                 }
             ],
         }
-        public_eligibility_form.cleaned_data = {
+        self.public_eligibility_form.cleaned_data = {
             "public_eligibility": True,
             "public_eligibility_summary": "",
         }
-        public_information_gate_form.cleaned_data = {
+        self.public_information_gate_form.cleaned_data = {
             "public_information": True,
         }
-        public_title_form.cleaned_data = {
+        self.public_title_form.cleaned_data = {
             "title": "The public title",
         }
-        public_summary_form.cleaned_data = {
+        self.public_summary_form.cleaned_data = {
             "summary": "The public summary",
         }
-        summary_form.cleaned_data = {"details_confirmation": "completed"}
+        self.summary_form.cleaned_data = {"details_confirmation": "completed"}
 
         # Build form list for done method arg
-        form_list = [
-            about_form,
-            status_form,
-            location_form,
-            trade_direction_form,
-            sectors_form,
-            companies_form,
-            export_type_form,
-            public_eligibility_form,
-            public_information_gate_form,
-            public_title_form,
-            public_summary_form,
-            summary_form,
+        self.form_list = [
+            self.about_form,
+            self.status_form,
+            self.location_form,
+            self.trade_direction_form,
+            self.sectors_form,
+            self.companies_form,
+            self.export_type_form,
+            self.public_eligibility_form,
+            self.public_information_gate_form,
+            self.public_title_form,
+            self.public_summary_form,
+            self.summary_form,
         ]
 
         # Build form dictionary for done method arg
-        form_dict = [
-            ("barrier-about", about_form),
-            ("barrier-status", status_form),
-            ("barrier-location", location_form),
-            ("barrier-trade-direction", trade_direction_form),
-            ("barrier-sectors-affected", sectors_form),
-            ("barrier-companies-affected", companies_form),
-            ("barrier-export-type", export_type_form),
-            ("barrier-public-eligibility", public_eligibility_form),
-            ("barrier-public-information-gate", public_information_gate_form),
-            ("barrier-public-title", public_title_form),
-            ("barrier-public-summary", public_summary_form),
-            ("barrier-details-summary", summary_form),
+        self.form_dict = [
+            ("barrier-about", self.about_form),
+            ("barrier-status", self.status_form),
+            ("barrier-location", self.location_form),
+            ("barrier-trade-direction", self.trade_direction_form),
+            ("barrier-sectors-affected", self.sectors_form),
+            ("barrier-companies-affected", self.companies_form),
+            ("barrier-export-type", self.export_type_form),
+            ("barrier-public-eligibility", self.public_eligibility_form),
+            ("barrier-public-information-gate", self.public_information_gate_form),
+            ("barrier-public-title", self.public_title_form),
+            ("barrier-public-summary", self.public_summary_form),
+            ("barrier-details-summary", self.summary_form),
         ]
 
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch("utils.api.client.MarketAccessAPIClient.patch")
+    @patch("utils.api.resources.ReportsResource.submit")
+    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
+    def test_submit_full_report(
+        self,
+        public_barrier_patch,
+        report_submit_patch,
+        report_update_patch,
+        report_get_patch,
+    ):
         # Create mock session data
         session_mock = namedtuple("session_mock", "prefix data")
         session_data = session_mock(
@@ -402,7 +402,7 @@ class SubmitReportTestCase(MarketAccessTestCase):
         # Set mock return values
         report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
 
-        result = view.done(form_list, form_dict)
+        result = view.done(self.form_list, self.form_dict)
 
         # Assert page redirected to the barrier information page
         assert result.status_code == 302
