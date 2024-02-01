@@ -28,6 +28,7 @@ from .resources import (
     SavedSearchesResource,
     StrategicAssessmentResource,
     UsersResource,
+    BarrierDownloadsResource,
 )
 
 logger = logging.getLogger(__name__)
@@ -57,6 +58,7 @@ class MarketAccessAPIClient:
         self.action_plan_tasks = ActionPlanTaskResource(self)
         self.action_plan_stakeholders = ActionPlanStakeholderResource(self)
         self.feedback = FeedbackResource(self)
+        self.barrier_download =  BarrierDownloadsResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

@@ -13,6 +13,7 @@ from .history import HistoryItem
 from .notes import Note, PublicBarrierNote
 from .saved_searches import SavedSearch
 from .wto import WTOProfile
+from .barrier_download import BarrierDownload
 
 __all__ = [
     Barrier,
@@ -31,4 +32,5 @@ __all__ = [
     WTOProfile,
     ActionPlan,
     Stakeholder,
+    BarrierDownload,
 ]

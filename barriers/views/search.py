@@ -174,14 +174,27 @@ class DownloadBarriers(SearchFormMixin, View):
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         resp = client.barriers.get_email_csv(**search_parameters)
 
-        search_page_url = reverse("barriers:search")
+        # search_page_url = reverse("barriers:search")
+        download_detail_url = reverse("barriers:download-detail", args=[resp["id"]])
         search_page_params = {
             "search_csv_downloaded": int(resp.get("success", False)),
             "search_csv_download_error": resp.get("reason", ""),
         }
 
+        # redirect to a download page for the csv
         return HttpResponseRedirect(
-            f"{search_page_url}?{urlencode(search_page_params)}&{form.get_raw_filters_querystring()}"
+            f"{download_detail_url}?{urlencode(search_page_params)}&{form.get_raw_filters_querystring()}"
+        )
+    
+class DownloadBarriersDetail(SearchFormMixin, View):
+    form_class = None
+    template_name = "barriers/download_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(self.request.session["sso_token"])
+        barrier_download = client.barrier_download.get(kwargs["pk"])
+        return self.render_to_response(
+            self.get_context_data(barrier_download=barrier_download)
         )
 
 

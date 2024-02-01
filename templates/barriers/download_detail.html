@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - CSV Download Progress{% endblock %}
+{% block page_content %}
+    <h1>CSV Download Progress</h1>
+    <p>Please wait while your CSV file is being generated...</p>
+    <progress id="progressBar" value="0" max="100"></progress>
+    <p id="progressText">0%</p>
+
+    <script>
+        var progressBar = document.getElementById("progressBar");
+        var progressText = document.getElementById("progressText");
+
+        pro
+
+        function updateProgress(progress) {
+            progressBar.value = progress;
+            progressText.textContent = progress + "%";
+        }
+
+        // Call the updateProgress function with the progress value
+        let progressValue = `{{ barrier_download.status }}` === "PROCESSING" ? 50 : 100;
+        updateProgress(progressValue);
+    </script>
+{% endblock %}

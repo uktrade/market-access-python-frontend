@@ -19,6 +19,16 @@
         </li>
     {% endif %}
 
+    {% if active == 'barrier_downloads' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Downloads</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?active=barrier_downloads">Downloads</a>
+        </li>
+    {% endif %}
+
     {% if active == 'mentions' %}
         <li class="page-tabs__tab page-tabs__tab--active">
             <span class="page-tabs__tab__text">Mentions {% if new_mentions_count %}<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ new_mentions_count }}</span>{% endif %}</span>
