@@ -177,6 +177,7 @@ urlpatterns = [
     path("search/", BarrierSearch.as_view(), name="search"),
     path("find-a-barrier/", BarrierSearch.as_view(), name="find_a_barrier"),
     path("search/download/", DownloadBarriers.as_view(), name="download"),
+    path("search/download/detail/", DownloadBarriers.as_view(), name="download-detail"),
     path(
         "search/request_download_approval/",
         RequestBarrierDownloadApproval.as_view(),

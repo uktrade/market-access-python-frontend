@@ -26,6 +26,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
         draft_barriers = client.reports.list()
         saved_searches = client.saved_searches.list()
         notification_exclusion = client.notification_exclusion.get()
+        barrier_downloads = client.barrier_download.list()
 
         are_all_mentions_read: bool = not any(
             not mention.read_by_recipient for mention in mentions
@@ -45,6 +46,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),
                 "active": active,
+                "barrier_downloads": barrier_downloads
             }
         )
         return context_data

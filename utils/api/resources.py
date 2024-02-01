@@ -23,6 +23,7 @@ from barriers.models import (
     SavedSearch,
     Stakeholder,
     StrategicAssessment,
+    BarrierDownload,
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
@@ -30,7 +31,7 @@ from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
 from utils.exceptions import ScanError
-from utils.models import ModelList
+from utils.models import APIModel, ModelList
 
 if TYPE_CHECKING:
     from utils.api.client import MarketAccessAPIClient
@@ -43,10 +44,10 @@ class APIResource:
     model = None
     client: MarketAccessAPIClient
 
-    def __init__(self, client):
+    def __init__(self, client) -> None:
         self.client = client
 
-    def list(self, **kwargs):
+    def list(self, **kwargs) -> ModelList:
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
             model=self.model,
@@ -54,21 +55,21 @@ class APIResource:
             total_count=response_data["count"],
         )
 
-    def get(self, id=None, *args, **kwargs):
+    def get(self, id=None, *args, **kwargs) -> APIModel:
         if not id:
             url = f"{self.resource_name}"
         else:
             url = f"{self.resource_name}/{id}"
         return self.model(self.client.get(url, *args, **kwargs))
 
-    def patch(self, id, *args, **kwargs):
+    def patch(self, id, *args, **kwargs) -> APIModel:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.patch(url, json=kwargs))
 
-    def create(self, *args, **kwargs):
+    def create(self, *args, **kwargs) -> APIModel:
         return self.model(self.client.post(self.resource_name, json=kwargs))
 
-    def update(self, id, *args, **kwargs):
+    def update(self, id, *args, **kwargs) -> APIModel:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.put(url, data=kwargs))
 
@@ -519,3 +520,12 @@ class FeedbackResource(APIResource):
     def add_comments(self, feedback_id, *args, **kwargs):
         url = f"feedback/{feedback_id}/"
         return self.client.put(url, json={**kwargs})
+
+
+class BarrierDownloadsResource(APIResource):
+    resource_name = "barrier-downloads"
+    model = BarrierDownload
+    
+    def get_presigned_url(self, download_id):
+        url = f"{self.resource_name}/{download_id}/presigned-url/"
+        return self.client.get(url)
