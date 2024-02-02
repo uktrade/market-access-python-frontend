@@ -420,7 +420,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                     elif key == "public_eligibility":
                         # Public eligibility value comes through as 'true' or 'false, needs to have
                         # a readable version for the summary page.
-                        context[key] = "Can be published" if value else "Cannot be published"
+                        context[key] = (
+                            "Can be published" if value else "Cannot be published"
+                        )
 
                     elif key == "title" and step == "barrier-public-title":
                         # Public title and internal title have the same key so need to differentiate in context
@@ -578,14 +580,11 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             # This should only trigger if we have completed public-title and public-summary form pages
             for barrier_form_name in public_barrier_form_pages:
                 if barrier_form_name in submitted_values.keys():
-                    self.client.public_barriers.patch(
-                        id=barrier_report.id, **submitted_values[barrier_form_name]
+                    self.client.public_barriers.report_public_barrier_field(
+                        id=barrier_report.id,
+                        form_name=barrier_form_name,
+                        values=submitted_values[barrier_form_name],
                     )
-            # If indicated as eligible, mark the barrier and public barrier as such
-            if (
-                submitted_values["barrier-public-eligibility"]["public_eligibility"]
-            ):
-                self.client.public_barriers.mark_as_in_progress(id=barrier_report.id)
 
         else:
             # Save progress to the draft barrier in the database

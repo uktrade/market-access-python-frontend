@@ -351,6 +351,20 @@ class PublicBarriersResource(APIResource):
     def mark_as_in_progress(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unprepared")
 
+    def report_public_barrier_field(self, id, *args, **kwargs):
+        form_name = kwargs["form_name"]
+        # Endpoint field to update depends on the report a barrier form used to submit data.
+        if form_name == "barrier-public-title":
+            return self.client.post(
+                f"{self.resource_name}/{id}/report_public_barrier_title", json=kwargs
+            )
+        elif form_name == "barrier-public-summary":
+            return self.client.post(
+                f"{self.resource_name}/{id}/report_public_barrier_summary", json=kwargs
+            )
+        else:
+            return "Error."
+
     def mark_as_ready(self, id):
         return self.client.post(f"{self.resource_name}/{id}/ready")
 
