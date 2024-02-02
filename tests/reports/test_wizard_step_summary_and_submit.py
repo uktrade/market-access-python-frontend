@@ -376,6 +376,7 @@ class SubmitReportTestCase(MarketAccessTestCase):
             ("barrier-details-summary", self.summary_form),
         ]
 
+
     @patch("utils.api.resources.ReportsResource.get")
     @patch("utils.api.client.MarketAccessAPIClient.patch")
     @patch("utils.api.resources.ReportsResource.submit")
@@ -461,6 +462,139 @@ class SubmitReportTestCase(MarketAccessTestCase):
         ) in str(patch_call_list[7])
         assert "'title': 'The public title'" in str(patch_call_list[8])
         assert "'summary': 'The public summary'" in str(patch_call_list[9])
+
+        # Assert the report submit mock was called a single time
+        report_submit_patch.assert_called_once()
+
+        # Assert the public barrier was marked as in-progress a single time
+        public_barrier_patch.assert_called_once()
+
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch("utils.api.client.MarketAccessAPIClient.patch")
+    @patch("utils.api.resources.ReportsResource.submit")
+    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
+    def test_submit_report_without_public(
+        self,
+        public_barrier_patch,
+        report_submit_patch,
+        report_update_patch,
+        report_get_patch,
+    ):
+
+        # Remove existing forms from lists/dicts
+
+        #logger.critical("-----")
+        #for it in self.form_list:
+        #    logger.critical(it)
+        #logger.critical("-----")
+#
+        #self.form_list.pop(7) #public_eligibility_form
+        #self.form_list.pop(8) #public_information_gate_form
+        #self.form_list.pop(9) #public_title_form
+        #self.form_list.pop(10) #public_summary_form
+#
+        #logger.critical("=====")
+        #logger.critical(self.form_list)
+        #logger.critical("=====")
+#
+        #self.form_dict.pop(("barrier-public-eligibility", self.public_eligibility_form))
+        #self.form_dict.pop(("barrier-public-information-gate", self.public_information_gate_form))
+        #self.form_dict.pop(("barrier-public-title", self.public_title_form))
+        #self.form_dict.pop(("barrier-public-summary", self.public_summary_form))
+
+        # Override setup cleaned_data & forms
+        self.public_eligibility_form.cleaned_data = {
+            "public_eligibility": False,
+            "public_eligibility_summary": "This barrier is not public",
+        }
+        self.public_information_gate_form.cleaned_data = None
+        self.public_title_form.cleaned_data = None
+        self.public_summary_form.cleaned_data = None
+
+        # Re-add forms to lists
+        #self.form_list.append(self.public_eligibility_form)
+        #self.form_list.append(self.public_information_gate_form)
+        #self.form_list.append(self.public_title_form)
+        #self.form_list.append(self.public_summary_form)
+        #self.form_dict.append(("barrier-public-eligibility", self.public_eligibility_form))
+        #self.form_dict.append(("barrier-public-information-gate", self.public_information_gate_form))
+        #self.form_dict.append(("barrier-public-title", self.public_title_form))
+        #self.form_dict.append(("barrier-public-summary", self.public_summary_form))
+
+        # Create mock session data
+        session_mock = namedtuple("session_mock", "prefix data")
+        session_data = session_mock(
+            prefix="wizard_report_barrier_wizard_view",
+            data={"meta": {"barrier_id": "barrier-id-goes-here"}},
+        )
+
+        # Initialise view for test
+        view = ReportBarrierWizardView()
+        view.storage = session_data
+        view.client = MarketAccessAPIClient()
+
+        # Set mock return values
+        report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
+
+        result = view.done(self.form_list, self.form_dict)
+
+        # Assert page redirected to the barrier information page
+        assert result.status_code == 302
+        assert result.url == f"/barriers/{self.draft_barrier['id']}/complete/"
+
+        # Assert the report patch mock was called for each form page
+        assert report_update_patch.call_count == 10
+
+        # Assert the correct fields from cleaned_data have been included in a patch call
+        patch_call_list = report_update_patch.call_args_list
+        # About fields
+        assert "'title': 'Fake barrier name'" in str(patch_call_list[0])
+        assert "'summary': 'Fake barrier summary'" in str(patch_call_list[0])
+        # Status fields
+        assert "'status': '2'" in str(patch_call_list[1])
+        assert "'start_date': None" in str(patch_call_list[1])
+        assert "'currently_active': 'YES'" in str(patch_call_list[1])
+        assert "'status_date': '2023-07-24'" in str(patch_call_list[1])
+        assert "'status_summary': ''" in str(patch_call_list[1])
+        assert "'start_date_known': False" in str(patch_call_list[1])
+        assert "'is_currently_active': 'YES'" in str(patch_call_list[1])
+        # Location fields
+        assert "'affect_whole_country': True" in str(patch_call_list[2])
+        assert "'admin_areas': []" in str(patch_call_list[2])
+        assert "'country': '985f66a0-5d95-e211-a939-e4115bead28a'" in str(
+            patch_call_list[2]
+        )
+        assert "'trading_bloc': ''" in str(patch_call_list[2])
+        assert "'caused_by_trading_bloc': False" in str(patch_call_list[2])
+        assert "'caused_by_admin_areas': False" in str(patch_call_list[2])
+        # Trade direction fields
+        assert "'trade_direction': '1'" in str(patch_call_list[3])
+        # Sector fields
+        assert "'main_sector': '9638cecc-5f95-e211-a939-e4115bead28a'" in str(
+            patch_call_list[4]
+        )
+        assert "'sectors': []" in str(patch_call_list[4])
+        assert "'sectors_affected': True" in str(patch_call_list[4])
+        # Companies fields
+        assert "'companies': [{'id': '10590916', 'name': 'BLAH LTD'}]" in str(
+            patch_call_list[5]
+        )
+        assert "'related_organisations': []" in str(patch_call_list[5])
+        # Export types fields
+        patch_call_list[6]
+        assert "'export_types': ['goods', 'services']" in str(patch_call_list[6])
+        assert "'export_description': 'A description of the export.'" in str(
+            patch_call_list[6]
+        )
+        assert (
+            "'commodities': [{'code': '1001000000', "
+            "'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ''}]"
+        ) in str(patch_call_list[6])
+        assert (
+            "'public_eligibility': False, " "'public_eligibility_summary': 'This barrier is not public'"
+        ) in str(patch_call_list[7])
+        assert "'title': 'The public title'" not in str(patch_call_list[8])
+        assert "'summary': 'The public summary'" not in str(patch_call_list[9])
 
         # Assert the report submit mock was called a single time
         report_submit_patch.assert_called_once()

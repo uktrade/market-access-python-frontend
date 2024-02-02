@@ -418,12 +418,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                             context[key] = []
 
                     elif key == "public_eligibility":
-                        # Public eligibility comes through as 'true' or 'false, needs to have
+                        # Public eligibility value comes through as 'true' or 'false, needs to have
                         # a readable version for the summary page.
-                        if value is True:
-                            context[key] = "Can be published"
-                        else:
-                            context[key] = "Cannot be published"
+                        context[key] = "Can be published" if value else "Cannot be published"
 
                     elif key == "title" and step == "barrier-public-title":
                         # Public title and internal title have the same key so need to differentiate in context
@@ -587,7 +584,6 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             # If indicated as eligible, mark the barrier and public barrier as such
             if (
                 submitted_values["barrier-public-eligibility"]["public_eligibility"]
-                is True
             ):
                 self.client.public_barriers.mark_as_in_progress(id=barrier_report.id)
 
