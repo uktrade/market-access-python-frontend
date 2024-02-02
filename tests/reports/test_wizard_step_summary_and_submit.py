@@ -31,17 +31,10 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
     # Test suite for loading the summary step of the form
     # make django-test path=reports/test_wizard_step_summary_and_submit.py::SummaryPageLoadTestCase
 
-    @patch("utils.api.resources.ReportsResource.get")
-    @patch(
-        "reports.report_barrier_view.ReportBarrierWizardView.get_cleaned_data_for_step"
-    )
-    @patch("utils.api.resources.CommoditiesResource.list")
-    def test_load_summary_page(
-        self, commodity_api_call_patch, report_get_cleaned_data_patch, report_get_patch
-    ):
+    def setUp(self):
         # Create mock session data - use named tuple method to create object, not dict
-        session_mock = namedtuple("session_mock", "prefix data extra_data")
-        session_data = session_mock(
+        self.session_mock = namedtuple("session_mock", "prefix data extra_data")
+        self.session_data = self.session_mock(
             prefix="wizard_report_barrier_wizard_view",
             extra_data={},
             data={
@@ -64,8 +57,8 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
         )
 
         # Create mock steps data - use named tuple method to create object, not dict
-        steps_mock = namedtuple("steps_mock", "steps current")
-        steps_data = steps_mock(
+        self.steps_mock = namedtuple("steps_mock", "steps current")
+        self.steps_data = self.steps_mock(
             steps={
                 "barrier-about",
                 "barrier-status",
@@ -84,7 +77,7 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
         )
 
         # Create mock commodity response object
-        commodity_mock_object = BarrierCommodity(
+        self.commodity_mock_object = BarrierCommodity(
             {
                 "commodity": "A Thing",
                 "code": "1002000000",
@@ -92,8 +85,8 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
             }
         )
 
-        about_cleaned_data = {"title": "vvvcvcvvbc", "summary": "cbcbcvbcbvc"}
-        status_cleaned_data = {
+        self.about_cleaned_data = {"title": "vvvcvcvvbc", "summary": "cbcbcvbcbvc"}
+        self.status_cleaned_data = {
             "status": "2",
             "partially_resolved_date": None,
             "partially_resolved_description": "",
@@ -107,7 +100,7 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
             "start_date_known": False,
             "is_currently_active": "NO",
         }
-        location_cleaned_data = {
+        self.location_cleaned_data = {
             "location_select": "TB00016",
             "affect_whole_country": True,
             "admin_areas": [],
@@ -120,8 +113,8 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
             "caused_by_trading_bloc": False,
             "caused_by_admin_areas": False,
         }
-        trade_direction_cleaned_data = {"trade_direction": "1"}
-        sector_cleaned_data = {
+        self.trade_direction_cleaned_data = {"trade_direction": "1"}
+        self.sector_cleaned_data = {
             "main_sector": "af959812-6095-e211-a939-e4115bead28a",
             "sectors": [
                 "9738cecc-5f95-e211-a939-e4115bead28a",
@@ -129,7 +122,7 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
             ],
             "sectors_affected": True,
         }
-        companies_cleaned_data = {
+        self.companies_cleaned_data = {
             "companies_affected": (
                 "[{"
                 '"company_number":"10590916",'
@@ -152,7 +145,7 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
             "companies": [{"id": "10590916", "name": "BLAH LTD"}],
             "related_organisations": [{"id": "", "name": "Fake Company"}],
         }
-        export_types_cleaned_data = {
+        self.export_types_cleaned_data = {
             "export_types": ["goods"],
             "export_description": "An export description",
             "code": "",
@@ -168,45 +161,56 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
                 }
             ],
         }
-        public_eligibility_cleaned_data = {
+        self.public_eligibility_cleaned_data = {
             "public_eligibility": True,
             "public_eligibility_summary": "",
         }
-        public_information_gate_cleaned_data = {
+        self.public_information_gate_cleaned_data = {
             "public_information": True,
         }
-        public_title_cleaned_data = {
+        self.public_title_cleaned_data = {
             "title": "The public title",
         }
-        public_summary_cleaned_data = {
+        self.public_summary_cleaned_data = {
             "summary": "The public summary",
         }
+
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch(
+        "reports.report_barrier_view.ReportBarrierWizardView.get_cleaned_data_for_step"
+    )
+    @patch("utils.api.resources.CommoditiesResource.list")
+    def test_load_summary_page_full_report(
+        self, commodity_api_call_patch, report_get_cleaned_data_patch, report_get_patch
+    ):
 
         # Mock the return of get_cleaned_data method but return different
         # dictionary depending on the passed step name.
         report_get_cleaned_data_patch.side_effect = lambda *step_cleaned_data: {
-            ("barrier-about",): about_cleaned_data,
-            ("barrier-status",): status_cleaned_data,
-            ("barrier-location",): location_cleaned_data,
-            ("barrier-trade-direction",): trade_direction_cleaned_data,
-            ("barrier-sectors-affected",): sector_cleaned_data,
-            ("barrier-companies-affected",): companies_cleaned_data,
-            ("barrier-export-type",): export_types_cleaned_data,
-            ("barrier-public-eligibility",): public_eligibility_cleaned_data,
-            ("barrier-public-information-gate",): public_information_gate_cleaned_data,
-            ("barrier-public-title",): public_title_cleaned_data,
-            ("barrier-public-summary",): public_summary_cleaned_data,
+            ("barrier-about",): self.about_cleaned_data,
+            ("barrier-status",): self.status_cleaned_data,
+            ("barrier-location",): self.location_cleaned_data,
+            ("barrier-trade-direction",): self.trade_direction_cleaned_data,
+            ("barrier-sectors-affected",): self.sector_cleaned_data,
+            ("barrier-companies-affected",): self.companies_cleaned_data,
+            ("barrier-export-type",): self.export_types_cleaned_data,
+            ("barrier-public-eligibility",): self.public_eligibility_cleaned_data,
+            (
+                "barrier-public-information-gate",
+            ): self.public_information_gate_cleaned_data,
+            ("barrier-public-title",): self.public_title_cleaned_data,
+            ("barrier-public-summary",): self.public_summary_cleaned_data,
         }[step_cleaned_data]
 
         # Initialise view for test
         view = ReportBarrierWizardView()
-        view.storage = session_data
-        view.steps = steps_data
+        view.storage = self.session_data
+        view.steps = self.steps_data
         view.prefix = ("wizard_report_barrier_wizard_view",)
         view.client = MarketAccessAPIClient()
 
         # Set mock return values
-        commodity_api_call_patch.return_value = [commodity_mock_object]
+        commodity_api_call_patch.return_value = [self.commodity_mock_object]
         report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
         summary_form = BarrierDetailsSummaryForm()
 
@@ -224,8 +228,166 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
         assert result["companies"] == ["BLAH LTD"]
         assert result["related_organisations"] == ["Fake Company"]
         assert result["codes"] == [{"code": "1002000000", "description": "A Thing"}]
+        assert result["public_eligibility"] == "Can be published"
         assert result["public_title"] == "The public title"
         assert result["public_summary"] == "The public summary"
+
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch(
+        "reports.report_barrier_view.ReportBarrierWizardView.get_cleaned_data_for_step"
+    )
+    @patch("utils.api.resources.CommoditiesResource.list")
+    def test_load_summary_page_ineligible_for_public(
+        self, commodity_api_call_patch, report_get_cleaned_data_patch, report_get_patch
+    ):
+
+        self.public_eligibility_cleaned_data = {
+            "public_eligibility": False,
+            "public_eligibility_summary": "This barrier is not public",
+        }
+
+        self.session_mock = namedtuple("session_mock", "prefix data extra_data")
+        self.session_data = self.session_mock(
+            prefix="wizard_report_barrier_wizard_view",
+            extra_data={},
+            data={
+                "step": "barrier-details-summary",
+                "step_data": {
+                    "barrier-about": {},
+                    "barrier-status": {},
+                    "barrier-location": {},
+                    "barrier-trade-direction": {},
+                    "barrier-sectors-affected": {},
+                    "barrier-companies-affected": {},
+                    "barrier-export-type": {},
+                    "barrier-public-eligibility": {},
+                },
+                "meta": {"barrier_id": "b9bc718d-f535-413a-a2c0-8868351b44f2"},
+            },
+        )
+
+        # Mock the return of get_cleaned_data method but return different
+        # dictionary depending on the passed step name.
+        report_get_cleaned_data_patch.side_effect = lambda *step_cleaned_data: {
+            ("barrier-about",): self.about_cleaned_data,
+            ("barrier-status",): self.status_cleaned_data,
+            ("barrier-location",): self.location_cleaned_data,
+            ("barrier-trade-direction",): self.trade_direction_cleaned_data,
+            ("barrier-sectors-affected",): self.sector_cleaned_data,
+            ("barrier-companies-affected",): self.companies_cleaned_data,
+            ("barrier-export-type",): self.export_types_cleaned_data,
+            ("barrier-public-eligibility",): self.public_eligibility_cleaned_data,
+        }[step_cleaned_data]
+
+        # Initialise view for test
+        view = ReportBarrierWizardView()
+        view.storage = self.session_data
+        view.steps = self.steps_data
+        view.prefix = ("wizard_report_barrier_wizard_view",)
+        view.client = MarketAccessAPIClient()
+
+        # Set mock return values
+        commodity_api_call_patch.return_value = [self.commodity_mock_object]
+        report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
+        summary_form = BarrierDetailsSummaryForm()
+
+        result = view.get_context_data(summary_form)
+
+        # Assert the transformations of stored data to readble values for the summary table
+        # have taken place and have been passed to the form in context.
+        assert result["status"] == "Open"
+        assert result["barrier_location"] == "European Union"
+        assert (
+            result["trade_direction"] == "Exporting from the UK or investing overseas"
+        )
+        assert result["main_sector"] == "Advanced Engineering"
+        assert result["sectors"] == ["Airports", "Automotive"]
+        assert result["companies"] == ["BLAH LTD"]
+        assert result["related_organisations"] == ["Fake Company"]
+        assert result["codes"] == [{"code": "1002000000", "description": "A Thing"}]
+        assert result["public_eligibility"] == "Cannot be published"
+        assert "public_title" not in result.keys()
+        assert "public_summary" not in result.keys()
+
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch(
+        "reports.report_barrier_view.ReportBarrierWizardView.get_cleaned_data_for_step"
+    )
+    @patch("utils.api.resources.CommoditiesResource.list")
+    def test_load_summary_page_eligible_for_public_later(
+        self, commodity_api_call_patch, report_get_cleaned_data_patch, report_get_patch
+    ):
+
+        self.public_information_gate_cleaned_data = {
+            "public_information": False,
+        }
+
+        self.session_mock = namedtuple("session_mock", "prefix data extra_data")
+        self.session_data = self.session_mock(
+            prefix="wizard_report_barrier_wizard_view",
+            extra_data={},
+            data={
+                "step": "barrier-details-summary",
+                "step_data": {
+                    "barrier-about": {},
+                    "barrier-status": {},
+                    "barrier-location": {},
+                    "barrier-trade-direction": {},
+                    "barrier-sectors-affected": {},
+                    "barrier-companies-affected": {},
+                    "barrier-export-type": {},
+                    "barrier-public-eligibility": {},
+                    "barrier-public-information-gate": {},
+                },
+                "meta": {"barrier_id": "b9bc718d-f535-413a-a2c0-8868351b44f2"},
+            },
+        )
+
+        # Mock the return of get_cleaned_data method but return different
+        # dictionary depending on the passed step name.
+        report_get_cleaned_data_patch.side_effect = lambda *step_cleaned_data: {
+            ("barrier-about",): self.about_cleaned_data,
+            ("barrier-status",): self.status_cleaned_data,
+            ("barrier-location",): self.location_cleaned_data,
+            ("barrier-trade-direction",): self.trade_direction_cleaned_data,
+            ("barrier-sectors-affected",): self.sector_cleaned_data,
+            ("barrier-companies-affected",): self.companies_cleaned_data,
+            ("barrier-export-type",): self.export_types_cleaned_data,
+            ("barrier-public-eligibility",): self.public_eligibility_cleaned_data,
+            (
+                "barrier-public-information-gate",
+            ): self.public_information_gate_cleaned_data,
+        }[step_cleaned_data]
+
+        # Initialise view for test
+        view = ReportBarrierWizardView()
+        view.storage = self.session_data
+        view.steps = self.steps_data
+        view.prefix = ("wizard_report_barrier_wizard_view",)
+        view.client = MarketAccessAPIClient()
+
+        # Set mock return values
+        commodity_api_call_patch.return_value = [self.commodity_mock_object]
+        report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
+        summary_form = BarrierDetailsSummaryForm()
+
+        result = view.get_context_data(summary_form)
+
+        # Assert the transformations of stored data to readble values for the summary table
+        # have taken place and have been passed to the form in context.
+        assert result["status"] == "Open"
+        assert result["barrier_location"] == "European Union"
+        assert (
+            result["trade_direction"] == "Exporting from the UK or investing overseas"
+        )
+        assert result["main_sector"] == "Advanced Engineering"
+        assert result["sectors"] == ["Airports", "Automotive"]
+        assert result["companies"] == ["BLAH LTD"]
+        assert result["related_organisations"] == ["Fake Company"]
+        assert result["codes"] == [{"code": "1002000000", "description": "A Thing"}]
+        assert result["public_eligibility"] == "Can be published"
+        assert "public_title" not in result.keys()
+        assert "public_summary" not in result.keys()
 
 
 class SubmitReportTestCase(MarketAccessTestCase):
@@ -469,3 +631,204 @@ class SubmitReportTestCase(MarketAccessTestCase):
 
         # Assert the public barrier was marked as in-progress a single time
         public_barrier_patch.call_count == 2
+
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch("utils.api.client.MarketAccessAPIClient.patch")
+    @patch("utils.api.resources.ReportsResource.submit")
+    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
+    def test_submit_report_ineligible_for_public(
+        self,
+        public_barrier_patch,
+        report_submit_patch,
+        report_update_patch,
+        report_get_patch,
+    ):
+        # Remove existing forms from lists/dicts
+        self.form_list.pop(10)  # public_summary_form
+        self.form_list.pop(9)  # public_title_form
+        self.form_list.pop(8)  # public_information_gate_form
+
+        # Override setup cleaned_data & forms
+        self.public_eligibility_form.cleaned_data = {
+            "public_eligibility": False,
+            "public_eligibility_summary": "This barrier is not public",
+        }
+
+        # Create mock session data
+        session_mock = namedtuple("session_mock", "prefix data")
+        session_data = session_mock(
+            prefix="wizard_report_barrier_wizard_view",
+            data={"meta": {"barrier_id": "barrier-id-goes-here"}},
+        )
+
+        # Initialise view for test
+        view = ReportBarrierWizardView()
+        view.storage = session_data
+        view.client = MarketAccessAPIClient()
+
+        # Set mock return values
+        report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
+
+        result = view.done(self.form_list, self.form_dict)
+
+        # Assert page redirected to the barrier information page
+        assert result.status_code == 302
+        assert result.url == f"/barriers/{self.draft_barrier['id']}/complete/"
+
+        # Assert the report patch mock was called for each form page
+        assert report_update_patch.call_count == 8
+
+        # Assert the correct fields from cleaned_data have been included in a patch call
+        patch_call_list = report_update_patch.call_args_list
+        # About fields
+        assert "'title': 'Fake barrier name'" in str(patch_call_list[0])
+        assert "'summary': 'Fake barrier summary'" in str(patch_call_list[0])
+        # Status fields
+        assert "'status': '2'" in str(patch_call_list[1])
+        assert "'start_date': None" in str(patch_call_list[1])
+        assert "'currently_active': 'YES'" in str(patch_call_list[1])
+        assert "'status_date': '2023-07-24'" in str(patch_call_list[1])
+        assert "'status_summary': ''" in str(patch_call_list[1])
+        assert "'start_date_known': False" in str(patch_call_list[1])
+        assert "'is_currently_active': 'YES'" in str(patch_call_list[1])
+        # Location fields
+        assert "'affect_whole_country': True" in str(patch_call_list[2])
+        assert "'admin_areas': []" in str(patch_call_list[2])
+        assert "'country': '985f66a0-5d95-e211-a939-e4115bead28a'" in str(
+            patch_call_list[2]
+        )
+        assert "'trading_bloc': ''" in str(patch_call_list[2])
+        assert "'caused_by_trading_bloc': False" in str(patch_call_list[2])
+        assert "'caused_by_admin_areas': False" in str(patch_call_list[2])
+        # Trade direction fields
+        assert "'trade_direction': '1'" in str(patch_call_list[3])
+        # Sector fields
+        assert "'main_sector': '9638cecc-5f95-e211-a939-e4115bead28a'" in str(
+            patch_call_list[4]
+        )
+        assert "'sectors': []" in str(patch_call_list[4])
+        assert "'sectors_affected': True" in str(patch_call_list[4])
+        # Companies fields
+        assert "'companies': [{'id': '10590916', 'name': 'BLAH LTD'}]" in str(
+            patch_call_list[5]
+        )
+        assert "'related_organisations': []" in str(patch_call_list[5])
+        # Export types fields
+        patch_call_list[6]
+        assert "'export_types': ['goods', 'services']" in str(patch_call_list[6])
+        assert "'export_description': 'A description of the export.'" in str(
+            patch_call_list[6]
+        )
+        assert (
+            "'commodities': [{'code': '1001000000', "
+            "'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ''}]"
+        ) in str(patch_call_list[6])
+        assert (
+            "'public_eligibility': False, "
+            "'public_eligibility_summary': 'This barrier is not public'"
+        ) in str(patch_call_list[7])
+
+        # Assert the report submit mock was called a single time
+        report_submit_patch.assert_called_once()
+
+        # Assert the public barrier was marked as in-progress a single time
+        public_barrier_patch.call_count == 0
+
+    @patch("utils.api.resources.ReportsResource.get")
+    @patch("utils.api.client.MarketAccessAPIClient.patch")
+    @patch("utils.api.resources.ReportsResource.submit")
+    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
+    def test_submit_report_eligible_for_public_later(
+        self,
+        public_barrier_patch,
+        report_submit_patch,
+        report_update_patch,
+        report_get_patch,
+    ):
+        # Remove existing forms from lists/dicts
+        self.form_list.pop(10)  # public_summary_form
+        self.form_list.pop(9)  # public_title_form
+
+        # Override setup cleaned_data & forms
+        self.public_information_gate_form.cleaned_data = {
+            "public_information": False,
+        }
+
+        # Create mock session data
+        session_mock = namedtuple("session_mock", "prefix data")
+        session_data = session_mock(
+            prefix="wizard_report_barrier_wizard_view",
+            data={"meta": {"barrier_id": "barrier-id-goes-here"}},
+        )
+
+        # Initialise view for test
+        view = ReportBarrierWizardView()
+        view.storage = session_data
+        view.client = MarketAccessAPIClient()
+
+        # Set mock return values
+        report_get_patch.return_value = ReportsResource.model(self.draft_barrier)
+
+        result = view.done(self.form_list, self.form_dict)
+
+        # Assert page redirected to the barrier information page
+        assert result.status_code == 302
+        assert result.url == f"/barriers/{self.draft_barrier['id']}/complete/"
+
+        # Assert the report patch mock was called for each form page
+        assert report_update_patch.call_count == 8
+
+        # Assert the correct fields from cleaned_data have been included in a patch call
+        patch_call_list = report_update_patch.call_args_list
+        # About fields
+        assert "'title': 'Fake barrier name'" in str(patch_call_list[0])
+        assert "'summary': 'Fake barrier summary'" in str(patch_call_list[0])
+        # Status fields
+        assert "'status': '2'" in str(patch_call_list[1])
+        assert "'start_date': None" in str(patch_call_list[1])
+        assert "'currently_active': 'YES'" in str(patch_call_list[1])
+        assert "'status_date': '2023-07-24'" in str(patch_call_list[1])
+        assert "'status_summary': ''" in str(patch_call_list[1])
+        assert "'start_date_known': False" in str(patch_call_list[1])
+        assert "'is_currently_active': 'YES'" in str(patch_call_list[1])
+        # Location fields
+        assert "'affect_whole_country': True" in str(patch_call_list[2])
+        assert "'admin_areas': []" in str(patch_call_list[2])
+        assert "'country': '985f66a0-5d95-e211-a939-e4115bead28a'" in str(
+            patch_call_list[2]
+        )
+        assert "'trading_bloc': ''" in str(patch_call_list[2])
+        assert "'caused_by_trading_bloc': False" in str(patch_call_list[2])
+        assert "'caused_by_admin_areas': False" in str(patch_call_list[2])
+        # Trade direction fields
+        assert "'trade_direction': '1'" in str(patch_call_list[3])
+        # Sector fields
+        assert "'main_sector': '9638cecc-5f95-e211-a939-e4115bead28a'" in str(
+            patch_call_list[4]
+        )
+        assert "'sectors': []" in str(patch_call_list[4])
+        assert "'sectors_affected': True" in str(patch_call_list[4])
+        # Companies fields
+        assert "'companies': [{'id': '10590916', 'name': 'BLAH LTD'}]" in str(
+            patch_call_list[5]
+        )
+        assert "'related_organisations': []" in str(patch_call_list[5])
+        # Export types fields
+        patch_call_list[6]
+        assert "'export_types': ['goods', 'services']" in str(patch_call_list[6])
+        assert "'export_description': 'A description of the export.'" in str(
+            patch_call_list[6]
+        )
+        assert (
+            "'commodities': [{'code': '1001000000', "
+            "'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ''}]"
+        ) in str(patch_call_list[6])
+        assert (
+            "'public_eligibility': True, " "'public_eligibility_summary': ''"
+        ) in str(patch_call_list[7])
+
+        # Assert the report submit mock was called a single time
+        report_submit_patch.assert_called_once()
+
+        # Assert the public barrier was marked as in-progress a single time
+        public_barrier_patch.call_count == 0
