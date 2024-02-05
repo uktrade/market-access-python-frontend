@@ -180,7 +180,7 @@ urlpatterns = [
     path("find-a-barrier/", BarrierSearch.as_view(), name="find_a_barrier"),
     path("search/download/", DownloadBarriers.as_view(), name="download"),
     path(
-        "search/download/<uuid:download_barrier_id>/detail/",
+        "search/download/<uuid:download_barrier_id>",
         DownloadBarriersDetail.as_view(),
         name="download-detail",
     ),

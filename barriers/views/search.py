@@ -172,11 +172,14 @@ class DownloadBarriers(SearchFormMixin, View):
         form.is_valid()
         search_parameters = form.get_api_search_parameters()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
-        resp = client.barrier_download.create(**search_parameters)
-        download_detail_url = reverse("barriers:download-detail", args=resp.id)
+        barrier_download = client.barrier_download.create(**search_parameters)
+        download_detail_url = reverse(
+            "barriers:download-detail",
+            kwargs={"download_barrier_id": barrier_download.id}
+        )
         search_page_params = {
-            "search_csv_downloaded": int(resp.get("success", False)),
-            "search_csv_download_error": resp.get("reason", ""),
+            "search_csv_downloaded": "",
+            "search_csv_download_error": "",
         }
 
         # redirect to a download page for the csv
