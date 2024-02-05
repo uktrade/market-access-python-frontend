@@ -24,6 +24,18 @@ class BarrierDownload(APIModel):
     @property
     def created_by(self):
         return self.data.get("created_by")
+    
+    @property
+    def filters(self):
+        return self.data.get("filters")
+    
+    @property
+    def success(self):
+        return self.data.get("success")
+    
+    @property
+    def reason(self):
+        return self.data.get("reason")
 
     @property
     def progress_url(self):

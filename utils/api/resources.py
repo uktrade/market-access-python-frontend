@@ -134,9 +134,9 @@ class BarriersResource(APIResource):
         url = f"barriers/members/{team_member_id}"
         return self.client.delete(url, params=kwargs)
 
-    def get_email_csv(self, *args, **kwargs):
-        url = "barriers/s3-email"
-        return self.client.get(url, params=kwargs)
+    # def get_email_csv(self, *args, **kwargs):
+    #     url = "barriers/s3-email"
+    #     return self.client.get(url, params=kwargs)
 
     def request_download_approval(self):
         url = "barriers/request-download-approval"

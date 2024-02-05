@@ -121,16 +121,24 @@
             {% if barrier_downloads|length == 0 %}
                 <p>You have no downloads</p>
                 <p><a href="">How do I download barriers?</a></p>
+            {% else %}
+                <p>By downloading files from this page you are agreeing to the <a href="">acceptable use agreement</a></p>
+                <ul class="ma-card-list">
+                    {% for download in barrier_downloads %}
+                        <li class="ma-card-list__item barrier-download">
+                            <div class="barrier-download__content">
+                                <h3 class="barrier-download__title">{{ download.name }}</h3>
+                                <p class="barrier-download__description">Download status: {{download.status}}</p>
+                                <p class="barrier-download__description">{{ download.created_on|date:"jS F Y" }}</p>
+                            </div>
+
+                            <div class="barrier-download__actions">
+                                <a class="barrier-download__action-item" href="{% url 'barriers:delete-download' download.id %}">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
             {% endif %}
-            {% for download in barrier_downloads %}
-                <div class="ma-card-list__item">
-                    <div class="saved-search__content">
-                        <h3 class="saved-search__title"><a href="{{ download.progress_url }}">{{ download.name }}</a></h3>
-                        <p class="saved-search__description">{{download.status}}</p>
-                        <p class="saved-search__description">{{ download.created_on|date:"jS F Y" }}</p>
-                    </div>
-                </div>
-            {% endfor %}
         </section>
     {% endif %}
 

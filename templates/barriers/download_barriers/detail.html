@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 
-{% block page_title %}{{ block.super }} - CSV Download Progress{% endblock %}
+{% block page_title %}{{ block.super }} - Your download is being prepared{% endblock %}
+
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+    </div>
+{% endblock %}
+
 {% block page_content %}
-    <h1>CSV Download Progress</h1>
+
+    {% include 'partials/heading.html' with text='Your download is being prepared' %}
+
     <p>Please wait while your CSV file is being generated...</p>
     <progress id="progressBar" value="0" max="100"></progress>
     <p id="progressText">0%</p>

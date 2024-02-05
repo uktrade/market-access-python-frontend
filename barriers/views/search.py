@@ -4,7 +4,7 @@ from urllib.parse import urlencode
 from django.forms import Form
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, View
+from django.views.generic import FormView, View, TemplateView
 
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
@@ -172,10 +172,8 @@ class DownloadBarriers(SearchFormMixin, View):
         form.is_valid()
         search_parameters = form.get_api_search_parameters()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
-        resp = client.barriers.get_email_csv(**search_parameters)
-
-        # search_page_url = reverse("barriers:search")
-        download_detail_url = reverse("barriers:download-detail", args=[resp["id"]])
+        resp = client.barrier_download.create(**search_parameters)
+        download_detail_url = reverse("barriers:download-detail", args=resp.id)
         search_page_params = {
             "search_csv_downloaded": int(resp.get("success", False)),
             "search_csv_download_error": resp.get("reason", ""),
@@ -187,16 +185,26 @@ class DownloadBarriers(SearchFormMixin, View):
         )
 
 
-class DownloadBarriersDetail(SearchFormMixin, View):
-    form_class = None
-    template_name = "barriers/download_detail.html"
+class DownloadBarriersDetail(SearchFormMixin, TemplateView):
+    template_name = "barriers/download_barriers/detail.html"
 
     def get(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session["sso_token"])
-        barrier_download = client.barrier_download.get(kwargs["pk"])
+        download_barrier_id = str(kwargs["download_barrier_id"])
+        barrier_download = client.barrier_download.get(download_barrier_id)
         return self.render_to_response(
             self.get_context_data(barrier_download=barrier_download)
         )
+
+
+class DownloadBarriersDelete(SearchFormMixin, TemplateView):
+    template_name = "barriers/download_barriers/delete.html"
+
+    def post(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(self.request.session["sso_token"])
+        download_barrier_id = str(kwargs["download_barrier_id"])
+        client.barrier_download.delete(download_barrier_id)
+        return HttpResponseRedirect(reverse("barriers:dashboard"))
 
 
 class RequestBarrierDownloadApproval(SearchFormMixin, View):
