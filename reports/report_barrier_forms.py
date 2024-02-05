@@ -569,10 +569,7 @@ class BarrierPublicEligibilityForm(forms.Form):
             ("yes", "Yes"),
             ("no", "No"),
         ),
-        error_messages={
-            "required": "Indicate whether the barrier can be published or not"
-        },
-        required=True,
+        required=False,
     )
     public_eligibility_summary = forms.CharField(
         label="Explain why the barrier should not be published",
@@ -588,6 +585,16 @@ class BarrierPublicEligibilityForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+
+        # Need to check for required field. Needs to be done here or the key
+        # will be missing for the summary check later in the method.
+        if (
+            "public_eligibility" not in cleaned_data.keys()
+            or cleaned_data["public_eligibility"] == ""
+        ):
+            msg = "Indicate whether the barrier can be published or not"
+            self.add_error("public_eligibility", msg)
+            return
 
         # Summary required if barrier cannot be published
         if (
