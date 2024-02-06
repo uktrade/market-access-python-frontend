@@ -127,9 +127,9 @@
                     {% for download in barrier_downloads %}
                         <li class="ma-card-list__item barrier-download">
                             <div class="barrier-download__content">
-                                <h3 class="barrier-download__title">{{ download.name }}</h3>
+                                <h3 class="barrier-download__title">{{download.name}}</h3>
                                 <p class="barrier-download__description">Download status: {{download.status}}</p>
-                                <p class="barrier-download__description">{{ download.created_on|date:"jS F Y" }}</p>
+                                <p class="barrier-download__description">Requested {{download.created_on|timesince}}</p>
                             </div>
 
                             <div class="barrier-download__actions">
