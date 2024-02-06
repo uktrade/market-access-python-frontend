@@ -566,8 +566,8 @@ class BarrierPublicEligibilityForm(forms.Form):
         label="Can the barrier be published on GOV.UK?",
         help_text="All market access barriers should be published unless there is a valid reason not to.",
         choices=(
-            ("yes", "Yes"),
-            ("no", "No"),
+            ("yes", "Yes, it can be published once approved"),
+            ("no", "No, it cannot be published"),
         ),
         required=False,
     )
