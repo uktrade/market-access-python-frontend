@@ -563,7 +563,7 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
 class BarrierPublicEligibilityForm(forms.Form):
     public_eligibility = forms.ChoiceField(
-        label="Can the barrier be published on GOV.UK?",
+        label="Should this barrier be made public on GOV.UK, once it has been approved?",
         help_text="All market access barriers should be published unless there is a valid reason not to.",
         choices=(
             ("yes", "Yes, it can be published once approved"),

@@ -421,7 +421,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         # Public eligibility value comes through as 'true' or 'false, needs to have
                         # a readable version for the summary page.
                         context[key] = (
-                            "Can be published" if value else "Cannot be published"
+                            "Can be published, once approved"
+                            if value
+                            else "Cannot be published"
                         )
 
                     elif key == "title" and step == "barrier-public-title":

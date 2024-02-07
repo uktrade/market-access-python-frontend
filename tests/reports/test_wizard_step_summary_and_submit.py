@@ -228,7 +228,7 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
         assert result["companies"] == ["BLAH LTD"]
         assert result["related_organisations"] == ["Fake Company"]
         assert result["codes"] == [{"code": "1002000000", "description": "A Thing"}]
-        assert result["public_eligibility"] == "Can be published"
+        assert result["public_eligibility"] == "Can be published, once approved"
         assert result["public_title"] == "The public title"
         assert result["public_summary"] == "The public summary"
 
@@ -385,7 +385,7 @@ class SummaryPageLoadTestCase(MarketAccessTestCase):
         assert result["companies"] == ["BLAH LTD"]
         assert result["related_organisations"] == ["Fake Company"]
         assert result["codes"] == [{"code": "1002000000", "description": "A Thing"}]
-        assert result["public_eligibility"] == "Can be published"
+        assert result["public_eligibility"] == "Can be published, once approved"
         assert "public_title" not in result.keys()
         assert "public_summary" not in result.keys()
 
