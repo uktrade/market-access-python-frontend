@@ -563,16 +563,13 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
 
 class BarrierPublicEligibilityForm(forms.Form):
     public_eligibility = forms.ChoiceField(
-        label="Can the barrier be published on GOV.UK?",
+        label="Should this barrier be made public on GOV.UK, once it has been approved?",
         help_text="All market access barriers should be published unless there is a valid reason not to.",
         choices=(
-            ("yes", "Yes"),
-            ("no", "No"),
+            ("yes", "Yes, it can be published once approved"),
+            ("no", "No, it cannot be published"),
         ),
-        error_messages={
-            "required": "Indicate whether the barrier can be published or not"
-        },
-        required=True,
+        required=False,
     )
     public_eligibility_summary = forms.CharField(
         label="Explain why the barrier should not be published",
@@ -588,6 +585,16 @@ class BarrierPublicEligibilityForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+
+        # Need to check for required field. Needs to be done here or the key
+        # will be missing for the summary check later in the method.
+        if (
+            "public_eligibility" not in cleaned_data.keys()
+            or cleaned_data["public_eligibility"] == ""
+        ):
+            msg = "Indicate whether the barrier can be published or not"
+            self.add_error("public_eligibility", msg)
+            return
 
         # Summary required if barrier cannot be published
         if (

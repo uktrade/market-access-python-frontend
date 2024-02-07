@@ -80,7 +80,7 @@ def check_public_form_form_display(step):
 
         # Check public-information-gate answer only if we are on the public-title or public-summary steps
         # Skip to the final step if a negative answer recieved
-        if step in ["title", "summary"]:
+        if step in ["public_title", "public_summary"]:
             if cleaned_data_information_gate is not None:
                 if cleaned_data_information_gate["public_information"] == "false":
                     show_page = False
@@ -111,10 +111,10 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
     # to decide if the page should be included in the form_list.
     condition_dict = {
         "barrier-public-information-gate": check_public_form_form_display(
-            "information_gate"
+            "public_information_gate"
         ),
-        "barrier-public-title": check_public_form_form_display("title"),
-        "barrier-public-summary": check_public_form_form_display("summary"),
+        "barrier-public-title": check_public_form_form_display("public_title"),
+        "barrier-public-summary": check_public_form_form_display("public_summary"),
     }
 
     def get_template_names(self):
@@ -421,7 +421,9 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         # Public eligibility value comes through as 'true' or 'false, needs to have
                         # a readable version for the summary page.
                         context[key] = (
-                            "Can be published" if value else "Cannot be published"
+                            "Can be published, once approved"
+                            if value
+                            else "Cannot be published"
                         )
 
                     elif key == "title" and step == "barrier-public-title":
@@ -436,6 +438,37 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         context[key] = value
 
         return context
+
+    def process_step(self, form):
+        """
+        This method is used to postprocess the form data. By default, it
+        returns the raw `form.data` dictionary.
+        """
+
+        # During the process, get_cleaned_data_for_step will trigger an error
+        # if some optional forms have been submitted, then later the user chooses a different path.
+        # At the root of the branching paths, we need to remove step data if we jump to a different path
+        # so we do not cause a keyerror when looping cleaned_data on the final barrier summary step.
+        if (
+            form.prefix == "barrier-public-eligibility"
+            and not form.cleaned_data["public_eligibility"]
+        ):
+            for form_name in [
+                "barrier-public-information-gate",
+                "barrier-public-title",
+                "barrier-public-summary",
+            ]:
+                if form_name in self.storage.data["step_data"]:
+                    self.storage.data["step_data"].pop(form_name)
+        if (
+            form.prefix == "barrier-public-information-gate"
+            and form.cleaned_data["public_information"] == "false"
+        ):
+            for form_name in ["barrier-public-title", "barrier-public-summary"]:
+                if form_name in self.storage.data["step_data"]:
+                    self.storage.data["step_data"].pop(form_name)
+
+        return self.get_form_step_data(form)
 
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)

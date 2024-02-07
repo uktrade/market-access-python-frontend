@@ -130,16 +130,20 @@
                         <div class="edit-url"><a href="/reports/barrier-public-eligibility" class="govuk-link">Change</a></div>
                     </div>
                 {% else %}
-                    <div class="report-barrier-questions__question">
-                        <h4 class="govuk-heading-s question-label">Public title</h4>
-                        <div class="answer">{{public_title}}</div>
-                        <div class="edit-url"><a href="/reports/barrier-public-title" class="govuk-link">Change</a></div>
-                    </div>
-                    <div class="report-barrier-questions__question">
-                        <h4 class="govuk-heading-s question-label">Public summary</h4>
-                        <div class="answer">{{public_summary}}</div>
-                        <div class="edit-url"><a href="/reports/barrier-public-summary" class="govuk-link">Change</a></div>
-                    </div>
+                    {% if public_title %}
+                        <div class="report-barrier-questions__question">
+                            <h4 class="govuk-heading-s question-label">Public title</h4>
+                            <div class="answer">{{public_title}}</div>
+                            <div class="edit-url"><a href="/reports/barrier-public-title" class="govuk-link">Change</a></div>
+                        </div>
+                    {% endif %}
+                    {% if public_summary %}
+                        <div class="report-barrier-questions__question">
+                            <h4 class="govuk-heading-s question-label">Public summary</h4>
+                            <div class="answer">{{public_summary}}</div>
+                            <div class="edit-url"><a href="/reports/barrier-public-summary" class="govuk-link">Change</a></div>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
 
