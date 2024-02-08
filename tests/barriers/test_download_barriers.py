@@ -9,9 +9,11 @@ from core.tests import MarketAccessTestCase
 class TestDownloadBarriers(MarketAccessTestCase):
     @patch("utils.api.client.BarrierDownloadsResource.get_presigned_url")
     def test_download_barriers(self, mock_get_presigned_url):
-        mock_get_presigned_url.return_value = {"presigned_url": "http://s3.example-download.com"}
+        mock_get_presigned_url.return_value = {
+            "presigned_url": "http://s3.example-download.com"
+        }
         response = self.client.get(
-            reverse("barriers:download"),
+            reverse("barriers:download-link"),
             data={
                 "search": "Test search",
                 "country": [
@@ -54,11 +56,15 @@ class TestDownloadBarriers(MarketAccessTestCase):
         )
 
     @patch("utils.api.client.BarriersResource.get_presigned_url")
-    def test_download_response_contains_correct_url_encoding(self, mock_get_presigned_url):
+    def test_download_response_contains_correct_url_encoding(
+        self, mock_get_presigned_url
+    ):
         # tss-1359 - filters missing after download redirect
-        mock_get_presigned_url.return_value = {"presigned_url": "http://s3.example-download.com"}
+        mock_get_presigned_url.return_value = {
+            "presigned_url": "http://s3.example-download.com"
+        }
         response = self.client.get(
-            reverse("barriers:download"),
+            reverse("barriers:download-link"),
             data={
                 "search": "Test search",
                 "country": [
