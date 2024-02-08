@@ -122,18 +122,33 @@
                 <p>You have no downloads</p>
                 <p><a href="">How do I download barriers?</a></p>
             {% else %}
-                <p>By downloading files from this page you are agreeing to the <a href="">acceptable use agreement</a></p>
+                <p>By downloading files from this page you are agreeing to the <a href="https://workspace.trade.gov.uk/working-at-dbt/policies-and-guidance/policies/acceptable-use-policy/">acceptable use agreement</a></p>
                 <ul class="ma-card-list">
                     {% for download in barrier_downloads %}
                         <li class="ma-card-list__item barrier-download">
                             <div class="barrier-download__content">
-                                <h3 class="barrier-download__title">{{download.name}}</h3>
-                                <p class="barrier-download__description">Download status: {{download.status}}</p>
-                                <p class="barrier-download__description">Requested {{download.created_on|timesince}}</p>
-                            </div>
+                                <div class="barrier-download__content--item">
+                                    <h3 class="barrier-download__title">{{download.name}}</h3>
+                                    <p>{{download.count}} result{{download.count|length|pluralize:"s"}}</p>
 
-                            <div class="barrier-download__actions">
-                                <a class="barrier-download__action-item" href="{% url 'barriers:delete-download' download.id %}">Delete</a>
+                                    {% if download.filters %}
+                                        <ul class="barrier-download__filter-list">
+                                            {% for name, value in download.readable_filters.items %}
+                                                <li class="barrier-download__filter-list-item">{{ value.readable_value|striptags }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+
+                                <div class="barrier-download__content--item">
+                                    <p>Download status: <span class="title">{{ download.status }}</span></p>
+                                    <p class="time-item">Requested {{ download.created_on|timesince }}</p>
+                                    <a href="{% url 'barriers:download-link' download.id %}">Download results</a>
+                                </div>
+
+                                <div class="barrier-download__content--item actions">
+                                    <a class="barrier-download__action-item" href="{% url 'barriers:delete-download' download.id %}">Delete</a>
+                                </div>
                             </div>
                         </li>
                     {% endfor %}

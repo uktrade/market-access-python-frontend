@@ -16,7 +16,26 @@
         margin-bottom: 0;
     }
     @include mq( $from: 1080px ){
-        width: 70%;
+        width: 100%;
+    }
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &--item{
+        margin-bottom: govuk-em( 16, 16 );
+
+        .title{
+            font-weight: bold;
+        }
+        .time-item{
+            color: $govuk-dark-grey !important
+        }
+        &.actions{
+            float: right;
+            margin-bottom: govuk-em( 16, 16 );
+        }
     }
 }
 
@@ -27,25 +46,17 @@
     }
 }
 
-.barrier-download__description {
-    margin: 0 0;
-}
-
-.barrier-download__notifications {
-    float: left;
-    margin-bottom: govuk-em( 16, 16 );
-}
-
 .barrier-download__actions {
     float: right;
     margin-left: auto;
     text-align: right;
+    margin-bottom: govuk-em( 16, 16 );
 }
 
 .barrier-download__action-item {
     display: block;
     margin-bottom: govuk-em( 12, 16 );
-    margin-left: govuk-em( 24, 16 );;
+    margin-left: govuk-em( 24, 16 );
 }
 
 .barrier-download__filter-list {

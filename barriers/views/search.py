@@ -207,7 +207,8 @@ class DownloadBarriersDelete(SearchFormMixin, TemplateView):
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         download_barrier_id = str(kwargs["download_barrier_id"])
         client.barrier_download.delete(download_barrier_id)
-        return HttpResponseRedirect(reverse("barriers:dashboard"))
+        url = reverse("barriers:dashboard") + "?active=barrier_downloads"
+        return HttpResponseRedirect(url)
     
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -216,6 +217,14 @@ class DownloadBarriersDelete(SearchFormMixin, TemplateView):
         context_data["download_barrier_id"] = download_barrier_id
         context_data["barrier_download"] = client.barrier_download.get(download_barrier_id)
         return context_data
+
+
+class BarrierDownloadLink(View):
+    def get(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(self.request.session["sso_token"])
+        download_barrier_id = str(kwargs["download_barrier_id"])
+        barrier_download_link = client.barrier_download.get_presigned_url(download_barrier_id)
+        return HttpResponseRedirect(barrier_download_link.get("presigned_url", ""))
 
 
 class RequestBarrierDownloadApproval(SearchFormMixin, View):

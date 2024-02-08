@@ -4,7 +4,7 @@
 
 {% block outside_content %}
     <div class="govuk-width-container ma-container-full">
-        <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+        <a href="{{ barrier_download.dashboard_uri }}" class="govuk-back-link">Back</a>
     </div>
 {% endblock %}
 
@@ -31,7 +31,7 @@
             </div>
 
             <button class="govuk-button" data-module="govuk-button">Confirm</button>
-            <a href="{% url 'barriers:dashboard' %}" class="form-cancel">Cancel</a>
+            <a href="{{ barrier_download.dashboard_uri }}" class="form-cancel">Cancel</a>
         </form>
     </section>
 

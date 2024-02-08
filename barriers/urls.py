@@ -147,6 +147,7 @@ from .views.search import (
     DownloadBarriers,
     DownloadBarriersDetail,
     DownloadBarriersDelete,
+    BarrierDownloadLink,
     RequestBarrierDownloadApproval,
 )
 from .views.sectors import (
@@ -183,6 +184,11 @@ urlpatterns = [
         "search/download/<uuid:download_barrier_id>",
         DownloadBarriersDetail.as_view(),
         name="download-detail",
+    ),
+    path(
+        "search/download/<uuid:download_barrier_id>/link/",
+        BarrierDownloadLink.as_view(),
+        name="download-link",
     ),
     path(
         "search/download/<uuid:download_barrier_id>/delete/",
