@@ -4,7 +4,7 @@ from urllib.parse import urlencode
 from django.forms import Form
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import FormView, View, TemplateView
+from django.views.generic import FormView, TemplateView, View
 
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
@@ -175,7 +175,7 @@ class DownloadBarriers(SearchFormMixin, View):
         barrier_download = client.barrier_download.create(**search_parameters)
         download_detail_url = reverse(
             "barriers:download-detail",
-            kwargs={"download_barrier_id": barrier_download.id}
+            kwargs={"download_barrier_id": barrier_download.id},
         )
         search_page_params = {
             "search_csv_downloaded": "",
@@ -209,13 +209,15 @@ class DownloadBarriersDelete(SearchFormMixin, TemplateView):
         client.barrier_download.delete(download_barrier_id)
         url = reverse("barriers:dashboard") + "?active=barrier_downloads"
         return HttpResponseRedirect(url)
-    
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         download_barrier_id = kwargs["download_barrier_id"]
         context_data["download_barrier_id"] = download_barrier_id
-        context_data["barrier_download"] = client.barrier_download.get(download_barrier_id)
+        context_data["barrier_download"] = client.barrier_download.get(
+            download_barrier_id
+        )
         return context_data
 
 
@@ -223,7 +225,9 @@ class BarrierDownloadLink(View):
     def get(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         download_barrier_id = str(kwargs["download_barrier_id"])
-        barrier_download_link = client.barrier_download.get_presigned_url(download_barrier_id)
+        barrier_download_link = client.barrier_download.get_presigned_url(
+            download_barrier_id
+        )
         return HttpResponseRedirect(barrier_download_link.get("presigned_url", ""))
 
 

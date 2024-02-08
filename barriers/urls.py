@@ -143,11 +143,11 @@ from .views.saved_searches import (
     SavedSearchNotifications,
 )
 from .views.search import (
+    BarrierDownloadLink,
     BarrierSearch,
     DownloadBarriers,
-    DownloadBarriersDetail,
     DownloadBarriersDelete,
-    BarrierDownloadLink,
+    DownloadBarriersDetail,
     RequestBarrierDownloadApproval,
 )
 from .views.sectors import (
