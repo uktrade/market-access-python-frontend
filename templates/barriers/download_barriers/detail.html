@@ -18,8 +18,8 @@
             <li>{{ barrier_download.count }} results</li>
             {% if barrier_download.filters %}
                 <ul class="barrier-download__filter-list">
-                    {% for name, value in barrier_download.filters.items %}
-                        <li class="barrier-download__filter-list-item">{{ value|striptags }}</li>
+                    {% for name, value in download.readable_filters.item %}
+                        <li class="barrier-download__filter-list-item">{{ value.readable_value|striptags }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}

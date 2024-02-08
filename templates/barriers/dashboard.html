@@ -133,7 +133,7 @@
 
                                     {% if download.filters %}
                                         <ul class="barrier-download__filter-list">
-                                            {% for name, value in download.readable_filters.items %}
+                                            {% for name, value in download.readable_filters.item %}
                                                 <li class="barrier-download__filter-list-item">{{ value.readable_value|striptags }}</li>
                                             {% endfor %}
                                         </ul>
