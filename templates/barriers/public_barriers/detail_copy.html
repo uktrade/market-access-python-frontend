@@ -1,0 +1,386 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load activity %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+{% block page_title %}{{ block.super }} - Public barrier{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' %}
+    </div>
+    {% include 'barriers/partials/tags.html' %}
+{% endblock %}
+
+{% block head %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script nonce="{{request.csp_nonce}}">
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderTextAreaWithMentions("note-textarea-container")
+        })
+    </script>
+{% endblock %}
+
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">
+        if( ma.components.DeleteModal ){
+            new ma.components.DeleteModal();
+        }
+    </script>
+{% endblock %}
+
+{% block outside_content %}
+    {% if delete_note %}
+        <div class="modal">
+            <div class="modal__content" role="alertdialog" tabindex="1" aria-describedby="modal-label">
+                <h3 class="modal__content__title" id="modal-label">Delete note</h3>
+                <p>Are you sure you want to delete this note?</p>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="note_id" value="{{ delete_note }}" />
+                    <button name="action" value="delete-note" class="govuk-button" tabindex="2">Yes, delete</button>
+                    <a href="{% url 'barriers:public_barrier_detail' barrier.id %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">No, cancel</a>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='public' %}
+
+    <section class="summary-group">
+        <h2 class="summary-group__heading">Public view: {{ public_barrier.public_status_text }}
+            {% if public_barrier.ready_text %}<span class="summary-group__subheading">{{ public_barrier.ready_text }}</span>{% endif %}
+        </h2>
+
+        {% if public_barrier.public_view_status == 20 %}
+            <div class="public-barrier-approved-warning">
+                <div class="govuk-warning-text govuk-!-margin-bottom-2">
+                    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+
+
+                    <span class="govuk-warning-text__assistive">Warning</span> <strong class="govuk-warning-text__text">Updating the public view status to ‘allowed’ does not mean the barrier will be published.</strong>
+                </div>
+                <div class="public-barrier-approved-warning__body">
+                    <p>The barrier will only be published once it has gone through quality assurance checks by BTR, Post, OGDs, DAs, HMTCs and the content team.</p>
+
+                    <p>Choosing the option “allowed, it can be viewed by the public” confirms that the barrier will be viewable by the public once it has been published.</p>
+
+                    <p>You can check the progress of these quality assurance checks in the “Public view” tab on the barrier’s page.</p>
+
+                </div>
+            </div>
+        {% endif %}
+
+        {% if public_barrier.first_published_on %}
+            <div class="publish-dates">
+                {% if public_barrier.last_published_on == public_barrier.first_published_on %}
+                    <p class="publish-dates__date">Published on {{ public_barrier.last_published_on|date:"j F Y" }} at {{ public_barrier.last_published_on|time:"g:iA"|lower }} (GMT)</p>
+                {% else %}
+                    <p class="publish-dates__date publish-dates__date--first">First published on {{ public_barrier.first_published_on|date:"j F Y" }} at {{ public_barrier.first_published_on|time:"g:iA"|lower }} (GMT)</p>
+                    {% if not public_barrier.unpublished_on %}
+                        <p class="publish-dates__date">Last published on {{ public_barrier.last_published_on|date:"j F Y" }} at {{ public_barrier.last_published_on|time:"g:iA"|lower }} (GMT)</p>
+                    {% endif %}
+                {% endif %}
+                {% if not public_barrier.is_published and public_barrier.unpublished_on %}
+                    <p class="publish-dates__date">Unpublished on {{ public_barrier.unpublished_on|date:"j F Y" }} at {{ public_barrier.unpublished_on|time:"g:iA"|lower }} (GMT)</p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if barrier.public_eligibility and public_barrier.unpublished_changes %}
+            {% include "partials/warning.html" with warning_text="There are unpublished changes" modifier="small" extra_classes="publish-update-warning" %}
+        {% endif %}
+
+        {% if current_user|has_permission:"change_barrier_public_eligibility" and not current_user|has_permission:"change_publicbarrier" %}
+            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-3 govuk-!-margin-top-5">Update public view status</a>
+        {% endif %}
+
+        <dl class="summary-group__list">
+            <dt class="summary-group__list__key">Public title</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.public_eligibility and public_barrier.internal_title_changed %}
+                    {% include "partials/warning.html" with warning_text="Internal title has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
+                {% endif %}
+                {% if public_barrier.title %}
+                    {% if barrier.public_eligibility and public_barrier.latest_published_version.title and public_barrier.latest_published_version.title != public_barrier.title %}
+                        <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.title }}</div>
+
+                        <div class="public-barrier__current-value-container">
+                            <h3 class="public-barrier__current-value-heading">New public title - not yet published</h3>
+                            <p class="public-barrier__current-value">{{ public_barrier.title }}</p>
+                            {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
+                                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        {{ public_barrier.title }}
+                        {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
+                            <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Edit</a>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_title' barrier.id %}">Add public title</a>
+                    {% else %}
+                        {% include "partials/warning.html" with warning_text="Public title has not been created" modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-margin-top-2" %}
+                    {% endif %}
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Public summary</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.public_eligibility and public_barrier.internal_summary_changed %}
+                    {% include "partials/warning.html" with warning_text="Internal summary has changed" modifier="small" extra_classes="govuk-!-margin-bottom-0" %}
+                {% endif %}
+                {% if public_barrier.summary %}
+                    {% if barrier.public_eligibility and public_barrier.latest_published_version.summary and public_barrier.latest_published_version.summary != public_barrier.summary %}
+                        <div class="public-barrier__published-value">{{ public_barrier.latest_published_version.summary|linebreaksbr }}</div>
+
+                        <div class="public-barrier__current-value-container">
+                            <h3 class="public-barrier__current-value-heading">New public summary - not yet published</h3>
+                            <p class="public-barrier__current-value">{{ public_barrier.summary|linebreaksbr }}</p>
+                            {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
+                                <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        {{ public_barrier.summary|linebreaksbr }}
+                        {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
+                            <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Edit</a>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% if barrier.public_eligibility and current_user|has_permission:"change_publicbarrier" %}
+                        <a class="summary-group__list__value__edit" href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}">Add public summary</a>
+                    {% else %}
+                        {% include "partials/warning.html" with warning_text="Public summary has not been created" modifier="small" extra_classes="govuk-!-margin-bottom-0 govuk-!-margin-top-2" %}
+                    {% endif %}
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Public ID</dt>
+            <dd class="summary-group__list__value">
+                {% if public_barrier.first_published_on %}
+                    {{ public_barrier.public_id }}
+                {% else %}
+                    A public ID will appear once published.
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Resolved</dt>
+            <dd class="summary-group__list__value">
+                {% if public_barrier.internal_is_resolved_changed or public_barrier.internal_status_date_changed and public_barrier.first_published_on %}
+                    <span class="diff__del diff__del--block">
+                        {{ public_barrier.latest_published_version.is_resolved_text }}
+                    </span>
+                    <span class="diff__ins diff__ins--block">
+                        {{ public_barrier.internal_is_resolved_text }}
+                    </span>
+                {% else %}
+                    {{ public_barrier.internal_is_resolved_text }}
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Date reported</dt>
+            <dd class="summary-group__list__value">
+                {{ public_barrier.reported_on|date:"j F Y" }}
+            </dd>
+
+            <dt class="summary-group__list__key">Location</dt>
+            <dd class="summary-group__list__value">
+                {% if public_barrier.internal_location_changed and public_barrier.first_published_on %}
+                    <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.location }}</span>
+                    <span class="diff__ins diff__ins--block">{{ public_barrier.internal_location }}</span>
+                {% else %}
+                    {{ public_barrier.internal_location }}
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Sector</dt>
+            <dd class="summary-group__list__value">
+                {% if public_barrier.internal_any_sectors_changed and public_barrier.first_published_on %}
+                    {% if public_barrier.latest_published_version.sector_names %}
+                        <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.sector_names|join:", " }}</span>
+                    {% endif %}
+                    {% if public_barrier.internal_sector_names %}
+                        <span class="diff__ins diff__ins--block">{{ public_barrier.internal_sector_names|join:", " }}</span>
+                    {% endif %}
+                {% else %}
+                    {% if public_barrier.internal_sector_names %}
+                        {{ public_barrier.internal_sector_names|join:", " }}
+                    {% else %}
+                        Not selected, add on main barrier tab.
+                    {% endif %}
+                {% endif %}
+            </dd>
+
+            <dt class="summary-group__list__key">Category</dt>
+            <dd class="summary-group__list__value">
+                {% if public_barrier.internal_categories_changed and public_barrier.first_published_on %}
+                    {% if public_barrier.latest_published_version.category_titles %}
+                        <span class="diff__del diff__del--block">{{ public_barrier.latest_published_version.category_titles|join:", " }}</span>
+                    {% endif %}
+                    {% if public_barrier.internal_category_titles %}
+                        <span class="diff__ins diff__ins--block">{{ public_barrier.internal_category_titles|join:", " }}</span>
+                    {% endif %}
+                {% else %}
+                    {% if public_barrier.internal_category_titles %}
+                        {{ public_barrier.internal_category_titles|join:", " }}
+                    {% else %}
+                        Not selected, add on main barrier tab.
+                    {% endif %}
+                {% endif %}
+            </dd>
+        </dl>
+
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {% if public_barrier.is_eligible or public_barrier.is_unpublished %}
+                {% if current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
+                    {% if public_barrier.title and public_barrier.summary %}
+                        {% if public_barrier.unpublished_changes %}
+                            <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
+                            {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
+                                <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="ignore-changes">Confirm changes</button>
+                            {% endif %}
+                        {% else %}
+                            <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
+                        {% endif %}
+                    {% else %}
+                        <button disabled="disabled" aria-disabled="true" class="govuk-button publishing-button disabled" data-module="govuk-button" name="action" value="mark-as-ready">Mark as ready to publish</button>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            {% if public_barrier.is_ready %}
+                {% if current_user|has_permission:"publish_barrier" %}
+                    <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="publish">Publish{% if public_barrier.first_published_on and not public_barrier.unpublished_on %} update{% endif %}</button>
+                {% endif %}
+                {% if current_user|has_permission:"mark_barrier_as_ready_for_publishing" %}
+                    <button class="govuk-button publishing-button govuk-button--secondary" data-module="govuk-button" name="action" value="mark-as-in-progress">Mark as in progress</button>
+                {% endif %}
+            {% endif %}
+
+            {% if public_barrier.is_published and current_user|has_permission:"publish_barrier" %}
+                {% if public_barrier.internal_title_changed or public_barrier.internal_summary_changed %}
+                    <button disabled="disabled" aria-disabled="true"  class="govuk-button publishing-button" data-module="govuk-button" name="action" value="publish">Publish update</button>
+                    <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="ignore-changes">Accept changes</button>
+                {% elif public_barrier.unpublished_changes %}
+                    <button class="govuk-button publishing-button" data-module="govuk-button" name="action" value="mark-as-ready">Mark changes as ready to publish</button>
+                {% endif %}
+                <button class="govuk-button govuk-button--secondary publishing-button" data-module="govuk-button" name="action" value="unpublish">Unpublish</button>
+            {% endif %}
+        </form>
+
+        {% if not public_barrier.is_published and current_user|has_permission:"change_publicbarrier" %}
+            <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-button govuk-button--secondary">Update public view status</a>
+        {% endif %}
+    </section>
+
+    <section class="barrier-content">
+        <h2 class="section-heading govuk-!-margin-bottom-0">Internal notes and updates</h2>
+        <span class="govuk-caption-m govuk-!-margin-bottom-6">These are not shown to the public.</span>
+
+        {% if public_barrier.light_touch_reviews.enabled %}
+            <div class="review-progress-checkboxes">
+                <h3>Review progress</h3>
+                <p class="description">Keep track of outstanding approvals</p>
+
+
+                <form class="govuk-checkboxes" id="tags" action="{% url 'barriers:edit_public_barrier_reviews' barrier.id %}" method="get">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend filter-items__label filter-group__label visually-hidden">
+                            Review Progress
+                        </legend>
+                        {% if public_barrier.title and public_barrier.summary %}
+                            <div class="checkbox-option">
+                                <div class="govuk-checkboxes__item">
+
+                                    <input class="govuk-checkboxes__input"
+                                           name="content_approval"
+                                           onChange="this.form.submit()"
+                                           type="checkbox"
+                                           {% if public_barrier.light_touch_reviews.content_team_approval %}checked{% endif %}>
+                                    <label class="govuk-label govuk-checkboxes__label">
+                                        Content team</label>
+                                    {% if public_barrier.light_touch_reviews.has_content_changed_since_approval %}<span class="checkbox-note">Edited since last content review</span>{% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="checkbox-option">
+                                <p class="add-approval-link">
+                                    <span>Public barrier has no title or summary content to review</span>
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval_enabled %}
+                            <div class="checkbox-option">
+                                <div class="govuk-checkboxes__item">
+                                    <input class="govuk-checkboxes__input"
+                                           name="hm_trade_comm_approval"
+                                           onChange="this.form.submit()"
+                                           type="checkbox"
+                                           {% if public_barrier.light_touch_reviews.hm_trade_commissioner_approval %}checked{% endif %}>
+                                    <label class="govuk-label govuk-checkboxes__label">HM Trade Commissioner</label>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="checkbox-option">
+                                <p class="add-approval-link">
+                                    <a href="{% url 'barriers:enable_hm_trade_commissioner_approvals' barrier.id %}?enabled=1">Add HM Trade Commissioner</a>
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% for government_organisation in barrier.government_organisations %}
+                            <div class="checkbox-option">
+                                <div class="govuk-checkboxes__item">
+                                    <input class="govuk-checkboxes__input"
+                                           name="organisation_approval__{{ government_organisation.id }}"
+                                           onChange="this.form.submit()"
+                                           type="checkbox"
+                                           {% if government_organisation.id in public_barrier.light_touch_reviews.government_organisation_approvals %}checked{% endif %}>
+                                    <label class="govuk-label govuk-checkboxes__label">{{ government_organisation.name }}</label>
+                                    <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail" class="remove">Edit</a>
+                                </div>
+                            </div>
+                        {% empty %}
+                        {% endfor %}
+                        {% if not public_barrier.light_touch_reviews.hm_trade_commissioner_approval_enabled %}
+                        {% endif %}
+                        <div class="checkbox-option">
+                            <p class="add-approval-link">
+                                <a href="{% url 'barriers:edit_gov_orgs' barrier.id %}?return_to=public_barrier_detail">Add government organisation</a>
+                            </p>
+                        </div>
+                    </fieldset>
+                    <noscript>
+                        <br/>
+                        <input type="submit" class="govuk-button button--primary" value="Save"/>
+                    </noscript>
+                </form>
+            </div>
+        {% endif %}
+
+        {% if add_note %}
+            <div class="interaction-panel">
+                {% include 'barriers/partials/public_barrier_note_form.html' %}
+            </div>
+        {% elif not edit_note %}
+            <a class="govuk-button button--primary" href="?add-note=1">Add a note</a>
+        {% endif %}
+
+        <ol class="event-list js-delete-modal-container">
+            {% for item in activity_items %}
+                <li class="event-list__item{% if item.modifier %} event_list__item--{{ item.modifier }}{% endif %}{% if item.date > barrier.last_seen_on %} event-list__item--unseen{% endif %}">
+                    {% activity_item item %}
+                </li>
+            {% endfor %}
+        </ol>
+    </section>
+
+{% endblock %}
