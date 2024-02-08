@@ -11,7 +11,6 @@ class BarrierDownload(APIModel):
 
     def __init__(self, data):
         self.data = data
-        print(self.data)
 
     @property
     def id(self):

@@ -7,9 +7,9 @@ from core.tests import MarketAccessTestCase
 
 
 class TestDownloadBarriers(MarketAccessTestCase):
-    @patch("utils.api.client.BarriersResource.get_email_csv")
-    def test_download_barriers(self, mock_get_email_csv):
-        mock_get_email_csv.return_value = {"success": True, "reason": ""}
+    @patch("utils.api.client.BarrierDownloadsResource.get_presigned_url")
+    def test_download_barriers(self, mock_get_presigned_url):
+        mock_get_presigned_url.return_value = {"presigned_url": "http://s3.example-download.com"}
         response = self.client.get(
             reverse("barriers:download"),
             data={
@@ -34,7 +34,7 @@ class TestDownloadBarriers(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
 
-        mock_get_email_csv.assert_called_with(
+        mock_get_presigned_url.assert_called_with(
             search="Test search",
             location=(
                 "9f5f66a0-5d95-e211-a939-e4115bead28a,"
@@ -53,10 +53,10 @@ class TestDownloadBarriers(MarketAccessTestCase):
             ordering="-reported",
         )
 
-    @patch("utils.api.client.BarriersResource.get_email_csv")
-    def test_download_response_contains_correct_url_encoding(self, mock_get_email_csv):
+    @patch("utils.api.client.BarriersResource.get_presigned_url")
+    def test_download_response_contains_correct_url_encoding(self, mock_get_presigned_url):
         # tss-1359 - filters missing after download redirect
-        mock_get_email_csv.return_value = {"success": True, "reason": ""}
+        mock_get_presigned_url.return_value = {"presigned_url": "http://s3.example-download.com"}
         response = self.client.get(
             reverse("barriers:download"),
             data={
