@@ -203,5 +203,5 @@ class ReportWizardPublicSummaryTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        expected_error_message = "Summary should be 2000 characters or less"
+        expected_error_message = "Summary should be 1500 characters or less"
         assert expected_error_message in str(form.errors["summary"])
