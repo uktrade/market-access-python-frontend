@@ -52,9 +52,7 @@ class ReportWizardPublicEligibilityTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        expected_error_message = (
-            "Barriers require a reason to not be eligible for publishing"
-        )
+        expected_error_message = "Enter a reason for not publishing this barrier"
         assert expected_error_message in str(form.errors["public_eligibility_summary"])
 
     def test_empty_form(self):
@@ -66,7 +64,9 @@ class ReportWizardPublicEligibilityTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        expected_error_message = "Indicate whether the barrier can be published or not"
+        expected_error_message = (
+            "Select whether this barrier should be published on GOV.UK, once approved"
+        )
         assert expected_error_message in str(form.errors["public_eligibility"])
 
     def test_valid_form_entry_clears_summary(self):
@@ -128,7 +128,7 @@ class ReportWizardPublicInformationGateTestCase(MarketAccessTestCase):
 
         assert form.is_valid() is False
         expected_error_message = (
-            "Indicate whether you will enter the public information for the barrier"
+            "Select whether you want to publish the barrier now or later"
         )
         assert expected_error_message in str(form.errors["public_information"])
 
@@ -154,7 +154,7 @@ class ReportWizardPublicTitleTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        expected_error_message = "Enter a public title"
+        expected_error_message = "Enter a public title for this barrier"
         assert expected_error_message in str(form.errors["title"])
 
     def test_invalid_form_too_long(self):
@@ -191,7 +191,7 @@ class ReportWizardPublicSummaryTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        expected_error_message = "Enter a public summary"
+        expected_error_message = "Enter a public summary for this barrier"
         assert expected_error_message in str(form.errors["summary"])
 
     def test_invalid_form_too_long(self):

@@ -176,7 +176,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         if (start_date is None and start_date_unknown is False) or (
             start_date and start_date_unknown is True
         ):
-            msg = "Enter a date or select 'I don't know'."
+            msg = "Enter the date the barrier started affecting trade or select ‘I do not know’"
             self.add_error("start_date", msg)
 
         if start_date_unknown and currently_active == "":
@@ -592,7 +592,7 @@ class BarrierPublicEligibilityForm(forms.Form):
             "public_eligibility" not in cleaned_data.keys()
             or cleaned_data["public_eligibility"] == ""
         ):
-            msg = "Indicate whether the barrier can be published or not"
+            msg = "Select whether this barrier should be published on GOV.UK, once approved"
             self.add_error("public_eligibility", msg)
             return
 
@@ -601,7 +601,7 @@ class BarrierPublicEligibilityForm(forms.Form):
             cleaned_data["public_eligibility"] == "no"
             and cleaned_data["public_eligibility_summary"] == ""
         ):
-            msg = "Barriers require a reason to not be eligible for publishing"
+            msg = "Enter a reason for not publishing this barrier"
             self.add_error("public_eligibility_summary", msg)
 
         if cleaned_data["public_eligibility"] == "yes":
@@ -626,7 +626,7 @@ class BarrierPublicInformationGateForm(forms.Form):
             ("false", "Later"),
         ),
         error_messages={
-            "required": "Indicate whether you will enter the public information for the barrier"
+            "required": "Select whether you want to publish the barrier now or later"
         },
         required=True,
     )
@@ -639,7 +639,7 @@ class BarrierPublicTitleForm(forms.Form):
         max_length=255,
         error_messages={
             "max_length": "Title should be %(limit_value)d characters or less",
-            "required": "Enter a public title",
+            "required": "Enter a public title for this barrier",
         },
         widget=forms.Textarea(
             attrs={
@@ -654,10 +654,10 @@ class BarrierPublicSummaryForm(forms.Form):
     summary = forms.CharField(
         label="Public summary",
         help_text=("Provide a summary that is suitable for the public to read."),
-        max_length=2000,
+        max_length=1500,
         error_messages={
             "max_length": "Summary should be %(limit_value)d characters or less",
-            "required": "Enter a public summary",
+            "required": "Enter a public summary for this barrier",
         },
         widget=forms.Textarea(
             attrs={
