@@ -524,7 +524,7 @@ class BarrierDownloadsResource(APIResource):
     model = BarrierDownload
 
     def get_presigned_url(self, download_id):
-        url = f"{self.resource_name}/{download_id}/presigned-url/"
+        url = f"{self.resource_name}/{download_id}/presigned-url"
         return self.client.get(url)
     
     def create(self, *args, **kwargs):
