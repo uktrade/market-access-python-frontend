@@ -1,5 +1,6 @@
-import dateutil.parser
 from urllib.parse import urlencode
+
+import dateutil.parser
 from django.urls import reverse
 
 from barriers.forms.search import BarrierSearchForm
@@ -83,7 +84,7 @@ class BarrierDownload(APIModel):
                 with_remove_urls=False
             )
         return self._readable_filters
-    
+
     @property
     def querystring(self):
         # In some instances, filters need reformatting before being encoded

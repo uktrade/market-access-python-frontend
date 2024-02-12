@@ -145,6 +145,8 @@
                                     <p class="time-item">Requested {{ download.created_on|timesince }}</p>
                                     {% if download.status == "Complete" %}
                                         <a href="{% url 'barriers:download-link' download.id %}">Download results</a>
+                                    {% elif download.status == "Failed" %}
+                                        <p>Download failed</p>
                                     {% else %}
                                         <p>We're working on your download. Refresh this page</p>
                                     {% endif %}
