@@ -143,7 +143,11 @@
                                 <div class="barrier-download__content--item">
                                     <p>Download status: <span class="title">{{ download.status }}</span></p>
                                     <p class="time-item">Requested {{ download.created_on|timesince }}</p>
-                                    <a href="{% url 'barriers:download-link' download.id %}">Download results</a>
+                                    {% if barrier_download.status == "Complete" %}
+                                        <a href="{% url 'barriers:download-link' download.id %}">Download results</a>
+                                    {% else %}
+                                        <p>We're working on your download. Refresh this page</p>
+                                    {% endif %}
                                 </div>
 
                                 <div class="barrier-download__content--item actions">
