@@ -55,14 +55,6 @@ class BarrierDownload(APIModel):
         return self.data.get("count")
 
     @property
-    def success(self) -> bool:
-        return self.data.get("success")
-
-    @property
-    def reason(self) -> str:
-        return self.data.get("reason")
-
-    @property
     def progress_uri(self):
         """this property is used in the template to link to the progress page"""
         return reverse("barriers:download-detail", kwargs={"pk": self.id})
