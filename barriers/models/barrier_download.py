@@ -11,6 +11,7 @@ from utils.models import APIModel
 
 class BarrierDownload(APIModel):
     data_fields = ("created_on", "modified_on")
+    _readable_filters = None
 
     def __init__(self, data):
         self.data = data

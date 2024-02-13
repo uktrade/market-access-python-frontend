@@ -128,7 +128,19 @@
     margin: 0 0 govuk-em( 5, 16 ) 0;
     padding: govuk-em( 10, 16 ) 0 0 0;
     border-top: 1px solid $govuk-mid-grey;
+
+    .menu-bar {
+        a {
+            display: inline-block;
+            margin-right: govuk-em( 10, 16 );
+        }
+        &.right {
+            float: right;
+        }
+    }
 }
+
+
 
 .filter-results-download__text {
 
