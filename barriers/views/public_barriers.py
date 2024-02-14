@@ -1,3 +1,4 @@
+import logging
 from urllib.parse import parse_qs
 
 from django.http import HttpResponseRedirect
@@ -17,6 +18,8 @@ from utils.metadata import MetadataMixin
 
 from .mixins import APIBarrierFormViewMixin, BarrierMixin, PublicBarrierMixin
 from .search import SearchFormView
+
+logger = logging.getLogger(__name__)
 
 
 class PublicBarrierListView(MetadataMixin, SearchFormView):
@@ -141,6 +144,10 @@ class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormV
 
             if action == "mark-as-ready":
                 client.public_barriers.mark_as_ready(id=barrier_id)
+            elif action == "submit-for-approval":
+                client.public_barriers.ready_for_approval(id=barrier_id)
+            elif action == "remove-for-approval":
+                client.public_barriers.allow_for_publishing_process(id=barrier_id)
             elif action == "publish":
                 client.public_barriers.publish(id=barrier_id)
             elif action == "mark-as-in-progress":

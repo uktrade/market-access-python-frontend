@@ -351,6 +351,14 @@ class PublicBarriersResource(APIResource):
     def mark_as_in_progress(self, id):
         return self.client.post(f"{self.resource_name}/{id}/unprepared")
 
+    def ready_for_approval(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/ready-for-approval")
+
+    def allow_for_publishing_process(self, id):
+        return self.client.post(
+            f"{self.resource_name}/{id}/allow-for-publishing-process"
+        )
+
     def report_public_barrier_field(self, id, *args, **kwargs):
         form_name = kwargs["form_name"]
         # Endpoint field to update depends on the report a barrier form used to submit data.
