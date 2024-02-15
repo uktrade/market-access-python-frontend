@@ -213,6 +213,12 @@ class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     def get_initial(self):
         return {"title": self.public_barrier.title}
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["internal_title"] = self.barrier.title
+        context_data["internal_summary"] = self.barrier.summary
+        return context_data
+
     def get_success_url(self):
         return reverse(
             "barriers:public_barrier_detail",
@@ -226,6 +232,12 @@ class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
 
     def get_initial(self):
         return {"summary": self.public_barrier.summary}
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["internal_title"] = self.barrier.title
+        context_data["internal_summary"] = self.barrier.summary
+        return context_data
 
     def get_success_url(self):
         return reverse(
