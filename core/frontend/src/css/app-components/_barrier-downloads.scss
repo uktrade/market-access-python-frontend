@@ -5,11 +5,11 @@
         padding: govuk-em( 16, 16 ) 0;
         margin-bottom: govuk-em( 32, 16 );
     }
+    border-bottom: 1.5px solid $govuk-mid-grey;
 }
 
 .barrier-download__content {
     @include govuk-clearfix;
-    margin-bottom: govuk-em( 16, 16 );
     @include mq( $from: tablet ){
         float: left;
         width: 60%;
@@ -18,23 +18,24 @@
     @include mq( $from: 1080px ){
         width: 100%;
     }
-
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
 
     &--item{
-        margin-bottom: govuk-em( 16, 16 );
+        text-align: left;
+        flex: 1;
 
-        .title{
-            font-weight: bold;
+        .action{
+            margin-top: govuk-em( 16, 16 );
+            float: right;
+            padding-right: govuk-em( 16, 16 );
         }
         .time-item{
-            color: $govuk-dark-grey !important
+            margin: 0 0 govuk-em( 8, 16 );
+            color: $govuk-dark-grey !important;
         }
-        &.actions{
-            float: right;
-            margin-bottom: govuk-em( 16, 16 );
+        .title {
+            margin: 0 0 govuk-em( 8, 16 );
+            font-weight: bold;
         }
     }
 }
@@ -44,19 +45,6 @@
     &--compact {
         margin-bottom: govuk-em( 4, 16 );
     }
-}
-
-.barrier-download__actions {
-    float: right;
-    margin-left: auto;
-    text-align: right;
-    margin-bottom: govuk-em( 16, 16 );
-}
-
-.barrier-download__action-item {
-    display: block;
-    margin-bottom: govuk-em( 12, 16 );
-    margin-left: govuk-em( 24, 16 );
 }
 
 .barrier-download__filter-list {
