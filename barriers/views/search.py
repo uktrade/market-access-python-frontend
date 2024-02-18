@@ -167,10 +167,13 @@ class BarrierSearch(PaginationMixin, SearchFormView):
 class DownloadBarriers(SearchFormMixin, View):
     form_class = BarrierSearchForm
 
+    _search_form = None
+
     def get(self, request, *args, **kwargs):
         form = self.form_class(**self.get_form_kwargs())
         form.is_valid()
         search_parameters = form.get_api_search_parameters()
+        search_parameters["filters"] = self.search_form.get_raw_filters()
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         barrier_download = client.barrier_download.create(**search_parameters)
         download_detail_url = reverse(
@@ -186,6 +189,18 @@ class DownloadBarriers(SearchFormMixin, View):
         return HttpResponseRedirect(
             f"{download_detail_url}?{urlencode(search_page_params)}&{form.get_raw_filters_querystring()}"
         )
+    
+    @property
+    def search_form(self):
+        if not self._search_form:
+            self._search_form = BarrierSearchForm(
+                metadata=get_metadata(), data=self.get_search_form_data()
+            )
+            self._search_form.full_clean()
+        return self._search_form
+
+    def get_search_form_data(self):
+        return self.request.GET
 
 
 class DownloadBarriersDetail(SearchFormMixin, TemplateView):
