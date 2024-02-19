@@ -66,7 +66,13 @@ class TestDownloadBarriers(MarketAccessTestCase):
                 "location": "9f5f66a0-5d95-e211-a939-e4115bead28a,83756b9a-5d95-e211-a939-e4115bead28a",
                 "archived": "0",
                 "ordering": "-reported",
-                "filters": {'search': 'Test search', 'country': ['9f5f66a0-5d95-e211-a939-e4115bead28a', '83756b9a-5d95-e211-a939-e4115bead28a']}
+                "filters": {
+                    "search": "Test search",
+                    "country": [
+                        "9f5f66a0-5d95-e211-a939-e4115bead28a",
+                        "83756b9a-5d95-e211-a939-e4115bead28a",
+                    ],
+                },
             }
         )
 
