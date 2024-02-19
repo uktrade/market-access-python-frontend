@@ -189,7 +189,7 @@ class DownloadBarriers(SearchFormMixin, View):
         return HttpResponseRedirect(
             f"{download_detail_url}?{urlencode(search_page_params)}&{form.get_raw_filters_querystring()}"
         )
-    
+
     @property
     def search_form(self):
         if not self._search_form:
