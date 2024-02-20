@@ -195,7 +195,7 @@
                             {% if public_barrier.internal_sector_names %}
                                 {{ public_barrier.internal_sector_names|join:", " }}
                             {% else %}
-                                Not selected, <a href="barrier-information#barrier-info-tab">add on main barrier tab</a>.
+                                Not selected, <a href="{% url 'barriers:barrier_detail' barrier.id %}">add on main barrier tab</a>.
                             {% endif %}
                         </dd>
                         <dt class="summary-group__list__key">Category</dt>
@@ -203,7 +203,7 @@
                             {% if public_barrier.internal_category_titles %}
                                 {{ public_barrier.internal_category_titles|join:", " }}
                             {% else %}
-                                Not selected, <a href="barrier-information#barrier-info-tab">add on main barrier tab</a>.
+                                Not selected, <a href="{% url 'barriers:barrier_detail' barrier.id %}">add on main barrier tab</a>.
                             {% endif %}
                         </dd>
                     </dl>
