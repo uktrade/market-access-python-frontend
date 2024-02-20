@@ -1,6 +1,5 @@
 import logging
 import uuid
-
 from urllib.parse import urlencode
 
 from django.forms import Form
