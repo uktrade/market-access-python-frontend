@@ -1,4 +1,6 @@
 import logging
+import uuid
+
 from urllib.parse import urlencode
 
 from django.forms import Form
@@ -174,6 +176,13 @@ class DownloadBarriers(SearchFormMixin, View):
         form.is_valid()
         search_parameters = form.get_api_search_parameters()
         search_parameters["filters"] = self.search_form.get_raw_filters()
+        search_id = search_parameters.get("search_id")
+
+        # coming from a saved search search_id will be a UUID
+        # we need to convert it to a string to be serialised
+        if search_id and isinstance(search_id, uuid.UUID):
+            search_parameters["search_id"] = str(search_id)
+
         client = MarketAccessAPIClient(self.request.session["sso_token"])
         barrier_download = client.barrier_download.create(**search_parameters)
         download_detail_url = reverse(

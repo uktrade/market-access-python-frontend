@@ -14,7 +14,7 @@
 
     <div class="barrier-download__content">
         <ul class="ma-card-list barrier-download__content--item">
-            <h3 class="barrier-download__title">{% if barrier_download.status == "Complete" %}<a href="{% url 'barriers:download-link' barrier_download.id %}">{{ barrier_download.name }}</a>{% else %}{{ barrier_download.name }}{% endif %}</h3>
+            <h3 class="barrier-download__title">{% if barrier_download.status == "Complete" %}<a href="{% url 'barriers:download-link' barrier_download.id %}" alt="Download CSV Results">{{ barrier_download.name }}</a>{% else %}{{ barrier_download.name }}{% endif %}</h3>
             <li>{{ barrier_download.count }} results</li>
             {% if barrier_download.filters %}
                 <ul class="barrier-download__filter-list">
