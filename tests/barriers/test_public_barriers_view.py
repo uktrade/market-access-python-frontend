@@ -39,9 +39,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
         title = "<title>Market Access - Public barrier</title>"
-        section_head = (
-            '<h2 class="summary-group-mau__heading">Prepare for publication</h2>'
-        )
+        section_head = '<h2 class="summary-group-public-view__heading">Prepare for publication</h2>'
         notes_head = '<h2 class="section-heading govuk-!-margin-bottom-0">Internal notes and updates</h2>'
         add_note_button = (
             '<a class="govuk-button button--primary" href="?add-note=1">Add a note</a>'

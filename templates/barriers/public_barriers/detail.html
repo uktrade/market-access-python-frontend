@@ -53,10 +53,10 @@
 
     <!-- Left Content Panel -->
     <section class="summary-group">
-        <h2 class="summary-group-mau__heading">Prepare for publication</h2>
+        <h2 class="summary-group-public-view__heading">Prepare for publication</h2>
 
         <!-- Public Eligibility Section -->
-        <div name="public-eligibility-box" class="information-box {% if not barrier.public_eligibility %}information-box__notset{% endif %}">
+        <div name="public-eligibility-box" class="public-view-information-box {% if not barrier.public_eligibility %}public-view-information-box__notset{% endif %}">
             <div class="govuk-summary-list__row">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Should this barrier be made public on GOV.UK once it has been approved?</h3>
             </div>
@@ -79,7 +79,7 @@
         </div>
 
         <!-- Public Title & Summary Section -->
-        <div name="public-title-summary-box" class="information-box {% if not barrier.public_eligibility %}information-box__notset{% endif %}">
+        <div name="public-title-summary-box" class="public-view-information-box {% if not barrier.public_eligibility %}public-view-information-box__notset{% endif %}">
             <div class="govuk-summary-list__row">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Public title and summary</h3>
             </div>
@@ -132,7 +132,7 @@
         </div>
 
         <!-- Approvals Section -->
-        <div class="information-box {% if public_barrier.public_view_status == 30 or public_barrier.public_view_status == 20 or not barrier.public_eligibility %} information-box__notset {% endif %}">
+        <div class="public-view-information-box {% if public_barrier.public_view_status == 30 or public_barrier.public_view_status == 20 or not barrier.public_eligibility %} public-view-information-box__notset {% endif %}">
             <div class="govuk-summary-list__row">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Approvals</h3>
             </div>
@@ -153,7 +153,7 @@
         </div>
 
         <!-- Publishing Section -->
-        <div class="information-box information-box__notset">
+        <div class="public-view-information-box public-view-information-box__notset">
             <div class="govuk-summary-list__row">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Publishing</h3>
             </div>
@@ -161,7 +161,7 @@
         </div>
 
         <!-- Other Barrier Details Section -->
-        <div class="information-box govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
+        <div class="public-view-information-box govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
             <details class="govuk-details" data-module="govuk-details" open="">
                 <summary class="govuk-details__summary">
                     <span class="govuk-details__summary-text">
@@ -217,8 +217,8 @@
 
         <!-- Publication Status Section -->
         <h2 class="section-heading govuk-!-margin-bottom-0">Barrier publication status</h2>
-        <div class="pv-status {% if public_barrier.public_status_text == "Published" %} pv-status {% else %} pv-status__inprogress {% endif %}">
-            <h2 class="pv-status__heading govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+        <div class="public-view-status-box {% if public_barrier.public_status_text == "Published" %} public-view-status-box {% else %} public-view-status-box__inprogress {% endif %}">
+            <h2 class="public-view-status-box__heading govuk-!-margin-bottom-0 govuk-!-margin-top-0">
                 {% if barrier.public_eligibility is None %}
                     <!-- Public barrier status is Unknown -->
                     Set a publication status

@@ -23,41 +23,41 @@
     border-bottom: 4px solid $govuk-black;
 }
 
-.summary-group-mau__heading {
+.summary-group-public-view__heading {
     @include govuk-font($size: 24, $weight: bold);
     padding-bottom: govuk-em(10, 24);
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.information-box {
+.public-view-information-box {
     padding: 10px 10px 10px 10px;
     flex: 1;
     margin-bottom: 20px;
     border: 2px solid #B1B4B6;
 }
 
-.information-box__notset {
+.public-view-information-box__notset {
     border: 2px dotted #B1B4B6;
     background-color: #f3f2f1;
 }
 
-.pv-status {
+.public-view-status-box {
     padding: 16px;
     margin-bottom: 20px;
     flex: 1;
     text-align: left;
 }
 
-.pv-status__inprogress {
+.public-view-status-box__inprogress {
     border: 3px solid #144E81;
 }
 
-.pv-status__heading {
+.public-view-status-box__heading {
     font-size: 22px;
 }
 
-.pv-status__published {
+.public-view-status-box__published {
     border: 3px solid #00703C;
 }
 
