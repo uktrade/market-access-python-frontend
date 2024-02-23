@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import time
+import urllib.parse
 from typing import TYPE_CHECKING
 
 import requests
@@ -12,6 +13,7 @@ from barriers.constants import Statuses
 from barriers.models import (
     ActionPlan,
     Barrier,
+    BarrierDownload,
     Commodity,
     EconomicAssessment,
     EconomicImpactAssessment,
@@ -30,7 +32,7 @@ from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
 from utils.exceptions import ScanError
-from utils.models import ModelList
+from utils.models import APIModel, ModelList
 
 if TYPE_CHECKING:
     from utils.api.client import MarketAccessAPIClient
@@ -43,10 +45,10 @@ class APIResource:
     model = None
     client: MarketAccessAPIClient
 
-    def __init__(self, client):
+    def __init__(self, client) -> None:
         self.client = client
 
-    def list(self, **kwargs):
+    def list(self, **kwargs) -> ModelList:
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
             model=self.model,
@@ -54,21 +56,21 @@ class APIResource:
             total_count=response_data["count"],
         )
 
-    def get(self, id=None, *args, **kwargs):
+    def get(self, id=None, *args, **kwargs) -> APIModel:
         if not id:
             url = f"{self.resource_name}"
         else:
             url = f"{self.resource_name}/{id}"
         return self.model(self.client.get(url, *args, **kwargs))
 
-    def patch(self, id, *args, **kwargs):
+    def patch(self, id, *args, **kwargs) -> APIModel:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.patch(url, json=kwargs))
 
-    def create(self, *args, **kwargs):
+    def create(self, *args, **kwargs) -> APIModel:
         return self.model(self.client.post(self.resource_name, json=kwargs))
 
-    def update(self, id, *args, **kwargs):
+    def update(self, id, *args, **kwargs) -> APIModel:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.put(url, data=kwargs))
 
@@ -132,10 +134,6 @@ class BarriersResource(APIResource):
     def delete_team_member(self, team_member_id, **kwargs):
         url = f"barriers/members/{team_member_id}"
         return self.client.delete(url, params=kwargs)
-
-    def get_email_csv(self, *args, **kwargs):
-        url = "barriers/s3-email"
-        return self.client.get(url, params=kwargs)
 
     def request_download_approval(self):
         url = "barriers/request-download-approval"
@@ -519,3 +517,17 @@ class FeedbackResource(APIResource):
     def add_comments(self, feedback_id, *args, **kwargs):
         url = f"feedback/{feedback_id}/"
         return self.client.put(url, json={**kwargs})
+
+
+class BarrierDownloadsResource(APIResource):
+    resource_name = "barrier-downloads"
+    model = BarrierDownload
+
+    def get_presigned_url(self, download_id):
+        url = f"{self.resource_name}/{download_id}/presigned-url"
+        return self.client.get(url)
+
+    def create(self, *args, **kwargs):
+        query_string = urllib.parse.urlencode(kwargs)
+        url = f"{self.resource_name}?{query_string}"
+        return self.model(self.client.post(url, json=kwargs))

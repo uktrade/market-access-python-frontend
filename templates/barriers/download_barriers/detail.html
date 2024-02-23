@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Your download is being prepared{% endblock %}
+
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% url 'barriers:dashboard' %}" class="govuk-back-link">Back</a>
+    </div>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Your download is being prepared' %}
+
+    <div class="barrier-download__content">
+        <ul class="ma-card-list barrier-download__content--item">
+            <h3 class="barrier-download__title">{% if barrier_download.status == "Complete" %}<a href="{% url 'barriers:download-link' barrier_download.id %}" alt="Download CSV Results">{{ barrier_download.name }}</a>{% else %}{{ barrier_download.name }}{% endif %}</h3>
+            <li>{{ barrier_download.count }} results</li>
+            {% if barrier_download.filters %}
+                <ul class="barrier-download__filter-list">
+                    {% for name, value in barrier_download.readable_filters.items %}
+                        <li class="barrier-download__filter-list-item">{{ value.readable_value|striptags }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </ul>
+        <ul class="ma-card-list barrier-download__content--item">
+            <li>Download status: <span class="title">{{ barrier_download.status }}</span></li>
+            <li>Requested: {{ barrier_download.created_on|timesince }}</li>
+        </ul>
+    </div>
+    <p>We're working on your download. Refresh this page or go to your <a href="{{barrier_download.dashboard_uri}}">downloads tab.</a></p>
+{% endblock %}
