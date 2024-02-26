@@ -128,7 +128,7 @@
                         <li class="ma-card-list__item barrier-download">
                             <div class="barrier-download__content">
                                 <div class="barrier-download__content--item">
-                                    <h3 class="barrier-download__title">{% if download.status == "Complete" %}<a href="{% url 'barriers:download-link' download.id %}" alt="Download CSV Results">{{ download.name }}</a>{% else %}{{ barrier_download.name }}{% endif %}</h3>
+                                    <h3 class="barrier-download__title">{% if download.status == "Complete" %}<a href="{% url 'barriers:download-link' download.id %}" aria-label="Download C S V results for ">{{ download.name }}</a>{% else %}{{ barrier_download.name }}{% endif %}</h3>
                                     <p>{{download.count}} result{{download.count|length|pluralize:"s"}}</p>
 
                                     {% if download.filters %}
