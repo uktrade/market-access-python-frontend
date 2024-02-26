@@ -5,6 +5,7 @@ from django.http import QueryDict
 
 from barriers.constants import AWAITING_REVIEW_FROM, PUBLIC_BARRIER_STATUSES
 from utils.api.client import MarketAccessAPIClient
+from utils.forms.fields import TrueFalseBooleanField
 from utils.metadata import Metadata
 
 from .mixins import APIFormMixin
@@ -134,6 +135,56 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
             form_name="barrier-public-summary",
             values={"summary": self.cleaned_data.get("summary")},
         )
+
+
+class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
+    confirmation = TrueFalseBooleanField(
+        required=True,
+        label=(
+            """
+            I confirm that this barrier can be approved for
+            publication and it has been reviewed with all parties listed on this page.
+            """
+        ),
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "govuk-checkboxes__input",
+            },
+        ),
+    )
+    public_approval_summary = forms.CharField(
+        label="Is there anything else you want to add about how you've reached your decision for approval? (optional)",
+        max_length=500,
+        required=False,
+        error_messages={
+            "max_length": "Summary should be %(limit_value)d characters or less",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "rows": 5,
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if cleaned_data["confirmation"] is False:
+            msg = "Confirm if the barrier is approved"
+            self.add_error("confirmation", msg)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        public_approval_summary = self.cleaned_data.get("public_approval_summary")
+        if public_approval_summary != "":
+            client.public_barriers.patch(
+                id=self.id,
+                approvers_summary=self.cleaned_data.get("public_approval_summary"),
+            )
+
+        client.public_barriers.ready_for_publishing(id=self.id)
 
 
 class PublicBarrierSearchForm(forms.Form):

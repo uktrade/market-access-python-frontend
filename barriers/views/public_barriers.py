@@ -7,11 +7,13 @@ from django.views.generic import FormView
 
 from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNoteForm
 from barriers.forms.public_barriers import (
+    ApprovePublicBarrierForm,
     PublicBarrierSearchForm,
     PublicEligibilityForm,
     PublishSummaryForm,
     PublishTitleForm,
 )
+from users.mixins import UserMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import remove_empty_values_from_dict
 from utils.metadata import MetadataMixin
@@ -77,7 +79,9 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
         return data
 
 
-class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormView):
+class PublicBarrierDetail(
+    MetadataMixin, PublicBarrierMixin, BarrierMixin, UserMixin, FormView
+):
     template_name = "barriers/public_barriers/detail.html"
 
     def get_activity(self):
@@ -93,12 +97,39 @@ class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormV
         return activity_items
 
     def get_context_data(self, **kwargs):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         context_data = super().get_context_data(**kwargs)
+
+        # Establish type of user accessing the page and pass to template
+        # Users can only be in one of these categories.
+        user_groups = client.users.get_current().groups_display
+        if "Public barrier approver" in user_groups:
+            context_data["user_role"] = "Approver"
+        elif "Publisher" in user_groups:
+            context_data["user_role"] = "Publisher"
+        else:
+            context_data["user_role"] = "General user"
+
         context_data["activity_items"] = self.get_activity()
+
+        # Check the activiy items and find the latest public_view_status activity
+        # which updated the value to Awaiting publishing, send the users name to the template
+        for item in context_data["activity_items"]:
+            if (
+                isinstance(item.new_value, dict)
+                and item.new_value["public_view_status"]
+            ):
+                if (
+                    item.new_value["public_view_status"]["name"]
+                    == "Awaiting publishing"
+                ):
+                    context_data["approver_name"] = item.user["name"]
+                    # First instance is most recent, so quit looping
+                    break
+
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")
         context_data["delete_note"] = self.request.GET.get("delete-note")
-        context_data["gov_organisations"] = self.metadata.get_gov_organisation_dict()
         return context_data
 
     def get_form_class(self):
@@ -148,6 +179,8 @@ class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormV
                 client.public_barriers.ready_for_approval(id=barrier_id)
             elif action == "remove-for-approval":
                 client.public_barriers.allow_for_publishing_process(id=barrier_id)
+            elif action == "remove-for-publishing":
+                client.public_barriers.ready_for_approval(id=barrier_id)
             elif action == "publish":
                 client.public_barriers.publish(id=barrier_id)
             elif action == "mark-as-in-progress":
@@ -238,6 +271,19 @@ class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         context_data["internal_title"] = self.barrier.title
         context_data["internal_summary"] = self.barrier.summary
         return context_data
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:public_barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class PublicBarrierApprovalConfirmation(
+    APIBarrierFormViewMixin, PublicBarrierMixin, FormView
+):
+    template_name = "barriers/public_barriers/approval_confirmation.html"
+    form_class = ApprovePublicBarrierForm
 
     def get_success_url(self):
         return reverse(

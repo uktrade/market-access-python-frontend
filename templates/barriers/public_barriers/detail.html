@@ -132,23 +132,64 @@
         </div>
 
         <!-- Approvals Section -->
-        <div class="public-view-information-box {% if public_barrier.public_view_status == 30 or public_barrier.public_view_status == 20 or not barrier.public_eligibility %} public-view-information-box__notset {% endif %}">
+        <div class="public-view-information-box {% if public_barrier.public_view_status == 10 or public_barrier.public_view_status == 20 or not barrier.public_eligibility %} public-view-information-box__notset {% endif %}">
             <div class="govuk-summary-list__row">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Approvals</h3>
             </div>
             {% if public_barrier.public_view_status == 20 or not barrier.public_eligibility %}
                 <!-- Public title and barrier not set. Show reason for blocking approval step. -->
-                <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">You cannot request approval for this barrier until you set a publication status and add a public title and summary.</p>
-            {% else %}
-                <!-- Public title and barrier set. Show list of bodies which are being contacted by approver for approval. -->
-                <p class="govuk-body">The approver is reviewing this barrier with the following people:</p>
+                {% if user_role == "General user" %}
+                    <!-- General users cannot request approval message -->
+                    <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">You cannot request approval for this barrier until you set a publication status and add a public title and summary.</p>
+                {% else %}
+                    <!-- Approver/Publisher users cannot approve message -->
+                    <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">You cannot review this barrier until a title and summary have been added.</p>
+                {% endif %}
+            {% elif public_barrier.public_view_status == 30 %}
+                <p class="govuk-body">The barrier has been approved by: {{ approver_name }}</p>
+                <p class="govuk-body">They have checked it with the following people or organisations:</p>
                 <ul class="govuk-lis govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
                     <li class="govuk-body">Market Access Regional Coordinators </li>
                     <li class="govuk-body">BTR Regional Teams </li>
-                    <li class="govuk-body">Department for Environment Food &amp; Rural Affairs </li>
-                    <li class="govuk-body">Department for Levelling Up, Housing and Communities </li>
+                    {% for item in barrier.government_organisations %}
+                        <li class="govuk-body">{{ item.name }}</li>
+                    {% endfor %}
                 </ul>
-                <p class="govuk-body">They will then confirm if they are happy for the barrier to made public on GOV.UK.</p>
+            {% else %}
+                <!-- Public title and barrier set. Show list of bodies which are being contacted by approver for approval. -->
+                {% if user_role == "General user" %}
+                    <!-- General users message for section -->
+                    <p class="govuk-body">The approver is reviewing this barrier with the following people:</p>
+                {% else %}
+                    <!-- Approver/Publisher users message for section -->
+                    <p class="govuk-body">As the approver of this barrier, you need to confirm you have checked it with the following people or organisations:</p>
+                {% endif %}
+                <ul class="govuk-lis govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
+                    <li class="govuk-body">Market Access Regional Coordinators </li>
+                    <li class="govuk-body">BTR Regional Teams </li>
+                    {% for item in barrier.government_organisations %}
+                        <li class="govuk-body">{{ item.name }}</li>
+                    {% endfor %}
+                </ul>
+                {% if user_role == "General user" %}
+                    <!-- General users display approval process message -->
+                    <p class="govuk-body">They will then confirm if they are happy for the barrier to made public on GOV.UK.</p>
+                {% endif %}
+                {% if user_role == "Approver" or user_role == "Publisher" %}
+                    <!-- Button to edit list of approver orgs only displays for approvers and publishers-->
+                    <p class="govuk-body"><a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit approvers</a></p>
+                {% endif %}
+            {% endif %}
+            {% if user_role == "Approver" and public_barrier.public_view_status == 70 or user_role == "Publisher" and public_barrier.public_view_status == 70 %}
+                <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
+                <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id %}" class="govuk-button">Approve barrier</a>
+            {% endif %}
+            {% if user_role == "Approver" and public_barrier.public_view_status == 30 or user_role == "Publisher" and public_barrier.public_view_status == 30 %}
+                <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <button name="action" value="remove-for-publishing" class="govuk-button govuk-button--secondary" tabindex="2">Revert approval</button>
+                </form>
             {% endif %}
         </div>
 
@@ -157,7 +198,14 @@
             <div class="govuk-summary-list__row">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Publishing</h3>
             </div>
-            <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">The GOV.UK team will publish the barrier if all the information is complete and it has been approved.</p>
+            {% if user_role != "Publisher" and public_barrier.public_view_status != 30 %}
+                <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">The GOV.UK team will publish the barrier if all the information is complete and it has been approved.</p>
+            {% elif user_role != "Publisher" and public_barrier.public_view_status == 30 %}
+                <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">The GOV.UK team are reviewing the content for this approved barrier.</p>
+                <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">They will update the status to 'published' once it is live. You will then be able to view the barrier by visiting <a href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank" class="govuk-link--no-visited-state govuk-!-font-size-19">check international trade barriers (opens in new tab)</a></p>
+            {% else %}
+                <p>Publisher content goes here</p>
+            {% endif %}
         </div>
 
         <!-- Other Barrier Details Section -->
