@@ -1,0 +1,73 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} Confirm Public Barrier Approval {% endblock %}
+
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:public_barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    <form action="" novalidate method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">Confirm this barrier has been approved</h1>
+        </legend>
+
+        <p class="govuk-body">By approving this barrier you confirm it should be published on GOV.UK, once they hace completed their content checks.</p>
+        <p class="govuk-body">You also confirm that you have reviewed it with the following people or organisations:</p>
+        <ul class="govuk-lis govuk-list--bullet govuk-list--spaced">
+            <li class="govuk-body">Market Access Regional Coordinators</li>
+            <li class="govuk-body">BTR Regional Teams</li>
+            {% for item in barrier.government_organisations %}
+                <li class="govuk-body">{{ item.name }}</li>
+            {% endfor %}
+        </ul>
+
+        {% form_error_banner form %}
+
+        <div id="{{ form.confirmation.name }}" class="govuk-form-group govuk-!-margin-top-6 {% if form.confirmation.errors %} govuk-form-group--error{% endif %}">
+            {% form_field_error form "confirmation" %}
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="{{ form.confirmation.name }}" name="{{ form.confirmation.name }}" type="checkbox" {% if form.confirmation.value == "True" %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-checkboxes__label" for={{ form.confirmation.name }}>
+                                {{ form.confirmation.label }}
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div id="{{ form.public_approval_summary.name }}"
+             class="govuk-character-count"
+             data-module="character-count"
+             data-maxlength="500">
+            <div class="{% form_group_classes form.public_approval_summary.errors %}">
+                {% form_field_error form "public_approval_summary" %}
+                <span id="{{ form.public_approval_summary.name }}_label" class="govuk-label govuk-label--s">{{ form.public_approval_summary.label }}</span>
+                {{ form.public_approval_summary }}
+                <div id="update_{{ forloop.counter }}-info"
+                     class="govuk-hint govuk-character-count__message"
+                     aria-live="polite">
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Save" class="govuk-button">
+        <a href="{% url 'barriers:public_barrier_detail' object.id %}" class="form-cancel">Cancel</a>
+    </form>
+
+{% endblock %}

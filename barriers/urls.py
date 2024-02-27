@@ -133,6 +133,7 @@ from .views.public_barriers import (
     EditPublicEligibility,
     EditPublicSummary,
     EditPublicTitle,
+    PublicBarrierApprovalConfirmation,
     PublicBarrierDetail,
     PublicBarrierListView,
 )
@@ -795,6 +796,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/public/summary/",
         EditPublicSummary.as_view(),
         name="edit_public_barrier_summary",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/public/public_approve/",
+        PublicBarrierApprovalConfirmation.as_view(),
+        name="approve_public_barrier_confirmation",
     ),
     path(
         "barriers/<uuid:barrier_id>/mark_approved",

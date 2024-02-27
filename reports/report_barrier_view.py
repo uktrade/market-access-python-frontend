@@ -17,6 +17,10 @@ from reports.report_barrier_forms import (
     BarrierDetailsSummaryForm,
     BarrierExportTypeForm,
     BarrierLocationForm,
+    BarrierPublicEligibilityForm,
+    BarrierPublicInformationGateForm,
+    BarrierPublicSummaryForm,
+    BarrierPublicTitleForm,
     BarrierSectorsAffectedForm,
     BarrierStatusForm,
     BarrierTradeDirectionForm,
@@ -46,6 +50,46 @@ logger = logging.getLogger(__name__)
 # visible to other users.
 
 
+def check_public_form_form_display(step):
+    """
+    Checks the current step, verifies that the prerequisite questions to 'unlock' the next page are met,
+    then returns true or false to decide if it should be shown. Wrapping the method allows parameters
+    to be sent through the condition dictionary.
+    Paths:
+    public-eligibility = F -> details-summary
+    public-eligibility = T -> public-information-gate = F -> details-summary
+    public-eligibility = T -> public-information-gate = T -> public-title -> public-summary -> details-summary
+    """
+
+    def _show_form_page(wizard):
+        # Get the form data for pages which result in branches
+        cleaned_data_eligibility = wizard.get_cleaned_data_for_step(
+            "barrier-public-eligibility"
+        )
+        cleaned_data_information_gate = wizard.get_cleaned_data_for_step(
+            "barrier-public-information-gate"
+        )
+
+        # Setting the default to show the pages - the 'true' path should pass the longer branch
+        show_page = True
+
+        # Check public-eligibility answer to skip to final step if negative answer recieved
+        if cleaned_data_eligibility is not None:
+            if cleaned_data_eligibility["public_eligibility"] is False:
+                show_page = False
+
+        # Check public-information-gate answer only if we are on the public-title or public-summary steps
+        # Skip to the final step if a negative answer recieved
+        if step in ["public_title", "public_summary"]:
+            if cleaned_data_information_gate is not None:
+                if cleaned_data_information_gate["public_information"] == "false":
+                    show_page = False
+
+        return show_page
+
+    return _show_form_page
+
+
 class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPreview):
     form_list = [
         ("barrier-about", BarrierAboutForm),
@@ -55,8 +99,23 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
         ("barrier-sectors-affected", BarrierSectorsAffectedForm),
         ("barrier-companies-affected", BarrierCompaniesAffectedForm),
         ("barrier-export-type", BarrierExportTypeForm),
+        ("barrier-public-eligibility", BarrierPublicEligibilityForm),
+        ("barrier-public-information-gate", BarrierPublicInformationGateForm),
+        ("barrier-public-title", BarrierPublicTitleForm),
+        ("barrier-public-summary", BarrierPublicSummaryForm),
         ("barrier-details-summary", BarrierDetailsSummaryForm),
     ]
+
+    # Use a condition dict to indicate pages that may not load depending on branching
+    # paths through the form. Call the method outside the class which will return a bool
+    # to decide if the page should be included in the form_list.
+    condition_dict = {
+        "barrier-public-information-gate": check_public_form_form_display(
+            "public_information_gate"
+        ),
+        "barrier-public-title": check_public_form_form_display("public_title"),
+        "barrier-public-summary": check_public_form_form_display("public_summary"),
+    }
 
     def get_template_names(self):
         return [f"reports/{self.steps.current.replace('-', '_')}_wizard_step.html"]
@@ -264,6 +323,14 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             context.update({"confirmed_commodities_data": confirmed_commodities_data})
 
+        if (
+            self.steps.current == "barrier-public-title"
+            or self.steps.current == "barrier-public-summary"
+        ):
+            barrier_internal_data = self.get_cleaned_data_for_step("barrier-about")
+            context["internal_title"] = barrier_internal_data["title"]
+            context["internal_summary"] = barrier_internal_data["summary"]
+
         # Put cleaned data into context for the details summary final step
         if self.steps.current == "barrier-details-summary":
             for step in self.storage.data["step_data"]:
@@ -349,10 +416,59 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                         else:
                             # If no HS codes provided (it is an optional field) set context as empty list
                             context[key] = []
+
+                    elif key == "public_eligibility":
+                        # Public eligibility value comes through as 'true' or 'false, needs to have
+                        # a readable version for the summary page.
+                        context[key] = (
+                            "Can be published, once approved"
+                            if value
+                            else "Cannot be published"
+                        )
+
+                    elif key == "title" and step == "barrier-public-title":
+                        # Public title and internal title have the same key so need to differentiate in context
+                        context["public_title"] = value
+
+                    elif key == "summary" and step == "barrier-public-summary":
+                        # Public summary and internal summary have the same key so need to differentiate in context
+                        context["public_summary"] = value
+
                     else:
                         context[key] = value
 
         return context
+
+    def process_step(self, form):
+        """
+        This method is used to postprocess the form data. By default, it
+        returns the raw `form.data` dictionary.
+        """
+
+        # During the process, get_cleaned_data_for_step will trigger an error
+        # if some optional forms have been submitted, then later the user chooses a different path.
+        # At the root of the branching paths, we need to remove step data if we jump to a different path
+        # so we do not cause a keyerror when looping cleaned_data on the final barrier summary step.
+        if (
+            form.prefix == "barrier-public-eligibility"
+            and not form.cleaned_data["public_eligibility"]
+        ):
+            for form_name in [
+                "barrier-public-information-gate",
+                "barrier-public-title",
+                "barrier-public-summary",
+            ]:
+                if form_name in self.storage.data["step_data"]:
+                    self.storage.data["step_data"].pop(form_name)
+        if (
+            form.prefix == "barrier-public-information-gate"
+            and form.cleaned_data["public_information"] == "false"
+        ):
+            for form_name in ["barrier-public-title", "barrier-public-summary"]:
+                if form_name in self.storage.data["step_data"]:
+                    self.storage.data["step_data"].pop(form_name)
+
+        return self.get_form_step_data(form)
 
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)
@@ -453,6 +569,7 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
                 "location",
                 "countries",
                 "trading_blocs",
+                "public_information",
             ]
             for name in exclude_fields:
                 if name in submitted_values[form.prefix].keys():
@@ -471,18 +588,39 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
             submitted_values["barrier-details-summary"]["details_confirmation"]
             == "completed"
         ):
-            # Remove form with no data to commit to the DB
+
+            public_barrier_form_pages = [
+                "barrier-public-title",
+                "barrier-public-summary",
+            ]
+
+            # Remove forms with no data to commit to the DB
             submitted_values.pop("barrier-details-summary")
+            # Information-gate step is on a branch, so may not be present in all situations
+            if "barrier-public-information-gate" in submitted_values.keys():
+                submitted_values.pop("barrier-public-information-gate")
 
             for form_submission in submitted_values:
-                self.client.reports.patch(
-                    id=barrier_report.id, **submitted_values[form_submission]
-                )
+                if form_submission not in public_barrier_form_pages:
+                    self.client.reports.patch(
+                        id=barrier_report.id, **submitted_values[form_submission]
+                    )
 
             # When report/barrier patched fully, call submit
             self.client.reports.submit(barrier_report.id)
 
+            # After the report is submitted and becomes a barrier, update the public barrier fields
+            # This should only trigger if we have completed public-title and public-summary form pages
+            for barrier_form_name in public_barrier_form_pages:
+                if barrier_form_name in submitted_values.keys():
+                    self.client.public_barriers.report_public_barrier_field(
+                        id=barrier_report.id,
+                        form_name=barrier_form_name,
+                        values=submitted_values[barrier_form_name],
+                    )
+
         else:
+            # Save progress to the draft barrier in the database
             self.client.reports.patch(
                 id=barrier_report.id,
                 new_report_session_data=json.dumps(self.storage.data),
