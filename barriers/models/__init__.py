@@ -5,6 +5,7 @@ from .assessments import (
     ResolvabilityAssessment,
     StrategicAssessment,
 )
+from .barrier_download import BarrierDownload
 from .barriers import Barrier, PublicBarrier
 from .commodities import Commodity
 from .companies import Company
@@ -31,4 +32,5 @@ __all__ = [
     WTOProfile,
     ActionPlan,
     Stakeholder,
+    BarrierDownload,
 ]
