@@ -1,37 +1,17 @@
-{% extends "barriers/edit/base.html" %}
-{% load render_bundle from webpack_loader %}
+{% extends "reports/barrier_wizard_step.html" %}
 
-{% block page_title %}{{ block.super }} Edit Publish Eligibility {% endblock %}
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Publication{% endblock %}
 
-{% block body_script %}
-    {% render_bundle 'main' 'js' 'REACT' %}
-    <!-- Import GDS Javascript components -->
-    <script nonce="{{request.csp_nonce}}">
-        document.addEventListener("DOMContentLoaded", function (event) {
-            ReactApp.GDSCheckboxes();
-        })
-        document.addEventListener("DOMContentLoaded", function (event) {
-            ReactApp.GDSRadios();
-        })
-        if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '.govuk-character-count' );
-        }
-    </script>
-{% endblock %}
+{% block fields %}
+    <div class="govuk-form-group govuk-!-margin-0">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Barrier publication
+                </h1>
+            </legend>
 
-{% block page_content %}
-
-    <form action="" method="POST" class="restrict-width">
-        {% csrf_token %}
-
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">
-                Barrier publication
-            </h1>
-        </legend>
-
-        {% form_error_banner form %}
-        <div class="{% form_group_classes form.public_eligibility.errors %}">
+            {% form_error_banner form %}
 
             <div class="govuk-radios" data-module="govuk-radios">
                 <label class="govuk-label govuk-label--s" for="{{ form.public_eligibility.name }}">{{ form.public_eligibility.label }}</label>
@@ -59,17 +39,17 @@
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input"
                                id="{{ form.public_eligibility.id_for_label }}"
-                               name="public_eligibility"
+                               name="barrier-public-eligibility-public_eligibility"
                                type="radio"
                                value="{{ value }}"
-                               data-aria-controls="conditional-public_eligibility-{{value}}"
+                               data-aria-controls="conditional-public_eligibility-{{ value }}"
                                {% if form.public_eligibility.value == value %} checked="checked"{% endif %}>
                         <label class="govuk-label govuk-radios__label" for="{{ form.public_eligibility.id_for_label }}">
                             {{ name }}
                         </label>
                     </div>
                     {% if value == "no" %}
-                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-public_eligibility-{{value}}">
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-public_eligibility-{{ value }}">
                             <div id="{{ form.public_eligibility_summary.name }}-form-group"
                                  class="govuk-character-count govuk-!-margin-0"
                                  data-module="character-count"
@@ -85,14 +65,11 @@
                             </div>
                         </div>
                     {% endif %}
+
                 {% endfor %}
             </div>
-        </div>
 
-        <div class="govuk-body govuk-!-margin-top-6">
-            <button class="govuk-button ">Confirm</button>
-            <a class="form-cancel" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Cancel</a>
-        </div>
-    </form>
 
+        </fieldset>
+    </div>
 {% endblock %}

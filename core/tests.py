@@ -38,6 +38,7 @@ class MarketAccessTestCase(TestCase):
                 "set_topprioritybarrier",
                 "can_approve_estimated_completion_date",
             ],
+            "groups": [{"id": 4, "name": "Administrator"}],
         }
     )
     general_user = User(
@@ -45,6 +46,7 @@ class MarketAccessTestCase(TestCase):
             "is_superuser": False,
             "is_active": True,
             "permissions": [],
+            "groups": [],
         }
     )
     approver_user = User(
@@ -61,6 +63,7 @@ class MarketAccessTestCase(TestCase):
                 "archive_strategicassessment",
                 "approve_strategicassessment",
             ],
+            "groups": [{"id": 27, "name": "Public barrier approver"}],
         }
     )
     analyst_user = User(
@@ -76,6 +79,7 @@ class MarketAccessTestCase(TestCase):
                 "change_economicimpactassessment",
                 "archive_economicimpactassessment",
             ],
+            "groups": [{"id": 5, "name": "Analyst"}],
         }
     )
 

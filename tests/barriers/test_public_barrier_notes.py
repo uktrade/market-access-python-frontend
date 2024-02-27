@@ -11,7 +11,13 @@ class PublicBarrierNotesTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.client.PublicBarriersResource.create_note")
-    def test_note_cannot_be_empty(self, mock_create, mock_get_notes, mock_get_activity):
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
+    def test_note_cannot_be_empty(
+        self, mock_get_user, mock_user, mock_create, mock_get_notes, mock_get_activity
+    ):
+        mock_get_user.return_value = self.general_user
+        mock_user.return_value = self.general_user
         mock_get_notes.return_value = []
         response = self.client.post(
             reverse(

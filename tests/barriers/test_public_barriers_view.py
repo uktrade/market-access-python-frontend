@@ -15,9 +15,13 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_correct_template(
-        self, _mock_get_notes, _mock_get_activity, mock_get
+        self, mock_get_user, mock_user, _mock_get_notes, _mock_get_activity, mock_get
     ):
+        mock_get_user.return_value = self.general_user
+        mock_user.return_value = self.general_user
         mock_get.return_value = self.barrier
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
@@ -31,15 +35,19 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_html(
-        self, _mock_get_notes, _mock_get_activity, mock_get
+        self, mock_get_user, mock_user, _mock_get_notes, _mock_get_activity, mock_get
     ):
+        mock_get_user.return_value = self.general_user
+        mock_user.return_value = self.general_user
         mock_get.return_value = self.public_barrier
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
         title = "<title>Market Access - Public barrier</title>"
-        section_head = '<h2 class="summary-group__heading">Public view:'
+        section_head = '<h2 class="summary-group-public-view__heading">Prepare for publication</h2>'
         notes_head = '<h2 class="section-heading govuk-!-margin-bottom-0">Internal notes and updates</h2>'
         add_note_button = (
             '<a class="govuk-button button--primary" href="?add-note=1">Add a note</a>'
