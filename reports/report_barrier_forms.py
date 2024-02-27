@@ -176,7 +176,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
         if (start_date is None and start_date_unknown is False) or (
             start_date and start_date_unknown is True
         ):
-            msg = "Enter a date or select 'I don't know'."
+            msg = "Enter the date the barrier started affecting trade or select ‘I do not know’"
             self.add_error("start_date", msg)
 
         if start_date_unknown and currently_active == "":
@@ -559,6 +559,113 @@ class BarrierExportTypeForm(APIFormMixin, forms.Form):
         cleaned_data["commodities"] = self.commodities
 
         return cleaned_data
+
+
+class BarrierPublicEligibilityForm(forms.Form):
+    public_eligibility = forms.ChoiceField(
+        label="Should this barrier be made public on GOV.UK, once it has been approved?",
+        help_text="All market access barriers should be published unless there is a valid reason not to.",
+        choices=(
+            ("yes", "Yes, it can be published once approved"),
+            ("no", "No, it cannot be published"),
+        ),
+        required=False,
+    )
+    public_eligibility_summary = forms.CharField(
+        label="Explain why the barrier should not be published",
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
+        required=False,
+        initial="",
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Need to check for required field. Needs to be done here or the key
+        # will be missing for the summary check later in the method.
+        if (
+            "public_eligibility" not in cleaned_data.keys()
+            or cleaned_data["public_eligibility"] == ""
+        ):
+            msg = "Select whether this barrier should be published on GOV.UK, once approved"
+            self.add_error("public_eligibility", msg)
+            return
+
+        # Summary required if barrier cannot be published
+        if (
+            cleaned_data["public_eligibility"] == "no"
+            and cleaned_data["public_eligibility_summary"] == ""
+        ):
+            msg = "Enter a reason for not publishing this barrier"
+            self.add_error("public_eligibility_summary", msg)
+
+        if cleaned_data["public_eligibility"] == "yes":
+            # Clear summary if confirming the barrier can be published
+            cleaned_data["public_eligibility_summary"] = ""
+            cleaned_data["public_eligibility"] = True
+        else:
+            cleaned_data["public_eligibility"] = False
+
+
+class BarrierPublicInformationGateForm(forms.Form):
+    public_information = forms.ChoiceField(
+        label="Do you want to provide a public title and summary now or later?",
+        help_text=(
+            """
+            You can write the title and summary now,
+            or you can do it within 30 days after reporting the barrier.
+            """
+        ),
+        choices=(
+            ("true", "Now"),
+            ("false", "Later"),
+        ),
+        error_messages={
+            "required": "Select whether you want to publish the barrier now or later"
+        },
+        required=True,
+    )
+
+
+class BarrierPublicTitleForm(forms.Form):
+    title = forms.CharField(
+        label="Public title",
+        help_text=("Provide a title that is suitable for the public to read."),
+        max_length=255,
+        error_messages={
+            "max_length": "Title should be %(limit_value)d characters or less",
+            "required": "Enter a public title for this barrier",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-input govuk-js-character-count js-character-count",
+                "rows": 10,
+            },
+        ),
+    )
+
+
+class BarrierPublicSummaryForm(forms.Form):
+    summary = forms.CharField(
+        label="Public summary",
+        help_text=("Provide a summary that is suitable for the public to read."),
+        max_length=1500,
+        error_messages={
+            "max_length": "Summary should be %(limit_value)d characters or less",
+            "required": "Enter a public summary for this barrier",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "rows": 5,
+            },
+        ),
+    )
 
 
 class BarrierDetailsSummaryForm(forms.Form):

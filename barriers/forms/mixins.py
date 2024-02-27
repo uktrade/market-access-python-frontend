@@ -28,6 +28,7 @@ class APIFormMixin:
         self.action_plan = kwargs.pop("action_plan", None)
         self.milestone_id = kwargs.pop("milestone_id", None)
         self.task_id = kwargs.pop("task_id", None)
+        self.countdown = kwargs.pop("countdown", None)
         super().__init__(*args, **kwargs)
 
 
