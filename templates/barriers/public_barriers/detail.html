@@ -125,7 +125,7 @@
                     <!-- Button to roll back submission for approval only shown when in Awaiting Approval status-->
                     <form action="" method="POST">
                         {% csrf_token %}
-                        <button name="action" value="remove-for-approval" class="govuk-button" tabindex="2">Remove for approval</button>
+                        <button name="action" value="remove-for-approval" class="govuk-button govuk-button--secondary" tabindex="2">Remove for approval</button>
                     </form>
                 {% endif %}
             {% endif %}
