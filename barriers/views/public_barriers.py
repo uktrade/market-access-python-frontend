@@ -115,9 +115,8 @@ class PublicBarrierDetail(
         # Check the activiy items and find the latest public_view_status activity
         # which updated the value to Awaiting publishing, send the users name to the template
         for item in context_data["activity_items"]:
-            if (
-                isinstance(item.new_value, dict)
-                and item.new_value["public_view_status"]
+            if isinstance(item.new_value, dict) and item.new_value.get(
+                "public_view_status"
             ):
                 if (
                     item.new_value["public_view_status"]["name"]
