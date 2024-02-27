@@ -184,6 +184,60 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         assert response.status_code == HTTPStatus.FOUND
 
 
+class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
+    @patch("utils.api.resources.PublicBarriersResource.ready_for_publishing")
+    @patch("utils.api.resources.PublicBarriersResource.patch")
+    def test_approve_with_summary(self, mock_patch, mock_ready):
+        response = self.client.post(
+            reverse(
+                "barriers:approve_public_barrier_confirmation",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={
+                "confirmation": True,
+                "public_approval_summary": "Test summary",
+            },
+        )
+        logger.critical(response.__dict__)
+        assert response.status_code == HTTPStatus.FOUND
+        assert mock_ready.called is True
+        assert mock_patch.called is True
+
+    @patch("utils.api.resources.PublicBarriersResource.ready_for_publishing")
+    @patch("utils.api.resources.PublicBarriersResource.patch")
+    def test_approve_without_summary(self, mock_patch, mock_ready):
+        response = self.client.post(
+            reverse(
+                "barriers:approve_public_barrier_confirmation",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={
+                "confirmation": True,
+                "public_approval_summary": "",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert mock_ready.called is True
+        assert mock_patch.called is False
+
+    @patch("utils.api.resources.PublicBarriersResource.ready_for_publishing")
+    @patch("utils.api.resources.PublicBarriersResource.patch")
+    def test_approve_failure(self, mock_patch, mock_ready):
+        response = self.client.post(
+            reverse(
+                "barriers:approve_public_barrier_confirmation",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={"confirmation": False, "public_approval_summary": ""},
+        )
+        assert response.status_code == HTTPStatus.OK
+        form = response.context["form"]
+        assert form.is_valid() is False
+        assert "confirmation" in form.errors
+        assert mock_ready.called is False
+        assert mock_patch.called is False
+
+
 class PublicBarrierActionsTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.PublicBarriersResource.mark_as_ready")
     def test_mark_as_ready_calls_api(self, mock_mark_as_ready):
@@ -268,3 +322,15 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
         )
         assert response.status_code == HTTPStatus.FOUND
         assert mock_allow_for_publishing_process.called is True
+
+    @patch("utils.api.resources.PublicBarriersResource.ready_for_approval")
+    def test_revoke_approval_calls_api(self, mock_ready_for_approval):
+        response = self.client.post(
+            reverse(
+                "barriers:public_barrier_detail",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={"action": "remove-for-publishing"},
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert mock_ready_for_approval.called is True

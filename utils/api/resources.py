@@ -354,6 +354,9 @@ class PublicBarriersResource(APIResource):
     def ready_for_approval(self, id):
         return self.client.post(f"{self.resource_name}/{id}/ready-for-approval")
 
+    def ready_for_publishing(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/ready-for-publishing")
+
     def allow_for_publishing_process(self, id):
         return self.client.post(
             f"{self.resource_name}/{id}/allow-for-publishing-process"
