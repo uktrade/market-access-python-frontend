@@ -1,110 +1,98 @@
 {% extends "barriers/edit/base.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block page_title %}{{ block.super }} Edit Publish Eligibility {% endblock %}
 
 {% block body_script %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <!-- Import GDS Javascript components -->
     <script nonce="{{request.csp_nonce}}">
-        new ma.components.ConditionalRadioContent({
-            inputContainer: '.{{ form.public_eligibility.name }}',
-            inputName: '{{ form.public_eligibility.name }}',
-            conditionalElem: '#conditional-no',
-            shouldShow: function( value ){ return ( value === 'no' ); }
-        });
-        new ma.components.ConditionalRadioContent({
-            inputContainer: '.{{ form.public_eligibility.name }}',
-            inputName: '{{ form.public_eligibility.name }}',
-            conditionalElem: '#conditional-yes',
-            shouldShow: function( value ){ return ( value === 'yes' ); }
-        });
-        new ma.components.ConditionalRadioContent({
-            inputContainer: '.{{ form.public_eligibility.name }}',
-            inputName: '{{ form.public_eligibility.name }}',
-            conditionalElem: '#conditional-review_later',
-            shouldShow: function( value ){ return ( value === 'review_later' ); }
-        });
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSCheckboxes();
+        })
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSRadios();
+        })
         if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '#conditional-yes .govuk-character-count' );
-            new ma.components.CharacterCount( '#conditional-review_later .govuk-character-count' );
-            new ma.components.CharacterCount( '#conditional-no .govuk-character-count' );
+            new ma.components.CharacterCount( '.govuk-character-count' );
         }
     </script>
 {% endblock %}
 
-{% block page_title %}{{ block.super }} - Edit Publish Eligibility{% endblock %}
-
-{% block back_link %}
-    <a href="{% url 'barriers:public_barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
-{% endblock %}
-
 {% block page_content %}
-
-    <h2 class="govuk-heading-l">Update public view status</h2>
-
-    {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+                Barrier publication
+            </h1>
+        </legend>
+
+        {% form_error_banner form %}
         <div class="{% form_group_classes form.public_eligibility.errors %}">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
-                    <strong>{{ form.public_eligibility.label }}</strong>
-                </legend>
 
-                {% form_field_error form.public_eligibility %}
-
-                <details class="govuk-details" data-module="govuk-details">
+            <div class="govuk-radios" data-module="govuk-radios">
+                <label class="govuk-label govuk-label--s" for="{{ form.public_eligibility.name }}">{{ form.public_eligibility.label }}</label>
+                <span class="govuk-hint">{{ form.public_eligibility.help_text }}</span>
+                <details class="govuk-details">
                     <summary class="govuk-details__summary">
                         <span class="govuk-details__summary-text">
-                            Criteria for making a barrier public
+                            What are the valid reasons for not publishing a barrier?
                         </span>
                     </summary>
                     <div class="govuk-details__text">
-                        <p>When it can be made public</p>
+                        <p class="govuk-body">A barrier should not be published if:</p>
                         <ul class="govuk-list govuk-list--bullet">
-                            <li>barriers affecting export from the UK</li>
-                            <li>barriers already published on WTO/EU MADB</li>
-                            <li>both short-term and long-term barriers</li>
-                            <li>all priorities (high, medium, low, unknown)</li>
-                            <li>all barrier status (Open: Pending action, Open: In progress, Resolved: In part, Resolved: In full, Dormant, Unknown)</li>
-                            <li>barriers currently in operation (not future or potential barriers)</li>
-                        </ul>
-                        <p>When it can't be made public</p>
-                        <ul class="govuk-list govuk-list--bullet">
-                            <li>barriers affecting import into the UK</li>
-                            <li>indicated by OGDs/DAs as not publishable during prior engagement</li>
-                            <li>insufficient information, quality, or accuracy</li>
-                            <li>barriers that identify a business even once individual details are removed due to niche/closed nature of market</li>
-                            <li>sensitive for defence or security reasons</li>
-                            <li>business environment issues (unless there is a clear and specific rationale for publication)</li>
-                            <li>specific strategic concerns relating to upcoming negotiations or dialogue</li>
-                            <li>politically sensitive</li>
-                            <li>future or potential barriers not yet in force</li>
+                            <li>it is defence or security related</li>
+                            <li>it affects imports into the UK</li>
+                            <li>it has not yet come into force</li>
+                            <li>the UK company affected is easily identifiable</li>
+                            <li>the UK company affected told us not to make the barrier public</li>
+                            <li>there is a likely risk of damage to the UK’s relationship with the partner government</li>
                         </ul>
                     </div>
                 </details>
-
-                <div class="govuk-radios {{ form.public_eligibility.name }} govuk-radios--conditional" data-module="radios">
-                    {% for value, name in form.public_eligibility.field.choices %}
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="{{ form.public_eligibility.name }}-{{ value }}" name="{{ form.public_eligibility.name }}" type="radio" value="{{ value }}"{% if form.public_eligibility.value == value %} checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="{{ form.public_eligibility.name }}-{{ value }}">{{ name }}</label>
+                {% form_field_error form "public_eligibility" %}
+                {% for value, name in form.fields.public_eligibility.choices %}
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input"
+                               id="{{ form.public_eligibility.id_for_label }}"
+                               name="public_eligibility"
+                               type="radio"
+                               value="{{ value }}"
+                               data-aria-controls="conditional-public_eligibility-{{value}}"
+                               {% if form.public_eligibility.value == value %} checked="checked"{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="{{ form.public_eligibility.id_for_label }}">
+                            {{ name }}
+                        </label>
+                    </div>
+                    {% if value == "no" %}
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-public_eligibility-{{value}}">
+                            <div id="{{ form.public_eligibility_summary.name }}-form-group"
+                                 class="govuk-character-count govuk-!-margin-0"
+                                 data-module="character-count"
+                                 data-maxlength="500">
+                                <div class="{% form_group_classes form.public_eligibility_summary.errors %}">
+                                    <label class="govuk-label govuk-label--s"
+                                           for="{{ form.public_eligibility_summary.id_for_label }}">{{ form.public_eligibility_summary.label }}
+                                    </label>
+                                    {% form_field_error form "public_eligibility_summary" %}
+                                    <span id="description-hint" class="govuk-hint">{{ form.summary.help_text }}</span>
+                                    {{ form.public_eligibility_summary }}
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ value }}">
-                            {% if value == "yes" %}
-                                {% include "partials/forms/textarea.html" with field=form.allowed_summary character_count=True %}
-                            {% elif value == "no" %}
-                                {% include "partials/forms/textarea.html" with field=form.not_allowed_summary character_count=True %}
-                            {% elif value == "review_later" %}
-                                {% include "partials/forms/textarea.html" with field=form.review_later_summary character_count=True %}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </fieldset>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
 
-        <button class="govuk-button">Confirm</button>
-        <a class="form-cancel" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Cancel</a>
+        <div class="govuk-body govuk-!-margin-top-6">
+            <button class="govuk-button ">Confirm</button>
+            <a class="form-cancel" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Cancel</a>
+        </div>
     </form>
 
 {% endblock %}
