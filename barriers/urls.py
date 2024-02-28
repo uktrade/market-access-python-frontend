@@ -136,6 +136,8 @@ from .views.public_barriers import (
     PublicBarrierApprovalConfirmation,
     PublicBarrierDetail,
     PublicBarrierListView,
+    PublicBarrierPublishConfirmation,
+    PublicBarrierUnpublishConfirmation,
 )
 from .views.saved_searches import (
     DeleteSavedSearch,
@@ -783,6 +785,16 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/public/public_approve/",
         PublicBarrierApprovalConfirmation.as_view(),
         name="approve_public_barrier_confirmation",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/public/public_publish/",
+        PublicBarrierPublishConfirmation.as_view(),
+        name="publish_public_barrier_confirmation",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/public/public_unpublish/",
+        PublicBarrierUnpublishConfirmation.as_view(),
+        name="unpublish_public_barrier_confirmation",
     ),
     path(
         "barriers/<uuid:barrier_id>/mark_approved",

@@ -10,8 +10,10 @@ from barriers.forms.public_barriers import (
     ApprovePublicBarrierForm,
     PublicBarrierSearchForm,
     PublicEligibilityForm,
+    PublishPublicBarrierForm,
     PublishSummaryForm,
     PublishTitleForm,
+    UnpublishPublicBarrierForm,
 )
 from users.mixins import UserMixin
 from utils.api.client import MarketAccessAPIClient
@@ -118,13 +120,15 @@ class PublicBarrierDetail(
             if isinstance(item.new_value, dict) and item.new_value.get(
                 "public_view_status"
             ):
-                if (
-                    item.new_value["public_view_status"]["name"]
-                    == "Awaiting publishing"
-                ):
+                if item.new_value["public_view_status"][
+                    "name"
+                ] == "Awaiting publishing" and not context_data.get("approver_name"):
                     context_data["approver_name"] = item.user["name"]
-                    # First instance is most recent, so quit looping
-                    break
+                if item.new_value["public_view_status"][
+                    "name"
+                ] == "Published" and not context_data.get("publisher_name"):
+                    context_data["publisher_name"] = item.user["name"]
+                    context_data["published_date"] = item.date
 
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")
@@ -283,6 +287,32 @@ class PublicBarrierApprovalConfirmation(
 ):
     template_name = "barriers/public_barriers/approval_confirmation.html"
     form_class = ApprovePublicBarrierForm
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:public_barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class PublicBarrierPublishConfirmation(
+    APIBarrierFormViewMixin, PublicBarrierMixin, FormView
+):
+    template_name = "barriers/public_barriers/publish_confirmation.html"
+    form_class = PublishPublicBarrierForm
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:public_barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class PublicBarrierUnpublishConfirmation(
+    APIBarrierFormViewMixin, PublicBarrierMixin, FormView
+):
+    template_name = "barriers/public_barriers/unpublish_confirmation.html"
+    form_class = UnpublishPublicBarrierForm
 
     def get_success_url(self):
         return reverse(

@@ -181,10 +181,50 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
         if public_approval_summary != "":
             client.public_barriers.patch(
                 id=self.id,
-                approvers_summary=self.cleaned_data.get("public_approval_summary"),
+                approvers_summary=public_approval_summary,
             )
 
         client.public_barriers.ready_for_publishing(id=self.id)
+
+
+class PublishPublicBarrierForm(APIFormMixin, forms.Form):
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.public_barriers.publish(id=self.id)
+
+
+class UnpublishPublicBarrierForm(APIFormMixin, forms.Form):
+    public_publisher_summary = forms.CharField(
+        label="Reason for removing the barrier",
+        max_length=500,
+        required=False,
+        error_messages={
+            "max_length": "Summary should be %(limit_value)d characters or less",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "rows": 5,
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if cleaned_data["public_publisher_summary"] is False:
+            msg = "Provide a reason for unpublishing the barrier."
+            self.add_error("public_publisher_summary", msg)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        client.public_barriers.patch(
+            id=self.id,
+            publishers_summary=self.cleaned_data.get("public_publisher_summary"),
+        )
+
+        client.public_barriers.unpublish(id=self.id)
 
 
 class PublicBarrierSearchForm(forms.Form):
