@@ -283,24 +283,28 @@
 
         <!-- Publication Status Section -->
         <h2 class="section-heading govuk-!-margin-bottom-0">Barrier publication status</h2>
-        <div class="public-view-status-box {% if public_barrier.public_status_text == "Published" %} public-view-status-box {% else %} public-view-status-box__inprogress {% endif %}">
+        <div class="public-view-status-box {% if public_barrier.public_view_status == 40 %} public-view-status-box__published {% else %} public-view-status-box__inprogress {% endif %}">
             <h2 class="public-view-status-box__heading govuk-!-margin-bottom-0 govuk-!-margin-top-0">
                 {% if barrier.public_eligibility is None %}
                     <!-- Public barrier status is Unknown -->
                     Set a publication status
                 {% elif barrier.public_eligibility is False %}
                     <!-- Public barrier status is Not Allowed -->
-                    This barrier will not be published on GOV.UK
+                    {% if user_role == "General user" %}
+                        This barrier will not be published on GOV.UK
+                    {% else %}
+                        This barrier does not need approval
+                    {% endif %}
                 {% else %}
                     {% if public_barrier.public_view_status == 20 %}
                         <!-- Public barrier status is Allowed -->
-                        Add a barrier title and summary
+                        This barrier is not ready for approval
                     {% elif public_barrier.public_view_status == 70 %}
                         <!-- Public barrier status is Awaiting Approval -->
-                        This barrier is being reviewed by the approver
+                        This barrier is awaiting approval
                     {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
                         <!-- Public barrier status is Awaiting Publishing -->
-                        The GOV.UK team are reviewing the content
+                        GOV.UK content checks are needed
                     {% elif public_barrier.public_view_status == 40 %}
                         <!-- Public barrier status is Published -->
                         This barrier has been published
@@ -310,23 +314,31 @@
             <p class="govuk-!-margin-0 govuk-!-padding-top-2">
                 {% if barrier.public_eligibility is None %}
                     <!-- Public barrier status is Unknown -->
-                    Set a status to decide if this barrier can be published, once it has been approved.
+                    To start the approval process to decide if this barrier can be made public on GOV.UK, first update the barrier publication status to 'allowed', and add a public title and summary.
                 {% elif barrier.public_eligibility is False %}
                     <!-- Public barrier status is Not Allowed -->
-                    To make this barrier public, you will need to update the barrier publication status, add a title and summary - and then get it approved.
+                    {% if user_role == "General user" %}
+                        To start the approval process to make this barrier public on GOV.UK, update the barrier publication status to 'allowed', and add a public title and summary.
+                    {% else %}
+                        You do not need to approve this barrier unless the barrier publication status is updated to 'allowed', and it includes a public title and summary.
+                    {% endif %}
                 {% else %}
                     {% if public_barrier.public_view_status == 20 %}
                         <!-- Public barrier status is Allowed -->
-                        You cannot send this barrier for approval until you add the title and summary. This needs to done within the next 30 days.
+                        This barrier cannot be approved until the public title and summary have been added.
+                        This needs to be done within the next XXX days, along a review from the approver, and the GOV.UK publishing team.
                     {% elif public_barrier.public_view_status == 70 %}
                         <!-- Public barrier status is Awaiting Approval -->
-                        Once it has been approved, the barrier will be sent to the GOV.UK team for final content checks. If this is done within the next 30 days it can be published.
+                        Once it has been approved, the barrier will be sent to the GOV.UK team for final content checks.
+                        This needs to be done within the next XXX days.
                     {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
                         <!-- Public barrier status is Awaiting Publishing -->
-                        They need to do complete their checks within the next 30 days. They can then publish the barrier and update the status.
+                        Only a member of the GOV.UK publishing team can complete the content checks.
+                        This needs to be done within the next XXX days. The barrier can then be published.
                     {% elif public_barrier.public_view_status == 40 %}
                         <!-- Public barrier status is Published -->
                         You can view the barrier on GOV.UK by visiting <a class="govuk-link" href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank">Check International Trade Barriers (opens in new tab).</a>
+                        For more details see the barrier information and notes on the public view tab.
                     {% endif %}
                 {% endif %}
             </p>
