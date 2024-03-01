@@ -326,15 +326,15 @@
                     {% if public_barrier.public_view_status == 20 %}
                         <!-- Public barrier status is Allowed -->
                         This barrier cannot be approved until the public title and summary have been added.
-                        This needs to be done within the next XXX days, along a review from the approver, and the GOV.UK publishing team.
+                        This needs to be done within the next {{ countdown }} days, along a review from the approver, and the GOV.UK publishing team.
                     {% elif public_barrier.public_view_status == 70 %}
                         <!-- Public barrier status is Awaiting Approval -->
                         Once it has been approved, the barrier will be sent to the GOV.UK team for final content checks.
-                        This needs to be done within the next XXX days.
+                        This needs to be done within the next {{ countdown }} days.
                     {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
                         <!-- Public barrier status is Awaiting Publishing -->
                         Only a member of the GOV.UK publishing team can complete the content checks.
-                        This needs to be done within the next XXX days. The barrier can then be published.
+                        This needs to be done within the next {{ countdown }} days. The barrier can then be published.
                     {% elif public_barrier.public_view_status == 40 %}
                         <!-- Public barrier status is Published -->
                         You can view the barrier on GOV.UK by visiting <a class="govuk-link" href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank">Check International Trade Barriers (opens in new tab).</a>

@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs
 
 from django.http import HttpResponseRedirect
@@ -129,6 +130,18 @@ class PublicBarrierDetail(
                 ] == "Published" and not context_data.get("publisher_name"):
                     context_data["publisher_name"] = item.user["name"]
                     context_data["published_date"] = item.date
+                # There is a 30 day limit after a barrier is set to 'Allowed' for
+                # it to be moved into 'Published'. A countdown is displayed in the frontend
+                # status box so we need to obtain that count here.
+                if item.new_value["public_view_status"][
+                    "name"
+                ] == "Allowed" and not context_data.get("countdown"):
+                    published_deadline = item.date + timedelta(days=30)
+                    deadline_difference = published_deadline - datetime.now(
+                        timezone.utc
+                    )
+                    # Add day to round up spare hours/mins
+                    context_data["countdown"] = deadline_difference.days + 1
 
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")
