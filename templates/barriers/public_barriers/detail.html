@@ -172,7 +172,7 @@
                 {% endif %}
                 {% if user_role == "Approver" or user_role == "Publisher" %}
                     <!-- Button to edit list of approver orgs only displays for approvers and publishers-->
-                    <p class="govuk-body"><a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit approvers</a></p>
+                    <p class="govuk-body"><a href="{% url 'barriers:edit_gov_orgs' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit list</a></p>
                 {% endif %}
             {% endif %}
             {% if user_role == "Approver" and public_barrier.public_view_status == 70 or user_role == "Publisher" and public_barrier.public_view_status == 70 %}
