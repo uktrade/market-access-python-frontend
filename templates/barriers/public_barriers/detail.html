@@ -317,7 +317,7 @@
                     To start the approval process to decide if this barrier can be made public on GOV.UK, first update the barrier publication status to 'allowed', and add a public title and summary.
                 {% elif barrier.public_eligibility is False %}
                     <!-- Public barrier status is Not Allowed -->
-                    {% if user_role == "General user" %}
+                    {% if user_role == "General user" or user_role == "Publisher" %}
                         To start the approval process to make this barrier public on GOV.UK, update the barrier publication status to 'allowed', and add a public title and summary.
                     {% else %}
                         You do not need to approve this barrier unless the barrier publication status is updated to 'allowed', and it includes a public title and summary.
@@ -326,7 +326,7 @@
                     {% if public_barrier.public_view_status == 20 %}
                         <!-- Public barrier status is Allowed -->
                         This barrier cannot be approved until the public title and summary have been added.
-                        This needs to be done within the next {{ countdown }} days, along a review from the approver, and the GOV.UK publishing team.
+                        This needs to be done within the next {{ countdown }} days, along with a review from the approver, and the GOV.UK publishing team.
                     {% elif public_barrier.public_view_status == 70 %}
                         <!-- Public barrier status is Awaiting Approval -->
                         Once it has been approved, the barrier will be sent to the GOV.UK team for final content checks.

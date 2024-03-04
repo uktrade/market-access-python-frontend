@@ -82,6 +82,23 @@ class MarketAccessTestCase(TestCase):
             "groups": [{"id": 5, "name": "Analyst"}],
         }
     )
+    publisher_user = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": [
+                "add_resolvabilityassessment",
+                "change_resolvabilityassessment",
+                "archive_resolvabilityassessment",
+                "approve_resolvabilityassessment",
+                "add_strategicassessment",
+                "change_strategicassessment",
+                "archive_strategicassessment",
+                "approve_strategicassessment",
+            ],
+            "groups": [{"id": 6, "name": "Publisher"}],
+        }
+    )
 
     def setUp(self):
         self.init_session()

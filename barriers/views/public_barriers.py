@@ -228,11 +228,8 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
 
     def get_initial(self):
         barrier_public_eligibility = self.barrier.public_eligibility
-        barrier_public_eligibility_postponed = self.barrier.public_eligibility_postponed
 
-        if barrier_public_eligibility_postponed:
-            public_eligibility = "review_later"
-        elif barrier_public_eligibility:
+        if barrier_public_eligibility:
             public_eligibility = "yes"
         else:
             public_eligibility = "no"
@@ -240,12 +237,11 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
         initial = {
             "public_eligibility": public_eligibility,
         }
-        if public_eligibility == "review_later":
-            initial["review_later_summary"] = self.barrier.public_eligibility_summary
-        elif public_eligibility == "no":
+        if public_eligibility == "no":
             initial["not_allowed_summary"] = self.barrier.public_eligibility_summary
-        elif public_eligibility == "yes":
+        else:
             initial["allowed_summary"] = self.barrier.public_eligibility_summary
+
         return initial
 
     def get_success_url(self):

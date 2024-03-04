@@ -198,7 +198,6 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
                 "public_approval_summary": "Test summary",
             },
         )
-        logger.critical(response.__dict__)
         assert response.status_code == HTTPStatus.FOUND
         assert mock_ready.called is True
         assert mock_patch.called is True
@@ -235,6 +234,57 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
         assert form.is_valid() is False
         assert "confirmation" in form.errors
         assert mock_ready.called is False
+        assert mock_patch.called is False
+
+
+class PublishBarrierConfirmationTestCase(MarketAccessTestCase):
+    @patch("utils.api.resources.PublicBarriersResource.publish")
+    def test_publish_confirmation(self, mock_publish):
+        response = self.client.post(
+            reverse(
+                "barriers:publish_public_barrier_confirmation",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={},
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert mock_publish.called is True
+
+
+class UnpublishBarrierConfirmationTestCase(MarketAccessTestCase):
+    @patch("utils.api.resources.PublicBarriersResource.unpublish")
+    @patch("utils.api.resources.PublicBarriersResource.patch")
+    def test_unpublish_confirmation(self, mock_patch, mock_unpublish):
+        response = self.client.post(
+            reverse(
+                "barriers:unpublish_public_barrier_confirmation",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={
+                "public_publisher_summary": "Test summary",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert mock_unpublish.called is True
+        assert mock_patch.called is True
+
+    @patch("utils.api.resources.PublicBarriersResource.unpublish")
+    @patch("utils.api.resources.PublicBarriersResource.patch")
+    def test_unpublish_confirmation_missing_summary(self, mock_patch, mock_unpublish):
+        response = self.client.post(
+            reverse(
+                "barriers:unpublish_public_barrier_confirmation",
+                kwargs={"barrier_id": self.barrier["id"]},
+            ),
+            data={
+                "public_publisher_summary": "",
+            },
+        )
+        assert response.status_code == HTTPStatus.OK
+        form = response.context["form"]
+        assert form.is_valid() is False
+        assert "public_publisher_summary" in form.errors
+        assert mock_unpublish.called is False
         assert mock_patch.called is False
 
 

@@ -212,7 +212,7 @@ class UnpublishPublicBarrierForm(APIFormMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        if cleaned_data["public_publisher_summary"] is False:
+        if cleaned_data["public_publisher_summary"] == "":
             msg = "Provide a reason for unpublishing the barrier."
             self.add_error("public_publisher_summary", msg)
 
