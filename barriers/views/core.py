@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
-from .mixins import AnalyticsMixin, BarrierMixin
+from .mixins import AnalyticsMixin, BarrierMixin, FeatureFlagMixin
 
 
 class Dashboard(AnalyticsMixin, TemplateView):
@@ -52,7 +52,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
         return context_data
 
 
-class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
+class BarrierDetail(AnalyticsMixin, FeatureFlagMixin, BarrierMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
     include_interactions = True
     utm_tags = {

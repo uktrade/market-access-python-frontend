@@ -12,6 +12,25 @@ from utils.exceptions import APIHttpException
 logger = logging.getLogger(__name__)
 
 
+class FeatureFlagMixin:
+    _feature_flags = None
+
+    @property
+    def feature_flags(self):
+        if not self._feature_flags:
+            self._feature_flags = self.get_flags()
+        return self._feature_flags
+
+    def get_flags(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        return client.feature_flags.list(barrier_id=self.barrier.id)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["feature_flags"] = self.feature_flags
+        return context_data
+
+
 class BarrierMixin:
     include_interactions = False
     _barrier = None

@@ -10,6 +10,7 @@ from .barriers import Barrier, PublicBarrier
 from .commodities import Commodity
 from .companies import Company
 from .documents import Document
+from .feature_flags import FeatureFlag
 from .history import HistoryItem
 from .notes import Note, PublicBarrierNote
 from .saved_searches import SavedSearch
@@ -23,6 +24,7 @@ __all__ = [
     EconomicAssessment,
     EconomicImpactAssessment,
     HistoryItem,
+    FeatureFlag,
     Note,
     PublicBarrier,
     PublicBarrierNote,

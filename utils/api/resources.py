@@ -18,6 +18,7 @@ from barriers.models import (
     EconomicAssessment,
     EconomicImpactAssessment,
     HistoryItem,
+    FeatureFlag,
     Note,
     PublicBarrier,
     PublicBarrierNote,
@@ -50,6 +51,7 @@ class APIResource:
 
     def list(self, **kwargs) -> ModelList:
         response_data = self.client.get(self.resource_name, params=kwargs)
+        print('age')
         return ModelList(
             model=self.model,
             data=response_data["results"],
@@ -78,6 +80,18 @@ class APIResource:
         url = f"{self.resource_name}/{id}"
         return self.client.delete(url)
 
+
+class FeatureFlagsResource(APIResource):
+    resource_name = "feature-flags"
+    model = FeatureFlag
+
+    def list(self, **kwargs) -> ModelList:
+        response_data = self.client.get(self.resource_name, params=kwargs)
+        return ModelList(
+            model=self.model,
+            data=response_data["results"],
+            total_count=response_data["count"],
+        )
 
 class BarriersResource(APIResource):
     resource_name = "barriers"
