@@ -51,7 +51,6 @@ class APIResource:
 
     def list(self, **kwargs) -> ModelList:
         response_data = self.client.get(self.resource_name, params=kwargs)
-        print('age')
         return ModelList(
             model=self.model,
             data=response_data["results"],
