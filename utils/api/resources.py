@@ -89,7 +89,7 @@ class FeatureFlagsResource(APIResource):
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
             model=self.model,
-            data=response_data["results"],
+            data=[d["name"] for d in response_data["results"]],
             total_count=response_data["count"],
         )
 
