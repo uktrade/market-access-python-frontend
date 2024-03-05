@@ -220,6 +220,12 @@ class BarriersResource(APIResource):
             data=kwargs,
         )
 
+    def get_similar(self, barrier_id, **kwargs):
+        # using the word similar her not to confuse with
+        # django related objects
+        url = f"barriers/{barrier_id}/related-barriers"
+        return self.client.get(url, params=kwargs)
+
 
 class NotesResource(APIResource):
     resource_name = "interactions"
