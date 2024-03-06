@@ -4,6 +4,7 @@ USER_ADDITIONAL_PERMISSION_GROUPS = [
     "Download approved user",
     "Action plan user",
     "PB100 barrier approver",
+    "Related Barriers"
 ]
 
 REGIONAL_LEAD_PERMISSION_GROUPS = [
