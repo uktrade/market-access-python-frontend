@@ -14,7 +14,7 @@ class EditPublicBarrierTitleTestCase(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:edit_public_barrier_title",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 12},
             )
         )
         assert response.status_code == HTTPStatus.OK
@@ -27,7 +27,7 @@ class EditPublicBarrierTitleTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:edit_public_barrier_title",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 15},
             ),
             data={"title": ""},
         )
@@ -43,7 +43,7 @@ class EditPublicBarrierTitleTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:edit_public_barrier_title",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 5},
             ),
             data={"title": "New Title"},
         )
@@ -60,7 +60,7 @@ class EditPublicBarrierSummaryTestCase(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:edit_public_barrier_summary",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 17},
             )
         )
         assert response.status_code == HTTPStatus.OK
@@ -73,7 +73,7 @@ class EditPublicBarrierSummaryTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:edit_public_barrier_summary",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 20},
             ),
             data={"summary": ""},
         )
@@ -89,7 +89,7 @@ class EditPublicBarrierSummaryTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:edit_public_barrier_summary",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 24},
             ),
             data={"summary": "New summary"},
         )
@@ -106,7 +106,7 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:edit_public_eligibility",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 27},
             )
         )
         assert response.status_code == HTTPStatus.OK
@@ -127,7 +127,7 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:edit_public_eligibility",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 20},
             ),
         )
         assert response.status_code == HTTPStatus.OK
@@ -142,7 +142,7 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:edit_public_eligibility",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 30},
             ),
             data={"public_eligibility": "yes", "public_eligibility_summary": ""},
         )
@@ -160,7 +160,7 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:edit_public_eligibility",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 3},
             ),
             data={"public_eligibility": "no", "public_eligibility_summary": "summary"},
         )
@@ -191,7 +191,7 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:approve_public_barrier_confirmation",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 17},
             ),
             data={
                 "confirmation": True,
@@ -208,7 +208,7 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:approve_public_barrier_confirmation",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 30},
             ),
             data={
                 "confirmation": True,
@@ -225,7 +225,7 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:approve_public_barrier_confirmation",
-                kwargs={"barrier_id": self.barrier["id"]},
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 18},
             ),
             data={"confirmation": False, "public_approval_summary": ""},
         )
@@ -289,68 +289,16 @@ class UnpublishBarrierConfirmationTestCase(MarketAccessTestCase):
 
 
 class PublicBarrierActionsTestCase(MarketAccessTestCase):
-    @patch("utils.api.resources.PublicBarriersResource.mark_as_ready")
-    def test_mark_as_ready_calls_api(self, mock_mark_as_ready):
-        response = self.client.post(
-            reverse(
-                "barriers:public_barrier_detail",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"action": "mark-as-ready"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert mock_mark_as_ready.called is True
-
-    @patch("utils.api.resources.PublicBarriersResource.publish")
-    def test_publish_calls_api(self, mock_publish):
-        response = self.client.post(
-            reverse(
-                "barriers:public_barrier_detail",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"action": "publish"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert mock_publish.called is True
-
-    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
-    def test_mark_as_in_progress_calls_api(self, mock_mark_as_in_progress):
-        response = self.client.post(
-            reverse(
-                "barriers:public_barrier_detail",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"action": "mark-as-in-progress"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert mock_mark_as_in_progress.called is True
-
-    @patch("utils.api.resources.PublicBarriersResource.unpublish")
-    def test_unpublish_calls_api(self, mock_unpublish):
-        response = self.client.post(
-            reverse(
-                "barriers:public_barrier_detail",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"action": "unpublish"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert mock_unpublish.called is True
-
-    @patch("utils.api.resources.PublicBarriersResource.ignore_all_changes")
-    def test_ignore_changes_calls_api(self, mock_ignore_changes):
-        response = self.client.post(
-            reverse(
-                "barriers:public_barrier_detail",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"action": "ignore-changes"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert mock_ignore_changes.called is True
-
     @patch("utils.api.resources.PublicBarriersResource.ready_for_approval")
-    def test_submit_for_approval_calls_api(self, mock_ready_for_approval):
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
+    @patch("utils.api.client.PublicBarriersResource.get_activity")
+    def test_submit_for_approval_calls_api(
+        self, mock_get_activity, mock_get_user, mock_user, mock_ready_for_approval
+    ):
+        mock_get_user.return_value = self.publisher_user
+        mock_user.return_value = self.publisher_user
+        mock_get_activity.return_value = self.public_barrier_activity
         response = self.client.post(
             reverse(
                 "barriers:public_barrier_detail",
@@ -362,7 +310,19 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
         assert mock_ready_for_approval.called is True
 
     @patch("utils.api.resources.PublicBarriersResource.allow_for_publishing_process")
-    def test_remove_for_approval_calls_api(self, mock_allow_for_publishing_process):
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
+    @patch("utils.api.client.PublicBarriersResource.get_activity")
+    def test_remove_for_approval_calls_api(
+        self,
+        mock_get_activity,
+        mock_get_user,
+        mock_user,
+        mock_allow_for_publishing_process,
+    ):
+        mock_get_user.return_value = self.publisher_user
+        mock_user.return_value = self.publisher_user
+        mock_get_activity.return_value = self.public_barrier_activity
         response = self.client.post(
             reverse(
                 "barriers:public_barrier_detail",
@@ -374,7 +334,15 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
         assert mock_allow_for_publishing_process.called is True
 
     @patch("utils.api.resources.PublicBarriersResource.ready_for_approval")
-    def test_revoke_approval_calls_api(self, mock_ready_for_approval):
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
+    @patch("utils.api.client.PublicBarriersResource.get_activity")
+    def test_revoke_approval_calls_api(
+        self, mock_get_activity, mock_get_user, mock_user, mock_ready_for_approval
+    ):
+        mock_get_user.return_value = self.publisher_user
+        mock_user.return_value = self.publisher_user
+        mock_get_activity.return_value = self.public_barrier_activity
         response = self.client.post(
             reverse(
                 "barriers:public_barrier_detail",

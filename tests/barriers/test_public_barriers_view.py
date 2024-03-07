@@ -4,7 +4,6 @@ from http import HTTPStatus
 from django.urls import resolve, reverse
 from mock import patch
 
-from barriers.models.history import HistoryItem
 from barriers.views.public_barriers import PublicBarrierDetail
 from core.tests import MarketAccessTestCase
 
@@ -27,26 +26,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
         mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
         mock_get.return_value = self.barrier
-        mock_get_activity.return_value = [
-            HistoryItem(
-                {
-                    "date": "2020-03-19T09:18:16.687291Z",
-                    "model": "public_barrier",
-                    "field": "public_view_status",
-                    "old_value": {
-                        "public_view_status": {"id": 70, "name": "Awaiting approval"},
-                        "public_eligibility": True,
-                        "public_eligibility_summary": "",
-                    },
-                    "new_value": {
-                        "public_view_status": {"id": 30, "name": "Awaiting publishing"},
-                        "public_eligibility": True,
-                        "public_eligibility_summary": "",
-                    },
-                    "user": {"id": 48, "name": "Test-user"},
-                }
-            )
-        ]
+        mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
@@ -66,11 +46,12 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.UsersResource.get_current")
     @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_correct_template_approver(
-        self, mock_get_user, mock_user, _mock_get_notes, _mock_get_activity, mock_get
+        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
         mock_get_user.return_value = self.approver_user
         mock_user.return_value = self.approver_user
         mock_get.return_value = self.barrier
+        mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
@@ -92,26 +73,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
         mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
         mock_get.return_value = self.barrier
-        mock_get_activity.return_value = [
-            HistoryItem(
-                {
-                    "date": "2020-03-19T09:18:16.687291Z",
-                    "model": "public_barrier",
-                    "field": "public_view_status",
-                    "old_value": {
-                        "public_view_status": {"id": 30, "name": "Awaiting publishing"},
-                        "public_eligibility": True,
-                        "public_eligibility_summary": "",
-                    },
-                    "new_value": {
-                        "public_view_status": {"id": 40, "name": "Published"},
-                        "public_eligibility": True,
-                        "public_eligibility_summary": "",
-                    },
-                    "user": {"id": 48, "name": "Test-user"},
-                }
-            )
-        ]
+        mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
@@ -135,11 +97,12 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.UsersResource.get_current")
     @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_html(
-        self, mock_get_user, mock_user, _mock_get_notes, _mock_get_activity, mock_get
+        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
         mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
         mock_get.return_value = self.public_barrier
+        mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
