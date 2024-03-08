@@ -293,11 +293,18 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.UsersResource.get_current")
     @patch("users.mixins.UserMixin.get_user")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
+    @patch("utils.api.client.PublicBarriersResource.get_notes")
     def test_submit_for_approval_calls_api(
-        self, mock_get_activity, mock_get_user, mock_user, mock_ready_for_approval
+        self,
+        mock_get_notes,
+        mock_get_activity,
+        mock_get_user,
+        mock_user,
+        mock_ready_for_approval,
     ):
         mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
+        mock_get_notes.return_value = []
         mock_get_activity.return_value = self.public_barrier_activity
         response = self.client.post(
             reverse(
@@ -313,8 +320,10 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.UsersResource.get_current")
     @patch("users.mixins.UserMixin.get_user")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
+    @patch("utils.api.client.PublicBarriersResource.get_notes")
     def test_remove_for_approval_calls_api(
         self,
+        mock_get_notes,
         mock_get_activity,
         mock_get_user,
         mock_user,
@@ -322,6 +331,7 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
     ):
         mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
+        mock_get_notes.return_value = []
         mock_get_activity.return_value = self.public_barrier_activity
         response = self.client.post(
             reverse(
@@ -337,11 +347,18 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.UsersResource.get_current")
     @patch("users.mixins.UserMixin.get_user")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
+    @patch("utils.api.client.PublicBarriersResource.get_notes")
     def test_revoke_approval_calls_api(
-        self, mock_get_activity, mock_get_user, mock_user, mock_ready_for_approval
+        self,
+        mock_get_notes,
+        mock_get_activity,
+        mock_get_user,
+        mock_user,
+        mock_ready_for_approval,
     ):
         mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
+        mock_get_notes.return_value = []
         mock_get_activity.return_value = self.public_barrier_activity
         response = self.client.post(
             reverse(
