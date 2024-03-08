@@ -189,7 +189,6 @@ class PublicBarrierDetail(
     def post(self, request, *args, **kwargs):
         action = self.request.POST.get("action")
         context_data = self.get_context_data()
-        logger.critical("GOT ACTION: " + str(action))
         if action:
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             barrier_id = self.kwargs.get("barrier_id")
