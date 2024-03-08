@@ -46,3 +46,14 @@
     border-bottom: 1px solid transparent;
     background-color: #00703c;
 }
+
+.govuk-notification-banner--success__content {
+    box-sizing: border-box;
+}
+
+.govuk-notification-banner--success__content {
+    $padding-tablet: govuk-spacing(4);
+    @include govuk-text-colour;
+    padding: govuk-spacing(3);
+    background-color: $govuk-body-background-colour;
+  }
