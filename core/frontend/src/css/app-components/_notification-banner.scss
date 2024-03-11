@@ -34,3 +34,26 @@
         color: #1D70B8;
     }
 }
+
+.govuk-notification-banner--success {
+    border-color: #00703c;
+    background-color: #00703c;
+    width: 100%
+}
+
+.govuk-notification-banner--success__header {
+    padding: 2px 15px 5px;
+    border-bottom: 1px solid transparent;
+    background-color: #00703c;
+}
+
+.govuk-notification-banner--success__content {
+    box-sizing: border-box;
+}
+
+.govuk-notification-banner--success__content {
+    $padding-tablet: govuk-spacing(4);
+    @include govuk-text-colour;
+    padding: govuk-spacing(3);
+    background-color: $govuk-body-background-colour;
+  }

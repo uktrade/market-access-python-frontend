@@ -767,22 +767,22 @@ urlpatterns = [
         name="public_barrier_detail",
     ),
     path(
-        "barriers/<uuid:barrier_id>/public/eligibility/",
+        "barriers/<uuid:barrier_id>/public/eligibility/<int:countdown>",
         EditPublicEligibility.as_view(),
         name="edit_public_eligibility",
     ),
     path(
-        "barriers/<uuid:barrier_id>/public/title/",
+        "barriers/<uuid:barrier_id>/public/title/<int:countdown>",
         EditPublicTitle.as_view(),
         name="edit_public_barrier_title",
     ),
     path(
-        "barriers/<uuid:barrier_id>/public/summary/",
+        "barriers/<uuid:barrier_id>/public/summary/<int:countdown>",
         EditPublicSummary.as_view(),
         name="edit_public_barrier_summary",
     ),
     path(
-        "barriers/<uuid:barrier_id>/public/public_approve/",
+        "barriers/<uuid:barrier_id>/public/public_approve/<int:countdown>",
         PublicBarrierApprovalConfirmation.as_view(),
         name="approve_public_barrier_confirmation",
     ),

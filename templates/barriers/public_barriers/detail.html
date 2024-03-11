@@ -49,6 +49,26 @@
 
 {% block page_content %}
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="govuk-notification-banner govuk-notification-banner--success govuk-!-margin-bottom-4 govuk-!-padding-bottom-0" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                <div class="govuk-notification-banner__header govuk-notification-banner--success__header">
+                    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                        Success
+                    </h2>
+                </div>
+                <div class="govuk-notification-banner--success__content">
+                    <h3 class="govuk-notification-banner__heading">
+                        {{ message.extra_tags }}
+                    </h3>
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        {{ message }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
     {% include 'barriers/partials/barrier_tabs.html' with active='public' %}
 
     <!-- Left Content Panel -->
@@ -56,24 +76,24 @@
         <h2 class="summary-group-public-view__heading">Prepare for publication</h2>
 
         <!-- Public Eligibility Section -->
-        <div name="public-eligibility-box" class="public-view-information-box {% if not barrier.public_eligibility %}public-view-information-box__notset{% endif %}">
+        <div name="public-eligibility-box" class="public-view-information-box {% if barrier.public_eligibility is None %}public-view-information-box__notset{% endif %}">
             <div class="govuk-summary-list__row">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Should this barrier be made public on GOV.UK once it has been approved?</h3>
             </div>
-            {% if not barrier.public_eligibility %}
+            {% if barrier.public_eligibility is None %}
                 <!-- Public eligibility not set. Show link to set eligibility.-->
-                <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Barrier publication status</a>
+                <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Barrier publication status</a>
             {% else %}
                 <!-- Public eligibility set. Show alternate content depending on its value.-->
                 {% if barrier.public_eligibility is True %}
                     <!-- Public eligibility set to allowed. Show confirmation of status and link to edit eligibility.-->
                     <p class="govuk-body govuk-!-margin-bottom-2">Yes</p>
-                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
+                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
                 {% else %}
                     <!-- Public eligibility set to not allowed. Show confirmation of status, the given reason and a link to edit eligibility.-->
                     <p class="govuk-body govuk-!-margin-bottom-2">No</p>
                     <p class="govuk-body govuk-!-margin-bottom-2"><span class="govuk-!-font-weight-bold">Reason:</span> {{ barrier.public_eligibility_summary }} </p>
-                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
+                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
                 {% endif %}
             {% endif %}
         </div>
@@ -90,26 +110,26 @@
                 <!-- Public eligibility set. Show links to add/edit public title and summary. -->
                 {% if not public_barrier.title %}
                     <!-- Public title not set. Show link to public title entry only. -->
-                    <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Public title</a></p>
+                    <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Public title</a></p>
                 {% else %}
                     <!-- Public title set. Show current public title and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public title</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.title }}</p>
                     {% if public_barrier.public_view_status == 20 %}
                         <!-- Edit button only shown when in Allowed status-->
-                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
+                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
                     {% endif %}
                 {% endif %}
                 {% if not public_barrier.summary %}
                     <!-- Public summary not set. Show link to public summary entry only. -->
-                    <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Public summary</a></p>
+                    <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Public summary</a></p>
                 {% else %}
                     <!-- Public summary set. Show current public summary and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public summary</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.summary }}</p>
                     {% if public_barrier.public_view_status == 20 %}
                         <!-- Edit button only shown when in Allowed status-->
-                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
+                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
                     {% endif %}
                 {% endif %}
                 <!-- Button control to move public barrier status -->
@@ -177,7 +197,7 @@
             {% endif %}
             {% if user_role == "Approver" and public_barrier.public_view_status == 70 or user_role == "Publisher" and public_barrier.public_view_status == 70 %}
                 <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
-                <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id %}" class="govuk-button">Approve barrier</a>
+                <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id countdown %}" class="govuk-button">Approve barrier</a>
             {% endif %}
             {% if user_role == "Approver" and public_barrier.public_view_status == 30 or user_role == "Publisher" and public_barrier.public_view_status == 30 %}
                 <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
