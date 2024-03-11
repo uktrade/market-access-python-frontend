@@ -1,6 +1,8 @@
 import logging
+from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs
 
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView
@@ -10,8 +12,10 @@ from barriers.forms.public_barriers import (
     ApprovePublicBarrierForm,
     PublicBarrierSearchForm,
     PublicEligibilityForm,
+    PublishPublicBarrierForm,
     PublishSummaryForm,
     PublishTitleForm,
+    UnpublishPublicBarrierForm,
 )
 from users.mixins import UserMixin
 from utils.api.client import MarketAccessAPIClient
@@ -118,13 +122,30 @@ class PublicBarrierDetail(
             if isinstance(item.new_value, dict) and item.new_value.get(
                 "public_view_status"
             ):
-                if (
-                    item.new_value["public_view_status"]["name"]
-                    == "Awaiting publishing"
-                ):
+                if item.new_value["public_view_status"][
+                    "name"
+                ] == "Awaiting publishing" and not context_data.get("approver_name"):
                     context_data["approver_name"] = item.user["name"]
-                    # First instance is most recent, so quit looping
-                    break
+                if item.new_value["public_view_status"][
+                    "name"
+                ] == "Published" and not context_data.get("publisher_name"):
+                    context_data["publisher_name"] = item.user["name"]
+                    context_data["published_date"] = item.date
+                # There is a 30 day limit after a barrier is set to 'Allowed' for
+                # it to be moved into 'Published'. A countdown is displayed in the frontend
+                # status box so we need to obtain that count here.
+                if item.new_value["public_view_status"][
+                    "name"
+                ] == "Allowed" and not context_data.get("countdown"):
+                    published_deadline = item.date + timedelta(days=30)
+                    deadline_difference = published_deadline - datetime.now(
+                        timezone.utc
+                    )
+                    # Add day to round up spare hours/mins
+                    if deadline_difference.days < 0:
+                        context_data["countdown"] = 0
+                    else:
+                        context_data["countdown"] = deadline_difference.days + 1
 
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")
@@ -167,27 +188,54 @@ class PublicBarrierDetail(
 
     def post(self, request, *args, **kwargs):
         action = self.request.POST.get("action")
-
+        context_data = self.get_context_data()
         if action:
             client = MarketAccessAPIClient(self.request.session.get("sso_token"))
             barrier_id = self.kwargs.get("barrier_id")
 
-            if action == "mark-as-ready":
-                client.public_barriers.mark_as_ready(id=barrier_id)
-            elif action == "submit-for-approval":
+            if action == "submit-for-approval":
                 client.public_barriers.ready_for_approval(id=barrier_id)
+                submitted_for_approval_success_message = f"""
+                    The approver is the person who checks the public title and summary, and gets
+                    clearances. For example, a Grade 6 or 7 in a regional team or a Market Access Coordinator at Post.
+                    Once it has been approved the barrier will be sent to the GOV.UK team for final content
+                    checks. It can then be published.
+                    This needs to be done within the next {context_data["countdown"]} days.
+                    For more details see the barrier information and notes on the public view tab
+                    """
+                messages.add_message(
+                    self.request,
+                    messages.INFO,
+                    submitted_for_approval_success_message,
+                    extra_tags="This barrier is now awaiting approval",
+                )
             elif action == "remove-for-approval":
                 client.public_barriers.allow_for_publishing_process(id=barrier_id)
+                approval_revoked_success_message = """
+                    The person who approves this barrier has reverted the barrier publication status to:
+                    awaiting approval.
+                    For more details see the barrier information and notes on the public view tab
+                    """
+                messages.add_message(
+                    self.request,
+                    messages.INFO,
+                    approval_revoked_success_message,
+                    extra_tags="This barrier is not ready for approval",
+                )
             elif action == "remove-for-publishing":
                 client.public_barriers.ready_for_approval(id=barrier_id)
-            elif action == "publish":
-                client.public_barriers.publish(id=barrier_id)
-            elif action == "mark-as-in-progress":
-                client.public_barriers.mark_as_in_progress(id=barrier_id)
-            elif action == "unpublish":
-                client.public_barriers.unpublish(id=barrier_id)
-            elif action == "ignore-changes":
-                client.public_barriers.ignore_all_changes(id=barrier_id)
+                publish_rejection_success_message = """
+                    The GOV.UK content team can not publish the barrier until it is approved again. To do this
+                    the approver will need to complete their checks and submit the barrier for approval.
+                    For more details see the barrier information and notes the publisher has added on the
+                    public view tab.
+                    """
+                messages.add_message(
+                    self.request,
+                    messages.INFO,
+                    publish_rejection_success_message,
+                    extra_tags="This barrier needs to be approved again",
+                )
             elif action == "delete-note":
                 note_id = self.request.POST.get("note_id")
                 client.public_barrier_notes.delete(id=note_id)
@@ -196,7 +244,7 @@ class PublicBarrierDetail(
             form = self.get_form()
             if form.is_valid():
                 return self.form_valid(form)
-        return self.render_to_response(self.get_context_data())
+        return self.render_to_response(context_data)
 
     def get_success_url(self):
         return reverse(
@@ -208,14 +256,25 @@ class PublicBarrierDetail(
 class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/public_barriers/eligibility.html"
     form_class = PublicEligibilityForm
+    success_message_eligible = """
+        But it cannot be approved until a public title and summary are added.
+        It will then be reviewed by the approver who checks the public title and summary, and gets
+        clearances. The GOV.UK can then review the content and publish it.
+        This needs to be done within the next %d days.
+        Add the public title and summary on the public view tab.
+        """
+    success_message_not_eligible = """
+        To start the approval process to decide if this barrier can be made public on GOV.UK, first
+        update the barrier publication status to 'allowed' and add the public title and summary.
+        It will then be reviewed by the approver who checks the public title and summary, and gets
+        clearances. The GOV.UK can then review the content and publish it.
+        For more details see the barrier information the public view tab.
+        """
 
     def get_initial(self):
         barrier_public_eligibility = self.barrier.public_eligibility
-        barrier_public_eligibility_postponed = self.barrier.public_eligibility_postponed
 
-        if barrier_public_eligibility_postponed:
-            public_eligibility = "review_later"
-        elif barrier_public_eligibility:
+        if barrier_public_eligibility:
             public_eligibility = "yes"
         else:
             public_eligibility = "no"
@@ -223,15 +282,30 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
         initial = {
             "public_eligibility": public_eligibility,
         }
-        if public_eligibility == "review_later":
-            initial["review_later_summary"] = self.barrier.public_eligibility_summary
-        elif public_eligibility == "no":
+        if public_eligibility == "no":
             initial["not_allowed_summary"] = self.barrier.public_eligibility_summary
-        elif public_eligibility == "yes":
+        else:
             initial["allowed_summary"] = self.barrier.public_eligibility_summary
+
         return initial
 
     def get_success_url(self):
+        form = self.get_form()
+        if form.data["public_eligibility"] == "yes":
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                (self.success_message_eligible % self.kwargs["countdown"]),
+                extra_tags="The barrier publication status has been set to: allowed",
+            )
+        else:
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                self.success_message_not_eligible,
+                extra_tags="The publication status is set to: not allowed",
+            )
+
         return reverse(
             "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
@@ -241,6 +315,12 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
 class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     template_name = "barriers/public_barriers/title.html"
     form_class = PublishTitleForm
+    success_message = """
+        But the barrier cannot be approved until there is both a public title and summary.
+        This needs to be done within the next %d days, along with a review from the approver,
+        and the GOV.UK publishing team.
+        Add the public title and summary on the public view tab.
+        """
 
     def get_initial(self):
         return {"title": self.public_barrier.title}
@@ -252,6 +332,12 @@ class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         return context_data
 
     def get_success_url(self):
+        messages.add_message(
+            self.request,
+            messages.INFO,
+            (self.success_message % self.kwargs["countdown"]),
+            extra_tags="The public title has been added",
+        )
         return reverse(
             "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
@@ -261,6 +347,12 @@ class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
 class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     template_name = "barriers/public_barriers/summary.html"
     form_class = PublishSummaryForm
+    success_message = """
+        But the barrier cannot be approved until there is both a public title and summary.
+        This needs to be done within the next %d days, along with a review from the approver,
+        and the GOV.UK publishing team.
+        Add the public title and summary on the public view tab.
+        """
 
     def get_initial(self):
         return {"summary": self.public_barrier.summary}
@@ -272,6 +364,12 @@ class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         return context_data
 
     def get_success_url(self):
+        messages.add_message(
+            self.request,
+            messages.INFO,
+            (self.success_message % self.kwargs["countdown"]),
+            extra_tags="The public summary has been added",
+        )
         return reverse(
             "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
@@ -283,8 +381,68 @@ class PublicBarrierApprovalConfirmation(
 ):
     template_name = "barriers/public_barriers/approval_confirmation.html"
     form_class = ApprovePublicBarrierForm
+    success_message = """
+        Only a member of the GOV.UK publishing team can complete the content checks. They will
+        contact the approver if they need more information or context.
+        This needs to be done within the next %d days. The barrier can then be published.
+        This will be updated in the barrier publication status on the public view tab.
+        """
 
     def get_success_url(self):
+        messages.add_message(
+            self.request,
+            messages.INFO,
+            (self.success_message % self.kwargs["countdown"]),
+            extra_tags="This barrier has been approved and is now with the GOV.UK content team",
+        )
+        return reverse(
+            "barriers:public_barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class PublicBarrierPublishConfirmation(
+    APIBarrierFormViewMixin,
+    PublicBarrierMixin,
+    FormView,
+):
+    template_name = "barriers/public_barriers/publish_confirmation.html"
+    form_class = PublishPublicBarrierForm
+    success_message = """
+        You can view the barrier on GOV.UK by visiting check international trade barriers.
+        For more details see the barrier information and notes on the public view tab.
+        """
+
+    def get_success_url(self):
+        messages.add_message(
+            self.request,
+            messages.INFO,
+            self.success_message,
+            extra_tags="This barrier has been published on GOV.UK",
+        )
+        return reverse(
+            "barriers:public_barrier_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class PublicBarrierUnpublishConfirmation(
+    APIBarrierFormViewMixin, PublicBarrierMixin, FormView
+):
+    template_name = "barriers/public_barriers/unpublish_confirmation.html"
+    form_class = UnpublishPublicBarrierForm
+    success_message = """
+        It can no longer be viewed on Check international trade barriers.
+        For more details see the barrier information and notes on the public view tab.
+        """
+
+    def get_success_url(self):
+        messages.add_message(
+            self.request,
+            messages.INFO,
+            self.success_message,
+            extra_tags="This barrier has been removed from GOV.UK",
+        )
         return reverse(
             "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},

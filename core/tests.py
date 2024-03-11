@@ -4,6 +4,7 @@ from django.conf import settings
 from django.test import TestCase, override_settings
 from mock import patch
 
+from barriers.models.history import HistoryItem
 from core.filecache import memfiles
 from users.models import User
 from utils.api.resources import (
@@ -82,6 +83,80 @@ class MarketAccessTestCase(TestCase):
             "groups": [{"id": 5, "name": "Analyst"}],
         }
     )
+    publisher_user = User(
+        {
+            "is_superuser": False,
+            "is_active": True,
+            "permissions": [
+                "add_resolvabilityassessment",
+                "change_resolvabilityassessment",
+                "archive_resolvabilityassessment",
+                "approve_resolvabilityassessment",
+                "add_strategicassessment",
+                "change_strategicassessment",
+                "archive_strategicassessment",
+                "approve_strategicassessment",
+            ],
+            "groups": [{"id": 6, "name": "Publisher"}],
+        }
+    )
+
+    public_barrier_activity = [
+        HistoryItem(
+            {
+                "date": "2020-03-19T09:18:16.687291Z",
+                "model": "public_barrier",
+                "field": "public_view_status",
+                "old_value": {
+                    "public_view_status": {"id": 0, "name": "Unknown"},
+                    "public_eligibility": False,
+                    "public_eligibility_summary": "",
+                },
+                "new_value": {
+                    "public_view_status": {"id": 10, "name": "Allowed"},
+                    "public_eligibility": True,
+                    "public_eligibility_summary": "",
+                },
+                "user": {"id": 48, "name": "Test-user"},
+            }
+        ),
+        HistoryItem(
+            {
+                "date": "2020-03-19T09:18:16.687291Z",
+                "model": "public_barrier",
+                "field": "public_view_status",
+                "old_value": {
+                    "public_view_status": {"id": 70, "name": "Awaiting approval"},
+                    "public_eligibility": True,
+                    "public_eligibility_summary": "",
+                },
+                "new_value": {
+                    "public_view_status": {"id": 30, "name": "Awaiting publishing"},
+                    "public_eligibility": True,
+                    "public_eligibility_summary": "",
+                },
+                "user": {"id": 48, "name": "Test-user"},
+            }
+        ),
+        HistoryItem(
+            {
+                "date": "2020-03-19T09:18:16.687291Z",
+                "model": "public_barrier",
+                "field": "public_view_status",
+                "old_value": {
+                    "public_view_status": {"id": 30, "name": "Awaiting publishing"},
+                    "public_eligibility": True,
+                    "public_eligibility_summary": "",
+                },
+                "new_value": {
+                    "public_view_status": {"id": 40, "name": "Published"},
+                    "public_eligibility": True,
+                    "public_eligibility_summary": "",
+                },
+                "user": {"id": 48, "name": "Test-user"},
+            }
+        ),
+    ]
 
     def setUp(self):
         self.init_session()

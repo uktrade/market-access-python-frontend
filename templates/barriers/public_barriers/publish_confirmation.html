@@ -1,0 +1,23 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} Confirm Public Barrier Approval {% endblock %}
+
+{% block page_content %}
+
+    <form action="" novalidate method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">Confirm you want to publish this barrier on GOV.UK</h1>
+        </legend>
+
+        <p class="govuk-body">By choosing to publish this barrier, you confirm that you want it to be made public on <a href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank" class="govuk-link--no-visited-state govuk-!-font-size-19">check international trade barriers (opens in new tab)</a>.</p>
+
+        <p class="govuk-body">
+            {% csrf_token %}
+            <input type="submit" value="Confirm" class="govuk-button">
+            <a href="{% url 'barriers:public_barrier_detail' object.id %}" class="form-cancel">Cancel</a>
+        </p>
+    </form>
+
+{% endblock %}
