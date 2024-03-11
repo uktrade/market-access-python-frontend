@@ -575,6 +575,8 @@ class PublicBarrier(APIModel):
             return "Awaiting publishing"
         elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.PUBLISHED:
             return "Published"
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.UNPUBLISHED:
+            return "Awaiting re-publishing"
 
     @property
     def reported_on(self):

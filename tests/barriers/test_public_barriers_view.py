@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 from django.urls import resolve, reverse
@@ -5,6 +6,8 @@ from mock import patch
 
 from barriers.views.public_barriers import PublicBarrierDetail
 from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class PublicBarrierViewTestCase(MarketAccessTestCase):
@@ -17,12 +20,13 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.resources.UsersResource.get_current")
     @patch("users.mixins.UserMixin.get_user")
-    def test_public_barrier_view_loads_correct_template(
-        self, mock_get_user, mock_user, _mock_get_notes, _mock_get_activity, mock_get
+    def test_public_barrier_view_loads_correct_template_general_user(
+        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
         mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
         mock_get.return_value = self.barrier
+        mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
@@ -31,6 +35,61 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
 
         assert HTTPStatus.OK == response.status_code
         self.assertTemplateUsed(response, "barriers/public_barriers/detail.html")
+        assert response.context_data["user_role"] == "General user"
+
+        # Test an approved barrier passed the approvers name to context
+        assert response.context_data["approver_name"] == "Test-user"
+
+    @patch("utils.api.client.PublicBarriersResource.get")
+    @patch("utils.api.client.PublicBarriersResource.get_activity")
+    @patch("utils.api.client.PublicBarriersResource.get_notes")
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
+    def test_public_barrier_view_loads_correct_template_approver(
+        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
+    ):
+        mock_get_user.return_value = self.approver_user
+        mock_user.return_value = self.approver_user
+        mock_get.return_value = self.barrier
+        mock_get_activity.return_value = self.public_barrier_activity
+        url = reverse(
+            "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
+        )
+
+        response = self.client.get(url)
+
+        assert HTTPStatus.OK == response.status_code
+        self.assertTemplateUsed(response, "barriers/public_barriers/detail.html")
+        assert response.context_data["user_role"] == "Approver"
+
+    @patch("utils.api.client.PublicBarriersResource.get")
+    @patch("utils.api.client.PublicBarriersResource.get_activity")
+    @patch("utils.api.client.PublicBarriersResource.get_notes")
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
+    def test_public_barrier_view_loads_correct_template_publisher(
+        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
+    ):
+        mock_get_user.return_value = self.publisher_user
+        mock_user.return_value = self.publisher_user
+        mock_get.return_value = self.barrier
+        mock_get_activity.return_value = self.public_barrier_activity
+        url = reverse(
+            "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
+        )
+
+        response = self.client.get(url)
+
+        assert HTTPStatus.OK == response.status_code
+        self.assertTemplateUsed(response, "barriers/public_barriers/detail.html")
+        assert response.context_data["user_role"] == "Publisher"
+
+        # Test an published barrier passes the publishers name and date to context
+        assert response.context_data["publisher_name"] == "Test-user"
+        assert (
+            str(response.context_data["published_date"])
+            == "2020-03-19 09:18:16.687291+00:00"
+        )
 
     @patch("utils.api.client.PublicBarriersResource.get")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
@@ -38,11 +97,12 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.UsersResource.get_current")
     @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_html(
-        self, mock_get_user, mock_user, _mock_get_notes, _mock_get_activity, mock_get
+        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
         mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
         mock_get.return_value = self.public_barrier
+        mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
         )
