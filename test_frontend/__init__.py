@@ -57,7 +57,7 @@ class PlaywrightTestBase(TransactionTestCase):
         return f"{cls.base_url}/barriers/{cls.TEST_BARRIER_ID}/"
 
     @classmethod
-    def create_test_barrier(cls):
+    def create_test_barrier(cls, title="test title"):
         new_browser = cls.playwright.chromium.launch(headless=True)
         context = new_browser.new_context()
         page = context.new_page()
@@ -65,7 +65,7 @@ class PlaywrightTestBase(TransactionTestCase):
         random_barrier_id = "".join(
             random.choice(string.ascii_uppercase) for i in range(5)
         )
-        random_barrier_name = f"test title - {datetime.datetime.now().strftime('%d-%m-%Y')} - {random_barrier_id}"
+        random_barrier_name = f"{title} - {datetime.datetime.now().strftime('%d-%m-%Y')} - {random_barrier_id}"
 
         page.goto(cls.base_url)
         page.get_by_role("link", name="Report a barrier").click()

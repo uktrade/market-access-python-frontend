@@ -194,7 +194,7 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if current_user.has_approved_digital_trade_email or current_user|has_permission:"download_barriers" %}
+                {% if current_user %}
                     <p class="filter-results-download">
                         {% if barriers %}
                             <span class="filter-results-download__text">
