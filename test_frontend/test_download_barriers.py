@@ -4,6 +4,7 @@ from test_frontend import PlaywrightTestBase
 
 
 class TestBarrierDownloads(PlaywrightTestBase):
+    """
 
     @classmethod
     def get_my_barrier_downloads_tab(cls):
@@ -24,3 +25,4 @@ class TestBarrierDownloads(PlaywrightTestBase):
     @pytest.mark.order(4)
     def test_clicking_download_button_on_saved_search_page(self):
         pass
+    """
