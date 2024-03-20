@@ -12,7 +12,7 @@ ENV_FILE="docker-compose.env"
 export $(cat $ENV_FILE | sed 's/#.*//g' | xargs)
 
 # run playwright with pytest
-pytest test_frontend/test_search.py
+pytest test_frontend/
 
 # deactivate python virtual environment
 deactivate
