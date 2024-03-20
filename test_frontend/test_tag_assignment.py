@@ -2,7 +2,6 @@ import pytest
 from playwright.sync_api import expect
 
 
-
 @pytest.mark.order(1)
 def test_tag_assignment(page, create_test_barrier):
     title = "test"
