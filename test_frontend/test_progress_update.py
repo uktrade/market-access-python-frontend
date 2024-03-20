@@ -1,33 +1,30 @@
-import pytest
+from playwright.sync_api import expect
 
-from test_frontend import PlaywrightTestBase
+def test_create_progress_update(page, create_test_barrier):
+    title = "test 2"
+    url = create_test_barrier(title=title)
+    page.goto(url)
 
+    page.get_by_role("link", name="Add progress update").click()
+    page.get_by_label("Barrier progress").check()
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_label("On Track Barrier will be").check()
+    page.get_by_label("Explain why barrier resolution is on track").click()
+    page.get_by_label("Explain why barrier resolution is on track").fill("dsghidhfgjhoighdfihjg")
+    page.get_by_label("Month").click()
+    page.get_by_label("Month").fill("10")
+    page.get_by_label("Year", exact=True).click()
+    page.get_by_label("Year", exact=True).fill("2024")
+    page.get_by_role("button", name="Save and continue").click()
+    page.locator("#next_step_item").click()
+    page.locator("#next_step_item").fill("odhfgiuhdsoiuhdfg")
+    page.locator("#next_step_owner").click()
+    page.locator("#next_step_owner").fill("dhfgudhsug")
+    page.get_by_label("Month").click()
+    page.get_by_label("Month").fill("06")
+    page.get_by_label("Year").click()
+    page.get_by_label("Year").fill("2024")
+    page.get_by_role("button", name="Save").click()
+    page.get_by_role("link", name="Confirm").click()
 
-class TestProgressUpdateCreate(PlaywrightTestBase):
-    @pytest.mark.order(1)
-    def test_create_progress_update(self):
-        self.page.goto(self.get_barrier_detail_page())
-
-        self.page.get_by_role("link", name="Add progress update").click()
-        self.page.get_by_text("Top 100 priority barrier").click()
-        self.page.get_by_role("button", name="Continue").click()
-        self.page.get_by_label("On track").check()
-        self.page.get_by_role(
-            "textbox", name="Explain why barrier resolution is on track"
-        ).click()
-        self.page.get_by_role(
-            "textbox", name="Explain why barrier resolution is on track"
-        ).fill("Playwright test")
-        self.page.get_by_role("button", name="Save and continue").click()
-        self.page.locator("#next_step_item").click()
-        self.page.locator("#next_step_item").fill("Playwright test next step")
-        self.page.locator("#next_step_item").press("Tab")
-        self.page.locator("#next_step_owner").fill("Playwright user")
-        self.page.locator("#next_step_owner").press("Tab")
-        self.page.get_by_label("Month").fill("12")
-        self.page.get_by_label("Month").press("Tab")
-        self.page.get_by_label("Year").fill("2023")
-        self.page.get_by_role("button", name="Save").click()
-        self.page.get_by_role("link", name="Confirm").click()
-
-        assert self.page.url == self.get_barrier_detail_page()
+    expect(page.get_by_role("heading", name=title)).to_be_visible()
