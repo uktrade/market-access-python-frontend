@@ -38,7 +38,7 @@ django-cors-headers = "~=4.3.0"
 tzdata = "^2023.3"
 
 [tool.poetry.dev-dependencies]
-black = "~=22.3.0"
+black = "~=24.3.0"
 flake8 = "~=5.0.0"
 ipython = "==8.10.0"
 isort = "^5.10.1"
