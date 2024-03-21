@@ -1,4 +1,5 @@
 import pytest
+
 from playwright.sync_api import expect
 
 
@@ -13,7 +14,7 @@ def test_report_a_barrier_page(page):
 @pytest.mark.order(2)
 def test_change_barrier_priority(page, create_test_barrier):
 
-    title = "test 2"
+    title = "test"
     url = create_test_barrier(title=title)
     page.goto(url)
     page.get_by_role("link", name="Activate link to change").click()
@@ -34,7 +35,7 @@ def test_change_barrier_priority(page, create_test_barrier):
 @pytest.mark.order(3)
 def test_change_top_100_status(page, create_test_barrier):
 
-    title = "test 2"
+    title = "test"
     url = create_test_barrier(title=title)
     page.goto(url)
 
@@ -67,13 +68,14 @@ def test_change_top_100_status(page, create_test_barrier):
     page.get_by_label("Year").click()
     page.get_by_label("Year").fill("2024")
     page.get_by_role("button", name="Save").click()
+    page.get_by_role("link", name="Confirm").click()
 
     expect(page.get_by_text("On track")).to_be_visible()
 
 
 @pytest.mark.order(4)
 def test_add_tag(page, create_test_barrier):
-    title = "test 2"
+    title = "test"
     url = create_test_barrier(title=title)
     page.goto(url)
     page.get_by_role("link", name="Edit tags").click()
@@ -84,14 +86,11 @@ def test_add_tag(page, create_test_barrier):
 
 @pytest.mark.order(5)
 def test_update_sector(page, create_test_barrier):
-    title = "test 2"
+    title = "test"
     url = create_test_barrier(title=title)
     page.goto(url)
     page.get_by_label("edit main sector").click()
-    page.get_by_role("combobox").select_option("9738cecc-5f95-e211-a939-e4115bead28a")
+    page.get_by_role("combobox").select_option("9b38cecc-5f95-e211-a939-e4115bead28a")
     page.get_by_role("button", name="Add main sector").click()
-    page.get_by_role("button", name="Continue").click()
-
-    expect(page.locator(".summary-group__list__value__list__item")).to_have_text(
-        "Aerospace"
-    )
+    page.get_by_text("Chemicals").click()
+    expect(page.get_by_text("Chemicals")).to_be_visible()

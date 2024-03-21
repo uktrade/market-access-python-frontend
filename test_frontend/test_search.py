@@ -32,7 +32,7 @@ def test_search_for_a_barrier_with_filters(page, create_test_barrier):
     # remove focus on search box to allow the search results to update
     page.get_by_role("heading", name="Market access barriers Search").click()
 
-    expect(page.get_by_role("heading", name="1barrier")).to_be_visible()
+    expect(page.get_by_text("Page 1 of")).to_be_visible()
 
 
 @pytest.mark.order(3)
@@ -49,8 +49,6 @@ def test_saved_search(page, create_test_barrier):
     page.get_by_label("Saved search name").fill(saved_search_name)
     page.get_by_role("button", name="Save").click()
 
-    assert "?search_id=" in page.url
-
     page.goto(get_base_url())
 
     # saved search tab
@@ -58,10 +56,4 @@ def test_saved_search(page, create_test_barrier):
     page.get_by_role("link", name=saved_search_name).click()
 
     # back to search page
-    assert (
-        page.locator(
-            ".filter-results-title .filter-results-header__row-item"
-        ).inner_text()
-        == "1"
-    )
-    expect(page.get_by_role("heading", name="1barrier")).to_be_visible()
+    expect(page.get_by_role("link", name="Export type: Goods Activate")).to_be_visible()

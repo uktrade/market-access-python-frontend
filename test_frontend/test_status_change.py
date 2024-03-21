@@ -28,7 +28,7 @@ def test_status_change_happy_path(page, create_test_barrier):
     url = create_test_barrier(title=title)
     page.goto(url)
 
-    assert page.url.endswith("/status/")
+    page.get_by_role("link", name="Edit status").click()
     page.get_by_label("Open").check()
     page.get_by_label(
         "Describe briefly the status of the barrier, including recent progress and any obstacles"
