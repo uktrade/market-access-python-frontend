@@ -5,6 +5,7 @@ from playwright.sync_api import expect
 
 from .utils import get_text_content_without_line_separators
 
+
 @pytest.mark.order(1)
 def test_change_status_unhappy_path(page, create_test_barrier):
     title = "test"
@@ -19,6 +20,7 @@ def test_change_status_unhappy_path(page, create_test_barrier):
         "Select the barrier status"
         in page.locator(".govuk-error-summary__list").text_content()
     )
+
 
 @pytest.mark.order(2)
 def test_status_change_happy_path(page, create_test_barrier):
@@ -59,9 +61,9 @@ def test_status_change_happy_path(page, create_test_barrier):
     page.get_by_label(
         "Describe briefly how this barrier was partially resolved"
     ).click()
-    page.get_by_label(
-        "Describe briefly how this barrier was partially resolved"
-    ).fill("description")
+    page.get_by_label("Describe briefly how this barrier was partially resolved").fill(
+        "description"
+    )
     page.get_by_role("button", name="Save and return").click()
 
     assert (
@@ -71,6 +73,4 @@ def test_status_change_happy_path(page, create_test_barrier):
         )
     )
 
-    expect(page.locator(".barrier-status-details__text")).to_have_text(
-        "description"
-    )
+    expect(page.locator(".barrier-status-details__text")).to_have_text("description")

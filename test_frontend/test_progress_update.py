@@ -1,5 +1,6 @@
 from playwright.sync_api import expect
 
+
 def test_create_progress_update(page, create_test_barrier):
     title = "test 2"
     url = create_test_barrier(title=title)
@@ -10,7 +11,9 @@ def test_create_progress_update(page, create_test_barrier):
     page.get_by_role("button", name="Continue").click()
     page.get_by_label("On Track Barrier will be").check()
     page.get_by_label("Explain why barrier resolution is on track").click()
-    page.get_by_label("Explain why barrier resolution is on track").fill("dsghidhfgjhoighdfihjg")
+    page.get_by_label("Explain why barrier resolution is on track").fill(
+        "dsghidhfgjhoighdfihjg"
+    )
     page.get_by_label("Month").click()
     page.get_by_label("Month").fill("10")
     page.get_by_label("Year", exact=True).click()

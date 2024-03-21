@@ -1,11 +1,14 @@
 import pytest
-
 from playwright.sync_api import expect
+
 
 @pytest.mark.order(1)
 def test_report_a_barrier_page(page):
     page.get_by_role("button", name="Report a barrier Add a market").click()
-    expect(page.get_by_role("heading", name="Market access barriers Report")).to_be_visible()
+    expect(
+        page.get_by_role("heading", name="Market access barriers Report")
+    ).to_be_visible()
+
 
 @pytest.mark.order(2)
 def test_change_barrier_priority(page, create_test_barrier):
@@ -16,9 +19,13 @@ def test_change_barrier_priority(page, create_test_barrier):
     page.get_by_role("link", name="Activate link to change").click()
     page.locator("#confirm-priority-yes").check()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_label("Top 100 priority barrier Barrier needs significant input from DBT policy teams").check()
+    page.get_by_label(
+        "Top 100 priority barrier Barrier needs significant input from DBT policy teams"
+    ).check()
     page.get_by_label("Describe why this should be").click()
-    page.get_by_label("Describe why this should be").fill("this is a top 100 priority barrier")
+    page.get_by_label("Describe why this should be").fill(
+        "this is a top 100 priority barrier"
+    )
     page.get_by_role("button", name="Save and return").click()
 
     expect(page.get_by_role("heading", name=title)).to_be_visible()
@@ -43,7 +50,9 @@ def test_change_top_100_status(page, create_test_barrier):
     page.get_by_role("button", name="Continue").click()
     page.get_by_label("On Track Barrier will be").check()
     page.get_by_label("Explain why barrier resolution is on track").click()
-    page.get_by_label("Explain why barrier resolution is on track").fill("because it is being resolved")
+    page.get_by_label("Explain why barrier resolution is on track").fill(
+        "because it is being resolved"
+    )
     page.get_by_label("Month").click()
     page.get_by_label("Month").fill("10")
     page.get_by_label("Year", exact=True).click()
@@ -61,6 +70,7 @@ def test_change_top_100_status(page, create_test_barrier):
 
     expect(page.get_by_text("On track")).to_be_visible()
 
+
 @pytest.mark.order(4)
 def test_add_tag(page, create_test_barrier):
     title = "test 2"
@@ -70,6 +80,7 @@ def test_add_tag(page, create_test_barrier):
     page.get_by_label("Programme Fund").check()
     page.get_by_label("Scoping (Top 100 priority").check()
     page.get_by_role("button", name="Save changes").click()
+
 
 @pytest.mark.order(5)
 def test_update_sector(page, create_test_barrier):
@@ -81,4 +92,6 @@ def test_update_sector(page, create_test_barrier):
     page.get_by_role("button", name="Add main sector").click()
     page.get_by_role("button", name="Continue").click()
 
-    expect(page.locator(".summary-group__list__value__list__item")).to_have_text("Aerospace")
+    expect(page.locator(".summary-group__list__value__list__item")).to_have_text(
+        "Aerospace"
+    )
