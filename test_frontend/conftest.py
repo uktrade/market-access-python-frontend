@@ -11,6 +11,7 @@ from playwright.sync_api import sync_playwright
 BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 HEADLESS = os.getenv("HEADLESS", "true").lower() == "true"
 
+
 @pytest.fixture(scope="session")
 def playwright_instance():
     with sync_playwright() as p:
@@ -19,7 +20,7 @@ def playwright_instance():
 
 @pytest.fixture(scope="session")
 def browser(playwright_instance):
-    browser = playwright_instance.chromium.launch(headless=False)
+    browser = playwright_instance.chromium.launch(headless=HEADLESS)
     yield browser
     browser.close()
 
@@ -35,7 +36,6 @@ def page(browser):
 
 @pytest.fixture
 def create_test_barrier(page):
-
     def _create_test_barrier(title):
 
         random_barrier_id = "".join(
@@ -53,12 +53,22 @@ def create_test_barrier(page):
 
         page.locator("#status-radio-2").check()
         page.locator("#status-radio-3").check()
-        page.locator("#status-date-group-barrier-status-partially_resolved_date_0").click()
-        page.locator("#status-date-group-barrier-status-partially_resolved_date_0").fill("04")
-        page.locator("#status-date-group-barrier-status-partially_resolved_date_1").click()
-        page.locator("#status-date-group-barrier-status-partially_resolved_date_1").fill("2023")
+        page.locator(
+            "#status-date-group-barrier-status-partially_resolved_date_0"
+        ).click()
+        page.locator(
+            "#status-date-group-barrier-status-partially_resolved_date_0"
+        ).fill("04")
+        page.locator(
+            "#status-date-group-barrier-status-partially_resolved_date_1"
+        ).click()
+        page.locator(
+            "#status-date-group-barrier-status-partially_resolved_date_1"
+        ).fill("2023")
         page.locator("#id_barrier-status-partially_resolved_description").click()
-        page.locator("#id_barrier-status-partially_resolved_description").fill("ifdshgihsdpihgf")
+        page.locator("#id_barrier-status-partially_resolved_description").fill(
+            "ifdshgihsdpihgf"
+        )
         page.locator("#status-date-group-barrier-status-start_date_0").click()
         page.locator("#status-date-group-barrier-status-start_date_0").fill("03")
         page.locator("#status-date-group-barrier-status-start_date_1").click()
@@ -68,11 +78,17 @@ def create_test_barrier(page):
         page.get_by_role("button", name="Continue").click()
         page.get_by_role("radio").first.check()
         page.get_by_role("button", name="Continue").click()
-        page.locator("#main_sector_select").select_option("9538cecc-5f95-e211-a939-e4115bead28a")
+        page.locator("#main_sector_select").select_option(
+            "9538cecc-5f95-e211-a939-e4115bead28a"
+        )
         page.get_by_text("Add sector").click()
-        page.locator("#sectors_select").select_option("9738cecc-5f95-e211-a939-e4115bead28a")
+        page.locator("#sectors_select").select_option(
+            "9738cecc-5f95-e211-a939-e4115bead28a"
+        )
         page.get_by_text("Other sectors (optional) Add").click()
-        page.locator("#sectors_select").select_option("9638cecc-5f95-e211-a939-e4115bead28a")
+        page.locator("#sectors_select").select_option(
+            "9638cecc-5f95-e211-a939-e4115bead28a"
+        )
         page.get_by_role("button", name="Continue").click()
         page.get_by_placeholder("Search Company").click()
         page.locator("#search-companies-button").click()
