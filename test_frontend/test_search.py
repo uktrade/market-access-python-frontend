@@ -5,7 +5,7 @@ from .utils import get_base_url
 
 
 def get_search_page():
-    return f"{get_base_url()}search/"
+    return f"{get_base_url()}/search/"
 
 
 @pytest.mark.order(1)
@@ -28,7 +28,7 @@ def test_search_for_a_barrier_with_filters(page, create_test_barrier):
 
     page.goto(get_search_page())
     page.get_by_role("textbox", name="Search").fill(title)
-    page.get_by_text("Goods").click()
+    page.get_by_text("Goods", exact=True).click()
     # remove focus on search box to allow the search results to update
     page.get_by_role("heading", name="Market access barriers Search").click()
 
@@ -43,7 +43,7 @@ def test_saved_search(page, create_test_barrier):
 
     page.goto(get_search_page())
     page.get_by_role("textbox", name="Search").fill(title)
-    page.get_by_text("Goods").click()
+    page.get_by_text("Goods", exact=True).click()
     page.get_by_role("link", name="Save search").click()
     saved_search_name = "test saved search"
     page.get_by_label("Saved search name").fill(saved_search_name)
