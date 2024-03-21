@@ -49,7 +49,7 @@ def test_saved_search(page, create_test_barrier):
     page.get_by_label("Saved search name").fill(saved_search_name)
     page.get_by_role("button", name="Save").click()
 
-    assert f"?search_id=" in page.url
+    assert "?search_id=" in page.url
 
     page.goto(get_base_url())
 
