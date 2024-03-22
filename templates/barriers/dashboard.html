@@ -122,7 +122,29 @@
                 <p>You have no downloads</p>
                 <p><a href="https://data-services-help.trade.gov.uk/market-access/how-guides/download-barrier-details-spreadsheet/">How do I download barriers?</a></p>
             {% else %}
-                <p>By downloading files from this page you are agreeing to the <a href="https://workspace.trade.gov.uk/working-at-dbt/policies-and-guidance/policies/acceptable-use-policy/">acceptable use agreement</a></p>
+
+                <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                            Acceptable use agreement
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        <p class="govuk-body">In order to download market access information from the Digital Market Access System (DMAS), you agree that:</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            <li>the downloaded information is commercially sensitive and may contain personal data</li>
+                            <li>when handling market access information you will follow your organisation’s information security and data protection policies</li>
+                            <li>any information security breach involving the downloaded information will be reported to your Data Protection team without undue delay</li>
+                            <li>the downloaded market access information shall be used solely for the purpose of resolving market access barriers and will not be shared publicly without consultation with the Department for Business and Trade (DBT), which remains the Data Owner</li>
+                        </ul>
+
+                        DMAS user privacy notice
+                        <br>
+                        <p class="govuk-body">View information about how your personal data is processed when you use DMAS <a href="https://data-services-help.trade.gov.uk/market-access/about-barriers-and-market-access/digital-market-access-service-dmas-privacy-notice/" class="govuk-link" target="_blank">here (opens in new tab)</a></p>
+                    </div>
+                </details>
+
+
                 <ul class="ma-card-list">
                     {% for download in barrier_downloads %}
                         <li class="ma-card-list__item barrier-download">
