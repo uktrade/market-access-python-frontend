@@ -89,6 +89,7 @@ LOCAL_APPS = [
     "healthcheck",
     "reports",
     "users",
+    "pingdom"
 ]
 
 INSTALLED_APPS = BASE_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
