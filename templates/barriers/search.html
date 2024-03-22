@@ -194,37 +194,35 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if current_user.has_approved_digital_trade_email %}
-                    <p class="filter-results-download">
-                        {% if barriers %}
-                            <span class="filter-results-download__text">
-                                {% if barriers.total_count == 1 %}
-                                    Download this barrier to a spreadsheet
-                                {% else %}
-                                    Download these {{ barriers.total_count }} barriers to a spreadsheet
-                                {% endif %}
-                            </span>
-                            <span class="menu-bar right">
-                                {% if form.search_id.value is not None %}
-                                    {% if have_filters_changed %}
-                                        <a href="{% url 'barriers:search' %}?{{ pageless_querystring }}&update_search=true"
-                                           class="filter-results-header__update-button">Update saved search</a>
-                                        <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
-                                           class="govuk-button filter-results-header__save-button">Save as a new search</a>
-                                    {% endif %}
-                                {% elif filters and not search_title %}
+                <p class="filter-results-download">
+                    {% if barriers %}
+                        <span class="filter-results-download__text">
+                            {% if barriers.total_count == 1 %}
+                                Download this barrier to a spreadsheet
+                            {% else %}
+                                Download these {{ barriers.total_count }} barriers to a spreadsheet
+                            {% endif %}
+                        </span>
+                        <span class="menu-bar right">
+                            {% if form.search_id.value is not None %}
+                                {% if have_filters_changed %}
+                                    <a href="{% url 'barriers:search' %}?{{ pageless_querystring }}&update_search=true"
+                                       class="filter-results-header__update-button">Update saved search</a>
                                     <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
-                                       class="govuk-button filter-results-header__save-button">Save search</a>
+                                       class="govuk-button filter-results-header__save-button">Save as a new search</a>
                                 {% endif %}
-                                <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
-                                    Download
-                                </a>
-                            </span>
-                        {% else %}
-                            <span class="filter-results-download__text">There are no barriers to download</span>
-                        {% endif %}
-                    </p>
-                {% endif %}
+                            {% elif filters and not search_title %}
+                                <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
+                                   class="govuk-button filter-results-header__save-button">Save search</a>
+                            {% endif %}
+                            <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
+                                Download
+                            </a>
+                        </span>
+                    {% else %}
+                        <span class="filter-results-download__text">There are no barriers to download</span>
+                    {% endif %}
+                </p>
                 <ol id="filter-results-list" class="filter-results-list">
                     {% for barrier in barriers %}
                         {% ifchanged %}
