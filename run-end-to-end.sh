@@ -3,8 +3,8 @@
 # activate python virtual environment
 source .venv/bin/activate
 
-# install python dependencies
-# pip install -r requirements.txt
+# install python dependencies if not already installed
+pip install -r requirements.txt
 
 ENV_FILE="docker-compose.env"
 
