@@ -28,9 +28,9 @@ def authenticate(page_obj, return_url):
     page_obj.goto(AUTH_URL)
 
     # Fill in the login form and submit it.
-    page_obj.fill("#username", TEST_USERNAME)
-    page_obj.fill("#password", TEST_PASSWORD)
-    page_obj.click("#login-button")
+    page_obj.get_by_label("Email:").fill(TEST_USERNAME)
+    page_obj.get_by_label("Password:").fill(TEST_PASSWORD)
+    page_obj.get_by_role("button", name="login").click()
 
     # Wait for navigation to ensure the login process has completed.
     page_obj.wait_for_navigation()
