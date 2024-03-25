@@ -194,77 +194,35 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if current_user.has_approved_digital_trade_email or current_user|has_permission:"download_barriers" %}
-                    <p class="filter-results-download">
-                        {% if barriers %}
-                            <span class="filter-results-download__text">
-                                {% if barriers.total_count == 1 %}
-                                    Download this barrier to a spreadsheet
-                                {% else %}
-                                    Download these {{ barriers.total_count }} barriers to a spreadsheet
-                                {% endif %}
-                            </span>
-                            <span class="menu-bar right">
-                                {% if form.search_id.value is not None %}
-                                    {% if have_filters_changed %}
-                                        <a href="{% url 'barriers:search' %}?{{ pageless_querystring }}&update_search=true"
-                                           class="filter-results-header__update-button">Update saved search</a>
-                                        <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
-                                           class="govuk-button filter-results-header__save-button">Save as a new search</a>
-                                    {% endif %}
-                                {% elif filters and not search_title %}
-                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
-                                       class="govuk-button filter-results-header__save-button">Save search</a>
-                                {% endif %}
-                                <a class="govuk-button filter-results-download__button"
-                                   href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
-                                    Download
-                                </a>
-                            </span>
-                            {% if search_csv_downloaded == "1" %}
-                                <div id="download-csv-confirmation"
-                                     class="govuk-panel govuk-panel--confirmation">
-                                    <h1 class="govuk-panel__title">Generating CSV file</h1>
-                                    <div class="govuk-panel__body">An email with a link to your file will be sent to you shortly.</div>
-                                </div>
-                            {% elif search_csv_downloaded == "0" %}
-                                <div class="govuk-panel govuk-panel--confirmation">
-                                    <h1 class="govuk-panel__title">This task has crashed</h1>
-                                    <div class="govuk-panel__body">No CSV will be generated got ERROR: {{ search_csv_download_error }}</div>
-                                </div>
+                <p class="filter-results-download">
+                    {% if barriers %}
+                        <span class="filter-results-download__text">
+                            {% if barriers.total_count == 1 %}
+                                Download this barrier to a spreadsheet
+                            {% else %}
+                                Download these {{ barriers.total_count }} barriers to a spreadsheet
                             {% endif %}
-                        {% else %}
-                            <span class="filter-results-download__text">There are no barriers to download</span>
-                        {% endif %}
-                    </p>
-                {% else %}
-                    <p class="filter-results-download">
-                        <span class="filter-results-download__text">You need permission to download a spreadsheet of this search.</span>
-                        <a class="govuk-button filter-results-download__button"
-                           href="{% url 'barriers:request_download_approval' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
-                            Request download permissions
-                        </a>
-                        {% if download_request_sent == "1" %}
-                            <div class="govuk-panel govuk-panel--confirmation">
-                                <h1 class="govuk-panel__title">Your request has been submitted</h1>
-                                <div class="govuk-panel__body">
-                                    You will be notified by email when the request has been approved. Once your request
-                                    has been approved, you will be able to come back to your search and download the
-                                    spreadsheet.
-                                </div>
-                            </div>
-                        {% elif download_request_sent == "0" %}
-                            <div class="govuk-panel govuk-panel--confirmation">
-                                <h1 class="govuk-panel__title">An error occurred.</h1>
-                                <div class="govuk-panel__body">
-                                    The request for download permissions encountered an error and has failed to send.
-                                    Please contact stefan.dennis@trade.gov.uk about this error and we will try to resolve the issue
-                                    for you.
-                                </div>
-                            </div>
-                        {% endif %}
-                    </p>
-                {% endif %}
+                        </span>
+                        <span class="menu-bar right">
+                            {% if form.search_id.value is not None %}
+                                {% if have_filters_changed %}
+                                    <a href="{% url 'barriers:search' %}?{{ pageless_querystring }}&update_search=true"
+                                       class="filter-results-header__update-button">Update saved search</a>
+                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
+                                       class="govuk-button filter-results-header__save-button">Save as a new search</a>
+                                {% endif %}
+                            {% elif filters and not search_title %}
+                                <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
+                                   class="govuk-button filter-results-header__save-button">Save search</a>
+                            {% endif %}
+                            <a class="govuk-button filter-results-download__button" href="{% url 'barriers:download' %}{% if request.GET %}?{{ pageless_querystring }}{% endif %}">
+                                Download
+                            </a>
+                        </span>
+                    {% else %}
+                        <span class="filter-results-download__text">There are no barriers to download</span>
+                    {% endif %}
+                </p>
                 <ol id="filter-results-list" class="filter-results-list">
                     {% for barrier in barriers %}
                         {% ifchanged %}
