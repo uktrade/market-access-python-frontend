@@ -54,5 +54,5 @@ RUN npm install -g npm \
     && npm ci
 
 # Set up Playwright
-RUN playwright install
-RUN playwright install-deps
+# RUN playwright install
+# RUN playwright install-deps
