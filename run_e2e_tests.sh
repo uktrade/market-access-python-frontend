@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# get test file name from command line argument
+$target=$1
+
 # activate python virtual environment
 source .venv/bin/activate
 
@@ -12,7 +15,7 @@ ENV_FILE="docker-compose.env"
 export $(cat $ENV_FILE | sed 's/#.*//g' | xargs)
 
 # run playwright with pytest
-pytest test_frontend/
+PWDEBUG=0 pytest test_frontend/$target
 
 # deactivate python virtual environment
 deactivate

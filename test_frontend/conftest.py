@@ -8,11 +8,13 @@ from urllib.parse import urlparse
 import pytest
 from playwright.sync_api import sync_playwright
 
-AUTH_URL = os.getenv("AUTH_URL", "http://market-access.local:9880/auth/login/")
-BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
-HEADLESS = os.getenv("HEADLESS", "true").lower() == "true"
-TEST_USERNAME = os.getenv("TEST_USERNAME", "test_user")
-TEST_PASSWORD = os.getenv("TEST_PASSWORD", "test_password")
+AUTH_URL = os.getenv("TEST_AUTH_URL", "http://market-access.local:9880/auth/login/")
+BASE_URL = os.getenv(
+    "TEST_BASE_FRONTEND_TESTING_UR", "http://market-access.local:9880/"
+)
+HEADLESS = os.getenv("TEST_HEADLESS", "true").lower() == "true"
+EMAIL = os.getenv("TEST_AUTH_EMAIL", "test_user")
+PASSWORD = os.getenv("TEST_AUTH_PASSWORD", "test_password")
 
 
 def is_https_url(url):
@@ -21,19 +23,20 @@ def is_https_url(url):
     return parsed_url.scheme == "https"
 
 
-def authenticate(page_obj, return_url):
+def authenticate(page_obj, return_url, context):
     """Perform the authentication process."""
 
     # Navigate to the authentication URL.
     page_obj.goto(AUTH_URL)
 
     # Fill in the login form and submit it.
-    page_obj.get_by_label("Email:").fill(TEST_USERNAME)
-    page_obj.get_by_label("Password:").fill(TEST_PASSWORD)
+    page_obj.get_by_label("Email:").fill(EMAIL)
+    page_obj.get_by_label("Password:").fill(PASSWORD)
     page_obj.get_by_role("button", name="login").click()
 
-    # Wait for navigation to ensure the login process has completed.
-    page_obj.wait_for_navigation()
+    cookies = context.cookies()
+
+    context.add_cookies(cookies)
 
     # After logging in, navigate to the return_url.
     page_obj.goto(return_url)
@@ -60,7 +63,7 @@ def page(browser):
     # If the base URL is an HTTPS URL, perform the authentication process.
     if is_https_url(BASE_URL):
         # Perform the authentication process.
-        authenticate(_page, BASE_URL)
+        authenticate(_page, BASE_URL, context)
     else:
         # For non-HTTPS URLs, just navigate to the base URL without authentication
         _page.goto(BASE_URL)
