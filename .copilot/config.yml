@@ -1,6 +1,4 @@
-repository: public.ecr.aws/market-access-python-frontend
+repository: dmas/dmas-frontend
 builder:
   name: paketobuildpacks/builder-jammy-full
-  version: 0.3.294
-packages:
-  - vim
+  version: 0.3.339
