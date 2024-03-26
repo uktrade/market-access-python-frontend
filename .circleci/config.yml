@@ -12,7 +12,7 @@ jobs:
         docker:
             # specify the version you desire here
             # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-            - image: circleci/python:3.8.0-node
+            - image: circleci/python:3.9.0-node
             - image: postgres:13
               environment:
                   POSTGRES_DB: "market_access_pyfe"
@@ -92,7 +92,7 @@ jobs:
 
     pep8:
         docker:
-            - image: circleci/python:3.8
+            - image: circleci/python:3.9
 
         working_directory: ~/market-access-python-frontend
 
@@ -120,7 +120,7 @@ jobs:
 
     format_and_secrets_checks:
         docker:
-            - image: circleci/python:3.8.0-node
+            - image: circleci/python:3.9.0-node
         working_directory: ~/market-access-python-frontend
         steps:
             - checkout
@@ -144,7 +144,7 @@ jobs:
 
     ui_tests:
         docker:
-            - image: circleci/python:3.8
+            - image: circleci/python:3.9
 
         working_directory: ~/market-access-python-frontend
 
