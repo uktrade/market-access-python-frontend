@@ -269,6 +269,13 @@
         flex: 0 1 calc(13% - 8px);
     }
 
+    .rating-star-label {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+      }
+
     #rating1,
     #rating2,
     #rating3,

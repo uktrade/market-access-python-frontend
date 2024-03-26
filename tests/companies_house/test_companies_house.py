@@ -274,7 +274,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         assert mock_alert.call_count == 1
         assert "Problem detected with companies house data" in str(mock_alert.call_args)
-        assert "type object argument after ** must be a mapping, not str" in str(
+        assert "argument after ** must be a mapping, not str" in str(
             mock_alert.call_args
         )
 
