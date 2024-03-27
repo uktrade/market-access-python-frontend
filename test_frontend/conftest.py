@@ -2,7 +2,6 @@ import datetime
 import os
 import random
 import string
-
 from urllib.parse import urlparse
 
 import pytest
