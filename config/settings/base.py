@@ -309,27 +309,27 @@ LOGGING = {
 }
 
 if is_copilot():
-    LOGGING['formatters']['asim_formatter'] = {"()": ASIMFormatter}
-    LOGGING['handlers']['asim'] = {
+    LOGGING["formatters"]["asim_formatter"] = {"()": ASIMFormatter}
+    LOGGING["handlers"]["asim"] = {
         "class": "logging.StreamHandler",
         "stream": sys.stdout,  # noqa F405
         "formatter": "asim_formatter",
     }
-    LOGGING['root'] = {"handlers": ["asim"]}
-    LOGGING['loggers']['django']['handlers'] = ["asim"]
-    LOGGING['loggers']['django.server']['handlers'] = ["asim"]
-    LOGGING['loggers']['django.db.backends']['handlers'] = ["asim"]
+    LOGGING["root"] = {"handlers": ["asim"]}
+    LOGGING["loggers"]["django"]["handlers"] = ["asim"]
+    LOGGING["loggers"]["django.server"]["handlers"] = ["asim"]
+    LOGGING["loggers"]["django.db.backends"]["handlers"] = ["asim"]
 else:
-    LOGGING['formatters']['ecs_formatter'] = {"()": ECSFormatter}
-    LOGGING['handlers']['ecs'] = {
+    LOGGING["formatters"]["ecs_formatter"] = {"()": ECSFormatter}
+    LOGGING["handlers"]["ecs"] = {
         "class": "logging.StreamHandler",
         "stream": sys.stdout,  # noqa F405
         "formatter": "ecs_formatter",
     }
-    LOGGING['root'] = {"handlers": ["ecs", "stdout"]}
-    LOGGING['loggers']['django']['handlers'] = ["ecs", "stdout"]
-    LOGGING['loggers']['django.server']['handlers'] = ["ecs", "stdout"]
-    LOGGING['loggers']['django.db.backends']['handlers'] = ["ecs", "stdout"]
+    LOGGING["root"] = {"handlers": ["ecs", "stdout"]}
+    LOGGING["loggers"]["django"]["handlers"] = ["ecs", "stdout"]
+    LOGGING["loggers"]["django.server"]["handlers"] = ["ecs", "stdout"]
+    LOGGING["loggers"]["django.db.backends"]["handlers"] = ["ecs", "stdout"]
 
 
 # Django Log Formatter ASIM settings
