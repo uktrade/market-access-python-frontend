@@ -1,32 +1,31 @@
 import pytest
 from playwright.sync_api import expect
 
-
-@pytest.mark.order(1)
-def test_tag_assignment(page, create_test_barrier):
-    title = "test"
-    url = create_test_barrier(title=title)
-    page.goto(url)
-
-    page.get_by_role("link", name="Edit tags").click()
-    page.get_by_label("Wales Priority").check()
-    page.get_by_label("Europe Priority").check()
-    page.get_by_role("button", name="Save changes").click()
-
-    expect(page.locator(".barrier-tag-list")).to_have_count(2)
-
-    expect(page.locator(".govuk-tag").nth(0)).to_have_text("Wales Priority")
-    expect(page.locator(".govuk-tag").nth(1)).to_have_text("Europe Priority")
+from test_frontend import PlaywrightTestBase
 
 
-@pytest.mark.order(2)
-def test_tag_removal(page, create_test_barrier):
-    title = "test"
-    url = create_test_barrier(title=title)
-    page.goto(url)
-    page.get_by_role("link", name="Edit tags").click()
-    page.get_by_label("Brexit").uncheck()
-    page.get_by_label("NI Protocol").uncheck()
-    page.get_by_role("button", name="Save changes").click()
+class TestTagAssignment(PlaywrightTestBase):
+    @pytest.mark.order(1)
+    def test_tag_assignment(self):
+        self.page.goto(self.get_barrier_detail_page())
+        self.page.get_by_role("link", name="Edit tags").click()
+        self.page.get_by_label("Brexit").check()
+        self.page.get_by_label("NI Protocol").check()
+        self.page.get_by_role("button", name="Save changes").click()
 
-    assert not page.locator(".barrier-tag-list").is_visible()
+        expect(self.page.locator(".barrier-tag-list")).to_have_count(2)
+
+        expect(self.page.locator(".govuk-tag").nth(0)).to_have_text("Brexit")
+        expect(self.page.locator(".govuk-tag").nth(1)).to_have_text("NI Protocol")
+
+        self.page.close()
+
+    @pytest.mark.order(2)
+    def test_tag_removal(self):
+        self.page.goto(self.get_barrier_detail_page())
+        self.page.get_by_role("link", name="Edit tags").click()
+        self.page.get_by_label("Brexit").uncheck()
+        self.page.get_by_label("NI Protocol").uncheck()
+        self.page.get_by_role("button", name="Save changes").click()
+
+        assert not self.page.locator(".barrier-tag-list").is_visible()
