@@ -8,13 +8,11 @@ from urllib.parse import urlparse
 import pytest
 from playwright.sync_api import sync_playwright
 
-AUTH_URL = os.getenv("TEST_AUTH_URL", "http://market-access.local:9880/auth/login/")
-BASE_URL = os.getenv(
-    "TEST_BASE_FRONTEND_TESTING_UR", "http://market-access.local:9880/"
-)
+AUTH_URL = os.getenv("TEST_SSO_LOGIN_URL", "http://market-access.local:9880/auth/login/")
+BASE_URL = os.getenv("TEST_BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 HEADLESS = os.getenv("TEST_HEADLESS", "true").lower() == "true"
-EMAIL = os.getenv("TEST_AUTH_EMAIL", "test_user")
-PASSWORD = os.getenv("TEST_AUTH_PASSWORD", "test_password")
+EMAIL = os.getenv("TEST_SSO_EMAIL", "test_user")
+PASSWORD = os.getenv("TEST_SSO_PASSWORD", "test_password")
 
 
 def is_https_url(url):
@@ -26,20 +24,34 @@ def is_https_url(url):
 def authenticate(page_obj, return_url, context):
     """Perform the authentication process."""
 
-    # Navigate to the authentication URL.
-    page_obj.goto(AUTH_URL)
+    # Navigate to the base URL, which should redirect to the SSO login if unauthenticated
+    page_obj.goto(return_url, wait_until="domcontentloaded")
 
-    # Fill in the login form and submit it.
-    page_obj.get_by_label("Email:").fill(EMAIL)
-    page_obj.get_by_label("Password:").fill(PASSWORD)
-    page_obj.get_by_role("button", name="login").click()
+    # page_obj.get_by_label("Enter your work email address").fill(EMAIL)
+    # page_obj.get_by_role("button", name="Next step").click()
 
-    cookies = context.cookies()
+    # # Fill in the login form and submit it.
+    # page_obj.get_by_label("Email:").fill(EMAIL)
+    # page_obj.get_by_label("Password:").fill(PASSWORD)
+    # page_obj.get_by_role("button", name="login").click()
 
-    context.add_cookies(cookies)
+    # cookies = context.cookies()
 
-    # After logging in, navigate to the return_url.
-    page_obj.goto(return_url)
+
+
+    # page_obj.pause()
+
+    
+
+    # # page_obj.get_by_label("Enter your work email address").fill(EMAIL)
+    # # page_obj.get_by_role("button", name="Next step").click()
+
+    # # page = context.new_page()
+
+    # context.add_cookies(cookies)
+
+    # # After logging in, navigate to the return_url.
+    # page_obj.goto(return_url)
 
 
 @pytest.fixture(scope="session")
