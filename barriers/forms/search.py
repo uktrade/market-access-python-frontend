@@ -144,14 +144,13 @@ class BarrierSearchForm(forms.Form):
     public_view = forms.MultipleChoiceField(
         label="Public view",
         choices=(
-            ("not_yet_sifted", "Not yet sifted"),
-            ("eligible", "Allowed to be published"),
-            ("ineligible", "Not allowed to be published"),
-            ("ready", "Ready to publish"),
+            ("unknown", "To be decided"),
+            ("allowed", "Allowed to be published"),
+            ("not_allowed", "Not allowed to be published"),
+            ("awaiting_approval", "Awaiting Approval"),
+            ("ready_for_publishing", "Awaiting Publishing"),
             ("published", "Published"),
-            ("changed", "Barriers changed internally since being made public"),
             ("unpublished", "Unpublished"),
-            ("review_later", "Barriers marked as 'review later'"),
         ),
         required=False,
     )

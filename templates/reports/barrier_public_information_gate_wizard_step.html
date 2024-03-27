@@ -1,0 +1,45 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Publication Data Entry Choice{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group govuk-!-margin-0">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Barrier publication
+                </h1>
+            </legend>
+
+            {% form_error_banner form %}
+
+            <div class="govuk-radios" data-module="govuk-radios">
+                <label class="govuk-label govuk-label--s" for="{{ form.public_information.name }}">{{ form.public_information.label }}</label>
+                <div class="govuk-inset-text inset-banner">
+                    For a barrier to be published on GOV.UK, it must have a title and summary that are suitable for the public to read.<br><br>
+                    <a href='https://data-services-help.trade.gov.uk/market-access/how-guides/how-prepare-market-access-barrier-report-public-view/' target='_blank'>Find out how to write a public title and summary (opens in a new tab)</a>
+                </div>
+                <span class="govuk-hint">{{ form.public_information.help_text }}</span>
+
+                {% form_field_error form "public_information" %}
+
+                {% for value, name in form.fields.public_information.choices %}
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input"
+                               id="{{ form.public_information.id_for_label }}"
+                               name="barrier-public-information-gate-public_information"
+                               type="radio"
+                               value="{{ value }}"
+                               {% if form.public_information.value == value %} checked="checked"{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="{{ form.public_information.id_for_label }}">
+                            {{ name }}
+                        </label>
+                    </div>
+
+                {% endfor %}
+            </div>
+
+
+        </fieldset>
+    </div>
+{% endblock %}

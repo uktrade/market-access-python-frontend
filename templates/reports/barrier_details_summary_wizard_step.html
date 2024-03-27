@@ -88,7 +88,7 @@
             </div>
 
             <!-- Goods/services/hs-codes section -->
-            <div class="report-barrier-questions__section govuk-!-margin-bottom-0">
+            <div class="report-barrier-questions__section">
                 <h2 class="govuk-heading-m">Goods, services or investments affected</h2>
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Export type</h4>
@@ -113,6 +113,38 @@
                     </div>
                 {% endfor %}
 
+            </div>
+
+            <!-- Barrier publication section -->
+            <div class="report-barrier-questions__section govuk-!-margin-bottom-0">
+                <h2 class="govuk-heading-m">Barrier publication</h2>
+                <div class="report-barrier-questions__question">
+                    <h4 class="govuk-heading-s question-label">Publishing</h4>
+                    <div class="answer">{{public_eligibility}}</div>
+                    <div class="edit-url"><a href="/reports/barrier-public-eligibility" class="govuk-link">Change</a></div>
+                </div>
+                {% if public_eligibility == "Cannot be published" %}
+                    <div class="report-barrier-questions__question">
+                        <h4 class="govuk-heading-s question-label">Reason</h4>
+                        <div class="answer">{{public_eligibility_summary}}</div>
+                        <div class="edit-url"><a href="/reports/barrier-public-eligibility" class="govuk-link">Change</a></div>
+                    </div>
+                {% else %}
+                    {% if public_title %}
+                        <div class="report-barrier-questions__question">
+                            <h4 class="govuk-heading-s question-label">Public title</h4>
+                            <div class="answer">{{public_title}}</div>
+                            <div class="edit-url"><a href="/reports/barrier-public-title" class="govuk-link">Change</a></div>
+                        </div>
+                    {% endif %}
+                    {% if public_summary %}
+                        <div class="report-barrier-questions__question">
+                            <h4 class="govuk-heading-s question-label">Public summary</h4>
+                            <div class="answer">{{public_summary}}</div>
+                            <div class="edit-url"><a href="/reports/barrier-public-summary" class="govuk-link">Change</a></div>
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
 
             <!-- Confirm input to conmplete process -->

@@ -361,7 +361,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        expected_error_message = "Enter a date or select 'I don't know'."
+        expected_error_message = "Enter the date the barrier started affecting trade or select ‘I do not know’"
         assert expected_error_message in form.errors["start_date"]
 
     def test_error_start_date_and_dont_know_both_entered(self):
@@ -380,7 +380,7 @@ class ReportWizardStatusStepTestCase(MarketAccessTestCase):
         )
 
         assert form.is_valid() is False
-        expected_error_message = "Enter a date or select 'I don't know'."
+        expected_error_message = "Enter the date the barrier started affecting trade or select ‘I do not know’"
         assert expected_error_message in form.errors["start_date"]
 
     def test_error_dont_know_currently_active_missing(self):

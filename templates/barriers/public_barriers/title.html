@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Publish title{% endblock %}
+{% block page_title %}{{ block.super }} Edit Public Title {% endblock %}
 
 {% block body_script %}
     <script nonce="{{request.csp_nonce}}">
@@ -10,27 +10,48 @@
     </script>
 {% endblock %}
 
-{% block back_link %}
-    <a href="{% url 'barriers:public_barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
-{% endblock %}
-
 {% block page_content %}
 
-    {% form_error_banner form %}
-
-    <form action="" method="POST" class="restrict-width">
+    <form action="" novalidate method="POST" class="restrict-width">
         {% csrf_token %}
 
-        {% include "partials/forms/text_input.html" with field=form.title label_classes="govuk-label--l" %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">Public title</h1>
+        </legend>
 
-        <details class="govuk-details" data-module="govuk-details">
+        {% form_error_banner form %}
+
+        <div id="{{ form.title.name }}-form-group"
+             class="govuk-character-count"
+             data-module="character-count"
+             data-maxlength="150">
+            <div class="{% form_group_classes form.title.errors %}">
+                {% form_field_error form "title" %}
+                <span id="{{ form.title.name }}_hint" class="govuk-hint">{{ form.title.help_text }}</span>
+                <div class="govuk-body">
+                    <a href='https://data-services-help.trade.gov.uk/market-access/how-guides/how-prepare-market-access-barrier-report-public-view/' target='_blank'>Find out how to write a public title (opens in a new tab)</a>
+                </div>
+                {{ form.title }}
+                <div id="update_{{ forloop.counter }}-info"
+                     class="govuk-hint govuk-character-count__message"
+                     aria-live="polite">
+                </div>
+            </div>
+        </div>
+
+        <details class="govuk-details govuk-!-margin-bottom-6">
             <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
-                    Internal summary for reference
+                    View internal title and summary
                 </span>
             </summary>
             <div class="govuk-details__text">
-                {{ barrier.summary|escape|linebreaksbr }}
+                <p class="govuk-body">
+                    <strong>Barrier title:</strong> {{ internal_title }}
+                </p>
+                <p class="govuk-body">
+                    <strong>Barrier description:</strong> {{ internal_summary }}
+                </p>
             </div>
         </details>
 

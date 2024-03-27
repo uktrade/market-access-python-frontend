@@ -11,8 +11,15 @@ class PublicBarrierNotesTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.client.PublicBarriersResource.create_note")
-    def test_note_cannot_be_empty(self, mock_create, mock_get_notes, mock_get_activity):
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
+    def test_note_cannot_be_empty(
+        self, mock_get_user, mock_user, mock_create, mock_get_notes, mock_get_activity
+    ):
+        mock_get_user.return_value = self.general_user
+        mock_user.return_value = self.general_user
         mock_get_notes.return_value = []
+        mock_get_activity.return_value = self.public_barrier_activity
         response = self.client.post(
             reverse(
                 "barriers:public_barrier_detail",
@@ -29,10 +36,20 @@ class PublicBarrierNotesTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.client.PublicBarriersResource.create_note")
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
     def test_add_note_success(
-        self, mock_create_note, mock_get_notes, mock_get_activity
+        self,
+        mock_get_user,
+        mock_user,
+        mock_create_note,
+        mock_get_notes,
+        mock_get_activity,
     ):
         mock_get_notes.return_value = []
+        mock_get_activity.return_value = self.public_barrier_activity
+        mock_get_user.return_value = self.publisher_user
+        mock_user.return_value = self.publisher_user
         response = self.client.post(
             reverse(
                 "barriers:public_barrier_detail",
@@ -46,9 +63,19 @@ class PublicBarrierNotesTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.client.PublicBarrierNotesResource.patch")
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
     def test_edit_note_success(
-        self, mock_patch_note, mock_get_notes, mock_get_activity
+        self,
+        mock_get_user,
+        mock_user,
+        mock_patch_note,
+        mock_get_notes,
+        mock_get_activity,
     ):
+        mock_get_activity.return_value = self.public_barrier_activity
+        mock_get_user.return_value = self.publisher_user
+        mock_user.return_value = self.publisher_user
         mock_get_notes.return_value = [
             PublicBarrierNote(
                 {
@@ -70,9 +97,19 @@ class PublicBarrierNotesTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.client.PublicBarrierNotesResource.delete")
+    @patch("utils.api.resources.UsersResource.get_current")
+    @patch("users.mixins.UserMixin.get_user")
     def test_delete_note_success(
-        self, mock_delete_note, mock_get_notes, mock_get_activity
+        self,
+        mock_get_user,
+        mock_user,
+        mock_delete_note,
+        mock_get_notes,
+        mock_get_activity,
     ):
+        mock_get_activity.return_value = self.public_barrier_activity
+        mock_get_user.return_value = self.publisher_user
+        mock_user.return_value = self.publisher_user
         mock_get_notes.return_value = [
             PublicBarrierNote(
                 {
