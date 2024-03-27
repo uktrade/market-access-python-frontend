@@ -277,12 +277,24 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
+        "asim_formatter": {"()": ASIMFormatter},
+        "ecs_formatter": {"()": ECSFormatter},
         "simple": {
             "format": "{asctime} {levelname} {message}",
             "style": "{",
         },
     },
     "handlers": {
+        "asim": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,  # noqa F405
+            "formatter": "asim_formatter",
+        },
+        "ecs": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,  # noqa F405
+            "formatter": "ecs_formatter",
+        },
         "stdout": {
             "class": "logging.StreamHandler",
             "stream": sys.stdout,  # noqa F405
@@ -290,46 +302,27 @@ LOGGING = {
         },
     },
     "root": {
+        "handlers": ["asim", "ecs", "stdout"],
         "level": os.getenv("ROOT_LOG_LEVEL", "INFO"),  # noqa F405
     },
     "loggers": {
         "django": {
+            "handlers": ["asim", "ecs", "stdout"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa F405
             "propagate": False,
         },
         "django.server": {
+            "handlers": ["asim", "ecs", "stdout"],
             "level": os.getenv("DJANGO_SERVER_LOG_LEVEL", "ERROR"),  # noqa F405
             "propagate": False,
         },
         "django.db.backends": {
+            "handlers": ["asim", "ecs", "stdout"],
             "level": os.getenv("DJANGO_DB_LOG_LEVEL", "ERROR"),  # noqa F405
             "propagate": False,
         },
     },
 }
-
-if is_copilot():
-    LOGGING["formatters"]["asim_formatter"] = {"()": ASIMFormatter}
-    LOGGING["handlers"]["asim"] = {
-        "class": "logging.StreamHandler",
-        "stream": sys.stdout,  # noqa F405
-        "formatter": "asim_formatter",
-    }
-    LOGGING["root"] = {"handlers": ["asim"]}
-    LOGGING["loggers"]["django"]["handlers"] = ["asim"]
-    LOGGING["loggers"]["django.server"]["handlers"] = ["asim"]
-    LOGGING["loggers"]["django.db.backends"]["handlers"] = ["asim"]
-else:
-    LOGGING["formatters"]["ecs_formatter"] = {"()": ECSFormatter}
-    LOGGING["handlers"]["ecs"] = {
-        "class": "logging.StreamHandler",
-        "stream": sys.stdout,  # noqa F405
-        "formatter": "ecs_formatter",
-    }
-    LOGGING["root"] = {"handlers": ["ecs", "stdout"]}
-    LOGGING["loggers"]["django"]["handlers"] = ["ecs", "stdout"]
-    LOGGING["loggers"]["django.server"]["handlers"] = ["ecs", "stdout"]
-    LOGGING["loggers"]["django.db.backends"]["handlers"] = ["ecs", "stdout"]
 
 
 # Django Log Formatter ASIM settings
