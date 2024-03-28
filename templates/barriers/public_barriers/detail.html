@@ -82,7 +82,7 @@
             </div>
             {% if barrier.public_eligibility is None %}
                 <!-- Public eligibility not set. Show link to set eligibility.-->
-                <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Barrier publication status</a>
+                <a href="{% url 'barriers:edit_public_eligibility' barrier.id 30 %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Barrier publication status</a>
             {% else %}
                 <!-- Public eligibility set. Show alternate content depending on its value.-->
                 {% if barrier.public_eligibility is True %}
@@ -93,7 +93,7 @@
                     <!-- Public eligibility set to not allowed. Show confirmation of status, the given reason and a link to edit eligibility.-->
                     <p class="govuk-body govuk-!-margin-bottom-2">No</p>
                     <p class="govuk-body govuk-!-margin-bottom-2"><span class="govuk-!-font-weight-bold">Reason:</span> {{ barrier.public_eligibility_summary }} </p>
-                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
+                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id 30 %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
                 {% endif %}
             {% endif %}
         </div>
