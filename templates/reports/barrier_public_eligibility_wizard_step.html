@@ -15,8 +15,10 @@
 
             <div class="govuk-radios" data-module="govuk-radios">
                 <label class="govuk-label govuk-label--s" for="{{ form.public_eligibility.name }}">{{ form.public_eligibility.label }}</label>
-                <span class="govuk-hint">{{ form.public_eligibility.help_text }}</span>
-                <details class="govuk-details">
+                <span class="govuk-hint">
+                    The public title and summary of all market access barriers should be published on the <a class="govuk-link" href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank">Check International Trade Barriers</a> page, unless there is a valid reason not to do this.
+                </span>
+                <details class="govuk-details govuk-!-margin-bottom-2">
                     <summary class="govuk-details__summary">
                         <span class="govuk-details__summary-text">
                             What are the valid reasons for not publishing a barrier?
@@ -26,14 +28,17 @@
                         <p class="govuk-body">A barrier should not be published if:</p>
                         <ul class="govuk-list govuk-list--bullet">
                             <li>it is defence or security related</li>
-                            <li>it affects imports into the UK</li>
-                            <li>it has not yet come into force</li>
-                            <li>the UK company affected is easily identifiable</li>
-                            <li>the UK company affected told us not to make the barrier public</li>
-                            <li>there is a likely risk of damage to the UK’s relationship with the partner government</li>
+                            <li>it only affects imports into the UK</li>
+                            <li>it has not yet come into force yet, so will only affect UK exports at a later date</li>
+                            <li>any UK companies affected are easy to identify</li>
+                            <li>any UK companies affected have told us not to make the barrier public</li>
+                            <li>there is a risk of damage to the UK’s relationship with a partner government</li>
                         </ul>
                     </div>
                 </details>
+                <span class="govuk-hint">
+                    If you decide to publish this barrier, it will be checked by both a senior member of your team and the GOV.UK content team. For more details see our <a class="govuk-link" href="https://data-services-help.trade.gov.uk/market-access/how-guides/how-prepare-market-access-barrier-report-public-view/" target="_blank">guidance on publishing barriers</a>
+                </span>
                 {% form_field_error form "public_eligibility" %}
                 {% for value, name in form.fields.public_eligibility.choices %}
                     <div class="govuk-radios__item">
