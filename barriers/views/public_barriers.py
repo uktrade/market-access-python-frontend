@@ -389,12 +389,21 @@ class PublicBarrierApprovalConfirmation(
         """
 
     def get_success_url(self):
-        messages.add_message(
-            self.request,
-            messages.INFO,
-            (self.success_message % self.kwargs["countdown"]),
-            extra_tags="This barrier has been approved and is now with the GOV.UK content team",
-        )
+        form = self.get_form()
+        if "submit_approval" in form.data:
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                (self.success_message % self.kwargs["countdown"]),
+                extra_tags="This barrier has been approved and is now with the GOV.UK content team",
+            )
+        else:
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                (self.success_message % self.kwargs["countdown"]),
+                extra_tags="The publication status is set to: not allowed",
+            )
         return reverse(
             "barriers:public_barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},

@@ -115,10 +115,7 @@
                     <!-- Public title set. Show current public title and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public title</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.title }}</p>
-                    {% if public_barrier.public_view_status == 20 %}
-                        <!-- Edit button only shown when in Allowed status-->
-                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
-                    {% endif %}
+                    <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
                 {% endif %}
                 {% if not public_barrier.summary %}
                     <!-- Public summary not set. Show link to public summary entry only. -->
@@ -127,26 +124,18 @@
                     <!-- Public summary set. Show current public summary and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public summary</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.summary }}</p>
-                    {% if public_barrier.public_view_status == 20 %}
-                        <!-- Edit button only shown when in Allowed status-->
-                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
-                    {% endif %}
+                    <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
+
                 {% endif %}
                 <!-- Button control to move public barrier status -->
                 {% if public_barrier.public_view_status == 20 %}
                     {% if public_barrier.title and public_barrier.summary %}
-                    <!-- Button to submit for approval only shown when in Allowed status, and has a title and summary set -->
+                    <!-- Button to submit to approver only shown when in Allowed status, and has a title and summary set -->
                         <form action="" method="POST">
                             {% csrf_token %}
-                            <button name="action" value="submit-for-approval" class="govuk-button" tabindex="2">Submit for approval</button>
+                            <button name="action" value="submit-for-approval" class="govuk-button" tabindex="2">Submit to approver</button>
                         </form>
                     {% endif %}
-                {% elif public_barrier.public_view_status == 70 %}
-                    <!-- Button to roll back submission for approval only shown when in Awaiting Approval status-->
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <button name="action" value="remove-for-approval" class="govuk-button govuk-button--secondary" tabindex="2">Remove for approval</button>
-                    </form>
                 {% endif %}
             {% endif %}
         </div>
@@ -154,7 +143,7 @@
         <!-- Approvals Section -->
         <div class="public-view-information-box {% if public_barrier.public_view_status == 10 or public_barrier.public_view_status == 20 or not barrier.public_eligibility %} public-view-information-box__notset {% endif %}">
             <div class="govuk-summary-list__row">
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Approvals</h3>
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Review and approve this barrier for publication</h3>
             </div>
             {% if public_barrier.public_view_status == 20 or not barrier.public_eligibility %}
                 <!-- Public title and barrier not set. Show reason for blocking approval step. -->
@@ -177,7 +166,9 @@
                     <p class="govuk-body">The approver is reviewing this barrier with the following people:</p>
                 {% else %}
                     <!-- Approver/Publisher users message for section -->
-                    <p class="govuk-body">As the approver of this barrier, you need to confirm you have checked it with the following people or organisations:</p>
+                    <p class="govuk-body">To review this barrier, check the public title and summary are suitable to be viewed publicly on GOV.UK</p>
+                    <p class="govuk-body govuk-!-font-weight-bold">If clearances are needed from any other people or government departments, review the barrier once you have these.</p>
+                    <p class="govuk-body">This barrier needs clearances from the following people of other government departments:</p>
                 {% endif %}
                 <ul class="govuk-lis govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
                     <li class="govuk-body">Market Access Regional Coordinators </li>
@@ -197,7 +188,7 @@
             {% endif %}
             {% if user_role == "Approver" and public_barrier.public_view_status == 70 or user_role == "Publisher" and public_barrier.public_view_status == 70 %}
                 <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
-                <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id countdown %}" class="govuk-button">Approve barrier</a>
+                <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id countdown %}" class="govuk-button">Review barrier</a>
             {% endif %}
             {% if user_role == "Approver" and public_barrier.public_view_status == 30 or user_role == "Publisher" and public_barrier.public_view_status == 30 %}
                 <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->

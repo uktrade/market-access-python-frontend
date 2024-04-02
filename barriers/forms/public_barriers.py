@@ -137,14 +137,17 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
 
 
 class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
-    confirmation = TrueFalseBooleanField(
+    content_clearance = TrueFalseBooleanField(
         required=True,
-        label=(
-            """
-            I confirm that this barrier can be approved for
-            publication and it has been reviewed with all parties listed on this page.
-            """
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "govuk-checkboxes__input",
+            },
         ),
+    )
+    external_clearances = TrueFalseBooleanField(
+        required=True,
+        label=("I confirm I have received clearances from:"),
         widget=forms.CheckboxInput(
             attrs={
                 "class": "govuk-checkboxes__input",
@@ -152,7 +155,7 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
         ),
     )
     public_approval_summary = forms.CharField(
-        label="Is there anything else you want to add about how you've reached your decision for approval? (optional)",
+        label="Any additional information to support your decision? (optional)",
         max_length=500,
         required=False,
         error_messages={
@@ -169,9 +172,13 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        if cleaned_data["confirmation"] is False:
-            msg = "Confirm if the barrier is approved"
-            self.add_error("confirmation", msg)
+        if "submit_approval" in self.data:
+            if cleaned_data["content_clearance"] is False:
+                msg = "Confirm if the barrier content is approved"
+                self.add_error("content_clearance", msg)
+            if cleaned_data["external_clearances"] is False:
+                msg = "Confirm if the barrier is cleared with relevant parties"
+                self.add_error("external_clearances", msg)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -183,7 +190,26 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
                 approvers_summary=public_approval_summary,
             )
 
-        client.public_barriers.ready_for_publishing(id=self.id)
+        if "submit_approval" in self.data:
+            client.public_barriers.ready_for_publishing(id=self.id)
+        else:
+            # Not allowed button pressed, need to change public eligibility
+            # and clear the public title and summary
+            client.barriers.patch(
+                id=self.id,
+                public_eligibility="no",
+                public_eligibility_summary=public_approval_summary,
+            )
+            client.public_barriers.report_public_barrier_field(
+                id=self.id,
+                form_name="barrier-public-title",
+                values={"title": ""},
+            )
+            client.public_barriers.report_public_barrier_field(
+                id=self.id,
+                form_name="barrier-public-summary",
+                values={"summary": ""},
+            )
 
 
 class PublishPublicBarrierForm(APIFormMixin, forms.Form):
