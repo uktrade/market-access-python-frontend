@@ -171,8 +171,7 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-
-        if "submit_approval" in self.data:
+        if "Send to GOV.UK content team" in self.data["submit_approval"]:
             if cleaned_data["content_clearance"] is False:
                 msg = "Confirm if the barrier content is approved"
                 self.add_error("content_clearance", msg)
@@ -190,7 +189,8 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
                 approvers_summary=public_approval_summary,
             )
 
-        if "submit_approval" in self.data:
+        if "Send to GOV.UK content team" in self.data["submit_approval"]:
+            logger.critical(4)
             client.public_barriers.ready_for_publishing(id=self.id)
         else:
             # Not allowed button pressed, need to change public eligibility

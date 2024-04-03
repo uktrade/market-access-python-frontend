@@ -390,7 +390,7 @@ class PublicBarrierApprovalConfirmation(
 
     def get_success_url(self):
         form = self.get_form()
-        if "submit_approval" in form.data:
+        if "Send to GOV.UK content team" in form.data["submit_approval"]:
             messages.add_message(
                 self.request,
                 messages.INFO,
