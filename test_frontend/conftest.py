@@ -7,9 +7,11 @@ from urllib.parse import urlparse
 import pytest
 from playwright.sync_api import sync_playwright
 
-AUTH_URL = os.getenv("TEST_SSO_LOGIN_URL", "http://market-access.local:9880/auth/login")
+AUTH_URL = os.getenv(
+    "TEST_SSO_LOGIN_URL", "http://market-access.local:9880/auth/login/"
+)
 BASE_URL = os.getenv(
-    "TEST_BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880"
+    "TEST_BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/"
 )
 HEADLESS = os.getenv("TEST_HEADLESS", "true").lower() == "true"
 EMAIL = os.getenv("TEST_SSO_EMAIL", "test_user")
@@ -26,29 +28,10 @@ def authenticate(page_obj, return_url, context):
     """Perform the authentication process."""
 
     # Navigate to the base URL, which should redirect to the SSO login if unauthenticated
-    page_obj.goto(AUTH_URL, wait_until="domcontentloaded")
+    page_obj.goto(return_url, wait_until="domcontentloaded")
 
-    # page_obj.pause()
-
-    # page_obj.get_by_label("Enter your work email address").fill(EMAIL)
-    # page_obj.get_by_role("button", name="Next step").click()
-
-    # Fill in the login form and submit it.
-    page_obj.get_by_label("Email:").fill(EMAIL)
-    page_obj.get_by_label("Password:").fill(PASSWORD)
-    page_obj.get_by_role("button", name="login").click()
-
-    # cookies = context.cookies()
-
-    # # page_obj.get_by_label("Enter your work email address").fill(EMAIL)
-    # # page_obj.get_by_role("button", name="Next step").click()
-
-    # # page = context.new_page()
-
-    # context.add_cookies(cookies)
-
-    # # After logging in, navigate to the return_url.
-    page_obj.goto(return_url)
+    # Check if the current URL is the SSO login page
+    page_obj.pause()
 
 
 @pytest.fixture(scope="session")
