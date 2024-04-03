@@ -7,11 +7,9 @@ from urllib.parse import urlparse
 import pytest
 from playwright.sync_api import sync_playwright
 
-AUTH_URL = os.getenv(
-    "TEST_SSO_LOGIN_URL", "http://market-access.local:9880/auth/login/"
-)
+AUTH_URL = os.getenv("TEST_SSO_LOGIN_URL", "http://market-access.local:9880/auth/login")
 BASE_URL = os.getenv(
-    "TEST_BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/"
+    "TEST_BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880"
 )
 HEADLESS = os.getenv("TEST_HEADLESS", "true").lower() == "true"
 EMAIL = os.getenv("TEST_SSO_EMAIL", "test_user")
@@ -28,17 +26,17 @@ def authenticate(page_obj, return_url, context):
     """Perform the authentication process."""
 
     # Navigate to the base URL, which should redirect to the SSO login if unauthenticated
-    page_obj.goto(return_url, wait_until="domcontentloaded")
+    page_obj.goto(AUTH_URL, wait_until="domcontentloaded")
 
-    page_obj.pause()
+    # page_obj.pause()
 
     # page_obj.get_by_label("Enter your work email address").fill(EMAIL)
     # page_obj.get_by_role("button", name="Next step").click()
 
-    # # Fill in the login form and submit it.
-    # page_obj.get_by_label("Email:").fill(EMAIL)
-    # page_obj.get_by_label("Password:").fill(PASSWORD)
-    # page_obj.get_by_role("button", name="login").click()
+    # Fill in the login form and submit it.
+    page_obj.get_by_label("Email:").fill(EMAIL)
+    page_obj.get_by_label("Password:").fill(PASSWORD)
+    page_obj.get_by_role("button", name="login").click()
 
     # cookies = context.cookies()
 
@@ -50,38 +48,49 @@ def authenticate(page_obj, return_url, context):
     # context.add_cookies(cookies)
 
     # # After logging in, navigate to the return_url.
-    # page_obj.goto(return_url)
+    page_obj.goto(return_url)
+
+
+@pytest.fixture(scope="session")
+def session_data():
+    """Return a dictionary to store session data."""
+    return {"cookies": None}
 
 
 @pytest.fixture(scope="session")
 def playwright_instance():
+    """Return a Playwright instance."""
     with sync_playwright() as p:
         yield p
 
 
 @pytest.fixture(scope="session")
 def browser(playwright_instance):
+    """Return a browser instance."""
     browser = playwright_instance.chromium.launch(headless=HEADLESS)
     yield browser
     browser.close()
 
 
-@pytest.fixture
-def page(browser):
+@pytest.fixture(scope="session")
+def context(browser, session_data):
+    # Create a new browser context
     context = browser.new_context()
-    _page = context.new_page()
 
-    # If the base URL is an HTTPS URL, perform the authentication process.
-    if is_https_url(BASE_URL):
-        # Perform the authentication process.
-        authenticate(_page, BASE_URL, context)
-    else:
-        # For non-HTTPS URLs, just navigate to the base URL without authentication
-        _page.goto(BASE_URL)
+    # Check if there is session data to apply, such as cookies
+    if session_data.get("cookies"):
+        context.add_cookies(session_data["cookies"])
 
-    yield _page
-
+    yield context
     context.close()
+
+
+@pytest.fixture
+def page(context):
+    # Create a new page in the provided context
+    _page = context.new_page()
+    _page.goto(BASE_URL)
+    yield _page
 
 
 @pytest.fixture
