@@ -22,6 +22,7 @@ from django_log_formatter_asim import ASIMFormatter
 from django_log_formatter_ecs import ECSFormatter
 from environ import Env
 from sentry_sdk.integrations.django import DjangoIntegration
+import requests
 
 ROOT_DIR = Path(__file__).parents[2]
 
@@ -46,6 +47,9 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
+
+aws_metadata = requests.get(os.environ["COPILOT_ENVIRONMENT_NAME"], timeout=0.01).json()
+print("IP ADDRESS: ", aws_metadata["Networks"][0]["IPv4Addresses"][0])
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 print("before")
