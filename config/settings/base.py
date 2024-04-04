@@ -16,8 +16,8 @@ from pathlib import Path
 import dj_database_url
 import sentry_sdk
 from dbt_copilot_python.database import database_url_from_env
-from dbt_copilot_python.utility import is_copilot
 from dbt_copilot_python.network import setup_allowed_hosts
+from dbt_copilot_python.utility import is_copilot
 from django_log_formatter_asim import ASIMFormatter
 from django_log_formatter_ecs import ECSFormatter
 from environ import Env
