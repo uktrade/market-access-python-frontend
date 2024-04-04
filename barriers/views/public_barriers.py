@@ -408,7 +408,7 @@ class PublicBarrierApprovalConfirmation(
             messages.add_message(
                 self.request,
                 messages.INFO,
-                (self.rejection_success_message % self.kwargs["countdown"]),
+                self.rejection_success_message,
                 extra_tags="The publication status is set to: not allowed",
             )
         return reverse(

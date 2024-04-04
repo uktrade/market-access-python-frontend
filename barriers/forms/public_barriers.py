@@ -190,7 +190,6 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
             )
 
         if "Send to GOV.UK content team" in self.data["submit_approval"]:
-            logger.critical(4)
             client.public_barriers.ready_for_publishing(id=self.id)
         else:
             # Not allowed button pressed, need to change public eligibility
