@@ -51,7 +51,6 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 
 # Application definition
-
 ELASTIC_APM_ENABLED = env("ELASTIC_APM_ENABLED", default=not DEBUG)
 
 PRIORITISATION_STRATEGIC_ASSESSMENTS = env.bool(
