@@ -53,6 +53,8 @@ print(ALLOWED_HOSTS)
 ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 print("after")
 print(ALLOWED_HOSTS)
+print("copilot environ name")
+print(os.environ["COPILOT_ENVIRONMENT_NAME"])
 
 # Application definition
 ELASTIC_APM_ENABLED = env("ELASTIC_APM_ENABLED", default=not DEBUG)
