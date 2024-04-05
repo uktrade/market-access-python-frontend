@@ -49,11 +49,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
-print("before")
-print(ALLOWED_HOSTS)
 ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
-print("after")
-print(ALLOWED_HOSTS)
 
 # Application definition
 ELASTIC_APM_ENABLED = env("ELASTIC_APM_ENABLED", default=not DEBUG)
