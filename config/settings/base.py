@@ -48,17 +48,12 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-aws_metadata = requests.get(os.environ["COPILOT_ENVIRONMENT_NAME"], timeout=0.01).json()
-print("IP ADDRESS: ", aws_metadata["Networks"][0]["IPv4Addresses"][0])
-
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 print("before")
 print(ALLOWED_HOSTS)
 ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 print("after")
 print(ALLOWED_HOSTS)
-print("copilot environ name")
-print(os.environ["COPILOT_ENVIRONMENT_NAME"])
 
 # Application definition
 ELASTIC_APM_ENABLED = env("ELASTIC_APM_ENABLED", default=not DEBUG)
