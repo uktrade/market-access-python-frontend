@@ -39,7 +39,7 @@ def test_status_change_happy_path(page, create_test_barrier):
     page.get_by_role("button", name="Save and return").click()
 
     assert (
-        f"Barrier open on {datetime.datetime.now().strftime('%d %B %Y')}"
+        f"Barrier open on {datetime.datetime.now().strftime('%d %B %Y').lstrip('0')}"
         in get_text_content_without_line_separators(
             page.locator(".barrier-status-details__heading").text_content()
         )

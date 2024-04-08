@@ -2,7 +2,6 @@ import datetime
 import os
 import random
 import string
-from urllib.parse import urlparse
 
 import pytest
 from playwright.sync_api import sync_playwright
@@ -16,22 +15,6 @@ BASE_URL = os.getenv(
 HEADLESS = os.getenv("TEST_HEADLESS", "true").lower() == "true"
 EMAIL = os.getenv("TEST_SSO_EMAIL", "test_user")
 PASSWORD = os.getenv("TEST_SSO_PASSWORD", "test_password")
-
-
-def is_https_url(url):
-    """Determine if the given URL is an HTTPS URL."""
-    parsed_url = urlparse(url)
-    return parsed_url.scheme == "https"
-
-
-def authenticate(page_obj, return_url, context):
-    """Perform the authentication process."""
-
-    # Navigate to the base URL, which should redirect to the SSO login if unauthenticated
-    page_obj.goto(return_url, wait_until="domcontentloaded")
-
-    # Check if the current URL is the SSO login page
-    page_obj.pause()
 
 
 @pytest.fixture(scope="session")
@@ -68,20 +51,20 @@ def context(browser, session_data):
     context.close()
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def page(context):
     # Create a new page in the provided context
     _page = context.new_page()
-    _page.goto(BASE_URL)
+    _page.goto(BASE_URL, wait_until="domcontentloaded")
     yield _page
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def create_test_barrier(page):
     def _create_test_barrier(title):
 
         random_barrier_id = "".join(
-            random.choice(string.ascii_uppercase) for i in range(5)
+            random.choice(string.ascii_uppercase) for _ in range(5)
         )
         random_barrier_name = f"{title} - {datetime.datetime.now().strftime('%d-%m-%Y')} - {random_barrier_id}"
 
