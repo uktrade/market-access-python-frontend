@@ -33,7 +33,11 @@ def playwright_instance():
 @pytest.fixture(scope="session")
 def browser(playwright_instance):
     """Return a browser instance."""
-    browser = playwright_instance.chromium.launch(headless=HEADLESS)
+    if HEADLESS:
+        print("Running tests in headless mode")
+        browser = playwright_instance.chromium.launch(headless=True)
+    else:
+        browser = playwright_instance.chromium.launch(slow_mo=100, headless=HEADLESS)
     yield browser
     browser.close()
 
