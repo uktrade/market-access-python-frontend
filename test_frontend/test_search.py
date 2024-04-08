@@ -5,13 +5,13 @@ from .utils import get_base_url
 
 
 def get_search_page():
-    return f"{get_base_url()}/search/"
+    return f"{get_base_url()}search/"
 
 
 @pytest.mark.order(1)
 def test_search_for_a_barrier(page):
 
-    page.goto(f"{get_search_page()}")
+    page.goto(get_search_page())
     # remove focus on search box to allow the search results to update
     page.get_by_role("heading", name="Market access barriers Search").click()
 

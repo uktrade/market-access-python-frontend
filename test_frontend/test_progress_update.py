@@ -1,10 +1,11 @@
 from playwright.sync_api import expect
+from .utils import clean_full_url
 
 
 def test_create_progress_update(page, create_test_barrier):
     title = "test 2"
     url = create_test_barrier(title=title)
-    page.goto(url)
+    page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Add progress update").click()
     page.get_by_label("Barrier progress").check()

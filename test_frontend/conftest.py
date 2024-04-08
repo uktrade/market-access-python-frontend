@@ -20,7 +20,10 @@ PASSWORD = os.getenv("TEST_SSO_PASSWORD", "test_password")
 @pytest.fixture(scope="session")
 def session_data():
     """Return a dictionary to store session data."""
-    return {"cookies": None}
+    return {
+        "cookies": None,
+        "barrier_id": None,
+    }
 
 
 @pytest.fixture(scope="session")
@@ -64,8 +67,11 @@ def page(context):
 
 
 @pytest.fixture(scope="session")
-def create_test_barrier(page):
+def create_test_barrier(page, session_data):
     def _create_test_barrier(title):
+
+        if session_data["barrier_id"]:
+            return f'{BASE_URL}barriers/{session_data["barrier_id"]}/'
 
         random_barrier_id = "".join(
             random.choice(string.ascii_uppercase) for _ in range(5)
@@ -132,6 +138,7 @@ def create_test_barrier(page):
         page.get_by_label("Which goods, services or").fill("isfdgihisdhfgidsfg")
         page.get_by_role("button", name="Continue").click()
         page.locator("#continue-button").click()
-        return f'{BASE_URL}/barriers/{page.url.split("/")[-3]}/'
+        session_data["barrier_id"] = page.url.split("/")[-3]
+        return f'{BASE_URL}/barriers/{session_data["barrier_id"]}/'
 
     return _create_test_barrier
