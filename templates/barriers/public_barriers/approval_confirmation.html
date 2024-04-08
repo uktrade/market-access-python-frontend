@@ -16,30 +16,47 @@
         {% csrf_token %}
 
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">Confirm this barrier has been approved</h1>
+            <h1 class="govuk-fieldset__heading">Confirm if this barrier can be approved for final content checks</h1>
         </legend>
-
-        <p class="govuk-body">By approving this barrier you confirm it should be published on GOV.UK, once they have completed their content checks.</p>
-        <p class="govuk-body">You also confirm that you have reviewed it with the following people or organisations:</p>
-        <ul class="govuk-lis govuk-list--bullet govuk-list--spaced">
-            <li class="govuk-body">Market Access Regional Coordinators</li>
-            <li class="govuk-body">BTR Regional Teams</li>
-            {% for item in barrier.government_organisations %}
-                <li class="govuk-body">{{ item.name }}</li>
-            {% endfor %}
-        </ul>
 
         {% form_error_banner form %}
 
-        <div id="{{ form.confirmation.name }}" class="govuk-form-group govuk-!-margin-top-6 {% if form.confirmation.errors %} govuk-form-group--error{% endif %}">
-            {% form_field_error form "confirmation" %}
+        <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
+            {% form_field_error form "content_clearance" %}
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="{{ form.confirmation.name }}" name="{{ form.confirmation.name }}" type="checkbox" {% if form.confirmation.value == "True" %}checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-checkboxes__label" for={{ form.confirmation.name }}>
-                                {{ form.confirmation.label }}
+                            <input class="govuk-checkboxes__input" id="{{ form.content_clearance.name }}" name="{{ form.content_clearance.name }}" type="checkbox" {% if form.content_clearance.value == "True" %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-checkboxes__label" for={{ form.content_clearance.name }}>
+                                <p class="govuk-body govuk-!-margin-bottom-2">I have checked the following public title and summary are understandable for UK business and do not contain any sensitive information:</p>
+                                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">Public title</p>
+                                <p class="govuk-body">{{ public_barrier.title }}</p>
+                                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">Public summary</p>
+                                <p class="govuk-body">{{ public_barrier.summary }}</p>
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div id="{{ form.external_clearances.name }}" class="govuk-form-group govuk-!-margin-top-6 {% if form.external_clearances.errors %} govuk-form-group--error{% endif %}">
+            {% form_field_error form "external_clearances" %}
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="{{ form.external_clearances.name }}" name="{{ form.external_clearances.name }}" type="checkbox" {% if form.external_clearances.value == "True" %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-checkboxes__label" for={{ form.external_clearances.name }}>
+                                {{ form.external_clearances.label }}
+                                <ul class="govuk-lis govuk-list--bullet govuk-list--spaced">
+                                    <li class="govuk-body">Market Access Regional Coordinators</li>
+                                    <li class="govuk-body">BTR Regional Teams</li>
+                                    {% for item in barrier.government_organisations %}
+                                        <li class="govuk-body">{{ item.name }}</li>
+                                    {% endfor %}
+                                </ul>
                             </label>
                         </div>
                     </div>
@@ -62,7 +79,8 @@
             </div>
         </div>
 
-        <input type="submit" value="Save" class="govuk-button">
+        <input type="submit" name="submit_approval" value="Send to GOV.UK content team" class="govuk-button">
+        <input type="submit" name="submit_approval" value="Set publication status to 'not allowed'" class="govuk-button button--secondary">
         <a href="{% url 'barriers:public_barrier_detail' object.id %}" class="form-cancel">Cancel</a>
     </form>
 

@@ -57,11 +57,11 @@
 
     {% if active == 'public' %}
         <li class="page-tabs__tab page-tabs__tab--active">
-            <span class="page-tabs__tab__text">Public view{% if public_barrier.tab_badge %} <span class="ma-badge ma-badge--in-tab">{{ public_barrier.tab_badge }}</span>{% endif %}</span>
+            <span class="page-tabs__tab__text">Barrier publication{% if public_barrier.tab_badge %} <span class="ma-badge ma-badge--in-tab">{{ public_barrier.tab_badge }}</span>{% endif %}</span>
         </li>
     {% else %}
         <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Public view
+            <a class="page-tabs__tab__text" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Barrier publication
                 {% if barrier.public_barrier.tab_badge %}
                     <span class="ma-badge ma-badge--in-tab">{{ barrier.public_barrier.tab_badge }}</span>
                 {% endif %}</a>

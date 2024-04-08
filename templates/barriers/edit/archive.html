@@ -60,7 +60,7 @@
         </form>
     {% else %}
         {% include 'partials/heading.html' with text='Archiving is disabled' %}
-        <p>Please remove the barrier from <a href="{% url 'barriers:public_barrier_detail' object.id %}">Public view</a>
+        <p>Please remove the barrier from <a href="{% url 'barriers:public_barrier_detail' object.id %}">Barrier publication</a>
             prior to archiving.</p>
         <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
     {% endif %}

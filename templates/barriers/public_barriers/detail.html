@@ -82,7 +82,7 @@
             </div>
             {% if barrier.public_eligibility is None %}
                 <!-- Public eligibility not set. Show link to set eligibility.-->
-                <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Barrier publication status</a>
+                <a href="{% url 'barriers:edit_public_eligibility' barrier.id 30 %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Barrier publication status</a>
             {% else %}
                 <!-- Public eligibility set. Show alternate content depending on its value.-->
                 {% if barrier.public_eligibility is True %}
@@ -93,7 +93,7 @@
                     <!-- Public eligibility set to not allowed. Show confirmation of status, the given reason and a link to edit eligibility.-->
                     <p class="govuk-body govuk-!-margin-bottom-2">No</p>
                     <p class="govuk-body govuk-!-margin-bottom-2"><span class="govuk-!-font-weight-bold">Reason:</span> {{ barrier.public_eligibility_summary }} </p>
-                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
+                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id 30 %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
                 {% endif %}
             {% endif %}
         </div>
@@ -115,8 +115,8 @@
                     <!-- Public title set. Show current public title and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public title</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.title }}</p>
-                    {% if public_barrier.public_view_status == 20 %}
-                        <!-- Edit button only shown when in Allowed status-->
+                    <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps -->
+                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" %}
                         <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
                     {% endif %}
                 {% endif %}
@@ -127,26 +127,19 @@
                     <!-- Public summary set. Show current public summary and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public summary</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.summary }}</p>
-                    {% if public_barrier.public_view_status == 20 %}
-                        <!-- Edit button only shown when in Allowed status-->
+                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" %}
                         <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
                     {% endif %}
                 {% endif %}
                 <!-- Button control to move public barrier status -->
                 {% if public_barrier.public_view_status == 20 %}
                     {% if public_barrier.title and public_barrier.summary %}
-                    <!-- Button to submit for approval only shown when in Allowed status, and has a title and summary set -->
+                    <!-- Button to submit to approver only shown when in Allowed status, and has a title and summary set -->
                         <form action="" method="POST">
                             {% csrf_token %}
-                            <button name="action" value="submit-for-approval" class="govuk-button" tabindex="2">Submit for approval</button>
+                            <button name="action" value="submit-for-approval" class="govuk-button" tabindex="2">Submit to approver</button>
                         </form>
                     {% endif %}
-                {% elif public_barrier.public_view_status == 70 %}
-                    <!-- Button to roll back submission for approval only shown when in Awaiting Approval status-->
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <button name="action" value="remove-for-approval" class="govuk-button govuk-button--secondary" tabindex="2">Remove for approval</button>
-                    </form>
                 {% endif %}
             {% endif %}
         </div>
@@ -154,7 +147,7 @@
         <!-- Approvals Section -->
         <div class="public-view-information-box {% if public_barrier.public_view_status == 10 or public_barrier.public_view_status == 20 or not barrier.public_eligibility %} public-view-information-box__notset {% endif %}">
             <div class="govuk-summary-list__row">
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Approvals</h3>
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Review and approve this barrier for publication</h3>
             </div>
             {% if public_barrier.public_view_status == 20 or not barrier.public_eligibility %}
                 <!-- Public title and barrier not set. Show reason for blocking approval step. -->
@@ -177,7 +170,9 @@
                     <p class="govuk-body">The approver is reviewing this barrier with the following people:</p>
                 {% else %}
                     <!-- Approver/Publisher users message for section -->
-                    <p class="govuk-body">As the approver of this barrier, you need to confirm you have checked it with the following people or organisations:</p>
+                    <p class="govuk-body">To review this barrier, check the public title and summary are suitable to be viewed publicly on GOV.UK</p>
+                    <p class="govuk-body govuk-!-font-weight-bold">If clearances are needed from any other people or government departments, review the barrier once you have these.</p>
+                    <p class="govuk-body">This barrier needs clearances from the following people of other government departments:</p>
                 {% endif %}
                 <ul class="govuk-lis govuk-list--bullet govuk-list--spaced govuk-!-margin-bottom-0">
                     <li class="govuk-body">Market Access Regional Coordinators </li>
@@ -197,13 +192,13 @@
             {% endif %}
             {% if user_role == "Approver" and public_barrier.public_view_status == 70 or user_role == "Publisher" and public_barrier.public_view_status == 70 %}
                 <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
-                <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id countdown %}" class="govuk-button">Approve barrier</a>
+                <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id countdown %}" class="govuk-button">Review barrier</a>
             {% endif %}
             {% if user_role == "Approver" and public_barrier.public_view_status == 30 or user_role == "Publisher" and public_barrier.public_view_status == 30 %}
                 <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <button name="action" value="remove-for-publishing" class="govuk-button govuk-button--secondary" tabindex="2">Revert approval</button>
+                    <button name="action" value="remove-for-publishing" class="govuk-button govuk-button--secondary" tabindex="2">Remove approval</button>
                 </form>
             {% endif %}
         </div>
@@ -316,18 +311,23 @@
                         This barrier does not need approval
                     {% endif %}
                 {% else %}
-                    {% if public_barrier.public_view_status == 20 %}
-                        <!-- Public barrier status is Allowed -->
-                        This barrier is not ready for approval
-                    {% elif public_barrier.public_view_status == 70 %}
-                        <!-- Public barrier status is Awaiting Approval -->
-                        This barrier is awaiting approval
-                    {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
-                        <!-- Public barrier status is Awaiting Publishing -->
-                        GOV.UK content checks are needed
-                    {% elif public_barrier.public_view_status == 40 %}
-                        <!-- Public barrier status is Published -->
-                        This barrier has been published
+                    {% if countdown != 0 %}
+                        {% if public_barrier.public_view_status == 20 %}
+                            <!-- Public barrier status is Allowed -->
+                            This barrier is not ready for approval
+                        {% elif public_barrier.public_view_status == 70 %}
+                            <!-- Public barrier status is Awaiting Approval -->
+                            This barrier is awaiting approval
+                        {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
+                            <!-- Public barrier status is Awaiting Publishing -->
+                            GOV.UK content checks are needed
+                        {% elif public_barrier.public_view_status == 40 %}
+                            <!-- Public barrier status is Published -->
+                            This barrier has been published
+                        {% endif %}
+                    {% else %}
+                        <!-- Public barrier has gone over the 30 day deadline -->
+                        This barrier is overdue for publication on GOV.UK
                     {% endif %}
                 {% endif %}
             </h2>
@@ -343,22 +343,39 @@
                         You do not need to approve this barrier unless the barrier publication status is updated to 'allowed', and it includes a public title and summary.
                     {% endif %}
                 {% else %}
-                    {% if public_barrier.public_view_status == 20 %}
-                        <!-- Public barrier status is Allowed -->
-                        This barrier cannot be approved until the public title and summary have been added.
-                        This needs to be done within the next {{ countdown }} days, along with a review from the approver, and the GOV.UK publishing team.
-                    {% elif public_barrier.public_view_status == 70 %}
-                        <!-- Public barrier status is Awaiting Approval -->
-                        Once it has been approved, the barrier will be sent to the GOV.UK team for final content checks.
-                        This needs to be done within the next {{ countdown }} days.
-                    {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
-                        <!-- Public barrier status is Awaiting Publishing -->
-                        Only a member of the GOV.UK publishing team can complete the content checks.
-                        This needs to be done within the next {{ countdown }} days. The barrier can then be published.
-                    {% elif public_barrier.public_view_status == 40 %}
-                        <!-- Public barrier status is Published -->
-                        You can view the barrier on GOV.UK by visiting <a class="govuk-link" href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank">Check International Trade Barriers (opens in new tab).</a>
-                        For more details see the barrier information and notes on the public view tab.
+                    {% if countdown != 0 %}
+                        {% if public_barrier.public_view_status == 20 %}
+                            <!-- Public barrier status is Allowed -->
+                            <p class="govuk-body">This barrier cannot be approved until the public title and summary have been added.</p>
+                            <p class="govuk-body">This needs to be done within the next {{ countdown }} days, along with a review from the approver, and the GOV.UK publishing team.</p>
+                        {% elif public_barrier.public_view_status == 70 %}
+                            <!-- Public barrier status is Awaiting Approval -->
+                            <p class="govuk-body">Once it has been approved, the barrier will be sent to the GOV.UK team for final content checks.</p>
+                            <p class="govuk-body">This needs to be done within the next {{ countdown }} days.</p>
+                        {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
+                            <!-- Public barrier status is Awaiting Publishing -->
+                            <p class="govuk-body">Only a member of the GOV.UK publishing team can complete the content checks.</p>
+                            <p class="govuk-body">This needs to be done within the next {{ countdown }} days. The barrier can then be published.</p>
+                        {% elif public_barrier.public_view_status == 40 %}
+                            <!-- Public barrier status is Published -->
+                            <p class="govuk-body">You can view the barrier on GOV.UK by visiting <a class="govuk-link" href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank">Check International Trade Barriers (opens in new tab).</a></p>
+                            <p class="govuk-body">For more details see the barrier information and notes on the Barrier publication tab.</p>
+                        {% endif %}
+                    {% else %}
+                        {% if public_barrier.public_view_status == 20 %}
+                            <!-- Public barrier has exceeded deadline while in Allowed state -->
+                            It has been more than 30 days since the publication status was set to 'allowed'.
+                            To publish this barrier it will need a public title and summary - which will have to be approved, along with final content checks from the GOV.UK team.
+                        {% elif public_barrier.public_view_status == 70 %}
+                            <!-- Public barrier has exceeded deadline while in Awaiting Approval state -->
+                            It has been more than 30 days since the publication status was set to 'allowed'.
+                            To publish this barrier it will first need approval from the person who checks the public title and summary and gets clearances.
+                            It will then need final content checks from the GOV.UK team.
+                        {% elif public_barrier.public_view_status == 30 or public_barrier.public_view_status == 50 %}
+                            <!-- Public barrier has exceeded deadline while in Awaiting Publishing state -->
+                            It has been more than 30 days since the publication status was set to 'allowed'.
+                            To publish this barrier it will need final content checks from the GOV.UK team.
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </p>

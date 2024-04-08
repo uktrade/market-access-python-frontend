@@ -217,13 +217,16 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
                 kwargs={"barrier_id": self.barrier["id"], "countdown": 17},
             ),
             data={
-                "confirmation": True,
+                "content_clearance": True,
+                "external_clearances": True,
                 "public_approval_summary": "Test summary",
+                "submit_approval": "Send to GOV.UK content team",
             },
         )
         assert response.status_code == HTTPStatus.FOUND
         assert mock_ready.called is True
         assert mock_patch.called is True
+        assert mock_patch.call_count == 1
 
         expected_message_tag = (
             "This barrier has been approved and is now with the GOV.UK content team"
@@ -241,8 +244,10 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
                 kwargs={"barrier_id": self.barrier["id"], "countdown": 30},
             ),
             data={
-                "confirmation": True,
+                "content_clearance": True,
+                "external_clearances": True,
                 "public_approval_summary": "",
+                "submit_approval": "Send to GOV.UK content team",
             },
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -263,14 +268,56 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
                 "barriers:approve_public_barrier_confirmation",
                 kwargs={"barrier_id": self.barrier["id"], "countdown": 18},
             ),
-            data={"confirmation": False, "public_approval_summary": ""},
+            data={
+                "content_clearance": False,
+                "external_clearances": False,
+                "public_approval_summary": "",
+                "submit_approval": "Send to GOV.UK content team",
+            },
         )
         assert response.status_code == HTTPStatus.OK
         form = response.context["form"]
         assert form.is_valid() is False
-        assert "confirmation" in form.errors
+        assert "content_clearance" in form.errors
+        assert "external_clearances" in form.errors
         assert mock_ready.called is False
         assert mock_patch.called is False
+
+    @patch("utils.api.resources.PublicBarriersResource.ready_for_publishing")
+    @patch("utils.api.resources.PublicBarriersResource.patch")
+    @patch("django.contrib.messages.add_message")
+    @patch("utils.api.resources.BarriersResource.patch")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    def test_reject_confirmation(
+        self,
+        mock_report_field,
+        mock_barrier_patch,
+        mock_add_message,
+        mock_patch,
+        mock_ready,
+    ):
+        response = self.client.post(
+            reverse(
+                "barriers:approve_public_barrier_confirmation",
+                kwargs={"barrier_id": self.barrier["id"], "countdown": 17},
+            ),
+            data={
+                "content_clearance": True,
+                "external_clearances": True,
+                "public_approval_summary": "Test summary",
+                "submit_approval": "Set publication status to 'not allowed'",
+            },
+        )
+        assert response.status_code == HTTPStatus.FOUND
+        assert mock_ready.called is False
+        assert mock_patch.called is True
+        assert mock_patch.call_count == 1
+        assert mock_report_field.call_count == 2
+        assert mock_barrier_patch.call_count == 1
+
+        expected_message_tag = "The publication status is set to: not allowed"
+        assert mock_add_message.called is True
+        assert expected_message_tag in str(mock_add_message.call_args)
 
 
 class PublishBarrierConfirmationTestCase(MarketAccessTestCase):
