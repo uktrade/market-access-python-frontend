@@ -113,24 +113,28 @@
                     <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Public title</a></p>
                 {% else %}
                     <!-- Public title set. Show current public title and edit link. -->
-                    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public title</p>
-                    <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.title }}</p>
+                    <dt class="summary-group__list__key">Public title</dt>
+                    <dd class="summary-group__list__value">{{ public_barrier.title }}
                     <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps (including unpublished)-->
-                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
-                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
-                    {% endif %}
+                        {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
+                            <br><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state">Edit</a></dd>
+                        {% else %}
+                            </dd>
+                        {% endif %}
                 {% endif %}
                 {% if not public_barrier.summary %}
                     <!-- Public summary not set. Show link to public summary entry only. -->
                     <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Public summary</a></p>
                 {% else %}
                     <!-- Public summary set. Show current public summary and edit link. -->
-                    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public summary</p>
-                    <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.summary }}</p>
+                    <dt class="summary-group__list__key">Public summary</dt>
+                    <dd class="summary-group__list__value">{{ public_barrier.summary }}
                     <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps (including unpublished)-->
-                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
-                        <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
-                    {% endif %}
+                        {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
+                            <br><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state">Edit</a></dd>
+                        {% else %}
+                            </dd>
+                        {% endif %}
                 {% endif %}
                 <!-- Button control to move public barrier status -->
                 {% if public_barrier.public_view_status == 20 %}
@@ -300,7 +304,7 @@
         <!-- Publication Status Section -->
         <h2 class="section-heading govuk-!-margin-bottom-0">Barrier publication status</h2>
         <div class="public-view-status-box {% if public_barrier.public_view_status == 40 %} public-view-status-box__published {% else %} public-view-status-box__inprogress {% endif %}">
-            <h2 class="public-view-status-box__heading govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+            <h3 class="public-view-status-box__heading govuk-!-margin-bottom-0 govuk-!-margin-top-0">
                 {% if barrier.public_eligibility is None %}
                     <!-- Public barrier status is Unknown -->
                     Set a publication status
@@ -331,7 +335,7 @@
                         This barrier is overdue for publication on GOV.UK
                     {% endif %}
                 {% endif %}
-            </h2>
+            </h3>
             <p class="govuk-!-margin-0 govuk-!-padding-top-2">
                 {% if barrier.public_eligibility is None %}
                     <!-- Public barrier status is Unknown -->
