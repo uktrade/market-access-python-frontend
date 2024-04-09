@@ -115,8 +115,8 @@
                     <!-- Public title set. Show current public title and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public title</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.title }}</p>
-                    <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps -->
-                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" %}
+                    <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps (including unpublished)-->
+                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
                         <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
                     {% endif %}
                 {% endif %}
@@ -127,7 +127,8 @@
                     <!-- Public summary set. Show current public summary and edit link. -->
                     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Public summary</p>
                     <p class="govuk-body govuk-!-margin-bottom-2">{{ public_barrier.summary }}</p>
-                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" %}
+                    <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps (including unpublished)-->
+                    {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
                         <p class="govuk-body"><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a></p>
                     {% endif %}
                 {% endif %}
@@ -194,8 +195,8 @@
                 <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
                 <a href="{% url 'barriers:approve_public_barrier_confirmation' barrier.id countdown %}" class="govuk-button">Review barrier</a>
             {% endif %}
-            {% if user_role == "Approver" and public_barrier.public_view_status == 30 or user_role == "Publisher" and public_barrier.public_view_status == 30 %}
-                <!-- Button to confirm approval only shown when user is either a approver or publisher and the status is Awaiting Approval -->
+            {% if user_role == "Approver" and public_barrier.public_view_status == 30 or user_role == "Publisher" and public_barrier.public_view_status == 30 or user_role == "Publisher" and public_barrier.public_view_status == 50 %}
+                <!-- Button to remove approval only shown when user is either a approver or publisher and the status is Awaiting Publishing or Unpublished -->
                 <form action="" method="POST">
                     {% csrf_token %}
                     <button name="action" value="remove-for-publishing" class="govuk-button govuk-button--secondary" tabindex="2">Remove approval</button>

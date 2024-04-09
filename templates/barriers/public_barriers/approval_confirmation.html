@@ -12,6 +12,8 @@
 
 {% block page_content %}
 
+    <a class="govuk-back-link" href="{% url 'barriers:public_barrier_detail' object.id %}">Back</a>
+
     <form action="" novalidate method="POST" class="restrict-width">
         {% csrf_token %}
 
@@ -21,7 +23,7 @@
 
         {% form_error_banner form %}
 
-        <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 govuk-!-margin-bottom-2 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
             {% form_field_error form "content_clearance" %}
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
@@ -41,7 +43,7 @@
             </div>
         </div>
 
-        <div id="{{ form.external_clearances.name }}" class="govuk-form-group govuk-!-margin-top-6 {% if form.external_clearances.errors %} govuk-form-group--error{% endif %}">
+        <div id="{{ form.external_clearances.name }}" class="govuk-form-group govuk-!-margin-bottom-2 {% if form.external_clearances.errors %} govuk-form-group--error{% endif %}">
             {% form_field_error form "external_clearances" %}
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
@@ -65,7 +67,7 @@
         </div>
 
         <div id="{{ form.public_approval_summary.name }}"
-             class="govuk-character-count"
+             class="govuk-character-count govuk-!-margin-bottom-2"
              data-module="character-count"
              data-maxlength="500">
             <div class="{% form_group_classes form.public_approval_summary.errors %}">
@@ -81,7 +83,6 @@
 
         <input type="submit" name="submit_approval" value="Send to GOV.UK content team" class="govuk-button">
         <input type="submit" name="submit_approval" value="Set publication status to 'not allowed'" class="govuk-button button--secondary">
-        <a href="{% url 'barriers:public_barrier_detail' object.id %}" class="form-cancel">Cancel</a>
     </form>
 
 {% endblock %}
