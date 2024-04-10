@@ -164,6 +164,7 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
         widget=forms.Textarea(
             attrs={
                 "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "aria-describedby": "id_public_approval_summary-info",
                 "rows": 5,
             },
         ),

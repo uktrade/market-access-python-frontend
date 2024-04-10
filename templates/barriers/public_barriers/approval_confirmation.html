@@ -5,7 +5,7 @@
 {% block body_script %}
     <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.public_approval_summary.name }}.govuk-character-count' );
         }
     </script>
 {% endblock %}
@@ -17,36 +17,34 @@
     <form action="" novalidate method="POST" class="restrict-width">
         {% csrf_token %}
 
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">Confirm if this barrier can be approved for final content checks</h1>
-        </legend>
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">Confirm if this barrier can be approved for final content checks</h1>
+            </legend>
 
-        {% form_error_banner form %}
+            {% form_error_banner form %}
 
-        <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 govuk-!-margin-bottom-2 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
-            {% form_field_error form "content_clearance" %}
-            <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset">
+            <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 govuk-!-margin-bottom-2 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
+                {% form_field_error form "content_clearance" %}
+                <div class="govuk-form-group">
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="{{ form.content_clearance.name }}" name="{{ form.content_clearance.name }}" type="checkbox" {% if form.content_clearance.value == "True" %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label" for={{ form.content_clearance.name }}>
                                 <p class="govuk-body govuk-!-margin-bottom-2">I have checked the following public title and summary are understandable for UK business and do not contain any sensitive information:</p>
-                                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">Public title</p>
-                                <p class="govuk-body">{{ public_barrier.title }}</p>
-                                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">Public summary</p>
-                                <p class="govuk-body">{{ public_barrier.summary }}</p>
+                                <dt class="summary-group__list__key">Public title</dt>
+                                <dd class="summary-group__list__value">{{ public_barrier.title }}</dd>
+                                <dt class="summary-group__list__key">Public summary</dt>
+                                <dd class="summary-group__list__value">{{ public_barrier.summary }}</dd>
                             </label>
                         </div>
                     </div>
-                </fieldset>
+                </div>
             </div>
-        </div>
 
-        <div id="{{ form.external_clearances.name }}" class="govuk-form-group govuk-!-margin-bottom-2 {% if form.external_clearances.errors %} govuk-form-group--error{% endif %}">
-            {% form_field_error form "external_clearances" %}
-            <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset">
+            <div id="{{ form.external_clearances.name }}" class="govuk-form-group govuk-!-margin-bottom-2 {% if form.external_clearances.errors %} govuk-form-group--error{% endif %}">
+                {% form_field_error form "external_clearances" %}
+                <div class="govuk-form-group">
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="{{ form.external_clearances.name }}" name="{{ form.external_clearances.name }}" type="checkbox" {% if form.external_clearances.value == "True" %}checked="checked"{% endif %}>
@@ -62,24 +60,25 @@
                             </label>
                         </div>
                     </div>
-                </fieldset>
-            </div>
-        </div>
-
-        <div id="{{ form.public_approval_summary.name }}"
-             class="govuk-character-count govuk-!-margin-bottom-2"
-             data-module="character-count"
-             data-maxlength="500">
-            <div class="{% form_group_classes form.public_approval_summary.errors %}">
-                {% form_field_error form "public_approval_summary" %}
-                <span id="{{ form.public_approval_summary.name }}_label" class="govuk-label govuk-label--s">{{ form.public_approval_summary.label }}</span>
-                {{ form.public_approval_summary }}
-                <div id="update_{{ forloop.counter }}-info"
-                     class="govuk-hint govuk-character-count__message"
-                     aria-live="polite">
                 </div>
             </div>
-        </div>
+
+            <div id="{{ form.public_approval_summary.name }}"
+                 class="govuk-character-count govuk-!-margin-bottom-2"
+                 data-module="character-count"
+                 data-maxlength="500">
+                <div class="{% form_group_classes form.public_approval_summary.errors %}">
+                    {% form_field_error form "public_approval_summary" %}
+                    <label id="{{ form.public_approval_summary.name }}_label" class="govuk-label govuk-label--s" for="{{ form.public_approval_summary.id_for_label }}">{{ form.public_approval_summary.label }}</label>
+                    {{ form.public_approval_summary }}
+                    <div id="{{ form.public_approval_summary.name }}-info"
+                         class="govuk-hint govuk-character-count__message"
+                         aria-live="polite">
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
 
         <input type="submit" name="submit_approval" value="Send to GOV.UK content team" class="govuk-button">
         <input type="submit" name="submit_approval" value="Set publication status to 'not allowed'" class="govuk-button button--secondary">

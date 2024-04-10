@@ -5,7 +5,7 @@
 {% block body_script %}
     <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
-            new ma.components.CharacterCount( '.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.title.name }}.govuk-character-count' );
         }
     </script>
 {% endblock %}
@@ -27,12 +27,12 @@
              data-maxlength="150">
             <div class="{% form_group_classes form.title.errors %}">
                 {% form_field_error form "title" %}
-                <span id="{{ form.title.name }}_hint" class="govuk-hint">{{ form.title.help_text }}</span>
+                <label id="{{ form.title.name }}_hint" class="govuk-hint" for="{{ form.title.id_for_label }}">{{ form.title.help_text }}</label>
                 <div class="govuk-body">
                     <a href='https://data-services-help.trade.gov.uk/market-access/how-guides/how-prepare-market-access-barrier-report-public-view/' target='_blank'>Find out how to write a public title (opens in a new tab)</a>
                 </div>
                 {{ form.title }}
-                <div id="update_{{ forloop.counter }}-info"
+                <div id="{{ form.title.name }}-info"
                      class="govuk-hint govuk-character-count__message"
                      aria-live="polite">
                 </div>
