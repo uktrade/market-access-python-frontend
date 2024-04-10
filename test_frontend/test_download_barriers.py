@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_download_barrier_csv_from_my_downloads_tab(page):
     pass
 

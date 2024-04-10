@@ -1,4 +1,3 @@
-import pytest
 from playwright.sync_api import expect
 
 from .utils import get_base_url
