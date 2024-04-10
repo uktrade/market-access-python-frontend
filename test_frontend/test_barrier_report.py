@@ -1,10 +1,8 @@
-import pytest
 from playwright.sync_api import expect
 
 from .utils import clean_full_url
 
 
-@pytest.mark.order(1)
 def test_report_a_barrier_page(page):
     page.get_by_role("button", name="Report a barrier Add a market").click()
     expect(
@@ -12,7 +10,6 @@ def test_report_a_barrier_page(page):
     ).to_be_visible()
 
 
-@pytest.mark.order(2)
 def test_change_barrier_priority(page, create_test_barrier):
 
     title = "test"
@@ -34,7 +31,6 @@ def test_change_barrier_priority(page, create_test_barrier):
     expect(page.get_by_role("heading", name=title)).to_be_visible()
 
 
-@pytest.mark.order(3)
 def test_change_top_100_status(page, create_test_barrier):
 
     title = "test"
@@ -75,7 +71,6 @@ def test_change_top_100_status(page, create_test_barrier):
     expect(page.get_by_text("On track")).to_be_visible()
 
 
-@pytest.mark.order(4)
 def test_add_tag(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
@@ -87,7 +82,6 @@ def test_add_tag(page, create_test_barrier):
     page.get_by_role("button", name="Save changes").click()
 
 
-@pytest.mark.order(5)
 def test_update_sector(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)

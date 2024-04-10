@@ -3,7 +3,6 @@ from playwright.sync_api import expect
 from .utils import clean_full_url
 
 
-@pytest.mark.order(1)
 def test_tag_assignment(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
@@ -20,7 +19,6 @@ def test_tag_assignment(page, create_test_barrier):
     expect(page.locator(".govuk-tag").nth(1)).to_have_text("Europe Priority")
 
 
-@pytest.mark.order(2)
 def test_tag_removal(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)

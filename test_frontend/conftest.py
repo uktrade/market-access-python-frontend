@@ -13,8 +13,6 @@ BASE_URL = os.getenv(
     "TEST_BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/"
 )
 HEADLESS = os.getenv("TEST_HEADLESS", "true").lower() == "true"
-EMAIL = os.getenv("TEST_SSO_EMAIL", "test_user")
-PASSWORD = os.getenv("TEST_SSO_PASSWORD", "test_password")
 
 
 @pytest.fixture(scope="session")
@@ -50,8 +48,13 @@ def context(browser, session_data):
     # Create a new browser context
     context = browser.new_context()
 
-    # Check if there is session data to apply, such as cookies
-    if session_data.get("cookies"):
+    # Initially, session_data["cookies"] will be None.
+    # Check if "cookies" key exists and has a value; if not, it means it's the first test run.
+    if session_data.get("cookies") is None:
+        # Since it's the first run, let the browser context initiate and capture the cookies.
+        session_data["cookies"] = context.cookies()
+    else:
+        # If it's not the first run, load the initially captured cookies into the context.
         context.add_cookies(session_data["cookies"])
 
     yield context

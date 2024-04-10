@@ -1,12 +1,10 @@
 import datetime
 
-import pytest
 from playwright.sync_api import expect
 
 from .utils import get_text_content_without_line_separators, clean_full_url
 
 
-@pytest.mark.order(1)
 def test_change_status_unhappy_path(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
@@ -22,7 +20,6 @@ def test_change_status_unhappy_path(page, create_test_barrier):
     )
 
 
-@pytest.mark.order(2)
 def test_status_change_happy_path(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
