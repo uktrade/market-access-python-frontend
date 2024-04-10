@@ -2,7 +2,7 @@ import datetime
 
 from playwright.sync_api import expect
 
-from .utils import get_text_content_without_line_separators, clean_full_url
+from .utils import clean_full_url, get_text_content_without_line_separators
 
 
 def test_estimated_resolution_change_happy_path(page, create_test_barrier):
