@@ -27,7 +27,7 @@
             <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 govuk-!-margin-bottom-2 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
                 {% form_field_error form "content_clearance" %}
                 <div class="govuk-form-group">
-                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="{{ form.content_clearance.name }}" name="{{ form.content_clearance.name }}" type="checkbox" {% if form.content_clearance.value == "True" %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label" for={{ form.content_clearance.name }}>
@@ -45,7 +45,7 @@
             <div id="{{ form.external_clearances.name }}" class="govuk-form-group govuk-!-margin-bottom-2 {% if form.external_clearances.errors %} govuk-form-group--error{% endif %}">
                 {% form_field_error form "external_clearances" %}
                 <div class="govuk-form-group">
-                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="{{ form.external_clearances.name }}" name="{{ form.external_clearances.name }}" type="checkbox" {% if form.external_clearances.value == "True" %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label" for={{ form.external_clearances.name }}>
