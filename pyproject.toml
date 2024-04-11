@@ -6,7 +6,7 @@ authors = ["Ferenc Csepregi <feri@31.digital>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-django = "4.2.10"
+django = "4.2.11"
 django-environ = "==0.4.5"
 django-extensions = "==3.0.9"
 django-log-formatter-ecs = "==0.0.5"
@@ -38,7 +38,7 @@ django-cors-headers = "~=4.3.0"
 tzdata = "^2023.3"
 
 [tool.poetry.dev-dependencies]
-black = "~=22.3.0"
+black = "~=24.3.0"
 flake8 = "~=5.0.0"
 ipython = "==8.10.0"
 isort = "^5.10.1"
