@@ -147,7 +147,7 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
     )
     external_clearances = TrueFalseBooleanField(
         required=True,
-        label=("I confirm I have received clearances from:"),
+        label=("I confirm this barrier has all the necessary clearances needed"),
         widget=forms.CheckboxInput(
             attrs={
                 "class": "govuk-checkboxes__input",

@@ -18,24 +18,41 @@
         {% csrf_token %}
 
         <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-4">
                 <h1 class="govuk-fieldset__heading">Confirm if this barrier can be approved for final content checks</h1>
             </legend>
 
             {% form_error_banner form %}
 
-            <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 govuk-!-margin-bottom-2 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
+            <div class="govuk-body govuk-grid-column-full">
+                <p class="govuk-body">Make sure the public title are understandable for UK businesses and do not contain any sensitive information:</p>
+                <dl className="details-list">
+                    <dt class="summary-group__list__key">Public title</dt>
+                    <dd class="summary-group__list__value">{{ public_barrier.title }}</dd>
+                    <dt class="summary-group__list__key">Public summary</dt>
+                    <dd class="summary-group__list__value">{{ public_barrier.summary }}</dd>
+                </dl>
+            </div>
+
+            <div class="govuk-body govuk-grid-column-full">
+                <p class="govuk-body govuk-!-margin-bottom-2">Make sure you have clearances from:</p>
+                <ul class="govuk-lis govuk-!-margin-left-6 govuk-list--bullet govuk-list--spaced">
+                    <li class="govuk-body">Market Access Regional Coordinators</li>
+                    <li class="govuk-body">BTR Regional Teams</li>
+                    {% for item in barrier.government_organisations %}
+                        <li class="govuk-body">{{ item.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div id="{{ form.content_clearance.name }}" class="govuk-form-group govuk-!-margin-top-6 govuk-!-margin-bottom-1 {% if form.content_clearance.errors %} govuk-form-group--error{% endif %}">
                 {% form_field_error form "content_clearance" %}
                 <div class="govuk-form-group">
                     <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="{{ form.content_clearance.name }}" name="{{ form.content_clearance.name }}" type="checkbox" {% if form.content_clearance.value == "True" %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label" for={{ form.content_clearance.name }}>
-                                <p class="govuk-body govuk-!-margin-bottom-2">I have checked the following public title and summary are understandable for UK business and do not contain any sensitive information:</p>
-                                <dt class="summary-group__list__key">Public title</dt>
-                                <dd class="summary-group__list__value">{{ public_barrier.title }}</dd>
-                                <dt class="summary-group__list__key">Public summary</dt>
-                                <dd class="summary-group__list__value">{{ public_barrier.summary }}</dd>
+                                <p class="govuk-body govuk-!-margin-bottom-1">I confirm the public title and summary of this barrier is ready for final content checks</p>
                             </label>
                         </div>
                     </div>
@@ -50,13 +67,6 @@
                             <input class="govuk-checkboxes__input" id="{{ form.external_clearances.name }}" name="{{ form.external_clearances.name }}" type="checkbox" {% if form.external_clearances.value == "True" %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label" for={{ form.external_clearances.name }}>
                                 {{ form.external_clearances.label }}
-                                <ul class="govuk-lis govuk-list--bullet govuk-list--spaced">
-                                    <li class="govuk-body">Market Access Regional Coordinators</li>
-                                    <li class="govuk-body">BTR Regional Teams</li>
-                                    {% for item in barrier.government_organisations %}
-                                        <li class="govuk-body">{{ item.name }}</li>
-                                    {% endfor %}
-                                </ul>
                             </label>
                         </div>
                     </div>
@@ -64,7 +74,7 @@
             </div>
 
             <div id="{{ form.public_approval_summary.name }}"
-                 class="govuk-character-count govuk-!-margin-bottom-2"
+                 class="govuk-character-count govuk-!-margin-top-6 govuk-!-margin-bottom-2"
                  data-module="character-count"
                  data-maxlength="500">
                 <div class="{% form_group_classes form.public_approval_summary.errors %}">
