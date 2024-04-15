@@ -12,10 +12,6 @@
                     <a href="{% url 'barriers:edit_location' barrier.id %}">location</a>
                 </div>
             {% endif %}
-            {% if not barrier.archived %}
-            <a class="barrier-summary__edit-links"
-               href="{% url 'barriers:related_barriers' barrier.id %}">Find related barriers</a>
-            {% endif %}
         </div>
         <div>
             {% if not hide_priority %}

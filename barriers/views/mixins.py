@@ -151,11 +151,10 @@ class RelatedBarriersContextMixin:
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        context["related_barriers"] = self.get_related_barriers(kwargs["barrier_id"])
+        context["related_barriers"] = self.client.barriers.get_similar(
+            kwargs["barrier_id"]
+        )
         return self.render_to_response(context)
-
-    def get_related_barriers(self, barrier_id):
-        return self.client.barriers.get_similar(barrier_id)
 
 
 class APIFormViewMixin:

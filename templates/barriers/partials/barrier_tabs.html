@@ -18,17 +18,17 @@
             <a class="page-tabs__tab__text" href="{% url 'barriers:team' barrier.id %}">Barrier team</a>
         </li>
     {% endif %}
-
-    {% if active == 'related-barriers' %}
-    <li class="page-tabs__tab page-tabs__tab--active">
-        <span class="page-tabs__tab__text">Related barriers</span>
-    </li>
-    {% else %}
-        <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:related_barriers_detail' barrier.id %}">Related barriers</a>
+    {% if current_user|has_permission:"related_barrier_user" %} 
+        {% if active == 'related' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Related barriers </span>
         </li>
+        {% else %}
+            <li class="page-tabs__tab">
+                <a class="page-tabs__tab__text" href="{% url 'barriers:related_barriers_detail' barrier.id %}">Related barriers</a>
+            </li>
+        {% endif %}
     {% endif %}
-
     {% if active == 'assessment' %}
         <li class="page-tabs__tab page-tabs__tab--active">
             <span class="page-tabs__tab__text">Assessment</span>

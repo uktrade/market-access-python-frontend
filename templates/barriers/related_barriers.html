@@ -1,15 +1,36 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>{{ barrier.title }}</h1>
-                {{ barrier.summary }}
-                {% if related_barriers %}
-                    <h2>Related barriers:</h2>
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Related barriers{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' %}
+    </div>
+    {% include 'barriers/partials/tags.html' %}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='related' %}
+   
+
+    {% if related_barriers %}
+                    
+                    <p class="barrier-summary"> The following are the most similar barriers based on the context of the title and description. Only upto the top 5 most similar results are shown.</p>
+
+                    <details class="govuk-details">
+                        
+                        <summary class="govuk-details__summary">
+                          <span class="govuk-details__summary-text">
+                            Why are these barries related?
+                          </span>
+                        </summary>
+                        <div class="govuk-details__text">
+                          These barriers are considered to be related based on the contextual similarity of the title and the description. The 'related barrier' search algorithm doesn't use other attributes such as sector and categories, so you may find other similar using the search function as well.
+                        </div>
+                      </details>
                     <ol id="filter-results-list" class="filter-results-list">
                         {% for barrier in related_barriers %}
-                            {% ifchanged %}
                                 <li class='filter-results-list__item' data-barrier-id="{{ barrier.id }}">
                                     <div class="filter-results-list__item__main-content">
                                         <h3 class='filter-results-list__item__heading'>
@@ -26,108 +47,34 @@
                                             <dd class="filter-results-list__item__definitions__value">
                                                 {{ barrier.summary }}
                                             </dd>
-                                            <dt class="filter-results-list__item__definitions__key">Similarity score:</dt>
-                                            <dd class="filter-results-list__item__definitions__value">
-                                                {{ barrier.similarity|floatformat:2 }}
-                                            </dd>
+                                            <!-- Need to either convert the string dates to dates or cast the barriers to local barrier model 
                                             <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
                                             <dd class="filter-results-list__item__definitions__value">
-                                                {{ barrier.reported_on|date:"j F Y" }}
+                                                {{ barrier.reported_on|date:"j F Y G" }}
                                             </dd>
                                             <dt class="filter-results-list__item__definitions__key">Updated:</dt>
                                             <dd class="filter-results-list__item__definitions__value">
                                                 {{ barrier.modified_on|date:"j F Y" }}
                                             </dd>
+                                            -->
                                             <dt class="filter-results-list__item__definitions__key">Status:</dt>
                                             <dd class="filter-results-list__item__definitions__value">
                                                 {{ barrier.status.name }}
                                             </dd>
-                                            {% if barrier.status.id == '4' %}
-                                                {# 4: RESOLVED_IN_FULL #}
-                                                <dt class="filter-results-list__item__definitions__key">Resolved:</dt>
-                                                <dd class="filter-results-list__item__definitions__value">
-                                                    {{ barrier.status_date|date:"F Y" }}
-                                                </dd>
-                                            {% else %}
-                                                {% if barrier.estimated_resolution_date %}
-                                                    <dt class="filter-results-list__item__definitions__key">Estimated resolution date:</dt>
-                                                    <dd class="filter-results-list__item__definitions__value">
-                                                        {{ barrier.estimated_resolution_date|date:"F Y" }}
-                                                    </dd>
-                                                {% endif %}
-                                            {% endif %}
-                                            {% if barrier.sector_names or barrier.main_sector_name %}
-                                                <dt class="filter-results-list__item__definitions__key">Sector{{ barrier.sectors|pluralize }} affected:</dt>
-                                                <dd class="filter-results-list__item__definitions__value">
-                                                    {% if barrier.main_sector %}
-                                                        {{ barrier.main_sector_name }} (main sector)
-                                                        {% if barrier.sector_names %},{% endif %}
-                                                    {% endif %}
-                                                    {{ barrier.sector_names|join:', ' }}
-                                                </dd>
-                                            {% endif %}
-                                            {% if barrier.current_valuation_assessment %}
-                                                <dt class="filter-results-list__item__definitions__key">Value:</dt>
-                                                <dd class="filter-results-list__item__definitions__value">
-                                                    {{ barrier.current_valuation_assessment }}
-                                                </dd>
-                                            {% endif %}
                                             <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
                                             <dd class="filter-results-list__item__definitions__value">
                                                 {{ barrier.location }}
                                             </dd>
+                                           
                                         </dl>
                                     </div>
-                                    <div class="filter-results-list__item__sub-content">
-                                        {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
-                                            <ul class="barrier-tag-list barrier-tag-list--search">
-                                                {% spaceless %}
-                                                    <div class="overflow-hidden">
-                                                        {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
-                                                            <div class="text-right">
-                                                                <li class="govuk-tag govuk-tag--top-100-priority-approval-pending text-right">TOP 100 APPROVAL PENDING</li>
-                                                            </div>
-                                                        {% elif barrier.top_priority_status == "APPROVED" %}
-                                                            <div class="text-right">
-                                                                <li class="govuk-tag govuk-tag--top-100-priority text-right">TOP 100 PRIORITY</li>
-                                                            </div>
-                                                        {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                                                            <div class="text-right">
-                                                                <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right">TOP 100 REMOVAL PENDING</li>
-                                                            </div>
-                                                        {% elif barrier.top_priority_status == "RESOLVED" %}
-                                                            <div class="text-right">
-                                                                <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">RESOLVED TOP 100 PRIORITY</li>
-                                                            </div>
-                                                        {% elif barrier.priority_level %}
-                                                            {% if barrier.priority_level == "OVERSEAS" %}
-                                                                <li class="govuk-tag govuk-tag--overseas-delivery">OVERSEAS DELIVERY</li>
-                                                            {% elif barrier.priority_level == "COUNTRY" %}
-                                                                <li class="govuk-tag govuk-tag--country-priority">COUNTRY PRIORITY</li>
-                                                            {% elif barrier.priority_level == "WATCHLIST" %}
-                                                                <li class="govuk-tag govuk-tag--watch-list">WATCH LIST</li>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="">
-                                                        {% for tag in barrier.tags %}
-                                                            <div class="text-right">
-                                                                <li class="govuk-tag govuk-tag--{{ tag.title|slugify }} text-right">{{ tag.title }}</li>
-                                                            </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endspaceless %}
-                                            </ul>
-                                        {% endif %}
-                                    </div>
                                 </li>
-                            {% endifchanged %}
+                        
                         {% endfor %}
                     </ol>
                 {% else %}
                     <p>There are no related barriers.</p>
                 {% endif %}
-            </div>
-        </div>
-    </div>
+            
+
 {% endblock %}
