@@ -136,6 +136,7 @@ from .views.public_barriers import (
     PublicBarrierDetail,
     PublicBarrierListView,
 )
+from .views.related_barriers import RelatedBarriers
 from .views.saved_searches import (
     DeleteSavedSearch,
     NewSavedSearch,
@@ -830,6 +831,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/export-types/edit/",
         BarrierEditExportType.as_view(),
         name="edit_export_types",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/related/",
+        RelatedBarriers.as_view(),
+        name="related_barriers_detail",
     ),
     path("public-barriers/", PublicBarrierListView.as_view(), name="public_barriers"),
     path(

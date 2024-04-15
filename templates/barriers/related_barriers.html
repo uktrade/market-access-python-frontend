@@ -1,0 +1,80 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Related barriers{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' %}
+    </div>
+    {% include 'barriers/partials/tags.html' %}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='related' %}
+
+
+    {% if related_barriers %}
+
+        <p class="barrier-summary"> The following are the most similar barriers based on the context of the title and description. Only upto the top 5 most similar results are shown.</p>
+
+        <details class="govuk-details">
+
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    Why are these barries related?
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                These barriers are considered to be related based on the contextual similarity of the title and the description. The 'related barrier' search algorithm doesn't use other attributes such as sector and categories, so you may find other similar barriers using the search function for other attributes.
+            </div>
+        </details>
+        <ol id="filter-results-list" class="filter-results-list">
+            {% for barrier in related_barriers %}
+                <li class='filter-results-list__item' data-barrier-id="{{ barrier.id }}">
+                    <div class="filter-results-list__item__main-content">
+                        <h3 class='filter-results-list__item__heading'>
+                            {% if saved_search %}
+                                {% if barrier.id in saved_search.new_barrier_ids %}<span class="ma-badge ma-badge--new">New</span>{% endif %}
+                                {% if barrier.id in saved_search.updated_barrier_ids %}
+                                    <span class="ma-badge ma-badge--updated">Updated</span>
+                                {% endif %}
+                            {% endif %}
+                            <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a>
+                        </h3>
+                        <dl class="filter-results-list__item__definitions">
+                            <dt class="filter-results-list__item__definitions__key visually-hidden">Summary:</dt>
+                            <dd class="filter-results-list__item__definitions__value">
+                                {{ barrier.summary }}
+                            </dd>
+                                            <!-- Need to either convert the string dates to dates or cast the barriers to local barrier model
+                                            <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.reported_on|date:"j F Y G" }}
+                                            </dd>
+                                            <dt class="filter-results-list__item__definitions__key">Updated:</dt>
+                                            <dd class="filter-results-list__item__definitions__value">
+                                                {{ barrier.modified_on|date:"j F Y" }}
+                                            </dd>
+                                            -->
+                            <dt class="filter-results-list__item__definitions__key">Status:</dt>
+                            <dd class="filter-results-list__item__definitions__value">
+                                {{ barrier.status.name }}
+                            </dd>
+                            <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
+                            <dd class="filter-results-list__item__definitions__value">
+                                {{ barrier.location }}
+                            </dd>
+
+                        </dl>
+                    </div>
+                </li>
+
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>There are no related barriers.</p>
+    {% endif %}
+
+
+{% endblock %}

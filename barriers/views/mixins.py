@@ -140,6 +140,23 @@ class TeamMembersContextMixin:
         return context_data
 
 
+class RelatedBarriersContextMixin:
+    _client = None
+
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        return self._client
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context["related_barriers"] = self.client.barriers.get_similar(
+            kwargs["barrier_id"]
+        )
+        return self.render_to_response(context)
+
+
 class APIFormViewMixin:
     _object = None
 
