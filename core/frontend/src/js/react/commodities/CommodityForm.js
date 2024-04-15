@@ -206,7 +206,7 @@ function CommodityForm(props) {
                             HS codes help DBT analysts evaluate an prioritise
                             barriers.{" "}
                             <a
-                                href="https://www.gov.uk/check-duties-customs-exporting"
+                                href="https://www.gov.uk/trade-tariff"
                                 className="govuk-link"
                                 target="_blank"
                                 rel="noreferrer"
