@@ -276,6 +276,20 @@
         overflow: hidden;
       }
 
+    .rating-star-item-hidden {
+        visibility: hidden;
+        height: 1px;
+        width: 1px;
+        padding: 0;
+    }
+
+    .rating-star-label-hidden {
+        visibility: hidden;
+        height: 1px;
+        width: 1px;
+        padding: 0;
+      }
+
     #rating1,
     #rating2,
     #rating3,
