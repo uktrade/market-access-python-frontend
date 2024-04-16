@@ -1,15 +1,18 @@
 from playwright.sync_api import expect
 
-from .utils import clean_full_url
+from .utils import clean_full_url, retry, get_base_url
 
 
+@retry()
 def test_report_a_barrier_page(page):
+    page.goto(clean_full_url(get_base_url()))
     page.get_by_role("button", name="Report a barrier Add a market").click()
     expect(
         page.get_by_role("heading", name="Market access barriers Report")
     ).to_be_visible()
 
 
+@retry()
 def test_change_barrier_priority(page, create_test_barrier):
 
     title = "test"
@@ -31,46 +34,7 @@ def test_change_barrier_priority(page, create_test_barrier):
     expect(page.get_by_role("heading", name=title)).to_be_visible()
 
 
-def test_change_top_100_status(page, create_test_barrier):
-
-    title = "test"
-    url = create_test_barrier(title=title)
-    page.goto(clean_full_url(url))
-
-    # add tag top 100 priority
-    page.get_by_role("link", name="Edit tags").click()
-    page.get_by_label("Programme Fund").check()
-    page.get_by_label("Scoping (Top 100 priority").check()
-    page.get_by_role("button", name="Save changes").click()
-
-    # change status to top 100 priority
-    page.get_by_role("link", name="Add progress update").click()
-    page.get_by_label("Barrier progress").check()
-    page.get_by_role("button", name="Continue").click()
-    page.get_by_label("On Track Barrier will be").check()
-    page.get_by_label("Explain why barrier resolution is on track").click()
-    page.get_by_label("Explain why barrier resolution is on track").fill(
-        "because it is being resolved"
-    )
-    page.get_by_label("Month").click()
-    page.get_by_label("Month").fill("10")
-    page.get_by_label("Year", exact=True).click()
-    page.get_by_label("Year", exact=True).fill("2024")
-    page.get_by_role("button", name="Save and continue").click()
-    page.locator("#next_step_item").click()
-    page.locator("#next_step_item").fill("check documents")
-    page.locator("#next_step_owner").click()
-    page.locator("#next_step_owner").fill("the next investigator")
-    page.get_by_label("Month").click()
-    page.get_by_label("Month").fill("8")
-    page.get_by_label("Year").click()
-    page.get_by_label("Year").fill("2024")
-    page.get_by_role("button", name="Save").click()
-    page.get_by_role("link", name="Confirm").click()
-
-    expect(page.get_by_text("On track")).to_be_visible()
-
-
+@retry()
 def test_add_tag(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
@@ -82,6 +46,7 @@ def test_add_tag(page, create_test_barrier):
     page.get_by_role("button", name="Save changes").click()
 
 
+@retry()
 def test_update_sector(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)

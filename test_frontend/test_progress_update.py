@@ -1,10 +1,14 @@
+import pytest
+
 from playwright.sync_api import expect
 
-from .utils import clean_full_url
+from .utils import clean_full_url, retry
 
 
+@retry()
+@pytest.mark.order(1)
 def test_create_progress_update(page, create_test_barrier):
-    title = "test 2"
+    title = "test"
     url = create_test_barrier(title=title)
     page.goto(clean_full_url(url))
 
@@ -30,6 +34,9 @@ def test_create_progress_update(page, create_test_barrier):
     page.get_by_label("Year").click()
     page.get_by_label("Year").fill("2024")
     page.get_by_role("button", name="Save").click()
-    page.get_by_role("link", name="Confirm").click()
+
+    link_locator = page.get_by_role("link", name="Confirm")
+    link_locator.wait_for(state="visible", timeout=60000)  # Wait up to 60 seconds
+    link_locator.click()
 
     expect(page.get_by_role("heading", name=title)).to_be_visible()

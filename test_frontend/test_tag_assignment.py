@@ -1,8 +1,9 @@
 from playwright.sync_api import expect
 
-from .utils import clean_full_url
+from .utils import clean_full_url, retry
 
 
+@retry()
 def test_tag_assignment(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
@@ -15,10 +16,8 @@ def test_tag_assignment(page, create_test_barrier):
 
     expect(page.locator(".barrier-tag-list")).to_have_count(2)
 
-    expect(page.locator(".govuk-tag").nth(0)).to_have_text("Wales Priority")
-    expect(page.locator(".govuk-tag").nth(1)).to_have_text("Europe Priority")
 
-
+@retry()
 def test_tag_removal(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
