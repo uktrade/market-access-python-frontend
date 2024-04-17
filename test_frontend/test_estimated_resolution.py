@@ -1,7 +1,8 @@
-import pytest
 import datetime
 
-from .utils import clean_full_url, retry, get_text_content_without_line_separators
+import pytest
+
+from .utils import clean_full_url, get_text_content_without_line_separators, retry
 
 
 @retry()

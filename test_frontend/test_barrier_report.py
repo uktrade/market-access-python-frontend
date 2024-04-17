@@ -1,6 +1,6 @@
 from playwright.sync_api import expect
 
-from .utils import clean_full_url, retry, get_base_url
+from .utils import clean_full_url, get_base_url, retry
 
 
 @retry()

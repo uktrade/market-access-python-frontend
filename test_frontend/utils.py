@@ -1,11 +1,10 @@
-import time
+import inspect
 import os
 import re
-import pytest
-import inspect
-
+import time
 from functools import wraps
 
+import pytest
 from playwright._impl._errors import TimeoutError
 
 
