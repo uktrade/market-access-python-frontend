@@ -153,7 +153,6 @@ class PublicBarrierDetail(
                         context_data["countdown"] = deadline_difference.days + 1
                         logger.critical("Countdown set to an integer")
 
-        logger.critical("   " + str(context_data["countdown"]))
         logger.critical("***************")
 
         context_data["add_note"] = self.request.GET.get("add-note")
