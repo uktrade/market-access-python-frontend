@@ -116,6 +116,8 @@ class PublicBarrierDetail(
 
         context_data["activity_items"] = self.get_activity()
 
+        logger.critical("***************")
+
         # Check the activiy items and find the latest public_view_status activity
         # which updated the value to Awaiting publishing, send the users name to the template
         for item in context_data["activity_items"]:
@@ -134,9 +136,11 @@ class PublicBarrierDetail(
                 # There is a 30 day limit after a barrier is set to 'Allowed' for
                 # it to be moved into 'Published'. A countdown is displayed in the frontend
                 # status box so we need to obtain that count here.
+                logger.critical("CHECKING PUBLIC VIEW STATUS")
                 if item.new_value["public_view_status"][
                     "name"
                 ] == "Allowed" and not context_data.get("countdown"):
+                    logger.critical("We are allowed and have no countdown set")
                     published_deadline = item.date + timedelta(days=30)
                     deadline_difference = published_deadline - datetime.now(
                         timezone.utc
@@ -144,8 +148,13 @@ class PublicBarrierDetail(
                     # Add day to round up spare hours/mins
                     if deadline_difference.days < 0:
                         context_data["countdown"] = 0
+                        logger.critical("Countdown set to 0")
                     else:
                         context_data["countdown"] = deadline_difference.days + 1
+                        logger.critical("Countdown set to an integer")
+
+        logger.critical("   " + str(context_data["countdown"]))
+        logger.critical("***************")
 
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")
