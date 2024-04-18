@@ -116,7 +116,8 @@ class PublicBarrierDetail(
 
         context_data["activity_items"] = self.get_activity()
 
-        logger.critical("***************")
+        logger.critical("***************START")
+        logger.critical(context_data["activity_items"])
 
         # Check the activiy items and find the latest public_view_status activity
         # which updated the value to Awaiting publishing, send the users name to the template
@@ -153,7 +154,7 @@ class PublicBarrierDetail(
                         context_data["countdown"] = deadline_difference.days + 1
                         logger.critical("Countdown set to an integer")
 
-        logger.critical("***************")
+        logger.critical("***************END")
 
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")
