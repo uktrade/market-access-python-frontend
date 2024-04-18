@@ -88,7 +88,7 @@
                 {% if barrier.public_eligibility is True %}
                     <!-- Public eligibility set to allowed. Show confirmation of status and link to edit eligibility.-->
                     <p class="govuk-body govuk-!-margin-bottom-2">Yes</p>
-                    {% if countdown is not None %}
+                    {% if countdown is not None or countdown != '' %}
                         <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
                     {% else %}
                         <a href="{% url 'barriers:edit_public_eligibility' barrier.id 30 %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
