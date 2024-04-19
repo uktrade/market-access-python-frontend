@@ -6,12 +6,7 @@ import string
 import pytest
 from playwright.sync_api import sync_playwright
 
-AUTH_URL = os.getenv(
-    "TEST_SSO_LOGIN_URL", "http://market-access.local:9880/auth/login/"
-)
-BASE_URL = os.getenv(
-    "TEST_BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/"
-)
+BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 HEADLESS = os.getenv("TEST_HEADLESS", "true").lower() == "true"
 
 
@@ -35,7 +30,6 @@ def playwright_instance():
 def browser(playwright_instance):
     """Return a browser instance."""
     if HEADLESS:
-        print("Running tests in headless mode")
         browser = playwright_instance.chromium.launch(headless=True)
     else:
         browser = playwright_instance.chromium.launch(slow_mo=100, headless=HEADLESS)

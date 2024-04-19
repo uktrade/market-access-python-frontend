@@ -1,21 +1,51 @@
 #!/bin/bash
 
-# get test file name from command line argument
-$target=$1
+# Initialize variables
+target=""
+target_url=""
 
-# activate python virtual environment
+# Function to parse arguments for flexibility
+parse_args() {
+    for arg in "$@"
+    do
+        case $arg in
+            target=*)
+                target="${arg#*=}"
+                shift # Remove once we have processed it
+                ;;
+            target_url=*)
+                target_url="${arg#*=}"
+                shift # Remove once we have processed it
+                ;;
+            *)
+                # Assume it's the target_url if target is already set
+                if [ -n "$target" ] && [ -z "$target_url" ]; then
+                    target_url="$arg"
+                elif [ -z "$target" ]; then
+                    target="$arg"
+                fi
+                shift
+                ;;
+        esac
+    done
+}
+
+# Parse the input arguments
+parse_args "$@"
+
+# Activate python virtual environment
 source .venv/bin/activate
 
-# install python dependencies if not already installed
-pip install -r requirements.txt
+# Install python dependencies if not already installed
+pip install -r test_frontend/requirements.txt
 
-ENV_FILE="docker-compose.env"
+if [ -z "$target_url" ]; then
+    echo "Error: No target URL specified."
+    exit 1
+fi
 
-# load environment variables
-export $(cat $ENV_FILE | sed 's/#.*//g' | xargs)
+# Run playwright with pytest
+PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" pytest "test_frontend/$target"
 
-# run playwright with pytest
-PWDEBUG=0 pytest test_frontend/$target
-
-# deactivate python virtual environment
+# Deactivate python virtual environment
 deactivate
