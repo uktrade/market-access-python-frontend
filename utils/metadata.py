@@ -45,8 +45,8 @@ def get_metadata():
         },
     )
 
-    if not response.ok:
-        raise HawkException(f"Call to fetch metadata failed {response}")
+    # if not response.ok:
+    #     raise HawkException(f"Call to fetch metadata failed {response}")
 
     metadata = response.json()
     redis_client.set("metadata", json.dumps(metadata), ex=settings.METADATA_CACHE_TIME)
