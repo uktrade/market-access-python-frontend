@@ -346,6 +346,7 @@ if not DEBUG:
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
         environment=env("SENTRY_ENVIRONMENT"),
+        traces_sample_rate=1.0,
         integrations=[
             DjangoIntegration(),
         ],
