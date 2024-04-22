@@ -119,7 +119,7 @@ If you are running the docker build
 By default the tests DO NOT RUN in headless mode, to activate headless mode the variable --is-headless will be required.
 
 5. Run the tests:
-`make test-end-to-end target_url=<target-url>` e.g target_url: `http://localhost:9880/` or `https://market-access.uat.uktrade.digital/`     
+`make test-end-to-end target_url=<target-url>` e.g target_url: `http://localhost:9880/` or `https://market-access.uat.uktrade.digital/`
 
 6. To run a specific suite of frontend tests, specify the desired module:
 `make test-end-to-end target_url=<target-url> target=test_examples.py`
