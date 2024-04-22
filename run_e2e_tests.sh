@@ -3,6 +3,7 @@
 # Initialize variables
 target=""
 target_url=""
+is_headless=false # Default is false (not headless)
 
 # Function to parse arguments for flexibility
 parse_args() {
@@ -15,6 +16,10 @@ parse_args() {
                 ;;
             target_url=*)
                 target_url="${arg#*=}"
+                shift # Remove once we have processed it
+                ;;
+            --is-headless)
+                is_headless="true"
                 shift # Remove once we have processed it
                 ;;
             *)
@@ -45,7 +50,7 @@ if [ -z "$target_url" ]; then
 fi
 
 # Run playwright with pytest
-PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" pytest "test_frontend/$target"
+PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" TEST_HEADLESS="$is_headless" pytest -c test_frontend/pytest.ini "test_frontend/$target"
 
 # Deactivate python virtual environment
 deactivate

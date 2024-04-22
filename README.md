@@ -105,21 +105,29 @@ Example usage.:
 	- `make django-test path=assessments/test_assessment_detail.py::EmptyAssessmentDetailTestCase::test_view` - run a specific test case
 2. To run tests with coverage use `make django-test-coverage` - this will output the report to the console.
 
-#### Running Playwright Tests
+#### Running End to End tests using playwright with pytest
 Playwright documentation - https://playwright.dev/python/docs/api/class-playwright
-1. Ensure the API is running.
 
-2. If using Docker, set the `BASE_FRONTEND_TESTING_URL` environment variable to `http://host.docker.internal:9880` in the `docker-compose.env` file.
+If you are running the docker build
 
-3. If not using Docker, set the `BASE_FRONTEND_TESTING_URL` environment variable to `http://localhost:{frontend_port}`.
+1. Ensure the API is running & the frondent service is runing and can be access on `http://localhost:{frontend_port}` or http://host.docker.internal:9880 if runing within the docker container
 
-4. Ensure the frontend server is up and has reached the point where the Django development server is running.
+2. Ensure the frontend server is up and has reached the point where the Django development server is running.
+
+By default the tests DO NOT RUN in headless mode, to activate headless mode the variable --is-headless will be required.
 
 5. Run the tests:
-`make test-frontend`
+`make test-end-to-end target_url=<target-url>` e.g target_url: `http://localhost:9880/` or `https://market-access.uat.uktrade.digital/`     
 
 6. To run a specific suite of frontend tests, specify the desired module:
-`make  test-frontend path=test_examples.py`
+`make test-end-to-end target_url=<target-url> target=test_examples.py`
+
+7. To run headless:
+`make test-end-to-end target_url=http://localhost:9880/ is-headless=true`
+
+##### Running the end to end test using the shell script directly
+
+The end to end frontend tests are located in the test_frontend folder, this is able to run in isolation to tform the rest of the application  do to the pytest config file `pytest.ini` within the directory check [pytest config docs](https://docs.pytest.org/en/7.0.x/reference/customize.html) for more details.
 
 ## Test Coverage
 

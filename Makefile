@@ -43,9 +43,9 @@ test-frontend: ## Run django ui tests.
 	docker-compose exec web bash -c "pytest test_frontend/$(path)"
 
 .PHONY: test-end-to-end
-target =
-test-end-to-end: ## Run end-to-end tests.
-	./run_e2e_tests.sh $(target)
+is-headless ?= false
+test-end-to-end:
+	./run_e2e_tests.sh target_url=$(target_url) target=$(target) $(if $(filter true,$(is-headless)),--is-headless)
 
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
