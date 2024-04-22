@@ -43,7 +43,9 @@ class AddNoteForm(DocumentMixin, forms.Form):
 
 class AddPublicBarrierNoteForm(forms.Form):
     note = forms.CharField(
-        label=("Tell us if update the barrier."),
+        label=(
+            "Add a note to highlight anything that has changed or you have updated with this barrier."
+        ),
         widget=forms.Textarea,
         error_messages={"required": "Add a note"},
     )

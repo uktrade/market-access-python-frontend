@@ -38,7 +38,9 @@
                 {% csrf_token %}
                 {{ wizard.management_form }}
                 {% block current_step %}
-                    <span class="govuk-caption-l">Section {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</span>
+                    {% if wizard.steps.current != "barrier-details-summary" %}
+                        <span class="govuk-caption-l">Section {{ wizard.steps.step1 }} of {{ wizard.steps.count|add:"-1" }}</span>
+                    {% endif %}
                 {% endblock %}
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
