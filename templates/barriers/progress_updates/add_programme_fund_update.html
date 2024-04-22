@@ -31,9 +31,9 @@
                 {% form_field_error form "milestones_and_deliverables" %}
                 <span class="govuk-hint">Tell us:</span>
                 <div class="govuk-hint">
-                    <li class="gov-help-text">how you're meeting key milestones and deliverables set out in your project plan</li>
-                    <li class="gov-help-text">if there are any new risks and how you plan to resolve them</li>
-                    <li class="gov-help-text">if you need any support from us</li>
+                    <li>how you're meeting key milestones and deliverables set out in your project plan</li>
+                    <li>if there are any new risks and how you plan to resolve them</li>
+                    <li>if you need any support from us</li>
                 </div>
 
                 <textarea id="{{ form.milestones_and_deliverables.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.milestones_and_deliverables.name }}" rows="5" maxlength="1250">{% if form.milestones_and_deliverables.value %}{{ form.milestones_and_deliverables.value }}{% endif %}</textarea>
