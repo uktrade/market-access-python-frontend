@@ -108,6 +108,8 @@ Example usage.:
 #### Running End to End tests using playwright with pytest
 Playwright documentation - https://playwright.dev/python/docs/api/class-playwright
 
+The end-to-end frontend tests reside in the test_frontend directory and are designed to operate independently of the rest of the application. This autonomy is facilitated through a local pytest.ini configuration file located within the same directory. The pytest.ini file configures specific parameters and settings essential for the execution of these tests, ensuring they can run in a self-contained environment. For detailed customization options and further information on pytest configuration files, refer to the [pytest configuration docs](https://docs.pytest.org/en/7.0.x/reference/customize.html)
+
 If you are running the docker build
 
 1. Ensure the API is running & the frondent service is runing and can be access on `http://localhost:{frontend_port}` or http://host.docker.internal:9880 if runing within the docker container
@@ -124,10 +126,6 @@ By default the tests DO NOT RUN in headless mode, to activate headless mode the 
 
 7. To run headless:
 `make test-end-to-end target_url=http://localhost:9880/ is-headless=true`
-
-##### Running the end to end test using the shell script directly
-
-The end to end frontend tests are located in the test_frontend folder, this is able to run in isolation to tform the rest of the application  do to the pytest config file `pytest.ini` within the directory check [pytest config docs](https://docs.pytest.org/en/7.0.x/reference/customize.html) for more details.
 
 ## Test Coverage
 
