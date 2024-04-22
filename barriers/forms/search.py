@@ -302,9 +302,9 @@ class BarrierSearchForm(forms.Form):
         ]
 
     def set_trade_direction_choices(self):
-        self.fields["trade_direction"].choices = (
-            self.metadata.get_trade_direction_choices()
-        )
+        self.fields[
+            "trade_direction"
+        ].choices = self.metadata.get_trade_direction_choices()
 
     def set_sector_choices(self):
         self.fields["sector"].choices = [
@@ -313,9 +313,9 @@ class BarrierSearchForm(forms.Form):
         ]
 
     def set_organisation_choices(self):
-        self.fields["organisation"].choices = (
-            self.metadata.get_gov_organisation_choices()
-        )
+        self.fields[
+            "organisation"
+        ].choices = self.metadata.get_gov_organisation_choices()
 
     def set_category_choices(self):
         choices = [
