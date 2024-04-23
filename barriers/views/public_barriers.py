@@ -146,6 +146,9 @@ class PublicBarrierDetail(
                 context_data["countdown"] = 0
             else:
                 context_data["countdown"] = deadline_difference.days
+        else:
+            # Have placeholder countdown value for url matching on HTML
+            context_data["countdown"] = 30
 
         context_data["add_note"] = self.request.GET.get("add-note")
         context_data["edit_note"] = self.request.GET.get("edit-note")

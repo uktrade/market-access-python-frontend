@@ -147,8 +147,11 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         assert mock_patch.called is False
 
     @patch("utils.api.resources.APIResource.patch")
+    @patch("utils.api.resources.PublicBarriersResource.allow_for_publishing_process")
     @patch("django.contrib.messages.add_message")
-    def test_edit_eligibility_yes_calls_api(self, mock_add_message, mock_patch):
+    def test_edit_eligibility_yes_calls_api(
+        self, mock_add_message, mock_allow_for_publish, mock_patch
+    ):
         mock_patch.return_value = self.barrier
         response = self.client.post(
             reverse(
@@ -163,6 +166,8 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
             public_eligibility_summary="",
         )
         assert response.status_code == HTTPStatus.FOUND
+
+        assert mock_allow_for_publish.call_count == 1
 
         expected_message_tag = "The barrier publication status has been set to: allowed"
         assert mock_add_message.called is True
