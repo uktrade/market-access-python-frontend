@@ -80,6 +80,8 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
                 form_name="barrier-public-summary",
                 values={"summary": ""},
             )
+        else:
+            client.public_barriers.allow_for_publishing_process(id=self.id)
 
 
 class PublishTitleForm(APIFormMixin, forms.Form):
@@ -289,9 +291,9 @@ class PublicBarrierSearchForm(forms.Form):
         self.fields["awaiting_review_from"].choices = AWAITING_REVIEW_FROM
 
     def set_organisation_choices(self):
-        self.fields[
-            "organisation"
-        ].choices = self.metadata.get_gov_organisation_choices()
+        self.fields["organisation"].choices = (
+            self.metadata.get_gov_organisation_choices()
+        )
 
     def set_sector_choices(self):
         self.fields["sector"].choices = self.metadata.get_sector_choices(level=0)
