@@ -29,8 +29,14 @@
                 <label class="govuk-label govuk-label--s" for="{{ form.milestones_and_deliverables.id_for_label }}">{{ form.milestones_and_deliverables.label }}</label>
 
                 {% form_field_error form "milestones_and_deliverables" %}
-                <span class="govuk-hint">{{ form.milestones_and_deliverables.help_text }}</span>
-
+                <span class="govuk-hint">Tell us:</span>
+                <div class="govuk-hint">
+                    <ul>
+                        <li>how you're meeting key milestones and deliverables set out in your project plan</li>
+                        <li>if there are any new risks and how you plan to resolve them</li>
+                        <li>if you need any support from us</li>
+                    </ul>
+                </div>
 
                 <textarea id="{{ form.milestones_and_deliverables.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.milestones_and_deliverables.name }}" rows="5" maxlength="1250">{% if form.milestones_and_deliverables.value %}{{ form.milestones_and_deliverables.value }}{% endif %}</textarea>
             </div>
@@ -44,8 +50,14 @@
                 <label class="govuk-label govuk-label--s" for="{{ form.expenditure.id_for_label }}">{{ form.expenditure.label }}</label>
 
                 {% form_field_error form "expenditure" %}
-                <span class="govuk-hint">{{ form.expenditure.help_text }}</span>
-
+                <span class="govuk-hint">Tell us:</span>
+                <div class="govuk-hint">
+                    <ul>
+                        <li>how much has been spent and where it has been used</li>
+                        <li>if there are any risks and how you plan to resolve them</li>
+                        <li>if you need any support to meet the spending goals set in your project plan</li>
+                    </ul>
+                </div>
                 <textarea  id="{{ form.expenditure.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.expenditure.name }}" rows="5" maxlength="1250">{% if form.expenditure.value %}{{ form.expenditure.value }}{% endif %}</textarea>
             </div>
             <div id="{{ form.expenditure.name }}-info" class="govuk-hint govuk-character-count__message">
