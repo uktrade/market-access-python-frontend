@@ -140,12 +140,8 @@ class PublicBarrierDetail(
             published_deadline = dateutil.parser.parse(
                 self.public_barrier.set_to_allowed_on
             ) + timedelta(days=30)
-            deadline_difference = published_deadline - datetime.now(timezone.utc)
-            # Add day to round up spare hours/mins
-            if deadline_difference.days <= 0:
-                context_data["countdown"] = 0
-            else:
-                context_data["countdown"] = deadline_difference.days
+            diff = published_deadline - datetime.now(timezone.utc)
+            context_data["countdown"] = 0 if diff.days <= 0 else diff.days
         else:
             # Have placeholder countdown value for url matching on HTML
             context_data["countdown"] = 30
