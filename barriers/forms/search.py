@@ -142,7 +142,7 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     public_view = forms.MultipleChoiceField(
-        label="Public view",
+        label="Barrier publication",
         choices=(
             ("unknown", "To be decided"),
             ("allowed", "Allowed to be published"),
