@@ -151,7 +151,7 @@ const reactConfig = {
     entry: path.resolve(__dirname, "core/frontend/src/js/react"),
     output: {
         path: path.resolve(__dirname, "core/frontend/dist/webpack_bundles/"),
-        filename: "react.js",
+        filename: "react_deployed.js",
         libraryTarget: "var",
         library: "ReactApp",
     },
