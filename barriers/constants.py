@@ -288,6 +288,7 @@ DEPRECATED_TAGS = (
     "COVID-19",
     "Brexit",
     "NI Protocol",
+    "Programme Fund"
 )
 
 EXPORT_TYPES = Choices(

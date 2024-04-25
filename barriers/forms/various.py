@@ -1,5 +1,4 @@
 from django import forms
-from django.utils.safestring import mark_safe
 
 
 class ChooseUpdateTypeForm(forms.Form):
@@ -7,17 +6,11 @@ class ChooseUpdateTypeForm(forms.Form):
         choices=(
             (
                 "top_100_priority",
-                mark_safe(
-                    "<span class='govuk-body'>Barrier progress</span> <span class='govuk-hint'>Monthly updates for"
-                    " PB100 barriers, including any using the Regulator Fund</span>"
-                ),
+                "Barrier Progress",
             ),
             (
                 "programme_fund",
-                mark_safe(
-                    "<span class='govuk-body'>Programme Fund</span> <span class='govuk-hint'>Regular updates on"
-                    " barriers using the Facilitative Regional Funds</span>"
-                ),
+                "Programme Fund",
             ),
         ),
         error_messages={
