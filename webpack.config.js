@@ -139,10 +139,7 @@ const mainConfig = {
         extensions: [".js", ".scss"],
     },
 
-    devtool:
-        process.env.NODE_ENV == "development"
-            ? "eval-source-map"
-            : "source-map",
+    devtool: "eval-source-map",
 };
 
 // React components need special configuration
@@ -178,10 +175,7 @@ const reactConfig = {
             },
         ],
     },
-    devtool:
-        process.env.NODE_ENV == "development"
-            ? "eval-source-map"
-            : "source-map",
+    devtool: "eval-source-map",
 };
 
 module.exports = [mainConfig, reactConfig];
