@@ -20,7 +20,6 @@ class ChooseUpdateTypeForm(forms.Form):
                 ),
             ),
         ),
-        help_text=("a", "b"),
         error_messages={
             "required": "Select barrier progress or Programme Fund",
         },
