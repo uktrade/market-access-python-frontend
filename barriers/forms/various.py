@@ -1,8 +1,6 @@
 from django import forms
 from django.utils.safestring import mark_safe
 
-from utils.forms import fields
-
 
 class ChooseUpdateTypeForm(forms.Form):
     update_type = forms.ChoiceField(
@@ -17,8 +15,8 @@ class ChooseUpdateTypeForm(forms.Form):
             (
                 "programme_fund",
                 mark_safe(
-                    "<span class='govuk-body'>Programme Fund</span> <span class='govuk-hint'>Regular updates on barriers"
-                    " using the Facilitative Regional Funds</span>"
+                    "<span class='govuk-body'>Programme Fund</span> <span class='govuk-hint'>Regular updates on"
+                    " barriers using the Facilitative Regional Funds</span>"
                 ),
             ),
         ),
