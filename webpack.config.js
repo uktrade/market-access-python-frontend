@@ -139,7 +139,7 @@ const mainConfig = {
         extensions: [".js", ".scss"],
     },
 
-    devtool: "eval-source-map",
+    devtool: "source-map",
 };
 
 // React components need special configuration
@@ -175,7 +175,7 @@ const reactConfig = {
             },
         ],
     },
-    devtool: "eval-source-map",
+    devtool: "source-map",
 };
 
 module.exports = [mainConfig, reactConfig];
