@@ -94,7 +94,7 @@ ma.components.AttachmentForm = (function (jessie) {
             var message =
                 data.message ||
                 //"A system error has occured, so the file has not been uploaded. Try again.;
-                $responseCode;
+                responseCode;
             this.showError(message);
         }
     };
