@@ -6,6 +6,7 @@ import dateutil.parser
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.views.generic import FormView
 
 from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNoteForm
@@ -194,45 +195,50 @@ class PublicBarrierDetail(
 
             if action == "submit-for-approval":
                 client.public_barriers.ready_for_approval(id=barrier_id)
-                submitted_for_approval_success_message = f"""
-                    The approver is the person who checks the public title and summary, and gets
+                submitted_for_approval_success_message = """
+                    <span>The approver is the person who checks the public title and summary, and gets
                     clearances. For example, a Grade 6 or 7 in a regional team or a Market Access Coordinator at Post.
                     Once it has been approved the barrier will be sent to the GOV.UK team for final content
-                    checks. It can then be published.
-                    This needs to be done within the next {context_data["countdown"]} days.
-                    For more details see the barrier information and notes on the Barrier publication tab
+                    checks. It can then be published.</span><br><br>
+                    <span>This needs to be done within the next <strong>%d</strong> days.
+                    For more details see the barrier information and notes on the Barrier publication tab.</span>
                     """
                 messages.add_message(
                     self.request,
                     messages.INFO,
-                    submitted_for_approval_success_message,
+                    mark_safe(
+                        (
+                            submitted_for_approval_success_message
+                            % context_data["countdown"]
+                        )
+                    ),
                     extra_tags="This barrier is now awaiting approval",
                 )
             elif action == "remove-for-approval":
                 client.public_barriers.allow_for_publishing_process(id=barrier_id)
                 approval_revoked_success_message = """
-                    The person who approves this barrier has changed the barrier publication status to:
-                    awaiting approval.
-                    For more details see the barrier information and notes on the Barrier publication tab
+                    <span>The person who approves this barrier has changed the barrier publication status to:
+                    <strong>awaiting approval</strong>.</span><br><br>
+                    <span>For more details see the barrier information and notes on the Barrier publication tab</span>
                     """
                 messages.add_message(
                     self.request,
                     messages.INFO,
-                    approval_revoked_success_message,
+                    mark_safe(approval_revoked_success_message),
                     extra_tags="This barrier is not ready for approval",
                 )
             elif action == "remove-for-publishing":
                 client.public_barriers.ready_for_approval(id=barrier_id)
                 publish_rejection_success_message = """
-                    The GOV.UK content team can not publish the barrier until it is approved again. To do this
-                    the approver will need to complete their checks and submit the barrier for approval.
-                    For more details see the barrier information and notes the publisher has added on the
-                    Barrier publication tab.
+                    <span>The GOV.UK content team can not publish the barrier until it is approved again. To do this
+                    the approver will need to complete their checks and submit the barrier for approval.</span><br><br>
+                    <span>For more details see the barrier information and notes the publisher has added on the
+                    Barrier publication tab.</span>
                     """
                 messages.add_message(
                     self.request,
                     messages.INFO,
-                    publish_rejection_success_message,
+                    mark_safe(publish_rejection_success_message),
                     extra_tags="This barrier needs to be approved again",
                 )
             elif action == "delete-note":
@@ -256,18 +262,18 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/public_barriers/eligibility.html"
     form_class = PublicEligibilityForm
     success_message_eligible = """
-        But it cannot be approved until a public title and summary are added.
-        It will then be reviewed by the approver who checks the public title and summary, and gets
+        <span>But it cannot be approved until a public title and summary are added.</span><br><br>
+        <span>It will then be reviewed by the approver who checks the public title and summary, and gets
         clearances. The GOV.UK can then review the content and publish it.
-        This needs to be done within the next %d days.
-        Add the public title and summary on the Barrier publication tab.
+        This needs to be done within the next <strong>%d</strong> days.</span><br><br>
+        <span>Add the public title and summary on the Barrier publication tab.</span>
         """
     success_message_not_eligible = """
-        To start the approval process to decide if this barrier can be made public on GOV.UK, first
-        update the barrier publication status to 'allowed' and add the public title and summary.
-        It will then be reviewed by the approver who checks the public title and summary, and gets
-        clearances. The GOV.UK can then review the content and publish it.
-        For more details see the barrier information the Barrier publication tab.
+        <span>To start the approval process to decide if this barrier can be made public on GOV.UK, first
+        update the barrier publication status to <strong>allowed</strong> and add the public title and summary.
+        </span><br><br><span>It will then be reviewed by the approver who checks the public title and summary,
+        and gets clearances. The GOV.UK can then review the content and publish it.</span><br><br>
+        <span>For more details see the barrier information the Barrier publication tab.</span>
         """
 
     def get_initial(self):
@@ -294,14 +300,14 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
             messages.add_message(
                 self.request,
                 messages.INFO,
-                (self.success_message_eligible % self.kwargs["countdown"]),
+                mark_safe((self.success_message_eligible % self.kwargs["countdown"])),
                 extra_tags="The barrier publication status has been set to: allowed",
             )
         else:
             messages.add_message(
                 self.request,
                 messages.INFO,
-                self.success_message_not_eligible,
+                mark_safe(self.success_message_not_eligible),
                 extra_tags="The publication status is set to: not allowed",
             )
 
@@ -315,10 +321,10 @@ class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     template_name = "barriers/public_barriers/title.html"
     form_class = PublishTitleForm
     success_message = """
-        But the barrier cannot be approved until there is both a public title and summary.
-        This needs to be done within the next %d days, along with a review from the approver,
-        and the GOV.UK publishing team.
-        Add the public title and summary on the Barrier publication tab.
+        <span>But the barrier cannot be approved until there is both a public title and summary.
+        </span><br><br><span>This needs to be done within the next <strong>%d</strong> days,
+        along with a review from the approver, and the GOV.UK publishing team.</span><br><br>
+        <span>Add the public title and summary on the Barrier publication tab.</span>
         """
 
     def get_initial(self):
@@ -334,7 +340,7 @@ class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         messages.add_message(
             self.request,
             messages.INFO,
-            (self.success_message % self.kwargs["countdown"]),
+            mark_safe((self.success_message % self.kwargs["countdown"])),
             extra_tags="The public title has been added",
         )
         return reverse(
@@ -347,10 +353,10 @@ class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
     template_name = "barriers/public_barriers/summary.html"
     form_class = PublishSummaryForm
     success_message = """
-        But the barrier cannot be approved until there is both a public title and summary.
-        This needs to be done within the next %d days, along with a review from the approver,
-        and the GOV.UK publishing team.
-        Add the public title and summary on the Barrier publication tab.
+        <span>But the barrier cannot be approved until there is both a public title and summary.
+        This needs to be done within the next <strong>%d</strong> days,
+        along with a review from the approver, and the GOV.UK publishing team.</span><br><br>
+        <span>Add the public title and summary on the Barrier publication tab.</span>
         """
 
     def get_initial(self):
@@ -366,7 +372,7 @@ class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         messages.add_message(
             self.request,
             messages.INFO,
-            (self.success_message % self.kwargs["countdown"]),
+            mark_safe((self.success_message % self.kwargs["countdown"])),
             extra_tags="The public summary has been added",
         )
         return reverse(
@@ -381,17 +387,19 @@ class PublicBarrierApprovalConfirmation(
     template_name = "barriers/public_barriers/approval_confirmation.html"
     form_class = ApprovePublicBarrierForm
     success_message = """
-        Only a member of the GOV.UK publishing team can complete the content checks. They will
-        contact the approver if they need more information or context.
-        This needs to be done within the next %d days. The barrier can then be published.
-        This will be updated in the barrier publication status on the Barrier publication tab.
+        <span>Only a member of the GOV.UK publishing team can complete the content checks. They will
+        contact the approver if they need more information or context.</span><br><br>
+        <span>This needs to be done within the next <strong>%d</strong> days.
+        The barrier can then be published.</span><br><br>
+        <span>This will be updated in the barrier publication status on the Barrier publication tab.</span>
         """
     rejection_success_message = """
-        To start the approval process to decide if this barrier can be made public on GOV.UK, first
-        update the barrier publication status to 'allowed' and add the public title and summary.
-        It will then be reviewed by the approver who checks the public title and summary, and gets
-        clearances. The GOV.UK can then review the content and publish it.
-        For more details see the barrier information the Barrier publication tab.
+        <span>To start the approval process to decide if this barrier can be made public on GOV.UK, first
+        update the barrier publication status to <strong>allowed</strong> and add the public title
+        and summary.</span><br><br>
+        <span>It will then be reviewed by the approver who checks the public title and summary, and gets
+        clearances. The GOV.UK can then review the content and publish it.</span><br><br>
+        <span>For more details see the barrier information the Barrier publication tab.</span>
         """
 
     def get_success_url(self):
@@ -400,14 +408,14 @@ class PublicBarrierApprovalConfirmation(
             messages.add_message(
                 self.request,
                 messages.INFO,
-                (self.success_message % self.kwargs["countdown"]),
+                mark_safe((self.success_message % self.kwargs["countdown"])),
                 extra_tags="This barrier has been approved and is now with the GOV.UK content team",
             )
         else:
             messages.add_message(
                 self.request,
                 messages.INFO,
-                self.rejection_success_message,
+                mark_safe(self.rejection_success_message),
                 extra_tags="The publication status is set to: not allowed",
             )
         return reverse(
@@ -424,15 +432,17 @@ class PublicBarrierPublishConfirmation(
     template_name = "barriers/public_barriers/publish_confirmation.html"
     form_class = PublishPublicBarrierForm
     success_message = """
-        You can view the barrier on GOV.UK by visiting check international trade barriers.
-        For more details see the barrier information and notes on the Barrier publication tab.
+        <span>You can view the barrier on GOV.UK by visiting
+        <a class="govuk-link" href="https://www.check-international-trade-barriers.service.gov.uk/">
+        Check international trade barriers</a>.</span><br><br>
+        <span>For more details see the barrier information and notes on the Barrier publication tab.</span>
         """
 
     def get_success_url(self):
         messages.add_message(
             self.request,
             messages.INFO,
-            self.success_message,
+            mark_safe(self.success_message),
             extra_tags="This barrier has been published on GOV.UK",
         )
         return reverse(
@@ -447,15 +457,17 @@ class PublicBarrierUnpublishConfirmation(
     template_name = "barriers/public_barriers/unpublish_confirmation.html"
     form_class = UnpublishPublicBarrierForm
     success_message = """
-        It can no longer be viewed on Check international trade barriers.
-        For more details see the barrier information and notes on the Barrier publication tab.
+        <span>It can no longer be viewed on
+        <a class="govuk-link" href="https://www.check-international-trade-barriers.service.gov.uk/">
+        Check international trade barriers</a>.</span><br><br>
+        <span>For more details see the barrier information and notes on the Barrier publication tab.</span>
         """
 
     def get_success_url(self):
         messages.add_message(
             self.request,
             messages.INFO,
-            self.success_message,
+            mark_safe(self.success_message),
             extra_tags="This barrier has been removed from GOV.UK",
         )
         return reverse(
