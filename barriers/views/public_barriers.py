@@ -209,7 +209,7 @@ class PublicBarrierDetail(
                     mark_safe(
                         (
                             submitted_for_approval_success_message
-                            % self.kwargs["countdown"]
+                            % context_data["countdown"]
                         )
                     ),
                     extra_tags="This barrier is now awaiting approval",

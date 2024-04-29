@@ -409,7 +409,7 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:public_barrier_detail",
-                kwargs={"barrier_id": self.barrier["id"], "countdown": 30},
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={"action": "submit-for-approval"},
         )
