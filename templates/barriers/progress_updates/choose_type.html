@@ -25,10 +25,15 @@
             <div class="govuk-radios govuk-radios" data-module="govuk-radios" id="update_type">
               {% for type in form.update_type %}
                 <div class="govuk-radios__item">
-                  {{  type.tag }}
+                  {{ type.tag }}
                   <label class="govuk-label govuk-radios__label" for="{{ type.id_for_label }}">
                     {{ type.choice_label }}
                   </label>
+                  {% if type.tag == "top_100_priority" %}
+                    <span class='govuk-hint'>Monthly updates for PB100 barriers, including any using the Regulator Fund</span>
+                  {% else %}
+                    <span class='govuk-hint'>Regular updates on barriers using the Facilitative Regional Funds</span>
+                  {% endif %}
                 </div>
               {% endfor %}
             </div>

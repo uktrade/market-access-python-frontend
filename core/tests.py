@@ -101,6 +101,19 @@ class MarketAccessTestCase(TestCase):
         }
     )
 
+    class PublicBarrier:
+        title = "Public Title"
+        summary = "Public summary"
+        public_view_status = 20
+        status = 0
+        is_resolved = False
+        internal_is_resolved = False
+        status_date = None
+        internal_status_date = None
+        set_to_allowed_on = "2024-04-23T11:45:44.720000Z"
+
+    public_barrier_mock = PublicBarrier()
+
     public_barrier_activity = [
         HistoryItem(
             {

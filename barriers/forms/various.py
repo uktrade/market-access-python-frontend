@@ -4,8 +4,14 @@ from django import forms
 class ChooseUpdateTypeForm(forms.Form):
     update_type = forms.ChoiceField(
         choices=(
-            ("top_100_priority", "Barrier progress"),
-            ("programme_fund", "Programme Fund"),
+            (
+                "top_100_priority",
+                "Barrier Progress",
+            ),
+            (
+                "programme_fund",
+                "Programme Fund",
+            ),
         ),
         error_messages={
             "required": "Select barrier progress or Programme Fund",

@@ -1,16 +1,15 @@
 import datetime
 
-import pytest
 from playwright.sync_api import expect
 
-from .utils import get_text_content_without_line_separators
+from .utils import clean_full_url, get_text_content_without_line_separators, retry
 
 
-@pytest.mark.order(1)
+@retry()
 def test_change_status_unhappy_path(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
-    page.goto(url)
+    page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Edit status").click()
     page.get_by_role("button", name="Save and return").click()
@@ -22,11 +21,11 @@ def test_change_status_unhappy_path(page, create_test_barrier):
     )
 
 
-@pytest.mark.order(2)
+@retry()
 def test_status_change_happy_path(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
-    page.goto(url)
+    page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Edit status").click()
     page.get_by_label("Open").check()
@@ -39,7 +38,7 @@ def test_status_change_happy_path(page, create_test_barrier):
     page.get_by_role("button", name="Save and return").click()
 
     assert (
-        f"Barrier open on {datetime.datetime.now().strftime('%d %B %Y')}"
+        f"Barrier open on {datetime.datetime.now().strftime('%d %B %Y').lstrip('0')}"
         in get_text_content_without_line_separators(
             page.locator(".barrier-status-details__heading").text_content()
         )
