@@ -1,6 +1,6 @@
 import os
-from .utils import get_base_url
 
+from .utils import get_base_url
 
 NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 60))
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
