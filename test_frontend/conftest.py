@@ -7,37 +7,71 @@ import pytest
 from playwright.sync_api import sync_playwright
 
 BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
-HEADLESS = os.getenv("HEADLESS", "true").lower() == "true"
+HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
+
+
+@pytest.fixture(scope="session")
+def session_data():
+    """Return a dictionary to store session data."""
+    return {
+        "cookies": None,
+        "barrier_id": None,
+    }
 
 
 @pytest.fixture(scope="session")
 def playwright_instance():
+    """Return a Playwright instance."""
     with sync_playwright() as p:
         yield p
 
 
 @pytest.fixture(scope="session")
 def browser(playwright_instance):
-    browser = playwright_instance.chromium.launch(headless=HEADLESS)
+    """Return a browser instance."""
+    if HEADLESS:
+        browser = playwright_instance.chromium.launch(headless=True)
+    else:
+        browser = playwright_instance.chromium.launch(slow_mo=100, headless=HEADLESS)
     yield browser
     browser.close()
 
 
-@pytest.fixture
-def page(browser):
+@pytest.fixture(scope="session")
+def context(browser, session_data):
+    # Create a new browser context
     context = browser.new_context()
-    _page = context.new_page()
-    _page.goto(BASE_URL)
-    yield _page
+
+    # Initially, session_data["cookies"] will be None.
+    # Check if "cookies" key exists and has a value; if not, it means it's the first test run.
+    if session_data.get("cookies") is None:
+        # Since it's the first run, let the browser context initiate and capture the cookies.
+        session_data["cookies"] = context.cookies()
+    else:
+        # If it's not the first run, load the initially captured cookies into the context.
+        context.add_cookies(session_data["cookies"])
+
+    yield context
     context.close()
 
 
-@pytest.fixture
-def create_test_barrier(page):
+@pytest.fixture(scope="session")
+def page(context):
+    # Create a new page in the provided context
+    _page = context.new_page()
+    _page.goto(BASE_URL, wait_until="domcontentloaded")
+    yield _page
+
+
+@pytest.fixture(scope="session")
+def create_test_barrier(page, session_data):
     def _create_test_barrier(title):
 
+        if session_data["barrier_id"]:
+            return f'{BASE_URL}barriers/{session_data["barrier_id"]}/'
+
         random_barrier_id = "".join(
-            random.choice(string.ascii_uppercase) for i in range(5)
+            random.choice(string.ascii_uppercase) for _ in range(5)
         )
         random_barrier_name = f"{title} - {datetime.datetime.now().strftime('%d-%m-%Y')} - {random_barrier_id}"
 
@@ -101,6 +135,7 @@ def create_test_barrier(page):
         page.get_by_label("Which goods, services or").fill("isfdgihisdhfgidsfg")
         page.get_by_role("button", name="Continue").click()
         page.locator("#continue-button").click()
-        return f'{BASE_URL}/barriers/{page.url.split("/")[-3]}/'
+        session_data["barrier_id"] = page.url.split("/")[-3]
+        return f'{BASE_URL}/barriers/{session_data["barrier_id"]}/'
 
     return _create_test_barrier

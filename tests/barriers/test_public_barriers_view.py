@@ -25,7 +25,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     ):
         mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
-        mock_get.return_value = self.barrier
+        mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
@@ -50,7 +50,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     ):
         mock_get_user.return_value = self.approver_user
         mock_user.return_value = self.approver_user
-        mock_get.return_value = self.barrier
+        mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
@@ -72,7 +72,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     ):
         mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
-        mock_get.return_value = self.barrier
+        mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
@@ -101,7 +101,7 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     ):
         mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
-        mock_get.return_value = self.public_barrier
+        mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
         url = reverse(
             "barriers:public_barrier_detail", kwargs={"barrier_id": self.barrier["id"]}
