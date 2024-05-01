@@ -33,6 +33,7 @@ def browser(playwright_instance):
         browser = playwright_instance.chromium.launch(headless=True)
     else:
         browser = playwright_instance.chromium.launch(slow_mo=100, headless=HEADLESS)
+    browser.set_default_timeout(10000)
     yield browser
     browser.close()
 
