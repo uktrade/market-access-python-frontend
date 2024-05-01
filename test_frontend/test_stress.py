@@ -2,7 +2,7 @@ import os
 from .utils import get_base_url
 
 
-NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 20))
+NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 4))
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
 
 
