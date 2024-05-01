@@ -2,7 +2,7 @@ import os
 from .utils import get_base_url
 
 
-NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 20))
+NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 60))
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
 
 
@@ -17,9 +17,6 @@ def test_multiple_users(context):
         # perform a search
         page.get_by_role("textbox", name="Search").fill("test")
         page.get_by_text("Goods", exact=True).click()
-
-        # Wait for the pages to load
-        page.wait_for_timeout(5000)
 
     # Clean up after the test
     for page in pages:

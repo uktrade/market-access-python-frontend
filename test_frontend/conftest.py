@@ -33,7 +33,6 @@ def browser(playwright_instance):
         browser = playwright_instance.chromium.launch(headless=True)
     else:
         browser = playwright_instance.chromium.launch(slow_mo=100, headless=HEADLESS)
-    browser.set_default_timeout(10000)
     yield browser
     browser.close()
 
@@ -61,6 +60,8 @@ def page(context):
     # Create a new page in the provided context
     _page = context.new_page()
     _page.goto(BASE_URL, wait_until="domcontentloaded")
+    # Wait for the page to load
+    _page.wait_for_timeout(10000)
     yield _page
 
 
