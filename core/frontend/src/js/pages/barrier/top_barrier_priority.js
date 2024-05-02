@@ -46,8 +46,7 @@ ma.pages.topBarrierPriority = {
         // Radio buttons for the "Which priority type" question
         const top100RadioInput = document.getElementById("priority_level-1");
         const overseasRadioInput = document.getElementById("priority_level-2");
-        const countryRadioInput = document.getElementById("priority_level-3");
-        const watchlistRadioInput = document.getElementById("priority_level-4");
+        const watchlistRadioInput = document.getElementById("priority_level-3");
 
         // Yes/No radio buttons for the "Is this barrer considered a top priority" question
         const topPriorityConsiderationYesRadio =
@@ -171,9 +170,6 @@ ma.pages.topBarrierPriority = {
             }
         });
         overseasRadioInput.addEventListener("change", function () {
-            lowLevelPriorityClickedEvent();
-        });
-        countryRadioInput.addEventListener("change", function () {
             lowLevelPriorityClickedEvent();
         });
         watchlistRadioInput.addEventListener("change", function () {
