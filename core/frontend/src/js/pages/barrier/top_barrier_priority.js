@@ -1,7 +1,7 @@
 ma.pages.topBarrierPriority = {
     topPriorityVisiblity: function (
         top_priority_status,
-        existing_top_priority_summary
+        existing_top_priority_summary,
     ) {
         // Collect HTML components
         // Section which will ask either for admins to approve a barrier top priority change, or anyone to request a change
@@ -13,34 +13,34 @@ ma.pages.topBarrierPriority = {
 
         // Sections that contains the text box to let users add a summary justifying the top priority change
         const topPrioritySummaryDescriptionContainer = document.getElementById(
-            "priority_summary-container"
+            "priority_summary-container",
         );
         const topPrioritySummaryInputLabel = document.getElementById(
-            "priority-summary-input-label"
+            "priority-summary-input-label",
         );
         const topPriorityRejectionDescriptionContainer =
             document.getElementById("top_priority_rejection_summary-container");
         const topPrioritySummaryDescriptionInput =
             document.getElementById("priority_summary");
         const topPrioritySummaryEditButton = document.getElementById(
-            "edit-priority-summary-button"
+            "edit-priority-summary-button",
         );
         const topPrioritySummaryExistingText = document.getElementById(
-            "priority-summary-existing"
+            "priority-summary-existing",
         );
         const topPrioritySummaryHintText = document.getElementById(
-            "priority-summary-hint"
+            "priority-summary-hint",
         );
         const topPrioritySummaryDates = document.getElementById(
-            "priority-summary-existing-dates"
+            "priority-summary-existing-dates",
         );
 
         // Notice for users regarding the process of top priority approval
         const topPriorityNotice = document.getElementById(
-            "top-priority-request-notice"
+            "top-priority-request-notice",
         );
         const topPriorityWatchlistWarning = document.getElementById(
-            "watchlist-warning-text"
+            "watchlist-warning-text",
         );
 
         // Radio buttons for the "Which priority type" question
@@ -74,7 +74,7 @@ ma.pages.topBarrierPriority = {
             // Get error elements
             const errorBanner = document.getElementById("add-priority-errors");
             const errorText = document.getElementById(
-                "missing-description-error"
+                "missing-description-error",
             );
             // Make error visible
             errorBanner.style = "display: inline-block";
@@ -207,7 +207,7 @@ ma.pages.topBarrierPriority = {
                         topPrioritySummaryDescriptionInput.value =
                             existing_top_priority_summary;
                     }
-                }
+                },
             );
             topPriorityConsiderationNoRadio.addEventListener(
                 "change",
@@ -237,7 +237,7 @@ ma.pages.topBarrierPriority = {
                             "Describe why this should be removed as a top 100 priority barrier";
                         topPrioritySummaryDescriptionInput.value = "";
                     }
-                }
+                },
             );
         }
 
@@ -249,7 +249,7 @@ ma.pages.topBarrierPriority = {
                     showComponent(topPrioritySummaryDescriptionInput);
                     hideComponent(topPrioritySummaryExistingText);
                     showComponent(topPrioritySummaryHintText);
-                }
+                },
             );
         }
 
@@ -276,7 +276,7 @@ ma.pages.topBarrierPriority = {
 
             if (topPriorityRejectionDescriptionContainer != null) {
                 const rejectionValue = document.getElementById(
-                    "top_priority_rejection_summary"
+                    "top_priority_rejection_summary",
                 ).value;
                 if (
                     rejectionValue.length < 1 &&
@@ -288,7 +288,7 @@ ma.pages.topBarrierPriority = {
                     showError();
                     // Add error focus bar to description section
                     topPriorityRejectionDescriptionContainer.classList.add(
-                        "govuk-form-group--error"
+                        "govuk-form-group--error",
                     );
                 }
             }
