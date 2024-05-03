@@ -4,6 +4,9 @@
 target=""
 target_url=""
 is_headless=false # Default is false (not headless)
+is_load_test=false # Default is false (not load test)
+requirements_file="test_frontend/requirements.txt"
+pytest_config_file="test_frontend/pytest.ini"
 
 # Function to parse arguments for flexibility
 parse_args() {
@@ -20,6 +23,10 @@ parse_args() {
                 ;;
             --is-headless)
                 is_headless="true"
+                shift # Remove once we have processed it
+                ;;
+            --is-load-test)
+                is_load_test="true"
                 shift # Remove once we have processed it
                 ;;
             *)
@@ -41,16 +48,28 @@ parse_args "$@"
 # Activate python virtual environment
 source .venv/bin/activate
 
-# Install python dependencies if not already installed
-pip install -r test_frontend/requirements.txt
+# Update requirements file and pytest configuration file if it's a load test
+if [ "$is_load_test" = "true" ]; then
+    requirements_file="test_frontend_load/requirements.txt"
+    pytest_config_file="test_frontend_load/pytest.ini"
+fi
+
+# Install python dependencies from the chosen requirements file
+pip install -r $requirements_file
 
 if [ -z "$target_url" ]; then
     echo "Error: No target URL specified."
     exit 1
 fi
 
-# Run playwright with pytest
-PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" TEST_HEADLESS="$is_headless" pytest -c test_frontend/pytest.ini "test_frontend/$target"
+# Conditionally set configuration and run tests
+if [ "$is_load_test" = "true" ]; then
+    # load testing with Playwright and pytest
+    PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" TEST_HEADLESS="$is_headless" pytest -c $pytest_config_file "test_frontend_load/$target"
+else
+    # Normal end-to-end testing with Playwright and pytest
+    PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" TEST_HEADLESS="$is_headless" pytest -c $pytest_config_file "test_frontend/$target"
+fi
 
 # Deactivate python virtual environment
 deactivate

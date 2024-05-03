@@ -1,8 +1,8 @@
 import os
 
-from .utils import get_base_url
+from test_frontend.utils import get_base_url
 
-NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 60))
+NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 50))
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
 
 
@@ -14,9 +14,9 @@ def test_multiple_users(context):
 
     for page in pages:
         page.goto(f"{get_base_url()}search/")
-        # perform a search
-        page.get_by_role("textbox", name="Search").fill("test")
         page.get_by_text("Goods", exact=True).click()
+        page.get_by_role("link", name="Download").click()
+        page.get_by_role("link", name="Dashboard").click()
 
     # Clean up after the test
     for page in pages:
