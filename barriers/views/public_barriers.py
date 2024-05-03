@@ -214,19 +214,6 @@ class PublicBarrierDetail(
                     ),
                     extra_tags="This barrier is now awaiting approval",
                 )
-            elif action == "remove-for-approval":
-                client.public_barriers.allow_for_publishing_process(id=barrier_id)
-                approval_revoked_success_message = """
-                    <span>The person who approves this barrier has changed the barrier publication status to:
-                    <strong>awaiting approval</strong>.</span><br><br>
-                    <span>For more details see the barrier information and notes on the Barrier publication tab</span>
-                    """
-                messages.add_message(
-                    self.request,
-                    messages.INFO,
-                    mark_safe(approval_revoked_success_message),
-                    extra_tags="This barrier is not ready for approval",
-                )
             elif action == "remove-for-publishing":
                 client.public_barriers.ready_for_approval(id=barrier_id)
                 publish_rejection_success_message = """
@@ -287,10 +274,11 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
         initial = {
             "public_eligibility": public_eligibility,
         }
+
         if public_eligibility == "no":
-            initial["not_allowed_summary"] = self.barrier.public_eligibility_summary
-        else:
-            initial["allowed_summary"] = self.barrier.public_eligibility_summary
+            initial["public_eligibility_summary"] = (
+                self.barrier.public_eligibility_summary
+            )
 
         return initial
 
@@ -426,7 +414,6 @@ class PublicBarrierApprovalConfirmation(
 
 class PublicBarrierPublishConfirmation(
     APIBarrierFormViewMixin,
-    PublicBarrierMixin,
     FormView,
 ):
     template_name = "barriers/public_barriers/publish_confirmation.html"
@@ -451,9 +438,7 @@ class PublicBarrierPublishConfirmation(
         )
 
 
-class PublicBarrierUnpublishConfirmation(
-    APIBarrierFormViewMixin, PublicBarrierMixin, FormView
-):
+class PublicBarrierUnpublishConfirmation(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/public_barriers/unpublish_confirmation.html"
     form_class = UnpublishPublicBarrierForm
     success_message = """
