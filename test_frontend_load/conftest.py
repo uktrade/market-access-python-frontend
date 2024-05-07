@@ -1,4 +1,5 @@
 import os
+
 import pytest
 from playwright.async_api import sync_playwright
 
