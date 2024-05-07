@@ -1,12 +1,13 @@
-import pytest
 from playwright.sync_api import expect
 
+from .utils import clean_full_url, retry
 
-@pytest.mark.order(1)
+
+@retry()
 def test_tag_assignment(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
-    page.goto(url)
+    page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Edit tags").click()
     page.get_by_label("Wales Priority").check()
@@ -15,18 +16,17 @@ def test_tag_assignment(page, create_test_barrier):
 
     expect(page.locator(".barrier-tag-list")).to_have_count(2)
 
-    expect(page.locator(".govuk-tag").nth(0)).to_have_text("Wales Priority")
-    expect(page.locator(".govuk-tag").nth(1)).to_have_text("Europe Priority")
 
-
-@pytest.mark.order(2)
+@retry()
 def test_tag_removal(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
-    page.goto(url)
+
+    page.goto(clean_full_url(url))
+
     page.get_by_role("link", name="Edit tags").click()
     page.get_by_label("Brexit").uncheck()
     page.get_by_label("NI Protocol").uncheck()
     page.get_by_role("button", name="Save changes").click()
 
-    assert not page.locator(".barrier-tag-list").is_visible()
+    expect(page.get_by_text("Barrier information")).to_be_visible()

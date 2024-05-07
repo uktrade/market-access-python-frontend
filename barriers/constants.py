@@ -78,12 +78,12 @@ UK_COUNTRY_ID = "80756b9a-5d95-e211-a939-e4115bead28a"
 
 PUBLIC_BARRIER_STATUSES = Choices(
     ("0", "UNKNOWN", "To be decided"),
-    ("10", "INELIGIBLE", "Not allowed"),
-    ("20", "ELIGIBLE", "Allowed"),
-    ("30", "READY", "Ready"),
+    ("10", "NOT_ALLOWED", "Not allowed"),
+    ("20", "ALLOWED", "Allowed"),
+    ("70", "APPROVAL_PENDING", "Awaiting approval"),
+    ("30", "PUBLISHING_PENDING", "Awaiting publishing"),
     ("40", "PUBLISHED", "Published"),
     ("50", "UNPUBLISHED", "Unpublished"),
-    ("60", "REVIEW_LATER", "Barriers marked as 'review later'"),
 )
 
 
@@ -284,11 +284,7 @@ TOP_PRIORITY_BARRIER_EDIT_PERMISSION = "set_topprioritybarrier"
 
 # Deprecated tags are tags we do not want future barriers to be able to use,
 # but need to keep for older and archived barriers.
-DEPRECATED_TAGS = (
-    "COVID-19",
-    "Brexit",
-    "NI Protocol",
-)
+DEPRECATED_TAGS = ("COVID-19", "Brexit", "NI Protocol", "Programme Fund")
 
 EXPORT_TYPES = Choices(
     ("goods", "Goods"),

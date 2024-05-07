@@ -142,16 +142,15 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     public_view = forms.MultipleChoiceField(
-        label="Public view",
+        label="Barrier publication",
         choices=(
-            ("not_yet_sifted", "Not yet sifted"),
-            ("eligible", "Allowed to be published"),
-            ("ineligible", "Not allowed to be published"),
-            ("ready", "Ready to publish"),
+            ("unknown", "To be decided"),
+            ("allowed", "Allowed to be published"),
+            ("not_allowed", "Not allowed to be published"),
+            ("awaiting_approval", "Awaiting Approval"),
+            ("ready_for_publishing", "Awaiting Publishing"),
             ("published", "Published"),
-            ("changed", "Barriers changed internally since being made public"),
             ("unpublished", "Unpublished"),
-            ("review_later", "Barriers marked as 'review later'"),
         ),
         required=False,
     )
@@ -303,9 +302,9 @@ class BarrierSearchForm(forms.Form):
         ]
 
     def set_trade_direction_choices(self):
-        self.fields[
-            "trade_direction"
-        ].choices = self.metadata.get_trade_direction_choices()
+        self.fields["trade_direction"].choices = (
+            self.metadata.get_trade_direction_choices()
+        )
 
     def set_sector_choices(self):
         self.fields["sector"].choices = [
@@ -314,9 +313,9 @@ class BarrierSearchForm(forms.Form):
         ]
 
     def set_organisation_choices(self):
-        self.fields[
-            "organisation"
-        ].choices = self.metadata.get_gov_organisation_choices()
+        self.fields["organisation"].choices = (
+            self.metadata.get_gov_organisation_choices()
+        )
 
     def set_category_choices(self):
         choices = [

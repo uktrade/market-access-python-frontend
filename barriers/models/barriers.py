@@ -567,12 +567,16 @@ class PublicBarrier(APIModel):
 
     @property
     def tab_badge(self):
-        if str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
+        if str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.ALLOWED:
             return "Allowed"
-        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.READY:
-            return "Ready"
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.APPROVAL_PENDING:
+            return "Awaiting approval"
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.PUBLISHING_PENDING:
+            return "Awaiting publishing"
         elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.PUBLISHED:
             return "Published"
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.UNPUBLISHED:
+            return "Awaiting re-publishing"
 
     @property
     def reported_on(self):

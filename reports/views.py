@@ -22,6 +22,8 @@ class NewReport(TemplateView):
             "5": "which sectors the barrier affects",
             "6": "which companies the barrier affects",
             "7": "which goods and services or investments the barrier affects",
+            "8": "whether the barrier can be published on GOV.UK",
+            "9": "to provide a title and summary that are suitable for the public to read",
         }
         return context_data
 

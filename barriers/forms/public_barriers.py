@@ -1,140 +1,257 @@
+import logging
+
 from django import forms
 from django.http import QueryDict
 
 from barriers.constants import AWAITING_REVIEW_FROM, PUBLIC_BARRIER_STATUSES
 from utils.api.client import MarketAccessAPIClient
+from utils.forms.fields import TrueFalseBooleanField
 from utils.metadata import Metadata
 
 from .mixins import APIFormMixin
 
+logger = logging.getLogger(__name__)
+
 
 class PublicEligibilityForm(APIFormMixin, forms.Form):
-    public_eligibility = forms.ChoiceField(
-        label="Does this barrier meet the criteria to be made public?",
-        choices=(
-            ("yes", "Allowed, it can be viewed by the public"),
-            ("no", "Not allowed"),
-            ("review_later", "Review later"),
-        ),
-        error_messages={"required": "Enter yes, no or review later"},
-    )
-    allowed_summary = forms.CharField(
-        label="Why is it allowed to be public? (optional)",
-        widget=forms.Textarea,
-        max_length=250,
-        required=False,
-        error_messages={
-            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
-        },
-    )
-    not_allowed_summary = forms.CharField(
-        label="Why is it not allowed to be public?",
-        widget=forms.Textarea,
-        max_length=250,
-        required=False,
-        error_messages={
-            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
-        },
-    )
-    review_later_summary = forms.CharField(
-        label="Why should this barrier be reviewed at a later date?",
-        widget=forms.Textarea,
-        max_length=250,
-        required=False,
-        error_messages={
-            "max_length": "Public eligibility summary should be %(limit_value)d characters or fewer",
-        },
-    )
 
-    def get_summary(self):
-        if self.cleaned_data.get("public_eligibility") == "yes":
-            return self.cleaned_data.get("allowed_summary")
-        elif self.cleaned_data.get("public_eligibility") == "no":
-            return self.cleaned_data.get("not_allowed_summary")
-        elif self.cleaned_data.get("public_eligibility") == "review_later":
-            return self.cleaned_data.get("review_later_summary")
-        return ""
+    public_eligibility = forms.ChoiceField(
+        label="Should this barrier be made public on GOV.UK, once it has been approved?",
+        choices=(
+            ("yes", "Yes, it can be published once approved"),
+            ("no", "No, it cannot be published"),
+        ),
+        required=False,
+    )
+    public_eligibility_summary = forms.CharField(
+        label="Explain why the barrier should not be published",
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea",
+                "rows": 5,
+            },
+        ),
+        required=False,
+        initial="",
+    )
 
     def clean(self):
-        data = self.cleaned_data
-        public_eligibility = data.get("public_eligibility", None)
-        if public_eligibility == "no" and not data.get("not_allowed_summary"):
-            raise forms.ValidationError(
-                "Summary required if public view status is not allowed"
-            )
-        if public_eligibility == "review_later" and not data.get(
-            "review_later_summary"
+        cleaned_data = super().clean()
+
+        # Need to check for required field. Needs to be done here or the key
+        # will be missing for the summary check later in the method.
+        if (
+            "public_eligibility" not in cleaned_data.keys()
+            or cleaned_data["public_eligibility"] == ""
         ):
-            raise forms.ValidationError(
-                "Summary required if public view status is be reviewed later"
-            )
-        return data
+            msg = "Select whether this barrier should be published on GOV.UK, once approved"
+            self.add_error("public_eligibility", msg)
+            return
+
+        # Summary required if barrier cannot be published
+        if (
+            cleaned_data["public_eligibility"] == "no"
+            and cleaned_data["public_eligibility_summary"] == ""
+        ):
+            msg = "Enter a reason for not publishing this barrier"
+            self.add_error("public_eligibility_summary", msg)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        if self.cleaned_data.get("public_eligibility") == "review_later":
-            client.barriers.patch(
+
+        client.barriers.patch(
+            id=self.id,
+            public_eligibility=self.cleaned_data.get("public_eligibility"),
+            public_eligibility_summary=self.cleaned_data.get(
+                "public_eligibility_summary"
+            ),
+        )
+
+        if self.cleaned_data.get("public_eligibility") == "no":
+            # Clear public title and summary of the barrier in case we are changing this
+            # barrier to Not Allowed from previously Allowed
+            client.public_barriers.report_public_barrier_field(
                 id=self.id,
-                public_eligibility_postponed=True,
-                public_eligibility=False,
-                public_eligibility_summary=self.get_summary(),
+                form_name="barrier-public-title",
+                values={"title": ""},
+            )
+            client.public_barriers.report_public_barrier_field(
+                id=self.id,
+                form_name="barrier-public-summary",
+                values={"summary": ""},
             )
         else:
-            client.barriers.patch(
-                id=self.id,
-                public_eligibility=self.cleaned_data.get("public_eligibility") == "yes",
-                public_eligibility_postponed=False,
-                public_eligibility_summary=self.get_summary(),
-            )
+            client.public_barriers.allow_for_publishing_process(id=self.id)
 
 
 class PublishTitleForm(APIFormMixin, forms.Form):
     title = forms.CharField(
-        label="Title",
-        max_length=255,
+        label="Public title",
+        help_text=("Provide a title that is suitable for the public to read."),
+        max_length=150,
         error_messages={
-            "max_length": "Title should be %(limit_value)d characters or fewer",
-            "required": "Enter a title",
+            "max_length": "Title should be %(limit_value)d characters or less",
+            "required": "Enter a public title for this barrier",
         },
-        help_text=(
-            "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
-            "how-prepare-market-access-barrier-report-public-view/' target='_blank'>"
-            "How to write a title for public view"
-            "</a>"
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-input govuk-js-character-count js-character-count",
+                "rows": 10,
+            },
         ),
     )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.public_barriers.patch(
+
+        client.public_barriers.report_public_barrier_field(
             id=self.id,
-            title=self.cleaned_data.get("title"),
+            form_name="barrier-public-title",
+            values={"title": self.cleaned_data.get("title")},
         )
 
 
 class PublishSummaryForm(APIFormMixin, forms.Form):
     summary = forms.CharField(
-        label="Summary",
-        widget=forms.Textarea,
+        label="Public summary",
+        help_text=("Provide a summary that is suitable for the public to read."),
         max_length=1500,
         error_messages={
-            "max_length": "Summary should be %(limit_value)d characters or fewer",
-            "required": "Enter a summary",
+            "max_length": "Summary should be %(limit_value)d characters or less",
+            "required": "Enter a public summary for this barrier",
         },
-        help_text=(
-            "<a href='https://data-services-help.trade.gov.uk/market-access/how-guides/"
-            "how-prepare-market-access-barrier-report-public-view/' target='_blank'>"
-            "How to write a summary for public view"
-            "</a>"
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "rows": 5,
+            },
         ),
     )
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
+
+        client.public_barriers.report_public_barrier_field(
+            id=self.id,
+            form_name="barrier-public-summary",
+            values={"summary": self.cleaned_data.get("summary")},
+        )
+
+
+class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
+    content_clearance = TrueFalseBooleanField(
+        required=True,
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "govuk-checkboxes__input",
+            },
+        ),
+    )
+    external_clearances = TrueFalseBooleanField(
+        required=True,
+        label=("I confirm this barrier has all the necessary clearances needed"),
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "govuk-checkboxes__input",
+            },
+        ),
+    )
+    public_approval_summary = forms.CharField(
+        label="Any additional information to support your decision? (optional)",
+        max_length=500,
+        required=False,
+        error_messages={
+            "max_length": "Summary should be %(limit_value)d characters or less",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "aria-describedby": "id_public_approval_summary-info",
+                "rows": 5,
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if "Send to GOV.UK content team" in self.data["submit_approval"]:
+            if cleaned_data["content_clearance"] is False:
+                msg = "Confirm if the barrier content is approved"
+                self.add_error("content_clearance", msg)
+            if cleaned_data["external_clearances"] is False:
+                msg = "Confirm if the barrier is cleared with relevant parties"
+                self.add_error("external_clearances", msg)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
+        public_approval_summary = self.cleaned_data.get("public_approval_summary")
+        if public_approval_summary != "":
+            client.public_barriers.patch(
+                id=self.id,
+                approvers_summary=public_approval_summary,
+            )
+
+        if "Send to GOV.UK content team" in self.data["submit_approval"]:
+            client.public_barriers.ready_for_publishing(id=self.id)
+        else:
+            # Not allowed button pressed, need to change public eligibility
+            # and clear the public title and summary
+            client.barriers.patch(
+                id=self.id,
+                public_eligibility="no",
+                public_eligibility_summary=public_approval_summary,
+            )
+            client.public_barriers.report_public_barrier_field(
+                id=self.id,
+                form_name="barrier-public-title",
+                values={"title": ""},
+            )
+            client.public_barriers.report_public_barrier_field(
+                id=self.id,
+                form_name="barrier-public-summary",
+                values={"summary": ""},
+            )
+
+
+class PublishPublicBarrierForm(APIFormMixin, forms.Form):
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.public_barriers.publish(id=self.id)
+
+
+class UnpublishPublicBarrierForm(APIFormMixin, forms.Form):
+    public_publisher_summary = forms.CharField(
+        label="Reason for removing the barrier",
+        max_length=500,
+        required=False,
+        error_messages={
+            "max_length": "Summary should be %(limit_value)d characters or less",
+        },
+        widget=forms.Textarea(
+            attrs={
+                "class": "govuk-textarea govuk-js-character-count js-character-count",
+                "rows": 5,
+            },
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if cleaned_data["public_publisher_summary"] == "":
+            msg = "Provide a reason for unpublishing the barrier."
+            self.add_error("public_publisher_summary", msg)
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+
         client.public_barriers.patch(
             id=self.id,
-            summary=self.cleaned_data.get("summary"),
+            publishers_summary=self.cleaned_data.get("public_publisher_summary"),
         )
+
+        client.public_barriers.unpublish(id=self.id)
 
 
 class PublicBarrierSearchForm(forms.Form):
@@ -174,9 +291,9 @@ class PublicBarrierSearchForm(forms.Form):
         self.fields["awaiting_review_from"].choices = AWAITING_REVIEW_FROM
 
     def set_organisation_choices(self):
-        self.fields[
-            "organisation"
-        ].choices = self.metadata.get_gov_organisation_choices()
+        self.fields["organisation"].choices = (
+            self.metadata.get_gov_organisation_choices()
+        )
 
     def set_sector_choices(self):
         self.fields["sector"].choices = self.metadata.get_sector_choices(level=0)
