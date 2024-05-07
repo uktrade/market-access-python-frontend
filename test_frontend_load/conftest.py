@@ -1,6 +1,6 @@
 import os
 import pytest
-from playwright.sync_api import sync_playwright
+from playwright.async_api import sync_playwright
 
 BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
@@ -35,7 +35,7 @@ def browser(playwright_instance):
 
 @pytest.fixture(scope="session")
 def context(browser, session_data):
-    # Create a new browser context
+    """Create a new browser context."""
     context = browser.new_context()
     context.set_default_timeout(0)
 
@@ -54,7 +54,7 @@ def context(browser, session_data):
 
 @pytest.fixture(scope="session")
 def page(context):
-    # Create a new page in the provided context
+    """Create a new page in the provided context."""
     _page = context.new_page()
     _page.goto(BASE_URL, wait_until="domcontentloaded")
     # Wait for the page to load
