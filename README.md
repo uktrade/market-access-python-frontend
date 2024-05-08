@@ -127,7 +127,7 @@ By default the tests DO NOT RUN in headless mode, to activate headless mode the 
 To run headless:
 `make test-end-to-end target_url=http://localhost:9880/ is-headless=true`
 
-#### setup pytest & playwright end to end module 
+#### setup pytest & playwright end to end module
 
 ___module structure___
 
@@ -204,7 +204,7 @@ def page(context):
 # ...
 ```
 
-now we can easily use the page fixture in our tests like you would in 
+now we can easily use the page fixture in our tests like you would in
 playwright examples [here](https://playwright.dev/python/docs/api/class-page)
 
 ```python
