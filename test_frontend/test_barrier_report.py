@@ -41,7 +41,7 @@ def test_add_tag(page, create_test_barrier):
     page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Edit tags").click()
-    page.get_by_label("Programme Fund").check()
+    page.get_by_label("Programme Fund - Facilitative Regional", exact=True).check()
     page.get_by_label("Scoping (Top 100 priority").check()
     page.get_by_role("button", name="Save changes").click()
 
