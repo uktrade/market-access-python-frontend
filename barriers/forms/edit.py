@@ -288,11 +288,6 @@ class ProgrammeFundProgressUpdateForm(
 ):
     milestones_and_deliverables = forms.CharField(
         label="Milestones and deliverables",
-        help_text=(
-            "Tell us whether your milestones and deliverables from your project plan"
-            " are on track or not, any new risks or issues and how you’re managing"
-            " them, and if you need any support."
-        ),
         widget=forms.Textarea,
         error_messages={
             "required": "Enter your milestones and deliverables",
@@ -300,11 +295,6 @@ class ProgrammeFundProgressUpdateForm(
     )
     expenditure = forms.CharField(
         label="Expenditure",
-        help_text=(
-            "Tell us how much money you’ve spent so far, what it was spent on and when,"
-            " whether your spending is on track with your project plan projection and"
-            " whether there’s a risk of over or underspend for this financial year."
-        ),
         widget=forms.Textarea,
         error_messages={"required": "Enter your expenditure"},
     )
