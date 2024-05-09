@@ -137,7 +137,23 @@ def create_test_barrier(page, session_data):
         page.get_by_label("Which goods, services or").click()
         page.get_by_label("Which goods, services or").fill("isfdgihisdhfgidsfg")
         page.get_by_role("button", name="Continue").click()
-        page.locator("#continue-button").click()
+
+        # MAU extra fields
+        page.get_by_label("Yes, it can be published once").check()
+        page.get_by_role("button", name="Continue").click()
+        page.get_by_label("Now").check()
+        page.get_by_role("button", name="Continue").click()
+        page.locator("#id_barrier-public-title-title").fill("Test barrier public")
+        page.locator("summary").click()
+        page.get_by_role("button", name="Continue").click()
+        page.locator("#id_barrier-public-summary-summary").fill("public summary")
+        page.get_by_role("button", name="Continue").click()
+
+        # saveand return to barrier page
+        page.get_by_role("button", name="Continue").click()
+
+        page.wait_for_timeout(5)
+
         session_data["barrier_id"] = page.url.split("/")[-3]
         return f'{BASE_URL}/barriers/{session_data["barrier_id"]}/'
 
