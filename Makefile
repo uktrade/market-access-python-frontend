@@ -47,6 +47,11 @@ is-headless ?= false
 test-end-to-end:
 	./run_e2e_tests.sh target_url=$(target_url) target=$(target) $(if $(filter true,$(is-headless)),--is-headless)
 
+.PHONY: load-test
+is-headless ?= false
+load-test:
+	./run_e2e_tests.sh target_url=$(target_url) target=$(target) $(if $(filter true,$(is-headless)),--is-headless) --is-load-test
+
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
 	docker-compose exec web bash -c "pytest tests --cov-report term"
