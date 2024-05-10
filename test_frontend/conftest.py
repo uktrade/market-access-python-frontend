@@ -16,6 +16,7 @@ def session_data():
     return {
         "cookies": None,
         "barrier_id": None,
+        "barrier_title": "",
     }
 
 
@@ -77,6 +78,8 @@ def create_test_barrier(page, session_data):
             random.choice(string.ascii_uppercase) for _ in range(5)
         )
         random_barrier_name = f"{title} - {datetime.datetime.now().strftime('%d-%m-%Y')} - {random_barrier_id}"
+
+        session_data["barrier_title"] = random_barrier_name
 
         page.get_by_role("link", name="Report a barrier").click()
         page.get_by_role("link", name="Start now").click()
