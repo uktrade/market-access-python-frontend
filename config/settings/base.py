@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+
 import os
 import sys
 from pathlib import Path
 
+import dj_database_url
 import sentry_sdk
 from django_log_formatter_ecs import ECSFormatter
 from environ import Env
@@ -146,9 +148,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db("DATABASE_URL"),
-}
+DATABASES = {"default": dj_database_url.config(env="DATABASE_URL", default="")}
 
 
 # Password validation
