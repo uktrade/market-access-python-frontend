@@ -21,9 +21,9 @@ def test_search_for_a_barrier(page):
 
 
 @retry()
-def test_search_for_a_barrier_with_filters(page, create_test_barrier):
+def test_search_for_a_barrier_with_filters(page, create_test_barrier, session_data):
 
-    title = "test unique search 1"
+    title = session_data["barrier_title"]
     create_test_barrier(title=title)
 
     page.goto(get_search_page())
@@ -36,9 +36,9 @@ def test_search_for_a_barrier_with_filters(page, create_test_barrier):
 
 
 @retry()
-def test_saved_search(page, create_test_barrier):
+def test_saved_search(page, create_test_barrier, session_data):
 
-    title = "test unique search"
+    title = session_data["barrier_title"]
     create_test_barrier(title=title)
 
     page.goto(get_search_page())
