@@ -29,10 +29,10 @@
                   <label class="govuk-label govuk-radios__label" for="{{ type.id_for_label }}">
                     {{ type.choice_label }}
                   </label>
-                  {% if type.tag == "top_100_priority" %}
-                    <span class='govuk-hint'>Monthly updates for PB100 barriers, including any using the Regulator Fund</span>
+                  {% if type.choice_label == "Barrier Progress" %}
+                    <span class='govuk-hint govuk-!-margin-left-3'>Monthly updates for PB100 barriers, including any using the Regulator Fund</span>
                   {% else %}
-                    <span class='govuk-hint'>Regular updates on barriers using the Facilitative Regional Funds</span>
+                    <span class='govuk-hint govuk-!-margin-left-3'>Regular updates on barriers using the Facilitative Regional Funds</span>
                   {% endif %}
                 </div>
               {% endfor %}
