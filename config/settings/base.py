@@ -148,7 +148,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {"default": dj_database_url.config(env="DATABASE_URL", default="")}
+DATABASES = {
+    "default": dj_database_url.config(
+        env="DATABASE_URL", conn_max_age=0, conn_health_checks=True, default=""
+    )
+}
 
 
 # Password validation
