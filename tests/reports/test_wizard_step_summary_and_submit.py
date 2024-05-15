@@ -541,10 +541,12 @@ class SubmitReportTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.ReportsResource.get")
     @patch("utils.api.client.MarketAccessAPIClient.patch")
     @patch("utils.api.resources.ReportsResource.submit")
-    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_title")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_summary")
     def test_submit_full_report(
         self,
-        public_barrier_patch,
+        public_barrier_patch_summary,
+        public_barrier_patch_title,
         report_submit_patch,
         report_update_patch,
         report_get_patch,
@@ -625,20 +627,18 @@ class SubmitReportTestCase(MarketAccessTestCase):
         # Assert the report submit mock was called a single time
         report_submit_patch.assert_called_once()
 
-        public_patch_call_list = public_barrier_patch.call_args_list
+        public_patch_call_list = public_barrier_patch_title.call_args_list
         assert "'title': 'The public title'" in str(public_patch_call_list[0])
-        assert "'summary': 'The public summary'" in str(public_patch_call_list[1])
-
-        # Assert the public barrier was marked as in-progress a single time
-        public_barrier_patch.call_count == 2
+        public_patch_call_list = public_barrier_patch_summary.call_args_list
+        assert "'summary': 'The public summary'" in str(public_patch_call_list[0])
+        public_barrier_patch_title.call_count == 1
+        public_barrier_patch_summary.call_count == 1
 
     @patch("utils.api.resources.ReportsResource.get")
     @patch("utils.api.client.MarketAccessAPIClient.patch")
     @patch("utils.api.resources.ReportsResource.submit")
-    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
     def test_submit_report_ineligible_for_public(
         self,
-        public_barrier_patch,
         report_submit_patch,
         report_update_patch,
         report_get_patch,
@@ -731,16 +731,11 @@ class SubmitReportTestCase(MarketAccessTestCase):
         # Assert the report submit mock was called a single time
         report_submit_patch.assert_called_once()
 
-        # Assert the public barrier was marked as in-progress a single time
-        public_barrier_patch.call_count == 0
-
     @patch("utils.api.resources.ReportsResource.get")
     @patch("utils.api.client.MarketAccessAPIClient.patch")
     @patch("utils.api.resources.ReportsResource.submit")
-    @patch("utils.api.resources.PublicBarriersResource.mark_as_in_progress")
     def test_submit_report_eligible_for_public_later(
         self,
-        public_barrier_patch,
         report_submit_patch,
         report_update_patch,
         report_get_patch,
@@ -829,6 +824,3 @@ class SubmitReportTestCase(MarketAccessTestCase):
 
         # Assert the report submit mock was called a single time
         report_submit_patch.assert_called_once()
-
-        # Assert the public barrier was marked as in-progress a single time
-        public_barrier_patch.call_count == 0
