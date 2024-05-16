@@ -611,13 +611,18 @@ class ReportBarrierWizardView(MetadataMixin, NamedUrlSessionWizardView, FormPrev
 
             # After the report is submitted and becomes a barrier, update the public barrier fields
             # This should only trigger if we have completed public-title and public-summary form pages
-            for barrier_form_name in public_barrier_form_pages:
-                if barrier_form_name in submitted_values.keys():
-                    self.client.public_barriers.report_public_barrier_field(
-                        id=barrier_report.id,
-                        form_name=barrier_form_name,
-                        values=submitted_values[barrier_form_name],
-                    )
+            if (
+                "barrier-public-title" in submitted_values.keys()
+                and "barrier-public-summary" in submitted_values.keys()
+            ):
+                self.client.public_barriers.report_public_barrier_title(
+                    id=barrier_report.id,
+                    values=submitted_values["barrier-public-title"],
+                )
+                self.client.public_barriers.report_public_barrier_summary(
+                    id=barrier_report.id,
+                    values=submitted_values["barrier-public-summary"],
+                )
 
         else:
             # Save progress to the draft barrier in the database
