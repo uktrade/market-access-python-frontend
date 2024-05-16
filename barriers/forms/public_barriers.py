@@ -32,7 +32,6 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
             },
         ),
         required=False,
-        initial="",
     )
 
     def clean(self):
@@ -70,14 +69,12 @@ class PublicEligibilityForm(APIFormMixin, forms.Form):
         if self.cleaned_data.get("public_eligibility") == "no":
             # Clear public title and summary of the barrier in case we are changing this
             # barrier to Not Allowed from previously Allowed
-            client.public_barriers.report_public_barrier_field(
+            client.public_barriers.report_public_barrier_title(
                 id=self.id,
-                form_name="barrier-public-title",
                 values={"title": ""},
             )
-            client.public_barriers.report_public_barrier_field(
+            client.public_barriers.report_public_barrier_summary(
                 id=self.id,
-                form_name="barrier-public-summary",
                 values={"summary": ""},
             )
         else:
@@ -104,9 +101,8 @@ class PublishTitleForm(APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        client.public_barriers.report_public_barrier_field(
+        client.public_barriers.report_public_barrier_title(
             id=self.id,
-            form_name="barrier-public-title",
             values={"title": self.cleaned_data.get("title")},
         )
 
@@ -131,9 +127,8 @@ class PublishSummaryForm(APIFormMixin, forms.Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        client.public_barriers.report_public_barrier_field(
+        client.public_barriers.report_public_barrier_summary(
             id=self.id,
-            form_name="barrier-public-summary",
             values={"summary": self.cleaned_data.get("summary")},
         )
 
@@ -202,14 +197,12 @@ class ApprovePublicBarrierForm(APIFormMixin, forms.Form):
                 public_eligibility="no",
                 public_eligibility_summary=public_approval_summary,
             )
-            client.public_barriers.report_public_barrier_field(
+            client.public_barriers.report_public_barrier_title(
                 id=self.id,
-                form_name="barrier-public-title",
                 values={"title": ""},
             )
-            client.public_barriers.report_public_barrier_field(
+            client.public_barriers.report_public_barrier_summary(
                 id=self.id,
-                form_name="barrier-public-summary",
                 values={"summary": ""},
             )
 

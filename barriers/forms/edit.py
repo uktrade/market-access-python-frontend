@@ -335,10 +335,6 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
         "Barrier can be resolved by officials at Post, with no or limited support needed from policy teams "
         "in London departments. "
     )
-    country_help_text = (
-        "This category is currently under review. We do not recommend assigning "
-        "country priority to new barriers."
-    )
     watchlist_help_text = "Of potential interest but not actively being worked on."
     CHOICES = [
         (
@@ -350,11 +346,6 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             "OVERSEAS",
             "<span class='govuk-body'>Overseas delivery</span> <span"
             f" class='govuk-hint'>{overseas_help_text}</span>",
-        ),
-        (
-            "COUNTRY",
-            "<span class='govuk-body'>Country priority</span> <span"
-            f" class='govuk-hint'>{country_help_text}</span>",
         ),
         (
             "WATCHLIST",

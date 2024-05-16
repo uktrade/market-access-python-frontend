@@ -20,6 +20,9 @@ The docker-compose.yml file provided is meant to be used for running tests and d
     ```
     # Market Access Frontend Client (Python)
     127.0.0.1               market-access.local
+
+    # Mock SSO
+    127.0.0.1               mocksso
     ```
 3. Clone the repository:
     ```shell
