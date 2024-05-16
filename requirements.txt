@@ -1,3 +1,7 @@
+# ======
+# DO NOT EDIT - use pyproject.toml instead!
+# Generated: $(__timestamp)
+# ======
 asgiref==3.8.1 ; python_version >= "3.9" and python_version < "4.0"
 async-timeout==4.0.3 ; python_version >= "3.9" and python_version <= "3.11.2"
 certifi==2023.7.22 ; python_version >= "3.9" and python_version < "4.0"
@@ -45,4 +49,4 @@ urllib3==1.26.18 ; python_version >= "3.9" and python_version < "4.0"
 whitenoise==5.2.0 ; python_version >= "3.9" and python_version < "4"
 wrapt==1.14.1 ; python_version >= "3.9" and python_version < "4"
 zope-event==5.0 ; python_version >= "3.9" and python_version < "4.0"
-zope-interface==6.3 ; python_version >= "3.9" and python_version < "4.0"
+zope-interface==6.4 ; python_version >= "3.9" and python_version < "4.0"
