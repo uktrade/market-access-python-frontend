@@ -84,11 +84,9 @@
         <input id="submit-priority-form" type="submit" value="Save and return" class="govuk-button">
         <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
-
         <!-- Form is hidden until first question is answered -->
     <form id="priority-form" action="" method="POST" class="restrict-width priority-page-hidden">
         {% csrf_token %}
-
             <!-- Priority assignment section -->
         <div id="{{ form.priority_level.name }}" class="govuk-form-group{% if form.priority.errors %} govuk-form-group--error{% endif %}">
             <fieldset class="govuk-fieldset">
