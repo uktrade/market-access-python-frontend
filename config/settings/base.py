@@ -148,7 +148,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {"default": dj_database_url.config(env="DATABASE_URL", default="")}
+DATABASES = {
+    "default": dj_database_url.config(
+        env="DATABASE_URL", conn_max_age=0, conn_health_checks=True, default=""
+    )
+}
 
 
 # Password validation
@@ -338,6 +342,8 @@ GTM_ID = env("GTM_ID", default=None)
 GTM_AUTH = env("GTM_AUTH", default=None)
 GTM_PREVIEW = env("GTM_PREVIEW", default=None)
 
+# Sentry
+SENTRY_BROWSER_TRACES_SAMPLE_RATE = env.float("SENTRY_BROWSER_TRACES_SAMPLE_RATE", 0.0)
 if not DEBUG:
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
@@ -345,6 +351,8 @@ if not DEBUG:
         integrations=[
             DjangoIntegration(),
         ],
+        enable_tracing=env.bool("SENTRY_ENABLE_TRACING", False),
+        traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", 0.0),
     )
 
 # Settings made available in templates
