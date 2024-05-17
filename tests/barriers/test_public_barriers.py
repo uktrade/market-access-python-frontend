@@ -22,7 +22,7 @@ class EditPublicBarrierTitleTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.initial["title"] == self.public_barrier["title"]
 
-    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_title")
     def test_title_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -37,7 +37,7 @@ class EditPublicBarrierTitleTestCase(MarketAccessTestCase):
         assert "title" in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_title")
     @patch("django.contrib.messages.add_message")
     def test_edit_title_calls_api(self, mock_add_message, mock_patch):
         mock_patch.return_value = self.barrier
@@ -50,7 +50,6 @@ class EditPublicBarrierTitleTestCase(MarketAccessTestCase):
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            form_name="barrier-public-title",
             values={"title": "New Title"},
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -73,7 +72,7 @@ class EditPublicBarrierSummaryTestCase(MarketAccessTestCase):
         form = response.context["form"]
         assert form.initial["summary"] == self.public_barrier["summary"]
 
-    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_summary")
     def test_summary_cannot_be_empty(self, mock_patch):
         response = self.client.post(
             reverse(
@@ -88,7 +87,7 @@ class EditPublicBarrierSummaryTestCase(MarketAccessTestCase):
         assert "summary" in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_summary")
     @patch("django.contrib.messages.add_message")
     def test_edit_summary_calls_api(self, mock_add_message, mock_patch):
         mock_patch.return_value = self.barrier
@@ -101,7 +100,6 @@ class EditPublicBarrierSummaryTestCase(MarketAccessTestCase):
         )
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            form_name="barrier-public-summary",
             values={"summary": "New summary"},
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -127,8 +125,26 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
             if self.barrier["public_eligibility"]
             else "no"
         )
+
+    def test_eligibility_has_initial_data_with_summary(self):
+        self.barrier_index = 1
+        self.init_get_barrier_patcher()
+        response = self.client.get(
+            reverse(
+                "barriers:edit_public_eligibility",
+                kwargs={"barrier_id": self._barriers[1]["id"], "countdown": 27},
+            )
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
         assert (
-            form.initial["allowed_summary"]
+            form.initial["public_eligibility"] == "yes"
+            if self.barrier["public_eligibility"]
+            else "no"
+        )
+        assert (
+            form.initial["public_eligibility_summary"]
             == self.barrier["public_eligibility_summary"]
         )
 
@@ -174,10 +190,11 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
         assert expected_message_tag in str(mock_add_message.call_args)
 
     @patch("utils.api.resources.APIResource.patch")
-    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_summary")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_title")
     @patch("django.contrib.messages.add_message")
     def test_edit_eligibility_no_calls_api(
-        self, mock_add_message, mock_report, mock_patch
+        self, mock_add_message, mock_report_title, mock_report_summary, mock_patch
     ):
         mock_patch.return_value = self.barrier
         response = self.client.post(
@@ -193,15 +210,14 @@ class EditPublicBarrierEligibilityTestCase(MarketAccessTestCase):
             public_eligibility_summary="summary",
         )
 
-        assert mock_report.call_count == 2
-        mock_report.assert_any_call(
+        assert mock_report_title.call_count == 1
+        mock_report_title.assert_any_call(
             id=self.barrier["id"],
-            form_name="barrier-public-title",
             values={"title": ""},
         )
-        mock_report.assert_any_call(
+        assert mock_report_summary.call_count == 1
+        mock_report_summary.assert_any_call(
             id=self.barrier["id"],
-            form_name="barrier-public-summary",
             values={"summary": ""},
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -292,10 +308,12 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.PublicBarriersResource.patch")
     @patch("django.contrib.messages.add_message")
     @patch("utils.api.resources.BarriersResource.patch")
-    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_field")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_title")
+    @patch("utils.api.resources.PublicBarriersResource.report_public_barrier_summary")
     def test_reject_confirmation(
         self,
-        mock_report_field,
+        mock_report_summary,
+        mock_report_title,
         mock_barrier_patch,
         mock_add_message,
         mock_patch,
@@ -317,7 +335,8 @@ class ApprovePublicBarrierSummaryTestCase(MarketAccessTestCase):
         assert mock_ready.called is False
         assert mock_patch.called is True
         assert mock_patch.call_count == 1
-        assert mock_report_field.call_count == 2
+        assert mock_report_title.call_count == 1
+        assert mock_report_summary.call_count == 1
         assert mock_barrier_patch.call_count == 1
 
         expected_message_tag = "The publication status is set to: not allowed"
@@ -417,39 +436,6 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
         assert mock_ready_for_approval.called is True
 
         expected_message_tag = "This barrier is now awaiting approval"
-        assert mock_add_message.called is True
-        assert expected_message_tag in str(mock_add_message.call_args)
-
-    @patch("utils.api.resources.PublicBarriersResource.allow_for_publishing_process")
-    @patch("utils.api.resources.UsersResource.get_current")
-    @patch("users.mixins.UserMixin.get_user")
-    @patch("utils.api.client.PublicBarriersResource.get_activity")
-    @patch("utils.api.client.PublicBarriersResource.get_notes")
-    @patch("django.contrib.messages.add_message")
-    def test_remove_for_approval_calls_api(
-        self,
-        mock_add_message,
-        mock_get_notes,
-        mock_get_activity,
-        mock_get_user,
-        mock_user,
-        mock_allow_for_publishing_process,
-    ):
-        mock_get_user.return_value = self.publisher_user
-        mock_user.return_value = self.publisher_user
-        mock_get_notes.return_value = []
-        mock_get_activity.return_value = self.public_barrier_activity
-        response = self.client.post(
-            reverse(
-                "barriers:public_barrier_detail",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"action": "remove-for-approval"},
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        assert mock_allow_for_publishing_process.called is True
-
-        expected_message_tag = "This barrier is not ready for approval"
         assert mock_add_message.called is True
         assert expected_message_tag in str(mock_add_message.call_args)
 

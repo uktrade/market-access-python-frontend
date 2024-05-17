@@ -382,7 +382,9 @@
             }
         ],
         "created_on": "2019-11-14T18:32:34.384000Z",
-        "modified_on": "2020-01-23T09:21:25.371626Z"
+        "modified_on": "2020-01-23T09:21:25.371626Z",
+        "public_eligibility": false,
+        "public_eligibility_summary": "Not Eligible"
     },
     {
         "id": "cf983d1e-4391-409f-8a32-495f8abdbdd1",

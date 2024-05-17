@@ -16,6 +16,7 @@ def session_data():
     return {
         "cookies": None,
         "barrier_id": None,
+        "barrier_title": "",
     }
 
 
@@ -41,6 +42,7 @@ def browser(playwright_instance):
 def context(browser, session_data):
     # Create a new browser context
     context = browser.new_context()
+    context.set_default_timeout(0)
 
     # Initially, session_data["cookies"] will be None.
     # Check if "cookies" key exists and has a value; if not, it means it's the first test run.
@@ -60,6 +62,8 @@ def page(context):
     # Create a new page in the provided context
     _page = context.new_page()
     _page.goto(BASE_URL, wait_until="domcontentloaded")
+    # Wait for the page to load
+    _page.wait_for_timeout(10000)
     yield _page
 
 
@@ -74,6 +78,8 @@ def create_test_barrier(page, session_data):
             random.choice(string.ascii_uppercase) for _ in range(5)
         )
         random_barrier_name = f"{title} - {datetime.datetime.now().strftime('%d-%m-%Y')} - {random_barrier_id}"
+
+        session_data["barrier_title"] = random_barrier_name
 
         page.get_by_role("link", name="Report a barrier").click()
         page.get_by_role("link", name="Start now").click()
@@ -134,7 +140,23 @@ def create_test_barrier(page, session_data):
         page.get_by_label("Which goods, services or").click()
         page.get_by_label("Which goods, services or").fill("isfdgihisdhfgidsfg")
         page.get_by_role("button", name="Continue").click()
-        page.locator("#continue-button").click()
+
+        # MAU extra fields
+        page.get_by_label("Yes, it can be published once").check()
+        page.get_by_role("button", name="Continue").click()
+        page.get_by_label("Now").check()
+        page.get_by_role("button", name="Continue").click()
+        page.locator("#id_barrier-public-title-title").fill("Test barrier public")
+        page.locator("summary").click()
+        page.get_by_role("button", name="Continue").click()
+        page.locator("#id_barrier-public-summary-summary").fill("public summary")
+        page.get_by_role("button", name="Continue").click()
+
+        # saveand return to barrier page
+        page.get_by_role("button", name="Continue").click()
+
+        page.wait_for_timeout(5)
+
         session_data["barrier_id"] = page.url.split("/")[-3]
         return f'{BASE_URL}/barriers/{session_data["barrier_id"]}/'
 

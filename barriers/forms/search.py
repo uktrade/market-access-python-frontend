@@ -68,7 +68,6 @@ class BarrierSearchForm(forms.Form):
             ("REMOVAL_PENDING", "Top 100 removal pending"),
             ("RESOLVED", "Top 100 priority resolved"),
             ("OVERSEAS", "Overseas Delivery"),
-            ("COUNTRY", "Country priority"),
             ("WATCHLIST", "Watch list"),
             ("NONE", "No priority assigned"),
         ),

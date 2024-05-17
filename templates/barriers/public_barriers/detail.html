@@ -61,6 +61,7 @@
                     <h3 class="govuk-notification-banner__heading">
                         {{ message.extra_tags }}
                     </h3>
+                    <br>
                     <p class="govuk-body govuk-!-margin-bottom-0">
                         {{ message }}
                     </p>
@@ -143,10 +144,10 @@
                 <!-- Button control to move public barrier status -->
                 {% if public_barrier.public_view_status == 20 %}
                     {% if public_barrier.title and public_barrier.summary %}
-                    <!-- Button to submit to approver only shown when in Allowed status, and has a title and summary set -->
+                    <!-- Button to submit for review only shown when in Allowed status, and has a title and summary set -->
                         <form action="" method="POST">
                             {% csrf_token %}
-                            <button name="action" value="submit-for-approval" class="govuk-button" tabindex="2">Submit to approver</button>
+                            <button name="action" value="submit-for-approval" class="govuk-button" tabindex="2">Submit for review</button>
                         </form>
                     {% endif %}
                 {% endif %}

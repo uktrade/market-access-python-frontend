@@ -21,10 +21,6 @@ from barriers.views.action_plans import (
     RemoveActionPlanOwner,
     SelectActionPlanOwner,
 )
-from barriers.views.light_touch_reviews import (
-    PublicBarrierLightTouchReviewsEdit,
-    PublicBarrierLightTouchReviewsHMTradeCommissionerApprovalEnabled,
-)
 from barriers.views.mentions import (
     MentionMarkAllAsRead,
     MentionMarkAllAsUnread,
@@ -813,16 +809,6 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/public/public_unpublish/",
         PublicBarrierUnpublishConfirmation.as_view(),
         name="unpublish_public_barrier_confirmation",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/mark_approved",
-        PublicBarrierLightTouchReviewsEdit.as_view(),
-        name="edit_public_barrier_reviews",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/enable_hm_trade_commissioner_approvals",
-        PublicBarrierLightTouchReviewsHMTradeCommissionerApprovalEnabled.as_view(),
-        name="enable_hm_trade_commissioner_approvals",
     ),
     path(
         "barriers/<uuid:barrier_id>/progress_updates/for",

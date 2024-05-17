@@ -117,21 +117,21 @@
                     {% if search_title %}<h2 class="search-title">{{ search_title }}</h2>{% endif %}
                     {% if filters %}
                         <div class="filter-results-header__row">
-                            {% if have_filters_changed %}
-                                <div class="filter-results-header__row-item">
-                                    <p class="filter-results-header__info">You have changed this search but not saved it</p>
-                                </div>
-                            {% endif %}
                             {% if saved_search_updated or saved_search_created %}
                                 <div class="filter-results-header__row-item">
                                     <p class="filter-results-header__info">Your search has been successfully saved</p>
                                 </div>
+                            {% elif have_filters_changed %}
+                                <div class="filter-results-header__row-item">
+                                    <p class="filter-results-header__info">You have changed this search but not saved it</p>
+                                </div>
                             {% endif %}
+
                         </div>
                     {% endif %}
                     <div class="filter-results-header__row">
                         <h2 class="filter-results-title filter-results-header__row-item">
-                            {{ barriers.total_count }}<span class="filter-results-title__caption">barrier{{ barriers.total_count|pluralize }}</span>
+                            {{ barriers.total_count }}<span class="filter-results-title__caption"> barrier{{ barriers.total_count|pluralize }}</span>
                         </h2>
                         <div class="filter-results-header__row-item">
                             {% if saved_search %}

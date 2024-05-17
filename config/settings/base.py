@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+
 import os
 import sys
 from pathlib import Path
@@ -157,7 +158,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 if is_copilot():
     DATABASES = {
         "default": dj_database_url.config(
-            default=database_url_from_env("DATABASE_ENV_VAR_KEY")
+            default=database_url_from_env("DATABASE_ENV_VAR_KEY"),
+            conn_max_age=0,
+            conn_health_checks=True,
         )
     }
 else:
@@ -342,6 +345,8 @@ GTM_ID = env("GTM_ID", default=None)
 GTM_AUTH = env("GTM_AUTH", default=None)
 GTM_PREVIEW = env("GTM_PREVIEW", default=None)
 
+# Sentry
+SENTRY_BROWSER_TRACES_SAMPLE_RATE = env.float("SENTRY_BROWSER_TRACES_SAMPLE_RATE", 0.0)
 if not DEBUG:
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
@@ -350,6 +355,8 @@ if not DEBUG:
         integrations=[
             DjangoIntegration(),
         ],
+        enable_tracing=env.bool("SENTRY_ENABLE_TRACING", False),
+        traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", 0.0),
     )
 
 # Settings made available in templates
