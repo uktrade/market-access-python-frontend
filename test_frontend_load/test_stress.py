@@ -40,33 +40,20 @@ def test_multiple_barriers_add_and_update(context):
         page.goto(get_base_url())
         page.get_by_role("link", name="Report a barrier").click()
         page.get_by_role("link", name="Start now").click()
-        page.get_by_label("Barrier title").click()
         page.get_by_label("Barrier title").fill(random_barrier_name)
-        page.get_by_label("Barrier description").click()
         page.get_by_label("Barrier description").fill("test description")
         page.get_by_role("button", name="Continue").click()
-
-        page.locator("#status-radio-2").check()
         page.locator("#status-radio-3").check()
-        page.locator(
-            "#status-date-group-barrier-status-partially_resolved_date_0"
-        ).click()
         page.locator(
             "#status-date-group-barrier-status-partially_resolved_date_0"
         ).fill("04")
         page.locator(
             "#status-date-group-barrier-status-partially_resolved_date_1"
-        ).click()
-        page.locator(
-            "#status-date-group-barrier-status-partially_resolved_date_1"
         ).fill("2023")
-        page.locator("#id_barrier-status-partially_resolved_description").click()
         page.locator("#id_barrier-status-partially_resolved_description").fill(
             "ifdshgihsdpihgf"
         )
-        page.locator("#status-date-group-barrier-status-start_date_0").click()
         page.locator("#status-date-group-barrier-status-start_date_0").fill("03")
-        page.locator("#status-date-group-barrier-status-start_date_1").click()
         page.locator("#status-date-group-barrier-status-start_date_1").fill("2024")
         page.get_by_role("button", name="Continue").click()
         page.get_by_role("combobox").select_option("TB00016")
@@ -80,13 +67,10 @@ def test_multiple_barriers_add_and_update(context):
         page.locator("#sectors_select").select_option(
             "9738cecc-5f95-e211-a939-e4115bead28a"
         )
-        page.get_by_text("Other sectors (optional) Add").click()
         page.locator("#sectors_select").select_option(
             "9638cecc-5f95-e211-a939-e4115bead28a"
         )
         page.get_by_role("button", name="Continue").click()
-        page.get_by_placeholder("Search Company").click()
-        page.locator("#search-companies-button").click()
         page.get_by_placeholder("Search Company").fill("Test LTD")
         page.get_by_placeholder("Search Company").press("Enter")
         page.get_by_text("TEST LIMITEDCompanies House").click()
@@ -94,7 +78,6 @@ def test_multiple_barriers_add_and_update(context):
         page.get_by_role("button", name="Continue").click()
         page.get_by_label("Goods", exact=True).check()
         page.get_by_label("Services", exact=True).check()
-        page.get_by_label("Which goods, services or").click()
         page.get_by_label("Which goods, services or").fill("isfdgihisdhfgidsfg")
         page.get_by_role("button", name="Continue").click()
 
@@ -109,11 +92,9 @@ def test_multiple_barriers_add_and_update(context):
         page.locator("#id_barrier-public-summary-summary").fill("public summary")
         page.get_by_role("button", name="Continue").click()
 
-        # saveand return to barrier page
+        # save and return to barrier page
         page.get_by_role("button", name="Continue").click()
-
         page.wait_for_timeout(5)
-
         url = f'{BASE_URL}/barriers/{page.url.split("/")[-3]}/'
 
         # update the new barrier
@@ -122,22 +103,15 @@ def test_multiple_barriers_add_and_update(context):
         page.get_by_label("Barrier progress").check()
         page.get_by_role("button", name="Continue").click()
         page.get_by_label("On Track Barrier will be").check()
-        page.get_by_label("Explain why barrier resolution is on track").click()
         page.get_by_label("Explain why barrier resolution is on track").fill(
             "dsghidhfgjhoighdfihjg"
         )
-        page.get_by_label("Month").click()
         page.get_by_label("Month").fill("10")
-        page.get_by_label("Year", exact=True).click()
         page.get_by_label("Year", exact=True).fill("2024")
         page.get_by_role("button", name="Save and continue").click()
-        page.locator("#next_step_item").click()
         page.locator("#next_step_item").fill("odhfgiuhdsoiuhdfg")
-        page.locator("#next_step_owner").click()
         page.locator("#next_step_owner").fill("dhfgudhsug")
-        page.get_by_label("Month").click()
         page.get_by_label("Month").fill("06")
-        page.get_by_label("Year").click()
         page.get_by_label("Year").fill("2024")
         page.get_by_role("button", name="Save").click()
 
