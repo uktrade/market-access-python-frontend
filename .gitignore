@@ -142,3 +142,4 @@ requirements-dev.txt
 webpack-stats.json
 webpack-stats-react.json
 .devcontainer/
+docker-compose.local-template.env
