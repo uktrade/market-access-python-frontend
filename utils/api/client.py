@@ -36,7 +36,8 @@ logger = logging.getLogger(__name__)
 
 class MarketAccessAPIClient:
     def __init__(self, token=None, **kwargs):
-        self.token = token or settings.TRUSTED_USER_TOKEN
+        # self.token = token or settings.TRUSTED_USER_TOKEN
+        self.token = token
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
         self.economic_assessments = EconomicAssessmentResource(self)
