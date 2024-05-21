@@ -3,7 +3,7 @@ import os
 import random
 import string
 
-from test_frontend.utils import get_base_url, clean_full_url
+from test_frontend.utils import clean_full_url, get_base_url
 
 NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 50))
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
