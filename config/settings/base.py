@@ -208,11 +208,20 @@ STATIC_ROOT = ROOT_DIR / "staticfiles"
 STATICFILES_DIRS = [
     str(ROOT_DIR / "core/frontend/dist/"),
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": env.str(
+            "STATICFILES_STORAGE", "whitenoise.storage.CompressedStaticFilesStorage"
+        ),
+    },
+}
+
 
 TRUSTED_USER_TOKEN = "ssobypass"
 
