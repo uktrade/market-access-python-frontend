@@ -204,9 +204,7 @@ STATICFILES_FINDERS = (
 
 STORAGES = {
     "staticfiles": {
-        "BACKEND": env.str(
-            "STATICFILES_STORAGE", "whitenoise.storage.CompressedStaticFilesStorage"
-        ),
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
