@@ -202,7 +202,6 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
-# TRUSTED_USER_TOKEN = "ssobypass"
 
 USER_DATA_CACHE_TIME = 3600
 METADATA_CACHE_TIME = "10600"
