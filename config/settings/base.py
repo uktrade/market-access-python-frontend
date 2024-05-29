@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 
 import dj_database_url
+import requests
 import sentry_sdk
 from dbt_copilot_python.database import database_url_from_env
 from dbt_copilot_python.network import setup_allowed_hosts
@@ -23,7 +24,6 @@ from django_log_formatter_asim import ASIMFormatter
 from django_log_formatter_ecs import ECSFormatter
 from environ import Env
 from sentry_sdk.integrations.django import DjangoIntegration
-import requests
 
 ROOT_DIR = Path(__file__).parents[2]
 
@@ -356,7 +356,7 @@ GTM_PREVIEW = env("GTM_PREVIEW", default=None)
 
 # Sentry
 SENTRY_BROWSER_TRACES_SAMPLE_RATE = env.float("SENTRY_BROWSER_TRACES_SAMPLE_RATE", 0.0)
-SENTRY_DNS = env("SENTRY_DSN", None)
+SENTRY_DNS = env("SENTRY_DSN", default=None)
 
 if SENTRY_DNS:
     sentry_sdk.init(

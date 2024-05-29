@@ -9,7 +9,7 @@ ma.components.AttachmentForm = (function (jessie) {
         fileUpload,
         attachments,
         submitButton,
-        multiDocument = true
+        multiDocument = true,
     ) {
         if (!fileUpload) {
             throw new Error("fileUpload is required");
@@ -44,7 +44,7 @@ ma.components.AttachmentForm = (function (jessie) {
                 this.fileUpload.setProgress(
                     "uploading file... " +
                         Math.floor((e.loaded / e.total) * 100) +
-                        "%"
+                        "%",
                 );
             }
         }
@@ -85,7 +85,7 @@ ma.components.AttachmentForm = (function (jessie) {
                 this.attachments.addItem(item, this.multiDocument);
             } else {
                 this.showError(
-                    "There was an issue uploading the document, try again"
+                    "There was an issue uploading the document, try again",
                 );
             }
         } else if (responseCode === 401) {
@@ -110,7 +110,7 @@ ma.components.AttachmentForm = (function (jessie) {
             xhr2.upload.addEventListener(
                 "progress",
                 bind(this.updateProgress, this),
-                false
+                false,
             );
         }
 
@@ -118,7 +118,7 @@ ma.components.AttachmentForm = (function (jessie) {
         xhr2.addEventListener(
             "abort",
             bind(this.transferCanceled, this),
-            false
+            false,
         );
         xhr2.addEventListener("load", bind(this.loaded, this), false);
 
