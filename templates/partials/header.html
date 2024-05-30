@@ -15,7 +15,7 @@
         {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
             <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
                 <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
-                <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss {% if settings.DJANGO_ENV == 'uat' %} env-banner__dismiss--{{ settings.DJANGO_ENV|upper }}{% endif %}">X</a>
+                <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss {% if settings.DJANGO_ENV == 'uat' %} env-banner__dismiss--{{ settings.DJANGO_ENV }}{% endif %}">X</a>
             </div>
         {% endif %}
 
