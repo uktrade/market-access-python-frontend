@@ -139,7 +139,6 @@ class BarrierEditProgrammeFund(APIBarrierFormViewMixin, FormView):
         for item in self.barrier.programme_fund_progress_updates:
             if item["id"] == str(self.kwargs.get("progress_update_id")):
                 return item
-        
         return {}
 
 
