@@ -307,7 +307,7 @@ class ProgrammeFundProgressUpdateForm(
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        if hasattr(self, "programme_fund_update_id"):
+        if self.programme_fund_update_id:
             client.barriers.patch_programme_fund_progress_update(
                 barrier=self.barrier_id,
                 id=self.programme_fund_update_id,
