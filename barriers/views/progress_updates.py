@@ -113,9 +113,9 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
         return super().form_valid(form)
 
 
-class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/progress_updates/add_barrier_update.html"
-    form_class = ProgressUpdateForm
+class BarrierEditProgrammeFund(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/progress_updates/edit_programme_fund.html"
+    form_class = ProgrammeFundProgressUpdateForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -136,31 +136,11 @@ class BarrierEditProgressUpdate(APIBarrierFormViewMixin, FormView):
         return super().form_valid(form)
 
     def get_initial(self):
-        progress_update = next(
-            (
-                item
-                for item in self.barrier.progress_updates
-                if item["id"] == str(self.kwargs.get("progress_update_id"))
-            ),
-            None,
-        )
-        updates = self.barrier.progress_updates
-        progress_update_id = self.kwargs.get("progress_update_id")
-        if self.barrier.proposed_estimated_resolution_date:
-            proposed_date = self.barrier.proposed_estimated_resolution_date
-        else:
-            proposed_date = self.barrier.estimated_resolution_date
-        if self.barrier.estimated_resolution_date_change_reason:
-            proposed_reason = self.barrier.estimated_resolution_date_change_reason
-        else:
-            proposed_reason = None
-        return {
-            "status": progress_update["status"],
-            "update": progress_update["message"],
-            "next_steps": progress_update["next_steps"],
-            "estimated_resolution_date": proposed_date,
-            "estimated_resolution_date_change_reason": proposed_reason,
-        }
+        for item in self.barrier.programme_fund_progress_updates:
+            if item["id"] == str(self.kwargs.get("progress_update_id")):
+                return item
+        
+        return {}
 
 
 class ProgrammeFundEditProgressUpdate(APIBarrierFormViewMixin, FormView):

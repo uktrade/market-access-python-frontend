@@ -302,7 +302,7 @@ class ProgrammeFundProgressUpdateForm(
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
-        self.progress_update_id = kwargs.get("progress_update_id", None)
+        self.programme_fund_update_id = kwargs.get("progress_update_id", None)
         self.user = kwargs.get("user", None)
 
     def save(self):

@@ -35,7 +35,7 @@ from barriers.views.progress_updates import (
     BarrierAddProgressUpdate,
     BarrierCompleteNextStepItem,
     BarrierEditNextStepItem,
-    BarrierEditProgressUpdate,
+    BarrierEditProgrammeFund,
     BarrierListNextStepsItems,
     BarrierListProgressUpdate,
     ChooseProgressUpdateTypeView,
@@ -265,7 +265,7 @@ urlpatterns = [
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/progress_update/<uuid:progress_update_id>/",
-        BarrierEditProgressUpdate.as_view(),
+        BarrierEditProgrammeFund.as_view(),
         name="edit_progress_update",
     ),
     path(
