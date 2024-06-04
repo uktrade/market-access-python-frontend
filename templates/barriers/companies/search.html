@@ -61,7 +61,7 @@
             <ul class="search-card-list">
                 {% for company in results.items %}
                     <li class="search-card">
-                        <a href="{% url 'barriers:company_detail' barrier.id company.company_number %}" class="search-card__link">
+                        <a href="{% url 'barriers:company_detail' barrier.id company.company_number %}" class="search-card__link" role="button" aria-label="View details for COMPANY NAME">
                             <h3 class="search-card__heading">{{ company.name|highlight:form.query.value }}</h3>
                         {% comment %} {{ company }} {% endcomment %}
                             <dl class="search-card__values">
