@@ -292,7 +292,7 @@ function CompaniesForm(props) {
                                     <a
                                         className="search-card__link"
                                         role="button"
-                                        aria-label="View details for COMPANY NAME"
+                                        aria-label={"View details for " + company.title}
                                         href="details.html"
                                         onClick={(event) =>
                                             displayCompanyDetails(company)
