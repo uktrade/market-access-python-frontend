@@ -293,74 +293,113 @@ function CompaniesForm(props) {
                                 >
                                     <a
                                         className="search-card__link"
-                                        onClick={(event) =>
-                                            displayCompanyDetails(company)
+                                        role="button"
+                                        aria-label={
+                                            "View details for " + company.title
                                         }
+                                        href="#"
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            displayCompanyDetails(company);
+                                        }}
                                     >
-                                        <h3 className="search-card__heading">
+                                        <h3
+                                            className="search-card__heading"
+                                            tabIndex={0}
+                                        >
                                             {company.title}
                                         </h3>
                                         <dl className="search-card__values">
                                             {company.company_number ? (
-                                                <span>
-                                                    <dt className="search-card__values__key">
+                                                <>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Companies House number
                                                     </dt>
-                                                    <dd className="search-card__values__value">
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {company.company_number}
                                                     </dd>
-                                                </span>
+                                                </>
                                             ) : null}
                                             {company.title ? (
-                                                <span>
-                                                    <dt className="search-card__values__key">
+                                                <>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Companies Name
                                                     </dt>
-                                                    <dd className="search-card__values__value">
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {company.title}
                                                     </dd>
-                                                </span>
+                                                </>
                                             ) : null}
                                             {company.date_of_creation ? (
-                                                <span>
-                                                    <dt className="search-card__values__key">
+                                                <>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Incorporated on
                                                     </dt>
-                                                    <dd className="search-card__values__value">
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {
                                                             company.date_of_creation
                                                         }
                                                     </dd>
-                                                </span>
+                                                </>
                                             ) : null}
                                             {company.date_of_cessation ? (
-                                                <span>
-                                                    <dt className="search-card__values__key">
+                                                <>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Terminated on
                                                     </dt>
-                                                    <dd className="search-card__values__value">
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {
                                                             company.date_of_cessation
                                                         }
                                                     </dd>
-                                                </span>
+                                                </>
                                             ) : null}
                                             {company.address_snippet ? (
-                                                <span>
-                                                    <dt className="search-card__values__key">
+                                                <>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Primary address
                                                     </dt>
-                                                    <dd className="search-card__values__value">
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {
                                                             company.address_snippet
                                                         }
                                                     </dd>
-                                                </span>
+                                                </>
                                             ) : null}
                                         </dl>
                                     </a>
