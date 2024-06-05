@@ -19,12 +19,12 @@ function CompaniesForm(props) {
     // Setup identifying the Django hidden input element
     const hiddenDjangoInput = document.getElementById("id_companies-affected");
     const hiddenDjangoInputUnrecognised = document.getElementById(
-        "id_barrier-companies-affected-unrecognised_company"
+        "id_barrier-companies-affected-unrecognised_company",
     );
 
     // Make unrecognised country input hidden for when JS is enabled
     const unrecognisedCompanyDjango = document.getElementById(
-        "barrier-unknown-company-section"
+        "barrier-unknown-company-section",
     );
     unrecognisedCompanyDjango.classList.add("govuk-visually-hidden");
 
@@ -109,7 +109,7 @@ function CompaniesForm(props) {
 
         // Remove list entry of removed company
         const companyListElement = document.getElementById(
-            company.company_number
+            company.company_number,
         );
         companyListElement.remove();
 
@@ -163,7 +163,7 @@ function CompaniesForm(props) {
     const updateContinueActionsDisplay = (action) => {
         // Get section of parent page containing continue/save&exit buttons
         const continueActionsDisplay = document.getElementById(
-            "continue-actions-section"
+            "continue-actions-section",
         );
         // Depending on passed action value, either show or remove section
         if (action == "show") {
@@ -207,7 +207,7 @@ function CompaniesForm(props) {
         var passedAddedCompanies = [];
         if (hiddenDjangoInputUnrecognised.value) {
             passedAddedCompanies = JSON.parse(
-                hiddenDjangoInputUnrecognised.value
+                hiddenDjangoInputUnrecognised.value,
             );
             if (passedAddedCompanies != []) {
                 setAddedCompaniesList(passedAddedCompanies);
@@ -292,24 +292,34 @@ function CompaniesForm(props) {
                                     <a
                                         className="search-card__link"
                                         role="button"
-                                        aria-label={"View details for " + company.title}
+                                        aria-label={
+                                            "View details for " + company.title
+                                        }
                                         href="#"
                                         onClick={(event) => {
-                                                event.preventDefault()
-                                                displayCompanyDetails(company)
-                                            }
-                                        }
+                                            event.preventDefault();
+                                            displayCompanyDetails(company);
+                                        }}
                                     >
-                                        <h3 className="search-card__heading" tabIndex={0}>
+                                        <h3
+                                            className="search-card__heading"
+                                            tabIndex={0}
+                                        >
                                             {company.title}
                                         </h3>
                                         <dl className="search-card__values">
                                             {company.company_number ? (
                                                 <>
-                                                    <dt className="search-card__values__key" tabIndex={0}>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Companies House number
                                                     </dt>
-                                                    <dd className="search-card__values__value" tabIndex={0}>
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {company.company_number}
                                                     </dd>
@@ -317,10 +327,16 @@ function CompaniesForm(props) {
                                             ) : null}
                                             {company.title ? (
                                                 <>
-                                                    <dt className="search-card__values__key" tabIndex={0}>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Companies Name
                                                     </dt>
-                                                    <dd className="search-card__values__value" tabIndex={0}>
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {company.title}
                                                     </dd>
@@ -328,10 +344,16 @@ function CompaniesForm(props) {
                                             ) : null}
                                             {company.date_of_creation ? (
                                                 <>
-                                                    <dt className="search-card__values__key" tabIndex={0}>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Incorporated on
                                                     </dt>
-                                                    <dd className="search-card__values__value" tabIndex={0}>
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {
                                                             company.date_of_creation
@@ -341,10 +363,16 @@ function CompaniesForm(props) {
                                             ) : null}
                                             {company.date_of_cessation ? (
                                                 <>
-                                                    <dt className="search-card__values__key" tabIndex={0}>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Terminated on
                                                     </dt>
-                                                    <dd className="search-card__values__value" tabIndex={0}>
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {
                                                             company.date_of_cessation
@@ -354,10 +382,16 @@ function CompaniesForm(props) {
                                             ) : null}
                                             {company.address_snippet ? (
                                                 <>
-                                                    <dt className="search-card__values__key" tabIndex={0}>
+                                                    <dt
+                                                        className="search-card__values__key"
+                                                        tabIndex={0}
+                                                    >
                                                         Primary address
                                                     </dt>
-                                                    <dd className="search-card__values__value" tabIndex={0}>
+                                                    <dd
+                                                        className="search-card__values__value"
+                                                        tabIndex={0}
+                                                    >
                                                         {" "}
                                                         {
                                                             company.address_snippet
