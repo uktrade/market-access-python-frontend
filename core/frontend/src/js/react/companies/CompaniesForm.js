@@ -249,13 +249,15 @@ function CompaniesForm(props) {
                             placeholder="Search Company"
                             onKeyDown={handleKeyDown}
                         />
-                        <div
+                        <button
                             id="search-companies-button"
                             className="search-form__button govuk-button govuk-!-margin-bottom-0"
                             onClick={searchCompany}
+                            aria-label="Search company"
+                            type="button"
                         >
                             Search
-                        </div>
+                        </button>
                     </div>
                     {selectedCompaniesList.length > 0 ||
                     addedCompaniesList.length > 0 ? (
