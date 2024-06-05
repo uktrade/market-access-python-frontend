@@ -576,13 +576,15 @@ function CompaniesForm(props) {
                                         </span>
                                     </li>
                                 ))}
-                            <div
+                            <button
                                 id="add-another-company-button"
                                 className="govuk-button button--secondary selection-list__add-button"
                                 onClick={addAnotherCompany}
+                                type="button"
+                                aria-label="Add another company"
                             >
                                 Add another company
-                            </div>
+                            </button>
                         </ul>
                     </div>
                 </div>
