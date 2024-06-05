@@ -19,12 +19,12 @@ function CompaniesForm(props) {
     // Setup identifying the Django hidden input element
     const hiddenDjangoInput = document.getElementById("id_companies-affected");
     const hiddenDjangoInputUnrecognised = document.getElementById(
-        "id_barrier-companies-affected-unrecognised_company"
+        "id_barrier-companies-affected-unrecognised_company",
     );
 
     // Make unrecognised country input hidden for when JS is enabled
     const unrecognisedCompanyDjango = document.getElementById(
-        "barrier-unknown-company-section"
+        "barrier-unknown-company-section",
     );
     unrecognisedCompanyDjango.classList.add("govuk-visually-hidden");
 
@@ -109,7 +109,7 @@ function CompaniesForm(props) {
 
         // Remove list entry of removed company
         const companyListElement = document.getElementById(
-            company.company_number
+            company.company_number,
         );
         companyListElement.remove();
 
@@ -163,7 +163,7 @@ function CompaniesForm(props) {
     const updateContinueActionsDisplay = (action) => {
         // Get section of parent page containing continue/save&exit buttons
         const continueActionsDisplay = document.getElementById(
-            "continue-actions-section"
+            "continue-actions-section",
         );
         // Depending on passed action value, either show or remove section
         if (action == "show") {
@@ -207,7 +207,7 @@ function CompaniesForm(props) {
         var passedAddedCompanies = [];
         if (hiddenDjangoInputUnrecognised.value) {
             passedAddedCompanies = JSON.parse(
-                hiddenDjangoInputUnrecognised.value
+                hiddenDjangoInputUnrecognised.value,
             );
             if (passedAddedCompanies != []) {
                 setAddedCompaniesList(passedAddedCompanies);
