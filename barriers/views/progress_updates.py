@@ -114,8 +114,8 @@ class BarrierAddProgrammeFundProgressUpdate(APIBarrierFormViewMixin, FormView):
 
 
 class BarrierEditProgrammeFund(APIBarrierFormViewMixin, FormView):
-    template_name = "barriers/progress_updates/edit_programme_fund.html"
-    form_class = ProgrammeFundProgressUpdateForm
+    template_name = "barriers/progress_updates/add_barrier_update.html"
+    form_class = ProgressUpdateForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
