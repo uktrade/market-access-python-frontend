@@ -80,16 +80,18 @@ ma.pages.report.sectorsWizardStep = function () {
                         sector_entry.appendChild(
                             document.createTextNode(option.text)
                         );
-                        let remove_link = document.createElement("a");
+                        // Add remove link to each sector
+                        let remove_link = document.createElement("button");
                         let remove_link_text =
                             document.createTextNode("remove");
-                        remove_link.setAttribute("href", "#");
+                        remove_link.setAttribute("type", "button");
+                        remove_link.setAttribute("aria-label", `remove ${option.innerHTML}`);
                         remove_link.addEventListener("click", function () {
                             removeItem(option.value);
                         });
                         remove_link.appendChild(remove_link_text);
                         remove_link.classList.add(
-                            "selection-list__list__item__remove-form"
+                            "selection-list__list__item__remove-form__submit"
                         );
                         sector_entry.appendChild(remove_link);
                         display_list.appendChild(sector_entry);

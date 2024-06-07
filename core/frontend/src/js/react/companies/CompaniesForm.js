@@ -546,15 +546,17 @@ function CompaniesForm(props) {
                                         key={company.company_number}
                                     >
                                         <span>{company.title}</span>
-                                        <span
+                                        <button
                                             id="remove-company-button"
                                             className="selection-list__list__item__remove-form__submit"
                                             onClick={(event) =>
                                                 removeCompany(company)
                                             }
+                                            type="button"
+                                            aria-label={`Remove ${company.title}`}
                                         >
                                             remove
-                                        </span>
+                                        </button>
                                     </li>
                                 ))}
                             {addedCompaniesList &&
