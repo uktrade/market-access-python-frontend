@@ -428,7 +428,7 @@ function CompaniesForm(props) {
                     <div id="or-add-text" className="govuk-label--s">
                         Or
                     </div>
-                    <label className="govuk-label govuk-label--s">
+                    <label htmlFor="add-unrecognised-company-input" className="govuk-label govuk-label--s">
                         Add a company
                     </label>
                     <input
