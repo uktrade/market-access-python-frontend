@@ -241,7 +241,7 @@ function CompaniesForm(props) {
                     </label>
                     <span className="govuk-hint">{props.searchHelpText}</span>
                     <div className="search-form__input-group govuk-!-margin-bottom-0">
-                        <label htmlFor="companies-search" className="govuk-visually-hidden">Companies search input</label>
+                        <label htmlFor="companies-search" className="govuk-visually-hidden">Search for a company</label>
                         <input
                             id="companies-search"
                             className="govuk-input search-form__input"
