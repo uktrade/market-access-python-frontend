@@ -8,8 +8,6 @@ TEST_RUNNER = "config.testrunner.PytestTestRunner"
 
 WHITENOISE_AUTOREFRESH = True
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.MD5PasswordHasher",
 ]

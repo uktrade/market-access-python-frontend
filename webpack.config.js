@@ -139,10 +139,7 @@ const mainConfig = {
         extensions: [".js", ".scss"],
     },
 
-    devtool:
-        process.env.NODE_ENV == "development"
-            ? "eval-source-map"
-            : "source-map",
+    devtool: "source-map",
 };
 
 // React components need special configuration
@@ -151,7 +148,7 @@ const reactConfig = {
     entry: path.resolve(__dirname, "core/frontend/src/js/react"),
     output: {
         path: path.resolve(__dirname, "core/frontend/dist/webpack_bundles/"),
-        filename: "react.js",
+        filename: "react_deployed.js",
         libraryTarget: "var",
         library: "ReactApp",
     },
@@ -178,10 +175,7 @@ const reactConfig = {
             },
         ],
     },
-    devtool:
-        process.env.NODE_ENV == "development"
-            ? "eval-source-map"
-            : "source-map",
+    devtool: "source-map",
 };
 
 module.exports = [mainConfig, reactConfig];
