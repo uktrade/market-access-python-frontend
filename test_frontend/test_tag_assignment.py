@@ -25,8 +25,8 @@ def test_tag_removal(page, create_test_barrier):
     page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Edit tags").click()
-    page.get_by_label("Brexit").uncheck()
-    page.get_by_label("NI Protocol").uncheck()
+    page.get_by_label("Wales Priority").uncheck()
+    page.get_by_label("Europe Priority").uncheck()
     page.get_by_role("button", name="Save changes").click()
 
     expect(page.get_by_text("Barrier information")).to_be_visible()
