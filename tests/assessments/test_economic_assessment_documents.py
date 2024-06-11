@@ -1,10 +1,11 @@
 from http import HTTPStatus
 
 import mock
-from core.tests import MarketAccessTestCase
 from django.conf import settings
 from django.urls import reverse
 from mock import patch
+
+from core.tests import MarketAccessTestCase
 from utils.exceptions import FileUploadError, ScanError
 
 

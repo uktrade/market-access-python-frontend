@@ -6,7 +6,7 @@ def format_commodity_code(code):
     code = code.rstrip("0")
     if len(code) % 2:
         code = f"{code}0"
-    code_split = [code[i:i + 2] for i in range(0, len(code), 2)]
+    code_split = [code[i : i + 2] for i in range(0, len(code), 2)]
     if len(code_split) > 2:
         code_split = [code_split[0] + code_split[1]] + code_split[2:]
     return ".".join(code_split)
@@ -16,21 +16,26 @@ class Commodity(APIModel):
     """
     A commodity containing a code and description
     """
+
     def create_barrier_commodity(self, code, location):
         metadata = get_metadata()
         if metadata.is_trading_bloc_code(location):
-            return BarrierCommodity({
+            return BarrierCommodity(
+                {
+                    "commodity": self.data,
+                    "code": code,
+                    "country": None,
+                    "trading_bloc": {"code": location},
+                }
+            )
+        return BarrierCommodity(
+            {
                 "commodity": self.data,
                 "code": code,
-                "country": None,
-                "trading_bloc": {"code": location},
-            })
-        return BarrierCommodity({
-            "commodity": self.data,
-            "code": code,
-            "country": {"id": location},
-            "trading_bloc": None,
-        })
+                "country": {"id": location},
+                "trading_bloc": None,
+            }
+        )
 
     @property
     def code_display(self):
@@ -49,6 +54,7 @@ class BarrierCommodity(APIModel):
     """
     A commodity associated to a barrier containing a specific code and country
     """
+
     _commodity = None
 
     @property
@@ -67,5 +73,5 @@ class BarrierCommodity(APIModel):
             "code_display": self.code_display,
             "country": self.country,
             "trading_bloc": self.trading_bloc,
-            "commodity": self.commodity.to_dict()
+            "commodity": self.commodity.to_dict(),
         }

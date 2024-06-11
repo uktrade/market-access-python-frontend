@@ -1,8 +1,19 @@
-{% for widget in widget.subwidgets %}
-<div class="govuk-date-input__item">
-    <div class="govuk-form-group">
-        <label class="govuk-label govuk-date-input__label" for="status-date-group-{{ widget.name }}">{% cycle 'Month' 'Year' %}</label>
-        <input class="govuk-input govuk-date-input__input govuk-input--width-{% cycle '2' '4' %}" id="status-date-group-{{ widget.name }}" name="{{ widget.name }}" type="number" pattern="[0-9]*" {% if widget.value %}value="{{ widget.value }}"{% endif %}>
-    </div>
+<div class="month_year_widget">
+    {% if widget.date_range_direction %}
+        <p class="govuk-label--s govuk-!-margin-bottom-0 govuk-!-font-size-16">{{ widget.date_range_direction|title }}</p>
+        {% if widget.help_text %}
+            <p class="govuk-hint govuk-!-margin-top-0 govuk-!-font-size-16">{{ widget.help_text }}</p>
+        {% endif %}
+    {% endif %}
+    {% for sub_widget in widget.subwidgets %}
+        <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label"
+                       for="status-date-group-{{ sub_widget.name }}">{% cycle 'Month' 'Year' %}</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-{% cycle '2' '4' %}"
+                       id="status-date-group-{{ sub_widget.name }}" name="{{ sub_widget.name }}" type="number"
+                       pattern="[0-9]*" {% if sub_widget.value %}value="{{ sub_widget.value }}"{% endif %}>
+            </div>
+        </div>
+    {% endfor %}
 </div>
-{% endfor %}

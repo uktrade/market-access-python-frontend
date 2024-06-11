@@ -1,60 +1,341 @@
 .barrier-status-details {
-	border: 2px solid $govuk-light-grey;
-	padding: govuk-em( 15, 16 );
-	margin-bottom: govuk-em( 30, 16 );
+    border: 2px solid $govuk-light-grey;
+    padding: govuk-em(15, 16);
+    margin-bottom: govuk-em(30, 16);
 }
 
 .barrier-status-details__icon {
-	float: left;
-	margin-right: govuk-em( 8, 16 );
+    float: left;
+    margin-right: govuk-em(8, 16);
 }
 
 .barrier-status-details__heading {
-	@include govuk-font( 19, $weight: bold );
-	margin: 0 0 govuk-em( 15, 19 ) 0;
+    @include govuk-font(19, $weight: bold);
+    margin: 0 0 govuk-em(15, 19) 0;
 }
 
 .barrier-status-details__heading__caption {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 .barrier-status-details__sub-heading {
-	@include govuk-font( 16, $weight: bold);
-	margin: 0 0 govuk-em( 5, 16 ) 0;
+    @include govuk-font(16, $weight: bold);
+    margin: 0 0 govuk-em(5, 16) 0;
 }
 
 .barrier-status-details__text {
-	margin: 0;
-	line-height: 1.25;
+    margin: 0;
+    line-height: 1.25;
 }
 
 .barrier-content {
-	max-width: 100%;
-	display: inline-block;
-	@include mq($from: 768px) {
-		width: calc(100% - 435px);
-	}
-	@include mq( $from: 1024px ){
-		width: calc(100% - 535px);
-	}
-	.section-heading {
-		border-bottom: none;
-	}
+    max-width: 100%;
+    display: inline-block;
+
+    @include mq($from: 768px) {
+        width: calc(100% - 435px);
+    }
+
+    @include mq($from: 1024px) {
+        width: calc(100% - 535px);
+    }
+
+    .section-heading {
+        border-bottom: none;
+    }
+
+    .review-progress-checkboxes {
+        h3 {
+            margin-bottom: 0px;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        .checkbox-option {
+            padding: 10px 5px;
+            border-top: 1px solid #ddd;
+        }
+
+        .govuk-checkboxes {
+            margin-top: 15px;
+            margin-bottom: 15px;
+
+            .checkbox-note {
+                font-size: 16px;
+                position: absolute;
+                right: 5px;
+                color: $govuk-red;
+            }
+        }
+
+        .govuk-checkboxes__item {
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: row;
+            align-items: center;
+            position: relative;
+
+            .checkbox-wrapper {
+                position: relative;
+                margin: 4px;
+            }
+
+            .remove {
+                position: absolute;
+                right: 5px;
+            }
+        }
+
+        .add-approval-link {
+            padding: 10px 0px 5px;
+        }
+    }
 }
 
 .interaction-panel {
-	background-color: $govuk-light-grey;
-	padding: govuk-em( 15, 16 );
-	margin-bottom: govuk-em( 30, 16 );
+    background-color: $govuk-light-grey;
+    padding: govuk-em(15, 16);
+    margin-bottom: govuk-em(30, 16);
 }
 
 .event-list__item--unseen {
-	&:before {
-		border: 5px solid $govuk-green;
-		background: $govuk-green;
-	}
+    &:before {
+        border: 5px solid $govuk-green;
+        background: $govuk-green;
+    }
 }
 
 .publish-info {
-	float: right;
+    float: right;
+}
+
+.barrier-progress-update {
+    background: #fbfafa;
+    padding: 0px;
+    padding-top: 2px;
+
+    &__cta {
+        margin: 12px 0px;
+    }
+
+    &__section {
+        margin: 12px;
+        padding: 5px;
+        background: #f3f2f1;
+
+        &__clear {
+            background: #f8f8f8;
+        }
+
+        &__dates {
+            color: #505a5f;
+        }
+
+        &__heading {
+            margin: 0px;
+        }
+
+        &__text {
+            margin: 8px 0px;
+        }
+
+        &__date {
+            font-weight: normal;
+        }
+
+        &__user {
+            font-weight: bold;
+        }
+    }
+
+    &__actions {
+        margin: 12px;
+
+        a {
+            display: block;
+        }
+    }
+}
+
+.barrier-progress-update-dropdown {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.dmas-barrier-progress-tabs {
+    .govuk-tabs__list-item .govuk-body-s {
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .govuk-tabs__panel {
+        padding: 0;
+    }
+
+    .govuk-tabs__list-item {
+        background-color: #fafbfb;
+    }
+}
+
+.barrier-rating {
+    text-align: center;
+    width: 100%;
+    margin: auto;
+    border: 2px solid #f3f2f1;
+    padding-top: 2em;
+
+    input[type="radio"] {
+        position: fixed;
+        top: 0;
+        right: 100%;
+    }
+
+    label {
+        padding: 0.4em;
+        float: left;
+        cursor: pointer;
+    }
+
+    input[type="radio"]:checked~input+label {
+        background: none;
+        color: rgb(11, 12, 12);
+        position: relative;
+        background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='white' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+        background-size: 6rem 4rem;
+        height: 1rem;
+        width: 2.1rem;
+        margin-bottom: 5px;
+
+        @include mq($from: desktop) {
+            background-size: 7rem 5rem;
+            height: 2rem;
+            width: 3rem;
+        }
+    }
+
+    input+label {
+        background: #fff;
+        color: rgb(254, 221, 3);
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='%23fedd03' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+        background-size: 6rem 4rem;
+        height: 1rem;
+        width: 2.1rem;
+        margin-bottom: 5px;
+
+        @include mq($from: desktop) {
+            background-size: 7rem 5rem;
+            height: 2rem;
+            width: 3rem;
+        }
+    }
+
+    input+label:first-of-type {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
+
+    input:checked+label {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+
+    hr {
+        clear: both;
+        border: 0;
+    }
+
+    .rating-box-new {
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 450px;
+        white-space: nowrap;
+
+        @include mq($from: desktop) {
+            width: 500px;
+        }
+    }
+
+    .flex-break {
+        flex-basis: 100%;
+        height: 0;
+    }
+
+    .rating-star-item {
+        flex: 0 1 calc(13% - 8px);
+    }
+
+    .rating-star-label {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+      }
+
+    .rating-star-item-hidden {
+        visibility: hidden;
+        height: 1px;
+        width: 1px;
+        padding: 0;
+    }
+
+    .rating-star-label-hidden {
+        visibility: hidden;
+        height: 1px;
+        width: 1px;
+        padding: 0;
+      }
+
+    #rating1,
+    #rating2,
+    #rating3,
+    #rating4,
+    #rating5 {
+        display: none;
+        white-space: nowrap;
+        width: 350px;
+
+        @include mq($from: desktop) {
+            width: 500px;
+        }
+    }
+
+    input[type="radio"]:checked#one~#rating1 {
+        display: flex;
+        justify-content: center;
+        z-index: 2;
+        margin-left: -10px;
+    }
+
+    input[type="radio"]:checked#two~#rating2 {
+        display: flex;
+        justify-content: center;
+        z-index: 2;
+        margin-left: -10px;
+    }
+
+    input[type="radio"]:checked#three~#rating3 {
+        display: flex;
+        justify-content: center;
+        z-index: 2;
+        margin-left: -10px;
+    }
+
+    input[type="radio"]:checked#four~#rating4 {
+        display: flex;
+        justify-content: center;
+        z-index: 2;
+        margin-left: -10px;
+    }
+
+    input[type="radio"]:checked#five~#rating5 {
+        display: flex;
+        justify-content: center;
+        z-index: 2;
+        margin-left: -10px;
+    }
 }

@@ -1,9 +1,9 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Economic assessment eligibility{% endblock %}
+{% block page_title %}{{ block.super }} - Initial economic assessment{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         new ma.components.ConditionalRadioContent({
             inputContainer: '.economic_assessment_eligibility',
             inputName: 'economic_assessment_eligibility',

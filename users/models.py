@@ -1,12 +1,15 @@
-from .datahub import get_visible_apps
-
 from utils.models import APIModel
+
+from .datahub import get_visible_apps
 
 
 class Group(APIModel):
     @property
     def plural_name(self):
-        return f"{self.name}s"
+        if "Regional Lead" not in self.name:
+            return f"{self.name}s"
+        else:
+            return self.name
 
 
 class User(APIModel):
@@ -47,3 +50,7 @@ class User(APIModel):
             if app["permittedKey"] == "datahub-crm":
                 return True
         return False
+
+    @property
+    def has_approved_digital_trade_email(self):
+        return self.data.get("has_approved_digital_trade_email", False)

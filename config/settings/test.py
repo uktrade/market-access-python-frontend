@@ -1,27 +1,30 @@
 from .base import *  # noqa
 
-DJANGO_ENV = 'test'
+DJANGO_ENV = "test"
 
-SECRET_KEY = 'nothing secret about this one'
+SECRET_KEY = "nothing secret about this one"  # pragma: allowlist secret
 
 TEST_RUNNER = "config.testrunner.PytestTestRunner"
 
-MOCK_METADATA = True
-
 WHITENOISE_AUTOREFRESH = True
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.MD5PasswordHasher',
+    "django.contrib.auth.hashers.MD5PasswordHasher",
 ]
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
 
-# Overrides to be able to run individual tests from PyCharm
-# TEMPLATES[0]["DIRS"].append("/usr/src/app/templates")
-# STATIC_ROOT = "/usr/src/app/static"
+
+HEADLESS = env.bool("HEADLESS", default=True)
+
+BASE_FRONTEND_TESTING_URL = env.str(
+    "BASE_FRONTEND_TESTING_URL", default="http://web:9000"
+)
+if BASE_FRONTEND_TESTING_URL.endswith("/"):
+    BASE_FRONTEND_TESTING_URL = BASE_FRONTEND_TESTING_URL[:-1]

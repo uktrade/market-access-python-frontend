@@ -1,9 +1,9 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Unarchive{% endblock %}
+{% block page_title %}{{ block.super }} - Unarchive barrier{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '.govuk-character-count' );
         }
@@ -20,7 +20,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='You are about to unarchive this barrier' %}
+    {% include 'partials/heading.html' with text='Unarchive barrier' %}
 
     {% form_error_banner form %}
 

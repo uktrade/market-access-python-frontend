@@ -1,12 +1,20 @@
+from barriers.models.history.action_plans import (
+    ActionPlanHistoryItem,
+    ActionPlanMilestoneHistoryItem,
+    ActionPlanTaskHistoryItem,
+)
+
 from .assessments.economic import EconomicAssessmentHistoryItem
 from .assessments.economic_impact import EconomicImpactAssessmentHistoryItem
 from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
 from .assessments.strategic import StrategicAssessmentHistoryItem
-from .barriers import BarrierHistoryItem
+from .barriers import BarrierHistoryItem, ProgressUpdateHistoryItem
 from .notes import NoteHistoryItem
-from .public_barriers import PublicBarrierHistoryItem
+from .programme_funds import ProgrammeFundsHistoryItem
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
+from .public_barriers import PublicBarrierHistoryItem
 from .team_members import TeamMemberHistoryItem
+from .top_priority_summary import BarrierTopPrioritySummaryItem
 from .utils import PolymorphicBase
 from .wto import WTOHistoryItem
 
@@ -31,5 +39,11 @@ class HistoryItem(PolymorphicBase):
         StrategicAssessmentHistoryItem,
         TeamMemberHistoryItem,
         WTOHistoryItem,
+        ActionPlanHistoryItem,
+        ActionPlanMilestoneHistoryItem,
+        ActionPlanTaskHistoryItem,
+        ProgressUpdateHistoryItem,
+        BarrierTopPrioritySummaryItem,
+        ProgrammeFundsHistoryItem,
     )
     class_lookup = {}

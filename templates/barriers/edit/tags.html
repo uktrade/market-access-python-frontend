@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier - Edit tags{% endblock %}
+{% block page_title %}{{ block.super }} - Edit tags{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Tags' %}
+    {% include 'partials/heading.html' with text='Edit tags' %}
     {% form_error_banner form %}
 
     <form method="POST" class="restrict-width">
@@ -22,11 +22,11 @@
 
                 <div class="govuk-checkboxes">
                     {% for value, name, help_text in form.fields.tags.choices %}
-                        <div class="govuk-checkboxes__item">
+                        <div class="govuk-checkboxes__item {% if name in form.deprecated_tags %}hidden-tag{% endif %}">
                             <input class="govuk-checkboxes__input" id="tag-{{ value }}" name="{{ form.tags.name }}" type="checkbox" value="{{ value }}"  {% if value in form.tags.value %}checked="checked"{% endif %}>
                             <label class="govuk-label govuk-checkboxes__label" for="tag-{{ value }}">{{ name }}</label>
                             <span id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                              {{ help_text }}
+                                {{ help_text }}
                             </span>
                         </div>
                     {% endfor %}

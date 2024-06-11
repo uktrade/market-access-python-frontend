@@ -1,0 +1,243 @@
+[
+    {
+        "accounts": {
+            "accounting_reference_date": {
+                "day": "12",
+                "month": "04"
+            },
+            "last_accounts": {
+                "made_up_to": "2009-05-05",
+                "type": {}
+            },
+            "next_due": "2009-05-05",
+            "next_made_up_to": "2009-05-05",
+            "overdue": "True"
+        },
+        "annual_return": {
+            "last_made_up_to": "2009-05-05",
+            "next_due": "2009-05-05",
+            "next_made_up_to": "2009-05-05",
+            "overdue": "True"
+        },
+        "branch_company_details": {
+            "business_activity": "string",
+            "parent_company_name": "string",
+            "parent_company_number": "123456"
+        },
+        "can_file": "False",
+        "company_name": "FULL DETAILS",
+        "company_number": "1234567",
+        "company_status": "Active",
+        "company_status_detail": "still about",
+        "confirmation_statement": {
+            "last_made_up_to": "2009-05-05",
+            "next_due": "2009-05-05",
+            "next_made_up_to": "2009-05-05",
+            "overdue": "True"
+        },
+        "date_of_cessation": "2019-05-05",
+        "date_of_creation": "2001-05-05",
+        "etag": "string",
+        "foreign_company_details": {
+            "accounting_requirement": {
+                "foreign_account_type": "string",
+                "terms_of_account_publication": "string"
+            },
+            "accounts": {
+                "account_period_from:": {
+                    "day": "23",
+                    "month": "10"
+                },
+                "account_period_to": {
+                    "day": "30",
+                    "month": "01"
+                },
+                "must_file_within": {
+                    "months": "2"
+                }
+            },
+            "business_activity": "string",
+            "company_type": "string",
+            "governed_by": "string",
+            "is_a_credit_finance_institution": "False",
+            "originating_registry": {
+                "country": "string",
+                "name": "string"
+            },
+            "registration_number": "string"
+        },
+        "has_been_liquidated": "False",
+        "has_charges": "False",
+        "has_insolvency_history": "False",
+        "is_community_interest_company": "False",
+        "jurisdiction": "string",
+        "last_full_members_list_date": "2009-05-05",
+        "links": {
+            "persons_with_significant_control": "string",
+            "persons_with_significant_control_statements": "string",
+            "registers": "string",
+            "self": "string"
+        },
+        "previous_company_names": [
+            {
+                "ceased_on": "2009-05-05",
+                "effective_from": "2009-05-05",
+                "name": "string"
+            }
+        ],
+        "registered_office_address": {
+            "address_line_1": "string",
+            "address_line_2": "string",
+            "care_of_name": "string",
+            "country": "string",
+            "locality": "string",
+            "po_box": "string",
+            "postal_code": "string",
+            "premises": "string",
+            "region": "string"
+        },
+        "registered_office_is_in_dispute": "False",
+        "service_address": {
+            "address_line_1": "string",
+            "address_line_2": "string",
+            "care_of_name": "string",
+            "country": "string",
+            "locality": "string",
+            "po_box": "string",
+            "postal_code": "string",
+            "region": "string"
+        },
+        "sic_codes": [
+            "string"
+        ],
+        "super_secure_managing_officer_count": "1",
+        "type": "string",
+        "undeliverable_registered_office_address": "False"
+    },
+    {
+        "accounts": {
+            "accounting_reference_date": {
+                "day": "12",
+                "month": "04"
+            },
+            "last_accounts": {
+                "made_up_to": "2009-05-05",
+                "type": {}
+            },
+            "next_due": "2009-05-05",
+            "next_made_up_to": "2009-05-05",
+            "overdue": "True"
+        },
+        "annual_return": {
+            "last_made_up_to": "2009-05-05",
+            "next_due": "2009-05-05",
+            "next_made_up_to": "2009-05-05",
+            "overdue": "True"
+        },
+        "branch_company_details": {
+            "business_activity": "string",
+            "parent_company_name": "string",
+            "parent_company_number": "123456"
+        },
+        "can_file": "False",
+        "company_name": "MISSING FIELD",
+        "company_status": "Active",
+        "company_status_detail": "still about",
+        "confirmation_statement": {
+            "last_made_up_to": "2009-05-05",
+            "next_due": "2009-05-05",
+            "next_made_up_to": "2009-05-05",
+            "overdue": "True"
+        },
+        "date_of_cessation": "2019-05-05",
+        "date_of_creation": "2001-05-05",
+        "etag": "string",
+        "foreign_company_details": {
+            "accounting_requirement": {
+                "foreign_account_type": "string",
+                "terms_of_account_publication": "string"
+            },
+            "accounts": {
+                "account_period_from:": {
+                    "day": "23",
+                    "month": "10"
+                },
+                "account_period_to": {
+                    "day": "30",
+                    "month": "01"
+                },
+                "must_file_within": {
+                    "months": "2"
+                }
+            },
+            "business_activity": "string",
+            "company_type": "string",
+            "governed_by": "string",
+            "is_a_credit_finance_institution": "False",
+            "originating_registry": {
+                "country": "string",
+                "name": "string"
+            },
+            "registration_number": "string"
+        },
+        "has_been_liquidated": "False",
+        "has_charges": "False",
+        "has_insolvency_history": "False",
+        "is_community_interest_company": "False",
+        "jurisdiction": "string",
+        "last_full_members_list_date": "2009-05-05",
+        "links": {
+            "persons_with_significant_control": "string",
+            "persons_with_significant_control_statements": "string",
+            "registers": "string",
+            "self": "string"
+        },
+        "previous_company_names": [
+            {
+                "ceased_on": "2009-05-05",
+                "effective_from": "2009-05-05",
+                "name": "string"
+            }
+        ],
+        "registered_office_address": {
+            "address_line_1": "string",
+            "address_line_2": "string",
+            "care_of_name": "string",
+            "country": "string",
+            "locality": "string",
+            "po_box": "string",
+            "postal_code": "string",
+            "premises": "string",
+            "region": "string"
+        },
+        "registered_office_is_in_dispute": "False",
+        "service_address": {
+            "address_line_1": "string",
+            "address_line_2": "string",
+            "care_of_name": "string",
+            "country": "string",
+            "locality": "string",
+            "po_box": "string",
+            "postal_code": "string",
+            "region": "string"
+        },
+        "sic_codes": [
+            "string"
+        ],
+        "super_secure_managing_officer_count": "1",
+        "type": "string",
+        "undeliverable_registered_office_address": "False"
+    },
+    {
+        "can_file": "False",
+        "company_name": "CRUCIAL DETAILS",
+        "company_number": "1234567",
+        "company_status": "Active",
+        "date_of_creation": "2001-05-05",
+        "jurisdiction": "string",
+        "links": {
+            "self": "string"
+        },
+        "type": "string"
+    }
+]

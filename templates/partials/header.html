@@ -1,7 +1,7 @@
 <header class="datahub-header js-datahub-header{% if fluid is False %} datahub-header--max-width{% endif %}" role="banner" data-module="header">
     <div class="datahub-header__logo-container">
         <div class="datahub-header__logo">
-            <span class="datahub-header__logo__site-name">Department for International Trade</span>
+            <span class="datahub-header__logo__site-name">Department for Business and Trade</span>
             {% if current_user.has_crm_permission %}
                 <a href="{{ settings.DATAHUB_DOMAIN }}" class="datahub-header__logo__link">
                     <span class="datahub-header__logo__text">Data Hub</span>
@@ -11,6 +11,14 @@
             {% endif %}
             <strong class="datahub-header__logo__tag">beta</strong>
         </div>
+
+        {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
+            <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
+                <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
+                <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss {% if settings.DJANGO_ENV == 'uat' %} env-banner__dismiss--{{ settings.DJANGO_ENV }}{% endif %}">X</a>
+            </div>
+        {% endif %}
+
         <ul id="logo-navigation" class="datahub-header__links" aria-label="Header links">
             <li class="datahub-header__links__item">
                 <a class="datahub-header__links__item__text" href="https://data.trade.gov.uk/"> Switch to Data Workspace </a>
@@ -21,13 +29,13 @@
     <div class="datahub-header__navigation-container">
         <nav class="datahub-header__navigation-wrapper" aria-labelledby="navigation">
             <ul id="navigation" class="datahub-header__navigation" aria-label="Top Level Navigation">
-            {% for item in current_user.apps %}
-                <li class="datahub-header__navigation__item">
-                    <a class="datahub-header__navigation__item__link{% if item.activeKey == 'market-access' %} datahub-header__navigation__item__link--active{% endif %}" href="{{ item.href }}">
-                        {{ item.name }}
-                    </a>
-                </li>
-            {% endfor %}
+                {% for item in current_user.apps %}
+                    <li class="datahub-header__navigation__item">
+                        <a class="datahub-header__navigation__item__link{% if item.activeKey == 'market-access' %} datahub-header__navigation__item__link--active{% endif %}" href="{{ item.href }}">
+                            {{ item.name }}
+                        </a>
+                    </li>
+                {% endfor %}
             </ul>
         </nav>
 
@@ -41,6 +49,9 @@
                 </li>
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link{% if page == 'search' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:search' %}">Search</a>
+                </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'public-barriers' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:public_barriers' %}">Find barriers for publishing</a>
                 </li>
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>

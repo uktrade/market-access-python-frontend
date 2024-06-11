@@ -7,6 +7,7 @@ class PaginationMixin:
     """
     Allows views to get pagination data
     """
+
     pagination_limit = settings.API_RESULTS_LIMIT
 
     def get_current_page(self):
@@ -24,15 +25,28 @@ class PaginationMixin:
 
     def get_pagination_data(self, object_list):
         limit = self.get_pagination_limit()
-        total_pages = math.ceil(object_list.total_count / limit)
+        total_count = object_list.total_count
+        total_pages = math.ceil(total_count / limit)
         current_page = self.get_current_page()
+        start_position = ((current_page - 1) * limit) + 1
+        # this used min(), but that crashes the tests because a MagicMock object can't handle the < operator
+        full_page_end = start_position + limit - 1
+        end_position = (
+            full_page_end + total_count - abs(total_count - full_page_end)
+        ) // 2
         pagination_data = {
             "total_pages": total_pages,
             "current_page": current_page,
             "pages": [
-                {"label": i, "url": self.update_querystring(page=i),}
+                {
+                    "label": i,
+                    "url": self.update_querystring(page=i),
+                }
                 for i in range(1, total_pages + 1)
             ],
+            "total_items": total_count,
+            "start_position": start_position,
+            "end_position": end_position,
         }
         if current_page > 1:
             pagination_data["previous"] = self.update_querystring(page=current_page - 1)
@@ -71,7 +85,9 @@ class PaginationMixin:
         start_of_current_block = abs(current_page_num - block_pivot)
         start_of_last_block = last_page["label"] - block_size
         block_start_index = min(
-            start_of_current_block, start_of_last_block, current_page_index,
+            start_of_current_block,
+            start_of_last_block,
+            current_page_index,
         )
 
         truncated_pages = pages[block_start_index:][:block_size]

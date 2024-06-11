@@ -1,16 +1,16 @@
+import dateutil.parser
+
 from barriers.constants import PUBLIC_BARRIER_STATUSES
 from barriers.models.assessments import (
     EconomicAssessment,
+    EconomicImpactAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
 )
 from barriers.models.commodities import BarrierCommodity
 from barriers.models.wto import WTOProfile
-
 from utils.metadata import get_metadata
 from utils.models import APIModel
-
-import dateutil.parser
 
 
 class Barrier(APIModel):
@@ -32,6 +32,30 @@ class Barrier(APIModel):
 
     def __init__(self, data):
         self.data = data
+
+    @property
+    def title(self):
+        return self.data["title"]
+
+    @property
+    def summary(self):
+        return self.data["summary"]
+
+    @property
+    def is_summary_sensitive(self):
+        return self.data["is_summary_sensitive"]
+
+    @property
+    def product(self):
+        return self.data["product"]
+
+    @property
+    def sub_status(self):
+        return self.data["sub_status"]
+
+    @property
+    def source(self):
+        return self.data.get("source")
 
     @property
     def metadata(self):
@@ -56,9 +80,32 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["created_on"])
 
     @property
-    def end_date(self):
-        if self.data.get("end_date"):
-            return dateutil.parser.parse(self.data["end_date"])
+    def estimated_resolution_date(self):
+        if self.data.get("estimated_resolution_date"):
+            return dateutil.parser.parse(self.data["estimated_resolution_date"])
+
+    @property
+    def proposed_estimated_resolution_date(self):
+        if self.data.get("proposed_estimated_resolution_date"):
+            return dateutil.parser.parse(
+                self.data["proposed_estimated_resolution_date"]
+            )
+
+    @property
+    def has_active_estimated_resolution_date_proposal(self):
+        estimated_resolution_date = self.estimated_resolution_date
+        proposed_estimated_resolution_date = self.proposed_estimated_resolution_date
+        if proposed_estimated_resolution_date:
+            if estimated_resolution_date != proposed_estimated_resolution_date:
+                return True
+        return False
+
+    @property
+    def proposed_estimated_resolution_date_created(self):
+        if self.data.get("proposed_estimated_resolution_date_created"):
+            return dateutil.parser.parse(
+                self.data["proposed_estimated_resolution_date_created"]
+            )
 
     @property
     def commodities(self):
@@ -66,6 +113,18 @@ class Barrier(APIModel):
             BarrierCommodity(commodity)
             for commodity in self.data.get("commodities", [])
         ]
+
+    @property
+    def public_eligibility(self):
+        return self.data.get("public_eligibility")
+
+    @property
+    def public_eligibility_postponed(self):
+        return self.data.get("public_eligibility_postponed")
+
+    @property
+    def top_priority_status(self):
+        return self.data.get("top_priority_status")
 
     @property
     def commodities_grouped_by_country(self):
@@ -104,7 +163,7 @@ class Barrier(APIModel):
 
     @property
     def reported_on(self):
-        return self.created_on
+        return dateutil.parser.parse(self.data["reported_on"])
 
     @property
     def archived_economic_assessments(self):
@@ -146,13 +205,10 @@ class Barrier(APIModel):
     @property
     def economic_impact_assessments(self):
         if self._economic_impact_assessments is None:
-            self._economic_impact_assessments = []
-            for economic_assessment in self.economic_assessments:
-                for (
-                    economic_impact_assessment
-                ) in economic_assessment.economic_impact_assessments:
-                    economic_impact_assessment.economic_assessment = economic_assessment
-                    self._economic_impact_assessments.append(economic_impact_assessment)
+            self._economic_impact_assessments = [
+                EconomicImpactAssessment(assessment)
+                for assessment in self.data.get("valuation_assessments", [])
+            ]
         return self._economic_impact_assessments
 
     @property
@@ -214,6 +270,10 @@ class Barrier(APIModel):
         return []
 
     @property
+    def main_sector_name(self):
+        return self.main_sector.get("name", "Unknown")
+
+    @property
     def status(self):
         if self._status is None:
             self.data["status"]["id"] = str(self.data["status"]["id"])
@@ -268,6 +328,67 @@ class Barrier(APIModel):
     def is_hibernated(self):
         return self.status["id"] == "5"
 
+    @property
+    def is_dormant(self):
+        return self.status["id"] == "5"
+
+    @property
+    def is_unknown(self):
+        return self.status["id"] == "7"
+
+    @property
+    def progress_status(self):
+        return self.data.get("progress_status")
+
+    @property
+    def progress_update(self):
+        return self.data.get("progress_update")
+
+    @property
+    def next_steps(self):
+        return self.data.get("next_steps")
+
+    @property
+    def progress_updates(self):
+        return self.data.get("progress_updates")
+
+    @property
+    def latest_top_100_progress_update(self):
+        if self.progress_updates:
+            return self.progress_updates[0]
+        return None
+
+    @property
+    def programme_fund_progress_updates(self):
+        return self.data.get("programme_fund_progress_updates")
+
+    @property
+    def latest_programme_fund_progress_update(self):
+        if self.programme_fund_progress_updates:
+            return self.programme_fund_progress_updates[0]
+        return None
+
+    @property
+    def start_date(self):
+        if self.data.get("start_date") is not None:
+            return dateutil.parser.parse(self.data.get("start_date"))
+
+    @property
+    def export_types(self):
+        return self.data.get("export_types", [])
+
+    @property
+    def export_description(self):
+        return self.data.get("export_description", "")
+
+    @property
+    def main_sector(self):
+        return self.data.get("main_sector", "")
+
+    @property
+    def all_sectors(self):
+        return self.data.get("all_sectors", False)
+
 
 class PublicBarrier(APIModel):
     _country = None
@@ -315,15 +436,11 @@ class PublicBarrier(APIModel):
 
     @property
     def internal_government_organisations(self):
-        return self.data.get("internal_government_organisations")
+        return self.data.get("internal_government_organisations", [])
 
     @property
     def internal_government_organisations_names(self):
-        org_names = []
-        if self.internal_government_organisations:
-            for org in self.internal_government_organisations:
-                org_names.append(org["name"])
-        return org_names
+        return [org["name"] for org in self.internal_government_organisations]
 
     @property
     def is_resolved_text(self):
@@ -370,19 +487,19 @@ class PublicBarrier(APIModel):
 
     @property
     def is_eligible(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.ELIGIBLE)
 
     @property
     def is_published(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.PUBLISHED)
 
     @property
     def is_ready(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.READY
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.READY)
 
     @property
     def is_unpublished(self):
-        return self.public_view_status == PUBLIC_BARRIER_STATUSES.UNPUBLISHED
+        return self.public_view_status == int(PUBLIC_BARRIER_STATUSES.UNPUBLISHED)
 
     @property
     def latest_published_version(self):
@@ -399,10 +516,11 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.UNKNOWN: "To be decided",
             PUBLIC_BARRIER_STATUSES.INELIGIBLE: "Not allowed",
             PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Allowed - yet to be published",
-            PUBLIC_BARRIER_STATUSES.READY: "Allowed - yet to be published",
+            PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "Published",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "Unpublished",
-        }.get(self.public_view_status)
+            PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
+        }.get(str(self.public_view_status))
 
     @property
     def ready_text(self):
@@ -413,7 +531,8 @@ class PublicBarrier(APIModel):
             PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
             PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
             PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
-        }.get(self.public_view_status)
+            PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
+        }.get(str(self.public_view_status))
 
     @property
     def internal_all_sectors(self):
@@ -425,11 +544,14 @@ class PublicBarrier(APIModel):
 
     @property
     def internal_sector_names(self):
+        sectors = [self.internal_main_sector] if self.internal_main_sector else []
         if self.internal_all_sectors:
-            return ["All sectors"]
+            sectors += ["All sectors"]
         if self.internal_sectors:
-            return [sector.get("name", "Unknown") for sector in self.internal_sectors]
-        return []
+            sectors += [
+                sector.get("name", "Unknown") for sector in self.internal_sectors
+            ]
+        return sectors
 
     @property
     def internal_any_sectors_changed(self):
@@ -445,14 +567,25 @@ class PublicBarrier(APIModel):
 
     @property
     def tab_badge(self):
-        if self.public_view_status == PUBLIC_BARRIER_STATUSES.ELIGIBLE:
+        if str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.ALLOWED:
             return "Allowed"
-        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.READY:
-            return "Ready"
-        elif self.public_view_status == PUBLIC_BARRIER_STATUSES.PUBLISHED:
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.APPROVAL_PENDING:
+            return "Awaiting approval"
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.PUBLISHING_PENDING:
+            return "Awaiting publishing"
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.PUBLISHED:
             return "Published"
+        elif str(self.public_view_status) == PUBLIC_BARRIER_STATUSES.UNPUBLISHED:
+            return "Awaiting re-publishing"
 
     @property
     def reported_on(self):
         if self.data.get("reported_on"):
             return dateutil.parser.parse(self.data["reported_on"])
+
+    @property
+    def internal_main_sector(self):
+        main_sector = self.data.get("internal_main_sector")
+        if main_sector:
+            return main_sector.get("name")
+        return None

@@ -3,7 +3,7 @@
 {% block page_title %}{{ block.super }} - {{ title }}{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         new ma.components.ConditionalRadioContent({
             inputContainer: '.{{ form.are_you_sure.name }}',
             inputName: '{{ form.are_you_sure.name }}',

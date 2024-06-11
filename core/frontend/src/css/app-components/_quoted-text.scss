@@ -1,0 +1,19 @@
+.quoted-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px 15px 0px 25px;
+    margin-bottom: 15px;
+
+    width: 630px;
+
+    background: #FFFFFF;
+    box-shadow: inset 10px 0px 0px #B1B4B6;
+
+    &__heading{
+        font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 0px;
+    }
+}

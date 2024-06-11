@@ -1,30 +1,31 @@
 {% extends "barriers/edit/base.html" %}
 
 {% load static %}
+{% load render_bundle from webpack_loader %}
 
 {% block head %}
-{% if not screen_reader_mode %}
-  <script src="{% static 'js/react.js' %}"></script>
-  {{ confirmed_commodities_data|json_script:"confirmed-commodities-data" }}
-  <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-      let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
-      let locations = [
-        {"id": "{{ lookup_form.location.field.choices.0.0 }}", "name": "{{ lookup_form.location.field.choices.0.1 }}"},
-        {"id": "{{ lookup_form.location.field.choices.1.0 }}", "name": "{{ lookup_form.location.field.choices.1.1 }}"},
-      ]
-      ReactApp.renderCommodityForm(
-        confirmedCommodities=confirmedCommodities,
-        locations=locations,
-        label="{{ lookup_form.code.label }}",
-        helpText="{{ lookup_form.code.help_text }}",
-      )
-    })
-  </script>
-{% endif %}
+    {% if not screen_reader_mode %}
+        {% render_bundle 'main' 'js' 'REACT' %}
+        {{ confirmed_commodities_data|json_script:"confirmed-commodities-data" }}
+        <script nonce="{{request.csp_nonce}}">
+            document.addEventListener("DOMContentLoaded", function(event) {
+                let confirmedCommodities = JSON.parse(document.getElementById('confirmed-commodities-data').textContent);
+                let locations = [
+                    {"id": "{{ lookup_form.location.field.choices.0.0 }}", "name": "{{ lookup_form.location.field.choices.0.1 }}"},
+                    {"id": "{{ lookup_form.location.field.choices.1.0 }}", "name": "{{ lookup_form.location.field.choices.1.1 }}"},
+                ]
+                ReactApp.renderCommodityForm(
+                    confirmedCommodities=confirmedCommodities,
+                    locations=locations,
+                    label="{{ lookup_form.code.label }}",
+                    helpText="{{ lookup_form.code.help_text }}",
+                )
+            })
+        </script>
+    {% endif %}
 {% endblock %}
 
-{% block page_title %}{{ block.super }} - Edit HS commodity codes{% endblock %}
+{% block page_title %}{{ block.super }} - Add HS commodity codes{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -33,84 +34,82 @@
 {% block page_content %}
 
     {% if not screen_reader_mode %}
-    <div class="sr-only govuk-visually-hidden">
-        This page contains dynamic content which screen reader users can find difficult to use, for an accessible page
-        please <a href="{% url 'barriers:edit_commodities_sr' barrier.id 'sr' %}">follow this link</a>.
-    </div>
+        <div class="sr-only govuk-visually-hidden">
+            This page contains dynamic content which screen reader users can find difficult to use, for an accessible page
+            please <a href="{% url 'barriers:edit_commodities_sr' barrier.id 'sr' %}">follow this link</a>.
+        </div>
     {% endif %}
 
     {% include 'partials/heading.html' with text='Add HS commodity codes' %}
 
     {% if not screen_reader_mode %}
-    <div id="react-app" class="commodities-form__container">
+        <div id="react-app" class="commodities-form__container">
     {% else %}
-    <div class="commodities-form__container">
+        <div class="commodities-form__container">
     {% endif %}
 
-        {% form_error_banner lookup_form %}
+    {% form_error_banner lookup_form %}
 
-        <form action="" method="GET" class="restrict-width">
-            <div id="{{ lookup_form.code.description }}" class="{% form_group_classes lookup_form.code.errors %}">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ lookup_form.code.label }}</legend>
-                    <span class="govuk-hint">{{ lookup_form.code.help_text }}</span>
+    <form action="" method="GET" class="restrict-width">
+        <div id="{{ lookup_form.code.description }}" class="{% form_group_classes lookup_form.code.errors %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ lookup_form.code.label }}</legend>
+                <span class="govuk-hint">{{ lookup_form.code.help_text }}</span>
 
-                    {% include "partials/forms/radio_input.html" with field=lookup_form.location radio_classes="govuk-radios--inline" classes="govuk-!-margin-top-5" strong=False %}
+                {% include "partials/forms/radio_input.html" with field=lookup_form.location radio_classes="govuk-radios--inline" classes="govuk-!-margin-top-5" strong=False %}
 
-                    {% form_field_error lookup_form.code %}
+                {% form_field_error lookup_form.code %}
 
-                    {% spaceless %}{{ lookup_form.code }}{% endspaceless %}
-                    <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Verify code</button>
-                </fieldset>
-            </div>
-        </form>
+                {% spaceless %}{{ lookup_form.code }}{% endspaceless %}
+                <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Verify code</button>
+            </fieldset>
+        </div>
+    </form>
 
-        <p class="govuk-body">Need help? <a href="https://www.gov.uk/check-duties-customs-exporting" target="_blank">Look up codes</a></p>
+    <p class="govuk-body">Need help? <a href="https://www.gov.uk/trade-tariff" target="_blank">Look up codes</a></p>
 
-        {% if lookup_form.commodity %}
-            <form action="" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="code" value="{{ lookup_form.commodity.code }}" />
-                <input type="hidden" name="location" value="{{ lookup_form.location.value }}" />
-
-                <ul class="commodities-list restrict-width">
-                    <li class="commodities-list__item">
-                        <div class="commodities-list__code">{{ lookup_form.commodity.code_display }}</div>
-                        <div class="commodities-list__description">{{ lookup_form.commodity.commodity.full_description }}</div>
-                        <button name="confirm-commodity" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
-                    </li>
-                </ul>
-            </form>
-        {% endif %}
-
-        {% if confirmed_commodities %}
-            <h3>HS commodity codes to add to this barrier</h3>
-            <form action="" method="POST">
-                {% csrf_token %}
-                <ul class="commodities-list restrict-width">
-                    {% for confirmed_commodity in confirmed_commodities %}
-                        <li class="commodities-list__item">
-                            <div class="commodities-list__code">{{ confirmed_commodity.code_display }}</div>
-                            <div class="commodities-list__description">{{ confirmed_commodity.commodity.full_description }}</div>
-                            <button name="remove-commodity" value="{{ confirmed_commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link" data-module="govuk-button">Remove</button>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </form>
-        {% endif %}
-
-        <span class="govuk-hint govuk-!-margin-bottom-6">Descriptions are only shown for codes up to HS6.</span>
-
+    {% if lookup_form.commodity %}
         <form action="" method="POST">
             {% csrf_token %}
-            {% for confirmed_commodity in confirmed_commodities %}
-                <input type="hidden" name="codes" value="{{ confirmed_commodity.code }}" />
-                <input type="hidden" name="countries" value="{{ confirmed_commodity.country.id }}" />
-                <input type="hidden" name="trading_blocs" value="{{ confirmed_commodity.trading_bloc.code }}" />
-            {% endfor %}
-            <button name="action" value="save" class="govuk-button" data-module="govuk-button">Done</button>
-            <button class="form-cancel govuk-button button-as-link" name="action" value="cancel">Cancel</button>
+            <input type="hidden" name="code" value="{{ lookup_form.commodity.code }}" />
+            <input type="hidden" name="location" value="{{ lookup_form.location.value }}" />
+
+            <ul class="commodities-list restrict-width">
+                <li class="commodities-list__item">
+                    <div class="commodities-list__code">{{ lookup_form.commodity.code_display }}</div>
+                    <div class="commodities-list__description">{{ lookup_form.commodity.commodity.full_description }}</div>
+                    <button name="confirm-commodity" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Confirm</button>
+                </li>
+            </ul>
         </form>
+    {% endif %}
+
+    {% if confirmed_commodities %}
+        <h3>HS commodity codes to add to this barrier</h3>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <ul class="commodities-list restrict-width">
+                {% for confirmed_commodity in confirmed_commodities %}
+                    <li class="commodities-list__item">
+                        <div class="commodities-list__code">{{ confirmed_commodity.code_display }}</div>
+                        <div class="commodities-list__description">{{ confirmed_commodity.commodity.full_description }}</div>
+                        <button type="button" name="remove-commodity" value="{{ confirmed_commodity.code }}" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 button-as-link" data-module="govuk-button" aria-label="Remove commodity">Remove</button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </form>
+    {% endif %}
+
+    <span class="govuk-hint govuk-!-margin-bottom-6">Descriptions are only shown for codes up to HS6.</span>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% for confirmed_commodity in confirmed_commodities %}
+            <input type="hidden" name="codes" value="{{ confirmed_commodity.code }}" />
+            <input type="hidden" name="countries" value="{{ confirmed_commodity.country.id }}" />
+            <input type="hidden" name="trading_blocs" value="{{ confirmed_commodity.trading_bloc.code }}" />
+        {% endfor %}
+    </form>
     </div>
 
 {% endblock %}

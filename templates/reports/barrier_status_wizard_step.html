@@ -1,0 +1,144 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script nonce="{{request.csp_nonce}}">
+        ma.pages.report.statusWizardStep();
+    </script>
+{% endblock %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Barrier Status{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group govuk-!-margin-0">
+
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+                Barrier status
+            </h1>
+        </legend>
+
+        {% form_error_banner form %}
+
+        <div id="{{ form.status.name }}" class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+
+            <div class="govuk-form-group" data-module="govuk-radios">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        {{ form.status.label }}
+                    </legend>
+
+                    {% for value, name in form.fields.status.choices %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                   id="status-radio-{{ value }}"
+                                   name="barrier-status-status"
+                                   type="radio"
+                                   value="{{ value }}"
+                                   {% if form.status.value == value %} checked="checked"{% endif %}
+                                   {% if value in "3 4" %} data-aria-controls="conditional-{{ value }}"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="{{ form.status.id_for_label }}">
+                                {{ name }}
+                            </label>
+                            {% form_field_error form "status" %}
+                            {% for help_text in form.status.help_text %}
+                                {% if help_text.0 == value %}
+                                    <span id="{{ name }}_hint" class="govuk-hint govuk-radios__hint">
+                                        {{ help_text.1 }}
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        {% if forloop.counter == 2 %}
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{value}}">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-label--s" for="partially_resolved_date">
+                                        {{ form.partially_resolved_date.label }}
+                                    </label>
+                                    {% form_field_error form "partially_resolved_date" %}
+                                    {{ form.partially_resolved_date }}
+                                </div>
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-label--s" for="partially_resolved_description">
+                                        {{ form.partially_resolved_description.label }}
+                                    </label>
+                                    {% form_field_error form "partially_resolved_description" %}
+                                    {{ form.partially_resolved_description }}
+                                </div>
+                            </div>
+
+                        {% elif forloop.counter == 3  %}
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{value}}">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-label--s" for="resolved_date">
+                                        {{ form.resolved_date.label }}
+                                    </label>
+                                    {% form_field_error form "resolved_date" %}
+                                    {{ form.resolved_date }}
+                                </div>
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-label--s" for="resolved_description">
+                                        {{ form.resolved_description.label }}
+                                    </label>
+                                    {% form_field_error form "resolved_description" %}
+                                    {{ form.resolved_description }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                </fieldset>
+            </div>
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <label id="start-date-heading" class="govuk-label govuk-label--s" for="start_date">
+                        {{ form.start_date.label }}
+                    </label>
+                    {% form_field_error form "start_date" %}
+                    <span id="{{ name }}_hint" class="govuk-hint">
+                        {{ form.start_date.help_text }}
+                    </span>
+                    {{ form.start_date }}
+
+                    <p>Or</p>
+
+                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input"
+                                   id="{{ form.start_date_unknown.name }}"
+                                   name="barrier-status-start_date_unknown"
+                                   type="checkbox"
+                                   value="1"
+                                   {% if form.start_date_unknown.value %}checked{% endif %}
+                                   data-aria-controls="conditional-current-active">
+                            <label class="govuk-label govuk-checkboxes__label" for="barrier-status-start_date_unknown">{{ form.start_date_unknown.label }}</label>
+                        </div>
+                        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden govuk-!-margin-bottom-0" id="conditional-current-active">
+                            <div class="govuk-radios" data-module="govuk-radios">
+                                <label class="govuk-label govuk-label--s" for="start_date">
+                                    {{ form.currently_active.label }}
+                                </label>
+                                {% form_field_error form "currently_active" %}
+                                {% for value, name in form.fields.currently_active.choices %}
+                                    <div class="govuk-radios__item">
+                                        <input class="govuk-radios__input"
+                                               id="{{ name }}"
+                                               name="{{wizard.steps.current}}-currently_active"
+                                               type="radio"
+                                               value="{{ value }}"
+                                               {% if form.currently_active.value == value %}checked="checked"{% endif %} >
+                                        <label class="govuk-label govuk-radios__label" for="{{ name }}">
+                                            {{ name }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+{% endblock %}

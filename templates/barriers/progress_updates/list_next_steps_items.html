@@ -1,0 +1,65 @@
+{% extends "barriers/edit/base.html" %}
+{% load dates %}
+{% load tz %}
+{% block page_title %}{{ block.super }} - Next steps{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Next steps' %}
+    <p class="govuk-body"> For each next step add the activity, who'll be doing it and when it will be completed.</p>
+    {% timezone "Europe/London" %}
+
+        {% for item in next_steps_items %}
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        <a class="" href="{% url 'barriers:edit_next_steps' barrier.id item.id %}">
+                            {% if item.next_step_item is not empty %}
+                                {{ item.next_step_item|linebreaksbr }}
+                            {% else %}
+                                No detail
+                            {% endif %}
+                        </a>
+                        <p class="govuk-body-s govuk-!-padding-top-5">
+                            <span class="govuk-!-font-weight-bold">Who's doing the activity?</span>
+                            {% if item.next_step_owner is not empty %}
+                                {{ item.next_step_owner|linebreaksbr }}
+                            {% else %}
+                                Unassigned
+                            {% endif %}
+                        </p>
+                        <p class="govuk-body-s">
+                            <span class="govuk-!-font-weight-bold" >Due date:</span>
+
+                            {% if item.completion_date is not empty %}
+                                {{ item.completion_date|parse_iso|date:"j F Y" }}
+                            {% else %}
+                                No detail
+                            {% endif %}
+                        </p>
+                    </dt>
+
+                    <dd class="govuk-summary-list__actions">
+                        {% if item.status == "COMPLETED"%}
+                            <strong class="govuk-tag">{{ item.status }}</strong>
+                        {% elif item.status is not empty %}
+                            <a class="govuk-link" href="{% url 'barriers:complete_next_steps' barrier.id item.id %}">
+                                Mark as complete<span class="govuk-visually-hidden"> name</span>
+                            </a>
+                        {% else  %}
+                            No detail
+                        {% endif %}
+                    </dd>
+                </div>
+            </dl>
+        {% endfor %}
+    {% endtimezone %}
+
+    <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add</a>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <a class="govuk-button button--primary" href="{% url 'barriers:barrier_detail' barrier.id %}">Confirm</a>
+{% endblock %}

@@ -1,6 +1,7 @@
 from django.views.generic import FormView
 
 from barriers.forms.archive import ArchiveBarrierForm, UnarchiveBarrierForm
+
 from .mixins import APIBarrierFormViewMixin
 
 

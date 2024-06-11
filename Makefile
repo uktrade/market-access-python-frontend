@@ -16,11 +16,11 @@ help: ## This help.
 # ==================================================
 .PHONY: django-run
 django-run: ## Run django's dev server (tailing).
-	docker-compose exec web bash -c "./manage.py runserver 0:9000"
+	docker-compose exec web bash -c "./manage.py runserver 0:9001"
 
 .PHONY: django-run-detached
 django-run-detached: ## Run django's dev server (silently).
-	docker-compose exec -d web bash -c "./manage.py runserver 0:9000"
+	docker-compose exec -d web bash -c "./manage.py runserver 0:9001"
 
 .PHONY: django-shell
 django-shell: ## Drop into django's shell (with iphython).
@@ -34,27 +34,31 @@ django-collectstatic: ## Collect static files.
 django-static: ## Compress SCSS and collect static files, clears staticfiles folder.
 	docker-compose exec web ./manage.py collectstatic --no-input -i *.scss --clear
 
+.PHONY: react-watch
+react-watch: ## Run react's dev server (tailing).
+	npm run dev
+
 .PHONY: django-test
 django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down
 	docker-compose exec web pytest -n 6 tests/$(path)
 
-.PHONY: django-ui-test
-django-run-test-server: ## Run django ui test server
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "./manage.py runserver 0:9000"
+.PHONY: test-frontend
+test-frontend: ## Run django ui tests.
+	docker-compose exec web bash -c "pytest test_frontend/$(path)"
 
-.PHONY: django-ui-test
-django-ui-test: ## Run django ui tests.
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pytest ui_tests"
+.PHONY: test-end-to-end
+is-headless ?= false
+test-end-to-end:
+	./run_e2e_tests.sh target_url=$(target_url) target=$(target) $(if $(filter true,$(is-headless)),--is-headless)
 
-.PHONY: django-ui-test
-django-ui-test-with-server: ## Run locla server and run django ui tests against it.
-	docker-compose -f docker-compose.test.yml -p market-access-test exec -d web-test bash -c "./manage.py runserver 0:9000"
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pytest ui_tests || pkill -f runserver"
-	docker-compose -f docker-compose.test.yml -p market-access-test exec web-test bash -c "pkill -f runserver"
+.PHONY: load-test
+is-headless ?= false
+load-test:
+	./run_e2e_tests.sh target_url=$(target_url) target=$(target) $(if $(filter true,$(is-headless)),--is-headless) --is-load-test
 
 .PHONY: django-tests-coverage
 django-tests-coverage: ## Run django tests and generate coverage report.
-	docker-compose exec web bash -c "pytest tests --cov=. --cov-report html"
+	docker-compose exec web bash -c "pytest tests --cov-report term"
 
 .PHONY: git-hooks
 git-hooks: ## Set up hooks for git.

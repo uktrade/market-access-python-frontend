@@ -2,11 +2,12 @@
     {
         "id": "3e12dd72-8b51-43ec-8269-a173031a0eee",
         "code": "B-19-9DD",
+        "archived": false,
         "term": {
             "id": 2,
             "name": "A long-term strategic barrier"
         },
-        "end_date": "2022-08-31",
+        "estimated_resolution_date": "2022-08-31",
         "is_resolved": false,
         "resolved_date": null,
         "country": {
@@ -34,9 +35,18 @@
                 "name": "Automotive"
             }
         ],
+        "export_types": [
+            {"id": 1, "name": "goods"},
+            {"id": 2, "name": "investment"}
+        ],
+        "export_description": "Cars",
         "companies": [{
             "id": "79baa06b-9217-4178-8c05-0c294aab355e",
             "name": "Christmas Tree Wholesale Ltd"
+        }],
+        "related_organisations": [{
+            "id": "",
+            "name": "Christmas Tree Disposal Ltd"
         }],
         "product": "McLaren",
         "source": {
@@ -59,7 +69,7 @@
         ],
         "public_eligibility": true,
         "public_eligibility_summary": "Eligible",
-        "reported_on": "2019-10-28T11:45:44.720000Z",
+        "reported_on": "2019-10-30T11:45:44.720000Z",
         "reported_by": {
             "id": 1,
             "name": "Boris Karaberberov"
@@ -70,11 +80,28 @@
         },
         "status_summary": "aabc",
         "status_date": "2019-08-01",
+        "tags": [
+            {
+                "id": 1,
+                "title": "COVID-19",
+                "description": "Barrier related to Covid pandemic.",
+                "order": 1
+            }
+        ],
+        "top_priority_status": "APPROVED",
+        "top_priority_summary": {
+            "top_priority_summary_text": "Barrier of extreme importance",
+            "created_on": "2019-10-28T11:36:39.469000Z",
+            "created_by": "Ted Moseby",
+            "modified_on": "2019-10-28T11:36:39.469000Z",
+            "modified_by": "Ted Moseby"
+        },
         "priority": {
             "code": "MEDIUM",
             "name": "Medium",
             "order": 2
         },
+        "priority_level": "COUNTRY",
         "priority_summary": "",
         "trade_category": "",
         "wto_profile": {
@@ -89,6 +116,32 @@
         "modified_on": "2020-01-21T15:39:34.137208Z",
         "commercial_value": 250000,
         "commercial_value_explanation": "Wibble wobble!",
+        "valuation_assessments": [
+
+            {
+                "id": "08410280-b342-4fe1-9f24-13b8df508e25",
+                "archived": false,
+                "archived_by": null,
+                "archived_on": null,
+                "created_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "created_on": "2020-11-20T15:12:49.978614Z",
+                "modified_on": "2020-11-20T15:12:49.978641Z",
+                "modified_by": {
+                    "id": 54,
+                    "name": "Vyvyan Holland"
+                },
+                "economic_assessment_id": 38,
+                "impact": {
+                    "id": 4,
+                    "name": "4: \u00a3 millions"
+                },
+                "explanation": "uk"
+            }
+
+        ],
         "economic_assessments": [
             {
                 "id": 15,
@@ -274,6 +327,7 @@
     {
         "id": "8152467a-a59b-4481-aea9-deba8f0f397a",
         "code": "B-19-SV8",
+        "archived": false,
         "reported_on": "2019-11-14T18:34:34.880000Z",
         "term": {
             "id": 2,
@@ -307,6 +361,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "NONE",
         "is_summary_sensitive": false,
         "categories": [
             {
@@ -327,11 +382,14 @@
             }
         ],
         "created_on": "2019-11-14T18:32:34.384000Z",
-        "modified_on": "2020-01-23T09:21:25.371626Z"
+        "modified_on": "2020-01-23T09:21:25.371626Z",
+        "public_eligibility": false,
+        "public_eligibility_summary": "Not Eligible"
     },
     {
         "id": "cf983d1e-4391-409f-8a32-495f8abdbdd1",
         "code": "B-19-6F5",
+        "archived": false,
         "reported_on": "2019-03-20T15:27:33.359000Z",
         "term": {
             "id": 1,
@@ -365,6 +423,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "OVERSEAS",
         "is_summary_sensitive": false,
         "categories": [
             {
@@ -378,6 +437,7 @@
     {
         "id": "47121200-4c8e-4736-a789-e396428caed0",
         "code": "B-19-VYG",
+        "archived": false,
         "reported_on": "2019-06-19T15:18:26.242000Z",
         "term": {
             "id": 2,
@@ -398,6 +458,11 @@
                 "name": "Sector name"
             }
         ],
+        "export_types": [
+            {"id": 1, "name": "goods"},
+            {"id": 3, "name": "services"}
+        ],
+        "export_description": "Tigers",
         "country": {
             "id": "62af72a6-5d95-e211-a939-e4115bead28a",
             "name": "Country Name"
@@ -424,6 +489,7 @@
             "name": "Unknown",
             "order": 0
         },
+        "priority_level": "WATCHLIST",
         "is_summary_sensitive": false,
         "categories": [],
         "created_on": "2019-06-19T15:17:23.776000Z",

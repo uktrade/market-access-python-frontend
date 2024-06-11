@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
-
-from mock import patch
 
 
 class EditCategoriesTestCase(MarketAccessTestCase):
@@ -13,7 +12,9 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         Landing page should load the barrier's categories into the session
         """
         response = self.client.get(
-            reverse("barriers:edit_categories", kwargs={"barrier_id": self.barrier["id"]})
+            reverse(
+                "barriers:edit_categories", kwargs={"barrier_id": self.barrier["id"]}
+            )
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
@@ -36,7 +37,10 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         self.update_session(
             {
                 "categories": [
-                    {"id": category_id, "title": "Title",}
+                    {
+                        "id": category_id,
+                        "title": "Title",
+                    }
                     for category_id in self.barrier["categories"]
                 ],
             }
@@ -61,7 +65,10 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         self.update_session(
             {
                 "categories": [
-                    {"id": category_id, "title": "Title",}
+                    {
+                        "id": category_id,
+                        "title": "Title",
+                    }
                     for category_id in self.barrier["categories"]
                 ],
             }
@@ -86,7 +93,10 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         self.update_session(
             {
                 "categories": [
-                    {"id": category_id, "title": "Title",}
+                    {
+                        "id": category_id,
+                        "title": "Title",
+                    }
                     for category_id in self.barrier["categories"] + [117]
                 ],
             }
@@ -94,7 +104,8 @@ class EditCategoriesTestCase(MarketAccessTestCase):
 
         response = self.client.get(
             reverse(
-                "barriers:edit_categories_session", kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_categories_session",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.OK
@@ -106,19 +117,26 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         """
         Saving barrier categories should call the API
         """
-        new_categories = [category["id"] for category in self.barrier["categories"]] + [117]
+        new_categories = [category["id"] for category in self.barrier["categories"]] + [
+            117
+        ]
 
         self.update_session(
             {
                 "categories": [
-                    {"id": category_id, "title": "Title",} for category_id in new_categories
+                    {
+                        "id": category_id,
+                        "title": "Title",
+                    }
+                    for category_id in new_categories
                 ],
             }
         )
 
         response = self.client.post(
             reverse(
-                "barriers:edit_categories_session", kwargs={"barrier_id": self.barrier["id"]}
+                "barriers:edit_categories_session",
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={"categories": new_categories},
         )
@@ -134,18 +152,23 @@ class EditCategoriesTestCase(MarketAccessTestCase):
         """
         Removing a category should remove it from the session, not call the API
         """
-        new_categories = [category["id"] for category in self.barrier["categories"]] + [117]
+        new_categories = [category["id"] for category in self.barrier["categories"]] + [
+            117
+        ]
 
         self.update_session(
             {
                 "categories": [
-                    {"id": category_id, "title": "Title"} for category_id in new_categories
+                    {"id": category_id, "title": "Title"}
+                    for category_id in new_categories
                 ],
             }
         )
 
         response = self.client.post(
-            reverse("barriers:remove_category", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:remove_category", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             data={"category_id": self.barrier["categories"][0]["id"]},
         )
         assert response.status_code == HTTPStatus.FOUND

@@ -1,15 +1,22 @@
+import json
+import logging
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierMixin
 from barriers.forms.companies import (
     AddCompanyForm,
     CompanySearchForm,
     EditCompaniesForm,
 )
-from utils.datahub import DatahubClient
+from companies_house.api_client import CompaniesHouseAPIClient
+from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_API_KEY
 from utils.exceptions import APIException
+
+from .mixins import BarrierMixin
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierSearchCompany(BarrierMixin, FormView):
@@ -17,11 +24,14 @@ class BarrierSearchCompany(BarrierMixin, FormView):
     form_class = CompanySearchForm
 
     def form_valid(self, form):
-        client = DatahubClient()
         error = None
-
+        companies_house_api_client = CompaniesHouseAPIClient(
+            api_key=COMPANIES_HOUSE_API_KEY, api_endpoint=COMPANIES_HOUSE_API_ENDPOINT
+        )
         try:
-            results = client.search_company(form.cleaned_data["query"], 1, 100)
+            results = companies_house_api_client.search_companies(
+                form.cleaned_data["query"], 100
+            )
         except APIException:
             error = "There was an error finding the company"
             results = []
@@ -36,18 +46,31 @@ class CompanyDetail(BarrierMixin, FormView):
     form_class = AddCompanyForm
 
     def get_context_data(self, **kwargs):
+        companies_house_api_client = CompaniesHouseAPIClient(
+            api_key=COMPANIES_HOUSE_API_KEY, api_endpoint=COMPANIES_HOUSE_API_ENDPOINT
+        )
         context_data = super().get_context_data(**kwargs)
         company_id = str(self.kwargs.get("company_id"))
-        client = DatahubClient()
-        context_data["company"] = client.get_company(company_id)
+        context_data["company"] = companies_house_api_client.get_company_from_id(
+            company_id
+        )
         return context_data
 
     def form_valid(self, form):
-        client = DatahubClient()
-        company = client.get_company(form.cleaned_data["company_id"])
+        companies_house_api_client = CompaniesHouseAPIClient(
+            api_key=COMPANIES_HOUSE_API_KEY, api_endpoint=COMPANIES_HOUSE_API_ENDPOINT
+        )
+        company = companies_house_api_client.get_company_from_id(
+            form.cleaned_data["company_id"]
+        )
         companies = self.request.session.get("companies", [])
         companies.append(
-            {"id": company.id, "name": company.name,}
+            {
+                "id": company.id,
+                "source": "company_house",
+                "name": company.company_name,
+                "address": company.address_display,
+            }
         )
         self.request.session["companies"] = companies
         return super().form_valid(form)
@@ -65,31 +88,35 @@ class BarrierEditCompanies(BarrierMixin, FormView):
     use_session_companies = False
 
     def get(self, request, *args, **kwargs):
-        if not self.use_session_companies:
-            request.session["companies"] = self.barrier.companies
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["companies"] = self.request.session.get("companies", [])
+
+        # Build JSON with fields matching companies house keys
+        companies_context_list = []
+        if self.barrier.companies:
+            for company in self.barrier.companies:
+                companies_context_list.append(
+                    {
+                        "company_number": company["id"],
+                        "title": company["name"],
+                    }
+                )
+
+        related_organisations_context_list = []
+        if self.barrier.related_organisations:
+            for related_organisation in self.barrier.related_organisations:
+                related_organisations_context_list.append(related_organisation["name"])
+
+        context_data["companies_affected"] = json.dumps(companies_context_list)
+        context_data["unrecognised_company"] = json.dumps(
+            related_organisations_context_list
+        )
         return context_data
 
-    def get_initial(self):
-        companies = self.request.session.get("companies", [])
-        return {
-            "companies": [company["id"] for company in companies],
-        }
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
-        kwargs["token"] = self.request.session.get("sso_token")
-        kwargs["companies"] = self.request.session.get("companies", [])
-        return kwargs
-
     def form_valid(self, form):
-        form.save()
-        del self.request.session["companies"]
+        form.save(self.barrier.id, self.request.session.get("sso_token"))
         return super().form_valid(form)
 
     def get_success_url(self):

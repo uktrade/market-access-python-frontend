@@ -8,6 +8,7 @@
 }
 
 .search-card__heading {
+	color: $govuk-blue;
 	@include govuk-font( $weight: bold, $size: 19 );
 }
 
@@ -41,6 +42,7 @@
 	padding: govuk-em( 15, 16 ) govuk-em( 15, 16 ) 0 govuk-em( 15, 16 );
 	width: 100%;
 	box-sizing: border-box;
+	cursor: pointer;
 
 	&:focus {
 		background-color: $govuk-light-grey;

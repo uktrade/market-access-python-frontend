@@ -112,6 +112,7 @@ db.sqlite3
 
 # VS Code
 .vscode/
+.devcontainer/
 
 # PyCharm
 .idea/
@@ -123,12 +124,21 @@ core/static/govuk-public/fonts
 staticfiles/
 node_modules/
 
+.docker/
 docker-compose.dev.env
 docker-compose.uat.env
 docker-compose.env
 config/settings/static/
+local.env
+/local.env
+
 
 requirements-dev.txt
 /GPATH
 /GRTAGS
 /GTAGS
+
+
+webpack-stats.json
+webpack-stats-react.json
+.devcontainer/

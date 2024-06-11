@@ -2,11 +2,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView, TemplateView
 
-from .mixins import BarrierMixin, SessionDocumentMixin
-from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
-from ..forms.notes import AddNoteForm, EditNoteForm, NoteDocumentForm
-
 from utils.api.client import MarketAccessAPIClient
+
+from ..forms.notes import AddNoteForm, EditNoteForm, NoteDocumentForm
+from .documents import AddDocumentAjaxView, DeleteDocumentAjaxView
+from .mixins import BarrierMixin, SessionDocumentMixin
 
 
 class NoteSessionDocumentMixin(SessionDocumentMixin):

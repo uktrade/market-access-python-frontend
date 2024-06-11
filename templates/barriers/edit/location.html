@@ -1,7 +1,7 @@
 {% extends "barriers/edit/base.html" %}
 {% load govuk_forms %}
 
-{% block page_title %}{{ block.super }} - Barrier - Edit location{% endblock %}
+{% block page_title %}{{ block.super }} - Edit barrier location{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -9,7 +9,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Edit location' %}
+    {% include 'partials/heading.html' with text='Edit barrier location' %}
     {% form_error_banner form %}
 
     <h3>Which location is affected by this issue?</h3>
@@ -54,7 +54,7 @@
         {{ form.trading_bloc }}
         {{ form.country }}
         {{ form.admin_areas }}
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
         <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 

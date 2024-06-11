@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier - Add an affected sector{% endblock %}
+{% block page_title %}{{ block.super }} - Sectors affected by the barrier{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -21,7 +21,7 @@
 
             <select class="govuk-select govuk-!-width-full{% if form.sector.errors %} govuk-select--error{% endif %}" id="sectors" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
                 {% for id, name in form.fields.sector.choices %}
-                <option value="{{ id }}">{{ name }}</option>
+                    <option value="{{ id }}">{{ name }}</option>
                 {% endfor %}
             </select>
         </div>

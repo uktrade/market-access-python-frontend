@@ -1,0 +1,62 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Stakeholder details{% endblock %}
+
+{% block back_link %}
+  <a href="{% url 'barriers:action_plan_stakeholders_list' barrier_id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+  {% include 'partials/heading.html' with text='Add stakeholder details' %}
+
+  {% form_error_banner form %}
+
+  <form method="post" action="" novalidate>
+    {% csrf_token %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div id="{{ form.name.name }}" class="govuk-form-group{% if form.name.errors %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label govuk-label--s" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+          {% form_field_error form "name" %}
+          {{ form.name }}
+        </div>
+      </div>
+    </div>
+    {% if form.job_title %}
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <div id="{{ form.job_title.name }}" class="govuk-form-group{% if form.job_title.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="{{ form.job_title.id_for_label }}">{{ form.job_title.label }}</label>
+            {% form_field_error form "job_title" %}
+            {{ form.job_title }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% if form.organisation %}
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <div id="{{ form.organisation.name }}" class="govuk-form-group{% if form.organisation.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="{{ form.organisation.id_for_label }}">{{ form.organisation.label }}</label>
+            {% form_field_error form "organisation" %}
+            {{ form.organisation }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {% include "partials/forms/radio_button_group.html" with radio_group=form.status %}
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-button-group">
+          <button class="govuk-button" data-module="govuk-button" type="submit">Confirm</button>
+          <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_stakeholders_list' barrier_id %}">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock page_content %}

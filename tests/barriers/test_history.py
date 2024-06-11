@@ -1,6 +1,5 @@
-from core.tests import MarketAccessTestCase
-
 from barriers.models import HistoryItem
+from core.tests import MarketAccessTestCase
 
 
 class BarrierHistoryItemTestCase(MarketAccessTestCase):
@@ -227,7 +226,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                     "sub_status_other": None,
                 },
                 "new_value": {
-                    "status": "1",
+                    "status": "2",
                     "status_date": "2019-10-28",
                     "status_summary": "It's pending action.",
                     "sub_status": "UK_GOVT",
@@ -238,7 +237,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         )
         assert item.field_name == "Status"
         assert item.old_value["status_text"] == "Unknown"
-        assert item.new_value["status_text"] == "Open: Pending action (UK government)"
+        assert item.new_value["status_text"] == "Open"
 
     def test_tags(self):
         item = HistoryItem(
@@ -247,7 +246,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
                 "model": "barrier",
                 "field": "tags",
                 "old_value": [1],
-                "new_value": [1, 2],
+                "new_value": [1, 3],
                 "user": {"id": 48, "name": "Test-user"},
             }
         )
@@ -269,6 +268,22 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         assert item.field_name == "Title"
         assert item.old_value == "Old Title"
         assert item.new_value == "New Title"
+
+    def test_top_priority(self):
+        item = HistoryItem(
+            {
+                "date": "2020-04-01T00:00:00Z",
+                "model": "barrier",
+                "field": "top_priority_status",
+                "old_value": {"value": None, "reason": None},
+                "new_value": {"value": "APPROVAL_PENDING", "reason": "an approval"},
+                "user": None,
+            }
+        )
+
+        assert item.field_name == "PB100 Priority Status"
+        assert item.old_value is None
+        assert item.new_value == {"value": "APPROVAL_PENDING", "reason": "an approval"}
 
 
 class NoteHistoryItemTestCase(MarketAccessTestCase):

@@ -1,0 +1,41 @@
+<ul class="page-tabs page-tabs--no-margin dashboard-tabs">
+    {% if active == 'barriers' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">My barriers</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?active=barriers">My barriers</a>
+        </li>
+    {% endif %}
+
+    {% if active == 'saved_searches' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">My Saved searches</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?active=saved_searches">My Saved searches</a>
+        </li>
+    {% endif %}
+
+    {% if active == 'barrier_downloads' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">My Downloads</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?active=barrier_downloads">My Downloads</a>
+        </li>
+    {% endif %}
+
+    {% if active == 'mentions' %}
+        <li class="page-tabs__tab page-tabs__tab--active">
+            <span class="page-tabs__tab__text">Mentions {% if new_mentions_count %}<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ new_mentions_count }}</span>{% endif %}</span>
+        </li>
+    {% else %}
+        <li class="page-tabs__tab">
+            <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?active=mentions">Mentions {% if new_mentions_count %}<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ new_mentions_count }}</span>{% endif %}</a>
+        </li>
+    {% endif %}
+</ul>

@@ -1,29 +1,30 @@
 import json
 from operator import itemgetter
 
-from barriers.constants import Statuses
+import redis
+import requests
+from django.conf import settings
+from mohawk import Sender
+
+from barriers.constants import DEPRECATED_TAGS, Statuses
 from core.filecache import memfiles
 from utils.exceptions import HawkException
 
-from django.conf import settings
-from mohawk import Sender
-import redis
-import requests
-
-
-redis_client = None
-if not settings.MOCK_METADATA:
+if settings.DJANGO_ENV == "test":
+    redis_client = None
+else:
     redis_client = redis.Redis.from_url(url=settings.REDIS_URI)
 
 
 def get_metadata():
-    if settings.MOCK_METADATA:
+    if settings.DJANGO_ENV == "test":
+        # we're testing and have no access to the API, so use the fixture.
         file = f"{settings.BASE_DIR}/../core/fixtures/metadata.json"
         return Metadata(json.loads(memfiles.open(file)))
-    else:
-        metadata = redis_client.get("metadata")
-        if metadata:
-            return Metadata(json.loads(metadata))
+
+    metadata = redis_client.get("metadata")
+    if metadata:
+        return Metadata(json.loads(metadata))
 
     url = f"{settings.MARKET_ACCESS_API_URI}metadata"
     sender = Sender(
@@ -44,14 +45,12 @@ def get_metadata():
         },
     )
 
-    if response.ok:
-        metadata = response.json()
-        redis_client.set(
-            "metadata", json.dumps(metadata), ex=settings.METADATA_CACHE_TIME
-        )
-        return Metadata(metadata)
+    if not response.ok:
+        raise HawkException(f"Call to fetch metadata failed {response}")
 
-    raise HawkException("Call to fetch metadata failed")
+    metadata = response.json()
+    redis_client.set("metadata", json.dumps(metadata), ex=settings.METADATA_CACHE_TIME)
+    return Metadata(metadata)
 
 
 class Metadata:
@@ -65,11 +64,6 @@ class Metadata:
             "modifier": "unfinished",
             "hint": "Barrier is unfinished",
         },
-        Statuses.OPEN_PENDING_ACTION: {
-            "name": "Pending",
-            "modifier": "open-pending-action",
-            "hint": "Barrier is awaiting action",
-        },
         Statuses.OPEN_IN_PROGRESS: {
             "name": "Open",
             "modifier": "open-in-progress",
@@ -78,9 +72,7 @@ class Metadata:
         Statuses.RESOLVED_IN_PART: {
             "name": "Part resolved",
             "modifier": "resolved",
-            "hint": (
-                "Barrier impact has been significantly reduced but remains " "in part"
-            ),
+            "hint": "Barrier impact has been significantly reduced but remains in part",
         },
         Statuses.RESOLVED_IN_FULL: {
             "name": "Resolved",
@@ -107,6 +99,9 @@ class Metadata:
     def __init__(self, data):
         self.data = data
 
+    def get_admin_area_list(self):
+        return self.data["admin_areas"]
+
     def get_admin_area(self, admin_area_id):
         for admin_area in self.data["admin_areas"]:
             if admin_area["id"] == admin_area_id and admin_area["disabled_on"] is None:
@@ -132,6 +127,20 @@ class Metadata:
             if admin_area["country"]["id"] == country_id
         ]
 
+    def get_countries_with_admin_areas_list(self):
+        countries_list = []
+        results_list = []
+        for admin_area in self.data["admin_areas"]:
+            if admin_area["country"]["id"] not in countries_list:
+                countries_list.append(admin_area["country"]["id"])
+                results_list.append(
+                    {
+                        "id": admin_area["country"]["id"],
+                        "name": admin_area["country"]["name"],
+                    }
+                )
+        return results_list
+
     def get_country(self, country_id):
         for country in self.data["countries"]:
             if country["id"] == country_id:
@@ -144,15 +153,8 @@ class Metadata:
         return [(country["id"], country["name"]) for country in self.get_country_list()]
 
     def get_overseas_region_list(self):
-        regions = {
-            country["overseas_region"]["id"]: country["overseas_region"]
-            for country in self.get_country_list()
-            if country["disabled_on"] is None
-            and country.get("overseas_region") is not None
-        }
-        regions = list(regions.values())
-        regions.sort(key=itemgetter("name"))
-        return regions
+        self.data["overseas_regions"].sort(key=itemgetter("name"))
+        return self.data["overseas_regions"]
 
     def get_overseas_region_by_id(self, region_id):
         for region in self.get_overseas_region_list():
@@ -205,6 +207,8 @@ class Metadata:
 
     def get_status(self, status_id):
         for id, name in self.data["barrier_status"].items():
+            if id == "1":
+                continue
             self.STATUS_INFO[id]["id"] = id
             self.STATUS_INFO[id]["name"] = name
 
@@ -217,15 +221,7 @@ class Metadata:
         sub_status_other=None,
     ):
         if status_id in self.STATUS_INFO.keys():
-            name = self.get_status(status_id)["name"]
-            if sub_status and status_id == Statuses.OPEN_PENDING_ACTION:
-                sub_status_text = self.get_sub_status_text(
-                    sub_status,
-                    sub_status_other,
-                )
-                return f"{name} ({sub_status_text})"
-            return name
-
+            return self.get_status(status_id)["name"]
         return status_id
 
     def get_status_choices(self):
@@ -320,20 +316,32 @@ class Metadata:
         for tag in self.get_barrier_tags():
             if str(tag["id"]) == str(tag_id):
                 return tag
+        return {
+            "id": tag_id,
+            "title": "[unknown tag]",
+            "description": "No such tag exists",
+            "show_at_reporting": False,
+            "order": 9999,
+        }
 
     def get_barrier_tags(self):
         tags = self.data.get("barrier_tags", [])
         return sorted(tags, key=lambda k: k["order"])
 
-    def get_barrier_tag_choices(self):
+    def get_barrier_tag_choices(self, list_use):
         """
-        Generates tag choices.
-        Includes all tags that are available.
+        Generates tag choices for edit or search tags pages.
+        Includes all tags except Top Priority, as that is assigned seperately.
         """
-        return (
-            (tag["id"], tag["title"], tag["description"])
-            for tag in self.get_barrier_tags()
-        )
+
+        tag_list = self.get_barrier_tags()
+
+        if list_use == "edit":
+            # If this list is for the edit pages, return as generator
+            return ((tag["id"], tag["title"], tag["description"]) for tag in tag_list)
+        elif list_use == "search":
+            # If this list is for the search functionality, return as a plain list
+            return tag_list
 
     def get_report_tag_choices(self):
         """
@@ -343,7 +351,7 @@ class Metadata:
         return (
             (tag["id"], tag["title"], tag["description"])
             for tag in self.get_barrier_tags()
-            if tag["show_at_reporting"] is True
+            if tag["show_at_reporting"] is True and tag["title"] not in DEPRECATED_TAGS
         )
 
     def get_trade_categories(self):
@@ -398,6 +406,9 @@ class Metadata:
         """
         return ((str(org["id"]), org["name"]) for org in self.get_gov_organisations())
 
+    def get_gov_organisation_dict(self):
+        return dict(self.get_gov_organisation_choices())
+
     def get_government_organisation(self, org_id):
         for org in self.get_gov_organisations():
             if str(org["id"]) == str(org_id):
@@ -408,6 +419,14 @@ class Metadata:
         return (
             org for org in self.get_gov_organisations() if str(org["id"]) in list_of_ids
         )
+
+    def get_top_priority_status(self, status):
+        for status in self.data["top_priority_status"]:
+            if str(status["id"]) == str(status):
+                return status
+
+    def get_search_ordering_choices(self):
+        return self.data["search_ordering_choices"]
 
 
 class MetadataMixin:

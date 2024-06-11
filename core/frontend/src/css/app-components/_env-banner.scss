@@ -8,6 +8,7 @@
   padding-right: 30px;
   background-color: #cccccc;
   font-size: 24px;
+  font-weight: normal;
   line-height: 50px;
   text-align: center;
   opacity: 0.95;
@@ -17,16 +18,21 @@
 
   &.env-banner-dev {
     background-color: #3c5cff;
+    color: #F2F2F2;
   }
 
   &.env-banner-uat {
     background-color: #FF69B4;
+    color: #0b0c0c;
   }
 
   .env-banner__dismiss {
     float: right;
-    color: white !important;
+    color: #F2F2F2 !important;
     text-decoration: none;
+    &.env-banner__dismiss--uat {
+      color: #0b0c0c !important;
+    }
   }
 
   @media (min-width: 800px ){
@@ -51,4 +57,3 @@
   }
 
 }
-

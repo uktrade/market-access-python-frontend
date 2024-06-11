@@ -1,27 +1,53 @@
 {% if from_group_classes %}
-<div id="{{ field.name }}" class="govuk-form-group {{ form_group_classes }}">
+    <div id="{{ field.name }}" class="govuk-form-group {{ form_group_classes }}">
 {% else %}
-<div id="{{ field.name }}" class="govuk-form-group filter-group">
+    <div id="{{ field.name }}" class="govuk-form-group filter-group">
 {% endif %}
-    <fieldset class="govuk-fieldset filter-group__inner">
-        <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
-            {{ field.label }}
-        </legend>
+<fieldset class="govuk-fieldset filter-group__inner">
+    <legend class="govuk-fieldset__legend filter-items__label filter-group__label">
+        {{ field.label }}
+    </legend>
 
-        <div class="checkbox-filter govuk-!-width-full{% if extra_classes %} {{ extra_classes }}{% endif %}">
-            {% for value, text in field.field.choices %}
-                <div class="checkbox-filter__item">
-                    <input class="checkbox-filter__input{% if field_classes %} {{ field_classes }}{% endif %}"
-                           id="{{ field.name }}-{{ forloop.counter }}"
-                           name="{{ field.name }}"
-                           type="checkbox"
-                           value="{{ value }}" {% if value|lower in field.value %}checked="checked"{% endif %}>
+    <div class="checkbox-filter govuk-!-width-full{% if extra_classes %} {{ extra_classes }}{% endif %}">
+        {% for value, text in field.field.choices %}
+            <div class="checkbox-filter__item">
+                <input class="checkbox-filter__input{% if field_classes %} {{ field_classes }}{% endif %}"
+                       id="{{ field.name }}-{{ forloop.counter }}"
+                       name="{{ field.name }}"
+                       type="checkbox"
+                       value="{{ value }}" {% if value in field.value %}checked="checked"{% endif %}>
 
-                    <label class="govuk-label checkbox-filter__label" for="{{ field.name }}-{{ forloop.counter }}">
-                      {{ text|safe }}
-                    </label>
-                </div>
-            {% endfor %}
-        </div>
-    </fieldset>
+                <label class="govuk-label checkbox-filter__label" for="{{ field.name }}-{{ forloop.counter }}">
+                    {{ text|safe }}
+                    {% if field.field.help_text %}
+                        <!-- Individual Choice help_text - if available, match tuple values to each other for correct text -->
+                        {% for help_value, help_text in field.field.help_text %}
+                            {% if help_value == value %}
+                                <label class="checkbox-filter__hint">{{ help_text }}</label>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </label>
+
+                <!-- Sections to display resolved date input, only displayed when loading the barrier status block-->
+                {% if text == "Open" %}
+                    <div id="resolved_date_filter_open_in_progress" {% if "2" not in field.data or not field.data %}hidden{% endif %}>
+                        {% include "partials/forms/date_input_filter.html" with field=form.status_date_open_in_progress %}
+                    </div>
+                {% endif %}
+                {% if text == "Resolved: In part" %}
+                    <div id="resolved_date_filter_resolved_in_part" {% if "3" not in field.data or not field.data %}hidden{% endif %}>
+                        {% include "partials/forms/date_input_filter.html" with field=form.status_date_resolved_in_part %}
+                    </div>
+                {% endif %}
+                {% if text == "Resolved: In full" %}
+                    <div id="resolved_date_filter_resolved_in_full" {% if "4" not in field.data or not field.data %}hidden{% endif %}>
+                        {% include "partials/forms/date_input_filter.html" with field=form.status_date_resolved_in_full %}
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+    </div>
+</fieldset>
 </div>

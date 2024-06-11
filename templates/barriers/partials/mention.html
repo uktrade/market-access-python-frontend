@@ -1,0 +1,31 @@
+{% load highlight_mentions %}
+
+<li class="mention-item ma-card-list__item">
+    <div class="mention-item__info">
+        <h3 class="mention-item__title">
+            {% if not mention.read_by_recipient %}
+                <span class="govuk-tag ma-badge ma-badge--attention">NEW</span>
+            {% endif %}
+            <a class="govuk-link" href="{% url 'barriers:mention_go_to' mention_id=mention.id %}">{{ mention.created_by.full_name }} mentioned you in a comment</a>
+        </h3>
+        {% for email in mention.message|get_mention_emails %}
+            <p class="mention-item__message">
+                {% if current_user.email == email %}
+                    <span class='mention-highlight mention-highlight__me'>@{{ email }}</span>
+                {% else %}
+                    <span class='mention-highlight'>@{{ email }}</span>
+                {% endif %}
+            </p>
+        {% endfor %}
+        <p class="mention-item__barrier"><a class="govuk-link" href="{% url 'barriers:mention_go_to' mention_id=mention.id %}">{{ mention.barrier.title }}</a></p>
+        <p class="mention-item__when"><span class="mention-item__date">{{ mention.created_on|date:"j F Y" }}</span>
+            <span class="mention-item__time">at {{ mention.created_on|date:"g:iA" }}</span></p>
+    </div>
+    <div class="mention-item__actions">
+        {% if mention.read_by_recipient %}
+            <a href="{% url 'barriers:mention_mark_as_unread' mention_id=mention.id %}">Mark as unread</a>
+        {% else %}
+            <a href="{% url 'barriers:mention_mark_as_read' mention_id=mention.id %}">Mark as read</a>
+        {% endif %}
+    </div>
+</li>

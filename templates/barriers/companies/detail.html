@@ -4,7 +4,7 @@
 
 {% block page_content %}
 
-    <a href="{% url 'barriers:search_company' barrier.id %}" class="govuk-back-link">Back</a>
+    <a href="{% url 'barriers:edit_companies' barrier.id %}" class="govuk-back-link">Back</a>
     {% include 'partials/heading.html' with caption=barrier.title text='Name of company affected' %}
     {% form_error_banner form %}
 
@@ -13,53 +13,35 @@
         <h2 class="govuk-heading-s">Company details</h2>
 
         <dl class="details-list">
-            {% if company.name %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Registered name</dt>
-                <dd class="details-list__value">{{ company.name }}</dd>
-            </div>
+            {% if company.company_name %}
+                <div class="details-list__group">
+                    <dt class="details-list__key">Registered name</dt>
+                    <dd class="details-list__value">{{ company.company_name }}</dd>
+                </div>
             {% endif %}
             {% if company.company_number %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Companies House number</dt>
-                <dd class="details-list__value">{{ company.company_number }}</dd>
-            </div>
+                <div class="details-list__group">
+                    <dt class="details-list__key">Companies House number</dt>
+                    <dd class="details-list__value">{{ company.company_number }}</dd>
+                </div>
             {% endif %}
-            {% if company.address %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Primary address</dt>
-                <dd class="details-list__value">{{ company.get_address_display }}</dd>
-            </div>
+            {% if company.address_display %}
+                <div class="details-list__group">
+                    <dt class="details-list__key">Primary address</dt>
+                    <dd class="details-list__value">{{ company.address_display }}</dd>
+                </div>
             {% endif %}
-            {% if company.sector.name %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Sector</dt>
-                <dd class="details-list__value">{{ company.sector.name }}</dd>
-            </div>
+            {% if company.sic_codes %}
+                <div class="details-list__group">
+                    <dt class="details-list__key">Sector</dt>
+                    <dd class="details-list__value">{{ company.sic_codes|join:", " }}</dd>
+                </div>
             {% endif %}
-            {% if company.created_on %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Incorporated on</dt>
-                <dd class="details-list__value">{{ company.created_on|date:"j F Y" }}</dd>
-            </div>
-            {% endif %}
-            {% if company.business_type.name %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Type</dt>
-                <dd class="details-list__value">{{ company.business_type.name }}</dd>
-            </div>
-            {% endif %}
-            {% if company.turnover_range.name %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Scale of company</dt>
-                <dd class="details-list__value">{{ company.turnover_range.name }}</dd>
-            </div>
-            {% endif %}
-            {% if company.employee_range.name %}
-            <div class="details-list__group">
-                <dt class="details-list__key">Number of employees</dt>
-                <dd class="details-list__value">{{ company.employee_range.name }}</dd>
-            </div>
+            {% if company.date_of_creation %}
+                <div class="details-list__group">
+                    <dt class="details-list__key">Incorporated on</dt>
+                    <dd class="details-list__value">{{ company.date_of_creation|date:"j F Y" }}</dd>
+                </div>
             {% endif %}
         </dl>
 
@@ -73,6 +55,6 @@
 
     <span class="govuk-heading-s">Or</span>
 
-    <a href="{% url 'barriers:search_company' barrier.id %}">Search again</a>
+    <a href="{% url 'barriers:edit_companies' barrier.id %}">Search again</a>
 
 {% endblock %}

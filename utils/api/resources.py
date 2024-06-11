@@ -1,12 +1,19 @@
-import requests
-import time
+from __future__ import annotations
 
+import logging
+import time
+import urllib.parse
+from typing import TYPE_CHECKING
+
+import requests
 from django.conf import settings
 from django.core.cache import cache
 
 from barriers.constants import Statuses
 from barriers.models import (
+    ActionPlan,
     Barrier,
+    BarrierDownload,
     Commodity,
     EconomicAssessment,
     EconomicImpactAssessment,
@@ -15,24 +22,33 @@ from barriers.models import (
     PublicBarrier,
     PublicBarrierNote,
     ResolvabilityAssessment,
-    StrategicAssessment,
     SavedSearch,
+    Stakeholder,
+    StrategicAssessment,
 )
+from barriers.models.action_plans import ActionPlanTask, Milestone
+from barriers.models.feedback import Feedback
+from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
 from users.models import Group, User
-
 from utils.exceptions import ScanError
-from utils.models import ModelList
+from utils.models import APIModel, ModelList
+
+if TYPE_CHECKING:
+    from utils.api.client import MarketAccessAPIClient
+
+logger = logging.getLogger(__name__)
 
 
 class APIResource:
     resource_name = None
     model = None
+    client: MarketAccessAPIClient
 
-    def __init__(self, client):
+    def __init__(self, client) -> None:
         self.client = client
 
-    def list(self, **kwargs):
+    def list(self, **kwargs) -> ModelList:
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
             model=self.model,
@@ -40,18 +56,21 @@ class APIResource:
             total_count=response_data["count"],
         )
 
-    def get(self, id, *args, **kwargs):
-        url = f"{self.resource_name}/{id}"
+    def get(self, id=None, *args, **kwargs) -> APIModel:
+        if not id:
+            url = f"{self.resource_name}"
+        else:
+            url = f"{self.resource_name}/{id}"
         return self.model(self.client.get(url, *args, **kwargs))
 
-    def patch(self, id, *args, **kwargs):
+    def patch(self, id, *args, **kwargs) -> APIModel:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.patch(url, json=kwargs))
 
-    def create(self, *args, **kwargs):
+    def create(self, *args, **kwargs) -> APIModel:
         return self.model(self.client.post(self.resource_name, json=kwargs))
 
-    def update(self, id, *args, **kwargs):
+    def update(self, id, *args, **kwargs) -> APIModel:
         url = f"{self.resource_name}/{id}"
         return self.model(self.client.put(url, data=kwargs))
 
@@ -103,7 +122,11 @@ class BarriersResource(APIResource):
     def add_team_member(self, barrier_id, user_id, role, **kwargs):
         url = f"barriers/{barrier_id}/members"
         data = {
-            "user": {"profile": {"sso_user_id": user_id,}},
+            "user": {
+                "profile": {
+                    "sso_user_id": user_id,
+                }
+            },
             "role": role,
         }
         return self.client.post(url, json=data)
@@ -112,19 +135,17 @@ class BarriersResource(APIResource):
         url = f"barriers/members/{team_member_id}"
         return self.client.delete(url, params=kwargs)
 
-    def get_csv(self, *args, **kwargs):
-        url = "barriers/s3-download"
-        return self.client.get(url, params=kwargs).get("url")
+    def request_download_approval(self):
+        url = "barriers/request-download-approval"
+        return self.client.post(url)
 
-    def get_streamed_csv(self, *args, **kwargs):
-        url = "barriers/export"
-        return self.client.get(url, params=kwargs, stream=True, raw=True)
+    def request_download_permissions(self, *args, **kwargs):
+        url = "barriers/request-download-permissions"
+        return self.client.get(url, params=kwargs)
 
     def set_status(self, barrier_id, status, **kwargs):
         if status == Statuses.UNKNOWN:
             url = f"barriers/{barrier_id}/unknown"
-        elif status == Statuses.OPEN_PENDING_ACTION:
-            url = f"barriers/{barrier_id}/open-action_required"
         elif status == Statuses.OPEN_IN_PROGRESS:
             url = f"barriers/{barrier_id}/open-in-progress"
         elif status == Statuses.RESOLVED_IN_PART:
@@ -134,6 +155,56 @@ class BarriersResource(APIResource):
         elif status == Statuses.DORMANT:
             url = f"barriers/{barrier_id}/hibernate"
         return self.client.put(url, json=kwargs)
+
+    def create_top_100_progress_update(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/top_100_progress_updates", data=kwargs
+        )
+
+    def patch_top_100_progress_update(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/top_100_progress_updates/{kwargs['id']}",
+            data=kwargs,
+        )
+
+    def get_top_priority_summary(self, **kwargs):
+        return self.client.get(
+            f"barriers/{kwargs['barrier']}/top_priority_summary/{kwargs['barrier']}",
+            data=kwargs,
+        )
+
+    def create_top_priority_summary(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/top_priority_summary", data=kwargs
+        )
+
+    def patch_top_priority_summary(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/top_priority_summary/{kwargs['barrier']}",
+            data=kwargs,
+        )
+
+    def create_programme_fund_progress_update(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/programme_fund_progress_updates", data=kwargs
+        )
+
+    def patch_programme_fund_progress_update(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/programme_fund_progress_updates/{kwargs['id']}",
+            data=kwargs,
+        )
+
+    def create_next_steps_item(self, **kwargs):
+        return self.client.post(
+            f"barriers/{kwargs['barrier']}/next_steps_items", data=kwargs
+        )
+
+    def patch_next_steps_item(self, **kwargs):
+        return self.client.patch(
+            f"barriers/{kwargs['barrier']}/next_steps_items/{kwargs['id']}",
+            data=kwargs,
+        )
 
 
 class NotesResource(APIResource):
@@ -162,7 +233,11 @@ class NotesResource(APIResource):
 class DocumentsResource(APIResource):
     def create(self, filename, filesize):
         return self.client.post(
-            "documents", json={"original_filename": filename, "size": filesize,}
+            "documents",
+            json={
+                "original_filename": filename,
+                "size": filesize,
+            },
         )
 
     def complete_upload(self, document_id):
@@ -252,6 +327,33 @@ class PublicBarriersResource(APIResource):
     resource_name = "public-barriers"
     model = PublicBarrier
 
+    def allow_for_publishing_process(self, id):
+        return self.client.post(
+            f"{self.resource_name}/{id}/allow-for-publishing-process"
+        )
+
+    def report_public_barrier_title(self, id, *args, **kwargs):
+        return self.client.post(
+            f"{self.resource_name}/{id}/report_public_barrier_title", json=kwargs
+        )
+
+    def report_public_barrier_summary(self, id, *args, **kwargs):
+        return self.client.post(
+            f"{self.resource_name}/{id}/report_public_barrier_summary", json=kwargs
+        )
+
+    def ready_for_approval(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/ready-for-approval")
+
+    def ready_for_publishing(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/ready-for-publishing")
+
+    def publish(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/publish")
+
+    def unpublish(self, id):
+        return self.client.post(f"{self.resource_name}/{id}/unpublish")
+
     def get_activity(self, barrier_id, **kwargs):
         url = f"public-barriers/{barrier_id}/activity"
         return [
@@ -267,21 +369,6 @@ class PublicBarriersResource(APIResource):
             PublicBarrierNote(note)
             for note in self.client.get(f"{self.resource_name}/{id}/notes")["results"]
         ]
-
-    def ignore_all_changes(self, id):
-        return self.client.post(f"{self.resource_name}/{id}/ignore-all-changes")
-
-    def mark_as_in_progress(self, id):
-        return self.client.post(f"{self.resource_name}/{id}/unprepared")
-
-    def mark_as_ready(self, id):
-        return self.client.post(f"{self.resource_name}/{id}/ready")
-
-    def publish(self, id):
-        return self.client.post(f"{self.resource_name}/{id}/publish")
-
-    def unpublish(self, id):
-        return self.client.post(f"{self.resource_name}/{id}/unpublish")
 
 
 class EconomicAssessmentResource(APIResource):
@@ -302,3 +389,146 @@ class ResolvabilityAssessmentResource(APIResource):
 class StrategicAssessmentResource(APIResource):
     resource_name = "strategic-assessments"
     model = StrategicAssessment
+
+
+class MentionResource(APIResource):
+    resource_name = "mentions"
+    model = Mention
+
+    def mark_as_read(self, mention_id, *args, **kwargs):
+        url = f"mentions/mark-as-read/{mention_id}"
+        return self.model(self.client.get(url))
+
+    def mark_as_unread(self, mention_id):
+        url = f"mentions/mark-as-unread/{mention_id}"
+        return self.model(self.client.get(url))
+
+    def mark_all_as_read(self):
+        url = "mentions/mark-all-as-read"
+        return self.model(self.client.get(url))
+
+    def mark_all_as_unread(self):
+        url = "mentions/mark-all-as-unread"
+        return self.model(self.client.get(url))
+
+
+class NotificationExclusionResource(APIResource):
+    resource_name = "mentions/exclude-from-notifications"
+    model = NotificationExclusion
+
+    def turn_off_notifications(self):
+        url = "mentions/exclude-from-notifications"
+        return self.model(self.client.post(url))
+
+    def turn_on_notifications(self):
+        url = "mentions/exclude-from-notifications"
+        return self.model(self.client.delete(url))
+
+
+class ActionPlanResource(APIResource):
+    resource_name = "action_plans"
+    model = ActionPlan
+
+    def get_barrier_action_plan(self, barrier_id: str):
+        url = f"barriers/{barrier_id}/action_plan"
+        return self.model(self.client.get(url))
+
+    def edit_action_plan(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan"
+        return self.model(self.client.patch(url, json={**kwargs}))
+
+
+class ActionPlanMilestoneResource(APIResource):
+    resource_name = "action_plan_milestones"
+    model = Milestone
+
+    def create_milestone(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/milestones"
+        return self.model(
+            self.client.post(url, json={"barrier": str(barrier_id), **kwargs})
+        )
+
+    def update_milestone(self, barrier_id, milestone_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
+        return self.model(self.client.patch(url, json={**kwargs}))
+
+    def delete_milestone(self, barrier_id, milestone_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/milestones/{milestone_id}"
+        return self.client.delete(url)
+
+
+class ActionPlanTaskResource(APIResource):
+    resource_name = "action_plan_tasks"
+    model = ActionPlanTask
+
+    def create_task(self, barrier_id, milestone_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/tasks"
+        return self.model(
+            self.client.post(
+                url,
+                json={
+                    "barrier": str(barrier_id),
+                    "milestone": str(milestone_id),
+                    **kwargs,
+                },
+            )
+        )
+
+    def update_task(self, barrier_id, task_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        kwargs["milestone_id"] = str(kwargs["milestone_id"])
+        return self.model(self.client.patch(url, json={**kwargs}))
+
+    def delete_task(self, barrier_id, task_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/action_plan/tasks/{task_id}"
+        return self.client.delete(url)
+
+
+class ActionPlanStakeholderResource(APIResource):
+    resource_name = "stakeholders"
+    model = Stakeholder
+
+    def create_stakeholder(self, *args, **kwargs):
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/"
+        response = self.client.post(url, json={**kwargs})
+        return self.model(response)
+
+    def update_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
+        response = self.client.patch(url, json={**kwargs})
+        return self.model(response)
+
+    def delete_stakeholder(self, *args, **kwargs):
+        id = kwargs.pop("id")
+        barrier_id = kwargs.pop("barrier_id")
+        url = f"barriers/{barrier_id}/action_plan/stakeholders/{id}/"
+        self.client.delete(url, json={**kwargs})
+
+
+class FeedbackResource(APIResource):
+    resource_name = "feedback"
+    model = Feedback
+
+    def send_feedback(self, *args, **kwargs):
+        return self.client.post("feedback/", json={**kwargs})
+
+    def add_comments(self, feedback_id, *args, **kwargs):
+        url = f"feedback/{feedback_id}/"
+        return self.client.put(url, json={**kwargs})
+
+
+class BarrierDownloadsResource(APIResource):
+    resource_name = "barrier-downloads"
+    model = BarrierDownload
+
+    def get_presigned_url(self, download_id):
+        url = f"{self.resource_name}/{download_id}/presigned-url"
+        return self.client.get(url)
+
+    def create(self, *args, **kwargs):
+        query_string = urllib.parse.urlencode(kwargs)
+        url = f"{self.resource_name}?{query_string}"
+        return self.model(self.client.post(url, json=kwargs))

@@ -1,17 +1,15 @@
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from .base import ArchiveAssessmentBase
-from ..mixins import (
-    BarrierMixin,
-    EconomicImpactAssessmentMixin,
-)
+from users.permissions import APIPermissionMixin
+from utils.metadata import MetadataMixin
+
 from ...forms.assessments.economic_impact import (
     ArchiveEconomicImpactAssessmentForm,
     EconomicImpactAssessmentForm,
 )
-from users.permissions import APIPermissionMixin
-from utils.metadata import MetadataMixin
+from ..mixins import BarrierMixin, EconomicImpactAssessmentMixin
+from .base import ArchiveAssessmentBase
 
 
 class EconomicImpactAssessmentEditBase(MetadataMixin, BarrierMixin, FormView):
@@ -40,10 +38,13 @@ class AddEconomicImpactAssessment(APIPermissionMixin, EconomicImpactAssessmentEd
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["economic_assessment"] = self.barrier.current_economic_assessment
+        kwargs["barrier"] = self.barrier
         return kwargs
 
 
-class EconomicImpactAssessmentDetail(EconomicImpactAssessmentMixin, BarrierMixin, TemplateView):
+class EconomicImpactAssessmentDetail(
+    EconomicImpactAssessmentMixin, BarrierMixin, TemplateView
+):
     template_name = "barriers/assessments/economic_impact/detail.html"
 
 

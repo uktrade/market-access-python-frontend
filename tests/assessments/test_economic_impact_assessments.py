@@ -14,7 +14,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:add_economic_impact_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
                 "impact": "3",
@@ -25,6 +25,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
         mock_create.assert_called_with(
             economic_assessment_id=15,
             impact="3",
+            barrier_id="3e12dd72-8b51-43ec-8269-a173031a0eee",
             explanation="Explanation...",
         )
 
@@ -33,7 +34,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
         response = self.client.post(
             reverse(
                 "barriers:add_economic_impact_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
             data={
                 "impact": "",
@@ -56,7 +57,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "are_you_sure": "yes",
@@ -78,7 +79,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
             data={
                 "are_you_sure": "no",
@@ -95,7 +96,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:add_economic_impact_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -106,7 +107,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -118,7 +119,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
         response = self.client.get(
             reverse(
                 "barriers:add_economic_impact_assessment",
-                kwargs={"barrier_id": self.barrier["id"]}
+                kwargs={"barrier_id": self.barrier["id"]},
             ),
         )
         assert response.status_code == HTTPStatus.OK
@@ -129,7 +130,7 @@ class TestEconomicImpactAssessments(MarketAccessTestCase):
                 kwargs={
                     "barrier_id": self.barrier["id"],
                     "assessment_id": self.assessment_id,
-                }
+                },
             ),
         )
         assert response.status_code == HTTPStatus.OK

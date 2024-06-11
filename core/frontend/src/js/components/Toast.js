@@ -1,37 +1,44 @@
-ma.components.Toast = (function( doc, jessie ){
+ma.components.Toast = (function (doc, jessie) {
+    if (
+        !jessie.hasFeatures(
+            "attachListener",
+            "bind",
+            "queryOne",
+            "cancelDefault"
+        )
+    ) {
+        return;
+    }
 
-	if( !jessie.hasFeatures(
-		'attachListener', 'bind', 'queryOne', 'cancelDefault'
-	) ){ return; }
+    function Toast(selector) {
+        this.elem = jessie.queryOne(selector);
 
-	function Toast( selector ){
+        if (!this.elem) {
+            return;
+        }
 
-		this.elem = jessie.queryOne( selector );
+        this.createDismiss();
+    }
 
-		if( !this.elem ){ return; }
+    Toast.prototype.createDismiss = function () {
+        this.dismissElem = doc.createElement("a");
 
-		this.createDismiss();
-	}
+        this.dismissElem.className = "toast__dismiss";
+        this.dismissElem.href = "#";
+        this.dismissElem.innerText = "x";
 
-	Toast.prototype.createDismiss = function(){
+        jessie.attachListener(
+            this.dismissElem,
+            "click",
+            this.dismiss.bind(this)
+        );
+        this.elem.appendChild(this.dismissElem);
+    };
 
-		this.dismissElem = doc.createElement( 'a' );
+    Toast.prototype.dismiss = function (e) {
+        jessie.cancelDefault(e);
+        this.elem.parentNode.removeChild(this.elem);
+    };
 
-		this.dismissElem.className = 'toast__dismiss';
-		this.dismissElem.href = '#';
-		this.dismissElem.innerText = 'x';
-
-		jessie.attachListener( this.dismissElem, 'click', this.dismiss.bind( this ) );
-		this.elem.appendChild( this.dismissElem );
-
-	};
-
-	Toast.prototype.dismiss = function( e ){
-
-		jessie.cancelDefault( e );
-		this.elem.parentNode.removeChild( this.elem );
-	};
-
-	return Toast;
-
-})( document, jessie );
+    return Toast;
+})(document, jessie);

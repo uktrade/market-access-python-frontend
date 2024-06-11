@@ -1,5 +1,5 @@
 body {
-	font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 	color: $govuk-black;
 	line-height: 1.5;
 	font-weight: 400;
@@ -17,19 +17,22 @@ a {
 
 
 .govuk-footer--ma {
-	margin-top: govuk-em( 45, 16 );
+	margin-top: govuk-em(45, 16);
 }
 
-@include mq( $from: tablet ){
+@include mq($from: tablet) {
 	.govuk-footer--ma {
 		.govuk-width-container {
 			max-width: 100%;
-			margin: 0 govuk-em( 30, 16 );
+			margin: 0 govuk-em(30, 16);
 		}
+
 		.govuk-footer__section-break {
 			display: none;
 		}
-		.govuk-footer__licence-logo, .govuk-footer__licence-description {
+
+		.govuk-footer__licence-logo,
+		.govuk-footer__licence-description {
 			display: none;
 		}
 	}
@@ -38,7 +41,7 @@ a {
 .ma-masthead {
 
 	max-width: 100%;
-	padding: 0 govuk-em( 30, 16 ) 0 govuk-em( 30, 16 );
+	padding: 0 govuk-em(30, 16) 0 govuk-em(30, 16);
 	background: $govuk-light-grey;
 	//margin-top: govuk-em( -40, 16 );
 	border-bottom: 1px solid $govuk-light-grey;
@@ -52,7 +55,7 @@ a {
 
 .archived-banner {
 	max-width: 100%;
-	padding: govuk-em( 5, 5 ) govuk-em( 30, 16 ) govuk-em( 5, 5 ) govuk-em( 30, 16 );
+	padding: govuk-em(5, 5) govuk-em(30, 16) govuk-em(5, 5) govuk-em(30, 16);
 	background: govuk-colour("dark-grey");
 
 	&:after {
@@ -62,9 +65,10 @@ a {
 	}
 }
 
-@include mq( $from: desktop ){
+@include mq($from: desktop) {
 	.ma-container-full {
 		max-width: 1300px;
-		margin: 0 govuk-em( 30, 16 );;
+		margin: 0 govuk-em(30, 16);
+		;
 	}
 }

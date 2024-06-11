@@ -1,17 +1,31 @@
 {% for document in item.deleted_documents %}
     <div class="history-item__value">
-        <a class="history-item__link history-item__link--old" href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
+        <a tabindex="0"
+           class="history-item__link history-item__link--old"
+           href="{% url 'barriers:download_document' document.id %}">
+            <p class="govuk-visually-hidden">old value:</p>
+            {{ document.name }}
+        </a>
     </div>
 {% endfor %}
-
-{% for document in item.unchanged_documents %}
-    <div class="history-item__value">
-        <a class="history-item__link history-item__link--existing" href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
-    </div>
-{% endfor %}
-
-{% for document in item.added_documents %}
-    <div class="history-item__value">
-        <a class="history-item__link history-item__link--new" href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
-    </div>
-{% endfor %}
+{% if item.unchanged_documents is not None %}
+    {% for document in item.unchanged_documents %}
+        <div class="history-item__value">
+            <a tabindex="0"
+               class="history-item__link history-item__link--existing"
+               href="{% url 'barriers:download_document' document.id %}">{{ document.name }}</a>
+        </div>
+    {% endfor %}
+{% endif %}
+{% if item.added_documents is not None %}
+    {% for document in item.added_documents %}
+        <div class="history-item__value">
+            <a tabindex="0"
+               class="history-item__link history-item__link--new"
+               href="{% url 'barriers:download_document' document.id %}">
+                <p class="govuk-visually-hidden">new value:</p>
+                {{ document.name }}
+            </a>
+        </div>
+    {% endfor %}
+{% endif %}

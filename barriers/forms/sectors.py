@@ -2,12 +2,20 @@ from django import forms
 
 from utils.api.client import MarketAccessAPIClient
 
+from .mixins import APIFormMixin
+
 
 class EditSectorsForm(forms.Form):
     sectors = forms.MultipleChoiceField(
-        label="", choices=[], widget=forms.MultipleHiddenInput(), required=False,
+        label="",
+        choices=[],
+        widget=forms.MultipleHiddenInput(),
+        required=False,
     )
-    all_sectors = forms.BooleanField(widget=forms.HiddenInput(), required=False,)
+    all_sectors = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=False,
+    )
 
     def __init__(self, barrier_id, sectors, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -39,3 +47,22 @@ class AddSectorsForm(forms.Form):
     def __init__(self, sectors, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["sector"].choices = sectors
+
+
+class AddMainSectorForm(APIFormMixin, forms.Form):
+    main_sector = forms.ChoiceField(
+        label="",
+        choices=[],
+        error_messages={"required": "Select a sector affected by the barrier"},
+    )
+
+    def __init__(self, sectors, barrier_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.barrier_id = barrier_id
+        self.fields["main_sector"].choices = sectors
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(
+            id=self.barrier_id, main_sector=self.cleaned_data["main_sector"]
+        )

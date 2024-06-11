@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
-
-from mock import patch
 
 
 class EditBarrierSectorsTestCase(MarketAccessTestCase):
@@ -33,10 +32,12 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         Add Sector page should not include current sectors in choices
         """
-        self.update_session({
-            "sectors": [sector["id"] for sector in self.barrier["sectors"]],
-            "all_sectors": False
-        })
+        self.update_session(
+            {
+                "sectors": [sector["id"] for sector in self.barrier["sectors"]],
+                "all_sectors": False,
+            }
+        )
 
         response = self.client.get(
             reverse("barriers:add_sectors", kwargs={"barrier_id": self.barrier["id"]}),
@@ -78,9 +79,8 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         self.update_session(
             {
-                "sectors": [
-                    sector["id"] for sector in self.barrier["sectors"]
-                ] + [self.new_sector_id],
+                "sectors": [sector["id"] for sector in self.barrier["sectors"]]
+                + [self.new_sector_id],
                 "all_sectors": False,
             }
         )
@@ -102,9 +102,7 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         Edit Sectors form should match the sectors in the session
         """
-        self.update_session(
-            {"sectors": [], "all_sectors": True}
-        )
+        self.update_session({"sectors": [], "all_sectors": True})
 
         response = self.client.get(
             reverse(
@@ -122,9 +120,9 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         Saving sectors should call the API
         """
-        new_sectors = [
-            sector["id"] for sector in self.barrier["sectors"]
-        ] + [self.new_sector_id]
+        new_sectors = [sector["id"] for sector in self.barrier["sectors"]] + [
+            self.new_sector_id
+        ]
         response = self.client.post(
             reverse(
                 "barriers:edit_sectors_session",
@@ -147,9 +145,8 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         """
         self.update_session(
             {
-                "sectors": [
-                    sector["id"] for sector in self.barrier["sectors"]
-                ] + [self.new_sector_id],
+                "sectors": [sector["id"] for sector in self.barrier["sectors"]]
+                + [self.new_sector_id],
                 "all_sectors": False,
             }
         )
@@ -171,7 +168,10 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
         Adding all sectors should update the session, not call the API
         """
         self.update_session(
-            {"sectors": self.barrier["sectors"], "all_sectors": False,}
+            {
+                "sectors": self.barrier["sectors"],
+                "all_sectors": False,
+            }
         )
 
         response = self.client.get(
@@ -197,6 +197,25 @@ class EditBarrierSectorsTestCase(MarketAccessTestCase):
             data={"sectors": [], "all_sectors": True},
         )
         mock_patch.assert_called_with(
-            id=self.barrier["id"], sectors=[], all_sectors=True, sectors_affected=True,
+            id=self.barrier["id"],
+            sectors=[],
+            all_sectors=True,
+            sectors_affected=True,
         )
         assert response.status_code == HTTPStatus.FOUND
+
+    def test_add_sector_main_sector_not_in_choices(self):
+        """
+        Add Sector page should not include the main sector
+        """
+        self.barrier["main_sector"] = {"id": "af959812-6095-e211-a939-e4115bead28a"}
+
+        response = self.client.get(
+            reverse("barriers:add_sectors", kwargs={"barrier_id": self.barrier["id"]}),
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert "form" in response.context
+        form = response.context["form"]
+
+        choice_values = [v for k, v in form.fields["sector"].choices]
+        assert "af959812-6095-e211-a939-e4115bead28a" not in choice_values

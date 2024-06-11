@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block body_script %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <!-- Import GDS Javascript components -->
+    <script nonce="{{request.csp_nonce}}">
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSCheckboxes();
+        })
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSRadios();
+        })
+    </script>
+{% endblock %}
+
+{% block gtag_events %}
+    {% if barrier_id %}
+        <script nonce="{{request.csp_nonce}}" type="text/javascript">
+            window.dataLayer.push({
+                'barrier_id': '{{ barrier_id }}',
+            });
+        </script>
+    {% endif %}
+{% endblock gtag_events %}
+
+{% block page_title %}{{ block.super }} Report A Barrier - Wizard Framework {{ heading.text }}{% endblock %}
+
+{% block page_content %}
+    <div class="govuk-width-container">
+        <form method="post" novalidate>
+            {% block back_button %}
+                {% if wizard.steps.current != wizard.steps.first%}
+                    <a id="form-wizard-back-button" class="govuk-back-link" href="{% url "reports:report-barrier-wizard-step" step=wizard.steps.prev %}">Back</a>
+                {% endif %}
+            {% endblock %}
+            <div>
+                {% csrf_token %}
+                {{ wizard.management_form }}
+                {% block current_step %}
+                    {% if wizard.steps.current != "barrier-details-summary" %}
+                        <span class="govuk-caption-l">Section {{ wizard.steps.step1 }} of {{ wizard.steps.count|add:"-1" }}</span>
+                    {% endif %}
+                {% endblock %}
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        {% block fields %}
+                        {% endblock %}
+                    </div>
+                </div>
+                <div id="continue-actions-section" class="govuk-!-margin-top-6">
+                    {% block actions %}
+                        <button id="continue-button" class="govuk-button">Continue</button>
+                        {% if wizard.steps.current != wizard.steps.first%}
+                            <a id="save-exit-button" class="govuk-button govuk-button--secondary" href="{% url 'reports:report-barrier-wizard-step' step='skip' %}">Save and exit </a>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

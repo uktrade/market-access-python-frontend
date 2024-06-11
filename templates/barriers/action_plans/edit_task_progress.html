@@ -1,0 +1,54 @@
+{% extends "barriers/edit/base.html" %}
+{% block page_title %}
+  {% load static %}
+  {% load render_bundle from webpack_loader %}
+  {{ block.super }} - Edit estimated_resolution date{% endblock %}
+
+{% block back_link %}
+  <a
+    href="{% url 'barriers:barrier_detail' barrier.id %}"
+    class="govuk-back-link ma-back-link"
+  >Back</a
+    >
+{% endblock %}
+
+{% block body_script %}
+  {% render_bundle 'main' 'js' 'REACT' %}
+  <script nonce="{{request.csp_nonce}}">
+    ma.pages.barrier.action_plans_add_task();
+    document.addEventListener("DOMContentLoaded", function (event) {
+      console.log("Dom content loaded")
+      ReactApp.renderInputSelectWithMentions("assigned_to__field-container", null, null, null, trigger="")
+    })
+  </script>
+{% endblock %}
+
+{% block page_content %} {% include 'partials/heading.html' with text='Edit task' %}
+  {% form_error_banner form %}
+  <form action="" method="POST" novalidate>
+    {% csrf_token %}
+
+    <div
+      id="{{ form.progress.name }}"
+      class="{% form_group_classes form.progress.errors %}"
+    >
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          {{ form.progress.label }}
+        </legend>
+
+        <span class="govuk-hint">{{ form.progress.help_text }}</span>
+
+        {% form_field_error form "progress" %}
+
+        <div class="govuk-date-input">{{ form.progress }}</div>
+      </fieldset>
+    </div>
+
+    <button class="govuk-button" data-module="govuk-button">Confirm</button>
+    <a class="form-cancel" href="{% url 'barriers:action_plan' barrier.id %}"
+    >Cancel</a
+      >
+    </form>
+
+{% endblock %}

@@ -1,9 +1,11 @@
 import sys
-from .base import *                 # noqa
 
 from django_log_formatter_ecs import ECSFormatter
 
-DJANGO_ENV = 'dev'
+from .base import *  # noqa
+from .hardening import *  # noqa
+
+DJANGO_ENV = "dev"
 
 # Unable to put this in base.py because of circular import problem with ECSFormatter
 LOGGING = {
@@ -21,10 +23,7 @@ LOGGING = {
             "stream": sys.stdout,
         },
     },
-    "loggers": {
-        "": {
-            "handlers": ["ecs"],
-            "level": DJANGO_LOG_LEVEL
-        }
-    },
+    "loggers": {"": {"handlers": ["ecs"], "level": DJANGO_LOG_LEVEL}},
 }
+
+DISPLAY_ROLE_ADMIN_GROUP = True

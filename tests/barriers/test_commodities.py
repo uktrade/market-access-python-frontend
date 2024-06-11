@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
 from mock import Mock, patch
 
 from barriers.models import Commodity
@@ -34,11 +34,13 @@ class CommoditiesTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.CommoditiesResource.get")
     def test_empty_commodity_lookup(self, mock_get):
         response = self.client.get(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             {
                 "code_0": "",
                 "country": self.country_id,
-            }
+            },
         )
         assert response.status_code == HTTPStatus.OK
         assert "lookup_form" in response.context
@@ -49,7 +51,9 @@ class CommoditiesTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.CommoditiesResource.get")
     def test_commodity_lookup(self, mock_get):
         response = self.client.get(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             self.lookup_data,
         )
         assert response.status_code == HTTPStatus.OK
@@ -62,9 +66,11 @@ class CommoditiesTestCase(MarketAccessTestCase):
     def test_ajax_commodity_lookup(self, mock_get):
         mock_get.return_value = Commodity(self.commodity_data)
         response = self.client.get(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             {"code": "21050099", "location": self.country_id},
-            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_get.assert_called_with(id="2105000000")
@@ -74,29 +80,39 @@ class CommoditiesTestCase(MarketAccessTestCase):
             "data": self.barrier_commodity_data,
         }
 
-    @patch("utils.api.resources.CommoditiesResource.get", side_effect=APIHttpException(Mock()))
+    @patch(
+        "utils.api.resources.CommoditiesResource.get",
+        side_effect=APIHttpException(Mock()),
+    )
     def test_ajax_commodity_not_found(self, mock_get):
         response = self.client.get(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             {"code": "99999999", "location": self.country_id},
-            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
         )
         assert response.status_code == HTTPStatus.OK
         mock_get.assert_called_with(id="9999990000")
         response_data = response.json()
-        assert response_data == {"status": "error", "message": "HS commodity code not found"}
+        assert response_data == {
+            "status": "error",
+            "message": "Enter a real HS commodity code",
+        }
 
     @patch("utils.api.resources.CommoditiesResource.list")
     def test_ajax_multiple_commodity_lookup(self, mock_list):
         mock_list.return_value = [Commodity(self.commodity_data)]
         response = self.client.get(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             {"codes": "21050099,2106,2107", "location": self.country_id},
-            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
         )
         assert response.status_code == HTTPStatus.OK
         kwargs_codes = mock_list.call_args.kwargs.get("codes", "").split(",")
-        assert set(kwargs_codes) == set(["2105000000","2107000000","2106000000"])
+        assert set(kwargs_codes) == set(["2105000000", "2107000000", "2106000000"])
 
         response_data = response.json()
         assert response_data == {
@@ -107,7 +123,9 @@ class CommoditiesTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.APIResource.patch")
     def test_submit_commodities_form(self, mock_patch):
         response = self.client.post(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             data={
                 "action": "save",
                 "codes": ["2105009900", "0708000000", "0101000000"],
@@ -120,9 +138,17 @@ class CommoditiesTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(
             id=self.barrier["id"],
             commodities=[
-                {'code': '2105009900', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ""},
-                {'code': '0708000000', 'country': '80756b9a-5d95-e211-a939-e4115bead28a', 'trading_bloc': ""},
-                {'code': '0101000000', 'country': None, 'trading_bloc': "TB00016"},
+                {
+                    "code": "2105009900",
+                    "country": "80756b9a-5d95-e211-a939-e4115bead28a",
+                    "trading_bloc": "",
+                },
+                {
+                    "code": "0708000000",
+                    "country": "80756b9a-5d95-e211-a939-e4115bead28a",
+                    "trading_bloc": "",
+                },
+                {"code": "0101000000", "country": None, "trading_bloc": "TB00016"},
             ],
         )
 
@@ -131,7 +157,9 @@ class CommoditiesTestCase(MarketAccessTestCase):
         session_key = f"barrier:{self.barrier['id']}:commodities"
         self.update_session({session_key: []})
         response = self.client.post(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             data={
                 "confirm-commodity": "1",
                 "code": "2105009900",
@@ -150,14 +178,18 @@ class CommoditiesTestCase(MarketAccessTestCase):
     def test_remove_commodity(self, mock_patch, mock_list):
         mock_list.return_value = [Commodity(self.commodity_data)]
         session_key = f"barrier:{self.barrier['id']}:commodities"
-        self.update_session({
-            session_key: [
-                {"code": "2105009900", "location": self.country_id},
-                {"code": "0708000000", "location": self.country_id},
-            ]
-        })
+        self.update_session(
+            {
+                session_key: [
+                    {"code": "2105009900", "location": self.country_id},
+                    {"code": "0708000000", "location": self.country_id},
+                ]
+            }
+        )
         response = self.client.post(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             data={"remove-commodity": "2105009900"},
         )
         assert response.status_code == HTTPStatus.OK
@@ -170,11 +202,17 @@ class CommoditiesTestCase(MarketAccessTestCase):
 
     def test_cancel_commodity_form(self):
         session_key = f"barrier:{self.barrier['id']}:commodities"
-        self.update_session({
-            session_key: [{"code": "2105009900", "location": self.country_id},]
-        })
+        self.update_session(
+            {
+                session_key: [
+                    {"code": "2105009900", "location": self.country_id},
+                ]
+            }
+        )
         response = self.client.post(
-            reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             data={"action": "cancel"},
         )
         assert response.status_code == HTTPStatus.FOUND
@@ -182,11 +220,15 @@ class CommoditiesTestCase(MarketAccessTestCase):
 
 
 class CommoditiesViewTestCase(MarketAccessTestCase):
-
     def setUp(self):
         super().setUp()
-        self.url = reverse("barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]})
-        self.url_sr = reverse("barriers:edit_commodities_sr", kwargs={"barrier_id": self.barrier["id"], "mode": "sr"})
+        self.url = reverse(
+            "barriers:edit_commodities", kwargs={"barrier_id": self.barrier["id"]}
+        )
+        self.url_sr = reverse(
+            "barriers:edit_commodities_sr",
+            kwargs={"barrier_id": self.barrier["id"], "mode": "sr"},
+        )
 
     # Regular view
     def test_edit_commodities_url_resolves_to_correct_view(self):
@@ -202,7 +244,7 @@ class CommoditiesViewTestCase(MarketAccessTestCase):
         expected_form = '<div id="react-app" class="commodities-form__container">'
 
         response = self.client.get(self.url)
-        html = response.content.decode('utf8')
+        html = response.content.decode("utf8")
 
         assert HTTPStatus.OK == response.status_code
         assert expected_form in html
@@ -222,7 +264,7 @@ class CommoditiesViewTestCase(MarketAccessTestCase):
         expected_form = '<div class="commodities-form__container">'
 
         response = self.client.get(self.url_sr)
-        html = response.content.decode('utf8')
+        html = response.content.decode("utf8")
 
         assert HTTPStatus.OK == response.status_code
         assert expected_form in html

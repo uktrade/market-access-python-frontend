@@ -2,15 +2,15 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
+from utils.api.client import MarketAccessAPIClient
+from utils.metadata import get_metadata
+
 from ..forms.saved_searches import (
     NewSavedSearchForm,
     RenameSavedSearchForm,
     SavedSearchNotificationsForm,
 )
 from ..forms.search import BarrierSearchForm
-
-from utils.api.client import MarketAccessAPIClient
-from utils.metadata import get_metadata
 
 
 class SearchFiltersMixin:
@@ -73,9 +73,7 @@ class NewSavedSearch(SearchFiltersMixin, FormView):
     def form_valid(self, form):
         saved_search = form.save()
         self.request.session["saved_search_created"] = saved_search.id
-        return HttpResponseRedirect(
-            self.get_success_url(saved_search=saved_search)
-        )
+        return HttpResponseRedirect(self.get_success_url(saved_search=saved_search))
 
     def get_success_url(self, saved_search):
         querystring = self.search_form.get_raw_filters_querystring()
@@ -147,7 +145,7 @@ class SavedSearchNotifications(SavedSearchMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        if self.request.GET.get('next') == "search":
+        if self.request.GET.get("next") == "search":
             search_url = reverse("barriers:search")
             qs = f"{self.saved_search.querystring}&search_id={self.saved_search.id}"
             return f"{search_url}?{qs}"

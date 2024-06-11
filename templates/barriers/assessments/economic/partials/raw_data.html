@@ -23,9 +23,9 @@
                 <td class="govuk-table__cell">{{ row.partner }}</td>
                 <td class="govuk-table__cell">{{ row.commodity_code }}</td>
                 <td class="govuk-table__cell">{{ row.products }}</td>
-                <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.average|floatformat:0|intcomma }}</td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">&pound;{{ row.average|floatformat:0|intcomma }}</td>
                 {% for year in years %}
-                    <td class="govuk-table__cell govuk-table__cell--numeric">{{ row|get_item:year|floatformat:0|intcomma }}</td>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">&pound;{{ row|get_item:year|floatformat:0|intcomma }}</td>
                 {% endfor %}
             </tr>
         {% endfor %}

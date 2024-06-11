@@ -1,13 +1,11 @@
 from http import HTTPStatus
 
+import mock
 from django.urls import reverse
+from mock import patch
 
 from core.tests import MarketAccessTestCase
-
 from utils.exceptions import FileUploadError, ScanError
-
-import mock
-from mock import patch
 
 
 class NoteDocumentsTestCase(MarketAccessTestCase):
@@ -161,7 +159,12 @@ class NoteDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:note:new:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         self.client.post(
             reverse(
@@ -185,11 +188,19 @@ class NoteDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:note:1:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         url = reverse(
             "barriers:delete_note_document",
-            kwargs={"barrier_id": self.barrier["id"], "document_id": document_ids[0],},
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "document_id": document_ids[0],
+            },
         )
         self.client.post(f"{url}?note_id=1", xhr=True)
         session_document_ids = [
@@ -204,11 +215,19 @@ class NoteDocumentsTestCase(MarketAccessTestCase):
         ]
         session_key = f"barrier:{self.barrier['id']}:note:1:documents"
         self.update_session(
-            {session_key: [{"id": document_ids[0]}, {"id": document_ids[1]},]}
+            {
+                session_key: [
+                    {"id": document_ids[0]},
+                    {"id": document_ids[1]},
+                ]
+            }
         )
         url = reverse(
             "barriers:delete_note_document",
-            kwargs={"barrier_id": self.barrier["id"], "document_id": document_ids[0],},
+            kwargs={
+                "barrier_id": self.barrier["id"],
+                "document_id": document_ids[0],
+            },
         )
         self.client.get(f"{url}?note_id=1")
         session_document_ids = [

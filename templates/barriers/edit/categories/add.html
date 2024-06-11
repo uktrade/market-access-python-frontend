@@ -1,9 +1,9 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Barrier - Add category{% endblock %}
+{% block page_title %}{{ block.super }} - Barrier category{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.barrier.type();
     </script>
 {% endblock %}
@@ -14,7 +14,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Define barrier category' %}
+    {% include 'partials/heading.html' with text='Barrier category' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -30,7 +30,7 @@
                             <input class="govuk-radios__input" id="category-{{ forloop.counter }}" name="{{ form.category.name }}" type="radio" value="{{ item.id }}" data-aria-controls="conditional-category-{{ forloop.counter }}">
 
                             <label class="govuk-label govuk-radios__label" for="category-{{ forloop.counter }}">
-                            {{ item.title }}
+                                {{ item.title }}
                             </label>
                         </div>
 
@@ -42,7 +42,7 @@
             </fieldset>
         </div>
 
-        <input type="submit" value="Add category" class="govuk-button">
+        <input type="submit" value="Add" class="govuk-button">
         <a class="form-cancel" href="{% url 'barriers:edit_categories_session' barrier.id %}">cancel</a>
     </form>
 {% endblock %}

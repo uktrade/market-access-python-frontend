@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   web:
@@ -6,6 +6,9 @@ services:
       context: .
       dockerfile: docker/local/Dockerfile
     entrypoint: docker/local/entrypoint.sh
+    # Running the main service of the container
+    # would be useful
+    command: ./manage.py runserver 0:9000
     volumes:
       - .:/usr/src/app
     env_file: docker-compose.env

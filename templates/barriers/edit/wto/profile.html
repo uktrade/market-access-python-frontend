@@ -1,26 +1,27 @@
 {% extends "barriers/edit/base.html" %}
 
 {% load static %}
+{% load render_bundle from webpack_loader %}
 
-{% block page_title %}{{ block.super }} - Edit WTO information{% endblock %}
+{% block page_title %}{{ block.super }} - World Trade Organisation (WTO) notification details{% endblock %}
 
 {% block head %}
-    <script src="{% static 'js/react.js' %}"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", function (event) {
-        ReactApp.renderMultiSelectFilter(
-            "member_states",
-            "Search member states",
-            "govuk-label--s",
-            "govuk-!-width-two-thirds"
-        )
-    })
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script nonce="{{request.csp_nonce}}">
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderMultiSelectFilter(
+                "member_states",
+                "Search member states",
+                "govuk-label--s",
+                "govuk-!-width-two-thirds"
+            )
+        })
     </script>
 {% endblock %}
 
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.barrier.wto();
         var csrftoken = ma.get_csrf_token();
     </script>
@@ -32,11 +33,11 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='About the barrier' %}
+    {% include 'partials/heading.html' with text='World Trade Organisation (WTO) notification details' %}
     {% form_error_banner form %}
 
     <div class="govuk-inset-text">
-        Leave items blank if you do not know the answer
+        Leave any fields where you don't have the information
     </div>
 
     <form action="" method="POST" enctype="multipart/form-data" class="restrict-width" data-xhr-upload="{% url 'barriers:add_wto_document' barrier.id %}">
@@ -71,7 +72,7 @@
         {% include "partials/forms/date_input.html" with field=form.raised_date %}
         {% include "partials/forms/text_input.html" with field=form.case_number field_classes="govuk-!-width-one-half" %}
 
-        <button class="govuk-button js-submit-button" data-module="govuk-button">Save and return to barrier</button>
+        <button class="govuk-button js-submit-button" data-module="govuk-button">Save and return</button>
         <a class="form-cancel" href="{% url 'barriers:cancel_wto_documents' barrier.id %}">Cancel</a>
     </form>
 

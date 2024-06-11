@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Delete profile{% endblock %}
+
+{% block outside_content %}
+    <div class="govuk-width-container ma-container-full">
+        <a href="{% url 'users:user_detail' user.id %}" class="govuk-back-link ma-back-link">Back</a>
+    </div>
+{% endblock %}
+
+{% block page_content %}
+    <h1 class="govuk-heading-l">Are you sure you want to delete {{ user.full_name }}?</h1>
+
+    <div class="restrict-width">
+        <form action="" method="POST" class="restrict-width">
+            {% csrf_token %}
+            <button class="delete-button">Yes, i'm sure - delete this profile</button>
+            <a class="form-cancel govuk-link" href="{% url 'users:user_detail' user.id %}">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

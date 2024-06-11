@@ -5,7 +5,7 @@
 {% block body_script %}
     {{ block.super }}
     {% if not economic_assessment.automated_analysis_data %}
-        <script>
+        <script nonce="{{request.csp_nonce}}">
             ma.pages.barrier.assessment();
             var csrftoken = ma.get_csrf_token();
         </script>
@@ -23,7 +23,7 @@
     {% form_error_banner form %}
 
     {% if economic_assessment.automated_analysis_data %}
-    {% include "barriers/assessments/economic/partials/automated_analysis_data.html" with data=economic_assessment.automated_analysis_data %}
+        {% include "barriers/assessments/economic/partials/automated_analysis_data.html" with data=economic_assessment.automated_analysis_data %}
     {% endif %}
 
     <form
@@ -68,7 +68,7 @@
                 {% form_field_error form "document" %}
 
                 <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
-                (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
+                    (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
                 </span>
 
                 <input class="govuk-file-upload file-upload__input js-file-input" id="document" name="document" type="file" aria-describedby="document-hint">

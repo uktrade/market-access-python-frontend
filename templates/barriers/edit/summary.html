@@ -1,67 +1,42 @@
 {% extends "barriers/edit/base.html" %}
-
-{% block page_title %}{{ block.super }} - Edit summary{% endblock %}
-
+{% block page_title %}{{ block.super }} - Barrier description{% endblock %}
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:barrier_detail' object.id %}"
+       class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
-
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.summary.name }}-form-group.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
 {% block page_content %}
-
-    {% include 'partials/heading.html' with text='About the barrier' %}
+    {% include 'partials/heading.html' with text='Barrier description' %}
     {% form_error_banner form %}
-
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-
-        <div id="{{ form.summary.name }}" class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-label--s" for="summary">{{ form.summary.label }}</label>
-
-            {% form_field_error form "summary" %}
-
-            {% if barrier.is_summary_sensitive is not False %}
-                <div class="govuk-warning-text govuk-!-margin-bottom-4 govuk-!-margin-top-4">
-                    <span class="govuk-warning-text__icon govuk-warning-text__icon--small" aria-hidden="true">!</span>
-                    <strong class="govuk-warning-text__text govuk-warning-text__text--small">
-                        <span class="govuk-warning-text__assistive">Warning</span>
-                        {% if barrier.is_summary_sensitive is True %}
-                            This summary contains OFFICIAL-SENSITIVE information.
-                        {% else %}
-                            This summary has not been given a security classification.
-                        {% endif %}
-                    </strong>
-                </div>
-            {% endif %}
-
-            <textarea class="govuk-textarea" name="summary" rows="5">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
-        </div>
-
-        <div id="{{ form.is_summary_sensitive.name }}" class="govuk-form-group{% if form.is_summary_sensitive.errors %} govuk-form-group--error{% endif %}">
-
-            {% form_field_error form "is_summary_sensitive" %}
-
-            <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                        {{ form.is_summary_sensitive.label }}
-                    </legend>
-
-                    {% include "partials/official_sensitive.html" %}
-
-                    <div class="govuk-radios">
-                        {% for value, name in form.fields.is_summary_sensitive.choices %}
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="{{ form.is_summary_sensitive.name }}-{{ value }}" name="{{ form.is_summary_sensitive.name }}" type="radio" value="{{ value }}"{% if form.is_summary_sensitive.value == value %} checked="checked"{% endif %}>
-                                <label class="govuk-label govuk-radios__label" for="{{ form.is_summary_sensitive.name }}-{{ value }}">{{ name }}</label>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </fieldset>
+        <div id="{{ form.summary.name }}-form-group"
+             class="govuk-character-count"
+             data-module="govuk-character-count"
+             data-maxlength="500">
+            <div class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s"
+                       for="{{ form.summary.id_for_label }}">{{ form.summary.label }}</label>
+                {% form_field_error form "summary" %}
+                <span class="govuk-hint">{{ form.summary.help_text }}</span>
+                <textarea id="{{ form.summary.name }}"
+                          class="govuk-textarea govuk-js-character-count js-character-count"
+                          name="{{ form.summary.name }}"
+                          rows="5"
+                          maxlength="500">{% if form.summary.value %}{{ form.summary.value }}{% endif %}</textarea>
             </div>
         </div>
-
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
-        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+        <div id="{{ form.summary.name }}-info"
+             class="govuk-hint govuk-character-count__message"
+             aria-live="polite">You can enter up to 500 characters</div>
+        <input type="submit" value="Save and return" class="govuk-button">
+        <a class="form-cancel"
+           href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
-
 {% endblock %}

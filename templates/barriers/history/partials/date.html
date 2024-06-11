@@ -1,10 +1,16 @@
 {% if item.old_value %}
     <div class="history-item__old-value">
-        <span class="diff__del">{{ item.old_value|date:"j F Y" }}</span>
+        <span class="diff__del" tabindex="0">
+            <p class="govuk-visually-hidden">old value: </p>
+            {{ item.old_value|date:"j F Y" }}
+        </span>
     </div>
 {% endif %}
 {% if item.new_value %}
     <div class="history-item__new-value">
-        <span class="diff__ins">{{ item.new_value|date:"j F Y" }}</span>
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value|date:"j F Y" }}
+        </span>
     </div>
 {% endif %}

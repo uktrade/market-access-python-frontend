@@ -1,9 +1,9 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit WTO status{% endblock %}
+{% block page_title %}{{ block.super }} - World Trade Organisation (WTO) notification status{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         new ma.components.ConditionalRadioContent({
             inputContainer: '.wto_has_been_notified',
             inputName: 'wto_has_been_notified',
@@ -19,7 +19,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='About the Barrier' %}
+    {% include 'partials/heading.html' with text='World Trade Organisation (WTO) notification status' %}
     {% form_error_banner form %}
 
     <form action="" method="POST">

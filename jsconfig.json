@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "esnext",
+        "rootDir": "./",
+        "jsx": "react",
+        "checkJs": true,
+        "lib": ["dom", "esnext"]
+    },
+    "include": ["core/frontend/src/js"
+
+    ],
+    "exclude": [
+        "node_modules",
+        "core/frontend/dist"
+    ]
+}

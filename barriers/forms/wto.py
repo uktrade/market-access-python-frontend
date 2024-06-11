@@ -1,26 +1,27 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import APIFormMixin, DocumentMixin
-
 from utils.api.client import MarketAccessAPIClient
-from utils.forms import DayMonthYearField, YesNoBooleanField, RestrictedFileField
+from utils.forms import DayMonthYearField, RestrictedFileField, YesNoBooleanField
+
+from .mixins import APIFormMixin, DocumentMixin
 
 
 class WTOStatusForm(APIFormMixin, forms.Form):
     wto_has_been_notified = YesNoBooleanField(
         label="Has this measure been notified to the WTO?",
-        error_messages={"required": "Enter yes or no"},
+        error_messages={"required": "Select yes or no"},
     )
     wto_should_be_notified = YesNoBooleanField(
-        label="Should the measure be notified to the WTO?", required=False,
+        label="Should the measure be notified to the WTO?",
+        required=False,
     )
 
     def clean(self):
         cleaned_data = super().clean()
         if cleaned_data.get("wto_has_been_notified") is False:
             if cleaned_data.get("wto_should_be_notified") is None:
-                self.add_error("wto_should_be_notified", "Enter yes or no")
+                self.add_error("wto_should_be_notified", "Select yes or no")
         elif cleaned_data.get("wto_has_been_notified") is True:
             cleaned_data["wto_should_be_notified"] = None
 
@@ -38,7 +39,9 @@ class WTOStatusForm(APIFormMixin, forms.Form):
 
 class WTOProfileForm(DocumentMixin, forms.Form):
     committee_notified = forms.ChoiceField(
-        label="Committee notified of the barrier", choices=(), required=False,
+        label="Committee notified of the barrier",
+        choices=(),
+        required=False,
     )
     committee_notification_link = forms.URLField(
         label="Committee notification",
@@ -50,7 +53,7 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         required=False,
         error_messages={
             "max_length": (
-                "Notification link should be %(limit_value)d characters or fewer",
+                "Notification link should be %(limit_value)d characters or less",
             )
         },
     )
@@ -66,7 +69,9 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         required=False,
     )
     committee_raised_in = forms.ChoiceField(
-        label="WTO committee the barrier was raised in", choices=(), required=False,
+        label="WTO committee the barrier was raised in",
+        choices=(),
+        required=False,
     )
     meeting_minutes_id = forms.CharField(required=False)
     meeting_minutes = RestrictedFileField(
@@ -85,7 +90,7 @@ class WTOProfileForm(DocumentMixin, forms.Form):
         max_length=255,
         required=False,
         error_messages={
-            "max_length": "Case number should be %(limit_value)d characters or fewer",
+            "max_length": "Case number should be %(limit_value)d characters or less",
         },
     )
 

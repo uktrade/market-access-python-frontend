@@ -5,9 +5,14 @@
 @import 'barrier/publish';
 @import 'barrier/team';
 @import 'barrier/type';
+@import 'barrier/action_plans';
+@import 'barrier/priority';
 
-@import 'report/detail';
 @import 'report/sectors';
+@import 'report/check_answers';
+@import 'report/public_barrier_information';
 
 @import 'search';
 @import 'what-is-a-barrier';
+
+@import 'users/search';

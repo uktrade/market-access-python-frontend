@@ -9,11 +9,11 @@
                     <span class="selection-list__list__item__number" data-number="{{ forloop.counter }}"></span>{{ item.name }}
 
                     {% if show_remove_links %}
-                    <form action="{% url 'barriers:remove_company' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="company_id" value="{{ item.id }}">
-                        {% action_remove_list_item forloop.counter item.name %}
-                    </form>
+                        <form action="{% url 'barriers:remove_company' barrier.id %}" class="selection-list__list__item__remove-form" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="company_id" value="{{ item.id }}">
+                            {% action_remove_list_item forloop.counter item.name %}
+                        </form>
                     {% endif %}
                 </li>
             {% endfor %}
@@ -21,6 +21,6 @@
     {% endif %}
 
     {% if show_add_button %}
-        <a href="{% url 'barriers:search_company' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another company</a>
+        <a href="{% url 'barriers:edit_companies' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another company</a>
     {% endif %}
 </div>

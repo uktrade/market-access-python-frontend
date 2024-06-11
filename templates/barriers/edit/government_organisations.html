@@ -12,7 +12,7 @@
     {% include 'partials/heading.html' with text='Government organisations related to the barrier' %}
     {% form_error_banner form %}
 
-    <h3 class="report-sectors-heading">Save or add {% if sectors %}another{% else %}an{% endif %} organisation</h3>
+    <h3 class="report-sectors-heading">Add or remove {% if sectors %}another{% else %}an{% endif %} organisation</h3>
 
     <div class="selection-list restrict-width">
         <h3 class="selection-list__heading">Selected government organisations</h3>
@@ -35,7 +35,7 @@
             {% endfor %}
         </ul>
 
-        <a href="{% url 'barriers:add_gov_orgs' barrier.id %}"
+        <a href="{% url 'barriers:add_gov_orgs' barrier.id %}?return_to={{ return_to }}"
            id="add-government-organisation-button"
            class="govuk-button button--secondary selection-list__add-button">
             Add a government organisation
@@ -46,7 +46,7 @@
     <form action="" method="POST">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
         <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button button--secondary">Cancel</a>
     </form>
 {% endblock %}

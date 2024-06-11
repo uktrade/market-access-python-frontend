@@ -86,11 +86,34 @@ body:not(.js-enabled) {
 }
 
 .form-cancel {
-	line-height: 2.5;
+	line-height: 2.1;
 	margin-left: govuk-em( 10, 16 );
+	font-size: 19px;
 }
 
 .barrier-section-intro {
 	margin-bottom: govuk-em( 30, 16 );
 }
 
+.header-l-with-button{
+	line-height: 75px;
+}
+
+.border-none{
+	border-width: 0px;
+}
+
+.margin-none{
+	margin: 0px;
+}
+
+.padding-none{
+	padding: 0px;
+}
+
+.flex-center{
+	display: flex;
+	align-content: center;
+	height: 100%;
+	width: 100%;
+}

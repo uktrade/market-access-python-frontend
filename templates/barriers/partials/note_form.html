@@ -6,28 +6,30 @@
 
         {% form_field_error form "note" %}
 
-        <textarea id="{{ form.note.name }}"
-                  class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}"
-                  name="{{ form.note.name }}"
-                  rows="5"
-                  autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+        <div id="note-textarea-container">
+            <textarea id="{{ form.note.name }}"
+                      class="govuk-textarea js-note-text{% if form.note.errors %} govuk-textarea--error{% endif %}"
+                      name="{{ form.note.name }}"
+                      rows="5"
+                      autofocus="">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+        </div>
     </div>
 
     {% if documents %}
-    <div class="attachments">
-        <h3 class="attachments__heading">Attached documents</h3>
-        <ul class="attachments__list js-documents-list">
-            {% for document in documents %}
-                {% if document %}
-                    <li class="attachments__list__item">
-                        <span class="attachments__list__item__file-name">{{ document.name }} - {{ document.size|filesizeformat }}</span>
-                        <a href="{% url 'barriers:delete_note_document' barrier.id document.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
-                        <input type="hidden" name="document_ids" value="{{ document.id }}">
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="attachments">
+            <h3 class="attachments__heading">Attached documents</h3>
+            <ul class="attachments__list js-documents-list">
+                {% for document in documents %}
+                    {% if document %}
+                        <li class="attachments__list__item">
+                            <span class="attachments__list__item__file-name">{{ document.name }} - {{ document.size|filesizeformat }}</span>
+                            <a href="{% url 'barriers:delete_note_document' barrier.id document.id %}{% if form.note_id %}?note_id={{ form.note_id }}{% endif %}" class="attachments__list__item__delete" data-document-id="{{ document.id }}">Delete</a>
+                            <input type="hidden" name="document_ids" value="{{ document.id }}">
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 
     <div id="{{ form.document.name }}" class="govuk-form-group file-upload js-form-group">
@@ -36,7 +38,7 @@
         {% form_field_error form "document" %}
 
         <span id="document-hint" class="govuk-hint file-upload__size-limit js-max-file-size">
-        (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
+            (file size limit <strong>{{ form.fields.document.max_upload_size|filesizeformat }}</strong>)
         </span>
 
         <input class="govuk-file-upload file-upload__input js-file-input" name="document" type="file" aria-describedby="document-hint">

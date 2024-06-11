@@ -3,7 +3,7 @@
 {% block page_title %}{{ block.super }} - Rename saved search{% endblock %}
 
 {% block body_script %}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         if( ma.components.CharacterCount ){
             new ma.components.CharacterCount( '.govuk-character-count' );
         }
@@ -48,7 +48,7 @@
 
                     <input class="govuk-input js-character-count{% if form.name.errors %} govuk-input--error{% endif %}" id="{{ form.name.name }}" name="{{ form.name.name }}" type="text" value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
 
-                    <span id="{{ form.name.name }}-info" class="govuk-hint govuk-character-count__message" aria-live="polite">
+                    <span id="{{ form.name.name }}-info" class="govuk-hint govuk-character-count__message">
                         You can enter up to {{ form.name.field.max_length }} characters
                     </span>
                 </div>

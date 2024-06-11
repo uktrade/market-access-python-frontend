@@ -2,18 +2,6 @@
 
 {% block page_title %}{{ block.super }} - Barrier team - List of members{% endblock %}
 
-{% block body_script %}
-    {{ block.super }}
-    <script>
-        ma.pages.barrier.team( {
-            toggleLinks: {
-                text: 'Update the barrier',
-                linkClass: 'js-barrier-summary-link'
-            }
-        } );
-    </script>
-{% endblock %}
-
 {% block masthead %}
     <div class="ma-masthead">
         {% include 'barriers/partials/barrier_summary.html' %}

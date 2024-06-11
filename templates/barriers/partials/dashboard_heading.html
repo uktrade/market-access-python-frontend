@@ -1,28 +1,52 @@
 <h1 class="govuk-heading-l">
     <span class="govuk-caption-m">Market access barriers</span> Dashboard
 </h1>
-
+{% now 'c' as tz_now %}
+{% comment %} c formats current time to ISO 8601 format e.g. 2008-01-02T10:30:00.000123+02:00 {% endcomment %}
+{% if tz_now < '2023-11-30T22:45:00.000000+00:00' %}
+    <div class="govuk-inset-text dash-insert"
+         role="region"
+         aria-labelledby="govuk-notification-banner-title"
+         data-module="govuk-insert-text">
+        <div class="dash-insert__content">
+            Need help resolving your barriers? Read the <a href="https://data-services-help.trade.gov.uk/market-access/the-market-access-playbook/"
+                                                           target="_blank">market access playbook</a>
+        </div>
+    </div>
+{% endif %}
 <section class="dash-buttons-cards-container">
-    <a href="{% url 'reports:new_report' %}" role="button" class="dash-button">
+    <a href="{% url 'reports:new_report' %}"
+       role="button"
+       class="dash-button">
         <span class="dash-button__heading">Report a barrier</span>
-        <span class="dash-button__text">
-            Add a market barrier that is affecting a UK business exporting or importing.
-        </span>
+        <span class="dash-button__text">Add a market barrier that is affecting a UK business exporting or importing.</span>
     </a>
-
     <a href="{% url 'barriers:search' %}" role="button" class="dash-button">
         <span class="dash-button__heading">Search</span>
-        <span class="dash-button__text">
-            Search and filter barriers.
-        </span>
-    </a>
-
-    <div class="dash-card">
-        <h2 class="dash-card__heading">
-            Help centre
-        </h2>
-        <p class="dash-card__text">
-            <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/">How-to guides</a>, <a href="https://data-services-help.trade.gov.uk/market-access/about-barriers-and-market-access/">about market access</a> and <a href="https://data-services-help.trade.gov.uk/market-access/updates/">updates</a> to the service.
-        </p>
-    </div>
-</section>
+        <span class="dash-button__text">Search and filter barriers.
+        </a>
+        <a href="{% url 'barriers:public_barriers' %}"
+           role="button"
+           class="dash-button">
+            <span class="dash-button__heading">Find barriers for publishing</span>
+            <span class="dash-button__text">Table view with public title, summary and comments</span>
+        </a>
+        <div class="dash-card">
+            <span class="dash-card__heading">Get help</span>
+            <span class="dash-button__text">
+                Read the <a href="https://data-services-help.trade.gov.uk/market-access/the-market-access-playbook/"
+                            target="_blank">market access playbook</a> for help resolving your barriers.
+            </span>
+            <span class="dash-button__text">You can also find out:</span>
+            <ul class="dash-card__text">
+                <li>
+                    <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/"
+                       target="_blank">how to use DMAS</a>
+                </li>
+                <li>
+                    <a href="https://data-services-help.trade.gov.uk/market-access/updates/"
+                       target="_blank">what's new on DMAS</a>
+                </li>
+            </ul>
+        </div>
+    </section>

@@ -1,7 +1,8 @@
 from django.views.generic import TemplateView
 
-from .mixins import BarrierMixin
 from utils.api.client import MarketAccessAPIClient
+
+from .mixins import BarrierMixin
 
 
 class BarrierHistory(BarrierMixin, TemplateView):
@@ -9,7 +10,10 @@ class BarrierHistory(BarrierMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["history_items"] = self.get_full_history()
+
+        full_history = self.get_full_history()
+
+        context_data["history_items"] = full_history
         return context_data
 
     def get_full_history(self):

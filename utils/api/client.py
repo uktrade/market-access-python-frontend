@@ -1,34 +1,42 @@
 import logging
 from json import JSONDecodeError
-import requests
 
+import requests
 from django.conf import settings
 
+from utils.exceptions import APIHttpException, APIJsonException
+
 from .resources import (
+    ActionPlanMilestoneResource,
+    ActionPlanResource,
+    ActionPlanStakeholderResource,
+    ActionPlanTaskResource,
+    BarrierDownloadsResource,
     BarriersResource,
     CommoditiesResource,
     DocumentsResource,
     EconomicAssessmentResource,
     EconomicImpactAssessmentResource,
+    FeedbackResource,
     GroupsResource,
+    MentionResource,
     NotesResource,
-    UsersResource,
+    NotificationExclusionResource,
     PublicBarrierNotesResource,
     PublicBarriersResource,
     ReportsResource,
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
+    UsersResource,
 )
-from utils.exceptions import APIHttpException, APIJsonException
-
 
 logger = logging.getLogger(__name__)
 
 
 class MarketAccessAPIClient:
     def __init__(self, token=None, **kwargs):
-        self.token = token or settings.TRUSTED_USER_TOKEN
+        self.token = token
         self.barriers = BarriersResource(self)
         self.documents = DocumentsResource(self)
         self.economic_assessments = EconomicAssessmentResource(self)
@@ -43,6 +51,14 @@ class MarketAccessAPIClient:
         self.strategic_assessments = StrategicAssessmentResource(self)
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
+        self.mentions = MentionResource(self)
+        self.notification_exclusion = NotificationExclusionResource(self)
+        self.action_plans = ActionPlanResource(self)
+        self.action_plan_milestones = ActionPlanMilestoneResource(self)
+        self.action_plan_tasks = ActionPlanTaskResource(self)
+        self.action_plan_stakeholders = ActionPlanStakeholderResource(self)
+        self.feedback = FeedbackResource(self)
+        self.barrier_download = BarrierDownloadsResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

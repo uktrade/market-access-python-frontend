@@ -35,13 +35,13 @@ __author__ = "fraser@google.com (Neil Fraser)"
 class diff_match_patch:
     """Class containing the diff, match and patch methods.
 
-  Also contains the behaviour settings.
-  """
+    Also contains the behaviour settings.
+    """
 
     def __init__(self):
         """Inits a diff_match_patch object with default settings.
-    Redefine these in your program to override the defaults.
-    """
+        Redefine these in your program to override the defaults.
+        """
 
         # Number of seconds to map a diff before giving up (0 for infinity).
         self.Diff_Timeout = 1.0
@@ -78,20 +78,20 @@ class diff_match_patch:
 
     def diff_main(self, text1, text2, checklines=True, deadline=None):
         """Find the differences between two texts.  Simplifies the problem by
-      stripping any common prefix or suffix off the texts before diffing.
+          stripping any common prefix or suffix off the texts before diffing.
 
-    Args:
-      text1: Old string to be diffed.
-      text2: New string to be diffed.
-      checklines: Optional speedup flag.  If present and false, then don't run
-        a line-level diff first to identify the changed areas.
-        Defaults to true, which does a faster, slightly less optimal diff.
-      deadline: Optional time when the diff should be complete by.  Used
-        internally for recursive calls.  Users should set DiffTimeout instead.
+        Args:
+          text1: Old string to be diffed.
+          text2: New string to be diffed.
+          checklines: Optional speedup flag.  If present and false, then don't run
+            a line-level diff first to identify the changed areas.
+            Defaults to true, which does a faster, slightly less optimal diff.
+          deadline: Optional time when the diff should be complete by.  Used
+            internally for recursive calls.  Users should set DiffTimeout instead.
 
-    Returns:
-      Array of changes.
-    """
+        Returns:
+          Array of changes.
+        """
         # Set a deadline by which time the diff must be complete.
         if deadline is None:
             # Unlike in most languages, Python counts time in seconds.
@@ -138,19 +138,19 @@ class diff_match_patch:
 
     def diff_compute(self, text1, text2, checklines, deadline):
         """Find the differences between two texts.  Assumes that the texts do not
-      have any common prefix or suffix.
+          have any common prefix or suffix.
 
-    Args:
-      text1: Old string to be diffed.
-      text2: New string to be diffed.
-      checklines: Speedup flag.  If false, then don't run a line-level diff
-        first to identify the changed areas.
-        If true, then run a faster, slightly less optimal diff.
-      deadline: Time when the diff should be complete by.
+        Args:
+          text1: Old string to be diffed.
+          text2: New string to be diffed.
+          checklines: Speedup flag.  If false, then don't run a line-level diff
+            first to identify the changed areas.
+            If true, then run a faster, slightly less optimal diff.
+          deadline: Time when the diff should be complete by.
 
-    Returns:
-      Array of changes.
-    """
+        Returns:
+          Array of changes.
+        """
         if not text1:
             # Just add some text (speedup).
             return [(self.DIFF_INSERT, text2)]
@@ -200,17 +200,17 @@ class diff_match_patch:
 
     def diff_lineMode(self, text1, text2, deadline):
         """Do a quick line-level diff on both strings, then rediff the parts for
-      greater accuracy.
-      This speedup can produce non-minimal diffs.
+          greater accuracy.
+          This speedup can produce non-minimal diffs.
 
-    Args:
-      text1: Old string to be diffed.
-      text2: New string to be diffed.
-      deadline: Time when the diff should be complete by.
+        Args:
+          text1: Old string to be diffed.
+          text2: New string to be diffed.
+          deadline: Time when the diff should be complete by.
 
-    Returns:
-      Array of changes.
-    """
+        Returns:
+          Array of changes.
+        """
 
         # Scan the text on a line-by-line basis first.
         (text1, text2, linearray) = self.diff_linesToChars(text1, text2)
@@ -255,19 +255,19 @@ class diff_match_patch:
 
         return diffs
 
-    def diff_bisect(self, text1, text2, deadline):      # noqa: C901
+    def diff_bisect(self, text1, text2, deadline):  # noqa: C901
         """Find the 'middle snake' of a diff, split the problem in two
-      and return the recursively constructed diff.
-      See Myers 1986 paper: An O(ND) Difference Algorithm and Its Variations.
+          and return the recursively constructed diff.
+          See Myers 1986 paper: An O(ND) Difference Algorithm and Its Variations.
 
-    Args:
-      text1: Old string to be diffed.
-      text2: New string to be diffed.
-      deadline: Time at which to bail if not yet complete.
+        Args:
+          text1: Old string to be diffed.
+          text2: New string to be diffed.
+          deadline: Time at which to bail if not yet complete.
 
-    Returns:
-      Array of diff tuples.
-    """
+        Returns:
+          Array of diff tuples.
+        """
 
         # Cache the text lengths to prevent multiple calls.
         text1_length = len(text1)
@@ -361,18 +361,18 @@ class diff_match_patch:
 
     def diff_bisectSplit(self, text1, text2, x, y, deadline):
         """Given the location of the 'middle snake', split the diff in two parts
-    and recurse.
+        and recurse.
 
-    Args:
-      text1: Old string to be diffed.
-      text2: New string to be diffed.
-      x: Index of split point in text1.
-      y: Index of split point in text2.
-      deadline: Time at which to bail if not yet complete.
+        Args:
+          text1: Old string to be diffed.
+          text2: New string to be diffed.
+          x: Index of split point in text1.
+          y: Index of split point in text2.
+          deadline: Time at which to bail if not yet complete.
 
-    Returns:
-      Array of diff tuples.
-    """
+        Returns:
+          Array of diff tuples.
+        """
         text1a = text1[:x]
         text2a = text2[:y]
         text1b = text1[x:]
@@ -386,17 +386,17 @@ class diff_match_patch:
 
     def diff_linesToChars(self, text1, text2):
         """Split two texts into an array of strings.  Reduce the texts to a string
-    of hashes where each Unicode character represents one line.
+        of hashes where each Unicode character represents one line.
 
-    Args:
-      text1: First string.
-      text2: Second string.
+        Args:
+          text1: First string.
+          text2: Second string.
 
-    Returns:
-      Three element tuple, containing the encoded text1, the encoded text2 and
-      the array of unique strings.  The zeroth element of the array of unique
-      strings is intentionally blank.
-    """
+        Returns:
+          Three element tuple, containing the encoded text1, the encoded text2 and
+          the array of unique strings.  The zeroth element of the array of unique
+          strings is intentionally blank.
+        """
         lineArray = []  # e.g. lineArray[4] == "Hello\n"
         lineHash = {}  # e.g. lineHash["Hello\n"] == 4
 
@@ -406,15 +406,15 @@ class diff_match_patch:
 
         def diff_linesToCharsMunge(text):
             """Split a text into an array of strings.  Reduce the texts to a string
-      of hashes where each Unicode character represents one line.
-      Modifies linearray and linehash through being a closure.
+            of hashes where each Unicode character represents one line.
+            Modifies linearray and linehash through being a closure.
 
-      Args:
-        text: String to encode.
+            Args:
+              text: String to encode.
 
-      Returns:
-        Encoded string.
-      """
+            Returns:
+              Encoded string.
+            """
             chars = []
             # Walk the text, pulling out a substring for each line.
             # text.split('\n') would would temporarily double our memory footprint.
@@ -449,12 +449,12 @@ class diff_match_patch:
 
     def diff_charsToLines(self, diffs, lineArray):
         """Rehydrate the text in a diff from a string of line hashes to real lines
-    of text.
+        of text.
 
-    Args:
-      diffs: Array of diff tuples.
-      lineArray: Array of unique strings.
-    """
+        Args:
+          diffs: Array of diff tuples.
+          lineArray: Array of unique strings.
+        """
         for i in range(len(diffs)):
             text = []
             for char in diffs[i][1]:
@@ -464,13 +464,13 @@ class diff_match_patch:
     def diff_commonPrefix(self, text1, text2):
         """Determine the common prefix of two strings.
 
-    Args:
-      text1: First string.
-      text2: Second string.
+        Args:
+          text1: First string.
+          text2: Second string.
 
-    Returns:
-      The number of characters common to the start of each string.
-    """
+        Returns:
+          The number of characters common to the start of each string.
+        """
         # Quick check for common null cases.
         if not text1 or not text2 or text1[0] != text2[0]:
             return 0
@@ -492,13 +492,13 @@ class diff_match_patch:
     def diff_commonSuffix(self, text1, text2):
         """Determine the common suffix of two strings.
 
-    Args:
-      text1: First string.
-      text2: Second string.
+        Args:
+          text1: First string.
+          text2: Second string.
 
-    Returns:
-      The number of characters common to the end of each string.
-    """
+        Returns:
+          The number of characters common to the end of each string.
+        """
         # Quick check for common null cases.
         if not text1 or not text2 or text1[-1] != text2[-1]:
             return 0
@@ -523,14 +523,14 @@ class diff_match_patch:
     def diff_commonOverlap(self, text1, text2):
         """Determine if the suffix of one string is the prefix of another.
 
-    Args:
-      text1 First string.
-      text2 Second string.
+        Args:
+          text1 First string.
+          text2 Second string.
 
-    Returns:
-      The number of characters common to the end of the first
-      string and the start of the second string.
-    """
+        Returns:
+          The number of characters common to the end of the first
+          string and the start of the second string.
+        """
         # Cache the text lengths to prevent multiple calls.
         text1_length = len(text1)
         text2_length = len(text2)
@@ -562,20 +562,20 @@ class diff_match_patch:
                 best = length
                 length += 1
 
-    def diff_halfMatch(self, text1, text2):     # noqa: C901
+    def diff_halfMatch(self, text1, text2):  # noqa: C901
         """Do the two texts share a substring which is at least half the length of
-    the longer text?
-    This speedup can produce non-minimal diffs.
+        the longer text?
+        This speedup can produce non-minimal diffs.
 
-    Args:
-      text1: First string.
-      text2: Second string.
+        Args:
+          text1: First string.
+          text2: Second string.
 
-    Returns:
-      Five element Array, containing the prefix of text1, the suffix of text1,
-      the prefix of text2, the suffix of text2 and the common middle.  Or None
-      if there was no match.
-    """
+        Returns:
+          Five element Array, containing the prefix of text1, the suffix of text1,
+          the prefix of text2, the suffix of text2 and the common middle.  Or None
+          if there was no match.
+        """
         if self.Diff_Timeout <= 0:
             # Don't risk returning a non-optimal diff if we have unlimited time.
             return None
@@ -588,19 +588,19 @@ class diff_match_patch:
 
         def diff_halfMatchI(longtext, shorttext, i):
             """Does a substring of shorttext exist within longtext such that the
-      substring is at least half the length of longtext?
-      Closure, but does not reference any external variables.
+            substring is at least half the length of longtext?
+            Closure, but does not reference any external variables.
 
-      Args:
-        longtext: Longer string.
-        shorttext: Shorter string.
-        i: Start index of quarter length substring within longtext.
+            Args:
+              longtext: Longer string.
+              shorttext: Shorter string.
+              i: Start index of quarter length substring within longtext.
 
-      Returns:
-        Five element Array, containing the prefix of longtext, the suffix of
-        longtext, the prefix of shorttext, the suffix of shorttext and the
-        common middle.  Or None if there was no match.
-      """
+            Returns:
+              Five element Array, containing the prefix of longtext, the suffix of
+              longtext, the prefix of shorttext, the suffix of shorttext and the
+              common middle.  Or None if there was no match.
+            """
             seed = longtext[i : i + len(longtext) // 4]
             best_common = ""
             j = shorttext.find(seed)
@@ -653,13 +653,13 @@ class diff_match_patch:
             (text2_a, text2_b, text1_a, text1_b, mid_common) = hm
         return (text1_a, text1_b, text2_a, text2_b, mid_common)
 
-    def diff_cleanupSemantic(self, diffs):      # noqa: C901
+    def diff_cleanupSemantic(self, diffs):  # noqa: C901
         """Reduce the number of edits by eliminating semantically trivial
-    equalities.
+        equalities.
 
-    Args:
-      diffs: Array of diff tuples.
-    """
+        Args:
+          diffs: Array of diff tuples.
+        """
         changes = False
         equalities = []  # Stack of indices where equalities are found.
         lastEquality = None  # Always equal to diffs[equalities[-1]][1]
@@ -774,28 +774,28 @@ class diff_match_patch:
                 pointer += 1
             pointer += 1
 
-    def diff_cleanupSemanticLossless(self, diffs):      # noqa: C901
+    def diff_cleanupSemanticLossless(self, diffs):  # noqa: C901
         """Look for single edits surrounded on both sides by equalities
-    which can be shifted sideways to align the edit to a word boundary.
-    e.g: The c<ins>at c</ins>ame. -> The <ins>cat </ins>came.
+        which can be shifted sideways to align the edit to a word boundary.
+        e.g: The c<ins>at c</ins>ame. -> The <ins>cat </ins>came.
 
-    Args:
-      diffs: Array of diff tuples.
-    """
+        Args:
+          diffs: Array of diff tuples.
+        """
 
         def diff_cleanupSemanticScore(one, two):
             """Given two strings, compute a score representing whether the
-      internal boundary falls on logical boundaries.
-      Scores range from 6 (best) to 0 (worst).
-      Closure, but does not reference any external variables.
+            internal boundary falls on logical boundaries.
+            Scores range from 6 (best) to 0 (worst).
+            Closure, but does not reference any external variables.
 
-      Args:
-        one: First string.
-        two: Second string.
+            Args:
+              one: First string.
+              two: Second string.
 
-      Returns:
-        The score.
-      """
+            Returns:
+              The score.
+            """
             if not one or not two:
                 # Edges are the best.
                 return 6
@@ -895,11 +895,11 @@ class diff_match_patch:
 
     def diff_cleanupEfficiency(self, diffs):
         """Reduce the number of edits by eliminating operationally trivial
-    equalities.
+        equalities.
 
-    Args:
-      diffs: Array of diff tuples.
-    """
+        Args:
+          diffs: Array of diff tuples.
+        """
         changes = False
         equalities = []  # Stack of indices where equalities are found.
         lastEquality = None  # Always equal to diffs[equalities[-1]][1]
@@ -971,13 +971,13 @@ class diff_match_patch:
         if changes:
             self.diff_cleanupMerge(diffs)
 
-    def diff_cleanupMerge(self, diffs):     # noqa: C901
+    def diff_cleanupMerge(self, diffs):  # noqa: C901
         """Reorder and merge like edit sections.  Merge equalities.
-    Any edit section can move as long as it doesn't cross an equality.
+        Any edit section can move as long as it doesn't cross an equality.
 
-    Args:
-      diffs: Array of diff tuples.
-    """
+        Args:
+          diffs: Array of diff tuples.
+        """
         diffs.append((self.DIFF_EQUAL, ""))  # Add a dummy entry at the end.
         pointer = 0
         count_delete = 0
@@ -1096,15 +1096,15 @@ class diff_match_patch:
 
     def diff_xIndex(self, diffs, loc):
         """loc is a location in text1, compute and return the equivalent location
-    in text2.  e.g. "The cat" vs "The big cat", 1->1, 5->8
+        in text2.  e.g. "The cat" vs "The big cat", 1->1, 5->8
 
-    Args:
-      diffs: Array of diff tuples.
-      loc: Location within text1.
+        Args:
+          diffs: Array of diff tuples.
+          loc: Location within text1.
 
-    Returns:
-      Location within text2.
-    """
+        Returns:
+          Location within text2.
+        """
         chars1 = 0
         chars2 = 0
         last_chars1 = 0
@@ -1129,12 +1129,12 @@ class diff_match_patch:
     def diff_prettyHtml(self, diffs):
         """Convert a diff array into a pretty HTML report.
 
-    Args:
-      diffs: Array of diff tuples.
+        Args:
+          diffs: Array of diff tuples.
 
-    Returns:
-      HTML representation.
-    """
+        Returns:
+          HTML representation.
+        """
         html = []
         for (op, data) in diffs:
             text = (
@@ -1151,12 +1151,12 @@ class diff_match_patch:
     def diff_text1(self, diffs):
         """Compute and return the source text (all equalities and deletions).
 
-    Args:
-      diffs: Array of diff tuples.
+        Args:
+          diffs: Array of diff tuples.
 
-    Returns:
-      Source text.
-    """
+        Returns:
+          Source text.
+        """
         text = []
         for (op, data) in diffs:
             if op != self.DIFF_INSERT:
@@ -1166,12 +1166,12 @@ class diff_match_patch:
     def diff_text2(self, diffs):
         """Compute and return the destination text (all equalities and insertions).
 
-    Args:
-      diffs: Array of diff tuples.
+        Args:
+          diffs: Array of diff tuples.
 
-    Returns:
-      Destination text.
-    """
+        Returns:
+          Destination text.
+        """
         text = []
         for (op, data) in diffs:
             if op != self.DIFF_DELETE:
@@ -1180,14 +1180,14 @@ class diff_match_patch:
 
     def diff_levenshtein(self, diffs):
         """Compute the Levenshtein distance; the number of inserted, deleted or
-    substituted characters.
+        substituted characters.
 
-    Args:
-      diffs: Array of diff tuples.
+        Args:
+          diffs: Array of diff tuples.
 
-    Returns:
-      Number of changes.
-    """
+        Returns:
+          Number of changes.
+        """
         levenshtein = 0
         insertions = 0
         deletions = 0
@@ -1206,16 +1206,16 @@ class diff_match_patch:
 
     def diff_toDelta(self, diffs):
         """Crush the diff into an encoded string which describes the operations
-    required to transform text1 into text2.
-    E.g. =3\t-2\t+ing  -> Keep 3 chars, delete 2 chars, insert 'ing'.
-    Operations are tab-separated.  Inserted text is escaped using %xx notation.
+        required to transform text1 into text2.
+        E.g. =3\t-2\t+ing  -> Keep 3 chars, delete 2 chars, insert 'ing'.
+        Operations are tab-separated.  Inserted text is escaped using %xx notation.
 
-    Args:
-      diffs: Array of diff tuples.
+        Args:
+          diffs: Array of diff tuples.
 
-    Returns:
-      Delta text.
-    """
+        Returns:
+          Delta text.
+        """
         text = []
         for (op, data) in diffs:
             if op == self.DIFF_INSERT:
@@ -1230,18 +1230,18 @@ class diff_match_patch:
 
     def diff_fromDelta(self, text1, delta):
         """Given the original text1, and an encoded string which describes the
-    operations required to transform text1 into text2, compute the full diff.
+        operations required to transform text1 into text2, compute the full diff.
 
-    Args:
-      text1: Source string for the diff.
-      delta: Delta text.
+        Args:
+          text1: Source string for the diff.
+          delta: Delta text.
 
-    Returns:
-      Array of diff tuples.
+        Returns:
+          Array of diff tuples.
 
-    Raises:
-      ValueError: If invalid input.
-    """
+        Raises:
+          ValueError: If invalid input.
+        """
         diffs = []
         pointer = 0  # Cursor in text1
         tokens = delta.split("\t")

@@ -1,27 +1,62 @@
+import csv
 import logging
-
 import re
-import requests
-from urllib.parse import urlencode
 import uuid
+from urllib.parse import urlencode
 
+import requests
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+from django.views import View
 from django.views.generic import FormView, RedirectView, TemplateView
 
-from .forms import UserGroupForm
-from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
-from .permissions import APIPermissionMixin
-
+from users.constants import (
+    REGIONAL_LEAD_PERMISSION_GROUPS,
+    USER_ADDITIONAL_PERMISSION_GROUPS,
+)
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
 from utils.pagination import PaginationMixin
 from utils.referers import RefererMixin
 from utils.sessions import init_session
+from utils.sso import SSOClient
+
+from .forms import UserDeleteForm, UserGroupForm
+from .mixins import GroupQuerystringMixin, UserMixin, UserSearchMixin
+from .permissions import APIPermissionMixin
 
 logger = logging.getLogger(__name__)
+
+
+class GetUsers(View):
+    def serialize_results(self, results):
+        return [
+            {
+                "user_id": str(result["user_id"]),
+                "first_name": result["first_name"],
+                "last_name": result["last_name"],
+                "email": result["email"],
+            }
+            for result in results
+        ]
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("q")
+        response = {"count": 0, "results": []}
+        if not query:
+            return JsonResponse(response)
+
+        # search needs to have email dots replaced with spaces for search lookup
+        query = query.replace(".", " ")
+
+        sso_client = SSOClient()
+        results = sso_client.search_users(query)
+        serialized_results = self.serialize_results(results)
+        response["results"] = serialized_results
+        response["count"] = len(results)
+        return JsonResponse(response)
 
 
 class Login(RedirectView):
@@ -72,18 +107,17 @@ class LoginCallback(RedirectView):
         }
 
         response = requests.post(url=settings.SSO_TOKEN_URI, data=payload, timeout=10)
+        if response.status_code != 200:
+            error_msg = f"No access_token from SSO: Status code: {response.status_code}, error: {response.text}"
+            raise PermissionDenied(error_msg)
 
-        if response.status_code == 200:
-            response_data = response.json()
-            access_token = response_data.get("access_token")
-            success = init_session(request.session, access_token)
-            if success:
-                return HttpResponseRedirect(self.get_redirect_url())
-            else:
-                raise PermissionDenied("Failed to initialise session.")
-        else:
-            error_msg = f"Status code: {response.status_code}, error: {response.text}"
-            raise PermissionDenied("No access_token from SSO: %s", error_msg)
+        response_data = response.json()
+        access_token = response_data.get("access_token")
+        success = init_session(request.session, access_token)
+        if not success:
+            raise PermissionDenied("Failed to initialise session.")
+
+        return HttpResponseRedirect(self.get_redirect_url())
 
     def get_redirect_url(self):
         url = self.request.session.get("return_path")
@@ -124,27 +158,77 @@ class ManageUsers(
     GroupQuerystringMixin,
     TemplateView,
 ):
+    """
+    View allowed GET query params:
+        - q: search for users by name or email
+        - group: filter by Django role/permission group
+        - page: page number
+        - ordering: name, email, role
+
+    Set following context variables:
+        - users: list of users
+        - pagination: {
+            "total_pages": total_pages,
+            "current_page": current_page,
+            "pages": [
+                {
+                    "label": i,
+                    "url": self.update_querystring(page=i),
+                }
+                for i in range(1, total_pages + 1)
+            ],
+        }
+        - q: query used
+        - ordering: sort used
+    """
+
     template_name = "users/manage.html"
     permission_required = "list_users"
-    pagination_limit = 500
+    pagination_limit = 10
+
+    def get_search_query(self):
+        return self.request.GET.get("q", "").strip()
+
+    def get_sort_query(self):
+        return self.request.GET.get("ordering", "").strip()
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["page"] = "manage-users"
-
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        group_id = self.get_group_id()
+
+        context_data["page"] = "manage-users"
         context_data["groups"] = client.groups.list()
 
-        group_id = self.get_group_id()
-        if group_id is None:
-            users = client.users.list(
-                limit=self.get_pagination_limit(),
-                offset=self.get_pagination_offset(),
-            )
-            context_data["users"] = users
-            context_data["pagination"] = self.get_pagination_data(object_list=users)
-        else:
-            context_data["group_id"] = group_id
+        search_query_param = self.get_search_query()
+        sort_param = self.get_sort_query()
+
+        context_data["search_query"] = search_query_param
+        context_data["ordering"] = sort_param
+        context_data["group_id"] = group_id
+        api_user_list_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "groups__id": group_id or "",
+        }
+        if search_query_param:
+            api_user_list_params["q"] = search_query_param
+        if sort_param:
+            api_user_list_params["ordering"] = sort_param
+
+        users = client.users.list(**api_user_list_params)
+
+        # Get list of users who are inactive & remove them from the dataset
+        inactive_users = []
+        for user in users:
+            if not user.is_active:
+                inactive_users.append(user.id)
+
+        users.remove(inactive_users)
+
+        context_data["users"] = users
+        context_data["pagination"] = self.get_pagination_data(object_list=users)
+
         return context_data
 
 
@@ -161,17 +245,58 @@ class AddUser(APIPermissionMixin, UserSearchMixin, GroupQuerystringMixin, FormVi
 
     def select_user_api_call(self, user_id):
         group_id = self.get_group_id()
+        user = self.client.users.get(user_id)
         if group_id:
-            self.client.users.patch(id=user_id, groups=[{"id": group_id}])
-        else:
-            # This call creates a user if they don't exist
-            self.client.users.get(id=user_id)
+            user_groups = user.groups
+            groups = self.client.groups.list()
+            group_name = [
+                group.data["name"] for group in groups if group.data["id"] == group_id
+            ][0]
+            is_permission_bundle_group = group_name in USER_ADDITIONAL_PERMISSION_GROUPS
+
+            if is_permission_bundle_group:
+                groups = [{"id": group["id"]} for group in user_groups] + [
+                    {"id": group_id}
+                ]
+            else:
+                groups = [{"id": group_id}]
+
+            self.client.users.patch(id=user_id, groups=groups)
+            return
+
+        # This call creates a user if they don't exist
+        self.client.users.get(id=user_id)
 
     def get_success_url(self):
         success_url = reverse("users:manage_users")
         group_id = self.get_group_id()
         if group_id:
             return f"{success_url}?group={group_id}"
+        return success_url
+
+
+class DeleteUser(APIPermissionMixin, UserMixin, FormView):
+    template_name = "users/delete.html"
+    form_class = UserDeleteForm
+    permission_required = "change_user"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["page"] = "manage-users"
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["id"] = str(self.kwargs.get("user_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        success_url = reverse("users:manage_users")
         return success_url
 
 
@@ -194,9 +319,26 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
         return kwargs
 
     def get_initial(self):
+        role_group = "0"
+        additional_groups = []
+        regional_lead_assignments = []
+
         for group in self.user.groups:
-            return {"group": str(group["id"])}
-        return {"group": "0"}
+            if group["name"] == "Role administrator":
+                if settings.DISPLAY_ROLE_ADMIN_GROUP:
+                    additional_groups.append(str(group["id"]))
+            elif group["name"] in USER_ADDITIONAL_PERMISSION_GROUPS:
+                additional_groups.append(str(group["id"]))
+            elif group["name"] in REGIONAL_LEAD_PERMISSION_GROUPS:
+                regional_lead_assignments.append(str(group["id"]))
+            else:
+                role_group = str(group["id"])
+
+        return {
+            "group": role_group,
+            "additional_permissions": additional_groups,
+            "regional_lead_groups": regional_lead_assignments,
+        }
 
     def form_valid(self, form):
         form.save()
@@ -205,17 +347,19 @@ class EditUser(APIPermissionMixin, RefererMixin, UserMixin, FormView):
         )
 
     def get_success_url(self, new_group_id):
-        if self.referer.path:
-            if self.referer.url_name == "manage_users":
-                manage_users_url = reverse("users:manage_users")
-                if new_group_id == "0":
-                    return manage_users_url
-                return f"{manage_users_url}?group={new_group_id}"
+        if not self.referer.path:
+            return reverse(
+                "users:user_detail", kwargs={"user_id": self.kwargs.get("user_id")}
+            )
+
+        if self.referer.url_name != "manage_users":
             return self.referer.path
-        return reverse(
-            "users:user_detail",
-            kwargs={"user_id": self.kwargs.get("user_id")}
-        )
+
+        manage_users_url = reverse("users:manage_users")
+        if new_group_id != "0":
+            return f"{manage_users_url}?group={new_group_id}"
+
+        return manage_users_url
 
 
 class UserDetail(UserMixin, TemplateView):
@@ -225,3 +369,58 @@ class UserDetail(UserMixin, TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data["page"] = "manage-users"
         return context_data
+
+
+class ExportUsers(GroupQuerystringMixin, View):
+    """
+    Django view that gets a list of users from MarketAccessAPIClient and
+    serializes them as a CSV file.
+
+    View should be protected being the Administrator permission required.
+    """
+
+    permission_required = "list_users"
+
+    def get_search_query(self):
+        return self.request.GET.get("q", "").strip()
+
+    def get_sort_query(self):
+        return self.request.GET.get("ordering", "").strip()
+
+    def get(self, request):
+        client = MarketAccessAPIClient(request.session.get("sso_token"))
+        group_id = self.get_group_id()
+
+        search_query_param = self.get_search_query()
+        sort_param = self.get_sort_query()
+
+        # not the most elegant approach, but let's assume we never have more than a million users
+        api_user_list_params = {
+            "offset": 0,
+            "limit": 1000000,
+            "groups__id": group_id or "",
+        }
+        if search_query_param:
+            api_user_list_params["q"] = search_query_param
+        if sort_param:
+            api_user_list_params["ordering"] = sort_param
+
+        users = client.users.list(**api_user_list_params)
+
+        # users = client.users.list()
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = "attachment; filename=users.csv"
+        writer = csv.writer(response)
+        writer.writerow(["id", "email", "first_name", "last_name", "roles"])
+        for user in users:
+            user_data = user.data
+            writer.writerow(
+                [
+                    user_data["id"],
+                    user_data["email"],
+                    user_data["first_name"],
+                    user_data["last_name"],
+                    ",".join([group["name"] for group in user_data["groups"]]),
+                ]
+            )
+        return response

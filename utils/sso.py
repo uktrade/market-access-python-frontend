@@ -1,10 +1,10 @@
-import requests
+from http import HTTPStatus
 from urllib.parse import quote_plus
 
+import requests
 from django.conf import settings
 
 from users.exceptions import SSOException
-
 from utils.exceptions import APIHttpException
 
 
@@ -45,3 +45,13 @@ class SSOClient:
         response = self.get(path)
         users = response.get("results", [])
         return users
+
+    def get_user_by_email(self, email_address):
+        path = f"user/introspect/?email={quote_plus(email_address)}"
+        try:
+            response = self.get(path)
+        except APIHttpException as e:
+            if e.status_code != HTTPStatus.NOT_FOUND:
+                raise e
+            response = None
+        return response

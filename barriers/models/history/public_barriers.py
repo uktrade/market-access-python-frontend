@@ -1,8 +1,9 @@
+import dateutil.parser
+
 from barriers.constants import PUBLIC_BARRIER_STATUSES
+
 from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
-
-import dateutil.parser
 
 
 class CategoriesHistoryItem(BaseHistoryItem):
@@ -19,7 +20,7 @@ class CategoriesHistoryItem(BaseHistoryItem):
 
 
 class LocationHistoryItem(BaseHistoryItem):
-    field = "location"
+    field = "country"
     field_name = "Public location"
 
 
@@ -33,6 +34,7 @@ class PublicViewStatusHistoryItem(BaseHistoryItem):
             PUBLIC_BARRIER_STATUSES.UNKNOWN,
             PUBLIC_BARRIER_STATUSES.INELIGIBLE,
             PUBLIC_BARRIER_STATUSES.ELIGIBLE,
+            PUBLIC_BARRIER_STATUSES.REVIEW_LATER,
         ):
             old_summary = self.old_value.get("public_eligibility_summary")
             new_summary = self.new_value.get("public_eligibility_summary")
@@ -70,7 +72,7 @@ class StatusHistoryItem(BaseHistoryItem):
 
 
 class SummaryHistoryItem(BaseHistoryItem):
-    field = "summary"
+    field = "_summary"
     field_name = "Public summary"
 
     def get_value(self, value):
@@ -78,7 +80,7 @@ class SummaryHistoryItem(BaseHistoryItem):
 
 
 class TitleHistoryItem(BaseHistoryItem):
-    field = "title"
+    field = "_title"
     field_name = "Public title"
 
 

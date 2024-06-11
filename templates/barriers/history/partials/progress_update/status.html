@@ -1,0 +1,32 @@
+{% if item.old_value %}
+    {% if item.old_value.status %}
+        <div class="history-item__old-value">
+            <span class="diff__del" tabindex="0">
+                <p class="govuk-visually-hidden">old value: </p>
+                {{ item.old_value.status }}
+            </span>
+        </div>
+    {% endif %}
+    {% if item.old_value.summary %}
+        <div class="history-item__old-value">
+            <span class="diff__del" tabindex="0">
+                <p class="govuk-visually-hidden">old value: </p>
+                {{ item.old_value.summary }}
+            </span>
+        </div>
+    {% endif %}
+{% endif %}
+{% if item.new_value %}
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value.status }}
+        </span>
+    </div>
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value.summary }}
+        </span>
+    </div>
+{% endif %}

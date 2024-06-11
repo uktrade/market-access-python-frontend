@@ -1,0 +1,45 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - {{ form.strategic_context.label}}{% endblock %}
+
+{% block back_link %}
+  <a href="{% url 'barriers:action_plan' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+  <h1 class="govuk-heading-l">
+    <label class="govuk-label govuk-label--l" for="{{ form.strategic_context.id_for_label }}">
+      {{ form.strategic_context.label }}
+    </label>
+    <span class="govuk-caption-m js-heading-caption">{{ caption }}</span> {{ text }}
+  </h1>
+
+  {% form_error_banner form %}
+
+  <form action="" method="POST" novalidate>
+    {% csrf_token %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-form-group{% if form.strategic_context.errors %} govuk-form-group--error{% endif %}">
+
+          {% form_field_error form.strategic_context %}
+          <div id="more-detail-hint" class="govuk-hint">
+            {{ form.strategic_context.help_text }}
+          </div>
+          {{ form.strategic_context }}
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-button-group">
+          <button class="govuk-button" data-module="govuk-button">Confirm</button>
+          <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan' barrier_id %}">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "reports/barrier_wizard_step.html" %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script nonce="{{request.csp_nonce}}">
+        ma.pages.report.sectorsWizardStep();
+    </script>
+{% endblock %}
+
+{% block page_title %} Report A Barrier - Wizard Framework - Sectors Affected{% endblock %}
+
+{% block fields %}
+    <div class="govuk-form-group govuk-!-margin-0">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    Sectors affected
+                </h1>
+            </legend>
+
+            {% form_error_banner form %}
+
+                <!-- Main Sector-->
+            <div id="{{ form.main_sector.name }}" class="selection-list govuk-form-group {% if form.main_sector.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="{{ form.main_sector.id_for_label }}">
+                    {{ form.main_sector.label }}
+                </label>
+                <span id="main-sector-hint" class="govuk-hint">
+                    {{ form.main_sector.help_text }}
+                </span>
+
+                {% form_field_error form "main_sector" %}
+
+                <select class="govuk-select govuk-!-width-full{% if form.sector.errors %} govuk-select--error{% endif %}" id="main_sector_select" name="barrier-sectors-affected-main_sector"{% if form.main_sector.errors %} aria-describedby="main_sector-error"{% endif %}>
+                    <option value="" disabled selected>Select a sector</option>
+                    {% for id, name in sectors_list %}
+                        <option value="{{ id }}" {% if form.main_sector.value == id %}selected{% endif %} >{{ name }}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+
+                <!-- Display Other Sector-->
+            <div class="selection-list restrict-width govuk-!-margin-0" id="sectors_display" >
+                <label class="govuk-label govuk-label--s" for="{{form.sectors.id_for_label }}">
+                    {{ form.sectors.label }}
+                </label>
+
+                <span id="description-hint" class="govuk-hint">
+                    {{ form.sectors.help_text }}
+                </span>
+
+                {% form_field_error form "sectors" %}
+
+                <ul class="selection-list__list" id="sectors_list_display">
+                </ul>
+
+                <select class="govuk-select govuk-!-width-full govuk-!-margin-bottom-3 {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
+                    <option value="" disabled selected>Select a sector</option>
+                    {% for id, name in sectors_list %}
+                        <option id="other-sectors-select-{{ id }}" value="{{ id }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="button" id="add-other-sector-button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="Add another sector">Add sector</button>
+            </div>
+
+                <!-- Hidden formtools fields -->
+            {{ form.sectors.as_hidden }}
+
+        </fieldset>
+    </div>
+{% endblock %}

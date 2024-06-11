@@ -1,5 +1,4 @@
 from core.tests import MarketAccessTestCase
-
 from utils.metadata import get_metadata
 
 
@@ -44,6 +43,7 @@ class MetadataTestCase(MarketAccessTestCase):
             "Middle East",
             "North America",
             "South Asia",
+            "Wider Europe",
         ]
 
     def test_get_sector(self):
@@ -79,8 +79,7 @@ class MetadataTestCase(MarketAccessTestCase):
     def test_get_status(self):
         metadata = get_metadata()
         assert metadata.get_status("0")["name"] == "Unfinished"
-        assert metadata.get_status("1")["name"] == "Open: Pending action"
-        assert metadata.get_status("2")["name"] == "Open: In progress"
+        assert metadata.get_status("2")["name"] == "Open"
         assert metadata.get_status("3")["name"] == "Resolved: In part"
         assert metadata.get_status("4")["name"] == "Resolved: In full"
         assert metadata.get_status("5")["name"] == "Dormant"
@@ -89,13 +88,7 @@ class MetadataTestCase(MarketAccessTestCase):
 
     def test_get_status_text(self):
         metadata = get_metadata()
-        assert metadata.get_status_text("2") == "Open: In progress"
-        assert metadata.get_status_text("1", "UK_GOVT") == (
-            "Open: Pending action (UK government)"
-        )
-        assert metadata.get_status_text("1", "OTHER", "Pending other") == (
-            "Open: Pending action (Pending other)"
-        )
+        assert metadata.get_status_text("2") == "Open"
 
     def test_get_term(self):
         metadata = get_metadata()
@@ -149,3 +142,16 @@ class MetadataTestCase(MarketAccessTestCase):
         assert len(barrier_types) > 0
         for barrier_type in barrier_types:
             assert barrier_type["category"] == "SERVICES"
+
+    def test_get_tag_that_does_not_exist(self):
+        metadata = get_metadata()
+
+        tag_id = 999999
+        tag = metadata.get_barrier_tag(tag_id=tag_id)
+        assert tag == {
+            "id": tag_id,
+            "title": "[unknown tag]",
+            "description": "No such tag exists",
+            "show_at_reporting": False,
+            "order": 9999,
+        }

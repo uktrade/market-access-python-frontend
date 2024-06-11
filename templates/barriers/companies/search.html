@@ -54,38 +54,45 @@
 
         {% if results %}
             <h2 class="results-count" role="alert">
-                <span class="results-count__number">{{ results.count }}</span>
+                <span class="results-count__number">{{ results.total_results }}</span>
                 companies match <span class="highlight">{{ form.query.value }}</span>
             </h2>
 
             <ul class="search-card-list">
-            {% for company in results.results %}
-                <li class="search-card">
-                    <a href="{% url 'barriers:company_detail' barrier.id company.id %}" class="search-card__link">
-                        <h3 class="search-card__heading">{{ company.name|highlight:form.query.value }}</h3>
-                        <dl class="search-card__values">
-                            {% if company.company_number %}
-                            <dt class="search-card__values__key">Companies House number</dt>
-                            <dd class="search-card__values__value">{{ company.company_number|highlight:form.query.value }}</dd>
-                            {% endif %}
-                            {% if company.headquarter_type %}
-                            <dt class="search-card__values__key">Type</dt>
-                            <dd class="search-card__values__value">{{ company.headquarter_type.name|highlight:form.query.value }}</dd>
-                            {% endif %}
-                            <dt class="search-card__values__key">Sector</dt>
-                            <dd class="search-card__values__value">{{ company.sector.name|highlight:form.query.value }}</dd>
+                {% for company in results.items %}
+                    <li class="search-card">
+                        <a href="{% url 'barriers:company_detail' barrier.id company.company_number %}" class="search-card__link">
+                            <h3 class="search-card__heading">{{ company.name|highlight:form.query.value }}</h3>
+                        {% comment %} {{ company }} {% endcomment %}
+                            <dl class="search-card__values">
+                                {% if company.company_number %}
+                                    <dt class="search-card__values__key">Companies House number</dt>
+                                    <dd class="search-card__values__value">{{ company.company_number|highlight:form.query.value }}</dd>
+                                {% endif %}
+                                {% if company.title %}
+                                    <dt class="search-card__values__key">Companies Name</dt>
+                                    <dd class="search-card__values__value">{{ company.title|highlight:form.query.value }}</dd>
+                                {% endif %}
 
-                            <dt class="search-card__values__key">Incorporated on</dt>
-                            <dd class="search-card__values__value">{{ company.created_on|date:"j F Y" }}</dd>
+                                {% if company.date_of_creation %}
+                                    <dt class="search-card__values__key">Incorporated on</dt>
+                                    <dd class="search-card__values__value">{{ company.date_of_creation|date:"j F Y" }}</dd>
+                                {% endif %}
 
-                            <dt class="search-card__values__key">Primary address</dt>
-                            <dd class="search-card__values__value">
-                                {{ company.get_address_display|highlight:form.query.value }}
-                            </dd>
-                        </dl>
-                    </a>
-                </li>
-            {% endfor %}
+                                {% if company.date_of_cessation %}
+                                    <dt class="search-card__values__key">Terminated on</dt>
+                                    <dd class="search-card__values__value">{{ company.date_of_cessation|date:"j F Y" }}</dd>
+                                {% endif %}
+                                {% if company.address_display %}
+                                    <dt class="search-card__values__key">Primary address</dt>
+                                    <dd class="search-card__values__value">
+                                        {{ company.address_display|highlight:form.query.value }}
+                                    </dd>
+                                {% endif %}
+                            </dl>
+                        </a>
+                    </li>
+                {% endfor %}
             </ul>
         {% endif %}
 
@@ -102,4 +109,3 @@
     </div>
 
 {% endblock %}
-

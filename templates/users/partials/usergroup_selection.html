@@ -1,0 +1,40 @@
+<div class="govuk-form-group">
+    <label class="govuk-label" for="filter_group">
+        Filter by group
+    </label>
+    <select class="govuk-select" id="filter_group" name="group">
+        <option value="all">All users</option>
+        {% for group in groups %}
+            <option value="{{ group.id }}"{% if group_id == group.id %} selected{% endif %}>
+                {{ group.plural_name}}
+            </option>
+        {% endfor %}
+    </select>
+    <button class="govuk-button dmas-js-disabled-button" type="submit" value="Filter">
+        Filter
+    </button>
+</div>
+
+{#<ul class="page-tabs page-tabs--no-margin">#}
+{#    {% if group_id %}#}
+{#        <li class="page-tabs__tab">#}
+{#            <a class="page-tabs__tab__text" href="{% url 'users:manage_users' %}">All users</a>#}
+{#        </li>#}
+{#    {% else %}#}
+{#        <li class="page-tabs__tab page-tabs__tab--active">#}
+{#            <span class="page-tabs__tab__text">All users</span>#}
+{#        </li>#}
+{#    {% endif %}#}
+{##}
+{#    {% for group in groups %}#}
+{#        {% if group_id == group.id %}#}
+{#            <li class="page-tabs__tab page-tabs__tab--active">#}
+{#                <span class="page-tabs__tab__text">{{ group.plural_name }}</span>#}
+{#            </li>#}
+{#        {% else %}#}
+{#            <li class="page-tabs__tab">#}
+{#                <a class="page-tabs__tab__text" href="?group={{ group.id }}">{{ group.plural_name }}</a>#}
+{#            </li>#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+{#</ul>#}

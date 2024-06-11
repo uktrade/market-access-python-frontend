@@ -1,0 +1,242 @@
+{% extends "barriers/edit/base.html" %}
+
+{% load activity %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+{% load dates %}
+
+{% block page_title %}{{ block.super }} - Action plan{% endblock %}
+
+{% block masthead %}
+    <div class="ma-masthead">
+        {% include 'barriers/partials/barrier_summary.html' %}
+    </div>
+    {% include 'barriers/partials/tags.html' %}
+{% endblock %}
+
+{% block head %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script nonce="{{request.csp_nonce}}">
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.renderTextAreaWithMentions("note-textarea-container")
+        })
+    </script>
+{% endblock %}
+
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">
+        if( ma.components.DeleteModal ){
+            new ma.components.DeleteModal();
+        }
+    </script>
+{% endblock %}
+
+{% block outside_content %}
+    {% if delete_note %}
+        <div class="modal">
+            <div class="modal__content" role="alertdialog" tabindex="1" aria-describedby="modal-label">
+                <h3 class="modal__content__title" id="modal-label">Delete note</h3>
+                <p>Are you sure you want to delete this note?</p>
+                <form action="" method="POST" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="note_id" value="{{ delete_note }}" />
+                    <button name="action" value="delete-note" class="govuk-button" tabindex="2">Yes, delete</button>
+                    <a href="{% url 'barriers:public_barrier_detail' barrier.id %}" class="govuk-button button--secondary js-modal-cancel" tabindex="3">No, cancel</a>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'barriers/partials/barrier_tabs.html' with active='action_plan' %}
+
+    <section class="action_plan">
+        <h2 class="govuk-heading-l"> Action plan </h2>
+        <div class="action_plans_stategic_context">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" colspan="2">
+                            <h2 class="govuk-heading-m"> Strategic context </h2>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_add_strategic_context' barrier.id %}">Overview</a>
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.strategic_context %}
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_stakeholders_list' barrier.id %}">Stakeholder mapping</a>
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.stakeholders %}
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_add_risks_and_mitigations' barrier.id %}">Risks and mitigation</a>
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.has_risks %}
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+{#                    <tr class="govuk-table__row">#}
+{#                        <td class="govuk-table__cell">#}
+{#                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan' barrier.id %}">Risks and mitigation</a> #}
+{#                        </td>#}
+{#                        <td class="govuk-table__cell">#}
+{#                            {% if action_plan.risks_mitigations %} #}
+{#                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">#}
+{#                                    Added#}
+{#                                </strong>#}
+{#                            {% else %}#}
+{#                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">#}
+{#                                    Not Added#}
+{#                                </strong>#}
+{#                            {% endif %}#}
+{#                        </td>#}
+{#                    </tr>#}
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            {% if action_plan.owner %}
+                                <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_existing_owner' barrier.id %}">Action plan owner</a>
+                            {% else %}
+                                <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_owner' barrier.id %}">Action plan owner</a>
+                            {% endif %}
+                        </td>
+                        <td class="govuk-table__cell">
+                            {% if action_plan.owner %}
+                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                    Added
+                                </strong>
+                            {% else %}
+                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                    Not Added
+                                </strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="action_plan_objectives">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">
+                            <h2 class="govuk-heading-m"> Objectives </h2>
+                            <p class="govuk-body">Add milestones you can work towards to solve this barrier. You can then add the tasks, or actions, that will help you reach them.</p>
+                            <p class="govuk-body">You can add more than one objective and more than one task to each objective.</p>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    {% for milestone in action_plan.milestones %}
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <p class="govuk-body">
+                                    <a class="govuk-link govuk-!-font-size-19 govuk-!-font-weight-bold max-w-70 inline-block" href="{% url 'barriers:action_plan_edit_milestone' barrier.id milestone.id %}">{{ milestone.objective }}</a>
+
+                                    <span class="action_plan__objective_status">
+                                        {% if milestone.status == "NOT_STARTED" %}
+                                            <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                                Not Started
+                                            </strong>
+                                        {% elif milestone.status == "IN_PROGRESS" %}
+                                            <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                                In Progress
+                                            </strong>
+                                        {% elif milestone.status == "COMPLETED" %}
+                                            <strong class="govuk-tag govuk-tag--green action_plans_tag">
+                                                Complete
+                                            </strong>
+                                        {% endif %}
+                                    </span>
+                                </p>
+                                {% if milestone.estimated_completion_date %}
+                                    <div class="indented-box p-4 text-m">Estimated completion date: <strong>{{ milestone.estimated_completion_date }}</strong></div>
+                                {% endif %}
+                                <div class="govuk-body action_plans_task_list">
+                                    {% if milestone.tasks %}
+                                        <table class="govuk-table">
+                                            <thead class="govuk-table__head">
+                                                <tr class="govuk-table__row">
+                                                    <th class="govuk-table__header" colspan="2">Objective task</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="govuk-table__body">
+                                                {% for task in milestone.tasks %}
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            <a class="govuk-link govuk-!-font-size-19" href="{% url 'barriers:action_plan_edit_task' barrier.id milestone.id task.id %}">{{ task.action_text }}</a>
+                                                        </td>
+                                                        <td class="govuk-table__cell">
+                                                            {% if task.status == "NOT_STARTED" %}
+                                                                <strong class="govuk-tag govuk-tag--grey action_plans_tag">
+                                                                    Not Started
+                                                                </strong>
+                                                            {% elif task.status == "IN_PROGRESS" %}
+                                                                <strong class="govuk-tag govuk-tag--blue action_plans_tag">
+                                                                    In Progress
+                                                                </strong>
+                                                            {% elif task.status == "COMPLETED" %}
+                                                                <strong class="govuk-tag govuk-tag--green action_plans_tag">
+                                                                    Complete
+                                                                </strong>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% endif %}
+                                    <div class="govuk-grid-row">
+                                        <div class="govuk-grid-column-full">
+                                            <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_add_task' barrier.id milestone.id %}">Add objective task</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:action_plan_add_milestone' barrier.id %}">Add objective</a>
+        </div>
+
+    </section>
+
+{% endblock %}

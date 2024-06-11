@@ -8,7 +8,7 @@
 
 {% block body_script %}
     {{ block.super }}
-    <script>
+    <script nonce="{{request.csp_nonce}}">
         ma.pages.report.index();
     </script>
 {% endblock %}
@@ -31,43 +31,43 @@
                     <th class="standard-table__heading">Barrier ID</th>
                     <th class="standard-table__heading">Barrier location</th>
                     <th class="standard-table__heading">Resolved?</th>
-                    <th class="standard-table__heading">Barrier scope</th>
+                    <th class="standard-table__heading">Barrier title</th>
                     <th class="standard-table__heading">Started by</th>
                     <th class="standard-table__heading">Action</th>
                 </tr>
             </thead>
             <tbody class="js-delete-modal-container">
                 {% for report in reports %}
-                <tr class="standard-table__row draft-barrier-item">
-                    <td class="standard-table__cell">
-                        {% if report.created_on %}{{ report.created_on|date:"j F Y" }} at {{ report.created_on|date:"g:iA"|lower }}{% else %}---{% endif %}
-                    </td>
-                    <td class="standard-table__cell">
-                        {{ report.code }}
-                    </td>
-                    <td class="standard-table__cell">
-                        {% if report.country %}
-                            {{ report.country.name|default:'---' }}
-                        {% else %}
-                            {{ report.trading_bloc.name|default:'---' }}
-                        {% endif %}
-                    </td>
-                    <td class="standard-table__cell">
-                        {{ report.resolved_text }}
-                    </td>
-                    <td class="standard-table__cell">
-                        {{ report.term.name|default:'---' }}
-                    </td>
-                    <td class="standard-table__cell">
-                        {{ report.created_by.name|default:'---' }}
-                    </td>
-                    <td class="standard-table__cell">
-                        <a class="table__link" href="{% url 'reports:draft_barrier_details_uuid' report.id %}">Continue</a>
-                        {% if report.created_by.id == current_user.id %}
-                            <a class="table__link js-delete-modal" href="{% url 'reports:delete_report' report.id %}">Delete</a>
-                        {% endif %}
-                    </td>
-                </tr>
+                    <tr class="standard-table__row draft-barrier-item">
+                        <td class="standard-table__cell">
+                            {% if report.created_on %}{{ report.created_on|date:"j F Y" }} at {{ report.created_on|date:"g:iA"|lower }}{% else %}---{% endif %}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.code }}
+                        </td>
+                        <td class="standard-table__cell">
+                            {% if report.country %}
+                                {{ report.country.name|default:'---' }}
+                            {% else %}
+                                {{ report.trading_bloc.name|default:'---' }}
+                            {% endif %}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.resolved_text }}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.title|default:'---' }}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.created_by.name|default:'---' }}
+                        </td>
+                        <td class="standard-table__cell">
+                            <a class="table__link" href="{% url 'reports:report-barrier-drafts' report.id %}">Continue</a>
+                            {% if report.created_by.id == current_user.id %}
+                                <a class="table__link js-delete-modal" href="{% url 'reports:delete_report' report.id %}">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>

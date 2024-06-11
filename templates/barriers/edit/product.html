@@ -1,6 +1,6 @@
 {% extends "barriers/edit/base.html" %}
 
-{% block page_title %}{{ block.super }} - Edit product or service{% endblock %}
+{% block page_title %}{{ block.super }} - Product, service or investment affected{% endblock %}
 
 {% block back_link %}
     <a href="{% url 'barriers:barrier_detail' object.id %}" class="govuk-back-link ma-back-link">Back</a>
@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='About the barrier' %}
+    {% include 'partials/heading.html' with text='Product, service or investment affected' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
@@ -22,7 +22,10 @@
             <input class="govuk-input" id="{{ form.product.name }}" name="{{ form.product.name }}" type="text" value="{% if form.product.value %}{{ form.product.value }}{% endif %}">
         </div>
 
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
+
+
+
     </form>
 
 {% endblock %}

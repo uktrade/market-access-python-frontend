@@ -1,7 +1,10 @@
 import datetime
-from core.tests import MarketAccessTestCase
+import logging
 
 from barriers.models import Barrier, Company, SavedSearch
+from core.tests import MarketAccessTestCase
+
+logger = logging.getLogger(__name__)
 
 
 class BarrierModelTestCase(MarketAccessTestCase):
@@ -12,7 +15,7 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.admin_areas[1]["name"] == "Sao Paulo"
 
         assert barrier.created_on.date() == datetime.date(2019, 10, 28)
-        assert barrier.reported_on.date() == datetime.date(2019, 10, 28)
+        assert barrier.reported_on.date() == datetime.date(2019, 10, 30)
         assert barrier.modified_on.date() == datetime.date(2020, 1, 21)
 
         assert barrier.location == "Rio de Janeiro, Sao Paulo (Brazil)"
@@ -54,6 +57,14 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
         "filters": {
             "search": "Test",
             "country": ["9f5f66a0-5d95-e211-a939-e4115bead28a"],
+            "admin_areas": {
+                "63af72a6-5d95-e211-a939-e4115bead28a": [
+                    "56f5f425-e3e3-4c9a-b886-ecb671b81503"
+                ],
+                "5961b8be-5d95-e211-a939-e4115bead28a": [
+                    "2384702f-01e9-4792-857b-026b2623f2fa"
+                ],
+            },
             "sector": [
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
@@ -68,8 +79,20 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
 
     def test_readable_filters(self):
         saved_search = SavedSearch(self.saved_search_data)
+        assert saved_search.readable_filters["admin_areas"] == {
+            "label": "Barrier region/state",
+            "readable_value": "Beijing, Moscow",
+            "value": {
+                "63af72a6-5d95-e211-a939-e4115bead28a": [
+                    "56f5f425-e3e3-4c9a-b886-ecb671b81503"
+                ],
+                "5961b8be-5d95-e211-a939-e4115bead28a": [
+                    "2384702f-01e9-4792-857b-026b2623f2fa"
+                ],
+            },
+        }
         assert saved_search.readable_filters["search"] == {
-            "label": "Search barrier title, summary, code or PID",
+            "label": "Search barrier title, summary, company, export description, code or PID",
             "readable_value": "Test",
             "value": "Test",
         }
@@ -96,24 +119,14 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
             "readable_value": "Europe",
             "value": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
         }
-        assert saved_search.readable_filters["priority"] == {
-            "label": "Barrier priority",
-            "readable_value": (
-                "<span class='priority-marker priority-marker--high'>"
-                "</span>High, "
-                "<span class='priority-marker priority-marker--medium'>"
-                "</span>Medium"
-            ),
-            "value": ["HIGH", "MEDIUM"],
-        }
         assert saved_search.readable_filters["status"] == {
             "label": "Barrier status",
-            "readable_value": "Open: In progress, Resolved: In part",
+            "readable_value": "Open, Resolved: In part",
             "value": ["2", "3"],
         }
         assert saved_search.readable_filters["show"] == {
             "label": "Show",
-            "readable_value": "My barriers",
+            "readable_value": "Barriers I have created",
             "value": ["1"],
         }
 

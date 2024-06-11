@@ -28,9 +28,9 @@ class CommodityLookupForm(forms.Form):
     def __init__(self, locations, *args, **kwargs):
         self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
-        self.fields["location"].choices = tuple([
-            (location["id"], location["name"]) for location in locations
-        ])
+        self.fields["location"].choices = tuple(
+            [(location["id"], location["name"]) for location in locations]
+        )
 
     def clean_code(self):
         code = self.cleaned_data["code"]
@@ -48,9 +48,11 @@ class CommodityLookupForm(forms.Form):
         try:
             hs6_code = code[:6].ljust(10, "0")
             commodity = client.commodities.get(id=hs6_code)
-            self.commodity = commodity.create_barrier_commodity(code=code, location=location)
+            self.commodity = commodity.create_barrier_commodity(
+                code=code, location=location
+            )
         except APIHttpException:
-            raise forms.ValidationError("HS commodity code not found")
+            raise forms.ValidationError("Enter a real HS commodity code")
 
     def get_commodity_data(self):
         return self.commodity.to_dict()
@@ -67,9 +69,9 @@ class MultiCommodityLookupForm(forms.Form):
     def __init__(self, locations, *args, **kwargs):
         self.token = kwargs.pop("token")
         super().__init__(*args, **kwargs)
-        self.fields["location"].choices = tuple([
-            (location["id"], location["name"]) for location in locations
-        ])
+        self.fields["location"].choices = tuple(
+            [(location["id"], location["name"]) for location in locations]
+        )
 
     def clean_codes(self):
         codes = self.cleaned_data["codes"]
@@ -94,7 +96,7 @@ class MultiCommodityLookupForm(forms.Form):
                 for commodity in client.commodities.list(codes=",".join(hs6_codes))
             }
         except APIHttpException:
-            raise forms.ValidationError("HS commodity code not found")
+            raise forms.ValidationError("Enter a real HS commodity code")
 
         self.commodities = []
         for code in codes:
@@ -102,7 +104,9 @@ class MultiCommodityLookupForm(forms.Form):
             commodity = commodity_lookup.get(hs6_code)
             if not commodity:
                 continue
-            barrier_commodity = commodity.create_barrier_commodity(code=code, location=location)
+            barrier_commodity = commodity.create_barrier_commodity(
+                code=code, location=location
+            )
             self.commodities.append(barrier_commodity)
 
     def get_commodity_data(self):
@@ -121,17 +125,19 @@ class UpdateBarrierCommoditiesForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        codes = cleaned_data["codes"]
+        codes = cleaned_data.get("codes", [])
         countries = cleaned_data["countries"]
         trading_blocs = cleaned_data["trading_blocs"]
         self.commodities = []
         for index, code in enumerate(codes):
             try:
-                self.commodities.append({
-                    "code": code,
-                    "country": countries[index] or None,
-                    "trading_bloc": trading_blocs[index],
-                })
+                self.commodities.append(
+                    {
+                        "code": code,
+                        "country": countries[index] or None,
+                        "trading_bloc": trading_blocs[index],
+                    }
+                )
             except IndexError:
                 raise forms.ValidationError("Code/country mismatch")
         return codes

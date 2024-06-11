@@ -47,3 +47,30 @@
 		background: none;
 	}
 }
+
+.delete-button {
+	@extend .govuk-button;
+	background-color: $govuk-error-colour;
+
+	&:hover {
+		background-color: shade($govuk-error-colour, 25%)
+	}
+}
+
+.delete-link {
+	@extend .govuk-link;
+	color: $govuk-error-colour;
+
+	&:link {
+		color: $govuk-error-colour;
+	}
+	&:visited {
+		color: $govuk-error-colour;
+  	}
+	&:hover {
+		color: shade($govuk-error-colour, 25%)
+	}
+	&:active {
+		color: $govuk-error-colour;
+	}
+}

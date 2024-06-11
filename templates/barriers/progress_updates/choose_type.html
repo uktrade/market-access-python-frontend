@@ -1,0 +1,55 @@
+{% extends 'barriers/edit/base.html' %}
+
+{% block page_title %}{{ block.super }} - What is your progress update for?{% endblock %}
+
+{% block back_link %}
+  <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+  {% form_error_banner form %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half-from-desktop">
+        <div class="govuk-form-group{% if form.update_type.errors %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+              <h1 class="govuk-fieldset__heading">
+                {{ form.update_type.label   }}
+              </h1>
+            </legend>
+            {% form_field_error form "update_type" %}
+            <div class="govuk-radios govuk-radios" data-module="govuk-radios" id="update_type">
+              {% for type in form.update_type %}
+                <div class="govuk-radios__item">
+                  {{ type.tag }}
+                  <label class="govuk-label govuk-radios__label" for="{{ type.id_for_label }}">
+                    {{ type.choice_label }}
+                  </label>
+                  {% if type.choice_label == "Barrier Progress" %}
+                    <span class='govuk-hint govuk-!-margin-left-3'>Monthly updates for PB100 barriers, including any using the Regulator Fund</span>
+                  {% else %}
+                    <span class='govuk-hint govuk-!-margin-left-3'>Regular updates on barriers using the Facilitative Regional Funds</span>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-button-group">
+          <button class="govuk-button" data-module="govuk-button">Continue</button>
+          <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:barrier_detail' barrier_id=barrier_id %}">Cancel</a>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}

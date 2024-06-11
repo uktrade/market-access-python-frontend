@@ -2,12 +2,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from .mixins import BarrierMixin
-from barriers.forms.sectors import (
-    AddSectorsForm,
-    EditSectorsForm,
-)
+from barriers.forms.sectors import AddMainSectorForm, AddSectorsForm, EditSectorsForm
 from utils.metadata import MetadataMixin
+
+from .mixins import BarrierMixin
 
 
 class BarrierEditSectors(MetadataMixin, BarrierMixin, FormView):
@@ -81,6 +79,12 @@ class BarrierAddSectors(MetadataMixin, BarrierMixin, FormView):
             (sector["id"], sector["name"])
             for sector in self.metadata.get_sector_list(level=0)
             if sector["id"] not in self.request.session.get("sectors", [])
+            # don't show sector if it's already selected as the main sector
+            and (
+                sector["id"] != self.barrier.main_sector["id"]
+                if self.barrier.main_sector
+                else True
+            )
         ]
         return kwargs
 
@@ -92,6 +96,40 @@ class BarrierAddSectors(MetadataMixin, BarrierMixin, FormView):
     def get_success_url(self):
         return reverse(
             "barriers:edit_sectors_session",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class BarrierAddMainSector(MetadataMixin, BarrierMixin, FormView):
+    template_name = "barriers/edit/add_main_sector.html"
+    form_class = AddMainSectorForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["sectors"] = self.metadata.get_sectors_by_ids(
+            self.barrier.sector_ids
+        )
+        context_data["main_sector"] = self.barrier.main_sector
+        return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["sectors"] = [
+            (sector["id"], sector["name"])
+            for sector in self.metadata.get_sector_list(level=0)
+            if sector["id"] not in self.barrier.sector_ids
+        ]
+        kwargs["barrier_id"] = str(self.kwargs.get("barrier_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:barrier_detail",
             kwargs={"barrier_id": self.kwargs.get("barrier_id")},
         )
 

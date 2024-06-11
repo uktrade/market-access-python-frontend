@@ -1,0 +1,176 @@
+{% extends "barriers/edit/base.html" %}
+{% load render_bundle from webpack_loader %}
+{% block page_title %}
+    {{ block.super }}
+    {% if "edit" in request.path %}
+        - Edit Top 100 priority barrier update
+    {% else %}
+        - Add Top 100 priority barrier update
+    {% endif %}
+{% endblock page_title %}
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' object.id %}"
+       class="govuk-back-link ma-back-link">Back</a>
+{% endblock back_link %}
+{% block body_script %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script nonce="{{request.csp_nonce}}">
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.update.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.update_1.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.update_2.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.update_3.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.next_steps.name }}-form-group.govuk-character-count' );
+        }
+        new ma.components.setupHiddenERDTextarea({
+            is_admin: '{{ current_user|has_permission:"can_approve_estimated_completion_date" }}',
+            proposedDate: '{{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}',
+            //monthInputID: 'estimated_resolution_date_0',
+            //yearInputID: 'estimated_resolution_date_1',
+        });
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            ReactApp.GDSRadios();
+        })
+    </script>
+{% endblock body_script %}
+{% block page_content %}
+    {% if "edit" in request.path %}
+        {% include 'partials/heading.html' with text='Edit barrier progress update' %}
+    {% else %}
+        {% include 'partials/heading.html' with text='Add barrier progress update' %}
+    {% endif %}
+    <p class="govuk-body-l">This update will be used to brief senior stakeholders, including ministers.</p>
+    {% form_error_banner form %}
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+        <div id="{{ form.status.name }}"
+             class="govuk-form-group{% if form.status.errors %} govuk-form-group--error{% endif %}">
+            <div class="govuk-form-group" data-module="govuk-radios">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ form.status.label }}</legend>
+                    {% form_field_error form "status" %}
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        {% for value, name in form.fields.status.choices %}
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input"
+                                       id="{{ form.status.name }}-{{ value }}"
+                                       name="{{ form.status.name }}"
+                                       type="radio"
+                                       value="{{ value }}"
+                                       {% if form.status.value == value %}checked="checked"{% endif %}
+                                       data-aria-controls="conditional-status-{{ value }}">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="{{ form.status.name }}-{{ value }}">{{ name }}</label>
+                            </div>
+                            {% if forloop.counter == 1 %}
+                                <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                     id="conditional-status-ON_TRACK">
+                                    <div class="govuk-form-group">
+                                        <div id="{{ form.update_1.name }}-form-group"
+                                             class="govuk-character-count"
+                                             data-module="govuk-character-count"
+                                             data-maxlength="1250">
+                                            <div class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                                                <label class="govuk-label govuk-label--s" for="update_1">{{ form.update_1.label }}</label>
+                                                {% form_field_error form "update_1" %}
+                                                <span class="govuk-hint">{{ form.update_1.help_text }}</span>
+                                                <textarea id="{{ form.update_1.name }}"
+                                                          class="govuk-textarea govuk-js-character-count js-character-count"
+                                                          name="update_{{ forloop.counter}}"
+                                                          rows="5"
+                                                          maxlength="1250">{% if form.update_1.value %}{{ form.update_1.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
+                                            </div>
+                                            <div id="update_{{ forloop.counter }}-info"
+                                                 class="govuk-hint govuk-character-count__message">
+                                                You can enter up to 1250 characters
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif forloop.counter == 2 %}
+                                <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                     id="conditional-status-RISK_OF_DELAY">
+                                    <div class="govuk-form-group">
+                                        <div id="{{ form.update_2.name }}-form-group"
+                                             class="govuk-character-count"
+                                             data-module="govuk-character-count"
+                                             data-maxlength="1250">
+                                            <div class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                                                <label class="govuk-label govuk-label--s" for="update_2">{{ form.update_2.label }}</label>
+                                                {% form_field_error form "update_2" %}
+                                                <span class="govuk-hint">{{ form.update_2.help_text }}</span>
+                                                <textarea id="{{ form.update_2.name }}"
+                                                          class="govuk-textarea govuk-js-character-count js-character-count"
+                                                          name="update_{{ forloop.counter}}"
+                                                          rows="5"
+                                                          maxlength="1250">{% if form.update_2.value %}{{ form.update_2.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
+                                            </div>
+                                            <div id="update_{{ forloop.counter }}-info"
+                                                 class="govuk-hint govuk-character-count__message">
+                                                You can enter up to 1250 characters
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif forloop.counter == 3 %}
+                                <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                     id="conditional-status-DELAYED">
+                                    <div class="govuk-form-group">
+                                        <div id="{{ form.update_3.name }}-form-group"
+                                             class="govuk-character-count"
+                                             data-module="govuk-character-count"
+                                             data-maxlength="1250">
+                                            <div class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
+                                                <label class="govuk-label govuk-label--s" for="update_3">{{ form.update_3.label }}</label>
+                                                {% form_field_error form "update_3" %}
+                                                <span class="govuk-hint">{{ form.update_3.help_text }}</span>
+                                                <textarea id="{{ form.update_3.name }}"
+                                                          class="govuk-textarea govuk-js-character-count js-character-count"
+                                                          name="update_{{ forloop.counter}}"
+                                                          rows="5"
+                                                          maxlength="1250">{% if form.update_3.value %}{{ form.update_3.value}}{% elif form.update.value%}{{ form.update.value }}{% endif %}</textarea>
+                                            </div>
+                                            <div id="update_{{ forloop.counter }}-info"
+                                                 class="govuk-hint govuk-character-count__message">
+                                                You can enter up to 1250 characters
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div id="{{ form.estimated_resolution_date.name }}"
+             class="{% form_group_classes form.estimated_resolution_date.errors %}">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ form.estimated_resolution_date.label }}</legend>
+                {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
+                <span class="govuk-hint">{{ form.estimated_resolution_date.help_text }}</span>
+                {% form_field_error form "estimated_resolution_date" %}
+                <div class="govuk-date-input">{{ form.estimated_resolution_date }}</div>
+            </fieldset>
+        </div>
+        <div id="{{ form.estimated_resolution_date_change_reason.name }}-form-group"
+             style="display:none"
+             class="govuk-character-count"
+             data-module="govuk-character-count"
+             data-maxlength="1250">
+            <div class="govuk-form-group{% if form.estimated_resolution_date_change_reason.errors %} govuk-form-group--error{% endif %}">
+                <label class="govuk-label govuk-label--s" for="update">{{ form.estimated_resolution_date_change_reason.label }}</label>
+                {% form_field_error form "update" %}
+                <span class="govuk-hint">{{ form.estimated_resolution_date_change_reason.help_text }}</span>
+                <textarea id="{{ form.estimated_resolution_date_change_reason.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.estimated_resolution_date_change_reason.name }}" rows="5" maxlength="1250">{{ form.estimated_resolution_date_change_reason.value|default_if_none:"" }}
+                </textarea>
+            </div>
+            <div id="{{ form.estimated_resolution_date_change_reason.name }}-info"
+                 class="govuk-hint govuk-character-count__message">You can enter up to 1250 characters</div>
+        </div>
+        <input type="submit" value="Save and continue" class="govuk-button">
+        <a class="govuk-button govuk-button--secondary"
+           href="{% url 'barriers:barrier_detail' barrier_id=barrier.id %}">Cancel</a>
+    </form>
+{% endblock %}

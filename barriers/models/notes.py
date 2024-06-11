@@ -1,7 +1,8 @@
-from .documents import Document
+import dateutil.parser
+
 from utils.models import APIModel
 
-import dateutil.parser
+from .documents import Document
 
 
 class Note(APIModel):

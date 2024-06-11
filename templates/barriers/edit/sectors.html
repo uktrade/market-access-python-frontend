@@ -34,13 +34,13 @@
         <a href="{% url 'barriers:add_sectors' barrier.id %}" id="add-sector-button" class="govuk-button button--secondary selection-list__add-button">Add specific sectors</a>
 
         {% if not all_sectors %}
-        <a href="{% url 'barriers:add_all_sectors' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Select all sectors</a>
+            <a href="{% url 'barriers:add_all_sectors' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Select all sectors</a>
         {% endif %}
     </div>
 
     <form action="" method="POST">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Save and exit to barrier" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
     </form>
 {% endblock %}

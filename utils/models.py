@@ -12,17 +12,20 @@ class APIModel:
         self.data = data
 
     def __getattr__(self, name):
-        if name not in self.data:
-            raise AttributeError(f"{name} not found in data")
 
-        value = self.data.get(name)
-        if not value:
+        try:
+            value = self.data.get(name)
+            if not value:
+                return value
+
+            if name in self.date_fields:
+                return dateutil.parser.parse(value)
+
             return value
-
-        if name in self.date_fields:
-            return dateutil.parser.parse(value)
-
-        return value
+        except Exception:
+            # this utility method can sometimes be called before
+            # existing methods and properties
+            return super().__getattr__(name)
 
 
 class ModelList(UserList):
@@ -40,3 +43,7 @@ class ModelList(UserList):
     def __iter__(self):
         for obj in self.data:
             yield self.model(obj)
+
+    def remove(self, obj_ids):
+        # Rebuild data dictionaries, excluding any if their ids are in the given list
+        self.data = [model for model in self.data if model["id"] not in obj_ids]

@@ -1,17 +1,21 @@
 from django import forms
 from django.conf import settings
 
-from .mixins import DocumentMixin
-
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import MultipleValueField, RestrictedFileField
+
+from .mixins import DocumentMixin
 
 
 class AddNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
-        label=("Add notes on an interaction or event"),
+        help_text=(
+            "You can mention someone in your note by typing '@' and their name, "
+            "then selecting their email address from the list. "
+            "They will get a notification with a link to your note."
+        ),
         widget=forms.Textarea,
-        error_messages={"required": "Add text for the note."},
+        error_messages={"required": "Enter a note or update"},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
@@ -40,11 +44,10 @@ class AddNoteForm(DocumentMixin, forms.Form):
 class AddPublicBarrierNoteForm(forms.Form):
     note = forms.CharField(
         label=(
-            "Is something incorrect or out of date? Enter the details so an Editor can "
-            "update the barrier."
+            "Add a note to highlight anything that has changed or you have updated with this barrier."
         ),
         widget=forms.Textarea,
-        error_messages={"required": "Add text for the note."},
+        error_messages={"required": "Add a note"},
     )
 
     def __init__(self, token, barrier_id, *args, **kwargs):
@@ -62,7 +65,8 @@ class AddPublicBarrierNoteForm(forms.Form):
 
 class EditNoteForm(DocumentMixin, forms.Form):
     note = forms.CharField(
-        widget=forms.Textarea, error_messages={"required": "Add text for the note."},
+        widget=forms.Textarea,
+        error_messages={"required": "Add a note"},
     )
     document_ids = MultipleValueField(required=False)
     document = RestrictedFileField(
@@ -91,12 +95,9 @@ class EditNoteForm(DocumentMixin, forms.Form):
 
 class EditPublicBarrierNoteForm(forms.Form):
     note = forms.CharField(
-        label=(
-            "Is something incorrect or out of date? Enter the details so an Editor can "
-            "update the barrier."
-        ),
+        label=("Tell us if the public view needs to be updated "),
         widget=forms.Textarea,
-        error_messages={"required": "Add text for the note."},
+        error_messages={"required": "Enter a note or update"},
     )
 
     def __init__(self, token, note_id, *args, **kwargs):

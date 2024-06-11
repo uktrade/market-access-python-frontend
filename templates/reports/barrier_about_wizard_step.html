@@ -1,0 +1,55 @@
+{% extends "reports/barrier_wizard_step.html" %}
+{% load render_bundle from webpack_loader %}
+{% load report_urls %}
+{% block page_title %}Report A Barrier - About the Barrier{% endblock %}
+{% block body_script %}
+    {% render_bundle 'main' 'js' 'REACT' %}
+    <script nonce="{{request.csp_nonce}}">
+        if( ma.components.CharacterCount ){
+            new ma.components.CharacterCount( '#{{ form.title.name }}-form-group.govuk-character-count' );
+            new ma.components.CharacterCount( '#{{ form.summary.name }}-form-group.govuk-character-count' );
+        }
+    </script>
+{% endblock %}
+{% block fields %}
+    <div class="govuk-form-group govuk-!-margin-0">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">About the barrier</h1>
+            </legend>
+            {% form_error_banner form %}
+            <!-- Barrier Title Question -->
+            <div id="{{ form.title.name }}-form-group"
+                 class="govuk-character-count"
+                 data-module="character-count"
+                 data-maxlength="150">
+                <div class="{% form_group_classes form.title.errors %}">
+                    <label class="govuk-label govuk-label--s"
+                           for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                    {% form_field_error form "title" %}
+                    <span id="{{ form.title.name }}_hint" class="govuk-hint">{{ form.title.help_text }}</span>
+                    {{ form.title }}
+                    <div id="update_{{ forloop.counter }}-info"
+                         class="govuk-hint govuk-character-count__message"
+                         aria-live="polite"></div>
+                </div>
+            </div>
+            <!-- Barrier Description Question -->
+            <div id="{{ form.summary.name }}-form-group"
+                 class="govuk-character-count govuk-!-margin-0"
+                 data-module="character-count"
+                 data-maxlength="500">
+                <div class="{% form_group_classes form.summary.errors %}">
+                    <label class="govuk-label govuk-label--s"
+                           for="{{ form.summary.id_for_label }}">{{ form.summary.label }}</label>
+                    {% form_field_error form "summary" %}
+                    <span id="description-hint" class="govuk-hint">{{ form.summary.help_text }}</span>
+                    {{ form.summary }}
+                    <div id="update_{{ forloop.counter }}-info"
+                         class="govuk-hint govuk-character-count__message"
+                         aria-live="polite"></div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+{% endblock %}

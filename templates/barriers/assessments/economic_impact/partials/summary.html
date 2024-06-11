@@ -1,51 +1,45 @@
-{% if barrier.economic_assessment_eligibility is True %}
-    {% with assessment=barrier.current_economic_impact_assessment %}
-        {% if assessment %}
-            <div class="assessment-item__section">
-                <dt class="ma-data-key">Valuation</dt>
-                <dd class="ma-data-value">
-                    {{ assessment.impact.name }}
-                </dd>
 
-                <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">View assessment detail</span>
-                    </summary>
-                    <div class="govuk-details__text">
-                        <dt class="ma-data-key">Assessment explanation</dt>
-                        <dd class="ma-data-value">
-                            {{ assessment.explanation|linebreaks }}
-                        </dd>
-                        <dt class="ma-data-key">Assessment produced by</dt>
-                        <dd class="ma-data-value ma-data-value--s">
-                            {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
-                        </dd>
-                        {% if current_user|has_permission:"archive_economicimpactassessment" %}
-                            <a href="{% url 'barriers:archive_economic_impact_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
-                        {% endif %}
-                    </div>
-                </details>
-            </div>
-        {% endif %}
+{% with assessment=barrier.current_economic_impact_assessment %}
+    {% if assessment %}
+        <div class="assessment-item__section">
+            <dt class="ma-data-key">Valuation</dt>
+            <dd class="ma-data-value">
+                {{ assessment.impact.name }}
+            </dd>
 
-        {% if barrier.current_economic_assessment.approved and current_user|has_permission:"add_economicimpactassessment" %}
+            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">View assessment detail</span>
+                </summary>
+                <div class="govuk-details__text">
+                    <dt class="ma-data-key">Assessment explanation</dt>
+                    <dd class="ma-data-value">
+                        {{ assessment.explanation|linebreaks }}
+                    </dd>
+                    <dt class="ma-data-key">Assessment produced by</dt>
+                    <dd class="ma-data-value ma-data-value--s">
+                        {{ assessment.created_by.name }} on {{ assessment.created_on|date:"j F Y" }}
+                    </dd>
+                    {% if current_user|has_permission:"archive_economicimpactassessment" %}
+                        <a href="{% url 'barriers:archive_economic_impact_assessment' barrier.id assessment.id %}" class="govuk-button govuk-button--secondary" data-module="govuk-button">Archive</a>
+                    {% endif %}
+                </div>
+            </details>
+        </div>
+    {% else %}
+        {% if current_user|has_permission:"add_economicimpactassessment" %}
             <div class="assessment-item__section">
                 <a href="{% url 'barriers:add_economic_impact_assessment' barrier.id %}">Add valuation assessment</a>
                 <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
             </div>
-        {% elif not barrier.current_economic_impact_assessment %}
+        {% else %}
             <div class="assessment-item__section">
                 <p>No valuation assessment</p>
                 <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
             </div>
         {% endif %}
-    {% endwith %}
-{% else %}
-    <div class="assessment-item__section">
-        <p>No valuation assessment</p>
-        <p class="assessment-item-content__hint">This is the economic importance of a barrier using trade and economic analysis from Market Access Analysts and business estimates of the value of the barrier.</p>
-    </div>
-{% endif %}
+    {% endif %}
+{% endwith %}
 
 {% if barrier.archived_economic_impact_assessments %}
     <div class="assessment-item__section">

@@ -3,7 +3,6 @@ import re
 from django import template
 from django.utils.safestring import mark_safe
 
-
 register = template.Library()
 
 
@@ -13,7 +12,7 @@ def highlight(value, arg, autoescape=True):
         return value
 
     result = re.sub(
-        fr"({arg})", r"<span class='highlight'>\1</span>", value, flags=re.IGNORECASE
+        rf"({arg})", r"<span class='highlight'>\1</span>", value, flags=re.IGNORECASE
     )
 
     return mark_safe(result)

@@ -1,5 +1,7 @@
 ---
 applications:
-- buildpacks:
-  - https://github.com/cloudfoundry/nodejs-buildpack.git#v1.7.29
-  - https://github.com/cloudfoundry/python-buildpack.git#v1.7.22
+  - name: market-access-python-frontend
+    buildpacks:
+      - https://github.com/cloudfoundry/nodejs-buildpack.git#v1.8.16
+      - https://github.com/cloudfoundry/python-buildpack.git#v1.8.0
+    stack: cflinuxfs4

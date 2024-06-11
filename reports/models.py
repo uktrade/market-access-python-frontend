@@ -1,16 +1,14 @@
 import operator
 
-from barriers.constants import STATUSES
+import dateutil.parser
 
+from barriers.constants import STATUSES, Statuses
 from utils.metadata import get_metadata
 from utils.models import APIModel
-
-import dateutil.parser
 
 
 class Report(APIModel):
     _metadata = None
-    _stages = None
     _progress = None
 
     @property
@@ -33,74 +31,58 @@ class Report(APIModel):
 
     @property
     def created_on(self):
-        return dateutil.parser.parse(self.data['created_on'])
+        return dateutil.parser.parse(self.data["created_on"])
 
     @property
     def progress(self):
         if self._progress is None:
-            self._progress = self.data.get('progress', [])
-            self._progress.sort(key=operator.itemgetter('stage_code'))
+            self._progress = self.data.get("progress", [])
+            self._progress.sort(key=operator.itemgetter("stage_code"))
         return self._progress
 
-    @property
-    def is_complete(self):
-        for stage in self.progress:
-            if stage['status_id'] != 3:
-                return False
-        return True
+    def is_status(self, status_id: Statuses):
+        if not self.status:
+            return False
+        return str(self.status["id"]) == status_id
 
     @property
-    def next_stage(self):
-        for stage in self.progress:
-            if stage['status_id'] != 3:
-                return stage
+    def sector_names(self):
+        if self.all_sectors:
+            return "All sectors"
+        return ", ".join([sector.get("name") for sector in self.sectors])
 
     @property
-    def stages(self):
-        """
-        Report stages grouped by main stage number
+    def source_display(self):
+        return self.data.get("source", {}).get("name", "")
 
-        Example output:
-            {
-                '1': {
-                    'name': 'Report a barrier,
-                    'stages': [
-                        {
-                            'name': 'Barrier status',
-                            'stage_code': '1.1',
-                            'status_id': 3,
-                            'status_desc': 'COMPLETED'
-                        }, {
-                            'name': 'Location of the barrier',
-                            'stage_code': '1.2',
-                            'status_id': 3,
-                            'status_desc': 'COMPLETED'
-                        }
-                    ]
-                }
-            }
-        """
-        if self._stages is None:
-            base_stages = self.metadata.data.get("report_stages", {})
-            progress_lookup = {
-                item['stage_code']: item
-                for item in self.progress
-            }
+    @property
+    def status_display(self):
+        return self.data.get("status", {}).get("name", "")
 
-            self._stages = {}
+    @property
+    def sub_status_display(self):
+        sub_status = self.data.get("sub_status", {}).get("name", "")
+        if sub_status == "None":
+            return None
+        return sub_status
 
-            for stage_code, name in base_stages.items():
-                major_number, minor_number = stage_code.split('.')
+    @property
+    def trade_direction_display(self):
+        if self.data.get("trade_direction", {}):
+            return self.data.get("trade_direction", {}).get("name", "")
+        return ""
 
-                if major_number not in self._stages:
-                    self._stages[major_number] = {}
+    @property
+    def country_trading_bloc(self):
+        # is the barrier tied to a country
+        # and does that country have a trading bloc
+        country = self.data.get("country", None)
+        if not country:
+            return False
+        return country.get("trading_bloc", False)
 
-                if minor_number == '0':
-                    self._stages[major_number]['name'] = name
-                    self._stages[major_number]['stages'] = []
-                else:
-                    stage = progress_lookup.get(stage_code, {})
-                    stage['name'] = name
-                    self._stages[major_number]['stages'].append(stage)
-
-        return self._stages
+    @property
+    def get_admin_areas(self):
+        if not self.country:
+            return []
+        return self.metadata.get_admin_areas_by_country(self.country["id"])

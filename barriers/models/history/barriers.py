@@ -1,10 +1,11 @@
+import dateutil.parser
+
 from barriers.constants import ARCHIVED_REASON
 from barriers.models.commodities import format_commodity_code
-from .base import BaseHistoryItem, GenericHistoryItem
-from .utils import PolymorphicBase
 from utils.metadata import Statuses
 
-import dateutil.parser
+from .base import BaseHistoryItem, GenericHistoryItem
+from .utils import PolymorphicBase
 
 
 class ArchivedHistoryItem(BaseHistoryItem):
@@ -19,8 +20,8 @@ class ArchivedHistoryItem(BaseHistoryItem):
             self.modifier = "unarchived"
 
     def get_value(self, value):
-        if "archived_reason" in value:
-            value["archived_reason"] = ARCHIVED_REASON[value["archived_reason"]]
+        if archived_reason := value.get("archived_reason"):
+            value["archived_reason"] = ARCHIVED_REASON[archived_reason]
         return value
 
 
@@ -46,8 +47,8 @@ class CausedByTradingBlocHistoryItem(BaseHistoryItem):
         country_trading_bloc = self.get_country_trading_bloc()
         if country_trading_bloc:
             self.field_name = (
-                f"Was this barrier caused by a regulation introduced by "
-                f"{country_trading_bloc['short_name']}?"
+                "Was this barrier caused by a regulation introduced by "
+                f"{country_trading_bloc['name']}?"
             )
 
     def get_country_trading_bloc(self):
@@ -147,9 +148,9 @@ class EconomicAssessmentEligibilitySummaryHistoryItem(BaseHistoryItem):
     field_name = "Economic assessment: Eligibility summary"
 
 
-class EndDateHistoryItem(BaseHistoryItem):
-    field = "end_date"
-    field_name = "End date"
+class EstimatedResolutionDateHistoryItem(BaseHistoryItem):
+    field = "estimated_resolution_date"
+    field_name = "Estimated resolution date"
 
     def get_value(self, value):
         if value:
@@ -171,7 +172,9 @@ class OrganisationHistoryItem(BaseHistoryItem):
     field_name = "Organisations"
 
     def get_value(self, value):
-        organisations = [self.metadata.get_government_organisation(org) for org in value or {}]
+        organisations = [
+            self.metadata.get_government_organisation(org) for org in value or {}
+        ]
         names = [t["name"] for t in organisations]
         return names
 
@@ -243,7 +246,6 @@ class StatusHistoryItem(BaseHistoryItem):
         value["show_summary"] = value["status"] in (
             Statuses.OPEN_IN_PROGRESS,
             Statuses.UNKNOWN,
-            Statuses.OPEN_PENDING_ACTION,
         )
         return value
 
@@ -262,7 +264,7 @@ class TagsHistoryItem(BaseHistoryItem):
 
     def get_value(self, value):
         tags = [self.metadata.get_barrier_tag(tag) for tag in value or {}]
-        sorted_tags = sorted(tags, key=lambda k: k['order'])
+        sorted_tags = sorted(tags, key=lambda k: k["order"])
         tag_names = [t["title"] for t in sorted_tags]
         return tag_names
 
@@ -297,6 +299,15 @@ class TradeDirectionHistoryItem(BaseHistoryItem):
         return self.metadata.get_trade_direction(str(value))
 
 
+class TopPriorityStatusHistoryItem(BaseHistoryItem):
+    field = "top_priority_status"
+    field_name = "PB100 Priority Status"
+
+    def get_value(self, value):
+        if value["value"]:
+            return value
+
+
 class BarrierHistoryItem(PolymorphicBase):
     """
     Polymorphic wrapper for HistoryItem classes
@@ -314,7 +325,7 @@ class BarrierHistoryItem(PolymorphicBase):
         CompaniesHistoryItem,
         EconomicAssessmentEligibilityHistoryItem,
         EconomicAssessmentEligibilitySummaryHistoryItem,
-        EndDateHistoryItem,
+        EstimatedResolutionDateHistoryItem,
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
         OrganisationHistoryItem,
@@ -330,6 +341,13 @@ class BarrierHistoryItem(PolymorphicBase):
         TitleHistoryItem,
         TradeCategoryHistoryItem,
         TradeDirectionHistoryItem,
+        TopPriorityStatusHistoryItem,
     )
     default_subclass = GenericHistoryItem
     class_lookup = {}
+
+
+class ProgressUpdateHistoryItem(BaseHistoryItem):
+    model = "progress_update"
+    field = "status"
+    field_name = "Delivery Confidence"
