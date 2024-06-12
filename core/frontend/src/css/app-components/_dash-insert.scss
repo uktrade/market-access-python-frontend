@@ -1,4 +1,30 @@
 .dash-insert {
     border-left: 10px solid #00703C;
     background: #F3F2F1;
+
+    &__title {
+        margin: 0;
+        font-weight: 700;
+        font-size: 19px;
+        line-height: 24px;
+    }
+
+    &__content {
+        padding: 15px 25px 17px;
+    }
+
+    &__heading {
+        margin: 0;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    &__link {
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 30px;
+        text-decoration-line: underline;
+        color: #1D70B8;
+    }
 }
