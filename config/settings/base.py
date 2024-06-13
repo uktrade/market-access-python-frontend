@@ -225,6 +225,10 @@ if REDIS_URI:
         }
     }
 
+# Set user sessions to be stored in the cache, not the DB, unless there
+# is a problem with redis
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
 # Market access API
 MARKET_ACCESS_API_URI = env("MARKET_ACCESS_API_URI")
 MARKET_ACCESS_API_HAWK_ID = env("MARKET_ACCESS_API_HAWK_ID")
