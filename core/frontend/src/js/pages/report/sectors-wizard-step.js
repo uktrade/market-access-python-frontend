@@ -20,7 +20,7 @@ ma.pages.report.sectorsWizardStep = function () {
             appendSector(
                 "id_barrier-sectors-affected-sectors",
                 "sectors_select",
-                "sectors_list_display"
+                "sectors_list_display",
             );
             otherSectorSelect.style.display = "none";
         }
@@ -60,7 +60,7 @@ ma.pages.report.sectorsWizardStep = function () {
     const updateSectorDisplay = function () {
         const sector_list = document.getElementById("sectors_select");
         const current_selected_list = document.getElementById(
-            "id_barrier-sectors-affected-sectors"
+            "id_barrier-sectors-affected-sectors",
         );
         const display_list = document.getElementById("sectors_list_display");
 
@@ -75,21 +75,26 @@ ma.pages.report.sectorsWizardStep = function () {
                     if (option.value == selected_list[i]) {
                         let sector_entry = document.createElement("li");
                         sector_entry.classList.add(
-                            "selection-list__list__item"
+                            "selection-list__list__item",
                         );
                         sector_entry.appendChild(
-                            document.createTextNode(option.text)
+                            document.createTextNode(option.text),
                         );
-                        let remove_link = document.createElement("a");
+                        // Add remove link to each sector
+                        let remove_link = document.createElement("button");
                         let remove_link_text =
                             document.createTextNode("remove");
-                        remove_link.setAttribute("href", "#");
+                        remove_link.setAttribute("type", "button");
+                        remove_link.setAttribute(
+                            "aria-label",
+                            `remove ${option.innerHTML}`,
+                        );
                         remove_link.addEventListener("click", function () {
                             removeItem(option.value);
                         });
                         remove_link.appendChild(remove_link_text);
                         remove_link.classList.add(
-                            "selection-list__list__item__remove-form"
+                            "selection-list__list__item__remove-form__submit",
                         );
                         sector_entry.appendChild(remove_link);
                         display_list.appendChild(sector_entry);
@@ -105,7 +110,7 @@ ma.pages.report.sectorsWizardStep = function () {
             // Hide newly selected option in the other sectors selection box
             otherSectorItemElementName = "other-sectors-select-".concat(sector);
             const otherSectorItem = document.getElementById(
-                otherSectorItemElementName
+                otherSectorItemElementName,
             );
             otherSectorItem.style.display = "none";
             // Show previously selected option in the other sectors selection box
@@ -114,11 +119,11 @@ ma.pages.report.sectorsWizardStep = function () {
                 currentMainSectorSelected != ""
             ) {
                 previousSectorItemElementName = "other-sectors-select-".concat(
-                    currentMainSectorSelected
+                    currentMainSectorSelected,
                 );
                 console.log(previousSectorItemElementName);
                 const previousSectorItem = document.getElementById(
-                    previousSectorItemElementName
+                    previousSectorItemElementName,
                 );
                 previousSectorItem.style.display = "block";
             }
@@ -129,7 +134,7 @@ ma.pages.report.sectorsWizardStep = function () {
 
     const removeItem = function (item) {
         const current_selected_list = document.getElementById(
-            "id_barrier-sectors-affected-sectors"
+            "id_barrier-sectors-affected-sectors",
         );
         if (current_selected_list.value == "") {
             const selected_list = current_selected_list.value;

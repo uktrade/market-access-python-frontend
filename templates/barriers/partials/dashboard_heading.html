@@ -3,14 +3,15 @@
 </h1>
 {% now 'c' as tz_now %}
 {% comment %} c formats current time to ISO 8601 format e.g. 2008-01-02T10:30:00.000123+02:00 {% endcomment %}
-{% if tz_now < '2023-11-30T22:45:00.000000+00:00' %}
+{% if tz_now < '2024-06-18T10:00:00.000000+00:00' %}
     <div class="govuk-inset-text dash-insert"
          role="region"
-         aria-labelledby="govuk-notification-banner-title"
-         data-module="govuk-insert-text">
-        <div class="dash-insert__content">
-            Need help resolving your barriers? Read the <a href="https://data-services-help.trade.gov.uk/market-access/the-market-access-playbook/"
-                                                           target="_blank">market access playbook</a>
+         aria-labelled-by="notification-banner"
+         data-module="dash-insert__content">
+        <div tabindex="0" >
+            <div class="dash-insert__title">Planned maintenance work </div>
+            <div class="dash-insert__content"> You will not be able to use DMAS on Tuesday 18 June, from 8am to 10am (UK time). During this time, you will see a maintenance message, telling you that it is unavailable.
+            </div>
         </div>
     </div>
 {% endif %}

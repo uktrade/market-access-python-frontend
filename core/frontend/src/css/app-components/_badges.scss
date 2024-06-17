@@ -31,12 +31,17 @@
     }
 
     &--in-tab {
-        background-color: $govuk-orange;
+        background-color: #fcd6c3;
+        color: #6e3619;
         text-transform: none;
         font-size: 16px;
         margin-left: govuk-em(8, 16);
         padding: govuk-em(4, 16) govuk-em(8, 16);
         line-height: 1;
+
+        &:hover {
+            color: #6e3619;
+        }
     }
 
     &--attention{

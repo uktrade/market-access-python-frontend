@@ -34,6 +34,10 @@ django-collectstatic: ## Collect static files.
 django-static: ## Compress SCSS and collect static files, clears staticfiles folder.
 	docker-compose exec web ./manage.py collectstatic --no-input -i *.scss --clear
 
+.PHONY: react-watch
+react-watch: ## Run react's dev server (tailing).
+	npm run dev
+
 .PHONY: django-test
 django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down
 	docker-compose exec web pytest -n 6 tests/$(path)
