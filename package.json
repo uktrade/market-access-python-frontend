@@ -9,7 +9,8 @@
     "build": "webpack --config webpack.config.js --mode production",
     "heroku-prebuild": "",
     "heroku-postbuild": "npm run build",
-    "lint": "eslint --fix --ext .js ./core/frontend/src/js"
+    "lint": "eslint --fix --ext .js ./core/frontend/src/js",
+    "start": "echo starting"
   },
   "dependencies": {
     "@babel/core": "^7.11.5",

@@ -15,7 +15,12 @@ import sys
 from pathlib import Path
 
 import dj_database_url
+import requests
 import sentry_sdk
+from dbt_copilot_python.database import database_url_from_env
+from dbt_copilot_python.network import setup_allowed_hosts
+from dbt_copilot_python.utility import is_copilot
+from django_log_formatter_asim import ASIMFormatter
 from django_log_formatter_ecs import ECSFormatter
 from environ import Env
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -45,9 +50,10 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
-# Application definition
+ALLOWED_HOSTS = setup_allowed_hosts(ALLOWED_HOSTS)
 
-ELASTIC_APM_ENABLED = env("ELASTIC_APM_ENABLED", default=not DEBUG)
+# Application definition
+ELASTIC_APM_ENABLED = env.bool("ELASTIC_APM_ENABLED", default=not DEBUG)
 
 PRIORITISATION_STRATEGIC_ASSESSMENTS = env.bool(
     "PRIORITISATION_STRATEGIC_ASSESSMENTS", default=False
@@ -91,6 +97,7 @@ LOCAL_APPS = [
     "healthcheck",
     "reports",
     "users",
+    "pingdom",
 ]
 
 INSTALLED_APPS = BASE_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -148,11 +155,16 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        env="DATABASE_URL", conn_max_age=0, conn_health_checks=True, default=""
-    )
-}
+if is_copilot():
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=database_url_from_env("DATABASE_ENV_VAR_KEY"),
+            conn_max_age=0,
+            conn_health_checks=True,
+        )
+    }
+else:
+    DATABASES = {"default": env.db("DATABASE_URL")}
 
 
 # Password validation
@@ -196,12 +208,19 @@ STATIC_ROOT = ROOT_DIR / "staticfiles"
 STATICFILES_DIRS = [
     str(ROOT_DIR / "core/frontend/dist/"),
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": env.str(
+            "STATICFILES_STORAGE", "whitenoise.storage.CompressedStaticFilesStorage"
+        ),
+    },
+}
 
 USER_DATA_CACHE_TIME = 3600
 METADATA_CACHE_TIME = "10600"
@@ -271,15 +290,19 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "ecs_formatter": {
-            "()": ECSFormatter,
-        },
+        "asim_formatter": {"()": ASIMFormatter},
+        "ecs_formatter": {"()": ECSFormatter},
         "simple": {
             "format": "{asctime} {levelname} {message}",
             "style": "{",
         },
     },
     "handlers": {
+        "asim": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,  # noqa F405
+            "formatter": "asim_formatter",
+        },
         "ecs": {
             "class": "logging.StreamHandler",
             "stream": sys.stdout,  # noqa F405
@@ -292,47 +315,34 @@ LOGGING = {
         },
     },
     "root": {
-        "handlers": [
-            "ecs",
-            "stdout",
-        ],
+        "handlers": ["asim", "ecs", "stdout"],
         "level": os.getenv("ROOT_LOG_LEVEL", "INFO"),  # noqa F405
     },
     "loggers": {
-        "": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa F405
-            "propagate": False,
-        },
         "django": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
+            "handlers": ["asim", "ecs", "stdout"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa F405
             "propagate": False,
         },
         "django.server": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
+            "handlers": ["asim", "ecs", "stdout"],
             "level": os.getenv("DJANGO_SERVER_LOG_LEVEL", "ERROR"),  # noqa F405
             "propagate": False,
         },
         "django.db.backends": {
-            "handlers": [
-                "ecs",
-                "stdout",
-            ],
+            "handlers": ["asim", "ecs", "stdout"],
             "level": os.getenv("DJANGO_DB_LOG_LEVEL", "ERROR"),  # noqa F405
             "propagate": False,
         },
     },
 }
+
+
+# Django Log Formatter ASIM settings
+if is_copilot():
+    DLFA_TRACE_HEADERS = ("X-B3-TraceId", "X-B3-SpanId")
+
+
 DLFE_APP_NAME = True
 DLFE_LOG_SENSITIVE_USER_DATA = True
 
@@ -343,9 +353,11 @@ GTM_PREVIEW = env("GTM_PREVIEW", default=None)
 
 # Sentry
 SENTRY_BROWSER_TRACES_SAMPLE_RATE = env.float("SENTRY_BROWSER_TRACES_SAMPLE_RATE", 0.0)
-if not DEBUG:
+SENTRY_DNS = env("SENTRY_DSN", default=None)
+
+if SENTRY_DNS:
     sentry_sdk.init(
-        dsn=env("SENTRY_DSN"),
+        dsn=SENTRY_DNS,
         environment=env("SENTRY_ENVIRONMENT"),
         integrations=[
             DjangoIntegration(),

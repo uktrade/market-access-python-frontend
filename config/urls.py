@@ -19,6 +19,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+from pingdom.urls import urlpatterns as pingdom_urlpatterns
+
 urlpatterns = []
 
 if settings.DEBUG and settings.DJANGO_ENV == "local":
@@ -33,4 +35,4 @@ urlpatterns += [
     path("", include("reports.urls", namespace="reports")),
     path("", include("core.urls", namespace="core")),
     path("", include("healthcheck.urls", namespace="healthcheck")),
-]
+] + pingdom_urlpatterns
