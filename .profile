@@ -7,6 +7,8 @@ echo "---- Apply Migrations ------"
 python manage.py migrate
 echo "---- Flush Metadata Cache ------"
 python manage.py clear_metadata_cache
+echo "---- Clear expired user sessions ------"
+python manage.py clearsessions
 echo "---- Collect Static Files ------"
 OUTPUT=$(python manage.py collectstatic --noinput --clear)
 mkdir -p ~/logs
