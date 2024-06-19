@@ -49,10 +49,10 @@
                         </div>
                         <div class="barrier-progress-update__actions">
                             <a class=""
-                               href="{% url 'barriers:edit_progress_update' barrier.id progress_update.id %}">Edit</a>
+                               href="{% url 'barriers:edit_barrier_fund_progress_update' barrier.id progress_update.id %}">Edit</a>
                         </div>
                         {% if not barrier.archived %}
-                        {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_progress_update' barrier.id %}">Edit</a> {% endcomment %}
+                        {% comment %} <a class="barrier-progress-update__section__edit" href="{% url 'barriers:edit_barrier_fund_progress_update' barrier.id %}">Edit</a> {% endcomment %}
                         {% endif %}
                     </div>
                 </div>
