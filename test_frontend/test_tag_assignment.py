@@ -12,6 +12,7 @@ def test_tag_assignment(page, create_test_barrier):
     page.get_by_role("link", name="Edit tags").click()
     page.get_by_label("Wales Priority").check()
     page.get_by_label("Europe Priority").check()
+    page.get_by_label("Market Distorting Practices (MDP)").check()
     page.get_by_role("button", name="Save changes").click()
 
     expect(page.locator(".barrier-tag-list")).to_have_count(2)
@@ -27,6 +28,7 @@ def test_tag_removal(page, create_test_barrier):
     page.get_by_role("link", name="Edit tags").click()
     page.get_by_label("Wales Priority").uncheck()
     page.get_by_label("Europe Priority").uncheck()
+    page.get_by_label("Market Distorting Practices (MDP)").uncheck()
     page.get_by_role("button", name="Save changes").click()
 
     expect(page.get_by_text("Barrier information")).to_be_visible()
