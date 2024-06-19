@@ -87,13 +87,6 @@ PUBLIC_BARRIER_STATUSES = Choices(
 )
 
 
-AWAITING_REVIEW_FROM = Choices(
-    ("0", "CONTENT", "Content"),
-    ("10", "CONTENT_AFTER_CHANGES", "Content (edited since last review)"),
-    ("20", "HM_TRADE_COMMISSION", "HM Trade Commission"),
-    ("30", "GOVERNMENT_ORGANISATION", "Government organisation"),
-)
-
 ACTION_PLAN_TASK_CHOICES = Choices(
     ("NOT_STARTED", "Not started"),
     ("IN_PROGRESS", "In progress"),

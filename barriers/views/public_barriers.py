@@ -43,7 +43,6 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
             "region",
             "status",
             "organisation",
-            "awaiting_review_from",
         ]
         params = parse_qs(self.request.META.get("QUERY_STRING"), keep_blank_values=True)
 
