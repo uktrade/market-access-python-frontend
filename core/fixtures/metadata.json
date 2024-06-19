@@ -8660,10 +8660,24 @@
     },
     {
       "id": 13,
-      "title": "Market Distorting Practices (MDP)",
+      "title": "Programme Fund - Facilitative Regional",
       "description": "",
       "show_at_reporting": true,
       "order": 13
+    },
+    {
+      "id": 14,
+      "title": "Programme Fund - Regulator",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 14
+    },
+    {
+      "id": 15,
+      "title": "Market Distorting Practices (MDP)",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 15
     }
   ],
   "barrier_type_categories": {
