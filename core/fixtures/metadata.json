@@ -8657,6 +8657,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 12
+    },
+    {
+      "id": 13,
+      "title": "Market Distorting Practices (MDP)",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 13
     }
   ],
   "barrier_type_categories": {
