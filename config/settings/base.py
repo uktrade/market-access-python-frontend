@@ -360,6 +360,14 @@ SENTRY_BROWSER_TRACES_SAMPLE_RATE = env.float("SENTRY_BROWSER_TRACES_SAMPLE_RATE
 SENTRY_DNS = env("SENTRY_DSN", default=None)
 
 if SENTRY_DNS:
+    def filter_transactions(event, hint):
+        url_string = event["request"]["url"]
+
+        if "csp_report" in url_string:
+            return None
+
+        return event
+
     sentry_sdk.init(
         dsn=SENTRY_DNS,
         environment=env("SENTRY_ENVIRONMENT"),
@@ -368,6 +376,7 @@ if SENTRY_DNS:
         ],
         enable_tracing=env.bool("SENTRY_ENABLE_TRACING", False),
         traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", 0.0),
+        before_send_transaction=filter_transactions,
     )
 
 # Settings made available in templates
