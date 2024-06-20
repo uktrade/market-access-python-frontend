@@ -1,57 +1,100 @@
 {% extends 'base.html' %}
-
 {% block page_title %}{{ block.super }} - Accessibility{% endblock %}
-
 {% block page_content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h2 class="govuk-heading-xl">Accessibility Statement for the Market Access service (DMAS) in DataHub</h2>
-
-            <p class="govuk-body">This accessibility statement applies to the <a class="govuk-link" href="https://market-access.trade.gov.uk">Market access service (DMAS)</a>. It is part of the wider DataHub service which has its own <a class="govuk-link" href="https://data-services-help.trade.gov.uk/accessibility-statement/"
-                                                                                                                                                                                                                                             target="_blank">accessibility statement</a>.</p>
-            <p class="govuk-body">This service is run by the Department for Business and Trade (DBT). We want as many people as possible to be able to use this service. For example, that means you should be able to:</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>change colours, contrast levels and fonts</li>
-                <li>zoom in up to 300% without the text spilling off the screen</li>
-                <li>get from the start of the service to the end using just a keyboard</li>
-                <li>get from the start of the service to the end using speech recognition software</li>
-                <li>listen to the service using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
-            </ul>
-
+            <p class="govuk-body">
+                This accessibility statement applies to the <a class="govuk-link" href="https://market-access.trade.gov.uk">Digital Market access service (DMAS)</a>.
+            </p>
+            <p class="govuk-body">
+                This service is run by the Department for Business and Trade.
+                We want as many people as possible to be able to use this service. For example, that means you should be able to:
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>change colours, contrast levels and fonts</li>
+                    <li>zoom in up to 300% without the text spilling off the screen</li>
+                    <li>navigate most of the service using just a keyboard</li>
+                    <li>navigate most of the service using speech recognition software</li>
+                    <li>listen to the service using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
+                </ul>
+            </p>
             <p class="govuk-body">We’ve also made the text in the service as simple as possible to understand.</p>
-            <p class="govuk-body"><a class="govuk-link" href="https://mcmw.abilitynet.org.uk/">AbilityNet</a> has advice on making your device easier to use if you have a disability.</p>
-
-            <h3 class="govuk-heading-l" id="how-accessible-this-website-is">How accessible this website is</h3>
-            <p class="govuk-body">We are constantly improving the content and performance of our website. Recent automated testing showed that small parts of the website are not fully accessible. For example:</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>some of the output documents like CSV files may not be fully accessible</li>
-            </ul>
-
-            <h3 class="govuk-heading-l" id="feedback-and-contact-information">Feedback and contact information</h3>
-            <p class="govuk-body">If you need information on this website in a different format like accessible PDF, large print, easy read, audio recording or braille, email <a class="govuk-link" href="mailto:digitalmarketaccess@digital.trade.gov.uk">digitalmarketaccess@digital.trade.gov.uk</a>.</p>
-
-            <h3 class="govuk-heading-l" id="reporting-accessibility-problems">Reporting accessibility problems with this service</h3>
-            <p class="govuk-body">We’re always looking to improve the accessibility of this online service.</p>
-            <p class="govuk-body">If you find any problems that aren’t listed on this page or think we’re not meeting the requirements of the accessibility regulations, contact: <a class="govuk-link" href="mailto:help@digital.trade.gov.uk">help@digital.trade.gov.uk</a> giving details of the issue and any assistive technology you are using.</p>
-
+            <p class="govuk-body">
+                <a class="govuk-link"
+                   href="https://mcmw.abilitynet.org.uk/"
+                   target="_new">AbilityNet(opens in new tab)</a> has advice on making your device easier to use if you have a disability.
+            </p>
+            <h3 class="govuk-heading-l" id="how-accessible-this-website-is">How accessible is this service</h3>
+            <p class="govuk-body">
+                We know some parts of this service are not fully accessible, due to a number of assistive technology barriers which means it does not fully comply with the WCAG (Web Content Accessibility Guidelines) version 2.1 AA standard.
+            </p>
+            <h3 class="govuk-heading-l" id="reporting-accessiblity-with-this-service">
+                Reporting accessibility problems with this service
+            </h3>
+            <p class="govuk-body">We’re always looking to improve the accessibility of this service.</p>
+            <p class="govuk-body">
+                If you find any problems that aren’t listed on this page or think we’re not meeting the requirements of the accessibility regulations,
+                contact:<a class="govuk-link" href="mailto:digital@businessandtrade.gov.uk/">digital@businessandtrade.gov.uk</a>, giving details of the issue and any assistive technology you are using.
+            </p>
             <h3 class="govuk-heading-l" id="enforcement-procedure">Enforcement procedure</h3>
-            <p class="govuk-body">The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you’re not happy with how we respond to your complaint, <a class="govuk-link" href="https://www.equalityadvisoryservice.com/">contact the Equality Advisory and Support Service (EASS)</a>.</p>
-
-            <h3 class="govuk-heading-l" id="technical-information">Technical information about this service’s accessibility</h3>
-            <p class="govuk-body">The Department for Business and Trade (DBT) is committed to making this service accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.</p>
-            <p class="govuk-body">This website is fully compliant with the <a class="govuk-link" href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1</a> AA standard.</p>
-
-            <h3 class="govuk-heading-l" id="compliance-status">Compliance status</h3>
-            <p class="govuk-body">This website is fully compliant with the <a class="govuk-link" href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1</a> AA standard.</p>
-
-            <h3 class="govuk-heading-l" id="improving-accessibility">What we’re doing to improve accessibility</h3>
-            <p class="govuk-body">The service team will be resolving the remaining AAA issues in priority order.</p>
-
-            <h3 class="govuk-heading-l" id="preparation-of-this-accessibility-statement">Preparation of this accessibility statement</h3>
-            <p class="govuk-body">This statement was prepared on 18 September 2020. It was last reviewed on 8 March 2023.</p>
-            <p class="govuk-body">This website was last tested on 23 October 2020. The test was carried out by the Digital Accessibility Centre (DAC).</p>
-            <p class="govuk-body">DAC have a team of experienced auditors and analysts, many of whom are disabled individuals and users of adaptive technology.</p>
-            <p class="govuk-body">The website was tested using a combination of pan-disability user feedback using a range of adaptive technologies and a technical audit using automated tools. The findings were combined to provide more accurate feedback.</p>
+            <p class="govuk-body">
+                The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’).
+                If you’re not happy with how we respond to your complaint, <a class="govuk-link" href="https://www.equalityadvisoryservice.com/"> contact the Equality Advisory and Support Service (EASS)</a>.
+            </p>
+            <h3 class="govuk-heading-l" id="technical-information-about-accessiblity">
+                Technical information about this services accessibility
+            </h3>
+            <p class="govuk-body">
+                The Department for Business and Trade is committed to making its websites and services accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
+            </p>
+            <h3 class="govuk-heading-l" id="how-we-tested-this-service">How we tested this service</h3>
+            <p class="govuk-body">
+                The service was last tested on 16th September 2023 and was checked for compliance with WCAG 2.1 AA. The test was carried out by the Digital Accessibility Centre.
+            </p>
+            <h3 class="govuk-heading-l" id="compliance-statement">Compliance status</h3>
+            <p class="govuk-body">
+                This service is only partially compliant with the WCAG (Web Content Accessibility Guidelines) version 2.1 A standard, due to the following non-compliances:
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>the use of custom components</li>
+                    <li>a list element which is not marked up in a fully accessible way</li>
+                    <li>ARIA roles which are used incorrectly or have the invalid values</li>
+                    <li>the use of non-descriptive links</li>
+                    <li>form elements which are not labelled correctly for screen readers or voice-activation users</li>
+                </ul>
+            </p>
+            <p class="govuk-body">
+                The service is only partially compliant with the WCAG (Web Content Accessibility Guidelines) version 2.1 AA standard, due to the following non-compliances:
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>
+                        the use of interactive elements which do not have a focus indicator to let users know when they are focused on an element
+                    </li>
+                    <li>
+                        the use of content which cannot be viewed without scrolling in two dimensions when the viewpoint is set to 320 CSS Pixels by 256 CSS Pixels
+                    </li>
+                </ul>
+            </p>
+            <p class="govuk-body">
+                The service is only partially compliant with the WCAG (Web Content Accessibility Guidelines) version 2.1 AAA standard, due to the following non-compliances:
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>the use of non-descriptive links which do not give enough context for screen readers.</li>
+                </ul>
+            </p>
+            <h3 class="govuk-heading-l"
+                id="what-we-are-doing-to-immprove-accessibility">What we're doing to improve accessibility</h3>
+            <p class="govuk-body">
+                We are currently working to resolve all of the identified issues listed in this statement to make them fully compliant with the WCAG (Web Content Accessibility Guidelines) version 2.1 AA standard.
+            </p>
+            <h3 class="govuk-heading-l" id="preparation-of-accesibility-statement">Preparation of this accessibility statement</h3>
+            <p class="govuk-body">This statement was prepared on 31 May 2024. It was last reviewed on 7 June 2024.</p>
+            <p class="govuk-body">
+                The service was last tested on 16th November 2023 and was checked for compliance with WCAG 2.1 AA. The test was carried out by the Digital Accessibility Centre.
+            </p>
+            <p class="govuk-body">
+                DAC have a team of experienced auditors and analysts, many of whom are disabled individuals and users of adaptive technology.
+            </p>
+            <p class="govuk-body">
+                The service was tested using a combination of pan-disability user feedback using a range of adaptive technologies and a technical audit using automated tools. The findings were combined to provide more accurate feedback.
+            </p>
         </div>
     </div>
 {% endblock %}
