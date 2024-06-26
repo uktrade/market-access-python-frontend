@@ -146,7 +146,6 @@ class AutomateEconomicAssessment(
         try:
             economic_assessment = client.economic_assessments.create(
                 barrier_id=self.barrier.id,
-                automate=True,
             )
         except APIHttpException as e:
             self.extra_context = {
