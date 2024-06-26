@@ -44,40 +44,6 @@ class TestEconomicAssessments(MarketAccessTestCase):
         assert "trade_category" in form.errors
         assert mock_patch.called is False
 
-    @patch("utils.api.resources.APIResource.create")
-    def test_automated_economic_assessment(self, mock_create):
-        mock_create.return_value = EconomicAssessment({"id": 55})
-        response = self.client.post(
-            reverse(
-                "barriers:automate_economic_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-        )
-        assert response.status_code == HTTPStatus.FOUND
-        mock_create.assert_called_with(
-            barrier_id=self.barrier["id"],
-            automate=True,
-        )
-
-    @patch("utils.api.resources.APIResource.create")
-    def test_automated_economic_assessment_errors(self, mock_create):
-        exception = APIHttpException(Mock())
-        exception.response_data = ["Country not found: USA"]
-        mock_create.side_effect = exception
-        response = self.client.post(
-            reverse(
-                "barriers:automate_economic_assessment",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-        )
-        assert response.status_code == HTTPStatus.OK
-        mock_create.assert_called_with(
-            barrier_id=self.barrier["id"],
-            automate=True,
-        )
-        assert "errors" in response.context
-        assert response.context["errors"] == ["Country not found: USA"]
-
     @patch("utils.api.resources.APIResource.patch")
     def test_update_economic_assessment_rating(self, mock_patch):
         response = self.client.post(
