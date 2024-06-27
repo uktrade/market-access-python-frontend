@@ -8,7 +8,7 @@
                     <a href="{{ user.link }}">{{ user.first_name|highlight:form.query.value }} {{ user.last_name|highlight:form.query.value }}</a>
                 </li>
             {% else %}
-                <form action="" method="POST" role="add" class="add-form">
+                <form action="" method="POST" class="add-form">
                     {% csrf_token %}
                     <li class="search-card">
                         <input name="query" id="query" value="{{ form.query.value }}" hidden aria-hidden="true">
