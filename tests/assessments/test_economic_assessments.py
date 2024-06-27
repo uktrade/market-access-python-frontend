@@ -1,11 +1,9 @@
 from http import HTTPStatus
 
 from django.urls import reverse
-from mock import Mock, patch
+from mock import patch
 
-from barriers.models import EconomicAssessment
 from core.tests import MarketAccessTestCase
-from utils.exceptions import APIHttpException
 
 
 class TestEconomicAssessments(MarketAccessTestCase):
