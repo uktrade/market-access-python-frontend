@@ -303,23 +303,23 @@
                                     {% if barrier.tags or barrier.top_priority_status != "NONE" or barrier.priority_level != "NONE" %}
                                         <ul class="barrier-tag-list barrier-tag-list--search">
                                             {% spaceless %}
-                                                <div class="overflow-hidden">
+                                                <!-- <div class="overflow-hidden"> -->
                                                     {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
-                                                        <div class="text-right">
-                                                            <li class="govuk-tag govuk-tag--top-100-priority-approval-pending text-right">TOP 100 APPROVAL PENDING</li>
-                                                        </div>
+                                                        <!-- <div class="text-right"> -->
+                                                            <li class="govuk-tag govuk-tag--top-100-priority-approval-pending text-right overflow-hidden">TOP 100 APPROVAL PENDING</li>
+                                                        <!-- </div> -->
                                                     {% elif barrier.top_priority_status == "APPROVED" %}
-                                                        <div class="text-right">
-                                                            <li class="govuk-tag govuk-tag--top-100-priority text-right">TOP 100 PRIORITY</li>
-                                                        </div>
+                                                        <!-- <div class="text-right"> -->
+                                                            <li class="govuk-tag govuk-tag--top-100-priority text-right overflow-hidden">TOP 100 PRIORITY</li>
+                                                        <!-- </div> -->
                                                     {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                                                        <div class="text-right">
-                                                            <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right">TOP 100 REMOVAL PENDING</li>
-                                                        </div>
+                                                        <!-- <div class="text-right"> -->
+                                                            <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right overflow-hidden">TOP 100 REMOVAL PENDING</li>
+                                                        <!-- </div> -->
                                                     {% elif barrier.top_priority_status == "RESOLVED" %}
-                                                        <div class="text-right">
-                                                            <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right">TOP 100 PRIORITY RESOLVED</li>
-                                                        </div>
+                                                        <!-- <div class="text-right"> -->
+                                                            <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right overflow-hidden">TOP 100 PRIORITY RESOLVED</li>
+                                                        <!-- </div> -->
                                                     {% elif barrier.priority_level %}
                                                         {% if barrier.priority_level == "OVERSEAS" %}
                                                             <li class="govuk-tag govuk-tag--overseas-delivery">OVERSEAS DELIVERY</li>
@@ -329,7 +329,7 @@
                                                             <li class="govuk-tag govuk-tag--watch-list">WATCH LIST</li>
                                                         {% endif %}
                                                     {% endif %}
-                                                </div>
+                                                <!-- </div> -->
                                                 <!-- <div class=""> -->
                                                     {% for tag in barrier.tags %}
                                                         <!-- <div class="text-right"> -->
