@@ -306,11 +306,11 @@
                                                 {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
                                                     <li class="govuk-tag govuk-tag--top-100-priority-approval-pending overflow-hidden">TOP 100 APPROVAL PENDING</li>
                                                 {% elif barrier.top_priority_status == "APPROVED" %}
-                                                    <li class="govuk-tag govuk-tag--top-100-priority text-right overflow-hidden">TOP 100 PRIORITY</li>
+                                                    <li class="govuk-tag govuk-tag--top-100-priority overflow-hidden">TOP 100 PRIORITY</li>
                                                 {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
-                                                    <li class="govuk-tag govuk-tag--top-100-priority-removal-pending text-right overflow-hidden">TOP 100 REMOVAL PENDING</li>
+                                                    <li class="govuk-tag govuk-tag--top-100-priority-removal-pending overflow-hidden">TOP 100 REMOVAL PENDING</li>
                                                 {% elif barrier.top_priority_status == "RESOLVED" %}
-                                                    <li class="govuk-tag govuk-tag--top-100-priority-resolved text-right overflow-hidden">TOP 100 PRIORITY RESOLVED</li>
+                                                    <li class="govuk-tag govuk-tag--top-100-priority-resolved overflow-hidden">TOP 100 PRIORITY RESOLVED</li>
                                                 {% elif barrier.priority_level %}
                                                     {% if barrier.priority_level == "OVERSEAS" %}
                                                         <li class="govuk-tag govuk-tag--overseas-delivery">OVERSEAS DELIVERY</li>
