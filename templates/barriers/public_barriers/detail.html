@@ -227,7 +227,7 @@
                     <p class="govuk-body govuk-hint govuk-!-margin-bottom-2">They will update the status to 'published' once it is live. You will then be able to view the barrier by visiting <a href="https://www.check-international-trade-barriers.service.gov.uk/" target="_blank" class="govuk-link--no-visited-state govuk-!-font-size-19">check international trade barriers (opens in new tab)</a></p>
                 {% elif public_barrier.public_view_status == 40 %}
                     <!-- The barrier has been published -->
-                    <p class="govuk-body">This barrier was published by {{publisher_name}} on {{published_date}}.</p>
+                    <p class="govuk-body">This barrier was published by {{publisher_name}} on {{published_date}}</p>
                     <p class="govuk-body">If you want to make changes to this barrier you will need to set the status to unpublished and check it with the approver.</p>
                 {% else %}
                     <!-- The barrier has not reached the stage this section becomes active -->
@@ -271,7 +271,7 @@
                         </dd>
                         <dt class="summary-group__list__key">Resolved</dt>
                         <dd class="summary-group__list__value">
-                            {{ public_barrier.internal_is_resolved_text }}
+                            {{ public_barrier.is_resolved_text }}
                         </dd>
                         <dt class="summary-group__list__key">Date reported</dt>
                         <dd class="summary-group__list__value">
@@ -279,20 +279,20 @@
                         </dd>
                         <dt class="summary-group__list__key">Location</dt>
                         <dd class="summary-group__list__value">
-                            {{ public_barrier.internal_location }}
+                            {{ public_barrier.location }}
                         </dd>
                         <dt class="summary-group__list__key">Sector</dt>
                         <dd class="summary-group__list__value">
-                            {% if public_barrier.internal_sector_names %}
-                                {{ public_barrier.internal_sector_names|join:", " }}
+                            {% if public_barrier.sector_names %}
+                                {{ public_barrier.sector_names|join:", " }}
                             {% else %}
                                 Not selected, <a href="{% url 'barriers:barrier_detail' barrier.id %}">add on main barrier tab</a>.
                             {% endif %}
                         </dd>
                         <dt class="summary-group__list__key">Category</dt>
                         <dd class="summary-group__list__value">
-                            {% if public_barrier.internal_category_titles %}
-                                {{ public_barrier.internal_category_titles|join:", " }}
+                            {% if public_barrier.category_titles %}
+                                {{ public_barrier.category_titles|join:", " }}
                             {% else %}
                                 Not selected, <a href="{% url 'barriers:barrier_detail' barrier.id %}">add on main barrier tab</a>.
                             {% endif %}

@@ -392,9 +392,6 @@ class Barrier(APIModel):
 
 class PublicBarrier(APIModel):
     _country = None
-    _internal_country = None
-    _internal_sectors = None
-    _internal_status = None
     _metadata = None
     _sectors = None
     _status = None
@@ -408,31 +405,9 @@ class PublicBarrier(APIModel):
         return self.data.get("internal_id")
 
     @property
-    def any_internal_sectors_changed(self):
-        return self.data.get("internal_sectors_changed") or self.data.get(
-            "internal_all_sectors_changed"
-        )
-
-    @property
     def category_titles(self):
-        return [category["title"] for category in self.categories]
-
-    @property
-    def internal_categories(self):
-        return self.data.get("internal_categories", [])
-
-    @property
-    def internal_category_titles(self):
-        return [category["title"] for category in self.internal_categories]
-
-    @property
-    def internal_is_resolved(self):
-        return self.data.get("internal_is_resolved")
-
-    @property
-    def internal_status_date(self):
-        if self.data.get("internal_status_date"):
-            return dateutil.parser.parse(self.data["internal_status_date"])
+        if self.categories:
+            return [category["title"] for category in self.categories]
 
     @property
     def internal_government_organisations(self):
@@ -445,12 +420,6 @@ class PublicBarrier(APIModel):
     @property
     def is_resolved_text(self):
         return self.get_resolved_text(self.is_resolved, self.status_date)
-
-    @property
-    def internal_is_resolved_text(self):
-        return self.get_resolved_text(
-            self.internal_is_resolved, self.internal_status_date
-        )
 
     def get_resolved_text(self, is_resolved, status_date):
         if is_resolved:
@@ -523,47 +492,13 @@ class PublicBarrier(APIModel):
         }.get(str(self.public_view_status))
 
     @property
-    def ready_text(self):
-        return {
-            PUBLIC_BARRIER_STATUSES.UNKNOWN: "Not ready to publish",
-            PUBLIC_BARRIER_STATUSES.INELIGIBLE: "",
-            PUBLIC_BARRIER_STATUSES.ELIGIBLE: "Not ready to publish",
-            PUBLIC_BARRIER_STATUSES.READY: "Ready to publish",
-            PUBLIC_BARRIER_STATUSES.PUBLISHED: "",
-            PUBLIC_BARRIER_STATUSES.UNPUBLISHED: "",
-            PUBLIC_BARRIER_STATUSES.REVIEW_LATER: "Review later",
-        }.get(str(self.public_view_status))
-
-    @property
-    def internal_all_sectors(self):
-        return self.data.get("internal_all_sectors")
-
-    @property
-    def internal_sectors(self):
-        return self.data.get("internal_sectors", [])
-
-    @property
-    def internal_sector_names(self):
-        sectors = [self.internal_main_sector] if self.internal_main_sector else []
-        if self.internal_all_sectors:
-            sectors += ["All sectors"]
-        if self.internal_sectors:
-            sectors += [
-                sector.get("name", "Unknown") for sector in self.internal_sectors
-            ]
-        return sectors
-
-    @property
-    def internal_any_sectors_changed(self):
-        return self.internal_sectors_changed or self.internal_all_sectors_changed
-
-    @property
     def sector_names(self):
+        sectors = [self.main_sector.get("name", "Unknown")] if self.main_sector else []
         if self.all_sectors:
-            return ["All sectors"]
+            sectors += ["All sectors"]
         if self.sectors:
-            return [sector.get("name", "Unknown") for sector in self.sectors]
-        return []
+            sectors += [sector.get("name", "Unknown") for sector in self.sectors]
+        return sectors
 
     @property
     def tab_badge(self):
@@ -582,10 +517,3 @@ class PublicBarrier(APIModel):
     def reported_on(self):
         if self.data.get("reported_on"):
             return dateutil.parser.parse(self.data["reported_on"])
-
-    @property
-    def internal_main_sector(self):
-        main_sector = self.data.get("internal_main_sector")
-        if main_sector:
-            return main_sector.get("name")
-        return None
