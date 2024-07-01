@@ -37,7 +37,7 @@
                                    value="{{ value }}"
                                    {% if form.status.value == value %} checked="checked"{% endif %}
                                    {% if value in "3 4" %} data-aria-controls="conditional-{{ value }}"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="{{ form.status.id_for_label }}">
+                            <label class="govuk-label govuk-radios__label" for="status-radio-{{ value }}">
                                 {{ name }}
                             </label>
                             {% form_field_error form "status" %}
