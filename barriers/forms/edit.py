@@ -712,6 +712,12 @@ class CausedByTradingBlocForm(forms.Form):
 
     def get_help_text(self, trading_bloc_code):
         help_text = {
+            "TB00003": (
+                "Yes should be selected if the barrier is a local application of an "
+                "ASEAN regulation. If it is an ASEAN-wide barrier, the country "
+                "location should be changed to Association of Southeast Asian Nations "
+                "(ASEAN) in the location screen."
+            ),
             "TB00016": (
                 "Yes should be selected if the barrier is a local application of an EU "
                 "regulation. If it is an EU-wide barrier, the country location should "
