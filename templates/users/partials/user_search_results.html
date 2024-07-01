@@ -8,17 +8,17 @@
                     <a href="{{ user.link }}">{{ user.first_name|highlight:form.query.value }} {{ user.last_name|highlight:form.query.value }}</a>
                 </li>
             {% else %}
-                <form action="" method="POST" class="add-form">
-                    {% csrf_token %}
-                    <li class="search-card">
+                <li class="search-card">
+                    <form action="" method="POST" class="add-form">
+                        {% csrf_token %}
                         <input name="query" id="query" value="{{ form.query.value }}" hidden aria-hidden="true">
                         <input name="user_id" id="add_user_id" value="{{ user.user_id }}" hidden aria-hidden="true">
                         <input name="user_full_name" id="add_user_full_name" value="{{ user.first_name }} {{ user.last_name }}" hidden aria-hidden="true">
                         <button type="submit" name="action" value="add" class="search-card__button">
                             <h3 class="search-card__heading">Add {{ user.first_name|highlight:form.query.value }} {{ user.last_name|highlight:form.query.value }}</h3>
                         </button>
-                    </li>
-                </form>
+                    </form>
+                </li>
             {% endif %}
         {% endfor %}
     </ul>

@@ -30,7 +30,7 @@
         {% else %}
             <h2 class="summary-group__heading">Barrier headlines</h2>
         {% endif %}
-        <div class="summary-group__list">
+        <dl class="summary-group__list">
             <div class="summary-group__list-item-50">
                 <dt class="summary-group__list__key">Date reported</dt>
                 <dd class="summary-group__list__value">
@@ -486,7 +486,7 @@
             <dd class="summary-group__list__value">
                 {{ barrier.reported_by.name }}
             </dd>
-        </div>
+        </dl>
         {% if not barrier.archived and not barrier.public_barrier.is_published %}
             <a href="{% url 'barriers:archive' barrier.id %}"
                class="govuk-button govuk-button--secondary"
