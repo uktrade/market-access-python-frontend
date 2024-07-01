@@ -171,10 +171,10 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     economic_impact_assessment = forms.MultipleChoiceField(
-        label="Valuation assessment",
+        label="Economic impact assessment",
         choices=(
-            ("with", "With a valuation assessment"),
-            ("without", "Without a valuation assessment"),
+            ("with", "With an Economic impact assessment"),
+            ("without", "Without an Economic impact assessment"),
         ),
         required=False,
     )
@@ -201,6 +201,14 @@ class BarrierSearchForm(forms.Form):
         widget=forms.Select(
             attrs={"class": "govuk-select dmas-search-ordering-select"}
         ),
+    )
+    valuation_assessment = forms.MultipleChoiceField(
+        label="Valuation assessment",
+        choices=(
+            ("with", "With a valuation assessment"),
+            ("without", "Without a valuation assessment"),
+        ),
+        required=False,
     )
 
     filter_groups = {
@@ -490,6 +498,9 @@ class BarrierSearchForm(forms.Form):
         params["export_types"] = ",".join(self.cleaned_data.get("export_types", []))
         params["start_date"] = self.cleaned_data.get("start_date")
         params["only_main_sector"] = self.cleaned_data.get("only_main_sector")
+        params["valuation_assessment"] = ",".join(
+            self.cleaned_data.get("valuation_assessment", [])
+        )
 
         return {k: v for k, v in params.items() if v}
 
