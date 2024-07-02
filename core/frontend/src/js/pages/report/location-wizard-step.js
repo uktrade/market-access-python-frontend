@@ -3,11 +3,13 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
     const showComponent = function (component) {
         if (component != null) {
             component.classList.remove("govuk-visually-hidden");
+            // component.setAttribute('aria-hidden', 'false');
         }
     };
     const hideComponent = function (component) {
         if (component != null) {
             component.classList.add("govuk-visually-hidden");
+            // component.setAttribute('aria-hidden', 'true');
         }
     };
 
