@@ -8987,6 +8987,23 @@
   ],
   "trading_blocs": [
     {
+      "code": "TB00003",
+      "name": "Association of Southeast Asian Nations (ASEAN)",
+      "short_name": "the ASEAN",
+      "country_ids": [
+        "56af72a6-5d95-e211-a939-e4115bead28a",
+        "5baf72a6-5d95-e211-a939-e4115bead28a",
+        "706a9ab2-5d95-e211-a939-e4115bead28a",
+        "7f6a9ab2-5d95-e211-a939-e4115bead28a",
+        "0550bdb8-5d95-e211-a939-e4115bead28a",
+        "59af72a6-5d95-e211-a939-e4115bead28a",
+        "5161b8be-5d95-e211-a939-e4115bead28a",
+        "1f0be5c4-5d95-e211-a939-e4115bead28a",
+        "a86ee1ca-5d95-e211-a939-e4115bead28a",
+        "ba6ee1ca-5d95-e211-a939-e4115bead28a"
+      ]
+    },
+    {
       "code": "TB00016",
       "name": "European Union",
       "short_name": "the EU",
