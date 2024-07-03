@@ -9,7 +9,7 @@ function TradingBlocFilter(props) {
                 selected.push(tradingBloc);
             return selected;
         },
-        []
+        [],
     );
 
     return (
@@ -54,7 +54,7 @@ function AdminAreaFilter(props) {
         for (let i = 0; i < adminAreasList.length; i++) {
             if (
                 props.selectedAdminAreaIds[adminAreasCountry].includes(
-                    adminAreasList[i]["value"]
+                    adminAreasList[i]["value"],
                 )
             ) {
                 defaultValues.push(adminAreasList[i]);
@@ -86,13 +86,13 @@ function AdminAreaFilter(props) {
                             onChange={(event) =>
                                 props.handleChangeFunction(
                                     event,
-                                    adminAreasCountry
+                                    adminAreasCountry,
                                 )
                             }
                             placeholder="Search admin area"
                             defaultValue={getDefaultValue(
                                 adminAreas[adminAreasCountry],
-                                adminAreasCountry
+                                adminAreasCountry,
                             )}
                         />
                     </div>
@@ -104,7 +104,7 @@ function AdminAreaFilter(props) {
 
 function LocationFilter(props) {
     const tradingBlocIds = props.tradingBlocs.map(
-        (tradingBloc) => tradingBloc.value
+        (tradingBloc) => tradingBloc.value,
     );
 
     const initialSelectedLocations = props.countries.reduce(
@@ -112,13 +112,13 @@ function LocationFilter(props) {
             if (location.checked) selected.push(location);
             return selected;
         },
-        []
+        [],
     );
     const initialSelectedLocationIds = initialSelectedLocations.map(
-        (location) => location.value
+        (location) => location.value,
     );
     const [selectedLocationIds, setSelectedLocationIds] = useState(
-        initialSelectedLocationIds
+        initialSelectedLocationIds,
     );
 
     const handleLocationSelect = (value, meta) => {
@@ -128,7 +128,7 @@ function LocationFilter(props) {
         } else {
             let location = meta.removedValue.value;
             setSelectedLocationIds(
-                selectedLocationIds.filter((item) => item !== location)
+                selectedLocationIds.filter((item) => item !== location),
             );
             // Must also clear the child admin areas if country is removed
             if (selectedAdminAreaIds[location]) {
@@ -140,6 +140,7 @@ function LocationFilter(props) {
     const getTradingBlocLabel = (tradingBloc) => {
         return (
             {
+                TB00003: "Include ASEAN-wide barriers",
                 TB00016: "Include EU-wide barriers",
                 TB00017: "Include GCC-wide barriers",
                 TB00013: "Include EAEU-wide barriers",
@@ -158,7 +159,7 @@ function LocationFilter(props) {
             if (validAdminAreaIds.includes(location)) selected.push(location);
             return selected;
         },
-        []
+        [],
     );
 
     const selectedTradingBlocIds = selectedLocationIds.reduce(
@@ -166,27 +167,27 @@ function LocationFilter(props) {
             if (tradingBlocIds.includes(location)) selected.push(location);
             return selected;
         },
-        []
+        [],
     );
 
     const selectedCountryTradingBlocs = props.tradingBlocData.reduce(
         (selected, tradingBloc) => {
             if (
                 selectedLocationIds.some((item) =>
-                    tradingBloc.country_ids.includes(item)
+                    tradingBloc.country_ids.includes(item),
                 )
             )
                 selected.push(tradingBloc);
             return selected;
         },
-        []
+        [],
     );
 
     const selectedCountryTradingBlocsCodes = props.tradingBlocData.map(
-        (tradingBloc) => tradingBloc.code
+        (tradingBloc) => tradingBloc.code,
     );
     const initialExtraLocation = new URLSearchParams(
-        window.location.search
+        window.location.search,
     ).getAll("extra_location");
 
     const initialSelectedTradingBlocValues = props.tradingBlocData.reduce(
@@ -194,11 +195,11 @@ function LocationFilter(props) {
             return {
                 ...selected,
                 [tradingBloc.code]: initialExtraLocation.includes(
-                    tradingBloc.code
+                    tradingBloc.code,
                 ),
             };
         },
-        {}
+        {},
     );
 
     const [selectedAllTradingBlocks, setSelectedAllTradingBlocks] =
@@ -231,8 +232,8 @@ function LocationFilter(props) {
                             [tradingBlocCode]: true,
                         };
                     },
-                    {}
-                )
+                    {},
+                ),
             );
         }
     };
@@ -259,7 +260,7 @@ function LocationFilter(props) {
     };
 
     const [selectedAdminAreaIds, setselectedAdminAreaIds] = useState(
-        initialSelectedAdminAreaValues
+        initialSelectedAdminAreaValues,
     );
 
     const handleAdminAreaSelect = (event, country) => {
@@ -333,7 +334,7 @@ function LocationFilter(props) {
                                         onChange={(event) =>
                                             individualTradingBlockChangeHandler(
                                                 event,
-                                                tradingBloc
+                                                tradingBloc,
                                             )
                                         }
                                         // checked={selectedAllTradingBlocks || initialExtraLocation.includes(tradingBloc.code)}
@@ -345,7 +346,7 @@ function LocationFilter(props) {
                                         {getTradingBlocLabel(tradingBloc)}
                                     </label>
                                 </div>
-                            )
+                            ),
                         )}
                         {/* {selectedCountryTradingBlocs.length > 0 ? (<div className="checkbox-filter__item"}>
                 <input

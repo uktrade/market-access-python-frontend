@@ -278,6 +278,7 @@ class BarrierSearchForm(forms.Form):
 
     def set_extra_location_choices(self):
         trading_bloc_labels = {
+            "TB00003": "Include ASEAN-wide barriers",
             "TB00016": "Include EU-wide barriers",
             "TB00026": "Include Mercosur-wide barriers",
             "TB00013": "Include EAEU-wide barriers",
@@ -293,6 +294,7 @@ class BarrierSearchForm(forms.Form):
 
     def set_country_trading_bloc_choices(self):
         trading_bloc_labels = {
+            "TB00003": "Include country specific implementations of ASEAN regulations",
             "TB00016": "Include country specific implementations of EU regulations",
             "TB00026": (
                 "Include country specific implementations of Mercosur regulations"
