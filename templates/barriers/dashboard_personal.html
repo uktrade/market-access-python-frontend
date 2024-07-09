@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ block.super }} - Homepage{% endblock %}
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">ma.pages.index();</script>
+    <script nonce="{{request.csp_nonce}}"
+            src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script nonce="{{request.csp_nonce}}">
+    var options = {
+        series: [{
+        name: 'Marine Sprite',
+        data: [44, 55, 41, 37, 22, 43, 21]
+      }, {
+        name: 'Striking Calf',
+        data: [53, 32, 33, 52, 13, 43, 32]
+      }, {
+        name: 'Tank Picture',
+        data: [12, 17, 11, 9, 15, 11, 20]
+      }, {
+        name: 'Bucket Slope',
+        data: [9, 7, 5, 8, 6, 9, 4]
+      }, {
+        name: 'Reborn Kid',
+        data: [25, 12, 19, 32, 25, 24, 10]
+      }],
+        chart: {
+        type: 'bar',
+        height: 350,
+        stacked: true,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          dataLabels: {
+            total: {
+              enabled: true,
+              offsetX: 0,
+              style: {
+                fontSize: '13px',
+                fontWeight: 900
+              }
+            }
+          }
+        },
+      },
+      stroke: {
+        width: 1,
+        colors: ['#fff']
+      },
+      title: {
+        text: 'Fiction Books Sales'
+      },
+      xaxis: {
+        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
+        labels: {
+          formatter: function (val) {
+            return val + "K"
+          }
+        }
+      },
+      yaxis: {
+        title: {
+          text: undefined
+        },
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val + "K"
+          }
+        }
+      },
+      fill: {
+        opacity: 1
+      },
+      legend: {
+        position: 'top',
+        horizontalAlign: 'left',
+        offsetX: 40
+      }
+      };
+
+      var chart = new ApexCharts(document.querySelector("#chart"), options);
+      chart.render();
+
+    </script>
+{% endblock %}
+{% block page_content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-row">
+                <h1 class="govuk-heading-l">
+                    <span class="govuk-caption-m">Dashboard</span> {{ current_user.first_name }} {{ current_user.last_name }}
+                </h1>
+                <section id="notice">
+                    {% now "c" as tz_now %}
+                    {% comment %} c formats current time to ISO 8601 format e.g. 2008-01-02T10:30:00.000123+02:00 {% endcomment %}
+                    {% if tz_now < '2024-08-18T10:00:00.000000+00:00' %}
+                        <div class="govuk-inset-text dash-insert"
+                             role="region"
+                             aria-labelled-by="notification-banner"
+                             data-module="dash-insert__content">
+                            <div tabindex="0">
+                                <div class="dash-insert__title">Welcome to the new dashboard layout</div>
+                                <div class="dash-insert__content">
+                                    Your personal dashboard is designed to surface information that is most relevant and important to you. Your feedback is important to help us improve this page and you can share your feedback here.
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </section>
+            </div>
+            <div class="govuk-grid-row">
+                <section id="search_bar">
+                    <fieldset class="govuk-fieldset">
+                        <div class="govuk-form-group">
+                            <input class="govuk-input govuk-!-width-three-quarters"
+                                   id="search_phase"
+                                   name="search"
+                                   type="text">
+                        </div>
+                    </fieldset>
+                    <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+                </section>
+            </div>
+            <div class="govuk-grid-row">
+                <fieldset class="govuk-fieldset">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="address-town">Town or city</label>
+                        <input class="govuk-input govuk-!-width-one-third"
+                               id="address-town"
+                               name="addressTown"
+                               type="text"
+                               autocomplete="address-level2">
+                    </div>
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="address-town">Town or city</label>
+                        <input class="govuk-input govuk-!-width-one-third"
+                               id="address-town"
+                               name="addressTown"
+                               type="text"
+                               autocomplete="address-level2">
+                    </div>
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="address-town">Town or city</label>
+                        <input class="govuk-input govuk-!-width-one-third"
+                               id="address-town"
+                               name="addressTown"
+                               type="text"
+                               autocomplete="address-level2">
+                    </div>
+                </fieldset>
+            </div>
+            <div class="govuk-grid-row">
+                <section class="dash-buttons-cards-container">
+                    <a href="{% url 'reports:new_report' %}"
+                       role="button"
+                       class="dash-button govuk-!-text-align-centre">
+                        <span class="dash-button__heading">PB100 Priority barriers</span>
+                        <span class="dash-button__heading">82</span>
+                        <span class="dash-button__text">barriers are on track for delivery this year, April 2023 to March 2024. This adds an estimated value of £250m of value. </span>
+                    </a>
+                    <a href="{% url 'barriers:search' %}"
+                       role="button"
+                       class="dash-button govuk-!-text-align-centre">
+                        <span class="dash-button__heading">Total barrier value</span>
+                        <span class="dash-button__heading">£40m</span>
+                        <span class="dash-button__text">You've addedd £40m of value this financial year, wkhich is a 20% increase comparing to last year </span>
+                    </a>
+                    <a href="{% url 'barriers:public_barriers' %}"
+                       role="button"
+                       class="dash-button">
+                        <span class="dash-button__heading">Resolved</span>
+                        <span class="dash-button__heading">50%</span>
+                        <span class="dash-button__text">of your barriers are on track to be resolved this year.</span>
+                    </a>
+                </section>
+            </div>
+            <div class="govuk-grid-row">
+                <table class="govuk-table">
+                    <caption class="govuk-table__caption govuk-table__caption--m">What to do next</caption>
+                    <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h4>
+                                    <a href="#">Barrier title</a>
+                                </h4>
+                                @stuartwatson mentioned you
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="govuk-tag govuk-tag--programme-fund-regulator text-right">26 June 2024</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="govuk-grid-row" id="barrier_progress_graph">
+                Graph here
+                <div id="chart"></div>
+            </div>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <div class="dash-card">
+                <span class="dash-card__heading">Get help</span>
+                <span class="dash-button__text">
+                    Read the <a href="https://data-services-help.trade.gov.uk/market-access/the-market-access-playbook/"
+    target="_blank">market access playbook</a> for help resolving your barriers.
+                </span>
+                <span class="dash-button__text">You can also find out:</span>
+                <ul class="dash-card__text">
+                    <li>
+                        <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/"
+                           target="_blank">how to use DMAS</a>
+                    </li>
+                    <li>
+                        <a href="https://data-services-help.trade.gov.uk/market-access/updates/"
+                           target="_blank">what's new on DMAS</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dash-card">
+                <span class="dash-card__heading">What's new</span>
+                <ul class="dash-card__text">
+                    <li>
+                        The
+                        <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/"
+                           target="_blank">May DMAS newsletter was published on 25 May</a>
+                    </li>
+                    <li>
+                        It is now easier to
+                        <a href="https://data-services-help.trade.gov.uk/market-access/updates/"
+                           target="_blank">publish barriers</a> read the release notes
+                    </li>
+                    <li>
+                        Tag your polklicy team in with the new
+                        <a href="https://data-services-help.trade.gov.uk/market-access/updates/"
+                           target="_blank">policy team</a> field
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock page_content %}

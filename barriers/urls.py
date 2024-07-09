@@ -87,7 +87,7 @@ from .views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from .views.core import BarrierDetail, Dashboard, WhatIsABarrier
+from .views.core import BarrierDetail, Dashboard, DashboardPersonal, WhatIsABarrier
 from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditCausedByTradingBloc,
@@ -176,6 +176,7 @@ app_name = "barriers"
 
 urlpatterns = [
     path("", Dashboard.as_view(), name="dashboard"),
+    path("home/", DashboardPersonal.as_view(), name="dashboard_personal"),
     path("search/", BarrierSearch.as_view(), name="search"),
     path("find-a-barrier/", BarrierSearch.as_view(), name="find_a_barrier"),
     path("search/download/", DownloadBarriers.as_view(), name="download"),
