@@ -1,33 +1,32 @@
 {% extends "barriers/edit/base.html" %}
-
 {% load static %}
-
 {% block page_title %}{{ block.super }} - Add initial economic assessment{% endblock %}
-
 {% block back_link %}
-    <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:assessment_detail' barrier.id %}"
+       class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
-
 {% block page_content %}
-
     <h2 class="govuk-heading-m">Add initial economic assessment</h2>
-
     <div class="restrict-width">
         {% if errors %}
-            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+            <div class="govuk-error-summary"
+                 aria-labelledby="error-summary-title"
+                 role="alert"
+                 tabindex="-1"
+                 data-module="govuk-error-summary">
                 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
                         {% for error in errors %}
-                            <li><a href="#">{{ error }}</a></li>
+                            <li>
+                                <a href="#">{{ error }}</a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         {% endif %}
-
         <h3 class="commodities-list__title">HS commodity codes</h3>
-
         {% if barrier.commodities %}
             <ul class="commodities-list">
                 {% for commodity in barrier.commodities %}
@@ -44,17 +43,18 @@
         {% else %}
             <p class="govuk-body">No HS commodity codes have been added.</p>
         {% endif %}
-
-        <p class="govuk-!-margin-bottom-6"><a href="{% url 'barriers:edit_commodities' barrier.id %}?next=automate" class="govuk-link">Need to change the HS commodity codes?</a></p>
-
+        <p class="govuk-!-margin-bottom-6">
+            <a href="{% url 'barriers:edit_commodities' barrier.id %}?next=automate"
+               class="govuk-link">Need to change the HS commodity codes?</a>
+        </p>
         <form action="" method="POST" class="restrict-width">
             {% csrf_token %}
-            <button class="govuk-button govuk-!-margin-right-4" {% if not barrier.commodities %} disabled{% endif %}>Run automated assessment</button>
-
-            <a href="{% url 'barriers:add_economic_assessment_rating' barrier.id %}" class="govuk-button govuk-button--secondary govuk-!-margin-right-4" data-module="govuk-button">Manual assessment</a>
-
-            <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
+            <a class="govuk-button govuk-!-margin-right-4"
+               href="{% url 'barriers:add_economic_assessment_rating' barrier.id %}"
+               class="govuk-button govuk-button--secondary govuk-!-margin-right-4"
+               data-module="govuk-button">Manual assessment</a>
+            <a href="{% url 'barriers:assessment_detail' barrier.id %}"
+               class="form-cancel">Cancel</a>
         </form>
     </div>
-
 {% endblock %}
