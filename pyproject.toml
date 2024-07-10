@@ -6,7 +6,7 @@ authors = ["Ferenc Csepregi <feri@31.digital>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-django = "4.2.11"
+django = "4.2.14"
 django-environ = "==0.4.5"
 django-extensions = "==3.0.9"
 django-log-formatter-ecs = "==0.0.5"
