@@ -367,7 +367,7 @@ if SENTRY_DNS:
             DjangoIntegration(),
         ],
         enable_tracing=env.bool("SENTRY_ENABLE_TRACING", False),
-        traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", 0.0),
+        traces_sample_rate=0.1,
     )
 
 # Settings made available in templates
