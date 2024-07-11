@@ -13,24 +13,20 @@
 
     &__question {
         display: flex;
-        // align items to top of container
-        align-items: flex-start;
-        justify-content: flex-start;
         box-shadow: inset 0px -1px 0px #B1B4B6;
         padding: 10px 0px 8px;
         gap: 10px;
 
         .question-label {
-            width: 250px;
-            min-width: 250px;
-            padding: 0px;
+            flex-basis: 250px;
             margin: 0px;
         }
 
         .answer {
-
-            flex-grow: 1;
-            overflow: auto;
+            flex: 1;
+            min-width: 100px;
+            overflow-wrap: break-word;
         }
     }
 }
+
