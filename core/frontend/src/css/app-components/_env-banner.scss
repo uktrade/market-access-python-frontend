@@ -1,8 +1,8 @@
 .env-banner {
-  position: absolute;
+  // position: absolute;
   width: 100%;
   left: 0;
-  top: 50px;
+  // top: 50px;
   height: 50px;
   margin-left: 0;
   padding-right: 30px;
@@ -33,27 +33,6 @@
     &.env-banner__dismiss--uat {
       color: #0b0c0c !important;
     }
-  }
-
-  @media (min-width: 800px ){
-    width: 300px;
-    left: 50%;
-    top: 0;
-    margin-left: -150px;
-  }
-
-  @media (min-width: 1080px ){
-    width: 400px;
-    left: 50%;
-    top: 0;
-    margin-left: -200px;
-  }
-
-  @media (min-width: 1400px ){
-    width: 600px;
-    left: 50%;
-    top: 0;
-    margin-left: -300px;
   }
 
 }
