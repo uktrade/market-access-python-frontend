@@ -87,7 +87,7 @@
                 </div>
             </div>
 
-            <!-- Goods/services/hs-codes section -->
+            <!-- Goods/\'""ices/hs-codes section -->
             <div class="report-barrier-questions__section">
                 <h2 class="govuk-heading-m">Goods, services or investments affected</h2>
                 <div class="report-barrier-questions__question">
@@ -107,8 +107,10 @@
                 {% for commodity in codes %}
                     <div class="report-barrier-questions__question">
                         <h4 class="govuk-heading-s question-label"></h4>
-                        <div class="answer govuk-heading-s govuk-!-font-size-14">{{commodity.code}}</div>
-                        <div class="answer">{{commodity.description}}</div>
+                        <div class="commodity">
+                            <div class="answer govuk-heading-s govuk-!-font-size-14">{{commodity.code}}</div>
+                            <div class="answer">{{commodity.description}}</div>
+                        </div>
                         <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change</a></div>
                     </div>
                 {% endfor %}
