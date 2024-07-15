@@ -114,15 +114,17 @@ export const AsyncSearchResultsBox = ({ }) => {
     observer.observe(formFieldsContainer, {
         characterDataOldValue: true,
         subtree: true,
-        childList: true,
-        characterData: true,
+        attributeFilter: [
+            "selected",
+            "value",
+        ],
     });
 
     document.querySelector(".filter-items").addEventListener("submit", (e) => {
         e.preventDefault();
     });
 
-    const applyFiltersButton = document.querySelector("#apply-filters-button");
+    const applyFiltersButton = document.querySelector("#apply-filters-button") as HTMLElement;
     applyFiltersButton.style.display = "none";
 
     return (

@@ -45,7 +45,7 @@ function MultiSelectFilter(props) {
     const handleOptionSelect = (value, meta) => {
         if (meta.action === "select-option") {
             let option = meta.option.value;
-            setSelectedOptionIds(selectedOptionIds.concat(option));
+            setSelectedOptionIds([...selectedOptionIds, option]);
         } else {
             let option = meta.removedValue.value;
             setSelectedOptionIds(
