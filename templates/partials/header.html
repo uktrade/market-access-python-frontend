@@ -12,13 +12,6 @@
             <strong class="datahub-header__logo__tag">beta</strong>
         </div>
 
-        {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
-            <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
-                <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
-                <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss {% if settings.DJANGO_ENV == 'uat' %} env-banner__dismiss--{{ settings.DJANGO_ENV }}{% endif %}" aria-label="Close {{ settings.DJANGO_ENV|upper }} environment banner">X</a>
-            </div>
-        {% endif %}
-
         <ul id="logo-navigation" class="datahub-header__links" aria-label="Header links">
             <li class="datahub-header__links__item">
                 <a class="datahub-header__links__item__text" href="https://data.trade.gov.uk/"> Switch to Data Workspace </a>
@@ -26,6 +19,14 @@
         </ul>
     </div>
     <button role="button" class="datahub-header__menu-button js-datahub-header-toggle" aria-controls="navigation sub-navigation logo-navigation" aria-label="Show or hide navigation">Menu</button>
+    
+    {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
+        <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
+            <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
+            <a href="#" onclick="this.parentNode.parentNode.removeChild( this.parentNode );event.preventDefault();" class="env-banner__dismiss {% if settings.DJANGO_ENV == 'uat' %} env-banner__dismiss--{{ settings.DJANGO_ENV }}{% endif %}" aria-label="Close {{ settings.DJANGO_ENV|upper }} environment banner">X</a>
+        </div>
+    {% endif %}
+
     <div class="datahub-header__navigation-container">
         <nav class="datahub-header__navigation-wrapper" aria-labelledby="navigation">
             <ul id="navigation" class="datahub-header__navigation" aria-label="Top Level Navigation">
