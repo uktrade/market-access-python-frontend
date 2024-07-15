@@ -19,7 +19,7 @@
         </ul>
     </div>
     <button role="button" class="datahub-header__menu-button js-datahub-header-toggle" aria-controls="navigation sub-navigation logo-navigation" aria-label="Show or hide navigation">Menu</button>
-    
+
     {% if settings.DJANGO_ENV and settings.DJANGO_ENV != "local" and settings.DJANGO_ENV != "prod" %}
         <div class="env-banner env-banner-{{ settings.DJANGO_ENV|lower }}">
             <strong>{{ settings.DJANGO_ENV|upper }}</strong> environment
