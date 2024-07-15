@@ -10,23 +10,18 @@
 
     }
 
-
     &__question {
-        display: flex;
-        box-shadow: inset 0px -1px 0px #B1B4B6;
-        padding: 10px 0px 8px;
+        display: grid;
+        grid-template-columns: 40% 40% auto;
         gap: 10px;
+        padding: 10px 0px 8px;
+        box-shadow: inset 0px -1px 0px #B1B4B6;
 
-        .question-label {
-            flex-basis: 250px;
-            margin: 0px;
+        @media (max-width: 400px ){
+            display: flex;
+            flex-direction: column;
         }
 
-        .answer {
-            flex: 1;
-            min-width: 100px;
-            overflow-wrap: break-word;
-            // word-break: break-word;
-        }
     }
+
 }
