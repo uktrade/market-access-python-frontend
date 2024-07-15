@@ -35,10 +35,10 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
 
     // Setup hidden inputs that will pass back to python code
     const adminAreasInput = document.getElementById(
-        "admin-areas-selection-input"
+        "admin-areas-selection-input",
     );
     const affectWholeCountryInput = document.getElementById(
-        "affect-whole-country-input"
+        "affect-whole-country-input",
     );
 
     // Get selected country on location_select change
@@ -46,7 +46,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
     const countrySection = document.getElementById("location_select");
     // The actual select element of the component
     const countrySelector = document.getElementsByName(
-        "barrier-location-location_select"
+        "barrier-location-location_select",
     )[0];
 
     // Run checks when change detected in location selector component
@@ -65,14 +65,14 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
         // 1. Convert passed data to object of JS's understanding
         let tradingBlocsCountriesList = trading_bloc_countries.replace(
             /'/g,
-            '"'
+            '"',
         );
         var tradingBlocsCountriesJson = JSON.parse(tradingBlocsCountriesList);
         // 2. Loop the trading bloc lists
         for (const [key, value] of Object.entries(tradingBlocsCountriesJson)) {
             // 3. Hide the question
             const tradingBlocQuestion = document.getElementById(
-                "trading_bloc_" + key
+                "trading_bloc_" + key,
             );
             // 4. Hide the question to clear options already being displayed
             hideComponent(tradingBlocQuestion);
@@ -88,7 +88,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
         // Show admin areas question if selected country has admin areas
         // 1. Hide all admin area selectors;
         const adminAreaSelectors = document.getElementsByName(
-            "admin-area-selector-section"
+            "admin-area-selector-section",
         );
         for (var x = 0; x < adminAreaSelectors.length; x++) {
             hideComponent(adminAreaSelectors[x]);
@@ -113,7 +113,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
             }
             // get the selection box, find the name for the area base on the list of selections and compare the value
             const adminAreaSelector = document.getElementById(
-                "admin_areas_" + countrySelectedName
+                "admin_areas_" + countrySelectedName,
             );
             if (adminAreaSelector) {
                 adminAreas = adminAreaSelector.children;
@@ -136,12 +136,12 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
         // 3. Update the selections list area
         updateSelectedAdminAreasContainer(
             selectedAdminAreasNames,
-            selectedAdminAreasIds
+            selectedAdminAreasIds,
         );
 
         // 4. Get the selector element for the selected country
         const adminAreaForCountry = document.getElementById(
-            "admin_areas_" + countrySelectedName + "-section"
+            "admin_areas_" + countrySelectedName + "-section",
         );
         // 5. If the element exists, display it
         if (adminAreaForCountry != null) {
@@ -160,14 +160,14 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
 
     // Get all admin-area selector buttons
     const addAdminAreaButtons = document.querySelectorAll(
-        "#admin-area-choices-button"
+        "#admin-area-choices-button",
     );
     // Loop through each and add event listener to build admin areas list
     addAdminAreaButtons.forEach(function (currentAddAdminButton) {
         currentAddAdminButton.addEventListener("click", function () {
             // Get the selector element for the selected country
             const adminAreaSelector = document.getElementById(
-                currentAddAdminButton.getAttribute("name")
+                currentAddAdminButton.getAttribute("name"),
             );
             // Only continue if selected value is not 'choose your location'
             if (adminAreaSelector.value != 0) {
@@ -189,7 +189,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
                 }
                 updateSelectedAdminAreasContainer(
                     selectedAdminAreasNames,
-                    selectedAdminAreasIds
+                    selectedAdminAreasIds,
                 );
             }
         });
@@ -199,10 +199,10 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
     // on a given list of admin areas
     const updateSelectedAdminAreasContainer = function (
         adminAreasList,
-        adminAreasIds
+        adminAreasIds,
     ) {
         const adminAreasSelectedBox = document.getElementById(
-            "selected-admin-areas-container"
+            "selected-admin-areas-container",
         );
         if (adminAreasList == "") {
             hideComponent(adminAreasSelectedBox);
@@ -226,18 +226,18 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
                 spanItem.setAttribute("data-number", x + 1);
                 listItem.appendChild(spanItem);
                 listItem.innerHTML = listItem.innerHTML.concat(
-                    adminAreasList[x]
+                    adminAreasList[x],
                 );
                 // Remove item section
                 const removeItemDiv = document.createElement("div");
                 removeItemDiv.classList.add(
-                    "selection-list__list__item__remove-form"
+                    "selection-list__list__item__remove-form",
                 );
                 listItem.appendChild(removeItemDiv);
                 // Remove item button
                 const removeItemButton = document.createElement("div");
                 removeItemButton.classList.add(
-                    "selection-list__list__item__remove-form__submit"
+                    "selection-list__list__item__remove-form__submit",
                 );
                 removeItemButton.innerHTML = "Remove";
                 removeItemButton.setAttribute("id", "remove-button");
@@ -272,7 +272,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
                     // Re-render the admin area container
                     updateSelectedAdminAreasContainer(
                         selectedAdminAreasNames,
-                        selectedAdminAreasIds
+                        selectedAdminAreasIds,
                     );
                 });
             });
@@ -290,7 +290,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
         selectedAdminAreasIds.length = 0;
         updateSelectedAdminAreasContainer(
             selectedAdminAreasNames,
-            selectedAdminAreasIds
+            selectedAdminAreasIds,
         );
     });
     const noEntireCountry = document.getElementById("admin-area-reveal");
@@ -300,7 +300,7 @@ ma.pages.report.locationWizardStep = function (trading_bloc_countries) {
     // In event of an admin_areas error, check 'no'
     // Search page for admin_areas error message
     let adminAreasError = document.body.innerHTML.search(
-        "Select all admin areas the barrier relates to"
+        "Select all admin areas the barrier relates to",
     );
     // If the error is present, it will have a position value higher than -1
     if (adminAreasError > -1) {
