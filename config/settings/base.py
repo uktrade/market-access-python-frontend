@@ -358,6 +358,7 @@ GTM_PREVIEW = env("GTM_PREVIEW", default=None)
 # Sentry
 SENTRY_BROWSER_TRACES_SAMPLE_RATE = env.float("SENTRY_BROWSER_TRACES_SAMPLE_RATE", 0.0)
 SENTRY_DNS = env("SENTRY_DSN", default=None)
+SENTRY_TRACES_SAMPLE_RATE = env.float("SENTRY_TRACES_SAMPLE_RATE", 0.0)
 
 if SENTRY_DNS:
     sentry_sdk.init(
@@ -367,7 +368,7 @@ if SENTRY_DNS:
             DjangoIntegration(),
         ],
         enable_tracing=env.bool("SENTRY_ENABLE_TRACING", False),
-        traces_sample_rate=0.1,
+        traces_sample_rate=SENTRY_TRACES_SAMPLE_RATE,
     )
 
 # Settings made available in templates
