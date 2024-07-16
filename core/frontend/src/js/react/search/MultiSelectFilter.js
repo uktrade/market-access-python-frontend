@@ -11,10 +11,10 @@ function MultiSelectFilter(props) {
         return selected;
     }, []);
     const initialSelectedOptionIds = initialSelectedOptions.map(
-        (option) => option.value
+        (option) => option.value,
     );
     const [selectedOptionIds, setSelectedOptionIds] = useState(
-        initialSelectedOptionIds
+        initialSelectedOptionIds,
     );
 
     // A multi-select field can have a checkbox below it called secondary option
@@ -31,7 +31,7 @@ function MultiSelectFilter(props) {
         : {};
 
     const [secondaryOptionValues, setSecondaryOptionValues] = useState(
-        defaultSecondaryOptionValues
+        defaultSecondaryOptionValues,
     );
 
     // To update a specific checkbox state, you can use a function like:
@@ -45,11 +45,11 @@ function MultiSelectFilter(props) {
     const handleOptionSelect = (value, meta) => {
         if (meta.action === "select-option") {
             let option = meta.option.value;
-            setSelectedOptionIds(selectedOptionIds.concat(option));
+            setSelectedOptionIds([...selectedOptionIds, option]);
         } else {
             let option = meta.removedValue.value;
             setSelectedOptionIds(
-                selectedOptionIds.filter((item) => item !== option)
+                selectedOptionIds.filter((item) => item !== option),
             );
         }
     };
@@ -89,7 +89,7 @@ function MultiSelectFilter(props) {
                                     }
                                     onChange={() =>
                                         handleSecondaryOptionChange(
-                                            option.fieldName
+                                            option.fieldName,
                                         )
                                     }
                                 />
