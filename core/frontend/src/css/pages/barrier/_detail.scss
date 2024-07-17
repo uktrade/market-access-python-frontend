@@ -198,11 +198,12 @@
         cursor: pointer;
     }
 
-    input[type="radio"]:checked~input+label {
+    .barrier-rating label:has(~input[type=radio]:checked~label),
+    .barrier-rating input[type=radio]:checked+label  {
         background: none;
         color: rgb(11, 12, 12);
         position: relative;
-        background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='white' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='yellow' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
         background-size: 6rem 4rem;
         height: 1rem;
         width: 2.1rem;
@@ -218,7 +219,7 @@
     input+label {
         background: #fff;
         color: rgb(254, 221, 3);
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='%23fedd03' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='white' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
         background-size: 6rem 4rem;
         height: 1rem;
         width: 2.1rem;
