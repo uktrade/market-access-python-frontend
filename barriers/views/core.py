@@ -63,6 +63,7 @@ class DashboardPersonal(AnalyticsMixin, TemplateView):
     }
 
     def get_context_data(self, **kwargs):
+        # TODO - refactor context data
         context_data = super().get_context_data(**kwargs)
         active = self.request.GET.get("active", "barriers")
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
