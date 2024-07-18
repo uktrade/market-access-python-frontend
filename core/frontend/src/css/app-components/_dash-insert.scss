@@ -2,6 +2,16 @@
     border-left: 10px solid #00703C;
     background: #F3F2F1;
 
+    &__card {
+        border-left: 0px;
+        display: inline-block;
+        text-align: center;
+
+        p {
+            padding: 20px;
+        }
+    }
+
     &__title {
         margin: 0;
         font-weight: 700;
