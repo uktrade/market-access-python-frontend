@@ -76,17 +76,25 @@ export const AsyncSearchResultsBox = (): JSX.Element => {
         const formFieldsContainer = document.querySelector("#search-form-fields");
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                if (mutation.oldValue !== mutation.target.textContent) {
-                    handleChange();
+                if (mutation.type === 'childList') {
+                    if (mutation.oldValue !== mutation.target.textContent) {
+                        const value = mutation.target.textContent;
+                        // Only trigger handleChange if the value is not empty
+                        if (value && value.length > 0) {
+                            handleChange();
+                        }
+                    }
                 }
             });
         });
 
         if (formFieldsContainer) {
             observer.observe(formFieldsContainer, {
-                characterDataOldValue: true,
-                subtree: true,
-                attributeFilter: ["selected", "value"],
+                characterData: true, 
+                childList: true, 
+                subtree: true, 
+                attributes: false, 
+                characterDataOldValue: true 
             });
         }
 
