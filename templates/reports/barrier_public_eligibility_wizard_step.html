@@ -45,8 +45,8 @@
                 {% for value, name in form.fields.public_eligibility.choices %}
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input"
-                               id="{{ form.public_eligibility.id_for_label }}"
-                               name="barrier-public-eligibility-public_eligibility"
+                               id="{{ form.public_eligibility.id_for_label }}-{{ value }}"
+                               name="barrier-public-eligibility-public_eligibility-{{ value }}"
                                type="radio"
                                value="{{ value }}"
                                data-aria-controls="conditional-public_eligibility-{{ value }}"
