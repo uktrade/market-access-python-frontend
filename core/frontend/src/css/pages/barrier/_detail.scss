@@ -198,8 +198,8 @@
         cursor: pointer;
     }
 
-    .barrier-rating label:has(~input[type=radio]:checked~label),
-    .barrier-rating input[type=radio]:checked+label  {
+    label:has(~input[type=radio]:checked~label),
+    input[type=radio]:checked+label {
         background: none;
         color: rgb(11, 12, 12);
         position: relative;
@@ -275,7 +275,7 @@
         height: 1px;
         width: 1px;
         overflow: hidden;
-      }
+    }
 
     .rating-star-item-hidden {
         visibility: hidden;
@@ -289,7 +289,7 @@
         height: 1px;
         width: 1px;
         padding: 0;
-      }
+    }
 
     #rating1,
     #rating2,
