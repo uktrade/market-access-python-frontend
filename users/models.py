@@ -6,7 +6,7 @@ from .datahub import get_visible_apps
 class Group(APIModel):
     @property
     def plural_name(self):
-        if "Regional Lead" not in self.name:
+        if "Regional Lead" not in self.name and "Related Barriers" not in self.name:
             return f"{self.name}s"
         else:
             return self.name
