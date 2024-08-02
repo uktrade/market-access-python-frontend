@@ -198,6 +198,22 @@
         cursor: pointer;
     }
 
+    input[type=radio] {
+        &:focus {
+            +label {
+                border-bottom: black 2px solid;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='yellow' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+            }
+        }
+
+        &:hover {
+            +label {
+                border-bottom: black 2px solid;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 70 70'%3e%3cpath fill='yellow' stroke='%230b0c0c' stroke-width='2' d='m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z'/%3e%3c/svg%3e");
+            }
+        }
+    }
+
     label:has(~input[type=radio]:checked~label),
     input[type=radio]:checked+label {
         background: none;
@@ -232,15 +248,7 @@
         }
     }
 
-    input+label:first-of-type {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-    }
 
-    input:checked+label {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-    }
 
     hr {
         clear: both;
