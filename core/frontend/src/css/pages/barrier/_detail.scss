@@ -198,6 +198,22 @@
         cursor: pointer;
     }
 
+    input[type='radio'] {
+        &:focus {
+            +label {
+                @include govuk-focused-text;
+            }
+        }
+
+        &:hover {
+            +label {
+                @include govuk-focused-text;
+            }
+        }
+    }
+
+
+
     label:has(~input[type=radio]:checked~label),
     input[type=radio]:checked+label {
         background: none;
@@ -230,16 +246,6 @@
             height: 2rem;
             width: 3rem;
         }
-    }
-
-    input+label:first-of-type {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-    }
-
-    input:checked+label {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
     }
 
     hr {

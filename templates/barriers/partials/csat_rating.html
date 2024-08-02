@@ -1,33 +1,49 @@
 {% if "complete" in request.path %}
-    <form method="POST" novalidate
+    <form method="POST"
+          novalidate
           action="{% url 'core:feedback' %}?return={% url 'barriers:barrier_detail' barrier.id %}">
         {% csrf_token %}
         <input type="hidden" name="attempted_actions" value="REPORT_BARRIER">
         <input type="hidden" name="csat_submission" value="True">
         <div class="govuk-panel govuk-panel--confirmation">
-            <h1 class="govuk-panel__title">
-                Barrier reported
-            </h1>
+            <h1 class="govuk-panel__title">Barrier reported</h1>
         </div>
-
         <div class="govuk-panel">
             <div class="barrier-rating">
                 <fieldset class="govuk-fieldset" aria-describedby="csat-hint-text">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                        <h2 class="govuk-heading-l">Overall, how would you rate your experience with the Digital market access service today?</h2>
+                        <h2 class="govuk-heading-l">
+                            Overall, how would you rate your experience with the digital market access service today?
+                        </h2>
                     </legend>
-                    <div id="csat-hint-text" class="govuk-hint">To do this add a star rating out of 5 - with 1 being very dissatisfied  and 5 being very satisfied.</div>
-                    <div class="rating-box-new govuk-heading-xl">
-                        <input type="radio" name="satisfaction" id="one" value="VERY_DISSATISFIED"/>
-                        <label for="one" class="rating-star-item"><span class="rating-star-label">1 star very dissatisfied</span></label>
-                        <input type="radio" name="satisfaction" id="two" value="DISSATISFIED"/>
-                        <label for="two" class="rating-star-item"><span class="rating-star-label">2 stars dissatisfied</span></label>
-                        <input type="radio" name="satisfaction" id="three" value="NEITHER"/>
-                        <label for="three" class="rating-star-item"><span class="rating-star-label">3 stars neither satisfied or dissatisfied</span></label>
-                        <input type="radio" name="satisfaction" id="four" value="SATISFIED"/>
-                        <label for="four" class="rating-star-item"><span class="rating-star-label">4 stars satisfied</span></label>
-                        <input type="radio" name="satisfaction" id="five" value="VERY_SATISFIED"/>
-                        <label for="five" class="rating-star-item"><span class="rating-star-label">5 stars very satisfied</span></label>
+                    <div id="csat-hint-text" class="govuk-hint">
+                        To do this add a star rating out of 5 - with 1 being very dissatisfied  and 5 being very satisfied.
+                    </div>
+                    <div class="rating-box-new govuk-heading-xl" tabindex=-1>
+                        <input type="radio"
+                               name="satisfaction"
+                               id="one"
+                               value="VERY_DISSATISFIED"
+                               aria-checked="false" />
+                        <label for="one" class="rating-star-item">
+                            <span class="rating-star-label">1 star very dissatisfied</span>
+                        </label>
+                        <input type="radio" name="satisfaction" id="two" value="DISSATISFIED" />
+                        <label for="two" class="rating-star-item">
+                            <span class="rating-star-label">2 stars dissatisfied</span>
+                        </label>
+                        <input type="radio" name="satisfaction" id="three" value="NEITHER" />
+                        <label for="three" class="rating-star-item">
+                            <span class="rating-star-label">3 stars neither satisfied or dissatisfied</span>
+                        </label>
+                        <input type="radio" name="satisfaction" id="four" value="SATISFIED" />
+                        <label for="four" class="rating-star-item">
+                            <span class="rating-star-label">4 stars satisfied</span>
+                        </label>
+                        <input type="radio" name="satisfaction" id="five" value="VERY_SATISFIED" />
+                        <label for="five" class="rating-star-item">
+                            <span class="rating-star-label">5 stars very satisfied</span>
+                        </label>
                         <div class="flex-break"></div>
                         <div id="rating1" class="govuk-body-l">Very dissatisfied</div>
                         <div id="rating2" class="govuk-body-l">Dissatisfied</div>
@@ -36,7 +52,9 @@
                         <div id="rating5" class="govuk-body-l">Very satisfied</div>
                     </div>
                 </fieldset>
-                <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">Continue</button>
+                <button type="submit"
+                        class="govuk-button govuk-button--secondary"
+                        data-module="govuk-button">Continue</button>
             </div>
         </div>
     </form>
