@@ -198,6 +198,20 @@
         cursor: pointer;
     }
 
+    input[type='radio'] {
+        &:focus {
+            +label {
+                border-bottom: black 2px solid;
+            }
+        }
+
+        &:hover {
+            +label {
+                border-bottom: black 2px solid;
+            }
+        }
+    }
+
     label:has(~input[type=radio]:checked~label),
     input[type=radio]:checked+label {
         background: none;
@@ -232,15 +246,7 @@
         }
     }
 
-    input+label:first-of-type {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-    }
 
-    input:checked+label {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-    }
 
     hr {
         clear: both;
