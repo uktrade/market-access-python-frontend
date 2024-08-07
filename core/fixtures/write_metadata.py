@@ -5,7 +5,7 @@ sys.path.append(".")
 from utils.metadata import get_metadata
 
 
-class UpdateMetadata():
+class UpdateMetadata:
 
     def __init__(self, metadata):
         self.metadata = metadata
