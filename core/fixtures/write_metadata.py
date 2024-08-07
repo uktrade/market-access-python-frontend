@@ -19,7 +19,7 @@ class UpdateMetadata():
 
         # Overwrite file with new data
         with open("core/fixtures/metadata.json", "w") as file:
-            json.dump(data, file, indent=2)
+            json.dump(data, file, ensure_ascii=False, indent=2)
 
     def update_barrier_tags(self):
         tags = self.metadata.get_barrier_tags()
