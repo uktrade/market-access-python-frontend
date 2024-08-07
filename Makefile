@@ -60,8 +60,8 @@ load-test:
 django-tests-coverage: ## Run django tests and generate coverage report.
 	docker-compose exec web bash -c "pytest tests --cov-report term"
 
-.PHONY: update-metadata-barrier-tags
-update-metadata-barrier-tags: ## Update barrier tags in the metadata test file.
+.PHONY: update-metadata
+update-metadata: ## Update barrier tags in the metadata test file.
 	docker compose exec web bash -c "python core/fixtures/write_metadata.py"
 
 .PHONY: git-hooks
