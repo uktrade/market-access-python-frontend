@@ -252,7 +252,7 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         )
         assert item.field_name == "Barrier tags"
         assert item.old_value == ["COVID-19"]
-        assert item.new_value == ["COVID-19", "Scoping (Top 100 priority barrier)"]
+        assert item.new_value == ["Scoping (Top 100 priority barrier)", "COVID-19"]
 
     def test_title(self):
         item = HistoryItem(
