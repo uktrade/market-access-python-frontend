@@ -2,7 +2,7 @@ import json
 import sys
 
 sys.path.append(".")
-from utils.metadata import get_metadata
+from utils.metadata import get_metadata  # noqa: E402
 
 
 class UpdateMetadata:
