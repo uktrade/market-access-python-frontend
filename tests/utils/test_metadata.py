@@ -127,6 +127,24 @@ class MetadataTestCase(MarketAccessTestCase):
         assert category["title"] == "Price controls"
         assert category["category"] == "GOODS"
 
+    def test_get_policy_team_list(self):
+        metadata = get_metadata()
+        policy_teams = metadata.get_policy_team_list()
+        titles = [policy_team["title"] for policy_team in policy_teams]
+
+        assert "Competition" in titles
+        assert "Customs" in titles
+        assert "Digital and Telecoms" in titles
+        assert "Environment and climate" in titles
+
+    def test_get_policy_team(self):
+        metadata = get_metadata()
+
+        policy_team = metadata.get_policy_team("1")
+
+        assert policy_team["title"] == "Competition"
+        assert "Competition policy is about making sure UK firms" in policy_team["description"]
+
     def test_get_goods(self):
         metadata = get_metadata()
 
