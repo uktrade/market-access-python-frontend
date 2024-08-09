@@ -6,7 +6,7 @@ authors = ["Ferenc Csepregi <feri@31.digital>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-django = "4.2.14"
+django = "4.2.15"
 django-environ = "==0.4.5"
 django-extensions = "==3.0.9"
 django-log-formatter-ecs = "==0.0.5"
@@ -23,7 +23,7 @@ python-json-logger = "==2.0.0"
 python-dateutil = ">=2.8.2"
 python-magic = "==0.4.18"
 redis = "==4.5.4"
-requests = "==2.32.0"
+requests = "==2.32.3"
 sentry-sdk = "==2.8.0"
 whitenoise = "==5.2.0"
 simplejson = "==3.17.2"
