@@ -143,7 +143,10 @@ class MetadataTestCase(MarketAccessTestCase):
         policy_team = metadata.get_policy_team("1")
 
         assert policy_team["title"] == "Competition"
-        assert "Competition policy is about making sure UK firms" in policy_team["description"]
+        assert (
+            "Competition policy is about making sure UK firms"
+            in policy_team["description"]
+        )
 
     def test_get_goods(self):
         metadata = get_metadata()

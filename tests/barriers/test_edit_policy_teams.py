@@ -47,7 +47,9 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
         )
 
         response = self.client.get(
-            reverse("barriers:add_policy_team", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:add_policy_team", kwargs={"barrier_id": self.barrier["id"]}
+            ),
         )
         assert response.status_code == HTTPStatus.OK
         assert "form" in response.context
@@ -75,11 +77,13 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
         )
 
         response = self.client.post(
-            reverse("barriers:add_policy_team", kwargs={"barrier_id": self.barrier["id"]}),
+            reverse(
+                "barriers:add_policy_team", kwargs={"barrier_id": self.barrier["id"]}
+            ),
             data={"policy_team": "12"},
         )
         assert response.status_code == HTTPStatus.FOUND
-        
+
         session_policy_team_ids = [
             policy_team["id"] for policy_team in self.client.session["policy_teams"]
         ]
@@ -91,7 +95,9 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
         """
         Edit policy teams form should match the policy teams in the session
         """
-        policy_teams_ids = [policy_team["id"] for policy_team in self.barrier["policy_teams"]]
+        policy_teams_ids = [
+            policy_team["id"] for policy_team in self.barrier["policy_teams"]
+        ]
         new_policy_teams_ids = policy_teams_ids + [12]
 
         self.update_session(
@@ -121,9 +127,9 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
         """
         Saving barrier policy teams should call the API
         """
-        new_policy_teams_ids = [policy_team["id"] for policy_team in self.barrier["policy_teams"]] + [
-            12
-        ]
+        new_policy_teams_ids = [
+            policy_team["id"] for policy_team in self.barrier["policy_teams"]
+        ] + [12]
 
         self.update_session(
             {
@@ -147,7 +153,9 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
 
         mock_patch.assert_called_with(
             id=self.barrier["id"],
-            policy_teams=[str(policy_team_id) for policy_team_id in new_policy_teams_ids],
+            policy_teams=[
+                str(policy_team_id) for policy_team_id in new_policy_teams_ids
+            ],
         )
         assert response.status_code == HTTPStatus.FOUND
 
@@ -156,9 +164,9 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
         """
         Removing a policy team should remove it from the session, not call the API
         """
-        new_policy_teams_ids = [policy_team["id"] for policy_team in self.barrier["policy_teams"]] + [
-            12
-        ]
+        new_policy_teams_ids = [
+            policy_team["id"] for policy_team in self.barrier["policy_teams"]
+        ] + [12]
 
         self.update_session(
             {
@@ -182,6 +190,7 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
         ]
 
         assert session_policy_team_ids == (
-            [policy_team["id"] for policy_team in self.barrier["policy_teams"][1:]] + [12]
+            [policy_team["id"] for policy_team in self.barrier["policy_teams"][1:]]
+            + [12]
         )
         assert mock_patch.called is False

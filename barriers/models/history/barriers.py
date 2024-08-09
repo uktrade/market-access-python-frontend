@@ -177,7 +177,8 @@ class OrganisationHistoryItem(BaseHistoryItem):
         ]
         names = [t["name"] for t in organisations]
         return names
-    
+
+
 class PolicyTeamsHistoryItem(BaseHistoryItem):
     field = "policy_teams"
     field_name = "Policy teams"
