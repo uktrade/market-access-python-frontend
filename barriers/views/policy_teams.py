@@ -49,8 +49,10 @@ class AddPolicyTeam(MetadataMixin, BarrierMixin, FormView):
                 "title": policy_team["title"],
             }
         )
-        
-        self.request.session["policy_teams"] = sorted(policy_teams, key=lambda k: k["title"])
+
+        self.request.session["policy_teams"] = sorted(
+            policy_teams, key=lambda k: k["title"]
+        )
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -72,7 +74,9 @@ class BarrierEditPolicyTeams(MetadataMixin, BarrierMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data.update({"policy_teams": self.request.session.get("policy_teams", [])})
+        context_data.update(
+            {"policy_teams": self.request.session.get("policy_teams", [])}
+        )
         return context_data
 
     def get_initial(self):
@@ -117,7 +121,9 @@ class BarrierRemovePolicyTeam(View):
         policy_team_id = request.POST.get("policy_team_id")
 
         self.request.session["policy_teams"] = [
-            policy_team for policy_team in policy_teams if policy_team_id != str(policy_team["id"])
+            policy_team
+            for policy_team in policy_teams
+            if policy_team_id != str(policy_team["id"])
         ]
         return HttpResponseRedirect(self.get_success_url())
 

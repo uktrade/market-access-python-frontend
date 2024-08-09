@@ -276,7 +276,7 @@ class Metadata:
             for category in self.get_category_list(sort=False)
             if category["category"] == group
         ]
-    
+
     def get_policy_team_list(self, sort=True):
         """
         Dedupe and sort the policy teams

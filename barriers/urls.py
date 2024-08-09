@@ -465,7 +465,7 @@ urlpatterns = [
         AddCategory.as_view(),
         name="add_category",
     ),
-        path(
+    path(
         "barriers/<uuid:barrier_id>/policy-teams/",
         BarrierEditPolicyTeamsSession.as_view(),
         name="edit_policy_teams_session",
