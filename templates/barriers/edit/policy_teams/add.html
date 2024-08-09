@@ -1,0 +1,49 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Policy team{% endblock %}
+
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">
+        ma.pages.barrier.type();
+        ma.pages.barrier.policyTeam();
+    </script>
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Policy teams' %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.policy_team.name }}" class="govuk-form-group {% if form.policy_team.errors %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset">
+                {% form_field_error form "policy_team" %}
+
+                <div class="govuk-radios policy-team govuk-radios--conditional" data-module="radios">
+                    {% for item in policy_teams %}
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="policy-team-{{ forloop.counter }}" name="{{ form.policy_team.name }}" type="radio" value="{{ item.id }}" data-aria-controls="conditional-policy-team-{{ forloop.counter }}">
+
+                            <label class="govuk-label govuk-radios__label" for="policy-team-{{ forloop.counter }}">
+                                {{ item.title }}
+                            </label>
+                        </div>
+
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-policy-team-{{ forloop.counter }}">
+                            <div class="conditional-policy-team-content">{{ item.description|safe|linebreaks }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        </div>
+
+        <input type="submit" value="Add" class="govuk-button">
+        <a class="form-cancel" href="{% url 'barriers:edit_policy_teams_session' barrier.id %}">cancel</a>
+    </form>
+{% endblock %}
