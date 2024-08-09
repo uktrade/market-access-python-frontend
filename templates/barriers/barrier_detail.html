@@ -433,6 +433,28 @@
                     {% endif %}
                 {% endif %}
             </dd>
+            <dt class="summary-group__list__key">Policy teams</dt>
+            <dd class="summary-group__list__value">
+                {% if barrier.policy_teams %}
+                    <ul class="summary-group__list__value__list">
+                        {% for item in barrier.policy_teams %}
+                            <li class="summary-group__list__value__list__item">{{ item.title }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if not barrier.archived %}
+                        <a class="summary-group__list__value__edit govuk-link--no-visited-state"
+                           href="{% url 'barriers:edit_policy_teams' barrier.id %}"
+                           aria-label="edit policy teams">Edit</a>
+                    {% endif %}
+                {% else %}
+                    {% if barrier.archived %}
+                        <span class="summary-group__list__value__none">No policy teams</span>
+                    {% else %}
+                        <a href="{% url 'barriers:add_policy_team' barrier.id %}"
+                           class="summary-group__list__value__add govuk-link--no-visited-state">Add a policy team</a>
+                    {% endif %}
+                {% endif %}
+            </dd>
             <dt class="summary-group__list__key">Export type</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.export_types %}
