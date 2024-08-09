@@ -179,6 +179,19 @@ class OrganisationHistoryItem(BaseHistoryItem):
         return names
 
 
+class PolicyTeamsHistoryItem(BaseHistoryItem):
+    field = "policy_teams"
+    field_name = "Policy teams"
+
+    def get_value(self, value):
+        policy_teams_names = [
+            self.metadata.get_policy_team(policy_team).get("title")
+            for policy_team in value or []
+        ]
+        policy_teams_names.sort()
+        return policy_teams_names
+
+
 class PriorityHistoryItem(BaseHistoryItem):
     field = "priority"
     field_name = "Priority"
@@ -329,6 +342,7 @@ class BarrierHistoryItem(PolymorphicBase):
         IsSummarySensitiveHistoryItem,
         LocationHistoryItem,
         OrganisationHistoryItem,
+        PolicyTeamsHistoryItem,
         ProductHistoryItem,
         PriorityHistoryItem,
         PublicEligibilitySummaryHistoryItem,

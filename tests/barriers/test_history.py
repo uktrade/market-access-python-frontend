@@ -113,6 +113,24 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
         assert item.old_value == "Angola"
         assert item.new_value == "British Columbia, Alberta (Canada)"
 
+    def test_policy_teams(self):
+        item = HistoryItem(
+            {
+                "date": "2020-03-24T15:49:19.803670Z",
+                "model": "barrier",
+                "field": "policy_teams",
+                "old_value": ["10", "11"],
+                "new_value": ["12"],
+                "user": {"id": 48, "name": "Test-user"},
+            }
+        )
+        assert item.field_name == "Policy teams"
+        assert item.old_value == [
+            "Procurement",
+            "Rules of Origin (RoO)",
+        ]
+        assert item.new_value == ["Sanitary and Phytosanitary measures (SPS)"]
+
     def test_priority(self):
         item = HistoryItem(
             {
