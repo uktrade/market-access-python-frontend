@@ -125,6 +125,12 @@ from .views.notes import (
     CancelNoteDocument,
     DeleteNoteDocument,
 )
+from .views.policy_teams import (
+    AddPolicyTeam,
+    BarrierEditPolicyTeams,
+    BarrierEditPolicyTeamsSession,
+    BarrierRemovePolicyTeam,
+)
 from .views.public_barriers import (
     EditPublicEligibility,
     EditPublicSummary,
@@ -458,6 +464,26 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/types/add/",
         AddCategory.as_view(),
         name="add_category",
+    ),
+        path(
+        "barriers/<uuid:barrier_id>/policy-teams/",
+        BarrierEditPolicyTeamsSession.as_view(),
+        name="edit_policy_teams_session",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/policy-teams/edit/",
+        BarrierEditPolicyTeams.as_view(),
+        name="edit_policy_teams",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/policy-teams/remove/",
+        BarrierRemovePolicyTeam.as_view(),
+        name="remove_policy_team",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/policy-teams/add/",
+        AddPolicyTeam.as_view(),
+        name="add_policy_team",
     ),
     path(
         "barriers/<uuid:barrier_id>/sectors/",
