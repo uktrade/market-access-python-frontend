@@ -414,7 +414,7 @@
             <dt class="summary-group__list__key">Policy teams</dt>
             <dd class="summary-group__list__value">
                 {% if barrier.policy_teams %}
-                    <ul class="summary-group__list__value__list">
+                    <ul class="summary-group__list__value__list policy-teams_text">
                         {% for item in barrier.policy_teams %}
                             <li class="summary-group__list__value__list__item">{{ item.title }}</li>
                         {% endfor %}
