@@ -115,7 +115,7 @@ class Metadata:
         :return: GENERATOR - data of admin areas
         """
         area_ids = admin_area_ids or []
-        if type(area_ids) == str:
+        if isinstance(area_ids, str):
             area_ids = admin_area_ids.replace(" ", "").split(",")
         admin_areas = [self.get_admin_area(area_id) for area_id in area_ids]
         return admin_areas
@@ -180,7 +180,7 @@ class Metadata:
         :return: GENERATOR - data of sectors
         """
         sec_ids = sector_ids or []
-        if type(sec_ids) == str:
+        if isinstance(sec_ids, str):
             sec_ids = sector_ids.replace(" ", "").split(",")
         sectors = (self.get_sector(sector_id) for sector_id in sec_ids)
         return sectors
