@@ -104,7 +104,9 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
             }
         )
 
-        new_policy_teams_ids = [new_policy_team["id"] for new_policy_team in new_policy_teams]
+        new_policy_teams_ids = [
+            new_policy_team["id"] for new_policy_team in new_policy_teams
+        ]
 
         response = self.client.get(
             reverse(
@@ -137,7 +139,9 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
             }
         )
 
-        new_policy_teams_ids = [new_policy_team["id"] for new_policy_team in new_policy_teams]
+        new_policy_teams_ids = [
+            new_policy_team["id"] for new_policy_team in new_policy_teams
+        ]
 
         response = self.client.post(
             reverse(
@@ -160,9 +164,7 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
         """
         Removing a policy team should remove it from the session, not call the API
         """
-        policy_teams = [
-            policy_team for policy_team in self.barrier["policy_teams"]
-        ]
+        policy_teams = [policy_team for policy_team in self.barrier["policy_teams"]]
 
         self.update_session(
             {
@@ -188,5 +190,5 @@ class EditPolicyTeamsTestCase(MarketAccessTestCase):
             policy_team["id"] for policy_team in self.client.session["policy_teams"]
         ]
 
-        assert  session_policy_team_ids == [11]
+        assert session_policy_team_ids == [11]
         assert mock_patch.called is False
