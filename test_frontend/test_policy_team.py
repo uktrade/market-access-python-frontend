@@ -1,8 +1,6 @@
-import datetime
-
 from playwright.sync_api import expect
 
-from .utils import clean_full_url, get_text_content_without_line_separators, retry
+from .utils import clean_full_url, retry
 
 
 @retry()
