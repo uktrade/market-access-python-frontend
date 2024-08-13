@@ -19,6 +19,7 @@ def test_add_policy_team(page, create_test_barrier):
 
     expect(page.locator(".policy-teams_text")).to_have_text("Customs")
 
+
 def update_add_policy_team(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
