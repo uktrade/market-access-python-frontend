@@ -3,9 +3,9 @@
 {% block page_title %}{{ block.super }} - Policy team{% endblock %}
 
 {% block body_script %}
+    {{ block.super }}
     <script nonce="{{request.csp_nonce}}">
-        ma.pages.barrier.type();
-        ma.pages.barrier.policyTeam();
+        ma.pages.report.hiddenRadioContent();
     </script>
 {% endblock %}
 
@@ -15,7 +15,7 @@
 
 {% block page_content %}
 
-    {% include 'partials/heading.html' with text='Policy teams' %}
+    {% include 'partials/heading.html' with text='Policy team' %}
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
