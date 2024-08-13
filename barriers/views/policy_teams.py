@@ -2,10 +2,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
+from barriers.forms.policy_teams import AddPolicyTeamForm, EditPolicyTeamsForm
+from barriers.views.mixins import BarrierMixin
 from utils.metadata import MetadataMixin
-
-from ..forms.policy_teams import AddPolicyTeamForm, EditPolicyTeamsForm
-from .mixins import BarrierMixin
 
 
 class AddPolicyTeam(MetadataMixin, BarrierMixin, FormView):
