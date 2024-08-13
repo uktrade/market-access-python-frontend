@@ -1,11 +1,9 @@
 ma.pages.report.hiddenRadioContent = function () {
     const showComponent = function (component) {
         component.classList.remove("govuk-radios__conditional--hidden");
-        // component.style.visibility = "visible";
     };
     const hideComponent = function (component) {
         component.classList.add("govuk-radios__conditional--hidden");
-        // component.style.visibility = "hidden";
     };
 
     const updateComponents = function (id) {
