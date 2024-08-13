@@ -21,28 +21,6 @@ from barriers.views.action_plans import (
     RemoveActionPlanOwner,
     SelectActionPlanOwner,
 )
-from barriers.views.mentions import (
-    MentionMarkAllAsRead,
-    MentionMarkAllAsUnread,
-    MentionMarkAsRead,
-    MentionMarkAsReadAndRedirect,
-    MentionMarkAsUnread,
-    TurnNotificationsOffAndRedirect,
-    TurnNotificationsOnAndRedirect,
-)
-from barriers.views.progress_updates import (
-    BarrierAddProgrammeFundProgressUpdate,
-    BarrierAddProgressUpdate,
-    BarrierCompleteNextStepItem,
-    BarrierEditNextStepItem,
-    BarrierEditProgressUpdate,
-    BarrierListNextStepsItems,
-    BarrierListProgressUpdate,
-    ChooseProgressUpdateTypeView,
-    ProgrammeFundEditProgressUpdate,
-    ProgrammeFundListProgressUpdate,
-)
-
 from barriers.views.archive import ArchiveBarrier, UnarchiveBarrier
 from barriers.views.assessments.economic import (
     AddEconomicAssessment,
@@ -117,6 +95,15 @@ from barriers.views.location import (
     BarrierEditLocationSession,
     RemoveAdminArea,
 )
+from barriers.views.mentions import (
+    MentionMarkAllAsRead,
+    MentionMarkAllAsUnread,
+    MentionMarkAsRead,
+    MentionMarkAsReadAndRedirect,
+    MentionMarkAsUnread,
+    TurnNotificationsOffAndRedirect,
+    TurnNotificationsOnAndRedirect,
+)
 from barriers.views.notes import (
     AddNoteDocument,
     BarrierAddNote,
@@ -130,6 +117,18 @@ from barriers.views.policy_teams import (
     BarrierEditPolicyTeams,
     BarrierEditPolicyTeamsSession,
     BarrierRemovePolicyTeam,
+)
+from barriers.views.progress_updates import (
+    BarrierAddProgrammeFundProgressUpdate,
+    BarrierAddProgressUpdate,
+    BarrierCompleteNextStepItem,
+    BarrierEditNextStepItem,
+    BarrierEditProgressUpdate,
+    BarrierListNextStepsItems,
+    BarrierListProgressUpdate,
+    ChooseProgressUpdateTypeView,
+    ProgrammeFundEditProgressUpdate,
+    ProgrammeFundListProgressUpdate,
 )
 from barriers.views.public_barriers import (
     EditPublicEligibility,
