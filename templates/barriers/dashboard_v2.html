@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ block.super }} - Homepage{% endblock %}
+
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">
+        ma.pages.index();
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">Dashboard</h1>
+        <div class="govuk-form-group">
+            <input class="govuk-input govuk-!-width-two-thirds" id="event-name" name="eventName" type="text" placeholder="Search for barrier by name or with key terms.">
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+                Search
+            </button>
+        </div>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-s">See data for barriers you're working on or monitoring</h3>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-s">Complete barrier tasks and progress updates</h3>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <h2 class="govuk-heading-m">Barrier next step progress across regions</h2>
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+        <h2 class="govuk-heading-m">What's new on DMAS</h2>
+    </div>
+</div>
+{% endblock %}

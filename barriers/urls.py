@@ -87,7 +87,7 @@ from .views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from .views.core import BarrierDetail, Dashboard, WhatIsABarrier
+from .views.core import BarrierDetail, Dashboard, WhatIsABarrier, DashboardV2
 from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditCausedByTradingBloc,
@@ -871,4 +871,5 @@ urlpatterns = [
         TurnNotificationsOnAndRedirect.as_view(),
         name="mention_turn_notifications_on",
     ),
+    path("dashboard-v2", DashboardV2.as_view(), name="dashboard-v2"),
 ]
