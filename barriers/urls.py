@@ -87,7 +87,7 @@ from .views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from .views.core import BarrierDetail, Dashboard, WhatIsABarrier, DashboardV2
+from .views.core import BarrierDetail, Dashboard, DashboardV2, WhatIsABarrier
 from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditCausedByTradingBloc,
