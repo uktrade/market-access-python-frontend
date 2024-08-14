@@ -58,8 +58,11 @@ def test_saved_search(page, create_test_barrier, session_data):
     # back to search page
     expect(page.get_by_role("link", name="Export type: Goods Activate")).to_be_visible()
 
+
 @retry()
-def test_search_for_a_barrier_with_policy_name_filter(page, create_test_barrier, session_data):
+def test_search_for_a_barrier_with_policy_name_filter(
+    page, create_test_barrier, session_data
+):
 
     title = session_data["barrier_title"]
     url = create_test_barrier(title=title)
