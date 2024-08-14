@@ -32,6 +32,7 @@
             )
             ReactApp.renderMultiSelectFilter("organisation")
             ReactApp.renderMultiSelectFilter("category", "Search categories")
+            ReactApp.renderMultiSelectFilter("policy_team", "Search policy teams")
             ReactApp.renderMultiSelectFilter("region")
             ReactApp.renderAsyncSearchResults()
         })
@@ -64,6 +65,7 @@
                 {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.organisation %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.category %}
+                {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
                 {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                 {% comment %} {% include 'partials/forms/checkbox_filter.html' with field=form.top_priority_status %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.priority_level %} {% endcomment %}
@@ -155,6 +157,7 @@
                             {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.organisation %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.category %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.policy_team %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.search %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.combined_priority %}
