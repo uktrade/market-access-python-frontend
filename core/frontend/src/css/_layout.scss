@@ -9,6 +9,13 @@ body {
 
 a {
 	@extend .govuk-link;
+	&:link {
+		&.govuk-link-no-visited-state-dark {
+			color: $govuk-black;
+			font-weight: bold;
+			padding-right: govuk-em( 15, 16 );
+		}
+	}
 }
 
 .visually-hidden {

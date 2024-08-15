@@ -7,15 +7,30 @@
     </script>
 {% endblock %}
 
-{% block content %}
-    <div class="govuk-grid-row">
+{% block main %}
+    {% block before_content %}
+    <div class="m-l-6">
+        {{ block.super }}
+    </div>
+    {% endblock %}
+    <main class="govuk-main-wrapper govuk-main-wrapper--dashboard" id="main-content" role="main">
+        {% block content %}
+    <div class="govuk-grid-row grey p-l-6 p-t-6">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-l">Dashboard</h1>
+            <h1 class="govuk-heading-xl">
+                <span class="govuk-caption-m">Market access barriers</span>
+                Dashboard
+            </h1>
             <div class="govuk-form-group">
                 <input class="govuk-input govuk-!-width-two-thirds" id="event-name" name="eventName" type="text" placeholder="Search for barrier by name or with key terms.">
                 <button type="submit" class="govuk-button" data-module="govuk-button">
                     Search
                 </button>
+                <div>
+                    <a href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link-no-visited-state-dark">My saved searches</a>
+                    <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link-no-visited-state-dark">My downloads</a>
+                    <a href="{% url 'barriers:search' %}?user=1" class="govuk-link-no-visited-state-dark">My open barriers</a>
+                </div>
             </div>
         </div>
     </div>
@@ -54,4 +69,6 @@
             </div>
         </div>
     </div>
+{% endblock %}
+    </main>
 {% endblock %}

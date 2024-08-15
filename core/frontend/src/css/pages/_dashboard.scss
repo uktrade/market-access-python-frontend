@@ -1,0 +1,13 @@
+// extend an existing govuk class
+
+.govuk-grid-row {
+    &.grey {
+        background-color: #DEE0E2;
+    }
+}
+
+.govuk-main-wrapper {
+  &--dashboard {
+    padding: 0;
+  }
+}
