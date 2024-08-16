@@ -115,7 +115,7 @@ class Metadata:
         :return: GENERATOR - data of admin areas
         """
         area_ids = admin_area_ids or []
-        if type(area_ids) == str:
+        if isinstance(area_ids, str):
             area_ids = admin_area_ids.replace(" ", "").split(",")
         admin_areas = [self.get_admin_area(area_id) for area_id in area_ids]
         return admin_areas
@@ -180,7 +180,7 @@ class Metadata:
         :return: GENERATOR - data of sectors
         """
         sec_ids = sector_ids or []
-        if type(sec_ids) == str:
+        if isinstance(sec_ids, str):
             sec_ids = sector_ids.replace(" ", "").split(",")
         sectors = (self.get_sector(sector_id) for sector_id in sec_ids)
         return sectors
@@ -276,6 +276,27 @@ class Metadata:
             for category in self.get_category_list(sort=False)
             if category["category"] == group
         ]
+
+    def get_policy_team_list(self, sort=True):
+        """
+        Dedupe and sort the policy teams
+        """
+        ids = []
+        unique_policy_teams = []
+        for policy_team in self.data.get("policy_teams"):
+            if policy_team["id"] not in ids:
+                unique_policy_teams.append(policy_team)
+                ids.append(policy_team["id"])
+
+        if sort:
+            unique_policy_teams.sort(key=itemgetter("title"))
+
+        return unique_policy_teams
+
+    def get_policy_team(self, policy_team_id):
+        for policy_team in self.data["policy_teams"]:
+            if str(policy_team["id"]) == str(policy_team_id):
+                return policy_team
 
     def get_goods(self):
         return self.get_categories_by_group("GOODS")
