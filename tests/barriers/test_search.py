@@ -56,6 +56,12 @@ class SearchTestCase(MarketAccessTestCase):
         category_choices = form.fields["category"].choices
         assert len(category_choices) == len(category_list)
 
+        policy_team_list = set(
+            [policy_team["id"] for policy_team in metadata.data["policy_teams"]]
+        )
+        policy_team_choices = form.fields["policy_team"].choices
+        assert len(policy_team_choices) == len(policy_team_list)
+
         region_list = set(
             [region["id"] for region in metadata.get_overseas_region_list()]
         )
@@ -81,6 +87,7 @@ class SearchTestCase(MarketAccessTestCase):
                     "aa22c9d2-5f95-e211-a939-e4115bead28a",
                 ],
                 "category": ["130", "141"],
+                "policy_team": ["10", "11"],
                 "region": [
                     "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
                     "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
@@ -104,6 +111,7 @@ class SearchTestCase(MarketAccessTestCase):
             "aa22c9d2-5f95-e211-a939-e4115bead28a",
         ]
         assert form.cleaned_data["category"] == ["130", "141"]
+        assert form.cleaned_data["policy_team"] == ["10", "11"]
         assert form.cleaned_data["region"] == [
             "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
             "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
@@ -128,6 +136,7 @@ class SearchTestCase(MarketAccessTestCase):
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
             category="130,141",
+            policy_team="10,11",
             status="2",
             user="1",
             archived="0",
