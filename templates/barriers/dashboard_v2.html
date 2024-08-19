@@ -22,10 +22,12 @@
                         Dashboard
                     </h1>
                     <div class="govuk-form-group">
-                        <input class="govuk-input govuk-!-width-two-thirds" id="event-name" name="eventName" type="text" placeholder="Search for barrier by name or with key terms.">
-                        <button type="submit" class="govuk-button" data-module="govuk-button">
-                            Search
-                        </button>
+                        <form action="{% url 'barriers:search' %}" method="GET">
+                            <input class="govuk-input govuk-!-width-two-thirds" id="event-name" name="search" type="text" placeholder="Search for barrier by name or with key terms.">
+                            <button type="submit" class="govuk-button" data-module="govuk-button">
+                                Search
+                            </button>
+                        </form>
                         <div>
                             <a href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link govuk-link--no-visited-state-dark">My saved searches</a>
                             <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link govuk-link--no-visited-state-dark">My downloads</a>
