@@ -32,7 +32,13 @@
             </ul>
         {% endif %}
 
-        <a href="{% url 'barriers:add_policy_team' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another policy team</a>
+        <a href="{% url 'barriers:add_policy_team' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">
+            {% if policy_teams %}
+                Add another policy team
+            {% else %}
+                Add a policy team
+            {% endif %}
+        </a>
     </div>
 
     <form action="" method="POST">
