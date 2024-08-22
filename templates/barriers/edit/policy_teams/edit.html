@@ -12,7 +12,13 @@
     {% include 'partials/heading.html' with text='Policy team' %}
     {% form_error_banner form %}
 
-    <h3 class="report-sectors-heading">Save or add another policy team</h3>
+    <h3 class="report-sectors-heading">
+        {% if policy_teams %}
+            Save or add another policy team
+        {% else %}
+            Save or add a policy team
+        {% endif %}
+    </h3>
 
     <div class="selection-list restrict-width">
         <h3 class="selection-list__heading">Selected policy teams</h3>
