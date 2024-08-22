@@ -428,7 +428,7 @@
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No policy teams</span>
                     {% else %}
-                        <a href="{% url 'barriers:add_policy_team' barrier.id %}"
+                        <a href="{% url 'barriers:edit_policy_teams' barrier.id %}"
                            class="summary-group__list__value__add govuk-link--no-visited-state">Add a policy team</a>
                     {% endif %}
                 {% endif %}
