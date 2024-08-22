@@ -265,11 +265,6 @@ class Metadata:
             unique_categories.sort(key=itemgetter("title"))
         return unique_categories
 
-    def get_category(self, category_id):
-        for category in self.data["categories"]:
-            if str(category["id"]) == str(category_id):
-                return category
-
     def get_categories_by_group(self, group):
         return [
             category
