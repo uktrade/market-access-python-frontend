@@ -37,6 +37,7 @@ def test_update_policy_team(page, create_test_barrier):
 
     expect(page.locator(".policy-teams_text")).to_have_text("Gender")
 
+
 def test_policy_team_history(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
