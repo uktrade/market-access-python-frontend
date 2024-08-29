@@ -67,6 +67,16 @@
                 "title": "Tariffs or import duties"
             }
         ],
+        "policy_teams": [
+            {
+                "id": 10,
+                "title": "Procurement"
+            },
+            {
+                "id": 11,
+                "title": "Rules of Origin (RoO)"
+            }
+        ],
         "public_eligibility": true,
         "public_eligibility_summary": "Eligible",
         "reported_on": "2019-10-30T11:45:44.720000Z",
