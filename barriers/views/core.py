@@ -78,8 +78,8 @@ class WhatIsABarrier(TemplateView):
         return context_data
 
 
-class DashboardV2(AnalyticsMixin, TemplateView):
-    template_name = "barriers/dashboard_v2.html"
+class Home(AnalyticsMixin, TemplateView):
+    template_name = "barriers/home.html"
     utm_tags = {
         "en": {
             "utm_source": "notification-email",
