@@ -4,6 +4,13 @@
 {% block body_script %}
     <script nonce="{{request.csp_nonce}}">
         ma.pages.index();
+
+        const month = new Date().toLocaleString('en-GB', { month: 'long' });
+        const year = new Date().getFullYear();
+        const newsletterLink = document.querySelector("#month-placeholder").parentNode;
+        newsletterLink.href = `https://data-services-help.trade.gov.uk/market-access/newsletters/${month.toLowerCase()}/${year}`;
+
+        newsletterLink.textContent = `DMAS newsletter for ${month} ${year}`;
     </script>
 {% endblock %}
 
@@ -68,9 +75,7 @@
             </div>
             <div class="govuk-grid-row p-l-4 p-r-6">
                 <div class="govuk-grid-column-full">
-                    <div class="govuk-summary-card">
-                        <h2 class="govuk-heading-m">What's new on DMAS</h2>
-                    </div>
+                    {% include "barriers/partials/whats_new.html" %}
                 </div>
             </div>
         {% endblock %}
