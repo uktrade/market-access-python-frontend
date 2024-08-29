@@ -65,22 +65,6 @@ from barriers.views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from .views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
-from .views.documents import DownloadDocument
-from .views.edit import (
-    BarrierEditCausedByTradingBloc,
-    BarrierEditCommercialValue,
-    BarrierEditEconomicAssessmentEligibility,
-    BarrierEditEstimatedResolutionDate,
-    BarrierEditEstimatedResolutionDateConfirmationPage,
-    BarrierEditPriority,
-    BarrierEditProduct,
-    BarrierEditStartDate,
-    BarrierEditSummary,
-    BarrierEditTags,
-    BarrierEditTitle,
-    BarrierEditTradeDirection,
-)
 from barriers.views.export_types import BarrierEditExportType
 from barriers.views.government_organisations import (
     BarrierAddGovernmentOrganisation,
@@ -175,6 +159,23 @@ from barriers.views.wto import (
     DeleteWTODocument,
     EditWTOProfile,
     EditWTOStatus,
+)
+
+from .views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
+from .views.documents import DownloadDocument
+from .views.edit import (
+    BarrierEditCausedByTradingBloc,
+    BarrierEditCommercialValue,
+    BarrierEditEconomicAssessmentEligibility,
+    BarrierEditEstimatedResolutionDate,
+    BarrierEditEstimatedResolutionDateConfirmationPage,
+    BarrierEditPriority,
+    BarrierEditProduct,
+    BarrierEditStartDate,
+    BarrierEditSummary,
+    BarrierEditTags,
+    BarrierEditTitle,
+    BarrierEditTradeDirection,
 )
 
 app_name = "barriers"
