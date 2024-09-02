@@ -10,6 +10,7 @@ def test_add_policy_team(page, create_test_barrier):
     page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Add a policy team").click()
+    page.get_by_role("link", name="Add a policy team").click()
     page.get_by_label("Customs").check()
     page.get_by_role("button", name="Add").click()
     page.get_by_role("button", name="Save and return").click()
@@ -24,7 +25,7 @@ def test_update_policy_team(page, create_test_barrier):
     page.goto(clean_full_url(url))
 
     page.get_by_label("edit policy teams").click()
-    page.get_by_role("link", name="Add another policy team").click()
+    page.get_by_role("link", name="Add a policy team").click()
     page.get_by_label("Gender").check()
     page.get_by_role("button", name="Add").click()
     page.get_by_role("button", name="Save and return").click()
