@@ -10,6 +10,7 @@ def test_add_policy_team(page, create_test_barrier):
     page.goto(clean_full_url(url))
 
     page.get_by_role("link", name="Add a policy team").click()
+    page.get_by_role("link", name="Add a policy team").click()
     page.get_by_label("Customs").check()
     page.get_by_role("button", name="Add").click()
     page.get_by_role("button", name="Save and return").click()
@@ -24,7 +25,7 @@ def test_update_policy_team(page, create_test_barrier):
     page.goto(clean_full_url(url))
 
     page.get_by_label("edit policy teams").click()
-    page.get_by_role("link", name="Add another policy team").click()
+    page.get_by_role("link", name="Add a policy team").click()
     page.get_by_label("Gender").check()
     page.get_by_role("button", name="Add").click()
     page.get_by_role("button", name="Save and return").click()
@@ -36,3 +37,14 @@ def test_update_policy_team(page, create_test_barrier):
     page.get_by_role("button", name="Save and return").click()
 
     expect(page.locator(".policy-teams_text")).to_have_text("Gender")
+
+
+def test_policy_team_history(page, create_test_barrier):
+    title = "test"
+    url = create_test_barrier(title=title)
+    page.goto(clean_full_url(url))
+
+    page.get_by_role("link", name="History").click()
+
+    expect(page.get_by_text("old value: Customs, Gender")).to_be_visible()
+    expect(page.get_by_text("new value: Gender")).to_be_visible()
