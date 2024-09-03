@@ -1,9 +1,14 @@
+import logging
+
 from django.views.generic import TemplateView
 
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
+from utils.pagination import PaginationMixin
 
 from .mixins import AnalyticsMixin, BarrierMixin
+
+logger = logging.getLogger(__name__)
 
 
 class Dashboard(AnalyticsMixin, TemplateView):
@@ -78,7 +83,7 @@ class WhatIsABarrier(TemplateView):
         return context_data
 
 
-class Home(AnalyticsMixin, TemplateView):
+class Home(AnalyticsMixin, TemplateView, PaginationMixin):
     template_name = "barriers/home.html"
     utm_tags = {
         "en": {
@@ -87,6 +92,9 @@ class Home(AnalyticsMixin, TemplateView):
             "utm_campaign": "dashboard",
         }
     }
+
+    # Let the pagination mixin know how many results the API will return per page
+    pagination_limit = 5
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -104,6 +112,18 @@ class Home(AnalyticsMixin, TemplateView):
             not mention.read_by_recipient for mention in mentions
         )
 
+        # Get page number for task list pagination from URL
+        page_number = (
+            self.request.GET.get("page") if self.request.GET.get("page") else 1
+        )
+        api_task_list_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "page": page_number,
+        }
+        # Get list of tasks for the user from the API
+        task_list = client.dashboard_tasks.list(**api_task_list_params)
+
         context_data.update(
             {
                 "page": "dashboard",
@@ -119,6 +139,9 @@ class Home(AnalyticsMixin, TemplateView):
                 ),
                 "active": active,
                 "barrier_downloads": barrier_downloads,
+                "task_list": task_list,
             }
         )
+        context_data["pagination"] = self.get_pagination_data(object_list=task_list)
+
         return context_data

@@ -1,0 +1,66 @@
+<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h3 class="govuk-summary-card__title">Complete barrier tasks and progress updates</h3>
+        <ul class="govuk-summary-card__actions">
+            <li class="govuk-summary-card__action">
+                <a class="govuk-link" href="#"><strong>My barriers</strong><span class="govuk-visually-hidden">My barriers</span></a>
+            </li>
+        </ul>
+
+    </div>
+    <div class="govuk-summary-card__content">
+
+
+        <dl class="govuk-summary-list">
+            {% for task in task_list %}
+                {% if task %}
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key govuk-summary-list__key-normal">
+                            <a class="govuk-link" href="{% url 'barriers:barrier_detail' task.barrier_id %}">{{ task.barrier_code }}<span class="govuk-visually-hidden"> barrier code</span></a>
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            <strong>
+                                <a class="govuk-link" href="{% url 'barriers:barrier_detail' task.barrier_id %}">{{ task.barrier_title }}<span class="govuk-visually-hidden"> barrier title</span></a>
+                            </strong>
+                        </dd>
+                        <dd class="govuk-summary-list__value">
+                            {{ task.message }}
+                        </dd>
+                        <dd class="govuk-summary-list__value">
+                            <div class="govuk-body">
+                                {% if task.tag == "REVIEW COMMENT" %}
+                                    <strong class="govuk-tag govuk-tag--turquoise">
+                                {% elif task.tag == "PROGRESS UPDATE DUE" %}
+                                    <strong class="govuk-tag govuk-tag--purple">
+                                {% elif task.tag == "REVIEW NEXT STEP" %}
+                                    <strong class="govuk-tag govuk-tag--turquoise">
+                                {% elif task.tag == "OVERDUE PROGRESS UPDATE" %}
+                                    <strong class="govuk-tag govuk-tag--yellow">
+                                {% elif task.tag == "REVIEW DATE" %}
+                                    <strong class="govuk-tag govuk-tag--turquoise">
+                                {% elif task.tag == "ADD DATE" %}
+                                    <strong class="govuk-tag govuk-tag--grey">
+                                {% elif task.tag == "CHANGE OVERDUE" %}
+                                    <strong class="govuk-tag govuk-tag--orange">
+                                {% elif task.tag == "ADD INFORMATION" %}
+                                    <strong class="govuk-tag govuk-tag--grey">
+                                {% elif task.tag == "PUBLICATION REVIEW" %}
+                                    <strong class="govuk-tag govuk-tag--yellow">
+                                {% elif task.tag == "OVERDUE REVIEW" %}
+                                    <strong class="govuk-tag govuk-tag--yellow">
+                                {% endif %}
+                                {{ task.tag }}
+                            </strong>
+                        </div>
+                    </dd>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% include 'partials/pagination.html' %}
+        </dl>
+
+
+
+
+    </div>
+</div>

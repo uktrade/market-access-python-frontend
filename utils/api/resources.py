@@ -30,7 +30,7 @@ from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
-from users.models import Group, User
+from users.models import DashboardTask, Group, User
 from utils.exceptions import ScanError
 from utils.models import APIModel, ModelList
 
@@ -311,6 +311,11 @@ class SavedSearchesResource(APIResource):
 class GroupsResource(APIResource):
     resource_name = "groups"
     model = Group
+
+
+class DashboardTasksResource(APIResource):
+    resource_name = "dashboard-tasks"
+    model = DashboardTask
 
 
 class CommoditiesResource(APIResource):
