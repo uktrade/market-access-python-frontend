@@ -9,8 +9,6 @@
 
     </div>
     <div class="govuk-summary-card__content">
-
-
         <dl class="govuk-summary-list">
             {% for task in task_list %}
                 {% if task %}
@@ -56,11 +54,7 @@
                     </div>
                 {% endif %}
             {% endfor %}
-            {% include 'partials/pagination.html' %}
         </dl>
-
-
-
-
+        {% include 'partials/pagination.html' %}
     </div>
 </div>
