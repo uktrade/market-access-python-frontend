@@ -36,6 +36,7 @@
     "loader-utils": "^2.0.4",
     "mini-css-extract-plugin": "^2.2.2",
     "react": "^16.14.0",
+    "react-apexcharts": "^1.4.1",
     "react-dom": "^16.13.1",
     "react-mentions": "^4.1.1",
     "react-select": "^5.4.0",

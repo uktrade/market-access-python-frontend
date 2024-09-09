@@ -13,6 +13,7 @@ import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
 import GDSCheckboxes from "./gds/Checkboxes";
+import {handleBarChart, handlePieChart, handleStackedBarChart}   from "./dashboard/charts";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -156,6 +157,9 @@ function renderInputSelectWithMentions(
     );
 }
 
+/**
+ * @param {string} fieldID
+ */
 function renderEmailSearchAutocomplete(fieldID) {
     const field = document.getElementById(fieldID),
         fieldlLabel = field.labels[0],
@@ -171,6 +175,21 @@ function renderRisksAndMitigationForm() {
     ReactDOM.render(<RisksAndMitigationForm />, container);
 }
 
+function renderPieChart(chartData, htmlElementId) {
+    const container = document.querySelector(`#${htmlElementId}`);
+    ReactDOM.render(handlePieChart(chartData), container);
+}
+
+function renderBarChart(chartData, htmlElementId) {
+    const container = document.querySelector(`#${htmlElementId}`);
+    ReactDOM.render(handleBarChart(chartData), container);
+}
+
+function renderStackedBarChart(chartData, htmlElementId) {
+    const container = document.querySelector(`#${htmlElementId}`);
+    ReactDOM.render(handleStackedBarChart(chartData), container);
+}
+
 export {
     renderCommodityForm,
     renderCompaniesForm,
@@ -184,4 +203,7 @@ export {
     GDSTabs,
     GDSRadios,
     GDSCheckboxes,
+    renderPieChart,
+    renderBarChart,
+    renderStackedBarChart,
 };
