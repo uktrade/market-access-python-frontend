@@ -5,134 +5,134 @@
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
     {% block body_script %}
-    <script nonce="{{request.csp_nonce}}">
+        <script nonce="{{request.csp_nonce}}">
 
-        document.addEventListener("DOMContentLoaded", function (event) {
-            ma.pages.index();
-            const month = new Date().toLocaleString('en-GB', { month: 'long' });
-            const year = new Date().getFullYear();
-            const newsletterLink = document.querySelector("#month-placeholder").parentNode;
-            newsletterLink.href = `https://data-services-help.trade.gov.uk/market-access/newsletters/${month.toLowerCase()}/${year}`;
-            newsletterLink.textContent = `DMAS newsletter for ${month} ${year}`;
-            
-            ReactApp.renderPieChart(
-                {
-                    series: [300, 660, 50, 330],
-                    options: {
-                        chart: {
-                            id: 'basic-pie',
-                            width: 380,
-                            type: 'pie',
-                        },
-                        title: {
-                            text: 'Monthly Sales Data',
-                            align: 'center'
-                        },
-                    },
-                    labels: ['Team A', 'Team B', 'Team C', 'Team D'],
-                    responsive: [{
-                        breakpoint: 480,
+            document.addEventListener("DOMContentLoaded", function (event) {
+                ma.pages.index();
+                const month = new Date().toLocaleString('en-GB', { month: 'long' });
+                const year = new Date().getFullYear();
+                const newsletterLink = document.querySelector("#month-placeholder").parentNode;
+                newsletterLink.href = `https://data-services-help.trade.gov.uk/market-access/newsletters/${month.toLowerCase()}/${year}`;
+                newsletterLink.textContent = `DMAS newsletter for ${month} ${year}`;
+
+                ReactApp.renderPieChart(
+                    {
+                        series: [300, 660, 50, 330],
                         options: {
                             chart: {
-                            width: 200
+                                id: 'basic-pie',
+                                width: 380,
+                                type: 'pie',
+                            },
+                            title: {
+                                text: 'Monthly Sales Data',
+                                align: 'center'
+                            },
+                        },
+                        labels: ['Team A', 'Team B', 'Team C', 'Team D'],
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                chart: {
+                                    width: 200
+                                },
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }]
+                    },"pie-chart");
+                ReactApp.renderBarChart(
+                    {
+                        series: [
+                            {
+                                name: "Sales",
+                                data: [30, 40, 45, 50, 49, 60, 70, 91]
+                            }
+                        ],
+                        options: {
+                            chart: {
+                                id: 'basic-bar',
+                                toolbar: {
+                                    show: true
+                                }
+                            },
+                            xaxis: {
+                                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                                title: {
+                                    text: 'Months'
+                                }
+                            },
+                            yaxis: {
+                                title: {
+                                    text: 'Revenue ($)'
+                                }
+                            },
+                            title: {
+                                text: 'Monthly Sales Data',
+                                align: 'center'
+                            },
+                            dataLabels: {
+                                enabled: true
+                            },
+                        }
+                    }, "bar-chart");
+                ReactApp.renderStackedBarChart(
+                    {
+                        series: [
+                            {
+                                name: 'PRODUCT A',
+                                data: [44, 55, 41, 64, 22, 43, 21]
+                            }, {
+                                name: 'PRODUCT B',
+                                data: [53, 32, 33, 52, 13, 44, 32]
+                            }, {
+                                name: 'PRODUCT C',
+                                data: [12, 17, 11, 9, 15, 11, 20]
+                            }
+                        ],
+                        options: {
+                            chart: {
+                                id: 'stacked-bar',
+                                type: 'bar',
+                                height: 350,
+                                stacked: true,
+                                toolbar: {
+                                    show: true
+                                }
+                            },
+                            plotOptions: {
+                                bar: {
+                                    horizontal: true,
+                                    columnWidth: '45%',
+                                    endingShape: 'rounded'
+                                },
+                            },
+                            xaxis: {
+                                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                            },
+                            yaxis: {
+                                title: {
+                                    text: 'Mn£'
+                                }
+                            },
+                            title: {
+                                text: 'Monthly Sales Data',
+                                align: 'center'
+                            },
+                            dataLabels: {
+                                enabled: false
                             },
                             legend: {
-                            position: 'bottom'
-                            }
-                        }
-                    }]
-                },"pie-chart");
-            ReactApp.renderBarChart(
-                {
-                    series: [
-                    {
-                        name: "Sales",
-                        data: [30, 40, 45, 50, 49, 60, 70, 91]
-                    }
-                    ],
-                    options: {
-                        chart: {
-                            id: 'basic-bar',
-                            toolbar: {
-                            show: true
-                            }
-                        },
-                        xaxis: {
-                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                            title: {
-                            text: 'Months'
-                            }
-                        },
-                        yaxis: {
-                            title: {
-                            text: 'Revenue ($)'
-                            }
-                        },
-                        title: {
-                            text: 'Monthly Sales Data',
-                            align: 'center'
-                        },
-                        dataLabels: {
-                            enabled: true
-                        },
-                }
-            }, "bar-chart");
-            ReactApp.renderStackedBarChart(
-                {
-                    series: [
-                    {
-                        name: 'PRODUCT A',
-                        data: [44, 55, 41, 64, 22, 43, 21]
-                    }, {
-                        name: 'PRODUCT B',
-                        data: [53, 32, 33, 52, 13, 44, 32]
-                    }, {
-                        name: 'PRODUCT C',
-                        data: [12, 17, 11, 9, 15, 11, 20]
-                    }
-                    ],
-                    options: {
-                        chart: {
-                            id: 'stacked-bar',
-                            type: 'bar',
-                            height: 350,
-                            stacked: true,
-                            toolbar: {
-                            show: true
-                            }
-                        },
-                        plotOptions: {
-                            bar: {
-                            horizontal: true,
-                            columnWidth: '45%',
-                            endingShape: 'rounded'
+                                position: 'top'
                             },
-                        },
-                        xaxis: {
-                            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                        },
-                        yaxis: {
-                            title: {
-                            text: 'Mn£'
+                            fill: {
+                                opacity: 1
                             }
-                        },
-                        title: {
-                            text: 'Monthly Sales Data',
-                            align: 'center'
-                        },
-                        dataLabels: {
-                            enabled: false
-                        },
-                        legend: {
-                            position: 'top'
-                        },
-                        fill: {
-                            opacity: 1
                         }
-                    }
-                },"stacked-bar-chart"
-            )
-        })
+                    },"stacked-bar-chart"
+                )
+            })
         </script>
     {% endblock %}
 {% endblock %}
