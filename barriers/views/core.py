@@ -4,6 +4,9 @@ from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 
 from .mixins import AnalyticsMixin, BarrierMixin
+from barriers.forms.search import BarrierSearchForm
+from barriers.views.search import SearchFormView
+import urllib.parse
 
 
 class Dashboard(AnalyticsMixin, TemplateView):
@@ -78,47 +81,68 @@ class WhatIsABarrier(TemplateView):
         return context_data
 
 
-class Home(AnalyticsMixin, TemplateView):
+class Home(AnalyticsMixin, SearchFormView, TemplateView):
     template_name = "barriers/home.html"
-    utm_tags = {
-        "en": {
-            "utm_source": "notification-email",
-            "utm_medium": "email",
-            "utm_campaign": "dashboard",
-        }
-    }
+    form_class = BarrierSearchForm
+    # utm_tags = {
+    #     "en": {
+    #         "utm_source": "notification-email",
+    #         "utm_medium": "email",
+    #         "utm_campaign": "dashboard",
+    #     }
+    # }
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        active = self.request.GET.get("active", "barriers")
+        # active = self.request.GET.get("active", "barriers")
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        my_barriers_saved_search = client.saved_searches.get("my-barriers")
-        team_barriers_saved_search = client.saved_searches.get("team-barriers")
+        # my_barriers_saved_search = client.saved_searches.get("my-barriers")
+        # team_barriers_saved_search = client.saved_searches.get("team-barriers")
         mentions = client.mentions.list()
-        draft_barriers = client.reports.list()
-        saved_searches = client.saved_searches.list()
-        notification_exclusion = client.notification_exclusion.get()
-        barrier_downloads = client.barrier_download.list()
+        # draft_barriers = client.reports.list()
+        # saved_searches = client.saved_searches.list()
+        # notification_exclusion = client.notification_exclusion.get()
+        # barrier_downloads = client.barrier_download.list()
 
         are_all_mentions_read: bool = not any(
             not mention.read_by_recipient for mention in mentions
         )
 
+        print("++++++++++++++++++++++++++++++++++++++++=")
+        print(form.get_api_search_parameters())
+        params = form.get_api_search_parameters()
+        query_string = ""
+        for parameter in params:
+            print(parameter, params[parameter])
+            for value in params[parameter]:
+                query_string = (
+                    query_string + f"&{urllib.parse.urlencode({parameter: value})}"
+                )
+        print("query string = ", query_string)
+
+        search_params = query_string
+
+        summary_url = f"dashboard-summary?{search_params}"
+        summary_stats = client.get(summary_url)
+
         context_data.update(
             {
                 "page": "dashboard",
-                "my_barriers_saved_search": my_barriers_saved_search,
-                "team_barriers_saved_search": team_barriers_saved_search,
-                "draft_barriers": draft_barriers,
-                "saved_searches": saved_searches,
-                "notification_exclusion": notification_exclusion,
+                # "my_barriers_saved_search": my_barriers_saved_search,
+                # "team_barriers_saved_search": team_barriers_saved_search,
+                # "draft_barriers": draft_barriers,
+                # "saved_searches": saved_searches,
+                # "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
                 "new_mentions_count": len(
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),
-                "active": active,
-                "barrier_downloads": barrier_downloads,
+                "filters": form.get_readable_filters(True),
+                # "active": active,
+                # "barrier_downloads": barrier_downloads,
+                "summary_stats": summary_stats,
+                "search_params": search_params,
             }
         )
         return context_data

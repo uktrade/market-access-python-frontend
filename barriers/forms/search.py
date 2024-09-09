@@ -453,16 +453,20 @@ class BarrierSearchForm(forms.Form):
         params = {}
         params["search_id"] = self.cleaned_data.get("search_id")
         params["search"] = self.cleaned_data.get("search")
-        params["location"] = ",".join(
-            self.cleaned_data.get("country", [])
-            + self.cleaned_data.get("region", [])
-            + self.cleaned_data.get("extra_location", [])
-        )
+        # params["location"] = ",".join(
+        #     self.cleaned_data.get("country", [])
+        #     + self.cleaned_data.get("region", [])
+        #     + self.cleaned_data.get("extra_location", [])
+        # )
+        params["region"] = self.cleaned_data.get("region", [])
+        params["country"] = self.cleaned_data.get("country", [])
+
         params["admin_areas"] = ",".join(self.format_admin_areas())
         params["trade_direction"] = ",".join(
             self.cleaned_data.get("trade_direction", [])
         )
-        params["sector"] = ",".join(self.cleaned_data.get("sector", []))
+        # params["sector"] = ",".join(self.cleaned_data.get("sector", []))
+        params["sector"] = self.cleaned_data.get("sector", [])
         params["ignore_all_sectors"] = self.cleaned_data.get("ignore_all_sectors")
         params["organisation"] = ",".join(self.cleaned_data.get("organisation", []))
         params["category"] = ",".join(self.cleaned_data.get("category", []))
