@@ -132,13 +132,21 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
 
         query_string = ""
         for parameter in params:
-            if isinstance(parameter, list):
+
+            if isinstance(params[parameter], list):
                 for value in params[parameter]:
                     query_string = (
                         query_string + f"&{urllib.parse.urlencode({parameter: value})}"
                     )
+            else:
+                query_string = (
+                    query_string
+                    + f"&{urllib.parse.urlencode({parameter: params[parameter]})}"
+                )
 
         search_params = query_string
+
+        print(" ************* search params ****************", search_params)
 
         summary_url = f"dashboard-summary?{search_params}"
         summary_stats = client.get(summary_url)

@@ -7,6 +7,7 @@
             <span class="govuk-visually-hidden">Warning</span>
             The monetary values shown here are subject to change throughout this financial year ({{ summary_stats.financial_year.current_start|parse_iso|date:"D, j F Y" }} to {{ summary_stats.financial_year.current_end|parse_iso|date:"D, j F Y" }} ) and should only be used as a guide due to some barriers in some sectors being harder to accurately estimate
         </strong>
+        {{ summary_stats }}
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter"  id="dashboard_filters">
@@ -63,7 +64,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers.pb100 }}</span> PB100 barriers are open.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&combined_priority=APPROVED">See the barriers</a>
                             </div>
                         </div>
                     </div>
