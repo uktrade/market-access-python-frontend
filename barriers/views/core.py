@@ -129,13 +129,14 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
         task_list = client.dashboard_tasks.list(**api_task_list_params)
 
         params = form.get_api_search_parameters()
+
         query_string = ""
         for parameter in params:
-
-            for value in params[parameter]:
-                query_string = (
-                    query_string + f"&{urllib.parse.urlencode({parameter: value})}"
-                )
+            if isinstance(parameter, list):
+                for value in params[parameter]:
+                    query_string = (
+                        query_string + f"&{urllib.parse.urlencode({parameter: value})}"
+                    )
 
         search_params = query_string
 
