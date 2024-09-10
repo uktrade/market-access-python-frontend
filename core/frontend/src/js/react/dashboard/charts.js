@@ -1,7 +1,7 @@
 import React from "react";
 import Charts from "react-apexcharts";
 
-export const handlePieChart = (chartData) => {
+export const handlePieChart = (/** @type {{ options: ApexCharts.ApexOptions; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData) => {
     return (
         <Charts
             options={chartData.options}
@@ -12,7 +12,7 @@ export const handlePieChart = (chartData) => {
     );
 };
 
-export const handleBarChart = (chartData) => {
+export const handleBarChart = (/** @type {{ options: ApexCharts.ApexOptions; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData) => {
     return (
         <Charts
             options={chartData.options}
@@ -23,10 +23,19 @@ export const handleBarChart = (chartData) => {
     );
 };
 
-export const handleStackedBarChart = (chartData) => {
+export const handleStackedBarChart = (/** @type {{ options: ApexCharts.ApexOptions; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData) => {
+    const options = {
+        ...chartData.options,
+        plotOptions: {
+            bar: {
+                horizontal: true,
+                columnWidth: '45%',
+            },
+        },
+    };
     return (
         <Charts
-            options={chartData.options}
+            options={options}
             series={chartData.series}
             type="bar"
             height={350}
