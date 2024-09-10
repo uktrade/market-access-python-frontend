@@ -1,9 +1,9 @@
 // extend an existing govuk class
 
 .govuk-grid-row {
-    &.grey {
-        background-color: #DEE0E2;
-    }
+  &.grey {
+    background-color: #DEE0E2;
+  }
 }
 
 .govuk-main-wrapper {
@@ -15,4 +15,32 @@
 .govuk-summary-list__key-normal {
   font-weight: normal;
   width: 10%;
+}
+
+.summary-card {
+  background-color: #DEE0E2;
+  min-height: 250px;
+  position: relative;
+
+
+
+  &__data-link {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 16px;
+  }
+
+}
+
+.summary_card_small {
+  font-size: 16px;
+}
+
+#dashboard_filters {
+  .checkbox-filter {
+
+    max-height: 7em;
+
+  }
 }

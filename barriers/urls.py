@@ -897,5 +897,5 @@ urlpatterns = [
         TurnNotificationsOnAndRedirect.as_view(),
         name="mention_turn_notifications_on",
     ),
-    path("home", Home.as_view(), name="home"),
+    path("home/", Home.as_view(), name="home"),
 ]

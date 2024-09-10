@@ -105,14 +105,11 @@
         </script>
     {% endblock %}
 {% endblock %}
-
 {% block main %}
-    {% block before_content %}
-        <div class="m-l-6">
-            {{ block.super }}
-        </div>
-    {% endblock %}
-    <main class="govuk-main-wrapper govuk-main-wrapper--dashboard" id="main-content" role="main">
+    {% block before_content %}<div class="m-l-6">{{ block.super }}</div>{% endblock %}
+    <main class="govuk-main-wrapper govuk-main-wrapper--dashboard"
+          id="main-content"
+          role="main">
         {% block content %}
             <div class="govuk-grid-row grey p-l-4 p-t-6">
                 <div class="govuk-grid-column-full">
@@ -122,29 +119,35 @@
                     </h1>
                     <div class="govuk-form-group">
                         <form action="{% url 'barriers:search' %}" method="GET">
-                            <input class="govuk-input govuk-!-width-two-thirds" id="event-name" name="search" type="text" placeholder="Search for barrier by name or with key terms.">
-                            <button type="submit" class="govuk-button" data-module="govuk-button">
-                                Search
-                            </button>
+                            <input class="govuk-input govuk-!-width-two-thirds"
+                                   id="event-name"
+                                   name="search"
+                                   type="text"
+                                   placeholder="Search for barrier by name or with key terms.">
+                            <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
                         </form>
                         <div>
-                            <a href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link govuk-link--no-visited-state-dark">My saved searches</a>
-                            <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link govuk-link--no-visited-state-dark">My downloads</a>
-                            <a href="{% url 'barriers:search' %}?user=1" class="govuk-link govuk-link--no-visited-state-dark">My open barriers</a>
+                            <a href="{% url 'barriers:dashboard' %}?active=saved_searches"
+                               class="govuk-link govuk-link--no-visited-state-dark">My saved searches</a>
+                            <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads"
+                               class="govuk-link govuk-link--no-visited-state-dark">My downloads</a>
+                            <a href="{% url 'barriers:search' %}?user=1"
+                               class="govuk-link govuk-link--no-visited-state-dark">My open barriers</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="govuk-grid-row p-l-4 p-r-6 p-t-6">
-                <div class="govuk-grid-column-full">
-                    {% include "barriers/partials/dashboard_tasks.html" %}
+            <section class="govuk-width-container ma-container-full">
+                <div class="govuk-grid-row p-t-6">
+                    <div class="govuk-grid-column-full">{% include "barriers/partials/dashboard_tasks.html" %}</div>
                 </div>
-            </div>
-            <div class="govuk-grid-row p-l-4 p-r-6">
-                <div class="govuk-grid-column-full">
-                    <div class="govuk-summary-card">
-                        <div class="govuk-summary-card__title-wrapper">
-                            <h3 class="govuk-summary-card__title">See data for barriers you're working on or monitoring</h3>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <div class="govuk-summary-card">
+                            <div class="govuk-summary-card__title-wrapper">
+                                <h3 class="govuk-summary-card__title">See data for barriers you're working on or monitoring</h3>
+                            </div>
+                            {% include "barriers/partials/summary_cards.html" %}
                         </div>
                     </div>
                 </div>
@@ -153,12 +156,10 @@
                 <div class="govuk-grid-column-full">
                     {% include "barriers/partials/dashboard-charts.html" %}
                 </div>
-            </div>
-            <div class="govuk-grid-row p-l-4 p-r-6">
-                <div class="govuk-grid-column-full">
-                    {% include "barriers/partials/whats_new.html" %}
+                <div class="govuk-grid-row p-l-4 p-r-6">
+                    <div class="govuk-grid-column-full">{% include "barriers/partials/whats_new.html" %}</div>
                 </div>
-            </div>
+            </section>
         {% endblock %}
     </main>
 {% endblock %}
