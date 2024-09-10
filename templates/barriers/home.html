@@ -21,33 +21,29 @@
                         options: {
                             chart: {
                                 id: 'basic-pie',
-                                width: 380,
-                                type: 'pie',
                             },
                             title: {
                                 text: 'Monthly Sales Data',
                                 align: 'center'
                             },
-                        },
-                        labels: ['Team A', 'Team B', 'Team C', 'Team D'],
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: 200
-                                },
-                                legend: {
-                                    position: 'bottom'
-                                }
-                            }
-                        }]
+                            dataLabels: {
+                                enabled: false
+                            },
+                            labels: ['Top 100 Priority Barriers', 'Overseas Delivery', 'Non Profit', 'Watchlist'],
+                            colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560'],
+                        }
                     },"pie-chart");
+
                 ReactApp.renderBarChart(
                     {
                         series: [
                             {
-                                name: "Sales",
-                                data: [30, 40, 45, 50, 49, 60, 70, 91]
+                                name: "Open Barriers",
+                                data: [30]
+                            },
+                            {
+                                name: "Resolved Barriers",
+                                data: [40]
                             }
                         ],
                         options: {
@@ -58,22 +54,15 @@
                                 }
                             },
                             xaxis: {
-                                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                                title: {
-                                    text: 'Months'
-                                }
+                                categories: ['Total Barriers'],
                             },
                             yaxis: {
-                                title: {
-                                    text: 'Revenue ($)'
-                                }
+                                categories: ['0', '20', '40', '60', '80', '100'],
                             },
+                            colors: ['#008FFB', '#00E396'],
                             title: {
-                                text: 'Monthly Sales Data',
+                                text: 'Total barrier value',
                                 align: 'center'
-                            },
-                            dataLabels: {
-                                enabled: true
                             },
                         }
                     }, "bar-chart");
@@ -81,35 +70,20 @@
                     {
                         series: [
                             {
-                                name: 'PRODUCT A',
-                                data: [44, 55, 41, 64, 22, 43, 21]
-                            }, {
-                                name: 'PRODUCT B',
-                                data: [53, 32, 33, 52, 13, 44, 32]
-                            }, {
-                                name: 'PRODUCT C',
-                                data: [12, 17, 11, 9, 15, 11, 20]
+                                name: 'Resolved Barriers',
+                                data: [330]
+                            },
+                            {
+                                name: 'Estimated Value',
+                                data: [2300]
                             }
                         ],
                         options: {
                             chart: {
                                 id: 'stacked-bar',
-                                type: 'bar',
-                                height: 350,
-                                stacked: true,
-                                toolbar: {
-                                    show: true
-                                }
-                            },
-                            plotOptions: {
-                                bar: {
-                                    horizontal: true,
-                                    columnWidth: '45%',
-                                    endingShape: 'rounded'
-                                },
                             },
                             xaxis: {
-                                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                                categories: ['Aug'],
                             },
                             yaxis: {
                                 title: {
@@ -120,15 +94,10 @@
                                 text: 'Monthly Sales Data',
                                 align: 'center'
                             },
-                            dataLabels: {
-                                enabled: false
-                            },
-                            legend: {
-                                position: 'top'
-                            },
                             fill: {
                                 opacity: 1
-                            }
+                            },
+                            colors: ['#00E396', '#008FFB'],
                         }
                     },"stacked-bar-chart"
                 )
