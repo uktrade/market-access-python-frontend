@@ -1,24 +1,23 @@
 import React from "react";
 import Charts from "react-apexcharts";
 
-export const handlePieChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
-) => {
+export const handlePieChart = (/** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData) => {
     const options = {
         ...chartData.options,
-        plotOptions: {
-            pie: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function (/** @type {string} */ val) {
-                        return `£${val}`;
-                    },
-                },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val, opts) {
+                // get the acual value not the percentage
+                const value = opts.w.globals.series[opts.seriesIndex];
+                const label = opts.w.config.labels[opts.seriesIndex];
+                return `${label}: ${value}`;
             },
+            offset: -10,
+
         },
         legend: {
-            show: false,
-        },
+            show: false
+        }
     };
 
     return (
@@ -32,27 +31,26 @@ export const handlePieChart = (
     );
 };
 
-export const handleBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
-) => {
+export const handleBarChart = (/** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData) => {
     const options = {
         ...chartData.options,
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: "100%",
+                columnWidth: "100%"
             },
         },
         fill: {
             opacity: 1,
         },
         stroke: {
-            width: 50,
-            colors: ["transparent"],
+            width: 5,
+            colors: ['transparent']
         },
         dataLabels: {
-            enabled: true,
+            enabled: true
         },
+        
     };
     return (
         <Charts
@@ -64,9 +62,7 @@ export const handleBarChart = (
     );
 };
 
-export const handleStackedBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
-) => {
+export const handleStackedBarChart = (/** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData) => {
     const options = {
         ...chartData.options,
         chart: {
@@ -74,15 +70,15 @@ export const handleStackedBarChart = (
             type: "bar",
             stacked: true,
             height: 350,
-            stackType: "100%",
+            stackType: '100%',
             toolbar: {
-                show: true,
+                show: true
             },
         },
         plotOptions: {
             bar: {
                 horizontal: true,
-                columnWidth: "100%",
+                columnWidth: "100%"
             },
         },
         fill: {
@@ -90,13 +86,13 @@ export const handleStackedBarChart = (
         },
         stroke: {
             width: 5,
-            colors: ["transparent"],
+            colors: ['transparent']
         },
         dataLabels: {
-            enabled: true,
+            enabled: true
         },
         legend: {
-            position: "bottom",
+            position: 'bottom',
         },
     };
     return (
