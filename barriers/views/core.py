@@ -1,17 +1,18 @@
 import logging
+import urllib.parse
 
 from django.views.generic import TemplateView
+
+from barriers.forms.search import BarrierSearchForm
+from barriers.views.search import SearchFormView
+
+from .mixins import AnalyticsMixin, BarrierMixin
 
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 
-from .mixins import AnalyticsMixin, BarrierMixin
-
 logger = logging.getLogger(__name__)
-from barriers.forms.search import BarrierSearchForm
-from barriers.views.search import SearchFormView
-import urllib.parse
 
 
 class Dashboard(AnalyticsMixin, TemplateView):
@@ -128,17 +129,14 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
         # Get list of tasks for the user from the API
         task_list = client.dashboard_tasks.list(**api_task_list_params)
 
-        print("++++++++++++++++++++++++++++++++++++++++=")
-        print(form.get_api_search_parameters())
         params = form.get_api_search_parameters()
         query_string = ""
         for parameter in params:
-            print(parameter, params[parameter])
+
             for value in params[parameter]:
                 query_string = (
                     query_string + f"&{urllib.parse.urlencode({parameter: value})}"
                 )
-        print("query string = ", query_string)
 
         search_params = query_string
 
