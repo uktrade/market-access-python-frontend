@@ -1,0 +1,119 @@
+{% load dates %}
+<div class="p-l-4 p-r-6">
+    <!-- {{ summary_stats }} -->
+    <div class="govuk-warning-text p-t-4">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text summary_card_small">
+            <span class="govuk-visually-hidden">Warning</span>
+            The monetary values shown here are subject to change throughout this financial year ({{ summary_stats.financial_year.current_start|parse_iso|date:"D, j F Y" }} to {{ summary_stats.financial_year.current_end|parse_iso|date:"D, j F Y" }} ) and should only be used as a guide due to some barriers in some sectors being harder to accurately estimate
+        </strong>
+        {{ summary_stats }}
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter"  id="dashboard_filters">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h3 class="govuk-fieldset__heading govuk-summary-card__title">Filters</h3>
+                </legend>
+                <!-- search form -->
+                <form action="" method="GET">
+                    {% include "partials/forms/checkbox_filter.html" with field=form.region %}
+                    {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
+                    {% include "partials/forms/checkbox_filter.html" with field=form.country %}
+                    {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
+                    {% if filters %}
+                        <a class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>
+                    {% endif %}
+                    <input type="hidden" id="status" name="status" value="2">
+                    <input type="submit"
+                           value="Apply filters"
+                           id="apply-filters-button"
+                           class="govuk-button govuk-button--full-width js-filter-submit">
+                </form>
+                <!--- search form end -->
+            </div>
+            <div class="govuk-grid-column-three-quarters">
+                <h3 class="govuk-summary-card__title">Summary data</h3>
+                <div class="govuk-grid-row">
+                    <div class="p-l-3" id="active filters">
+                        {% if filters %}
+                            <h3 class="visually-hidden">Active filters:</h3>
+                            <ul class="active-filters">
+                                {% include 'barriers/partials/active_filter.html' with filter=filters.status remove_hidden=True %}
+                                {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
+                                {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
+                                {% include 'barriers/partials/active_filter.html' with filter=filters.policy_team %}
+                                {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <h3 class="govuk-summary-card__title p-l-3">Open barriers</h3>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="govuk-inset-text summary-card">
+                            <p>
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers.open }}</span> barriers are open.
+                            </p>
+                            <div class="summary-card__data-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}">See the barriers</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="govuk-inset-text summary-card">
+                            <p>
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers.pb100 }}</span> PB100 barriers are open.
+                            </p>
+                            <div class="summary-card__data-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&combined_priority=APPROVED">See the barriers</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="govuk-inset-text summary-card">
+                            <p>
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers.overseas_delivery }}</span> Overseas delivery barriers are open.
+                            </p>
+                            <div class="summary-card__data-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}">See the barriers</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="govuk-grid-row">
+                    <h3 class="govuk-summary-card__title p-l-3">
+                        Barriers which have been resolved or are projected to be resolved between {{ summary_stats.financial_year.current_start|parse_iso|date:"D, j F Y" }} and {{ summary_stats.financial_year.current_end|parse_iso|date:"D, j F Y" }}, ( current financial year).
+                    </h3>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="govuk-inset-text summary-card">
+                            <p>
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.open }}</span> barriers have been resolved in the current financial year.
+                            </p>
+                            <div class="summary-card__data-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}">See the barriers</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="govuk-inset-text summary-card">
+                            <p>
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.pb100 }}</span> PB100 barriers are estimated to be resolved in the current financial year.
+                            </p>
+                            <div class="summary-card__data-link">
+                                <a href="#">See the barriers</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="govuk-inset-text summary-card">
+                            <p>
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.overseas_delivery }}</span> Overseas delivery barriers are estimated to be resolved in the current financial year.
+                            </p>
+                            <div class="summary-card__data-link">
+                                <a href="#">See the barriers</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
