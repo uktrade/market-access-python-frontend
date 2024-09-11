@@ -6,7 +6,6 @@
     {% render_bundle 'main' 'js' 'REACT' %}
     {% block body_script %}
         <script nonce="{{request.csp_nonce}}">
-
             document.addEventListener("DOMContentLoaded", function (event) {
                 ma.pages.index();
                 const month = new Date().toLocaleString('en-GB', { month: 'long' });
@@ -23,7 +22,7 @@
                                 id: 'basic-pie',
                             },
                             title: {
-                                text: 'Monthly Sales Data',
+                                text: 'Total value of barriers resolved and estimated to be resolved in the current finanacial year',
                                 align: 'center'
                             },
                             dataLabels: {
@@ -91,7 +90,7 @@
                                 }
                             },
                             title: {
-                                text: 'Monthly Sales Data',
+                                text: 'Total value of open and partially resolved barrier by priority type',
                                 align: 'center'
                             },
                             fill: {
@@ -106,13 +105,12 @@
     {% endblock %}
 {% endblock %}
 {% block main %}
-    {% block before_content %}<div class="m-l-6">{{ block.super }}</div>{% endblock %}
     <main class="govuk-main-wrapper govuk-main-wrapper--dashboard"
           id="main-content"
           role="main">
         {% block content %}
-            <div class="govuk-grid-row grey p-l-4 p-t-6">
-                <div class="govuk-grid-column-full">
+            <div class="govuk-grid-row grey">
+                <div class="govuk-grid-column-full ma-container-full p-t-4">
                     <h1 class="govuk-heading-xl">
                         <span class="govuk-caption-m">Market access barriers</span>
                         Dashboard
@@ -148,15 +146,13 @@
                                 <h3 class="govuk-summary-card__title">See data for barriers you're working on or monitoring</h3>
                             </div>
                             {% include "barriers/partials/summary_cards.html" %}
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-full">{% include "barriers/partials/dashboard-charts.html" %}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="govuk-grid-row p-l-4 p-r-6">
-                <div class="govuk-grid-column-full">
-                    {% include "barriers/partials/dashboard-charts.html" %}
-                </div>
-                <div class="govuk-grid-row p-l-4 p-r-6">
+                <div class="govuk-grid-row">
                     <div class="govuk-grid-column-full">{% include "barriers/partials/whats_new.html" %}</div>
                 </div>
             </section>
