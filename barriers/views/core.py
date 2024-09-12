@@ -151,9 +151,16 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
         summary_url = f"dashboard-summary?{search_params}"
         summary_stats = client.get(summary_url)
 
+        metadata = get_metadata()
+
         context_data.update(
             {
                 "page": "dashboard",
+                "trading_blocs": metadata.get_trading_bloc_list(),
+                "admin_areas": self.get_admin_areas_data(
+                    metadata.get_admin_area_list()
+                ),
+                "countries_with_admin_areas": metadata.get_countries_with_admin_areas_list(),
                 # "my_barriers_saved_search": my_barriers_saved_search,
                 # "team_barriers_saved_search": team_barriers_saved_search,
                 # "draft_barriers": draft_barriers,
@@ -175,3 +182,23 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
         context_data["pagination"] = self.get_pagination_data(object_list=task_list)
 
         return context_data
+
+    def get_admin_areas_data(self, admin_areas_metadata):
+        # Admin area data works differently to both trading blocs and countries
+        # We only want admin areas for specific countries and we need them formatted and
+        # sorted in a particular way so the Javascript and HTML can display them correctly
+        # in seperate drop down lists.
+        filtered_areas = {}
+
+        for area in admin_areas_metadata:
+            country = area["country"]["id"]
+            if filtered_areas.get(f"{country}") is None:
+                filtered_areas[f"{country}"] = [
+                    {"value": area["id"], "label": area["name"]}
+                ]
+            else:
+                filtered_areas[f"{country}"].append(
+                    {"value": area["id"], "label": area["name"]}
+                )
+
+        return filtered_areas

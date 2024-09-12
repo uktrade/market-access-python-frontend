@@ -19,6 +19,7 @@
                     {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                     {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
                     {% include "partials/forms/checkbox_filter.html" with field=form.country %}
+                    {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                     {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
                     {% if filters %}
                         <a class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>

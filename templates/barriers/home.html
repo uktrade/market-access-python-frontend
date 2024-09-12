@@ -4,6 +4,9 @@
 {% block page_title %}{{ block.super }} - Homepage{% endblock %}
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
+    {{ trading_blocs|json_script:"trading-blocs-data" }}
+    {{ admin_areas|json_script:"admin-areas-data" }}
+    {{ countries_with_admin_areas|json_script:"countries-with-admin-areas-data" }}
     {% block body_script %}
         <script nonce="{{request.csp_nonce}}">
             document.addEventListener("DOMContentLoaded", function (event) {
@@ -14,6 +17,18 @@
                 newsletterLink.href = `https://data-services-help.trade.gov.uk/market-access/newsletters/${month.toLowerCase()}/${year}`;
                 newsletterLink.textContent = `DMAS newsletter for ${month} ${year}`;
 
+                // add the active filters to the active filters section
+                let countryElement = document.getElementById("country");
+                let tradingBlocElement = document.getElementById("country_trading_bloc");
+                let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent);
+                let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
+                let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
+                ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries);
+                ReactApp.renderMultiSelectFilter("policy_team", "Search teams");
+                ReactApp.renderMultiSelectFilter("region");
+                ReactApp.renderMultiSelectFilter("sector");
+
+                // load the charts
                 ReactApp.renderPieChart(
                     {
                         series: [300, 660, 50, 330],
