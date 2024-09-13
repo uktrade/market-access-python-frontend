@@ -17,8 +17,10 @@ export const handlePieChart = (
             offset: -10,
         },
         legend: {
-            show: false,
+            show: true,
+            position: 'bottom',
         },
+
     };
 
     return (
