@@ -18,9 +18,8 @@ export const handlePieChart = (
         },
         legend: {
             show: true,
-            position: 'bottom',
+            position: "bottom",
         },
-
     };
 
     return (
