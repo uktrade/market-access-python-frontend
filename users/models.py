@@ -12,6 +12,16 @@ class Group(APIModel):
             return self.name
 
 
+class DashboardTask(APIModel):
+    def to_dict(self):
+        return {
+            "barrier_code": self.barrier_code,
+            "barrier_title": self.barrier_title,
+            "message": self.message,
+            "tag": self.tag,
+        }
+
+
 class User(APIModel):
     _apps = None
 

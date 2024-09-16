@@ -117,3 +117,15 @@ body:not(.js-enabled) {
 	height: 100%;
 	width: 100%;
 }
+
+.govuk-link {
+	// extend govuk-link from govuk-frontend
+	&--no-visited-state-dark {
+		color: $govuk-black;
+		font-weight: bold;
+		padding-right: govuk-em( 15, 16 );
+		&:visited {
+			color: $govuk-black;
+		}
+	}
+}
