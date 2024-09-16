@@ -65,7 +65,7 @@ from barriers.views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from barriers.views.core import BarrierDetail, Dashboard, WhatIsABarrier
+from barriers.views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
 from barriers.views.documents import DownloadDocument
 from barriers.views.edit import (
     BarrierEditCausedByTradingBloc,
@@ -82,18 +82,11 @@ from barriers.views.edit import (
     BarrierEditTradeDirection,
 )
 from barriers.views.export_types import BarrierEditExportType
-from barriers.views.export_types import BarrierEditExportType
 from barriers.views.government_organisations import (
     BarrierAddGovernmentOrganisation,
     BarrierEditGovernmentOrganisations,
     BarrierRemoveGovernmentOrganisation,
 )
-from barriers.views.government_organisations import (
-    BarrierAddGovernmentOrganisation,
-    BarrierEditGovernmentOrganisations,
-    BarrierRemoveGovernmentOrganisation,
-)
-from barriers.views.history import BarrierHistory
 from barriers.views.history import BarrierHistory
 from barriers.views.location import (
     AddAdminArea,
@@ -101,22 +94,6 @@ from barriers.views.location import (
     BarrierEditLocation,
     BarrierEditLocationSession,
     RemoveAdminArea,
-)
-from barriers.views.location import (
-    AddAdminArea,
-    BarrierEditCountryOrTradingBloc,
-    BarrierEditLocation,
-    BarrierEditLocationSession,
-    RemoveAdminArea,
-)
-from barriers.views.mentions import (
-    MentionMarkAllAsRead,
-    MentionMarkAllAsUnread,
-    MentionMarkAsRead,
-    MentionMarkAsReadAndRedirect,
-    MentionMarkAsUnread,
-    TurnNotificationsOffAndRedirect,
-    TurnNotificationsOnAndRedirect,
 )
 from barriers.views.mentions import (
     MentionMarkAllAsRead,
@@ -135,37 +112,11 @@ from barriers.views.notes import (
     CancelNoteDocument,
     DeleteNoteDocument,
 )
-from barriers.views.notes import (
-    AddNoteDocument,
-    BarrierAddNote,
-    BarrierDeleteNote,
-    BarrierEditNote,
-    CancelNoteDocument,
-    DeleteNoteDocument,
-)
 from barriers.views.policy_teams import (
     AddPolicyTeam,
     BarrierEditPolicyTeams,
     BarrierEditPolicyTeamsSession,
     BarrierRemovePolicyTeam,
-)
-from barriers.views.policy_teams import (
-    AddPolicyTeam,
-    BarrierEditPolicyTeams,
-    BarrierEditPolicyTeamsSession,
-    BarrierRemovePolicyTeam,
-)
-from barriers.views.progress_updates import (
-    BarrierAddProgrammeFundProgressUpdate,
-    BarrierAddProgressUpdate,
-    BarrierCompleteNextStepItem,
-    BarrierEditNextStepItem,
-    BarrierEditProgressUpdate,
-    BarrierListNextStepsItems,
-    BarrierListProgressUpdate,
-    ChooseProgressUpdateTypeView,
-    ProgrammeFundEditProgressUpdate,
-    ProgrammeFundListProgressUpdate,
 )
 from barriers.views.progress_updates import (
     BarrierAddProgrammeFundProgressUpdate,
@@ -189,35 +140,11 @@ from barriers.views.public_barriers import (
     PublicBarrierPublishConfirmation,
     PublicBarrierUnpublishConfirmation,
 )
-from barriers.views.public_barriers import (
-    EditPublicEligibility,
-    EditPublicSummary,
-    EditPublicTitle,
-    PublicBarrierApprovalConfirmation,
-    PublicBarrierDetail,
-    PublicBarrierListView,
-    PublicBarrierPublishConfirmation,
-    PublicBarrierUnpublishConfirmation,
-)
 from barriers.views.saved_searches import (
     DeleteSavedSearch,
     NewSavedSearch,
     RenameSavedSearch,
     SavedSearchNotifications,
-)
-from barriers.views.saved_searches import (
-    DeleteSavedSearch,
-    NewSavedSearch,
-    RenameSavedSearch,
-    SavedSearchNotifications,
-)
-from barriers.views.search import (
-    BarrierDownloadLink,
-    BarrierSearch,
-    DownloadBarriers,
-    DownloadBarriersDelete,
-    DownloadBarriersDetail,
-    RequestBarrierDownloadApproval,
 )
 from barriers.views.search import (
     BarrierDownloadLink,
@@ -235,22 +162,7 @@ from barriers.views.sectors import (
     BarrierEditSectorsSession,
     BarrierRemoveSector,
 )
-from barriers.views.sectors import (
-    BarrierAddAllSectors,
-    BarrierAddMainSector,
-    BarrierAddSectors,
-    BarrierEditSectors,
-    BarrierEditSectorsSession,
-    BarrierRemoveSector,
-)
 from barriers.views.statuses import BarrierChangeStatus
-from barriers.views.statuses import BarrierChangeStatus
-from barriers.views.teams import (
-    BarrierTeam,
-    ChangeOwnerView,
-    DeleteTeamMember,
-    SearchTeamMember,
-)
 from barriers.views.teams import (
     BarrierTeam,
     ChangeOwnerView,
@@ -264,15 +176,6 @@ from barriers.views.wto import (
     EditWTOProfile,
     EditWTOStatus,
 )
-from barriers.views.wto import (
-    AddWTODocument,
-    CancelWTODocuments,
-    DeleteWTODocument,
-    EditWTOProfile,
-    EditWTOStatus,
-)
-from .views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
-from .views.documents import DownloadDocument
 
 app_name = "barriers"
 
