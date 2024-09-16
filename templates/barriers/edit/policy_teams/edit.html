@@ -12,7 +12,7 @@
     {% include 'partials/heading.html' with text='Policy team' %}
     {% form_error_banner form %}
 
-    <h3 class="report-sectors-heading">Save or add another policy team</h3>
+    <h3 class="report-sectors-heading">Add or remove a policy team</h3>
 
     <div class="selection-list restrict-width">
         <h3 class="selection-list__heading">Selected policy teams</h3>
@@ -32,7 +32,11 @@
             </ul>
         {% endif %}
 
+<<<<<<< HEAD
         <a href="{% url 'barriers:add_policy_team' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add another policy team</a>
+=======
+        <a href="{% url 'barriers:add_policy_team' barrier.id %}" class="govuk-button button--secondary selection-list__add-button">Add a policy team</a>
+>>>>>>> origin
     </div>
 
     <form action="" method="POST">
