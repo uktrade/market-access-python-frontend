@@ -273,7 +273,6 @@ from barriers.views.wto import (
 )
 from .views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
 from .views.documents import DownloadDocument
-from .views.edit import (
 
 app_name = "barriers"
 
