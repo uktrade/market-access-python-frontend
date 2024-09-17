@@ -164,9 +164,9 @@ from barriers.views.wto import (
 from .views.core import (
     BarrierDetail,
     Dashboard,
+    GetDashboardSummary,
     Home,
     WhatIsABarrier,
-    GetDashboardSummary,
 )
 from .views.documents import DownloadDocument
 from .views.edit import (

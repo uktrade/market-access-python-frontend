@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { render } from "react-dom";
 
-const SummaryCard = ({value, description, url, search_params}) => {
-
+const SummaryCard = ({ value, description, url, search_params }) => {
     const handleSearchParam = () => {
         return `${url}?${search_params}`;
     };
@@ -11,7 +10,8 @@ const SummaryCard = ({value, description, url, search_params}) => {
         <div className="govuk-grid-column-one-third">
             <div className="govuk-inset-text summary-card">
                 <p>
-                    <span className="govuk-heading-xl">{value}</span> {description}
+                    <span className="govuk-heading-xl">{value}</span>{" "}
+                    {description}
                 </p>
                 <div className="summary-card__data-link">
                     <a href={handleSearchParam()}>See the barriers</a>
@@ -19,10 +19,9 @@ const SummaryCard = ({value, description, url, search_params}) => {
             </div>
         </div>
     );
-}
+};
 
 const SummaryCards = () => {
-
     const form = document.querySelector("#filters-form");
 
     const remove_hidden = false;
@@ -30,7 +29,9 @@ const SummaryCards = () => {
     const applyFiltersButton = document.querySelector("#apply-filters-button");
 
     useEffect(() => {
-        const handleApplyFilters = async (/** @type {{ preventDefault: () => void; }} */ event) => {
+        const handleApplyFilters = async (
+            /** @type {{ preventDefault: () => void; }} */ event,
+        ) => {
             event.preventDefault();
             const params = getSearchParamsFromForm();
             await fetchData(params);
@@ -42,7 +43,10 @@ const SummaryCards = () => {
 
         return () => {
             if (applyFiltersButton) {
-                applyFiltersButton.removeEventListener("click", handleApplyFilters);
+                applyFiltersButton.removeEventListener(
+                    "click",
+                    handleApplyFilters,
+                );
             }
         };
     }, []);
@@ -53,17 +57,18 @@ const SummaryCards = () => {
 
     /**
      * Fetches data from the server based on the provided query parameters.
-     * 
+     *
      * @param {string} queryParams - The query parameters to be included in the request URL.
      * @returns {Promise<void>} - A promise that resolves when the data is fetched and set.
      */
     const fetchData = async (queryParams) => {
-    
         // update the current URL with the new query params
         const searchParams = new URLSearchParams(queryParams);
         window.history.pushState({}, "", `?${searchParams.toString()}`);
 
-        const url = queryParams ? `/dashboard-summary/?${queryParams}` : "/dashboard-summary/";
+        const url = queryParams
+            ? `/dashboard-summary/?${queryParams}`
+            : "/dashboard-summary/";
         const response = await fetch(url, {
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
@@ -86,10 +91,10 @@ const SummaryCards = () => {
         return new Date(date).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "long",
-            year: "numeric"
+            year: "numeric",
         });
-    }
-    
+    };
+
     useEffect(() => {
         fetchData("");
     }, []);
@@ -103,46 +108,78 @@ const SummaryCards = () => {
                 label: key,
                 value: params[key],
                 readable_value: params[key],
-                remove_url: searchParams.toString().replace(`${key}=${params[key]}`, ""),
+                remove_url: searchParams
+                    .toString()
+                    .replace(`${key}=${params[key]}`, ""),
             };
         });
         setFilters(filters);
     }, [window.location.search]);
-
 
     return (
         <>
             <h3 className="govuk-summary-card__title">Summary data</h3>
             <div className="p-l-3" id="active filters">
                 <ul className="govuk-list">
-                    {filters.map((filter, index) => (
-                        filter.value && (
-                            <li className="active-filters__item" key={index}>
-                                {remove_hidden ? (
-                                    <>
-                                        <h4 className="active-filter__heading">{filter.label}:</h4>
-                                        <p className="active-filter__text">{filter.readable_value.replace(/<\/?[^>]+(>|$)/g, "")}</p>
-                                    </>
-                                ) : (
-                                    <a
-                                        href={filter.remove_url ? `?${filter.remove_url}` : '/barriers/search'}
-                                        className="active-filters__item__link"
-                                        title={`Remove ${filter.label} filter`}
-                                    >
-                                        <h4 className="active-filter__heading">{filter.label}:</h4>
-                                        <p className="active-filter__text">{filter.readable_value.replace(/<\/?[^>]+(>|$)/g, "")}</p>
-                                        <span className="sr-only govuk-visually-hidden">
-                                            Activate link to remove {filter.label} filter with value open quote {filter.readable_value.replace(/<\/?[^>]+(>|$)/g, "")} end quote.
-                                        </span>
-                                    </a>
-                                )}
-                            </li>
-                        )
-                    ))}
+                    {filters.map(
+                        (filter, index) =>
+                            filter.value && (
+                                <li
+                                    className="active-filters__item"
+                                    key={index}
+                                >
+                                    {remove_hidden ? (
+                                        <>
+                                            <h4 className="active-filter__heading">
+                                                {filter.label}:
+                                            </h4>
+                                            <p className="active-filter__text">
+                                                {filter.readable_value.replace(
+                                                    /<\/?[^>]+(>|$)/g,
+                                                    "",
+                                                )}
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <a
+                                            href={
+                                                filter.remove_url
+                                                    ? `?${filter.remove_url}`
+                                                    : "/barriers/search"
+                                            }
+                                            className="active-filters__item__link"
+                                            title={`Remove ${filter.label} filter`}
+                                        >
+                                            <h4 className="active-filter__heading">
+                                                {filter.label}:
+                                            </h4>
+                                            <p className="active-filter__text">
+                                                {filter.readable_value.replace(
+                                                    /<\/?[^>]+(>|$)/g,
+                                                    "",
+                                                )}
+                                            </p>
+                                            <span className="sr-only govuk-visually-hidden">
+                                                Activate link to remove{" "}
+                                                {filter.label} filter with value
+                                                open quote{" "}
+                                                {filter.readable_value.replace(
+                                                    /<\/?[^>]+(>|$)/g,
+                                                    "",
+                                                )}{" "}
+                                                end quote.
+                                            </span>
+                                        </a>
+                                    )}
+                                </li>
+                            ),
+                    )}
                 </ul>
             </div>
             <div className="govuk-grid-row">
-                <h3 className="govuk-summary-card__title p-l-3">Open barriers</h3>
+                <h3 className="govuk-summary-card__title p-l-3">
+                    Open barriers
+                </h3>
                 <SummaryCard
                     value={data && data.barriers.open}
                     description="barriers are open."
@@ -164,7 +201,12 @@ const SummaryCards = () => {
             </div>
             <div className="govuk-grid-row">
                 <h3 className="govuk-summary-card__title p-l-3">
-                    {`Barriers which have been resolved or are projected to be resolved between ${parseIso(data && data.financial_year.current_start)} and ${parseIso(data && data.financial_year.current_end)} current financial year`}.
+                    {`Barriers which have been resolved or are projected to be resolved between ${parseIso(
+                        data && data.financial_year.current_start,
+                    )} and ${parseIso(
+                        data && data.financial_year.current_end,
+                    )} current financial year`}
+                    .
                 </h3>
                 <SummaryCard
                     value={data && data.barriers_current_year.open}
@@ -187,15 +229,11 @@ const SummaryCards = () => {
             </div>
         </>
     );
-}
+};
 
 const renderSummaryCards = (/** @type {string} */ elementId) => {
     const element = document.getElementById(elementId);
-    render(
-        <SummaryCards
-        />,
-        element
-    );
-}
+    render(<SummaryCards />, element);
+};
 
 export default renderSummaryCards;
