@@ -1,7 +1,9 @@
 import logging
 import urllib.parse
 
+from django.views import View
 from django.views.generic import TemplateView
+from django.http import JsonResponse
 
 from barriers.forms.search import BarrierSearchForm
 from barriers.views.search import SearchFormView
@@ -202,3 +204,11 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
                 )
 
         return filtered_areas
+
+
+class GetDashboardSummary(View):
+    def get(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(request.session.get("sso_token"))
+        summary_url = f"dashboard-summary?{request.GET.urlencode()}"
+        resp = client.get(summary_url)
+        return JsonResponse(resp)

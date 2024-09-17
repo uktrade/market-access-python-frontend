@@ -161,7 +161,13 @@ from barriers.views.wto import (
     EditWTOStatus,
 )
 
-from .views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
+from .views.core import (
+    BarrierDetail,
+    Dashboard,
+    Home,
+    WhatIsABarrier,
+    GetDashboardSummary,
+)
 from .views.documents import DownloadDocument
 from .views.edit import (
     BarrierEditCausedByTradingBloc,
@@ -898,4 +904,5 @@ urlpatterns = [
         name="mention_turn_notifications_on",
     ),
     path("home/", Home.as_view(), name="home"),
+    path("dashboard-summary/", GetDashboardSummary.as_view(), name="dashboard_summary"),
 ]
