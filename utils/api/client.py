@@ -14,6 +14,7 @@ from .resources import (
     BarrierDownloadsResource,
     BarriersResource,
     CommoditiesResource,
+    DashboardTasksResource,
     DocumentsResource,
     EconomicAssessmentResource,
     EconomicImpactAssessmentResource,
@@ -59,6 +60,7 @@ class MarketAccessAPIClient:
         self.action_plan_stakeholders = ActionPlanStakeholderResource(self)
         self.feedback = FeedbackResource(self)
         self.barrier_download = BarrierDownloadsResource(self)
+        self.dashboard_tasks = DashboardTasksResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

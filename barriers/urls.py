@@ -65,7 +65,7 @@ from barriers.views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from barriers.views.core import BarrierDetail, Dashboard, WhatIsABarrier
+from barriers.views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
 from barriers.views.documents import DownloadDocument
 from barriers.views.edit import (
     BarrierEditCausedByTradingBloc,
@@ -896,4 +896,5 @@ urlpatterns = [
         TurnNotificationsOnAndRedirect.as_view(),
         name="mention_turn_notifications_on",
     ),
+    path("home/", Home.as_view(), name="home"),
 ]
