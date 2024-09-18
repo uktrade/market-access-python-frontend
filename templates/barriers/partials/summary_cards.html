@@ -22,7 +22,7 @@
                     {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                     {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
                     {% if filters %}
-                        <a class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>
+                        <a id="clear-filters-button" class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>
                     {% endif %}
                     <input type="hidden" id="status" name="status" value="2">
                     <input type="submit"

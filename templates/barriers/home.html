@@ -23,13 +23,14 @@
                 let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent);
                 let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
                 let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
+
+                // load summary cards
+                ReactApp.renderSummaryCards("summary-cards", [...tradingBlocs, ...adminAreasCountries]);
+
                 ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries);
                 ReactApp.renderMultiSelectFilter("policy_team", "Search teams");
                 ReactApp.renderMultiSelectFilter("region");
                 ReactApp.renderMultiSelectFilter("sector");
-
-                // load summary cards
-                ReactApp.renderSummaryCards("summary-cards");
 
                 // load the charts
                 ReactApp.renderPieChart(

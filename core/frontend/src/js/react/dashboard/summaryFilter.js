@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { render } from "react-dom";
 
+import { getCheckboxValues } from "../utils";
+
 const SummaryCard = ({ value, description, url, search_params }) => {
     const handleSearchParam = () => {
         return `${url}?${search_params}`;
@@ -21,35 +23,19 @@ const SummaryCard = ({ value, description, url, search_params }) => {
     );
 };
 
-const SummaryCards = () => {
+const getOptionValue = (htmlElement) => {
+    const label = htmlElement.querySelector("legend").textContent.trim();
+    const options = getCheckboxValues(htmlElement);
+    return { label, options };
+};
+
+const SummaryCards = ({filterValues}) => {
+
     const form = document.querySelector("#filters-form");
 
-    const remove_hidden = false;
+    const remove_hidden = true;
 
     const applyFiltersButton = document.querySelector("#apply-filters-button");
-
-    useEffect(() => {
-        const handleApplyFilters = async (
-            /** @type {{ preventDefault: () => void; }} */ event,
-        ) => {
-            event.preventDefault();
-            const params = getSearchParamsFromForm();
-            await fetchData(params);
-        };
-
-        if (applyFiltersButton) {
-            applyFiltersButton.addEventListener("click", handleApplyFilters);
-        }
-
-        return () => {
-            if (applyFiltersButton) {
-                applyFiltersButton.removeEventListener(
-                    "click",
-                    handleApplyFilters,
-                );
-            }
-        };
-    }, []);
 
     const [data, setData] = useState(null);
 
@@ -95,6 +81,42 @@ const SummaryCards = () => {
         });
     };
 
+    const getReadableValue = (/** @type {string} */ value, /** @type {string} */ type) => {
+        if (type === "region") {
+            return filterValues.region.find((region) => region.value === value).label;
+        } else if (type === "sector") {
+            return filterValues.sector.find((sector) => sector.value === value).label;
+        } else if (type === "policy_team") {
+            return filterValues.policy_team.find((policy_team) => policy_team.value === value).label;
+        } else if (type === "country") {
+            return filterValues.location.find((location) => location.value === value).label;
+        }
+        return value;
+    };
+
+    useEffect(() => {
+        const handleApplyFilters = async (
+            /** @type {{ preventDefault: () => void; }} */ event,
+        ) => {
+            event.preventDefault();
+            const params = getSearchParamsFromForm();
+            await fetchData(params);
+        };
+
+        if (applyFiltersButton) {
+            applyFiltersButton.addEventListener("click", handleApplyFilters);
+        }
+
+        return () => {
+            if (applyFiltersButton) {
+                applyFiltersButton.removeEventListener(
+                    "click",
+                    handleApplyFilters,
+                );
+            }
+        };
+    }, []);
+
     useEffect(() => {
         fetchData("");
     }, []);
@@ -102,17 +124,29 @@ const SummaryCards = () => {
     useEffect(() => {
         // set filters to be used in the summary cards
         const searchParams = new URLSearchParams(window.location.search);
-        const params = Object.fromEntries(searchParams.entries());
-        const filters = Object.keys(params).map((key) => {
-            return {
-                label: key,
-                value: params[key],
-                readable_value: params[key],
-                remove_url: searchParams
-                    .toString()
-                    .replace(`${key}=${params[key]}`, ""),
-            };
+        const params = {};
+        
+        // Use forEach to handle duplicate keys
+        searchParams.forEach((value, key) => {
+            if (!params[key]) {
+                params[key] = [];
+            }
+            params[key].push(value);
         });
+    
+        // Build filters array
+        const filters = Object.keys(params).map((key) => {
+            const values = params[key];
+            return values.map((val) => ({
+                label: key,
+                value: val,
+                readable_value: val && getReadableValue(val, key),
+                remove_url: new URLSearchParams(
+                    [...searchParams].filter(([paramKey, paramValue]) => !(paramKey === key && paramValue === val))
+                ).toString(),
+            }));
+        }).flat();
+    
         setFilters(filters);
     }, [window.location.search]);
 
@@ -120,61 +154,73 @@ const SummaryCards = () => {
         <>
             <h3 className="govuk-summary-card__title">Summary data</h3>
             <div className="p-l-3" id="active filters">
-                <ul className="govuk-list">
-                    {filters.map(
-                        (filter, index) =>
-                            filter.value && (
-                                <li
-                                    className="active-filters__item"
-                                    key={index}
-                                >
-                                    {remove_hidden ? (
-                                        <>
-                                            <h4 className="active-filter__heading">
-                                                {filter.label}:
-                                            </h4>
-                                            <p className="active-filter__text">
-                                                {filter.readable_value.replace(
-                                                    /<\/?[^>]+(>|$)/g,
-                                                    "",
-                                                )}
-                                            </p>
-                                        </>
-                                    ) : (
-                                        <a
-                                            href={
-                                                filter.remove_url
-                                                    ? `?${filter.remove_url}`
-                                                    : "/barriers/search"
-                                            }
-                                            className="active-filters__item__link"
-                                            title={`Remove ${filter.label} filter`}
-                                        >
-                                            <h4 className="active-filter__heading">
-                                                {filter.label}:
-                                            </h4>
-                                            <p className="active-filter__text">
-                                                {filter.readable_value.replace(
-                                                    /<\/?[^>]+(>|$)/g,
-                                                    "",
-                                                )}
-                                            </p>
-                                            <span className="sr-only govuk-visually-hidden">
-                                                Activate link to remove{" "}
-                                                {filter.label} filter with value
-                                                open quote{" "}
-                                                {filter.readable_value.replace(
-                                                    /<\/?[^>]+(>|$)/g,
-                                                    "",
-                                                )}{" "}
-                                                end quote.
-                                            </span>
-                                        </a>
-                                    )}
-                                </li>
-                            ),
-                    )}
-                </ul>
+            <ul className="govuk-list">
+    {Object.entries(
+        filters.reduce((acc, filter) => {
+            if (filter.value) {
+                // Group filters by label, appending values under the same label
+                if (!acc[filter.label]) {
+                    acc[filter.label] = [];
+                }
+                acc[filter.label].push({
+                    readable_value: filter.readable_value,
+                    remove_url: filter.remove_url,
+                });
+            }
+            return acc;
+        }, {})
+    ).map(([label, values], index) => {
+
+        return <li className="active-filters__item" key={index}>
+            {remove_hidden ? (
+                <>
+                    <h4 className="active-filter__heading">{label}:</h4>
+                    <p className="active-filter__text">
+                        {values
+                            .map((value) =>
+                                value.readable_value
+                                    ? value.readable_value.replace(/<\/?[^>]+(>|$)/g, "")
+                                    : ""
+                            )
+                            .join(", ")}
+                    </p>
+                </>
+            ) : (
+                <a
+                    href={
+                        values.length === 1 && values[0].remove_url
+                            ? `?${values[0].remove_url}`
+                            : "/barriers/search"
+                    }
+                    className="active-filters__item__link"
+                    title={`Remove ${label} filter`}
+                >
+                    <h4 className="active-filter__heading">{label}:</h4>
+                    <p className="active-filter__text">
+                        {values
+                            .map((value) =>
+                                value.readable_value
+                                    ? value.readable_value.replace(/<\/?[^>]+(>|$)/g, "")
+                                    : ""
+                            )
+                            .join(", ")}
+                    </p>
+                    <span className="sr-only govuk-visually-hidden">
+                        Activate link to remove {label} filter with value open quote{" "}
+                        {values
+                            .map((value) =>
+                                value.readable_value
+                                    ? value.readable_value.replace(/<\/?[^>]+(>|$)/g, "")
+                                    : ""
+                            )
+                            .join(", ")}{" "}
+                        end quote.
+                    </span>
+                </a>
+            )}
+        </li>
+})}
+</ul>
             </div>
             <div className="govuk-grid-row">
                 <h3 className="govuk-summary-card__title p-l-3">
@@ -231,9 +277,21 @@ const SummaryCards = () => {
     );
 };
 
-const renderSummaryCards = (/** @type {string} */ elementId) => {
+const renderSummaryCards = (elementId, locationObj) => {
     const element = document.getElementById(elementId);
-    render(<SummaryCards />, element);
+
+    const region = document.getElementById("region");
+    const sector = document.getElementById("sector");
+    const policy_team = document.getElementById("policy_team");
+    const country = document.getElementById("country");
+
+    const filterValues = {
+        region: getOptionValue(region).options,
+        sector: getOptionValue(sector).options,
+        policy_team: getOptionValue(policy_team).options,
+        location: getOptionValue(country).options,
+    }
+    render(<SummaryCards filterValues={filterValues} />, element);
 };
 
 export default renderSummaryCards;
