@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { render } from "react-dom";
 
 import { getCheckboxValues } from "../utils";
+import { BARRIER_STATUS } from "../constants";
 
 const SummaryCard = ({ value, description, url, search_params }) => {
     const handleSearchParam = () => {
@@ -98,6 +99,8 @@ const SummaryCards = ({ filterValues }) => {
             return filterValues.location.find(
                 (location) => location.value === value,
             ).label;
+        } else if (type === "status") {
+            return BARRIER_STATUS[value];
         }
         return value;
     };
@@ -126,7 +129,7 @@ const SummaryCards = ({ filterValues }) => {
     }, []);
 
     useEffect(() => {
-        fetchData("");
+        fetchData("status=2");
     }, []);
 
     useEffect(() => {
@@ -258,19 +261,19 @@ const SummaryCards = ({ filterValues }) => {
                 <SummaryCard
                     value={data && data.barriers.open}
                     description="barriers are open."
-                    url="{% url 'barriers:search' %}"
+                    url="/search"
                     search_params={getSearchParamsFromForm()}
                 />
                 <SummaryCard
                     value={data && data.barriers.pb100}
                     description="PB100 barriers are open."
-                    url="{% url 'barriers:search' %}"
+                    url="/search"
                     search_params={`${getSearchParamsFromForm()}&combined_priority=APPROVED`}
                 />
                 <SummaryCard
                     value={data && data.barriers.overseas_delivery}
                     description="Overseas delivery barriers are open."
-                    url="{% url 'barriers:search' %}"
+                    url="/search"
                     search_params={getSearchParamsFromForm()}
                 />
             </div>
@@ -286,7 +289,7 @@ const SummaryCards = ({ filterValues }) => {
                 <SummaryCard
                     value={data && data.barriers_current_year.open}
                     description="barriers have been resolved in the current financial year."
-                    url="{% url 'barriers:search' %}"
+                    url="/search"
                     search_params={getSearchParamsFromForm()}
                 />
                 <SummaryCard
