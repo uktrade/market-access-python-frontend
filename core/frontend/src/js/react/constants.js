@@ -9,5 +9,5 @@ export const BARRIER_STATUS = {
     3: "Rejected",
     4: "Resolved",
     5: "Hibernated",
-    6: "Archived"
+    6: "Archived",
 };
