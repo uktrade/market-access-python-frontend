@@ -35,19 +35,19 @@
                 // load the charts
                 ReactApp.renderPieChart(
                     {
-                        series: [300, 660, 50, 330],
+                        series: {{ summary_stats.barriers_by_status_chart.series}},
                         options: {
                             chart: {
                                 id: 'basic-pie',
                             },
                             title: {
-                                text: 'Total value of barriers resolved and estimated to be resolved in the current finanacial year',
+                                text: 'Total value of open and partially resolved barrier by priority type',
                                 align: 'center'
                             },
                             dataLabels: {
                                 enabled: false
                             },
-                            labels: ['Top 100 Priority Barriers', 'Overseas Delivery', 'Non Profit', 'Watchlist'],
+                            labels: {{ summary_stats.barriers_by_status_chart.labels|safe}},
                             colors: ['#28a197', '#003078', '#d4351c', '#912b88'],
                         }
                     },"pie-chart");
@@ -57,11 +57,11 @@
                         series: [
                             {
                                 name: "Open Barriers",
-                                data: [30]
+                                data: [{{ summary_stats.total_value_chart.open_barriers_value }}]
                             },
                             {
                                 name: "Resolved Barriers",
-                                data: [40]
+                                data: [{{ summary_stats.total_value_chart.resolved_barriers_value }}]
                             }
                         ],
                         options: {
@@ -88,12 +88,12 @@
                     {
                         series: [
                             {
-                                name: 'Resolved Barriers',
-                                data: [330]
+                                name: 'Value of resolved barriers ',
+                                data: [{{ summary_stats.barrier_value_chart.resolved_barriers_value }}]
                             },
                             {
-                                name: 'Estimated Value',
-                                data: [2300]
+                                name: 'Value of barriers estimated to be resolved',
+                                data: [{{ summary_stats.barrier_value_chart.estimated_barriers_value }}]
                             }
                         ],
                         options: {
@@ -105,11 +105,11 @@
                             },
                             yaxis: {
                                 title: {
-                                    text: 'Mn£'
+                                    text: '£'
                                 }
                             },
                             title: {
-                                text: 'Total value of open and partially resolved barrier by priority type',
+                                text: 'Total value of barriers resolved and estimated in the current finanacial year',
                                 align: 'center'
                             },
                             fill: {
