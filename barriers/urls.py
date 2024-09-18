@@ -65,7 +65,6 @@ from barriers.views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from barriers.views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
 from barriers.views.documents import DownloadDocument
 from barriers.views.edit import (
     BarrierEditCausedByTradingBloc,
