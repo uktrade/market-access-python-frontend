@@ -319,7 +319,7 @@ function LocationFilter(props) {
                     <div className="checkbox-filter govuk-!-width-full">
                         {selectedCountryTradingBlocs.map(
                             (tradingBloc, index) => (
-                                <div className="checkbox-filter__item">
+                                <div className="checkbox-filter__item" key={index}>
                                     <input
                                         className="checkbox-filter__input"
                                         id={"extra_location" + index}
