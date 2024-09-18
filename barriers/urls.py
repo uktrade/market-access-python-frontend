@@ -65,6 +65,22 @@ from barriers.views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
+from barriers.views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
+from barriers.views.documents import DownloadDocument
+from barriers.views.edit import (
+    BarrierEditCausedByTradingBloc,
+    BarrierEditCommercialValue,
+    BarrierEditEconomicAssessmentEligibility,
+    BarrierEditEstimatedResolutionDate,
+    BarrierEditEstimatedResolutionDateConfirmationPage,
+    BarrierEditPriority,
+    BarrierEditProduct,
+    BarrierEditStartDate,
+    BarrierEditSummary,
+    BarrierEditTags,
+    BarrierEditTitle,
+    BarrierEditTradeDirection,
+)
 from barriers.views.export_types import BarrierEditExportType
 from barriers.views.government_organisations import (
     BarrierAddGovernmentOrganisation,
