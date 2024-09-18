@@ -21,30 +21,8 @@ from barriers.views.action_plans import (
     RemoveActionPlanOwner,
     SelectActionPlanOwner,
 )
-from barriers.views.mentions import (
-    MentionMarkAllAsRead,
-    MentionMarkAllAsUnread,
-    MentionMarkAsRead,
-    MentionMarkAsReadAndRedirect,
-    MentionMarkAsUnread,
-    TurnNotificationsOffAndRedirect,
-    TurnNotificationsOnAndRedirect,
-)
-from barriers.views.progress_updates import (
-    BarrierAddProgrammeFundProgressUpdate,
-    BarrierAddProgressUpdate,
-    BarrierCompleteNextStepItem,
-    BarrierEditNextStepItem,
-    BarrierEditProgressUpdate,
-    BarrierListNextStepsItems,
-    BarrierListProgressUpdate,
-    ChooseProgressUpdateTypeView,
-    ProgrammeFundEditProgressUpdate,
-    ProgrammeFundListProgressUpdate,
-)
-
-from .views.archive import ArchiveBarrier, UnarchiveBarrier
-from .views.assessments.economic import (
+from barriers.views.archive import ArchiveBarrier, UnarchiveBarrier
+from barriers.views.assessments.economic import (
     AddEconomicAssessment,
     AddEconomicAssessmentDocument,
     ArchiveEconomicAssessment,
@@ -55,41 +33,41 @@ from .views.assessments.economic import (
     EconomicAssessmentRawData,
     EditEconomicAssessmentRating,
 )
-from .views.assessments.economic_impact import (
+from barriers.views.assessments.economic_impact import (
     AddEconomicImpactAssessment,
     ArchiveEconomicImpactAssessment,
     EconomicImpactAssessmentDetail,
 )
-from .views.assessments.overview import AssessmentOverview
-from .views.assessments.resolvability import (
+from barriers.views.assessments.overview import AssessmentOverview
+from barriers.views.assessments.resolvability import (
     AddResolvabilityAssessment,
     ArchiveResolvabilityAssessment,
     EditResolvabilityAssessment,
     ResolvabilityAssessmentDetail,
 )
-from .views.assessments.strategic import (
+from barriers.views.assessments.strategic import (
     AddStrategicAssessment,
     ArchiveStrategicAssessment,
     EditStrategicAssessment,
     StrategicAssessmentDetail,
 )
-from .views.categories import (
+from barriers.views.categories import (
     AddCategory,
     BarrierEditCategories,
     BarrierEditCategoriesSession,
     BarrierRemoveCategory,
 )
-from .views.commodities import BarrierEditCommodities
-from .views.companies import (
+from barriers.views.commodities import BarrierEditCommodities
+from barriers.views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
     BarrierRemoveCompany,
     BarrierSearchCompany,
     CompanyDetail,
 )
-from .views.core import BarrierDetail, Dashboard, WhatIsABarrier
-from .views.documents import DownloadDocument
-from .views.edit import (
+from barriers.views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
+from barriers.views.documents import DownloadDocument
+from barriers.views.edit import (
     BarrierEditCausedByTradingBloc,
     BarrierEditCommercialValue,
     BarrierEditEconomicAssessmentEligibility,
@@ -103,21 +81,30 @@ from .views.edit import (
     BarrierEditTitle,
     BarrierEditTradeDirection,
 )
-from .views.export_types import BarrierEditExportType
-from .views.government_organisations import (
+from barriers.views.export_types import BarrierEditExportType
+from barriers.views.government_organisations import (
     BarrierAddGovernmentOrganisation,
     BarrierEditGovernmentOrganisations,
     BarrierRemoveGovernmentOrganisation,
 )
-from .views.history import BarrierHistory
-from .views.location import (
+from barriers.views.history import BarrierHistory
+from barriers.views.location import (
     AddAdminArea,
     BarrierEditCountryOrTradingBloc,
     BarrierEditLocation,
     BarrierEditLocationSession,
     RemoveAdminArea,
 )
-from .views.notes import (
+from barriers.views.mentions import (
+    MentionMarkAllAsRead,
+    MentionMarkAllAsUnread,
+    MentionMarkAsRead,
+    MentionMarkAsReadAndRedirect,
+    MentionMarkAsUnread,
+    TurnNotificationsOffAndRedirect,
+    TurnNotificationsOnAndRedirect,
+)
+from barriers.views.notes import (
     AddNoteDocument,
     BarrierAddNote,
     BarrierDeleteNote,
@@ -125,7 +112,25 @@ from .views.notes import (
     CancelNoteDocument,
     DeleteNoteDocument,
 )
-from .views.public_barriers import (
+from barriers.views.policy_teams import (
+    AddPolicyTeam,
+    BarrierEditPolicyTeams,
+    BarrierEditPolicyTeamsSession,
+    BarrierRemovePolicyTeam,
+)
+from barriers.views.progress_updates import (
+    BarrierAddProgrammeFundProgressUpdate,
+    BarrierAddProgressUpdate,
+    BarrierCompleteNextStepItem,
+    BarrierEditNextStepItem,
+    BarrierEditProgressUpdate,
+    BarrierListNextStepsItems,
+    BarrierListProgressUpdate,
+    ChooseProgressUpdateTypeView,
+    ProgrammeFundEditProgressUpdate,
+    ProgrammeFundListProgressUpdate,
+)
+from barriers.views.public_barriers import (
     EditPublicEligibility,
     EditPublicSummary,
     EditPublicTitle,
@@ -135,13 +140,13 @@ from .views.public_barriers import (
     PublicBarrierPublishConfirmation,
     PublicBarrierUnpublishConfirmation,
 )
-from .views.saved_searches import (
+from barriers.views.saved_searches import (
     DeleteSavedSearch,
     NewSavedSearch,
     RenameSavedSearch,
     SavedSearchNotifications,
 )
-from .views.search import (
+from barriers.views.search import (
     BarrierDownloadLink,
     BarrierSearch,
     DownloadBarriers,
@@ -149,7 +154,7 @@ from .views.search import (
     DownloadBarriersDetail,
     RequestBarrierDownloadApproval,
 )
-from .views.sectors import (
+from barriers.views.sectors import (
     BarrierAddAllSectors,
     BarrierAddMainSector,
     BarrierAddSectors,
@@ -157,14 +162,14 @@ from .views.sectors import (
     BarrierEditSectorsSession,
     BarrierRemoveSector,
 )
-from .views.statuses import BarrierChangeStatus
-from .views.teams import (
+from barriers.views.statuses import BarrierChangeStatus
+from barriers.views.teams import (
     BarrierTeam,
     ChangeOwnerView,
     DeleteTeamMember,
     SearchTeamMember,
 )
-from .views.wto import (
+from barriers.views.wto import (
     AddWTODocument,
     CancelWTODocuments,
     DeleteWTODocument,
@@ -458,6 +463,26 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/types/add/",
         AddCategory.as_view(),
         name="add_category",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/policy-teams/",
+        BarrierEditPolicyTeamsSession.as_view(),
+        name="edit_policy_teams_session",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/policy-teams/edit/",
+        BarrierEditPolicyTeams.as_view(),
+        name="edit_policy_teams",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/policy-teams/remove/",
+        BarrierRemovePolicyTeam.as_view(),
+        name="remove_policy_team",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/policy-teams/add/",
+        AddPolicyTeam.as_view(),
+        name="add_policy_team",
     ),
     path(
         "barriers/<uuid:barrier_id>/sectors/",
@@ -871,4 +896,5 @@ urlpatterns = [
         TurnNotificationsOnAndRedirect.as_view(),
         name="mention_turn_notifications_on",
     ),
+    path("home/", Home.as_view(), name="home"),
 ]

@@ -55,6 +55,10 @@ class BarrierSearchForm(forms.Form):
         label="Category",
         required=False,
     )
+    policy_team = forms.MultipleChoiceField(
+        label="Policy team",
+        required=False,
+    )
     region = forms.MultipleChoiceField(
         label="Overseas region",
         required=False,
@@ -260,6 +264,7 @@ class BarrierSearchForm(forms.Form):
         self.set_sector_choices()
         self.set_organisation_choices()
         self.set_category_choices()
+        self.set_policy_team_choices()
         self.set_region_choices()
         self.set_status_choices()
         self.set_tags_choices()
@@ -334,6 +339,13 @@ class BarrierSearchForm(forms.Form):
         choices = list(set(choices))
         choices.sort(key=itemgetter(1))
         self.fields["category"].choices = choices
+
+    def set_policy_team_choices(self):
+        choices = [
+            (str(policy_team["id"]), policy_team["title"])
+            for policy_team in self.metadata.data["policy_teams"]
+        ]
+        self.fields["policy_team"].choices = choices
 
     def set_region_choices(self):
         choices = [
@@ -446,14 +458,19 @@ class BarrierSearchForm(forms.Form):
             + self.cleaned_data.get("region", [])
             + self.cleaned_data.get("extra_location", [])
         )
+        # params["region"] = self.cleaned_data.get("region", [])
+        # params["country"] = self.cleaned_data.get("country", [])
+
         params["admin_areas"] = ",".join(self.format_admin_areas())
         params["trade_direction"] = ",".join(
             self.cleaned_data.get("trade_direction", [])
         )
         params["sector"] = ",".join(self.cleaned_data.get("sector", []))
+        # params["sector"] = self.cleaned_data.get("sector", [])
         params["ignore_all_sectors"] = self.cleaned_data.get("ignore_all_sectors")
         params["organisation"] = ",".join(self.cleaned_data.get("organisation", []))
         params["category"] = ",".join(self.cleaned_data.get("category", []))
+        params["policy_team"] = ",".join(self.cleaned_data.get("policy_team", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))
         for status_value in STATUS_WITH_DATE_FILTER:

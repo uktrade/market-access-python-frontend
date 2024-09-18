@@ -26,6 +26,8 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.title == "Import quota for sports cars"
         assert barrier.categories[0]["title"] == "Import quotas"
         assert barrier.categories[1]["title"] == "Tariffs or import duties"
+        assert barrier.policy_teams[0]["title"] == "Procurement"
+        assert barrier.policy_teams[1]["title"] == "Rules of Origin (RoO)"
 
         assert barrier.is_resolved is True
         assert barrier.is_partially_resolved is False

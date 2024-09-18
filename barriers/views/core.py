@@ -1,9 +1,17 @@
+import logging
+import urllib.parse
+
 from django.views.generic import TemplateView
 
+from barriers.forms.search import BarrierSearchForm
+from barriers.views.search import SearchFormView
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
+from utils.pagination import PaginationMixin
 
 from .mixins import AnalyticsMixin, BarrierMixin
+
+logger = logging.getLogger(__name__)
 
 
 class Dashboard(AnalyticsMixin, TemplateView):
@@ -75,4 +83,93 @@ class WhatIsABarrier(TemplateView):
         metadata = get_metadata()
         context_data["goods"] = metadata.get_goods()
         context_data["services"] = metadata.get_services()
+        return context_data
+
+
+class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
+    template_name = "barriers/home.html"
+    utm_tags = {
+        "en": {
+            "utm_source": "notification-email",
+            "utm_medium": "email",
+            "utm_campaign": "dashboard",
+        }
+    }
+    form_class = BarrierSearchForm
+
+    # Let the pagination mixin know how many results the API will return per page
+    pagination_limit = 5
+
+    def get_context_data(self, form, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # active = self.request.GET.get("active", "barriers")
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        # my_barriers_saved_search = client.saved_searches.get("my-barriers")
+        # team_barriers_saved_search = client.saved_searches.get("team-barriers")
+        mentions = client.mentions.list()
+        # draft_barriers = client.reports.list()
+        # saved_searches = client.saved_searches.list()
+        # notification_exclusion = client.notification_exclusion.get()
+        # barrier_downloads = client.barrier_download.list()
+
+        are_all_mentions_read: bool = not any(
+            not mention.read_by_recipient for mention in mentions
+        )
+
+        # Get page number for task list pagination from URL
+        page_number = (
+            self.request.GET.get("page") if self.request.GET.get("page") else 1
+        )
+        api_task_list_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "page": page_number,
+        }
+        # Get list of tasks for the user from the API
+        task_list = client.dashboard_tasks.list(**api_task_list_params)
+
+        params = form.get_api_search_parameters()
+
+        query_string = ""
+        for parameter in params:
+
+            if isinstance(params[parameter], list):
+                for value in params[parameter]:
+                    query_string = (
+                        query_string + f"&{urllib.parse.urlencode({parameter: value})}"
+                    )
+            else:
+                query_string = (
+                    query_string
+                    + f"&{urllib.parse.urlencode({parameter: params[parameter]})}"
+                )
+
+        search_params = query_string
+
+        summary_url = f"dashboard-summary?{search_params}"
+        summary_stats = client.get(summary_url)
+
+        context_data.update(
+            {
+                "page": "dashboard",
+                # "my_barriers_saved_search": my_barriers_saved_search,
+                # "team_barriers_saved_search": team_barriers_saved_search,
+                # "draft_barriers": draft_barriers,
+                # "saved_searches": saved_searches,
+                # "notification_exclusion": notification_exclusion,
+                "mentions": mentions,
+                "are_all_mentions_read": are_all_mentions_read,
+                "new_mentions_count": len(
+                    [mention for mention in mentions if not mention.read_by_recipient]
+                ),
+                "filters": form.get_readable_filters(True),
+                # "active": active,
+                # "barrier_downloads": barrier_downloads,
+                "task_list": task_list,
+                "summary_stats": summary_stats,
+                "search_params": search_params,
+            }
+        )
+        context_data["pagination"] = self.get_pagination_data(object_list=task_list)
+
         return context_data

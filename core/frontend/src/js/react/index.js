@@ -13,6 +13,11 @@ import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
 import GDSCheckboxes from "./gds/Checkboxes";
+import {
+    handleBarChart,
+    handlePieChart,
+    handleStackedBarChart,
+} from "./dashboard/charts";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -20,7 +25,7 @@ function renderCommodityForm(
     label,
     helpText,
     isReportJourney = false,
-    nextUrl = null
+    nextUrl = null,
 ) {
     const csrfToken = getCSRFToken();
     ReactDOM.render(
@@ -33,7 +38,7 @@ function renderCommodityForm(
             isReportJourney={isReportJourney}
             nextUrl={nextUrl}
         />,
-        document.getElementById("react-app")
+        document.getElementById("react-app"),
     );
 }
 
@@ -43,7 +48,7 @@ function renderCompaniesForm(searchLabel, searchHelpText) {
             searchLabel={searchLabel}
             searchHelpText={searchHelpText}
         />,
-        document.getElementById("react-app")
+        document.getElementById("react-app"),
     );
 }
 
@@ -52,7 +57,7 @@ function renderLocationFilter(
     tradingBlocElement,
     tradingBlocData,
     adminAreaData,
-    adminAreasCountries
+    adminAreasCountries,
 ) {
     const label = countryElement.querySelector("legend").textContent.trim();
     const countries = getCheckboxValues(countryElement);
@@ -68,7 +73,7 @@ function renderLocationFilter(
             adminAreaData={adminAreaData}
             adminAreasCountries={adminAreasCountries}
         />,
-        countryElement
+        countryElement,
     );
 }
 
@@ -77,7 +82,7 @@ function renderMultiSelectFilter(
     placeholder = null,
     labelClasses = null,
     containerClasses = null,
-    secondaryOptions = null
+    secondaryOptions = null,
 ) {
     let placeholderString = placeholder
         ? placeholder
@@ -96,7 +101,7 @@ function renderMultiSelectFilter(
             containerClasses={containerClasses}
             secondaryOptions={secondaryOptions}
         />,
-        htmlElement
+        htmlElement,
     );
 }
 
@@ -105,7 +110,7 @@ function renderTextAreaWithMentions(
     placeholder = null,
     labelClasses = null,
     containerClasses = null,
-    trigger = undefined
+    trigger = undefined,
 ) {
     const addNoteElement = document.getElementById(htmlElementId);
     const nativeTextarea = addNoteElement.querySelector("textarea");
@@ -121,7 +126,7 @@ function renderTextAreaWithMentions(
             preExistingText={preExistingText}
             trigger={trigger}
         />,
-        addNoteElement
+        addNoteElement,
     );
 }
 
@@ -131,7 +136,7 @@ function renderInputSelectWithMentions(
     labelClasses = null,
     containerClasses = null,
     trigger = undefined,
-    autofocus = true
+    autofocus = true,
 ) {
     console.log("setting up input with mentions", htmlElementId, trigger);
 
@@ -152,23 +157,41 @@ function renderInputSelectWithMentions(
             trigger={trigger}
             autofocus={autofocus}
         />,
-        inputContainerElement
+        inputContainerElement,
     );
 }
 
+/**
+ * @param {string} fieldID
+ */
 function renderEmailSearchAutocomplete(fieldID) {
     const field = document.getElementById(fieldID),
         fieldlLabel = field.labels[0],
         wrapperElement = field.closest(".dmas_autocomplete_wrapper");
     ReactDOM.render(
         <EmailSearchAutocomplete field={field} label={fieldlLabel} />,
-        wrapperElement
+        wrapperElement,
     );
 }
 
 function renderRisksAndMitigationForm() {
     const container = document.createElement("div");
     ReactDOM.render(<RisksAndMitigationForm />, container);
+}
+
+function renderPieChart(chartData, htmlElementId) {
+    const container = document.querySelector(`#${htmlElementId}`);
+    ReactDOM.render(handlePieChart(chartData), container);
+}
+
+function renderBarChart(chartData, htmlElementId) {
+    const container = document.querySelector(`#${htmlElementId}`);
+    ReactDOM.render(handleBarChart(chartData), container);
+}
+
+function renderStackedBarChart(chartData, htmlElementId) {
+    const container = document.querySelector(`#${htmlElementId}`);
+    ReactDOM.render(handleStackedBarChart(chartData), container);
 }
 
 export {
@@ -184,4 +207,7 @@ export {
     GDSTabs,
     GDSRadios,
     GDSCheckboxes,
+    renderPieChart,
+    renderBarChart,
+    renderStackedBarChart,
 };

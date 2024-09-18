@@ -83,6 +83,7 @@ const mainConfig = {
                         `${assetsSrcPath}/js/components/DeleteModal.js`,
                         `${assetsSrcPath}/js/components/AttachmentForm.js`,
                         `${assetsSrcPath}/js/components/HiddenEstimatedResolutionDateTextarea.js`,
+                        `${assetsSrcPath}/js/components/HiddenRadioContent.js`,
                         `${assetsSrcPath}/js/pages/index.js`,
                         `${assetsSrcPath}/js/pages/report/location-wizard-step.js`,
                         `${assetsSrcPath}/js/pages/report/sectors-wizard-step.js`,
@@ -136,7 +137,7 @@ const mainConfig = {
 
     resolve: {
         modules: ["node_modules"],
-        extensions: [".js", ".scss"],
+        extensions: [".js", ".scss", ".ts"],
     },
 
     devtool: "source-map",
@@ -172,6 +173,16 @@ const reactConfig = {
                         plugins: ["@babel/plugin-transform-runtime"],
                     },
                 },
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    "css-loader",
+                    "sass-loader",
+                ],
             },
         ],
     },
