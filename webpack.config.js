@@ -137,7 +137,7 @@ const mainConfig = {
 
     resolve: {
         modules: ["node_modules"],
-        extensions: [".js", ".scss"],
+        extensions: [".js", ".scss", ".ts"],
     },
 
     devtool: "source-map",
@@ -173,6 +173,16 @@ const reactConfig = {
                         plugins: ["@babel/plugin-transform-runtime"],
                     },
                 },
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    "css-loader",
+                    "sass-loader",
+                ],
             },
         ],
     },
