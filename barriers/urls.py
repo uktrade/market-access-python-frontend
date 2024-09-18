@@ -184,21 +184,6 @@ from .views.core import (
     Home,
     WhatIsABarrier,
 )
-from .views.documents import DownloadDocument
-from .views.edit import (
-    BarrierEditCausedByTradingBloc,
-    BarrierEditCommercialValue,
-    BarrierEditEconomicAssessmentEligibility,
-    BarrierEditEstimatedResolutionDate,
-    BarrierEditEstimatedResolutionDateConfirmationPage,
-    BarrierEditPriority,
-    BarrierEditProduct,
-    BarrierEditStartDate,
-    BarrierEditSummary,
-    BarrierEditTags,
-    BarrierEditTitle,
-    BarrierEditTradeDirection,
-)
 
 app_name = "barriers"
 
