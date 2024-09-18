@@ -57,7 +57,11 @@ const SummaryCards = ({ filterValues }) => {
 
         console.log(searchParamsWithLocation.toString());
 
-        window.history.pushState({}, "", `?${searchParamsWithLocation.toString()}`);
+        window.history.pushState(
+            {},
+            "",
+            `?${searchParamsWithLocation.toString()}`,
+        );
 
         const url = searchParamsWithLocation
             ? `/dashboard-summary/?${searchParamsWithLocation.toString()}`
@@ -75,28 +79,29 @@ const SummaryCards = ({ filterValues }) => {
     const addLocation = (queryParams) => {
         // update the current URL with the new query params
         const searchParams = new URLSearchParams(queryParams);
-    
+
         // Get all country, region, and country_trading_bloc values
         const locationParams = [
-            ...searchParams.getAll('country'),    // Get all 'country' values
-            searchParams.get('region'),           // Get 'region'
-            searchParams.get('country_trading_bloc') // Get 'country_trading_bloc'
-        ].filter(Boolean).join(",");              // Filter out empty values and join with commas
-    
+            ...searchParams.getAll("country"), // Get all 'country' values
+            searchParams.get("region"), // Get 'region'
+            searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
+        ]
+            .filter(Boolean)
+            .join(","); // Filter out empty values and join with commas
+
         // Remove 'country', 'region', and 'country_trading_bloc' parameters
-        searchParams.delete('country');
-        searchParams.delete('region');
-        searchParams.delete('country_trading_bloc');
-    
+        searchParams.delete("country");
+        searchParams.delete("region");
+        searchParams.delete("country_trading_bloc");
+
         // Add the new 'location' parameter if there are any valid values
         if (locationParams) {
             searchParams.append("location", locationParams);
         }
-    
+
         // Return the updated searchParams object
         return searchParams;
-    };    
-
+    };
 
     const getSearchParamsFromForm = () => {
         // @ts-ignore
@@ -128,9 +133,14 @@ const SummaryCards = ({ filterValues }) => {
         } else if (type === "location") {
             // check if value is comma separated then split it and return an array
             if (value.includes(",")) {
-                return value.split(",").map((val) => filterValues.location.find(
-                    (location) => location.value === val,
-                ).label);
+                return value
+                    .split(",")
+                    .map(
+                        (val) =>
+                            filterValues.location.find(
+                                (location) => location.value === val,
+                            ).label,
+                    );
             } else {
                 return filterValues.location.find(
                     (location) => location.value === value,
@@ -211,37 +221,53 @@ const SummaryCards = ({ filterValues }) => {
             <div className="p-l-3" id="active filters">
                 <ul className="govuk-list">
                     {Object.entries(
-                    // if the filter label is location then convert to individual location values
-                    filters.map((filter) => {
-                            // set filters to be used in the summary cards
-                            const searchParams = new URLSearchParams(window.location.search);
-                            if (filter.label === "location") {
-                                return filter.value.split(",").map((val) => ({
-                                    label: filter.label,
-                                    value: val,
-                                    readable_value: val && getReadableValue(val, filter.label),
-                                    remove_url: new URLSearchParams(
-                                        [...searchParams].filter(
-                                            ([paramKey, paramValue]) =>
-                                                !(paramKey === filter.label && paramValue === val),
-                                        ),
-                                    ).toString(),
-                                }));
-                            }
-                            return filter;
-                        }).flat().reduce((acc, filter) => {
-                            if (filter.value) {
-                                // Group filters by label, appending values under the same label
-                                if (!acc[filter.label]) {
-                                    acc[filter.label] = [];
+                        // if the filter label is location then convert to individual location values
+                        filters
+                            .map((filter) => {
+                                // set filters to be used in the summary cards
+                                const searchParams = new URLSearchParams(
+                                    window.location.search,
+                                );
+                                if (filter.label === "location") {
+                                    return filter.value
+                                        .split(",")
+                                        .map((val) => ({
+                                            label: filter.label,
+                                            value: val,
+                                            readable_value:
+                                                val &&
+                                                getReadableValue(
+                                                    val,
+                                                    filter.label,
+                                                ),
+                                            remove_url: new URLSearchParams(
+                                                [...searchParams].filter(
+                                                    ([paramKey, paramValue]) =>
+                                                        !(
+                                                            paramKey ===
+                                                                filter.label &&
+                                                            paramValue === val
+                                                        ),
+                                                ),
+                                            ).toString(),
+                                        }));
                                 }
-                                acc[filter.label].push({
-                                    readable_value: filter.readable_value,
-                                    remove_url: filter.remove_url,
-                                });
-                            }
-                            return acc;
-                        }, {}),
+                                return filter;
+                            })
+                            .flat()
+                            .reduce((acc, filter) => {
+                                if (filter.value) {
+                                    // Group filters by label, appending values under the same label
+                                    if (!acc[filter.label]) {
+                                        acc[filter.label] = [];
+                                    }
+                                    acc[filter.label].push({
+                                        readable_value: filter.readable_value,
+                                        remove_url: filter.remove_url,
+                                    });
+                                }
+                                return acc;
+                            }, {}),
                     ).map(([label, values], index) => {
                         return (
                             <li className="active-filters__item" key={index}>
@@ -377,7 +403,10 @@ const renderSummaryCards = (elementId, locationObj) => {
     const filterValues = {
         sector: getOptionValue(sector).options,
         policy_team: getOptionValue(policy_team).options,
-        location: [...getOptionValue(country).options, ...getOptionValue(region).options],
+        location: [
+            ...getOptionValue(country).options,
+            ...getOptionValue(region).options,
+        ],
     };
     render(<SummaryCards filterValues={filterValues} />, element);
 };
