@@ -114,8 +114,11 @@ const SummaryCards = ({ filterValues }) => {
         const adminAreas = formatAdminAreas(searchParams);
 
         if (adminAreas.length > 0) {
-            searchParams.append("admin_areas", adminAreas.filter(Boolean).join(","));
-        }else{
+            searchParams.append(
+                "admin_areas",
+                adminAreas.filter(Boolean).join(","),
+            );
+        } else {
             searchParams.delete("admin_areas");
         }
 
