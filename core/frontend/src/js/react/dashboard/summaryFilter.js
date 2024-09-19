@@ -93,9 +93,31 @@ const SummaryCards = ({ filterValues }) => {
         setData(data);
     };
 
+    const formatAdminAreas = (searchParams) => {
+        const admin_areas = [];
+        if (searchParams.get("admin_areas")) {
+            const adminAreasData = JSON.parse(searchParams.get("admin_areas"));
+            for (const key in adminAreasData) {
+                const values = adminAreasData[key];
+                for (const admin_area_id of values) {
+                    admin_areas.push(admin_area_id);
+                }
+            }
+        }
+        return admin_areas;
+    };
+
     const addLocation = (queryParams) => {
         // update the current URL with the new query params
         const searchParams = new URLSearchParams(queryParams);
+
+        const adminAreas = formatAdminAreas(searchParams);
+
+        if (adminAreas.length > 0) {
+            searchParams.append("admin_areas", adminAreas.filter(Boolean).join(","));
+        }else{
+            searchParams.delete("admin_areas");
+        }
 
         // Get all country, region, and country_trading_bloc values
         const locationParams = [
