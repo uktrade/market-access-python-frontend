@@ -4,10 +4,10 @@ export const SCREEN_READER_CLASSES = "sr-only govuk-visually-hidden";
 
 export const BARRIER_STATUS = {
     0: "Unfinished",
-    1: "Screening",
     2: "Open",
-    3: "Rejected",
-    4: "Resolved",
-    5: "Hibernated",
+    3: "Resolved: In part",
+    4: "Resolved: In full",
+    5: "Dormant",
     6: "Archived",
+    7: "Unknown",
 };

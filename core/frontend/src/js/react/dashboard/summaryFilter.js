@@ -54,7 +54,7 @@ const getOptionValue = (htmlElement) => {
 const SummaryCards = ({ filterValues }) => {
     const form = document.querySelector("#filters-form");
 
-    const remove_hidden = true;
+    const removeHidden = false;
 
     const applyFiltersButton = document.querySelector("#apply-filters-button");
 
@@ -218,7 +218,7 @@ const SummaryCards = ({ filterValues }) => {
     }, []);
 
     useEffect(() => {
-        fetchData("status=2");
+        fetchData("");
     }, []);
 
     useEffect(() => {
@@ -311,7 +311,7 @@ const SummaryCards = ({ filterValues }) => {
                     ).map(([label, values], index) => {
                         return (
                             <li className="active-filters__item" key={index}>
-                                {remove_hidden ? (
+                                {removeHidden ? (
                                     <>
                                         <h4 className="active-filter__heading">
                                             {label}:
