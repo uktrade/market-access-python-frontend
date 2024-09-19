@@ -51,11 +51,7 @@ const SummaryCards = ({ filterValues }) => {
         // update the current URL with the new query params
         const searchParams = new URLSearchParams(queryParams);
 
-        console.log(searchParams.toString());
-
         const searchParamsWithLocation = addLocation(searchParams);
-
-        console.log(searchParamsWithLocation.toString());
 
         window.history.pushState(
             {},
@@ -213,7 +209,6 @@ const SummaryCards = ({ filterValues }) => {
         setFilters(filters);
     }, [window.location.search]);
 
-    console.log(filters);
 
     return (
         <>
