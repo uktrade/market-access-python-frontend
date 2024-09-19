@@ -4,7 +4,6 @@ import { render } from "react-dom";
 import { getCheckboxValues } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 
-
 /**
  * Renders a summary card component.
  * @param {Object} props - The component props.
@@ -13,7 +12,7 @@ import { BARRIER_STATUS } from "../constants";
  * @param {string} props.url - The URL to link to.
  * @param {string} props.search_params - The search parameters to be included in the URL.
  * @returns {JSX.Element} - The rendered summary card component.
-*/
+ */
 const SummaryCard = ({ value, description, url, search_params }) => {
     const handleSearchParam = () => {
         return `${url}?${search_params}`;
@@ -35,8 +34,8 @@ const SummaryCard = ({ value, description, url, search_params }) => {
 };
 
 /**
- * 
- * @param {*} htmlElement 
+ *
+ * @param {*} htmlElement
  * @returns {Object} - label and options
  */
 const getOptionValue = (htmlElement) => {
@@ -44,7 +43,6 @@ const getOptionValue = (htmlElement) => {
     const options = getCheckboxValues(htmlElement);
     return { label, options };
 };
-
 
 /**
  * Renders the summary cards component & filters.
@@ -232,7 +230,6 @@ const SummaryCards = ({ filterValues }) => {
         setFilters(filters);
     }, [window.location.search]);
 
-
     return (
         <>
             <h3 className="govuk-summary-card__title">Summary data</h3>
@@ -414,9 +411,8 @@ const SummaryCards = ({ filterValues }) => {
  * Renders the summary cards component.
  * @param {string} elementId - The ID of the element to render the component in.
  * @returns {void}
-*/
+ */
 const renderSummaryCards = (elementId) => {
-
     const element = document.getElementById(elementId);
 
     const region = document.getElementById("region");
@@ -429,7 +425,7 @@ const renderSummaryCards = (elementId) => {
         policy_team: getOptionValue(policy_team).options,
         location: [
             ...getOptionValue(country).options,
-            ...getOptionValue(region).options
+            ...getOptionValue(region).options,
         ],
     };
     render(<SummaryCards filterValues={filterValues} />, element);
