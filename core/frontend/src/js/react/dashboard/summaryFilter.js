@@ -4,6 +4,16 @@ import { render } from "react-dom";
 import { getCheckboxValues } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 
+
+/**
+ * Renders a summary card component.
+ * @param {Object} props - The component props.
+ * @param {string} props.value - The value to be displayed in the card.
+ * @param {string} props.description - The description to be displayed in the card.
+ * @param {string} props.url - The URL to link to.
+ * @param {string} props.search_params - The search parameters to be included in the URL.
+ * @returns {JSX.Element} - The rendered summary card component.
+*/
 const SummaryCard = ({ value, description, url, search_params }) => {
     const handleSearchParam = () => {
         return `${url}?${search_params}`;
@@ -24,12 +34,25 @@ const SummaryCard = ({ value, description, url, search_params }) => {
     );
 };
 
+/**
+ * 
+ * @param {*} htmlElement 
+ * @returns {Object} - label and options
+ */
 const getOptionValue = (htmlElement) => {
     const label = htmlElement.querySelector("legend").textContent.trim();
     const options = getCheckboxValues(htmlElement);
     return { label, options };
 };
 
+
+/**
+ * Renders the summary cards component & filters.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.filterValues - The filter values.
+ * @returns {JSX.Element} - The rendered summary cards component.
+ */
 const SummaryCards = ({ filterValues }) => {
     const form = document.querySelector("#filters-form");
 
@@ -387,7 +410,13 @@ const SummaryCards = ({ filterValues }) => {
     );
 };
 
-const renderSummaryCards = (elementId, locationObj) => {
+/**
+ * Renders the summary cards component.
+ * @param {string} elementId - The ID of the element to render the component in.
+ * @returns {void}
+*/
+const renderSummaryCards = (elementId) => {
+
     const element = document.getElementById(elementId);
 
     const region = document.getElementById("region");
@@ -400,7 +429,7 @@ const renderSummaryCards = (elementId, locationObj) => {
         policy_team: getOptionValue(policy_team).options,
         location: [
             ...getOptionValue(country).options,
-            ...getOptionValue(region).options,
+            ...getOptionValue(region).options
         ],
     };
     render(<SummaryCards filterValues={filterValues} />, element);
