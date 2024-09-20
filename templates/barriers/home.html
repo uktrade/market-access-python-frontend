@@ -33,7 +33,24 @@
                 ReactApp.renderMultiSelectFilter("sector");
 
                 // load the charts
-                ReactApp.renderPieChart("pie-chart");
+                ReactApp.renderPieChart(
+                    {
+                        series: "{{ summary_stats.barriers_by_status_chart.series}}",
+                        options: {
+                            chart: {
+                                id: 'basic-pie',
+                            },
+                            title: {
+                                text: 'Total value of open and partially resolved barrier by priority type',
+                                align: 'center'
+                            },
+                            dataLabels: {
+                                enabled: false
+                            },
+                            labels: "{{ summary_stats.barriers_by_status_chart.labels|safe}}",
+                            colors: ['#28a197', '#003078', '#d4351c', '#912b88'],
+                        }
+                    },"pie-chart");
 
                 ReactApp.renderBarChart(
                     {
