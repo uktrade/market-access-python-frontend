@@ -5,40 +5,52 @@
         </li>
     {% else %}
         <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:barrier_detail' barrier.id %}">Barrier information</a>
+            <a class="page-tabs__tab__text"
+               href="{% url 'barriers:barrier_detail' barrier.id %}">Barrier information</a>
         </li>
     {% endif %}
-
     {% if active == 'team' %}
         <li class="page-tabs__tab page-tabs__tab--active">
             <span class="page-tabs__tab__text">Barrier team</span>
         </li>
     {% else %}
         <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:team' barrier.id %}">Barrier team</a>
+            <a class="page-tabs__tab__text"
+               href="{% url 'barriers:team' barrier.id %}">Barrier team</a>
         </li>
     {% endif %}
-
+    {% if current_user|has_permission:"related_barrier_user" %}
+        {% if active == 'related' %}
+            <li class="page-tabs__tab page-tabs__tab--active">
+                <span class="page-tabs__tab__text">Related barriers</span>
+            </li>
+        {% else %}
+            <li class="page-tabs__tab">
+                <a class="page-tabs__tab__text"
+                   href="{% url 'barriers:related_barriers_detail' barrier.id %}">Related barriers</a>
+            </li>
+        {% endif %}
+    {% endif %}
     {% if active == 'assessment' %}
         <li class="page-tabs__tab page-tabs__tab--active">
             <span class="page-tabs__tab__text">Assessment</span>
         </li>
     {% else %}
         <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:assessment_detail' barrier.id %}">Assessment</a>
+            <a class="page-tabs__tab__text"
+               href="{% url 'barriers:assessment_detail' barrier.id %}">Assessment</a>
         </li>
     {% endif %}
-
     {% if active == 'history' %}
         <li class="page-tabs__tab page-tabs__tab--active">
             <span class="page-tabs__tab__text">History</span>
         </li>
     {% else %}
         <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:history' barrier.id %}">History</a>
+            <a class="page-tabs__tab__text"
+               href="{% url 'barriers:history' barrier.id %}">History</a>
         </li>
     {% endif %}
-
     {% if feature_flags.action_plans_enabled %}
         {% if current_user|has_permission:"view_action_plans" %}
             {% if active == 'action_plan' %}
@@ -47,24 +59,28 @@
                 </li>
             {% else %}
                 <li class="page-tabs__tab">
-                    <a class="page-tabs__tab__text" href="{% url 'barriers:action_plan' barrier.id %}">
-                        Action plan
-                    </a>
+                    <a class="page-tabs__tab__text"
+                       href="{% url 'barriers:action_plan' barrier.id %}">Action plan</a>
                 </li>
             {% endif %}
         {% endif %}
     {% endif %}
-
     {% if active == 'public' %}
         <li class="page-tabs__tab page-tabs__tab--active">
-            <span class="page-tabs__tab__text">Barrier publication{% if public_barrier.tab_badge %} <span class="ma-badge ma-badge--in-tab">{{ public_barrier.tab_badge }}</span>{% endif %}</span>
+            <span class="page-tabs__tab__text">Barrier publication
+                {% if public_barrier.tab_badge %}
+                    <span class="ma-badge ma-badge--in-tab">{{ public_barrier.tab_badge }}</span>
+                {% endif %}
+            </span>
         </li>
     {% else %}
         <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:public_barrier_detail' barrier.id %}">Barrier publication
+            <a class="page-tabs__tab__text"
+               href="{% url 'barriers:public_barrier_detail' barrier.id %}">Barrier publication
                 {% if barrier.public_barrier.tab_badge %}
                     <span class="ma-badge ma-badge--in-tab">{{ barrier.public_barrier.tab_badge }}</span>
-                {% endif %}</a>
+                {% endif %}
+            </a>
         </li>
     {% endif %}
 </ul>

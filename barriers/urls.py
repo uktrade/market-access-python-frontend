@@ -177,6 +177,8 @@ from barriers.views.wto import (
     EditWTOStatus,
 )
 
+from .views.related_barriers import RelatedBarriers
+
 app_name = "barriers"
 
 urlpatterns = [
@@ -897,4 +899,9 @@ urlpatterns = [
         name="mention_turn_notifications_on",
     ),
     path("home/", Home.as_view(), name="home"),
+    path(
+        "barriers/<uuid:barrier_id>/related/",
+        RelatedBarriers.as_view(),
+        name="related_barriers_detail",
+    ),
 ]
