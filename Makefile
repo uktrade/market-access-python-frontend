@@ -36,7 +36,7 @@ django-static: ## Compress SCSS and collect static files, clears staticfiles fol
 
 .PHONY: react-watch
 react-watch: ## Run react's dev server (tailing).
-	npm run dev
+	npm run dev; npm run watch
 
 .PHONY: django-test
 django-test: ## Run django tests. (Use path=appname/filename::class::test) to narrow down

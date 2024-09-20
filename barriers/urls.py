@@ -65,7 +65,6 @@ from barriers.views.companies import (
     BarrierSearchCompany,
     CompanyDetail,
 )
-from barriers.views.core import BarrierDetail, Dashboard, Home, WhatIsABarrier
 from barriers.views.documents import DownloadDocument
 from barriers.views.edit import (
     BarrierEditCausedByTradingBloc,
@@ -175,6 +174,14 @@ from barriers.views.wto import (
     DeleteWTODocument,
     EditWTOProfile,
     EditWTOStatus,
+)
+
+from .views.core import (
+    BarrierDetail,
+    Dashboard,
+    GetDashboardSummary,
+    Home,
+    WhatIsABarrier,
 )
 
 app_name = "barriers"
@@ -897,4 +904,5 @@ urlpatterns = [
         name="mention_turn_notifications_on",
     ),
     path("home/", Home.as_view(), name="home"),
+    path("dashboard-summary/", GetDashboardSummary.as_view(), name="dashboard_summary"),
 ]
