@@ -9,43 +9,46 @@
         </strong>
     </div>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter"  id="dashboard_filters">
+        <div class="govuk-grid-column-one-quarter">
             <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h3 class="govuk-fieldset__heading govuk-summary-card__title">Filters</h3>
                 </legend>
                 <!-- search form -->
-                <form action="" method="GET">
+                <form id="filters-form" action="" method="GET">
                     {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                     {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
                     {% include "partials/forms/checkbox_filter.html" with field=form.country %}
+                    {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                     {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
                     {% if filters %}
-                        <a class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>
+                        <a id="clear-filters-button" class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>
                     {% endif %}
-                    <input type="hidden" id="status" name="status" value="2">
+                    <!-- <input type="hidden" id="status" name="status" value="2"> -->
                     <input type="submit"
                            value="Apply filters"
                            id="apply-filters-button"
                            class="govuk-button govuk-button--full-width js-filter-submit">
                 </form>
                 <!--- search form end -->
-            </div>
-            <div class="govuk-grid-column-three-quarters">
+            </fieldset>
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+            <div id="summary-cards">
                 <h3 class="govuk-summary-card__title">Summary data</h3>
+                <div class="p-l-3" id="active filters">
+                    {% if filters %}
+                        <h3 class="visually-hidden">Active filters:</h3>
+                        <ul class="active-filters">
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.status remove_hidden=True %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.policy_team %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
+                        </ul>
+                    {% endif %}
+                </div>
                 <div class="govuk-grid-row">
-                    <div class="p-l-3" id="active filters">
-                        {% if filters %}
-                            <h3 class="visually-hidden">Active filters:</h3>
-                            <ul class="active-filters">
-                                {% include 'barriers/partials/active_filter.html' with filter=filters.status remove_hidden=True %}
-                                {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
-                                {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
-                                {% include 'barriers/partials/active_filter.html' with filter=filters.policy_team %}
-                                {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
-                            </ul>
-                        {% endif %}
-                    </div>
                     <h3 class="govuk-summary-card__title p-l-3">Open barriers</h3>
                     <div class="govuk-grid-column-one-third">
                         <div class="govuk-inset-text summary-card">
@@ -116,3 +119,4 @@
             </div>
         </div>
     </div>
+</div>
