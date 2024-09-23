@@ -35,7 +35,7 @@
                 // load the charts
                 ReactApp.renderPieChart(
                     {
-                        series: "{{ summary_stats.barriers_by_status_chart.series}}",
+                        series: {{ summary_stats.barriers_by_status_chart.series }},
                         options: {
                             chart: {
                                 id: 'basic-pie',
@@ -47,7 +47,7 @@
                             dataLabels: {
                                 enabled: false
                             },
-                            labels: "{{ summary_stats.barriers_by_status_chart.labels|safe}}",
+                            labels: {{ summary_stats.barriers_by_status_chart.labels|safe }},
                             colors: ['#28a197', '#003078', '#d4351c', '#912b88'],
                         }
                     },"pie-chart");
@@ -57,11 +57,11 @@
                         series: [
                             {
                                 name: "Open Barriers",
-                                data: ["{{ summary_stats.total_value_chart.open_barriers_value }}"]
+                                data: [{{ summary_stats.total_value_chart.open_barriers_value }}]
                             },
                             {
                                 name: "Resolved Barriers",
-                                data: ["{{ summary_stats.total_value_chart.resolved_barriers_value }}"]
+                                data: [{{ summary_stats.total_value_chart.resolved_barriers_value }}]
                             }
                         ],
                         options: {
@@ -89,11 +89,11 @@
                         series: [
                             {
                                 name: 'Value of resolved barriers ',
-                                data: ["{{ summary_stats.barrier_value_chart.resolved_barriers_value }}"]
+                                data: [{{ summary_stats.barrier_value_chart.resolved_barriers_value }}]
                             },
                             {
                                 name: 'Value of barriers estimated to be resolved',
-                                data: ["{{ summary_stats.barrier_value_chart.estimated_barriers_value }}"]
+                                data: [{{ summary_stats.barrier_value_chart.estimated_barriers_value }}]
                             }
                         ],
                         options: {
