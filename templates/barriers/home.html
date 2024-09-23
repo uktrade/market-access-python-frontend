@@ -4,6 +4,9 @@
 {% block page_title %}{{ block.super }} - Homepage{% endblock %}
 {% block head %}
     {% render_bundle 'main' 'js' 'REACT' %}
+    {{ trading_blocs|json_script:"trading-blocs-data" }}
+    {{ admin_areas|json_script:"admin-areas-data" }}
+    {{ countries_with_admin_areas|json_script:"countries-with-admin-areas-data" }}
     {% block body_script %}
         <script nonce="{{request.csp_nonce}}">
             document.addEventListener("DOMContentLoaded", function (event) {
@@ -14,9 +17,25 @@
                 newsletterLink.href = `https://data-services-help.trade.gov.uk/market-access/newsletters/${month.toLowerCase()}/${year}`;
                 newsletterLink.textContent = `DMAS newsletter for ${month} ${year}`;
 
+                // add the active filters to the active filters section
+                let countryElement = document.getElementById("country");
+                let tradingBlocElement = document.getElementById("country_trading_bloc");
+                let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent);
+                let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
+                let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
+
+                // load summary cards
+                ReactApp.renderSummaryCards("summary-cards", [...tradingBlocs, ...adminAreasCountries]);
+
+                ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries);
+                ReactApp.renderMultiSelectFilter("policy_team", "Search teams");
+                ReactApp.renderMultiSelectFilter("region");
+                ReactApp.renderMultiSelectFilter("sector");
+
+                // load the charts
                 ReactApp.renderPieChart(
                     {
-                        series: {{ summary_stats.barriers_by_status_chart.series}},
+                        series: {{ summary_stats.barriers_by_status_chart.series }},
                         options: {
                             chart: {
                                 id: 'basic-pie',
@@ -28,7 +47,7 @@
                             dataLabels: {
                                 enabled: false
                             },
-                            labels: {{ summary_stats.barriers_by_status_chart.labels|safe}},
+                            labels: {{ summary_stats.barriers_by_status_chart.labels|safe }},
                             colors: ['#28a197', '#003078', '#d4351c', '#912b88'],
                         }
                     },"pie-chart");
@@ -119,7 +138,7 @@
                         <form action="{% url 'barriers:search' %}" method="GET">
                             <input class="govuk-input govuk-!-width-two-thirds"
                                    id="event-name"
-                                   name="search"
+                                   name="text"
                                    type="text"
                                    placeholder="Search for barrier by name or with key terms.">
                             <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>

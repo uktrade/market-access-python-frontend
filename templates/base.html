@@ -1,9 +1,9 @@
 {% load static %}
 {% load render_bundle from webpack_loader %}
 {% load webpack_static from webpack_loader %}
-
 <!DOCTYPE html>
-<html lang="{{ htmlLang | default:'en' }}" class="govuk-template {{ htmlClasses }}">
+<html lang="{{ htmlLang | default:'en' }}"
+      class="govuk-template {{ htmlClasses }}">
   <head>
     <!-- Google Tag Manager -->
     <script nonce="{{request.csp_nonce}}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -11,52 +11,64 @@
                                                 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl+'&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x';
       f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','{{ settings.GTM_ID }}');</script>
+    })(window,document,'script','dataLayer','{{ settings.GTM_ID }}');
+    </script>
     <!-- End Google Tag Manager -->
     <meta charset="utf-8" />
-    <title>{% block page_title %}Market Access{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="{{ themeColor | default:'#0b0c0c' }}" /> {# Hardcoded value of $govuk-black #}
+    <title>
+      {% block page_title %}Market Access{% endblock %}
+    </title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="{{ themeColor | default:'#0b0c0c' }}" />
+    {# Hardcoded value of $govuk-black #}
     {# Ensure that older IE versions always render with the correct rendering engine #}
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
     {% render_bundle 'style' 'css' 'DEFAULT' %}
-
     {% block headIcons %}
-      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{% webpack_static '../images/favicon.ico' %}" type="image/x-icon" />
-      <link rel="mask-icon" href="{% webpack_static '../govuk-public/images/govuk-mask-icon.svg' %}" color="#0b0c0c"> {# Hardcoded value of $govuk-black #}
-      <link rel="apple-touch-icon" sizes="180x180" href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon-180x180.png' %}">
-      <link rel="apple-touch-icon" sizes="167x167" href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon-167x167.png' %}">
-      <link rel="apple-touch-icon" sizes="152x152" href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon-152x152.png' %}">
-      <link rel="apple-touch-icon" href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon.png' %}">
+      <link rel="shortcut icon"
+            sizes="16x16 32x32 48x48"
+            href="{% webpack_static '../images/favicon.ico' %}"
+            type="image/x-icon" />
+      <link rel="mask-icon"
+            href="{% webpack_static '../govuk-public/images/govuk-mask-icon.svg' %}"
+            color="#0b0c0c">
+      {# Hardcoded value of $govuk-black #}
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon-180x180.png' %}">
+      <link rel="apple-touch-icon"
+            sizes="167x167"
+            href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon-167x167.png' %}">
+      <link rel="apple-touch-icon"
+            sizes="152x152"
+            href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon-152x152.png' %}">
+      <link rel="apple-touch-icon"
+            href="{% webpack_static '../govuk-public/images/govuk-apple-touch-icon.png' %}">
     {% endblock %}
-
     {% block head %}{% endblock %}
     {# The default og:image is added below head so that scrapers see any custom metatags first, and this is just a fallback #}
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
-    <meta property="og:image" content="{% webpack_static '../images/govuk-opengraph-image.png' %}">
-    <script nonce="{{request.csp_nonce}}">
-      window.dataLayer = window.dataLayer || [];
-    </script>
+    <meta property="og:image"
+          content="{% webpack_static '../images/govuk-opengraph-image.png' %}">
+    <script nonce="{{request.csp_nonce}}">window.dataLayer = window.dataLayer || [];</script>
     {% block gtag_events %}
     {% endblock gtag_events %}
   </head>
   <body class="govuk-template__body {{ bodyClasses }}">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.GTM_ID }}&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x"
-                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+                      height="0"
+                      width="0"
+                      style="display:none;
+                             visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <script nonce="{{request.csp_nonce}}">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
-
-    {% block skipLink %}
-      <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-    {% endblock %}
-
+    {% block skipLink %}<a href="#main-content" class="govuk-skip-link">Skip to main content</a>{% endblock %}
     {% block header %}
       {% include 'partials/header.html' %}
     {% endblock %}
-
     {% block main %}
       {% block outside_content %}{% endblock %}
       {% block masthead %}{% endblock %}
@@ -64,25 +76,26 @@
         {% block before_content %}
           <div class="govuk-phase-banner">
             <p class="govuk-phase-banner__content">
-              <strong class="govuk-tag govuk-phase-banner__content__tag">
-                beta
-              </strong>
+              <strong class="govuk-tag govuk-phase-banner__content__tag">beta</strong>
               <span class="govuk-phase-banner__text">
-                This is a new service – your <a class="govuk-link" href="{% url 'core:feedback' %}?return={{ request.build_absolute_uri|urlencode }}">feedback</a> will help us to improve it.
+                This is a new service – your <a class="govuk-link"
+                                                href="{% url 'core:feedback' %}?return={{ request.build_absolute_uri|urlencode }}">feedback</a> will help us to improve it.
               </span>
             </p>
           </div>
         {% endblock %}
-        <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
-          {% block content %}{% block page_content %}{% endblock %}{% endblock %}
+        <main class="govuk-main-wrapper {{ mainClasses }}"
+              id="main-content"
+              role="main">
+          {% block content %}
+            {% block page_content %}{% endblock %}
+          {% endblock %}
         </main>
       </div>
     {% endblock %}
-
     {% block footer %}
       {% include 'partials/footer.html' %}
     {% endblock %}
-
     {% block body_end %}
       <script nonce="{{request.csp_nonce}}" src="{% webpack_static 'main.js' %}"></script>
       <script nonce="{{request.csp_nonce}}">ma.init();</script>

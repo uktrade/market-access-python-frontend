@@ -18,6 +18,7 @@ import {
     handlePieChart,
     handleStackedBarChart,
 } from "./dashboard/charts";
+import renderSummaryCards from "./dashboard/summaryFilter";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -210,4 +211,5 @@ export {
     renderPieChart,
     renderBarChart,
     renderStackedBarChart,
+    renderSummaryCards,
 };

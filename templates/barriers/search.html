@@ -223,6 +223,19 @@
                         </span>
                     {% else %}
                         <span class="filter-results-download__text">There are no barriers to download</span>
+                        <span class="menu-bar right">
+                            {% if form.search_id.value is not None %}
+                                {% if have_filters_changed %}
+                                    <a href="{% url 'barriers:search' %}?{{ pageless_querystring }}&update_search=true"
+                                       class="filter-results-header__update-button">Update saved search</a>
+                                    <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
+                                       class="govuk-button filter-results-header__save-button">Save as a new search</a>
+                                {% endif %}
+                            {% elif filters and not search_title %}
+                                <a href="{% url 'barriers:new_saved_search' %}?{{ pageless_querystring }}"
+                                   class="govuk-button filter-results-header__save-button">Save search</a>
+                            {% endif %}
+                        </span>
                     {% endif %}
                 </p>
                 <ol id="filter-results-list" class="filter-results-list">
