@@ -58,10 +58,10 @@
   <body class="govuk-template__body {{ bodyClasses }}">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.GTM_ID }}&gtm_auth={{ settings.GTM_AUTH }}&gtm_preview={{ settings.GTM_PREVIEW }}&gtm_cookies_win=x"
-        height="0"
-        width="0"
-        style="display:none;
-               visibility:hidden"></iframe></noscript>
+                      height="0"
+                      width="0"
+                      style="display:none;
+                             visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <script nonce="{{request.csp_nonce}}">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
@@ -79,7 +79,7 @@
               <strong class="govuk-tag govuk-phase-banner__content__tag">beta</strong>
               <span class="govuk-phase-banner__text">
                 This is a new service – your <a class="govuk-link"
-    href="{% url 'core:feedback' %}?return={{ request.build_absolute_uri|urlencode }}">feedback</a> will help us to improve it.
+                                                href="{% url 'core:feedback' %}?return={{ request.build_absolute_uri|urlencode }}">feedback</a> will help us to improve it.
               </span>
             </p>
           </div>

@@ -176,7 +176,6 @@ from barriers.views.wto import (
     EditWTOStatus,
 )
 
-from .views.related_barriers import RelatedBarriers
 from .views.core import (
     BarrierDetail,
     Dashboard,
@@ -184,6 +183,7 @@ from .views.core import (
     Home,
     WhatIsABarrier,
 )
+from .views.related_barriers import RelatedBarriers
 
 app_name = "barriers"
 
