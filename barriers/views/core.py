@@ -210,3 +210,36 @@ class GetDashboardSummary(View):
         summary_url = f"dashboard-summary?{request.GET.urlencode()}"
         resp = client.get(summary_url)
         return JsonResponse(resp)
+
+
+class MyDownloads(TemplateView):
+    template_name = "barriers/my_downloads.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_downloads = client.barrier_download.list()
+
+        context_data.update(
+            {
+                "barrier_downloads": barrier_downloads,
+            }
+        )
+        return context_data
+
+
+class MySavedSearches(TemplateView):
+    template_name = "barriers/my_saved_searches.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        saved_searches = client.saved_searches.list()
+
+        context_data.update(
+            {
+                "saved_searches": saved_searches,
+            }
+        )
+        return context_data

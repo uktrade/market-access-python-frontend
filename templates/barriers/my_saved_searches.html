@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ block.super }} - Homepage{% endblock %}
+
+{% block body_script %}
+    <script nonce="{{request.csp_nonce}}">
+        ma.pages.index();
+    </script>
+{% endblock %}
+
+
+{% block page_content %}
+    <a href="{% url "barriers:home" %}" class="govuk-back-link ma-back-link">Back</a>
+    {% include 'partials/heading.html' with text='My saved searches' %}
+    <section>
+        <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ saved_searches|length }}</span> saved search{{ saved_searches|length|pluralize:"es" }}</h2>
+        <ul class="ma-card-list">
+            {% for saved_search in saved_searches %}
+                <li class="ma-card-list__item saved-search">
+                    <div class="saved-search__content">
+                        <h3 class="saved-search__title"><a href="{% url 'barriers:search' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a></h3>
+                        {% include "barriers/partials/saved_search_badges.html" %}
+                        {% if saved_search.filters %}
+                            <ul class="saved-search__filter-list">
+                                {% for name, value in saved_search.readable_filters.items %}
+                                    <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <a class="saved-search__notifications" href="{% url 'barriers:saved_search_notifications' saved_search.id %}">Notifications: {{ saved_search.notifications_text }}</a>
+                    <div class="saved-search__actions">
+                        <a class="saved-search__action-item" href="{% url 'barriers:rename_saved_search' saved_search.id %}">Rename</a>
+                        <a class="saved-search__action-item" href="{% url 'barriers:delete_saved_search' saved_search.id %}">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock %}

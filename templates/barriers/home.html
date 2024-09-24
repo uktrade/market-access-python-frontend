@@ -53,13 +53,13 @@
                         </form>
                         <div>
                             <div class="dashboard-search-link-container">
-                                <a href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
+                                <a href="{% url 'barriers:my_saved_searches' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
                             </div>
                             <div class="dashboard-search-link-container">
-                                <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
+                                <a href="{% url 'barriers:my_downloads' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
                             </div>
                             <div class="dashboard-search-link-container">
-                                <a href="{% url 'barriers:search' %}?user=1" class="govuk-link--no-visited-state-dark">My open barriers</a>
+                                <a href="{% url 'barriers:search' %}?user=1&status=2" class="govuk-link--no-visited-state-dark">My open barriers</a>
                             </div>
                         </div>
                     </div>
