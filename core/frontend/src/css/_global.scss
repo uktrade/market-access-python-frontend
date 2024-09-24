@@ -121,11 +121,13 @@ body:not(.js-enabled) {
 .govuk-link {
 	// extend govuk-link from govuk-frontend
 	&--no-visited-state-dark {
-		color: $govuk-black;
+		color: $govuk-black !important;
 		font-weight: bold;
-		padding-right: govuk-em( 15, 16 );
 		&:visited {
-			color: $govuk-black;
+			color: $govuk-black !important;
+		}
+		&:hover {
+			background-color: $govuk-yellow;
 		}
 	}
 }

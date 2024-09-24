@@ -144,12 +144,15 @@
                             <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
                         </form>
                         <div>
-                            <a href="{% url 'barriers:dashboard' %}?active=saved_searches"
-                               class="govuk-link govuk-link--no-visited-state-dark">My saved searches</a>
-                            <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads"
-                               class="govuk-link govuk-link--no-visited-state-dark">My downloads</a>
-                            <a href="{% url 'barriers:search' %}?user=1"
-                               class="govuk-link govuk-link--no-visited-state-dark">My open barriers</a>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:search' %}?user=1" class="govuk-link--no-visited-state-dark">My open barriers</a>
+                            </div>
                         </div>
                     </div>
                 </div>
