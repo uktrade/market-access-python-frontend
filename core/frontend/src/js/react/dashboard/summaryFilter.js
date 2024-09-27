@@ -5,8 +5,11 @@ import { getCheckboxValues } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 import MultiSelectFilter from "../search/MultiSelectFilter";
 import LocationFilter from "../search/LocationFilter";
-import { handleBarChart, handlePieChart, handleStackedBarChart } from "./charts";
-
+import {
+    handleBarChart,
+    handlePieChart,
+    handleStackedBarChart,
+} from "./charts";
 
 /**
  * Renders a summary card component.
@@ -55,8 +58,7 @@ const getOptionValue = (htmlElement) => {
  * @param {Object} props.filterValues - The filter values.
  * @returns {JSX.Element} - The rendered summary cards component.
  */
-const SummaryCards = ({ filterValues}) => {
-
+const SummaryCards = ({ filterValues }) => {
     const [form, setForm] = useState({
         region: "",
         sector: "",
@@ -69,38 +71,38 @@ const SummaryCards = ({ filterValues}) => {
 
     const [data, setData] = useState(null);
 
-    const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+    const currentMonth = new Date().toLocaleString("default", {
+        month: "long",
+    });
 
     const [chartData, setChartData] = useState({
         pieChatData: {
-            series: data
-                ? data.barrier_status_chart?.series
-                : [],
+            series: data ? data.barrier_status_chart?.series : [],
             options: {
                 chart: {
-                    id: 'basic-pie',
+                    id: "basic-pie",
                 },
                 title: {
-                    text: 'Total value of open and partially resolved barrier by priority type',
-                    align: 'center'
+                    text: "Total value of open and partially resolved barrier by priority type",
+                    align: "center",
                 },
                 dataLabels: {
-                    enabled: false
+                    enabled: false,
                 },
                 labels: data ? data.barrier_status_chart?.labels : [],
-                colors: ['#28a197', '#003078', '#d4351c', '#912b88'],
+                colors: ["#28a197", "#003078", "#d4351c", "#912b88"],
             },
         },
         barChartData: {
             series: [
                 {
-                    name: 'Open barriers',
+                    name: "Open barriers",
                     data: data
                         ? data.total_value_chart?.open_barriers_value
                         : [],
                 },
                 {
-                    name: 'Resolved barriers',
+                    name: "Resolved barriers",
                     data: data
                         ? data.total_value_chart?.resolved_barriers_value
                         : [],
@@ -108,12 +110,12 @@ const SummaryCards = ({ filterValues}) => {
             ],
             options: {
                 chart: {
-                    id: 'basic-bar',
+                    id: "basic-bar",
                 },
                 plotOptions: {
                     bar: {
                         horizontal: false,
-                        columnWidth: '100%',
+                        columnWidth: "100%",
                     },
                 },
                 fill: {
@@ -121,28 +123,26 @@ const SummaryCards = ({ filterValues}) => {
                 },
                 stroke: {
                     width: 5,
-                    colors: ['transparent'],
+                    colors: ["transparent"],
                 },
                 dataLabels: {
                     enabled: true,
                 },
                 xaxis: {
-                    categories: data
-                        ? data.total_value_chart?.labels
-                        : [],
+                    categories: data ? data.total_value_chart?.labels : [],
                 },
             },
         },
         stackedBarChartData: {
             series: [
                 {
-                    name: 'Value of resolved barriers',
+                    name: "Value of resolved barriers",
                     data: data
                         ? data.barrier_value_chart?.resolved_barriers_value
                         : [],
                 },
                 {
-                    name: 'Value of barriers estimated to be resolved',
+                    name: "Value of barriers estimated to be resolved",
                     data: data
                         ? data.barrier_value_chart?.estimated_barriers_value
                         : [],
@@ -150,24 +150,24 @@ const SummaryCards = ({ filterValues}) => {
             ],
             options: {
                 chart: {
-                    id: 'stacked-bar', 
+                    id: "stacked-bar",
                 },
                 xaxis: {
                     categories: [currentMonth],
                 },
                 yaxis: {
                     title: {
-                        text: '£'
-                    }
+                        text: "£",
+                    },
                 },
                 title: {
-                    text: 'Total value of barriers resolved and estimated in the current financial year',
-                    align: 'center'
+                    text: "Total value of barriers resolved and estimated in the current financial year",
+                    align: "center",
                 },
                 fill: {
-                    opacity: 1
+                    opacity: 1,
                 },
-                colors: ['#912b88', '#003078'],
+                colors: ["#912b88", "#003078"],
             },
         },
     });
@@ -219,11 +219,13 @@ const SummaryCards = ({ filterValues}) => {
                         series: [
                             {
                                 name: "Open barriers",
-                                data: data.total_value_chart.open_barriers_value,
+                                data: data.total_value_chart
+                                    .open_barriers_value,
                             },
                             {
                                 name: "Resolved barriers",
-                                data: data.total_value_chart.resolved_barriers_value,
+                                data: data.total_value_chart
+                                    .resolved_barriers_value,
                             },
                         ],
                         options: {
@@ -238,11 +240,13 @@ const SummaryCards = ({ filterValues}) => {
                         series: [
                             {
                                 name: "Value of resolved barriers",
-                                data: data.barrier_value_chart.resolved_barriers_value,
+                                data: data.barrier_value_chart
+                                    .resolved_barriers_value,
                             },
                             {
                                 name: "Value of barriers estimated to be resolved",
-                                data: data.barrier_value_chart.estimated_barriers_value,
+                                data: data.barrier_value_chart
+                                    .estimated_barriers_value,
                             },
                         ],
                     },
@@ -354,10 +358,10 @@ const SummaryCards = ({ filterValues}) => {
         return value;
     };
 
-    const handleInputChange = ({name, value}) => {
+    const handleInputChange = ({ name, value }) => {
         // set the new value with the name of the input to the query string in the url
         setForm((prevState) => {
-            const newForm = {...prevState, [name]: value};
+            const newForm = { ...prevState, [name]: value };
             // update the current URL with the new query params
             const searchParams = new URLSearchParams();
             for (const [key, value] of Object.entries(newForm)) {
@@ -374,7 +378,7 @@ const SummaryCards = ({ filterValues}) => {
             );
             return newForm;
         });
-      };
+    };
 
     const handleSubmit = (/** @type {any} */ event) => {
         event.preventDefault();
@@ -386,18 +390,12 @@ const SummaryCards = ({ filterValues}) => {
     const removeFilter = (/** @type {any} */ filter) => {
         // remove from filter list and update the URL
         setFilters((prevFilters) =>
-            prevFilters.filter(
-                (f) => f.label !== filter.label,
-            ),
+            prevFilters.filter((f) => f.label !== filter.label),
         );
         // remove the filter from the URL
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.delete(filter.label);
-        window.history.pushState(
-            {},
-            "",
-            `?${searchParams.toString()}`,
-        );
+        window.history.pushState({}, "", `?${searchParams.toString()}`);
     };
 
     useEffect(() => {
@@ -444,9 +442,15 @@ const SummaryCards = ({ filterValues}) => {
                 <div className="govuk-grid-column-one-quarter">
                     <fieldset className="govuk-fieldset">
                         <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
-                            <h3 className="govuk-fieldset__heading govuk-summary-card__title">Filters</h3>
+                            <h3 className="govuk-fieldset__heading govuk-summary-card__title">
+                                Filters
+                            </h3>
                         </legend>
-                        <form id="filters-form" onSubmit={handleSubmit} ref={formRef}>
+                        <form
+                            id="filters-form"
+                            onSubmit={handleSubmit}
+                            ref={formRef}
+                        >
                             <MultiSelectFilter
                                 label="Region"
                                 options={filterValues.region}
@@ -467,7 +471,9 @@ const SummaryCards = ({ filterValues}) => {
                                 tradingBlocs={filterValues.tradingBlocs}
                                 tradingBlocData={filterValues.tradingBlocsData}
                                 adminAreaData={filterValues.adminAreas}
-                                adminAreasCountries={filterValues.adminAreasCountries}
+                                adminAreasCountries={
+                                    filterValues.adminAreasCountries
+                                }
                                 onChange={handleInputChange}
                             />
                             <MultiSelectFilter
@@ -478,7 +484,11 @@ const SummaryCards = ({ filterValues}) => {
                                 onChange={handleInputChange}
                             />
                             {filters.length > 0 && (
-                                <a id="clear-filters-button" className="filter-items__clear" href="{% url 'barriers:home' %}">
+                                <a
+                                    id="clear-filters-button"
+                                    className="filter-items__clear"
+                                    href="{% url 'barriers:home' %}"
+                                >
                                     Remove all filters
                                 </a>
                             )}
@@ -486,7 +496,9 @@ const SummaryCards = ({ filterValues}) => {
                                 type="submit"
                                 className="govuk-button govuk-button--full-width"
                                 id="apply-filters-button"
-                                disabled={Object.values(form).every(value => value === "")}
+                                disabled={Object.values(form).every(
+                                    (value) => value === "",
+                                )}
                             >
                                 Apply filters
                             </button>
@@ -497,28 +509,41 @@ const SummaryCards = ({ filterValues}) => {
                     <h3 className="govuk-summary-card__title">Summary data</h3>
                     <div className="p-l-3" id="active-filters">
                         <ul className="govuk-list">
-                            {filters.filter(v => v.readable_value).map((filter, index) => (
-                                <li className="active-filters__item" key={index}>
-                                    <span
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            removeFilter(filter);
-                                        }}
-                                        className="active-filters__item__link"
-                                        title={`Remove ${filter.label} filter`}
+                            {filters
+                                .filter((v) => v.readable_value)
+                                .map((filter, index) => (
+                                    <li
+                                        className="active-filters__item"
+                                        key={index}
                                     >
-                                        <h4 className="active-filter__heading">{filter.label}:</h4>
-                                        <p className="active-filter__text">{filter.readable_value}</p>
-                                        <span className="sr-only govuk-visually-hidden">
-                                            Activate link to remove {filter.label} filter with value {filter.readable_value}.
+                                        <span
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                removeFilter(filter);
+                                            }}
+                                            className="active-filters__item__link"
+                                            title={`Remove ${filter.label} filter`}
+                                        >
+                                            <h4 className="active-filter__heading">
+                                                {filter.label}:
+                                            </h4>
+                                            <p className="active-filter__text">
+                                                {filter.readable_value}
+                                            </p>
+                                            <span className="sr-only govuk-visually-hidden">
+                                                Activate link to remove{" "}
+                                                {filter.label} filter with value{" "}
+                                                {filter.readable_value}.
+                                            </span>
                                         </span>
-                                    </span>
-                                </li>
-                            ))}
+                                    </li>
+                                ))}
                         </ul>
                     </div>
                     <div className="govuk-grid-row">
-                        <h3 className="govuk-summary-card__title p-l-3">Open barriers</h3>
+                        <h3 className="govuk-summary-card__title p-l-3">
+                            Open barriers
+                        </h3>
                         <SummaryCard
                             value={data?.barriers?.open}
                             description="barriers are open."
@@ -540,7 +565,11 @@ const SummaryCards = ({ filterValues}) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            {`Barriers which have been resolved or are projected to be resolved between ${parseIso(data?.financial_year?.current_start)} and ${parseIso(data?.financial_year?.current_end)} current financial year`}
+                            {`Barriers which have been resolved or are projected to be resolved between ${parseIso(
+                                data?.financial_year?.current_start,
+                            )} and ${parseIso(
+                                data?.financial_year?.current_end,
+                            )} current financial year`}
                         </h3>
                         <SummaryCard
                             value={data?.barriers_current_year?.open}
@@ -555,7 +584,9 @@ const SummaryCards = ({ filterValues}) => {
                             search_params=""
                         />
                         <SummaryCard
-                            value={data?.barriers_current_year?.overseas_delivery}
+                            value={
+                                data?.barriers_current_year?.overseas_delivery
+                            }
                             description="Overseas delivery barriers are estimated to be resolved in the current financial year."
                             url="#"
                             search_params=""
@@ -566,34 +597,61 @@ const SummaryCards = ({ filterValues}) => {
             <div className="govuk-grid-row">
                 <div className="govuk-grid-row">
                     <div className="govuk-grid-column-full">
-                        {data?.barrier_value_chart.resolved_barriers_value && data?.barrier_value_chart.estimated_barriers_value ? (
+                        {data?.barrier_value_chart.resolved_barriers_value &&
+                        data?.barrier_value_chart.estimated_barriers_value ? (
                             handleStackedBarChart(chartData.stackedBarChartData)
-                        ): (
+                        ) : (
                             <div className="dashboard-chart">
-                                <h3 className="govuk-heading-s">Total value of barriers resolved and estimated in the current finanacial year</h3>
-                                <p className="govuk-inset-text">Unable to display chart. No data available for current filters</p>
-                                { !data?.barrier_value_chart.resolved_barriers_value && (
-                                <p className="govuk-body-s">No resolved barriers found</p>)}
-                    {! data?.barrier_value_chart.estimated_barriers_value && (
-                        <p className="govuk-body-s">No barriers with an estimated resolution in the current year found </p>
-                    )}
-                    </div>
+                                <h3 className="govuk-heading-s">
+                                    Total value of barriers resolved and
+                                    estimated in the current finanacial year
+                                </h3>
+                                <p className="govuk-inset-text">
+                                    Unable to display chart. No data available
+                                    for current filters
+                                </p>
+                                {!data?.barrier_value_chart
+                                    .resolved_barriers_value && (
+                                    <p className="govuk-body-s">
+                                        No resolved barriers found
+                                    </p>
+                                )}
+                                {!data?.barrier_value_chart
+                                    .estimated_barriers_value && (
+                                    <p className="govuk-body-s">
+                                        No barriers with an estimated resolution
+                                        in the current year found{" "}
+                                    </p>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
                 <div className="govuk-grid-row">
                     <div className="govuk-grid-column-one-half">
-                        {data?.total_value_chart.open_barriers_value && data?.total_value_chart.resolved_barriers_value ? (
+                        {data?.total_value_chart.open_barriers_value &&
+                        data?.total_value_chart.resolved_barriers_value ? (
                             handleBarChart(chartData.barChartData)
-                        ): 
-                        (
+                        ) : (
                             <div className="dashboard-chart">
-                                <h3 className="govuk-heading-s">Total barrier value</h3>
-                                <p className="govuk-inset-text">Unable to display chart. No data available for current filters</p>
-                                { !data?.total_value_chart.open_barriers_value && (
-                                    <p className="govuk-body-s">No open barriers found</p>)}
-                                {!data?.total_value_chart.resolved_barriers_value && (
-                                    <p className="govuk-body-s">No resolved barriers found</p>
+                                <h3 className="govuk-heading-s">
+                                    Total barrier value
+                                </h3>
+                                <p className="govuk-inset-text">
+                                    Unable to display chart. No data available
+                                    for current filters
+                                </p>
+                                {!data?.total_value_chart
+                                    .open_barriers_value && (
+                                    <p className="govuk-body-s">
+                                        No open barriers found
+                                    </p>
+                                )}
+                                {!data?.total_value_chart
+                                    .resolved_barriers_value && (
+                                    <p className="govuk-body-s">
+                                        No resolved barriers found
+                                    </p>
                                 )}
                             </div>
                         )}
@@ -601,10 +659,16 @@ const SummaryCards = ({ filterValues}) => {
                     <div className="govuk-grid-column-one-half">
                         {data?.barriers_by_status_chart.series ? (
                             handlePieChart(chartData.pieChatData)
-                        ): (
+                        ) : (
                             <div className="dashboard-chart">
-                                <h3 className="govuk-heading-s">Total value of open and partially resolved barrier by status</h3>
-                                <p className="govuk-inset-text">Unable to display chart. No data available for current filters</p>
+                                <h3 className="govuk-heading-s">
+                                    Total value of open and partially resolved
+                                    barrier by status
+                                </h3>
+                                <p className="govuk-inset-text">
+                                    Unable to display chart. No data available
+                                    for current filters
+                                </p>
                             </div>
                         )}
                     </div>
@@ -627,9 +691,15 @@ const renderSummaryCards = (elementId) => {
     const policy_team = document.getElementById("policy_team");
     const country = document.getElementById("country");
     const tradingBlocs = document.getElementById("country_trading_bloc");
-    const tradingBlocsData = JSON.parse(document.getElementById("trading-blocs-data").textContent);
-    const adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
-    const adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
+    const tradingBlocsData = JSON.parse(
+        document.getElementById("trading-blocs-data").textContent,
+    );
+    const adminAreas = JSON.parse(
+        document.getElementById("admin-areas-data").textContent,
+    );
+    const adminAreasCountries = JSON.parse(
+        document.getElementById("countries-with-admin-areas-data").textContent,
+    );
 
     const filterValues = {
         region: getOptionValue(region).options,

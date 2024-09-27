@@ -55,15 +55,14 @@ function MultiSelectFilter(props) {
         } else {
             let option = meta.removedValue.value;
             setSelectedOptionIds((prevState) => {
-                const newOptions = prevState.filter((item) => item !== option)
+                const newOptions = prevState.filter((item) => item !== option);
                 if (props.onChange) {
                     props.onChange({ name: props.inputId, value: newOptions });
                 }
                 return newOptions;
-                }
-            );
-       }
-        };
+            });
+        }
+    };
 
     return (
         <div className="govuk-form-group">

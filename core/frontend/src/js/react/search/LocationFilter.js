@@ -137,12 +137,13 @@ function LocationFilter(props) {
                     });
                 }
                 return newLocation;
-                }
-            );
+            });
         } else {
             let location = meta.removedValue.value;
             setSelectedLocationIds((prevState) => {
-                const newLocations = prevState.filter((item) => item !== location);
+                const newLocations = prevState.filter(
+                    (item) => item !== location,
+                );
                 if (props.onChange) {
                     props.onChange({
                         name: "location",
@@ -154,8 +155,7 @@ function LocationFilter(props) {
                     });
                 }
                 return newLocations;
-                }
-            );
+            });
             // Must also clear the child admin areas if country is removed
             if (selectedAdminAreaIds[location]) {
                 selectedAdminAreaIds[location] = [];
