@@ -1,6 +1,6 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        {% if summary_stats.barrier_value_chart.resolved_barriers_value  and summary_stats.barrier_value_chart.estimated_barriers_value %}
+        {% if summary_stats.barrier_value_chart.resolved_barriers_value and summary_stats.barrier_value_chart.estimated_barriers_value %}
             <div id="stacked-bar-chart" class="dashboard-chart"></div>
         {% else %}
             <div class="dashboard-chart">
@@ -20,7 +20,7 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
-        {% if summary_stats.total_value_chart.open_barriers_value  and summary_stats.total_value_chart.resolved_barriers_value %}
+        {% if summary_stats.total_value_chart.open_barriers_value and summary_stats.total_value_chart.resolved_barriers_value %}
             <div id="bar-chart" class="dashboard-chart"></div>
         {% else %}
             <div class="dashboard-chart">
