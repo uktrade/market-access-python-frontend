@@ -479,13 +479,20 @@ const SummaryCards = ({ filterValues }) => {
                                 onChange={handleInputChange}
                             />
                             {filters.length > 0 && (
-                                <a
+                                <span
                                     id="clear-filters-button"
                                     className="filter-items__clear"
-                                    href="{% url 'barriers:home' %}"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        window.history.pushState(
+                                            {},
+                                            ""
+                                        );
+                                        setFilters([]);
+                                    }}
                                 >
                                     Remove all filters
-                                </a>
+                                </span>
                             )}
                             <button
                                 type="submit"
