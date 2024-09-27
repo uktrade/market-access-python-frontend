@@ -138,9 +138,10 @@
                         <form action="{% url 'barriers:search' %}" method="GET">
                             <input class="govuk-input govuk-!-width-two-thirds"
                                    id="event-name"
-                                   name="text"
+                                   name="search_term_text"
                                    type="text"
-                                   placeholder="Search for barrier by name or with key terms.">
+                                   placeholder="Search for barrier by name or with key terms."/>
+                            <input type="hidden" name="ordering" value="relevance"/>
                             <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
                         </form>
                         <div>

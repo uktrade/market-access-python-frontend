@@ -50,6 +50,9 @@
                            name="{{ form.member.name }}"
                            value="{{ form.member.value }}" />
                 {% endif %}
+                {% if search_term_text %}
+                    <input type="hidden" name="search_term_text" value="{{ search_term_text }}" />
+                {% endif %}
                 <div class="govuk-form-group filter-items-group">
                     <label class="govuk-label filter-items__label" for="search">{{ form.search.label }}</label>
                     <input id="{{ form.search.name }}"
@@ -174,6 +177,7 @@
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_resolved_in_part %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_open_in_progress %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.valuation_assessment %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.search_term_text %}
                         </ul>
                     {% endif %}
                 </div>
