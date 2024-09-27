@@ -110,28 +110,23 @@ const SummaryCards = ({ filterValues }) => {
             ],
             options: {
                 chart: {
-                    id: "basic-bar",
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: "100%",
-                    },
-                },
-                fill: {
-                    opacity: 1,
-                },
-                stroke: {
-                    width: 5,
-                    colors: ["transparent"],
-                },
-                dataLabels: {
-                    enabled: true,
+                    id: 'basic-bar',
+                    toolbar: {
+                        show: true
+                    }
                 },
                 xaxis: {
-                    categories: data ? data.total_value_chart?.labels : [],
+                    categories: ['Total Barriers'],
                 },
-            },
+                yaxis: {
+                    categories: ['0', '20', '40', '60', '80', '100'],
+                },
+                colors: ['#912b88', '#003078'],
+                title: {
+                    text: 'Total barrier value',
+                    align: 'center'
+                },
+            }
         },
         stackedBarChartData: {
             series: [
@@ -657,7 +652,7 @@ const SummaryCards = ({ filterValues }) => {
                         )}
                     </div>
                     <div className="govuk-grid-column-one-half">
-                        {data?.barriers_by_status_chart.series ? (
+                        {chartData.pieChatData.series ? (
                             handlePieChart(chartData.pieChatData)
                         ) : (
                             <div className="dashboard-chart">

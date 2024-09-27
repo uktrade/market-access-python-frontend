@@ -22,10 +22,12 @@ export const handlePieChart = (
         },
     };
 
+    console.log("chartData", chartData.series);
+
     return (
         <Charts
             options={options}
-            series={chartData.series === undefined ? [] : chartData.series}
+            series={chartData.series}
             type={"pie"}
             height={350}
             labels={chartData.options.labels}
