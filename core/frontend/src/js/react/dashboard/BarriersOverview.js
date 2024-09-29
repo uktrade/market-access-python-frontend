@@ -58,7 +58,7 @@ const getOptionValue = (htmlElement) => {
  * @param {Object} props.filterValues - The filter values.
  * @returns {JSX.Element} - The rendered summary cards component.
  */
-const SummaryCards = ({ filterValues }) => {
+const BarriersOverview = ({ filterValues }) => {
     const [form, setForm] = useState({
         region: "",
         sector: "",
@@ -110,23 +110,23 @@ const SummaryCards = ({ filterValues }) => {
             ],
             options: {
                 chart: {
-                    id: 'basic-bar',
+                    id: "basic-bar",
                     toolbar: {
-                        show: true
-                    }
+                        show: true,
+                    },
                 },
                 xaxis: {
-                    categories: ['Total Barriers'],
+                    categories: ["Total Barriers"],
                 },
                 yaxis: {
-                    categories: ['0', '20', '40', '60', '80', '100'],
+                    categories: ["0", "20", "40", "60", "80", "100"],
                 },
-                colors: ['#912b88', '#003078'],
+                colors: ["#912b88", "#003078"],
                 title: {
-                    text: 'Total barrier value',
-                    align: 'center'
+                    text: "Total barrier value",
+                    align: "center",
                 },
-            }
+            },
         },
         stackedBarChartData: {
             series: [
@@ -361,7 +361,15 @@ const SummaryCards = ({ filterValues }) => {
             const searchParams = new URLSearchParams();
             for (const [key, value] of Object.entries(newForm)) {
                 if (["", null].indexOf(value) === -1) {
-                    searchParams.append(key, value);
+                    if (key === "location") {
+                        // @ts-ignore
+                        const selectedIds = newForm[key].selectedLocationIds;
+                        if (selectedIds.length > 0) {
+                            searchParams.append(key, selectedIds.join(","));
+                        }
+                    }else {
+                        searchParams.append(key, value);
+                    }
                 }
             }
             // update the current URL with the new query params
@@ -413,17 +421,11 @@ const SummaryCards = ({ filterValues }) => {
         // Build filters array
         const filters = Object.keys(params)
             .map((key) => {
-                const values = params[key];
+                const values = params[key][0].split(",");
                 return values.map((val) => ({
                     label: key,
                     value: val,
-                    readable_value: val && getReadableValue(val, key),
-                    remove_url: new URLSearchParams(
-                        [...searchParams].filter(
-                            ([paramKey, paramValue]) =>
-                                !(paramKey === key && paramValue === val),
-                        ),
-                    ).toString(),
+                    readable_value: val && getReadableValue(val, key)
                 }));
             })
             .flat();
@@ -484,10 +486,7 @@ const SummaryCards = ({ filterValues }) => {
                                     className="filter-items__clear"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        window.history.pushState(
-                                            {},
-                                            ""
-                                        );
+                                        window.history.pushState({}, "");
                                         setFilters([]);
                                     }}
                                 >
@@ -518,26 +517,10 @@ const SummaryCards = ({ filterValues }) => {
                                         className="active-filters__item"
                                         key={index}
                                     >
-                                        <span
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                removeFilter(filter);
-                                            }}
-                                            className="active-filters__item__link"
-                                            title={`Remove ${filter.label} filter`}
-                                        >
-                                            <h4 className="active-filter__heading">
-                                                {filter.label}:
-                                            </h4>
-                                            <p className="active-filter__text">
-                                                {filter.readable_value}
-                                            </p>
-                                            <span className="sr-only govuk-visually-hidden">
-                                                Activate link to remove{" "}
-                                                {filter.label} filter with value{" "}
-                                                {filter.readable_value}.
-                                            </span>
-                                        </span>
+                                        <h4 className="active-filter__heading">
+                                            {filter.label}:
+                                        </h4>
+                                        <p className="active-filter__text">{filter.readable_value}</p>
                                     </li>
                                 ))}
                         </ul>
@@ -685,7 +668,7 @@ const SummaryCards = ({ filterValues }) => {
  * @param {string} elementId - The ID of the element to render the component in.
  * @returns {void}
  */
-const renderSummaryCards = (elementId) => {
+const renderBarriersOverview = (elementId) => {
     const element = document.getElementById(elementId);
 
     const region = document.getElementById("region");
@@ -717,7 +700,7 @@ const renderSummaryCards = (elementId) => {
         adminAreas,
         adminAreasCountries,
     };
-    render(<SummaryCards filterValues={filterValues} />, element);
+    render(<BarriersOverview filterValues={filterValues} />, element);
 };
 
-export default renderSummaryCards;
+export default renderBarriersOverview;

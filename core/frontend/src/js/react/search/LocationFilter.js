@@ -295,6 +295,7 @@ function LocationFilter(props) {
             selectedAreasList.push(event[i]["value"]);
         }
         selectedAdminAreaIds[country] = selectedAreasList;
+        // @ts-ignore
         document.getElementById("admin_areas").value =
             JSON.stringify(selectedAdminAreaIds);
     };

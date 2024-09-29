@@ -22,8 +22,6 @@ export const handlePieChart = (
         },
     };
 
-    console.log("chartData", chartData.series);
-
     return (
         <Charts
             options={options}
