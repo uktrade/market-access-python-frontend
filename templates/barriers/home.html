@@ -24,6 +24,17 @@
                 let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
                 let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
 
+                window.addEventListener('resize', function(event) {
+                    const search_submit_bar = document.getElementById("event-name");
+                    const search_submit_button = document.getElementById("search_submit_button");
+                    if (window.innerWidth < 768) {
+                        search_submit_button.classList.add("dmas-search-field__submit");
+                    }
+                    else {
+                        search_submit_button.classList.remove("dmas-search-field__submit");
+                    }
+                });
+
                 // load summary cards
                 ReactApp.renderBarriersOverview("barrier-overview");
 
@@ -50,7 +61,7 @@
                                    type="text"
                                    placeholder="Search for barrier by name or with key terms."/>
                             <input type="hidden" name="ordering" value="relevance"/>
-                            <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+                            <button id="search_submit_button" type="submit" class="govuk-button" data-module="govuk-button">Search</button>
                         </form>
                         <div>
                             <div class="dashboard-search-link-container">
