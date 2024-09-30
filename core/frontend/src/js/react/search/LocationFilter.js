@@ -124,12 +124,38 @@ function LocationFilter(props) {
     const handleLocationSelect = (value, meta) => {
         if (meta.action == "select-option") {
             let location = meta.option.value;
-            setSelectedLocationIds(selectedLocationIds.concat(location));
+            setSelectedLocationIds((prevState) => {
+                const newLocation = [...prevState, location];
+                if (props.onChange) {
+                    props.onChange({
+                        name: "location",
+                        value: {
+                            selectedLocationIds: newLocation,
+                            selectedAdminAreaIds,
+                            selectedCountryTradingBlocValues,
+                        },
+                    });
+                }
+                return newLocation;
+            });
         } else {
             let location = meta.removedValue.value;
-            setSelectedLocationIds(
-                selectedLocationIds.filter((item) => item !== location),
-            );
+            setSelectedLocationIds((prevState) => {
+                const newLocations = prevState.filter(
+                    (item) => item !== location,
+                );
+                if (props.onChange) {
+                    props.onChange({
+                        name: "location",
+                        value: {
+                            selectedLocationIds: newLocations,
+                            selectedAdminAreaIds,
+                            selectedCountryTradingBlocValues,
+                        },
+                    });
+                }
+                return newLocations;
+            });
             // Must also clear the child admin areas if country is removed
             if (selectedAdminAreaIds[location]) {
                 selectedAdminAreaIds[location] = [];
@@ -269,6 +295,7 @@ function LocationFilter(props) {
             selectedAreasList.push(event[i]["value"]);
         }
         selectedAdminAreaIds[country] = selectedAreasList;
+        // @ts-ignore
         document.getElementById("admin_areas").value =
             JSON.stringify(selectedAdminAreaIds);
     };
@@ -340,7 +367,6 @@ function LocationFilter(props) {
                                                 tradingBloc,
                                             )
                                         }
-                                        // checked={selectedAllTradingBlocks || initialExtraLocation.includes(tradingBloc.code)}
                                     />
                                     <label
                                         className="govuk-label checkbox-filter__label"
@@ -351,19 +377,6 @@ function LocationFilter(props) {
                                 </div>
                             ),
                         )}
-                        {/* {selectedCountryTradingBlocs.length > 0 ? (<div className="checkbox-filter__item"}>
-                <input
-                  className="checkbox-filter__input"
-                  id={"extra_location" + selectedCountryTradingBlocs.length}
-                  onChange={allTradingBlocsChangeHandler}
-                  type="checkbox"
-                  value={"ALL"}
-                  checked={selectedAllTradingBlocks}
-                />
-                <label className="govuk-label checkbox-filter__label" for={"extra_location" + selectedCountryTradingBlocs.length}>
-                  Include all trading blocks
-                </label>
-              </div>) : null}*/}
                     </div>
                 ) : null}
             </fieldset>

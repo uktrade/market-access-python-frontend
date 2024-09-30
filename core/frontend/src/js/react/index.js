@@ -18,7 +18,7 @@ import {
     handlePieChart,
     handleStackedBarChart,
 } from "./dashboard/charts";
-import renderSummaryCards from "./dashboard/summaryFilter";
+import renderBarriersOverview from "./dashboard/BarriersOverview";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -167,6 +167,7 @@ function renderInputSelectWithMentions(
  */
 function renderEmailSearchAutocomplete(fieldID) {
     const field = document.getElementById(fieldID),
+        // @ts-ignore
         fieldlLabel = field.labels[0],
         wrapperElement = field.closest(".dmas_autocomplete_wrapper");
     ReactDOM.render(
@@ -211,5 +212,5 @@ export {
     renderPieChart,
     renderBarChart,
     renderStackedBarChart,
-    renderSummaryCards,
+    renderBarriersOverview,
 };

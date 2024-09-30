@@ -45,12 +45,22 @@ function MultiSelectFilter(props) {
     const handleOptionSelect = (value, meta) => {
         if (meta.action === "select-option") {
             let option = meta.option.value;
-            setSelectedOptionIds([...selectedOptionIds, option]);
+            setSelectedOptionIds((prevState) => {
+                const newOption = [...prevState, option];
+                if (props.onChange) {
+                    props.onChange({ name: props.inputId, value: newOption });
+                }
+                return newOption;
+            });
         } else {
             let option = meta.removedValue.value;
-            setSelectedOptionIds(
-                selectedOptionIds.filter((item) => item !== option),
-            );
+            setSelectedOptionIds((prevState) => {
+                const newOptions = prevState.filter((item) => item !== option);
+                if (props.onChange) {
+                    props.onChange({ name: props.inputId, value: newOptions });
+                }
+                return newOptions;
+            });
         }
     };
 
