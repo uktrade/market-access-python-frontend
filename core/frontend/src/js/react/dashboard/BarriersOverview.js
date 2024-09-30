@@ -367,7 +367,7 @@ const BarriersOverview = ({ filterValues }) => {
                         if (selectedIds.length > 0) {
                             searchParams.append(key, selectedIds.join(","));
                         }
-                    }else {
+                    } else {
                         searchParams.append(key, value);
                     }
                 }
@@ -425,7 +425,7 @@ const BarriersOverview = ({ filterValues }) => {
                 return values.map((val) => ({
                     label: key,
                     value: val,
-                    readable_value: val && getReadableValue(val, key)
+                    readable_value: val && getReadableValue(val, key),
                 }));
             })
             .flat();
@@ -520,7 +520,9 @@ const BarriersOverview = ({ filterValues }) => {
                                         <h4 className="active-filter__heading">
                                             {filter.label}:
                                         </h4>
-                                        <p className="active-filter__text">{filter.readable_value}</p>
+                                        <p className="active-filter__text">
+                                            {filter.readable_value}
+                                        </p>
                                     </li>
                                 ))}
                         </ul>
