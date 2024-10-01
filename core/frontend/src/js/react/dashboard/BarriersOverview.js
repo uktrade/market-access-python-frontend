@@ -66,6 +66,7 @@ const formatAdminAreas = (searchParams) => {
     return admin_areas;
 };
 
+
 const addLocation = (queryParams) => {
     // update the current URL with the new query params
     const searchParams = new URLSearchParams(queryParams);
@@ -152,15 +153,11 @@ const BarriersOverview = ({ filterValues }) => {
             series: [
                 {
                     name: "Open barriers",
-                    data: data
-                        ? data.total_value_chart?.open_barriers_value
-                        : [],
+                    data: data && data.total_value_chart.open_barriers_value ? [data.total_value_chart.open_barriers_value] : [],
                 },
                 {
                     name: "Resolved barriers",
-                    data: data
-                        ? data.total_value_chart?.resolved_barriers_value
-                        : [],
+                    data: data && data.total_value_chart?.resolved_barriers_value ? [data.total_value_chart.resolved_barriers_value] : [],
                 },
             ],
             options: {
@@ -187,14 +184,12 @@ const BarriersOverview = ({ filterValues }) => {
             series: [
                 {
                     name: "Value of resolved barriers",
-                    data: data
-                        ? data.barrier_value_chart?.resolved_barriers_value
+                    data: data && data.barrier_value_chart.resolved_barriers_value ? [data.barrier_value_chart.resolved_barriers_value]
                         : [],
                 },
                 {
                     name: "Value of barriers estimated to be resolved",
-                    data: data
-                        ? data.barrier_value_chart?.estimated_barriers_value
+                    data: data && data.barrier_value_chart.estimated_barriers_value ? [data.barrier_value_chart.estimated_barriers_value]
                         : [],
                 },
             ],
@@ -273,34 +268,28 @@ const BarriersOverview = ({ filterValues }) => {
                         series: [
                             {
                                 name: "Open barriers",
-                                data: data.total_value_chart
-                                    .open_barriers_value,
+                                data: data.total_value_chart.open_barriers_value ?
+                                [data.total_value_chart.open_barriers_value] : [],
                             },
                             {
                                 name: "Resolved barriers",
-                                data: data.total_value_chart
-                                    .resolved_barriers_value,
+                                data: data.total_value_chart.resolved_barriers_value ?
+                                [data.total_value_chart.resolved_barriers_value] : [],
                             },
-                        ],
-                        options: {
-                            ...prevState.barChartData.options,
-                            xaxis: {
-                                categories: data.total_value_chart.labels,
-                            },
-                        },
+                        ]
                     },
                     stackedBarChartData: {
                         ...prevState.stackedBarChartData,
                         series: [
                             {
                                 name: "Value of resolved barriers",
-                                data: data.barrier_value_chart
-                                    .resolved_barriers_value,
+                                data: data && data.barrier_value_chart
+                                    .resolved_barriers_value ? [data.barrier_value_chart.resolved_barriers_value] : [],
                             },
                             {
                                 name: "Value of barriers estimated to be resolved",
-                                data: data.barrier_value_chart
-                                    .estimated_barriers_value,
+                                data: data && data.barrier_value_chart
+                                    .estimated_barriers_value ? [data.barrier_value_chart.estimated_barriers_value] : [],
                             },
                         ],
                     },
@@ -582,8 +571,7 @@ const BarriersOverview = ({ filterValues }) => {
             <div className="govuk-grid-row">
                 <div className="govuk-grid-row">
                     <div className="govuk-grid-column-full">
-                        {data?.barrier_value_chart.resolved_barriers_value &&
-                        data?.barrier_value_chart.estimated_barriers_value ? (
+                        {chartData.stackedBarChartData.series[0].data.length > 0 || chartData.stackedBarChartData.series[1].data.length > 0 ?(
                             handleStackedBarChart(chartData.stackedBarChartData)
                         ) : (
                             <div className="dashboard-chart">
@@ -595,14 +583,12 @@ const BarriersOverview = ({ filterValues }) => {
                                     Unable to display chart. No data available
                                     for current filters
                                 </p>
-                                {!data?.barrier_value_chart
-                                    .resolved_barriers_value && (
+                                {chartData.stackedBarChartData.series[0].data.length === 0 && (
                                     <p className="govuk-body-s">
                                         No resolved barriers found
                                     </p>
                                 )}
-                                {!data?.barrier_value_chart
-                                    .estimated_barriers_value && (
+                                {chartData.stackedBarChartData.series[0].data.length === 1 && (
                                     <p className="govuk-body-s">
                                         No barriers with an estimated resolution
                                         in the current year found{" "}
@@ -614,8 +600,8 @@ const BarriersOverview = ({ filterValues }) => {
                 </div>
                 <div className="govuk-grid-row">
                     <div className="govuk-grid-column-one-half">
-                        {data?.total_value_chart.open_barriers_value &&
-                        data?.total_value_chart.resolved_barriers_value ? (
+                        {chartData.barChartData.series[0].data.length > 0 || chartData.barChartData.series[1].data.length > 0 ?
+                         (
                             handleBarChart(chartData.barChartData)
                         ) : (
                             <div className="dashboard-chart">
@@ -626,14 +612,12 @@ const BarriersOverview = ({ filterValues }) => {
                                     Unable to display chart. No data available
                                     for current filters
                                 </p>
-                                {!data?.total_value_chart
-                                    .open_barriers_value && (
+                                {chartData.barChartData.series[0].data.length === 0 && (
                                     <p className="govuk-body-s">
                                         No open barriers found
                                     </p>
                                 )}
-                                {!data?.total_value_chart
-                                    .resolved_barriers_value && (
+                                {chartData.barChartData.series[1].data.length === 0 && (
                                     <p className="govuk-body-s">
                                         No resolved barriers found
                                     </p>
