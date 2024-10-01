@@ -19,6 +19,7 @@ import {
     handleStackedBarChart,
 } from "./dashboard/charts";
 import renderBarriersOverview from "./dashboard/BarriersOverview";
+import renderSummaryCards from "./dashboard/summaryFilter";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -213,4 +214,5 @@ export {
     renderBarChart,
     renderStackedBarChart,
     renderBarriersOverview,
+    renderSummaryCards,
 };

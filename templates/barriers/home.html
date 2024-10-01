@@ -24,6 +24,7 @@
                 let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
                 let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
 
+                <<<<<<< HEAD
                 window.addEventListener('resize', function(event) {
                     const search_submit_bar = document.getElementById("event-name");
                     const search_submit_button = document.getElementById("search_submit_button");
@@ -37,6 +38,35 @@
 
                 // load summary cards
                 ReactApp.renderBarriersOverview("barrier-overview");
+                =======
+                // load summary cards
+                ReactApp.renderSummaryCards("summary-cards", [...tradingBlocs, ...adminAreasCountries]);
+
+                ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries);
+                ReactApp.renderMultiSelectFilter("policy_team", "Search teams");
+                ReactApp.renderMultiSelectFilter("region");
+                ReactApp.renderMultiSelectFilter("sector");
+
+                // load the charts
+                ReactApp.renderPieChart(
+                    {
+                        series: {{ summary_stats.barriers_by_status_chart.series }},
+                        options: {
+                            chart: {
+                                id: 'basic-pie',
+                            },
+                            title: {
+                                text: 'Total value of open and partially resolved barrier by priority type',
+                                align: 'center'
+                            },
+                            dataLabels: {
+                                enabled: false
+                            },
+                            labels: {{ summary_stats.barriers_by_status_chart.labels|safe }},
+                            colors: ['#28a197', '#003078', '#d4351c', '#912b88'],
+                        }
+                    },"pie-chart");
+                >>>>>>> master
 
             })
         </script>
@@ -57,9 +87,13 @@
                         <form action="{% url 'barriers:search' %}" method="GET">
                             <input class="govuk-input govuk-!-width-two-thirds"
                                    id="event-name"
+                                   <<<<<<< HEAD
                                    name="search_term_text"
-                                   type="text"
-                                   placeholder="Search for barrier by name or with key terms."/>
+                                   =======
+                                   name="text"
+                            >>>>>>> master
+                            type="text"
+                            placeholder="Search for barrier by name or with key terms."/>
                             <input type="hidden" name="ordering" value="relevance"/>
                             <button id="search_submit_button" type="submit" class="govuk-button" data-module="govuk-button">Search</button>
                         </form>
