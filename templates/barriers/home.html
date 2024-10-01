@@ -24,6 +24,17 @@
                 let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
                 let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
 
+                window.addEventListener('resize', function(event) {
+                    const search_submit_bar = document.getElementById("event-name");
+                    const search_submit_button = document.getElementById("search_submit_button");
+                    if (window.innerWidth < 768) {
+                        search_submit_button.classList.add("dmas-search-field__submit");
+                    }
+                    else {
+                        search_submit_button.classList.remove("dmas-search-field__submit");
+                    }
+                });
+
                 // load summary cards
                 ReactApp.renderBarriersOverview("barrier-overview");
 
@@ -37,7 +48,7 @@
           role="main">
         {% block content %}
             <div class="govuk-grid-row grey">
-                <div class="govuk-grid-column-full ma-container-full p-t-4">
+                <div class="govuk-grid-column-full ma-container-full p-t-4 p-l-0">
                     <h1 class="govuk-heading-xl">
                         <span class="govuk-caption-m">Market access barriers</span>
                         Dashboard
@@ -46,18 +57,22 @@
                         <form action="{% url 'barriers:search' %}" method="GET">
                             <input class="govuk-input govuk-!-width-two-thirds"
                                    id="event-name"
-                                   name="text"
+                                   name="search_term_text"
                                    type="text"
-                                   placeholder="Search for barrier by name or with key terms.">
-                            <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+                                   placeholder="Search for barrier by name or with key terms."/>
+                            <input type="hidden" name="ordering" value="relevance"/>
+                            <button id="search_submit_button" type="submit" class="govuk-button" data-module="govuk-button">Search</button>
                         </form>
                         <div>
-                            <a href="{% url 'barriers:dashboard' %}?active=saved_searches"
-                               class="govuk-link govuk-link--no-visited-state-dark">My saved searches</a>
-                            <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads"
-                               class="govuk-link govuk-link--no-visited-state-dark">My downloads</a>
-                            <a href="{% url 'barriers:search' %}?user=1"
-                               class="govuk-link govuk-link--no-visited-state-dark">My open barriers</a>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:my_saved_searches' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:my_downloads' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:search' %}?user=1&status=2" class="govuk-link--no-visited-state-dark">My open barriers</a>
+                            </div>
                         </div>
                     </div>
                 </div>

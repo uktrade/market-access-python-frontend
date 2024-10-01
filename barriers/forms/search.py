@@ -21,6 +21,9 @@ class BarrierSearchForm(forms.Form):
         max_length=255,
         required=False,
     )
+    search_term_text = forms.CharField(
+        label="Dashboard search term", max_length=255, required=False
+    )
     country = forms.MultipleChoiceField(
         label="Barrier location",
         required=False,
@@ -373,7 +376,15 @@ class BarrierSearchForm(forms.Form):
         self.fields["tags"].choices = choices
 
     def set_ordering_choices(self):
-        self.fields["ordering"].choices = self.metadata.get_search_ordering_choices()
+
+        ordering_choices = self.metadata.get_search_ordering_choices()
+
+        if not self.data.get("search_term_text"):
+            # If there is no search term for similarity, we need to remove the relevance ordering filter
+            # from the list of options
+            ordering_choices.remove(["relevance", "Relevence to the search term"])
+
+        self.fields["ordering"].choices = ordering_choices
 
     def clean_country(self):
         data = self.cleaned_data["country"]
@@ -453,6 +464,7 @@ class BarrierSearchForm(forms.Form):
         params = {}
         params["search_id"] = self.cleaned_data.get("search_id")
         params["search"] = self.cleaned_data.get("search")
+        params["search_term_text"] = self.cleaned_data.get("search_term_text")
         params["location"] = ",".join(
             self.cleaned_data.get("country", [])
             + self.cleaned_data.get("region", [])
