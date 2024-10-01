@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
 
 import { getCheckboxValues } from "../utils";
@@ -51,12 +51,64 @@ const getOptionValue = (htmlElement) => {
     return { label, options };
 };
 
+const formatAdminAreas = (searchParams) => {
+    const admin_areas = [];
+    if (searchParams.get("admin_areas")) {
+        const adminAreasData = JSON.parse(searchParams.get("admin_areas"));
+        for (const key in adminAreasData) {
+            const values = adminAreasData[key];
+            for (const admin_area_id of values) {
+                admin_areas.push(admin_area_id);
+            }
+        }
+    }
+    return admin_areas;
+};
+
+const addLocation = (queryParams) => {
+    // update the current URL with the new query params
+    const searchParams = new URLSearchParams(queryParams);
+
+    const adminAreas = formatAdminAreas(searchParams);
+
+    if (adminAreas.length > 0) {
+        searchParams.append(
+            "admin_areas",
+            adminAreas.filter(Boolean).join(","),
+        );
+    } else {
+        searchParams.delete("admin_areas");
+    }
+
+    // Get all country, region, and country_trading_bloc values
+    const locationParams = [
+        ...searchParams.getAll("country"), // Get all 'country' values
+        searchParams.get("region"), // Get 'region'
+        searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
+    ]
+        .filter(Boolean)
+        .join(","); // Filter out empty values and join with commas
+
+    // Remove 'country', 'region', and 'country_trading_bloc' parameters
+    searchParams.delete("country");
+    searchParams.delete("region");
+    searchParams.delete("country_trading_bloc");
+
+    // Add the new 'location' parameter if there are any valid values
+    if (locationParams) {
+        searchParams.append("location", locationParams);
+    }
+
+    // Return the updated searchParams object
+    return searchParams;
+};
+
 /**
  * Renders the summary cards component & filters.
  *
  * @param {Object} props - The component props.
  * @param {Object} props.filterValues - The filter values.
- * @returns {JSX.Element} - The rendered summary cards component.
+ * @returns {JSX.Element} - The rendered component.
  */
 const BarriersOverview = ({ filterValues }) => {
     const [form, setForm] = useState({
@@ -70,6 +122,8 @@ const BarriersOverview = ({ filterValues }) => {
     const formRef = React.useRef(null);
 
     const [data, setData] = useState(null);
+
+    const [filters, setFilters] = useState([]);
 
     const currentMonth = new Date().toLocaleString("default", {
         month: "long",
@@ -97,15 +151,17 @@ const BarriersOverview = ({ filterValues }) => {
             series: [
                 {
                     name: "Open barriers",
-                    data: data
-                        ? data.total_value_chart?.open_barriers_value
-                        : [],
+                    data:
+                        data && data.total_value_chart.open_barriers_value
+                            ? [data.total_value_chart.open_barriers_value]
+                            : [],
                 },
                 {
                     name: "Resolved barriers",
-                    data: data
-                        ? data.total_value_chart?.resolved_barriers_value
-                        : [],
+                    data:
+                        data && data.total_value_chart?.resolved_barriers_value
+                            ? [data.total_value_chart.resolved_barriers_value]
+                            : [],
                 },
             ],
             options: {
@@ -132,15 +188,21 @@ const BarriersOverview = ({ filterValues }) => {
             series: [
                 {
                     name: "Value of resolved barriers",
-                    data: data
-                        ? data.barrier_value_chart?.resolved_barriers_value
-                        : [],
+                    data:
+                        data && data.barrier_value_chart.resolved_barriers_value
+                            ? [data.barrier_value_chart.resolved_barriers_value]
+                            : [],
                 },
                 {
                     name: "Value of barriers estimated to be resolved",
-                    data: data
-                        ? data.barrier_value_chart?.estimated_barriers_value
-                        : [],
+                    data:
+                        data &&
+                        data.barrier_value_chart.estimated_barriers_value
+                            ? [
+                                  data.barrier_value_chart
+                                      .estimated_barriers_value,
+                              ]
+                            : [],
                 },
             ],
             options: {
@@ -167,8 +229,6 @@ const BarriersOverview = ({ filterValues }) => {
         },
     });
 
-    const [filters, setFilters] = useState([]);
-
     /**
      * Fetches data from the server based on the provided query parameters.
      *
@@ -179,6 +239,12 @@ const BarriersOverview = ({ filterValues }) => {
         // update the current URL with the new query params
         const searchParams = new URLSearchParams(queryParams);
 
+        // remove any empty values
+        for (const [key, value] of searchParams.entries()) {
+            if (value === "" || value === null || value === undefined) {
+                searchParams.delete(key);
+            }
+        }
         const searchParamsWithLocation = addLocation(searchParams);
 
         window.history.pushState(
@@ -203,10 +269,10 @@ const BarriersOverview = ({ filterValues }) => {
                     ...prevState,
                     pieChatData: {
                         ...prevState.pieChatData,
-                        series: data.barrier_status_chart?.series,
+                        series: data.barriers_by_status_chart?.series,
                         options: {
                             ...prevState.pieChatData.options,
-                            labels: data.barrier_status_chart?.labels,
+                            labels: data.barriers_by_status_chart?.labels,
                         },
                     },
                     barChartData: {
@@ -214,92 +280,57 @@ const BarriersOverview = ({ filterValues }) => {
                         series: [
                             {
                                 name: "Open barriers",
-                                data: data.total_value_chart
-                                    .open_barriers_value,
+                                data: data.total_value_chart.open_barriers_value
+                                    ? [
+                                          data.total_value_chart
+                                              .open_barriers_value,
+                                      ]
+                                    : [],
                             },
                             {
                                 name: "Resolved barriers",
                                 data: data.total_value_chart
-                                    .resolved_barriers_value,
+                                    .resolved_barriers_value
+                                    ? [
+                                          data.total_value_chart
+                                              .resolved_barriers_value,
+                                      ]
+                                    : [],
                             },
                         ],
-                        options: {
-                            ...prevState.barChartData.options,
-                            xaxis: {
-                                categories: data.total_value_chart.labels,
-                            },
-                        },
                     },
                     stackedBarChartData: {
                         ...prevState.stackedBarChartData,
                         series: [
                             {
                                 name: "Value of resolved barriers",
-                                data: data.barrier_value_chart
-                                    .resolved_barriers_value,
+                                data:
+                                    data &&
+                                    data.barrier_value_chart
+                                        .resolved_barriers_value
+                                        ? [
+                                              data.barrier_value_chart
+                                                  .resolved_barriers_value,
+                                          ]
+                                        : [],
                             },
                             {
                                 name: "Value of barriers estimated to be resolved",
-                                data: data.barrier_value_chart
-                                    .estimated_barriers_value,
+                                data:
+                                    data &&
+                                    data.barrier_value_chart
+                                        .estimated_barriers_value
+                                        ? [
+                                              data.barrier_value_chart
+                                                  .estimated_barriers_value,
+                                          ]
+                                        : [],
                             },
                         ],
                     },
                 }));
             });
         });
-    };
-
-    const formatAdminAreas = (searchParams) => {
-        const admin_areas = [];
-        if (searchParams.get("admin_areas")) {
-            const adminAreasData = JSON.parse(searchParams.get("admin_areas"));
-            for (const key in adminAreasData) {
-                const values = adminAreasData[key];
-                for (const admin_area_id of values) {
-                    admin_areas.push(admin_area_id);
-                }
-            }
-        }
-        return admin_areas;
-    };
-
-    const addLocation = (queryParams) => {
-        // update the current URL with the new query params
-        const searchParams = new URLSearchParams(queryParams);
-
-        const adminAreas = formatAdminAreas(searchParams);
-
-        if (adminAreas.length > 0) {
-            searchParams.append(
-                "admin_areas",
-                adminAreas.filter(Boolean).join(","),
-            );
-        } else {
-            searchParams.delete("admin_areas");
-        }
-
-        // Get all country, region, and country_trading_bloc values
-        const locationParams = [
-            ...searchParams.getAll("country"), // Get all 'country' values
-            searchParams.get("region"), // Get 'region'
-            searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
-        ]
-            .filter(Boolean)
-            .join(","); // Filter out empty values and join with commas
-
-        // Remove 'country', 'region', and 'country_trading_bloc' parameters
-        searchParams.delete("country");
-        searchParams.delete("region");
-        searchParams.delete("country_trading_bloc");
-
-        // Add the new 'location' parameter if there are any valid values
-        if (locationParams) {
-            searchParams.append("location", locationParams);
-        }
-
-        // Return the updated searchParams object
-        return searchParams;
     };
 
     const getSearchParamsFromForm = () => {
@@ -353,6 +384,34 @@ const BarriersOverview = ({ filterValues }) => {
         return value;
     };
 
+    const updateFilters = useCallback(() => {
+        // set filters to be used in the summary cards
+        const searchParams = new URLSearchParams(window.location.search);
+        const params = {};
+
+        // Use forEach to handle duplicate keys
+        searchParams.forEach((value, key) => {
+            if (!params[key]) {
+                params[key] = [];
+            }
+            params[key].push(value);
+        });
+
+        // Build filters array
+        const filters = Object.keys(params)
+            .map((key) => {
+                const values = params[key][0].split(",");
+                return values.map((val) => ({
+                    label: key,
+                    value: val,
+                    readable_value: val && getReadableValue(val, key),
+                }));
+            })
+            .flat();
+
+        setFilters(filters);
+    }, [window.location.search]);
+
     const handleInputChange = ({ name, value }) => {
         // set the new value with the name of the input to the query string in the url
         setForm((prevState) => {
@@ -388,53 +447,16 @@ const BarriersOverview = ({ filterValues }) => {
         const params = getSearchParamsFromForm();
         // @ts-ignore
         fetchData(params);
-    };
-
-    const removeFilter = (/** @type {any} */ filter) => {
-        // remove from filter list and update the URL
-        setFilters((prevFilters) =>
-            prevFilters.filter((f) => f.label !== filter.label),
-        );
-        // remove the filter from the URL
-        const searchParams = new URLSearchParams(window.location.search);
-        searchParams.delete(filter.label);
-        window.history.pushState({}, "", `?${searchParams.toString()}`);
+        // update the filters
+        updateFilters();
     };
 
     useEffect(() => {
         fetchData("");
     }, []);
 
-    useEffect(() => {
-        // set filters to be used in the summary cards
-        const searchParams = new URLSearchParams(window.location.search);
-        const params = {};
-
-        // Use forEach to handle duplicate keys
-        searchParams.forEach((value, key) => {
-            if (!params[key]) {
-                params[key] = [];
-            }
-            params[key].push(value);
-        });
-
-        // Build filters array
-        const filters = Object.keys(params)
-            .map((key) => {
-                const values = params[key][0].split(",");
-                return values.map((val) => ({
-                    label: key,
-                    value: val,
-                    readable_value: val && getReadableValue(val, key),
-                }));
-            })
-            .flat();
-
-        setFilters(filters);
-    }, [window.location.search]);
-
     return (
-        <div>
+        <>
             <div className="govuk-grid-row">
                 <div className="govuk-grid-column-one-quarter">
                     <fieldset className="govuk-fieldset">
@@ -584,8 +606,10 @@ const BarriersOverview = ({ filterValues }) => {
             <div className="govuk-grid-row">
                 <div className="govuk-grid-row">
                     <div className="govuk-grid-column-full">
-                        {data?.barrier_value_chart.resolved_barriers_value &&
-                        data?.barrier_value_chart.estimated_barriers_value ? (
+                        {chartData.stackedBarChartData.series[0].data.length >
+                            0 ||
+                        chartData.stackedBarChartData.series[1].data.length >
+                            0 ? (
                             handleStackedBarChart(chartData.stackedBarChartData)
                         ) : (
                             <div className="dashboard-chart">
@@ -597,14 +621,14 @@ const BarriersOverview = ({ filterValues }) => {
                                     Unable to display chart. No data available
                                     for current filters
                                 </p>
-                                {!data?.barrier_value_chart
-                                    .resolved_barriers_value && (
+                                {chartData.stackedBarChartData.series[0].data
+                                    .length === 0 && (
                                     <p className="govuk-body-s">
                                         No resolved barriers found
                                     </p>
                                 )}
-                                {!data?.barrier_value_chart
-                                    .estimated_barriers_value && (
+                                {chartData.stackedBarChartData.series[0].data
+                                    .length === 1 && (
                                     <p className="govuk-body-s">
                                         No barriers with an estimated resolution
                                         in the current year found{" "}
@@ -616,8 +640,8 @@ const BarriersOverview = ({ filterValues }) => {
                 </div>
                 <div className="govuk-grid-row">
                     <div className="govuk-grid-column-one-half">
-                        {data?.total_value_chart.open_barriers_value &&
-                        data?.total_value_chart.resolved_barriers_value ? (
+                        {chartData.barChartData.series[0].data.length > 0 ||
+                        chartData.barChartData.series[1].data.length > 0 ? (
                             handleBarChart(chartData.barChartData)
                         ) : (
                             <div className="dashboard-chart">
@@ -628,14 +652,14 @@ const BarriersOverview = ({ filterValues }) => {
                                     Unable to display chart. No data available
                                     for current filters
                                 </p>
-                                {!data?.total_value_chart
-                                    .open_barriers_value && (
+                                {chartData.barChartData.series[0].data
+                                    .length === 0 && (
                                     <p className="govuk-body-s">
                                         No open barriers found
                                     </p>
                                 )}
-                                {!data?.total_value_chart
-                                    .resolved_barriers_value && (
+                                {chartData.barChartData.series[1].data
+                                    .length === 0 && (
                                     <p className="govuk-body-s">
                                         No resolved barriers found
                                     </p>
@@ -644,7 +668,7 @@ const BarriersOverview = ({ filterValues }) => {
                         )}
                     </div>
                     <div className="govuk-grid-column-one-half">
-                        {chartData.pieChatData.series ? (
+                        {chartData.pieChatData.series.length > 0 ? (
                             handlePieChart(chartData.pieChatData)
                         ) : (
                             <div className="dashboard-chart">
@@ -661,7 +685,7 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
