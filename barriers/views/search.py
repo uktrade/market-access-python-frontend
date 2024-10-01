@@ -77,6 +77,7 @@ class BarrierSearch(PaginationMixin, SearchFormView):
                     "download_request_sent_error"
                 ),
                 "search_ordering_choices": metadata.get_search_ordering_choices(),
+                "search_term_text": self.request.GET.get("search_term_text"),
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)

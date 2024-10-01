@@ -3,6 +3,8 @@
 .govuk-grid-row {
   &.grey {
     background-color: #DEE0E2;
+    width: 100%;
+    margin: 0;
   }
 }
 
@@ -49,4 +51,9 @@
   padding: 20px;
   border: 1px solid #b1b4b6;
   margin: 10px;
+}
+
+.dashboard-search-link-container {
+  display: inline;
+  padding-right: govuk-em( 15, 16 );
 }

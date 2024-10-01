@@ -9414,6 +9414,10 @@
     [
       "resolved",
       "Date resolved (least recent)"
+    ],
+    [
+      "relevance",
+      "Relevence to the search term"
     ]
   ],
   "policy_teams": [

@@ -24,101 +24,19 @@
                 let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
                 let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
 
+                window.addEventListener('resize', function(event) {
+                    const search_submit_bar = document.getElementById("event-name");
+                    const search_submit_button = document.getElementById("search_submit_button");
+                    if (window.innerWidth < 768) {
+                        search_submit_button.classList.add("dmas-search-field__submit");
+                    }
+                    else {
+                        search_submit_button.classList.remove("dmas-search-field__submit");
+                    }
+                });
+
                 // load summary cards
-                ReactApp.renderSummaryCards("summary-cards", [...tradingBlocs, ...adminAreasCountries]);
-
-                ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries);
-                ReactApp.renderMultiSelectFilter("policy_team", "Search teams");
-                ReactApp.renderMultiSelectFilter("region");
-                ReactApp.renderMultiSelectFilter("sector");
-
-                // load the charts
-                ReactApp.renderPieChart(
-                    {
-                        series: {{ summary_stats.barriers_by_status_chart.series }},
-                        options: {
-                            chart: {
-                                id: 'basic-pie',
-                            },
-                            title: {
-                                text: 'Total value of open and partially resolved barrier by priority type',
-                                align: 'center'
-                            },
-                            dataLabels: {
-                                enabled: false
-                            },
-                            labels: {{ summary_stats.barriers_by_status_chart.labels|safe }},
-                            colors: ['#28a197', '#003078', '#d4351c', '#912b88'],
-                        }
-                    },"pie-chart");
-
-                ReactApp.renderBarChart(
-                    {
-                        series: [
-                            {
-                                name: "Open Barriers",
-                                data: [{{ summary_stats.total_value_chart.open_barriers_value }}]
-                            },
-                            {
-                                name: "Resolved Barriers",
-                                data: [{{ summary_stats.total_value_chart.resolved_barriers_value }}]
-                            }
-                        ],
-                        options: {
-                            chart: {
-                                id: 'basic-bar',
-                                toolbar: {
-                                    show: true
-                                }
-                            },
-                            xaxis: {
-                                categories: ['Total Barriers'],
-                            },
-                            yaxis: {
-                                categories: ['0', '20', '40', '60', '80', '100'],
-                            },
-                            colors: ['#912b88', '#003078'],
-                            title: {
-                                text: 'Total barrier value',
-                                align: 'center'
-                            },
-                        }
-                    }, "bar-chart");
-                ReactApp.renderStackedBarChart(
-                    {
-                        series: [
-                            {
-                                name: 'Value of resolved barriers ',
-                                data: [{{ summary_stats.barrier_value_chart.resolved_barriers_value }}]
-                            },
-                            {
-                                name: 'Value of barriers estimated to be resolved',
-                                data: [{{ summary_stats.barrier_value_chart.estimated_barriers_value }}]
-                            }
-                        ],
-                        options: {
-                            chart: {
-                                id: 'stacked-bar',
-                            },
-                            xaxis: {
-                                categories: ['Aug'],
-                            },
-                            yaxis: {
-                                title: {
-                                    text: '£'
-                                }
-                            },
-                            title: {
-                                text: 'Total value of barriers resolved and estimated in the current finanacial year',
-                                align: 'center'
-                            },
-                            fill: {
-                                opacity: 1
-                            },
-                            colors: ['#912b88', '#003078'],
-                        }
-                    },"stacked-bar-chart"
-                )
+                ReactApp.renderBarriersOverview("barrier-overview");
             })
         </script>
     {% endblock %}
@@ -129,7 +47,7 @@
           role="main">
         {% block content %}
             <div class="govuk-grid-row grey">
-                <div class="govuk-grid-column-full ma-container-full p-t-4">
+                <div class="govuk-grid-column-full ma-container-full p-t-4 p-l-0">
                     <h1 class="govuk-heading-xl">
                         <span class="govuk-caption-m">Market access barriers</span>
                         Dashboard
@@ -138,18 +56,22 @@
                         <form action="{% url 'barriers:search' %}" method="GET">
                             <input class="govuk-input govuk-!-width-two-thirds"
                                    id="event-name"
-                                   name="text"
+                                   name="search_term_text"
                                    type="text"
-                                   placeholder="Search for barrier by name or with key terms.">
-                            <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+                                   placeholder="Search for barrier by name or with key terms."/>
+                            <input type="hidden" name="ordering" value="relevance"/>
+                            <button id="search_submit_button" type="submit" class="govuk-button" data-module="govuk-button">Search</button>
                         </form>
                         <div>
-                            <a href="{% url 'barriers:dashboard' %}?active=saved_searches"
-                               class="govuk-link govuk-link--no-visited-state-dark">My saved searches</a>
-                            <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads"
-                               class="govuk-link govuk-link--no-visited-state-dark">My downloads</a>
-                            <a href="{% url 'barriers:search' %}?user=1"
-                               class="govuk-link govuk-link--no-visited-state-dark">My open barriers</a>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:my_saved_searches' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:my_downloads' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:search' %}?user=1&status=2" class="govuk-link--no-visited-state-dark">My open barriers</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -165,9 +87,6 @@
                                 <h3 class="govuk-summary-card__title">See data for barriers you're working on or monitoring</h3>
                             </div>
                             {% include "barriers/partials/summary_cards.html" %}
-                            <div class="govuk-grid-row">
-                                <div class="govuk-grid-column-full">{% include "barriers/partials/dashboard-charts.html" %}</div>
-                            </div>
                         </div>
                     </div>
                 </div>

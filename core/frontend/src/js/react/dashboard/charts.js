@@ -55,10 +55,11 @@ export const handleBarChart = (
             enabled: true,
         },
     };
+
     return (
         <Charts
             options={options}
-            series={chartData.series}
+            series={chartData.series === undefined ? [] : chartData.series}
             type="bar"
             height={350}
         />
@@ -103,7 +104,7 @@ export const handleStackedBarChart = (
     return (
         <Charts
             options={options}
-            series={chartData.series}
+            series={chartData.series === undefined ? [] : chartData.series}
             type="bar"
             height={350}
         />
