@@ -53,6 +53,14 @@
           content="{% webpack_static '../images/govuk-opengraph-image.png' %}">
     <script nonce="{{request.csp_nonce}}">window.dataLayer = window.dataLayer || [];</script>
     {% block gtag_events %}
+      {% if current_user.sso_user_id %}
+        <script nonce="{{request.csp_nonce}}" type="text/javascript">
+          window.dataLayer.push({
+            'sso_id': '{{ current_user.sso_user_id }}',
+            'page_url': '{{ request.get_full_path }}',
+          });
+        </script>
+      {% endif %}
     {% endblock gtag_events %}
   </head>
   <body class="govuk-template__body {{ bodyClasses }}">

@@ -46,8 +46,8 @@
           id="main-content"
           role="main">
         {% block content %}
-            <div class="govuk-grid-row grey">
-                <div class="govuk-grid-column-full ma-container-full p-t-4 p-l-0">
+            <div class="govuk-grid-row grey m-b-6">
+                <div class="govuk-grid-column-full ma-container-full p-t-4">
                     <h1 class="govuk-heading-xl">
                         <span class="govuk-caption-m">Market access barriers</span>
                         Dashboard
@@ -77,9 +77,11 @@
                 </div>
             </div>
             <section class="govuk-width-container ma-container-full">
-                <div class="govuk-grid-row p-t-6">
-                    <div class="govuk-grid-column-full">{% include "barriers/partials/dashboard_tasks.html" %}</div>
-                </div>
+                {% if task_list %}
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">{% include "barriers/partials/dashboard_tasks.html" %}</div>
+                    </div>
+                {% endif %}
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-full">
                         <div class="govuk-summary-card">
