@@ -6,7 +6,7 @@ export const getCSRFToken = () => {
     }
 };
 
-export const getCheckboxValues = (element) => {
+export const getCheckboxValues = (/** @type {HTMLElement} */ element) => {
     const filterItems = element.getElementsByClassName("checkbox-filter__item");
     let values = [];
 
@@ -32,8 +32,8 @@ export const normalizeValue = (/** @type {number} */ value) => {
     if (typeof value !== "number") {
         throw new TypeError("Value must be a number");
     }
-    const units = ["K", "M"];
-    const thresholds = [1000, 1000000];
+    const units = ["K", "M", "B"];
+    const thresholds = [1000, 1000000, 1000000000];
     for (let i = thresholds.length - 1; i >= 0; i--) {
         if (value >= thresholds[i]) {
             return (value / thresholds[i]).toFixed(1) + units[i];

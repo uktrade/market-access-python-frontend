@@ -72,6 +72,11 @@ export const handleBarChart = (
             formatter: (/** @type {number} */ val) => normalizeValue(val),
         },
         theme: chartTheme,
+        yaxis: {
+            labels: {
+                formatter: (/** @type {number} */ val) => normalizeValue(val),
+            },
+        },
     };
 
     return (
@@ -111,10 +116,6 @@ export const handleStackedBarChart = (
         stroke: {
             width: 5,
             colors: ["transparent"],
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: (/** @type {number} */ val) => normalizeValue(val),
         },
         legend: {
             position: "bottom",
