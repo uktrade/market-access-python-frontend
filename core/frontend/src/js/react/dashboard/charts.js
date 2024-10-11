@@ -1,6 +1,8 @@
 import React from "react";
 import Charts from "react-apexcharts";
 
+import { normalizeValue } from "../utils";
+
 const chartTheme = {
     palette: "palette1",
     monochrome: {
@@ -12,7 +14,7 @@ const chartTheme = {
 };
 
 export const handlePieChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -20,12 +22,12 @@ export const handlePieChart = (
             enabled: true,
             formatter: function (
                 /** @type {any} */ _val,
-                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts,
+                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts
             ) {
                 // get the acual value not the percentage
                 const value = opts.w.globals.series[opts.seriesIndex];
                 const label = opts.w.config.labels[opts.seriesIndex];
-                return `${label}: ${value}`;
+                return `${label}: ${normalizeValue(value)}`;
             },
             offset: -10,
         },
@@ -48,7 +50,7 @@ export const handlePieChart = (
 };
 
 export const handleBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -67,6 +69,7 @@ export const handleBarChart = (
         },
         dataLabels: {
             enabled: true,
+            formatter: (/** @type {number} */ val) => normalizeValue(val),
         },
         theme: chartTheme,
     };
@@ -82,7 +85,7 @@ export const handleBarChart = (
 };
 
 export const handleStackedBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -111,6 +114,7 @@ export const handleStackedBarChart = (
         },
         dataLabels: {
             enabled: true,
+            formatter: (/** @type {number} */ val) => normalizeValue(val),
         },
         legend: {
             position: "bottom",
