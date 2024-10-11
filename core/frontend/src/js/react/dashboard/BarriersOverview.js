@@ -359,7 +359,8 @@ const BarriersOverview = ({ filterValues }) => {
                 .label;
         } else if (type === "policy_team") {
             return filterValues.policy_team.find(
-                (policy_team) => policy_team.value === value
+                (/** @type {{ value: string; }} */ policy_team) =>
+                    policy_team.value === value
             ).label;
         } else if (type === "location") {
             // check if value is comma separated then split it and return an array
@@ -369,12 +370,14 @@ const BarriersOverview = ({ filterValues }) => {
                     .map(
                         (val) =>
                             filterValues.location.find(
-                                (location) => location.value === val
+                                (/** @type {{ value: string; }} */ location) =>
+                                    location.value === val
                             ).label
                     );
             } else {
                 return filterValues.location.find(
-                    (location) => location.value === value
+                    (/** @type {{ value: string; }} */ location) =>
+                        location.value === value
                 ).label;
             }
         } else if (type === "status") {
@@ -400,7 +403,7 @@ const BarriersOverview = ({ filterValues }) => {
         const filters = Object.keys(params)
             .map((key) => {
                 const values = params[key][0].split(",");
-                return values.map((val) => ({
+                return values.map((/** @type {string} */ val) => ({
                     label: key,
                     value: val,
                     readable_value: val && getReadableValue(val, key),
