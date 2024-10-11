@@ -1,14 +1,27 @@
 import React from "react";
 import Charts from "react-apexcharts";
 
+const chartTheme = {
+    palette: "palette1",
+    monochrome: {
+        enabled: false,
+        color: "#1d70b8", // GDS blue
+        shadeTo: "light",
+        shadeIntensity: 0.65,
+    },
+};
+
 export const handlePieChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
         dataLabels: {
             enabled: true,
-            formatter: function (val, opts) {
+            formatter: function (
+                /** @type {any} */ _val,
+                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts
+            ) {
                 // get the acual value not the percentage
                 const value = opts.w.globals.series[opts.seriesIndex];
                 const label = opts.w.config.labels[opts.seriesIndex];
@@ -20,6 +33,7 @@ export const handlePieChart = (
             show: true,
             position: "bottom",
         },
+        theme: chartTheme,
     };
 
     return (
@@ -34,7 +48,7 @@ export const handlePieChart = (
 };
 
 export const handleBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -54,6 +68,7 @@ export const handleBarChart = (
         dataLabels: {
             enabled: true,
         },
+        theme: chartTheme,
     };
 
     return (
@@ -67,7 +82,7 @@ export const handleBarChart = (
 };
 
 export const handleStackedBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -100,6 +115,7 @@ export const handleStackedBarChart = (
         legend: {
             position: "bottom",
         },
+        theme: chartTheme,
     };
     return (
         <Charts
