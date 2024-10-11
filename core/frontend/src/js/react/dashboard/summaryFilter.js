@@ -77,7 +77,7 @@ const SummaryCards = ({ filterValues }) => {
         window.history.pushState(
             {},
             "",
-            `?${searchParamsWithLocation.toString()}`
+            `?${searchParamsWithLocation.toString()}`,
         );
 
         const url = searchParamsWithLocation
@@ -116,7 +116,7 @@ const SummaryCards = ({ filterValues }) => {
         if (adminAreas.length > 0) {
             searchParams.append(
                 "admin_areas",
-                adminAreas.filter(Boolean).join(",")
+                adminAreas.filter(Boolean).join(","),
             );
         } else {
             searchParams.delete("admin_areas");
@@ -163,17 +163,17 @@ const SummaryCards = ({ filterValues }) => {
 
     const getReadableValue = (
         /** @type {string} */ value,
-        /** @type {string} */ type
+        /** @type {string} */ type,
     ) => {
         if (type === "sector") {
             return filterValues.sector.find(
                 (/** @type {{ value: string; }} */ sector) =>
-                    sector.value === value
+                    sector.value === value,
             ).label;
         } else if (type === "policy_team") {
             return filterValues.policy_team.find(
                 (/** @type {{ value: string; }} */ policy_team) =>
-                    policy_team.value === value
+                    policy_team.value === value,
             ).label;
         } else if (type === "location") {
             // check if value is comma separated then split it and return an array
@@ -184,13 +184,13 @@ const SummaryCards = ({ filterValues }) => {
                         (val) =>
                             filterValues.location.find(
                                 (/** @type {{ value: string; }} */ location) =>
-                                    location.value === val
-                            ).label
+                                    location.value === val,
+                            ).label,
                     );
             } else {
                 return filterValues.location.find(
                     (/** @type {{ value: string; }} */ location) =>
-                        location.value === value
+                        location.value === value,
                 ).label;
             }
         } else if (type === "status") {
@@ -201,7 +201,7 @@ const SummaryCards = ({ filterValues }) => {
 
     useEffect(() => {
         const handleApplyFilters = async (
-            /** @type {{ preventDefault: () => void; }} */ event
+            /** @type {{ preventDefault: () => void; }} */ event,
         ) => {
             event.preventDefault();
             const params = getSearchParamsFromForm();
@@ -216,7 +216,7 @@ const SummaryCards = ({ filterValues }) => {
             if (applyFiltersButton) {
                 applyFiltersButton.removeEventListener(
                     "click",
-                    handleApplyFilters
+                    handleApplyFilters,
                 );
             }
         };
@@ -250,8 +250,8 @@ const SummaryCards = ({ filterValues }) => {
                     remove_url: new URLSearchParams(
                         [...searchParams].filter(
                             ([paramKey, paramValue]) =>
-                                !(paramKey === key && paramValue === val)
-                        )
+                                !(paramKey === key && paramValue === val),
+                        ),
                     ).toString(),
                 }));
             })
@@ -271,7 +271,7 @@ const SummaryCards = ({ filterValues }) => {
                             .map((filter) => {
                                 // set filters to be used in the summary cards
                                 const searchParams = new URLSearchParams(
-                                    window.location.search
+                                    window.location.search,
                                 );
                                 if (filter.label === "location") {
                                     return filter.value
@@ -283,7 +283,7 @@ const SummaryCards = ({ filterValues }) => {
                                                 val &&
                                                 getReadableValue(
                                                     val,
-                                                    filter.label
+                                                    filter.label,
                                                 ),
                                             remove_url: new URLSearchParams(
                                                 [...searchParams].filter(
@@ -292,8 +292,8 @@ const SummaryCards = ({ filterValues }) => {
                                                             paramKey ===
                                                                 filter.label &&
                                                             paramValue === val
-                                                        )
-                                                )
+                                                        ),
+                                                ),
                                             ).toString(),
                                         }));
                                 }
@@ -312,7 +312,7 @@ const SummaryCards = ({ filterValues }) => {
                                     });
                                 }
                                 return acc;
-                            }, {})
+                            }, {}),
                     ).map(([label, values], index) => {
                         return (
                             <li className="active-filters__item" key={index}>
@@ -325,14 +325,14 @@ const SummaryCards = ({ filterValues }) => {
                                             {values
                                                 .map(
                                                     (
-                                                        /** @type {{ readable_value: string; }} */ value
+                                                        /** @type {{ readable_value: string; }} */ value,
                                                     ) =>
                                                         value.readable_value
                                                             ? value.readable_value.replace(
                                                                   /<\/?[^>]+(>|$)/g,
-                                                                  ""
+                                                                  "",
                                                               )
-                                                            : ""
+                                                            : "",
                                                 )
                                                 .join(", ")}
                                         </p>
@@ -355,14 +355,14 @@ const SummaryCards = ({ filterValues }) => {
                                             {values
                                                 .map(
                                                     (
-                                                        /** @type {{ readable_value: string; }} */ value
+                                                        /** @type {{ readable_value: string; }} */ value,
                                                     ) =>
                                                         value.readable_value
                                                             ? value.readable_value.replace(
                                                                   /<\/?[^>]+(>|$)/g,
-                                                                  ""
+                                                                  "",
                                                               )
-                                                            : ""
+                                                            : "",
                                                 )
                                                 .join(", ")}
                                         </p>
@@ -372,14 +372,14 @@ const SummaryCards = ({ filterValues }) => {
                                             {values
                                                 .map(
                                                     (
-                                                        /** @type {{ readable_value: string; }} */ value
+                                                        /** @type {{ readable_value: string; }} */ value,
                                                     ) =>
                                                         value.readable_value
                                                             ? value.readable_value.replace(
                                                                   /<\/?[^>]+(>|$)/g,
-                                                                  ""
+                                                                  "",
                                                               )
-                                                            : ""
+                                                            : "",
                                                 )
                                                 .join(", ")}{" "}
                                             end quote.
@@ -417,9 +417,9 @@ const SummaryCards = ({ filterValues }) => {
             <div className="govuk-grid-row">
                 <h3 className="govuk-summary-card__title p-l-3">
                     {`Barriers which have been resolved or are projected to be resolved between ${parseIso(
-                        data && data.financial_year.current_start
+                        data && data.financial_year.current_start,
                     )} and ${parseIso(
-                        data && data.financial_year.current_end
+                        data && data.financial_year.current_end,
                     )} current financial year`}
                     .
                 </h3>
