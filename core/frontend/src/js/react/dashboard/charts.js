@@ -6,7 +6,8 @@ import { normalizeValue } from "../utils";
 const chartTheme = {
     palette: "palette1",
     monochrome: {
-        enabled: false,
+        // GDS palette
+        enabled: true,
         color: "#1d70b8", // GDS blue
         shadeTo: "light",
         shadeIntensity: 0.65,
@@ -14,7 +15,7 @@ const chartTheme = {
 };
 
 export const handlePieChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -22,7 +23,7 @@ export const handlePieChart = (
             enabled: true,
             formatter: function (
                 /** @type {any} */ _val,
-                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts,
+                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts
             ) {
                 // get the acual value not the percentage
                 const value = opts.w.globals.series[opts.seriesIndex];
@@ -30,6 +31,13 @@ export const handlePieChart = (
                 return `${label}: ${normalizeValue(value)}`;
             },
             offset: -10,
+        },
+        tooltip: {
+            y: {
+                formatter: function (/** @type {number} */ val) {
+                    return normalizeValue(val);
+                },
+            },
         },
         legend: {
             show: true,
@@ -50,7 +58,7 @@ export const handlePieChart = (
 };
 
 export const handleBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -90,7 +98,7 @@ export const handleBarChart = (
 };
 
 export const handleStackedBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -102,6 +110,13 @@ export const handleStackedBarChart = (
             stackType: "100%",
             toolbar: {
                 show: true,
+            },
+        },
+        tooltip: {
+            y: {
+                formatter: function (/** @type {number} */ val) {
+                    return normalizeValue(val);
+                },
             },
         },
         plotOptions: {
