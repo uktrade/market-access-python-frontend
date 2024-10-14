@@ -3,7 +3,18 @@ import Charts from "react-apexcharts";
 
 import { normalizeValue } from "../utils";
 
-const colorTheme = ["#d53880", "#003078", "#28a197", "#f47738", "#5694ca"];
+const colorTheme = [
+    "#d53880",
+    "#003078",
+    "#28a197",
+    "#f47738",
+    "#5694ca",
+    "#4C2C92",
+    "#6F72AF",
+    "#F499BE",
+    "#85994B",
+    "#FFDD00",
+]; // 10 GDS colours
 
 export const handlePieChart = (
     /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
