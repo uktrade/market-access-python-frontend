@@ -66,7 +66,7 @@ const formatAdminAreas = (/** @type {URLSearchParams} */ searchParams) => {
 };
 
 const addLocation = (
-    /** @type {string | URLSearchParams | string[][] | Record<string, string>} */ queryParams,
+    /** @type {string | URLSearchParams | string[][] | Record<string, string>} */ queryParams
 ) => {
     // update the current URL with the new query params
     const searchParams = new URLSearchParams(queryParams);
@@ -76,7 +76,7 @@ const addLocation = (
     if (adminAreas.length > 0) {
         searchParams.append(
             "admin_areas",
-            adminAreas.filter(Boolean).join(","),
+            adminAreas.filter(Boolean).join(",")
         );
     } else {
         searchParams.delete("admin_areas");
@@ -249,7 +249,7 @@ const BarriersOverview = ({ filterValues }) => {
         window.history.pushState(
             {},
             "",
-            `?${searchParamsWithLocation.toString()}`,
+            `?${searchParamsWithLocation.toString()}`
         );
 
         const url = searchParamsWithLocation
@@ -352,7 +352,7 @@ const BarriersOverview = ({ filterValues }) => {
 
     const getReadableValue = (
         /** @type {string} */ value,
-        /** @type {string} */ type,
+        /** @type {string} */ type
     ) => {
         if (type === "sector") {
             return filterValues.sector.find((sector) => sector.value === value)
@@ -360,7 +360,7 @@ const BarriersOverview = ({ filterValues }) => {
         } else if (type === "policy_team") {
             return filterValues.policy_team.find(
                 (/** @type {{ value: string; }} */ policy_team) =>
-                    policy_team.value === value,
+                    policy_team.value === value
             ).label;
         } else if (type === "location") {
             // check if value is comma separated then split it and return an array
@@ -371,13 +371,13 @@ const BarriersOverview = ({ filterValues }) => {
                         (val) =>
                             filterValues.location.find(
                                 (/** @type {{ value: string; }} */ location) =>
-                                    location.value === val,
-                            ).label,
+                                    location.value === val
+                            ).label
                     );
             } else {
                 return filterValues.location.find(
                     (/** @type {{ value: string; }} */ location) =>
-                        location.value === value,
+                        location.value === value
                 ).label;
             }
         } else if (type === "status") {
@@ -438,7 +438,7 @@ const BarriersOverview = ({ filterValues }) => {
             window.history.replaceState(
                 {},
                 "",
-                `?${searchParamsWithLocation.toString()}`,
+                `?${searchParamsWithLocation.toString()}`
             );
             return newForm;
         });
@@ -522,7 +522,7 @@ const BarriersOverview = ({ filterValues }) => {
                                 className="govuk-button govuk-button--full-width"
                                 id="apply-filters-button"
                                 disabled={Object.values(form).every(
-                                    (value) => value === "",
+                                    (value) => value === ""
                                 )}
                             >
                                 Apply filters
@@ -577,9 +577,9 @@ const BarriersOverview = ({ filterValues }) => {
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
                             {`Barriers which have been resolved or are projected to be resolved between ${parseIso(
-                                data?.financial_year?.current_start,
+                                data?.financial_year?.current_start
                             )} and ${parseIso(
-                                data?.financial_year?.current_end,
+                                data?.financial_year?.current_end
                             )} current financial year`}
                         </h3>
                         <SummaryCard
@@ -705,13 +705,13 @@ const renderBarriersOverview = (elementId) => {
     const country = document.getElementById("country");
     const tradingBlocs = document.getElementById("country_trading_bloc");
     const tradingBlocsData = JSON.parse(
-        document.getElementById("trading-blocs-data").textContent,
+        document.getElementById("trading-blocs-data").textContent
     );
     const adminAreas = JSON.parse(
-        document.getElementById("admin-areas-data").textContent,
+        document.getElementById("admin-areas-data").textContent
     );
     const adminAreasCountries = JSON.parse(
-        document.getElementById("countries-with-admin-areas-data").textContent,
+        document.getElementById("countries-with-admin-areas-data").textContent
     );
 
     const filterValues = {

@@ -3,19 +3,10 @@ import Charts from "react-apexcharts";
 
 import { normalizeValue } from "../utils";
 
-const chartTheme = {
-    palette: "palette1",
-    monochrome: {
-        // GDS palette
-        enabled: true,
-        color: "#1d70b8", // GDS blue
-        shadeTo: "light",
-        shadeIntensity: 0.65,
-    },
-};
+const colorTheme = ["#d53880", "#003078", "#28a197", "#f47738", "#5694ca"];
 
 export const handlePieChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -23,7 +14,7 @@ export const handlePieChart = (
             enabled: true,
             formatter: function (
                 /** @type {any} */ _val,
-                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts,
+                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts
             ) {
                 // get the acual value not the percentage
                 const value = opts.w.globals.series[opts.seriesIndex];
@@ -43,7 +34,7 @@ export const handlePieChart = (
             show: true,
             position: "bottom",
         },
-        theme: chartTheme,
+        colors: colorTheme,
     };
 
     return (
@@ -58,7 +49,7 @@ export const handlePieChart = (
 };
 
 export const handleBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -79,7 +70,7 @@ export const handleBarChart = (
             enabled: true,
             formatter: (/** @type {number} */ val) => normalizeValue(val),
         },
-        theme: chartTheme,
+        colors: colorTheme,
         yaxis: {
             labels: {
                 formatter: (/** @type {number} */ val) => normalizeValue(val),
@@ -98,7 +89,7 @@ export const handleBarChart = (
 };
 
 export const handleStackedBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
 ) => {
     const options = {
         ...chartData.options,
@@ -135,7 +126,7 @@ export const handleStackedBarChart = (
         legend: {
             position: "bottom",
         },
-        theme: chartTheme,
+        colors: colorTheme,
     };
     return (
         <Charts
