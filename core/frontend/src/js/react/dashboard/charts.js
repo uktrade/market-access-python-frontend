@@ -17,7 +17,7 @@ const colorTheme = [
 ]; // 10 GDS colours
 
 export const handlePieChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
 ) => {
     const options = {
         ...chartData.options,
@@ -25,7 +25,7 @@ export const handlePieChart = (
             enabled: true,
             formatter: function (
                 /** @type {any} */ _val,
-                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts
+                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts,
             ) {
                 // get the acual value not the percentage
                 const value = opts.w.globals.series[opts.seriesIndex];
@@ -60,7 +60,7 @@ export const handlePieChart = (
 };
 
 export const handleBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
 ) => {
     const options = {
         ...chartData.options,
@@ -100,7 +100,7 @@ export const handleBarChart = (
 };
 
 export const handleStackedBarChart = (
-    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData
+    /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
 ) => {
     const options = {
         ...chartData.options,
