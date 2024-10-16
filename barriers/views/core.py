@@ -246,3 +246,16 @@ class MySavedSearches(TemplateView):
 
 class AccountHome(TemplateView):
     template_name = "barriers/account_home.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        current_user = client.users.get_current()
+
+        context_data.update(
+            {
+                "current_user": current_user,
+            }
+        )
+
+        return context_data
