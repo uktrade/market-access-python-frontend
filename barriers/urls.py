@@ -184,6 +184,7 @@ from .views.core import (
     MyDownloads,
     MySavedSearches,
     WhatIsABarrier,
+    AccountHome,
 )
 from .views.related_barriers import RelatedBarriers
 
@@ -915,4 +916,5 @@ urlpatterns = [
     path("dashboard-summary/", GetDashboardSummary.as_view(), name="dashboard_summary"),
     path("my-saved-searches/", MySavedSearches.as_view(), name="my_saved_searches"),
     path("my-downloads/", MyDownloads.as_view(), name="my_downloads"),
+    path("account-home/", AccountHome.as_view(), name="account_home")
 ]
