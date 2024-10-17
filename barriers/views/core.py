@@ -244,6 +244,7 @@ class MySavedSearches(TemplateView):
         )
         return context_data
 
+
 class AccountHome(TemplateView):
     template_name = "barriers/account_home.html"
 
