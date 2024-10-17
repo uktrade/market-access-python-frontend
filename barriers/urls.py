@@ -185,6 +185,7 @@ from .views.core import (
     MyDownloads,
     MySavedSearches,
     WhatIsABarrier,
+    MyDownloadsV2,
 )
 from .views.related_barriers import RelatedBarriers
 
@@ -917,4 +918,5 @@ urlpatterns = [
     path("my-saved-searches/", MySavedSearches.as_view(), name="my_saved_searches"),
     path("my-downloads/", MyDownloads.as_view(), name="my_downloads"),
     path("account-home/", AccountHome.as_view(), name="account_home"),
+    path("my-downloads-v2/", MyDownloadsV2.as_view(), name="my_downloads_v2"),
 ]

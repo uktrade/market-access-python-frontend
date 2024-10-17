@@ -31,7 +31,7 @@
             <a class="{% if page == 'saved-searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
         </li>
         <li class="datahub-header__navigation__item">
-            <a class="{% if page == 'my-downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
+            <a class="{% if page == 'my-downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:my_downloads_v2' %}" class="govuk-link--no-visited-state-dark">My downloads</a>
         </li>
         <li class="datahub-header__navigation__item">
             <a class="{% if page == 'my-barriers' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:dashboard' %}?active=barriers" class="govuk-link--no-visited-state-dark">My barriers</a>

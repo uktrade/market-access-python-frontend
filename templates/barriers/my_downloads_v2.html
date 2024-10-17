@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+{% block page_title %}{{ block.super }} - My downloads{% endblock %}
+{% block main %}
+    <main class="govuk-main-wrapper govuk-main-wrapper--dashboard"
+          id="main-content"
+          role="main">
+        {% block content %}
+            {% include "barriers/partials/account_banner.html" %}
+            <section class="ma-container-full govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ barrier_downloads|length }}</span> download{{ barrier_downloads|length|pluralize:"s" }}</h2>
+                    {% if barrier_downloads|length == 0 %}
+                        <p>You have no downloads</p>
+                        <p><a href="https://data-services-help.trade.gov.uk/market-access/how-guides/download-barrier-details-spreadsheet/">How do I download barriers?</a></p>
+                    {% else %}
+                        <details class="govuk-details">
+                            <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">
+                                    Acceptable use agreement
+                                </span>
+                            </summary>
+                            <div class="govuk-details__text">
+                                <p class="govuk-body">In order to download market access information from the Digital Market Access System (DMAS), you agree that:</p>
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>the downloaded information is commercially sensitive and may contain personal data</li>
+                                    <li>when handling market access information you will follow your organisation’s information security and data protection policies</li>
+                                    <li>any information security breach involving the downloaded information will be reported to your Data Protection team without undue delay</li>
+                                    <li>the downloaded market access information shall be used solely for the purpose of resolving market access barriers and will not be shared publicly without consultation with the Department for Business and Trade (DBT), which remains the Data Owner</li>
+                                </ul>
+                                DMAS user privacy notice
+                                <br>
+                                <p class="govuk-body">View information about how your personal data is processed when you use DMAS <a href="https://data-services-help.trade.gov.uk/market-access/about-barriers-and-market-access/digital-market-access-service-dmas-privacy-notice/" class="govuk-link" target="_blank">here (opens in new tab)</a></p>
+                            </div>
+                        </details>
+                        <ul class="ma-card-list">
+                            {% for download in barrier_downloads %}
+                                <li class="ma-card-list__item barrier-download">
+                                    <div class="barrier-download__content">
+                                        <div class="barrier-download__content--item">
+                                            <h3 class="barrier-download__title">{% if download.status == "Complete" %}<a href="{% url 'barriers:download-link' download.id %}" aria-label="Download C S V results for ">{{ download.name }}</a>{% else %}{{ barrier_download.name }}{% endif %}</h3>
+                                            <p>{{download.count}} result{{download.count|length|pluralize:"s"}}</p>
+                                            {% if download.filters %}
+                                                <ul class="barrier-download__filter-list">
+                                                    {% for name, value in download.readable_filters.items %}
+                                                        <li class="barrier-download__filter-list-item">{{ value.readable_value|striptags }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                        <div class="barrier-download__content--item">
+                                            <p>Download status: <span class="title">{{ download.status }}</span></p>
+                                            <p class="time-item">Requested {{ download.created_on|timesince }} ago</p>
+                                            {% if download.status == "Complete" %}
+                                                {# no action #}
+                                            {% elif download.status == "Failed" %}
+                                                <p>Download failed</p>
+                                            {% else %}
+                                                <p>We're working on your download. Refresh this page</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="barrier-download__content--item">
+                                            <a class="action" href="{% url 'barriers:delete-download' download.id %}">Delete</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </section>
+        {% endblock %}
+    </main>
+{% endblock %}

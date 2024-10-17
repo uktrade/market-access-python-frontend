@@ -261,3 +261,21 @@ class AccountHome(TemplateView):
         )
 
         return context_data
+
+
+class MyDownloadsV2(TemplateView):
+    template_name = "barriers/my_downloads_v2.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_downloads = client.barrier_download.list()
+
+        context_data.update(
+            {
+                "barrier_downloads": barrier_downloads,
+                "page": "my-downloads",
+            }
+        )
+        return context_data
