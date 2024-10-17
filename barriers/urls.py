@@ -177,6 +177,7 @@ from barriers.views.wto import (
 )
 
 from .views.core import (
+    AccountHome,
     BarrierDetail,
     Dashboard,
     GetDashboardSummary,
@@ -184,7 +185,6 @@ from .views.core import (
     MyDownloads,
     MySavedSearches,
     WhatIsABarrier,
-    AccountHome,
 )
 from .views.related_barriers import RelatedBarriers
 
