@@ -7,54 +7,40 @@
           id="main-content"
           role="main">
         {% block content %}
-            <div class="govuk-grid-row grey ">
-                <a href="{% url 'barriers:home' %}" class="govuk-back-link govuk-grid-column-full ma-container-full">Back</a>
+
+            <section class="govuk-grid-row grey m-b-6">
+                <!-- <a href="{% url 'barriers:home' %}" class="govuk-back-link govuk-grid-column-full ma-container-full">Back</a> -->
                 <div class="govuk-grid-column-full ma-container-full p-t-4">
                     <h1 class="govuk-heading-xl">
                         <span class="govuk-caption-m">{{ current_user.first_name }} {{ current_user.last_name }}</span>
                         Account home
                     </h1>
+                    <nav class="govuk-form-group">
+                        <div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:account_home' %}" class="govuk-link">My profile</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
+                            </div>
+                            <div class="dashboard-search-link-container">
+                                <a href="{% url 'barriers:dashboard' %}?active=barriers" class="govuk-link--no-visited-state-dark">My barriers</a>
+                            </div>
+                        </div>
+                    </nav>
                 </div>
-            </div>
+            </section>
+            
+            <section class="ma-container-full govuk-grid-row">
+                <div class="govuk-grid-column-full">{% include "barriers/partials/account_home_my_profile.html" %}</div>
+            </section>
 
-            <div class="govuk-service-navigation"
-            data-module="govuk-service-navigation">
-            <div class="govuk-width-container">
-              <div class="govuk-service-navigation__container">
-                <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-                  <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
-                    Menu
-                  </button>
-                  <ul class="govuk-service-navigation__list" id="navigation">
-                    <li class="govuk-service-navigation__item">
-                      <a class="govuk-service-navigation__link" href="#">
-                        Navigation item 1
-                      </a>
-                    </li>
-                    <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
-                      <a class="govuk-service-navigation__link" href="#" aria-current="true">
-                        <strong class="govuk-service-navigation__active-fallback">Navigation item 2</strong>
-                      </a>
-                    </li>
-                    <li class="govuk-service-navigation__item">
-                      <a class="govuk-service-navigation__link" href="#">
-                        Navigation item 3
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
-
-            <section class="govuk-width-container ma-container-full">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-full">{% include "barriers/partials/account_home_my_profile.html" %}</div>
-                </div>
-
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-full">{% include "barriers/partials/account_home_role_areas_of_interest.html" %}</div>
-                </div>
+            <section class="ma-container-full govuk-grid-row">
+                <div class="govuk-grid-column-full">{% include "barriers/partials/account_home_role_areas_of_interest.html" %}</div>
+            </section>
 
             </section>
         {% endblock %}
