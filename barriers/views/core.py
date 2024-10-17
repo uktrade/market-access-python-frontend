@@ -256,6 +256,7 @@ class AccountHome(TemplateView):
         context_data.update(
             {
                 "current_user": current_user,
+                "page": "account-home",
             }
         )
 
