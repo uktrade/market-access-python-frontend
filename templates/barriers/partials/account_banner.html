@@ -1,40 +1,21 @@
-<section class="govuk-grid-row grey">
-    <!-- <a href="{% url 'barriers:home' %}" class="govuk-back-link govuk-grid-column-full ma-container-full">Back</a> -->
-    <div class="govuk-grid-column-full ma-container-full p-t-4">
-        <h1 class="govuk-heading-xl">
-            <span class="govuk-caption-m">{{ current_user.first_name }} {{ current_user.last_name }}</span>
-            Account home
-        </h1>
-            <!-- <div>
-                <div class="dashboard-search-link-container">
-                    <a href="{% url 'barriers:account_home' %}" class="govuk-link">My profile</a>
-                </div>
-                <div class="dashboard-search-link-container">
-                    <a href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
-                </div>
-                <div class="dashboard-search-link-container">
-                    <a href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
-                </div>
-                <div class="dashboard-search-link-container">
-                    <a href="{% url 'barriers:dashboard' %}?active=barriers" class="govuk-link--no-visited-state-dark">My barriers</a>
-                </div>
-            </div> -->
+<section class="ma-masthead">
+    <div class="barrier-summary">
+        <div class="barrier-summary__code">{{ current_user.first_name }} {{ current_user.last_name }}</div>
+        <h1 class="barrier-summary__heading__text">Account home</h1>
     </div>
 </section>
 
-<nav class="datahub-header__navigation-wrapper m-b-6 govuk-grid-column-full">
-    <ul class="datahub-header__navigation">
-        <li class="datahub-header__navigation__item">
-            <a class="{% if page == 'account-home' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:account_home' %}">My profile</a>
-        </li>
-        <li class="datahub-header__navigation__item">
-            <a class="{% if page == 'saved-searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:dashboard' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
-        </li>
-        <li class="datahub-header__navigation__item">
-            <a class="{% if page == 'my-downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:dashboard' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
-        </li>
-        <li class="datahub-header__navigation__item">
-            <a class="{% if page == 'my-barriers' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:dashboard' %}?active=barriers" class="govuk-link--no-visited-state-dark">My barriers</a>
-        </li>
-    </ul>
-</nav>
+<ul class="datahub-header__navigation govuk-template">
+    <li class="datahub-header__navigation__item">
+        <a class="{% if page == 'account-home' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:account_home' %}">My profile</a>
+    </li>
+    <li class="datahub-header__navigation__item">
+        <a class="{% if page == 'saved-searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href=# class="govuk-link--no-visited-state-dark">My saved searches</a>
+    </li>
+    <li class="datahub-header__navigation__item">
+        <a class="{% if page == 'my-downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href=# class="govuk-link--no-visited-state-dark">My downloads</a>
+    </li>
+    <li class="datahub-header__navigation__item">
+        <a class="{% if page == 'my-barriers' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href=#ß class="govuk-link--no-visited-state-dark">My barriers</a>
+    </li>
+</ul>
