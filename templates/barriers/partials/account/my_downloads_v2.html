@@ -23,12 +23,11 @@
     <p><a href="https://data-services-help.trade.gov.uk/market-access/how-guides/download-barrier-details-spreadsheet/">How do I download barriers?</a></p>
 
 {% else %}
-
     <div class="govuk-summary-card">
         <div class="govuk-summary-card__title-wrapper">
             <h3 class="govuk-summary-card__title"><span class="ma-list-heading__count">{{ barrier_downloads|length }}</span> download{{ barrier_downloads|length|pluralize:"s" }}</h3>
         </div>
-        <ul class="govuk-summary-card__content">
+        <ul class="ma-card-list govuk-summary-card__content">
             {% for download in barrier_downloads %}
                 <li class="ma-card-list__item barrier-download">
                     <div class="barrier-download__content">
@@ -62,6 +61,5 @@
             {% endfor %}
         </ul>
     </div>
-
 {% endif %}
     
