@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+{% block page_title %}{{ block.super }} - Account{% endblock %}
+{% block masthead %}
+    {% include 'barriers/partials/account/banner.html' with active=active %}
+{% endblock %}
+{% block page_content %}
+    {% if active == "my_profile" %}
+        <section class="govuk-grid-row">
+            <div class="govuk-grid-column-full">{% include "barriers/partials/account/home_my_profile.html" %}</div>
+        </section>
+
+        <section class="govuk-grid-row">
+            <div class="govuk-grid-column-full">{% include "barriers/partials/account/home_role_areas_of_interest.html" %}</div>
+        </section>
+    {% endif %}
+{% endblock %}
