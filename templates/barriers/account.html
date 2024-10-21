@@ -15,4 +15,9 @@
             <div class="govuk-grid-column-full">{% include "barriers/partials/account/home_role_areas_of_interest.html" %}</div>
         </section>
     {% endif %}
+
+    {% if active == "my_downloads" %}
+        <section>{% include "barriers/partials/account/my_downloads.html" with barrier_downloads=my_downloads %}</section>
+    {% endif %}
+
 {% endblock %}

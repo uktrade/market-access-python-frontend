@@ -253,15 +253,15 @@ class Account(TemplateView):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
         active = self.request.GET.get("active")
-        print(active)
         current_user = client.users.get_current()
+        my_downloads = client.barrier_download.list()
 
         context_data.update(
             {
-                "current_user": current_user,
                 "active": active,
-                # my_downloads,
+                "current_user": current_user,
                 # my_saved_searches,
+                "my_downloads": my_downloads,
                 # my_barriers,
             }
         )
