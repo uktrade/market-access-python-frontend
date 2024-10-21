@@ -10,7 +10,7 @@
             <a class="{% if active == 'my_profile' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:account' %}?active=my_profile">My profile</a>
         </li>
         <li class="datahub-header__navigation__item">
-            <a class="{% if active == 'saved_searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:account' %}?active=my_saved_searches">My saved searches</a>
+            <a class="{% if active == 'my_saved_searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:account' %}?active=my_saved_searches">My saved searches</a>
         </li>
         <li class="datahub-header__navigation__item">
             <a class="{% if active == 'my_downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link" href="{% url 'barriers:account' %}?active=my_downloads">My downloads</a>
