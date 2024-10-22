@@ -27,10 +27,10 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    Placeholder
+                    {{ policy_teams }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="">
+                    <a class="govuk-link" href="{% url 'users:edit_user_policy_teams'  current_user.id %}">
                         Change
                     </a>
                 </dd>
@@ -43,7 +43,7 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    Placeholder
+                    {{ sectors }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="">
@@ -75,7 +75,7 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    Placeholder
+                    {{ organisations }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="">

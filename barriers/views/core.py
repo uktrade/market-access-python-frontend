@@ -244,26 +244,3 @@ class MySavedSearches(TemplateView):
         )
         return context_data
 
-
-class Account(TemplateView):
-    template_name = "barriers/account.html"
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-
-        active = self.request.GET.get("active")
-        print(active)
-        current_user = client.users.get_current()
-
-        context_data.update(
-            {
-                "current_user": current_user,
-                "active": active,
-                # my_downloads,
-                # my_saved_searches,
-                # my_barriers,
-            }
-        )
-
-        return context_data

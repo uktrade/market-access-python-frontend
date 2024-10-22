@@ -177,7 +177,6 @@ from barriers.views.wto import (
 )
 
 from .views.core import (
-    Account,
     BarrierDetail,
     Dashboard,
     GetDashboardSummary,
@@ -916,5 +915,4 @@ urlpatterns = [
     path("dashboard-summary/", GetDashboardSummary.as_view(), name="dashboard_summary"),
     path("my-saved-searches/", MySavedSearches.as_view(), name="my_saved_searches"),
     path("my-downloads/", MyDownloads.as_view(), name="my_downloads"),
-    path("account/", Account.as_view(), name="account"),
 ]

@@ -424,3 +424,33 @@ class ExportUsers(GroupQuerystringMixin, View):
                 ]
             )
         return response
+
+
+class Account(TemplateView):
+    template_name = "users/account.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = self.request.GET.get("active")
+        current_user = client.users.get_current()
+        policy_teams = current_user.policy_teams_display
+        sectors = "placeholder sectors"
+        organisations = "placeholder organisations"
+        
+
+        context_data.update(
+            {
+                "active": active,
+                "current_user": current_user,
+                "policy_teams": policy_teams,
+                "sectors": sectors,
+                "organisations": organisations,
+                # my_downloads,
+                # my_saved_searches,
+                # my_barriers,
+            }
+        )
+
+        return context_data
