@@ -1,5 +1,6 @@
 from django.urls import path
 
+from users.profile.views.policy_teams import UserEditPolicyTeams
 from users.views import (
     Account,
     AddUser,
@@ -13,7 +14,6 @@ from users.views import (
     SignOut,
     UserDetail,
 )
-from users.profile.views.policy_teams import UserEditPolicyTeams
 
 app_name = "users"
 

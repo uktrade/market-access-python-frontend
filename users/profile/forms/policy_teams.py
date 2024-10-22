@@ -1,7 +1,5 @@
 from django import forms
 
-from utils.api.client import MarketAccessAPIClient
-
 
 class UserEditPolicyTeamsForm(forms.Form):
     policy_teams = forms.MultipleChoiceField(
@@ -10,9 +8,9 @@ class UserEditPolicyTeamsForm(forms.Form):
         widget=forms.MultipleHiddenInput(),
         required=False,
     )
-    label="Placeholder"
-    help_text="Placeholder"
-    required=False
+    label = "Placeholder"
+    help_text = "Placeholder"
+    required = False
 
     def __init__(self, user_id, policy_teams, *args, **kwargs):
         self.token = kwargs.pop("token")

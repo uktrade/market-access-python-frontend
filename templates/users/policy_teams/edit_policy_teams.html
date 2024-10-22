@@ -14,35 +14,35 @@
     {% include 'users/partials/account/banner.html' with active="my_profile" %}
 {% endblock %}
 {% block page_content %}
-<div class="govuk-summary-card">
-    <div class="govuk-summary-card__title-wrapper">
-        <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
-    </div>
-    <fieldset>
-        <label class="govuk-label govuk-label--s" for="sectors_select">
-            {{ form.label }}
-        </label>
+    <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+            <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
+        </div>
+        <fieldset>
+            <label class="govuk-label govuk-label--s" for="sectors_select">
+                {{ form.label }}
+            </label>
 
-        <span id="description-hint" class="govuk-hint">
-            {{ form.help_text }}
-        </span>
+            <span id="description-hint" class="govuk-hint">
+                {{ form.help_text }}
+            </span>
 
         <!-- {% form_field_error form "sectors" %} -->
 
-        <ul class="selection-list__list" id="sectors_list_display">
-        </ul>
+            <ul class="selection-list__list" id="sectors_list_display">
+            </ul>
 
-        <select class="govuk-select govuk-!-width-full govuk-!-margin-bottom-3 {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
-            <option value="" disabled selected>Select a policy team</option>
-            {% for item in policy_teams %}
-                <option id="other-sectors-select-{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
-            {% endfor %}
-        </select>
+            <select class="govuk-select govuk-!-width-full govuk-!-margin-bottom-3 {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
+                <option value="" disabled selected>Select a policy team</option>
+                {% for item in policy_teams %}
+                    <option id="other-sectors-select-{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
+                {% endfor %}
+            </select>
 
-        <button type="button" id="add-other-sector-button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="Add another sector">Add policy teams</button>
+            <button type="button" id="add-other-sector-button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="Add another sector">Add policy teams</button>
 
         <!-- {{ form.sectors.as_hidden }} -->
 
-    </fieldset>
-</div>
+        </fieldset>
+    </div>
 {% endblock %}

@@ -14,7 +14,7 @@ class UserEditPolicyTeams(FormView, TemplateView, MetadataMixin):
         kwargs["token"] = self.request.session.get("sso_token")
         kwargs["policy_teams"] = self.metadata.get_policy_team_list()
         return kwargs
-    
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data.update(

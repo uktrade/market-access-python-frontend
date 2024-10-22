@@ -243,4 +243,3 @@ class MySavedSearches(TemplateView):
             }
         )
         return context_data
-

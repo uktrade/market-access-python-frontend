@@ -438,7 +438,6 @@ class Account(TemplateView):
         policy_teams = current_user.policy_teams_display
         sectors = "placeholder sectors"
         organisations = "placeholder organisations"
-        
 
         context_data.update(
             {
