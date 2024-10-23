@@ -84,6 +84,7 @@ const mainConfig = {
                         `${assetsSrcPath}/js/components/AttachmentForm.js`,
                         `${assetsSrcPath}/js/components/HiddenEstimatedResolutionDateTextarea.js`,
                         `${assetsSrcPath}/js/components/HiddenRadioContent.js`,
+                        `${assetsSrcPath}/js/components/MultiSelect.js`,
                         `${assetsSrcPath}/js/pages/index.js`,
                         `${assetsSrcPath}/js/pages/report/location-wizard-step.js`,
                         `${assetsSrcPath}/js/pages/report/sectors-wizard-step.js`,

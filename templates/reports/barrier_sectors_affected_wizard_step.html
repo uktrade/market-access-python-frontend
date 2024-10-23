@@ -3,7 +3,7 @@
 {% block body_script %}
     {{ block.super }}
     <script nonce="{{request.csp_nonce}}">
-        ma.pages.report.sectorsWizardStep();
+        ma.components.MultiSelect();
     </script>
 {% endblock %}
 
