@@ -20,7 +20,7 @@ ma.components.MultiSelect = function (category, main_and_other=false) {
             select.style.display = "block";
         } else {
             appendCategory(
-                "id_barrier-sectors-affected-sectors",
+                "selected_sectors",
                 category + "_select",
                 category + "_list_display",
             );
@@ -32,7 +32,7 @@ ma.components.MultiSelect = function (category, main_and_other=false) {
     const appendCategory = function (fieldname, select, display_list) {
         let category_select = document.getElementById(select);
         let category = category_select.value;
-        let current_category_list = document.getElementById(fieldname);
+        let current_category_list = document.getElementById(fieldname).getElementsByTagName('input')[0];
 
         if (current_category_list.value) {
             // Current sector hidden input has value
@@ -49,7 +49,7 @@ ma.components.MultiSelect = function (category, main_and_other=false) {
             // Create empty list
             const new_list = [];
             // Push sector ID into list
-            if (sector) {
+            if (category) {
                 category.push(category);
             }
             // Set hidden input value to contain the list
