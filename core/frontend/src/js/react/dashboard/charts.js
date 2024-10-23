@@ -1,6 +1,21 @@
 import React from "react";
 import Charts from "react-apexcharts";
 
+import { normalizeValue } from "../utils";
+
+const colorTheme = [
+    "#d53880",
+    "#003078",
+    "#28a197",
+    "#f47738",
+    "#5694ca",
+    "#4C2C92",
+    "#6F72AF",
+    "#F499BE",
+    "#85994B",
+    "#FFDD00",
+]; // 10 GDS colours
+
 export const handlePieChart = (
     /** @type {{ options: any; series: ApexAxisChartSeries | ApexNonAxisChartSeries; }} */ chartData,
 ) => {
@@ -8,18 +23,29 @@ export const handlePieChart = (
         ...chartData.options,
         dataLabels: {
             enabled: true,
-            formatter: function (val, opts) {
+            formatter: function (
+                /** @type {any} */ _val,
+                /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts,
+            ) {
                 // get the acual value not the percentage
                 const value = opts.w.globals.series[opts.seriesIndex];
                 const label = opts.w.config.labels[opts.seriesIndex];
-                return `${label}: ${value}`;
+                return `${label}: ${normalizeValue(value)}`;
             },
             offset: -10,
+        },
+        tooltip: {
+            y: {
+                formatter: function (/** @type {number} */ val) {
+                    return normalizeValue(val);
+                },
+            },
         },
         legend: {
             show: true,
             position: "bottom",
         },
+        colors: colorTheme,
     };
 
     return (
@@ -53,6 +79,13 @@ export const handleBarChart = (
         },
         dataLabels: {
             enabled: true,
+            formatter: (/** @type {number} */ val) => normalizeValue(val),
+        },
+        colors: colorTheme,
+        yaxis: {
+            labels: {
+                formatter: (/** @type {number} */ val) => normalizeValue(val),
+            },
         },
     };
 
@@ -81,6 +114,13 @@ export const handleStackedBarChart = (
                 show: true,
             },
         },
+        tooltip: {
+            y: {
+                formatter: function (/** @type {number} */ val) {
+                    return normalizeValue(val);
+                },
+            },
+        },
         plotOptions: {
             bar: {
                 horizontal: true,
@@ -94,12 +134,10 @@ export const handleStackedBarChart = (
             width: 5,
             colors: ["transparent"],
         },
-        dataLabels: {
-            enabled: true,
-        },
         legend: {
             position: "bottom",
         },
+        colors: colorTheme,
     };
     return (
         <Charts

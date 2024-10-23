@@ -51,7 +51,7 @@ const getOptionValue = (htmlElement) => {
     return { label, options };
 };
 
-const formatAdminAreas = (searchParams) => {
+const formatAdminAreas = (/** @type {URLSearchParams} */ searchParams) => {
     const admin_areas = [];
     if (searchParams.get("admin_areas")) {
         const adminAreasData = JSON.parse(searchParams.get("admin_areas"));
@@ -65,7 +65,9 @@ const formatAdminAreas = (searchParams) => {
     return admin_areas;
 };
 
-const addLocation = (queryParams) => {
+const addLocation = (
+    /** @type {string | URLSearchParams | string[][] | Record<string, string>} */ queryParams,
+) => {
     // update the current URL with the new query params
     const searchParams = new URLSearchParams(queryParams);
 
@@ -144,7 +146,6 @@ const BarriersOverview = ({ filterValues }) => {
                     enabled: false,
                 },
                 labels: data ? data.barrier_status_chart?.labels : [],
-                colors: ["#28a197", "#003078", "#d4351c", "#912b88"],
             },
         },
         barChartData: {
@@ -177,7 +178,6 @@ const BarriersOverview = ({ filterValues }) => {
                 yaxis: {
                     categories: ["0", "20", "40", "60", "80", "100"],
                 },
-                colors: ["#912b88", "#003078"],
                 title: {
                     text: "Total barrier value",
                     align: "center",
@@ -214,7 +214,7 @@ const BarriersOverview = ({ filterValues }) => {
                 },
                 yaxis: {
                     title: {
-                        text: "£",
+                        text: "Current Month",
                     },
                 },
                 title: {
@@ -224,7 +224,6 @@ const BarriersOverview = ({ filterValues }) => {
                 fill: {
                     opacity: 1,
                 },
-                colors: ["#912b88", "#003078"],
             },
         },
     });
@@ -360,7 +359,8 @@ const BarriersOverview = ({ filterValues }) => {
                 .label;
         } else if (type === "policy_team") {
             return filterValues.policy_team.find(
-                (policy_team) => policy_team.value === value,
+                (/** @type {{ value: string; }} */ policy_team) =>
+                    policy_team.value === value,
             ).label;
         } else if (type === "location") {
             // check if value is comma separated then split it and return an array
@@ -370,12 +370,14 @@ const BarriersOverview = ({ filterValues }) => {
                     .map(
                         (val) =>
                             filterValues.location.find(
-                                (location) => location.value === val,
+                                (/** @type {{ value: string; }} */ location) =>
+                                    location.value === val,
                             ).label,
                     );
             } else {
                 return filterValues.location.find(
-                    (location) => location.value === value,
+                    (/** @type {{ value: string; }} */ location) =>
+                        location.value === value,
                 ).label;
             }
         } else if (type === "status") {
@@ -401,7 +403,7 @@ const BarriersOverview = ({ filterValues }) => {
         const filters = Object.keys(params)
             .map((key) => {
                 const values = params[key][0].split(",");
-                return values.map((val) => ({
+                return values.map((/** @type {string} */ val) => ({
                     label: key,
                     value: val,
                     readable_value: val && getReadableValue(val, key),

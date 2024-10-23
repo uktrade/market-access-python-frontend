@@ -166,11 +166,14 @@ const SummaryCards = ({ filterValues }) => {
         /** @type {string} */ type,
     ) => {
         if (type === "sector") {
-            return filterValues.sector.find((sector) => sector.value === value)
-                .label;
+            return filterValues.sector.find(
+                (/** @type {{ value: string; }} */ sector) =>
+                    sector.value === value,
+            ).label;
         } else if (type === "policy_team") {
             return filterValues.policy_team.find(
-                (policy_team) => policy_team.value === value,
+                (/** @type {{ value: string; }} */ policy_team) =>
+                    policy_team.value === value,
             ).label;
         } else if (type === "location") {
             // check if value is comma separated then split it and return an array
@@ -180,12 +183,14 @@ const SummaryCards = ({ filterValues }) => {
                     .map(
                         (val) =>
                             filterValues.location.find(
-                                (location) => location.value === val,
+                                (/** @type {{ value: string; }} */ location) =>
+                                    location.value === val,
                             ).label,
                     );
             } else {
                 return filterValues.location.find(
-                    (location) => location.value === value,
+                    (/** @type {{ value: string; }} */ location) =>
+                        location.value === value,
                 ).label;
             }
         } else if (type === "status") {
@@ -238,7 +243,7 @@ const SummaryCards = ({ filterValues }) => {
         const filters = Object.keys(params)
             .map((key) => {
                 const values = params[key];
-                return values.map((val) => ({
+                return values.map((/** @type {string} */ val) => ({
                     label: key,
                     value: val,
                     readable_value: val && getReadableValue(val, key),
@@ -271,7 +276,7 @@ const SummaryCards = ({ filterValues }) => {
                                 if (filter.label === "location") {
                                     return filter.value
                                         .split(",")
-                                        .map((val) => ({
+                                        .map((/** @type {string} */ val) => ({
                                             label: filter.label,
                                             value: val,
                                             readable_value:
@@ -318,13 +323,16 @@ const SummaryCards = ({ filterValues }) => {
                                         </h4>
                                         <p className="active-filter__text">
                                             {values
-                                                .map((value) =>
-                                                    value.readable_value
-                                                        ? value.readable_value.replace(
-                                                              /<\/?[^>]+(>|$)/g,
-                                                              "",
-                                                          )
-                                                        : "",
+                                                .map(
+                                                    (
+                                                        /** @type {{ readable_value: string; }} */ value,
+                                                    ) =>
+                                                        value.readable_value
+                                                            ? value.readable_value.replace(
+                                                                  /<\/?[^>]+(>|$)/g,
+                                                                  "",
+                                                              )
+                                                            : "",
                                                 )
                                                 .join(", ")}
                                         </p>
@@ -345,13 +353,16 @@ const SummaryCards = ({ filterValues }) => {
                                         </h4>
                                         <p className="active-filter__text">
                                             {values
-                                                .map((value) =>
-                                                    value.readable_value
-                                                        ? value.readable_value.replace(
-                                                              /<\/?[^>]+(>|$)/g,
-                                                              "",
-                                                          )
-                                                        : "",
+                                                .map(
+                                                    (
+                                                        /** @type {{ readable_value: string; }} */ value,
+                                                    ) =>
+                                                        value.readable_value
+                                                            ? value.readable_value.replace(
+                                                                  /<\/?[^>]+(>|$)/g,
+                                                                  "",
+                                                              )
+                                                            : "",
                                                 )
                                                 .join(", ")}
                                         </p>
@@ -359,13 +370,16 @@ const SummaryCards = ({ filterValues }) => {
                                             Activate link to remove {label}{" "}
                                             filter with value open quote{" "}
                                             {values
-                                                .map((value) =>
-                                                    value.readable_value
-                                                        ? value.readable_value.replace(
-                                                              /<\/?[^>]+(>|$)/g,
-                                                              "",
-                                                          )
-                                                        : "",
+                                                .map(
+                                                    (
+                                                        /** @type {{ readable_value: string; }} */ value,
+                                                    ) =>
+                                                        value.readable_value
+                                                            ? value.readable_value.replace(
+                                                                  /<\/?[^>]+(>|$)/g,
+                                                                  "",
+                                                              )
+                                                            : "",
                                                 )
                                                 .join(", ")}{" "}
                                             end quote.
