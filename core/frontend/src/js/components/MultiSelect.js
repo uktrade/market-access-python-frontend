@@ -9,39 +9,40 @@ ma.components.MultiSelect = function (category, main_and_other=false) {
         });
     }
     
-    const addSectorButton = document.getElementById("add-other-sector-button");
-    addSectorButton.addEventListener("click", function () {
+    const addButton = document.getElementById("add_button");
+    addButton.addEventListener("click", function () {
         additionMode();
     });
-    const otherSectorSelect = document.getElementById("sectors_select");
+    const select = document.getElementById(category + "_select");
 
     const additionMode = function () {
-        if (otherSectorSelect.style.display == "none") {
-            otherSectorSelect.style.display = "block";
+        if (select.style.display == "none") {
+            select.style.display = "block";
         } else {
-            appendSector(
+            appendCategory(
                 "id_barrier-sectors-affected-sectors",
-                "sectors_select",
-                "sectors_list_display",
+                category + "_select",
+                category + "_list_display",
             );
-            otherSectorSelect.style.display = "none";
+            select.style.display = "none";
         }
     };
 
-    const appendSector = function (fieldname, select, display_list) {
-        let sector_select = document.getElementById(select);
-        let sector = sector_select.value;
-        let current_sector_list = document.getElementById(fieldname);
 
-        if (current_sector_list.value) {
+    const appendCategory = function (fieldname, select, display_list) {
+        let category_select = document.getElementById(select);
+        let category = category_select.value;
+        let current_category_list = document.getElementById(fieldname);
+
+        if (current_category_list.value) {
             // Current sector hidden input has value
             // Parse the existing list so we can add to it
-            const new_list = JSON.parse(current_sector_list.value);
-            if (!new_list.includes(sector)) {
+            const new_list = JSON.parse(current_category_list.value);
+            if (!new_list.includes(category)) {
                 // Sector ID not in hidden input list, so add this to the list
-                new_list.push(sector);
+                new_list.push(category);
                 // Update the hidden input value with the updated list
-                current_sector_list.value = JSON.stringify(new_list);
+                current_category_list.value = JSON.stringify(new_list);
             }
         } else {
             // Current sector hidden input empty
@@ -49,22 +50,22 @@ ma.components.MultiSelect = function (category, main_and_other=false) {
             const new_list = [];
             // Push sector ID into list
             if (sector) {
-                new_list.push(sector);
+                category.push(category);
             }
             // Set hidden input value to contain the list
-            current_sector_list.value = JSON.stringify(new_list);
+            current_category_list.value = JSON.stringify(new_list);
         }
 
         // Update the display box with the new updated list
-        updateSectorDisplay();
+        updateDisplay();
     };
 
-    const updateSectorDisplay = function () {
-        const sector_list = document.getElementById("sectors_select");
+    const updateDisplay = function () {
+        const sector_list = document.getElementById(category + "_select");
         const current_selected_list = document.getElementById(
             "id_barrier-sectors-affected-sectors",
         );
-        const display_list = document.getElementById("sectors_list_display");
+        const display_list = document.getElementById(category + "_list_display");
 
         if (current_selected_list.value == "") {
             const selected_list = current_selected_list.value;
@@ -153,7 +154,7 @@ ma.components.MultiSelect = function (category, main_and_other=false) {
     };
 
     // Set initial visibility mode & initial list of selected sectors
-    otherSectorSelect.style.display = "none";
+    select.style.display = "none";
     updateOtherCategoriesList(currentMainCategorySelected);
-    updateSectorDisplay();
+    updateDisplay();
 };
