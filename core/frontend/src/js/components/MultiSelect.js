@@ -1,12 +1,14 @@
-ma.components.MultiSelect = function () {
+ma.components.MultiSelect = function (category, main_and_other=false) {
     // Get buttons from sections and assign them onclick events to call relevant function
-    const mainSectorSelect = document.getElementById("main_sector_select");
-    var currentMainSectorSelected = mainSectorSelect.value;
-    console.log(currentMainSectorSelected);
-    mainSectorSelect.addEventListener("change", function () {
-        updateOtherSectorsList(mainSectorSelect.value);
-        removeItem(mainSectorSelect.value);
-    });
+    if (main_and_other === true) {
+        const mainCategorySelect = document.getElementById("main_" + category + "_select");
+        var currentMainCategorySelected = mainCategorySelect.value;
+        mainCategorySelect.addEventListener("change", function () {
+            updateOtherCategoriesList(mainCategorySelect.value);
+            removeItem(mainCategorySelect.value);
+        });
+    }
+    
     const addSectorButton = document.getElementById("add-other-sector-button");
     addSectorButton.addEventListener("click", function () {
         additionMode();
@@ -104,7 +106,7 @@ ma.components.MultiSelect = function () {
         }
     };
 
-    const updateOtherSectorsList = function (sector) {
+    const updateOtherCategoriesList = function (sector) {
         // Want to prevent item selected as main sector to be available as an option for other sector
         if (sector != "") {
             // Hide newly selected option in the other sectors selection box
@@ -115,11 +117,11 @@ ma.components.MultiSelect = function () {
             otherSectorItem.style.display = "none";
             // Show previously selected option in the other sectors selection box
             if (
-                currentMainSectorSelected != sector &&
-                currentMainSectorSelected != ""
+                currentMainCategorySelected != sector &&
+                currentMainCategorySelected != ""
             ) {
                 previousSectorItemElementName = "other-sectors-select-".concat(
-                    currentMainSectorSelected,
+                    currentMainCategorySelected,
                 );
                 console.log(previousSectorItemElementName);
                 const previousSectorItem = document.getElementById(
@@ -128,7 +130,7 @@ ma.components.MultiSelect = function () {
                 previousSectorItem.style.display = "block";
             }
             // Set variable tracking selected sector to the new value
-            currentMainSectorSelected = sector;
+            currentMainCategorySelected = sector;
         }
     };
 
@@ -152,6 +154,6 @@ ma.components.MultiSelect = function () {
 
     // Set initial visibility mode & initial list of selected sectors
     otherSectorSelect.style.display = "none";
-    updateOtherSectorsList(currentMainSectorSelected);
+    updateOtherCategoriesList(currentMainCategorySelected);
     updateSectorDisplay();
 };

@@ -3,7 +3,7 @@
 {% block body_script %}
     {{ block.super }}
     <script nonce="{{request.csp_nonce}}">
-        ma.components.MultiSelect();
+        ma.components.MultiSelect(category="sector", main_and_other=true);
     </script>
 {% endblock %}
 
