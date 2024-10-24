@@ -2,7 +2,7 @@ from django.urls import path
 
 from users.account.views import (
     UserEditBarrierLocations,
-    UserEditGovernmentDepartments,
+    UserEditGovernmentDepartment,
     UserEditOverseasRegions,
     UserEditPolicyTeams,
     UserEditSectors,
@@ -48,28 +48,28 @@ urlpatterns = [
         name="account_downloads",
     ),
     path(
-        "account/<int:user_id>/policy-teams/edit/",
+        "account/policy-teams/edit/",
         UserEditPolicyTeams.as_view(),
         name="edit_user_policy_teams",
     ),
     path(
-        "account/<int:user_id>/sectors/edit/",
+        "account/sectors/edit/",
         UserEditSectors.as_view(),
         name="edit_user_sectors",
     ),
     path(
-        "account/<int:user_id>/barrier-locations/edit/",
+        "account/barrier-locations/edit/",
         UserEditBarrierLocations.as_view(),
         name="edit_user_barrier_locations",
     ),
     path(
-        "account/<int:user_id>/overseas-regions/edit/",
+        "account/overseas-regions/edit/",
         UserEditOverseasRegions.as_view(),
         name="edit_user_overseas_regions",
     ),
     path(
-        "account/<int:user_id>/government-departments/edit/",
-        UserEditGovernmentDepartments.as_view(),
-        name="edit_user_government_departments",
+        "account/government-department/edit/",
+        UserEditGovernmentDepartment.as_view(),
+        name="edit_user_government_department",
     ),
 ]

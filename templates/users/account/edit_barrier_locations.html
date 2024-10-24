@@ -9,9 +9,11 @@
     </script>
 {% endblock %}
 
+<!-- TODO rework partials -->
+
 {% block page_title %}{{ block.super }} - Account{% endblock %}
 {% block masthead %}
-    {% include 'users/partials/account/banner.html' with active="my_profile" %}
+    {% include 'users/partials/account/banner.html' with active="my profile" %}
 {% endblock %}
 {% block page_content %}
     {% include 'users/partials/account/areas_multi_select.html' with form=form title="My role and areas of interest" select_text="Select a barrier location" add_text="Add location" %}

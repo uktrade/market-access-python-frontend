@@ -436,29 +436,39 @@ class Account(TemplateView, MetadataMixin):
 
         active = "my profile"
         current_user = client.users.get_current()
+        profile = client.profile.get(id=current_user.id).data
 
-        profile = client.users.get(id=current_user.id).data["profile"]
+        overseas_regions = self.get_display_list(
+            [region["name"] for region in profile["overseas_regions"] or []]
+        )
+        policy_teams = self.get_display_list(
+            [policy_team["title"] for policy_team in profile["policy_teams"] or []]
+        )
+        sectors = self.get_display_list(
+            [sector["name"] for sector in profile["sectors"] or []]
+        )
+        government_department = self.get_display_list(
+            [organisation["name"] for organisation in profile["organisations"] or []]
+        )
 
-        overseas_regions = self.get_display_list(profile, "overseas_regions")
-        policy_teams = self.get_display_list(profile, "policy_teams")
-        sectors = self.get_display_list(profile, "sectors")
-        barrier_locations = self.get_barrier_locations_display_list(profile)
-        government_departments = self.get_display_list(profile, "organisations")
+        trading_blocs = [bloc["name"] for bloc in profile["trading_blocs"] or []]
+        countries = [country["name"] for country in profile["countries"] or []]
+        barrier_locations = self.get_display_list(trading_blocs + countries)
 
         context_data.update(
             {
                 "active": active,
-                "current_user": current_user,
                 "overseas_regions": overseas_regions,
                 "policy_teams": policy_teams,
                 "sectors": sectors,
                 "barrier_locations": barrier_locations,
-                "government_departments": government_departments,
+                "government_department": government_department,
             }
         )
 
         return context_data
 
+<<<<<<< HEAD
     def get_display_list(self, profile, area):
         id_list = profile[area]
         if area == "policy_teams":
@@ -491,25 +501,50 @@ class Account(TemplateView, MetadataMixin):
             if organisations:
                 return "".join(organisations)
             return "None"
-
-    def get_barrier_locations_display_list(self, profile):
-        trading_blocs = profile["trading_blocs"]
-        countries = profile["countries"]
-        trading_blocs_display = [
-            self.metadata.get_trading_bloc(trading_bloc).get("name")
-            for trading_bloc in trading_blocs or []
-        ]
-        countries_display = [
-            self.metadata.get_country(country).get("name")
-            for country in countries or []
-        ]
-        trading_blocs_display.sort()
-        countries_display.sort()
-        if trading_blocs_display or countries_display:
-            return "\n".join(
-                [", ".join(trading_blocs_display), ", ".join(countries_display)]
-            )
-        return "None"
+=======
+    def get_display_list(self, list):
+        list.sort()
+        if list:
+            list.sort()
+            return ", ".join(list)
+        return None
+<<<<<<< HEAD
+        # id_list = profile[area]
+        # if area == "policy_teams":
+        #     policy_teams = [
+        #         self.metadata.get_policy_team(id).get("title") for id in id_list or []
+        #     ]
+        #     policy_teams.sort()
+        #     if policy_teams:
+        #         return ", ".join(policy_teams)
+        #     return "None"
+        # elif area == "sectors":
+        #     sectors = [self.metadata.get_sector(id).get("name") for id in id_list or []]
+        #     sectors.sort()
+        #     if sectors:
+        #         return ", ".join(sectors)
+        #     return "None"
+        # elif area == "overseas_regions":
+        #     overseas_regions = [
+        #         self.metadata.get_overseas_region_by_id(id).get("name")
+        #         for id in id_list or []
+        #     ]
+        #     overseas_regions.sort()
+        #     if overseas_regions:
+        #         return "\n".join(overseas_regions)
+        #     return "None"
+        # elif area == "organisations":
+        #     organisations = [
+        #         item["name"]
+        #         for item in self.metadata.get_gov_organisations()
+        #         if item["id"] in id_list
+        #     ]
+        #     if organisations:
+        #         return ", ".join(organisations)
+        #     return "None"
+>>>>>>> 7cf4695c (Refactoring)
+=======
+>>>>>>> 0058c263 (All fields working)
 
 
 class AccountSavedSearch(TemplateView):
