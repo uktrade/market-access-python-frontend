@@ -48,10 +48,14 @@
                 
             <ul class="selection-list__list" id="list_display"></ul>
 
-            {{ form.policy_teams }}
+
 
         </fieldset>
     </div>
+    <form action="" method="post">
+        {% csrf_token %}
+            {{ form.policy_teams }}
 
-    <input type="submit" value="Save and return" class="govuk-button">
+            <input type="submit" value="Save and return" class="govuk-button">
+    </form>
 {% endblock %}
