@@ -218,7 +218,9 @@ const BarriersOverview = ({ filterValues }) => {
                     },
                 },
                 title: {
-                    text: `Total value of barriers resolved and estimated to be resolved between ${parseIso(data?.financial_year?.current_start)} and ${parseIso(data?.financial_year?.current_end)}`,
+                    text: `Total value of barriers resolved and estimated to be resolved between ${parseIso(
+                        data?.financial_year?.current_start,
+                    )} and ${parseIso(data?.financial_year?.current_end)}`,
                     align: "center",
                 },
                 fill: {

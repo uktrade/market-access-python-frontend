@@ -43,9 +43,9 @@ export const normalizeValue = (/** @type {number} */ value) => {
 };
 
 /**
- * 
- * @param {*} dateString 
- * @returns 
+ *
+ * @param {*} dateString
+ * @returns
  */
 export const parseIso = (/** @type {string | number | Date} */ dateString) => {
     const date = new Date(dateString);
