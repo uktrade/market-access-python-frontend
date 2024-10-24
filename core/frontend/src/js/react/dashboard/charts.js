@@ -4,8 +4,8 @@ import Charts from "react-apexcharts";
 import { normalizeValue } from "../utils";
 
 const colorTheme = [
-    "#d53880",
     "#003078",
+    "#d53880",
     "#28a197",
     "#f47738",
     "#5694ca",

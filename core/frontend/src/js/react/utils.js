@@ -41,3 +41,17 @@ export const normalizeValue = (/** @type {number} */ value) => {
     }
     return value.toString();
 };
+
+/**
+ * 
+ * @param {*} dateString 
+ * @returns 
+ */
+export const parseIso = (/** @type {string | number | Date} */ dateString) => {
+    const date = new Date(dateString);
+    return new Date(date).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+};

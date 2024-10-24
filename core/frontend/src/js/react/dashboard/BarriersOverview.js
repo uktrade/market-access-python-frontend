@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
 
-import { getCheckboxValues } from "../utils";
+import { getCheckboxValues, parseIso } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 import MultiSelectFilter from "../search/MultiSelectFilter";
 import LocationFilter from "../search/LocationFilter";
@@ -187,13 +187,6 @@ const BarriersOverview = ({ filterValues }) => {
         stackedBarChartData: {
             series: [
                 {
-                    name: "Value of resolved barriers",
-                    data:
-                        data && data.barrier_value_chart.resolved_barriers_value
-                            ? [data.barrier_value_chart.resolved_barriers_value]
-                            : [],
-                },
-                {
                     name: "Value of barriers estimated to be resolved",
                     data:
                         data &&
@@ -202,6 +195,13 @@ const BarriersOverview = ({ filterValues }) => {
                                   data.barrier_value_chart
                                       .estimated_barriers_value,
                               ]
+                            : [],
+                },
+                {
+                    name: "Value of resolved barriers",
+                    data:
+                        data && data.barrier_value_chart.resolved_barriers_value
+                            ? [data.barrier_value_chart.resolved_barriers_value]
                             : [],
                 },
             ],
@@ -218,7 +218,7 @@ const BarriersOverview = ({ filterValues }) => {
                     },
                 },
                 title: {
-                    text: "Total value of barriers resolved and estimated in the current financial year",
+                    text: `Total value of barriers resolved and estimated to be resolved between ${parseIso(data?.financial_year?.current_start)} and ${parseIso(data?.financial_year?.current_end)}`,
                     align: "center",
                 },
                 fill: {
@@ -339,15 +339,6 @@ const BarriersOverview = ({ filterValues }) => {
         const formData = new FormData(formRef.current);
         // @ts-ignore
         return new URLSearchParams(formData).toString();
-    };
-
-    const parseIso = (/** @type {string | number | Date} */ dateString) => {
-        const date = new Date(dateString);
-        return new Date(date).toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        });
     };
 
     const getReadableValue = (
