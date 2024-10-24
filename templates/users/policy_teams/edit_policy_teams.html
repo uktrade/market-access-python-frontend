@@ -29,14 +29,14 @@
                 </span>
 
                 <div>
-                    <select 
+                    <select
                         class="govuk-select govuk-!-width-two-thirds"
                         id="policy_team_select"
                         name="policy_team">
-                            <option value="" disabled selected>Select a policy team</option>
-                            {% for item in policy_teams %}
-                                <option id="{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
-                            {% endfor %}
+                        <option value="" disabled selected>Select a policy team</option>
+                        {% for item in policy_teams %}
+                            <option id="{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
+                        {% endfor %}
                     </select>
 
                     <button type="button" id="add_button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="Add policy team">
@@ -45,7 +45,7 @@
                 </div>
 
             </div>
-                
+
             <ul class="selection-list__list" id="list_display"></ul>
 
 
@@ -54,8 +54,8 @@
     </div>
     <form action="" method="post">
         {% csrf_token %}
-            {{ form.policy_teams }}
+        {{ form.policy_teams }}
 
-            <input type="submit" value="Save and return" class="govuk-button">
+        <input type="submit" value="Save and return" class="govuk-button">
     </form>
 {% endblock %}

@@ -1,8 +1,7 @@
 ma.components.MultiSelect = function (category) {
-    
     const add_button = document.getElementById("add_button");
     const dropdown = document.getElementById(category + "_select");
-    let current_list_element = document.getElementById("id_" + category + "s")
+    let current_list_element = document.getElementById("id_" + category + "s");
 
     add_button.addEventListener("click", function () {
         additionMode();

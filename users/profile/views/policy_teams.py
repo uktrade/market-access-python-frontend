@@ -1,10 +1,9 @@
-from django.views.generic import FormView, TemplateView
-from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic import FormView, TemplateView
 
 from users.profile.forms.policy_teams import UserEditPolicyTeamsForm
-from utils.metadata import MetadataMixin
 from utils.api.client import MarketAccessAPIClient
+from utils.metadata import MetadataMixin
 
 
 class UserEditPolicyTeams(FormView, TemplateView, MetadataMixin):

@@ -2,8 +2,6 @@ import json
 
 from django import forms
 
-from utils.api.client import MarketAccessAPIClient
-
 
 class UserEditPolicyTeamsForm(forms.Form):
     policy_teams = forms.CharField(
