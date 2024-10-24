@@ -435,7 +435,7 @@ class Account(TemplateView):
 
         active = self.request.GET.get("active")
         current_user = client.users.get_current()
-        policy_teams = current_user.policy_teams_display
+        policy_teams = current_user.__dict__
         sectors = "placeholder sectors"
         organisations = "placeholder organisations"
 

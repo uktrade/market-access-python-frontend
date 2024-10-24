@@ -5,7 +5,7 @@
 {% block body_script %}
     {{ block.super }}
     <script nonce="{{request.csp_nonce}}">
-        ma.pages.report.sectorsWizardStep();
+        ma.components.MultiSelect(category="policy_team", main_and_other=false);
     </script>
 {% endblock %}
 
@@ -18,31 +18,44 @@
         <div class="govuk-summary-card__title-wrapper">
             <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
         </div>
-        <fieldset>
-            <label class="govuk-label govuk-label--s" for="sectors_select">
-                {{ form.label }}
-            </label>
+        <fieldset class="govuk-fieldset">
+            <div class="govuk-summary-card__content">
+                <label for="policy_team_select" class="govuk-label govuk-label--s">
+                    {{ form.policy_teams.label }}
+                </label>
 
-            <span id="description-hint" class="govuk-hint">
-                {{ form.help_text }}
-            </span>
+                <span class="govuk-hint">
+                    {{ form.policy_teams.help_text }}
+                </span>
 
-        <!-- {% form_field_error form "sectors" %} -->
+                <div>
+                    <select
+                        class="govuk-select govuk-!-width-two-thirds"
+                        id="policy_team_select"
+                        name="policy_team">
+                        <option value="" disabled selected>Select a policy team</option>
+                        {% for item in policy_teams %}
+                            <option id="{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
+                        {% endfor %}
+                    </select>
 
-            <ul class="selection-list__list" id="sectors_list_display">
-            </ul>
+                    <button type="button" id="add_button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="Add policy team">
+                        Add policy team
+                    </button>
+                </div>
 
-            <select class="govuk-select govuk-!-width-full govuk-!-margin-bottom-3 {% if form.sectors.errors %} govuk-select--error{% endif %}" id="sectors_select" name="sector"{% if form.sector.errors %} aria-describedby="sectors-error"{% endif %}>
-                <option value="" disabled selected>Select a policy team</option>
-                {% for item in policy_teams %}
-                    <option id="other-sectors-select-{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
-                {% endfor %}
-            </select>
+            </div>
 
-            <button type="button" id="add-other-sector-button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="Add another sector">Add policy teams</button>
+            <ul class="selection-list__list" id="list_display"></ul>
 
-        <!-- {{ form.sectors.as_hidden }} -->
+
 
         </fieldset>
     </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.policy_teams }}
+
+        <input type="submit" value="Save and return" class="govuk-button">
+    </form>
 {% endblock %}

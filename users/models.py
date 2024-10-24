@@ -67,4 +67,4 @@ class User(APIModel):
 
     @property
     def policy_teams_display(self):
-        return self.data.get("user_profile")
+        return self.data.get("policy_teams")
