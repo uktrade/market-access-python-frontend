@@ -21,11 +21,11 @@
         <fieldset class="govuk-fieldset">
             <div class="govuk-summary-card__content">
                 <label for="policy_team_select" class="govuk-label govuk-label--s">
-                    {{ form.label }}
+                    {{ form.policy_teams.label }}
                 </label>
 
                 <span class="govuk-hint">
-                    {{ form.help_text }}
+                    {{ form.policy_teams.help_text }}
                 </span>
 
                 <div>
@@ -48,8 +48,10 @@
                 
             <ul class="selection-list__list" id="list_display"></ul>
 
-            <div id="current_selection"></div>
+            {{ form.policy_teams }}
 
         </fieldset>
     </div>
+
+    <input type="submit" value="Save and return" class="govuk-button">
 {% endblock %}

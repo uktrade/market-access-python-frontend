@@ -2,7 +2,7 @@ ma.components.MultiSelect = function (category) {
     
     const add_button = document.getElementById("add_button");
     const dropdown = document.getElementById(category + "_select");
-    let current_list_element = document.getElementById("current_selection")
+    let current_list_element = document.getElementById("id_" + category + "s")
 
     add_button.addEventListener("click", function () {
         additionMode();
@@ -20,9 +20,7 @@ ma.components.MultiSelect = function (category) {
             }
         } else {
             const new_list = [];
-            if (dropdown.value) {
-                new_list.push(dropdown.value);
-            }
+            new_list.push(dropdown.value);
             current_list_element.value = JSON.stringify(new_list);
         }
 
