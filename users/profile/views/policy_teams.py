@@ -20,18 +20,31 @@ class UserEditPolicyTeams(FormView, TemplateView, MetadataMixin):
         context_data = super().get_context_data(**kwargs)
         context_data.update(
             {
-                "policy_teams": self.metadata.get_policy_team_list(),
+                "select_options": self.metadata.get_policy_team_list(),
             }
         )
         return context_data
 
+    def get_initial(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        current_user = client.users.get_current()
+        selected_policy_teams = client.users.get(id=current_user.id).data["profile"][
+            "policy_teams"
+        ]
+        return {
+            "form": selected_policy_teams,
+        }
+
     def form_valid(self, form):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        policy_teams = sorted(form.cleaned_data["policy_teams"])
+        policy_teams = sorted(form.cleaned_data["form"])
         print(policy_teams)
         client.users.patch(
             id=str(self.kwargs.get("user_id")),
-            policy_teams=policy_teams,
+            profile={
+                "id": 3,
+                "policy_teams": policy_teams,
+            },
         )
         return super().form_valid(form)
 
