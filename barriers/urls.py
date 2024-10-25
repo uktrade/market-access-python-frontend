@@ -181,8 +181,6 @@ from .views.core import (
     Dashboard,
     GetDashboardSummary,
     Home,
-    MyDownloads,
-    MySavedSearches,
     WhatIsABarrier,
 )
 from .views.related_barriers import RelatedBarriers
