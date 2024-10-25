@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+{% block page_title %}
+    {{ block.super }} - Account
+{% endblock page_title %}
+{% block masthead %}
+    {% include "users/partials/account/banner.html" with active=active %}
+{% endblock masthead %}
+{% block page_content %}
+    <section>
+        <h2 class="ma-list-heading">
+            <span class="ma-list-heading__count">{{ saved_searches|length }}</span> saved search{{ saved_searches|length|pluralize:"es" }}
+        </h2>
+        <ul class="ma-card-list">
+            {% for saved_search in saved_searches %}
+                <li class="ma-card-list__item saved-search">
+                    <div class="saved-search__content">
+                        <h3 class="saved-search__title">
+                            <a href="{% url 'barriers:search' %}?{{ saved_search.querystring }}&search_id={{ saved_search.id }}">{{ saved_search.name }}</a>
+                        </h3>
+                        {% include "barriers/partials/saved_search_badges.html" %}
+                        {% if saved_search.filters %}
+                            <ul class="saved-search__filter-list">
+                                {% for name, value in saved_search.readable_filters.items %}
+                                    <li class="saved-search__filter-list-item">{{ value.readable_value|striptags }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <a class="saved-search__notifications"
+                       href="{% url 'barriers:saved_search_notifications' saved_search.id %}">Notifications: {{ saved_search.notifications_text }}</a>
+                    <div class="saved-search__actions">
+                        <a class="saved-search__action-item"
+                           href="{% url 'barriers:rename_saved_search' saved_search.id %}">Rename</a>
+                        <a class="saved-search__action-item"
+                           href="{% url 'barriers:delete_saved_search' saved_search.id %}">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock page_content %}
