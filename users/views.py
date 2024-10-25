@@ -433,7 +433,7 @@ class Account(TemplateView):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
-        active = self.request.GET.get("active")
+        active = "my profile"
         current_user = client.users.get_current()
         policy_teams = current_user.__dict__
         sectors = "placeholder sectors"
@@ -446,9 +446,46 @@ class Account(TemplateView):
                 "policy_teams": policy_teams,
                 "sectors": sectors,
                 "organisations": organisations,
-                # my_downloads,
-                # my_saved_searches,
-                # my_barriers,
+            }
+        )
+
+        return context_data
+
+
+class AccountSavedSearch(TemplateView):
+    template_name = "users/account_saved_search.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my saved searches"
+        saved_searches = client.saved_searches.list()
+
+        context_data.update(
+            {
+                "active": active,
+                "saved_searches": saved_searches,
+            }
+        )
+
+        return context_data
+
+
+class AccountDownloads(TemplateView):
+    template_name = "users/account_downloads.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my downloads"
+        barrier_downloads = client.barrier_download.list()
+
+        context_data.update(
+            {
+                "active": active,
+                "barrier_downloads": barrier_downloads,
             }
         )
 
