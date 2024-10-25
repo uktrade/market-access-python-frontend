@@ -56,9 +56,9 @@ class TestDownloadBarriers(MarketAccessTestCase):
         )
 
         assert response.status_code == HTTPStatus.FOUND
-
-        assert "&country=9f5f66a0-5d95-e211-a939-e4115bead28a" in response.url
-        assert "&country=83756b9a-5d95-e211-a939-e4115bead28a" in response.url
+        assert response.url == (
+            f"/search/download/{data['id']}?search_csv_downloaded=&search_csv_download_error="
+        )
 
         mock_create.assert_called_with(
             **{
@@ -77,7 +77,7 @@ class TestDownloadBarriers(MarketAccessTestCase):
         )
 
     @patch("utils.api.client.BarrierDownloadsResource.create")
-    def test_download_response_contains_correct_url_encoding(self, mock_create):
+    def test_download_response_response_url_value(self, mock_create):
         # tss-1359 - filters missing after download redirect
 
         data = {
@@ -111,5 +111,6 @@ class TestDownloadBarriers(MarketAccessTestCase):
             },
         )
         assert response.status_code == HTTPStatus.FOUND
-        assert "&country=9f5f66a0-5d95-e211-a939-e4115bead28a" in response.url
-        assert "&country=83756b9a-5d95-e211-a939-e4115bead28a" in response.url
+        assert response.url == (
+            f"/search/download/{data['id']}?search_csv_downloaded=&search_csv_download_error="
+        )
