@@ -1,0 +1,105 @@
+<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
+    </div>
+    <div class="govuk-summary-card__content">
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Sectors
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ sectors }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Policy teams
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ policy_teams }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="{% url 'users:edit_user_policy_teams'  current_user.id %}">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Organisations
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ organisations }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Countries
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ countries }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Trading blocs
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ trading_blocs }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Overseas regions
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ overseas_regions }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+        </dl>
+    </div>
+</div>

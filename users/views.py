@@ -18,6 +18,7 @@ from users.constants import (
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
+from utils.metadata import MetadataMixin
 from utils.pagination import PaginationMixin
 from utils.referers import RefererMixin
 from utils.sessions import init_session
@@ -424,3 +425,56 @@ class ExportUsers(GroupQuerystringMixin, View):
                 ]
             )
         return response
+
+
+class Account(TemplateView, MetadataMixin):
+    template_name = "users/account.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = self.request.GET.get("active")
+        current_user = client.users.get_current()
+
+        profile = client.users.get(id=current_user.id).data["profile"]
+
+        sectors = self.get_display_list(profile, "sectors")
+        policy_teams = self.get_display_list(profile, "policy_teams")
+        organisations = self.get_display_list(profile, "organisations")
+        countries = self.get_display_list(profile, "countries")
+        trading_blocs = self.get_display_list(profile, "trading_blocs")
+        overseas_regions = self.get_display_list(profile, "overseas_regions")
+
+        context_data.update(
+            {
+                "active": active,
+                "current_user": current_user,
+                "sectors": sectors,
+                "policy_teams": policy_teams,
+                "organisations": organisations,
+                "countries": countries,
+                "trading_blocs": trading_blocs,
+                "overseas_regions": overseas_regions,
+                # TODO
+                # my_downloads,
+                # my_saved_searches,
+                # my_barriers,
+            }
+        )
+
+        return context_data
+
+    def get_display_list(self, profile, area):
+        id_list = profile[area]
+        if area == "policy_teams":
+            title_list = [
+                self.metadata.get_policy_team(id).get("title") for id in id_list or []
+            ]
+            title_list.sort()
+            if title_list:
+                return ", ".join(title_list)
+            return "None"
+        # TODO
+        else:
+            return "None"
