@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+{% block body_script %}
+    {{ block.super }}
+    <script nonce="{{request.csp_nonce}}">
+        ma.components.MultiSelect();
+    </script>
+{% endblock %}
+
+{% block page_title %}{{ block.super }} - Account{% endblock %}
+{% block masthead %}
+    {% include 'users/partials/account/banner.html' with active="my_profile" %}
+{% endblock %}
+{% block page_content %}
+
+{% endblock %}
