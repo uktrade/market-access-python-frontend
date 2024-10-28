@@ -4,7 +4,9 @@ ma.components.MultiSelect = function (select_element) {
     let selection = document.getElementById("id_form");
 
     add_button.addEventListener("click", function () {
-        additionMode();
+        if (select.value) {
+            additionMode();
+        }
     });
     const additionMode = function () {
         appendToList();

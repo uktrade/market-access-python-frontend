@@ -30,7 +30,7 @@
 
                 <div>
                     <select class="govuk-select govuk-!-width-two-thirds" id="select">
-                        <option disabled selected>Select a {{ form.area_text }}</option>
+                        <option disabled selected value="">Select a {{ form.area_text }}</option>
                         {% for item in select_options %}
                             <option id="{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
                         {% endfor %}
