@@ -7,39 +7,7 @@
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     <strong>
-                        Overseas regions
-                    </strong>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    Placeholder
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="">
-                        Change
-                    </a>
-                </dd>
-            </div>
-
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <strong>
-                        Policy team
-                    </strong>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    {{ policy_teams }}
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_policy_teams'  current_user.id %}">
-                        Change
-                    </a>
-                </dd>
-            </div>
-
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <strong>
-                        Sector
+                        Sectors
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
@@ -55,11 +23,27 @@
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     <strong>
-                        Barrier locations
+                        Policy teams
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    Placeholder
+                    {{ policy_teams }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="{% url 'users:edit_user_policy_teams'  current_user.id %}">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Organisations
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ organisations }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="">
@@ -71,11 +55,43 @@
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     <strong>
-                        Government department
+                        Countries
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ organisations }}
+                    {{ countries }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Trading blocs
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ trading_blocs }}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="">
+                        Change
+                    </a>
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <strong>
+                        Overseas regions
+                    </strong>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    {{ overseas_regions }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="">

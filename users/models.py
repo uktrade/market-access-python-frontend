@@ -64,7 +64,3 @@ class User(APIModel):
     @property
     def has_approved_digital_trade_email(self):
         return self.data.get("has_approved_digital_trade_email", False)
-
-    @property
-    def policy_teams_display(self):
-        return self.data.get("policy_teams")

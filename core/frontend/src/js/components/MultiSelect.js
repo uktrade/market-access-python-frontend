@@ -1,26 +1,30 @@
-ma.components.MultiSelect = function (category) {
+ma.components.MultiSelect = function (select_element) {
     const add_button = document.getElementById("add_button");
-    const dropdown = document.getElementById(category + "_select");
-    let current_list_element = document.getElementById("id_" + category + "s");
+    const select = document.getElementById("select");
+    let selection = document.getElementById("id_form");
 
     add_button.addEventListener("click", function () {
-        additionMode();
+        if (select.value) {
+            additionMode();
+        }
     });
     const additionMode = function () {
         appendToList();
     };
 
     const appendToList = function () {
-        if (current_list_element.value) {
-            const new_list = JSON.parse(current_list_element.value);
-            if (!new_list.includes(dropdown.value)) {
-                new_list.push(dropdown.value);
-                current_list_element.value = JSON.stringify(new_list);
+        if (selection.value) {
+            const new_list = JSON.parse(selection.value).map(function (e) {
+                return e.toString();
+            });
+            if (!new_list.includes(select.value)) {
+                new_list.push(select.value);
+                selection.value = JSON.stringify(new_list);
             }
         } else {
             const new_list = [];
-            new_list.push(dropdown.value);
-            current_list_element.value = JSON.stringify(new_list);
+            new_list.push(select.value);
+            selection.value = JSON.stringify(new_list);
         }
 
         updateDisplay();
@@ -29,12 +33,14 @@ ma.components.MultiSelect = function (category) {
     const updateDisplay = function () {
         const display_list = document.getElementById("list_display");
 
-        if (current_list_element.value) {
-            const selected_list = JSON.parse(current_list_element.value);
+        if (selection.value) {
+            const selected_list = JSON.parse(selection.value).map(function (e) {
+                return e.toString();
+            });
             display_list.innerHTML = "";
             for (let i = 0; i < selected_list.length; i++) {
-                for (let x = 0; x < dropdown.length; x++) {
-                    let option = dropdown.options[x];
+                for (let x = 0; x < select.length; x++) {
+                    let option = select.options[x];
                     if (option.value == selected_list[i]) {
                         let category_entry = document.createElement("li");
                         category_entry.classList.add(
@@ -68,14 +74,16 @@ ma.components.MultiSelect = function (category) {
     };
 
     const removeItem = function (item) {
-        if (current_list_element.value) {
-            let selected_list = JSON.parse(current_list_element.value);
+        if (selection.value) {
+            let selected_list = JSON.parse(selection.value).map(function (e) {
+                return e.toString();
+            });
             const index = selected_list.indexOf(item);
             if (index > -1) {
                 // only splice array when item is found
                 selected_list.splice(index, 1);
             }
-            current_list_element.value = JSON.stringify(selected_list);
+            selection.value = JSON.stringify(selected_list);
             updateDisplay();
         }
     };
