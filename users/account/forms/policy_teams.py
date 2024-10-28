@@ -7,7 +7,7 @@ class UserEditPolicyTeamsForm(forms.Form):
     form = forms.CharField(
         required=False,
     )
-    label = "Label"
+    label = "Policy teams"
     help_text = "Help text"
     area_variable = "policy_team"
     area_text = "policy team"

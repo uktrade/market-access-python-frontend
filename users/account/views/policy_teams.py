@@ -1,13 +1,13 @@
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from users.profile.forms.policy_teams import UserEditPolicyTeamsForm
+from users.account.forms.policy_teams import UserEditPolicyTeamsForm
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
 
 
 class UserEditPolicyTeams(FormView, TemplateView, MetadataMixin):
-    template_name = "users/policy_teams/edit_policy_teams.html"
+    template_name = "users/account/edit_policy_teams.html"
     form_class = UserEditPolicyTeamsForm
 
     def get_form_kwargs(self):

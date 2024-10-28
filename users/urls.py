@@ -1,6 +1,6 @@
 from django.urls import path
 
-from users.profile.views.policy_teams import UserEditPolicyTeams
+from users.account.views.policy_teams import UserEditPolicyTeams
 from users.views import (
     Account,
     AccountDownloads,

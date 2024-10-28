@@ -1,0 +1,39 @@
+<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+        <h3 class="govuk-summary-card__title ">{{ title }}</h3>
+    </div>
+    <fieldset class="govuk-fieldset">
+        <div class="govuk-summary-card__content">
+            <label for="select" class="govuk-label govuk-label--s">
+                {{ form.label }}
+            </label>
+
+            <span class="govuk-hint">
+                {{ form.help_text }}
+            </span>
+
+            <div>
+                <select class="govuk-select govuk-!-width-two-thirds" id="select">
+                    <option disabled selected value="">Select a {{ form.area_text }}</option>
+                    {% for item in select_options %}
+                        <option id="{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="button" id="add_button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="Add a {{ form.area_text }}">
+                    Add {{ form.area_text }}
+                </button>
+            </div>
+
+        </div>
+
+        <ul class="selection-list__list" id="list_display"></ul>
+
+    </fieldset>
+</div>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.form.as_hidden }}
+
+    <input type="submit" value="Save and return" class="govuk-button">
+</form>

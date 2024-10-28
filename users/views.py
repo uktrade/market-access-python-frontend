@@ -428,7 +428,7 @@ class ExportUsers(GroupQuerystringMixin, View):
 
 
 class Account(TemplateView, MetadataMixin):
-    template_name = "users/account.html"
+    template_name = "users/account/account.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -477,7 +477,7 @@ class Account(TemplateView, MetadataMixin):
 
 
 class AccountSavedSearch(TemplateView):
-    template_name = "users/account_saved_search.html"
+    template_name = "users/account/saved_search.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -497,7 +497,7 @@ class AccountSavedSearch(TemplateView):
 
 
 class AccountDownloads(TemplateView):
-    template_name = "users/account_downloads.html"
+    template_name = "users/account/downloads.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
