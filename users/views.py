@@ -443,7 +443,6 @@ class Account(TemplateView, MetadataMixin):
         policy_teams = self.get_display_list(profile, "policy_teams")
         organisations = self.get_display_list(profile, "organisations")
         countries = self.get_display_list(profile, "countries")
-        trading_blocs = self.get_display_list(profile, "trading_blocs")
         overseas_regions = self.get_display_list(profile, "overseas_regions")
 
         context_data.update(
@@ -454,7 +453,6 @@ class Account(TemplateView, MetadataMixin):
                 "policy_teams": policy_teams,
                 "organisations": organisations,
                 "countries": countries,
-                "trading_blocs": trading_blocs,
                 "overseas_regions": overseas_regions,
             }
         )
