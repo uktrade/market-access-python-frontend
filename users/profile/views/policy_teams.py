@@ -38,7 +38,6 @@ class UserEditPolicyTeams(FormView, TemplateView, MetadataMixin):
     def form_valid(self, form):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         policy_teams = sorted(form.cleaned_data["form"])
-        print(policy_teams)
         client.users.patch(
             id=str(self.kwargs.get("user_id")),
             profile={
