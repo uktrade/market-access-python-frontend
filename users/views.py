@@ -434,7 +434,7 @@ class Account(TemplateView, MetadataMixin):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
 
-        active = self.request.GET.get("active")
+        active = "my profile"
         current_user = client.users.get_current()
 
         profile = client.users.get(id=current_user.id).data["profile"]
@@ -456,10 +456,6 @@ class Account(TemplateView, MetadataMixin):
                 "countries": countries,
                 "trading_blocs": trading_blocs,
                 "overseas_regions": overseas_regions,
-                # TODO
-                # my_downloads,
-                # my_saved_searches,
-                # my_barriers,
             }
         )
 
@@ -478,3 +474,43 @@ class Account(TemplateView, MetadataMixin):
         # TODO
         else:
             return "None"
+
+
+class AccountSavedSearch(TemplateView):
+    template_name = "users/account_saved_search.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my saved searches"
+        saved_searches = client.saved_searches.list()
+
+        context_data.update(
+            {
+                "active": active,
+                "saved_searches": saved_searches,
+            }
+        )
+
+        return context_data
+
+
+class AccountDownloads(TemplateView):
+    template_name = "users/account_downloads.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my downloads"
+        barrier_downloads = client.barrier_download.list()
+
+        context_data.update(
+            {
+                "active": active,
+                "barrier_downloads": barrier_downloads,
+            }
+        )
+
+        return context_data

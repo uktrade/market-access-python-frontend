@@ -58,19 +58,25 @@
                                    id="event-name"
                                    name="search_term_text"
                                    type="text"
-                                   placeholder="Search for barrier by name or with key terms."/>
-                            <input type="hidden" name="ordering" value="relevance"/>
-                            <button id="search_submit_button" type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+                                   placeholder="Search for barrier by name or with key terms." />
+                            <input type="hidden" name="ordering" value="relevance" />
+                            <button id="search_submit_button"
+                                    type="submit"
+                                    class="govuk-button"
+                                    data-module="govuk-button">Search</button>
                         </form>
                         <div>
                             <div class="dashboard-search-link-container">
-                                <a href="{% url 'barriers:my_saved_searches' %}?active=saved_searches" class="govuk-link--no-visited-state-dark">My saved searches</a>
+                                <a href="{% url 'users:account_saved_searches' %}"
+                                   class="govuk-link--no-visited-state-dark">My saved searches</a>
                             </div>
                             <div class="dashboard-search-link-container">
-                                <a href="{% url 'barriers:my_downloads' %}?active=barrier_downloads" class="govuk-link--no-visited-state-dark">My downloads</a>
+                                <a href="{% url 'users:account_downloads' %}"
+                                   class="govuk-link--no-visited-state-dark">My downloads</a>
                             </div>
                             <div class="dashboard-search-link-container">
-                                <a href="{% url 'barriers:search' %}?user=1&status=2" class="govuk-link--no-visited-state-dark">My open barriers</a>
+                                <a href="{% url 'barriers:search' %}?user=1&status=2"
+                                   class="govuk-link--no-visited-state-dark">My open barriers</a>
                             </div>
                         </div>
                     </div>
