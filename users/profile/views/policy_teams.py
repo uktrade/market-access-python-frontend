@@ -41,7 +41,7 @@ class UserEditPolicyTeams(FormView, TemplateView, MetadataMixin):
         client.users.patch(
             id=str(self.kwargs.get("user_id")),
             profile={
-                "id": 3,
+                "id": str(self.kwargs.get("user_id")),
                 "policy_teams": policy_teams,
             },
         )
