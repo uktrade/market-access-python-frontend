@@ -456,10 +456,9 @@ class Account(TemplateView, MetadataMixin):
                 "countries": countries,
                 "trading_blocs": trading_blocs,
                 "overseas_regions": overseas_regions,
-                
             }
         )
-        
+
         return context_data
 
     def get_display_list(self, profile, area):
