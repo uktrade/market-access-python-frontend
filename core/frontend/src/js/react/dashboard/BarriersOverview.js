@@ -304,18 +304,6 @@ const BarriersOverview = ({ filterValues }) => {
                         ...prevState.stackedBarChartData,
                         series: [
                             {
-                                name: "Value of resolved barriers",
-                                data:
-                                    data &&
-                                    data.barrier_value_chart
-                                        .resolved_barriers_value
-                                        ? [
-                                              data.barrier_value_chart
-                                                  .resolved_barriers_value,
-                                          ]
-                                        : [],
-                            },
-                            {
                                 name: "Value of barriers estimated to be resolved",
                                 data:
                                     data &&
@@ -324,6 +312,18 @@ const BarriersOverview = ({ filterValues }) => {
                                         ? [
                                               data.barrier_value_chart
                                                   .estimated_barriers_value,
+                                          ]
+                                        : [],
+                            },
+                            {
+                                name: "Value of resolved barriers",
+                                data:
+                                    data &&
+                                    data.barrier_value_chart
+                                        .resolved_barriers_value
+                                        ? [
+                                              data.barrier_value_chart
+                                                  .resolved_barriers_value,
                                           ]
                                         : [],
                             },
