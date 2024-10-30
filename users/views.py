@@ -462,12 +462,20 @@ class Account(TemplateView, MetadataMixin):
     def get_display_list(self, profile, area):
         id_list = profile[area]
         if area == "policy_teams":
-            title_list = [
+            policy_teams = [
                 self.metadata.get_policy_team(id).get("title") for id in id_list or []
             ]
-            title_list.sort()
-            if title_list:
-                return ", ".join(title_list)
+            policy_teams.sort()
+            if policy_teams:
+                return ", ".join(policy_teams)
+            return "None"
+        elif area == "sectors":
+            sectors = [
+                self.metadata.get_sector(id).get("name") for id in id_list or []
+            ]
+            sectors.sort()
+            if sectors:
+                return ", ".join(sectors)
             return "None"
         # TODO
         else:

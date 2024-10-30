@@ -44,6 +44,7 @@ class UserEditSectorsForm(forms.Form):
         if cleaned_data["form"]:
             cleaned_sectors = json.loads(cleaned_data["form"])
         cleaned_data["form"] = cleaned_sectors
+        print(cleaned_sectors)
 
 
 class UserEditBarrierLocationsForm(forms.Form):

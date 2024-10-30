@@ -1,3 +1,5 @@
+import json
+
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
@@ -61,16 +63,16 @@ class UserEditPolicyTeams(UserEditBase):
         return super().form_valid(form)
 
 
-class UserEditSectors(FormView, TemplateView, MetadataMixin):
+class UserEditSectors(UserEditBase):
     template_name = "users/account/edit_sectors.html"
     form_class = UserEditSectorsForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        sectors = self.metadata.get_sector_list()
+        sectors = [{"id":item["id"], "title":item["name"]} for item in self.metadata.get_sector_list()]
         context_data.update(
             {
-                "select_options": self.metadata.get_sector_list(),
+                "select_options": sectors,
             }
         )
         return context_data
@@ -82,7 +84,7 @@ class UserEditSectors(FormView, TemplateView, MetadataMixin):
             "sectors"
         ]
         return {
-            "form": selected_sectors,
+            "form": json.dumps(selected_sectors),
         }
 
     def form_valid(self, form):
@@ -98,16 +100,16 @@ class UserEditSectors(FormView, TemplateView, MetadataMixin):
         return super().form_valid(form)
     
 
-class UserEditOverseasRegions(FormView, TemplateView, MetadataMixin):
+class UserEditOverseasRegions(UserEditBase):
     template_name = "users/account/edit_overseas_regions.html"
     form_class = UserEditOverseasRegionsForm
 
 
-class UserEditBarrierLocations(FormView, TemplateView, MetadataMixin):
+class UserEditBarrierLocations(UserEditBase):
     template_name = "users/account/edit_barrier_locations.html"
     form_class = UserEditBarrierLocationsForm
 
 
-class UserEditGovernmentDepartments(FormView, TemplateView, MetadataMixin):
+class UserEditGovernmentDepartments(UserEditBase):
     template_name = "users/account/edit_government_departments.html"
     form_class = UserEditGovernmentDepartmentsForm

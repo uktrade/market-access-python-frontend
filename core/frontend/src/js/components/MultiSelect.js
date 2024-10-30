@@ -14,6 +14,8 @@ ma.components.MultiSelect = function (select_element) {
 
     const appendToList = function () {
         if (selection.value) {
+            console.log(selection.value)
+            console.log(typeof selection.value)
             const new_list = JSON.parse(selection.value).map(function (e) {
                 return e.toString();
             });
