@@ -58,17 +58,17 @@ urlpatterns = [
         name="edit_user_sectors",
     ),
     path(
-        "account/<int:user_id>/sectors/edit/",
+        "account/<int:user_id>/barrier-locations/edit/",
         UserEditBarrierLocations.as_view(),
         name="edit_user_barrier_locations",
     ),
     path(
-        "account/<int:user_id>/sectors/edit/",
+        "account/<int:user_id>/overseas-regions/edit/",
         UserEditOverseasRegions.as_view(),
         name="edit_user_overseas_regions",
     ),
     path(
-        "account/<int:user_id>/sectors/edit/",
+        "account/<int:user_id>/government-departments/edit/",
         UserEditGovernmentDepartments.as_view(),
         name="edit_user_government_departments",
     ),

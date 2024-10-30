@@ -477,6 +477,14 @@ class Account(TemplateView, MetadataMixin):
             if sectors:
                 return ", ".join(sectors)
             return "None"
+        elif area == "overseas_regions":
+            overseas_regions = [
+                self.metadata.get_overseas_region_by_id(id).get("name") for id in id_list or []
+            ]
+            overseas_regions.sort()
+            if overseas_regions:
+                return ", ".join(overseas_regions)
+            return "None"
         # TODO
         else:
             return "None"

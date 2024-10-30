@@ -31,7 +31,7 @@ class UserEditSectorsForm(forms.Form):
     label = "Sectors"
     help_text = "Help text"
     area_variable = "sector"
-    area_text = "sectors"
+    area_text = "sector"
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -72,10 +72,10 @@ class UserEditOverseasRegionsForm(forms.Form):
     form = forms.CharField(
         required=False,
     )
-    label = "Sectors"
+    label = "Overseas regions"
     help_text = "Help text"
-    area_variable = "sector"
-    area_text = "sectors"
+    area_variable = "overseas_region"
+    area_text = "overseas region"
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -84,10 +84,10 @@ class UserEditOverseasRegionsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_sectors = []
+        cleaned_overseas_regions = []
         if cleaned_data["form"]:
-            cleaned_sectors = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_sectors
+            cleaned_overseas_regions = json.loads(cleaned_data["form"])
+        cleaned_data["form"] = cleaned_overseas_regions
 
 
 class UserEditGovernmentDepartmentsForm(forms.Form):

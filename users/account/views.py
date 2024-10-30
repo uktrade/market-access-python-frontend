@@ -104,6 +104,38 @@ class UserEditOverseasRegions(UserEditBase):
     template_name = "users/account/edit_overseas_regions.html"
     form_class = UserEditOverseasRegionsForm
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        overseas_regions = [{"id":item["id"], "title":item["name"]} for item in self.metadata.get_overseas_region_list()]
+        context_data.update(
+            {
+                "select_options": overseas_regions,
+            }
+        )
+        return context_data
+
+    def get_initial(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        current_user = client.users.get_current()
+        overseas_regions = client.users.get(id=current_user.id).data["profile"][
+            "overseas_regions"
+        ]
+        return {
+            "form": json.dumps(overseas_regions),
+        }
+
+    def form_valid(self, form):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        overseas_regions = sorted(form.cleaned_data["form"])
+        client.users.patch(
+            id=str(self.kwargs.get("user_id")),
+            profile={
+                "id": str(self.kwargs.get("user_id")),
+                "overseas_regions": overseas_regions,
+            },
+        )
+        return super().form_valid(form)
+
 
 class UserEditBarrierLocations(UserEditBase):
     template_name = "users/account/edit_barrier_locations.html"
