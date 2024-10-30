@@ -24,6 +24,7 @@ class UserEditPolicyTeamsForm(forms.Form):
             cleaned_policy_teams = json.loads(cleaned_data["form"])
         cleaned_data["form"] = cleaned_policy_teams
 
+
 class UserEditSectorsForm(forms.Form):
     form = forms.CharField(
         required=False,

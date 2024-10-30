@@ -4,11 +4,11 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
 from users.account.forms import (
-    UserEditPolicyTeamsForm,
-    UserEditSectorsForm,
     UserEditBarrierLocationsForm,
     UserEditGovernmentDepartmentsForm,
     UserEditOverseasRegionsForm,
+    UserEditPolicyTeamsForm,
+    UserEditSectorsForm,
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
@@ -21,11 +21,12 @@ class UserEditBase(FormView, TemplateView, MetadataMixin):
         kwargs["user_id"] = str(self.kwargs.get("user_id"))
         kwargs["token"] = self.request.session.get("sso_token")
         return kwargs
-    
+
     def get_success_url(self):
         return reverse(
             "users:account",
         )
+
 
 class UserEditPolicyTeams(UserEditBase):
     template_name = "users/account/edit_policy_teams.html"
@@ -69,7 +70,10 @@ class UserEditSectors(UserEditBase):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        sectors = [{"id":item["id"], "title":item["name"]} for item in self.metadata.get_sector_list()]
+        sectors = [
+            {"id": item["id"], "title": item["name"]}
+            for item in self.metadata.get_sector_list()
+        ]
         context_data.update(
             {
                 "select_options": sectors,
@@ -98,7 +102,7 @@ class UserEditSectors(UserEditBase):
             },
         )
         return super().form_valid(form)
-    
+
 
 class UserEditOverseasRegions(UserEditBase):
     template_name = "users/account/edit_overseas_regions.html"
@@ -106,7 +110,10 @@ class UserEditOverseasRegions(UserEditBase):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        overseas_regions = [{"id":item["id"], "title":item["name"]} for item in self.metadata.get_overseas_region_list()]
+        overseas_regions = [
+            {"id": item["id"], "title": item["name"]}
+            for item in self.metadata.get_overseas_region_list()
+        ]
         context_data.update(
             {
                 "select_options": overseas_regions,

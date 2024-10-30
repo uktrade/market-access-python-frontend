@@ -470,16 +470,15 @@ class Account(TemplateView, MetadataMixin):
                 return ", ".join(policy_teams)
             return "None"
         elif area == "sectors":
-            sectors = [
-                self.metadata.get_sector(id).get("name") for id in id_list or []
-            ]
+            sectors = [self.metadata.get_sector(id).get("name") for id in id_list or []]
             sectors.sort()
             if sectors:
                 return ", ".join(sectors)
             return "None"
         elif area == "overseas_regions":
             overseas_regions = [
-                self.metadata.get_overseas_region_by_id(id).get("name") for id in id_list or []
+                self.metadata.get_overseas_region_by_id(id).get("name")
+                for id in id_list or []
             ]
             overseas_regions.sort()
             if overseas_regions:
