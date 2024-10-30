@@ -10,7 +10,8 @@ class UserEditPolicyTeamsForm(forms.Form):
     label = "Policy teams"
     help_text = "Help text"
     area_variable = "policy_team"
-    area_text = "policy team"
+    select_text = "Select a policy team"
+    add_text = "Add team"
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -32,7 +33,8 @@ class UserEditSectorsForm(forms.Form):
     label = "Sectors"
     help_text = "Help text"
     area_variable = "sector"
-    area_text = "sector"
+    select_text = "Select a sector"
+    add_text = "Add sector"
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -51,10 +53,12 @@ class UserEditBarrierLocationsForm(forms.Form):
     form = forms.CharField(
         required=False,
     )
-    label = "Sectors"
-    help_text = "Help text"
-    area_variable = "sector"
-    area_text = "sectors"
+    label = "Barrier locations"
+    help_text = "All the barrier locations you're interested in by selecting them from the dropdown list. "
+    "Or type the first few letters of the location name into the box."
+    area_variable = "barrier_location"
+    select_text = "Select a barrier location"
+    add_text = "Add location"
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -76,7 +80,8 @@ class UserEditOverseasRegionsForm(forms.Form):
     label = "Overseas regions"
     help_text = "Help text"
     area_variable = "overseas_region"
-    area_text = "overseas region"
+    select_text = "Select an overseas region"
+    add_text = "Add region"
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -95,10 +100,11 @@ class UserEditGovernmentDepartmentsForm(forms.Form):
     form = forms.CharField(
         required=False,
     )
-    label = "Sectors"
+    label = "Government departments"
     help_text = "Help text"
-    area_variable = "sector"
-    area_text = "sectors"
+    area_variable = "government_department"
+    select_text = "Select a government department"
+    add_text = "Add department"
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
