@@ -97,23 +97,21 @@ class UserEditOverseasRegionsForm(forms.Form):
 
 
 class UserEditGovernmentDepartmentsForm(forms.Form):
-    form = forms.CharField(
-        required=False,
+    government_departments = forms.ChoiceField(
+        label="",
+        choices=[],
     )
+
     label = "Government departments"
     help_text = "Help text"
-    area_variable = "government_department"
-    select_text = "Select a government department"
-    add_text = "Add department"
 
-    def __init__(self, user_id, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.user_id = user_id
+    def __init__(self, user_id, token, government_departments, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["government_departments"].choices = government_departments
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_sectors = []
-        if cleaned_data["form"]:
-            cleaned_sectors = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_sectors
+        cleaned_government_departments = []
+        if cleaned_data["government_departments"]:
+            cleaned_government_departments = json.loads(cleaned_data["government_departments"])
+        cleaned_data["government_departments"] = cleaned_government_departments

@@ -15,8 +15,8 @@
             <div>
                 <select class="govuk-select govuk-!-width-two-thirds" id="select">
                     <option disabled selected value="">{{ form.select_text }}</option>
-                    {% for item in select_options %}
-                        <option id="{{ item.id }}" value="{{ item.id }}">{{ item.title }}</option>
+                    {% for id, name in select_options %}
+                        <option id="{{ id }}" value="{{ id }}">{{ name }}</option>
                     {% endfor %}
                 </select>
 

@@ -482,7 +482,13 @@ class Account(TemplateView, MetadataMixin):
             ]
             overseas_regions.sort()
             if overseas_regions:
-                return ", ".join(overseas_regions)
+                return "\n".join(overseas_regions)
+            return "None"
+        elif area == "organisations":
+            # organisations = self.metadata.get_gov_organisations_by_ids(id_list)
+            organisations = [item["name"] for item in self.metadata.get_gov_organisations() if item["id"] in id_list]
+            if organisations:
+                return "".join(organisations)
             return "None"
         # TODO
         else:

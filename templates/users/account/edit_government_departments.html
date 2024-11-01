@@ -2,17 +2,42 @@
 {% load static %}
 {% load render_bundle from webpack_loader %}
 
-{% block body_script %}
-    {{ block.super }}
-    <script nonce="{{request.csp_nonce}}">
-        ma.components.MultiSelect();
-    </script>
-{% endblock %}
-
 {% block page_title %}{{ block.super }} - Account{% endblock %}
 {% block masthead %}
     {% include 'users/partials/account/banner.html' with active="my_profile" %}
 {% endblock %}
 {% block page_content %}
+<form action="" method="POST">
+    {% csrf_token %}
+        <fieldset class="govuk-fieldset">
+            <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
+                </div>
+
+                <div class="govuk-summary-card__content">
+                    <label for="select" class="govuk-label govuk-label--s">
+                        {{ form.label }}
+                    </label>
+
+                    <span class="govuk-hint">
+                        {{ form.help_text }}
+                    </span>
+                        
+                    <div id="{{ form.government_departments.name }}" class="govuk-form-group">
+                        <select class="govuk-select govuk-!-width-two-thirds" id="select" name="government_departments">
+                            <option value="">None</option>
+                            {% for id, name in form.fields.government_departments.choices %}
+                                <option value="{{ id }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+            
+    <input type="submit" value="Save and return" class="govuk-button">
+
+</form>
 
 {% endblock %}

@@ -34,9 +34,13 @@ class UserEditPolicyTeams(UserEditBase):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        policy_teams = [
+            (policy_team["id"], policy_team["title"])
+            for policy_team in self.metadata.get_policy_team_list()
+        ]
         context_data.update(
             {
-                "select_options": self.metadata.get_policy_team_list(),
+                "select_options": policy_teams,
             }
         )
         return context_data
@@ -71,8 +75,8 @@ class UserEditSectors(UserEditBase):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         sectors = [
-            {"id": item["id"], "title": item["name"]}
-            for item in self.metadata.get_sector_list()
+            (sector["id"], sector["name"])
+            for sector in self.metadata.get_sector_list(level=0)
         ]
         context_data.update(
             {
@@ -110,13 +114,9 @@ class UserEditOverseasRegions(UserEditBase):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        overseas_regions = [
-            {"id": item["id"], "title": item["name"]}
-            for item in self.metadata.get_overseas_region_list()
-        ]
         context_data.update(
             {
-                "select_options": overseas_regions,
+                "select_options": self.metadata.get_overseas_region_choices(),
             }
         )
         return context_data
@@ -149,6 +149,33 @@ class UserEditBarrierLocations(UserEditBase):
     form_class = UserEditBarrierLocationsForm
 
 
-class UserEditGovernmentDepartments(UserEditBase):
+class UserEditGovernmentDepartments(FormView, MetadataMixin):
     template_name = "users/account/edit_government_departments.html"
     form_class = UserEditGovernmentDepartmentsForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user_id"] = str(self.kwargs.get("user_id"))
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["government_departments"] = [
+            (organisation_id, organisation_name)
+            for organisation_id, organisation_name in self.metadata.get_gov_organisation_choices()
+        ]
+        return kwargs
+
+    def form_valid(self, form):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        print(form.cleaned_data["government_departments"])
+        client.users.patch(
+            id=str(self.kwargs.get("user_id")),
+            profile={
+                "id": str(self.kwargs.get("user_id")),
+                "organisations": [form.cleaned_data["government_departments"]],
+            },
+        )
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "users:account",
+        )

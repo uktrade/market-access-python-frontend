@@ -12,7 +12,7 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ overseas_regions }}
+                    {{ overseas_regions|linebreaksbr }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="{% url 'users:edit_user_overseas_regions'  current_user.id %}">
