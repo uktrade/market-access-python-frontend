@@ -2,18 +2,8 @@ import json
 
 from django import forms
 
-from barriers.forms.location import EditCountryOrTradingBlocForm
 
-
-class UserEditPolicyTeamsForm(forms.Form):
-    form = forms.CharField(
-        required=False,
-    )
-    label = "Policy teams"
-    help_text = "Help text"
-    area_variable = "policy_team"
-    select_text = "Select a policy team"
-    add_text = "Add team"
+class UserEditBaseForm(forms.Form):
 
     def __init__(self, user_id, *args, **kwargs):
         self.token = kwargs.pop("token")
@@ -22,86 +12,50 @@ class UserEditPolicyTeamsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_policy_teams = []
+        cleaned_list = []
         if cleaned_data["form"]:
-            cleaned_policy_teams = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_policy_teams
+            cleaned_list = json.loads(cleaned_data["form"])
+        cleaned_data["form"] = cleaned_list
 
 
-class UserEditSectorsForm(forms.Form):
+class UserEditPolicyTeamsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
+        label = "Policy teams",
+        help_text = "Help text",
     )
-    label = "Sectors"
-    help_text = "Help text"
-    area_variable = "sector"
-    select_text = "Select a sector"
-    add_text = "Add sector"
-
-    def __init__(self, user_id, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.user_id = user_id
-        super().__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = super().clean()
-        cleaned_sectors = []
-        if cleaned_data["form"]:
-            cleaned_sectors = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_sectors
 
 
-class UserEditBarrierLocationsForm(forms.Form):
+class UserEditSectorsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
+        label = "Sectors",
+        help_text = "Help text",
     )
-    label = "Barrier locations"
-    help_text = "All the barrier locations you're interested in by selecting them from the dropdown list. "
-    "Or type the first few letters of the location name into the box."
-    area_variable = "barrier_location"
-    select_text = "Select a barrier location"
-    add_text = "Add location"
-
-    def __init__(self, user_id, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.user_id = user_id
-        super().__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = super().clean()
-        cleaned_locations = []
-        if cleaned_data["form"]:
-            cleaned_locations = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_locations
 
 
-class UserEditOverseasRegionsForm(forms.Form):
+class UserEditBarrierLocationsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
+        label = "Barrier locations",
+        help_text = "All the barrier locations you're interested in by selecting them from the dropdown list. "
+        "Or type the first few letters of the location name into the box.",
     )
-    label = "Overseas regions"
-    help_text = "Help text"
-    area_variable = "overseas_region"
-    select_text = "Select an overseas region"
-    add_text = "Add region"
 
-    def __init__(self, user_id, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.user_id = user_id
-        super().__init__(*args, **kwargs)
 
-    def clean(self):
-        cleaned_data = super().clean()
-        cleaned_overseas_regions = []
-        if cleaned_data["form"]:
-            cleaned_overseas_regions = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_overseas_regions
+class UserEditOverseasRegionsForm(UserEditBaseForm):
+    form = forms.CharField(
+        required=False,
+        label = "Overseas regions",
+        help_text = "Help text",
+    )
 
 
 class UserEditGovernmentDepartmentsForm(forms.Form):
     government_departments = forms.ChoiceField(
-        label="",
-        choices=[],
+        required=False,
+        label = "Government departments",
+        help_text = "Help text",
     )
 
     label = "Government departments"
