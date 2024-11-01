@@ -486,7 +486,11 @@ class Account(TemplateView, MetadataMixin):
             return "None"
         elif area == "organisations":
             # organisations = self.metadata.get_gov_organisations_by_ids(id_list)
-            organisations = [item["name"] for item in self.metadata.get_gov_organisations() if item["id"] in id_list]
+            organisations = [
+                item["name"]
+                for item in self.metadata.get_gov_organisations()
+                if item["id"] in id_list
+            ]
             if organisations:
                 return "".join(organisations)
             return "None"

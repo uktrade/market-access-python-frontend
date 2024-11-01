@@ -7,8 +7,8 @@
     {% include 'users/partials/account/banner.html' with active="my_profile" %}
 {% endblock %}
 {% block page_content %}
-<form action="" method="POST">
-    {% csrf_token %}
+    <form action="" method="POST">
+        {% csrf_token %}
         <fieldset class="govuk-fieldset">
             <div class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
@@ -23,7 +23,7 @@
                     <span class="govuk-hint">
                         {{ form.help_text }}
                     </span>
-                        
+
                     <div id="{{ form.government_departments.name }}" class="govuk-form-group">
                         <select class="govuk-select govuk-!-width-two-thirds" id="select" name="government_departments">
                             <option value="">None</option>
@@ -35,9 +35,9 @@
                 </div>
             </div>
         </fieldset>
-            
-    <input type="submit" value="Save and return" class="govuk-button">
 
-</form>
+        <input type="submit" value="Save and return" class="govuk-button">
+
+    </form>
 
 {% endblock %}

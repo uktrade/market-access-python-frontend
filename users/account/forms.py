@@ -113,5 +113,7 @@ class UserEditGovernmentDepartmentsForm(forms.Form):
         cleaned_data = super().clean()
         cleaned_government_departments = []
         if cleaned_data["government_departments"]:
-            cleaned_government_departments = json.loads(cleaned_data["government_departments"])
+            cleaned_government_departments = json.loads(
+                cleaned_data["government_departments"]
+            )
         cleaned_data["government_departments"] = cleaned_government_departments
