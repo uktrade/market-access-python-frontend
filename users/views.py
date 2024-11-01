@@ -498,15 +498,19 @@ class Account(TemplateView, MetadataMixin):
         trading_blocs = profile["trading_blocs"]
         countries = profile["countries"]
         trading_blocs_display = [
-            self.metadata.get_trading_bloc(trading_bloc).get("name") for trading_bloc in trading_blocs or []
-            ]
+            self.metadata.get_trading_bloc(trading_bloc).get("name")
+            for trading_bloc in trading_blocs or []
+        ]
         countries_display = [
-            self.metadata.get_country(country).get("name") for country in countries or []
-            ]
+            self.metadata.get_country(country).get("name")
+            for country in countries or []
+        ]
         trading_blocs_display.sort()
         countries_display.sort()
         if trading_blocs_display or countries_display:
-            return "\n".join([", ".join(trading_blocs_display), ", ".join(countries_display)])
+            return "\n".join(
+                [", ".join(trading_blocs_display), ", ".join(countries_display)]
+            )
         return "None"
 
 

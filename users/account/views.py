@@ -151,35 +151,41 @@ class UserEditBarrierLocations(UserEditBase):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         locations = (
-                (
-                    "Trading blocs",
-                    tuple([(bloc["code"], bloc["name"]) for bloc in self.metadata.get_trading_bloc_list()]),
+            (
+                "Trading blocs",
+                tuple(
+                    [
+                        (bloc["code"], bloc["name"])
+                        for bloc in self.metadata.get_trading_bloc_list()
+                    ]
                 ),
-                (
-                    "Countries",
-                    tuple((country["id"], country["name"]) for country in self.metadata.get_country_list()),
+            ),
+            (
+                "Countries",
+                tuple(
+                    (country["id"], country["name"])
+                    for country in self.metadata.get_country_list()
                 ),
-            )
+            ),
+        )
         context_data.update(
             {
                 "select_options": locations,
             }
         )
         return context_data
-    
+
     def get_initial(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         current_user = client.users.get_current()
         trading_blocs = client.users.get(id=current_user.id).data["profile"][
             "trading_blocs"
         ]
-        countries = client.users.get(id=current_user.id).data["profile"][
-            "countries"
-        ]
+        countries = client.users.get(id=current_user.id).data["profile"]["countries"]
         return {
             "form": json.dumps(trading_blocs + countries),
         }
-    
+
     def form_valid(self, form):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         locations = sorted(form.cleaned_data["form"])
@@ -197,7 +203,7 @@ class UserEditBarrierLocations(UserEditBase):
             profile={
                 "id": str(self.kwargs.get("user_id")),
                 "trading_blocs": sorted_trading_blocs,
-                "countries": sorted_countries
+                "countries": sorted_countries,
             },
         )
         return super().form_valid(form)
