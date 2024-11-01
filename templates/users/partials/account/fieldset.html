@@ -1,0 +1,25 @@
+<fieldset class="govuk-fieldset">
+    <div class="govuk-summary-card__content">
+        <label for="select" class="govuk-label govuk-label--s">
+            {{ form.form.label }}
+        </label>
+
+        <span class="govuk-hint">
+            {{ form.form.help_text }}
+        </span>
+
+        <div>
+            <select class="govuk-select govuk-!-width-two-thirds" id="select">
+                {% include 'users/partials/account/select.html' with fields=select_options %}
+            </select>
+
+            <button type="button" id="add_button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="{{ add_text }}">
+                {{ add_text }}
+            </button>
+        </div>
+
+    </div>
+
+    <ul class="selection-list__list" id="list_display"></ul>
+
+</fieldset>

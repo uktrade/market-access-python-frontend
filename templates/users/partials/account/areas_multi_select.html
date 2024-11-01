@@ -1,49 +1,5 @@
 <div class="govuk-summary-card">
-    <div class="govuk-summary-card__title-wrapper">
-        <h3 class="govuk-summary-card__title ">{{ title }}</h3>
-    </div>
-    <fieldset class="govuk-fieldset">
-        <div class="govuk-summary-card__content">
-            <label for="select" class="govuk-label govuk-label--s">
-                {{ form.label }}
-            </label>
-
-            <span class="govuk-hint">
-                {{ form.help_text }}
-            </span>
-
-            <div>
-                <select class="govuk-select govuk-!-width-two-thirds" id="select">
-                    <option disabled selected value="">{{ form.select_text }}</option>
-                    {% for value, label in select_options %}
-                        {% if label.0|add:"x" == "" %}
-                            {% with group_name=value group_choices=label %}
-                                <optgroup label="{{ group_name }}">
-                                    {% for value, label in group_choices %}
-                                        <option{% if option_classes %} class="{{ option_classes }}"{% endif %} value="{{ value }}"{% if value == field.value %} selected{% endif %}>{{ label }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                            {% endwith %}
-                        {% else %}
-                            <option value="{{ value }}"{% if value == field.value %} selected{% endif %}>{{ label }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-
-                <button type="button" id="add_button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2" aria-label="{{ form.add_text }}">
-                    {{ form.add_text }}
-                </button>
-            </div>
-
-        </div>
-
-        <ul class="selection-list__list" id="list_display"></ul>
-
-    </fieldset>
+    {% include 'users/partials/account/heading.html' with text="My role and areas of interest" %}
+    {% include 'users/partials/account/fieldset.html' with form=form select_text=select_text add_text=add_text %}
 </div>
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.form.as_hidden }}
-
-    <input type="submit" value="Save and return" class="govuk-button">
-</form>
+{% include 'users/partials/account/save_button.html' with form=form %}
