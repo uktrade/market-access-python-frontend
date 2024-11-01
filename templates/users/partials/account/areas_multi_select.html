@@ -15,8 +15,18 @@
             <div>
                 <select class="govuk-select govuk-!-width-two-thirds" id="select">
                     <option disabled selected value="">{{ form.select_text }}</option>
-                    {% for id, name in select_options %}
-                        <option id="{{ id }}" value="{{ id }}">{{ name }}</option>
+                    {% for value, label in select_options %}
+                        {% if label.0|add:"x" == "" %}
+                            {% with group_name=value group_choices=label %}
+                                <optgroup label="{{ group_name }}">
+                                    {% for value, label in group_choices %}
+                                        <option{% if option_classes %} class="{{ option_classes }}"{% endif %} value="{{ value }}"{% if value == field.value %} selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endwith %}
+                        {% else %}
+                            <option value="{{ value }}"{% if value == field.value %} selected{% endif %}>{{ label }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
 

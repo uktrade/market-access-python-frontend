@@ -2,6 +2,8 @@ import json
 
 from django import forms
 
+from barriers.forms.location import EditCountryOrTradingBlocForm
+
 
 class UserEditPolicyTeamsForm(forms.Form):
     form = forms.CharField(
@@ -67,10 +69,10 @@ class UserEditBarrierLocationsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_sectors = []
+        cleaned_locations = []
         if cleaned_data["form"]:
-            cleaned_sectors = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_sectors
+            cleaned_locations = json.loads(cleaned_data["form"])
+        cleaned_data["form"] = cleaned_locations
 
 
 class UserEditOverseasRegionsForm(forms.Form):

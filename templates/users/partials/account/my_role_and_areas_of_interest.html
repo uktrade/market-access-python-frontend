@@ -60,7 +60,7 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ countries }}
+                    {{ barrier_locations|linebreaksbr }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="{% url 'users:edit_user_barrier_locations'  current_user.id %}">
@@ -76,7 +76,7 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ organisations }}
+                    {{ government_departments }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="{% url 'users:edit_user_government_departments'  current_user.id %}">

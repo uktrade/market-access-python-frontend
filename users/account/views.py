@@ -148,15 +148,67 @@ class UserEditBarrierLocations(UserEditBase):
     template_name = "users/account/edit_barrier_locations.html"
     form_class = UserEditBarrierLocationsForm
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        locations = (
+                (
+                    "Trading blocs",
+                    tuple([(bloc["code"], bloc["name"]) for bloc in self.metadata.get_trading_bloc_list()]),
+                ),
+                (
+                    "Countries",
+                    tuple((country["id"], country["name"]) for country in self.metadata.get_country_list()),
+                ),
+            )
+        context_data.update(
+            {
+                "select_options": locations,
+            }
+        )
+        return context_data
+    
+    def get_initial(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        current_user = client.users.get_current()
+        trading_blocs = client.users.get(id=current_user.id).data["profile"][
+            "trading_blocs"
+        ]
+        countries = client.users.get(id=current_user.id).data["profile"][
+            "countries"
+        ]
+        return {
+            "form": json.dumps(trading_blocs + countries),
+        }
+    
+    def form_valid(self, form):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        locations = sorted(form.cleaned_data["form"])
+        countries = []
+        trading_blocs = []
+        for location in locations:
+            if self.metadata.is_trading_bloc_code(location):
+                trading_blocs.append(location)
+            else:
+                countries.append(location)
+        sorted_countries = sorted(countries)
+        sorted_trading_blocs = sorted(trading_blocs)
+        client.users.patch(
+            id=str(self.kwargs.get("user_id")),
+            profile={
+                "id": str(self.kwargs.get("user_id")),
+                "trading_blocs": sorted_trading_blocs,
+                "countries": sorted_countries
+            },
+        )
+        return super().form_valid(form)
 
-class UserEditGovernmentDepartments(FormView, MetadataMixin):
+
+class UserEditGovernmentDepartments(UserEditBase):
     template_name = "users/account/edit_government_departments.html"
     form_class = UserEditGovernmentDepartmentsForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user_id"] = str(self.kwargs.get("user_id"))
-        kwargs["token"] = self.request.session.get("sso_token")
         kwargs["government_departments"] = [
             (organisation_id, organisation_name)
             for organisation_id, organisation_name in self.metadata.get_gov_organisation_choices()
@@ -165,7 +217,6 @@ class UserEditGovernmentDepartments(FormView, MetadataMixin):
 
     def form_valid(self, form):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        print(form.cleaned_data["government_departments"])
         client.users.patch(
             id=str(self.kwargs.get("user_id")),
             profile={
@@ -174,8 +225,3 @@ class UserEditGovernmentDepartments(FormView, MetadataMixin):
             },
         )
         return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse(
-            "users:account",
-        )
