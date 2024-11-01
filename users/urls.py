@@ -48,7 +48,7 @@ urlpatterns = [
         name="account_downloads",
     ),
     path(
-        "account/<int:user_id>/policy-teams/edit/",
+        "account/policy-teams/edit/",
         UserEditPolicyTeams.as_view(),
         name="edit_user_policy_teams",
     ),
