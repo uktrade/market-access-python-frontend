@@ -5,7 +5,7 @@ from django.views.generic import FormView, TemplateView
 
 from users.account.forms import (
     UserEditBarrierLocationsForm,
-    UserEditGovernmentDepartmentsForm,
+    UserEditGovernmentDepartmentForm,
     UserEditOverseasRegionsForm,
     UserEditPolicyTeamsForm,
     UserEditSectorsForm,
@@ -26,20 +26,11 @@ class UserEditBase(FormView, TemplateView, MetadataMixin):
         return reverse(
             "users:account",
         )
-    
-    def get_selected_options(self, client, area):
-        current_user = self.client.users.get_current()
-        return client.users.get(id=current_user.id).data["profile"][area]
-    
-    def patch_to_api(self, client, area, form):
-        new_selection = sorted(form.cleaned_data["form"])
-        self.client.users.patch(
-            id=str(self.kwargs.get("user_id")),
-            profile={
-                "id": str(self.kwargs.get("user_id")),
-                area: new_selection,
-            },
-        )
+
+    def get_selected_options(self, area):
+        self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        self.current_user = self.client.users.get_current()
+        return self.client.profile.get(id=self.current_user.id).data[area]
 
 
 class UserEditPolicyTeams(UserEditBase):
@@ -52,29 +43,21 @@ class UserEditPolicyTeams(UserEditBase):
             (policy_team["id"], policy_team["title"])
             for policy_team in self.metadata.get_policy_team_list()
         ]
-        context_data.update(
-            {
-                "select_options": policy_teams,
-            }
-        )
+        context_data.update({"select_options": policy_teams})
         return context_data
 
     def get_initial(self):
-        selected_policy_teams = self.client.users.get(id=self.current_user.id).data["profile"][
-            "policy_teams"
-        ]
         return {
-            "form": selected_policy_teams,
+            "form": [
+                policy_team["id"]
+                for policy_team in self.get_selected_options("policy_teams")
+            ],
         }
 
     def form_valid(self, form):
-        policy_teams = sorted(form.cleaned_data["form"])
-        self.client.users.patch(
+        self.client.profile.patch(
             id=str(self.current_user.id),
-            profile={
-                "id": str(self.current_user.id),
-                "policy_teams": policy_teams,
-            },
+            policy_teams=sorted(form.cleaned_data["form"]),
         )
         return super().form_valid(form)
 
@@ -98,12 +81,23 @@ class UserEditSectors(UserEditBase):
 
     def get_initial(self):
         self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        self.current_user = self.client.users.get_current()
+        selected_sectors = self.client.users.get(id=self.current_user.id).data[
+            "profile"
+        ]["sectors"]
         return {
-            "form": json.dumps(self.get_selected_options(self.client, "sectors")),
+            "form": json.dumps(selected_sectors),
         }
 
     def form_valid(self, form):
-        self.patch_to_api(self.client, "sectors", form)
+        sectors = sorted(form.cleaned_data["form"])
+        self.client.users.patch(
+            id=str(self.current_user.id),
+            profile={
+                "id": str(self.current_user.id),
+                "sectors": sectors,
+            },
+        )
         return super().form_valid(form)
 
 
@@ -122,12 +116,23 @@ class UserEditOverseasRegions(UserEditBase):
 
     def get_initial(self):
         self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        self.current_user = self.client.users.get_current()
+        overseas_regions = self.client.users.get(id=self.current_user.id).data[
+            "profile"
+        ]["overseas_regions"]
         return {
-            "form": json.dumps(self.get_selected_options(self.client, "overseas_regions")),
+            "form": json.dumps(overseas_regions),
         }
 
     def form_valid(self, form):
-        self.patch_to_api(self.client, "overseas_regions", form)
+        overseas_regions = sorted(form.cleaned_data["form"])
+        self.client.users.patch(
+            id=str(self.current_user.id),
+            profile={
+                "id": str(self.current_user.id),
+                "overseas_regions": overseas_regions,
+            },
+        )
         return super().form_valid(form)
 
 
@@ -163,18 +168,19 @@ class UserEditBarrierLocations(UserEditBase):
         return context_data
 
     def get_initial(self):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        current_user = client.users.get_current()
-        trading_blocs = client.users.get(id=current_user.id).data["profile"][
+        self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        self.current_user = self.client.users.get_current()
+        trading_blocs = self.client.users.get(id=self.current_user.id).data["profile"][
             "trading_blocs"
         ]
-        countries = client.users.get(id=current_user.id).data["profile"]["countries"]
+        countries = self.client.users.get(id=self.current_user.id).data["profile"][
+            "countries"
+        ]
         return {
             "form": json.dumps(trading_blocs + countries),
         }
 
     def form_valid(self, form):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         locations = sorted(form.cleaned_data["form"])
         countries = []
         trading_blocs = []
@@ -185,10 +191,10 @@ class UserEditBarrierLocations(UserEditBase):
                 countries.append(location)
         sorted_countries = sorted(countries)
         sorted_trading_blocs = sorted(trading_blocs)
-        client.users.patch(
-            id=str(self.kwargs.get("user_id")),
+        self.client.users.patch(
+            id=str(self.current_user.id),
             profile={
-                "id": str(self.kwargs.get("user_id")),
+                "id": str(self.current_user.id),
                 "trading_blocs": sorted_trading_blocs,
                 "countries": sorted_countries,
             },
@@ -196,9 +202,9 @@ class UserEditBarrierLocations(UserEditBase):
         return super().form_valid(form)
 
 
-class UserEditGovernmentDepartments(UserEditBase):
-    template_name = "users/account/edit_government_departments.html"
-    form_class = UserEditGovernmentDepartmentsForm
+class UserEditGovernmentDepartment(UserEditBase):
+    template_name = "users/account/edit_government_department.html"
+    form_class = UserEditGovernmentDepartmentForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -209,12 +215,10 @@ class UserEditGovernmentDepartments(UserEditBase):
         return kwargs
 
     def form_valid(self, form):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        client.users.patch(
-            id=str(self.kwargs.get("user_id")),
-            profile={
-                "id": str(self.kwargs.get("user_id")),
-                "organisations": [form.cleaned_data["government_departments"]],
-            },
+        self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        self.current_user = self.client.users.get_current()
+        self.client.profile.patch(
+            id=str(self.current_user.id),
+            organisations=form.cleaned_data["government_departments"],
         )
         return super().form_valid(form)

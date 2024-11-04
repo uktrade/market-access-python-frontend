@@ -436,28 +436,35 @@ class Account(TemplateView, MetadataMixin):
 
         active = "my profile"
         current_user = client.users.get_current()
+        user = client.users.get(id=current_user.id).data["profile"]
+        profile = client.profile.get(id=current_user.id).data
 
-        profile = client.users.get(id=current_user.id).data["profile"]
-
-        overseas_regions = self.get_display_list([self.metadata.get_overseas_region_by_id(id).get("name") for id in profile["overseas_regions"] or []])
-        # policy_teams = self.get_display_list(profile, "policy_teams")
-        sectors = self.get_display_list([self.metadata.get_sector(id).get("name") for id in profile["sectors"] or []])
+        overseas_regions = self.get_display_list(
+            [
+                self.metadata.get_overseas_region_by_id(id).get("name")
+                for id in user["overseas_regions"] or []
+            ]
+        )
+        policy_teams = self.get_display_list(
+            ([policy_team["title"] for policy_team in profile["policy_teams"] or []])
+        )
+        sectors = self.get_display_list(
+            [self.metadata.get_sector(id).get("name") for id in user["sectors"] or []]
+        )
         barrier_locations = self.get_barrier_locations_display_list(profile)
-        # government_departments = self.get_display_list([
-        #         item["name"]
-        #         for item in self.metadata.get_gov_organisations()
-        #         if item["id"] in profile["organisations"]
-        #     ])
+        # TODO should this be a list from the API?
+        government_department = self.get_display_list(
+            ([organisation["name"] for organisation in user["organisations"] or []])
+        )
 
         context_data.update(
             {
                 "active": active,
-                "current_user": current_user,
                 "overseas_regions": overseas_regions,
-                # "policy_teams": policy_teams,
+                "policy_teams": policy_teams,
                 "sectors": sectors,
                 "barrier_locations": barrier_locations,
-                # "government_departments": government_departments,
+                "government_department": government_department,
             }
         )
 
@@ -469,39 +476,6 @@ class Account(TemplateView, MetadataMixin):
             list.sort()
             return ", ".join(list)
         return None
-        # id_list = profile[area]
-        # if area == "policy_teams":
-        #     policy_teams = [
-        #         self.metadata.get_policy_team(id).get("title") for id in id_list or []
-        #     ]
-        #     policy_teams.sort()
-        #     if policy_teams:
-        #         return ", ".join(policy_teams)
-        #     return "None"
-        # elif area == "sectors":
-        #     sectors = [self.metadata.get_sector(id).get("name") for id in id_list or []]
-        #     sectors.sort()
-        #     if sectors:
-        #         return ", ".join(sectors)
-        #     return "None"
-        # elif area == "overseas_regions":
-        #     overseas_regions = [
-        #         self.metadata.get_overseas_region_by_id(id).get("name")
-        #         for id in id_list or []
-        #     ]
-        #     overseas_regions.sort()
-        #     if overseas_regions:
-        #         return "\n".join(overseas_regions)
-        #     return "None"
-        # elif area == "organisations":
-        #     organisations = [
-        #         item["name"]
-        #         for item in self.metadata.get_gov_organisations()
-        #         if item["id"] in id_list
-        #     ]
-        #     if organisations:
-        #         return ", ".join(organisations)
-        #     return "None"
 
     def get_barrier_locations_display_list(self, profile):
         trading_blocs = profile["trading_blocs"]

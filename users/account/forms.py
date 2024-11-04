@@ -21,24 +21,24 @@ class UserEditBaseForm(forms.Form):
 class UserEditPolicyTeamsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
-        label = "Policy teams",
-        help_text = "Help text",
+        label="Policy teams",
+        help_text="Help text",
     )
 
 
 class UserEditSectorsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
-        label = "Sectors",
-        help_text = "Help text",
+        label="Sectors",
+        help_text="Help text",
     )
 
 
 class UserEditBarrierLocationsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
-        label = "Barrier locations",
-        help_text = "All the barrier locations you're interested in by selecting them from the dropdown list. "
+        label="Barrier locations",
+        help_text="All the barrier locations you're interested in by selecting them from the dropdown list. "
         "Or type the first few letters of the location name into the box.",
     )
 
@@ -46,19 +46,19 @@ class UserEditBarrierLocationsForm(UserEditBaseForm):
 class UserEditOverseasRegionsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
-        label = "Overseas regions",
-        help_text = "Help text",
+        label="Overseas regions",
+        help_text="Help text",
     )
 
 
-class UserEditGovernmentDepartmentsForm(forms.Form):
+class UserEditGovernmentDepartmentForm(forms.Form):
     government_departments = forms.ChoiceField(
         required=False,
-        label = "Government departments",
-        help_text = "Help text",
+        label="Government department",
+        help_text="Help text",
     )
 
-    label = "Government departments"
+    label = "Government department"
     help_text = "Help text"
 
     def __init__(self, user_id, token, government_departments, *args, **kwargs):
@@ -69,7 +69,7 @@ class UserEditGovernmentDepartmentsForm(forms.Form):
         cleaned_data = super().clean()
         cleaned_government_departments = []
         if cleaned_data["government_departments"]:
-            cleaned_government_departments = json.loads(
-                cleaned_data["government_departments"]
-            )
+            cleaned_government_departments = [
+                json.loads(cleaned_data["government_departments"])
+            ]
         cleaned_data["government_departments"] = cleaned_government_departments

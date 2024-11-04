@@ -30,7 +30,7 @@ from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
 from barriers.models.history.mentions import Mention, NotificationExclusion
 from reports.models import Report
-from users.models import DashboardTask, Group, User
+from users.models import DashboardTask, Group, User, UserProfile
 from utils.exceptions import ScanError
 from utils.models import APIModel, ModelList
 
@@ -544,3 +544,8 @@ class BarrierDownloadsResource(APIResource):
         query_string = urllib.parse.urlencode(kwargs)
         url = f"{self.resource_name}?{query_string}"
         return self.model(self.client.post(url, json=kwargs))
+
+
+class UserProfile(APIResource):
+    resource_name = "users/profile"
+    model = UserProfile

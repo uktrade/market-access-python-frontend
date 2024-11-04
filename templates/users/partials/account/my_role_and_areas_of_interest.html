@@ -12,10 +12,10 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ overseas_regions|linebreaksbr }}
+                    {{ overseas_regions }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_overseas_regions'  current_user.id %}">
+                    <a class="govuk-link" href="{% url 'users:edit_user_overseas_regions' %}">
                         Change
                     </a>
                 </dd>
@@ -47,7 +47,7 @@
                     {{ sectors }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_sectors'  current_user.id %}">
+                    <a class="govuk-link" href="{% url 'users:edit_user_sectors' %}">
                         Change
                     </a>
                 </dd>
@@ -60,10 +60,10 @@
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ barrier_locations|linebreaksbr }}
+                    {{ barrier_locations }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_barrier_locations'  current_user.id %}">
+                    <a class="govuk-link" href="{% url 'users:edit_user_barrier_locations' %}">
                         Change
                     </a>
                 </dd>
@@ -72,14 +72,14 @@
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     <strong>
-                        Government departments
+                        Government department
                     </strong>
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    {{ government_departments }}
+                    {{ government_department }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_government_departments'  current_user.id %}">
+                    <a class="govuk-link" href="{% url 'users:edit_user_government_department' %}">
                         Change
                     </a>
                 </dd>
