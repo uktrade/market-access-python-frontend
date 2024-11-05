@@ -433,8 +433,6 @@ class Account(TemplateView, MetadataMixin):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-
-        active = "my profile"
         current_user = client.users.get_current()
         profile = client.profile.get(id=current_user.id).data
 
@@ -457,7 +455,7 @@ class Account(TemplateView, MetadataMixin):
 
         context_data.update(
             {
-                "active": active,
+                "active": "my profile",
                 "overseas_regions": overseas_regions,
                 "policy_teams": policy_teams,
                 "sectors": sectors,
