@@ -1,0 +1,14 @@
+<option disabled selected value="">{{ select_text }}</option>
+{% for value, label in fields %}
+    {% if label.0|add:"x" == "" %}
+        {% with group_name=value group_choices=label %}
+            <optgroup label="{{ group_name }}">
+                {% for value, label in group_choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </optgroup>
+        {% endwith %}
+    {% else %}
+        <option value="{{ value }}">{{ label }}</option>
+    {% endif %}
+{% endfor %}
