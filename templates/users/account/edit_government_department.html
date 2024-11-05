@@ -17,17 +17,17 @@
 
                 <div class="govuk-summary-card__content">
                     <label for="select" class="govuk-label govuk-label--s">
-                        {{ form.government_departments.label }}
+                        {{ form.form.label }}
                     </label>
 
                     <div class="govuk-hint">
-                        {{ form.government_departments.help_text }}
+                        {{ form.form.help_text }}
                     </div>
 
-                    <div id="{{ form.government_departments.name }}" class="govuk-form-group">
-                        <select class="govuk-select govuk-!-width-two-thirds" id="select" name="government_departments">
+                    <div class="govuk-form-group">
+                        <select class="govuk-select govuk-!-width-two-thirds" id="select" name="form">
                             <option value="">None</option>
-                            {% for id, name in form.fields.government_departments.choices %}
+                            {% for id, name in form.fields.form.choices %}
                                 <option value="{{ id }}">{{ name }}</option>
                             {% endfor %}
                         </select>

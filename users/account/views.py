@@ -18,12 +18,6 @@ from utils.metadata import MetadataMixin
 
 class UserEditBase(FormView, TemplateView, MetadataMixin):
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["user_id"] = str(self.kwargs.get("user_id"))
-        kwargs["token"] = self.request.session.get("sso_token")
-        return kwargs
-
     def get_success_url(self):
         return reverse(
             "users:account",
@@ -213,6 +207,6 @@ class UserEditGovernmentDepartment(UserEditBase):
         self.current_user = self.client.users.get_current()
         self.client.profile.patch(
             id=str(self.current_user.id),
-            organisations=form.cleaned_data["government_departments"],
+            organisations=form.cleaned_data["form"],
         )
         return super().form_valid(form)
