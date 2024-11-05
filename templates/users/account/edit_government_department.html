@@ -4,7 +4,7 @@
 
 {% block page_title %}{{ block.super }} - Account{% endblock %}
 {% block masthead %}
-    {% include 'users/partials/account/banner.html' with active="my_profile" %}
+    {% include 'users/partials/account/banner.html' with active="my profile" %}
 {% endblock %}
 {% block page_content %}
     <form action="" method="POST">
@@ -17,12 +17,12 @@
 
                 <div class="govuk-summary-card__content">
                     <label for="select" class="govuk-label govuk-label--s">
-                        {{ form.label }}
+                        {{ form.government_departments.label }}
                     </label>
 
-                    <span class="govuk-hint">
-                        {{ form.help_text }}
-                    </span>
+                    <div class="govuk-hint">
+                        {{ form.government_departments.help_text }}
+                    </div>
 
                     <div id="{{ form.government_departments.name }}" class="govuk-form-group">
                         <select class="govuk-select govuk-!-width-two-thirds" id="select" name="government_departments">

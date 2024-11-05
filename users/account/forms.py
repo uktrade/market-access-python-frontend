@@ -22,7 +22,8 @@ class UserEditPolicyTeamsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
         label="Policy teams",
-        help_text="Help text",
+        help_text="Add policy teams to keep track on the policy areas which affect the barriers you’ve working on, "
+        "or to stay connected with colleagues you work with or manage. ",
     )
 
 
@@ -30,7 +31,6 @@ class UserEditSectorsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
         label="Sectors",
-        help_text="Help text",
     )
 
 
@@ -47,7 +47,6 @@ class UserEditOverseasRegionsForm(UserEditBaseForm):
     form = forms.CharField(
         required=False,
         label="Overseas regions",
-        help_text="Help text",
     )
 
 
@@ -56,11 +55,9 @@ class UserEditGovernmentDepartmentForm(forms.Form):
     government_departments = forms.ChoiceField(
         required=False,
         label="Government department",
-        help_text="Help text",
+        help_text="Add Government departments to stay connected with colleagues outside of the Department of "
+        "Business and Trade, who are working on the barriers you’re trying to resolve.",
     )
-
-    label = "Government department"
-    help_text = "Help text"
 
     def __init__(self, user_id, token, government_departments, *args, **kwargs):
         super().__init__(*args, **kwargs)
