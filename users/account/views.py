@@ -161,11 +161,17 @@ class UserEditBarrierLocations(UserEditBase):
     def get_initial(self):
         self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         self.current_user = self.client.users.get_current()
-        trading_blocs = self.client.users.get(id=self.current_user.id).data["profile"][
-            "trading_blocs"
+        trading_blocs = [
+            bloc["code"]
+            for bloc in self.client.profile.get(id=self.current_user.id).data[
+                "trading_blocs"
+            ]
         ]
-        countries = self.client.users.get(id=self.current_user.id).data["profile"][
-            "countries"
+        countries = [
+            country["id"]
+            for country in self.client.profile.get(id=self.current_user.id).data[
+                "countries"
+            ]
         ]
         return {
             "form": json.dumps(trading_blocs + countries),
@@ -182,13 +188,10 @@ class UserEditBarrierLocations(UserEditBase):
                 countries.append(location)
         sorted_countries = sorted(countries)
         sorted_trading_blocs = sorted(trading_blocs)
-        self.client.users.patch(
+        self.client.profile.patch(
             id=str(self.current_user.id),
-            profile={
-                "id": str(self.current_user.id),
-                "trading_blocs": sorted_trading_blocs,
-                "countries": sorted_countries,
-            },
+            trading_blocs=sorted_trading_blocs,
+            countries=sorted_countries,
         )
         return super().form_valid(form)
 

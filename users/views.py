@@ -436,7 +436,6 @@ class Account(TemplateView, MetadataMixin):
 
         active = "my profile"
         current_user = client.users.get_current()
-        user = client.users.get(id=current_user.id).data["profile"]
         profile = client.profile.get(id=current_user.id).data
 
         overseas_regions = self.get_display_list(
@@ -448,10 +447,13 @@ class Account(TemplateView, MetadataMixin):
         sectors = self.get_display_list(
             [sector["name"] for sector in profile["sectors"] or []]
         )
-        barrier_locations = profile
         government_department = self.get_display_list(
-            [organisation["name"] for organisation in user["organisations"] or []]
+            [organisation["name"] for organisation in profile["organisations"] or []]
         )
+
+        trading_blocs = [bloc["name"] for bloc in profile["trading_blocs"] or []]
+        countries = [country["name"] for country in profile["countries"] or []]
+        barrier_locations = self.get_display_list(trading_blocs + countries)
 
         context_data.update(
             {
@@ -472,26 +474,6 @@ class Account(TemplateView, MetadataMixin):
             list.sort()
             return ", ".join(list)
         return None
-
-    def get_barrier_locations_display_list(self, profile):
-        # TODO clean up
-        trading_blocs = profile["trading_blocs"]
-        countries = profile["countries"]
-        trading_blocs_display = [
-            self.metadata.get_trading_bloc(trading_bloc).get("name")
-            for trading_bloc in trading_blocs or []
-        ]
-        countries_display = [
-            self.metadata.get_country(country).get("name")
-            for country in countries or []
-        ]
-        trading_blocs_display.sort()
-        countries_display.sort()
-        if trading_blocs_display or countries_display:
-            return "\n".join(
-                [", ".join(trading_blocs_display), ", ".join(countries_display)]
-            )
-        return "None"
 
 
 class AccountSavedSearch(TemplateView):
