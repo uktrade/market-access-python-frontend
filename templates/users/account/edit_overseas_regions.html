@@ -14,5 +14,11 @@
     {% include 'users/partials/account/banner.html' with active="my profile" %}
 {% endblock %}
 {% block page_content %}
-    {% include 'users/partials/account/areas_multi_select.html' with form=form title="My role and areas of interest" select_text="Select an overseas region" add_text="Add region" %}
+    <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+            <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
+        </div>
+        {% include 'users/partials/account/multi_select_fieldset.html' with form=form select_text="Select an overseas region" add_text="Add region" %}
+    </div>
+    {% include 'users/partials/account/save_button.html' with form=form %}
 {% endblock %}
