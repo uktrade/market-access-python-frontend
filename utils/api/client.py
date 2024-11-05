@@ -29,8 +29,8 @@ from .resources import (
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
-    UsersResource,
     UserProfile,
+    UsersResource,
 )
 
 logger = logging.getLogger(__name__)

@@ -52,6 +52,7 @@ class UserEditOverseasRegionsForm(UserEditBaseForm):
 
 
 class UserEditGovernmentDepartmentForm(forms.Form):
+    # TODO refactor - can it use the base form?
     government_departments = forms.ChoiceField(
         required=False,
         label="Government department",

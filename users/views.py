@@ -440,21 +440,17 @@ class Account(TemplateView, MetadataMixin):
         profile = client.profile.get(id=current_user.id).data
 
         overseas_regions = self.get_display_list(
-            [
-                self.metadata.get_overseas_region_by_id(id).get("name")
-                for id in user["overseas_regions"] or []
-            ]
+            [region["name"] for region in profile["overseas_regions"] or []]
         )
         policy_teams = self.get_display_list(
-            ([policy_team["title"] for policy_team in profile["policy_teams"] or []])
+            [policy_team["title"] for policy_team in profile["policy_teams"] or []]
         )
         sectors = self.get_display_list(
-            [self.metadata.get_sector(id).get("name") for id in user["sectors"] or []]
+            [sector["name"] for sector in profile["sectors"] or []]
         )
-        barrier_locations = self.get_barrier_locations_display_list(profile)
-        # TODO should this be a list from the API?
+        barrier_locations = profile
         government_department = self.get_display_list(
-            ([organisation["name"] for organisation in user["organisations"] or []])
+            [organisation["name"] for organisation in user["organisations"] or []]
         )
 
         context_data.update(
@@ -478,6 +474,7 @@ class Account(TemplateView, MetadataMixin):
         return None
 
     def get_barrier_locations_display_list(self, profile):
+        # TODO clean up
         trading_blocs = profile["trading_blocs"]
         countries = profile["countries"]
         trading_blocs_display = [

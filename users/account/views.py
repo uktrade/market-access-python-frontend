@@ -13,6 +13,8 @@ from users.account.forms import (
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
 
+# TODO refactor to reduce duplication across views
+
 
 class UserEditBase(FormView, TemplateView, MetadataMixin):
 
@@ -80,23 +82,16 @@ class UserEditSectors(UserEditBase):
         return context_data
 
     def get_initial(self):
-        self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        self.current_user = self.client.users.get_current()
-        selected_sectors = self.client.users.get(id=self.current_user.id).data[
-            "profile"
-        ]["sectors"]
         return {
-            "form": json.dumps(selected_sectors),
+            "form": json.dumps(
+                [sector["id"] for sector in self.get_selected_options("sectors")]
+            ),
         }
 
     def form_valid(self, form):
-        sectors = sorted(form.cleaned_data["form"])
-        self.client.users.patch(
+        self.client.profile.patch(
             id=str(self.current_user.id),
-            profile={
-                "id": str(self.current_user.id),
-                "sectors": sectors,
-            },
+            sectors=sorted(form.cleaned_data["form"]),
         )
         return super().form_valid(form)
 
@@ -115,23 +110,19 @@ class UserEditOverseasRegions(UserEditBase):
         return context_data
 
     def get_initial(self):
-        self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        self.current_user = self.client.users.get_current()
-        overseas_regions = self.client.users.get(id=self.current_user.id).data[
-            "profile"
-        ]["overseas_regions"]
         return {
-            "form": json.dumps(overseas_regions),
+            "form": json.dumps(
+                [
+                    region["id"]
+                    for region in self.get_selected_options("overseas_regions")
+                ]
+            ),
         }
 
     def form_valid(self, form):
-        overseas_regions = sorted(form.cleaned_data["form"])
-        self.client.users.patch(
+        self.client.profile.patch(
             id=str(self.current_user.id),
-            profile={
-                "id": str(self.current_user.id),
-                "overseas_regions": overseas_regions,
-            },
+            overseas_regions=sorted(form.cleaned_data["form"]),
         )
         return super().form_valid(form)
 
