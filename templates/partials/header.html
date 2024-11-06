@@ -63,6 +63,12 @@
                         <a class="datahub-header__navigation__item__link{% if page == 'manage-users' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:manage_users' %}">Administer users</a>
                     </li>
                 {% endif %}
+                <li class="datahub-header__navigation__item float-right">
+                    <a class="datahub-header__navigation__item__link" href="{% url 'users:account' %}">
+                        <span class="ma-badge ma-badge--profile">{{ current_user.initials }}</span>
+                        Account
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
