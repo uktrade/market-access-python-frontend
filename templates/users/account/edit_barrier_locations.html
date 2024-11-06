@@ -20,7 +20,6 @@
         <div class="govuk-summary-card__title-wrapper">
             <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
         </div>
-        {% include 'users/partials/account/multi_select_fieldset.html' with form=form select_text="Select a barrier location" add_text="Add location" %}
+        {% include 'users/partials/account/multi_select.html' with form=form select_text="Select a barrier location" add_text="Add location" %}
     </div>
-    {% include 'users/partials/account/save_button.html' with form=form %}
 {% endblock %}

@@ -13,8 +13,6 @@ from users.account.forms import (
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import MetadataMixin
 
-# TODO refactor to reduce duplication across views
-
 
 class UserEditBase(FormView, TemplateView, MetadataMixin):
 
@@ -25,9 +23,6 @@ class UserEditBase(FormView, TemplateView, MetadataMixin):
             item[id_type]
             for item in self.client.profile.get(id=self.current_user.id).data[area]
         ]
-
-    def get_options(self, list, identifier="name", id_type="id"):
-        return [(item[id_type], item[identifier]) for item in list]
 
     def patch_to_api(self, form, area):
         patch_args = {
@@ -53,10 +48,10 @@ class UserEditPolicyTeams(UserEditBase):
         context_data = super().get_context_data(**kwargs)
         context_data.update(
             {
-                "select_options": self.get_options(
-                    self.metadata.get_policy_team_list(),
-                    identifier="title",
-                )
+                "select_options": [
+                    (policy_team["id"], policy_team["title"])
+                    for policy_team in self.metadata.get_policy_team_list()
+                ]
             }
         )
         return context_data
@@ -77,9 +72,10 @@ class UserEditSectors(UserEditBase):
         context_data = super().get_context_data(**kwargs)
         context_data.update(
             {
-                "select_options": self.get_options(
-                    self.metadata.get_sector_list(level=0),
-                )
+                "select_options": [
+                    (sector["id"], sector["name"])
+                    for sector in self.metadata.get_sector_list(level=0)
+                ]
             }
         )
         return context_data
@@ -125,18 +121,19 @@ class UserEditBarrierLocations(UserEditBase):
             (
                 "Trading blocs",
                 (
-                    self.get_options(
-                        self.metadata.get_trading_bloc_list(),
-                        id_type="code",
-                    )
+                    [
+                        (bloc["code"], bloc["name"])
+                        for bloc in self.metadata.get_trading_bloc_list()
+                    ]
                 ),
             ),
             (
                 "Countries",
                 (
-                    self.get_options(
-                        self.metadata.get_country_list(),
-                    )
+                    [
+                        (country["id"], country["name"])
+                        for country in self.metadata.get_country_list()
+                    ]
                 ),
             ),
         )
@@ -167,9 +164,11 @@ class UserEditGovernmentDepartment(UserEditBase):
         self.client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         self.current_user = self.client.users.get_current()
         kwargs = super().get_form_kwargs()
-        kwargs["government_departments"] = self.metadata.get_gov_organisation_choices()
+        kwargs["select_options"] = self.metadata.get_gov_organisation_choices()
         return kwargs
 
     def form_valid(self, form):
+        print("HELLO")
+        print(sorted(form.cleaned_data["form"]))
         self.patch_to_api(form, "organisations")
         return super().form_valid(form)

@@ -7,37 +7,16 @@
     {% include 'users/partials/account/banner.html' with active="my profile" %}
 {% endblock %}
 {% block page_content %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        <fieldset class="govuk-fieldset">
-            <div class="govuk-summary-card">
-                <div class="govuk-summary-card__title-wrapper">
-                    <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
-                </div>
-
-                <div class="govuk-summary-card__content">
-                    <label for="select" class="govuk-label govuk-label--s">
-                        {{ form.form.label }}
-                    </label>
-
-                    <div class="govuk-hint">
-                        {{ form.form.help_text }}
-                    </div>
-
-                    <div class="govuk-form-group">
-                        <select class="govuk-select govuk-!-width-two-thirds" id="select" name="form">
-                            <option value="">None</option>
-                            {% for id, name in form.fields.form.choices %}
-                                <option value="{{ id }}">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
+    <div class="govuk-summary-card">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="govuk-summary-card__title-wrapper">
+                <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
             </div>
-        </fieldset>
-
-        <input type="submit" value="Save and return" class="govuk-button">
-
-    </form>
-
+            {% include 'users/partials/account/fieldset.html' with form=form select_text="Select a government department" select_options=form.fields.form.choices %}
+            <div class="govuk-summary-card__content">
+                <input type="submit" value="Save and return" class="govuk-button">
+            </div>
+        </form>
+    </div>
 {% endblock %}

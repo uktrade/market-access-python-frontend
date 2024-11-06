@@ -49,7 +49,6 @@ class UserEditOverseasRegionsForm(UserEditBaseForm):
 
 
 class UserEditGovernmentDepartmentForm(UserEditBaseForm):
-    # TODO refactor - can it use the base form?
     form = forms.ChoiceField(
         required=False,
         label="Government department",
@@ -57,6 +56,6 @@ class UserEditGovernmentDepartmentForm(UserEditBaseForm):
         "Business and Trade, who are working on the barriers you’re trying to resolve.",
     )
 
-    def __init__(self, government_departments, *args, **kwargs):
+    def __init__(self, select_options, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["form"].choices = government_departments
+        self.fields["form"].choices = select_options
