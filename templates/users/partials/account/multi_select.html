@@ -2,6 +2,6 @@
 <ul class="selection-list__list" id="list_display"></ul>
 <form action="" method="post" class="govuk-summary-card__content">
     {% csrf_token %}
-    {{ form.form }}
+    {{ form.form.as_hidden }}
     <input type="submit" value="Save and return" class="govuk-button">
 </form>
