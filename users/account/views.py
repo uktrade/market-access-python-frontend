@@ -24,6 +24,15 @@ class UserEditBase(FormView, TemplateView, MetadataMixin):
             for item in self.client.profile.get(id=self.current_user.id).data[area]
         ]
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data.update(
+            {
+                "page": "account",
+            }
+        )
+        return context_data
+
     def patch_to_api(self, form, area):
         patch_args = {
             "id": str(self.current_user.id),

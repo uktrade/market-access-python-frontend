@@ -455,6 +455,7 @@ class Account(TemplateView, MetadataMixin):
 
         context_data.update(
             {
+                "page": "account",
                 "active": "my profile",
                 "overseas_regions": overseas_regions,
                 "policy_teams": policy_teams,
@@ -486,6 +487,7 @@ class AccountSavedSearch(TemplateView):
 
         context_data.update(
             {
+                "page": "account",
                 "active": active,
                 "saved_searches": saved_searches,
             }
@@ -506,6 +508,7 @@ class AccountDownloads(TemplateView):
 
         context_data.update(
             {
+                "page": "account",
                 "active": active,
                 "barrier_downloads": barrier_downloads,
             }

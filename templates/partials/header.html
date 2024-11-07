@@ -40,7 +40,7 @@
             </ul>
         </nav>
 
-        <nav class="datahub-header__navigation-wrapper datahub-header__navigation-wrapper--sub" aria-labelledby="sub-navigation">
+        <nav class="datahub-header__navigation-wrapper datahub-header__navigation-wrapper--sub inline-block" aria-labelledby="sub-navigation">
             <ul id="sub-navigation" class="datahub-header__navigation" aria-label="Second Level Navigation">
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link{% if page == 'dashboard' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'barriers:dashboard' %}">Dashboard</a>
@@ -63,8 +63,9 @@
                         <a class="datahub-header__navigation__item__link{% if page == 'manage-users' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:manage_users' %}">Administer users</a>
                     </li>
                 {% endif %}
+
                 <li class="datahub-header__navigation__item float-right">
-                    <a class="datahub-header__navigation__item__link" href="{% url 'users:account' %}">
+                    <a class="datahub-header__navigation__item__link{% if page == 'account' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:account' %}">
                         <span class="ma-badge ma-badge--profile">{{ current_user.initials }}</span>
                         Account
                     </a>
