@@ -67,7 +67,13 @@ class User(APIModel):
 
     @property
     def initials(self):
-        return self.data.get("first_name", [])[0] + self.data.get("last_name", [])[0]
+        first_name = self.data.get("first_name")
+        last_name = self.data.get("last_name")
+        if first_name:
+            if last_name:
+                return first_name[0] + last_name[0]
+            return first_name[0]
+        return "U"
 
 
 class UserProfile(APIModel):
