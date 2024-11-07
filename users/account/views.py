@@ -177,7 +177,5 @@ class UserEditGovernmentDepartment(UserEditBase):
         return kwargs
 
     def form_valid(self, form):
-        print("HELLO")
-        print(sorted(form.cleaned_data["form"]))
         self.patch_to_api(form, "organisations")
         return super().form_valid(form)
