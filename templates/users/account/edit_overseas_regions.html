@@ -5,7 +5,7 @@
 {% block body_script %}
     {{ block.super }}
     <script nonce="{{request.csp_nonce}}">
-        ma.components.MultiSelect();
+        ma.components.MultiSelect(element="overseas_regions_multiselect");
     </script>
 {% endblock %}
 
@@ -18,6 +18,6 @@
         <div class="govuk-summary-card__title-wrapper">
             <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
         </div>
-        {% include 'users/partials/account/multi_select.html' with form=form select_text="Select an overseas region" add_text="Add region" %}
+        <div id="overseas_regions_multiselect">{% include 'users/partials/account/multi_select.html' with form=form select_text="Select an overseas region" add_text="Add region" %}</div>
     </div>
 {% endblock %}
