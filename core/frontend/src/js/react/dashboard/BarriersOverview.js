@@ -343,6 +343,61 @@ const BarriersOverview = ({ filterValues }) => {
         return new URLSearchParams(formData).toString();
     };
 
+    const getFinancialYearSearchParams = (field) => {
+        if (!formRef.current) {
+            return "";
+        }
+        const formData = new FormData(formRef.current);
+        // @ts-ignore
+        const searchParams = new URLSearchParams(formData);
+        // Append the year and month filters for the financial year
+        const start_date = new Date(data?.financial_year?.current_start);
+        const end_date = new Date(data?.financial_year?.current_end);
+
+        if (field == "status") {
+            //Resolved in full from this date
+            searchParams.append(
+                "status_date_resolved_in_full_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_resolved_in_full_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "status_date_resolved_in_full_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_resolved_in_full_1_1",
+                end_date.getFullYear().toString(),
+            );
+        }
+        if (field == "estimated_resolution_date") {
+            //Estimated resolution date from this date
+            searchParams.append(
+                "status_date_open_in_progress_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_open_in_progress_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "status_date_open_in_progress_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_open_in_progress_1_1",
+                end_date.getFullYear().toString(),
+            );
+        }
+
+        return searchParams.toString();
+    };
+
     const getReadableValue = (
         /** @type {string} */ value,
         /** @type {string} */ type,
@@ -552,19 +607,19 @@ const BarriersOverview = ({ filterValues }) => {
                             value={data?.barriers?.open}
                             description="barriers are open."
                             url="/search"
-                            search_params={getSearchParamsFromForm()}
+                            search_params={`${getSearchParamsFromForm()}&status=2&status=3`}
                         />
                         <SummaryCard
                             value={data?.barriers?.pb100}
                             description="PB100 barriers are open."
                             url="/search"
-                            search_params={`${getSearchParamsFromForm()}&combined_priority=APPROVED`}
+                            search_params={`${getSearchParamsFromForm()}&status=2&status=3&combined_priority=APPROVED`}
                         />
                         <SummaryCard
                             value={data?.barriers?.overseas_delivery}
                             description="Overseas delivery barriers are open."
                             url="/search"
-                            search_params={getSearchParamsFromForm()}
+                            search_params={`${getSearchParamsFromForm()}&status=2&status=3&combined_priority=OVERSEAS`}
                         />
                     </div>
                     <div className="govuk-grid-row">
@@ -576,24 +631,30 @@ const BarriersOverview = ({ filterValues }) => {
                             )} current financial year`}
                         </h3>
                         <SummaryCard
-                            value={data?.barriers_current_year?.open}
+                            value={data?.barriers_current_year?.resolved}
                             description="barriers have been resolved in the current financial year."
                             url="/search"
-                            search_params={getSearchParamsFromForm()}
+                            search_params={`${getSearchParamsFromForm()}${getFinancialYearSearchParams(
+                                "status",
+                            )}&status=4`}
                         />
                         <SummaryCard
                             value={data?.barriers_current_year?.pb100}
                             description="PB100 barriers are estimated to be resolved in the current financial year."
-                            url="#"
-                            search_params=""
+                            url="/search"
+                            search_params={`${getSearchParamsFromForm()}${getFinancialYearSearchParams(
+                                "estimated_resolution_date",
+                            )}&status=2&status=3&combined_priority=APPROVED`}
                         />
                         <SummaryCard
                             value={
                                 data?.barriers_current_year?.overseas_delivery
                             }
                             description="Overseas delivery barriers are estimated to be resolved in the current financial year."
-                            url="#"
-                            search_params=""
+                            url="/search"
+                            search_params={`${getSearchParamsFromForm()}${getFinancialYearSearchParams(
+                                "estimated_resolution_date",
+                            )}&status=2&status=3&combined_priority=OVERSEAS`}
                         />
                     </div>
                 </div>

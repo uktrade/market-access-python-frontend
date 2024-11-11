@@ -18,6 +18,7 @@ from users.constants import (
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import build_absolute_uri
+from utils.metadata import MetadataMixin
 from utils.pagination import PaginationMixin
 from utils.referers import RefererMixin
 from utils.sessions import init_session
@@ -424,3 +425,92 @@ class ExportUsers(GroupQuerystringMixin, View):
                 ]
             )
         return response
+
+
+class Account(TemplateView, MetadataMixin):
+    template_name = "users/account/account.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my profile"
+        current_user = client.users.get_current()
+        profile = client.profile.get(id=current_user.id).data
+
+        overseas_regions = self.get_display_list(
+            [region["name"] for region in profile["overseas_regions"] or []]
+        )
+        policy_teams = self.get_display_list(
+            [policy_team["title"] for policy_team in profile["policy_teams"] or []]
+        )
+        sectors = self.get_display_list(
+            [sector["name"] for sector in profile["sectors"] or []]
+        )
+        government_department = self.get_display_list(
+            [organisation["name"] for organisation in profile["organisations"] or []]
+        )
+
+        trading_blocs = [bloc["name"] for bloc in profile["trading_blocs"] or []]
+        countries = [country["name"] for country in profile["countries"] or []]
+        barrier_locations = self.get_display_list(trading_blocs + countries)
+
+        context_data.update(
+            {
+                "active": active,
+                "overseas_regions": overseas_regions,
+                "policy_teams": policy_teams,
+                "sectors": sectors,
+                "barrier_locations": barrier_locations,
+                "government_department": government_department,
+            }
+        )
+
+        return context_data
+
+    def get_display_list(self, list):
+        list.sort()
+        if list:
+            list.sort()
+            return ", ".join(list)
+        return None
+
+
+class AccountSavedSearch(TemplateView):
+    template_name = "users/account/saved_search.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my saved searches"
+        saved_searches = client.saved_searches.list()
+
+        context_data.update(
+            {
+                "active": active,
+                "saved_searches": saved_searches,
+            }
+        )
+
+        return context_data
+
+
+class AccountDownloads(TemplateView):
+    template_name = "users/account/downloads.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my downloads"
+        barrier_downloads = client.barrier_download.list()
+
+        context_data.update(
+            {
+                "active": active,
+                "barrier_downloads": barrier_downloads,
+            }
+        )
+
+        return context_data
