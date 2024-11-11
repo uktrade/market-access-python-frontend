@@ -1,6 +1,12 @@
 from django.urls import path
 
-from users.profile.views.policy_teams import UserEditPolicyTeams
+from users.account.views import (
+    UserEditBarrierLocations,
+    UserEditGovernmentDepartment,
+    UserEditOverseasRegions,
+    UserEditPolicyTeams,
+    UserEditSectors,
+)
 from users.views import (
     Account,
     AccountDownloads,
@@ -42,8 +48,28 @@ urlpatterns = [
         name="account_downloads",
     ),
     path(
-        "account/<int:user_id>/policy-teams/edit/",
+        "account/policy-teams/edit/",
         UserEditPolicyTeams.as_view(),
         name="edit_user_policy_teams",
+    ),
+    path(
+        "account/sectors/edit/",
+        UserEditSectors.as_view(),
+        name="edit_user_sectors",
+    ),
+    path(
+        "account/barrier-locations/edit/",
+        UserEditBarrierLocations.as_view(),
+        name="edit_user_barrier_locations",
+    ),
+    path(
+        "account/overseas-regions/edit/",
+        UserEditOverseasRegions.as_view(),
+        name="edit_user_overseas_regions",
+    ),
+    path(
+        "account/government-department/edit/",
+        UserEditGovernmentDepartment.as_view(),
+        name="edit_user_government_department",
     ),
 ]

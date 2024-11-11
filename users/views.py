@@ -428,7 +428,7 @@ class ExportUsers(GroupQuerystringMixin, View):
 
 
 class Account(TemplateView, MetadataMixin):
-    template_name = "users/account.html"
+    template_name = "users/account/account.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -436,47 +436,48 @@ class Account(TemplateView, MetadataMixin):
 
         active = "my profile"
         current_user = client.users.get_current()
+        profile = client.profile.get(id=current_user.id).data
 
-        profile = client.users.get(id=current_user.id).data["profile"]
+        overseas_regions = self.get_display_list(
+            [region["name"] for region in profile["overseas_regions"] or []]
+        )
+        policy_teams = self.get_display_list(
+            [policy_team["title"] for policy_team in profile["policy_teams"] or []]
+        )
+        sectors = self.get_display_list(
+            [sector["name"] for sector in profile["sectors"] or []]
+        )
+        government_department = self.get_display_list(
+            [organisation["name"] for organisation in profile["organisations"] or []]
+        )
 
-        sectors = self.get_display_list(profile, "sectors")
-        policy_teams = self.get_display_list(profile, "policy_teams")
-        organisations = self.get_display_list(profile, "organisations")
-        countries = self.get_display_list(profile, "countries")
-        trading_blocs = self.get_display_list(profile, "trading_blocs")
-        overseas_regions = self.get_display_list(profile, "overseas_regions")
+        trading_blocs = [bloc["name"] for bloc in profile["trading_blocs"] or []]
+        countries = [country["name"] for country in profile["countries"] or []]
+        barrier_locations = self.get_display_list(trading_blocs + countries)
 
         context_data.update(
             {
                 "active": active,
-                "current_user": current_user,
-                "sectors": sectors,
-                "policy_teams": policy_teams,
-                "organisations": organisations,
-<<<<<<< HEAD
-                "countries": countries,
-                "trading_blocs": trading_blocs,
                 "overseas_regions": overseas_regions,
-<<<<<<< HEAD
-                # TODO
-                # my_downloads,
-                # my_saved_searches,
-                # my_barriers,
-=======
-            }
-        )
-=======
+                "policy_teams": policy_teams,
+                "sectors": sectors,
+                "barrier_locations": barrier_locations,
+                "government_department": government_department,
             }
         )
 
         return context_data
->>>>>>> a3f72996 (Formatting)
 
-        return context_data
+    def get_display_list(self, list):
+        list.sort()
+        if list:
+            list.sort()
+            return ", ".join(list)
+        return None
 
 
 class AccountSavedSearch(TemplateView):
-    template_name = "users/account_saved_search.html"
+    template_name = "users/account/saved_search.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -496,7 +497,7 @@ class AccountSavedSearch(TemplateView):
 
 
 class AccountDownloads(TemplateView):
-    template_name = "users/account_downloads.html"
+    template_name = "users/account/downloads.html"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -509,25 +510,7 @@ class AccountDownloads(TemplateView):
             {
                 "active": active,
                 "barrier_downloads": barrier_downloads,
->>>>>>> 942d6cf9 (Add my saved searches/downloads)
             }
         )
 
         return context_data
-<<<<<<< HEAD
-
-    def get_display_list(self, profile, area):
-        id_list = profile[area]
-        if area == "policy_teams":
-            title_list = [
-                self.metadata.get_policy_team(id).get("title") for id in id_list or []
-            ]
-            title_list.sort()
-            if title_list:
-                return ", ".join(title_list)
-            return "None"
-        # TODO
-        else:
-            return "None"
-=======
->>>>>>> a3f72996 (Formatting)
