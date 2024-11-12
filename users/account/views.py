@@ -67,6 +67,7 @@ class UserEditPolicyTeams(UserEditBase):
 
     def form_valid(self, form):
         self.patch_to_api(form, "policy_teams")
+
         return super().form_valid(form)
 
 
@@ -91,7 +92,6 @@ class UserEditSectors(UserEditBase):
 
     def form_valid(self, form):
         self.patch_to_api(form, "sectors")
-        return super().form_valid(form)
 
 
 class UserEditOverseasRegions(UserEditBase):

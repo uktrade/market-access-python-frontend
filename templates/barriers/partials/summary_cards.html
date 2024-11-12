@@ -5,7 +5,7 @@
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text summary_card_small">
             <span class="govuk-visually-hidden">Warning</span>
-            The monetary values shown here are subject to change throughout this financial year ({{ summary_stats.financial_year.current_start|parse_iso|date:"D, j F Y" }} to {{ summary_stats.financial_year.current_end|parse_iso|date:"D, j F Y" }} ) and should only be used as a guide due to some barriers in some sectors being harder to accurately estimate
+            The monetary values shown here are subject to change throughout this financial year ({{ summary_stats.financial_year.current_start|parse_iso|date:"D, j F Y" }} to {{ summary_stats.financial_year.current_end|parse_iso|date:"D, j F Y" }}) and should only be used as a guide due to some barriers in some sectors being harder to accurately estimate
         </strong>
     </div>
     <div id="barrier-overview">
@@ -56,7 +56,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers.open }}</span> barriers are open.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3">See the barriers</a>
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers.pb100 }}</span> PB100 barriers are open.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&combined_priority=APPROVED">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED">See the barriers</a>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers.overseas_delivery }}</span> Overseas delivery barriers are open.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS">See the barriers</a>
                             </div>
                         </div>
                     </div>
@@ -88,10 +88,10 @@
                     <div class="govuk-grid-column-one-third">
                         <div class="govuk-inset-text summary-card">
                             <p>
-                                <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.open }}</span> barriers have been resolved in the current financial year.
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.resolved }}</span> barriers have been resolved in the current financial year.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=4&status_date_resolved_in_full_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_resolved_in_full_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_resolved_in_full_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_resolved_in_full_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.pb100 }}</span> PB100 barriers are estimated to be resolved in the current financial year.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="#">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.overseas_delivery }}</span> Overseas delivery barriers are estimated to be resolved in the current financial year.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="#">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
                             </div>
                         </div>
                     </div>

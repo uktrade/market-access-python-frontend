@@ -1,11 +1,9 @@
-ma.components.MultiSelect = function (element) {
-    const nodes = document.getElementById(element)
-
-    const select = document.getElementById("dropdown");
+ma.components.MultiSelect = function (select_element) {
     const add_button = document.getElementById("add_button");
-    const display_list = document.getElementById("list_display");
-    const selection = document.getElementById("id_form");
-    
+    const select = document.getElementById("select");
+    let selection = document.getElementById("id_form");
+
+
     add_button.addEventListener("click", function () {
         if (select.value) {
             additionMode();
@@ -34,6 +32,8 @@ ma.components.MultiSelect = function (element) {
     };
 
     const updateDisplay = function () {
+        const display_list = document.getElementById("list_display");
+
         if (selection.value) {
             const selected_list = JSON.parse(selection.value).map(function (e) {
                 return e.toString();
