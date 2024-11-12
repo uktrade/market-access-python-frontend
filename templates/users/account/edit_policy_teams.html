@@ -4,7 +4,7 @@
 
 {% block body_script %}
     <script nonce="{{request.csp_nonce}}">
-        ma.components.MultiSelect(element="policy_teams_multiselect");
+        ma.components.MultiSelect(id="policy_teams_multiselect");
     </script>
 {% endblock %}
 
@@ -17,6 +17,6 @@
         <div class="govuk-summary-card__title-wrapper">
             <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
         </div>
-        <div class="policy_teams_multiselect" id="policy_teams_multiselect">{% include 'users/partials/account/multi_select.html' with form=form select_text="Select a policy team" add_text="Add team" %}</div>
+        <div id="policy_teams_multiselect">{% include 'users/partials/account/multi_select.html' with form=form select_text="Select a policy team" add_text="Add team" %}</div>
     </div>
 {% endblock %}

@@ -9,7 +9,7 @@
         </div>
 
         <div>
-            <select class="govuk-select govuk-!-width-two-thirds" id="dropdown" name="form" class="dropdown">
+            <select class="govuk-select govuk-!-width-two-thirds dropdown" name="form">
                 {% if add_text %}
                     <option disabled selected value="">{{ select_text }}</option>
                 {% else %}
@@ -31,7 +31,7 @@
             </select>
 
             {% if add_text %}
-                <button type="button" id="add_button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2 add_button" aria-label="{{ add_text }}">
+                <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2 add_button" aria-label="{{ add_text }}">
                     {{ add_text }}
                 </button>
             {% endif %}

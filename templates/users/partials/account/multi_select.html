@@ -1,6 +1,6 @@
 {% include 'users/partials/account/fieldset.html' %}
-<ul class="selection-list__list" id="list_display" class="list_display"></ul>
-<form action="" method="post" class="govuk-summary-card__content">
+<ul class="selection-list__list list_display"></ul>
+<form action="" method="post" class="govuk-summary-card__content input_form">
     {% csrf_token %}
     {{ form.form.as_hidden }}
     <input type="submit" value="Save and return" class="govuk-button">
