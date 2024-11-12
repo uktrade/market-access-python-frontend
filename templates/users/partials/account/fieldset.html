@@ -1,41 +1,41 @@
 <fieldset class="govuk-fieldset govuk-summary-card__content">
 
-        <label for="select" class="govuk-label govuk-label--s">
-            {{ form.form.label }}
-        </label>
+    <label for="select" class="govuk-label govuk-label--s">
+        {{ form.form.label }}
+    </label>
 
-        <div class="govuk-hint">
-            {{ form.form.help_text }}
-        </div>
+    <div class="govuk-hint">
+        {{ form.form.help_text }}
+    </div>
 
-        <div>
-            <select class="govuk-select govuk-!-width-two-thirds dropdown" name="form">
-                {% if add_text %}
-                    <option disabled selected value="">{{ select_text }}</option>
-                {% else %}
-                    <option value="">None</option>
-                {% endif %}
-                {% for id, name in select_options %}
-                    {% if name.0|add:"x" == "" %}
-                        {% with group_name=id group_choices=name %}
-                            <optgroup label="{{ group_name }}">
-                                {% for id, name in group_choices %}
-                                    <option value="{{ id }}">{{ name }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% endwith %}
-                    {% else %}
-                        <option value="{{ id }}">{{ name }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-
+    <div>
+        <select class="govuk-select govuk-!-width-two-thirds dropdown" name="form">
             {% if add_text %}
-                <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2 add_button" aria-label="{{ add_text }}">
-                    {{ add_text }}
-                </button>
+                <option disabled selected value="">{{ select_text }}</option>
+            {% else %}
+                <option value="">None</option>
             {% endif %}
+            {% for id, name in select_options %}
+                {% if name.0|add:"x" == "" %}
+                    {% with group_name=id group_choices=name %}
+                        <optgroup label="{{ group_name }}">
+                            {% for id, name in group_choices %}
+                                <option value="{{ id }}">{{ name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endwith %}
+                {% else %}
+                    <option value="{{ id }}">{{ name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
 
-        </div>
+        {% if add_text %}
+            <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-2 add_button" aria-label="{{ add_text }}">
+                {{ add_text }}
+            </button>
+        {% endif %}
+
+    </div>
 
 </fieldset>

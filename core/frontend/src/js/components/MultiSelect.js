@@ -1,10 +1,12 @@
 ma.components.MultiSelect = function (id_name) {
-    const nodes = document.getElementById(id_name)
+    const nodes = document.getElementById(id_name);
 
     const select = nodes.querySelector(".dropdown");
     const add_button = nodes.querySelector(".add_button");
     const display_list = nodes.querySelector(".list_display");
-    const selection = nodes.querySelector(".input_form").querySelectorAll("input")[1]
+    const selection = nodes
+        .querySelector(".input_form")
+        .querySelectorAll("input")[1];
 
     add_button.addEventListener("click", function () {
         if (select.value) {
@@ -34,7 +36,6 @@ ma.components.MultiSelect = function (id_name) {
     };
 
     const updateDisplay = function () {
-
         if (selection.value) {
             const selected_list = JSON.parse(selection.value).map(function (e) {
                 return e.toString();
