@@ -60,4 +60,15 @@
         background-color: $govuk-orange;
     }
 
+    &--profile {
+        $badge-circle-size: 15px;
+
+        background-color: $govuk-green;
+        width: $badge-circle-size;
+        height: $badge-circle-size;
+        border-radius: $badge-circle-size;
+        text-align: center;
+        line-height: $badge-circle-size;
+    }
+
 }
