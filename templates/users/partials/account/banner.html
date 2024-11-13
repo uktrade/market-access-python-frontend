@@ -1,0 +1,28 @@
+<div class="ma-masthead">
+    <section class="barrier-summary">
+        <div class="barrier-summary__heading">
+            <p class="barrier-summary__code">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+            <h1 class="barrier-summary__heading__text">{{ active|capfirst|default_if_none:"Account Home" }}</h1>
+        </div>
+    </section>
+</div>
+<nav>
+    <ul class="datahub-header__navigation govuk-template">
+        <li class="datahub-header__navigation__item">
+            <a class="{% if active == 'my profile' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+               href="{% url 'users:account' %}">My profile</a>
+        </li>
+        <li class="datahub-header__navigation__item">
+            <a class="{% if active == 'my saved searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+               href="{% url 'users:account_saved_searches' %}">My saved searches</a>
+        </li>
+        <li class="datahub-header__navigation__item">
+            <a class="{% if active == 'my downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+               href="{% url 'users:account_downloads' %}">My downloads</a>
+        </li>
+        <li class="datahub-header__navigation__item">
+            <a class="{% if active == 'my_barriers' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+               href="{% url 'barriers:search' %}?team=1">My barriers</a>
+        </li>
+    </ul>
+</nav>

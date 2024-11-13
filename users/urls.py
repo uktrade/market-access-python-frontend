@@ -1,6 +1,16 @@
 from django.urls import path
 
-from .views import (
+from users.account.views import (
+    UserEditBarrierLocations,
+    UserEditGovernmentDepartment,
+    UserEditOverseasRegions,
+    UserEditPolicyTeams,
+    UserEditSectors,
+)
+from users.views import (
+    Account,
+    AccountDownloads,
+    AccountSavedSearch,
     AddUser,
     DeleteUser,
     EditUser,
@@ -26,4 +36,40 @@ urlpatterns = [
     path("users/<int:user_id>/", UserDetail.as_view(), name="user_detail"),
     path("users/<int:user_id>/edit/", EditUser.as_view(), name="edit_user"),
     path("users/<int:user_id>/delete/", DeleteUser.as_view(), name="delete_user"),
+    path("account/", Account.as_view(), name="account"),
+    path(
+        "account/saved_searches/",
+        AccountSavedSearch.as_view(),
+        name="account_saved_searches",
+    ),
+    path(
+        "account/downloads/",
+        AccountDownloads.as_view(),
+        name="account_downloads",
+    ),
+    path(
+        "account/policy-teams/edit/",
+        UserEditPolicyTeams.as_view(),
+        name="edit_user_policy_teams",
+    ),
+    path(
+        "account/sectors/edit/",
+        UserEditSectors.as_view(),
+        name="edit_user_sectors",
+    ),
+    path(
+        "account/barrier-locations/edit/",
+        UserEditBarrierLocations.as_view(),
+        name="edit_user_barrier_locations",
+    ),
+    path(
+        "account/overseas-regions/edit/",
+        UserEditOverseasRegions.as_view(),
+        name="edit_user_overseas_regions",
+    ),
+    path(
+        "account/government-department/edit/",
+        UserEditGovernmentDepartment.as_view(),
+        name="edit_user_government_department",
+    ),
 ]
