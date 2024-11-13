@@ -19,7 +19,6 @@ from barriers.forms.public_barriers import (
     PublishTitleForm,
     UnpublishPublicBarrierForm,
 )
-from users.mixins import UserMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.helpers import remove_empty_values_from_dict
 from utils.metadata import MetadataMixin
@@ -84,9 +83,7 @@ class PublicBarrierListView(MetadataMixin, SearchFormView):
         return data
 
 
-class PublicBarrierDetail(
-    MetadataMixin, PublicBarrierMixin, BarrierMixin, UserMixin, FormView
-):
+class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormView):
     template_name = "barriers/public_barriers/detail.html"
 
     def get_activity(self):
