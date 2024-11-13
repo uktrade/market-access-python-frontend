@@ -408,7 +408,6 @@ class UnpublishBarrierConfirmationTestCase(MarketAccessTestCase):
 class PublicBarrierActionsTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.PublicBarriersResource.ready_for_approval")
     @patch("utils.api.resources.UsersResource.get_current")
-    @patch("users.mixins.UserMixin.get_user")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("django.contrib.messages.add_message")
@@ -417,11 +416,9 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
         mock_add_message,
         mock_get_notes,
         mock_get_activity,
-        mock_get_user,
         mock_user,
         mock_ready_for_approval,
     ):
-        mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
         mock_get_notes.return_value = []
         mock_get_activity.return_value = self.public_barrier_activity
@@ -441,7 +438,6 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
 
     @patch("utils.api.resources.PublicBarriersResource.ready_for_approval")
     @patch("utils.api.resources.UsersResource.get_current")
-    @patch("users.mixins.UserMixin.get_user")
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("django.contrib.messages.add_message")
@@ -450,11 +446,9 @@ class PublicBarrierActionsTestCase(MarketAccessTestCase):
         mock_add_message,
         mock_get_notes,
         mock_get_activity,
-        mock_get_user,
         mock_user,
         mock_ready_for_approval,
     ):
-        mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
         mock_get_notes.return_value = []
         mock_get_activity.return_value = self.public_barrier_activity

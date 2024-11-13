@@ -19,11 +19,9 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.resources.UsersResource.get_current")
-    @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_correct_template_general_user(
-        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
+        self, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
-        mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
         mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
@@ -44,11 +42,9 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.resources.UsersResource.get_current")
-    @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_correct_template_approver(
-        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
+        self, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
-        mock_get_user.return_value = self.approver_user
         mock_user.return_value = self.approver_user
         mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
@@ -66,11 +62,9 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.resources.UsersResource.get_current")
-    @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_correct_template_publisher(
-        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
+        self, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
-        mock_get_user.return_value = self.publisher_user
         mock_user.return_value = self.publisher_user
         mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
@@ -95,11 +89,9 @@ class PublicBarrierViewTestCase(MarketAccessTestCase):
     @patch("utils.api.client.PublicBarriersResource.get_activity")
     @patch("utils.api.client.PublicBarriersResource.get_notes")
     @patch("utils.api.resources.UsersResource.get_current")
-    @patch("users.mixins.UserMixin.get_user")
     def test_public_barrier_view_loads_html(
-        self, mock_get_user, mock_user, mock_get_activity, _mock_get_notes, mock_get
+        self, mock_user, mock_get_activity, _mock_get_notes, mock_get
     ):
-        mock_get_user.return_value = self.general_user
         mock_user.return_value = self.general_user
         mock_get.return_value = self.public_barrier_mock
         mock_get_activity.return_value = self.public_barrier_activity
