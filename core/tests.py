@@ -16,6 +16,7 @@ from utils.api.resources import (
     NotesResource,
     PublicBarriersResource,
     ReportsResource,
+    UserProfileResource,
     UsersResource,
 )
 
@@ -180,6 +181,7 @@ class MarketAccessTestCase(TestCase):
         self.init_get_current_user_patcher()
         self.init_get_public_barrier_patcher()
         self.init_get_action_plans_patcher()
+        self.init_get_profile_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -251,6 +253,12 @@ class MarketAccessTestCase(TestCase):
             self.public_barrier
         )
         self.addCleanup(self.get_public_barrier_patcher.stop)
+
+    def init_get_profile_patcher(self):
+        self.get_profile_patcher = patch("utils.api.resources.UserProfileResource.get")
+        self.mock_get_profile = self.get_profile_patcher.start()
+        self.mock_get_profile.return_value = self.profile
+        self.addCleanup(self.get_profile_patcher.stop)
 
     def delete_session_key(self, key):
         try:
@@ -464,3 +472,16 @@ class MarketAccessTestCase(TestCase):
             users = json.loads(memfiles.open(file))
             self._users = [User(user) for user in users]
         return self._users
+
+    @property
+    def profile(self):
+        return UserProfileResource.model(
+            {
+                "sectors": [],
+                "policy_teams": [],
+                "organisations": [],
+                "countries": [],
+                "trading_blocs": [],
+                "overseas_regions": [],
+            }
+        )

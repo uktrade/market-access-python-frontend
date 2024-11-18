@@ -546,6 +546,6 @@ class BarrierDownloadsResource(APIResource):
         return self.model(self.client.post(url, json=kwargs))
 
 
-class UserProfile(APIResource):
+class UserProfileResource(APIResource):
     resource_name = "users/profile"
     model = UserProfile
