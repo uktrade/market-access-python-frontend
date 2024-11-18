@@ -5,16 +5,19 @@
 {% block body_script %}
     {{ block.super }}
     <script nonce="{{request.csp_nonce}}">
-        ma.components.MultiSelect();
+        ma.components.MultiSelect(element="barrier_locations_multiselect");
     </script>
 {% endblock %}
-
-<!-- TODO rework partials -->
 
 {% block page_title %}{{ block.super }} - Account{% endblock %}
 {% block masthead %}
     {% include 'users/partials/account/banner.html' with active="my profile" %}
 {% endblock %}
 {% block page_content %}
-    {% include 'users/partials/account/areas_multi_select.html' with form=form title="My role and areas of interest" select_text="Select a barrier location" add_text="Add location" %}
+    <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+            <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
+        </div>
+        <div id="barrier_locations_multiselect">{% include 'users/partials/account/multi_select.html' with form=form select_text="Select a barrier location" add_text="Add location" %}</div>
+    </div>
 {% endblock %}

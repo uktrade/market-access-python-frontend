@@ -65,6 +65,16 @@ class User(APIModel):
     def has_approved_digital_trade_email(self):
         return self.data.get("has_approved_digital_trade_email", False)
 
+    @property
+    def initials(self):
+        first_name = self.data.get("first_name")
+        last_name = self.data.get("last_name")
+        if first_name:
+            if last_name:
+                return first_name[0] + last_name[0]
+            return first_name[0]
+        return "U"
+
 
 class UserProfile(APIModel):
     pass
