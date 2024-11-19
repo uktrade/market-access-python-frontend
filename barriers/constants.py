@@ -284,3 +284,37 @@ EXPORT_TYPES = Choices(
     ("services", "Services"),
     ("investments", "Investments"),
 )
+
+# Related barriers rag tags
+RELATED_BARRIER_TAGS = {
+    "duplicate": {
+        "lower_boundary": 0.9,
+        "upper_boundary": 1,
+        "label": "Potential duplicate",
+        "class": "govuk-tag--green",
+    },
+    "similar": {
+        "lower_boundary": 0.7,
+        "upper_boundary": 0.8,
+        "label": "Very similar",
+        "class": "govuk-tag--turquoise",
+    },
+    "good": {
+        "lower_boundary": 0.4,
+        "upper_boundary": 0.6,
+        "label": "Good match",
+        "class": "govuk-tag--blue",
+    },
+    "some": {
+        "lower_boundary": 0.2,
+        "upper_boundary": 0.3,
+        "label": "Some relevance",
+        "class": "govuk-tag--purple",
+    },
+    "poor": {
+        "lower_boundary": 0,
+        "upper_boundary": 0.2,
+        "label": "Poor match",
+        "class": "govuk-tag--pink",
+    },
+}
