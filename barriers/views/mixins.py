@@ -5,8 +5,8 @@ from http import HTTPStatus
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 
-from barriers.models import PublicBarrier
 from barriers.constants import RELATED_BARRIER_TAGS
+from barriers.models import PublicBarrier
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 

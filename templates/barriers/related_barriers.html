@@ -107,14 +107,14 @@
                         </dd>
                     </div>
                 </div>
+                </div>
+            {% endfor %}
+        </dl>
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <p>There are no related barriers.</p>
             </div>
-        {% endfor %}
-    </dl>
-{% else %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            <p>There are no related barriers.</p>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 {% endblock page_content %}
