@@ -29,7 +29,7 @@ from .resources import (
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
-    UserProfile,
+    UserProfileResource,
     UsersResource,
 )
 
@@ -62,7 +62,7 @@ class MarketAccessAPIClient:
         self.feedback = FeedbackResource(self)
         self.barrier_download = BarrierDownloadsResource(self)
         self.dashboard_tasks = DashboardTasksResource(self)
-        self.profile = UserProfile(self)
+        self.profile = UserProfileResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

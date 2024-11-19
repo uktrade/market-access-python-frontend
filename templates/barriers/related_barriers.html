@@ -1,72 +1,120 @@
 {% extends "barriers/edit/base.html" %}
+{% load dates %}
 {% block page_title %}
     {{ block.super }} - Related barriers
 {% endblock page_title %}
 {% block masthead %}
     <div class="ma-masthead">{% include 'barriers/partials/barrier_summary.html' %}</div>
     {% include 'barriers/partials/tags.html' %}
-{% endblock %}
+{% endblock masthead %}
 {% block page_content %}
     {% include 'barriers/partials/barrier_tabs.html' with active='related' %}
     {% if related_barriers %}
-        <p class="barrier-summary">
-            The following are the most similar barriers based on the context of the title and description. Only upto the top 5 most similar results are shown.
-        </p>
-        <details class="govuk-details">
-            <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">Why are these barries related?</span>
-            </summary>
-            <div class="govuk-details__text">
-                These barriers are considered to be related based on the contextual similarity of the title and the description. The 'related barrier' search algorithm doesn't use other attributes such as sector and categories, so you may find other similar barriers using the search function for other attributes.
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <div class="govuk-inset-text">
+                    <p>
+                        You can use this information to help find common ways to resolve this barrier and collaborate with your colleagues.
+                    </p>
+                    <p>
+                        The following are the most similar barriers based on the context of the title, description and other key fields. The top 10 most similar results are shown.
+                    </p>
+                </div>
+                <hr class="govuk-section-break govuk-section-break--visible">
             </div>
-        </details>
-        <ol id="filter-results-list" class="filter-results-list">
+        </div>
+        <dl class="govuk-summary-list related-summary-list">
             {% for barrier in related_barriers %}
-                <li class='filter-results-list__item' data-barrier-id="{{ barrier.id }}">
-                    <div class="filter-results-list__item__main-content">
-                        <h3 class='filter-results-list__item__heading'>
-                            {% if saved_search %}
-                                {% if barrier.id in saved_search.new_barrier_ids %}<span class="ma-badge ma-badge--new">New</span>{% endif %}
-                                {% if barrier.id in saved_search.updated_barrier_ids %}
-                                    <span class="ma-badge ma-badge--updated">Updated</span>
-                                {% endif %}
-                            {% endif %}
-                            <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a>
-                        </h3>
-                        <dl class="filter-results-list__item__definitions">
-                            <dt class="filter-results-list__item__definitions__key visually-hidden">Summary:</dt>
-                            <dd class="filter-results-list__item__definitions__value">
+                <div class="govuk-summary-list__row govuk-!-margin-bottom-9">
+                    <div class="govuk-grid-row govuk-!-margin-top-3">
+                        <div class="govuk-grid-column-full">
+                            <h3 class="govuk-heading-s">
+                                <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.title }}</a>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">
+                            <dt class="govuk-summary-list__key">Barrier description:</dt>
+                            <dd class="govuk-summary-list__value govuk-!-text-align-left">
                                 {{ barrier.summary }}
                             </dd>
-                            <!-- Need to either convert the string dates to dates or cast the barriers to local barrier model
-                                            <dt class="filter-results-list__item__definitions__key">Date reported:</dt>
-                                            <dd class="filter-results-list__item__definitions__value">
-                                                {{ barrier.reported_on|date:"j F Y G" }}
-                                            </dd>
-                                            <dt class="filter-results-list__item__definitions__key">Updated:</dt>
-                                            <dd class="filter-results-list__item__definitions__value">
-                                                {{ barrier.modified_on|date:"j F Y" }}
-                                            </dd>
-                                            -->
-                            <dt class="filter-results-list__item__definitions__key">Status:</dt>
-                            <dd class="filter-results-list__item__definitions__value">
+                        </div>
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            <dt class="govuk-summary-list__key">Status:</dt>
+                            <dd class="govuk-summary-list__value">
                                 {{ barrier.status.name }}
                             </dd>
-                            <dt class="filter-results-list__item__definitions__key">Barrier location:</dt>
-                            <dd class="filter-results-list__item__definitions__value">
-                                {{ barrier.location }}
-                            </dd>
-                            <dt class="filter-results-list__item__definitions__key">Similarity Score:</dt>
-                            <dd class="filter-results-list__item__definitions__value">
-                                {{ barrier.similarity|floatformat:3 }}
-                                {% if barrier.similarity > .8 %}<strong class="govuk-tag">Potential duplicate</strong>{% endif %}
-                            </dd>
-                        </dl>
+                        </div>
+                        <div class="govuk-grid-column-one-half">
+                            <dt class="govuk-summary-list__key">Priority:</dt>
+                            <dd class="govuk-summary-list__value">
+                                {% if barrier.top_priority_status == "APPROVAL_PENDING" %}
+                                    TOP 100 APPROVAL PENDING
+                                {% elif barrier.top_priority_status == "APPROVED" %}
+                                    TOP 100 PRIORITY
+                                {% elif barrier.top_priority_status == "REMOVAL_PENDING" %}
+                                    TOP 100 REMOVAL PENDING
+                                {% elif barrier.top_priority_status == "RESOLVED" %}
+                                    TOP 100 PRIORITY RESOLVED
+                                {% elif barrier.priority_level %}
+                                    {% if barrier.priority_level == "OVERSEAS" %}
+                                        OVERSEAS DELIVERY
+                                    {% elif barrier.priority_level == "COUNTRY" %}
+                                        COUNTRY PRIORITY
+                                    {% elif barrier.priority_level == "WATCHLIST" %}
+                                        WATCH LIST
+                                    {% endif %}
+                                {% else %}
+                                    NONE
+                                {% endif %}
+                            </ul>
+                        </dd>
                     </div>
-                </li>
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-half">
+                        <dt class="govuk-summary-list__key">Date reported:</dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ barrier.reported_on|parse_iso }}
+                        </dd>
+                    </div>
+                    <div class="govuk-grid-column-one-half">
+                        <dt class="govuk-summary-list__key">Last updated:</dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ barrier.modified_on|parse_iso }}
+                        </dd>
+                    </div>
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-half">
+                        <dt class="govuk-summary-list__key">Barrier location:</dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ barrier.location }}
+                        </dd>
+                    </div>
+                    <div class="govuk-grid-column-one-half">
+                        <dt class="govuk-summary-list__key">Similarity Score:</dt>
+                        <dd class="govuk-summary-list__value">
+                            {{ barrier.similarity|floatformat:3 }}
+                            {% for key, value in related_barrier_tags.items %}
+                                {% if barrier.similarity <= value.upper_boundary and barrier.similarity >= value.lower_boundary %}
+                                    <strong class="govuk-tag {{ value.class }}">{{ value.label }}</strong>
+                                {% endif %}
+                            {% endfor %}
+                        </dd>
+                    </div>
+                </div>
+                </div>
             {% endfor %}
-        </ol>
+        </dl>
     {% else %}
-        <p>There are no related barriers.</p>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <p>There are no related barriers.</p>
+            </div>
+        </div>
     {% endif %}
-{% endblock %}
+{% endblock page_content %}

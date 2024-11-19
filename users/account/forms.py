@@ -5,17 +5,15 @@ from django import forms
 
 class UserEditBaseForm(forms.Form):
 
-    def __init__(self, user_id, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.user_id = user_id
-        super().__init__(*args, **kwargs)
-
     def clean(self):
         cleaned_data = super().clean()
         cleaned_list = []
         if cleaned_data["form"]:
             cleaned_list = json.loads(cleaned_data["form"])
-        cleaned_data["form"] = cleaned_list
+        if isinstance(cleaned_list, list):
+            cleaned_data["form"] = cleaned_list
+        else:
+            cleaned_data["form"] = [cleaned_list]
 
 
 class UserEditPolicyTeamsForm(UserEditBaseForm):
@@ -50,24 +48,14 @@ class UserEditOverseasRegionsForm(UserEditBaseForm):
     )
 
 
-class UserEditGovernmentDepartmentForm(forms.Form):
-    # TODO refactor - can it use the base form?
-    government_departments = forms.ChoiceField(
+class UserEditGovernmentDepartmentForm(UserEditBaseForm):
+    form = forms.ChoiceField(
         required=False,
         label="Government department",
         help_text="Add Government departments to stay connected with colleagues outside of the Department of "
         "Business and Trade, who are working on the barriers you’re trying to resolve.",
     )
 
-    def __init__(self, user_id, token, government_departments, *args, **kwargs):
+    def __init__(self, select_options, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["government_departments"].choices = government_departments
-
-    def clean(self):
-        cleaned_data = super().clean()
-        cleaned_government_departments = []
-        if cleaned_data["government_departments"]:
-            cleaned_government_departments = [
-                json.loads(cleaned_data["government_departments"])
-            ]
-        cleaned_data["government_departments"] = cleaned_government_departments
+        self.fields["form"].choices = select_options

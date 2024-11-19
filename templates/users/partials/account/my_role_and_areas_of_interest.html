@@ -1,6 +1,6 @@
 <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h3 class="govuk-summary-card__title ">My role and areas of interest</h3>
+        <h2 class="govuk-summary-card__title ">My role and areas of interest</h3>
     </div>
     <div class="govuk-summary-card__content govuk-hint">
         Add areas of interest here so we can later filter the data and types of updates you see in other parts of DMAS. For example, on your dashboard.
@@ -14,11 +14,11 @@
                         Overseas regions
                     </strong>
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value overseas-regions-selection">
                     {{ overseas_regions }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_overseas_regions' %}">
+                    <a class="govuk-link edit-overseas-regions" href="{% url 'users:edit_user_overseas_regions' %}">
                         Change
                     </a>
                 </dd>
@@ -30,11 +30,11 @@
                         Policy teams
                     </strong>
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value policy-teams-selection">
                     {{ policy_teams }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_policy_teams' %}">
+                    <a class="govuk-link edit-policy-teams" href="{% url 'users:edit_user_policy_teams' %}">
                         Change
                     </a>
                 </dd>
@@ -46,11 +46,11 @@
                         Sectors
                     </strong>
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value sectors-selection">
                     {{ sectors }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_sectors' %}">
+                    <a class="govuk-link edit-sectors" href="{% url 'users:edit_user_sectors' %}">
                         Change
                     </a>
                 </dd>
@@ -62,11 +62,11 @@
                         Barrier locations
                     </strong>
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value barrier-locations-selection">
                     {{ barrier_locations }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_barrier_locations' %}">
+                    <a class="govuk-link edit-barrier-locations" href="{% url 'users:edit_user_barrier_locations' %}">
                         Change
                     </a>
                 </dd>
@@ -78,11 +78,11 @@
                         Government department
                     </strong>
                 </dt>
-                <dd class="govuk-summary-list__value">
+                <dd class="govuk-summary-list__value government-department-selection">
                     {{ government_department }}
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="{% url 'users:edit_user_government_department' %}">
+                    <a class="govuk-link edit-government-department" href="{% url 'users:edit_user_government_department' %}">
                         Change
                     </a>
                 </dd>
