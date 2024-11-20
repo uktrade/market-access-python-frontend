@@ -460,7 +460,36 @@ const BarriersOverview = ({ filterValues }) => {
             .flat();
 
         setFilters(filters);
+        handleGoogleAnalytics(filters);
     }, [window.location.search]);
+
+    const handleGoogleAnalytics = (filters) => {
+        let filtersForAnalytics = {
+            region: [],
+            policy_team: [],
+            sector: [],
+            location: [],
+        };
+
+        filters.forEach((filter) => {
+            if (filter.label == "sector" && filter.value) {
+                filtersForAnalytics.sector.push(filter.readable_value);
+            } else if (filter.label == "policy_team" && filter.value) {
+                filtersForAnalytics.policy_team.push(filter.readable_value);
+            } else if (filter.label == "location" && filter.value) {
+                if (filterValues.region.some((e) => e.value == filter.value)) {
+                    filtersForAnalytics.region.push(filter.readable_value);
+                } else {
+                    filtersForAnalytics.location.push(filter.readable_value);
+                }
+            }
+        });
+
+        window["dataLayer"].push({
+            event: "event",
+            eventProps: JSON.stringify(filtersForAnalytics),
+        });
+    };
 
     const handleInputChange = ({ name, value }) => {
         // set the new value with the name of the input to the query string in the url
