@@ -85,7 +85,7 @@ const addLocation = (
     // Get all country, region, and country_trading_bloc values
     const locationParams = [
         ...searchParams.getAll("country"), // Get all 'country' values
-        searchParams.getAll("region"), // Get 'region'
+        searchParams.get("region"), // Get 'region'
         searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
     ]
         .filter(Boolean)
@@ -450,7 +450,13 @@ const BarriersOverview = ({ filterValues }) => {
         // Build filters array
         const filters = Object.keys(params)
             .map((key) => {
-                const values = params[key][0].split(",");
+                let values = []
+                if (key == "sector" || key == "policy_team") {
+                    values = params[key]
+                }
+                else {
+                    values = params[key][0].split(",");
+                }
                 return values.map((/** @type {string} */ val) => ({
                     label: key,
                     value: val,
