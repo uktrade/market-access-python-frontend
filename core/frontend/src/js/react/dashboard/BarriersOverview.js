@@ -403,17 +403,17 @@ const BarriersOverview = ({ filterValues }) => {
         /** @type {string} */ type,
     ) => {
         if (type === "sector") {
-            return " " + filterValues.sector.find((sector) => sector.value === value)
+            return filterValues.sector.find((sector) => sector.value === value)
                 .label;
         } else if (type === "policy_team") {
-            return " " + filterValues.policy_team.find(
+            return filterValues.policy_team.find(
                 (/** @type {{ value: string; }} */ policy_team) =>
                     policy_team.value === value,
             ).label;
         } else if (type === "location") {
             // check if value is comma separated then split it and return an array
             if (value.includes(",")) {
-                return " " + value
+                return value
                     .split(",")
                     .map(
                         (val) =>
@@ -423,7 +423,7 @@ const BarriersOverview = ({ filterValues }) => {
                             ).label,
                     );
             } else {
-                return " " + filterValues.location.find(
+                return filterValues.location.find(
                     (/** @type {{ value: string; }} */ location) =>
                         location.value === value,
                 ).label;
@@ -464,7 +464,7 @@ const BarriersOverview = ({ filterValues }) => {
                 }));
             })
             .flat();
-
+        console.log(filters)
         setFilters(filters);
     }, [window.location.search]);
 
@@ -596,7 +596,8 @@ const BarriersOverview = ({ filterValues }) => {
                                         key={index}
                                     >
                                         <h4 className="active-filter__heading">
-                                            {filter.label}:
+                                            {filter.label === 'policy_team' ? 'policy team' : filter.label}
+                                            {": "}
                                         </h4>
                                         <p className="active-filter__text">
                                             {filter.readable_value}
