@@ -4,6 +4,7 @@ import urllib.parse
 from django.http import JsonResponse
 from django.views import View
 from django.views.generic import TemplateView
+from django.shortcuts import redirect
 
 from barriers.forms.search import BarrierSearchForm
 from barriers.views.search import SearchFormView
@@ -25,6 +26,26 @@ class Dashboard(AnalyticsMixin, TemplateView):
             "utm_campaign": "dashboard",
         }
     }
+
+    def get(self, *args, **kwargs):
+
+        # Check to see if new default is being set
+        default_home_page = self.request.GET.get("default", None)
+
+        if default_home_page == "home":
+            # set home as the default
+            self.request.session["default"] = "home"
+        elif default_home_page == "dashboard":
+            # set home as the default
+            self.request.session["default"] = "dashboard"
+
+        # Check default dashboard current session
+        current_default = self.request.session.get("default", None)
+
+        if current_default == "home":
+            return redirect("barriers:home")
+
+        return super().get(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -102,18 +123,28 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
     # Let the pagination mixin know how many results the API will return per page
     pagination_limit = 5
 
+    def get(self, form, *args, **kwargs):
+
+        # Check to see if new default is being set
+        default_home_page = self.request.GET.get("default", None)
+        if default_home_page == "home":
+            # set home as the default
+            self.request.session["default"] = "home"
+        elif default_home_page == "dashboard":
+            # set home as the default
+            self.request.session["default"] = "dashboard"
+
+        # Check default dashboard current session
+        current_default = self.request.session.get("default", None)
+        if current_default == "dashboard":
+            return redirect("barriers:dashboard")
+
+        return super().get(form, *args, **kwargs)
+
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        # active = self.request.GET.get("active", "barriers")
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        # my_barriers_saved_search = client.saved_searches.get("my-barriers")
-        # team_barriers_saved_search = client.saved_searches.get("team-barriers")
         mentions = client.mentions.list()
-        # draft_barriers = client.reports.list()
-        # saved_searches = client.saved_searches.list()
-        # notification_exclusion = client.notification_exclusion.get()
-        # barrier_downloads = client.barrier_download.list()
-
         are_all_mentions_read: bool = not any(
             not mention.read_by_recipient for mention in mentions
         )
@@ -161,19 +192,12 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
                     metadata.get_admin_area_list()
                 ),
                 "countries_with_admin_areas": metadata.get_countries_with_admin_areas_list(),
-                # "my_barriers_saved_search": my_barriers_saved_search,
-                # "team_barriers_saved_search": team_barriers_saved_search,
-                # "draft_barriers": draft_barriers,
-                # "saved_searches": saved_searches,
-                # "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
                 "new_mentions_count": len(
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),
                 "filters": form.get_readable_filters(True),
-                # "active": active,
-                # "barrier_downloads": barrier_downloads,
                 "task_list": task_list,
                 "summary_stats": summary_stats,
                 "search_params": search_params,
