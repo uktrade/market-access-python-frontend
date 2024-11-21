@@ -86,7 +86,7 @@ const addLocation = (
     const locationParams = [
         ...searchParams.getAll("country"), // Get all 'country' values
         searchParams.getAll("region"), // Get 'region'
-        searchParams.getAll("country_trading_bloc"), // Get 'country_trading_bloc'
+        searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
     ]
         .filter(Boolean)
         .join(","); // Filter out empty values and join with commas
