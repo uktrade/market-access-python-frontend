@@ -2,9 +2,9 @@ import logging
 import urllib.parse
 
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import TemplateView
-from django.shortcuts import redirect
 
 from barriers.forms.search import BarrierSearchForm
 from barriers.views.search import SearchFormView
