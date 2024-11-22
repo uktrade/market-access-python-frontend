@@ -565,7 +565,7 @@ const BarriersOverview = ({ filterValues }) => {
                                 placeholder="Search policy teams"
                                 onChange={handleInputChange}
                             />
-                            {filters.length > 0 && (
+                            {/* {filters.length > 0 && (
                                 <span
                                     id="clear-filters-button"
                                     className="filter-items__clear"
@@ -577,7 +577,7 @@ const BarriersOverview = ({ filterValues }) => {
                                 >
                                     Remove all filters
                                 </span>
-                            )}
+                            )} */}
                             <button
                                 type="submit"
                                 className="govuk-button govuk-button--full-width"
