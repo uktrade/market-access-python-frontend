@@ -95,6 +95,12 @@ class BarrierSearchForm(forms.Form):
         label="Resolved in part date",
         required=False,
     )
+
+    estimated_resolution_date_resolved_in_part = MonthDateRangeField(
+        label="Resolved in part barriers estimated resolution date range",
+        required=False,
+    )
+
     status_date_open_in_progress = MonthDateRangeField(
         label="Estimated resolution date", required=False
     )
@@ -453,6 +459,8 @@ class BarrierSearchForm(forms.Form):
             for status_value in STATUS_WITH_DATE_FILTER:
                 if f"status_date_{status_value}" in params:
                     del params[f"status_date_{status_value}"]
+                if "estimated_resolution_date_resolved_in_part" in params:
+                    del params["estimated_resolution_date_resolved_in_part"]
 
         # tss-1069 - we need to encode the admin_areas as string JSON in the URL
         if "admin_areas" in params:
@@ -489,6 +497,9 @@ class BarrierSearchForm(forms.Form):
             params[f"status_date_{status_value}"] = self.cleaned_data.get(
                 f"status_date_{status_value}"
             )
+        params["estimated_resolution_date_resolved_in_part"] = self.cleaned_data.get(
+            "estimated_resolution_date_resolved_in_part"
+        )
 
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
