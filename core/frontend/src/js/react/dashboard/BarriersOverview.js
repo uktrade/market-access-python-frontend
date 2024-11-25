@@ -502,7 +502,6 @@ const BarriersOverview = ({ filterValues }) => {
             event: "event",
             eventProps: filtersForAnalytics,
         });
-
     };
 
     const handleInputChange = ({ name, value }) => {
