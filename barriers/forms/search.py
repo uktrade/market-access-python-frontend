@@ -461,6 +461,11 @@ class BarrierSearchForm(forms.Form):
         return urlencode(params, doseq=True)
 
     def get_api_search_parameters(self):
+
+        # Heres some comments to merge into develop
+        # This way we can check that changes to the develop branch
+        # do not trigger auto deployment to atlantis and gotham.
+
         params = {}
         params["search_id"] = self.cleaned_data.get("search_id")
         params["search"] = self.cleaned_data.get("search")
