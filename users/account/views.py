@@ -26,7 +26,11 @@ class UserEditBase(FormView, TemplateView, MetadataMixin):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["page"] = "account"
+        context_data.update(
+            {
+                "page": "account",
+            }
+        )
         return context_data
 
     def patch_to_api(self, form, area):
@@ -51,10 +55,14 @@ class UserEditPolicyTeams(UserEditBase):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["select_options"] = [
-            (policy_team["id"], policy_team["title"])
-            for policy_team in self.metadata.get_policy_team_list()
-        ]
+        context_data.update(
+            {
+                "select_options": [
+                    (policy_team["id"], policy_team["title"])
+                    for policy_team in self.metadata.get_policy_team_list()
+                ]
+            }
+        )
         return context_data
 
     def form_valid(self, form):
@@ -71,10 +79,14 @@ class UserEditSectors(UserEditBase):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["select_options"] = [
-            (sector["id"], sector["name"])
-            for sector in self.metadata.get_sector_list(level=0)
-        ]
+        context_data.update(
+            {
+                "select_options": [
+                    (sector["id"], sector["name"])
+                    for sector in self.metadata.get_sector_list(level=0)
+                ]
+            }
+        )
         return context_data
 
     def form_valid(self, form):
@@ -91,7 +103,9 @@ class UserEditOverseasRegions(UserEditBase):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["select_options"] = self.metadata.get_overseas_region_choices()
+        context_data.update(
+            {"select_options": self.metadata.get_overseas_region_choices()}
+        )
         return context_data
 
     def form_valid(self, form):
@@ -132,7 +146,7 @@ class UserEditBarrierLocations(UserEditBase):
                 ),
             ),
         )
-        context_data["select_options"] = locations
+        context_data.update({"select_options": locations})
         return context_data
 
     def form_valid(self, form):
