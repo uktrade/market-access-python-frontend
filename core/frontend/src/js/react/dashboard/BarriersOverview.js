@@ -500,8 +500,9 @@ const BarriersOverview = ({ filterValues }) => {
 
         window["dataLayer"].push({
             event: "event",
-            eventProps: JSON.stringify(filtersForAnalytics),
+            eventProps: filtersForAnalytics,
         });
+
     };
 
     const handleInputChange = ({ name, value }) => {
