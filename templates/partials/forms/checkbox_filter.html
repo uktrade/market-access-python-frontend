@@ -38,6 +38,8 @@
                 {% if text == "Resolved: In part" %}
                     <div id="resolved_date_filter_resolved_in_part" {% if "3" not in field.data or not field.data %}hidden{% endif %}>
                         {% include "partials/forms/date_input_filter.html" with field=form.status_date_resolved_in_part %}
+                        <!-- Extra filter for estimated resolution date for Resolved In Part barriers, activate if filter requested, currently only used for dashboard summary cards-->
+                        <!--{% include "partials/forms/date_input_filter.html" with field=form.estimated_resolution_date_resolved_in_part %}-->
                     </div>
                 {% endif %}
                 {% if text == "Resolved: In full" %}

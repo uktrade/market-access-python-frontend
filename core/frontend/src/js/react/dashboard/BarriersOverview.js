@@ -388,6 +388,24 @@ const BarriersOverview = ({ filterValues }) => {
         if (field == "estimated_resolution_date") {
             //Estimated resolution date from this date
             searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_1",
+                end_date.getFullYear().toString(),
+            );
+            //Estimated resolution date from this date
+            searchParams.append(
                 "status_date_open_in_progress_0_0",
                 (start_date.getMonth() + 1).toString(),
             );
@@ -475,7 +493,36 @@ const BarriersOverview = ({ filterValues }) => {
             })
             .flat();
         setFilters(filters);
+        handleGoogleAnalytics(filters);
     }, [window.location.search]);
+
+    const handleGoogleAnalytics = (filters) => {
+        let filtersForAnalytics = {
+            region: [],
+            policy_team: [],
+            sector: [],
+            location: [],
+        };
+
+        filters.forEach((filter) => {
+            if (filter.label == "sector" && filter.value) {
+                filtersForAnalytics.sector.push(filter.readable_value);
+            } else if (filter.label == "policy_team" && filter.value) {
+                filtersForAnalytics.policy_team.push(filter.readable_value);
+            } else if (filter.label == "location" && filter.value) {
+                if (filterValues.region.some((e) => e.value == filter.value)) {
+                    filtersForAnalytics.region.push(filter.readable_value);
+                } else {
+                    filtersForAnalytics.location.push(filter.readable_value);
+                }
+            }
+        });
+
+        window["dataLayer"].push({
+            event: "event",
+            eventProps: filtersForAnalytics,
+        });
+    };
 
     const handleInputChange = ({ name, value }) => {
         // set the new value with the name of the input to the query string in the url
