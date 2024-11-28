@@ -595,6 +595,28 @@ class SearchTestCase(MarketAccessTestCase):
         )
 
     @patch("utils.api.resources.APIResource.list")
+    def test_estimated_resolution_date_filters_resolved_in_part(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["3"],
+                "estimated_resolution_date_resolved_in_part": "2021-01-01,2022-01-31",
+                "ordering": "-reported",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="3",
+            estimated_resolution_date_resolved_in_part="2021-01-01,2022-01-01",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
     def test_delivery_confidence_filter(self, mock_list):
         response = self.client.get(
             reverse("barriers:search"),

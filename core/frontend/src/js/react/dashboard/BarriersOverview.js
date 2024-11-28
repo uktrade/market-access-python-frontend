@@ -386,6 +386,24 @@ const BarriersOverview = ({ filterValues }) => {
         if (field == "estimated_resolution_date") {
             //Estimated resolution date from this date
             searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_1",
+                end_date.getFullYear().toString(),
+            );
+            //Estimated resolution date from this date
+            searchParams.append(
                 "status_date_open_in_progress_0_0",
                 (start_date.getMonth() + 1).toString(),
             );
