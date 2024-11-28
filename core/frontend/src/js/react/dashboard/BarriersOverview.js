@@ -197,11 +197,11 @@ const BarriersOverview = ({ filterValues }) => {
                     name: "Value of barriers estimated to be resolved",
                     data:
                         data &&
-                            data.barrier_value_chart.estimated_barriers_value
+                        data.barrier_value_chart.estimated_barriers_value
                             ? [
-                                data.barrier_value_chart
-                                    .estimated_barriers_value,
-                            ]
+                                  data.barrier_value_chart
+                                      .estimated_barriers_value,
+                              ]
                             : [],
                 },
                 {
@@ -318,24 +318,24 @@ const BarriersOverview = ({ filterValues }) => {
                                 name: "Value of barriers estimated to be resolved",
                                 data:
                                     data &&
-                                        data.barrier_value_chart
-                                            .estimated_barriers_value
+                                    data.barrier_value_chart
+                                        .estimated_barriers_value
                                         ? [
-                                            data.barrier_value_chart
-                                                .estimated_barriers_value,
-                                        ]
+                                              data.barrier_value_chart
+                                                  .estimated_barriers_value,
+                                          ]
                                         : [],
                             },
                             {
                                 name: "Value of resolved barriers",
                                 data:
                                     data &&
-                                        data.barrier_value_chart
-                                            .resolved_barriers_value
+                                    data.barrier_value_chart
+                                        .resolved_barriers_value
                                         ? [
-                                            data.barrier_value_chart
-                                                .resolved_barriers_value,
-                                        ]
+                                              data.barrier_value_chart
+                                                  .resolved_barriers_value,
+                                          ]
                                         : [],
                             },
                         ],
@@ -713,34 +713,32 @@ const BarriersOverview = ({ filterValues }) => {
             </div>
             <div className="govuk-grid-row">
                 <div className="govuk-grid-column-full">
-                    {chartData.stackedBarChartData.series[0].data.length >
-                        0 ||
-                        chartData.stackedBarChartData.series[1].data.length >
-                        0 ? (
+                    {chartData.stackedBarChartData.series[0].data.length > 0 ||
+                    chartData.stackedBarChartData.series[1].data.length > 0 ? (
                         handleBarChart(chartData.stackedBarChartData)
                     ) : (
                         <div className="dashboard-chart">
                             <h3 className="govuk-heading-s">
-                                Total value of barriers resolved and
-                                estimated in the current finanacial year
+                                Total value of barriers resolved and estimated
+                                in the current finanacial year
                             </h3>
                             <p className="govuk-inset-text">
-                                Unable to display chart. No data available
-                                for current filters
+                                Unable to display chart. No data available for
+                                current filters
                             </p>
                             {chartData.stackedBarChartData.series[0].data
                                 .length === 0 && (
-                                    <p className="govuk-body-s">
-                                        No resolved barriers found in the date range
-                                    </p>
-                                )}
+                                <p className="govuk-body-s">
+                                    No resolved barriers found in the date range
+                                </p>
+                            )}
                             {chartData.stackedBarChartData.series[0].data
                                 .length === 1 && (
-                                    <p className="govuk-body-s">
-                                        No barriers with an estimated resolution
-                                        in the date range{" "}
-                                    </p>
-                                )}
+                                <p className="govuk-body-s">
+                                    No barriers with an estimated resolution in
+                                    the date range{" "}
+                                </p>
+                            )}
                         </div>
                     )}
                 </div>
