@@ -295,19 +295,19 @@ RELATED_BARRIER_TAGS = {
     },
     "similar": {
         "lower_boundary": 0.7,
-        "upper_boundary": 0.8,
+        "upper_boundary": 0.9,
         "label": "Very similar",
         "class": "govuk-tag--turquoise",
     },
     "good": {
         "lower_boundary": 0.4,
-        "upper_boundary": 0.6,
+        "upper_boundary": 0.7,
         "label": "Good match",
         "class": "govuk-tag--blue",
     },
     "some": {
         "lower_boundary": 0.2,
-        "upper_boundary": 0.3,
+        "upper_boundary": 0.4,
         "label": "Some relevance",
         "class": "govuk-tag--purple",
     },
