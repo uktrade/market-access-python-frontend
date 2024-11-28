@@ -28,8 +28,6 @@ def test_update_overseas_region(page):
 
 def test_policy_teams(page):
     page.locator(".edit-policy-teams").click()
-    page.get_by_label("remove Competition").click()
-    page.get_by_label("remove Customs").click()
     page.get_by_role("combobox").select_option("4")
     page.get_by_label("Add team").click()
     page.get_by_role("combobox").select_option("5")

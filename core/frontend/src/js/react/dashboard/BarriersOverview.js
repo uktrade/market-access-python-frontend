@@ -69,6 +69,7 @@ const addLocation = (
     /** @type {string | URLSearchParams | string[][] | Record<string, string>} */ queryParams,
 ) => {
     // update the current URL with the new query params
+
     const searchParams = new URLSearchParams(queryParams);
 
     const adminAreas = formatAdminAreas(searchParams);
@@ -83,13 +84,19 @@ const addLocation = (
     }
 
     // Get all country, region, and country_trading_bloc values
-    const locationParams = [
+
+    let locationParams = [
         ...searchParams.getAll("country"), // Get all 'country' values
-        searchParams.get("region"), // Get 'region'
+        searchParams.getAll("region"), // Get all 'region' values
         searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
     ]
         .filter(Boolean)
         .join(","); // Filter out empty values and join with commas
+
+    // Remove trailing comma
+    if (locationParams.slice(-1) === ",") {
+        locationParams = locationParams.slice(0, -1);
+    }
 
     // Remove 'country', 'region', and 'country_trading_bloc' parameters
     searchParams.delete("country");
@@ -246,6 +253,7 @@ const BarriersOverview = ({ filterValues }) => {
                 searchParams.delete(key);
             }
         }
+
         const searchParamsWithLocation = addLocation(searchParams);
 
         window.history.pushState(
@@ -257,6 +265,7 @@ const BarriersOverview = ({ filterValues }) => {
         const url = searchParamsWithLocation
             ? `/dashboard-summary/?${searchParamsWithLocation.toString()}`
             : "/dashboard-summary/";
+
         fetch(url, {
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
@@ -377,6 +386,24 @@ const BarriersOverview = ({ filterValues }) => {
         if (field == "estimated_resolution_date") {
             //Estimated resolution date from this date
             searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_1",
+                end_date.getFullYear().toString(),
+            );
+            //Estimated resolution date from this date
+            searchParams.append(
                 "status_date_open_in_progress_0_0",
                 (start_date.getMonth() + 1).toString(),
             );
@@ -450,7 +477,12 @@ const BarriersOverview = ({ filterValues }) => {
         // Build filters array
         const filters = Object.keys(params)
             .map((key) => {
-                const values = params[key][0].split(",");
+                let values = [];
+                if (key == "sector" || key == "policy_team") {
+                    values = params[key];
+                } else {
+                    values = params[key][0].split(",");
+                }
                 return values.map((/** @type {string} */ val) => ({
                     label: key,
                     value: val,
@@ -458,9 +490,37 @@ const BarriersOverview = ({ filterValues }) => {
                 }));
             })
             .flat();
-
         setFilters(filters);
+        handleGoogleAnalytics(filters);
     }, [window.location.search]);
+
+    const handleGoogleAnalytics = (filters) => {
+        let filtersForAnalytics = {
+            region: [],
+            policy_team: [],
+            sector: [],
+            location: [],
+        };
+
+        filters.forEach((filter) => {
+            if (filter.label == "sector" && filter.value) {
+                filtersForAnalytics.sector.push(filter.readable_value);
+            } else if (filter.label == "policy_team" && filter.value) {
+                filtersForAnalytics.policy_team.push(filter.readable_value);
+            } else if (filter.label == "location" && filter.value) {
+                if (filterValues.region.some((e) => e.value == filter.value)) {
+                    filtersForAnalytics.region.push(filter.readable_value);
+                } else {
+                    filtersForAnalytics.location.push(filter.readable_value);
+                }
+            }
+        });
+
+        window["dataLayer"].push({
+            event: "event",
+            eventProps: filtersForAnalytics,
+        });
+    };
 
     const handleInputChange = ({ name, value }) => {
         // set the new value with the name of the input to the query string in the url
@@ -552,19 +612,6 @@ const BarriersOverview = ({ filterValues }) => {
                                 placeholder="Search policy teams"
                                 onChange={handleInputChange}
                             />
-                            {filters.length > 0 && (
-                                <span
-                                    id="clear-filters-button"
-                                    className="filter-items__clear"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        window.history.pushState({}, "");
-                                        setFilters([]);
-                                    }}
-                                >
-                                    Remove all filters
-                                </span>
-                            )}
                             <button
                                 type="submit"
                                 className="govuk-button govuk-button--full-width"
@@ -590,7 +637,10 @@ const BarriersOverview = ({ filterValues }) => {
                                         key={index}
                                     >
                                         <h4 className="active-filter__heading">
-                                            {filter.label}:
+                                            {filter.label === "policy_team"
+                                                ? "policy team"
+                                                : filter.label}
+                                            {": "}
                                         </h4>
                                         <p className="active-filter__text">
                                             {filter.readable_value}
