@@ -289,7 +289,7 @@ EXPORT_TYPES = Choices(
 RELATED_BARRIER_TAGS = {
     "duplicate": {
         "lower_boundary": 0.9,
-        "upper_boundary": 1,
+        "upper_boundary": 2,
         "label": "Potential duplicate",
         "class": "govuk-tag--green",
     },
