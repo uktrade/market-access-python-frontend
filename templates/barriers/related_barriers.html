@@ -100,7 +100,7 @@
                         <dd class="govuk-summary-list__value">
                             {% widthratio barrier.similarity 1 100 %}%
                             {% for key, value in related_barrier_tags.items %}
-                                {% if barrier.similarity < value.upper_boundary and barrier.similarity >= value.lower_boundary %}
+                                {% if barrier.similarity|floatformat:2 < value.upper_boundary|floatformat:2 and barrier.similarity|floatformat:2 >= value.lower_boundary|floatformat:2 %}
                                     <strong class="govuk-tag {{ value.class }}">{{ value.label }}</strong>
                                 {% endif %}
                             {% endfor %}
