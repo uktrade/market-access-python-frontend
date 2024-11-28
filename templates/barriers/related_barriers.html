@@ -98,16 +98,12 @@
                     <div class="govuk-grid-column-one-half">
                         <dt class="govuk-summary-list__key">Similarity Score:</dt>
                         <dd class="govuk-summary-list__value">
-                            {% widthratio barrier.similarity|floatformat:3 1 100 %}%
-                            {% if barrier.similarity >= 0.9 %}
-                                <strong class="govuk-tag--green">Potential duplicate</strong>
-                            {% else %}
-                                {% for key, value in related_barrier_tags.items %}
-                                    {% if barrier.similarity < value.upper_boundary and barrier.similarity >= value.lower_boundary %}
-                                        <strong class="govuk-tag {{ value.class }}">{{ value.label }}</strong>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
+                            {% widthratio barrier.similarity 1 100 %}%
+                            {% for key, value in related_barrier_tags.items %}
+                                {% if barrier.similarity < value.upper_boundary and barrier.similarity >= value.lower_boundary %}
+                                    <strong class="govuk-tag {{ value.class }}">{{ value.label }}</strong>
+                                {% endif %}
+                            {% endfor %}
                         </dd>
                     </div>
                 </div>
