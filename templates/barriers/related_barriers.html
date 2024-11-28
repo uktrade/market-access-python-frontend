@@ -98,7 +98,7 @@
                     <div class="govuk-grid-column-one-half">
                         <dt class="govuk-summary-list__key">Similarity Score:</dt>
                         <dd class="govuk-summary-list__value">
-                            {{ barrier.similarity|floatformat:3 }}
+                            {% widthratio barrier.similarity|floatformat:3 1 100 %}%
                             {% for key, value in related_barrier_tags.items %}
                                 {% if barrier.similarity <= value.upper_boundary and barrier.similarity >= value.lower_boundary %}
                                     <strong class="govuk-tag {{ value.class }}">{{ value.label }}</strong>
