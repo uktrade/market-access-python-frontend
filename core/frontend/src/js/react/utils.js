@@ -49,7 +49,13 @@ export const normalizeValue = (/** @type {number} */ value) => {
  * @throws {TypeError} If the provided dateString is not a string, number, or Date.
  */
 export const parseIso = (/** @type {string | number | Date} */ dateString) => {
-    if (!(typeof dateString === "string" || typeof dateString === "number" || dateString instanceof Date)) {
+    if (
+        !(
+            typeof dateString === "string" ||
+            typeof dateString === "number" ||
+            dateString instanceof Date
+        )
+    ) {
         throw new TypeError("dateString must be a string, number, or Date");
     }
     const date = new Date(dateString);
