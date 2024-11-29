@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
 
-import { getCheckboxValues, parseIso } from "../utils";
+import { getCheckboxValues } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 import MultiSelectFilter from "../search/MultiSelectFilter";
 import LocationFilter from "../search/LocationFilter";
@@ -572,11 +572,7 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            {`Barriers which have been resolved or are projected to be resolved between ${parseIso(
-                                data?.financial_year?.current_start,
-                            )} and ${parseIso(
-                                data?.financial_year?.current_end,
-                            )} current financial year`}
+                            Barriers which have been resolved or are projected to be resolved 
                         </h3>
                         <SummaryCard
                             value={data?.barriers_current_year?.resolved}
@@ -616,7 +612,6 @@ const BarriersOverview = ({ filterValues }) => {
                         <div className="dashboard-chart">
                             <h3 className="govuk-heading-s">
                                 Total value of barriers resolved and estimated
-                                in the current finanacial year
                             </h3>
                             <p className="govuk-inset-text">
                                 Unable to display chart. No data available for
