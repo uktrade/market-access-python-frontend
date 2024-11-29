@@ -5,9 +5,7 @@ import { getCheckboxValues } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 import MultiSelectFilter from "../search/MultiSelectFilter";
 import LocationFilter from "../search/LocationFilter";
-import {
-    handleBarChart,
-} from "./charts";
+import { handleBarChart } from "./charts";
 
 /**
  * Renders a summary card component.
@@ -572,7 +570,8 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            Barriers which have been resolved or are projected to be resolved 
+                            Barriers which have been resolved or are projected
+                            to be resolved
                         </h3>
                         <SummaryCard
                             value={data?.barriers_current_year?.resolved}
@@ -617,14 +616,14 @@ const BarriersOverview = ({ filterValues }) => {
                                 Unable to display chart. No data available for
                                 current filters
                             </p>
-                            {chartData.barChartData.series[0].data
-                                .length === 0 && (
+                            {chartData.barChartData.series[0].data.length ===
+                                0 && (
                                 <p className="govuk-body-s">
                                     No resolved barriers found in the date range
                                 </p>
                             )}
-                            {chartData.barChartData.series[0].data
-                                .length === 1 && (
+                            {chartData.barChartData.series[0].data.length ===
+                                1 && (
                                 <p className="govuk-body-s">
                                     No barriers with an estimated resolution in
                                     the date range{" "}
