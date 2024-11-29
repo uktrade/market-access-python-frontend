@@ -40,7 +40,22 @@ class SearchFormView(SearchFormMixin, FormView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class BarrierSearch(PaginationMixin, SearchFormView):
+class BarrierSearchFormView(SearchFormView):
+    def get_form_kwargs(self):
+        search_id = self.request.GET.get("search_id")
+
+        kwargs = super().get_form_kwargs()
+
+        if search_id and len(self.request.GET) == 1:
+            # New saved search
+            saved_search = self.client.saved_searches.get(id=str(search_id))
+            kwargs["data"] = saved_search.filters
+            kwargs["data"]["search_id"] = search_id
+
+        return kwargs
+
+
+class BarrierSearch(PaginationMixin, BarrierSearchFormView):
     template_name = "barriers/search.html"
     form_class = BarrierSearchForm
     _client = None
