@@ -65,7 +65,9 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
         label="Barrier value",
         choices=CHOICES,
         widget=forms.RadioSelect,
-        error_messages={"required": "Select a value",},
+        error_messages={
+            "required": "Select a value",
+        },
     )
 
     preliminary_value_explanation = forms.CharField(

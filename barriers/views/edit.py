@@ -16,9 +16,9 @@ from barriers.forms.edit import (
     UpdateCausedByTradingBlocForm,
     UpdateCommercialValueForm,
     UpdateEconomicAssessmentEligibilityForm,
+    UpdatePreliminaryAssessmentForm,
     UpdateTradeDirectionForm,
     update_barrier_priority_form_factory,
-    UpdatePreliminaryAssessmentForm,
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.context_processors import user_scope
