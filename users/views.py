@@ -435,7 +435,6 @@ class Account(TemplateView, MetadataMixin):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         current_user = client.users.get_current()
         profile = client.profile.get(id=current_user.id).data
-        print(client.profile.get(id=current_user.id).data)
 
         overseas_regions = self.get_display_list(
             [region["name"] for region in profile["overseas_regions"] or []]

@@ -52,6 +52,26 @@
                         <span class="govuk-caption-m">Market access barriers</span>
                         Dashboard
                     </h1>
+                    <!-- Dashboard version Toggle  -->
+                    <div class="dashboard-banner">
+                        <div class="govuk-notification-banner"
+                             role="region"
+                             aria-labelledby="govuk-notification-banner-title"
+                             data-module="govuk-notification-banner">
+                            <div class="govuk-notification-banner__content">
+                                <p class="govuk-heading-s">
+                                    Return to old dashboard
+                                    <label class="switch">
+                                        <input type="checkbox"
+                                               onclick='window.location.assign("/?default=dashboard")'
+                                               checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end dashboard toggle -->
                     <div class="govuk-form-group">
                         <form action="{% url 'barriers:search' %}" method="GET">
                             <input class="govuk-input govuk-!-width-two-thirds"

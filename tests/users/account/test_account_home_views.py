@@ -114,7 +114,7 @@ class AccountHomeViewsTestCase(MarketAccessTestCase):
             ),
             data={"form": department},
         )
-        print(json.dumps(department))
+
         assert response.status_code == HTTPStatus.FOUND
 
         mock_patch.assert_called_with(
