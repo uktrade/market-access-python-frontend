@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { render } from "react-dom";
 
-import { getCheckboxValues } from "../utils";
+import { getCheckboxValues, parseIso } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 
 /**
@@ -150,15 +150,6 @@ const SummaryCards = ({ filterValues }) => {
         const formData = new FormData(form);
         // @ts-ignore
         return new URLSearchParams(formData).toString();
-    };
-
-    const parseIso = (/** @type {string | number | Date} */ dateString) => {
-        const date = new Date(dateString);
-        return new Date(date).toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        });
     };
 
     const getReadableValue = (
