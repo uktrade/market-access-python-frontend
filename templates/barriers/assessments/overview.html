@@ -16,10 +16,6 @@
     {% include 'barriers/partials/barrier_tabs.html' with active='assessment' %}
 
     <div class="restrict-width">
-        <div class="assessment-item">
-            <h2 class="assessment-item__heading">Initial economic assessment</h2>
-            {% include "barriers/assessments/economic/partials/summary.html" %}
-        </div>
 
         <div class="assessment-item">
             <h2 class="assessment-item__heading">Valuation assessment</h2>
@@ -50,5 +46,11 @@
             <h2 class="assessment-item__heading">Strategic assessment</h2>
             {% include "barriers/assessments/strategic/partials/summary.html" %}
         </div>
+
+        <div class="assessment-item archived">
+            <h2 class="assessment-item__heading">Initial economic assessment - archived</h2>
+            {% include "barriers/assessments/economic/partials/summary.html" %}
+        </div>
+
     </div>
 {% endblock %}
