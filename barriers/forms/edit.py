@@ -60,7 +60,7 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
         ("LESS_THAN_10_MILLION", "Less than 10 million pounds"),
         ("UNABLE", "Unable to access"),
     ]
-    
+
     preliminary_value = forms.ChoiceField(
         label="Barrier value",
         choices=CHOICES,
