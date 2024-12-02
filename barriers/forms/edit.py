@@ -54,6 +54,31 @@ class UpdateCommercialValueForm(APIFormMixin, forms.Form):
         client.barriers.patch(id=self.id, **self.cleaned_data)
 
 
+class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
+    CHOICES = [
+        ("IN_PROGRESS", "Over 10 million pounds"),
+        ("LESS_THAN_10_MILLION", "Less than 10 million pounds"),
+        ("UNABLE", "Unable to access"),
+    ]
+    
+    preliminary_value = forms.ChoiceField(
+        label="Barrier value",
+        choices=CHOICES,
+        widget=forms.RadioSelect,
+        error_messages={"required": "Select a value",},
+    )
+
+    preliminary_value_explanation = forms.CharField(
+        widget=forms.Textarea,
+        label="Provide an explanation on how the value has been assessed",
+        error_messages={"required": "Enter details of the preliminary value"},
+    )
+
+    def save(self):
+        client = MarketAccessAPIClient(self.token)
+        client.barriers.patch(id=self.id, **self.cleaned_data)
+
+
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
     title = forms.CharField(
         label="Suggest a title for this barrier",

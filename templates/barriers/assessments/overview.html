@@ -18,6 +18,20 @@
     <div class="restrict-width">
 
         <div class="assessment-item">
+            <h2 class="assessment-item__heading">Preliminary economic assessment</h2>
+            {% if barrier.commercial_value %}
+                <p class="assessment-item__value">&pound; {{ barrier.commercial_value|intcomma }}</p>
+                <p class="assessment-item__value">{{ barrier.commercial_value_explanation|linebreaksbr }}</p>
+                <a class="assessment-item__edit" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Edit</a>
+            {% else %}
+                <div class="assessment-item-content">
+                    <a class="assessment-item-content__link" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Add preliminary assessment</a>
+                    <p class="assessment-item-content__hint">Preliminary assessments are an estimate of whether a market access barrier is likely to be worth less or more than £10M in additional exports, or earnings on UK outward Foreign Direct Investment (FDI), over a 5-year period.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="assessment-item">
             <h2 class="assessment-item__heading">Valuation assessment</h2>
             {% include "barriers/assessments/economic_impact/partials/summary.html" %}
         </div>

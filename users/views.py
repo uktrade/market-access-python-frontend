@@ -154,7 +154,7 @@ class SignOut(RedirectView):
 
 
 class ManageUsers(
-    APIPermissionMixin,
+    # APIPermissionMixin,
     PaginationMixin,
     GroupQuerystringMixin,
     TemplateView,

@@ -79,6 +79,7 @@ from barriers.views.edit import (
     BarrierEditTags,
     BarrierEditTitle,
     BarrierEditTradeDirection,
+    PreliminaryAssessmentValue,
 )
 from barriers.views.export_types import BarrierEditExportType
 from barriers.views.government_organisations import (
@@ -330,6 +331,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/commercial-value/",
         BarrierEditCommercialValue.as_view(),
         name="edit_commercial_value",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/preliminary-assessment/",
+        PreliminaryAssessmentValue.as_view(),
+        name="edit_preliminary_assessment",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/commodities/",

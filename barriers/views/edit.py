@@ -18,6 +18,7 @@ from barriers.forms.edit import (
     UpdateEconomicAssessmentEligibilityForm,
     UpdateTradeDirectionForm,
     update_barrier_priority_form_factory,
+    UpdatePreliminaryAssessmentForm,
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.context_processors import user_scope
@@ -320,6 +321,23 @@ class BarrierEditCommercialValue(APIBarrierFormViewMixin, FormView):
         return {
             "commercial_value": self.barrier.commercial_value,
             "commercial_value_explanation": self.barrier.commercial_value_explanation,
+        }
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:assessment_detail",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
+
+
+class PreliminaryAssessmentValue(APIBarrierFormViewMixin, FormView):
+    template_name = "barriers/assessments/preliminary_assessment.html"
+    form_class = UpdatePreliminaryAssessmentForm
+
+    def get_initial(self):
+        return {
+            "preliminary_value": self.barrier.preliminary_value,
+            "preliminary_value_explanation": self.barrier.preliminary_value_explanation,
         }
 
     def get_success_url(self):
