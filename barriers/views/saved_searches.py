@@ -76,11 +76,7 @@ class NewSavedSearch(SearchFiltersMixin, FormView):
         return HttpResponseRedirect(self.get_success_url(saved_search=saved_search))
 
     def get_success_url(self, saved_search):
-        querystring = self.search_form.get_raw_filters_querystring()
-        return (
-            f"{reverse('barriers:search')}"
-            f"?search_id={saved_search.id}&{querystring}"
-        )
+        return f"{reverse('barriers:search')}?search_id={saved_search.id}"
 
 
 class DeleteSavedSearch(SavedSearchMixin, TemplateView):
