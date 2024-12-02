@@ -199,6 +199,7 @@ class DownloadBarriers(SearchFormMixin, View):
             search_parameters["search_id"] = str(search_id)
 
         client = MarketAccessAPIClient(self.request.session["sso_token"])
+
         barrier_download = client.barrier_download.create(**search_parameters)
         download_detail_url = reverse(
             "barriers:download-detail",
@@ -211,7 +212,7 @@ class DownloadBarriers(SearchFormMixin, View):
 
         # redirect to a download page for the csv
         return HttpResponseRedirect(
-            f"{download_detail_url}?{urlencode(search_page_params)}&{form.get_raw_filters_querystring()}"
+            f"{download_detail_url}?{urlencode(search_page_params)}"
         )
 
     @property

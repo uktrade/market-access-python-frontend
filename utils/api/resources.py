@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import time
-import urllib.parse
 from typing import TYPE_CHECKING
 
 import requests
@@ -541,8 +540,7 @@ class BarrierDownloadsResource(APIResource):
         return self.client.get(url)
 
     def create(self, *args, **kwargs):
-        query_string = urllib.parse.urlencode(kwargs)
-        url = f"{self.resource_name}?{query_string}"
+        url = f"{self.resource_name}"
         return self.model(self.client.post(url, json=kwargs))
 
 
