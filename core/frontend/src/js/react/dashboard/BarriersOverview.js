@@ -237,7 +237,11 @@ const BarriersOverview = ({ filterValues }) => {
                             ...prevState.barChartData.options,
                             xaxis: {
                                 categories: [
-                                   `Between ${parseIso(data?.financial_year?.current_start)} and ${parseIso(data?.financial_year?.current_end)}`, 
+                                    `Between ${parseIso(
+                                        data?.financial_year?.current_start,
+                                    )} and ${parseIso(
+                                        data?.financial_year?.current_end,
+                                    )}`,
                                 ],
                             },
                         },
