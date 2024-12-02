@@ -5,11 +5,7 @@ import { getCheckboxValues, parseIso } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 import MultiSelectFilter from "../search/MultiSelectFilter";
 import LocationFilter from "../search/LocationFilter";
-import {
-    handleBarChart,
-    handlePieChart,
-    handleStackedBarChart,
-} from "./charts";
+import { handleBarChart } from "./charts";
 
 /**
  * Renders a summary card component.
@@ -134,42 +130,16 @@ const BarriersOverview = ({ filterValues }) => {
 
     const [filters, setFilters] = useState([]);
 
-    const currentMonth = new Date().toLocaleString("default", {
-        month: "long",
-    });
-
     const [chartData, setChartData] = useState({
-        pieChatData: {
-            series: data ? data.barrier_status_chart?.series : [],
-            options: {
-                chart: {
-                    id: "basic-pie",
-                },
-                title: {
-                    text: "Total value of open and partially resolved barrier by priority type",
-                    align: "center",
-                },
-                dataLabels: {
-                    enabled: false,
-                },
-                labels: data ? data.barrier_status_chart?.labels : [],
-            },
-        },
         barChartData: {
             series: [
                 {
-                    name: "Open barriers",
-                    data:
-                        data && data.total_value_chart.open_barriers_value
-                            ? [data.total_value_chart.open_barriers_value]
-                            : [],
+                    name: "Value of barriers estimated to be resolved",
+                    data: [],
                 },
                 {
-                    name: "Resolved barriers",
-                    data:
-                        data && data.total_value_chart?.resolved_barriers_value
-                            ? [data.total_value_chart.resolved_barriers_value]
-                            : [],
+                    name: "Value of resolved barriers",
+                    data: [],
                 },
             ],
             options: {
@@ -180,59 +150,18 @@ const BarriersOverview = ({ filterValues }) => {
                     },
                 },
                 xaxis: {
-                    categories: ["Total Barriers"],
+                    categories: ["Loading ..."], // will be updated with label
                 },
                 yaxis: {
                     categories: ["0", "20", "40", "60", "80", "100"],
                 },
                 title: {
-                    text: "Total barrier value",
+                    text: "Total value of barriers resolved and estimated to be resolved",
                     align: "center",
                 },
             },
-        },
-        stackedBarChartData: {
-            series: [
-                {
-                    name: "Value of barriers estimated to be resolved",
-                    data:
-                        data &&
-                        data.barrier_value_chart.estimated_barriers_value
-                            ? [
-                                  data.barrier_value_chart
-                                      .estimated_barriers_value,
-                              ]
-                            : [],
-                },
-                {
-                    name: "Value of resolved barriers",
-                    data:
-                        data && data.barrier_value_chart.resolved_barriers_value
-                            ? [data.barrier_value_chart.resolved_barriers_value]
-                            : [],
-                },
-            ],
-            options: {
-                chart: {
-                    id: "stacked-bar",
-                },
-                xaxis: {
-                    categories: [currentMonth],
-                },
-                yaxis: {
-                    title: {
-                        text: "Current Month",
-                    },
-                },
-                title: {
-                    text: `Total value of barriers resolved and estimated to be resolved between ${parseIso(
-                        data?.financial_year?.current_start,
-                    )} and ${parseIso(data?.financial_year?.current_end)}`,
-                    align: "center",
-                },
-                fill: {
-                    opacity: 1,
-                },
+            fill: {
+                opacity: 1,
             },
         },
     });
@@ -274,43 +203,10 @@ const BarriersOverview = ({ filterValues }) => {
         }).then((response) => {
             response.json().then((data) => {
                 setData(data);
-                // set the data for the charts
                 setChartData((prevState) => ({
                     ...prevState,
-                    pieChatData: {
-                        ...prevState.pieChatData,
-                        series: data.barriers_by_status_chart?.series,
-                        options: {
-                            ...prevState.pieChatData.options,
-                            labels: data.barriers_by_status_chart?.labels,
-                        },
-                    },
                     barChartData: {
                         ...prevState.barChartData,
-                        series: [
-                            {
-                                name: "Open barriers",
-                                data: data.total_value_chart.open_barriers_value
-                                    ? [
-                                          data.total_value_chart
-                                              .open_barriers_value,
-                                      ]
-                                    : [],
-                            },
-                            {
-                                name: "Resolved barriers",
-                                data: data.total_value_chart
-                                    .resolved_barriers_value
-                                    ? [
-                                          data.total_value_chart
-                                              .resolved_barriers_value,
-                                      ]
-                                    : [],
-                            },
-                        ],
-                    },
-                    stackedBarChartData: {
-                        ...prevState.stackedBarChartData,
                         series: [
                             {
                                 name: "Value of barriers estimated to be resolved",
@@ -337,6 +233,18 @@ const BarriersOverview = ({ filterValues }) => {
                                         : [],
                             },
                         ],
+                        options: {
+                            ...prevState.barChartData.options,
+                            xaxis: {
+                                categories: [
+                                    `Between ${parseIso(
+                                        data?.financial_year?.current_start,
+                                    )} and ${parseIso(
+                                        data?.financial_year?.current_end,
+                                    )}`,
+                                ],
+                            },
+                        },
                     },
                 }));
             });
@@ -674,11 +582,8 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            {`Barriers which have been resolved or are projected to be resolved between ${parseIso(
-                                data?.financial_year?.current_start,
-                            )} and ${parseIso(
-                                data?.financial_year?.current_end,
-                            )} current financial year`}
+                            Barriers which have been resolved or are projected
+                            to be resolved
                         </h3>
                         <SummaryCard
                             value={data?.barriers_current_year?.resolved}
@@ -710,85 +615,34 @@ const BarriersOverview = ({ filterValues }) => {
                 </div>
             </div>
             <div className="govuk-grid-row">
-                <div className="govuk-grid-row">
-                    <div className="govuk-grid-column-full">
-                        {chartData.stackedBarChartData.series[0].data.length >
-                            0 ||
-                        chartData.stackedBarChartData.series[1].data.length >
-                            0 ? (
-                            handleStackedBarChart(chartData.stackedBarChartData)
-                        ) : (
-                            <div className="dashboard-chart">
-                                <h3 className="govuk-heading-s">
-                                    Total value of barriers resolved and
-                                    estimated in the current finanacial year
-                                </h3>
-                                <p className="govuk-inset-text">
-                                    Unable to display chart. No data available
-                                    for current filters
+                <div className="govuk-grid-column-full">
+                    {chartData.barChartData.series[0].data.length > 0 ||
+                    chartData.barChartData.series[1].data.length > 0 ? (
+                        handleBarChart(chartData.barChartData)
+                    ) : (
+                        <div className="dashboard-chart">
+                            <h3 className="govuk-heading-s">
+                                Total value of barriers resolved and estimated
+                            </h3>
+                            <p className="govuk-inset-text">
+                                Unable to display chart. No data available for
+                                current filters
+                            </p>
+                            {chartData.barChartData.series[0].data.length ===
+                                0 && (
+                                <p className="govuk-body-s">
+                                    No resolved barriers found in the date range
                                 </p>
-                                {chartData.stackedBarChartData.series[0].data
-                                    .length === 0 && (
-                                    <p className="govuk-body-s">
-                                        No resolved barriers found
-                                    </p>
-                                )}
-                                {chartData.stackedBarChartData.series[0].data
-                                    .length === 1 && (
-                                    <p className="govuk-body-s">
-                                        No barriers with an estimated resolution
-                                        in the current year found{" "}
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <div className="govuk-grid-row">
-                    <div className="govuk-grid-column-one-half">
-                        {chartData.barChartData.series[0].data.length > 0 ||
-                        chartData.barChartData.series[1].data.length > 0 ? (
-                            handleBarChart(chartData.barChartData)
-                        ) : (
-                            <div className="dashboard-chart">
-                                <h3 className="govuk-heading-s">
-                                    Total barrier value
-                                </h3>
-                                <p className="govuk-inset-text">
-                                    Unable to display chart. No data available
-                                    for current filters
+                            )}
+                            {chartData.barChartData.series[0].data.length ===
+                                1 && (
+                                <p className="govuk-body-s">
+                                    No barriers with an estimated resolution in
+                                    the date range{" "}
                                 </p>
-                                {chartData.barChartData.series[0].data
-                                    .length === 0 && (
-                                    <p className="govuk-body-s">
-                                        No open barriers found
-                                    </p>
-                                )}
-                                {chartData.barChartData.series[1].data
-                                    .length === 0 && (
-                                    <p className="govuk-body-s">
-                                        No resolved barriers found
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                    <div className="govuk-grid-column-one-half">
-                        {chartData.pieChatData.series.length > 0 ? (
-                            handlePieChart(chartData.pieChatData)
-                        ) : (
-                            <div className="dashboard-chart">
-                                <h3 className="govuk-heading-s">
-                                    Total value of open and partially resolved
-                                    barrier by status
-                                </h3>
-                                <p className="govuk-inset-text">
-                                    Unable to display chart. No data available
-                                    for current filters
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </>
