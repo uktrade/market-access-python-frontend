@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
 
-import { getCheckboxValues } from "../utils";
+import { getCheckboxValues, parseIso } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 import MultiSelectFilter from "../search/MultiSelectFilter";
 import LocationFilter from "../search/LocationFilter";
@@ -150,7 +150,7 @@ const BarriersOverview = ({ filterValues }) => {
                     },
                 },
                 xaxis: {
-                    categories: ["Total Barriers"], // will be updated with labels
+                    categories: ["Loading ..."], // will be updated with label
                 },
                 yaxis: {
                     categories: ["0", "20", "40", "60", "80", "100"],
@@ -233,6 +233,14 @@ const BarriersOverview = ({ filterValues }) => {
                                         : [],
                             },
                         ],
+                        options: {
+                            ...prevState.barChartData.options,
+                            xaxis: {
+                                categories: [
+                                   `Between ${parseIso(data?.financial_year?.current_start)} and ${parseIso(data?.financial_year?.current_end)}`, 
+                                ],
+                            },
+                        },
                     },
                 }));
             });
