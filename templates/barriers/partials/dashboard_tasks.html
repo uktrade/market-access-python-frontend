@@ -23,7 +23,7 @@
                     {% else %}
                         <p>{{ barrier.task_list.0.message }}</p>
                     {% endif %}
-                    <p class="govuk-hint">{{ barrier.modified_user }} updated on {{ barrier.modified_on }}</p>
+                    <p class="govuk-hint">{{ barrier.modified_by }} updated on {{ barrier.modified_on }}</p>
                 </div>
             {% endfor %}
         </dl>
