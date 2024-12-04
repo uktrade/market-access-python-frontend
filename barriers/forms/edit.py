@@ -8,6 +8,7 @@ from django.utils.translation import gettext as _
 
 from barriers.constants import (
     DEPRECATED_TAGS,
+    PRELIMINARY_ASSESSMENT_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS,
     TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES,
@@ -15,7 +16,6 @@ from barriers.constants import (
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES,
-    PRELIMINARY_ASSESSMENT_CHOICES,
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.forms.fields import (
@@ -71,12 +71,7 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter details of the preliminary value"},
     )
 
-    def __init__(
-        self,
-        preliminary_assessment=None,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, preliminary_assessment=None, *args, **kwargs):
         self.token = kwargs.pop("token")
         self.barrier = kwargs.pop("barrier")
         self.preliminary_assessment = preliminary_assessment
@@ -95,7 +90,7 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
                 barrier_id=self.barrier.id,
                 value=self.cleaned_data["preliminary_value"],
                 details=self.cleaned_data["preliminary_value_explanation"],
-        )
+            )
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):

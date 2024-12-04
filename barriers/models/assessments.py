@@ -1,9 +1,7 @@
+from barriers.constants import PRELIMINARY_ASSESSMENT_CHOICES
 from utils.models import APIModel
 
 from .documents import Document
-from barriers.constants import (
-    PRELIMINARY_ASSESSMENT_CHOICES,
-)
 
 
 class EconomicAssessment(APIModel):
@@ -51,7 +49,7 @@ class StrategicAssessment(APIModel):
 
 
 class PreliminaryAssessment(APIModel):
-    date_fields = ("created_on")
+    date_fields = "created_on"
 
     @property
     def get_value_display(self):

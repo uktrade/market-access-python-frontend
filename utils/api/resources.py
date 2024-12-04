@@ -19,13 +19,13 @@ from barriers.models import (
     EconomicImpactAssessment,
     HistoryItem,
     Note,
+    PreliminaryAssessment,
     PublicBarrier,
     PublicBarrierNote,
     ResolvabilityAssessment,
     SavedSearch,
     Stakeholder,
     StrategicAssessment,
-    PreliminaryAssessment,
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
@@ -558,7 +558,7 @@ class PreliminaryAssessmentResource(APIResource):
 
     def get_preliminary_assessment(self, barrier_id):
         url = f"barriers/{barrier_id}/preliminary-assessment"
-        print('API CALL')
+        print("API CALL")
         print(self.client.get(url))
         print(self.model(self.client.get(url)))
         return self.model(self.client.get(url))
@@ -566,8 +566,7 @@ class PreliminaryAssessmentResource(APIResource):
     def create_preliminary_assessment(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/preliminary-assessment"
         return self.model(self.client.post(url, json={**kwargs}))
-    
+
     def patch_preliminary_assessment(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/preliminary-assessment"
         return self.model(self.client.patch(url, json={**kwargs}))
-

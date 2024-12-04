@@ -23,6 +23,7 @@ from .resources import (
     MentionResource,
     NotesResource,
     NotificationExclusionResource,
+    PreliminaryAssessmentResource,
     PublicBarrierNotesResource,
     PublicBarriersResource,
     ReportsResource,
@@ -31,7 +32,6 @@ from .resources import (
     StrategicAssessmentResource,
     UserProfileResource,
     UsersResource,
-    PreliminaryAssessmentResource,
 )
 
 logger = logging.getLogger(__name__)

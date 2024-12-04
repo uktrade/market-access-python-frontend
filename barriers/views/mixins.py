@@ -51,7 +51,7 @@ class BarrierMixin:
         if not self._action_plan:
             self._action_plan = self.get_action_plan()
         return self._action_plan
-    
+
     @property
     def preliminary_assessment(self):
         if not self._preliminary_assessment:
@@ -108,7 +108,9 @@ class BarrierMixin:
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         barrier_id = self.barrier.id
         try:
-            return client.preliminary_assessment.get_preliminary_assessment(barrier_id=barrier_id)
+            return client.preliminary_assessment.get_preliminary_assessment(
+                barrier_id=barrier_id
+            )
         except APIHttpException as e:
             if e.status_code == HTTPStatus.NOT_FOUND:
                 return None

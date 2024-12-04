@@ -350,7 +350,6 @@ class PreliminaryAssessmentValue(APIBarrierFormViewMixin, FormView):
         else:
             return
 
-
     def get_success_url(self):
         return reverse(
             "barriers:assessment_detail",
