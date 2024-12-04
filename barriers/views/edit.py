@@ -334,11 +334,22 @@ class PreliminaryAssessmentValue(APIBarrierFormViewMixin, FormView):
     template_name = "barriers/assessments/preliminary_assessment.html"
     form_class = UpdatePreliminaryAssessmentForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["token"] = self.request.session.get("sso_token")
+        kwargs["barrier"] = self.barrier
+        kwargs["preliminary_assessment"] = self.preliminary_assessment
+        return kwargs
+
     def get_initial(self):
-        return {
-            "preliminary_value": self.barrier.preliminary_value,
-            "preliminary_value_explanation": self.barrier.preliminary_value_explanation,
-        }
+        if self.preliminary_assessment:
+            return {
+                "preliminary_value": self.preliminary_assessment.value,
+                "preliminary_value_explanation": self.preliminary_assessment.details,
+            }
+        else:
+            return
+
 
     def get_success_url(self):
         return reverse(

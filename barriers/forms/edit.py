@@ -15,6 +15,7 @@ from barriers.constants import (
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES,
+    PRELIMINARY_ASSESSMENT_CHOICES,
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.forms.fields import (
@@ -55,15 +56,9 @@ class UpdateCommercialValueForm(APIFormMixin, forms.Form):
 
 
 class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
-    CHOICES = [
-        ("IN_PROGRESS", "Over 10 million pounds"),
-        ("LESS_THAN_10_MILLION", "Less than 10 million pounds"),
-        ("UNABLE", "Unable to access"),
-    ]
-
     preliminary_value = forms.ChoiceField(
         label="Barrier value",
-        choices=CHOICES,
+        choices=PRELIMINARY_ASSESSMENT_CHOICES,
         widget=forms.RadioSelect,
         error_messages={
             "required": "Select a value",
@@ -76,9 +71,31 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
         error_messages={"required": "Enter details of the preliminary value"},
     )
 
+    def __init__(
+        self,
+        preliminary_assessment=None,
+        *args,
+        **kwargs
+    ):
+        self.token = kwargs.pop("token")
+        self.barrier = kwargs.pop("barrier")
+        self.preliminary_assessment = preliminary_assessment
+        super().__init__(*args, **kwargs)
+
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.barriers.patch(id=self.id, **self.cleaned_data)
+        if self.preliminary_assessment:
+            client.preliminary_assessment.patch_preliminary_assessment(
+                barrier_id=self.barrier.id,
+                value=self.cleaned_data["preliminary_value"],
+                details=self.cleaned_data["preliminary_value_explanation"],
+            )
+        else:
+            client.preliminary_assessment.create_preliminary_assessment(
+                barrier_id=self.barrier.id,
+                value=self.cleaned_data["preliminary_value"],
+                details=self.cleaned_data["preliminary_value_explanation"],
+        )
 
 
 class UpdateBarrierTitleForm(APIFormMixin, forms.Form):
