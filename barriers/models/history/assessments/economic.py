@@ -90,3 +90,24 @@ class EconomicAssessmentHistoryItem(PolymorphicBase):
     )
     default_subclass = GenericHistoryItem
     class_lookup = {}
+
+
+class PreliminaryAssessmentValueHistoryItem(BaseHistoryItem):
+    field = "value"
+    field_name = "Preliminary assessment value"
+
+
+class PreliminaryAssessmentDetailsHistoryItem(BaseHistoryItem):
+    field = "details"
+    field_name = "Preliminary assessment details"
+
+
+class PreliminaryAssessmentHistoryItem(PolymorphicBase):
+    model = "preliminary_assessment"
+    key = "field"
+    subclasses = (
+        PreliminaryAssessmentValueHistoryItem,
+        PreliminaryAssessmentDetailsHistoryItem,
+    )
+    default_subclass = GenericHistoryItem
+    class_lookup = {}

@@ -65,7 +65,7 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
         },
     )
 
-    preliminary_value_explanation = forms.CharField(
+    preliminary_value_details = forms.CharField(
         widget=forms.Textarea,
         label="Provide an explanation on how the value has been assessed",
         error_messages={"required": "Enter details of the preliminary value"},
@@ -83,13 +83,13 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
             client.preliminary_assessment.patch_preliminary_assessment(
                 barrier_id=self.barrier.id,
                 value=self.cleaned_data["preliminary_value"],
-                details=self.cleaned_data["preliminary_value_explanation"],
+                details=self.cleaned_data["preliminary_value_details"],
             )
         else:
             client.preliminary_assessment.create_preliminary_assessment(
                 barrier_id=self.barrier.id,
                 value=self.cleaned_data["preliminary_value"],
-                details=self.cleaned_data["preliminary_value_explanation"],
+                details=self.cleaned_data["preliminary_value_details"],
             )
 
 

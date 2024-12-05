@@ -558,9 +558,6 @@ class PreliminaryAssessmentResource(APIResource):
 
     def get_preliminary_assessment(self, barrier_id):
         url = f"barriers/{barrier_id}/preliminary-assessment"
-        print("API CALL")
-        print(self.client.get(url))
-        print(self.model(self.client.get(url)))
         return self.model(self.client.get(url))
 
     def create_preliminary_assessment(self, barrier_id, *args, **kwargs):

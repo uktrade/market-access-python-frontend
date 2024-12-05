@@ -1,74 +1,53 @@
 from http import HTTPStatus
 
 from django.urls import reverse
-from mock import patch
+from mock import Mock, patch
 
 from core.tests import MarketAccessTestCase
 
 
-class EditCommercialValueTestCase(MarketAccessTestCase):
-    def test_commercial_value_has_initial_data(self):
+class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
+
+    @patch("utils.api.resources.PreliminaryAssessmentResource.get_preliminary_assessment")
+    def test_preliminary_assessment_has_initial_data(self, mock_get_preliminary_assessment: Mock
+    ):
+        mock_get_preliminary_assessment.return_value = self.preliminary_assessment
         response = self.client.get(
             reverse(
-                "barriers:edit_commercial_value",
+                "barriers:edit_preliminary_assessment",
                 kwargs={"barrier_id": self.barrier["id"]},
-            )
+            ),
         )
-
         assert response.status_code == HTTPStatus.OK
+
         assert "form" in response.context
         form = response.context["form"]
-        assert form.initial["commercial_value"] == self.barrier["commercial_value"]
-        assert (
-            form.initial["commercial_value_explanation"]
-            == self.barrier["commercial_value_explanation"]
-        )
+        assert form.initial["preliminary_value"] == self.preliminary_assessment.value
+        assert form.initial["preliminary_value_details"] == self.preliminary_assessment.details
 
-    @patch("utils.api.resources.APIResource.patch")
-    def test_edit_commercial_value_calls_api(self, mock_patch):
-        response = self.client.post(
-            reverse(
-                "barriers:edit_commercial_value",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={
-                "commercial_value": "500003",
-                "commercial_value_explanation": "Wibble, wobble.",
+    @patch("utils.api.resources.PreliminaryAssessmentResource.patch_preliminary_assessment")
+    def test_edit_preliminary_assessment_calls_api(self, mock_patch_preliminary_assessment: Mock):
+        mock_patch_preliminary_assessment.return_value = True
+        barrier_id = self.barrier["id"]
+
+        url = reverse(
+            "barriers:edit_preliminary_assessment",
+            kwargs={
+                "barrier_id": barrier_id,
             },
         )
-        mock_patch.assert_called_with(
-            id=self.barrier["id"],
-            commercial_value=500003,
-            commercial_value_explanation="Wibble, wobble.",
+        response = self.client.patch(
+            url,
+            data={
+                "value": "2",
+                "details": "updated description",
+            }
         )
-        assert response.status_code == HTTPStatus.FOUND
 
-    @patch("utils.api.resources.APIResource.patch")
-    def test_commercial_value_bad_value(self, mock_patch):
-        response = self.client.post(
-            reverse(
-                "barriers:edit_commercial_value",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"commercial_value": "10-0"},
-        )
-        assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "commercial_value" in form.errors
-        assert mock_patch.called is False
+        assert response.status_code == 200
+        assert response.url == f"/barriers/{barrier_id}/assessments"
 
-    @patch("utils.api.resources.APIResource.patch")
-    def test_commercial_value_cannot_be_empty(self, mock_patch):
-        response = self.client.post(
-            reverse(
-                "barriers:edit_commercial_value",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={"commercial_value": ""},
-        )
-        assert response.status_code == HTTPStatus.OK
-        form = response.context["form"]
-        assert form.is_valid() is False
-        assert "commercial_value" in form.errors
-        assert mock_patch.called is False
+        assert mock_patch_preliminary_assessment.call_args[0][0] == barrier_id
+        assert mock_patch_preliminary_assessment.call_args[0][1] == 2
+        assert mock_patch_preliminary_assessment.call_args[0][2] == "updated description"
+

@@ -345,7 +345,7 @@ class PreliminaryAssessmentValue(APIBarrierFormViewMixin, FormView):
         if self.preliminary_assessment:
             return {
                 "preliminary_value": self.preliminary_assessment.value,
-                "preliminary_value_explanation": self.preliminary_assessment.details,
+                "preliminary_value_details": self.preliminary_assessment.details,
             }
         else:
             return

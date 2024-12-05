@@ -15,7 +15,7 @@
         {% csrf_token %}
 
         {% include "partials/forms/radio_input.html" with field=form.preliminary_value %}
-        {% include "partials/forms/textarea.html" with field=form.preliminary_value_explanation %}
+        {% include "partials/forms/textarea.html" with field=form.preliminary_value_details %}
 
         <button class="govuk-button" data-module="govuk-button">Save and return</button>
         <a href="{% url 'barriers:assessment_detail' barrier.id %}" class="form-cancel">Cancel</a>
