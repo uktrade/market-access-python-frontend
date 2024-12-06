@@ -188,7 +188,8 @@
 
     input[type="radio"] {
         position: absolute;
-        right: 100%;
+        opacity: 0;
+
     }
 
     label {
@@ -360,4 +361,27 @@
         z-index: 2;
         margin-left: -10px;
     }
+
+    /* evenly space out the inputs for screen readers */
+    input#one {
+        left: 30%;
+    }
+
+    input#two {
+        left: 36%;
+    }
+
+    input#three {
+        left: 43%;
+    }
+
+    input#four {
+        left: 49%;
+    }
+
+    input#five {
+        left: 55%;
+    }
+
+
 }

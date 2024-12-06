@@ -27,7 +27,7 @@ export const handlePieChart = (
                 /** @type {any} */ _val,
                 /** @type {{ w: { globals: { series: { [x: string]: any; }; }; config: { labels: { [x: string]: any; }; }; }; seriesIndex: string | number; }} */ opts,
             ) {
-                // get the acual value not the percentage
+                // get the actual value not the percentage
                 const value = opts.w.globals.series[opts.seriesIndex];
                 const label = opts.w.config.labels[opts.seriesIndex];
                 return `${label}: ${normalizeValue(value)}`;

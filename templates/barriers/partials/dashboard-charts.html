@@ -18,31 +18,3 @@
         {% endif %}
     </div>
 </div>
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-        {% if summary_stats.total_value_chart.open_barriers_value and summary_stats.total_value_chart.resolved_barriers_value %}
-            <div id="bar-chart" class="dashboard-chart"></div>
-        {% else %}
-            <div class="dashboard-chart">
-                <h3 class="govuk-heading-s">Total barrier value</h3>
-                <p class="govuk-inset-text">Unable to display chart. No data available for current filters</p>
-                <p class="govuk-body-s">
-                    {% if summary_stats.barrier_value_chart.resolved_barriers_value is None %}No open barriers found{% endif %}
-                </p>
-                <p class="govuk-body-s">
-                    {% if summary_stats.barrier_value_chart.estimated_barriers_value is None %}No resolved barriers found{% endif %}
-                </p>
-            </div>
-        {% endif %}
-    </div>
-    <div class="govuk-grid-column-one-half">
-        {% if summary_stats.barriers_by_status_chart.series %}
-            <div id="pie-chart" class="dashboard-chart"></div>
-        {% else %}
-            <div class="dashboard-chart">
-                <h3 class="govuk-heading-s">Total value of open and partially resolved barrier by status</h3>
-                <p class="govuk-inset-text">Unable to display chart. No data available for current filters</p>
-            </div>
-        {% endif %}
-    </div>
-</div>
