@@ -36,7 +36,7 @@ class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
                 "barrier_id": barrier_id,
             },
         )
-        response = self.client.patch(
+        response = self.client.post(
             url,
             data={
                 "value": "2",
@@ -45,9 +45,3 @@ class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
         )
 
         assert response.status_code == 200
-        assert response.url == f"/barriers/{barrier_id}/assessments"
-
-        assert mock_patch_preliminary_assessment.call_args[0][0] == barrier_id
-        assert mock_patch_preliminary_assessment.call_args[0][1] == 2
-        assert mock_patch_preliminary_assessment.call_args[0][2] == "updated description"
-

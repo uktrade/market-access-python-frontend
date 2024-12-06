@@ -22,10 +22,14 @@
             {% if preliminary_assessment %}
                 <p class="assessment-item__value">{{ preliminary_assessment.get_value_display }}</p>
                 <p class="assessment-item__value">{{ preliminary_assessment.details|linebreaksbr }}</p>
-                <a class="assessment-item__edit" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Edit</a>
+                {% if current_user|has_permission:"add_preliminaryassessment" %}
+                    <a class="assessment-item__edit" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Edit</a>
+                {% endif %}
             {% else %}
                 <div class="assessment-item-content">
-                    <a class="assessment-item-content__link" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Add preliminary assessment</a>
+                    {% if current_user|has_permission:"add_preliminaryassessment" %}
+                        <a class="assessment-item-content__link" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Add preliminary assessment</a>
+                    {% endif %}
                     <p class="assessment-item-content__hint">Preliminary assessments are an estimate of whether a market access barrier is likely to be worth less or more than £10M in additional exports, or earnings on UK outward Foreign Direct Investment (FDI), over a 5-year period.</p>
                 </div>
             {% endif %}
