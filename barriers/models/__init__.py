@@ -4,6 +4,7 @@ from .assessments import (
     EconomicImpactAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
+    PreliminaryAssessment,
 )
 from .barrier_download import BarrierDownload
 from .barriers import Barrier, PublicBarrier
@@ -33,4 +34,5 @@ __all__ = [
     ActionPlan,
     Stakeholder,
     BarrierDownload,
+    PreliminaryAssessment,
 ]

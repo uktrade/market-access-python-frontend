@@ -1,11 +1,8 @@
 from django import forms
 
-from barriers.constants import (
-    PRELIMINARY_ASSESSMENT_CHOICES,
-)
+from barriers.constants import PRELIMINARY_ASSESSMENT_CHOICES
+from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
-
-from .mixins import APIFormMixin
 
 
 class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):

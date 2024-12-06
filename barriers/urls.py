@@ -39,6 +39,7 @@ from barriers.views.assessments.economic_impact import (
     EconomicImpactAssessmentDetail,
 )
 from barriers.views.assessments.overview import AssessmentOverview
+from barriers.views.assessments.preliminary_assessment import PreliminaryAssessmentValue
 from barriers.views.assessments.resolvability import (
     AddResolvabilityAssessment,
     ArchiveResolvabilityAssessment,
@@ -50,9 +51,6 @@ from barriers.views.assessments.strategic import (
     ArchiveStrategicAssessment,
     EditStrategicAssessment,
     StrategicAssessmentDetail,
-)
-from barriers.views.assessments.preliminary_assessment import (
-    PreliminaryAssessmentValue,
 )
 from barriers.views.categories import (
     AddCategory,

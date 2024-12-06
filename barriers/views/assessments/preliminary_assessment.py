@@ -1,8 +1,10 @@
 from django.urls import reverse
 from django.views.generic import FormView
 
+from barriers.forms.assessments.preliminary_assessment import (
+    UpdatePreliminaryAssessmentForm,
+)
 from barriers.views.mixins import APIBarrierFormViewMixin
-from barriers.forms.assessments.preliminary_assessment import UpdatePreliminaryAssessmentForm
 
 
 class PreliminaryAssessmentValue(APIBarrierFormViewMixin, FormView):
