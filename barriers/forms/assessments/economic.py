@@ -32,7 +32,6 @@ class TradeCategoryForm(forms.Form):
 
 class EconomicAssessmentRatingForm(DocumentMixin, forms.Form):
     rating = forms.ChoiceField(
-        label="What is the initial economic assessment of this barrier?",
         choices=[],
         error_messages={
             "required": "Select the initial economic assessment of this barrier"

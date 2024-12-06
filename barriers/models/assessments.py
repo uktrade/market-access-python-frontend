@@ -1,3 +1,4 @@
+from barriers.constants import PRELIMINARY_ASSESSMENT_CHOICES
 from utils.models import APIModel
 
 from .documents import Document
@@ -45,3 +46,15 @@ class ResolvabilityAssessment(APIModel):
 
 class StrategicAssessment(APIModel):
     date_fields = ("archived_on", "created_on", "reviewed_on")
+
+
+class PreliminaryAssessment(APIModel):
+    date_fields = "created_on"
+
+    @property
+    def get_value_display(self):
+        value = str(self.data.get("value", ""))
+        if value:
+            return PRELIMINARY_ASSESSMENT_CHOICES[value]
+        else:
+            return ""
