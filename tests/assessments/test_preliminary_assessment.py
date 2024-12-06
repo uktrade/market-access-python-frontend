@@ -32,17 +32,12 @@ class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
         )
 
     @patch(
-        "utils.api.resources.PreliminaryAssessmentResource.patch_preliminary_assessment"
-    )
-    @patch(
         "utils.api.resources.PreliminaryAssessmentResource.get_preliminary_assessment"
     )
     def test_edit_preliminary_assessment_calls_api(
         self,
-        mock_patch_preliminary_assessment: Mock,
         mock_get_preliminary_assessment: Mock,
     ):
-        mock_patch_preliminary_assessment.return_value = True
         barrier_id = self.barrier["id"]
 
         url = reverse(
@@ -59,4 +54,5 @@ class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
             },
         )
 
+        mock_get_preliminary_assessment.assert_called_once_with(barrier_id=barrier_id)
         assert response.status_code == 200
