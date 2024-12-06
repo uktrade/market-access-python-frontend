@@ -46,10 +46,23 @@ export const normalizeValue = (/** @type {number} */ value) => {
  *
  * @param {*} dateString
  * @returns
+ * @throws {TypeError} If the provided dateString is not a string, number, or Date.
  */
 export const parseIso = (/** @type {string | number | Date} */ dateString) => {
+    if (
+        !(
+            typeof dateString === "string" ||
+            typeof dateString === "number" ||
+            dateString instanceof Date
+        )
+    ) {
+        throw new TypeError("dateString must be a string, number, or Date");
+    }
     const date = new Date(dateString);
-    return new Date(date).toLocaleDateString("en-GB", {
+    if (isNaN(date.getTime())) {
+        throw new TypeError("Invalid date");
+    }
+    return date.toLocaleDateString("en-GB", {
         day: "numeric",
         month: "long",
         year: "numeric",
