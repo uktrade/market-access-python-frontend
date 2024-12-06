@@ -51,6 +51,9 @@ from barriers.views.assessments.strategic import (
     EditStrategicAssessment,
     StrategicAssessmentDetail,
 )
+from barriers.views.assessments.preliminary_assessment import (
+    PreliminaryAssessmentValue,
+)
 from barriers.views.categories import (
     AddCategory,
     BarrierEditCategories,
@@ -79,7 +82,6 @@ from barriers.views.edit import (
     BarrierEditTags,
     BarrierEditTitle,
     BarrierEditTradeDirection,
-    PreliminaryAssessmentValue,
 )
 from barriers.views.export_types import BarrierEditExportType
 from barriers.views.government_organisations import (
