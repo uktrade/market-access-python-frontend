@@ -21,5 +21,4 @@ class BarrierHistory(BarrierMixin, TemplateView):
         barrier_id = self.kwargs.get("barrier_id")
         full_history = client.barriers.get_full_history(barrier_id=barrier_id)
         full_history.sort(key=lambda object: object.date, reverse=True)
-        print(full_history)
         return full_history

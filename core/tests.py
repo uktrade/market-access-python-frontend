@@ -183,7 +183,6 @@ class MarketAccessTestCase(TestCase):
         self.init_get_public_barrier_patcher()
         self.init_get_action_plans_patcher()
         self.init_get_profile_patcher()
-        self.init_get_preliminary_assessment_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -261,14 +260,6 @@ class MarketAccessTestCase(TestCase):
         self.mock_get_profile = self.get_profile_patcher.start()
         self.mock_get_profile.return_value = self.profile
         self.addCleanup(self.get_profile_patcher.stop)
-
-    def init_get_preliminary_assessment_patcher(self):
-        self.get_preliminary_assessment_patcher = patch("utils.api.resources.PreliminaryAssessmentResource.get_preliminary_assessment")
-        print('HELLO')
-        self.mock_get_preliminary_assessment = self.get_preliminary_assessment_patcher.start()
-        self.mock_get_preliminary_assessment.return_value = self.preliminary_assessment
-        print(self.mock_get_preliminary_assessment.return_value.value)
-        self.addCleanup(self.get_preliminary_assessment_patcher.stop)
 
     def delete_session_key(self, key):
         try:

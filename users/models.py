@@ -41,8 +41,6 @@ class User(APIModel):
         return self.data.get("permissions", [])
 
     def has_permission(self, permission_name):
-        print('PERMISSIONS')
-        print(self.permissions)
         if not self.is_active:
             return False
         return self.is_superuser or permission_name in self.permissions
