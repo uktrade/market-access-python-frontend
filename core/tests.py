@@ -14,11 +14,11 @@ from utils.api.resources import (
     ActionPlanTaskResource,
     BarriersResource,
     NotesResource,
+    PreliminaryAssessmentResource,
     PublicBarriersResource,
     ReportsResource,
     UserProfileResource,
     UsersResource,
-    PreliminaryAssessmentResource,
 )
 
 
@@ -486,7 +486,7 @@ class MarketAccessTestCase(TestCase):
                 "overseas_regions": [],
             }
         )
-    
+
     @property
     def preliminary_assessment(self):
         return PreliminaryAssessmentResource.model(

@@ -8,8 +8,11 @@ from core.tests import MarketAccessTestCase
 
 class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
 
-    @patch("utils.api.resources.PreliminaryAssessmentResource.get_preliminary_assessment")
-    def test_preliminary_assessment_has_initial_data(self, mock_get_preliminary_assessment: Mock
+    @patch(
+        "utils.api.resources.PreliminaryAssessmentResource.get_preliminary_assessment"
+    )
+    def test_preliminary_assessment_has_initial_data(
+        self, mock_get_preliminary_assessment: Mock
     ):
         mock_get_preliminary_assessment.return_value = self.preliminary_assessment
         response = self.client.get(
@@ -23,10 +26,17 @@ class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
         assert "form" in response.context
         form = response.context["form"]
         assert form.initial["preliminary_value"] == self.preliminary_assessment.value
-        assert form.initial["preliminary_value_details"] == self.preliminary_assessment.details
+        assert (
+            form.initial["preliminary_value_details"]
+            == self.preliminary_assessment.details
+        )
 
-    @patch("utils.api.resources.PreliminaryAssessmentResource.patch_preliminary_assessment")
-    def test_edit_preliminary_assessment_calls_api(self, mock_patch_preliminary_assessment: Mock):
+    @patch(
+        "utils.api.resources.PreliminaryAssessmentResource.patch_preliminary_assessment"
+    )
+    def test_edit_preliminary_assessment_calls_api(
+        self, mock_patch_preliminary_assessment: Mock
+    ):
         mock_patch_preliminary_assessment.return_value = True
         barrier_id = self.barrier["id"]
 
@@ -41,7 +51,7 @@ class EditPreliminaryAssessmentTestCase(MarketAccessTestCase):
             data={
                 "value": "2",
                 "details": "updated description",
-            }
+            },
         )
 
         assert response.status_code == 200
