@@ -23,7 +23,7 @@
                 <p class="assessment-item__value"><strong>Preliminary value: {{ preliminary_assessment.get_value_display }}</p></strong>
                 <p class="assessment-item__value">Details:</p>
                 <p class="assessment-item__value">{{ preliminary_assessment.details|linebreaksbr }}</p>
-                {% if current_user|has_permission:"add_preliminaryassessment" %}
+                {% if current_user|has_permission:"change_preliminaryassessment" %}
                     <a class="assessment-item__edit" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Edit</a>
                 {% endif %}
             {% else %}
