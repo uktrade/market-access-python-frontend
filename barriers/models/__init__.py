@@ -2,9 +2,9 @@ from .action_plans import ActionPlan, Stakeholder
 from .assessments import (
     EconomicAssessment,
     EconomicImpactAssessment,
+    PreliminaryAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
-    PreliminaryAssessment,
 )
 from .barrier_download import BarrierDownload
 from .barriers import Barrier, PublicBarrier
