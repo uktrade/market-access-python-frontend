@@ -561,9 +561,10 @@ class PreliminaryAssessmentResource(APIResource):
         return self.model(self.client.get(url))
 
     def create_preliminary_assessment(self, barrier_id, *args, **kwargs):
-        url = f"barriers/{barrier_id}/preliminary-assessment"
-        return self.model(self.client.post(url, json={**kwargs}))
+        url = f"preliminary-assessment"
+        data = {**kwargs, **{"barrier_id": barrier_id}}
+        return self.model(self.client.post(url, json=data))
 
     def patch_preliminary_assessment(self, barrier_id, *args, **kwargs):
         url = f"barriers/{barrier_id}/preliminary-assessment"
-        return self.model(self.client.patch(url, json={**kwargs}))
+        return self.model(self.client.patch(url, json=kwargs))
