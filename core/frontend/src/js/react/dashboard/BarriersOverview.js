@@ -583,7 +583,7 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            Resolved barriers for financial year( {data?.financial_year?.current_start} to {data?.financial_year?.current_end} )
+                            {`Resolved barriers for financial year (${parseIso(data?.financial_year?.current_start)} to ${parseIso(data?.financial_year?.current_end)})`}
                         </h3>
                         <span className="govuk-caption-m p-l-3">
                             This is includes barriers with an estimated resolution date in the financial year
