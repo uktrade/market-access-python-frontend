@@ -19,6 +19,7 @@ from barriers.models import (
     EconomicImpactAssessment,
     HistoryItem,
     Note,
+    PreliminaryAssessment,
     PublicBarrier,
     PublicBarrierNote,
     ResolvabilityAssessment,
@@ -549,3 +550,20 @@ class BarrierDownloadsResource(APIResource):
 class UserProfileResource(APIResource):
     resource_name = "users/profile"
     model = UserProfile
+
+
+class PreliminaryAssessmentResource(APIResource):
+    resource_name = "preliminary-assessment"
+    model = PreliminaryAssessment
+
+    def get_preliminary_assessment(self, barrier_id):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.get(url))
+
+    def create_preliminary_assessment(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.post(url, json=kwargs))
+
+    def patch_preliminary_assessment(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.patch(url, json=kwargs))

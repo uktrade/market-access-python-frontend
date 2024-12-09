@@ -39,6 +39,7 @@ from barriers.views.assessments.economic_impact import (
     EconomicImpactAssessmentDetail,
 )
 from barriers.views.assessments.overview import AssessmentOverview
+from barriers.views.assessments.preliminary_assessment import PreliminaryAssessmentValue
 from barriers.views.assessments.resolvability import (
     AddResolvabilityAssessment,
     ArchiveResolvabilityAssessment,
@@ -330,6 +331,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/commercial-value/",
         BarrierEditCommercialValue.as_view(),
         name="edit_commercial_value",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/preliminary-assessment/",
+        PreliminaryAssessmentValue.as_view(),
+        name="edit_preliminary_assessment",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/commodities/",
