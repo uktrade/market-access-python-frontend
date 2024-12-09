@@ -212,24 +212,24 @@ const BarriersOverview = ({ filterValues }) => {
                                 name: "Value of barriers estimated to be resolved",
                                 data:
                                     data &&
-                                        data.barrier_value_chart
-                                            .estimated_barriers_value
+                                    data.barrier_value_chart
+                                        .estimated_barriers_value
                                         ? [
-                                            data.barrier_value_chart
-                                                .estimated_barriers_value,
-                                        ]
+                                              data.barrier_value_chart
+                                                  .estimated_barriers_value,
+                                          ]
                                         : [],
                             },
                             {
                                 name: "Value of resolved barriers",
                                 data:
                                     data &&
-                                        data.barrier_value_chart
-                                            .resolved_barriers_value
+                                    data.barrier_value_chart
+                                        .resolved_barriers_value
                                         ? [
-                                            data.barrier_value_chart
-                                                .resolved_barriers_value,
-                                        ]
+                                              data.barrier_value_chart
+                                                  .resolved_barriers_value,
+                                          ]
                                         : [],
                             },
                         ],
@@ -534,7 +534,9 @@ const BarriersOverview = ({ filterValues }) => {
                     </fieldset>
                 </div>
                 <div className="govuk-grid-column-three-quarters">
-                    <h3 className="govuk-summary-card__title">Barrier insights</h3>
+                    <h3 className="govuk-summary-card__title">
+                        Barrier insights
+                    </h3>
                     <div className="p-l-3" id="active filters">
                         <ul className="govuk-list">
                             {filters
@@ -561,7 +563,10 @@ const BarriersOverview = ({ filterValues }) => {
                         <h3 className="govuk-summary-card__title p-l-3">
                             Open barriers
                         </h3>
-                        <span className="govuk-caption-m p-l-3">This includes all open  and resolved in part barriers.</span>
+                        <span className="govuk-caption-m p-l-3">
+                            This includes all open and resolved in part
+                            barriers.
+                        </span>
                         <SummaryCard
                             value={data?.barriers?.open}
                             description="barriers are open in total."
@@ -583,10 +588,15 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            {`Resolved barriers for financial year (${parseIso(data?.financial_year?.current_start)} to ${parseIso(data?.financial_year?.current_end)})`}
+                            {`Resolved barriers for financial year (${parseIso(
+                                data?.financial_year?.current_start,
+                            )} to ${parseIso(
+                                data?.financial_year?.current_end,
+                            )})`}
                         </h3>
                         <span className="govuk-caption-m p-l-3">
-                            This is includes barriers with an estimated resolution date in the financial year
+                            This is includes barriers with an estimated
+                            resolution date in the financial year
                         </span>
 
                         <SummaryCard
@@ -621,7 +631,7 @@ const BarriersOverview = ({ filterValues }) => {
             <div className="govuk-grid-row">
                 <div className="govuk-grid-column-full">
                     {chartData.barChartData.series[0].data.length > 0 ||
-                        chartData.barChartData.series[1].data.length > 0 ? (
+                    chartData.barChartData.series[1].data.length > 0 ? (
                         handleBarChart(chartData.barChartData)
                     ) : (
                         <div className="dashboard-chart">
@@ -634,17 +644,17 @@ const BarriersOverview = ({ filterValues }) => {
                             </p>
                             {chartData.barChartData.series[0].data.length ===
                                 0 && (
-                                    <p className="govuk-body-s">
-                                        No resolved barriers found in the date range
-                                    </p>
-                                )}
+                                <p className="govuk-body-s">
+                                    No resolved barriers found in the date range
+                                </p>
+                            )}
                             {chartData.barChartData.series[0].data.length ===
                                 1 && (
-                                    <p className="govuk-body-s">
-                                        No barriers with an estimated resolution in
-                                        the date range{" "}
-                                    </p>
-                                )}
+                                <p className="govuk-body-s">
+                                    No barriers with an estimated resolution in
+                                    the date range{" "}
+                                </p>
+                            )}
                         </div>
                     )}
                 </div>
