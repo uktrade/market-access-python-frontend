@@ -281,7 +281,7 @@ const SummaryCards = ({ filterValues }) => {
                                                     ([paramKey, paramValue]) =>
                                                         !(
                                                             paramKey ===
-                                                                filter.label &&
+                                                            filter.label &&
                                                             paramValue === val
                                                         ),
                                                 ),
@@ -320,9 +320,9 @@ const SummaryCards = ({ filterValues }) => {
                                                     ) =>
                                                         value.readable_value
                                                             ? value.readable_value.replace(
-                                                                  /<\/?[^>]+(>|$)/g,
-                                                                  "",
-                                                              )
+                                                                /<\/?[^>]+(>|$)/g,
+                                                                "",
+                                                            )
                                                             : "",
                                                 )
                                                 .join(", ")}
@@ -332,7 +332,7 @@ const SummaryCards = ({ filterValues }) => {
                                     <a
                                         href={
                                             values.length === 1 &&
-                                            values[0].remove_url
+                                                values[0].remove_url
                                                 ? `?${values[0].remove_url}`
                                                 : "/barriers/search"
                                         }
@@ -350,9 +350,9 @@ const SummaryCards = ({ filterValues }) => {
                                                     ) =>
                                                         value.readable_value
                                                             ? value.readable_value.replace(
-                                                                  /<\/?[^>]+(>|$)/g,
-                                                                  "",
-                                                              )
+                                                                /<\/?[^>]+(>|$)/g,
+                                                                "",
+                                                            )
                                                             : "",
                                                 )
                                                 .join(", ")}
@@ -367,9 +367,9 @@ const SummaryCards = ({ filterValues }) => {
                                                     ) =>
                                                         value.readable_value
                                                             ? value.readable_value.replace(
-                                                                  /<\/?[^>]+(>|$)/g,
-                                                                  "",
-                                                              )
+                                                                /<\/?[^>]+(>|$)/g,
+                                                                "",
+                                                            )
                                                             : "",
                                                 )
                                                 .join(", ")}{" "}

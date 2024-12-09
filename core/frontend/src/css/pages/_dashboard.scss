@@ -23,7 +23,7 @@
 
 .summary-card {
   background-color: $govuk-light-grey;
-  min-height: 250px;
+  min-height: 220px;
   position: relative;
 
 
@@ -57,5 +57,5 @@
 
 .dashboard-search-link-container {
   display: inline;
-  padding-right: govuk-em( 15, 16 );
+  padding-right: govuk-em(15, 16);
 }

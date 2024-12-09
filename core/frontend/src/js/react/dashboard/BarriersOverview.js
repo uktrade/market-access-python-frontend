@@ -212,24 +212,24 @@ const BarriersOverview = ({ filterValues }) => {
                                 name: "Value of barriers estimated to be resolved",
                                 data:
                                     data &&
-                                    data.barrier_value_chart
-                                        .estimated_barriers_value
+                                        data.barrier_value_chart
+                                            .estimated_barriers_value
                                         ? [
-                                              data.barrier_value_chart
-                                                  .estimated_barriers_value,
-                                          ]
+                                            data.barrier_value_chart
+                                                .estimated_barriers_value,
+                                        ]
                                         : [],
                             },
                             {
                                 name: "Value of resolved barriers",
                                 data:
                                     data &&
-                                    data.barrier_value_chart
-                                        .resolved_barriers_value
+                                        data.barrier_value_chart
+                                            .resolved_barriers_value
                                         ? [
-                                              data.barrier_value_chart
-                                                  .resolved_barriers_value,
-                                          ]
+                                            data.barrier_value_chart
+                                                .resolved_barriers_value,
+                                        ]
                                         : [],
                             },
                         ],
@@ -237,9 +237,9 @@ const BarriersOverview = ({ filterValues }) => {
                             ...prevState.barChartData.options,
                             xaxis: {
                                 categories: [
-                                    `Between ${parseIso(
+                                    ` ${parseIso(
                                         data?.financial_year?.current_start,
-                                    )} and ${parseIso(
+                                    )} to ${parseIso(
                                         data?.financial_year?.current_end,
                                     )}`,
                                 ],
@@ -534,8 +534,8 @@ const BarriersOverview = ({ filterValues }) => {
                     </fieldset>
                 </div>
                 <div className="govuk-grid-column-three-quarters">
-                    <h3 className="govuk-summary-card__title">Summary data</h3>
-                    <div className="p-l-3" id="active-filters">
+                    <h3 className="govuk-summary-card__title">Barrier insights</h3>
+                    <div className="p-l-3" id="active filters">
                         <ul className="govuk-list">
                             {filters
                                 .filter((v) => v.readable_value)
@@ -561,9 +561,10 @@ const BarriersOverview = ({ filterValues }) => {
                         <h3 className="govuk-summary-card__title p-l-3">
                             Open barriers
                         </h3>
+                        <span className="govuk-caption-m p-l-3">This includes all open  and resolved in part barriers.</span>
                         <SummaryCard
                             value={data?.barriers?.open}
-                            description="barriers are open."
+                            description="barriers are open in total."
                             url="/search"
                             search_params={`${getSearchParamsFromForm()}&status=2&status=3`}
                         />
@@ -582,12 +583,15 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            Barriers which have been resolved or are projected
-                            to be resolved
+                            Resolved barriers for financial year( {data?.financial_year?.current_start} to {data?.financial_year?.current_end} )
                         </h3>
+                        <span className="govuk-caption-m p-l-3">
+                            This is includes barriers with an estimated resolution date in the financial year
+                        </span>
+
                         <SummaryCard
                             value={data?.barriers_current_year?.resolved}
-                            description="barriers have been resolved in the current financial year."
+                            description="barriers have been resolved in full in the financial year."
                             url="/search"
                             search_params={`${getSearchParamsFromForm()}${getFinancialYearSearchParams(
                                 "status",
@@ -595,7 +599,7 @@ const BarriersOverview = ({ filterValues }) => {
                         />
                         <SummaryCard
                             value={data?.barriers_current_year?.pb100}
-                            description="PB100 barriers are estimated to be resolved in the current financial year."
+                            description="PB100 barriers are estimated to be resolved in the financial year."
                             url="/search"
                             search_params={`${getSearchParamsFromForm()}${getFinancialYearSearchParams(
                                 "estimated_resolution_date",
@@ -605,7 +609,7 @@ const BarriersOverview = ({ filterValues }) => {
                             value={
                                 data?.barriers_current_year?.overseas_delivery
                             }
-                            description="Overseas delivery barriers are estimated to be resolved in the current financial year."
+                            description="Overseas delivery barriers are estimated to be resolved in the financial year."
                             url="/search"
                             search_params={`${getSearchParamsFromForm()}${getFinancialYearSearchParams(
                                 "estimated_resolution_date",
@@ -617,7 +621,7 @@ const BarriersOverview = ({ filterValues }) => {
             <div className="govuk-grid-row">
                 <div className="govuk-grid-column-full">
                     {chartData.barChartData.series[0].data.length > 0 ||
-                    chartData.barChartData.series[1].data.length > 0 ? (
+                        chartData.barChartData.series[1].data.length > 0 ? (
                         handleBarChart(chartData.barChartData)
                     ) : (
                         <div className="dashboard-chart">
@@ -630,17 +634,17 @@ const BarriersOverview = ({ filterValues }) => {
                             </p>
                             {chartData.barChartData.series[0].data.length ===
                                 0 && (
-                                <p className="govuk-body-s">
-                                    No resolved barriers found in the date range
-                                </p>
-                            )}
+                                    <p className="govuk-body-s">
+                                        No resolved barriers found in the date range
+                                    </p>
+                                )}
                             {chartData.barChartData.series[0].data.length ===
                                 1 && (
-                                <p className="govuk-body-s">
-                                    No barriers with an estimated resolution in
-                                    the date range{" "}
-                                </p>
-                            )}
+                                    <p className="govuk-body-s">
+                                        No barriers with an estimated resolution in
+                                        the date range{" "}
+                                    </p>
+                                )}
                         </div>
                     )}
                 </div>
