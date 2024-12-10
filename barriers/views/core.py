@@ -104,15 +104,8 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        # active = self.request.GET.get("active", "barriers")
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        # my_barriers_saved_search = client.saved_searches.get("my-barriers")
-        # team_barriers_saved_search = client.saved_searches.get("team-barriers")
         mentions = client.mentions.list()
-        # draft_barriers = client.reports.list()
-        # saved_searches = client.saved_searches.list()
-        # notification_exclusion = client.notification_exclusion.get()
-        # barrier_downloads = client.barrier_download.list()
 
         are_all_mentions_read: bool = not any(
             not mention.read_by_recipient for mention in mentions
@@ -128,7 +121,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
             "page": page_number,
         }
         # Get list of tasks for the user from the API
-        task_list = client.dashboard_tasks.list(**api_task_list_params)
+        barrier_task_list = client.dashboard_tasks.list(**api_task_list_params)
 
         params = form.get_api_search_parameters()
 
@@ -161,25 +154,21 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
                     metadata.get_admin_area_list()
                 ),
                 "countries_with_admin_areas": metadata.get_countries_with_admin_areas_list(),
-                # "my_barriers_saved_search": my_barriers_saved_search,
-                # "team_barriers_saved_search": team_barriers_saved_search,
-                # "draft_barriers": draft_barriers,
-                # "saved_searches": saved_searches,
-                # "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
                 "new_mentions_count": len(
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),
                 "filters": form.get_readable_filters(True),
-                # "active": active,
-                # "barrier_downloads": barrier_downloads,
-                "task_list": task_list,
+                "barrier_task_list": barrier_task_list,
                 "summary_stats": summary_stats,
                 "search_params": search_params,
             }
         )
-        context_data["pagination"] = self.get_pagination_data(object_list=task_list)
+
+        context_data["pagination"] = self.get_pagination_data(
+            object_list=barrier_task_list
+        )
 
         return context_data
 
