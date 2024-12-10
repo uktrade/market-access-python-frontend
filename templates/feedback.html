@@ -17,7 +17,7 @@
 {% block page_content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half-from-desktop">
-      <h1 class="govuk-heading-xl">Give feedback</h1>
+      <h1 class="govuk-heading-xl">Give feedback on this service</h1>
     </div>
   </div>
   {% if form.errors and not form.non_field_errors %}
@@ -103,7 +103,7 @@
                       <div id="{{ form.other_detail.name }}-form-group"
                            class="govuk-character-count"
                            data-module="govuk-character-count"
-                           data-maxlength="1250">
+                           data-maxlength="1200">
                         <div class="govuk-form-group{% if form.update.errors %} govuk-form-group--error{% endif %}">
                           <label class="govuk-label govuk-label--s" for="other_detail">{{ form.other_detail.label }}</label>
                           {% form_field_error form "other_detail" %}
@@ -112,11 +112,11 @@
                                     class="govuk-textarea govuk-js-character-count js-character-count"
                                     name="{{ form.other_detail.name }}"
                                     rows="5"
-                                    maxlength="1250">{{ form.other_detail.value|default_if_none:"" }}</textarea>
+                                    maxlength="1200">{{ form.other_detail.value|default_if_none:"" }}</textarea>
                         </div>
                         <div id="other_detail-info"
                              class="govuk-hint govuk-character-count__message">
-                          You can enter up to 1250 characters
+                          You can enter up to 1200 characters
                         </div>
                       </div>
                     </div>
@@ -167,7 +167,7 @@
     </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half-from-desktop">
-        <button type="submit" class="govuk-button" data-module="govuk-button">Leave feedback</button>
+        <button type="submit" class="govuk-button" data-module="govuk-button">Submit feedback</button>
       </div>
     </div>
   </form>
