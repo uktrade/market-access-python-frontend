@@ -15,7 +15,7 @@
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h3 class="govuk-fieldset__heading govuk-summary-card__title">Filters</h3>
                     </legend>
-                <!-- search form -->
+                    <!-- search form -->
                     <form id="filters-form" action="" method="GET">
                         {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                         {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
@@ -23,19 +23,21 @@
                         {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                         {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
                         {% if filters %}
-                            <a id="clear-filters-button" class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>
+                            <a id="clear-filters-button"
+                               class="filter-items__clear"
+                               href="{% url 'barriers:home' %}">Remove all filters</a>
                         {% endif %}
-                    <!-- <input type="hidden" id="status" name="status" value="2"> -->
+                        <!-- <input type="hidden" id="status" name="status" value="2"> -->
                         <input type="submit"
                                value="Apply filters"
                                id="apply-filters-button"
                                class="govuk-button govuk-button--full-width js-filter-submit">
                     </form>
-                <!--- search form end -->
+                    <!--- search form end -->
                 </fieldset>
             </div>
             <div class="govuk-grid-column-three-quarters">
-                <h3 class="govuk-summary-card__title">Summary data</h3>
+                <h3 class="govuk-summary-card__title">Barrier insights</h3>
                 <div class="p-l-3" id="active filters">
                     {% if filters %}
                         <h3 class="visually-hidden">Active filters:</h3>
@@ -50,10 +52,11 @@
                 </div>
                 <div class="govuk-grid-row">
                     <h3 class="govuk-summary-card__title p-l-3">Open barriers</h3>
+                    <span class="govuk-caption-m">This includes all open  and resolved in part barriers.</span>
                     <div class="govuk-grid-column-one-third">
                         <div class="govuk-inset-text summary-card">
                             <p>
-                                <span class="govuk-heading-xl">{{ summary_stats.barriers.open }}</span> barriers are open.
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers.open }}</span> barriers are open in total.
                             </p>
                             <div class="summary-card__data-link">
                                 <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3">See the barriers</a>
