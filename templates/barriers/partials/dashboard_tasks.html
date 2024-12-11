@@ -17,11 +17,27 @@
                         <p class="govuk-body m-b-0 m-t-2"><strong>{{ barrier.task_list|length }} Tasks on this barrier</strong></p>
                         <ul class="govuk-list govuk-list--bullet govuk-body">
                             {% for task in barrier.task_list %}
-                                <li>{{ task.message }}</li>
+                                <li>
+                                    {% for text_section in task.message %}
+                                        {% if text_section == task.link_text %}
+                                            <a class="govuk-link" href="{% url task.task_url barrier.barrier_id %}">{{ text_section }}</a>
+                                        {% else %}
+                                            {{ text_section }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </li>
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>{{ barrier.task_list.0.message }}</p>
+                        <p>
+                            {% for text_section in barrier.task_list.0.message %}
+                                {% if text_section == barrier.task_list.0.link_text %}
+                                    <a class="govuk-link" href="{% url barrier.task_list.0.task_url barrier.barrier_id %}">{{ text_section }}</a>
+                                {% else %}
+                                    {{ text_section }}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
                     {% endif %}
                     <p class="govuk-hint">{{ barrier.modified_by }} updated on {{ barrier.modified_on }}</p>
                 </div>
