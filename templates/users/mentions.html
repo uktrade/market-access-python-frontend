@@ -18,4 +18,40 @@
 {% endblock masthead %}
 {% block page_content %}
 
+<section>
+    <h2 class="ma-list-heading">
+        <div class="ma-list-heading__heading"><span class="ma-list-heading__count">{{ mentions|length }}</span> mentions</div>
+
+        <div class="ma-list-heading__actions">
+
+            <span class="ma-list-heading__action">
+                {% if notification_exclusion.mention_notifications_enabled %}
+                    <a href="{% url 'barriers:mention_turn_notifications_off' %}">Email notifications: On</a>
+                {% else %}
+                    <a href="{% url 'barriers:mention_turn_notifications_on' %}">Email notifications: Off</a>
+                {% endif %}
+            </span>
+            <span class="ma-list-heading__action">
+                {% if are_all_mentions_read %}
+                    <a href="{% url 'barriers:mention_mark_all_as_unread' %}">Mark all as unread</a>
+                {% else %}
+                    <a href="{% url 'barriers:mention_mark_all_as_read' %}">Mark all as read</a>
+                {% endif %}
+            </span>
+        </div>
+
+    </h2>
+
+
+    <ul class="ma-card-list">
+        {% for mention in mentions %}
+            {% include "barriers/partials/mention.html" with mention=mention %}
+        {% empty %}
+            <li class="mention-item ma-card-list__item">
+                <p>You have no mentions</p>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
+
 {% endblock page_content %}
