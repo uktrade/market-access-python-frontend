@@ -22,7 +22,6 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
     )
 
     def __init__(self, preliminary_assessment=None, *args, **kwargs):
-        self.token = kwargs.pop("token")
         self.barrier = kwargs.pop("barrier")
         self.preliminary_assessment = preliminary_assessment
         super().__init__(*args, **kwargs)
