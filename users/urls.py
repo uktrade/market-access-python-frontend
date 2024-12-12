@@ -19,9 +19,9 @@ from users.views import (
     Login,
     LoginCallback,
     ManageUsers,
+    Mentions,
     SignOut,
     UserDetail,
-    Mentions,
 )
 
 app_name = "users"
