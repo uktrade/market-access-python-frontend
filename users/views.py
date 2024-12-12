@@ -516,3 +516,28 @@ class AccountDownloads(TemplateView):
         )
 
         return context_data
+
+
+class Mentions(TemplateView):
+    template_name = "users/mentions.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        mentions = client.mentions.list()
+        notification_exclusion = client.notification_exclusion.get()
+
+        are_all_mentions_read: bool = not any(
+            not mention.read_by_recipient for mention in mentions
+        )
+
+        context_data.update(
+            {
+                "page": "mentions",
+                "mentions": mentions,
+                "notification_exclusion": notification_exclusion,
+                "are_all_mentions_read": are_all_mentions_read,
+            }
+        )
+
+        return context_data
