@@ -14,6 +14,7 @@ from utils.api.resources import (
     ActionPlanTaskResource,
     BarriersResource,
     NotesResource,
+    PreliminaryAssessmentResource,
     PublicBarriersResource,
     ReportsResource,
     UserProfileResource,
@@ -483,5 +484,15 @@ class MarketAccessTestCase(TestCase):
                 "countries": [],
                 "trading_blocs": [],
                 "overseas_regions": [],
+            }
+        )
+
+    @property
+    def preliminary_assessment(self):
+        return PreliminaryAssessmentResource.model(
+            {
+                "id": 1,
+                "value": "1",
+                "details": "test details",
             }
         )
