@@ -516,3 +516,7 @@ class AccountDownloads(TemplateView):
         )
 
         return context_data
+
+
+class Mentions(TemplateView):
+    template_name = "users/mentions.html"

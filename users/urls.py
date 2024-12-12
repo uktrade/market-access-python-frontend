@@ -21,6 +21,7 @@ from users.views import (
     ManageUsers,
     SignOut,
     UserDetail,
+    Mentions,
 )
 
 app_name = "users"
@@ -72,4 +73,5 @@ urlpatterns = [
         UserEditGovernmentDepartment.as_view(),
         name="edit_user_government_department",
     ),
+    path("mentions/", Mentions.as_view(), name="mentions"),
 ]
