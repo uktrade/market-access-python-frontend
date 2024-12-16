@@ -231,6 +231,7 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.get_interactions_patcher.stop)
 
     def init_get_current_user_patcher(self):
+        print('HELLO I AM IN THE GET CURRENT USER PATCHER')
         self.get_current_user_patcher = patch(
             "utils.api.resources.UsersResource.get_current"
         )
@@ -264,8 +265,10 @@ class MarketAccessTestCase(TestCase):
 
     def init_get_mentions_count_patcher(self):
         self.get_mentions_patcher = patch("utils.api.resources.MentionResource.get")
+        print('HELLO I AM IN THE MENTIONS COUNT PATCHER')
         self.mock_get_mentions = self.get_mentions_patcher.start()
-        self.mock_get_mentions.return_value = self.mention
+        self.mock_get_mentions.return_value = self.mentions
+        print(self.mock_get_mentions.return_value)
         self.addCleanup(self.get_mentions_patcher.stop)
 
     def delete_session_key(self, key):
@@ -495,12 +498,22 @@ class MarketAccessTestCase(TestCase):
         )
     
     @property
-    def mention(self):
-        return MentionResource.model(
-            {
-                "barrier":"1",
-                "email_used":"example@test.com",
-                "recipient":"test user",
-                "created_by_id":"2",
-            }
-        )
+    def mentions(self):
+        return [
+                MentionResource.model(
+                    {
+                        "barrier":"1",
+                        "email_used":"example@test.com",
+                        "recipient":"test user",
+                        "created_by_id":"2",
+                    }
+                ),
+                MentionResource.model(
+                    {
+                        "barrier":"2",
+                        "email_used":"example2@test.com",
+                        "recipient":"test user 2",
+                        "created_by_id":"3",
+                    }
+                ),
+            ]
