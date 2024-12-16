@@ -18,6 +18,7 @@ from utils.api.resources import (
     ReportsResource,
     UserProfileResource,
     UsersResource,
+    MentionResource,
 )
 
 
@@ -182,6 +183,7 @@ class MarketAccessTestCase(TestCase):
         self.init_get_public_barrier_patcher()
         self.init_get_action_plans_patcher()
         self.init_get_profile_patcher()
+        self.init_get_mentions_count_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -259,6 +261,12 @@ class MarketAccessTestCase(TestCase):
         self.mock_get_profile = self.get_profile_patcher.start()
         self.mock_get_profile.return_value = self.profile
         self.addCleanup(self.get_profile_patcher.stop)
+
+    def init_get_mentions_count_patcher(self):
+        self.get_mentions_patcher = patch("utils.api.resources.MentionResource.get")
+        self.mock_get_mentions = self.get_mentions_patcher.start()
+        self.mock_get_mentions.return_value = self.mention
+        self.addCleanup(self.get_mentions_patcher.stop)
 
     def delete_session_key(self, key):
         try:
@@ -483,5 +491,16 @@ class MarketAccessTestCase(TestCase):
                 "countries": [],
                 "trading_blocs": [],
                 "overseas_regions": [],
+            }
+        )
+    
+    @property
+    def mention(self):
+        return MentionResource.model(
+            {
+                "barrier":"1",
+                "email_used":"example@test.com",
+                "recipient":"test user",
+                "created_by_id":"2",
             }
         )
