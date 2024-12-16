@@ -13,12 +13,12 @@ from utils.api.resources import (
     ActionPlanStakeholderResource,
     ActionPlanTaskResource,
     BarriersResource,
+    MentionResource,
     NotesResource,
     PublicBarriersResource,
     ReportsResource,
     UserProfileResource,
     UsersResource,
-    MentionResource,
 )
 
 
@@ -231,7 +231,7 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.get_interactions_patcher.stop)
 
     def init_get_current_user_patcher(self):
-        print('HELLO I AM IN THE GET CURRENT USER PATCHER')
+        print("HELLO I AM IN THE GET CURRENT USER PATCHER")
         self.get_current_user_patcher = patch(
             "utils.api.resources.UsersResource.get_current"
         )
@@ -259,15 +259,16 @@ class MarketAccessTestCase(TestCase):
 
     def init_get_profile_patcher(self):
         self.get_profile_patcher = patch("utils.api.resources.UserProfileResource.get")
+        "HELLO IM IN THE PROFILE PATCHER"
         self.mock_get_profile = self.get_profile_patcher.start()
         self.mock_get_profile.return_value = self.profile
         self.addCleanup(self.get_profile_patcher.stop)
 
     def init_get_mentions_count_patcher(self):
         self.get_mentions_patcher = patch("utils.api.resources.MentionResource.get")
-        print('HELLO I AM IN THE MENTIONS COUNT PATCHER')
+        print("HELLO I AM IN THE MENTIONS COUNT PATCHER")
         self.mock_get_mentions = self.get_mentions_patcher.start()
-        self.mock_get_mentions.return_value = self.mentions
+        self.mock_get_mentions.return_value = "TEST MENTIONS"
         print(self.mock_get_mentions.return_value)
         self.addCleanup(self.get_mentions_patcher.stop)
 
@@ -496,24 +497,24 @@ class MarketAccessTestCase(TestCase):
                 "overseas_regions": [],
             }
         )
-    
+
     @property
     def mentions(self):
         return [
-                MentionResource.model(
-                    {
-                        "barrier":"1",
-                        "email_used":"example@test.com",
-                        "recipient":"test user",
-                        "created_by_id":"2",
-                    }
-                ),
-                MentionResource.model(
-                    {
-                        "barrier":"2",
-                        "email_used":"example2@test.com",
-                        "recipient":"test user 2",
-                        "created_by_id":"3",
-                    }
-                ),
-            ]
+            MentionResource.model(
+                {
+                    "barrier": "1",
+                    "email_used": "example@test.com",
+                    "recipient": "test user",
+                    "created_by_id": "2",
+                }
+            ),
+            MentionResource.model(
+                {
+                    "barrier": "2",
+                    "email_used": "example2@test.com",
+                    "recipient": "test user 2",
+                    "created_by_id": "3",
+                }
+            ),
+        ]
