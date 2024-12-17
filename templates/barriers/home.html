@@ -11,11 +11,6 @@
         <script nonce="{{request.csp_nonce}}">
             document.addEventListener("DOMContentLoaded", function (event) {
                 ma.pages.index();
-                const month = new Date().toLocaleString('en-GB', { month: 'long' });
-                const year = new Date().getFullYear();
-                const newsletterLink = document.querySelector("#month-placeholder").parentNode;
-                newsletterLink.href = `https://data-services-help.trade.gov.uk/market-access/newsletters/${month.toLowerCase()}/${year}`;
-                newsletterLink.textContent = `DMAS newsletter for ${month} ${year}`;
 
                 // add the active filters to the active filters section
                 let countryElement = document.getElementById("country");
@@ -41,67 +36,86 @@
         </script>
     {% endblock %}
 {% endblock %}
-{% block main %}
-    <main class="govuk-main-wrapper govuk-main-wrapper--dashboard"
-          id="main-content"
-          role="main">
-        {% block content %}
-            <div class="govuk-grid-row grey m-b-6">
-                <div class="govuk-grid-column-full ma-container-full p-t-4">
-                    <h1 class="govuk-heading-xl">
-                        <span class="govuk-caption-m">Market access barriers</span>
-                        Dashboard
-                    </h1>
-                    <div class="govuk-form-group">
-                        <form action="{% url 'barriers:search' %}" method="GET">
-                            <input class="govuk-input govuk-!-width-two-thirds"
-                                   id="event-name"
-                                   name="search_term_text"
-                                   type="text"
-                                   placeholder="Search for barrier by name or with key terms." />
-                            <input type="hidden" name="ordering" value="relevance" />
-                            <button id="search_submit_button"
-                                    type="submit"
-                                    class="govuk-button"
-                                    data-module="govuk-button">Search</button>
-                        </form>
-                        <div>
-                            <div class="dashboard-search-link-container">
-                                <a href="{% url 'users:account_saved_searches' %}"
-                                   class="govuk-link--no-visited-state-dark">My saved searches</a>
-                            </div>
-                            <div class="dashboard-search-link-container">
-                                <a href="{% url 'users:account_downloads' %}"
-                                   class="govuk-link--no-visited-state-dark">My downloads</a>
-                            </div>
-                            <div class="dashboard-search-link-container">
-                                <a href="{% url 'barriers:search' %}?user=1&status=2"
-                                   class="govuk-link--no-visited-state-dark">My open barriers</a>
-                            </div>
-                        </div>
+{% block masthead %}
+    <div class="ma-masthead">
+        <div class="govuk-grid-row govuk-width-container ma-container-full govuk-!-padding-top-5 govuk-!-margin-left-0">
+            <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
+                <h1 class="govuk-heading-xl">
+                    <span class="govuk-caption-m">Market access barriers</span>
+                    Dashboard
+                </h1>
+                <div class="govuk-form-group">
+                    <form action="{% url 'barriers:search' %}" method="GET">
+                        <label class="govuk-visually-hidden" for="search_term">Search term</label>
+                        <input class="govuk-input govuk-!-width-two-thirds"
+                               id="search_term"
+                               name="search_term_text"
+                               type="text"
+                               placeholder="Search for barrier by name or with key terms." />
+                        <input type="hidden" name="ordering" value="relevance" />
+                        <button id="search_submit_button"
+                                type="submit"
+                                class="govuk-button"
+                                data-module="govuk-button">Search</button>
+                    </form>
+                </div>
+                <div>
+                    <div class="dashboard-search-link-container">
+                        <a href="{% url 'users:account_saved_searches' %}"
+                           class="govuk-link--no-visited-state-dark">My saved searches</a>
+                    </div>
+                    <div class="dashboard-search-link-container">
+                        <a href="{% url 'users:account_downloads' %}"
+                           class="govuk-link--no-visited-state-dark">My downloads</a>
+                    </div>
+                    <div class="dashboard-search-link-container">
+                        <a href="{% url 'barriers:search' %}?user=1&status=2"
+                           class="govuk-link--no-visited-state-dark">My open barriers</a>
                     </div>
                 </div>
             </div>
-            <section class="govuk-width-container ma-container-full">
-                {% if barrier_task_list %}
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-full">{% include "barriers/partials/dashboard_tasks.html" %}</div>
-                    </div>
-                {% endif %}
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-full">
-                        <div class="govuk-summary-card">
-                            <div class="govuk-summary-card__title-wrapper">
-                                <h3 class="govuk-summary-card__title">See data for barriers you're working on or monitoring</h3>
-                            </div>
-                            {% include "barriers/partials/summary_cards.html" %}
-                        </div>
-                    </div>
+            <div class="govuk-grid-column-one-third">
+                <div class="dash-card  govuk-!-margin-left-0 govuk-!-margin-top-3">
+                    <span class="dash-card__heading">Get help</span>
+                    <span class="dash-button__text dashboard_button__text">
+                        Read the <a href="https://data-services-help.trade.gov.uk/market-access/the-market-access-playbook/"
+    target="_blank">market access playbook</a> for help resolving your barriers.
+                    </span>
+                    <span class="dash-button__text dashboard_button__text">You can also find out:</span>
+                    <ul class="dash-card__text dashboard_button__text">
+                        <li>
+                            <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/"
+                               target="_blank">how to use DMAS</a>
+                        </li>
+                        <li>
+                            <a href="https://data-services-help.trade.gov.uk/market-access/updates/"
+                               target="_blank">what's new on DMAS</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-full">{% include "barriers/partials/whats_new.html" %}</div>
+            </div>
+        </div>
+    </div>
+{% endblock masthead %}
+{% block content %}
+    <section title="Barrier insights">
+        {% if barrier_task_list %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">{% include "barriers/partials/dashboard_tasks.html" %}</div>
+            </div>
+        {% endif %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <div class="govuk-summary-card">
+                    <div class="govuk-summary-card__title-wrapper">
+                        <h3 class="govuk-summary-card__title">See data for barriers you're working on or monitoring</h3>
+                    </div>
+                    {% include "barriers/partials/summary_cards.html" %}
                 </div>
-            </section>
-        {% endblock %}
-    </main>
-{% endblock %}
+            </div>
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">{% include "barriers/partials/whats_new.html" %}</div>
+        </div>
+    </section>
+{% endblock content %}
