@@ -529,17 +529,19 @@ class Mentions(TemplateView, PaginationMixin):
             self.request.GET.get("page") if self.request.GET.get("page") else 1
         )
 
+        mentions = client.mentions
+
         mentions_params = {
             "limit": self.get_pagination_limit(),
             "offset": self.get_pagination_offset(),
             "page": page_number,
         }
-        mentions_list = client.mentions.list(**mentions_params)
+        mentions_list = mentions.list(**mentions_params)
 
         notification_exclusion = client.notification_exclusion.get()
 
         are_all_mentions_read: bool = not any(
-            not mention.read_by_recipient for mention in mentions_list
+            not mention.read_by_recipient for mention in mentions.list()
         )
 
         context_data.update(
@@ -548,6 +550,7 @@ class Mentions(TemplateView, PaginationMixin):
                 "mentions": mentions_list,
                 "notification_exclusion": notification_exclusion,
                 "are_all_mentions_read": are_all_mentions_read,
+                "total_mentions": len(mentions.list())
             }
         )
 
