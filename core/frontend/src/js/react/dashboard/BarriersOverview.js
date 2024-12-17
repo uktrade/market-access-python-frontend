@@ -154,9 +154,9 @@ const BarriersOverview = ({ filterValues }) => {
                 },
                 yaxis: {
                     title: {
-                        text: 'British pounds(£)',
+                        text: "British pounds(£)",
                         style: {
-                            color: '#3b5998',
+                            color: "#3b5998",
                         },
                     },
                 },
@@ -217,24 +217,24 @@ const BarriersOverview = ({ filterValues }) => {
                                 name: "Value of barriers estimated to be resolved",
                                 data:
                                     data &&
-                                        data.barrier_value_chart
-                                            .estimated_barriers_value
+                                    data.barrier_value_chart
+                                        .estimated_barriers_value
                                         ? [
-                                            data.barrier_value_chart
-                                                .estimated_barriers_value,
-                                        ]
+                                              data.barrier_value_chart
+                                                  .estimated_barriers_value,
+                                          ]
                                         : [],
                             },
                             {
                                 name: "Value of resolved barriers",
                                 data:
                                     data &&
-                                        data.barrier_value_chart
-                                            .resolved_barriers_value
+                                    data.barrier_value_chart
+                                        .resolved_barriers_value
                                         ? [
-                                            data.barrier_value_chart
-                                                .resolved_barriers_value,
-                                        ]
+                                              data.barrier_value_chart
+                                                  .resolved_barriers_value,
+                                          ]
                                         : [],
                             },
                         ],
@@ -251,12 +251,11 @@ const BarriersOverview = ({ filterValues }) => {
                             },
                             yaxis: {
                                 title: {
-                                    text: 'British pounds(£)',
+                                    text: "British pounds(£)",
                                     style: {
-                                        color: '#3b5998',
+                                        color: "#3b5998",
                                     },
                                 },
-
                             },
                         },
                     },
@@ -550,11 +549,12 @@ const BarriersOverview = ({ filterValues }) => {
                 <div className="govuk-grid-column-three-quarters">
                     <h2 className="govuk-summary-card__title">
                         Barrier insights
-                        <span className="govuk-caption-m">Current filters:</span>
+                        <span className="govuk-caption-m">
+                            Current filters:
+                        </span>
                     </h2>
 
                     <div className="p-l-3" id="active filters">
-
                         <ul className="govuk-list">
                             {filters
                                 .filter((v) => v.readable_value)
@@ -605,17 +605,19 @@ const BarriersOverview = ({ filterValues }) => {
                     </div>
                     <div className="govuk-grid-row">
                         <h3 className="govuk-summary-card__title p-l-3">
-                            {`Resolved barriers for financial year: ${data
-                                ? parseIso(
-                                    data?.financial_year?.current_start,
-                                )
-                                : null
-                                } to ${data
+                            {`Resolved barriers for financial year: ${
+                                data
                                     ? parseIso(
-                                        data?.financial_year?.current_end,
-                                    )
+                                          data?.financial_year?.current_start,
+                                      )
                                     : null
-                                }`}
+                            } to ${
+                                data
+                                    ? parseIso(
+                                          data?.financial_year?.current_end,
+                                      )
+                                    : null
+                            }`}
                         </h3>
                         <span className="govuk-caption-m p-l-3">
                             This includes resolved barriers and those with an
@@ -654,7 +656,7 @@ const BarriersOverview = ({ filterValues }) => {
             <div className="govuk-grid-row">
                 <div className="govuk-grid-column-full">
                     {chartData.barChartData.series[0].data.length > 0 ||
-                        chartData.barChartData.series[1].data.length > 0 ? (
+                    chartData.barChartData.series[1].data.length > 0 ? (
                         handleBarChart(chartData.barChartData)
                     ) : (
                         <div className="dashboard-chart">
@@ -667,17 +669,17 @@ const BarriersOverview = ({ filterValues }) => {
                             </p>
                             {chartData.barChartData.series[0].data.length ===
                                 0 && (
-                                    <p className="govuk-body-s">
-                                        No resolved barriers found in the date range
-                                    </p>
-                                )}
+                                <p className="govuk-body-s">
+                                    No resolved barriers found in the date range
+                                </p>
+                            )}
                             {chartData.barChartData.series[0].data.length ===
                                 1 && (
-                                    <p className="govuk-body-s">
-                                        No barriers with an estimated resolution in
-                                        the date range{" "}
-                                    </p>
-                                )}
+                                <p className="govuk-body-s">
+                                    No barriers with an estimated resolution in
+                                    the date range{" "}
+                                </p>
+                            )}
                         </div>
                     )}
                 </div>
