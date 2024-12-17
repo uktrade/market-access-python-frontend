@@ -52,9 +52,6 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
-                "new_mentions_count": len(
-                    [mention for mention in mentions if not mention.read_by_recipient]
-                ),
                 "active": active,
                 "barrier_downloads": barrier_downloads,
             }
