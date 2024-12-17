@@ -518,26 +518,42 @@ class AccountDownloads(TemplateView):
         return context_data
 
 
-class Mentions(TemplateView):
+class Mentions(TemplateView, PaginationMixin):
     template_name = "users/mentions.html"
+    pagination_limit = 6
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        mentions = client.mentions.list()
+        page_number = (
+            self.request.GET.get("page") if self.request.GET.get("page") else 1
+        )
+
+        mentions_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "page": page_number,
+        }
+        mentions_list = client.mentions.list(**mentions_params)
+
         notification_exclusion = client.notification_exclusion.get()
 
         are_all_mentions_read: bool = not any(
-            not mention.read_by_recipient for mention in mentions
+            not mention.read_by_recipient for mention in mentions_list
         )
 
         context_data.update(
             {
                 "page": "mentions",
-                "mentions": mentions,
+                "mentions": mentions_list,
                 "notification_exclusion": notification_exclusion,
                 "are_all_mentions_read": are_all_mentions_read,
             }
         )
+
+        context_data["pagination"] = self.get_pagination_data(
+            object_list=mentions_list
+        )
+        print(mentions_list)
 
         return context_data

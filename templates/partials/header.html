@@ -59,8 +59,8 @@
                 </li>
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link{% if page == 'mentions' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:mentions' %}">
-                        {% if mentions_count %}
-                            <span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ mentions_count }}</span>
+                        {% if new_mentions_count %}
+                            <span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ new_mentions_count }}</span>
                         {% endif %}
                         Mentions
                     </a>

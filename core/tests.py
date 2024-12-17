@@ -259,7 +259,7 @@ class MarketAccessTestCase(TestCase):
 
     def init_get_profile_patcher(self):
         self.get_profile_patcher = patch("utils.api.resources.UserProfileResource.get")
-        "HELLO IM IN THE PROFILE PATCHER"
+        print("HELLO IM IN THE PROFILE PATCHER")
         self.mock_get_profile = self.get_profile_patcher.start()
         self.mock_get_profile.return_value = self.profile
         self.addCleanup(self.get_profile_patcher.stop)
