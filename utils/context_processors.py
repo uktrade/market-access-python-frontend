@@ -18,15 +18,13 @@ def get_user(request):
 
 
 def new_mentions_count(request):
-    user_id = request.session.get("user_data", {}).get("id")
-    if user_id:
-        client = MarketAccessAPIClient(request.session.get("sso_token"))
-        mentions = client.mentions.list()
-        new_mentions_count = len([mention for mention in mentions if not mention.read_by_recipient])
-        if new_mentions_count > 99:
-            return "99+"
-        else:
-            return new_mentions_count
+    client = MarketAccessAPIClient(request.session.get("sso_token"))
+    mentions = client.mentions.list()
+    new_mentions_count = len([mention for mention in mentions if not mention.read_by_recipient])
+    if new_mentions_count > 99:
+        return "99+"
+    else:
+        return new_mentions_count
 
 
 def user_scope(request):
