@@ -550,13 +550,9 @@ class Mentions(TemplateView, PaginationMixin):
                 "mentions": mentions_list,
                 "notification_exclusion": notification_exclusion,
                 "are_all_mentions_read": are_all_mentions_read,
-                "total_mentions": len(mentions.list())
+                "total_mentions": len(mentions.list()),
+                "pagination": self.get_pagination_data(object_list=mentions_list),
             }
         )
-
-        context_data["pagination"] = self.get_pagination_data(
-            object_list=mentions_list
-        )
-        print(mentions_list)
 
         return context_data
