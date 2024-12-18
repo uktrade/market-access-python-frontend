@@ -7,7 +7,12 @@ from django import forms
 from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import DEPRECATED_TAGS, EXPORT_TYPES, STATUS_WITH_DATE_FILTER
+from barriers.constants import (
+    DEPRECATED_TAGS,
+    EXPORT_TYPES,
+    STATUS_WITH_DATE_FILTER,
+    PRELIMINARY_ASSESSMENT_CHOICES,
+)
 from utils.forms.fields import MonthDateRangeField
 from utils.helpers import format_dict_for_url_querystring
 
@@ -164,6 +169,11 @@ class BarrierSearchForm(forms.Form):
             ("published", "Published"),
             ("unpublished", "Unpublished"),
         ),
+        required=False,
+    )
+    preliminary_assessment = forms.MultipleChoiceField(
+        label="Preliminary economic assessment",
+        choices=PRELIMINARY_ASSESSMENT_CHOICES,
         required=False,
     )
     economic_assessment_eligibility = forms.MultipleChoiceField(
@@ -523,6 +533,9 @@ class BarrierSearchForm(forms.Form):
         params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
         params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
+        params["preliminary_assessment"] = ",".join(
+            self.cleaned_data.get("preliminary_assessment", [])
+        )
         params["country_trading_bloc"] = ",".join(
             self.cleaned_data.get("country_trading_bloc", [])
         )
