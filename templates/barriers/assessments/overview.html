@@ -33,6 +33,7 @@
                         <a class="assessment-item-content__link" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Add preliminary assessment</a>
                     {% else %}
                         <p class="assessment-item-content__hint">This barrier has not yet received a preliminary assessment. Analysts carry out preliminary assessments of all new market access barriers uploaded to DMAS.</p>
+                        <br>
                         <p class="assessment-item-content__hint">Preliminary assessments are an estimate of whether a market access barrier is likely to be worth less or more than £10M in additional exports, or earnings on UK outward <strong>Foreign Direct Investment</strong> (FDI), over a 5-year period.</p>
                     {% endif %}
                 </div>
