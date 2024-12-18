@@ -100,7 +100,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
     form_class = BarrierSearchForm
 
     # Let the pagination mixin know how many results the API will return per page
-    pagination_limit = 5
+    pagination_limit = 3
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(**kwargs)
