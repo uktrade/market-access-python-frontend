@@ -16,9 +16,27 @@
     {% include 'barriers/partials/barrier_tabs.html' with active='assessment' %}
 
     <div class="restrict-width">
+
         <div class="assessment-item">
-            <h2 class="assessment-item__heading">Initial economic assessment</h2>
-            {% include "barriers/assessments/economic/partials/summary.html" %}
+            <h2 class="assessment-item__heading">Preliminary economic assessment</h2>
+            {% if preliminary_assessment %}
+                <p class="assessment-item__value"><strong>Preliminary value: {{ preliminary_assessment.get_value_display }}</p></strong>
+                <p class="assessment-item__value">Details:</p>
+                <p class="assessment-item__value">{{ preliminary_assessment.details|linebreaksbr }}</p>
+                {% if current_user|has_permission:"change_preliminaryassessment" %}
+                    <a class="assessment-item__edit" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Edit</a>
+                {% endif %}
+            {% else %}
+                <div class="assessment-item-content">
+                    {% if current_user|has_permission:"add_preliminaryassessment" %}
+                        <p class="assessment-item-content__hint">No preliminary assessment</p>
+                        <a class="assessment-item-content__link" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Add preliminary assessment</a>
+                    {% else %}
+                        <p class="assessment-item-content__hint">This barrier has not yet received a preliminary assessment. Analysts carry out preliminary assessments of all new market access barriers uploaded to DMAS.</p>
+                        <p class="assessment-item-content__hint">Preliminary assessments are an estimate of whether a market access barrier is likely to be worth less or more than £10M in additional exports, or earnings on UK outward <strong>Foreign Direct Investment</strong> (FDI), over a 5-year period.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
 
         <div class="assessment-item">
@@ -50,5 +68,11 @@
             <h2 class="assessment-item__heading">Strategic assessment</h2>
             {% include "barriers/assessments/strategic/partials/summary.html" %}
         </div>
+
+        <div class="assessment-item archived">
+            <h2 class="assessment-item__heading">Initial economic assessment - archived</h2>
+            {% include "barriers/assessments/economic/partials/summary.html" %}
+        </div>
+
     </div>
 {% endblock %}

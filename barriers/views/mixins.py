@@ -20,6 +20,7 @@ class BarrierMixin:
     _notes = None
     _note = None
     _action_plan = None
+    _preliminary_assessment = None
 
     @property
     def barrier(self):
@@ -50,6 +51,12 @@ class BarrierMixin:
         if not self._action_plan:
             self._action_plan = self.get_action_plan()
         return self._action_plan
+
+    @property
+    def preliminary_assessment(self):
+        if not self._preliminary_assessment:
+            self._preliminary_assessment = self.get_preliminary_assessment()
+        return self._preliminary_assessment
 
     def get_barrier(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
@@ -96,6 +103,17 @@ class BarrierMixin:
             if e.status_code == HTTPStatus.NOT_FOUND:
                 raise Http404()
             raise
+
+    def get_preliminary_assessment(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.barrier.id
+        try:
+            return client.preliminary_assessment.get_preliminary_assessment(
+                barrier_id=barrier_id
+            )
+        except APIHttpException as e:
+            if e.status_code == HTTPStatus.NOT_FOUND:
+                return None
 
 
 class PublicBarrierMixin:
