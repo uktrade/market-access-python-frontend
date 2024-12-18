@@ -27,7 +27,7 @@ class MentionsTestCase(MarketAccessTestCase):
         html = response.content.decode("utf8")
         assert mock_list.call_count == 2
         assert "Mentions" in html
-        assert 'govuk-tag ma-badge ma-badge--attention new-mention-count' not in html
+        assert "govuk-tag ma-badge ma-badge--attention new-mention-count" not in html
 
     @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.get")
@@ -40,4 +40,7 @@ class MentionsTestCase(MarketAccessTestCase):
         html = response.content.decode("utf8")
         assert mock_list.call_count == 2
         assert "Mentions" in html
-        assert f'<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{len(self.mentions)}</span>' in html
+        assert (
+            f'<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{len(self.mentions)}</span>'
+            in html
+        )

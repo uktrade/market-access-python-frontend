@@ -508,7 +508,7 @@ class MarketAccessTestCase(TestCase):
                     "email_used": "example@test.com",
                     "recipient": "test user",
                     "created_by_id": "2",
-                    "read_by_recipient": False
+                    "read_by_recipient": False,
                 }
             ),
             MentionResource.model(
@@ -517,7 +517,7 @@ class MarketAccessTestCase(TestCase):
                     "email_used": "example2@test.com",
                     "recipient": "test user 2",
                     "created_by_id": "3",
-                    "read_by_recipient": False
+                    "read_by_recipient": False,
                 }
             ),
         ]

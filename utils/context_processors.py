@@ -20,7 +20,9 @@ def get_user(request):
 def new_mentions_count(request):
     client = MarketAccessAPIClient(request.session.get("sso_token"))
     mentions = client.mentions.list()
-    new_mentions_count = len([mention for mention in mentions if not mention.read_by_recipient])
+    new_mentions_count = len(
+        [mention for mention in mentions if not mention.read_by_recipient]
+    )
     if new_mentions_count > 99:
         return "99+"
     else:
