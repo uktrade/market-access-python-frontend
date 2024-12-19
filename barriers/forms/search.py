@@ -7,7 +7,12 @@ from django import forms
 from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import DEPRECATED_TAGS, EXPORT_TYPES, STATUS_WITH_DATE_FILTER
+from barriers.constants import (
+    DEPRECATED_TAGS,
+    EXPORT_TYPES,
+    PRELIMINARY_ASSESSMENT_CHOICES,
+    STATUS_WITH_DATE_FILTER,
+)
 from utils.forms.fields import MonthDateRangeField
 from utils.helpers import format_dict_for_url_querystring
 
@@ -166,21 +171,9 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
-    economic_assessment_eligibility = forms.MultipleChoiceField(
-        label="Economic assessment eligibility",
-        choices=(
-            ("eligible", "Eligible"),
-            ("ineligible", "Ineligible"),
-            ("not_yet_marked", "Not yet marked"),
-        ),
-    )
-    economic_assessment = forms.MultipleChoiceField(
-        label="Economic assessment",
-        choices=(
-            ("with", "With an economic assessment"),
-            ("without", "Without an economic assessment"),
-            ("ready_for_approval", "With an economic assessment ready for approval"),
-        ),
+    preliminary_assessment = forms.MultipleChoiceField(
+        label="Preliminary economic assessment",
+        choices=PRELIMINARY_ASSESSMENT_CHOICES,
         required=False,
     )
     economic_impact_assessment = forms.MultipleChoiceField(
@@ -523,14 +516,11 @@ class BarrierSearchForm(forms.Form):
         params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
         params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
+        params["preliminary_assessment"] = ",".join(
+            self.cleaned_data.get("preliminary_assessment", [])
+        )
         params["country_trading_bloc"] = ",".join(
             self.cleaned_data.get("country_trading_bloc", [])
-        )
-        params["economic_assessment_eligibility"] = ",".join(
-            self.cleaned_data.get("economic_assessment_eligibility", [])
-        )
-        params["economic_assessment"] = ",".join(
-            self.cleaned_data.get("economic_assessment", [])
         )
         params["economic_impact_assessment"] = ",".join(
             self.cleaned_data.get("economic_impact_assessment", [])

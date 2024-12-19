@@ -92,6 +92,7 @@ class SearchTestCase(MarketAccessTestCase):
                     "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
                     "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
                 ],
+                "preliminary_assessment": ["1", "3"],
                 "status": ["2"],
                 "user": "1",
                 "ordering": "-reported",
@@ -118,6 +119,7 @@ class SearchTestCase(MarketAccessTestCase):
         ]
         assert form.cleaned_data["status"] == ["2"]
         assert form.cleaned_data["user"] == "1"
+        assert form.cleaned_data["preliminary_assessment"] == ["1", "3"]
 
         mock_list.assert_called_with(
             ordering="-reported",
@@ -137,6 +139,7 @@ class SearchTestCase(MarketAccessTestCase):
             ),
             category="130,141",
             policy_team="10,11",
+            preliminary_assessment="1,3",
             status="2",
             user="1",
             archived="0",
