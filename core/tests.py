@@ -184,7 +184,7 @@ class MarketAccessTestCase(TestCase):
         self.init_get_public_barrier_patcher()
         self.init_get_action_plans_patcher()
         self.init_get_profile_patcher()
-        self.init_get_mentions_patcher()
+        self.init_get_user_mention_counts_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -263,13 +263,13 @@ class MarketAccessTestCase(TestCase):
         self.mock_get_profile.return_value = self.profile
         self.addCleanup(self.get_profile_patcher.stop)
 
-    def init_get_mentions_patcher(self):
-        self.get_mentions_patcher = patch("utils.api.resources.MentionResource.list")
+    def init_get_user_mention_counts_patcher(self):
+        self.get_user_mention_counts_patcher = patch("utils.api.resources.UserMentionCountsResource.list")
         print("HELLO IM IN THE MENTION PATCHER")
-        self.mock_get_mentions = self.get_mentions_patcher.start()
-        self.mock_get_mentions.return_value = self.mentions
-        print(self.mock_get_mentions.return_value)
-        self.addCleanup(self.get_mentions_patcher.stop)
+        self.mock_get_user_mention_counts = self.get_user_mention_counts_patcher.start()
+        self.mock_get_user_mention_counts.return_value = {'read_by_recipient': 0, 'total': 0}
+        print(self.mock_get_user_mention_counts.return_value)
+        self.addCleanup(self.get_user_mention_counts_patcher.stop)
 
     def delete_session_key(self, key):
         try:
