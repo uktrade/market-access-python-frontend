@@ -27,7 +27,6 @@ def user_scope(request):
 def user_mention_counts(request):
     client = MarketAccessAPIClient(request.session.get("sso_token"))
     resource = client.user_mention_counts.get()
-    print(resource.data)
     unread_count = resource.total - resource.read_by_recipient
     if unread_count > 99:
         count = "99+"
