@@ -153,10 +153,15 @@ const BarriersOverview = ({ filterValues }) => {
                     categories: ["Loading ..."], // will be updated with label
                 },
                 yaxis: {
-                    categories: ["0", "20", "40", "60", "80", "100"],
+                    title: {
+                        text: "British pounds(£)",
+                        style: {
+                            color: "#3b5998",
+                        },
+                    },
                 },
                 title: {
-                    text: "Total value of barriers resolved and estimated to be resolved",
+                    text: "Total value of open barriers estimated to be resolved and resolved barriers( £-British pounds)",
                     align: "center",
                 },
             },
@@ -243,6 +248,14 @@ const BarriersOverview = ({ filterValues }) => {
                                         data?.financial_year?.current_end,
                                     )}`,
                                 ],
+                            },
+                            yaxis: {
+                                title: {
+                                    text: "British pounds(£)",
+                                    style: {
+                                        color: "#3b5998",
+                                    },
+                                },
                             },
                         },
                     },
@@ -536,6 +549,9 @@ const BarriersOverview = ({ filterValues }) => {
                 <div className="govuk-grid-column-three-quarters">
                     <h2 className="govuk-summary-card__title">
                         Barrier insights
+                        <span className="govuk-caption-m">
+                            Current filters:
+                        </span>
                     </h2>
 
                     <div className="p-l-3" id="active filters">

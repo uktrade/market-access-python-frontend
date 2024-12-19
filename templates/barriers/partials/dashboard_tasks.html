@@ -1,21 +1,24 @@
 <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h3 class="govuk-summary-card__title">Tasks you need to complete for barriers you're working on</h3>
+        <h2 class="govuk-summary-card__title">Tasks you need to complete for barriers you're working on</h2>
         <ul class="govuk-summary-card__actions">
             <!-- Filter goes here -->
         </ul>
     </div>
     <div class="govuk-summary-card__content p-t-0">
-        <dl class="govuk-summary-list">
+        <div class="govuk-summary-list">
             {% for barrier in barrier_task_list %}
                 <div class="govuk-summary-list__row">
                     <div class="govuk-grid-row m-t-4">
-                        <a class="govuk-link govuk-body-l govuk-grid-column-one-half m-b-0" href="{% url 'barriers:barrier_detail' barrier.barrier_id %}"><strong>{{ barrier.barrier_title }}</strong></a>
+                        <a class="govuk-link govuk-grid-column-one-half"
+                           href="{% url 'barriers:barrier_detail' barrier.barrier_id %}"><strong>{{ barrier.barrier_title }}</strong></a>
                         <span>{{ barrier.barrier_code }}</span>
                     </div>
                     {% if barrier.task_list|length > 1 %}
-                        <p class="govuk-body m-b-0 m-t-2"><strong>{{ barrier.task_list|length }} Tasks on this barrier</strong></p>
-                        <ul class="govuk-list govuk-list--bullet govuk-body">
+                        <p>
+                            <strong>{{ barrier.task_list|length }} Tasks on this barrier</strong>
+                        </p>
+                        <ul class="govuk-list govuk-list--bullet m-l-2">
                             {% for task in barrier.task_list %}
                                 <li>
                                     {% for text_section in task.message %}
@@ -32,7 +35,8 @@
                         <p>
                             {% for text_section in barrier.task_list.0.message %}
                                 {% if text_section == barrier.task_list.0.link_text %}
-                                    <a class="govuk-link" href="{% url barrier.task_list.0.task_url barrier.barrier_id %}">{{ text_section }}</a>
+                                    <a class="govuk-link"
+                                       href="{% url barrier.task_list.0.task_url barrier.barrier_id %}">{{ text_section }}</a>
                                 {% else %}
                                     {{ text_section }}
                                 {% endif %}
@@ -42,7 +46,7 @@
                     <p class="govuk-hint">{{ barrier.modified_by }} updated on {{ barrier.modified_on }}</p>
                 </div>
             {% endfor %}
-        </dl>
+        </div>
         {% include 'partials/pagination.html' %}
     </div>
 </div>
