@@ -32,6 +32,7 @@ from .resources import (
     StrategicAssessmentResource,
     UserProfileResource,
     UsersResource,
+    UserMentionCountsResource,
 )
 
 logger = logging.getLogger(__name__)
@@ -55,6 +56,7 @@ class MarketAccessAPIClient:
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
         self.mentions = MentionResource(self)
+        self.user_mention_counts = UserMentionCountsResource(self)
         self.notification_exclusion = NotificationExclusionResource(self)
         self.action_plans = ActionPlanResource(self)
         self.action_plan_milestones = ActionPlanMilestoneResource(self)

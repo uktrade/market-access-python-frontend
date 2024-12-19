@@ -184,7 +184,7 @@ class MarketAccessTestCase(TestCase):
         self.init_get_public_barrier_patcher()
         self.init_get_action_plans_patcher()
         self.init_get_profile_patcher()
-        self.init_get_mentions_count_patcher()
+        self.init_get_mentions_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -232,7 +232,6 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.get_interactions_patcher.stop)
 
     def init_get_current_user_patcher(self):
-        print("HELLO I AM IN THE GET CURRENT USER PATCHER")
         self.get_current_user_patcher = patch(
             "utils.api.resources.UsersResource.get_current"
         )
@@ -260,16 +259,15 @@ class MarketAccessTestCase(TestCase):
 
     def init_get_profile_patcher(self):
         self.get_profile_patcher = patch("utils.api.resources.UserProfileResource.get")
-        print("HELLO IM IN THE PROFILE PATCHER")
         self.mock_get_profile = self.get_profile_patcher.start()
         self.mock_get_profile.return_value = self.profile
         self.addCleanup(self.get_profile_patcher.stop)
 
-    def init_get_mentions_count_patcher(self):
-        self.get_mentions_patcher = patch("utils.api.resources.MentionResource.get")
-        print("HELLO I AM IN THE MENTIONS COUNT PATCHER")
+    def init_get_mentions_patcher(self):
+        self.get_mentions_patcher = patch("utils.api.resources.MentionResource.list")
+        print('HELLO IM IN THE MENTION PATCHER')
         self.mock_get_mentions = self.get_mentions_patcher.start()
-        self.mock_get_mentions.return_value = "TEST MENTIONS"
+        self.mock_get_mentions.return_value = self.mentions
         print(self.mock_get_mentions.return_value)
         self.addCleanup(self.get_mentions_patcher.stop)
 

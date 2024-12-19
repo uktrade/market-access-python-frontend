@@ -23,8 +23,9 @@ class SearchTestCase(MarketAccessTestCase):
         "notify_about_updates": False,
     }
 
-    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.BarriersResource.list")
     def test_empty_search(self, mock_list):
+        from utils.api.resources import BarriersResource
         response = self.client.get(reverse("barriers:search"))
         assert response.status_code == HTTPStatus.OK
         mock_list.assert_called_with(
@@ -32,6 +33,7 @@ class SearchTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
         )
+        assert 0
 
     @patch("utils.api.resources.APIResource.list")
     def test_search_form_choices(self, mock_list):
