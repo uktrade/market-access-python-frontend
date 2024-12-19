@@ -30,9 +30,9 @@ from .resources import (
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
+    UserMentionCountsResource,
     UserProfileResource,
     UsersResource,
-    UserMentionCountsResource,
 )
 
 logger = logging.getLogger(__name__)

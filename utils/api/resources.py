@@ -29,7 +29,11 @@ from barriers.models import (
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
-from barriers.models.history.mentions import Mention, NotificationExclusion, UserMentionCounts
+from barriers.models.history.mentions import (
+    Mention,
+    NotificationExclusion,
+    UserMentionCounts,
+)
 from reports.models import Report
 from users.models import DashboardTask, Group, User, UserProfile
 from utils.exceptions import ScanError
@@ -423,7 +427,7 @@ class MentionResource(APIResource):
     def mark_all_as_unread(self):
         url = "mentions/mark-all-as-unread"
         return self.model(self.client.get(url))
-    
+
 
 class UserMentionCountsResource(APIResource):
     resource_name = "mentions/counts"

@@ -265,7 +265,7 @@ class MarketAccessTestCase(TestCase):
 
     def init_get_mentions_patcher(self):
         self.get_mentions_patcher = patch("utils.api.resources.MentionResource.list")
-        print('HELLO IM IN THE MENTION PATCHER')
+        print("HELLO IM IN THE MENTION PATCHER")
         self.mock_get_mentions = self.get_mentions_patcher.start()
         self.mock_get_mentions.return_value = self.mentions
         print(self.mock_get_mentions.return_value)
