@@ -13,14 +13,13 @@ from utils.api.resources import (
     ActionPlanStakeholderResource,
     ActionPlanTaskResource,
     BarriersResource,
-    MentionResource,
     NotesResource,
     PreliminaryAssessmentResource,
     PublicBarriersResource,
     ReportsResource,
+    UserMentionCountsResource,
     UserProfileResource,
     UsersResource,
-    UserMentionCountsResource,
 )
 
 
@@ -269,11 +268,13 @@ class MarketAccessTestCase(TestCase):
             "utils.api.resources.UserMentionCountsResource.get"
         )
         self.mock_get_user_mention_counts = self.get_user_mention_counts_patcher.start()
-        self.mock_get_user_mention_counts.return_value = UserMentionCountsResource.model(
-            {
-                "read_by_recipient": 0,
-                "total": 0,
-            }
+        self.mock_get_user_mention_counts.return_value = (
+            UserMentionCountsResource.model(
+                {
+                    "read_by_recipient": 0,
+                    "total": 0,
+                }
+            )
         )
         print(self.mock_get_user_mention_counts.return_value)
         self.addCleanup(self.get_user_mention_counts_patcher.stop)

@@ -4,9 +4,7 @@ from unittest.mock import patch
 from django.urls import reverse
 
 from core.tests import MarketAccessTestCase
-from utils.api.resources import (
-    UserMentionCountsResource,
-)
+from utils.api.resources import UserMentionCountsResource
 
 
 class MentionsTestCase(MarketAccessTestCase):
@@ -36,6 +34,6 @@ class MentionsTestCase(MarketAccessTestCase):
         assert mock.call_count == 1
         assert "Mentions" in html
         assert (
-            f'<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">10</span>'
+            '<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">10</span>'
             in html
         )
