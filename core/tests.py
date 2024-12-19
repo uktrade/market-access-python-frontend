@@ -20,6 +20,7 @@ from utils.api.resources import (
     ReportsResource,
     UserProfileResource,
     UsersResource,
+    UserMentionCountsResource,
 )
 
 
@@ -269,10 +270,12 @@ class MarketAccessTestCase(TestCase):
         )
         print("HELLO IM IN THE MENTION PATCHER")
         self.mock_get_user_mention_counts = self.get_user_mention_counts_patcher.start()
-        self.mock_get_user_mention_counts.return_value = {
-            "read_by_recipient": 0,
-            "total": 0,
-        }
+        self.mock_get_user_mention_counts.return_value = UserMentionCountsResource.model(
+            {
+                "read_by_recipient": 0,
+                "total": 0,
+            }
+        )
         print(self.mock_get_user_mention_counts.return_value)
         self.addCleanup(self.get_user_mention_counts_patcher.stop)
 
