@@ -541,7 +541,8 @@ class Mentions(TemplateView, PaginationMixin):
                 "page": "mentions",
                 "mentions": mentions,
                 "notification_exclusion": client.notification_exclusion.get(),
-                "are_all_mentions_read": mention_counts.total == mention_counts.read_by_recipient,
+                "are_all_mentions_read": mention_counts.total
+                == mention_counts.read_by_recipient,
                 "total_mentions": mention_counts.total,
                 "pagination": self.get_pagination_data(object_list=mentions),
             }
