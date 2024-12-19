@@ -45,17 +45,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-from functools import wraps
-def logger(f):
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        print(f"Function: {f.__name__}")
-        print(*args)
-        print(**kwds)
-        return f(*args, **kwds)
-    return wrapper
-
-
 class APIResource:
     resource_name = None
     model = None
@@ -64,7 +53,6 @@ class APIResource:
     def __init__(self, client) -> None:
         self.client = client
 
-    @logger
     def list(self, **kwargs) -> ModelList:
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
@@ -73,7 +61,6 @@ class APIResource:
             total_count=response_data["count"],
         )
 
-    @logger
     def get(self, id=None, *args, **kwargs) -> APIModel:
         if not id:
             url = f"{self.resource_name}"
