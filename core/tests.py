@@ -276,7 +276,6 @@ class MarketAccessTestCase(TestCase):
                 }
             )
         )
-        print(self.mock_get_user_mention_counts.return_value)
         self.addCleanup(self.get_user_mention_counts_patcher.stop)
 
     def delete_session_key(self, key):
