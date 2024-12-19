@@ -264,10 +264,15 @@ class MarketAccessTestCase(TestCase):
         self.addCleanup(self.get_profile_patcher.stop)
 
     def init_get_user_mention_counts_patcher(self):
-        self.get_user_mention_counts_patcher = patch("utils.api.resources.UserMentionCountsResource.get")
+        self.get_user_mention_counts_patcher = patch(
+            "utils.api.resources.UserMentionCountsResource.get"
+        )
         print("HELLO IM IN THE MENTION PATCHER")
         self.mock_get_user_mention_counts = self.get_user_mention_counts_patcher.start()
-        self.mock_get_user_mention_counts.return_value = {'read_by_recipient': 0, 'total': 0}
+        self.mock_get_user_mention_counts.return_value = {
+            "read_by_recipient": 0,
+            "total": 0,
+        }
         print(self.mock_get_user_mention_counts.return_value)
         self.addCleanup(self.get_user_mention_counts_patcher.stop)
 
