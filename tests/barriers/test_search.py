@@ -32,7 +32,6 @@ class SearchTestCase(MarketAccessTestCase):
             limit=settings.API_RESULTS_LIMIT,
             offset=0,
         )
-        assert 0
 
     @patch("utils.api.resources.APIResource.list")
     def test_search_form_choices(self, mock_list):

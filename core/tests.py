@@ -268,7 +268,6 @@ class MarketAccessTestCase(TestCase):
         self.get_user_mention_counts_patcher = patch(
             "utils.api.resources.UserMentionCountsResource.get"
         )
-        print("HELLO IM IN THE MENTION PATCHER")
         self.mock_get_user_mention_counts = self.get_user_mention_counts_patcher.start()
         self.mock_get_user_mention_counts.return_value = UserMentionCountsResource.model(
             {
@@ -504,29 +503,6 @@ class MarketAccessTestCase(TestCase):
                 "overseas_regions": [],
             }
         )
-
-    @property
-    def mentions(self):
-        return [
-            MentionResource.model(
-                {
-                    "barrier": "1",
-                    "email_used": "example@test.com",
-                    "recipient": "test user",
-                    "created_by_id": "2",
-                    "read_by_recipient": False,
-                }
-            ),
-            MentionResource.model(
-                {
-                    "barrier": "2",
-                    "email_used": "example2@test.com",
-                    "recipient": "test user 2",
-                    "created_by_id": "3",
-                    "read_by_recipient": False,
-                }
-            ),
-        ]
 
     @property
     def preliminary_assessment(self):
