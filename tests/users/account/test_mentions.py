@@ -9,7 +9,7 @@ from utils.api.resources import UserMentionCountsResource
 
 class MentionsTestCase(MarketAccessTestCase):
     @patch("utils.api.resources.NotificationExclusionResource.get")
-    def test_user_can_access_mentions_page(self, mock):
+    def test_user_can_access_mentions_page(self, *args):
         response = self.client.get(reverse("users:mentions"))
         assert response.status_code == HTTPStatus.OK
 
