@@ -7,33 +7,46 @@ from utils.api.client import MarketAccessAPIClient
 
 def get_user(request):
     user_id = request.session.get("user_data", {}).get("id")
-    if user_id:
-        cache_key = f"user_data:{user_id}"
-        user_data = cache.get(cache_key)
-        if user_data is not None:
-            return User(user_data)
+    if not user_id:
+        return
 
-        client = MarketAccessAPIClient(request.session.get("sso_token"))
-        return client.users.get_current()
+    cache_key = f"user_data:{user_id}"
+    user_data = cache.get(cache_key)
+    if user_data is not None:
+        return User(user_data)
 
-
-def user_scope(request):
-    user = get_user(request)
-    return {
-        "current_user": user,
-    }
-
-
-def user_mention_counts(request):
     client = MarketAccessAPIClient(request.session.get("sso_token"))
+    return client.users.get_current()
+
+
+def get_mention_counts(request):
+    sso_token = request.session.get("sso_token")
+    if not sso_token:
+        return
+
+    client = MarketAccessAPIClient(sso_token)
     resource = client.user_mention_counts.get()
     unread_count = resource.total - resource.read_by_recipient
     if unread_count > 99:
         count = "99+"
     else:
         count = unread_count
+    return count
+
+
+def user_scope(request):
+    user = get_user(request)
+
     return {
-        "user_mention_counts": count,
+        "current_user": user,
+    }
+
+
+def user_mention_counts(request):
+    counts = get_mention_counts(request)
+
+    return {
+        "user_mention_counts": counts,
     }
 
 
