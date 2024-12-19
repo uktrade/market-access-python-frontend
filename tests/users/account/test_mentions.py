@@ -8,9 +8,10 @@ from utils.api.resources import UserMentionCountsResource
 
 
 class MentionsTestCase(MarketAccessTestCase):
+    @patch("utils.api.resources.NotificationExclusionResource.get")
     @patch("utils.api.resources.MentionResource.list")
     @patch("utils.api.resources.UserMentionCountsResource.get")
-    def test_user_can_access_mentions_page(self, mock_counts, mock_list):
+    def test_user_can_access_mentions_page(self, mock_counts, mock_list, _):
         mock_counts.return_value = UserMentionCountsResource.model(
             {
                 "read_by_recipient": 0,
@@ -24,8 +25,10 @@ class MentionsTestCase(MarketAccessTestCase):
         assert mock_counts.call_count == 2
         assert response.status_code == HTTPStatus.OK
 
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.UserMentionCountsResource.get")
-    def test_dashboard_no_mentions(self, mock_get):
+    def test_dashboard_no_mentions(self, mock_get, _, __):
         mock_get.return_value = UserMentionCountsResource.model(
             {
                 "read_by_recipient": 0,
@@ -41,8 +44,11 @@ class MentionsTestCase(MarketAccessTestCase):
         assert "Mentions" in html
         assert "govuk-tag ma-badge ma-badge--attention new-mention-count" not in html
 
+    @patch("utils.api.resources.APIResource.get")
+    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.NotificationExclusionResource.list")
     @patch("utils.api.resources.UserMentionCountsResource.get")
-    def test_dashboard_has_mentions(self, mock_get):
+    def test_dashboard_has_mentions(self, mock_get, _, __, ___):
         mock_get.return_value = UserMentionCountsResource.model(
             {
                 "read_by_recipient": 0,
