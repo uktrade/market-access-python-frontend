@@ -29,7 +29,11 @@ from barriers.models import (
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
-from barriers.models.history.mentions import Mention, NotificationExclusion
+from barriers.models.history.mentions import (
+    Mention,
+    NotificationExclusion,
+    UserMentionCounts,
+)
 from reports.models import Report
 from users.models import DashboardTask, Group, User, UserProfile
 from utils.exceptions import ScanError
@@ -41,6 +45,17 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+from functools import wraps
+def logger(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        print(f"Function: {f.__name__}")
+        print(*args)
+        print(**kwds)
+        return f(*args, **kwds)
+    return wrapper
+
+
 class APIResource:
     resource_name = None
     model = None
@@ -49,6 +64,7 @@ class APIResource:
     def __init__(self, client) -> None:
         self.client = client
 
+    @logger
     def list(self, **kwargs) -> ModelList:
         response_data = self.client.get(self.resource_name, params=kwargs)
         return ModelList(
@@ -57,6 +73,7 @@ class APIResource:
             total_count=response_data["count"],
         )
 
+    @logger
     def get(self, id=None, *args, **kwargs) -> APIModel:
         if not id:
             url = f"{self.resource_name}"
@@ -423,6 +440,11 @@ class MentionResource(APIResource):
     def mark_all_as_unread(self):
         url = "mentions/mark-all-as-unread"
         return self.model(self.client.get(url))
+
+
+class UserMentionCountsResource(APIResource):
+    resource_name = "mentions/counts"
+    model = UserMentionCounts
 
 
 class NotificationExclusionResource(APIResource):

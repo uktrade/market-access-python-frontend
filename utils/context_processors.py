@@ -19,7 +19,22 @@ def get_user(request):
 
 def user_scope(request):
     user = get_user(request)
-    return {"current_user": user}
+    return {
+        "current_user": user,
+    }
+
+
+def user_mention_counts(request):
+    client = MarketAccessAPIClient(request.session.get("sso_token"))
+    resource = client.user_mention_counts.get()
+    unread_count = resource.total - resource.read_by_recipient
+    if unread_count > 99:
+        count = "99+"
+    else:
+        count = unread_count
+    return {
+        "user_mention_counts": count,
+    }
 
 
 def feature_flags(request):
