@@ -138,6 +138,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "utils.context_processors.user_scope",
+                "utils.context_processors.user_mention_counts",
                 "utils.context_processors.feature_flags",
                 "django_settings_export.settings_export",
             ],
