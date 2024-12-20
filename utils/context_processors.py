@@ -27,11 +27,12 @@ def get_mention_counts(request):
     client = MarketAccessAPIClient(sso_token)
     resource = client.user_mention_counts.get()
     unread_count = resource.total - resource.read_by_recipient
-    if unread_count > 99:
-        count = "99+"
-    else:
-        count = unread_count
-    return count
+    counts = {
+        "total": resource.total,
+        "read_by_recipient": resource.read_by_recipient,
+        "display_count": unread_count if unread_count <= 99 else "99+"
+    }
+    return counts
 
 
 def user_scope(request):
