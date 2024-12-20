@@ -2,7 +2,7 @@
 {% load static %}
 {% load render_bundle from webpack_loader %}
 {% block page_title %}
-    {{ block.super }} - Mentions
+    {{ block.super }} - Notifications
 {% endblock page_title %}
 {% block masthead %}
     <div class="grey">
@@ -10,7 +10,7 @@
             <section class="barrier-summary">
                 <div class="barrier-summary__heading">
                     <p class="barrier-summary__code">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-                    <h1 class="barrier-summary__heading__text">Mentions</h1>
+                    <h1 class="barrier-summary__heading__text">Notifications</h1>
                 </div>
             </section>
         </div>
@@ -20,7 +20,7 @@
 
     <section>
         <h2 class="ma-list-heading">
-            <div class="ma-list-heading__heading"><span class="ma-list-heading__count">{{ total_mentions }}</span> mentions</div>
+            <div class="ma-list-heading__heading"><span class="ma-list-heading__count">{{ total_mentions }}</span> notifications</div>
 
             <div class="ma-list-heading__actions">
 
