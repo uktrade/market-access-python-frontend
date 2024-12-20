@@ -30,7 +30,7 @@ def get_mention_counts(request):
     counts = {
         "total": resource.total,
         "read_by_recipient": resource.read_by_recipient,
-        "display_count": unread_count if unread_count <= 99 else "99+"
+        "display_count": unread_count if unread_count <= 99 else "99+",
     }
     return counts
 
