@@ -23,7 +23,7 @@ class SearchTestCase(MarketAccessTestCase):
         "notify_about_updates": False,
     }
 
-    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.BarriersResource.list")
     def test_empty_search(self, mock_list):
         response = self.client.get(reverse("barriers:search"))
         assert response.status_code == HTTPStatus.OK

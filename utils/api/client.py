@@ -30,6 +30,7 @@ from .resources import (
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
+    UserMentionCountsResource,
     UserProfileResource,
     UsersResource,
 )
@@ -55,6 +56,7 @@ class MarketAccessAPIClient:
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
         self.mentions = MentionResource(self)
+        self.user_mention_counts = UserMentionCountsResource(self)
         self.notification_exclusion = NotificationExclusionResource(self)
         self.action_plans = ActionPlanResource(self)
         self.action_plan_milestones = ActionPlanMilestoneResource(self)
