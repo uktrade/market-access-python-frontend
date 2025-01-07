@@ -139,6 +139,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
         search_params = query_string
 
         summary_url = f"dashboard-summary?{search_params}"
+        print('SUMMARY URL ', summary_url)
         summary_stats = client.get(summary_url)
 
         metadata = get_metadata()
@@ -193,6 +194,10 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
 class GetDashboardSummary(View):
     def get(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(request.session.get("sso_token"))
-        summary_url = f"dashboard-summary?{request.GET.urlencode()}"
+        query_str = '&'.join(
+            urllib.parse.urlencode({key: ','.join(request.GET.getlist(key))})
+            for key in request.GET
+        )
+        summary_url = f"dashboard-summary?{query_str}"
         resp = client.get(summary_url)
         return JsonResponse(resp)
