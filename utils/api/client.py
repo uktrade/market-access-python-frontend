@@ -23,12 +23,14 @@ from .resources import (
     MentionResource,
     NotesResource,
     NotificationExclusionResource,
+    PreliminaryAssessmentResource,
     PublicBarrierNotesResource,
     PublicBarriersResource,
     ReportsResource,
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
+    UserMentionCountsResource,
     UserProfileResource,
     UsersResource,
 )
@@ -54,6 +56,7 @@ class MarketAccessAPIClient:
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
         self.mentions = MentionResource(self)
+        self.user_mention_counts = UserMentionCountsResource(self)
         self.notification_exclusion = NotificationExclusionResource(self)
         self.action_plans = ActionPlanResource(self)
         self.action_plan_milestones = ActionPlanMilestoneResource(self)
@@ -63,6 +66,7 @@ class MarketAccessAPIClient:
         self.barrier_download = BarrierDownloadsResource(self)
         self.dashboard_tasks = DashboardTasksResource(self)
         self.profile = UserProfileResource(self)
+        self.preliminary_assessment = PreliminaryAssessmentResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

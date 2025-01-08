@@ -15,7 +15,7 @@
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h3 class="govuk-fieldset__heading govuk-summary-card__title">Filters</h3>
                     </legend>
-                <!-- search form -->
+                    <!-- search form -->
                     <form id="filters-form" action="" method="GET">
                         {% include "partials/forms/checkbox_filter.html" with field=form.region %}
                         {% include "partials/forms/checkbox_filter.html" with field=form.sector %}
@@ -23,19 +23,21 @@
                         {% include "partials/forms/checkbox_filter.html" with field=form.country_trading_bloc %}
                         {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
                         {% if filters %}
-                            <a id="clear-filters-button" class="filter-items__clear" href="{% url 'barriers:home' %}">Remove all filters</a>
+                            <a id="clear-filters-button"
+                               class="filter-items__clear"
+                               href="{% url 'barriers:home' %}">Remove all filters</a>
                         {% endif %}
-                    <!-- <input type="hidden" id="status" name="status" value="2"> -->
+                        <!-- <input type="hidden" id="status" name="status" value="2"> -->
                         <input type="submit"
                                value="Apply filters"
                                id="apply-filters-button"
                                class="govuk-button govuk-button--full-width js-filter-submit">
                     </form>
-                <!--- search form end -->
+                    <!--- search form end -->
                 </fieldset>
             </div>
             <div class="govuk-grid-column-three-quarters">
-                <h3 class="govuk-summary-card__title">Summary data</h3>
+                <h3 class="govuk-summary-card__title">Barrier insights</h3>
                 <div class="p-l-3" id="active filters">
                     {% if filters %}
                         <h3 class="visually-hidden">Active filters:</h3>
@@ -50,10 +52,11 @@
                 </div>
                 <div class="govuk-grid-row">
                     <h3 class="govuk-summary-card__title p-l-3">Open barriers</h3>
+                    <span class="govuk-caption-m">This includes all open  and resolved in part barriers.</span>
                     <div class="govuk-grid-column-one-third">
                         <div class="govuk-inset-text summary-card">
                             <p>
-                                <span class="govuk-heading-xl">{{ summary_stats.barriers.open }}</span> barriers are open.
+                                <span class="govuk-heading-xl">{{ summary_stats.barriers.open }}</span> barriers are open in total.
                             </p>
                             <div class="summary-card__data-link">
                                 <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3">See the barriers</a>
@@ -101,7 +104,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.pb100 }}</span> PB100 barriers are estimated to be resolved in the current financial year.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED&estimated_resolution_date_resolved_in_part_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&estimated_resolution_date_resolved_in_part_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
                             </div>
                         </div>
                     </div>
@@ -111,7 +114,7 @@
                                 <span class="govuk-heading-xl">{{ summary_stats.barriers_current_year.overseas_delivery }}</span> Overseas delivery barriers are estimated to be resolved in the current financial year.
                             </p>
                             <div class="summary-card__data-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS&estimated_resolution_date_resolved_in_part_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&estimated_resolution_date_resolved_in_part_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
                             </div>
                         </div>
                     </div>

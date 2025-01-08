@@ -7,7 +7,12 @@ from django import forms
 from django.conf import settings
 from django.http import QueryDict
 
-from barriers.constants import DEPRECATED_TAGS, EXPORT_TYPES, STATUS_WITH_DATE_FILTER
+from barriers.constants import (
+    DEPRECATED_TAGS,
+    EXPORT_TYPES,
+    PRELIMINARY_ASSESSMENT_CHOICES,
+    STATUS_WITH_DATE_FILTER,
+)
 from utils.forms.fields import MonthDateRangeField
 from utils.helpers import format_dict_for_url_querystring
 
@@ -95,6 +100,12 @@ class BarrierSearchForm(forms.Form):
         label="Resolved in part date",
         required=False,
     )
+
+    estimated_resolution_date_resolved_in_part = MonthDateRangeField(
+        label="Resolved in part barriers estimated resolution date range",
+        required=False,
+    )
+
     status_date_open_in_progress = MonthDateRangeField(
         label="Estimated resolution date", required=False
     )
@@ -160,21 +171,9 @@ class BarrierSearchForm(forms.Form):
         ),
         required=False,
     )
-    economic_assessment_eligibility = forms.MultipleChoiceField(
-        label="Economic assessment eligibility",
-        choices=(
-            ("eligible", "Eligible"),
-            ("ineligible", "Ineligible"),
-            ("not_yet_marked", "Not yet marked"),
-        ),
-    )
-    economic_assessment = forms.MultipleChoiceField(
-        label="Economic assessment",
-        choices=(
-            ("with", "With an economic assessment"),
-            ("without", "Without an economic assessment"),
-            ("ready_for_approval", "With an economic assessment ready for approval"),
-        ),
+    preliminary_assessment = forms.MultipleChoiceField(
+        label="Preliminary economic assessment",
+        choices=PRELIMINARY_ASSESSMENT_CHOICES,
         required=False,
     )
     economic_impact_assessment = forms.MultipleChoiceField(
@@ -453,6 +452,8 @@ class BarrierSearchForm(forms.Form):
             for status_value in STATUS_WITH_DATE_FILTER:
                 if f"status_date_{status_value}" in params:
                     del params[f"status_date_{status_value}"]
+                if "estimated_resolution_date_resolved_in_part" in params:
+                    del params["estimated_resolution_date_resolved_in_part"]
 
         # tss-1069 - we need to encode the admin_areas as string JSON in the URL
         if "admin_areas" in params:
@@ -461,6 +462,11 @@ class BarrierSearchForm(forms.Form):
         return urlencode(params, doseq=True)
 
     def get_api_search_parameters(self):
+
+        # Heres some comments to merge into develop
+        # This way we can check that changes to the develop branch
+        # do not trigger auto deployment to atlantis and gotham.
+
         params = {}
         params["search_id"] = self.cleaned_data.get("search_id")
         params["search"] = self.cleaned_data.get("search")
@@ -489,6 +495,9 @@ class BarrierSearchForm(forms.Form):
             params[f"status_date_{status_value}"] = self.cleaned_data.get(
                 f"status_date_{status_value}"
             )
+        params["estimated_resolution_date_resolved_in_part"] = self.cleaned_data.get(
+            "estimated_resolution_date_resolved_in_part"
+        )
 
         params["delivery_confidence"] = ",".join(
             self.cleaned_data.get("delivery_confidence", [])
@@ -507,14 +516,11 @@ class BarrierSearchForm(forms.Form):
         params["wto"] = ",".join(self.cleaned_data.get("wto", []))
         params["archived"] = self.cleaned_data.get("only_archived") or "0"
         params["public_view"] = ",".join(self.cleaned_data.get("public_view", []))
+        params["preliminary_assessment"] = ",".join(
+            self.cleaned_data.get("preliminary_assessment", [])
+        )
         params["country_trading_bloc"] = ",".join(
             self.cleaned_data.get("country_trading_bloc", [])
-        )
-        params["economic_assessment_eligibility"] = ",".join(
-            self.cleaned_data.get("economic_assessment_eligibility", [])
-        )
-        params["economic_assessment"] = ",".join(
-            self.cleaned_data.get("economic_assessment", [])
         )
         params["economic_impact_assessment"] = ",".join(
             self.cleaned_data.get("economic_impact_assessment", [])

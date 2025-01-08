@@ -101,8 +101,7 @@
                     </div>
                 {% endif %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.public_view %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment_eligibility %}
-                {% include 'partials/forms/checkbox_filter.html' with field=form.economic_assessment %}
+                {% include 'partials/forms/checkbox_filter.html' with field=form.preliminary_assessment %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.economic_impact_assessment %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.valuation_assessment %}
                 {% include 'partials/forms/checkbox_filter.html' with field=form.commodity_code %}
@@ -168,6 +167,7 @@
                             {% include 'barriers/partials/active_filter.html' with filter=filters.tags %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.show %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.public_view %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.preliminary_assessment %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.economic_assessment %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.economic_impact_assessment %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.commodity_code %}
@@ -176,6 +176,7 @@
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_resolved_in_full %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_resolved_in_part %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.status_date_open_in_progress %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.estimated_resolution_date_resolved_in_part %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.valuation_assessment %}
                             {% include 'barriers/partials/active_filter.html' with filter=filters.search_term_text %}
                         </ul>

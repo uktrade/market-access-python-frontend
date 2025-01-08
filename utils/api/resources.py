@@ -19,6 +19,7 @@ from barriers.models import (
     EconomicImpactAssessment,
     HistoryItem,
     Note,
+    PreliminaryAssessment,
     PublicBarrier,
     PublicBarrierNote,
     ResolvabilityAssessment,
@@ -28,7 +29,11 @@ from barriers.models import (
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
 from barriers.models.feedback import Feedback
-from barriers.models.history.mentions import Mention, NotificationExclusion
+from barriers.models.history.mentions import (
+    Mention,
+    NotificationExclusion,
+    UserMentionCounts,
+)
 from reports.models import Report
 from users.models import DashboardTask, Group, User, UserProfile
 from utils.exceptions import ScanError
@@ -424,6 +429,11 @@ class MentionResource(APIResource):
         return self.model(self.client.get(url))
 
 
+class UserMentionCountsResource(APIResource):
+    resource_name = "mentions/counts"
+    model = UserMentionCounts
+
+
 class NotificationExclusionResource(APIResource):
     resource_name = "mentions/exclude-from-notifications"
     model = NotificationExclusion
@@ -549,3 +559,20 @@ class BarrierDownloadsResource(APIResource):
 class UserProfileResource(APIResource):
     resource_name = "users/profile"
     model = UserProfile
+
+
+class PreliminaryAssessmentResource(APIResource):
+    resource_name = "preliminary-assessment"
+    model = PreliminaryAssessment
+
+    def get_preliminary_assessment(self, barrier_id):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.get(url))
+
+    def create_preliminary_assessment(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.post(url, json=kwargs))
+
+    def patch_preliminary_assessment(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.patch(url, json=kwargs))

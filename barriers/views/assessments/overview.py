@@ -16,4 +16,5 @@ class AssessmentOverview(BarrierMixin, TemplateView):
             assement_class += " visually-hidden"
 
         context["strategic_ass"] = assement_class
+        context["preliminary_assessment"] = self.preliminary_assessment
         return context

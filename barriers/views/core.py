@@ -73,9 +73,6 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
-                "new_mentions_count": len(
-                    [mention for mention in mentions if not mention.read_by_recipient]
-                ),
                 "active": active,
                 "barrier_downloads": barrier_downloads,
             }
@@ -121,7 +118,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
     form_class = BarrierSearchForm
 
     # Let the pagination mixin know how many results the API will return per page
-    pagination_limit = 5
+    pagination_limit = 3
 
     def get(self, form, *args, **kwargs):
 
@@ -145,6 +142,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         mentions = client.mentions.list()
+
         are_all_mentions_read: bool = not any(
             not mention.read_by_recipient for mention in mentions
         )
@@ -159,7 +157,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
             "page": page_number,
         }
         # Get list of tasks for the user from the API
-        task_list = client.dashboard_tasks.list(**api_task_list_params)
+        barrier_task_list = client.dashboard_tasks.list(**api_task_list_params)
 
         params = form.get_api_search_parameters()
 
@@ -198,12 +196,15 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),
                 "filters": form.get_readable_filters(True),
-                "task_list": task_list,
+                "barrier_task_list": barrier_task_list,
                 "summary_stats": summary_stats,
                 "search_params": search_params,
             }
         )
-        context_data["pagination"] = self.get_pagination_data(object_list=task_list)
+
+        context_data["pagination"] = self.get_pagination_data(
+            object_list=barrier_task_list
+        )
 
         return context_data
 
