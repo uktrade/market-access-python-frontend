@@ -59,39 +59,65 @@
                                 data-module="govuk-button">Search</button>
                     </form>
                 </div>
-                <div>
-                    <div class="dashboard-search-link-container">
-                        <a href="{% url 'users:account_saved_searches' %}"
-                           class="govuk-link--no-visited-state-dark">My saved searches</a>
+            </div>
+            <div class="govuk-grid-column-one-third">
+                <!-- Dashboard version Toggle  -->
+                <div class="dashboard-banner govuk-!-margin-bottom-0">
+                    <div class="govuk-notification-banner"
+                         role="region"
+                         aria-labelledby="govuk-notification-banner-title"
+                         data-module="govuk-notification-banner">
+                        <div class="govuk-notification-banner__content">
+                            <p class="govuk-heading-s">
+                                Return to old dashboard
+                                <label for="dashboard_switch" class="switch">
+                                    <input type="checkbox"
+                                           id="dashboard_switch"
+                                           aria-label="Switch to old dashboard"
+                                           onclick='window.location.assign("/?default=dashboard")'
+                                           checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </p>
+                        </div>
                     </div>
-                    <div class="dashboard-search-link-container">
-                        <a href="{% url 'users:account_downloads' %}"
-                           class="govuk-link--no-visited-state-dark">My downloads</a>
-                    </div>
-                    <div class="dashboard-search-link-container">
-                        <a href="{% url 'barriers:search' %}?user=1&status=2"
-                           class="govuk-link--no-visited-state-dark">My open barriers</a>
+                </div>
+                <!-- end dashboard toggle -->
+                <div class="govuk-!-text-align-right">
+                    <div class="dash-card govuk-!-text-align-left">
+                        <span class="dash-card__heading">Get help</span>
+                        <span class="dash-button__text dashboard_button__text">
+                            Read the <a href="https://data-services-help.trade.gov.uk/market-access/the-market-access-playbook/"
+    target="_blank">market access playbook</a> for help resolving your barriers.
+                        </span>
+                        <span class="dash-button__text dashboard_button__text">You can also find out:</span>
+                        <ul class="dash-card__text dashboard_button__text">
+                            <li>
+                                <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/"
+                                   target="_blank">how to use DMAS</a>
+                            </li>
+                            <li>
+                                <a href="https://data-services-help.trade.gov.uk/market-access/updates/"
+                                   target="_blank">what's new on DMAS</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="govuk-grid-column-one-third">
-                <div class="dash-card  govuk-!-margin-left-0 govuk-!-margin-top-3">
-                    <span class="dash-card__heading">Get help</span>
-                    <span class="dash-button__text dashboard_button__text">
-                        Read the <a href="https://data-services-help.trade.gov.uk/market-access/the-market-access-playbook/"
-    target="_blank">market access playbook</a> for help resolving your barriers.
-                    </span>
-                    <span class="dash-button__text dashboard_button__text">You can also find out:</span>
-                    <ul class="dash-card__text dashboard_button__text">
-                        <li>
-                            <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/"
-                               target="_blank">how to use DMAS</a>
-                        </li>
-                        <li>
-                            <a href="https://data-services-help.trade.gov.uk/market-access/updates/"
-                               target="_blank">what's new on DMAS</a>
-                        </li>
-                    </ul>
+        </div>
+        <div class="govuk-grid-row ma-container-full govuk-!-margin-left-0">
+            <div>
+                <div class="dashboard-search-link-container">
+                    <a href="{% url 'users:account_saved_searches' %}"
+                       class="govuk-link--no-visited-state-dark">My saved searches</a>
+                </div>
+                <div class="dashboard-search-link-container">
+                    <a href="{% url 'users:account_downloads' %}"
+                       class="govuk-link--no-visited-state-dark">My downloads</a>
+                </div>
+                <div class="dashboard-search-link-container">
+                    <a href="{% url 'barriers:search' %}?user=1&status=2"
+                       class="govuk-link--no-visited-state-dark">My open barriers</a>
                 </div>
             </div>
         </div>

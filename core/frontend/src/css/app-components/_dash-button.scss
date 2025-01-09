@@ -68,12 +68,7 @@ $desktop-width: mq-get-breakpoint-width(desktop, $mq-breakpoints);
 /* Dashboard Toggle switch */
 
 .dashboard-banner {
-
-    @include mq($from: $dash-button-from-tablet-width ) {
-
-        text-align: right;
-        margin-top: -120px;
-    }
+    text-align: right;
 }
 
 .switch {
