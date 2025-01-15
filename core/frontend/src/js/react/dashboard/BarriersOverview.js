@@ -502,7 +502,7 @@ const BarriersOverview = ({ filterValues }) => {
                             ref={formRef}
                         >
                             <MultiSelectFilter
-                                label="Region"
+                                label="Overseas Region"
                                 options={filterValues.region}
                                 inputId="region"
                                 placeholder="Search regions"
@@ -516,7 +516,7 @@ const BarriersOverview = ({ filterValues }) => {
                                 onChange={handleInputChange}
                             />
                             <LocationFilter
-                                label="Location"
+                                label="Barrier Location"
                                 countries={filterValues.location}
                                 tradingBlocs={filterValues.tradingBlocs}
                                 tradingBlocData={filterValues.tradingBlocsData}
