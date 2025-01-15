@@ -14,11 +14,13 @@
                     {"id": "{{ lookup_form.location.field.choices.0.0 }}", "name": "{{ lookup_form.location.field.choices.0.1 }}"},
                     {"id": "{{ lookup_form.location.field.choices.1.0 }}", "name": "{{ lookup_form.location.field.choices.1.1 }}"},
                 ]
+                let barrier_id = "{{ barrier.id }}"
                 ReactApp.renderCommodityForm(
                     confirmedCommodities=confirmedCommodities,
                     locations=locations,
                     label="{{ lookup_form.code.label }}",
                     helpText="{{ lookup_form.code.help_text }}",
+                    barrier_id=barrier_id,
                 )
             })
         </script>

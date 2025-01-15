@@ -334,6 +334,11 @@ class CommoditiesResource(APIResource):
     resource_name = "commodities"
     model = Commodity
 
+    def get_commodity_search(self, query, **kwargs):
+        url = f"commodities/search/?query={query}"
+        similar_commodities = self.client.get(url, params=kwargs)
+        return similar_commodities
+
 
 class PublicBarrierNotesResource(APIResource):
     resource_name = "public-barrier-notes"

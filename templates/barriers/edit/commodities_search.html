@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block page_title %}Commodity HS Code Search{% endblock %}
+
+{% block page_content %}
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div id="{{ form.query.name }}" class="govuk-form-group{% if form.query.errors %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--s" for="{{ form.query.name }}">{{ form.query.label }}</label>
+            <span id="{{ form.query.name }}-hint" class="govuk-hint">{{ form.query.help_text }}</span>
+            {% form_field_error form "query" %}
+            <input class="govuk-input" name="{{ form.query.name }}" type="text" value="{% if form.query.value %}{{ form.query.value }}{% endif %}" aria-describedby="{{ form.query.name }}-hint">
+        </div>
+        <input type="submit" value="Search" class="govuk-button">
+    </form>
+
+    {% if search_result %}
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m">Results</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">HS Code</th>
+                    <th scope="col" class="govuk-table__header">Commodity</th>
+                    <th scope="col" class="govuk-table__header">Similarity</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                {% for result_item in search_result %}
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">{{ result_item.hs_code }}</th>
+                        <td class="govuk-table__cell">{{ result_item.description }}</td>
+                        <td class="govuk-table__cell">{{ result_item.similarity }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

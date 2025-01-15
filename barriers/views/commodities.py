@@ -1,3 +1,5 @@
+import logging
+
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.generic import FormView
@@ -5,12 +7,50 @@ from django.views.generic import FormView
 from barriers.constants import UK_COUNTRY_ID
 from barriers.forms.commodities import (
     CommodityLookupForm,
+    CommoditySearchForm,
     MultiCommodityLookupForm,
     UpdateBarrierCommoditiesForm,
 )
 from utils.api.client import MarketAccessAPIClient
 
 from .mixins import BarrierMixin
+
+logger = logging.getLogger(__name__)
+
+
+class CommoditySearchView(FormView):
+    template_name = "barriers/edit/commodities_search.html"
+    form_class = CommoditySearchForm
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        # If there is a result in the session data, display it
+        context_data.update(
+            {"search_result": self.request.session["commodities_search"]}
+        )
+
+        # Clear the session as the result has been displayed
+        self.request.session["commodities_search"] = None
+
+        return context_data
+
+    def post(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        commodities = client.commodities.get_commodity_search(request.POST.get("query"))
+
+        self.request.session["commodities_search"] = commodities
+
+        return super().get(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse(
+            "barriers:search_commodities",
+            kwargs={"barrier_id": self.kwargs.get("barrier_id")},
+        )
 
 
 class BarrierEditCommodities(BarrierMixin, FormView):

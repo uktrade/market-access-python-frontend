@@ -25,6 +25,7 @@ function renderCommodityForm(
     locations,
     label,
     helpText,
+    barrier_id,
     isReportJourney = false,
     nextUrl = null,
 ) {
@@ -36,6 +37,7 @@ function renderCommodityForm(
             locations={locations}
             label={label}
             helpText={helpText}
+            barrierId={barrier_id}
             isReportJourney={isReportJourney}
             nextUrl={nextUrl}
         />,

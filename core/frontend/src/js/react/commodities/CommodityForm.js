@@ -9,8 +9,9 @@ import ErrorBanner from "../forms/ErrorBanner";
 function CommodityForm(props) {
     const [codeArray, setCodeArray] = useState(["", "", "", "", ""]);
     const [locationId, setLocationId] = useState(props.locations[0]["id"]);
+    const [barrierId, setBarrierId] = useState(props.barrierId);
     const [confirmedCommodities, setConfirmedCommodities] = useState(
-        props.confirmedCommodities
+        props.confirmedCommodities,
     );
     const [unconfirmedCommodities, setUnconfirmedCommodities] = useState([]);
     const [pastedCodes, setPastedCodes] = useState("");
@@ -74,7 +75,7 @@ function CommodityForm(props) {
 
     const getCode = () => {
         let cleanedCodeArray = codeArray.map((element) =>
-            ("00" + element).slice(-2)
+            ("00" + element).slice(-2),
         );
         let zeroPaddedCode = cleanedCodeArray.slice(0, 10).join("");
         return zeroPaddedCode.replace(/0+$/g, "");
@@ -90,7 +91,7 @@ function CommodityForm(props) {
 
     const confirmAll = (event) => {
         setConfirmedCommodities(
-            confirmedCommodities.concat(unconfirmedCommodities)
+            confirmedCommodities.concat(unconfirmedCommodities),
         );
         setUnconfirmedCommodities([]);
     };
@@ -120,7 +121,8 @@ function CommodityForm(props) {
                         let zeroPaddedCode = code.padEnd(10, "0");
                         if (
                             confirmedCommodities.some(
-                                (commodity) => commodity.code === zeroPaddedCode
+                                (commodity) =>
+                                    commodity.code === zeroPaddedCode,
                             )
                         ) {
                             setUnconfirmedCommodities([]);
@@ -137,7 +139,7 @@ function CommodityForm(props) {
                     setIsLoading(false);
                     setUnconfirmedCommodities([]);
                     setCodeLookupError(error);
-                }
+                },
             );
     }
 
@@ -167,7 +169,7 @@ function CommodityForm(props) {
                     if (result["status"] == "ok") {
                         let newCommodities = result.data.filter((item) => {
                             return !confirmedCommodities.some(
-                                (commodity) => commodity.code === item.code
+                                (commodity) => commodity.code === item.code,
                             );
                         });
                         setUnconfirmedCommodities(newCommodities);
@@ -181,7 +183,7 @@ function CommodityForm(props) {
                     setIsLoading(false);
                     setUnconfirmedCommodities([]);
                     setCodeLookupError(error);
-                }
+                },
             );
     }
 
@@ -206,7 +208,11 @@ function CommodityForm(props) {
                             HS codes help DBT analysts evaluate an prioritise
                             barriers.{" "}
                             <a
-                                href="https://www.gov.uk/trade-tariff"
+                                href={
+                                    "/barriers/" +
+                                    barrierId +
+                                    "/search/commodities"
+                                }
                                 className="govuk-link"
                                 target="_blank"
                                 rel="noreferrer"

@@ -58,7 +58,7 @@ from barriers.views.categories import (
     BarrierEditCategoriesSession,
     BarrierRemoveCategory,
 )
-from barriers.views.commodities import BarrierEditCommodities
+from barriers.views.commodities import BarrierEditCommodities, CommoditySearchView
 from barriers.views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
@@ -341,6 +341,11 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/edit/commodities/",
         BarrierEditCommodities.as_view(),
         name="edit_commodities",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/search/commodities/",
+        CommoditySearchView.as_view(),
+        name="search_commodities",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/commodities/<str:mode>/",

@@ -1,3 +1,4 @@
+import logging
 import re
 
 from django import forms
@@ -5,6 +6,18 @@ from django import forms
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 from utils.forms import CommodityCodeWidget, MultipleValueField
+
+logger = logging.getLogger(__name__)
+
+
+class CommoditySearchForm(forms.Form):
+    query = forms.CharField(
+        label="Commodity Search",
+        help_text="Search for your commodity if you are unsure of the HS code.",
+    )
+
+    def clean_query(self):
+        return str(self.cleaned_data["query"])
 
 
 class CommodityLookupForm(forms.Form):
