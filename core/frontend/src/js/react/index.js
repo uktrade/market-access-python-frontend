@@ -19,6 +19,7 @@ import {
     handleStackedBarChart,
 } from "./dashboard/charts";
 import renderBarriersOverview from "./dashboard/BarriersOverview";
+import {renderApplyFilterButton} from "./dashboard/button";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -64,7 +65,9 @@ function renderLocationFilter(
     const countries = getCheckboxValues(countryElement);
     const tradingBlocs = getCheckboxValues(tradingBlocElement);
 
-    tradingBlocElement.remove();
+    if (tradingBlocElement) {
+        tradingBlocElement.remove();
+    }
     ReactDOM.render(
         <LocationFilter
             label={label}
@@ -213,4 +216,5 @@ export {
     renderBarChart,
     renderStackedBarChart,
     renderBarriersOverview,
+    renderApplyFilterButton,
 };
