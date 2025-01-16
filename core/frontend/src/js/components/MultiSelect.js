@@ -20,9 +20,11 @@ ma.components.MultiSelect = function (/** @type {string} */ id_name) {
 
     const appendToList = function () {
         if (selection.value) {
-            const new_list = JSON.parse(selection.value).map(function (/** @type {{ toString: () => any; }} */ e) {
-                return e.toString();
-            });
+            const new_list = JSON.parse(selection.value).map(
+                function (/** @type {{ toString: () => any; }} */ e) {
+                    return e.toString();
+                },
+            );
             // @ts-ignore
             if (!new_list.includes(select.value)) {
                 // @ts-ignore
@@ -41,9 +43,11 @@ ma.components.MultiSelect = function (/** @type {string} */ id_name) {
 
     const updateDisplay = function () {
         if (selection.value) {
-            const selected_list = JSON.parse(selection.value).map(function (/** @type {{ toString: () => any; }} */ e) {
-                return e.toString();
-            });
+            const selected_list = JSON.parse(selection.value).map(
+                function (/** @type {{ toString: () => any; }} */ e) {
+                    return e.toString();
+                },
+            );
             display_list.innerHTML = "";
             for (let i = 0; i < selected_list.length; i++) {
                 // @ts-ignore
@@ -84,9 +88,11 @@ ma.components.MultiSelect = function (/** @type {string} */ id_name) {
 
     const removeItem = function (/** @type {any} */ item) {
         if (selection.value) {
-            let selected_list = JSON.parse(selection.value).map(function (/** @type {{ toString: () => any; }} */ e) {
-                return e.toString();
-            });
+            let selected_list = JSON.parse(selection.value).map(
+                function (/** @type {{ toString: () => any; }} */ e) {
+                    return e.toString();
+                },
+            );
             const index = selected_list.indexOf(item);
             if (index > -1) {
                 // only splice array when item is found

@@ -19,7 +19,7 @@ import {
     handleStackedBarChart,
 } from "./dashboard/charts";
 import renderBarriersOverview from "./dashboard/BarriersOverview";
-import {renderApplyFilterButton} from "./dashboard/button";
+import { renderApplyFilterButton } from "./dashboard/button";
 
 function renderCommodityForm(
     confirmedCommodities,

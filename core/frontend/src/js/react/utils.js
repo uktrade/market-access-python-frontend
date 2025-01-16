@@ -8,7 +8,7 @@ export const getCSRFToken = () => {
 
 export const getCheckboxValues = (/** @type {HTMLElement} */ element) => {
     const filterItems = element.getElementsByClassName("checkbox-filter__item");
- 
+
     let values = [];
 
     for (let i = 0; i < filterItems.length; i++) {

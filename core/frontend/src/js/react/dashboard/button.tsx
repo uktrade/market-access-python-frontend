@@ -15,44 +15,44 @@ interface HandleClickEvent extends React.MouseEvent<HTMLButtonElement> {
 
 /**
  * ApplyFilterButton component.
- * 
+ *
  * This component renders a button that, when clicked, applies filters to update the dashboard.
- * 
+ *
  * @param {ApplyFilterButtonProps} props - The properties for the ApplyFilterButton component.
- * 
+ *
  * @returns {JSX.Element} The rendered button component.
- * 
+ *
  * @component
- * 
+ *
  * @example
  * <ApplyFilterButton text="Apply Filters" />
- * 
+ *
  * @function
- * 
+ *
  * @name ApplyFilterButton
- * 
+ *
  * @description
  * The ApplyFilterButton component is responsible for handling the click event to apply filters
  * and update the dashboard. It fetches the updated content from the server and replaces the
  * relevant sections of the page with the new content.
- * 
+ *
  * @param {React.MouseEvent<HTMLButtonElement>} event - The click event.
- * 
+ *
  * @async
  * @function
  * @name handleClick
- * 
+ *
  * @description
  * The handleClick function is triggered when the button is clicked. It prevents the default
  * form submission, constructs a new query string from the form data, updates the URL, and
  * fetches the updated content to replace the relevant sections of the page.
- * 
+ *
  * @param {string} submitUrl - The URL to fetch the updated content from.
- * 
+ *
  * @async
  * @function
  * @name updateBarrierInsight
- * 
+ *
  * @description
  * The updateBarrierInsight function fetches the updated content from the server and replaces
  * the relevant sections of the page with the new content.
@@ -107,7 +107,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         updateBarrierInsight(submitURL);
 
     };
-    
+
     return (
         <button
             className={`govuk-button govuk-button--full-width`}

@@ -18,7 +18,7 @@
                 let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent);
                 let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
                 let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
-                
+
                 ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries)
                 ReactApp.renderMultiSelectFilter("policy_team", "Search policy teams")
                 ReactApp.renderMultiSelectFilter("sector")
