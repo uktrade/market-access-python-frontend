@@ -18,7 +18,6 @@ import {
     handlePieChart,
     handleStackedBarChart,
 } from "./dashboard/charts";
-import renderBarriersOverview from "./dashboard/BarriersOverview";
 import { renderApplyFilterButton } from "./dashboard/button";
 
 function renderCommodityForm(
@@ -215,6 +214,5 @@ export {
     renderPieChart,
     renderBarChart,
     renderStackedBarChart,
-    renderBarriersOverview,
     renderApplyFilterButton,
 };
