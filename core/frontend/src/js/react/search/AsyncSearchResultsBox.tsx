@@ -61,7 +61,7 @@ export const AsyncSearchResultsBox = (): JSX.Element => {
             const formData = new FormData(form);
             const queryString = new URLSearchParams(formData as any).toString();
 
-            if (currentURLQuerystring === `?${queryString}`) return;
+            if (currentURLQuerystring === queryString) return;
 
             requestCounter += 1;
             const formAction = form.action.split("?")[0];
