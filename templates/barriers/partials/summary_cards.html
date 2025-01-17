@@ -43,11 +43,11 @@
                     {% if filters %}
                         <h3 class="visually-hidden">Active filters:</h3>
                         <ul class="active-filters">
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.status remove_hidden=True %}
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.country %}
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.sector %}
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.policy_team %}
-                            {% include 'barriers/partials/active_filter.html' with filter=filters.region %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.status remove_hidden=True location_url='barriers:home' %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.country location_url='barriers:home' %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.sector location_url='barriers:home' %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.policy_team location_url='barriers:home' %}
+                            {% include 'barriers/partials/active_filter.html' with filter=filters.region location_url='barriers:home' %}
                         </ul>
                     {% endif %}
                 </div>
