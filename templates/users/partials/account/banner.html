@@ -1,28 +1,30 @@
-<div class="govuk-width-container ma-container-full">
-    <section class="barrier-summary">
-        <div class="barrier-summary__heading">
-            <p class="barrier-summary__code">{{ current_user.first_name }} {{ current_user.last_name }}</p>
-            <h1 class="barrier-summary__heading__text">{{ active|capfirst|default_if_none:"Account Home" }}</h1>
+{% block masthead %}
+    <div class="ma-masthead">
+        <div class="govuk-grid-row govuk-width-container ma-container-full govuk-!-padding-top-5 govuk-!-margin-left-0">
+            <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
+                <h1 class="govuk-heading-xl">
+                    <span class="govuk-caption-m">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                    {{ active|capfirst|default_if_none:"Account Home" }}
+                </h1>
+            </div>
         </div>
-    </section>
-</div>
-<nav class="grey">
-    <ul class="datahub-header__navigation govuk-template grey">
-        <li class="datahub-header__navigation__item">
-            <a class="{% if active == 'my profile' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
-               href="{% url 'users:account' %}">My profile</a>
-        </li>
-        <li class="datahub-header__navigation__item">
-            <a class="{% if active == 'my saved searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
-               href="{% url 'users:account_saved_searches' %}">My saved searches</a>
-        </li>
-        <li class="datahub-header__navigation__item">
-            <a class="{% if active == 'my downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
-               href="{% url 'users:account_downloads' %}">My downloads</a>
-        </li>
-        <li class="datahub-header__navigation__item">
-            <a class="{% if active == 'my_barriers' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
-               href="{% url 'users:account' %}">My barriers</a>
-        </li>
-    </ul>
-</nav>
+        <div class="govuk-grid-row ma-container-full govuk-!-margin-left-0">
+            <div class="datahub-header__navigation__item">
+                <a class="{% if active == 'my profile' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+                   href="{% url 'users:account' %}">My profile</a>
+            </div>
+            <div class="datahub-header__navigation__item">
+                <a class="{% if active == 'my saved searches' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+                   href="{% url 'users:account_saved_searches' %}">My saved searches</a>
+            </div>
+            <div class="datahub-header__navigation__item">
+                <a class="{% if active == 'my downloads' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+                   href="{% url 'users:account_downloads' %}">My downloads</a>
+            </div>
+            <div class="datahub-header__navigation__item">
+                <a class="{% if active == 'my_barriers' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+                   href="{% url 'barriers:search' %}?user=1">My barriers</a>
+            </div>
+        </div>
+    </div>
+{% endblock masthead %}
