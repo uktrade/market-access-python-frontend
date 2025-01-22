@@ -1,6 +1,5 @@
 from playwright.sync_api import expect
 
-from test_frontend.conftest import create_test_barrier
 from test_frontend.utils import clean_full_url, get_base_url, retry
 
 
