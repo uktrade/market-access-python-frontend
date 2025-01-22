@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { BARRIER_STATUS } from "../constants";
 import { getCheckboxValues } from "../utils";
@@ -27,12 +27,17 @@ const getOptionValue = (htmlElement: HTMLElement): OptionValue => {
     return { label, options };
 };
 
-const formatAdminAreas = (/** @type {URLSearchParams} */ searchParams) => {
-    const admin_areas = [];
-    if (searchParams.get("admin_areas")) {
-        const adminAreasData = JSON.parse(searchParams.get("admin_areas"));
+interface AdminAreasData {
+    [key: string]: string[];
+}
+
+const formatAdminAreas = (searchParams: URLSearchParams): string[] => {
+    const admin_areas: string[] = [];
+    const adminAreasParam = searchParams.get("admin_areas");
+    if (adminAreasParam) {
+        const adminAreasData: AdminAreasData = JSON.parse(adminAreasParam);
         for (const key in adminAreasData) {
-            const values = adminAreasData[key];
+            const values: string[] = adminAreasData[key];
             for (const admin_area_id of values) {
                 admin_areas.push(admin_area_id);
             }
@@ -46,7 +51,7 @@ const addLocation = (
 ) => {
     // update the current URL with the new query params
 
-    const searchParams = new URLSearchParams(queryParams);
+    const searchParams: URLSearchParams = new URLSearchParams(queryParams as string | string[][] | Record<string, string>);
 
     const adminAreas = formatAdminAreas(searchParams);
 
@@ -88,50 +93,6 @@ const addLocation = (
     return searchParams;
 };
 
-/**
- * ApplyFilterButton component.
- *
- * This component renders a button that, when clicked, applies filters to update the dashboard.
- *
- * @param {ApplyFilterButtonProps} props - The properties for the ApplyFilterButton component.
- *
- * @returns {JSX.Element} The rendered button component.
- *
- * @component
- *
- * @example
- * <ApplyFilterButton text="Apply Filters" />
- *
- * @function
- *
- * @name ApplyFilterButton
- *
- * @description
- * The ApplyFilterButton component is responsible for handling the click event to apply filters
- * and update the dashboard. It fetches the updated content from the server and replaces the
- * relevant sections of the page with the new content.
- *
- * @param {React.MouseEvent<HTMLButtonElement>} event - The click event.
- *
- * @async
- * @function
- * @name handleClick
- *
- * @description
- * The handleClick function is triggered when the button is clicked. It prevents the default
- * form submission, constructs a new query string from the form data, updates the URL, and
- * fetches the updated content to replace the relevant sections of the page.
- *
- * @param {string} submitUrl - The URL to fetch the updated content from.
- *
- * @async
- * @function
- * @name updateBarrierInsight
- *
- * @description
- * The updateBarrierInsight function fetches the updated content from the server and replaces
- * the relevant sections of the page with the new content.
- */
 const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterButtonProps): JSX.Element => {
 
     const filterForm = document.querySelector<HTMLFormElement>("#filters-form");
@@ -327,7 +288,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         }
 
         let queryString = new URLSearchParams(formData as any).toString();
-        
+
         if (queryString === currentURLQuerystring) return;
 
         queryString = addLocation(queryString).toString();
@@ -340,7 +301,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
         // update the dashboard
         updateBarrierInsight(submitURL);
-        
+
         // update the active filters
         updateActiveFilters();
     };
