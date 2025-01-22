@@ -1,7 +1,7 @@
 <div class="govuk-width-container ma-container-full">
     <section class="barrier-summary">
         <div class="barrier-summary__heading">
-            <p class="barrier-summary__code">{{ current_user.first_name }} {{ current_user.last_name }}</p>
+            <p class="barrier-summary__code" data-testid="username">{{ current_user.first_name }} {{ current_user.last_name }}</p>
             <h1 class="barrier-summary__heading__text">{{ active|capfirst|default_if_none:"Account Home" }}</h1>
         </div>
     </section>
