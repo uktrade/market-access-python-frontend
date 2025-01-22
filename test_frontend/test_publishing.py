@@ -1,8 +1,7 @@
 from playwright.sync_api import expect
 
 from test_frontend.conftest import create_test_barrier
-from test_frontend.utils import clean_full_url, retry, get_base_url
-
+from test_frontend.utils import clean_full_url, get_base_url, retry
 
 
 @retry()
@@ -27,11 +26,15 @@ def test_successful_publish(page, create_test_barrier):
 
     page.goto(barrier_details_url + "public")
     page.get_by_role("link", name="Review barrier").click()
-    page.locator("input[name=\"content_clearance\"]").check()
-    page.locator("input[name=\"external_clearances\"]").check()
+    page.locator('input[name="content_clearance"]').check()
+    page.locator('input[name="external_clearances"]').check()
     page.get_by_role("button", name="Send to GOV.UK content team").click()
 
-    expect(page.get_by_text("This barrier has been approved and is now with the GOV.UK content team")).to_be_visible()
+    expect(
+        page.get_by_text(
+            "This barrier has been approved and is now with the GOV.UK content team"
+        )
+    ).to_be_visible()
 
     page.goto(base_url + "users")
     page.get_by_role("link", name=name).click()
@@ -41,12 +44,16 @@ def test_successful_publish(page, create_test_barrier):
 
     page.goto(barrier_details_url + "public")
     page.get_by_role("link", name="Publish", exact=True).click()
-    
-    expect(page.get_by_text("Confirm you want to publish this barrier on GOV.UK")).to_be_visible()
+
+    expect(
+        page.get_by_text("Confirm you want to publish this barrier on GOV.UK")
+    ).to_be_visible()
 
     if base_url != "http://market-access.local:9880/":
         page.get_by_role("button", name="Confirm").click()
-        expect(page.get_by_text("This barrier has been published on GOV.UK")).to_be_visible()
+        expect(
+            page.get_by_text("This barrier has been published on GOV.UK")
+        ).to_be_visible()
 
 
 def get_username(page, base_url, barrier_details_url):
@@ -55,5 +62,4 @@ def get_username(page, base_url, barrier_details_url):
     page.goto(base_url + "account")
     page.locator("dt").filter(has_text="Name").click()
     name = page.get_by_test_id("username").inner_text()
-    # name = "Elizabeth Pedley"
     return name
