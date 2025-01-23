@@ -5,7 +5,6 @@ import { getCheckboxValues, parseIso } from "../utils";
 import { BARRIER_STATUS } from "../constants";
 import MultiSelectFilter from "../search/MultiSelectFilter";
 import LocationFilter from "../search/LocationFilter";
-import { handleBarChart } from "./charts";
 
 /**
  * Renders a summary card component.

@@ -11,8 +11,12 @@
         <script nonce="{{request.csp_nonce}}">
             document.addEventListener("DOMContentLoaded", function (event) {
                 ma.pages.index();
+
+                // add bar chart to the dashboard
+                ReactApp.renderBarChart("bar-chart");
+
                 // load apply filter button first!
-                ReactApp.renderApplyFilterButton("apply-filters-button", "Apply filters") // render the apply filter button
+                ReactApp.renderApplyFilterButton("apply-filters-button", "Apply filters"); // render the apply filter button
 
                 // add the active filters to the active filters section
                 let countryElement = document.getElementById("country");

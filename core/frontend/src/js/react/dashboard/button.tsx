@@ -2,13 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BARRIER_STATUS } from "../constants";
 import { getCheckboxValues } from "../utils";
+import { sharedData } from "./shared";
+
 
 interface ApplyFilterButtonProps {
     text: string;
     filterValues: Record<string, any>;
 }
 
-interface updateBarrierInsight {
+interface updateBarrierInsightProps {
     (submitUrl: string): void;
 }
 
@@ -166,7 +168,8 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         return value;
     };
 
-    const updateBarrierInsight: updateBarrierInsight = async (submitUrl: string): Promise<void> => {
+    const updateBarrierInsight: updateBarrierInsightProps = async (submitUrl: string): Promise<void> => {
+
         const response = await fetch(submitUrl, {
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
@@ -177,20 +180,6 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        // const responseText = await response.text();
-        // const tempElement = document.createElement("html");
-        // tempElement.innerHTML = responseText;
-        // const barrierInsight = tempElement.querySelector("#barrier-insights");
-        // const barrierChart = tempElement.querySelector("#barrier-charts");
-
-        // if (barrierInsight) {
-        //     const barrierInsightContainer = document.querySelector("#barrier-insights");
-        //     barrierInsightContainer.innerHTML = barrierInsight.innerHTML;
-        // }
-        // if (barrierChart) {
-        //     const barrierChartContainer = document.querySelector("#barrier-charts");
-        //     barrierChartContainer.innerHTML = barrierChart.innerHTML;
-        // }
         const data = await response.json();
         // update  summary cards
         document.getElementById("open-count").innerHTML = data.barriers.open;
@@ -199,6 +188,9 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         document.getElementById("current_year-resolved-count").innerHTML = data.barriers_current_year.resolved;
         document.getElementById("current_year-pb100-count").innerHTML = data.barriers_current_year.pb100;
         document.getElementById("current_year-overseas_delivery-count").innerHTML = data.barriers_current_year.overseas_delivery;
+
+        // Update chart using the exported ref
+        sharedData.current = data;
     };
 
     const updateActiveFilters = () => {
@@ -307,14 +299,16 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
     };
 
     return (
-        <button
-            className={`govuk-button govuk-button--full-width`}
-            type="button"
-            onClick={handleClick}
-            data-module="govuk-button"
-        >
-            {props.text}
-        </button>
+        <>
+            <button
+                className={`govuk-button govuk-button--full-width`}
+                type="button"
+                onClick={handleClick}
+                data-module="govuk-button"
+            >
+                {props.text}
+            </button>
+        </>
     );
 };
 
