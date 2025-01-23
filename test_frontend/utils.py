@@ -76,6 +76,7 @@ def retry(tries=3, delay=3, backoff=2, logger=None):
 
     return deco_retry
 
+
 def get_username(page):
     if get_base_url() == "http://market-access.local:9880/":
         return "Your"
@@ -84,6 +85,7 @@ def get_username(page):
     # name = page.get_by_test_id("username").inner_text()
     name = "Elizabeth Pedley"
     return name
+
 
 def change_permissions(page, username, permission):
     page.goto(get_base_url() + "users")
