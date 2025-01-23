@@ -2,7 +2,6 @@ import React, {forwardRef, useState, useEffect} from "react";
 import { render } from "react-dom";
 import Charts from "react-apexcharts";
 import ApexCharts from 'apexcharts';
-import { sharedData } from "./shared";
 import { parseIso } from "../utils";
 
 const colorTheme = [
@@ -72,7 +71,6 @@ React.useEffect(() => {
 // Memoize the URLSearchParams object so it doesn't get re-created on each render
 return React.useMemo(() => new URLSearchParams(search), [search]);
 }
-  
 
 export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
     const queryParams = useWindowQueryParams();
@@ -156,34 +154,12 @@ export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
                             ];
                         }
                     );
-        
+
                 });
             });
-       
-    }, []);
 
-    useEffect(() => {
-        if (sharedData.current) {
-            console.log("Data changed:", sharedData.current);
-            // Update your chart here with new data
-            setSeries((_prevSeries) => {
-                // update the two values
-                return [
-                    {
-                        name: "Value of barriers estimated to be resolved",
-                        data: [sharedData.current.barrier_value_chart.estimated_barriers_value || 0],
-                    },
-                    {
-                        name: "Value of resolved barriers",
-                        data: [sharedData.current.barrier_value_chart.resolved_barriers_value || 0],
-                    },
-                ];
-            });
+    }, [queryParams]);
 
-        console.log("Rendering chart with series:", series);
-
-        }}, [queryParams]);
-  
     return <Charts options={options} series={series} type="bar" height={350} />;
 });
 

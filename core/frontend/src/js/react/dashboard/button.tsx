@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BARRIER_STATUS } from "../constants";
 import { getCheckboxValues } from "../utils";
-import { sharedData } from "./shared";
 
 
 interface ApplyFilterButtonProps {
@@ -48,9 +47,7 @@ const formatAdminAreas = (searchParams: URLSearchParams): string[] => {
     return admin_areas;
 };
 
-const addLocation = (
-    /** @type {string | URLSearchParams | string[][] | Record<string, string>} */ queryParams,
-) => {
+const addLocation = (queryParams: string | URLSearchParams | string[][] | Record<string, string>) => {
     // update the current URL with the new query params
 
     const searchParams: URLSearchParams = new URLSearchParams(queryParams as string | string[][] | Record<string, string>);
@@ -188,9 +185,6 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         document.getElementById("current_year-resolved-count").innerHTML = data.barriers_current_year.resolved;
         document.getElementById("current_year-pb100-count").innerHTML = data.barriers_current_year.pb100;
         document.getElementById("current_year-overseas_delivery-count").innerHTML = data.barriers_current_year.overseas_delivery;
-
-        // Update chart using the exported ref
-        sharedData.current = data;
     };
 
     const updateActiveFilters = () => {
