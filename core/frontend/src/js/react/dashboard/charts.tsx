@@ -116,48 +116,51 @@ export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
     });
 
     useEffect(() => {
-         fetch("/dashboard-summary/", {
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest",
-                        "Content-Type": "application/json",
-                    },
-                }).then((response) => {
-                    response.json().then((data) => {
-                        setOptions((_prevOptions) => {
-                            return {
-                                ..._prevOptions,
-                                noData: {
-                                    text: 'Loading...'
-                                },
-                                xaxis: {
-                                    categories: [
-                                        ` ${parseIso(
-                                            data?.financial_year?.current_start,
-                                        )} to ${parseIso(
-                                            data?.financial_year?.current_end,
-                                        )}`,
-                                    ],
-                                },
-                            };
-                        });
+        const filteredQueryParams = new URLSearchParams();
+        queryParams.forEach((value, key) => {
+          if (value) {
+            filteredQueryParams.set(key, value);
+          }
+        });
+        const queryString = filteredQueryParams.toString();
+        const submitURL = `/dashboard-summary/?${queryString}`;
 
-                        setSeries((_prevSeries) => {
-                            return [
-                                {
-                                    name: "Value of barriers estimated to be resolved",
-                                    data: [data.barrier_value_chart.estimated_barriers_value || 0],
-                                },
-                                {
-                                    name: "Value of resolved barriers",
-                                    data: [data.barrier_value_chart.resolved_barriers_value || 0],
-                                },
-                            ];
-                        }
-                    );
-
-                });
+        const fetchData = async () => {
+          try {
+            const response = await fetch(submitURL, {
+              headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/json",
+              },
             });
+            const data = await response.json();
 
+            setOptions((prevOptions) => ({
+              ...prevOptions,
+              noData: { text: 'Loading...' },
+              xaxis: {
+                categories: [
+                  ` ${parseIso(data?.financial_year?.current_start)} to ${parseIso(data?.financial_year?.current_end)}`,
+                ],
+              },
+            }));
+
+            setSeries([
+              {
+                name: "Value of barriers estimated to be resolved",
+                data: [data.barrier_value_chart.estimated_barriers_value || 0],
+              },
+              {
+                name: "Value of resolved barriers",
+                data: [data.barrier_value_chart.resolved_barriers_value || 0],
+              },
+            ]);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        fetchData();
     }, [queryParams]);
 
     return <Charts options={options} series={series} type="bar" height={350} />;
