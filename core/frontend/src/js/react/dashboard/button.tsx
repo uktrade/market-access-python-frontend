@@ -166,7 +166,18 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
     };
 
     const updateBarrierInsight: updateBarrierInsightProps = async (submitUrl: string): Promise<void> => {
+        // Constants for element IDs
+        const elementIds = {
+            current: ["open-count", "pb100-count", "overseas_delivery-count"],
+            yearly: ["resolved", "pb100", "overseas_delivery"].map(id => `current_year-${id}-count`)
+        };
 
+        // Set loading state for all elements
+        [...elementIds.current, ...elementIds.yearly].forEach(id => {
+            document.getElementById(id).innerHTML = "Loading...";
+        });
+
+        // Fetch data
         const response = await fetch(submitUrl, {
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
@@ -177,14 +188,20 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        // update  summary cards
-        document.getElementById("open-count").innerHTML = data.barriers.open;
-        document.getElementById("pb100-count").innerHTML = data.barriers.pb100;
-        document.getElementById("overseas_delivery-count").innerHTML = data.barriers.overseas_delivery;
-        document.getElementById("current_year-resolved-count").innerHTML = data.barriers_current_year.resolved;
-        document.getElementById("current_year-pb100-count").innerHTML = data.barriers_current_year.pb100;
-        document.getElementById("current_year-overseas_delivery-count").innerHTML = data.barriers_current_year.overseas_delivery;
+
+        const { barriers, barriers_current_year } = await response.json();
+
+        // Update current barriers
+        elementIds.current.forEach((id, index) => {
+            const keys = ["open", "pb100", "overseas_delivery"];
+            document.getElementById(id).innerHTML = barriers[keys[index]];
+        });
+
+        // Update yearly barriers
+        elementIds.yearly.forEach((id, index) => {
+            const keys = ["resolved", "pb100", "overseas_delivery"];
+            document.getElementById(id).innerHTML = barriers_current_year[keys[index]];
+        });
     };
 
     const updateActiveFilters = () => {
