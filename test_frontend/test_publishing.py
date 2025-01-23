@@ -1,5 +1,3 @@
-import logging
-
 import pytest
 from playwright.sync_api import expect
 
@@ -10,8 +8,6 @@ from test_frontend.utils import (
     get_base_url,
     get_username,
 )
-
-LOGGER = logging.getLogger(__name__)
 
 
 def test_publish_general_user(page, create_test_barrier):
