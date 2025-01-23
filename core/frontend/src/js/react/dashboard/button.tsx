@@ -165,6 +165,73 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         return value;
     };
 
+    const getFinancialYearSearchParam = (field: string, financial_year: any) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const start_date = new Date(financial_year.current_start);
+        const end_date = new Date(financial_year.current_end);
+
+        if (field == "status") {
+            //Resolved in full from this date
+            searchParams.append(
+                "status_date_resolved_in_full_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_resolved_in_full_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "status_date_resolved_in_full_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_resolved_in_full_1_1",
+                end_date.getFullYear().toString(),
+            );
+        }
+        if (field == "estimated_resolution_date") {
+            //Estimated resolution date from this date
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "estimated_resolution_date_resolved_in_part_1_1",
+                end_date.getFullYear().toString(),
+            );
+            //Estimated resolution date from this date
+            searchParams.append(
+                "status_date_open_in_progress_0_0",
+                (start_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_open_in_progress_0_1",
+                start_date.getFullYear().toString(),
+            );
+            //to this date
+            searchParams.append(
+                "status_date_open_in_progress_1_0",
+                (end_date.getMonth() + 1).toString(),
+            );
+            searchParams.append(
+                "status_date_open_in_progress_1_1",
+                end_date.getFullYear().toString(),
+            );
+        }
+
+        return searchParams.toString();
+    }
+
     const updateBarrierInsight: updateBarrierInsightProps = async (submitUrl: string): Promise<void> => {
         // Constants for element IDs
         const elementIds = {
@@ -176,6 +243,11 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         [...elementIds.current, ...elementIds.yearly].forEach(id => {
             document.getElementById(id).innerHTML = "Loading...";
         });
+
+        const elementLinkUrls = {
+            current: ["open-link", "pb100-link", "overseas_delivery-link"],
+            yearly: ["resolved", "pb100", "overseas_delivery"].map(id => `current_year-${id}-link`)
+        };
 
         // Fetch data
         const response = await fetch(submitUrl, {
@@ -189,7 +261,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const { barriers, barriers_current_year } = await response.json();
+        const { barriers, barriers_current_year, financial_year } = await response.json();
 
         // Update current barriers
         elementIds.current.forEach((id, index) => {
@@ -201,6 +273,29 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         elementIds.yearly.forEach((id, index) => {
             const keys = ["resolved", "pb100", "overseas_delivery"];
             document.getElementById(id).innerHTML = barriers_current_year[keys[index]];
+        });
+
+        const searchParams = submitUrl.split("?")[1];
+
+        // Update financial year url
+        const status = getFinancialYearSearchParam("status", financial_year);
+        const estimated_resolution_date = getFinancialYearSearchParam("estimated_resolution_date", financial_year);
+
+        const linkDict = {
+            "open-link": `/search/?${searchParams}&status=2&status=3`, // Open link
+            "pb100-link": `/search/?${searchParams}&status=2&status=3&combined_priority=APPROVED`, // PB100 link
+            "overseas_delivery-link": `/search/?${searchParams}&status=2&status=3&combined_priority=OVERSEAS`, // Overseas delivery link
+            "current_year-resolved-link": `/search/?${status}&status=4`, // Resolved link
+            "current_year-pb100-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=APPROVED`, // PB100 link current year
+            "current_year-overseas_delivery-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=OVERSEAS` // Overseas delivery link current year
+        }
+
+        // update the divs with the new links
+        Object.keys(linkDict).forEach((key) => {
+            const element = document.getElementById(key);
+            if (element) {
+                element.querySelector('a').href = linkDict[key];
+            }
         });
     };
 
@@ -229,7 +324,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             });
             handleGoogleAnalytics(filters);
 
-        const activeFiltersContainer = document.getElementById("active-filters-container");
+        const activeFiltersContainer = document.getElementById("active filters");
         if (activeFiltersContainer) {
             ReactDOM.render(
                 <>
