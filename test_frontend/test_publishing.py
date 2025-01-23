@@ -4,21 +4,22 @@ import pytest
 from playwright.sync_api import expect
 
 from test_frontend.utils import (
+    admin_user,
     change_permissions,
     clean_full_url,
     get_base_url,
     get_username,
-    retry,
 )
 
 LOGGER = logging.getLogger(__name__)
 
 
-@retry()
 def test_successful_publish(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
     barrier_details_url = clean_full_url(url)
+    if not admin_user(page):
+        pytest.skip("You are not an admin in this environment", allow_module_level=True)
 
     page.goto(barrier_details_url + "public")
     page.get_by_role("button", name="Submit for review").click()
@@ -71,6 +72,8 @@ def test_successful_publish(page, create_test_barrier):
 def test_unpublish(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
+    if not admin_user(page):
+        pytest.skip("You are not an admin in this environment", allow_module_level=True)
 
     page.goto(clean_full_url(url) + "public")
     page.get_by_role("link", name="Unpublish").click()
@@ -83,6 +86,8 @@ def test_unpublish(page, create_test_barrier):
 def test_remove_review(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
+    if not admin_user(page):
+        pytest.skip("You are not an admin in this environment", allow_module_level=True)
 
     change_permissions(
         page,

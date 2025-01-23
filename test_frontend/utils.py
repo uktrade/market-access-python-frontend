@@ -96,3 +96,10 @@ def change_permissions(page, username, permission):
     page.get_by_role("link", name="Edit profile").click()
     page.get_by_label(permission).check()
     page.get_by_role("button", name="Save").click()
+
+
+def admin_user(page):
+    page.goto(get_base_url() + "users")
+    if page.get_by_role("heading", name="Manage users and groups").is_visible():
+        return True
+    return False
