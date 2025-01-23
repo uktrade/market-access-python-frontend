@@ -7,7 +7,7 @@ RUN apt-get update
 RUN apt-get install -y build-essential python3-dev libffi-dev libmagic-dev
 
 # Configure the node apt repository
-RUN curl -sL https://deb.nodesource.com/setup_23.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
 
 # SSH
