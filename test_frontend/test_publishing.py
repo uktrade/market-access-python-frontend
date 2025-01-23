@@ -26,29 +26,16 @@ def test_publish_general_user(page, create_test_barrier):
     page.get_by_role("button", name="Submit for review").click()
 
     expect(page.get_by_text("This barrier is now awaiting approval")).to_be_visible()
-    expect(
-        page.get_by_text("This barrier is now awaiting approval")
-    ).not_to_be_visible()
-
-
-def test_publish_general_user(page, create_test_barrier):
-    title = "test"
-    url = create_test_barrier(title=title)
-    change_permissions(
-        page,
-        get_username(page),
-        "General user",
-    )
-    page.goto(clean_full_url(url) + "public")
-    page.get_by_role("button", name="Submit for review").click()
-
-    expect(page.get_by_text("This barrier is now awaiting approval")).to_be_visible()
     expect(page.get_by_role("link", name="Review barrier")).not_to_be_visible()
 
 
 def test_publish_approver(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
+    if not admin_user(page):
+        pytest.skip(
+            "You cannot approve barriers in this environment", allow_module_level=True
+        )
     change_permissions(
         page,
         get_username(page),
@@ -75,6 +62,10 @@ def test_publish_approver(page, create_test_barrier):
 def test_publish_publisher(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
+    if not admin_user(page):
+        pytest.skip(
+            "You cannot publish barriers in this environment", allow_module_level=True
+        )
     change_permissions(
         page,
         get_username(page),
@@ -106,6 +97,10 @@ def test_publish_publisher(page, create_test_barrier):
 def test_unpublish_publisher(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
+    if not admin_user(page):
+        pytest.skip(
+            "You cannot publish barriers in this environment", allow_module_level=True
+        )
     page.goto(clean_full_url(url) + "public")
     page.get_by_role("link", name="Unpublish").click()
     page.locator("#id_public_publisher_summary").fill("Test")
