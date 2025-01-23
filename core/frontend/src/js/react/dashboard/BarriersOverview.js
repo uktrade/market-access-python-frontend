@@ -15,7 +15,7 @@ import LocationFilter from "../search/LocationFilter";
  * @param {string} props.search_params - The search parameters to be included in the URL.
  * @returns {JSX.Element} - The rendered summary card component.
  */
-const SummaryCard = ({ value, description, url, search_params}) => {
+const SummaryCard = ({ value, description, url, search_params }) => {
     const handleSearchParam = () => {
         return `${url}?${search_params}`;
     };
