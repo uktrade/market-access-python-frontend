@@ -82,8 +82,7 @@ def get_username(page):
         return "Your"
     page.goto(get_base_url() + "account")
     page.locator("dt").filter(has_text="Name").click()
-    # name = page.get_by_test_id("username").inner_text()
-    name = "Elizabeth Pedley"
+    name = page.get_by_test_id("username").inner_text()
     return name
 
 
