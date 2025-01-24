@@ -77,15 +77,6 @@ def retry(tries=3, delay=3, backoff=2, logger=None):
     return deco_retry
 
 
-def get_username(page):
-    if get_base_url() == "http://market-access.local:9880/":
-        return "Your"
-    page.goto(get_base_url() + "account")
-    page.locator("dt").filter(has_text="Name").click()
-    name = page.get_by_test_id("username").inner_text()
-    return name
-
-
 def change_permissions(page, username, permission):
     page.goto(get_base_url() + "users")
     if not page.get_by_role("link", name=username).is_visible():
@@ -95,10 +86,3 @@ def change_permissions(page, username, permission):
     page.get_by_role("link", name="Edit profile").click()
     page.get_by_label(permission).check()
     page.get_by_role("button", name="Save").click()
-
-
-def admin_user(page):
-    page.goto(get_base_url() + "users")
-    if page.get_by_role("heading", name="Manage users and groups").is_visible():
-        return True
-    return False

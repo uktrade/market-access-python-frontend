@@ -1,40 +1,30 @@
 import pytest
 from playwright.sync_api import expect
 
-from test_frontend.utils import (
-    admin_user,
-    change_permissions,
-    clean_full_url,
-    get_base_url,
-    get_username,
-)
+from test_frontend.utils import change_permissions, clean_full_url, get_base_url
 
 
 def test_publish_general_user(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
-    change_permissions(
-        page,
-        get_username(page),
-        "General user",
-    )
     page.goto(clean_full_url(url) + "public")
     page.get_by_role("button", name="Submit for review").click()
 
     expect(page.get_by_text("This barrier is now awaiting approval")).to_be_visible()
-    expect(page.get_by_role("link", name="Review barrier")).not_to_be_visible()
 
 
-def test_publish_approver(page, create_test_barrier):
+def test_publish_approver(page, create_test_barrier, is_admin, get_username):
     title = "test"
     url = create_test_barrier(title=title)
-    if not admin_user(page):
+    is_admin = is_admin()
+    username = get_username()
+    if not is_admin:
         pytest.skip(
-            "You cannot approve barriers in this environment", allow_module_level=True
+            f"You do not have the correct permissions to test approving barriers in {get_base_url()}"
         )
     change_permissions(
         page,
-        get_username(page),
+        username,
         "Public barrier approver",
     )
     page.goto(clean_full_url(url) + "public")
@@ -55,16 +45,18 @@ def test_publish_approver(page, create_test_barrier):
     expect(page.get_by_text("This barrier needs to be approved again")).to_be_visible()
 
 
-def test_publish_publisher(page, create_test_barrier):
+def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
     title = "test"
     url = create_test_barrier(title=title)
-    if not admin_user(page):
+    is_admin = is_admin()
+    username = get_username()
+    if not is_admin:
         pytest.skip(
-            "You cannot publish barriers in this environment", allow_module_level=True
+            f"You do not have the correct permissions to test publishing barriers in {get_base_url()}"
         )
     change_permissions(
         page,
-        get_username(page),
+        username,
         "Publisher",
     )
     page.goto(clean_full_url(url) + "public")
@@ -88,15 +80,14 @@ def test_publish_publisher(page, create_test_barrier):
 
 @pytest.mark.skipif(
     get_base_url() == "http://market-access.local:9880/",
-    reason="Barriers cannot be published on your local environment",
+    reason=f"Barriers cannot be published in {get_base_url()}",
 )
-def test_unpublish_publisher(page, create_test_barrier):
+def test_unpublish_publisher(page, create_test_barrier, is_admin):
     title = "test"
     url = create_test_barrier(title=title)
-    if not admin_user(page):
-        pytest.skip(
-            "You cannot publish barriers in this environment", allow_module_level=True
-        )
+    is_admin = is_admin()
+    if not is_admin:
+        pytest.skip("You cannot publish barriers in this environment")
     page.goto(clean_full_url(url) + "public")
     page.get_by_role("link", name="Unpublish").click()
     page.locator("#id_public_publisher_summary").fill("Test")

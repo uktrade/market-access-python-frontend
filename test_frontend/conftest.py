@@ -5,6 +5,9 @@ import string
 
 import pytest
 from playwright.sync_api import sync_playwright
+from test_frontend.utils import (
+    get_base_url,
+)
 
 BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
@@ -161,3 +164,27 @@ def create_test_barrier(page, session_data):
         return f'{BASE_URL}/barriers/{session_data["barrier_id"]}/'
 
     return _create_test_barrier
+
+
+@pytest.fixture(scope="session")
+def is_admin(page):
+    def _is_admin():
+        page.goto(get_base_url() + "users")
+        if page.get_by_role("heading", name="Manage users and groups").is_visible():
+            return True
+        return False
+
+    return _is_admin
+
+
+@pytest.fixture(scope="session")
+def get_username(page):
+    def _get_username():
+        if get_base_url() == "http://market-access.local:9880/":
+            return "Your"
+        page.goto(get_base_url() + "account")
+        page.locator("dt").filter(has_text="Name").click()
+        name = page.get_by_test_id("username").inner_text()
+        return name
+
+    return _get_username

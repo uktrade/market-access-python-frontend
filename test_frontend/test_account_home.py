@@ -5,7 +5,7 @@ from test_frontend.utils import get_base_url, retry
 
 @retry()
 def test_update_overseas_region(page):
-    page.goto(get_base_url() + "/account")
+    page.goto(get_base_url() + "account")
 
     page.locator(".edit-overseas-regions").click()
     page.get_by_role("combobox").select_option("8d4c4f31-06ce-4320-8e2f-1c13559e125f")
