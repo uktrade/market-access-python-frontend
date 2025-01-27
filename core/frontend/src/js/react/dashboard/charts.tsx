@@ -92,7 +92,7 @@ export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
         },
         series,
         title: {
-            text: "Total value of open barriers estimated to be resolved and resolved barriers( £-British pounds)",
+            text: "Total value of open barriers estimated to be resolved and resolved barriers",
             align: "center",
         },
         noData: {
@@ -104,9 +104,6 @@ export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
         yaxis: {
             title: {
                 text: "British pounds(£)",
-                style: {
-                    color: "#3b5998",
-                },
             },
         },
         fill: {
