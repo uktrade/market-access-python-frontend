@@ -14,9 +14,6 @@ import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
 import GDSCheckboxes from "./gds/Checkboxes";
 import {
-    // handleBarChart,
-    // handlePieChart,
-    // handleStackedBarChart,
     renderBarChart,
 } from "./dashboard/charts";
 import { renderApplyFilterButton } from "./dashboard/button";
@@ -183,21 +180,6 @@ function renderRisksAndMitigationForm() {
     const container = document.createElement("div");
     ReactDOM.render(<RisksAndMitigationForm />, container);
 }
-
-// function renderPieChart(chartData, htmlElementId) {
-//     const container = document.querySelector(`#${htmlElementId}`);
-//     ReactDOM.render(handlePieChart(chartData), container);
-// }
-
-// function renderBarChart(chartData, htmlElementId) {
-//     const container = document.querySelector(`#${htmlElementId}`);
-//     ReactDOM.render(handleBarChart(chartData), container);
-// }
-
-// function renderStackedBarChart(chartData, htmlElementId) {
-//     const container = document.querySelector(`#${htmlElementId}`);
-//     ReactDOM.render(handleStackedBarChart(chartData), container);
-// }
 
 export {
     renderCommodityForm,
