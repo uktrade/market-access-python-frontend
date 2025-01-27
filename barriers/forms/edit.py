@@ -632,6 +632,7 @@ class UpdateBarrierEstimatedResolutionDateForm(
         label="Estimated resolution date",
         help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
         error_messages={"required": "Enter an estimated resolution date"},
+        required=False,
     )
     estimated_resolution_date_change_reason = forms.CharField(
         label="What has caused the change in estimated resolution date?",
@@ -645,12 +646,16 @@ class UpdateBarrierEstimatedResolutionDateForm(
     def save(self):
         client = MarketAccessAPIClient(self.token)
 
-        estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
-        is_future_date = self.does_new_estimated_date_require_approval(
-            self.cleaned_data
+        estimated_resolution_date = self.cleaned_data.get(
+            "estimated_resolution_date", None
         )
 
-        if (not self.is_user_admin) and (is_future_date):
+        is_future_or_cleared_date = self.does_new_estimated_date_require_approval(
+            self.cleaned_data
+        )
+        print("is future or cleared date :", is_future_or_cleared_date)
+
+        if (not self.is_user_admin) and (is_future_or_cleared_date):
             self.requested_change = True
             client.barriers.patch(
                 id=str(self.barrier_id),

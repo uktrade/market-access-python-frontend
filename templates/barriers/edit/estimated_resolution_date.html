@@ -1,11 +1,9 @@
 {% extends "barriers/edit/base.html" %}
-
 {% block page_title %}{{ block.super }} - Add estimated resolution date{% endblock %}
-
 {% block back_link %}
-    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}"
+       class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
-
 {% block body_script %}
     <script nonce="{{request.csp_nonce}}">
         new ma.components.setupHiddenERDTextarea({
@@ -14,22 +12,33 @@
         });
     </script>
 {% endblock %}
-
 {% block page_content %}
-
     {% include 'partials/heading.html' with text='Add estimated resolution date' %}
-
-
     {% form_error_banner form %}
-
+    <div class="govuk-notification-banner"
+         role="region"
+         aria-labelledby="govuk-notification-banner-title"
+         data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title"
+                id="govuk-notification-banner-title">
+                This section is for testing purposes only and should be removed before merged in production
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <p>Current user : {{ current_user.first_name }} {{ current_user.last_name }}</p>
+            <p>Is superuser? : {{ current_user.is_superuser }}</p>
+            <p>Groups : {{ current_user.groups }}</p>
+            <p>Permissions :  {{ current_user.permissions }}</p>
+            <p>Requested Change :  {{ barrier.has_active_estimated_resolution_date_proposal }}</p>
+        </div>
+    </div>
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-
         {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
         {% include 'barriers/partials/edit_estimated_resolution_date.html' %}
-
         <button class="govuk-button" data-module="govuk-button">Save and return</button>
-        <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
+        <a class="form-cancel"
+           href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
-
 {% endblock %}

@@ -152,14 +152,25 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
 
     def does_new_estimated_date_require_approval(self, cleaned_data):
         estimated_resolution_date = cleaned_data.get("estimated_resolution_date")
+        print("new estimated resolution date", estimated_resolution_date)
         if not self.barrier.estimated_resolution_date:
-            return False
-
-        if not estimated_resolution_date:
             return False
 
         existing_estimated_resolution_date = (
             self.barrier.estimated_resolution_date.strftime("%Y-%m-%d")
+        )
+
+        print("existing erd :", existing_estimated_resolution_date)
+
+        if estimated_resolution_date is None and existing_estimated_resolution_date:
+            return True
+
+        if not estimated_resolution_date:
+            return False
+
+        print(
+            existing_estimated_resolution_date
+            and (estimated_resolution_date > existing_estimated_resolution_date)
         )
 
         return existing_estimated_resolution_date and (
@@ -184,13 +195,24 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
         )
 
     def clean_estimated_resolution_date(self):
-        return self.cleaned_data["estimated_resolution_date"].isoformat()
+        estimated_resolution_date = self.cleaned_data.get(
+            "estimated_resolution_date", None
+        )
+        if estimated_resolution_date:
+            return self.cleaned_data["estimated_resolution_date"].isoformat()
+        else:
+            return None
 
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
         change_requires_approval = self.does_new_estimated_date_require_approval(
             cleaned_data
         )
+
+        print("cleaning data")
+        print("is approval required? ", change_requires_approval)
+
+        print("is user admin :", self.is_user_admin)
 
         if (not self.is_user_admin) and change_requires_approval:
             # only admin users can change the estimated resolution date to a date in the past
