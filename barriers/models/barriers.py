@@ -72,10 +72,6 @@ class Barrier(APIModel):
         return dateutil.parser.parse(self.data["archived_on"])
 
     @property
-    def category_titles(self):
-        return [category["title"] for category in self.categories]
-
-    @property
     def created_on(self):
         return dateutil.parser.parse(self.data["created_on"])
 
@@ -403,11 +399,6 @@ class PublicBarrier(APIModel):
     @property
     def internal_id(self):
         return self.data.get("internal_id")
-
-    @property
-    def category_titles(self):
-        if self.categories:
-            return [category["title"] for category in self.categories]
 
     @property
     def internal_government_organisations(self):
