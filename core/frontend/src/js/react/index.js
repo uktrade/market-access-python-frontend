@@ -192,9 +192,6 @@ export {
     GDSTabs,
     GDSRadios,
     GDSCheckboxes,
-    // renderPieChart,
-    // renderBarChart,
-    // renderStackedBarChart,
     renderApplyFilterButton,
     renderBarChart,
 };
