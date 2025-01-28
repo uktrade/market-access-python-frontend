@@ -13,9 +13,7 @@ import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
 import GDSCheckboxes from "./gds/Checkboxes";
-import {
-    renderBarChart,
-} from "./dashboard/charts";
+import { renderBarChart } from "./dashboard/charts";
 import { renderApplyFilterButton } from "./dashboard/button";
 
 function renderCommodityForm(
