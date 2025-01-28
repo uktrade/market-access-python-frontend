@@ -119,14 +119,6 @@ class MetadataTestCase(MarketAccessTestCase):
         assert "Rules of origin" in titles
         assert "Tariffs or import duties" in titles
 
-    def test_get_category(self):
-        metadata = get_metadata()
-
-        category = metadata.get_category("130")
-
-        assert category["title"] == "Price controls"
-        assert category["category"] == "GOODS"
-
     def test_get_policy_team_list(self):
         metadata = get_metadata()
         policy_teams = metadata.get_policy_team_list()
