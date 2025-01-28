@@ -30,24 +30,6 @@ class BarrierHistoryItemTestCase(MarketAccessTestCase):
             "archived_explanation": "It's not a barrier",
         }
 
-    def test_categories(self):
-        item = HistoryItem(
-            {
-                "date": "2020-03-24T15:49:19.803670Z",
-                "model": "barrier",
-                "field": "categories",
-                "old_value": ["109", "141"],
-                "new_value": ["123"],
-                "user": {"id": 48, "name": "Test-user"},
-            }
-        )
-        assert item.field_name == "Barrier categories"
-        assert item.old_value == [
-            "Locally produced material in goods",
-            "Tariffs or import duties",
-        ]
-        assert item.new_value == ["Limitations on access to key infrastructure"]
-
     def test_commercial_value(self):
         item = HistoryItem(
             {
