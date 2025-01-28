@@ -71,7 +71,6 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
-            "category": ["127"],
             "region": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
             "priority": ["HIGH", "MEDIUM"],
             "status": ["2", "3"],
@@ -110,11 +109,6 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
-        }
-        assert saved_search.readable_filters["category"] == {
-            "label": "Category",
-            "readable_value": "Government subsidies",
-            "value": ["127"],
         }
         assert saved_search.readable_filters["region"] == {
             "label": "Overseas region",
