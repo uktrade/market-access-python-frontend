@@ -75,7 +75,6 @@ class PublicBarrierHistoryItem(PolymorphicBase):
     model = "public_barrier"
     key = "field"
     subclasses = (
-        CategoriesHistoryItem,
         LocationHistoryItem,
         PublicViewStatusHistoryItem,
         SectorsHistoryItem,
