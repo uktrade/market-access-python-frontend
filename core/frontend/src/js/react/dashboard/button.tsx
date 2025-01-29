@@ -426,10 +426,10 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
     React.useEffect(() => {
         const formFieldsContainer = document.querySelector("#filters-form");
-        
+
         const observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
-                if (mutation.type !== "childList" || 
+                if (mutation.type !== "childList" ||
                     mutation.oldValue === mutation.target.textContent ||
                     !(mutation.target instanceof HTMLDivElement)) {
                     continue;
