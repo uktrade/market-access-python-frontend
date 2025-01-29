@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BARRIER_STATUS } from "../constants";
 import { getCheckboxValues } from "../utils";
+import { useWindowQueryParams } from "../hooks";
 
 
 interface ApplyFilterButtonProps {
@@ -93,6 +94,8 @@ const addLocation = (queryParams: string | URLSearchParams | string[][] | Record
 };
 
 const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterButtonProps): JSX.Element => {
+
+    const queryParams = useWindowQueryParams();
 
     const filterForm = document.querySelector<HTMLFormElement>("#filters-form");
 
@@ -391,10 +394,27 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
         queryString = addLocation(queryString).toString();
 
+        // Remove empty query parameters
+        queryString = queryString.split('&')
+            .filter(param => {
+            const [key, value] = param.split('=');
+            return value !== '' && value !== undefined;
+            })
+            .join('&');
+
         const formAction = filterForm.action.split("?")[0];
         const url = `${formAction}?${queryString}`;
         window.history.pushState({}, document.title, url);
+    };
 
+    React.useEffect(() => {
+        const filteredQueryParams = new URLSearchParams();
+        queryParams.forEach((value, key) => {
+          if (value) {
+            filteredQueryParams.set(key, value);
+          }
+        });
+        const queryString = filteredQueryParams.toString();
         const submitURL = `/dashboard-summary/?${queryString}`;
 
         // update the dashboard
@@ -402,20 +422,44 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
         // update the active filters
         updateActiveFilters();
-    };
+    }, [queryParams]);
 
-    return (
-        <>
-            <button
-                className={`govuk-button govuk-button--full-width`}
-                type="button"
-                onClick={handleClick}
-                data-module="govuk-button"
-            >
-                {props.text}
-            </button>
-        </>
-    );
+    React.useEffect(() => {
+        const formFieldsContainer = document.querySelector("#filters-form");
+        
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type !== "childList" || 
+                    mutation.oldValue === mutation.target.textContent ||
+                    !(mutation.target instanceof HTMLDivElement)) {
+                    continue;
+                }
+
+                const input = mutation.target.querySelector("input");
+                if (!input) continue;
+
+                handleClick(
+                    { preventDefault: () => {} } as HandleClickEvent);
+            }
+        });
+
+        if (formFieldsContainer) {
+            observer.observe(formFieldsContainer, {
+                characterData: false,
+                childList: true,
+                subtree: true,
+                attributes: false,
+                characterDataOldValue: false,
+            });
+        }
+
+        // Cleanup function to disconnect observer when component unmounts
+        return () => {
+            observer.disconnect();
+        };
+    }, []); // Empty dependency array since we only want this to run once on mount
+
+    return null; // Controller component doesn't need to render anything
 };
 
 export const renderApplyFilterButton = (elementId: string, buttonText: any) => {

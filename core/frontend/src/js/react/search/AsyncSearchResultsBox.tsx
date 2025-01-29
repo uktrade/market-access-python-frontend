@@ -90,9 +90,9 @@ export const AsyncSearchResultsBox = (): JSX.Element => {
 
         if (formFieldsContainer) {
             observer.observe(formFieldsContainer, {
-                characterData: true,
+                characterData: false,
                 childList: true,
-                subtree: true,
+                subtree: false,
                 attributes: false,
                 characterDataOldValue: true
             });
