@@ -25,14 +25,14 @@
                             {% include "partials/forms/checkbox_filter.html" with field=form.policy_team %}
                             {% if filters %}
                                 <a id="clear-filters-button"
-                                class="filter-items__clear"
-                                href="{% url 'barriers:home' %}">Remove all filters</a>
+                                   class="filter-items__clear"
+                                   href="{% url 'barriers:home' %}">Remove all filters</a>
                             {% endif %}
                             <!-- <input type="hidden" id="status" name="status" value="2"> -->
                             <div id="apply-filters-button">
                                 <input type="submit"
-                                    value="Apply filters"
-                                    class="govuk-button govuk-button--full-width">
+                                       value="Apply filters"
+                                       class="govuk-button govuk-button--full-width">
                             </div>
                         </div>
                     </form>

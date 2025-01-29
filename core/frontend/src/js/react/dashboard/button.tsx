@@ -458,19 +458,19 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         // Event handler that will fire whenever a checkbox changes
         const handleCheckboxChange = ({ target }: Event) => {
             if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
-            
+
             const urlParams = new URLSearchParams(window.location.search);
             const { name, checked, value } = target;
-            
+
             if (!name) return;
-            
+
             checked ? urlParams.set(name, value) : urlParams.delete(name);
             window.history.replaceState({}, "", `?${urlParams.toString()}`);
         };
-  
+
         // Attach listener
         formFieldsContainer.addEventListener("change", handleCheckboxChange);
-  
+
         // Clean up
         return () => {
             formFieldsContainer.removeEventListener("change", handleCheckboxChange);
