@@ -397,7 +397,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         // Remove empty query parameters
         queryString = queryString.split('&')
             .filter(param => {
-            const [key, value] = param.split('=');
+            const [_key, value] = param.split('=');
             return value !== '' && value !== undefined;
             })
             .join('&');
@@ -425,7 +425,9 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
     }, [queryParams]);
 
     React.useEffect(() => {
-        const formFieldsContainer = document.querySelector("#filters-form");
+        const formFieldsContainer = document.querySelector("#filter-form-fields");
+
+        if (!formFieldsContainer) return;
 
         const observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
@@ -453,10 +455,28 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             });
         }
 
-        // Cleanup function to disconnect observer when component unmounts
+        // Event handler that will fire whenever a checkbox changes
+        const handleCheckboxChange = ({ target }: Event) => {
+            if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const { name, checked, value } = target;
+            
+            if (!name) return;
+            
+            checked ? urlParams.set(name, value) : urlParams.delete(name);
+            window.history.replaceState({}, "", `?${urlParams.toString()}`);
+        };
+  
+        // Attach listener
+        formFieldsContainer.addEventListener("change", handleCheckboxChange);
+  
+        // Clean up
         return () => {
+            formFieldsContainer.removeEventListener("change", handleCheckboxChange);
             observer.disconnect();
         };
+
     }, []); // Empty dependency array since we only want this to run once on mount
 
     return null; // Controller component doesn't need to render anything
@@ -487,7 +507,6 @@ export const renderApplyFilterButton = (elementId: string, buttonText: any) => {
         location: [
             ...getOptionValue(country).options,
             ...getOptionValue(region).options,
-            ...getOptionValue(tradingBlocs).options,
         ],
         tradingBlocs: getOptionValue(tradingBlocs).options,
         tradingBlocsData,
