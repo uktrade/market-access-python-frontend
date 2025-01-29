@@ -1,11 +1,11 @@
 from playwright.sync_api import expect
 
-from .utils import clean_full_url, get_base_url, retry
+from .utils import clean_full_url, retry, BASE_URL
 
 
 @retry()
 def test_report_a_barrier_page(page):
-    page.goto(clean_full_url(get_base_url()))
+    page.goto(clean_full_url(BASE_URL))
     page.get_by_role("button", name="Report a barrier Add a market").click()
     expect(
         page.get_by_role("heading", name="Market access barriers Report")

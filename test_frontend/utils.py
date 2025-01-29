@@ -7,9 +7,7 @@ from functools import wraps
 import pytest
 from playwright._impl._errors import TimeoutError
 
-
-def get_base_url():
-    return os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
+BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 
 
 def get_text_content_without_line_separators(text_content):
@@ -78,7 +76,7 @@ def retry(tries=3, delay=3, backoff=2, logger=None):
 
 
 def change_permissions(page, username, permission):
-    page.goto(get_base_url() + "users")
+    page.goto(BASE_URL + "users")
     if not page.get_by_role("link", name=username).is_visible():
         page.get_by_placeholder("E.g. full name").fill(username)
         page.get_by_role("button", name="Search").click()

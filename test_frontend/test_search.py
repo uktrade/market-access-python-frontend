@@ -1,11 +1,11 @@
 from playwright.sync_api import expect
 
-from test_frontend.utils import clean_full_url, get_base_url, retry
+from test_frontend.utils import clean_full_url, retry, BASE_URL
 
 
 @retry()
 def get_search_page():
-    return f"{get_base_url()}search/"
+    return f"{BASE_URL}search/"
 
 
 @retry()
@@ -49,7 +49,7 @@ def test_saved_search(page, create_test_barrier, session_data):
     page.get_by_label("Saved search name").fill(saved_search_name)
     page.get_by_role("button", name="Save").click()
 
-    page.goto(get_base_url())
+    page.goto(BASE_URL)
 
     # saved search tab
     page.get_by_role("link", name="My Saved searches").click()

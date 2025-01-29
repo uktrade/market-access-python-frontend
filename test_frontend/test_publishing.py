@@ -1,7 +1,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from test_frontend.utils import change_permissions, clean_full_url, get_base_url
+from test_frontend.utils import BASE_URL, change_permissions, clean_full_url
 
 
 def test_publish_general_user(page, create_test_barrier):
@@ -20,7 +20,7 @@ def test_publish_approver(page, create_test_barrier, is_admin, get_username):
     username = get_username()
     if not is_admin:
         pytest.skip(
-            f"You do not have the correct permissions to test approving barriers in {get_base_url()}"
+            f"You do not have the correct permissions to test approving barriers in {BASE_URL}"
         )
     change_permissions(
         page,
@@ -52,7 +52,7 @@ def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
     username = get_username()
     if not is_admin:
         pytest.skip(
-            f"You do not have the correct permissions to test publishing barriers in {get_base_url()}"
+            f"You do not have the correct permissions to test publishing barriers in {BASE_URL}"
         )
     change_permissions(
         page,
@@ -70,7 +70,7 @@ def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
     ).to_be_visible()
 
     # Barriers cannot be published on local environment
-    if get_base_url() != "http://market-access.local:9880/":
+    if BASE_URL != "http://market-access.local:9880/":
         page.get_by_role("button", name="Confirm").click()
 
         expect(
@@ -79,8 +79,8 @@ def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
 
 
 @pytest.mark.skipif(
-    get_base_url() == "http://market-access.local:9880/",
-    reason=f"Barriers cannot be published in {get_base_url()}",
+    BASE_URL == "http://market-access.local:9880/",
+    reason=f"Barriers cannot be published in {BASE_URL}",
 )
 def test_unpublish_publisher(page, create_test_barrier, is_admin):
     title = "test"

@@ -3,11 +3,10 @@ import os
 import random
 import string
 
-from test_frontend.utils import clean_full_url, get_base_url
+from test_frontend.utils import clean_full_url, BASE_URL
 
 NUM_CONCURRENT_TESTS = int(os.getenv("NUM_CONCURRENT_TESTS", 50))
 HEADLESS = os.getenv("TEST_HEADLESS", "false").lower() == "true"
-BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 
 
 def test_multiple_users(context):
@@ -17,7 +16,7 @@ def test_multiple_users(context):
     pages = [context.new_page() for _ in range(NUM_CONCURRENT_TESTS)]
 
     for page in pages:
-        page.goto(f"{get_base_url()}search/")
+        page.goto(f"{BASE_URL}search/")
         page.get_by_text("Goods", exact=True).click()
         page.get_by_role("link", name="Download").click()
         page.get_by_role("link", name="Dashboard").click()
@@ -37,7 +36,7 @@ def test_multiple_barriers_add_and_update(context):
         )
         random_barrier_name = f"test - {datetime.datetime.now().strftime('%d-%m-%Y')} - {random_barrier_id}"
 
-        page.goto(get_base_url())
+        page.goto(BASE_URL)
         page.get_by_role("link", name="Report a barrier").click()
         page.get_by_role("link", name="Start now").click()
         page.get_by_label("Barrier title").fill(random_barrier_name)
