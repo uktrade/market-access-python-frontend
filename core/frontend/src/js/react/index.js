@@ -13,12 +13,8 @@ import { renderAsyncSearchResults } from "./search/AsyncSearchResultsBox";
 import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
 import GDSCheckboxes from "./gds/Checkboxes";
-import {
-    handleBarChart,
-    handlePieChart,
-    handleStackedBarChart,
-} from "./dashboard/charts";
-import renderBarriersOverview from "./dashboard/BarriersOverview";
+import { renderBarChart } from "./dashboard/charts";
+import { renderApplyFilterButton } from "./dashboard/button";
 
 function renderCommodityForm(
     confirmedCommodities,
@@ -64,7 +60,9 @@ function renderLocationFilter(
     const countries = getCheckboxValues(countryElement);
     const tradingBlocs = getCheckboxValues(tradingBlocElement);
 
-    tradingBlocElement.remove();
+    if (tradingBlocElement) {
+        tradingBlocElement.remove();
+    }
     ReactDOM.render(
         <LocationFilter
             label={label}
@@ -181,21 +179,6 @@ function renderRisksAndMitigationForm() {
     ReactDOM.render(<RisksAndMitigationForm />, container);
 }
 
-function renderPieChart(chartData, htmlElementId) {
-    const container = document.querySelector(`#${htmlElementId}`);
-    ReactDOM.render(handlePieChart(chartData), container);
-}
-
-function renderBarChart(chartData, htmlElementId) {
-    const container = document.querySelector(`#${htmlElementId}`);
-    ReactDOM.render(handleBarChart(chartData), container);
-}
-
-function renderStackedBarChart(chartData, htmlElementId) {
-    const container = document.querySelector(`#${htmlElementId}`);
-    ReactDOM.render(handleStackedBarChart(chartData), container);
-}
-
 export {
     renderCommodityForm,
     renderCompaniesForm,
@@ -209,8 +192,6 @@ export {
     GDSTabs,
     GDSRadios,
     GDSCheckboxes,
-    renderPieChart,
+    renderApplyFilterButton,
     renderBarChart,
-    renderStackedBarChart,
-    renderBarriersOverview,
 };
