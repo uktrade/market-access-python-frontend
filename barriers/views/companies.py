@@ -8,7 +8,6 @@ from django.views.generic import FormView, View
 from barriers.forms.companies import AddCompanyForm, EditCompaniesForm
 from companies_house.api_client import CompaniesHouseAPIClient
 from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_API_KEY
-from utils.exceptions import APIException
 
 from .mixins import BarrierMixin
 
