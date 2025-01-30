@@ -3,7 +3,7 @@
         <div class="govuk-grid-row govuk-width-container ma-container-full govuk-!-padding-top-5 govuk-!-margin-left-0">
             <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
                 <h1 class="govuk-heading-xl">
-                    <span class="govuk-caption-m">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                    <span class="govuk-caption-m" data-testid="username">{{ current_user.first_name }} {{ current_user.last_name }}</span>
                     {{ active|capfirst|default_if_none:"Account Home" }}
                 </h1>
             </div>

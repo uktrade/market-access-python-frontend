@@ -1,4 +1,4 @@
-ma.components.MultiSelect = function (id_name) {
+ma.components.MultiSelect = function (/** @type {string} */ id_name) {
     const nodes = document.getElementById(id_name);
 
     const select = nodes.querySelector(".dropdown");
@@ -9,6 +9,7 @@ ma.components.MultiSelect = function (id_name) {
         .querySelectorAll("input")[1];
 
     add_button.addEventListener("click", function () {
+        // @ts-ignore
         if (select.value) {
             additionMode();
         }
@@ -19,15 +20,20 @@ ma.components.MultiSelect = function (id_name) {
 
     const appendToList = function () {
         if (selection.value) {
-            const new_list = JSON.parse(selection.value).map(function (e) {
-                return e.toString();
-            });
+            const new_list = JSON.parse(selection.value).map(
+                function (/** @type {{ toString: () => any; }} */ e) {
+                    return e.toString();
+                },
+            );
+            // @ts-ignore
             if (!new_list.includes(select.value)) {
+                // @ts-ignore
                 new_list.push(select.value);
                 selection.value = JSON.stringify(new_list);
             }
         } else {
             const new_list = [];
+            // @ts-ignore
             new_list.push(select.value);
             selection.value = JSON.stringify(new_list);
         }
@@ -37,12 +43,16 @@ ma.components.MultiSelect = function (id_name) {
 
     const updateDisplay = function () {
         if (selection.value) {
-            const selected_list = JSON.parse(selection.value).map(function (e) {
-                return e.toString();
-            });
+            const selected_list = JSON.parse(selection.value).map(
+                function (/** @type {{ toString: () => any; }} */ e) {
+                    return e.toString();
+                },
+            );
             display_list.innerHTML = "";
             for (let i = 0; i < selected_list.length; i++) {
+                // @ts-ignore
                 for (let x = 0; x < select.length; x++) {
+                    // @ts-ignore
                     let option = select.options[x];
                     if (option.value == selected_list[i]) {
                         let category_entry = document.createElement("li");
@@ -76,11 +86,13 @@ ma.components.MultiSelect = function (id_name) {
         }
     };
 
-    const removeItem = function (item) {
+    const removeItem = function (/** @type {any} */ item) {
         if (selection.value) {
-            let selected_list = JSON.parse(selection.value).map(function (e) {
-                return e.toString();
-            });
+            let selected_list = JSON.parse(selection.value).map(
+                function (/** @type {{ toString: () => any; }} */ e) {
+                    return e.toString();
+                },
+            );
             const index = selected_list.indexOf(item);
             if (index > -1) {
                 // only splice array when item is found
