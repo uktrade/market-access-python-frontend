@@ -164,6 +164,10 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             }
         } else if (type === "status") {
             return BARRIER_STATUS[value];
+        } else if (type === "country_trading_bloc") {
+            return props.filterValues.tradingBlocs.find(
+                (tradingBloc: Option) => tradingBloc.value === value,
+            ).label;
         }
         return value;
     };
@@ -315,14 +319,28 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
         const filters = Object.keys(params)
             .flatMap((key) => {
-                const values = key === "sector" || key === "policy_team" ? params[key] : params[key][0].split(",");
-                return values.map((val) => ({
-                    label: key,
-                    value: val,
-                    readable_value: val && getReadableValue(val, key),
-                    remove_url: new URLSearchParams(
-                        addLocation(searchParams)
-                    ).toString(),
+            // Get values based on parameter type
+            const values = key === "sector" || key === "policy_team" 
+                ? [...new Set(params[key])]  // Remove duplicates from arrays
+                : [...new Set(params[key][0].split(","))];  // Remove duplicates from comma-separated string
+
+            // Format the label
+            const label = key === 'country_trading_bloc' 
+                ? 'Location' 
+                : key.split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+
+            // Map to filter objects, filtering out empty values
+            return values
+                .filter(val => val)  // Remove empty values
+                .map(val => ({
+                label,
+                value: val,
+                readable_value: getReadableValue(val, key),
+                remove_url: new URLSearchParams(
+                    addLocation(searchParams)
+                ).toString(),
                 }));
             });
             handleGoogleAnalytics(filters);
@@ -481,6 +499,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
                     }
                 }
             }
+            console.log(urlParams.toString());
             handleClick(
                 { preventDefault: () => {} } as HandleClickEvent,
                 urlParams.toString()
