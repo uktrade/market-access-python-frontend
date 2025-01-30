@@ -320,7 +320,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             .flatMap((key) => {
                 const values = key === "sector" || key === "policy_team" ? params[key] : params[key][0].split(",");
                 return values.map((val) => ({
-                    label: key === 'country_trading_bloc' ? 'Location' : key.split('_').map(word => 
+                    label: key === 'country_trading_bloc' ? 'Location' : key.split('_').map(word =>
                         word.charAt(0).toUpperCase() + word.slice(1)
                     ).join(' '),
                     value: val,
@@ -478,7 +478,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
                 values.delete(value);
             }
 
-            const queryString = Array.from(values).length > 0 
+            const queryString = Array.from(values).length > 0
                 ? Array.from(values).map(v => `${name}=${v}`).join('&')
                 : '';
 
