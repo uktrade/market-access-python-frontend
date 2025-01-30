@@ -69,7 +69,6 @@ const addLocation = (queryParams: string | URLSearchParams | string[][] | Record
     let locationParams = [
         ...searchParams.getAll("country"), // Get all 'country' values
         searchParams.getAll("region"), // Get all 'region' values
-        searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
     ]
         .filter(Boolean)
         .join(","); // Filter out empty values and join with commas
@@ -319,28 +318,16 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
         const filters = Object.keys(params)
             .flatMap((key) => {
-            // Get values based on parameter type
-            const values = key === "sector" || key === "policy_team" 
-                ? [...new Set(params[key])]  // Remove duplicates from arrays
-                : [...new Set(params[key][0].split(","))];  // Remove duplicates from comma-separated string
-
-            // Format the label
-            const label = key === 'country_trading_bloc' 
-                ? 'Location' 
-                : key.split('_')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-
-            // Map to filter objects, filtering out empty values
-            return values
-                .filter(val => val)  // Remove empty values
-                .map(val => ({
-                label,
-                value: val,
-                readable_value: getReadableValue(val, key),
-                remove_url: new URLSearchParams(
-                    addLocation(searchParams)
-                ).toString(),
+                const values = key === "sector" || key === "policy_team" ? params[key] : params[key][0].split(",");
+                return values.map((val) => ({
+                    label: key === 'country_trading_bloc' ? 'Location' : key.split('_').map(word => 
+                        word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join(' '),
+                    value: val,
+                    readable_value: val && getReadableValue(val, key),
+                    remove_url: new URLSearchParams(
+                        addLocation(searchParams)
+                    ).toString(),
                 }));
             });
             handleGoogleAnalytics(filters);
@@ -476,33 +463,28 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             });
         }
 
-        // Event handler that will fire whenever a checkbox changes
         const handleCheckboxChange = ({ target }: Event) => {
             if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
 
-            const urlParams = new URLSearchParams(window.location.search);
             const { name, checked, value } = target;
-
             if (!name) return;
 
-            if (checked) {
-                urlParams.set(name, value);
+            const searchParams = new URLSearchParams(window.location.search);
+            const values = new Set(searchParams.getAll(name));
+
+            if (checked && !values.has(value)) {
+                values.add(value);
             } else {
-                const existingValue = urlParams.get(name);
-                if (existingValue) {
-                    const values = existingValue.split(',');
-                    const newValues = values.filter(v => v !== value);
-                    if (newValues.length > 0) {
-                        urlParams.set(name, newValues.join(','));
-                    } else {
-                        urlParams.delete(name);
-                    }
-                }
+                values.delete(value);
             }
-            console.log(urlParams.toString());
+
+            const queryString = Array.from(values).length > 0 
+                ? Array.from(values).map(v => `${name}=${v}`).join('&')
+                : '';
+
             handleClick(
                 { preventDefault: () => {} } as HandleClickEvent,
-                urlParams.toString()
+                queryString
             );
         };
 
