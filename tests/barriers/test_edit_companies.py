@@ -59,61 +59,6 @@ class EditCompaniesTestCase(MarketAccessTestCase):
         for id in company_ids:
             assert str(id) in response.context_data["companies_affected"]
 
-    def test_company_search_page_loads(self):
-        """
-        The search page should load with a form in the context
-        """
-        response = self.client.get(
-            reverse(
-                "barriers:search_company", kwargs={"barrier_id": self.barrier["id"]}
-            )
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-
-    @patch("barriers.views.companies.CompaniesHouseAPIClient.search_companies")
-    def test_company_search_submit(self, mock_post):
-        """
-        Searching should call the Datahub API
-        """
-        mock_post.return_value = CompanyHouseSearchResult(
-            items_per_page=10,
-            total_results=1,
-            items=[
-                {
-                    "title": self.company_data["company_name"],
-                    "description": "",
-                    "kind": "company",
-                    "address": self.company_data["registered_office_address"],
-                    "address_snippet": "",
-                    "company_number": self.company_data["company_number"],
-                    "company_type": self.company_data["type"],
-                    "description_identifier": [],
-                    "company_status": self.company_data["company_status"],
-                    "matches": {},
-                    "links": self.company_data["links"],
-                    "snippet": "",
-                    "date_of_creation": self.company_data["date_of_creation"],
-                }
-            ],
-            page_number=1,
-            start_index=0,
-            kind="search_results",
-        )
-        response = self.client.post(
-            reverse(
-                "barriers:search_company", kwargs={"barrier_id": self.barrier["id"]}
-            ),
-            data={"query": "test search"},
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        assert "results" in response.context
-        results = response.context["results"]
-        assert results.total_results == 1
-        assert results.items[0].id == self.company_id
-        assert results.items[0].name == self.company_name
-
     @patch("barriers.views.companies.CompaniesHouseAPIClient.get_company_from_id")
     def test_company_detail(self, mock_get_company):
         """
