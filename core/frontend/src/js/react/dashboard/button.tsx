@@ -372,7 +372,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         }
     };
 
-    const handleClick = async (event: HandleClickEvent) => {
+    const handleClick = async (event: HandleClickEvent, additionalQueryParams: string | null = null) => {
         // prevent the default action
         event.preventDefault();
 
@@ -403,7 +403,10 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             .join('&');
 
         const formAction = filterForm.action.split("?")[0];
-        const url = `${formAction}?${queryString}`;
+        let url = `${formAction}?${queryString}`;
+        if (additionalQueryParams) {
+            url += `&${additionalQueryParams}`;
+        }
         window.history.pushState({}, document.title, url);
     };
 
@@ -464,8 +467,24 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
             if (!name) return;
 
-            checked ? urlParams.set(name, value) : urlParams.delete(name);
-            window.history.replaceState({}, "", `?${urlParams.toString()}`);
+            if (checked) {
+                urlParams.set(name, value);
+            } else {
+                const existingValue = urlParams.get(name);
+                if (existingValue) {
+                    const values = existingValue.split(',');
+                    const newValues = values.filter(v => v !== value);
+                    if (newValues.length > 0) {
+                        urlParams.set(name, newValues.join(','));
+                    } else {
+                        urlParams.delete(name);
+                    }
+                }
+            }
+            handleClick(
+                { preventDefault: () => {} } as HandleClickEvent,
+                urlParams.toString()
+            );
         };
 
         // Attach listener
