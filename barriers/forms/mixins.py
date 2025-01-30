@@ -214,10 +214,52 @@ class EstimatedResolutionDateApprovalMixin(APIFormMixin):
 
         print("is user admin :", self.is_user_admin)
 
+        # If admin and the date is being cleared then ask for a reason
+        if (
+            self.is_user_admin
+            and change_requires_approval
+            and not cleaned_data.get("estimated_resolution_date_change_reason")
+        ):
+
+            print(
+                "estimated_resolution date :",
+                cleaned_data.get("estimated_resolution_date"),
+            )
+
+            if not cleaned_data.get("estimated_resolution_date"):
+                self.add_error(
+                    "estimated_resolution_date",
+                    ValidationError(
+                        _(
+                            "Enter a reason for the removal of the Estimated resolution date."
+                        ),
+                        code="missing_estimated_resolution_date",
+                    ),
+                )
+
         if (not self.is_user_admin) and change_requires_approval:
             # only admin users can change the estimated resolution date to a date in the past
             # without approval
-            if not cleaned_data.get("estimated_resolution_date_change_reason"):
+
+            print(
+                "estimated_resolution date :",
+                cleaned_data.get("estimated_resolution_date"),
+            )
+
+            if not cleaned_data.get("estimated_resolution_date"):
+                self.add_error(
+                    "estimated_resolution_date",
+                    ValidationError(
+                        _(
+                            "The estimated resolution date cannot be deleted without approval."
+                        ),
+                        code="missing_estimated_resolution_date",
+                    ),
+                )
+
+            if not cleaned_data.get(
+                "estimated_resolution_date_change_reason"
+            ) and cleaned_data.get("estimated_resolution_date"):
                 self.add_error(
                     "estimated_resolution_date_change_reason",
                     ValidationError(

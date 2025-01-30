@@ -15,13 +15,9 @@
 {% block page_content %}
     {% include 'partials/heading.html' with text='Add estimated resolution date' %}
     {% form_error_banner form %}
-    <div class="govuk-notification-banner"
-         role="region"
-         aria-labelledby="govuk-notification-banner-title"
-         data-module="govuk-notification-banner">
+    {% comment %} <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title"
-                id="govuk-notification-banner-title">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
                 This section is for testing purposes only and should be removed before merged in production
             </h2>
         </div>
@@ -32,7 +28,7 @@
             <p>Permissions :  {{ current_user.permissions }}</p>
             <p>Requested Change :  {{ barrier.has_active_estimated_resolution_date_proposal }}</p>
         </div>
-    </div>
+    </div> {% endcomment %}
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
         {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
