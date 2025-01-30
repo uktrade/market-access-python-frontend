@@ -12,12 +12,23 @@
             document.addEventListener("DOMContentLoaded", function (event) {
                 ma.pages.index();
 
+                // add bar chart to the dashboard
+                ReactApp.renderBarChart("bar-chart");
+
+                // load apply filter button first!
+                ReactApp.renderApplyFilterButton("apply-filters-button", "Apply filters"); // render the apply filter button
+
                 // add the active filters to the active filters section
                 let countryElement = document.getElementById("country");
                 let tradingBlocElement = document.getElementById("country_trading_bloc");
                 let tradingBlocs = JSON.parse(document.getElementById("trading-blocs-data").textContent);
                 let adminAreas = JSON.parse(document.getElementById("admin-areas-data").textContent);
                 let adminAreasCountries = JSON.parse(document.getElementById("countries-with-admin-areas-data").textContent);
+
+                ReactApp.renderLocationFilter(countryElement, tradingBlocElement, tradingBlocs, adminAreas, adminAreasCountries)
+                ReactApp.renderMultiSelectFilter("policy_team", "Search policy teams")
+                ReactApp.renderMultiSelectFilter("sector")
+                ReactApp.renderMultiSelectFilter("region", "Overseas Region")
 
                 window.addEventListener('resize', function(event) {
                     const search_submit_bar = document.getElementById("event-name");
@@ -29,9 +40,6 @@
                         search_submit_button.classList.remove("dmas-search-field__submit");
                     }
                 });
-
-                // load summary cards
-                ReactApp.renderBarriersOverview("barrier-overview");
             })
         </script>
     {% endblock %}
