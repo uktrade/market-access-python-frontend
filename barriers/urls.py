@@ -57,7 +57,6 @@ from barriers.views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
     BarrierRemoveCompany,
-    BarrierSearchCompany,
     CompanyDetail,
 )
 from barriers.views.documents import DownloadDocument
@@ -526,11 +525,6 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/companies/edit/",
         BarrierEditCompanies.as_view(),
         name="edit_companies",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/companies/search/",
-        BarrierSearchCompany.as_view(),
-        name="search_company",
     ),
     path(
         "barriers/<uuid:barrier_id>/companies/remove/",

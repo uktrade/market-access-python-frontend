@@ -4,7 +4,7 @@ from unittest import mock
 import pytest
 from django.conf import settings
 
-from barriers.forms.companies import CompanySearchForm
+from barriers.forms.companies import EditCompaniesForm
 from companies_house.api_client import CompaniesHouseAPIClient
 from companies_house.dataclasses import (
     CompanyHouseCompany,
@@ -17,7 +17,7 @@ from core.tests import MarketAccessTestCase
 
 class CompaniesHouseTestCase(MarketAccessTestCase):
 
-    mock_form = CompanySearchForm()
+    mock_form = EditCompaniesForm()
     mock_form.api_key = "An API Key"  # pragma: allowlist secret
 
     def get_company_mocked_requests_get(*args, **kwargs):

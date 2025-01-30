@@ -4,7 +4,7 @@ from http import HTTPStatus
 from django.urls import reverse
 from mock import patch
 
-from companies_house.dataclasses import CompanyHouseCompany, CompanyHouseSearchResult
+from companies_house.dataclasses import CompanyHouseCompany
 from core.tests import MarketAccessTestCase
 
 logger = logging.getLogger(__name__)
