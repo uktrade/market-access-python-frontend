@@ -5,7 +5,6 @@ from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.safestring import mark_safe
 
 from barriers.constants import (
     ACTION_PLAN_HAS_RISKS_CHOICES,
@@ -220,7 +219,7 @@ class ActionPlanTaskSubformRenderer:
             if field_name in self.initial:
                 field.widget.value = self.initial[field_name]
             output += render_to_string(template_name, context={"widget": field.widget})
-        return mark_safe(output)
+        return output
 
 
 class ActionPlanTaskEditOutcomeForm(
