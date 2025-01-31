@@ -331,14 +331,8 @@ PROGRESS_UPDATES = Choices(
     ("DELAYED", "Delayed"),
 )
 
-# PROGRESS_UPDATES_HELP_TEXT = Choices(
-#     (PROGRESS_UPDATES.ON_TRACK, "Barrier will be resolved in the target financial year"),
-#     (PROGRESS_UPDATES.RISK_OF_DELAY, "Barrier might not be resolved in the target financial year"),
-#     (PROGRESS_UPDATES.DELAYED, "Barrier will not be resolved in the target financial year"),
-# )
-
 PROGRESS_UPDATES_HELP_TEXT = {
-    "ON_TRACK": "Barrier will be resolved in the target financial year",
-    "RISK_OF_DELAY": "Barrier might not be resolved in the target financial year",
-    "DELAYED": "Barrier will not be resolved in the target financial year",
+    PROGRESS_UPDATES.ON_TRACK: "Barrier will be resolved in the target financial year",
+    PROGRESS_UPDATES.RISK_OF_DELAY: "Barrier might not be resolved in the target financial year",
+    PROGRESS_UPDATES.DELAYED: "Barrier will not be resolved in the target financial year",
 }
