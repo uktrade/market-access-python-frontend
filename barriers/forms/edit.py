@@ -3,7 +3,6 @@ import logging
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
 from barriers.constants import (
@@ -15,6 +14,8 @@ from barriers.constants import (
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_REQUEST_REMOVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_RESOLVED_CHOICES,
+    PROGRESS_UPDATES,
+    PROGRESS_UPDATES_HELP_TEXT,
 )
 from utils.api.client import MarketAccessAPIClient
 from utils.forms.fields import (
@@ -113,32 +114,9 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
 class ProgressUpdateForm(
     ClearableMixin, EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
 ):
-    CHOICES = [
-        (
-            "ON_TRACK",
-            mark_safe(
-                "<span class='govuk-body'>On Track</span> <span class='govuk-hint'>Barrier will be resolved"
-                " in the target financial year</span>"
-            ),
-        ),
-        (
-            "RISK_OF_DELAY",
-            mark_safe(
-                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not be"
-                " resolved in the target financial year</span>"
-            ),
-        ),
-        (
-            "DELAYED",
-            mark_safe(
-                "<span class='govuk-body'>Delayed</span> <span class='govuk-hint'>Barrier will not be"
-                " resolved in the target financial year</span>"
-            ),
-        ),
-    ]
     status = forms.ChoiceField(
         label="Delivery confidence",
-        choices=CHOICES,
+        choices=PROGRESS_UPDATES,
         widget=forms.RadioSelect,
         error_messages={
             "required": "Select if delivery is on track, at risk of delay or delayed"
@@ -191,6 +169,7 @@ class ProgressUpdateForm(
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id")
         self.user = kwargs.get("user")
+        self.help_text = PROGRESS_UPDATES_HELP_TEXT
 
     def clean_estimated_resolution_date(self):
         if self.cleaned_data["estimated_resolution_date"]:
