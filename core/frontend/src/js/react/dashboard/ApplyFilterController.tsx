@@ -18,6 +18,11 @@ interface HandleClickEvent extends React.MouseEvent<HTMLButtonElement> {
     preventDefault: () => void;
 }
 
+interface Option {
+    value: string;
+    label: string;
+}
+
 interface OptionValue {
     label: string;
     options: { value: string; label: string; checked: boolean }[];
@@ -98,10 +103,17 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
 
     const filterForm = document.querySelector<HTMLFormElement>("#filters-form");
 
-    interface Option {
-        value: string;
-        label: string;
-    }
+    const getSearchParamsFromForm = () => {
+        if (!filterForm) {
+            return "";
+        }
+        const formData = new FormData(filterForm);
+        const formDataObject: Record<string, string> = {};
+        formData.forEach((value, key) => {
+            formDataObject[key] = value.toString();
+        });
+        return new URLSearchParams(formDataObject).toString();
+    };
 
     const handleGoogleAnalytics = (filters: { label: string; value: string; readable_value: string | string[]; }[]) => {
         let filtersForAnalytics = {
@@ -172,7 +184,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
     };
 
     const getFinancialYearSearchParam = (field: string, financial_year: any) => {
-        const searchParams = new URLSearchParams(window.location.search);
+        const searchParams = new URLSearchParams(getSearchParamsFromForm());
         const start_date = new Date(financial_year.current_start);
         const end_date = new Date(financial_year.current_end);
 
@@ -281,16 +293,14 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
             document.getElementById(id).innerHTML = barriers_current_year[keys[index]];
         });
 
-        const searchParams = submitUrl.split("?")[1];
-
         // Update financial year url
         const status = getFinancialYearSearchParam("status", financial_year);
         const estimated_resolution_date = getFinancialYearSearchParam("estimated_resolution_date", financial_year);
 
         const linkDict = {
-            "open-link": `/search/?${searchParams}&status=2&status=3`, // Open link
-            "pb100-link": `/search/?${searchParams}&status=2&status=3&combined_priority=APPROVED`, // PB100 link
-            "overseas_delivery-link": `/search/?${searchParams}&status=2&status=3&combined_priority=OVERSEAS`, // Overseas delivery link
+            "open-link": `/search/?${getSearchParamsFromForm()}&status=2&status=3`, // Open link
+            "pb100-link": `/search/?${getSearchParamsFromForm()}&status=2&status=3&combined_priority=APPROVED`, // PB100 link
+            "overseas_delivery-link": `/search/?${getSearchParamsFromForm()}&status=2&status=3&combined_priority=OVERSEAS`, // Overseas delivery link
             "current_year-resolved-link": `/search/?${status}&status=4`, // Resolved link
             "current_year-pb100-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=APPROVED`, // PB100 link current year
             "current_year-overseas_delivery-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=OVERSEAS` // Overseas delivery link current year
@@ -306,7 +316,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
     };
 
     const updateActiveFilters = () => {
-        const searchParams = new URLSearchParams(window.location.search);
+        const searchParams = new URLSearchParams(getSearchParamsFromForm());
         const params: Record<string, string[]> = {};
 
         searchParams.forEach((value, key) => {
