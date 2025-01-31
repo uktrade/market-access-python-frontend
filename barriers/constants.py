@@ -342,4 +342,3 @@ PROGRESS_UPDATES_HELP_TEXT = {
     "RISK_OF_DELAY": "Barrier might not be resolved in the target financial year",
     "DELAYED": "Barrier will not be resolved in the target financial year",
 }
-
