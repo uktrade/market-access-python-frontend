@@ -181,7 +181,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) is CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -206,7 +206,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) is CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -231,7 +231,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) is CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -256,7 +256,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) is CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -281,7 +281,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) is CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -298,7 +298,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) is CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH REQUIRED DETAILS"
 
     @mock.patch("requests.get", side_effect=get_company_mocked_requests_get)
