@@ -176,7 +176,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) is CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 1
 
         result_item = result.items[0]
@@ -194,7 +194,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) is CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -219,7 +219,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) is CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -244,7 +244,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) is CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -269,7 +269,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) is CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -293,7 +293,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) is CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 1
 
         result_item = result.items[0]
@@ -314,7 +314,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = client_obj.get_company_from_id("1")
 
-        assert type(result) is CompanyHouseCompany
+        assert isinstance(result, CompanyHouseCompany)
         assert result.company_name == "FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=get_company_mocked_requests_get)
@@ -349,5 +349,5 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = client_obj.get_company_from_id("1")
 
-        assert type(result) is CompanyHouseCompany
+        assert isinstance(result, CompanyHouseCompany)
         assert result.company_name == "CRUCIAL DETAILS"
