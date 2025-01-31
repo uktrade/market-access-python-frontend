@@ -5,7 +5,7 @@ import { getCheckboxValues } from "../utils";
 import { useWindowQueryParams } from "../hooks";
 
 
-interface ApplyFilterButtonProps {
+interface ApplyFilterControllerProps {
     text: string;
     filterValues: Record<string, any>;
 }
@@ -92,7 +92,7 @@ const addLocation = (queryParams: string | URLSearchParams | string[][] | Record
     return searchParams;
 };
 
-const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterButtonProps): JSX.Element => {
+const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: ApplyFilterControllerProps): JSX.Element => {
 
     const queryParams = useWindowQueryParams();
 
@@ -534,7 +534,7 @@ export const renderApplyFilterButton = (elementId: string, buttonText: any) => {
         adminAreasCountries,
     };
     ReactDOM.render(
-        <ApplyFilterButton
+        <ApplyFilterController
             text={text}
             filterValues={filterValues}
         />,
