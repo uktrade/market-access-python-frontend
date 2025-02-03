@@ -155,7 +155,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
                 (policy_team: Option) =>
                     policy_team.value === value,
             ).label;
-        } else if (type === "location") {
+        } else if (["location", "region", "country"].includes(type)) {
             // check if value is comma separated then split it and return an array
             if (value.includes(",")) {
                 return value
@@ -182,6 +182,42 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
         }
         return value;
     };
+
+    // const getReadableValue = (
+    //     value: string,
+    //     type: string,
+    // ) => {
+    //     if (type === "sector") {
+    //         return props.filterValues.sector.find((sector) => sector.value === value)
+    //             .label;
+    //     } else if (type === "policy_team") {
+    //         return props.filterValues.policy_team.find(
+    //             (/** @type {{ value: string; }} */ policy_team) =>
+    //                 policy_team.value === value,
+    //         ).label;
+    //     } else if (type === "location") {
+    //         // check if value is comma separated then split it and return an array
+    //         if (value.includes(",")) {
+    //             return value
+    //                 .split(",")
+    //                 .map(
+    //                     (val) =>
+    //                         props.filterValues.location.find(
+    //                             (/** @type {{ value: string; }} */ location) =>
+    //                                 location.value === val,
+    //                         ).label,
+    //                 );
+    //         } else {
+    //             return props.filterValues.location.find(
+    //                 (/** @type {{ value: string; }} */ location) =>
+    //                     location.value === value,
+    //             ).label;
+    //         }
+    //     } else if (type === "status") {
+    //         return BARRIER_STATUS[value];
+    //     }
+    //     return value;
+    // };
 
     const getFinancialYearSearchParam = (field: string, financial_year: any) => {
         const searchParams = new URLSearchParams(getSearchParamsFromForm());
@@ -297,10 +333,12 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
         const status = getFinancialYearSearchParam("status", financial_year);
         const estimated_resolution_date = getFinancialYearSearchParam("estimated_resolution_date", financial_year);
 
+        const queryParams = getSearchParamsFromForm();
+
         const linkDict = {
-            "open-link": `/search/?${getSearchParamsFromForm()}&status=2&status=3`, // Open link
-            "pb100-link": `/search/?${getSearchParamsFromForm()}&status=2&status=3&combined_priority=APPROVED`, // PB100 link
-            "overseas_delivery-link": `/search/?${getSearchParamsFromForm()}&status=2&status=3&combined_priority=OVERSEAS`, // Overseas delivery link
+            "open-link": `/search/?${queryParams}&status=2&status=3`, // Open link
+            "pb100-link": `/search/?${queryParams}&status=2&status=3&combined_priority=APPROVED`, // PB100 link
+            "overseas_delivery-link": `/search/?${queryParams}&status=2&status=3&combined_priority=OVERSEAS`, // Overseas delivery link
             "current_year-resolved-link": `/search/?${status}&status=4`, // Resolved link
             "current_year-pb100-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=APPROVED`, // PB100 link current year
             "current_year-overseas_delivery-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=OVERSEAS` // Overseas delivery link current year
@@ -316,7 +354,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
     };
 
     const updateActiveFilters = () => {
-        const searchParams = new URLSearchParams(getSearchParamsFromForm());
+        const searchParams = new URLSearchParams(window.location.search);
         const params: Record<string, string[]> = {};
 
         searchParams.forEach((value, key) => {
@@ -330,9 +368,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
             .flatMap((key) => {
                 const values = key === "sector" || key === "policy_team" ? params[key] : params[key][0].split(",");
                 return values.map((val) => ({
-                    label: key === 'country_trading_bloc' ? 'Location' : key.split('_').map(word =>
-                        word.charAt(0).toUpperCase() + word.slice(1)
-                    ).join(' '),
+                    label: key,
                     value: val,
                     readable_value: val && getReadableValue(val, key),
                     remove_url: new URLSearchParams(
@@ -426,13 +462,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
     };
 
     React.useEffect(() => {
-        const filteredQueryParams = new URLSearchParams();
-        queryParams.forEach((value, key) => {
-          if (value) {
-            filteredQueryParams.set(key, value);
-          }
-        });
-        const queryString = filteredQueryParams.toString();
+        const queryString = getSearchParamsFromForm()
         const submitURL = `/dashboard-summary/?${queryString}`;
 
         // update the dashboard
