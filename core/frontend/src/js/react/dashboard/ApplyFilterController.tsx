@@ -361,7 +361,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
 
         // Get initial search params
         const initialSearchParams = new URLSearchParams(window.location.search);
-        
+
         // Combine multiple values of the same parameter
         const paramMap = new Map<string, string[]>();
         initialSearchParams.forEach((value, key) => {
@@ -370,13 +370,13 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
             }
             paramMap.get(key)!.push(value);
         });
-        
+
         // Create new URLSearchParams with combined values
         const searchParams = new URLSearchParams();
         paramMap.forEach((values, key) => {
             searchParams.append(key, values.join(','));
         });
-        
+
         const params: Record<string, string[]> = {};
 
         searchParams.forEach((value, key) => {
