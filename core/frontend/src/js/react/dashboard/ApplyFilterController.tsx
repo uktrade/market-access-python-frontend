@@ -187,42 +187,6 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
         return value;
     };
 
-    // const getReadableValue = (
-    //     value: string,
-    //     type: string,
-    // ) => {
-    //     if (type === "sector") {
-    //         return props.filterValues.sector.find((sector) => sector.value === value)
-    //             .label;
-    //     } else if (type === "policy_team") {
-    //         return props.filterValues.policy_team.find(
-    //             (/** @type {{ value: string; }} */ policy_team) =>
-    //                 policy_team.value === value,
-    //         ).label;
-    //     } else if (type === "location") {
-    //         // check if value is comma separated then split it and return an array
-    //         if (value.includes(",")) {
-    //             return value
-    //                 .split(",")
-    //                 .map(
-    //                     (val) =>
-    //                         props.filterValues.location.find(
-    //                             (/** @type {{ value: string; }} */ location) =>
-    //                                 location.value === val,
-    //                         ).label,
-    //                 );
-    //         } else {
-    //             return props.filterValues.location.find(
-    //                 (/** @type {{ value: string; }} */ location) =>
-    //                     location.value === value,
-    //             ).label;
-    //         }
-    //     } else if (type === "status") {
-    //         return BARRIER_STATUS[value];
-    //     }
-    //     return value;
-    // };
-
     const getFinancialYearSearchParam = (field: string, financial_year: any) => {
         const searchParams = new URLSearchParams(getSearchParamsFromForm());
         const start_date = new Date(financial_year.current_start);
