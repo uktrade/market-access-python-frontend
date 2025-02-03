@@ -53,6 +53,10 @@ const formatAdminAreas = (searchParams: URLSearchParams): string[] => {
     return admin_areas;
 };
 
+const _makeHumanReadable = (value: string): string => {
+    return value.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+}
+
 const addLocation = (queryParams: string | URLSearchParams | string[][] | Record<string, string>) => {
     // update the current URL with the new query params
 
@@ -354,7 +358,25 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
     };
 
     const updateActiveFilters = () => {
-        const searchParams = new URLSearchParams(window.location.search);
+
+        // Get initial search params
+        const initialSearchParams = new URLSearchParams(window.location.search);
+        
+        // Combine multiple values of the same parameter
+        const paramMap = new Map<string, string[]>();
+        initialSearchParams.forEach((value, key) => {
+            if (!paramMap.has(key)) {
+            paramMap.set(key, []);
+            }
+            paramMap.get(key)!.push(value);
+        });
+        
+        // Create new URLSearchParams with combined values
+        const searchParams = new URLSearchParams();
+        paramMap.forEach((values, key) => {
+            searchParams.append(key, values.join(','));
+        });
+        
         const params: Record<string, string[]> = {};
 
         searchParams.forEach((value, key) => {
@@ -368,7 +390,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
             .flatMap((key) => {
                 const values = key === "sector" || key === "policy_team" ? params[key] : params[key][0].split(",");
                 return values.map((val) => ({
-                    label: key,
+                    label: _makeHumanReadable(key),
                     value: val,
                     readable_value: val && getReadableValue(val, key),
                     remove_url: new URLSearchParams(
@@ -462,7 +484,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
     };
 
     React.useEffect(() => {
-        const queryString = getSearchParamsFromForm()
+        const queryString = new URLSearchParams(window.location.search).toString();
         const submitURL = `/dashboard-summary/?${queryString}`;
 
         // update the dashboard
