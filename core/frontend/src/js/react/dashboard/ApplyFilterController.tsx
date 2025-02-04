@@ -57,7 +57,7 @@ const _makeHumanReadable = (value: string): string => {
     return value.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
 
-const addLocation = (queryParams: string | URLSearchParams | string[][] | Record<string, string>) => {
+export const addLocation = (queryParams: string | URLSearchParams | string[][] | Record<string, string>) => {
     // update the current URL with the new query params
 
     const searchParams: URLSearchParams = new URLSearchParams(queryParams as string | string[][] | Record<string, string>);
@@ -266,11 +266,6 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
             document.getElementById(id).innerHTML = "Loading...";
         });
 
-        const elementLinkUrls = {
-            current: ["open-link", "pb100-link", "overseas_delivery-link"],
-            yearly: ["resolved", "pb100", "overseas_delivery"].map(id => `current_year-${id}-link`)
-        };
-
         // Fetch data
         const response = await fetch(submitUrl, {
             headers: {
@@ -301,7 +296,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
         const status = getFinancialYearSearchParam("status", financial_year);
         const estimated_resolution_date = getFinancialYearSearchParam("estimated_resolution_date", financial_year);
 
-        const queryParams = getSearchParamsFromForm();
+        const queryParams = new URLSearchParams(window.location.search).toString();
 
         const linkDict = {
             "open-link": `/search/?${queryParams}&status=2&status=3`, // Open link
@@ -342,12 +337,13 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
         });
 
         const params: Record<string, string[]> = {};
-
         searchParams.forEach((value, key) => {
             if (!params[key]) {
-                params[key] = [];
+            params[key] = [];
             }
-            params[key].push(value);
+            // Split values by comma and add unique values to the array
+            const values = value.split(',');
+            params[key] = [...new Set([...params[key], ...values])];
         });
 
         const filters = Object.keys(params)
@@ -429,8 +425,6 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
 
         if (queryString === currentURLQuerystring) return;
 
-        queryString = addLocation(queryString).toString();
-
         // Remove empty query parameters
         queryString = queryString.split('&')
             .filter(param => {
@@ -448,8 +442,12 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
     };
 
     React.useEffect(() => {
-        const queryString = new URLSearchParams(window.location.search).toString();
-        const submitURL = `/dashboard-summary/?${queryString}`;
+        let queryString = new URLSearchParams(window.location.search);
+
+        // make it compatible to the url being sent to the api
+        queryString = addLocation(queryString);
+
+        const submitURL = `/dashboard-summary/?${queryString.toString()}`;
 
         // update the dashboard
         updateBarrierInsight(submitURL);

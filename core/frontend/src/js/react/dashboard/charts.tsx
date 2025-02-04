@@ -4,6 +4,7 @@ import Charts from "react-apexcharts";
 import ApexCharts from 'apexcharts';
 import { parseIso } from "../utils";
 import { useWindowQueryParams } from "../hooks";
+import { addLocation } from "./ApplyFilterController";
 
 const colorTheme = [
     "#d53880",
@@ -71,12 +72,15 @@ export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
     });
 
     useEffect(() => {
-        const filteredQueryParams = new URLSearchParams();
+        let filteredQueryParams = new URLSearchParams();
         queryParams.forEach((value, key) => {
           if (value) {
             filteredQueryParams.set(key, value);
           }
         });
+        filteredQueryParams = addLocation(filteredQueryParams);
+
+        // make it compatible to the url being sent to the api
         const queryString = filteredQueryParams.toString();
         const submitURL = `/dashboard-summary/?${queryString}`;
 
