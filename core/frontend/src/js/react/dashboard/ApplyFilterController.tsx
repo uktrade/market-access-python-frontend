@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BARRIER_STATUS } from "../constants";
 import { getCheckboxValues } from "../utils";
+import { useWindowQueryParams } from "../hooks";
 
 
-interface ApplyFilterButtonProps {
+interface ApplyFilterControllerProps {
     text: string;
     filterValues: Record<string, any>;
 }
@@ -15,6 +16,11 @@ interface updateBarrierInsightProps {
 
 interface HandleClickEvent extends React.MouseEvent<HTMLButtonElement> {
     preventDefault: () => void;
+}
+
+interface Option {
+    value: string;
+    label: string;
 }
 
 interface OptionValue {
@@ -47,7 +53,11 @@ const formatAdminAreas = (searchParams: URLSearchParams): string[] => {
     return admin_areas;
 };
 
-const addLocation = (queryParams: string | URLSearchParams | string[][] | Record<string, string>) => {
+const _makeHumanReadable = (value: string): string => {
+    return value.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+}
+
+export const addLocation = (queryParams: string | URLSearchParams | string[][] | Record<string, string>) => {
     // update the current URL with the new query params
 
     const searchParams: URLSearchParams = new URLSearchParams(queryParams as string | string[][] | Record<string, string>);
@@ -68,7 +78,6 @@ const addLocation = (queryParams: string | URLSearchParams | string[][] | Record
     let locationParams = [
         ...searchParams.getAll("country"), // Get all 'country' values
         searchParams.getAll("region"), // Get all 'region' values
-        searchParams.get("country_trading_bloc"), // Get 'country_trading_bloc'
     ]
         .filter(Boolean)
         .join(","); // Filter out empty values and join with commas
@@ -92,14 +101,23 @@ const addLocation = (queryParams: string | URLSearchParams | string[][] | Record
     return searchParams;
 };
 
-const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterButtonProps): JSX.Element => {
+const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: ApplyFilterControllerProps): JSX.Element => {
+
+    const queryParams = useWindowQueryParams();
 
     const filterForm = document.querySelector<HTMLFormElement>("#filters-form");
 
-    interface Option {
-        value: string;
-        label: string;
-    }
+    const getSearchParamsFromForm = () => {
+        if (!filterForm) {
+            return "";
+        }
+        const formData = new FormData(filterForm);
+        const formDataObject: Record<string, string> = {};
+        formData.forEach((value, key) => {
+            formDataObject[key] = value.toString();
+        });
+        return new URLSearchParams(formDataObject).toString();
+    };
 
     const handleGoogleAnalytics = (filters: { label: string; value: string; readable_value: string | string[]; }[]) => {
         let filtersForAnalytics = {
@@ -141,7 +159,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
                 (policy_team: Option) =>
                     policy_team.value === value,
             ).label;
-        } else if (type === "location") {
+        } else if (["location", "region", "country"].includes(type)) {
             // check if value is comma separated then split it and return an array
             if (value.includes(",")) {
                 return value
@@ -161,12 +179,16 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             }
         } else if (type === "status") {
             return BARRIER_STATUS[value];
+        } else if (type === "country_trading_bloc") {
+            return props.filterValues.tradingBlocs.find(
+                (tradingBloc: Option) => tradingBloc.value === value,
+            ).label;
         }
         return value;
     };
 
     const getFinancialYearSearchParam = (field: string, financial_year: any) => {
-        const searchParams = new URLSearchParams(window.location.search);
+        const searchParams = new URLSearchParams(getSearchParamsFromForm());
         const start_date = new Date(financial_year.current_start);
         const end_date = new Date(financial_year.current_end);
 
@@ -244,11 +266,6 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             document.getElementById(id).innerHTML = "Loading...";
         });
 
-        const elementLinkUrls = {
-            current: ["open-link", "pb100-link", "overseas_delivery-link"],
-            yearly: ["resolved", "pb100", "overseas_delivery"].map(id => `current_year-${id}-link`)
-        };
-
         // Fetch data
         const response = await fetch(submitUrl, {
             headers: {
@@ -275,16 +292,16 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
             document.getElementById(id).innerHTML = barriers_current_year[keys[index]];
         });
 
-        const searchParams = submitUrl.split("?")[1];
-
         // Update financial year url
         const status = getFinancialYearSearchParam("status", financial_year);
         const estimated_resolution_date = getFinancialYearSearchParam("estimated_resolution_date", financial_year);
 
+        const queryParams = new URLSearchParams(window.location.search).toString();
+
         const linkDict = {
-            "open-link": `/search/?${searchParams}&status=2&status=3`, // Open link
-            "pb100-link": `/search/?${searchParams}&status=2&status=3&combined_priority=APPROVED`, // PB100 link
-            "overseas_delivery-link": `/search/?${searchParams}&status=2&status=3&combined_priority=OVERSEAS`, // Overseas delivery link
+            "open-link": `/search/?${queryParams}&status=2&status=3`, // Open link
+            "pb100-link": `/search/?${queryParams}&status=2&status=3&combined_priority=APPROVED`, // PB100 link
+            "overseas_delivery-link": `/search/?${queryParams}&status=2&status=3&combined_priority=OVERSEAS`, // Overseas delivery link
             "current_year-resolved-link": `/search/?${status}&status=4`, // Resolved link
             "current_year-pb100-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=APPROVED`, // PB100 link current year
             "current_year-overseas_delivery-link": `/search/?${estimated_resolution_date}&status=2&status=3&combined_priority=OVERSEAS` // Overseas delivery link current year
@@ -300,21 +317,39 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
     };
 
     const updateActiveFilters = () => {
-        const searchParams = new URLSearchParams(window.location.search);
-        const params: Record<string, string[]> = {};
 
+        // Get initial search params
+        const initialSearchParams = new URLSearchParams(window.location.search);
+
+        // Combine multiple values of the same parameter
+        const paramMap = new Map<string, string[]>();
+        initialSearchParams.forEach((value, key) => {
+            if (!paramMap.has(key)) {
+            paramMap.set(key, []);
+            }
+            paramMap.get(key)!.push(value);
+        });
+
+        // Create new URLSearchParams with combined values
+        const searchParams = new URLSearchParams();
+        paramMap.forEach((values, key) => {
+            searchParams.append(key, values.join(','));
+        });
+
+        const params: Record<string, string[]> = {};
         searchParams.forEach((value, key) => {
             if (!params[key]) {
-                params[key] = [];
+            params[key] = [];
             }
-            params[key].push(value);
+            // Split values by comma and add unique values to the array
+            const values = value.split(',');
+            params[key] = [...new Set([...params[key], ...values])];
         });
 
         const filters = Object.keys(params)
             .flatMap((key) => {
-                const values = key === "sector" || key === "policy_team" ? params[key] : params[key][0].split(",");
-                return values.map((val) => ({
-                    label: key,
+                return params[key].map((val) => ({
+                    label: _makeHumanReadable(key),
                     value: val,
                     readable_value: val && getReadableValue(val, key),
                     remove_url: new URLSearchParams(
@@ -369,7 +404,7 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
         }
     };
 
-    const handleClick = async (event: HandleClickEvent) => {
+    const handleClick = async (event: HandleClickEvent, additionalQueryParams: string | null = null) => {
         // prevent the default action
         event.preventDefault();
 
@@ -389,33 +424,105 @@ const ApplyFilterButton: React.FC<ApplyFilterButtonProps> = (props: ApplyFilterB
 
         if (queryString === currentURLQuerystring) return;
 
-        queryString = addLocation(queryString).toString();
+        // Remove empty query parameters
+        queryString = queryString.split('&')
+            .filter(param => {
+            const [_key, value] = param.split('=');
+            return value !== '' && value !== undefined;
+            })
+            .join('&');
 
         const formAction = filterForm.action.split("?")[0];
-        const url = `${formAction}?${queryString}`;
+        let url = `${formAction}?${queryString}`;
+        if (additionalQueryParams) {
+            url += `&${additionalQueryParams}`;
+        }
         window.history.pushState({}, document.title, url);
+    };
 
-        const submitURL = `/dashboard-summary/?${queryString}`;
+    React.useEffect(() => {
+        let queryString = new URLSearchParams(window.location.search);
+
+        // make it compatible to the url being sent to the api
+        queryString = addLocation(queryString);
+
+        const submitURL = `/dashboard-summary/?${queryString.toString()}`;
 
         // update the dashboard
         updateBarrierInsight(submitURL);
 
         // update the active filters
         updateActiveFilters();
-    };
+    }, [queryParams]);
 
-    return (
-        <>
-            <button
-                className={`govuk-button govuk-button--full-width`}
-                type="button"
-                onClick={handleClick}
-                data-module="govuk-button"
-            >
-                {props.text}
-            </button>
-        </>
-    );
+    React.useEffect(() => {
+        const formFieldsContainer = document.querySelector("#filter-form-fields");
+
+        if (!formFieldsContainer) return;
+
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type !== "childList" ||
+                    mutation.oldValue === mutation.target.textContent ||
+                    !(mutation.target instanceof HTMLDivElement)) {
+                    continue;
+                }
+
+                const input = mutation.target.querySelector("input");
+                if (!input) continue;
+
+                handleClick(
+                    { preventDefault: () => {} } as HandleClickEvent);
+            }
+        });
+
+        if (formFieldsContainer) {
+            observer.observe(formFieldsContainer, {
+                characterData: false,
+                childList: true,
+                subtree: true,
+                attributes: false,
+                characterDataOldValue: false,
+            });
+        }
+
+        const handleCheckboxChange = ({ target }: Event) => {
+            if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
+
+            const { name, checked, value } = target;
+            if (!name) return;
+
+            const searchParams = new URLSearchParams(window.location.search);
+            const values = new Set(searchParams.getAll(name));
+
+            if (checked && !values.has(value)) {
+                values.add(value);
+            } else {
+                values.delete(value);
+            }
+
+            const queryString = Array.from(values).length > 0
+                ? Array.from(values).map(v => `${name}=${v}`).join('&')
+                : '';
+
+            handleClick(
+                { preventDefault: () => {} } as HandleClickEvent,
+                queryString
+            );
+        };
+
+        // Attach listener
+        formFieldsContainer.addEventListener("change", handleCheckboxChange);
+
+        // Clean up
+        return () => {
+            formFieldsContainer.removeEventListener("change", handleCheckboxChange);
+            observer.disconnect();
+        };
+
+    }, []); // Empty dependency array since we only want this to run once on mount
+
+    return null; // Controller component doesn't need to render anything
 };
 
 export const renderApplyFilterButton = (elementId: string, buttonText: any) => {
@@ -443,7 +550,6 @@ export const renderApplyFilterButton = (elementId: string, buttonText: any) => {
         location: [
             ...getOptionValue(country).options,
             ...getOptionValue(region).options,
-            ...getOptionValue(tradingBlocs).options,
         ],
         tradingBlocs: getOptionValue(tradingBlocs).options,
         tradingBlocsData,
@@ -451,7 +557,7 @@ export const renderApplyFilterButton = (elementId: string, buttonText: any) => {
         adminAreasCountries,
     };
     ReactDOM.render(
-        <ApplyFilterButton
+        <ApplyFilterController
             text={text}
             filterValues={filterValues}
         />,
