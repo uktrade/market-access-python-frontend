@@ -348,8 +348,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
 
         const filters = Object.keys(params)
             .flatMap((key) => {
-                const values = key === "sector" || key === "policy_team" ? params[key] : params[key][0].split(",");
-                return values.map((val) => ({
+                return params[key].map((val) => ({
                     label: _makeHumanReadable(key),
                     value: val,
                     readable_value: val && getReadableValue(val, key),
