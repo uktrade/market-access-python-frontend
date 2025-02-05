@@ -2,7 +2,7 @@ import React, {forwardRef, useState, useEffect} from "react";
 import { render } from "react-dom";
 import Charts from "react-apexcharts";
 import ApexCharts from 'apexcharts';
-import { parseIso } from "../utils";
+import { parseIso, normalizeValue } from "../utils";
 import { useWindowQueryParams } from "../hooks";
 import { addLocation } from "./ApplyFilterController";
 
@@ -64,9 +64,16 @@ export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
             title: {
                 text: "British pounds(£)",
             },
+            labels: {
+                formatter: (val: number) => normalizeValue(val),
+            }
         },
         fill: {
             opacity: 1,
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: (val: number) => normalizeValue(val),
         },
         colors: colorTheme,
     });
@@ -78,9 +85,10 @@ export const BarChart = forwardRef<BarChartHandle, {}>((_props, _ref) => {
             filteredQueryParams.set(key, value);
           }
         });
-        filteredQueryParams = addLocation(filteredQueryParams);
 
         // make it compatible to the url being sent to the api
+        filteredQueryParams = addLocation(filteredQueryParams);
+
         const queryString = filteredQueryParams.toString();
         const submitURL = `/dashboard-summary/?${queryString}`;
 
