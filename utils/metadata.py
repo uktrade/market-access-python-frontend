@@ -250,28 +250,6 @@ class Metadata:
             if priority["code"] == priority_code:
                 return priority
 
-    def get_category_list(self, sort=True):
-        """
-        Dedupe and sort the barrier types
-        """
-        ids = []
-        unique_categories = []
-        for category in self.data.get("categories"):
-            if category["id"] not in ids:
-                unique_categories.append(category)
-                ids.append(category["id"])
-
-        if sort:
-            unique_categories.sort(key=itemgetter("title"))
-        return unique_categories
-
-    def get_categories_by_group(self, group):
-        return [
-            category
-            for category in self.get_category_list(sort=False)
-            if category["category"] == group
-        ]
-
     def get_policy_team_list(self, sort=True):
         """
         Dedupe and sort the policy teams
