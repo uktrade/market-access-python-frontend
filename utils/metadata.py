@@ -271,12 +271,6 @@ class Metadata:
             if str(policy_team["id"]) == str(policy_team_id):
                 return policy_team
 
-    def get_goods(self):
-        return self.get_categories_by_group("GOODS")
-
-    def get_services(self):
-        return self.get_categories_by_group("SERVICES")
-
     def get_economic_assessment_impact(self):
         return self.data.get("economic_assessment_impact", {})
 
