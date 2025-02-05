@@ -14,7 +14,7 @@ import GDSTabs from "./gds/Tabs";
 import GDSRadios from "./gds/Radios";
 import GDSCheckboxes from "./gds/Checkboxes";
 import { renderBarChart } from "./dashboard/charts";
-import { renderApplyFilterButton } from "./dashboard/button";
+import { renderApplyFilterButton } from "./dashboard/ApplyFilterController";
 
 function renderCommodityForm(
     confirmedCommodities,
