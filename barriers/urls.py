@@ -52,18 +52,11 @@ from barriers.views.assessments.strategic import (
     EditStrategicAssessment,
     StrategicAssessmentDetail,
 )
-from barriers.views.categories import (
-    AddCategory,
-    BarrierEditCategories,
-    BarrierEditCategoriesSession,
-    BarrierRemoveCategory,
-)
 from barriers.views.commodities import BarrierEditCommodities
 from barriers.views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
     BarrierRemoveCompany,
-    BarrierSearchCompany,
     CompanyDetail,
 )
 from barriers.views.documents import DownloadDocument
@@ -459,26 +452,6 @@ urlpatterns = [
         name="change_status",
     ),
     path(
-        "barriers/<uuid:barrier_id>/types/",
-        BarrierEditCategoriesSession.as_view(),
-        name="edit_categories_session",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/types/edit/",
-        BarrierEditCategories.as_view(),
-        name="edit_categories",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/types/remove/",
-        BarrierRemoveCategory.as_view(),
-        name="remove_category",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/types/add/",
-        AddCategory.as_view(),
-        name="add_category",
-    ),
-    path(
         "barriers/<uuid:barrier_id>/policy-teams/",
         BarrierEditPolicyTeamsSession.as_view(),
         name="edit_policy_teams_session",
@@ -552,11 +525,6 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/companies/edit/",
         BarrierEditCompanies.as_view(),
         name="edit_companies",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/companies/search/",
-        BarrierSearchCompany.as_view(),
-        name="search_company",
     ),
     path(
         "barriers/<uuid:barrier_id>/companies/remove/",

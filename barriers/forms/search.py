@@ -59,10 +59,6 @@ class BarrierSearchForm(forms.Form):
         label="Government organisations",
         required=False,
     )
-    category = forms.MultipleChoiceField(
-        label="Category",
-        required=False,
-    )
     policy_team = forms.MultipleChoiceField(
         label="Policy team",
         required=False,
@@ -265,7 +261,6 @@ class BarrierSearchForm(forms.Form):
         self.set_trade_direction_choices()
         self.set_sector_choices()
         self.set_organisation_choices()
-        self.set_category_choices()
         self.set_policy_team_choices()
         self.set_region_choices()
         self.set_status_choices()
@@ -332,15 +327,6 @@ class BarrierSearchForm(forms.Form):
         self.fields["organisation"].choices = (
             self.metadata.get_gov_organisation_choices()
         )
-
-    def set_category_choices(self):
-        choices = [
-            (str(category["id"]), category["title"])
-            for category in self.metadata.data["categories"]
-        ]
-        choices = list(set(choices))
-        choices.sort(key=itemgetter(1))
-        self.fields["category"].choices = choices
 
     def set_policy_team_choices(self):
         choices = [
@@ -487,7 +473,6 @@ class BarrierSearchForm(forms.Form):
         # params["sector"] = self.cleaned_data.get("sector", [])
         params["ignore_all_sectors"] = self.cleaned_data.get("ignore_all_sectors")
         params["organisation"] = ",".join(self.cleaned_data.get("organisation", []))
-        params["category"] = ",".join(self.cleaned_data.get("category", []))
         params["policy_team"] = ",".join(self.cleaned_data.get("policy_team", []))
         params["status"] = ",".join(self.cleaned_data.get("status", []))
         params["tags"] = ",".join(self.cleaned_data.get("tags", []))

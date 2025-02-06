@@ -62,6 +62,13 @@
                                        data-aria-controls="conditional-status-{{ value }}">
                                 <label class="govuk-label govuk-radios__label"
                                        for="{{ form.status.name }}-{{ value }}">{{ name }}</label>
+                                {% for key, text in form.help_text.items %}
+                                    {% if key == value %}
+                                        <span id="{{ name }}_hint" class="govuk-hint govuk-radios__hint">
+                                            {{text}}
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                             {% if forloop.counter == 1 %}
                                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden"

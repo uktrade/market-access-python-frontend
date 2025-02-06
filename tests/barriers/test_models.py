@@ -24,8 +24,6 @@ class BarrierModelTestCase(MarketAccessTestCase):
         assert barrier.source["name"] == "UK government"
         assert barrier.status["name"] == "Resolved: In full"
         assert barrier.title == "Import quota for sports cars"
-        assert barrier.categories[0]["title"] == "Import quotas"
-        assert barrier.categories[1]["title"] == "Tariffs or import duties"
         assert barrier.policy_teams[0]["title"] == "Procurement"
         assert barrier.policy_teams[1]["title"] == "Rules of Origin (RoO)"
 
@@ -71,7 +69,6 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
-            "category": ["127"],
             "region": ["3e6809d6-89f6-4590-8458-1d0dab73ad1a"],
             "priority": ["HIGH", "MEDIUM"],
             "status": ["2", "3"],
@@ -110,11 +107,6 @@ class SavedSearchModelTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a",
                 "a538cecc-5f95-e211-a939-e4115bead28a",
             ],
-        }
-        assert saved_search.readable_filters["category"] == {
-            "label": "Category",
-            "readable_value": "Government subsidies",
-            "value": ["127"],
         }
         assert saved_search.readable_filters["region"] == {
             "label": "Overseas region",

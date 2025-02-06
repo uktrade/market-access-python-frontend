@@ -324,3 +324,15 @@ RELATED_BARRIER_TAGS = {
         "class": "govuk-tag--pink",
     },
 }
+
+PROGRESS_UPDATES = Choices(
+    ("ON_TRACK", "On Track"),
+    ("RISK_OF_DELAY", "Risk of delay"),
+    ("DELAYED", "Delayed"),
+)
+
+PROGRESS_UPDATES_HELP_TEXT = {
+    PROGRESS_UPDATES.ON_TRACK: "Barrier will be resolved in the target financial year",
+    PROGRESS_UPDATES.RISK_OF_DELAY: "Barrier might not be resolved in the target financial year",
+    PROGRESS_UPDATES.DELAYED: "Barrier will not be resolved in the target financial year",
+}

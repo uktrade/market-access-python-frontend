@@ -90,7 +90,6 @@ const mainConfig = {
                         `${assetsSrcPath}/js/pages/report/sectors-wizard-step.js`,
                         `${assetsSrcPath}/js/pages/report/status-wizard-step.js`,
                         `${assetsSrcPath}/js/pages/barrier/status.js`,
-                        `${assetsSrcPath}/js/pages/barrier/type.js`,
                         `${assetsSrcPath}/js/pages/barrier/edit.js`,
                         `${assetsSrcPath}/js/pages/barrier/priority.js`,
                         `${assetsSrcPath}/js/pages/barrier/top_barrier_priority.js`,

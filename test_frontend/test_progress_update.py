@@ -14,7 +14,7 @@ def test_create_progress_update(page, create_test_barrier):
     page.get_by_role("link", name="Add progress update").click()
     page.get_by_label("Barrier progress").check()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_label("On Track Barrier will be").check()
+    page.get_by_label("On Track", exact=True).check()
     page.get_by_label("Explain why barrier resolution is on track").click()
     page.get_by_label("Explain why barrier resolution is on track").fill(
         "dsghidhfgjhoighdfihjg"

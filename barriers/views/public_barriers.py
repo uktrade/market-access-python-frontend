@@ -6,7 +6,7 @@ import dateutil.parser
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django.views.generic import FormView
 
 from barriers.forms.notes import AddPublicBarrierNoteForm, EditPublicBarrierNoteForm
@@ -202,7 +202,7 @@ class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormV
                 messages.add_message(
                     self.request,
                     messages.INFO,
-                    mark_safe(
+                    format_html(
                         (
                             submitted_for_approval_success_message
                             % context_data["countdown"]
@@ -221,7 +221,7 @@ class PublicBarrierDetail(MetadataMixin, PublicBarrierMixin, BarrierMixin, FormV
                 messages.add_message(
                     self.request,
                     messages.INFO,
-                    mark_safe(publish_rejection_success_message),
+                    format_html(publish_rejection_success_message),
                     extra_tags="This barrier needs to be approved again",
                 )
             elif action == "delete-note":
@@ -283,14 +283,14 @@ class EditPublicEligibility(APIBarrierFormViewMixin, FormView):
             messages.add_message(
                 self.request,
                 messages.INFO,
-                mark_safe((self.success_message_eligible % self.kwargs["countdown"])),
+                format_html((self.success_message_eligible % self.kwargs["countdown"])),
                 extra_tags="The barrier publication status has been set to: allowed",
             )
         else:
             messages.add_message(
                 self.request,
                 messages.INFO,
-                mark_safe(self.success_message_not_eligible),
+                format_html(self.success_message_not_eligible),
                 extra_tags="The publication status is set to: not allowed",
             )
 
@@ -323,7 +323,7 @@ class EditPublicTitle(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         messages.add_message(
             self.request,
             messages.INFO,
-            mark_safe((self.success_message % self.kwargs["countdown"])),
+            format_html((self.success_message % self.kwargs["countdown"])),
             extra_tags="The public title has been added",
         )
         return reverse(
@@ -355,7 +355,7 @@ class EditPublicSummary(APIBarrierFormViewMixin, PublicBarrierMixin, FormView):
         messages.add_message(
             self.request,
             messages.INFO,
-            mark_safe((self.success_message % self.kwargs["countdown"])),
+            format_html((self.success_message % self.kwargs["countdown"])),
             extra_tags="The public summary has been added",
         )
         return reverse(
@@ -391,14 +391,14 @@ class PublicBarrierApprovalConfirmation(
             messages.add_message(
                 self.request,
                 messages.INFO,
-                mark_safe((self.success_message % self.kwargs["countdown"])),
+                format_html((self.success_message % self.kwargs["countdown"])),
                 extra_tags="This barrier has been approved and is now with the GOV.UK content team",
             )
         else:
             messages.add_message(
                 self.request,
                 messages.INFO,
-                mark_safe(self.rejection_success_message),
+                format_html(self.rejection_success_message),
                 extra_tags="The publication status is set to: not allowed",
             )
         return reverse(
@@ -424,7 +424,7 @@ class PublicBarrierPublishConfirmation(
         messages.add_message(
             self.request,
             messages.INFO,
-            mark_safe(self.success_message),
+            format_html(self.success_message),
             extra_tags="This barrier has been published on GOV.UK",
         )
         return reverse(
@@ -447,7 +447,7 @@ class PublicBarrierUnpublishConfirmation(APIBarrierFormViewMixin, FormView):
         messages.add_message(
             self.request,
             messages.INFO,
-            mark_safe(self.success_message),
+            format_html(self.success_message),
             extra_tags="This barrier has been removed from GOV.UK",
         )
         return reverse(
