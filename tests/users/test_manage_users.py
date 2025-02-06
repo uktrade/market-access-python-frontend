@@ -40,7 +40,7 @@ class ManageUsersPermissionsTestCase(MarketAccessTestCase):
         response = self.client.get(reverse("users:manage_users"))
         assert response.status_code == HTTPStatus.OK
 
-    @patch("utils.api.resources.APIResource")
+    @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.UsersResource.get_current")
     def test_administrator_can_access_manage_users(self, mock_user, mock_list):
         mock_user.return_value = self.administrator
