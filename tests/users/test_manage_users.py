@@ -244,7 +244,7 @@ class ManageUsersTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(id="75", groups=[{"id": "3"}])
 
     @patch("utils.api.resources.APIResource.get")
-    @patch("utils.api.resources.GroupsResource.list")
+    @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.patch")
     def test_change_role_additional_permissions(self, mock_patch, mock_list, mock_get):
         mock_patch.return_value = self.editor
@@ -266,7 +266,7 @@ class ManageUsersTestCase(MarketAccessTestCase):
         mock_patch.assert_called_with(id="75", groups=[{"id": "2"}, {"id": "3"}])
 
     @patch("utils.api.resources.APIResource.get")
-    @patch("utils.api.resources.GroupsResource.list")
+    @patch("utils.api.resources.APIResource.list")
     @patch("utils.api.resources.APIResource.patch")
     def test_make_regional_lead(self, mock_patch, mock_list, mock_get):
         mock_patch.return_value = self.editor
