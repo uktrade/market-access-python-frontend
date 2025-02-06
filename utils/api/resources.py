@@ -327,7 +327,11 @@ class GroupsResource(APIResource):
     def list(self, **kwargs) -> ModelList:
         if not settings.DISPLAY_ROLE_ADMIN_GROUP:
             response_data = self.client.get(self.resource_name, params=kwargs)
-            data = [result for result in response_data["results"] if result['name'] != "Role administrator"]
+            data = [
+                result
+                for result in response_data["results"]
+                if result["name"] != "Role administrator"
+            ]
             return ModelList(
                 model=self.model,
                 data=data,
