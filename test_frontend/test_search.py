@@ -32,6 +32,10 @@ def test_search_for_a_barrier_with_filters(page, create_test_barrier, session_da
     # remove focus on search box to allow the search results to update
     page.get_by_role("heading", name="Market access barriers Search").click()
 
+    # wait for results to load
+    search_results = page.get_by_role("link", name="Save search")
+    search_results.wait_for(state="visible", timeout=60000)  # Wait up to 60 seconds
+
     expect(page.get_by_text("Page 1 of")).to_be_visible()
 
 
@@ -73,5 +77,9 @@ def test_search_for_a_barrier_with_policy_name_filter(
     page.get_by_text("Gender", exact=True).click()
     # remove focus on search box to allow the search results to update
     page.get_by_role("heading", name="Market access barriers Search").click()
+
+    # wait for results to load
+    search_results = page.get_by_role("link", name="Save search")
+    search_results.wait_for(state="visible", timeout=60000)  # Wait up to 60 seconds
 
     expect(page.get_by_text(title)).to_be_visible()
