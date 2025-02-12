@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.urls import reverse
 
 from users.models import User
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIException
 
 
 def get_user(request):
@@ -16,7 +18,14 @@ def get_user(request):
         return User(user_data)
 
     client = MarketAccessAPIClient(request.session.get("sso_token"))
-    return client.users.get_current()
+    try:
+        user = client.users.get_current()
+        return user
+    except APIException:
+        if APIException.status_code == 401:
+            return reverse("users:login")
+        else:
+            return {}
 
 
 def get_mention_counts(request):
