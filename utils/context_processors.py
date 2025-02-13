@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from users.models import User
 from utils.api.client import MarketAccessAPIClient
-from utils.exceptions import APIException
+from utils.exceptions import APIHttpException
 
 
 def get_user(request):
@@ -21,8 +21,8 @@ def get_user(request):
     try:
         user = client.users.get_current()
         return user
-    except APIException:
-        if APIException.status_code == 401:
+    except APIHttpException:
+        if APIHttpException.status_code == 401:
             return reverse("users:login")
         else:
             return {}
