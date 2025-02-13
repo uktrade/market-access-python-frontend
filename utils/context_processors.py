@@ -7,7 +7,6 @@ from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 
 
-
 def get_user(request):
     user_id = request.session.get("user_data", {}).get("id")
     if not user_id:
