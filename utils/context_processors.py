@@ -7,6 +7,7 @@ from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 
 
+
 def get_user(request):
     user_id = request.session.get("user_data", {}).get("id")
     if not user_id:
@@ -21,8 +22,8 @@ def get_user(request):
     try:
         user = client.users.get_current()
         return user
-    except APIHttpException:
-        if APIHttpException.status_code == 401:
+    except APIException:
+        if APIException.status_code == 401:
             return reverse("users:login")
         else:
             return {}
