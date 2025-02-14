@@ -21,11 +21,11 @@ def get_user(request):
     try:
         user = client.users.get_current()
         return user
-    except APIHttpException:
-        if APIHttpException.status_code == 401:
+    except APIHttpException as e:
+        if e.status_code == 401:
             return reverse("users:login")
         else:
-            return {}
+            raise
 
 
 def get_mention_counts(request):
