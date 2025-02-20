@@ -515,7 +515,7 @@ class AccountDownloads(TemplateView):
         )
 
         return context_data
-    
+
 
 class AccountDrafts(TemplateView):
     template_name = "users/account/drafts.html"

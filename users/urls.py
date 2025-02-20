@@ -10,8 +10,8 @@ from users.account.views import (
 from users.views import (
     Account,
     AccountDownloads,
-    AccountSavedSearch,
     AccountDrafts,
+    AccountSavedSearch,
     AddUser,
     DeleteUser,
     EditUser,
