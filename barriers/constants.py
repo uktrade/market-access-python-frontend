@@ -286,8 +286,8 @@ EXPORT_TYPES = Choices(
 )
 
 PRELIMINARY_ASSESSMENT_CHOICES = Choices(
-    ("1", "Over 10 million pounds"),
-    ("2", "Less than 10 million pounds"),
+    ("1", "Greater than £10 million over 5 years"),
+    ("2", "Less than £10 million over 5 years"),
     ("3", "Unable to assess"),
 )
 
