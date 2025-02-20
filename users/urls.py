@@ -11,6 +11,7 @@ from users.views import (
     Account,
     AccountDownloads,
     AccountSavedSearch,
+    AccountDrafts,
     AddUser,
     DeleteUser,
     EditUser,
@@ -47,6 +48,11 @@ urlpatterns = [
         "account/downloads/",
         AccountDownloads.as_view(),
         name="account_downloads",
+    ),
+    path(
+        "account/drafts/",
+        AccountDrafts.as_view(),
+        name="account_drafts",
     ),
     path(
         "account/policy-teams/edit/",

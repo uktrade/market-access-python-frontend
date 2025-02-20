@@ -25,6 +25,10 @@
                 <a class="{% if active == 'my_barriers' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
                    href="{% url 'barriers:search' %}?user=1">My barriers</a>
             </div>
+            <div class="datahub-header__navigation__item">
+                <a class="{% if active == 'my drafts' %}datahub-header__navigation__item__link--active {% endif %}datahub-header__navigation__item__link"
+                   href="{% url 'users:account_drafts' %}">My drafts</a>
+            </div>
         </div>
     </div>
 {% endblock masthead %}

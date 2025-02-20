@@ -515,6 +515,27 @@ class AccountDownloads(TemplateView):
         )
 
         return context_data
+    
+
+class AccountDrafts(TemplateView):
+    template_name = "users/account/drafts.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+
+        active = "my drafts"
+        draft_barriers = client.reports.list(ordering="-created_on")
+
+        context_data.update(
+            {
+                "page": "account",
+                "active": active,
+                "reports": draft_barriers,
+            }
+        )
+
+        return context_data
 
 
 class Mentions(TemplateView, PaginationMixin):
