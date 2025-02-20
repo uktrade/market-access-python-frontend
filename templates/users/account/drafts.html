@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+{% block page_title %}
+    {{ block.super }} - Account
+{% endblock page_title %}
+{% block masthead %}
+    {% include "users/partials/account/banner.html" with active=active %}
+{% endblock masthead %}
+{% block page_content %}
+
+    <h2 class="ma-list-heading"><span class="ma-list-heading__count">{{ reports|length }}</span> draft barrier{{ reports|pluralize }}</h2>
+
+    {% if reports %}
+
+        <table class="standard-table my-draft-barriers">
+            <thead>
+                <tr class="standard-table__heading-row">
+                    <th class="standard-table__heading standard-table__heading--active">Date started</th>
+                    <th class="standard-table__heading">Barrier ID</th>
+                    <th class="standard-table__heading">Barrier location</th>
+                    <th class="standard-table__heading">Resolved?</th>
+                    <th class="standard-table__heading">Barrier title</th>
+                    <th class="standard-table__heading">Started by</th>
+                    <th class="standard-table__heading">Action</th>
+                </tr>
+            </thead>
+            <tbody class="js-delete-modal-container">
+                {% for report in reports %}
+                    <tr class="standard-table__row draft-barrier-item">
+                        <td class="standard-table__cell">
+                            {% if report.created_on %}{{ report.created_on|date:"j F Y" }} at {{ report.created_on|date:"g:iA"|lower }}{% else %}---{% endif %}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.code }}
+                        </td>
+                        <td class="standard-table__cell">
+                            {% if report.country %}
+                                {{ report.country.name|default:'---' }}
+                            {% else %}
+                                {{ report.trading_bloc.name|default:'---' }}
+                            {% endif %}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.resolved_text }}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.title|default:'---' }}
+                        </td>
+                        <td class="standard-table__cell">
+                            {{ report.created_by.name|default:'---' }}
+                        </td>
+                        <td class="standard-table__cell">
+                            <a class="table__link" href="{% url 'reports:report-barrier-drafts' report.id %}">Continue</a>
+                            {% if report.created_by.id == current_user.id %}
+                                <a class="table__link js-delete-modal" href="{% url 'reports:delete_report' report.id %}">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+
+        <div class="no-results-box">
+            <p>
+                There are currently no draft market access barriers.
+            </p>
+        </div>
+
+    {% endif %}
+{% endblock %}
