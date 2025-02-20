@@ -481,14 +481,12 @@ class AccountSavedSearch(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-
-        active = "my saved searches"
         saved_searches = client.saved_searches.list()
 
         context_data.update(
             {
                 "page": "account",
-                "active": active,
+                "active": "my saved searches",
                 "saved_searches": saved_searches,
             }
         )
@@ -502,14 +500,12 @@ class AccountDownloads(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-
-        active = "my downloads"
         barrier_downloads = client.barrier_download.list()
 
         context_data.update(
             {
                 "page": "account",
-                "active": active,
+                "active": "my downloads",
                 "barrier_downloads": barrier_downloads,
             }
         )
@@ -523,14 +519,12 @@ class AccountDrafts(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-
-        active = "my drafts"
         draft_barriers = client.reports.list(ordering="-created_on")
 
         context_data.update(
             {
                 "page": "account",
-                "active": active,
+                "active": "my drafts",
                 "reports": draft_barriers,
             }
         )
