@@ -168,7 +168,7 @@ class BarrierSearchForm(forms.Form):
         required=False,
     )
     preliminary_assessment = forms.MultipleChoiceField(
-        label="Preliminary economic assessment",
+        label="Preliminary assessment",
         choices=PRELIMINARY_ASSESSMENT_CHOICES,
         required=False,
     )
