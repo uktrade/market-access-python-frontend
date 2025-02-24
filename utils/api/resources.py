@@ -422,8 +422,7 @@ class ErdRequestResource(APIResource):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
         try:
             return self.model(self.client.get(url))
-        except APIHttpException as e:
-            print(e)
+        except APIHttpException:
             pass
 
     def delete(self, barrier_id, reason):

@@ -76,14 +76,11 @@ class BarrierMixin:
             raise
 
     def get_estimated_resolution_date_request(self):
-        print('GETTTTTIN ERDS')
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         barrier_id = self.kwargs.get("barrier_id")
         try:
-            erd_request = client.erd_request.get(barrier_id=barrier_id)
-            # print('erd_request data: ', erd_request.data)
-            return erd_request
-        except APIHttpException as e:
+            return client.erd_request.get(barrier_id=barrier_id)
+        except APIHttpException:
             return
 
     def get_interactions(self):

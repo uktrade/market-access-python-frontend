@@ -52,8 +52,6 @@ class EditEstimatedResolutionDateForm(Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        date = self.cleaned_data.get("estimated_resolution_date")
-        print('DATE: ', date)
         client.erd_request.create(
             barrier_id=str(self.barrier_id),
             estimated_resolution_date=str(self.cleaned_data.get("estimated_resolution_date")),
@@ -76,7 +74,6 @@ class DeleteEstimatedResolutionDateForm(Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        print("CLEANED_DATA: ", self.cleaned_data)
         reason = self.cleaned_data.get("reason")
         client.erd_request.delete(barrier_id=str(self.barrier_id), reason=reason)
 
@@ -122,7 +119,6 @@ class RejectEstimatedResolutionDateForm(Form):
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        print("CLEANED_DATA: ", self.cleaned_data)
         reason = self.cleaned_data.get("reason")
         client.erd_request.reject(barrier_id=str(self.barrier_id), reason=reason)
 
