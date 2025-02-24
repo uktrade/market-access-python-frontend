@@ -18,7 +18,7 @@
     <div class="restrict-width">
 
         <div class="assessment-item">
-            <h2 class="assessment-item__heading">Preliminary economic assessment</h2>
+            <h2 class="assessment-item__heading">Preliminary assessment</h2>
             {% if preliminary_assessment %}
                 <p class="assessment-item__value"><strong>Preliminary value: {{ preliminary_assessment.get_value_display }}</p></strong>
                 <p class="assessment-item__value">Details:</p>
@@ -29,7 +29,7 @@
             {% else %}
                 <div class="assessment-item-content">
                     {% if current_user|has_permission:"add_preliminaryassessment" %}
-                        <p class="assessment-item-content__hint">No preliminary assessment</p>
+                        <p class="assessment-item-content__hint">This barrier has not yet received a preliminary assessment. You need to complete preliminary assessments for all new market access barriers uploaded to DMAS.</p>
                         <a class="assessment-item-content__link" href="{% url 'barriers:edit_preliminary_assessment' barrier.id %}">Add preliminary assessment</a>
                     {% else %}
                         <p class="assessment-item-content__hint">This barrier has not yet received a preliminary assessment. Analysts carry out preliminary assessments of all new market access barriers uploaded to DMAS.</p>
