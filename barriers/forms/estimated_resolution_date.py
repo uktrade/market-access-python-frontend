@@ -1,4 +1,4 @@
-from django.forms import Form, CharField, Textarea
+from django.forms import CharField, Form, Textarea
 
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import EstimatedResolutionDateField
@@ -27,8 +27,10 @@ class AddEstimatedResolutionDateForm(Form):
         date = self.cleaned_data.get("estimated_resolution_date")
         client.erd_request.create(
             barrier_id=str(self.barrier_id),
-            estimated_resolution_date=str(self.cleaned_data.get("estimated_resolution_date")),
-            reason=self.cleaned_data.get("reason")
+            estimated_resolution_date=str(
+                self.cleaned_data.get("estimated_resolution_date")
+            ),
+            reason=self.cleaned_data.get("reason"),
         )
 
 
@@ -54,8 +56,10 @@ class EditEstimatedResolutionDateForm(Form):
         client = MarketAccessAPIClient(self.token)
         client.erd_request.create(
             barrier_id=str(self.barrier_id),
-            estimated_resolution_date=str(self.cleaned_data.get("estimated_resolution_date")),
-            reason=self.cleaned_data.get("reason")
+            estimated_resolution_date=str(
+                self.cleaned_data.get("estimated_resolution_date")
+            ),
+            reason=self.cleaned_data.get("reason"),
         )
 
 

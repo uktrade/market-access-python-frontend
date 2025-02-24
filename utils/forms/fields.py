@@ -9,7 +9,10 @@ from django.template.defaultfilters import filesizeformat
 
 from utils.forms.mixins import HelpTextMixin
 from utils.forms.widgets import DateRangeWidget, DayMonthYearWidget, MonthYearWidget
-from utils.validators import validate_date_not_in_future, validate_proposed_estimated_resolution_date
+from utils.validators import (
+    validate_date_not_in_future,
+    validate_proposed_estimated_resolution_date,
+)
 
 logger = logging.getLogger(__name__)
 

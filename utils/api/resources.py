@@ -37,7 +37,7 @@ from barriers.models.history.mentions import (
 )
 from reports.models import Report
 from users.models import DashboardTask, Group, User, UserProfile
-from utils.exceptions import ScanError, APIHttpException
+from utils.exceptions import APIHttpException, ScanError
 from utils.models import APIModel, ModelList
 
 if TYPE_CHECKING:
@@ -427,27 +427,29 @@ class ErdRequestResource(APIResource):
 
     def delete(self, barrier_id, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.post(
-            url, json={"reason": reason}
-        ))
+        return self.model(self.client.post(url, json={"reason": reason}))
 
     def create(self, barrier_id, estimated_resolution_date, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.post(
-            url, json={"estimated_resolution_date": estimated_resolution_date, "reason": reason}
-        ))
+        return self.model(
+            self.client.post(
+                url,
+                json={
+                    "estimated_resolution_date": estimated_resolution_date,
+                    "reason": reason,
+                },
+            )
+        )
 
     def approve(self, barrier_id):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.patch(
-            url, json={"status": "APPROVED"}
-        ))
+        return self.model(self.client.patch(url, json={"status": "APPROVED"}))
 
     def reject(self, barrier_id, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.patch(
-            url, json={"status": "REJECTED", "reason": reason}
-        ))
+        return self.model(
+            self.client.patch(url, json={"status": "REJECTED", "reason": reason})
+        )
 
 
 class ResolvabilityAssessmentResource(APIResource):

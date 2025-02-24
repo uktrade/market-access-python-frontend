@@ -176,9 +176,15 @@ from .views.core import (
     Home,
     WhatIsABarrier,
 )
-from .views.estimated_resolution_date import AddEstimatedResolutionDateFormView, EditEstimatedResolutionDateFormView, \
-    DeleteEstimatedResolutionDateFormView, ReviewEstimatedResolutionDateFormView, RejectEstimatedResolutionDateFormView, \
-    ApproveEstimatedResolutionDateFormView, ConfirmationEstimatedResolutionDateFormView
+from .views.estimated_resolution_date import (
+    AddEstimatedResolutionDateFormView,
+    ApproveEstimatedResolutionDateFormView,
+    ConfirmationEstimatedResolutionDateFormView,
+    DeleteEstimatedResolutionDateFormView,
+    EditEstimatedResolutionDateFormView,
+    RejectEstimatedResolutionDateFormView,
+    ReviewEstimatedResolutionDateFormView,
+)
 from .views.related_barriers import RelatedBarriers
 
 app_name = "barriers"

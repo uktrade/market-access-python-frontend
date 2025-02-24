@@ -1,5 +1,6 @@
-from utils.models import APIModel
 import dateutil.parser
+
+from utils.models import APIModel
 
 
 class ErdRequest(APIModel):

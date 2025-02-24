@@ -2,13 +2,8 @@ import logging
 import uuid
 
 import requests
-from django import forms
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
 
-from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import FileUploadError, ScanError
-from utils.forms.fields import MonthYearInFutureField
 
 logger = logging.getLogger(__name__)
 

@@ -32,7 +32,9 @@ class BarrierMixin:
     @property
     def estimated_resolution_date_request(self):
         if not self._estimated_resolution_date_request:
-            self._estimated_resolution_date_request = self.get_estimated_resolution_date_request()
+            self._estimated_resolution_date_request = (
+                self.get_estimated_resolution_date_request()
+            )
         return self._estimated_resolution_date_request
 
     @property
@@ -97,7 +99,9 @@ class BarrierMixin:
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["barrier"] = self.barrier
-        context_data["estimated_resolution_date_request"] = self.estimated_resolution_date_request
+        context_data["estimated_resolution_date_request"] = (
+            self.estimated_resolution_date_request
+        )
         context_data["action_plan"] = self.action_plan
         if self.include_interactions:
             context_data["interactions"] = self.interactions

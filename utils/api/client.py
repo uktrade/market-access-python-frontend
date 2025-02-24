@@ -18,6 +18,7 @@ from .resources import (
     DocumentsResource,
     EconomicAssessmentResource,
     EconomicImpactAssessmentResource,
+    ErdRequestResource,
     FeedbackResource,
     GroupsResource,
     MentionResource,
@@ -33,7 +34,6 @@ from .resources import (
     UserMentionCountsResource,
     UserProfileResource,
     UsersResource,
-    ErdRequestResource,
 )
 
 logger = logging.getLogger(__name__)
