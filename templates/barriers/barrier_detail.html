@@ -206,27 +206,43 @@
                 {% if barrier.estimated_resolution_date %}
                     {{ barrier.estimated_resolution_date|date:"j F Y" }}
                     {% if not barrier.archived %}
-                        <a class="summary-group__list__value__edit govuk-link--no-visited-state"
-                           href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}"
-                           aria-label="edit estimated resolution date">Edit</a>
+                        <div class="summary-group__list__value__edit">
+                            <a class="govuk-link--no-visited-state"
+                               href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}"
+                               aria-label="edit estimated resolution date">Edit</a>
+                            <a class="govuk-link--no-visited-state"
+                               href="{% url 'barriers:delete_estimated_resolution_date' barrier.id %}"
+                               aria-label="delete estimated resolution date">Delete</a>
+                        </div>
                     {% endif %}
                 {% else %}
                     {% if barrier.archived %}
                         <span class="summary-group__list__value__none">No estimated resolution date</span>
                     {% else %}
-                        <a href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}"
+                        <a href="{% url 'barriers:add_estimated_resolution_date' barrier.id %}"
                            class="summary-group__list__value__add govuk-link--no-visited-state">Add estimated resolution date if applicable</a>
                     {% endif %}
                 {% endif %}
-                {% if barrier.has_active_estimated_resolution_date_proposal %}
+                {% if estimated_resolution_date_request %}
                     <div class="govuk-inset-text text-sm m-2 text-dark">
-                        <p>
-                            A request has been submitted to change the estimated resolution date to {{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}.
-                        </p>
-                        <hr />
+                        {% if estimated_resolution_date_request.estimated_resolution_date %}
+                            <p>
+                                A request has been submitted to change the estimated resolution date to {{ estimated_resolution_date_request.estimated_resolution_date|date:"j F Y" }}.
+                            </p>
+                        {% else %}
+                            <p>
+                                A request has been submitted to remove the estimated resolution date.
+                            </p>
+                        {% endif %}
+                        {% if is_admin %}
+                            <a class="govuk-link--no-visited-state"
+                                   href="{% url 'barriers:review_estimated_resolution_date' barrier.id %}"
+                                   aria-label="delete estimated resolution date">Review</a>
+                            <hr />
+                        {% endif %}
                         <p class="text-xs">
-                            Date submitted: {{ barrier.proposed_estimated_resolution_date_created|date:"j F Y" }}
-                            by {{ barrier.proposed_estimated_resolution_date_user.name }}
+                            Date submitted: {{ estimated_resolution_date_request.created_on|date:"j F Y" }}
+                            by {{ estimated_resolution_date_request.created_by }}
                         </p>
                     </div>
                 {% endif %}

@@ -28,6 +28,7 @@ from barriers.models import (
     StrategicAssessment,
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
+from barriers.models.erd_request import ErdRequest
 from barriers.models.feedback import Feedback
 from barriers.models.history.mentions import (
     Mention,
@@ -36,7 +37,7 @@ from barriers.models.history.mentions import (
 )
 from reports.models import Report
 from users.models import DashboardTask, Group, User, UserProfile
-from utils.exceptions import ScanError
+from utils.exceptions import ScanError, APIHttpException
 from utils.models import APIModel, ModelList
 
 if TYPE_CHECKING:
@@ -411,6 +412,43 @@ class EconomicAssessmentResource(APIResource):
 class EconomicImpactAssessmentResource(APIResource):
     resource_name = "economic-impact-assessments"
     model = EconomicImpactAssessment
+
+
+class ErdRequestResource(APIResource):
+    resource_name = "erd-requests"
+    model = ErdRequest
+
+    def get(self, barrier_id):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        try:
+            return self.model(self.client.get(url))
+        except APIHttpException as e:
+            print(e)
+            pass
+
+    def delete(self, barrier_id, reason):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        return self.model(self.client.post(
+            url, json={"reason": reason}
+        ))
+
+    def create(self, barrier_id, estimated_resolution_date, reason):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        return self.model(self.client.post(
+            url, json={"estimated_resolution_date": estimated_resolution_date, "reason": reason}
+        ))
+
+    def approve(self, barrier_id):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        return self.model(self.client.patch(
+            url, json={"status": "APPROVED"}
+        ))
+
+    def reject(self, barrier_id, reason):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        return self.model(self.client.patch(
+            url, json={"status": "REJECTED", "reason": reason}
+        ))
 
 
 class ResolvabilityAssessmentResource(APIResource):

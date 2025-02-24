@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from barriers.forms.search import BarrierSearchForm
 from barriers.views.search import SearchFormView
 from utils.api.client import MarketAccessAPIClient
+from utils.context_processors import user_scope
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 
@@ -93,6 +94,12 @@ class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
             },
         }
     }
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        user = user_scope(self.request)["current_user"]
+        context_data["is_admin"] = any(filter(lambda d: d['name'] == 'Administrator', user.groups))
+        return context_data
 
 
 class WhatIsABarrier(TemplateView):

@@ -33,6 +33,7 @@ from .resources import (
     UserMentionCountsResource,
     UserProfileResource,
     UsersResource,
+    ErdRequestResource,
 )
 
 logger = logging.getLogger(__name__)
@@ -42,6 +43,7 @@ class MarketAccessAPIClient:
     def __init__(self, token=None, **kwargs):
         self.token = token
         self.barriers = BarriersResource(self)
+        self.erd_request = ErdRequestResource(self)
         self.documents = DocumentsResource(self)
         self.economic_assessments = EconomicAssessmentResource(self)
         self.economic_impact_assessments = EconomicImpactAssessmentResource(self)

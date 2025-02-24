@@ -12,7 +12,7 @@ class APIHttpException(APIException):
     def __init__(self, http_error, response=None):
         self.status_code = http_error.response.status_code
         self.message = str(http_error)
-        self.response_data = None
+        self.response_data = http_error.response.json()
 
         if response:
             try:

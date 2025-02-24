@@ -9,7 +9,7 @@ from django.template.defaultfilters import filesizeformat
 
 from utils.forms.mixins import HelpTextMixin
 from utils.forms.widgets import DateRangeWidget, DayMonthYearWidget, MonthYearWidget
-from utils.validators import validate_date_not_in_future
+from utils.validators import validate_date_not_in_future, validate_proposed_estimated_resolution_date
 
 logger = logging.getLogger(__name__)
 
@@ -357,6 +357,10 @@ class MonthYearField(forms.MultiValueField):
 
 class MonthYearInFutureField(MonthYearField):
     default_validators = []
+
+
+class EstimatedResolutionDateField(MonthYearField):
+    default_validators = [validate_proposed_estimated_resolution_date]
 
 
 class MonthDateRangeField(forms.MultiValueField):
