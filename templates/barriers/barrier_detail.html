@@ -242,7 +242,9 @@
                         {% endif %}
                         <p class="text-xs">
                             Date submitted: {{ estimated_resolution_date_request.created_on|date:"j F Y" }}
-                            by {{ estimated_resolution_date_request.created_by }}
+                            {% if estimated_resolution_date_request.created_by %}
+                                by {{ estimated_resolution_date_request.created_by }}
+                            {% endif %}
                         </p>
                     </div>
                 {% endif %}
