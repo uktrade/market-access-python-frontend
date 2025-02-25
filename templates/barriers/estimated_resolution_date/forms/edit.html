@@ -16,11 +16,21 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        {% include 'barriers/estimated_resolution_date/proposal.html' %}
+        <div class="govuk-inset-text">
+            <p class="govuk-body"><span class="govuk-!-font-weight-bold">Current estimated resolution date:</span></p>
+            {{ barrier.estimated_resolution_date|date:"j F Y" }}
+        </div>
+
         {% include 'barriers/estimated_resolution_date/fields/date.html' %}
         {% include 'barriers/estimated_resolution_date/fields/reason.html' %}
 
-        <button class="govuk-button" data-module="govuk-button">Save and return</button>
+        <button class="govuk-button" data-module="govuk-button">
+            {% if is_admin %}
+                Save and return
+            {% else %}
+                Save and request
+            {% endif %}
+        </button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
 

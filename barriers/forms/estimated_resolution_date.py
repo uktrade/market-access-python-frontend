@@ -1,10 +1,11 @@
 from django.forms import CharField, Form, Textarea
 
+from barriers.forms.mixins import APIFormMixin
 from utils.api.client import MarketAccessAPIClient
 from utils.forms import EstimatedResolutionDateField
 
 
-class AddEstimatedResolutionDateForm(Form):
+class AddEstimatedResolutionDateForm(APIFormMixin, Form):
     estimated_resolution_date = EstimatedResolutionDateField(
         label="Estimated resolution date",
         help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
@@ -13,20 +14,12 @@ class AddEstimatedResolutionDateForm(Form):
     reason = CharField(
         label="What is the reason for adding the estimated resolution date?",
         widget=Textarea,
-        required=False,
     )
-
-    def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier_id = kwargs.pop("barrier_id")
-        kwargs.pop("id")
-        return super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        date = self.cleaned_data.get("estimated_resolution_date")
         client.erd_request.create(
-            barrier_id=str(self.barrier_id),
+            barrier_id=str(self.id),
             estimated_resolution_date=str(
                 self.cleaned_data.get("estimated_resolution_date")
             ),
@@ -34,7 +27,7 @@ class AddEstimatedResolutionDateForm(Form):
         )
 
 
-class EditEstimatedResolutionDateForm(Form):
+class EditEstimatedResolutionDateForm(APIFormMixin, Form):
     estimated_resolution_date = EstimatedResolutionDateField(
         label="Estimated resolution date",
         help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
@@ -43,19 +36,12 @@ class EditEstimatedResolutionDateForm(Form):
     reason = CharField(
         label="What is the reason for changing the estimated resolution date?",
         widget=Textarea,
-        required=False,
     )
-
-    def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier_id = kwargs.pop("barrier_id")
-        kwargs.pop("id")
-        return super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         client.erd_request.create(
-            barrier_id=str(self.barrier_id),
+            barrier_id=str(self.id),
             estimated_resolution_date=str(
                 self.cleaned_data.get("estimated_resolution_date")
             ),
@@ -63,73 +49,39 @@ class EditEstimatedResolutionDateForm(Form):
         )
 
 
-class DeleteEstimatedResolutionDateForm(Form):
+class DeleteEstimatedResolutionDateForm(APIFormMixin, Form):
     reason = CharField(
         label="Why do you want to remove the estimated resolution date?",
         widget=Textarea,
-        required=False,
     )
-
-    def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier_id = kwargs.pop("barrier_id")
-        kwargs.pop("id")
-        return super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         reason = self.cleaned_data.get("reason")
-        client.erd_request.delete(barrier_id=str(self.barrier_id), reason=reason)
+        client.erd_request.delete(barrier_id=str(self.id), reason=reason)
 
 
-class ReviewEstimatedResolutionDateForm(Form):
-    reason = CharField(
-        label="Why do you want to remove the estimated resolution date?",
-        widget=Textarea,
-        required=False,
-    )
-
-    def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier_id = kwargs.pop("barrier_id")
-        kwargs.pop("id")
-        return super().__init__(*args, **kwargs)
-
+class ReviewEstimatedResolutionDateForm(APIFormMixin, Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.erd_request.approve(barrier_id=str(self.barrier_id))
+        client.erd_request.approve(barrier_id=str(self.id), reason="")
 
 
-class ApproveEstimatedResolutionDateForm(Form):
-    def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier_id = kwargs.pop("barrier_id")
-        kwargs.pop("id")
-        return super().__init__(*args, **kwargs)
+class ApproveEstimatedResolutionDateForm(APIFormMixin, Form):
+    pass
 
 
-class RejectEstimatedResolutionDateForm(Form):
+class RejectEstimatedResolutionDateForm(APIFormMixin, Form):
     reason = CharField(
         label="Why do you want to reject the request to delete the estimated resolution date?",
         widget=Textarea,
-        required=False,
     )
-
-    def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier_id = kwargs.pop("barrier_id")
-        kwargs.pop("id")
-        return super().__init__(*args, **kwargs)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
         reason = self.cleaned_data.get("reason")
-        client.erd_request.reject(barrier_id=str(self.barrier_id), reason=reason)
+        client.erd_request.reject(barrier_id=str(self.id), reason=reason)
 
 
-class ConfirmationEstimatedResolutionDateForm(Form):
-    def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop("token")
-        self.barrier_id = kwargs.pop("barrier_id")
-        kwargs.pop("id")
-        return super().__init__(*args, **kwargs)
+class ConfirmationEstimatedResolutionDateForm(APIFormMixin, Form):
+    pass

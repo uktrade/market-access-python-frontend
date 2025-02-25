@@ -16,7 +16,6 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        {% include 'barriers/estimated_resolution_date/proposal.html' %}
         {% include 'barriers/estimated_resolution_date/fields/date.html' %}
         {% include 'barriers/estimated_resolution_date/fields/reason.html' %}
 

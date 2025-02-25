@@ -10,16 +10,35 @@
 
     {% include 'partials/heading.html' with text='Delete estimated resolution date' %}
 
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+        <span class="govuk-visually-hidden">Warning</span>
+            The date will be permanently removed from the barrier
+        </strong>
+    </div>
 
     {% form_error_banner form %}
-
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
+        <div class="govuk-inset-text">
+            <p class="govuk-body"><span class="govuk-!-font-weight-bold">Current estimated resolution date:</span></p>
+            {{ barrier.estimated_resolution_date|date:"j F Y" }}
+        </div>
 
-        {% include 'barriers/estimated_resolution_date/proposal.html' %}
+        {% if barrier.is_top_priority and not is_admin %}
+            <p class="govuk-hint">The request to remove the estimated resolution date will be sent for approval by the Deputy Director for the region and the International Strategy and Trade Relations(ISTR) Director</p>
+        {% endif %}
+
         {% include 'barriers/estimated_resolution_date/fields/reason.html' %}
 
-        <button class="govuk-button" data-module="govuk-button">Delete</button>
+        <button class="govuk-button govuk-button--warning" data-module="govuk-button">
+            {% if barrier.is_top_priority and not is_admin %}
+                Request deletion
+            {% else %}
+                Delete
+            {% endif %}
+        </button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
     </form>
 

@@ -13,7 +13,7 @@ from utils.context_processors import user_scope
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 
-from .mixins import AnalyticsMixin, BarrierMixin
+from .mixins import AnalyticsMixin, BarrierMixin, AdminMixin
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
         return context_data
 
 
-class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
+class BarrierDetail(AdminMixin, AnalyticsMixin, BarrierMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
     include_interactions = True
     utm_tags = {
@@ -94,14 +94,6 @@ class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
             },
         }
     }
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        user = user_scope(self.request)["current_user"]
-        context_data["is_admin"] = any(
-            filter(lambda d: d["name"] == "Administrator", user.groups)
-        )
-        return context_data
 
 
 class WhatIsABarrier(TemplateView):

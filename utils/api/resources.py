@@ -441,9 +441,9 @@ class ErdRequestResource(APIResource):
             )
         )
 
-    def approve(self, barrier_id):
+    def approve(self, barrier_id, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.patch(url, json={"status": "APPROVED"}))
+        return self.model(self.client.patch(url, json={"status": "APPROVED", "reason": reason}))
 
     def reject(self, barrier_id, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
