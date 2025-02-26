@@ -1,0 +1,31 @@
+{% extends "barriers/edit/base.html" %}
+
+{% block page_title %}{{ block.super }} - Delete estimated resolution date{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include 'partials/heading.html' with text='Estimated resolution date' %}
+
+
+    {% form_error_banner form %}
+
+    <form action="" method="POST" class="restrict-width">
+        {% csrf_token %}
+
+        <div class="govuk-inset-text text-dark">
+            {% if barrier.estimated_resolution_date %}
+                <p class="govuk-body">The request to change the estimated resolution date to {{ barrier.estimated_resolution_date|date:"j F Y" }} has been approved.</p>
+            {% else %}
+                <p class="govuk-body">The request to delete the estimated resolution date of {{ barrier.estimated_resolution_date|date:"j F Y" }} has been approved.</p>
+            {% endif %}
+            <p class="govuk-body">You will see the change on the barrier information page.</p>
+        </div>
+
+        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button" id="reject-erd-link">Return to barrier detail</a>
+    </form>
+
+{% endblock %}

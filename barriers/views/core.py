@@ -9,10 +9,11 @@ from django.views.generic import TemplateView
 from barriers.forms.search import BarrierSearchForm
 from barriers.views.search import SearchFormView
 from utils.api.client import MarketAccessAPIClient
+from utils.context_processors import user_scope
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 
-from .mixins import AnalyticsMixin, BarrierMixin
+from .mixins import AnalyticsMixin, BarrierMixin, AdminMixin
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +81,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
         return context_data
 
 
-class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
+class BarrierDetail(AdminMixin, AnalyticsMixin, BarrierMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
     include_interactions = True
     utm_tags = {
