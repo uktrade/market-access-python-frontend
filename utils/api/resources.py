@@ -427,7 +427,7 @@ class ErdRequestResource(APIResource):
 
     def delete(self, barrier_id, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.post(url, json={"reason": reason}))
+        return self.model(self.client.post(url, json={"reason": reason, "estimated_resolution_date": None}))
 
     def create(self, barrier_id, estimated_resolution_date, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
@@ -441,14 +441,14 @@ class ErdRequestResource(APIResource):
             )
         )
 
-    def approve(self, barrier_id, reason):
-        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.patch(url, json={"status": "APPROVED", "reason": reason}))
+    def approve(self, barrier_id):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request/approve"
+        return self.model(self.client.post(url))
 
     def reject(self, barrier_id, reason):
-        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request/reject"
         return self.model(
-            self.client.patch(url, json={"status": "REJECTED", "reason": reason})
+            self.client.post(url, json={"reason": reason})
         )
 
 
