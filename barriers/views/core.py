@@ -17,7 +17,7 @@ from .mixins import AnalyticsMixin, BarrierMixin
 logger = logging.getLogger(__name__)
 
 
-class Dashboard(AnalyticsMixin, TemplateView):
+class Dashboard(AnalyticsMixin, TemplateView, PaginationMixin):
     template_name = "barriers/dashboard.html"
     utm_tags = {
         "en": {
@@ -26,6 +26,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
             "utm_campaign": "dashboard",
         }
     }
+    pagination_limit = 20
 
     def get(self, *args, **kwargs):
 
@@ -63,6 +64,16 @@ class Dashboard(AnalyticsMixin, TemplateView):
             not mention.read_by_recipient for mention in mentions
         )
 
+        downloads_page_number = (
+            self.request.GET.get("page") if self.request.GET.get("page") else 1
+        )
+        downloads_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "page": downloads_page_number,
+        }
+        barrier_downloads = client.barrier_download.list(**downloads_params)
+
         context_data.update(
             {
                 "page": "dashboard",
@@ -74,7 +85,9 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
                 "active": active,
+                "all_downloads_count": barrier_downloads.total_count,
                 "barrier_downloads": barrier_downloads,
+                "pagination": self.get_pagination_data(object_list=barrier_downloads),
             }
         )
         return context_data

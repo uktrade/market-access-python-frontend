@@ -514,7 +514,6 @@ class AccountDownloads(TemplateView, PaginationMixin):
         }
 
         active = "my downloads"
-
         barrier_downloads = client.barrier_download.list(**downloads_params)
 
         context_data.update(
