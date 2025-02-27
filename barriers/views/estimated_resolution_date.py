@@ -20,7 +20,7 @@ class AddEstimatedResolutionDateFormView(APIBarrierFormViewMixin, FormView):
 
     def get_success_url(self):
         return reverse_lazy(
-            "barriers:barrier_detail",
+            "barriers:confirmation_estimated_resolution_date",
             kwargs={"barrier_id": self.get_object().id},
         )
 

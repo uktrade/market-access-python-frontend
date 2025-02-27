@@ -12,7 +12,7 @@ class AddEstimatedResolutionDateForm(APIFormMixin, Form):
         error_messages={"required": "Enter an estimated resolution date"},
     )
     reason = CharField(
-        label="What is the reason for adding the estimated resolution date?",
+        label="How have you estimated this date?",
         widget=Textarea,
     )
 
@@ -34,7 +34,7 @@ class EditEstimatedResolutionDateForm(APIFormMixin, Form):
         error_messages={"required": "Enter an estimated resolution date"},
     )
     reason = CharField(
-        label="What is the reason for changing the estimated resolution date?",
+        label="How have you estimated this date?",
         widget=Textarea,
     )
 
