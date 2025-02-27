@@ -10,7 +10,7 @@ from barriers.forms.estimated_resolution_date import (
     RejectEstimatedResolutionDateForm,
     ReviewEstimatedResolutionDateForm,
 )
-from barriers.views.mixins import APIBarrierFormViewMixin, AdminMixin
+from barriers.views.mixins import AdminMixin, APIBarrierFormViewMixin
 from utils.api.client import MarketAccessAPIClient
 
 
@@ -25,7 +25,9 @@ class AddEstimatedResolutionDateFormView(APIBarrierFormViewMixin, FormView):
         )
 
 
-class EditEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin, FormView):
+class EditEstimatedResolutionDateFormView(
+    AdminMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/estimated_resolution_date/forms/edit.html"
     form_class = EditEstimatedResolutionDateForm
 
@@ -51,7 +53,9 @@ class EditEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin, F
         }
 
 
-class DeleteEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin, FormView):
+class DeleteEstimatedResolutionDateFormView(
+    AdminMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/estimated_resolution_date/forms/delete.html"
     form_class = DeleteEstimatedResolutionDateForm
 
@@ -62,7 +66,9 @@ class DeleteEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin,
         )
 
 
-class ReviewEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin, FormView):
+class ReviewEstimatedResolutionDateFormView(
+    AdminMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/estimated_resolution_date/forms/review.html"
     form_class = ReviewEstimatedResolutionDateForm
 
@@ -73,7 +79,9 @@ class ReviewEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin,
         )
 
 
-class ApproveEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin, FormView):
+class ApproveEstimatedResolutionDateFormView(
+    AdminMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/estimated_resolution_date/forms/approve.html"
     form_class = ApproveEstimatedResolutionDateForm
 
@@ -84,7 +92,9 @@ class ApproveEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin
         )
 
 
-class RejectEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin, FormView):
+class RejectEstimatedResolutionDateFormView(
+    AdminMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/estimated_resolution_date/forms/reject.html"
     form_class = RejectEstimatedResolutionDateForm
 
@@ -95,7 +105,9 @@ class RejectEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin,
         )
 
 
-class ConfirmationEstimatedResolutionDateFormView(AdminMixin, APIBarrierFormViewMixin, FormView):
+class ConfirmationEstimatedResolutionDateFormView(
+    AdminMixin, APIBarrierFormViewMixin, FormView
+):
     template_name = "barriers/estimated_resolution_date/forms/confirmation.html"
     form_class = ConfirmationEstimatedResolutionDateForm
 

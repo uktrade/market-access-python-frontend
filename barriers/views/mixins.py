@@ -18,7 +18,9 @@ class AdminMixin:
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         user = user_scope(self.request)["current_user"]
-        context_data["is_admin"] = any(filter(lambda d: d['name'] == 'Administrator', user.groups))
+        context_data["is_admin"] = any(
+            filter(lambda d: d["name"] == "Administrator", user.groups)
+        )
         return context_data
 
 

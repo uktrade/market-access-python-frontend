@@ -9,11 +9,10 @@ from django.views.generic import TemplateView
 from barriers.forms.search import BarrierSearchForm
 from barriers.views.search import SearchFormView
 from utils.api.client import MarketAccessAPIClient
-from utils.context_processors import user_scope
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 
-from .mixins import AnalyticsMixin, BarrierMixin, AdminMixin
+from .mixins import AdminMixin, AnalyticsMixin, BarrierMixin
 
 logger = logging.getLogger(__name__)
 

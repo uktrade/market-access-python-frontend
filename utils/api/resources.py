@@ -427,7 +427,11 @@ class ErdRequestResource(APIResource):
 
     def delete(self, barrier_id, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
-        return self.model(self.client.post(url, json={"reason": reason, "estimated_resolution_date": None}))
+        return self.model(
+            self.client.post(
+                url, json={"reason": reason, "estimated_resolution_date": None}
+            )
+        )
 
     def create(self, barrier_id, estimated_resolution_date, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request"
@@ -447,9 +451,7 @@ class ErdRequestResource(APIResource):
 
     def reject(self, barrier_id, reason):
         url = f"barriers/{barrier_id}/estimated-resolution-date-request/reject"
-        return self.model(
-            self.client.post(url, json={"reason": reason})
-        )
+        return self.model(self.client.post(url, json={"reason": reason}))
 
 
 class ResolvabilityAssessmentResource(APIResource):
