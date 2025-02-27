@@ -13,9 +13,9 @@
     <div class="history-item__new-value">
         <span class="diff__ins" tabindex="0">
             <p class="govuk-visually-hidden">new value: </p>
-            {% if not item.old_value.status %}
+            {% if item.old_value.status %}
                 {% if item.old_value.estimated_resolution_date %}
-                    A request was made to change the estimated resolution date to {{ item.new_value.estimated_resolution_date }} has been approved
+                    A request to change the estimated resolution date to {{ item.new_value.estimated_resolution_date }} has been approved
                 {% else %}
                     A request to remove the estimated resolution date has been approved
                 {% endif %}
