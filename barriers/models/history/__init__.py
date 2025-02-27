@@ -11,7 +11,7 @@ from .assessments.economic import (
 from .assessments.economic_impact import EconomicImpactAssessmentHistoryItem
 from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
 from .assessments.strategic import StrategicAssessmentHistoryItem
-from .barriers import BarrierHistoryItem, ProgressUpdateHistoryItem
+from .barriers import BarrierHistoryItem, ProgressUpdateHistoryItem, EstimatedResolutionDateRequestHistoryItem
 from .notes import NoteHistoryItem
 from .programme_funds import ProgrammeFundsHistoryItem
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
@@ -49,5 +49,6 @@ class HistoryItem(PolymorphicBase):
         BarrierTopPrioritySummaryItem,
         ProgrammeFundsHistoryItem,
         PreliminaryAssessmentHistoryItem,
+        EstimatedResolutionDateRequestHistoryItem
     )
     class_lookup = {}

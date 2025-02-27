@@ -64,7 +64,7 @@ class DeleteEstimatedResolutionDateForm(APIFormMixin, Form):
 class ReviewEstimatedResolutionDateForm(APIFormMixin, Form):
     def save(self):
         client = MarketAccessAPIClient(self.token)
-        client.erd_request.approve(barrier_id=str(self.id), reason="")
+        client.erd_request.approve(barrier_id=str(self.id))
 
 
 class ApproveEstimatedResolutionDateForm(APIFormMixin, Form):
