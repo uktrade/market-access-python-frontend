@@ -37,21 +37,6 @@ class EditEstimatedResolutionDateFormView(
             kwargs={"barrier_id": self.get_object().id},
         )
 
-    def get_initial(self):
-        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        erd_request = client.erd_request.get(barrier_id=self.get_object().id)
-        if erd_request:
-            proposed_date = erd_request.estimated_resolution_date
-            proposed_reason = erd_request.reason
-        else:
-            proposed_date = erd_request
-            proposed_reason = None
-
-        return {
-            "estimated_resolution_date": proposed_date,
-            "estimated_resolution_date_change_reason": proposed_reason,
-        }
-
 
 class DeleteEstimatedResolutionDateFormView(
     AdminMixin, APIBarrierFormViewMixin, FormView
