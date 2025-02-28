@@ -205,19 +205,6 @@ class BarrierEditPriority(APIBarrierFormViewMixin, FormView):
         }
 
 
-class BarrierEditEstimatedResolutionDateConfirmationPage(TemplateView):
-    template_name = "barriers/edit/estimated_resolution_date_confirmation_page.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        barrier_id = kwargs.get("barrier_id")
-        kwargs["token"] = self.request.session.get("sso_token")
-        client = MarketAccessAPIClient(kwargs["token"])
-        barrier = client.barriers.get(id=barrier_id)
-        context["barrier"] = barrier
-        return context
-
-
 class BarrierEditTags(MetadataMixin, APIBarrierFormViewMixin, FormView):
     template_name = "barriers/edit/tags.html"
     form_class = UpdateBarrierTagsForm
