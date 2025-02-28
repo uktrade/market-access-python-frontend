@@ -2,7 +2,7 @@ import logging
 
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
 
 from barriers.constants import TOP_PRIORITY_BARRIER_STATUS
 from barriers.forms.edit import (
