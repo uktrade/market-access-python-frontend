@@ -350,3 +350,9 @@ class ProgressUpdateHistoryItem(BaseHistoryItem):
     model = "progress_update"
     field = "status"
     field_name = "Delivery Confidence"
+
+
+class EstimatedResolutionDateRequestHistoryItem(BaseHistoryItem):
+    model = "estimated_resolution_date_request"
+    field = "default"
+    field_name = "Estimated resolution date"

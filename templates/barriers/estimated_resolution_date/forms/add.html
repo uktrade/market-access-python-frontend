@@ -6,15 +6,6 @@
     <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-back-link ma-back-link">Back</a>
 {% endblock %}
 
-{% block body_script %}
-    <script nonce="{{request.csp_nonce}}">
-        new ma.components.setupHiddenERDTextarea({
-            is_admin: '{{ current_user|has_permission:"can_approve_estimated_completion_date" }}',
-            proposedDate: '{{ barrier.proposed_estimated_resolution_date|date:"j F Y" }}',
-        });
-    </script>
-{% endblock %}
-
 {% block page_content %}
 
     {% include 'partials/heading.html' with text='Add estimated resolution date' %}
@@ -25,8 +16,8 @@
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
 
-        {% include 'barriers/partials/proposed_estimated_resolution_date.html' %}
-        {% include 'barriers/partials/edit_estimated_resolution_date.html' %}
+        {% include 'barriers/estimated_resolution_date/fields/date.html' %}
+        {% include 'barriers/estimated_resolution_date/fields/reason.html' %}
 
         <button class="govuk-button" data-module="govuk-button">Save and return</button>
         <a class="form-cancel" href="{% url 'barriers:barrier_detail' barrier.id %}">Cancel</a>
