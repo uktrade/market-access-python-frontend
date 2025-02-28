@@ -11,7 +11,6 @@ from barriers.forms.estimated_resolution_date import (
     ReviewEstimatedResolutionDateForm,
 )
 from barriers.views.mixins import AdminMixin, APIBarrierFormViewMixin
-from utils.api.client import MarketAccessAPIClient
 
 
 class AddEstimatedResolutionDateFormView(APIBarrierFormViewMixin, FormView):
