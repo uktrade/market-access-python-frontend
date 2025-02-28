@@ -201,8 +201,12 @@ class MarketAccessTestCase(TestCase):
         session.save()
 
     def init_get_estimated_resolution_date_request_patcher(self):
-        self.get_estimated_resolution_date_request_patcher = patch("utils.api.resources.ErdRequestResource.get")
-        self.mock_get_estimated_resolution_date_request_patcher = self.get_estimated_resolution_date_request_patcher.start()
+        self.get_estimated_resolution_date_request_patcher = patch(
+            "utils.api.resources.ErdRequestResource.get"
+        )
+        self.mock_get_estimated_resolution_date_request_patcher = (
+            self.get_estimated_resolution_date_request_patcher.start()
+        )
         self.mock_get_estimated_resolution_date_request_patcher.return_value = {}
         self.addCleanup(self.get_estimated_resolution_date_request_patcher.stop)
 

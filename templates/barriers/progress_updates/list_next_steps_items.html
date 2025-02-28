@@ -64,11 +64,11 @@
     {% if barrier.is_top_priority %}
         <div class="govuk-inset-text">
             Now that you have completed your progress update you must add an
-                {% if barrier.estimated_resolution_date %}
-                    <a href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-edit-link"> estimated resolution date </a>
-                {% else %}
-                    <a href="{% url 'barriers:add_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-add-link"> estimated resolution date </a>
-                {% endif %}
+            {% if barrier.estimated_resolution_date %}
+                <a href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-edit-link"> estimated resolution date </a>
+            {% else %}
+                <a href="{% url 'barriers:add_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-add-link"> estimated resolution date </a>
+            {% endif %}
             to this priority barrier.
         </div>
 
