@@ -127,18 +127,25 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
             location: [],
         };
 
-        filters.forEach((filter: { label: string; value: string; readable_value: string | string[] }) => {
-            if (filter.label == "sector" && filter.value) {
-                filtersForAnalytics.sector.push(filter.readable_value as string);
-            } else if (filter.label == "policy_team" && filter.value) {
-                filtersForAnalytics.policy_team.push(filter.readable_value as string);
-            } else if (filter.label == "location" && filter.value) {
-                if (props.filterValues.region.some((e: Option) => e.value == filter.value)) {
-                    filtersForAnalytics.region.push(filter.readable_value as string);
-                } else {
-                    filtersForAnalytics.location.push(filter.readable_value as string);
-                }
-            }
+        const filterMapping = {
+            'sector': 'sector',
+            'policy team': 'policy_team',
+            'region': (filter: { value: string; readable_value: string }) => 
+            props.filterValues.region.some((e: Option) => e.value === filter.value) 
+                ? 'region' 
+                : 'location',
+            'country': 'location'
+        } as const;
+
+        filters.forEach(filter => {
+            const normalizedLabel = filter.label.toLowerCase();
+            if (!filter.value || !(normalizedLabel in filterMapping)) return;
+
+            const category = typeof filterMapping[normalizedLabel] === 'function'
+            ? filterMapping[normalizedLabel](filter)
+            : filterMapping[normalizedLabel];
+
+            filtersForAnalytics[category].push(filter.readable_value as string);
         });
 
         window["dataLayer"].push({
@@ -316,6 +323,32 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
         });
     };
 
+    /**
+     * Updates and renders active filters based on URL search parameters.
+     * 
+     * This function performs the following operations:
+     * 1. Extracts and combines multiple values for the same parameter from URL search params
+     * 2. Creates a new URLSearchParams object with combined values
+     * 3. Converts the search params into a Record of string arrays
+     * 4. Transforms the params into filter objects with labels and readable values
+     * 5. Triggers Google Analytics tracking if filters exist
+     * 6. Renders the active filters list using ReactDOM
+     * 
+     * Each filter in the rendered list includes:
+     * - A human-readable label
+     * - The filter value
+     * - A remove link (if applicable)
+     * - Accessibility features for screen readers
+     * 
+     * @remarks
+     * The function depends on external functions:
+     * - _makeHumanReadable
+     * - getReadableValue
+     * - handleGoogleAnalytics
+     * - addLocation
+     * 
+     * @returns void
+     */
     const updateActiveFilters = () => {
 
         // Get initial search params
@@ -357,6 +390,8 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
                     ).toString(),
                 }));
             });
+        // update google analytics with the filters used
+        if(filters && filters.length > 0)
             handleGoogleAnalytics(filters);
 
         const activeFiltersContainer = document.getElementById("active filters");
