@@ -1,0 +1,13 @@
+<div id="{{ form.reason.name }}-form-group" class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1250">
+    <div  class="govuk-form-group{% if form.reason.errors %} govuk-form-group--error{% endif %}">
+        <label class="govuk-label govuk-label--s" for="update">{{ form.reason.label }}</label>
+
+        {% form_field_error form "reason" %}
+        <span class="govuk-hint">{{ form.reason.help_text }}</span>
+
+        <textarea id="{{ form.reason.name }}" class="govuk-textarea govuk-js-character-count js-character-count" name="{{ form.reason.name }}" rows="5" maxlength="1250">{% if form.reason.value %}{{ form.reason.value }}{% endif %}</textarea>
+    </div>
+    <div id="{{ form.reason.name }}-info" class="govuk-hint govuk-character-count__message">
+        You can enter up to 1250 characters
+    </div>
+</div>

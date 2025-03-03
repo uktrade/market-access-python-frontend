@@ -8,9 +8,20 @@ from django.urls import reverse
 from barriers.constants import RELATED_BARRIER_TAGS
 from barriers.models import PublicBarrier
 from utils.api.client import MarketAccessAPIClient
+from utils.context_processors import user_scope
 from utils.exceptions import APIHttpException
 
 logger = logging.getLogger(__name__)
+
+
+class AdminMixin:
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        user = user_scope(self.request)["current_user"]
+        context_data["is_admin"] = any(
+            filter(lambda d: d["name"] == "Administrator", user.groups or {})
+        )
+        return context_data
 
 
 class BarrierMixin:
@@ -21,12 +32,21 @@ class BarrierMixin:
     _note = None
     _action_plan = None
     _preliminary_assessment = None
+    _estimated_resolution_date_request = None
 
     @property
     def barrier(self):
         if not self._barrier:
             self._barrier = self.get_barrier()
         return self._barrier
+
+    @property
+    def estimated_resolution_date_request(self):
+        if not self._estimated_resolution_date_request:
+            self._estimated_resolution_date_request = (
+                self.get_estimated_resolution_date_request()
+            )
+        return self._estimated_resolution_date_request
 
     @property
     def interactions(self):
@@ -68,6 +88,14 @@ class BarrierMixin:
                 raise Http404()
             raise
 
+    def get_estimated_resolution_date_request(self):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        barrier_id = self.kwargs.get("barrier_id")
+        try:
+            return client.erd_request.get(barrier_id=barrier_id)
+        except APIHttpException:
+            return
+
     def get_interactions(self):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         activity = client.barriers.get_activity(barrier_id=self.barrier.id)
@@ -82,6 +110,9 @@ class BarrierMixin:
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["barrier"] = self.barrier
+        context_data["estimated_resolution_date_request"] = (
+            self.estimated_resolution_date_request
+        )
         context_data["action_plan"] = self.action_plan
         if self.include_interactions:
             context_data["interactions"] = self.interactions
