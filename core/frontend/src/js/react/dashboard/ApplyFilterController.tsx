@@ -130,9 +130,9 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
         const filterMapping = {
             'sector': 'sector',
             'policy team': 'policy_team',
-            'region': (filter: { value: string; readable_value: string }) => 
-            props.filterValues.region.some((e: Option) => e.value === filter.value) 
-                ? 'region' 
+            'region': (filter: { value: string; readable_value: string }) =>
+            props.filterValues.region.some((e: Option) => e.value === filter.value)
+                ? 'region'
                 : 'location',
             'country': 'location'
         } as const;
@@ -325,7 +325,7 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
 
     /**
      * Updates and renders active filters based on URL search parameters.
-     * 
+     *
      * This function performs the following operations:
      * 1. Extracts and combines multiple values for the same parameter from URL search params
      * 2. Creates a new URLSearchParams object with combined values
@@ -333,20 +333,20 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
      * 4. Transforms the params into filter objects with labels and readable values
      * 5. Triggers Google Analytics tracking if filters exist
      * 6. Renders the active filters list using ReactDOM
-     * 
+     *
      * Each filter in the rendered list includes:
      * - A human-readable label
      * - The filter value
      * - A remove link (if applicable)
      * - Accessibility features for screen readers
-     * 
+     *
      * @remarks
      * The function depends on external functions:
      * - _makeHumanReadable
      * - getReadableValue
      * - handleGoogleAnalytics
      * - addLocation
-     * 
+     *
      * @returns void
      */
     const updateActiveFilters = () => {
