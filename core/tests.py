@@ -185,6 +185,7 @@ class MarketAccessTestCase(TestCase):
         self.init_get_action_plans_patcher()
         self.init_get_profile_patcher()
         self.init_get_user_mention_counts_patcher()
+        self.init_get_estimated_resolution_date_request_patcher()
 
     def init_session(self):
         session = self.client.session
@@ -198,6 +199,16 @@ class MarketAccessTestCase(TestCase):
             }
         )
         session.save()
+
+    def init_get_estimated_resolution_date_request_patcher(self):
+        self.get_estimated_resolution_date_request_patcher = patch(
+            "utils.api.resources.ErdRequestResource.get"
+        )
+        self.mock_get_estimated_resolution_date_request_patcher = (
+            self.get_estimated_resolution_date_request_patcher.start()
+        )
+        self.mock_get_estimated_resolution_date_request_patcher.return_value = {}
+        self.addCleanup(self.get_estimated_resolution_date_request_patcher.stop)
 
     def init_get_barrier_patcher(self):
         self.get_barrier_patcher = patch("utils.api.resources.BarriersResource.get")
