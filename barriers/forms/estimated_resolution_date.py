@@ -12,9 +12,7 @@ class AddEstimatedResolutionDateForm(APIFormMixin, Form):
         error_messages={"required": "Enter an estimated resolution date"},
     )
     reason = CharField(
-        label="How have you estimated this date?",
-        widget=Textarea,
-        max_length=1250
+        label="How have you estimated this date?", widget=Textarea, max_length=1250
     )
 
     def save(self):
@@ -35,9 +33,7 @@ class EditEstimatedResolutionDateForm(APIFormMixin, Form):
         error_messages={"required": "Enter an estimated resolution date"},
     )
     reason = CharField(
-        label="How have you estimated this date?",
-        widget=Textarea,
-        max_length=1250
+        label="How have you estimated this date?", widget=Textarea, max_length=1250
     )
 
     def save(self):
@@ -55,7 +51,7 @@ class DeleteEstimatedResolutionDateForm(APIFormMixin, Form):
     reason = CharField(
         label="Why do you want to remove the estimated resolution date?",
         widget=Textarea,
-        max_length=1250
+        max_length=1250,
     )
 
     def save(self):
@@ -78,7 +74,7 @@ class RejectEstimatedResolutionDateForm(APIFormMixin, Form):
     reason = CharField(
         label="Why do you want to reject the request to delete the estimated resolution date?",
         widget=Textarea,
-        max_length=1250
+        max_length=1250,
     )
 
     def save(self):
