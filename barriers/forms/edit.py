@@ -145,10 +145,10 @@ class ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id")
-        self.user = kwargs.get("user")
         self.help_text = PROGRESS_UPDATES_HELP_TEXT
 
     def clean(self):
@@ -227,10 +227,10 @@ class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id", None)
-        self.user = kwargs.get("user", None)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
