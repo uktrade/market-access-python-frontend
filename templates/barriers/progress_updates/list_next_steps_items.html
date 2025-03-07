@@ -61,5 +61,27 @@
 
     <a class="govuk-button govuk-button--secondary" href="{% url 'barriers:add_next_steps' barrier.id %}">Add</a>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <div class="govuk-inset-text">
+
+        {% if barrier.estimated_resolution_date %}
+            {% if barrier.is_top_priority %}
+                You should now review the
+                <a href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-edit-link"> estimated resolution date </a>
+                as this is a priority barrier
+            {% else %}
+                You can now review the
+                <a href="{% url 'barriers:edit_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-edit-link"> estimated resolution date </a>
+            {% endif %}
+        {% else %}
+            {% if barrier.is_top_priority %}
+                Now that you have completed your progress update you must add an
+                <a href="{% url 'barriers:add_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-add-link"> estimated resolution date </a>
+                to this priority barrier.
+            {% else %}
+                Now that you have completed your progress update you can add an
+                <a href="{% url 'barriers:add_estimated_resolution_date' barrier.id %}" class="govuk-link" id="estimated-resolution-date-add-link"> estimated resolution date </a>
+            {% endif %}
+        {% endif %}
+    </div>
     <a class="govuk-button button--primary" href="{% url 'barriers:barrier_detail' barrier.id %}">Confirm</a>
 {% endblock %}

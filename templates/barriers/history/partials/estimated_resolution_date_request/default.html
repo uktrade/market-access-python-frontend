@@ -1,0 +1,60 @@
+{% if item.new_value.status == "NEEDS_REVIEW" %}
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {% if item.new_value.estimated_resolution_date %}
+                A request was made to set the estimated resolution date to {{ item.new_value.estimated_resolution_date }}
+            {% else %}
+                A request was made to remove the estimated resolution date
+            {% endif %}
+        </span>
+    </div>
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value.reason }}
+        </span>
+    </div>
+{% elif item.new_value.status == "APPROVED" %}
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {% if item.old_value.status %}
+                {% if item.new_value.estimated_resolution_date %}
+                    A request to change the estimated resolution date to {{ item.new_value.estimated_resolution_date }} has been approved
+                {% else %}
+                    A request to remove the estimated resolution date has been approved
+                {% endif %}
+            {% else %}
+                {% if item.new_value.estimated_resolution_date %}
+                    Estimated resolution date changed to {{ item.new_value.estimated_resolution_date }}
+                {% else %}
+                    Estimated resolution date removed
+                {% endif %}
+            {% endif %}
+        </span>
+    </div>
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value.reason }}
+        </span>
+    </div>
+{% elif item.new_value.status == "REJECTED" %}
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {% if item.old_value.estimated_resolution_date %}
+                A request to change the estimated resolution date to {{ item.new_value.estimated_resolution_date }} has been rejected
+            {% else %}
+                A request to remove the estimated resolution date has been rejected
+            {% endif %}
+        </span>
+    </div>
+    <div class="history-item__new-value">
+        <span class="diff__ins" tabindex="0">
+            <p class="govuk-visually-hidden">new value: </p>
+            {{ item.new_value.reason }}
+        </span>
+    </div>
+{% endif %}
