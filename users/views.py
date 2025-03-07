@@ -494,19 +494,32 @@ class AccountSavedSearch(TemplateView):
         return context_data
 
 
-class AccountDownloads(TemplateView):
+class AccountDownloads(TemplateView, PaginationMixin):
     template_name = "users/account/downloads.html"
+    pagination_limit = 20
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        barrier_downloads = client.barrier_download.list()
+        page_number = (
+            self.request.GET.get("page") if self.request.GET.get("page") else 1
+        )
+
+        downloads_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "page": page_number,
+        }
+
+        barrier_downloads = client.barrier_download.list(**downloads_params)
 
         context_data.update(
             {
                 "page": "account",
                 "active": "my downloads",
                 "barrier_downloads": barrier_downloads,
+                "all_downloads_count": barrier_downloads.total_count,
+                "pagination": self.get_pagination_data(object_list=barrier_downloads),
             }
         )
 
@@ -548,8 +561,10 @@ class Mentions(TemplateView, PaginationMixin):
             "offset": self.get_pagination_offset(),
             "page": page_number,
         }
+
         mentions = client.mentions.list(**mentions_params)
         mention_counts = client.user_mention_counts.get()
+
         context_data.update(
             {
                 "page": "mentions",
