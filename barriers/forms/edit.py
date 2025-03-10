@@ -318,7 +318,7 @@ class EditBarrierPriorityForm(APIFormMixin, forms.Form):
             ]
 
         # Update the priority summary if it is present/amended
-        if self.fields.get("priority_summary"):
+        if self.fields.get("priority_summary") and self.cleaned_data["priority_summary"]:
             submitted_summary = self.cleaned_data["priority_summary"]
             existing_top_priority_summary = client.barriers.get_top_priority_summary(
                 barrier=self.id
