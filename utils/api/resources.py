@@ -175,7 +175,7 @@ class BarriersResource(APIResource):
 
     def get_top_priority_summary(self, **kwargs):
         return self.client.get(
-            f"barriers/{kwargs['barrier']}/top_priority_summary/{kwargs['barrier']}",
+            f"barriers/{kwargs['barrier']}/test/{kwargs['barrier']}",
             data=kwargs,
         )
 
@@ -186,7 +186,7 @@ class BarriersResource(APIResource):
 
     def patch_top_priority_summary(self, **kwargs):
         return self.client.patch(
-            f"barriers/{kwargs['barrier']}/top_priority_summary/{kwargs['barrier']}",
+            f"barriers/{kwargs['barrier']}/test/{kwargs['barrier']}",
             data=kwargs,
         )
 
