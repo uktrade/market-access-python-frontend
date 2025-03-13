@@ -4,7 +4,7 @@ from unittest import mock
 import pytest
 from django.conf import settings
 
-from barriers.forms.companies import CompanySearchForm
+from barriers.forms.companies import EditCompaniesForm
 from companies_house.api_client import CompaniesHouseAPIClient
 from companies_house.dataclasses import (
     CompanyHouseCompany,
@@ -17,7 +17,7 @@ from core.tests import MarketAccessTestCase
 
 class CompaniesHouseTestCase(MarketAccessTestCase):
 
-    mock_form = CompanySearchForm()
+    mock_form = EditCompaniesForm()
     mock_form.api_key = "An API Key"  # pragma: allowlist secret
 
     def get_company_mocked_requests_get(*args, **kwargs):
@@ -176,12 +176,12 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) == CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 1
 
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) == CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -194,7 +194,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) == CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -206,7 +206,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) == CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -219,7 +219,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) == CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -231,7 +231,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) == CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -244,7 +244,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) == CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -256,7 +256,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) == CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -269,7 +269,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) == CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 2
 
         assert mock_alert.call_count == 1
@@ -281,7 +281,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
         # Ensure the items with correct details are still returned
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) == CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=search_mocked_requests_get)
@@ -293,12 +293,12 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = CompaniesHouseAPIClient.search_companies(self.mock_form, 100)
 
-        assert type(result) == CompanyHouseSearchResult
+        assert isinstance(result, CompanyHouseSearchResult)
         assert result.total_results == 1
 
         result_item = result.items[0]
         assert len(result.items) == 1
-        assert type(result_item) == CompanyHouseSearchResultItem
+        assert isinstance(result_item, CompanyHouseSearchResultItem)
         assert result_item.title == "COMPANY WITH REQUIRED DETAILS"
 
     @mock.patch("requests.get", side_effect=get_company_mocked_requests_get)
@@ -314,7 +314,7 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = client_obj.get_company_from_id("1")
 
-        assert type(result) == CompanyHouseCompany
+        assert isinstance(result, CompanyHouseCompany)
         assert result.company_name == "FULL DETAILS"
 
     @mock.patch("requests.get", side_effect=get_company_mocked_requests_get)
@@ -349,5 +349,5 @@ class CompaniesHouseTestCase(MarketAccessTestCase):
 
         result = client_obj.get_company_from_id("1")
 
-        assert type(result) == CompanyHouseCompany
+        assert isinstance(result, CompanyHouseCompany)
         assert result.company_name == "CRUCIAL DETAILS"

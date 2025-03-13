@@ -24,19 +24,6 @@ class ArchivedHistoryItem(BaseHistoryItem):
         return value
 
 
-class CategoriesHistoryItem(BaseHistoryItem):
-    field = "categories"
-    field_name = "Barrier categories"
-
-    def get_value(self, value):
-        category_names = [
-            self.metadata.get_category(category).get("title")
-            for category in value or []
-        ]
-        category_names.sort()
-        return category_names
-
-
 class CausedByTradingBlocHistoryItem(BaseHistoryItem):
     field = "caused_by_trading_bloc"
     field_name = "Caused by trading bloc"
@@ -329,7 +316,6 @@ class BarrierHistoryItem(PolymorphicBase):
     key = "field"
     subclasses = (
         ArchivedHistoryItem,
-        CategoriesHistoryItem,
         CausedByTradingBlocHistoryItem,
         CommercialValueHistoryItem,
         CommercialValueExplanationHistoryItem,
@@ -364,3 +350,9 @@ class ProgressUpdateHistoryItem(BaseHistoryItem):
     model = "progress_update"
     field = "status"
     field_name = "Delivery Confidence"
+
+
+class EstimatedResolutionDateRequestHistoryItem(BaseHistoryItem):
+    model = "estimated_resolution_date_request"
+    field = "default"
+    field_name = "Estimated resolution date"

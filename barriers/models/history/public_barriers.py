@@ -6,19 +6,6 @@ from .base import BaseHistoryItem, GenericHistoryItem
 from .utils import PolymorphicBase
 
 
-class CategoriesHistoryItem(BaseHistoryItem):
-    field = "categories"
-    field_name = "Public categories"
-
-    def get_value(self, value):
-        category_names = [
-            self.metadata.get_category(category).get("title")
-            for category in value or []
-        ]
-        category_names.sort()
-        return category_names
-
-
 class LocationHistoryItem(BaseHistoryItem):
     field = "country"
     field_name = "Public location"
@@ -88,7 +75,6 @@ class PublicBarrierHistoryItem(PolymorphicBase):
     model = "public_barrier"
     key = "field"
     subclasses = (
-        CategoriesHistoryItem,
         LocationHistoryItem,
         PublicViewStatusHistoryItem,
         SectorsHistoryItem,

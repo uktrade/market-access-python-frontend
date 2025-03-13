@@ -18,17 +18,20 @@ from .resources import (
     DocumentsResource,
     EconomicAssessmentResource,
     EconomicImpactAssessmentResource,
+    ErdRequestResource,
     FeedbackResource,
     GroupsResource,
     MentionResource,
     NotesResource,
     NotificationExclusionResource,
+    PreliminaryAssessmentResource,
     PublicBarrierNotesResource,
     PublicBarriersResource,
     ReportsResource,
     ResolvabilityAssessmentResource,
     SavedSearchesResource,
     StrategicAssessmentResource,
+    UserMentionCountsResource,
     UserProfileResource,
     UsersResource,
 )
@@ -40,6 +43,7 @@ class MarketAccessAPIClient:
     def __init__(self, token=None, **kwargs):
         self.token = token
         self.barriers = BarriersResource(self)
+        self.erd_request = ErdRequestResource(self)
         self.documents = DocumentsResource(self)
         self.economic_assessments = EconomicAssessmentResource(self)
         self.economic_impact_assessments = EconomicImpactAssessmentResource(self)
@@ -54,6 +58,7 @@ class MarketAccessAPIClient:
         self.saved_searches = SavedSearchesResource(self)
         self.users = UsersResource(self)
         self.mentions = MentionResource(self)
+        self.user_mention_counts = UserMentionCountsResource(self)
         self.notification_exclusion = NotificationExclusionResource(self)
         self.action_plans = ActionPlanResource(self)
         self.action_plan_milestones = ActionPlanMilestoneResource(self)
@@ -63,6 +68,7 @@ class MarketAccessAPIClient:
         self.barrier_download = BarrierDownloadsResource(self)
         self.dashboard_tasks = DashboardTasksResource(self)
         self.profile = UserProfileResource(self)
+        self.preliminary_assessment = PreliminaryAssessmentResource(self)
 
     def request(self, method, path, **kwargs):
         url = f"{settings.MARKET_ACCESS_API_URI}{path}"

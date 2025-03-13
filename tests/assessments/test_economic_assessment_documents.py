@@ -166,7 +166,10 @@ class EconomicAssessmentDocumentsTestCase(MarketAccessTestCase):
         ]
         assert session_document_ids == document_ids[1:]
 
-    def test_strategic_assessments(self):
+    @patch(
+        "utils.api.resources.PreliminaryAssessmentResource.get_preliminary_assessment"
+    )
+    def test_strategic_assessments(self, mock_get_preliminary_assessment):
         url = reverse(
             "barriers:assessment_detail",
             kwargs={

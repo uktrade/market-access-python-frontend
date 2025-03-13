@@ -285,29 +285,35 @@ EXPORT_TYPES = Choices(
     ("investments", "Investments"),
 )
 
+PRELIMINARY_ASSESSMENT_CHOICES = Choices(
+    ("1", "Greater than £10 million over 5 years"),
+    ("2", "Less than £10 million over 5 years"),
+    ("3", "Unable to assess"),
+)
+
 # Related barriers rag tags
 RELATED_BARRIER_TAGS = {
     "duplicate": {
         "lower_boundary": 0.9,
-        "upper_boundary": 1,
+        "upper_boundary": 2,
         "label": "Potential duplicate",
         "class": "govuk-tag--green",
     },
     "similar": {
         "lower_boundary": 0.7,
-        "upper_boundary": 0.8,
+        "upper_boundary": 0.9,
         "label": "Very similar",
         "class": "govuk-tag--turquoise",
     },
     "good": {
         "lower_boundary": 0.4,
-        "upper_boundary": 0.6,
+        "upper_boundary": 0.7,
         "label": "Good match",
         "class": "govuk-tag--blue",
     },
     "some": {
         "lower_boundary": 0.2,
-        "upper_boundary": 0.3,
+        "upper_boundary": 0.4,
         "label": "Some relevance",
         "class": "govuk-tag--purple",
     },
@@ -317,4 +323,16 @@ RELATED_BARRIER_TAGS = {
         "label": "Poor match",
         "class": "govuk-tag--pink",
     },
+}
+
+PROGRESS_UPDATES = Choices(
+    ("ON_TRACK", "On Track"),
+    ("RISK_OF_DELAY", "Risk of delay"),
+    ("DELAYED", "Delayed"),
+)
+
+PROGRESS_UPDATES_HELP_TEXT = {
+    PROGRESS_UPDATES.ON_TRACK: "Barrier will be resolved in the target financial year",
+    PROGRESS_UPDATES.RISK_OF_DELAY: "Barrier might not be resolved in the target financial year",
+    PROGRESS_UPDATES.DELAYED: "Barrier will not be resolved in the target financial year",
 }

@@ -68,7 +68,7 @@ if [ "$is_load_test" = "true" ]; then
     PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" TEST_HEADLESS="$is_headless" pytest -c $pytest_config_file "test_frontend_load/$target"
 else
     # Normal end-to-end testing with Playwright and pytest
-    PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" TEST_HEADLESS="$is_headless" pytest -c $pytest_config_file "test_frontend/$target"
+    PWDEBUG=0 BASE_FRONTEND_TESTING_URL="$target_url" TEST_HEADLESS="$is_headless" pytest -rA -c $pytest_config_file "test_frontend/$target"
 fi
 
 # Deactivate python virtual environment

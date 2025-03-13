@@ -1,7 +1,6 @@
 import logging
 from http import HTTPStatus
 
-import dateutil.parser
 from django.urls import reverse
 from mock import patch
 
@@ -314,20 +313,6 @@ class EditPriorityTestCase(MarketAccessTestCase):
 
 
 class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
-    def test_edit_estimated_resolution_date_has_initial_data(self):
-        response = self.client.get(
-            reverse(
-                "barriers:edit_estimated_resolution_date",
-                kwargs={"barrier_id": self.barrier["id"]},
-            )
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert "form" in response.context
-        form = response.context["form"]
-        assert form.initial["estimated_resolution_date"] == dateutil.parser.parse(
-            self.barrier["estimated_resolution_date"]
-        )
-
     @patch("utils.api.resources.APIResource.patch")
     @patch("utils.api.resources.UsersResource.get_current")
     def test_estimated_resolution_date_cannot_be_empty(self, mock_user, mock_patch):
@@ -385,53 +370,6 @@ class EditEstimatedResolutionDateTestCase(MarketAccessTestCase):
         assert form.is_valid() is False
         assert "estimated_resolution_date" in form.errors
         assert mock_patch.called is False
-
-    @patch("utils.api.resources.APIResource.patch")
-    @patch("utils.api.resources.UsersResource.get_current")
-    def test_edit_estimated_resolution_date_calls_api(self, mock_user, mock_patch):
-        mock_user.return_value = self.administrator
-        mock_patch.return_value = self.barrier
-        response = self.client.post(
-            reverse(
-                "barriers:edit_estimated_resolution_date",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={
-                "estimated_resolution_date_0": "6",
-                "estimated_resolution_date_1": "2022",
-            },
-        )
-        mock_patch.assert_called_with(
-            id=self.barrier["id"],
-            estimated_resolution_date="2022-06-01",
-            proposed_estimated_resolution_date="2022-06-01",
-            estimated_resolution_date_change_reason="",
-        )
-        assert response.status_code == HTTPStatus.FOUND
-
-    @patch("utils.api.resources.APIResource.patch")
-    @patch("utils.api.resources.UsersResource.get_current")
-    def test_clear_estimated_resolution_date_calls_api(self, mock_user, mock_patch):
-        mock_user.return_value = self.administrator
-        mock_patch.return_value = self.barrier
-        response = self.client.post(
-            reverse(
-                "barriers:edit_estimated_resolution_date",
-                kwargs={"barrier_id": self.barrier["id"]},
-            ),
-            data={
-                "estimated_resolution_date_0": "6",
-                "estimated_resolution_date_1": "2022",
-                "clear": "1",
-            },
-        )
-        mock_patch.assert_called_with(
-            id=self.barrier["id"],
-            estimated_resolution_date=None,
-            proposed_estimated_resolution_date=None,
-            estimated_resolution_date_change_reason="",
-        )
-        assert response.status_code == HTTPStatus.FOUND
 
 
 class EditCausedByTradingBlocTestCase(MarketAccessTestCase):

@@ -18,6 +18,7 @@ from barriers.models import (
     EconomicImpactAssessment,
     HistoryItem,
     Note,
+    PreliminaryAssessment,
     PublicBarrier,
     PublicBarrierNote,
     ResolvabilityAssessment,
@@ -26,11 +27,16 @@ from barriers.models import (
     StrategicAssessment,
 )
 from barriers.models.action_plans import ActionPlanTask, Milestone
+from barriers.models.erd_request import ErdRequest
 from barriers.models.feedback import Feedback
-from barriers.models.history.mentions import Mention, NotificationExclusion
+from barriers.models.history.mentions import (
+    Mention,
+    NotificationExclusion,
+    UserMentionCounts,
+)
 from reports.models import Report
 from users.models import DashboardTask, Group, User, UserProfile
-from utils.exceptions import ScanError
+from utils.exceptions import APIHttpException, ScanError
 from utils.models import APIModel, ModelList
 
 if TYPE_CHECKING:
@@ -318,6 +324,21 @@ class GroupsResource(APIResource):
     resource_name = "groups"
     model = Group
 
+    def list(self, **kwargs) -> ModelList:
+        if not settings.DISPLAY_ROLE_ADMIN_GROUP:
+            response_data = self.client.get(self.resource_name, params=kwargs)
+            data = [
+                result
+                for result in response_data["results"]
+                if result["name"] != "Role administrator"
+            ]
+            return ModelList(
+                model=self.model,
+                data=data,
+                total_count=len(data),
+            )
+        return super().list(**kwargs)
+
 
 class DashboardTasksResource(APIResource):
     resource_name = "dashboard-tasks"
@@ -392,6 +413,46 @@ class EconomicImpactAssessmentResource(APIResource):
     model = EconomicImpactAssessment
 
 
+class ErdRequestResource(APIResource):
+    resource_name = "erd-requests"
+    model = ErdRequest
+
+    def get(self, barrier_id):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        try:
+            return self.model(self.client.get(url))
+        except APIHttpException:
+            pass
+
+    def delete(self, barrier_id, reason):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        return self.model(
+            self.client.post(
+                url, json={"reason": reason, "estimated_resolution_date": None}
+            )
+        )
+
+    def create(self, barrier_id, estimated_resolution_date, reason):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request"
+        return self.model(
+            self.client.post(
+                url,
+                json={
+                    "estimated_resolution_date": estimated_resolution_date,
+                    "reason": reason,
+                },
+            )
+        )
+
+    def approve(self, barrier_id):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request/approve"
+        return self.model(self.client.post(url))
+
+    def reject(self, barrier_id, reason):
+        url = f"barriers/{barrier_id}/estimated-resolution-date-request/reject"
+        return self.model(self.client.post(url, json={"reason": reason}))
+
+
 class ResolvabilityAssessmentResource(APIResource):
     resource_name = "resolvability-assessments"
     model = ResolvabilityAssessment
@@ -421,6 +482,11 @@ class MentionResource(APIResource):
     def mark_all_as_unread(self):
         url = "mentions/mark-all-as-unread"
         return self.model(self.client.get(url))
+
+
+class UserMentionCountsResource(APIResource):
+    resource_name = "mentions/counts"
+    model = UserMentionCounts
 
 
 class NotificationExclusionResource(APIResource):
@@ -547,3 +613,20 @@ class BarrierDownloadsResource(APIResource):
 class UserProfileResource(APIResource):
     resource_name = "users/profile"
     model = UserProfile
+
+
+class PreliminaryAssessmentResource(APIResource):
+    resource_name = "preliminary-assessment"
+    model = PreliminaryAssessment
+
+    def get_preliminary_assessment(self, barrier_id):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.get(url))
+
+    def create_preliminary_assessment(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.post(url, json=kwargs))
+
+    def patch_preliminary_assessment(self, barrier_id, *args, **kwargs):
+        url = f"barriers/{barrier_id}/preliminary-assessment"
+        return self.model(self.client.patch(url, json=kwargs))

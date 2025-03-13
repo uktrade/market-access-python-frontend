@@ -11,7 +11,6 @@ COMMENT_TEMPLATE = "<!--{comment}-->\n"
 
 
 def pingdom(request):
-    print("processing")
     checked = {}
     for service in services_to_check:
         checked[service.name] = service().check()

@@ -45,7 +45,7 @@ class BarrierSearchFilterValuesTestCase(MarketAccessTestCase):
     form_class = BarrierSearchForm
     parsed_checkboxes = None
 
-    excluded_fields = ["extra_location", "category"]
+    excluded_fields = ["extra_location"]
 
     @classmethod
     def generate_test_for_checkbox_values_equal_to_choices(cls, field_name):

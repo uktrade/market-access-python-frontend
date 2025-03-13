@@ -57,6 +57,14 @@
                 <li class="datahub-header__navigation__item">
                     <a class="datahub-header__navigation__item__link" href="https://data-services-help.trade.gov.uk/market-access/">Help centre</a>
                 </li>
+                <li class="datahub-header__navigation__item">
+                    <a class="datahub-header__navigation__item__link{% if page == 'mentions' %} datahub-header__navigation__item__link--active{% endif %}" href="{% url 'users:mentions' %}">
+                        {% if user_mention_counts.display_count %}
+                            <span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{user_mention_counts.display_count }}</span>
+                        {% endif %}
+                        Notifications
+                    </a>
+                </li>
 
                 {% if current_user|has_permission:"change_user" %}
                     <li class="datahub-header__navigation__item">

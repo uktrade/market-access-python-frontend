@@ -1,25 +1,63 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.urls import reverse
 
 from users.models import User
 from utils.api.client import MarketAccessAPIClient
+from utils.exceptions import APIHttpException
 
 
 def get_user(request):
     user_id = request.session.get("user_data", {}).get("id")
-    if user_id:
-        cache_key = f"user_data:{user_id}"
-        user_data = cache.get(cache_key)
-        if user_data is not None:
-            return User(user_data)
+    if not user_id:
+        return
 
-        client = MarketAccessAPIClient(request.session.get("sso_token"))
-        return client.users.get_current()
+    cache_key = f"user_data:{user_id}"
+    user_data = cache.get(cache_key)
+    if user_data is not None:
+        return User(user_data)
+
+    client = MarketAccessAPIClient(request.session.get("sso_token"))
+    try:
+        user = client.users.get_current()
+        return user
+    except APIHttpException as e:
+        if e.status_code == 401:
+            return reverse("users:login")
+        else:
+            raise
+
+
+def get_mention_counts(request):
+    sso_token = request.session.get("sso_token")
+    if not sso_token:
+        return
+
+    client = MarketAccessAPIClient(sso_token)
+    resource = client.user_mention_counts.get()
+    unread_count = resource.total - resource.read_by_recipient
+    counts = {
+        "total": resource.total,
+        "read_by_recipient": resource.read_by_recipient,
+        "display_count": unread_count if unread_count <= 99 else "99+",
+    }
+    return counts
 
 
 def user_scope(request):
     user = get_user(request)
-    return {"current_user": user}
+
+    return {
+        "current_user": user,
+    }
+
+
+def user_mention_counts(request):
+    counts = get_mention_counts(request)
+
+    return {
+        "user_mention_counts": counts,
+    }
 
 
 def feature_flags(request):

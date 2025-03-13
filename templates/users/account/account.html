@@ -5,7 +5,7 @@
     {{ block.super }} - Account
 {% endblock page_title %}
 {% block masthead %}
-    <div class="grey">{% include "users/partials/account/banner.html" with active=active %}</div>
+    {% include "users/partials/account/banner.html" with active=active %}
 {% endblock masthead %}
 {% block page_content %}
     <section class="govuk-grid-row">

@@ -6,6 +6,9 @@
 	&:first-child {
 		margin-top: govuk-em( 32, 16 );
 	}
+	&.archived {
+		opacity: 0.5;
+	}
 }
 
 .assessment-item__heading {

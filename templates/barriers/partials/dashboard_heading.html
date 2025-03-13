@@ -1,6 +1,32 @@
-<h1 class="govuk-heading-l">
-    <span class="govuk-caption-m">Market access barriers</span> Dashboard
-</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-m">Market access barriers</span> Dashboard
+        </h1>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <!-- Dashboard version Toggle  -->
+        <div class="dashboard-banner">
+            <div class="govuk-notification-banner"
+                 role="region"
+                 aria-labelledby="govuk-notification-banner-title"
+                 data-module="govuk-notification-banner">
+                <div class="govuk-notification-banner__content">
+                    <p class="govuk-heading-s">
+                        Use the new dashboard
+                        <label for="dashboard_switch" class="switch">
+                            <input type="checkbox"
+                                   id="dashboard_switch"
+                                   aria-label="Switch to new dashboard"
+                                   onclick='window.location.assign("/home/?default=home")'>
+                            <span class="slider round"></span>
+                        </label>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% now 'c' as tz_now %}
 {% comment %} c formats current time to ISO 8601 format e.g. 2008-01-02T10:30:00.000123+02:00 {% endcomment %}
 {% if tz_now < '2024-10-01T10:00:00.000000+00:00' %}
@@ -8,9 +34,12 @@
          role="region"
          aria-labelled-by="notification-banner"
          data-module="dash-insert__content">
-        <div tabindex="0" >
+        <div tabindex="0">
             <div class="dash-insert__title">Add policy teams to barriers</div>
-            <div class="dash-insert__content">You can now add policy teams to barriers, to help the right teams find and resolve them. <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/how-to-add-policy-teams-to-help-resolve-barriers-in-dmas/" class="govuk-link" target="_blank">Find out how.</a>
+            <div class="dash-insert__content">
+                You can now add policy teams to barriers, to help the right teams find and resolve them. <a href="https://data-services-help.trade.gov.uk/market-access/how-guides/how-to-add-policy-teams-to-help-resolve-barriers-in-dmas/"
+                                                                                                            class="govuk-link"
+                                                                                                            target="_blank">Find out how.</a>
             </div>
         </div>
     </div>

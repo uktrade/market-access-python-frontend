@@ -10,6 +10,7 @@ from users.account.views import (
 from users.views import (
     Account,
     AccountDownloads,
+    AccountDrafts,
     AccountSavedSearch,
     AddUser,
     DeleteUser,
@@ -19,6 +20,7 @@ from users.views import (
     Login,
     LoginCallback,
     ManageUsers,
+    Mentions,
     SignOut,
     UserDetail,
 )
@@ -48,6 +50,11 @@ urlpatterns = [
         name="account_downloads",
     ),
     path(
+        "account/drafts/",
+        AccountDrafts.as_view(),
+        name="account_drafts",
+    ),
+    path(
         "account/policy-teams/edit/",
         UserEditPolicyTeams.as_view(),
         name="edit_user_policy_teams",
@@ -72,4 +79,5 @@ urlpatterns = [
         UserEditGovernmentDepartment.as_view(),
         name="edit_user_government_department",
     ),
+    path("mentions/", Mentions.as_view(), name="mentions"),
 ]

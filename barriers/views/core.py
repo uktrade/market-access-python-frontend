@@ -2,6 +2,7 @@ import logging
 import urllib.parse
 
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -11,7 +12,7 @@ from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
 
-from .mixins import AnalyticsMixin, BarrierMixin
+from .mixins import AdminMixin, AnalyticsMixin, BarrierMixin
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,26 @@ class Dashboard(AnalyticsMixin, TemplateView):
             "utm_campaign": "dashboard",
         }
     }
+
+    def get(self, *args, **kwargs):
+
+        # Check to see if new default is being set
+        default_home_page = self.request.GET.get("default", None)
+
+        if default_home_page == "home":
+            # set home as the default
+            self.request.session["default"] = "home"
+        elif default_home_page == "dashboard":
+            # set home as the default
+            self.request.session["default"] = "dashboard"
+
+        # Check default dashboard current session
+        current_default = self.request.session.get("default", None)
+
+        if current_default == "home":
+            return redirect("barriers:home")
+
+        return super().get(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -52,9 +73,6 @@ class Dashboard(AnalyticsMixin, TemplateView):
                 "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
-                "new_mentions_count": len(
-                    [mention for mention in mentions if not mention.read_by_recipient]
-                ),
                 "active": active,
                 "barrier_downloads": barrier_downloads,
             }
@@ -62,7 +80,7 @@ class Dashboard(AnalyticsMixin, TemplateView):
         return context_data
 
 
-class BarrierDetail(AnalyticsMixin, BarrierMixin, TemplateView):
+class BarrierDetail(AdminMixin, AnalyticsMixin, BarrierMixin, TemplateView):
     template_name = "barriers/barrier_detail.html"
     include_interactions = True
     utm_tags = {
@@ -100,19 +118,30 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
     form_class = BarrierSearchForm
 
     # Let the pagination mixin know how many results the API will return per page
-    pagination_limit = 5
+    pagination_limit = 3
+
+    def get(self, form, *args, **kwargs):
+
+        # Check to see if new default is being set
+        default_home_page = self.request.GET.get("default", None)
+        if default_home_page == "home":
+            # set home as the default
+            self.request.session["default"] = "home"
+        elif default_home_page == "dashboard":
+            # set home as the default
+            self.request.session["default"] = "dashboard"
+
+        # Check default dashboard current session
+        current_default = self.request.session.get("default", None)
+        if current_default == "dashboard":
+            return redirect("barriers:dashboard")
+
+        return super().get(form, *args, **kwargs)
 
     def get_context_data(self, form, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        # active = self.request.GET.get("active", "barriers")
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-        # my_barriers_saved_search = client.saved_searches.get("my-barriers")
-        # team_barriers_saved_search = client.saved_searches.get("team-barriers")
         mentions = client.mentions.list()
-        # draft_barriers = client.reports.list()
-        # saved_searches = client.saved_searches.list()
-        # notification_exclusion = client.notification_exclusion.get()
-        # barrier_downloads = client.barrier_download.list()
 
         are_all_mentions_read: bool = not any(
             not mention.read_by_recipient for mention in mentions
@@ -128,7 +157,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
             "page": page_number,
         }
         # Get list of tasks for the user from the API
-        task_list = client.dashboard_tasks.list(**api_task_list_params)
+        barrier_task_list = client.dashboard_tasks.list(**api_task_list_params)
 
         params = form.get_api_search_parameters()
 
@@ -161,25 +190,21 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
                     metadata.get_admin_area_list()
                 ),
                 "countries_with_admin_areas": metadata.get_countries_with_admin_areas_list(),
-                # "my_barriers_saved_search": my_barriers_saved_search,
-                # "team_barriers_saved_search": team_barriers_saved_search,
-                # "draft_barriers": draft_barriers,
-                # "saved_searches": saved_searches,
-                # "notification_exclusion": notification_exclusion,
                 "mentions": mentions,
                 "are_all_mentions_read": are_all_mentions_read,
                 "new_mentions_count": len(
                     [mention for mention in mentions if not mention.read_by_recipient]
                 ),
                 "filters": form.get_readable_filters(True),
-                # "active": active,
-                # "barrier_downloads": barrier_downloads,
-                "task_list": task_list,
+                "barrier_task_list": barrier_task_list,
                 "summary_stats": summary_stats,
                 "search_params": search_params,
             }
         )
-        context_data["pagination"] = self.get_pagination_data(object_list=task_list)
+
+        context_data["pagination"] = self.get_pagination_data(
+            object_list=barrier_task_list
+        )
 
         return context_data
 
@@ -207,6 +232,10 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
 class GetDashboardSummary(View):
     def get(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(request.session.get("sso_token"))
-        summary_url = f"dashboard-summary?{request.GET.urlencode()}"
+        query_str = "&".join(
+            urllib.parse.urlencode({key: ",".join(request.GET.getlist(key))})
+            for key in request.GET
+        )
+        summary_url = f"dashboard-summary?{query_str}"
         resp = client.get(summary_url)
         return JsonResponse(resp)

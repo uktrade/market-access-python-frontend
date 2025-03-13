@@ -109,24 +109,6 @@ class MetadataTestCase(MarketAccessTestCase):
         assert metadata.get_priority("MEDIUM")["name"] == "Medium"
         assert metadata.get_priority("LOW")["name"] == "Low"
 
-    def test_get_category_list(self):
-        metadata = get_metadata()
-        categories = metadata.get_category_list()
-        titles = [category["title"] for category in categories]
-
-        assert "Customs procedures" in titles
-        assert "Government subsidies" in titles
-        assert "Rules of origin" in titles
-        assert "Tariffs or import duties" in titles
-
-    def test_get_category(self):
-        metadata = get_metadata()
-
-        category = metadata.get_category("130")
-
-        assert category["title"] == "Price controls"
-        assert category["category"] == "GOODS"
-
     def test_get_policy_team_list(self):
         metadata = get_metadata()
         policy_teams = metadata.get_policy_team_list()
@@ -147,22 +129,6 @@ class MetadataTestCase(MarketAccessTestCase):
             "Competition policy is about making sure UK firms"
             in policy_team["description"]
         )
-
-    def test_get_goods(self):
-        metadata = get_metadata()
-
-        barrier_types = metadata.get_goods()
-        assert len(barrier_types) > 0
-        for barrier_type in barrier_types:
-            assert barrier_type["category"] == "GOODS"
-
-    def test_get_services(self):
-        metadata = get_metadata()
-
-        barrier_types = metadata.get_services()
-        assert len(barrier_types) > 0
-        for barrier_type in barrier_types:
-            assert barrier_type["category"] == "SERVICES"
 
     def test_get_tag_that_does_not_exist(self):
         metadata = get_metadata()

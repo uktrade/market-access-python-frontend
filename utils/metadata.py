@@ -250,33 +250,6 @@ class Metadata:
             if priority["code"] == priority_code:
                 return priority
 
-    def get_category_list(self, sort=True):
-        """
-        Dedupe and sort the barrier types
-        """
-        ids = []
-        unique_categories = []
-        for category in self.data.get("categories"):
-            if category["id"] not in ids:
-                unique_categories.append(category)
-                ids.append(category["id"])
-
-        if sort:
-            unique_categories.sort(key=itemgetter("title"))
-        return unique_categories
-
-    def get_category(self, category_id):
-        for category in self.data["categories"]:
-            if str(category["id"]) == str(category_id):
-                return category
-
-    def get_categories_by_group(self, group):
-        return [
-            category
-            for category in self.get_category_list(sort=False)
-            if category["category"] == group
-        ]
-
     def get_policy_team_list(self, sort=True):
         """
         Dedupe and sort the policy teams
@@ -297,12 +270,6 @@ class Metadata:
         for policy_team in self.data["policy_teams"]:
             if str(policy_team["id"]) == str(policy_team_id):
                 return policy_team
-
-    def get_goods(self):
-        return self.get_categories_by_group("GOODS")
-
-    def get_services(self):
-        return self.get_categories_by_group("SERVICES")
 
     def get_economic_assessment_impact(self):
         return self.data.get("economic_assessment_impact", {})

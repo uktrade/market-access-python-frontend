@@ -5,40 +5,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, View
 
-from barriers.forms.companies import (
-    AddCompanyForm,
-    CompanySearchForm,
-    EditCompaniesForm,
-)
+from barriers.forms.companies import AddCompanyForm, EditCompaniesForm
 from companies_house.api_client import CompaniesHouseAPIClient
 from config.settings.base import COMPANIES_HOUSE_API_ENDPOINT, COMPANIES_HOUSE_API_KEY
-from utils.exceptions import APIException
 
 from .mixins import BarrierMixin
 
 logger = logging.getLogger(__name__)
-
-
-class BarrierSearchCompany(BarrierMixin, FormView):
-    template_name = "barriers/companies/search.html"
-    form_class = CompanySearchForm
-
-    def form_valid(self, form):
-        error = None
-        companies_house_api_client = CompaniesHouseAPIClient(
-            api_key=COMPANIES_HOUSE_API_KEY, api_endpoint=COMPANIES_HOUSE_API_ENDPOINT
-        )
-        try:
-            results = companies_house_api_client.search_companies(
-                form.cleaned_data["query"], 100
-            )
-        except APIException:
-            error = "There was an error finding the company"
-            results = []
-
-        return self.render_to_response(
-            self.get_context_data(form=form, results=results, error=error)
-        )
 
 
 class CompanyDetail(BarrierMixin, FormView):

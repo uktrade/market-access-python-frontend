@@ -31,11 +31,11 @@
 
     {% if active == 'mentions' %}
         <li class="page-tabs__tab page-tabs__tab--active">
-            <span class="page-tabs__tab__text">Mentions {% if new_mentions_count %}<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ new_mentions_count }}</span>{% endif %}</span>
+            <span class="page-tabs__tab__text">Mentions {% if user_mention_counts.display_count %}<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ user_mention_counts.display_count }}</span>{% endif %}</span>
         </li>
     {% else %}
         <li class="page-tabs__tab">
-            <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?active=mentions">Mentions {% if new_mentions_count %}<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ new_mentions_count }}</span>{% endif %}</a>
+            <a class="page-tabs__tab__text" href="{% url 'barriers:dashboard' %}?active=mentions">Mentions {% if user_mention_counts.display_count %}<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">{{ user_mention_counts.display_count }}</span>{% endif %}</a>
         </li>
     {% endif %}
 </ul>

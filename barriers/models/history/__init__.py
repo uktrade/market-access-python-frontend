@@ -4,11 +4,18 @@ from barriers.models.history.action_plans import (
     ActionPlanTaskHistoryItem,
 )
 
-from .assessments.economic import EconomicAssessmentHistoryItem
+from .assessments.economic import (
+    EconomicAssessmentHistoryItem,
+    PreliminaryAssessmentHistoryItem,
+)
 from .assessments.economic_impact import EconomicImpactAssessmentHistoryItem
 from .assessments.resolvability import ResolvabilityAssessmentHistoryItem
 from .assessments.strategic import StrategicAssessmentHistoryItem
-from .barriers import BarrierHistoryItem, ProgressUpdateHistoryItem
+from .barriers import (
+    BarrierHistoryItem,
+    EstimatedResolutionDateRequestHistoryItem,
+    ProgressUpdateHistoryItem,
+)
 from .notes import NoteHistoryItem
 from .programme_funds import ProgrammeFundsHistoryItem
 from .public_barrier_notes import PublicBarrierNoteHistoryItem
@@ -45,5 +52,7 @@ class HistoryItem(PolymorphicBase):
         ProgressUpdateHistoryItem,
         BarrierTopPrioritySummaryItem,
         ProgrammeFundsHistoryItem,
+        PreliminaryAssessmentHistoryItem,
+        EstimatedResolutionDateRequestHistoryItem,
     )
     class_lookup = {}

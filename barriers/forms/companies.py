@@ -8,17 +8,6 @@ from utils.api.client import MarketAccessAPIClient
 logger = logging.getLogger(__name__)
 
 
-class CompanySearchForm(forms.Form):
-    query = forms.CharField(
-        label="Find the affected company",
-        max_length=255,
-        error_messages={
-            "max_length": "Entry should be %(limit_value)d characters or less",
-            "required": "Enter a company name, address or number",
-        },
-    )
-
-
 class AddCompanyForm(forms.Form):
     company_id = forms.CharField()
 

@@ -39,6 +39,7 @@ from barriers.views.assessments.economic_impact import (
     EconomicImpactAssessmentDetail,
 )
 from barriers.views.assessments.overview import AssessmentOverview
+from barriers.views.assessments.preliminary_assessment import PreliminaryAssessmentValue
 from barriers.views.assessments.resolvability import (
     AddResolvabilityAssessment,
     ArchiveResolvabilityAssessment,
@@ -51,18 +52,11 @@ from barriers.views.assessments.strategic import (
     EditStrategicAssessment,
     StrategicAssessmentDetail,
 )
-from barriers.views.categories import (
-    AddCategory,
-    BarrierEditCategories,
-    BarrierEditCategoriesSession,
-    BarrierRemoveCategory,
-)
 from barriers.views.commodities import BarrierEditCommodities
 from barriers.views.companies import (
     BarrierEditCompanies,
     BarrierEditCompaniesSession,
     BarrierRemoveCompany,
-    BarrierSearchCompany,
     CompanyDetail,
 )
 from barriers.views.documents import DownloadDocument
@@ -70,8 +64,6 @@ from barriers.views.edit import (
     BarrierEditCausedByTradingBloc,
     BarrierEditCommercialValue,
     BarrierEditEconomicAssessmentEligibility,
-    BarrierEditEstimatedResolutionDate,
-    BarrierEditEstimatedResolutionDateConfirmationPage,
     BarrierEditPriority,
     BarrierEditProduct,
     BarrierEditStartDate,
@@ -182,6 +174,15 @@ from .views.core import (
     GetDashboardSummary,
     Home,
     WhatIsABarrier,
+)
+from .views.estimated_resolution_date import (
+    AddEstimatedResolutionDateFormView,
+    ApproveEstimatedResolutionDateFormView,
+    ConfirmationEstimatedResolutionDateFormView,
+    DeleteEstimatedResolutionDateFormView,
+    EditEstimatedResolutionDateFormView,
+    RejectEstimatedResolutionDateFormView,
+    ReviewEstimatedResolutionDateFormView,
 )
 from .views.related_barriers import RelatedBarriers
 
@@ -317,19 +318,14 @@ urlpatterns = [
         name="economic_assessment_eligibility",
     ),
     path(
-        "barriers/<uuid:barrier_id>/edit/estimated-resolution-date/",
-        BarrierEditEstimatedResolutionDate.as_view(),
-        name="edit_estimated_resolution_date",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/edit/estimated-resolution-date/confirmation/",
-        BarrierEditEstimatedResolutionDateConfirmationPage.as_view(),
-        name="edit_estimated_resolution_date_confirmation_page",
-    ),
-    path(
         "barriers/<uuid:barrier_id>/edit/commercial-value/",
         BarrierEditCommercialValue.as_view(),
         name="edit_commercial_value",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/edit/preliminary-assessment/",
+        PreliminaryAssessmentValue.as_view(),
+        name="edit_preliminary_assessment",
     ),
     path(
         "barriers/<uuid:barrier_id>/edit/commodities/",
@@ -453,26 +449,6 @@ urlpatterns = [
         name="change_status",
     ),
     path(
-        "barriers/<uuid:barrier_id>/types/",
-        BarrierEditCategoriesSession.as_view(),
-        name="edit_categories_session",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/types/edit/",
-        BarrierEditCategories.as_view(),
-        name="edit_categories",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/types/remove/",
-        BarrierRemoveCategory.as_view(),
-        name="remove_category",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/types/add/",
-        AddCategory.as_view(),
-        name="add_category",
-    ),
-    path(
         "barriers/<uuid:barrier_id>/policy-teams/",
         BarrierEditPolicyTeamsSession.as_view(),
         name="edit_policy_teams_session",
@@ -546,11 +522,6 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/companies/edit/",
         BarrierEditCompanies.as_view(),
         name="edit_companies",
-    ),
-    path(
-        "barriers/<uuid:barrier_id>/companies/search/",
-        BarrierSearchCompany.as_view(),
-        name="search_company",
     ),
     path(
         "barriers/<uuid:barrier_id>/companies/remove/",
@@ -909,6 +880,41 @@ urlpatterns = [
         "barriers/<uuid:barrier_id>/related/",
         RelatedBarriers.as_view(),
         name="related_barriers_detail",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/estimated-resolution-date/add",
+        AddEstimatedResolutionDateFormView.as_view(),
+        name="add_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/estimated-resolution-date/edit",
+        EditEstimatedResolutionDateFormView.as_view(),
+        name="edit_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/estimated-resolution-date/delete",
+        DeleteEstimatedResolutionDateFormView.as_view(),
+        name="delete_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/estimated-resolution-date/review",
+        ReviewEstimatedResolutionDateFormView.as_view(),
+        name="review_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/estimated-resolution-date/reject",
+        RejectEstimatedResolutionDateFormView.as_view(),
+        name="reject_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/estimated-resolution-date/approve",
+        ApproveEstimatedResolutionDateFormView.as_view(),
+        name="approve_estimated_resolution_date",
+    ),
+    path(
+        "barriers/<uuid:barrier_id>/estimated-resolution-date/confirmation",
+        ConfirmationEstimatedResolutionDateFormView.as_view(),
+        name="confirmation_estimated_resolution_date",
     ),
     path("dashboard-summary/", GetDashboardSummary.as_view(), name="dashboard_summary"),
 ]

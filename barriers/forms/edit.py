@@ -3,11 +3,12 @@ import logging
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
 from barriers.constants import (
     DEPRECATED_TAGS,
+    PROGRESS_UPDATES,
+    PROGRESS_UPDATES_HELP_TEXT,
     TOP_PRIORITY_BARRIER_STATUS,
     TOP_PRIORITY_BARRIER_STATUS_APPROVAL_CHOICES,
     TOP_PRIORITY_BARRIER_STATUS_APPROVE_REMOVAL_CHOICES,
@@ -26,7 +27,7 @@ from utils.forms.fields import (
 )
 from utils.forms.mixins import ClearableMixin
 
-from .mixins import APIFormMixin, EstimatedResolutionDateApprovalMixin
+from .mixins import APIFormMixin
 
 logger = logging.getLogger(__name__)
 
@@ -110,35 +111,10 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         )
 
 
-class ProgressUpdateForm(
-    ClearableMixin, EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
-):
-    CHOICES = [
-        (
-            "ON_TRACK",
-            mark_safe(
-                "<span class='govuk-body'>On Track</span> <span class='govuk-hint'>Barrier will be resolved"
-                " in the target financial year</span>"
-            ),
-        ),
-        (
-            "RISK_OF_DELAY",
-            mark_safe(
-                "<span class='govuk-body'>Risk of delay</span> <span class='govuk-hint'>Barrier might not be"
-                " resolved in the target financial year</span>"
-            ),
-        ),
-        (
-            "DELAYED",
-            mark_safe(
-                "<span class='govuk-body'>Delayed</span> <span class='govuk-hint'>Barrier will not be"
-                " resolved in the target financial year</span>"
-            ),
-        ),
-    ]
+class ProgressUpdateForm(ClearableMixin, APIFormMixin, forms.Form):
     status = forms.ChoiceField(
         label="Delivery confidence",
-        choices=CHOICES,
+        choices=PROGRESS_UPDATES,
         widget=forms.RadioSelect,
         error_messages={
             "required": "Select if delivery is on track, at risk of delay or delayed"
@@ -168,34 +144,12 @@ class ProgressUpdateForm(
         required=False,
     )
 
-    estimated_resolution_date = MonthYearInFutureField(
-        label="Estimated resolution date (optional)",
-        help_text=(
-            "You can change the estimated resolution date as part of this update."
-            " The date should be no more than 5 years in the future. Enter the date in the format, 11 2024."
-        ),
-        error_messages={
-            "invalid_year": "Enter an estimated resolution date",
-            "invalid_month": "Enter an estimated resolution date",
-        },
-        required=False,
-    )
-    estimated_resolution_date_change_reason = forms.CharField(
-        label="What has caused the change in estimated resolution date?",
-        widget=forms.Textarea,
-        required=False,
-    )
-
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id")
-        self.user = kwargs.get("user")
-
-    def clean_estimated_resolution_date(self):
-        if self.cleaned_data["estimated_resolution_date"]:
-            return self.cleaned_data["estimated_resolution_date"].isoformat()
-        return self.cleaned_data["estimated_resolution_date"]
+        self.help_text = PROGRESS_UPDATES_HELP_TEXT
 
     def clean(self):
         cleaned_data = super().clean()
@@ -257,35 +211,8 @@ class ProgressUpdateForm(
                 message=self.message,
             )
 
-        estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
-        is_future_date = self.does_new_estimated_date_require_approval(
-            self.cleaned_data
-        )
 
-        if (not self.is_user_admin) and (is_future_date):
-            self.requested_change = True
-            client.barriers.patch(
-                id=str(self.barrier_id),
-                proposed_estimated_resolution_date=estimated_resolution_date,
-                estimated_resolution_date_change_reason=self.cleaned_data.get(
-                    "estimated_resolution_date_change_reason"
-                ),
-            )
-        else:
-            self.requested_change = False
-            client.barriers.patch(
-                id=str(self.barrier_id),
-                estimated_resolution_date=estimated_resolution_date,
-                proposed_estimated_resolution_date=estimated_resolution_date,
-                estimated_resolution_date_change_reason=self.cleaned_data.get(
-                    "estimated_resolution_date_change_reason", ""
-                ),
-            )
-
-
-class ProgrammeFundProgressUpdateForm(
-    EstimatedResolutionDateApprovalMixin, APIFormMixin, forms.Form
-):
+class ProgrammeFundProgressUpdateForm(APIFormMixin, forms.Form):
     milestones_and_deliverables = forms.CharField(
         label="Milestones and deliverables",
         widget=forms.Textarea,
@@ -300,10 +227,10 @@ class ProgrammeFundProgressUpdateForm(
     )
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.barrier_id = kwargs.get("barrier_id")
         self.progress_update_id = kwargs.get("progress_update_id", None)
-        self.user = kwargs.get("user", None)
 
     def save(self):
         client = MarketAccessAPIClient(self.token)
@@ -623,52 +550,6 @@ def update_barrier_priority_form_factory(
             return rejection_summary
 
     return CustomizedUpdateBarrierPriorityForm
-
-
-class UpdateBarrierEstimatedResolutionDateForm(
-    EstimatedResolutionDateApprovalMixin, ClearableMixin, APIFormMixin, forms.Form
-):
-    estimated_resolution_date = MonthYearInFutureField(
-        label="Estimated resolution date",
-        help_text="The date should be no more than 5 years in the future. Enter the date in the format, 11 2024.",
-        error_messages={"required": "Enter an estimated resolution date"},
-    )
-    estimated_resolution_date_change_reason = forms.CharField(
-        label="What has caused the change in estimated resolution date?",
-        widget=forms.Textarea,
-        required=False,
-    )
-
-    def __init__(self, *args, **kwargs):
-        return super().__init__(*args, **kwargs)
-
-    def save(self):
-        client = MarketAccessAPIClient(self.token)
-
-        estimated_resolution_date = self.cleaned_data.get("estimated_resolution_date")
-        is_future_date = self.does_new_estimated_date_require_approval(
-            self.cleaned_data
-        )
-
-        if (not self.is_user_admin) and (is_future_date):
-            self.requested_change = True
-            client.barriers.patch(
-                id=str(self.barrier_id),
-                proposed_estimated_resolution_date=estimated_resolution_date,
-                estimated_resolution_date_change_reason=self.cleaned_data.get(
-                    "estimated_resolution_date_change_reason"
-                ),
-            )
-        else:
-            self.requested_change = False
-            client.barriers.patch(
-                id=str(self.barrier_id),
-                estimated_resolution_date=estimated_resolution_date,
-                proposed_estimated_resolution_date=estimated_resolution_date,
-                estimated_resolution_date_change_reason=self.cleaned_data.get(
-                    "estimated_resolution_date_change_reason", ""
-                ),
-            )
 
 
 class UpdateTradeDirectionForm(APIFormMixin, forms.Form):

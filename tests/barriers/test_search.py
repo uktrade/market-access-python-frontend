@@ -23,7 +23,7 @@ class SearchTestCase(MarketAccessTestCase):
         "notify_about_updates": False,
     }
 
-    @patch("utils.api.resources.APIResource.list")
+    @patch("utils.api.resources.BarriersResource.list")
     def test_empty_search(self, mock_list):
         response = self.client.get(reverse("barriers:search"))
         assert response.status_code == HTTPStatus.OK
@@ -49,12 +49,6 @@ class SearchTestCase(MarketAccessTestCase):
         sector_list = metadata.get_sector_list(level=0)
         sector_choices = form.fields["sector"].choices
         assert len(sector_choices) == len(sector_list)
-
-        category_list = set(
-            [category["id"] for category in metadata.data["categories"]]
-        )
-        category_choices = form.fields["category"].choices
-        assert len(category_choices) == len(category_list)
 
         policy_team_list = set(
             [policy_team["id"] for policy_team in metadata.data["policy_teams"]]
@@ -86,12 +80,12 @@ class SearchTestCase(MarketAccessTestCase):
                     "9538cecc-5f95-e211-a939-e4115bead28a",
                     "aa22c9d2-5f95-e211-a939-e4115bead28a",
                 ],
-                "category": ["130", "141"],
                 "policy_team": ["10", "11"],
                 "region": [
                     "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
                     "5616ccf5-ab4a-4c2c-9624-13c69be3c46b",
                 ],
+                "preliminary_assessment": ["1", "3"],
                 "status": ["2"],
                 "user": "1",
                 "ordering": "-reported",
@@ -110,7 +104,6 @@ class SearchTestCase(MarketAccessTestCase):
             "9538cecc-5f95-e211-a939-e4115bead28a",
             "aa22c9d2-5f95-e211-a939-e4115bead28a",
         ]
-        assert form.cleaned_data["category"] == ["130", "141"]
         assert form.cleaned_data["policy_team"] == ["10", "11"]
         assert form.cleaned_data["region"] == [
             "3e6809d6-89f6-4590-8458-1d0dab73ad1a",
@@ -118,6 +111,7 @@ class SearchTestCase(MarketAccessTestCase):
         ]
         assert form.cleaned_data["status"] == ["2"]
         assert form.cleaned_data["user"] == "1"
+        assert form.cleaned_data["preliminary_assessment"] == ["1", "3"]
 
         mock_list.assert_called_with(
             ordering="-reported",
@@ -135,8 +129,8 @@ class SearchTestCase(MarketAccessTestCase):
                 "9538cecc-5f95-e211-a939-e4115bead28a,"
                 "aa22c9d2-5f95-e211-a939-e4115bead28a"
             ),
-            category="130,141",
             policy_team="10,11",
+            preliminary_assessment="1,3",
             status="2",
             user="1",
             archived="0",
@@ -592,6 +586,28 @@ class SearchTestCase(MarketAccessTestCase):
             archived="0",
             status="2",
             status_date_open_in_progress="2021-01-01,2022-01-01",
+        )
+
+    @patch("utils.api.resources.APIResource.list")
+    def test_estimated_resolution_date_filters_resolved_in_part(self, mock_list):
+        response = self.client.get(
+            reverse("barriers:search"),
+            data={
+                "status": ["3"],
+                "estimated_resolution_date_resolved_in_part": "2021-01-01,2022-01-31",
+                "ordering": "-reported",
+            },
+        )
+
+        assert response.status_code == HTTPStatus.OK
+
+        mock_list.assert_called_with(
+            ordering="-reported",
+            limit=settings.API_RESULTS_LIMIT,
+            offset=0,
+            archived="0",
+            status="3",
+            estimated_resolution_date_resolved_in_part="2021-01-01,2022-01-01",
         )
 
     @patch("utils.api.resources.APIResource.list")

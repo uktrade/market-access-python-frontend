@@ -1,60 +1,52 @@
 <div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-        <h3 class="govuk-summary-card__title">Complete barrier tasks and progress updates</h3>
+        <h2 class="govuk-summary-card__title">Tasks you need to complete for barriers you're working on</h2>
         <ul class="govuk-summary-card__actions">
-            <li class="govuk-summary-card__action">
-                <a class="govuk-link" href="{% url 'barriers:search' %}?team=1"><strong>My barriers</strong><span class="govuk-visually-hidden">My barriers</span></a>
-            </li>
+            <!-- Filter goes here -->
         </ul>
-
     </div>
-    <div class="govuk-summary-card__content">
-        <dl class="govuk-summary-list">
-            {% for task in task_list %}
-                {% if task %}
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key govuk-summary-list__key-normal">
-                            <a class="govuk-link" href="{% url 'barriers:barrier_detail' task.barrier_id %}">{{ task.barrier_code }}<span class="govuk-visually-hidden"> barrier code</span></a>
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            <strong>
-                                <a class="govuk-link" href="{% url 'barriers:barrier_detail' task.barrier_id %}">{{ task.barrier_title }}<span class="govuk-visually-hidden"> barrier title</span></a>
-                            </strong>
-                        </dd>
-                        <dd class="govuk-summary-list__value">
-                            {{ task.message }}
-                        </dd>
-                        <dd class="govuk-summary-list__value">
-                            <div class="govuk-body">
-                                {% if task.tag == "REVIEW COMMENT" %}
-                                    <strong class="govuk-tag govuk-tag--turquoise">
-                                {% elif task.tag == "PROGRESS UPDATE DUE" %}
-                                    <strong class="govuk-tag govuk-tag--purple">
-                                {% elif task.tag == "REVIEW NEXT STEP" %}
-                                    <strong class="govuk-tag govuk-tag--turquoise">
-                                {% elif task.tag == "OVERDUE PROGRESS UPDATE" %}
-                                    <strong class="govuk-tag govuk-tag--yellow">
-                                {% elif task.tag == "REVIEW DATE" %}
-                                    <strong class="govuk-tag govuk-tag--turquoise">
-                                {% elif task.tag == "ADD DATE" %}
-                                    <strong class="govuk-tag govuk-tag--grey">
-                                {% elif task.tag == "CHANGE OVERDUE" %}
-                                    <strong class="govuk-tag govuk-tag--orange">
-                                {% elif task.tag == "ADD INFORMATION" %}
-                                    <strong class="govuk-tag govuk-tag--grey">
-                                {% elif task.tag == "PUBLICATION REVIEW" %}
-                                    <strong class="govuk-tag govuk-tag--yellow">
-                                {% elif task.tag == "OVERDUE REVIEW" %}
-                                    <strong class="govuk-tag govuk-tag--yellow">
-                                {% endif %}
-                                {{ task.tag }}
-                            </strong>
-                        </div>
-                    </dd>
+    <div class="govuk-summary-card__content p-t-0">
+        <div class="govuk-summary-list">
+            {% for barrier in barrier_task_list %}
+                <div class="govuk-summary-list__row">
+                    <div class="govuk-grid-row m-t-4">
+                        <a class="govuk-link govuk-grid-column-one-half"
+                           href="{% url 'barriers:barrier_detail' barrier.barrier_id %}"><strong>{{ barrier.barrier_title }}</strong></a>
+                        <span>{{ barrier.barrier_code }}</span>
                     </div>
-                {% endif %}
+                    {% if barrier.task_list|length > 1 %}
+                        <p>
+                            <strong>{{ barrier.task_list|length }} Tasks on this barrier</strong>
+                        </p>
+                        <ul class="govuk-list govuk-list--bullet m-l-2">
+                            {% for task in barrier.task_list %}
+                                <li>
+                                    {% for text_section in task.message %}
+                                        {% if text_section == task.link_text %}
+                                            <a class="govuk-link" href="{% url task.task_url barrier.barrier_id %}">{{ text_section }}</a>
+                                        {% else %}
+                                            {{ text_section }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>
+                            {% for text_section in barrier.task_list.0.message %}
+                                {% if text_section == barrier.task_list.0.link_text %}
+                                    <a class="govuk-link"
+                                       href="{% url barrier.task_list.0.task_url barrier.barrier_id %}">{{ text_section }}</a>
+                                {% else %}
+                                    {{ text_section }}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                    <p class="govuk-hint">{{ barrier.modified_by }} updated on {{ barrier.modified_on }}</p>
+                </div>
             {% endfor %}
-        </dl>
+        </div>
         {% include 'partials/pagination.html' %}
     </div>
 </div>

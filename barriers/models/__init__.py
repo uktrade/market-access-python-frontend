@@ -2,6 +2,7 @@ from .action_plans import ActionPlan, Stakeholder
 from .assessments import (
     EconomicAssessment,
     EconomicImpactAssessment,
+    PreliminaryAssessment,
     ResolvabilityAssessment,
     StrategicAssessment,
 )
@@ -33,4 +34,5 @@ __all__ = [
     ActionPlan,
     Stakeholder,
     BarrierDownload,
+    PreliminaryAssessment,
 ]

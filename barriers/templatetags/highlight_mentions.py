@@ -1,14 +1,13 @@
 import re
 
 from django import template
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 register = template.Library()
 
 
 @register.filter(needs_autoescape=True)
 def highlight_mentions(value, user_email=None, autoescape=True):
-
     regex = r"(@[^ @]+@[^ @\r\n]+)"
 
     def wrap_email(match):
@@ -20,8 +19,7 @@ def highlight_mentions(value, user_email=None, autoescape=True):
         return f"<span class='mention-highlight'>{email}</span>"
 
     result = re.sub(regex, wrap_email, value, 0, re.MULTILINE)
-
-    return mark_safe(result)
+    return format_html(result)
 
 
 @register.filter(needs_autoescape=True)

@@ -435,7 +435,6 @@ class Account(TemplateView, MetadataMixin):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         current_user = client.users.get_current()
         profile = client.profile.get(id=current_user.id).data
-        print(client.profile.get(id=current_user.id).data)
 
         overseas_regions = self.get_display_list(
             [region["name"] for region in profile["overseas_regions"] or []]
@@ -482,14 +481,12 @@ class AccountSavedSearch(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-
-        active = "my saved searches"
         saved_searches = client.saved_searches.list()
 
         context_data.update(
             {
                 "page": "account",
-                "active": active,
+                "active": "my saved searches",
                 "saved_searches": saved_searches,
             }
         )
@@ -503,15 +500,65 @@ class AccountDownloads(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
-
-        active = "my downloads"
         barrier_downloads = client.barrier_download.list()
 
         context_data.update(
             {
                 "page": "account",
-                "active": active,
+                "active": "my downloads",
                 "barrier_downloads": barrier_downloads,
+            }
+        )
+
+        return context_data
+
+
+class AccountDrafts(TemplateView):
+    template_name = "users/account/drafts.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        draft_barriers = client.reports.list(ordering="-created_on")
+
+        context_data.update(
+            {
+                "page": "account",
+                "active": "my drafts",
+                "reports": draft_barriers,
+            }
+        )
+
+        return context_data
+
+
+class Mentions(TemplateView, PaginationMixin):
+    template_name = "users/mentions.html"
+    pagination_limit = 6
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        page_number = (
+            self.request.GET.get("page") if self.request.GET.get("page") else 1
+        )
+
+        mentions_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "page": page_number,
+        }
+        mentions = client.mentions.list(**mentions_params)
+        mention_counts = client.user_mention_counts.get()
+        context_data.update(
+            {
+                "page": "mentions",
+                "mentions": mentions,
+                "notification_exclusion": client.notification_exclusion.get(),
+                "are_all_mentions_read": mention_counts.total
+                == mention_counts.read_by_recipient,
+                "total_mentions": mention_counts.total,
+                "pagination": self.get_pagination_data(object_list=mentions),
             }
         )
 
