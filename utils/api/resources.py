@@ -174,7 +174,7 @@ class BarriersResource(APIResource):
 
     def get_top_priority_summary(self, **kwargs):
         return self.client.get(
-            f"barriers/{kwargs['barrier']}/top_priority_summary/{kwargs['barrier']}",
+            f"barriers/{kwargs['barrier']}/top_priority_summary",
             data=kwargs,
         )
 
