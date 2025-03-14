@@ -99,6 +99,9 @@ class BarrierSearch(PaginationMixin, BarrierSearchFormView):
         return context_data
 
     def get_barriers(self, form):
+        res = self.client.barriers.get_top_priority_summary()
+        print(res.__dict__)
+        logger.info(res.__dict__)
         return self.client.barriers.list(
             limit=self.get_pagination_limit(),
             offset=self.get_pagination_offset(),
