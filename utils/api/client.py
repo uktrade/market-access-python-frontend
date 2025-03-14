@@ -83,6 +83,10 @@ class MarketAccessAPIClient:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             logger.warning(e)
+            print('TEST')
+            logger.info('Test')
+            print(response.__dict__)
+            logger.info(response.__dict__)
             raise APIHttpException(e, response)
 
         return response
