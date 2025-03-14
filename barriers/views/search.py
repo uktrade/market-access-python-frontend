@@ -99,7 +99,7 @@ class BarrierSearch(PaginationMixin, BarrierSearchFormView):
         return context_data
 
     def get_barriers(self, form):
-        res = self.client.barriers.get_top_priority_summary()
+        res = self.client.barriers.get_top_priority_summary(barrier="583529ec-9062-4841-ab0b-1d5425c5e776")
         print(res.__dict__)
         logger.info(res.__dict__)
         return self.client.barriers.list(
