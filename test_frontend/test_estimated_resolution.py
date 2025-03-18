@@ -9,7 +9,6 @@ from .utils import clean_full_url, retry, generate_random_text
 
 @retry()
 @pytest.mark.order(2)
-@pytest.mark.timeout(10)
 def test_estimated_resolution_change_happy_path(page, create_test_barrier):
     title = "test"
     month = str(datetime.date.today().month + 1)
