@@ -1,11 +1,14 @@
-import inspect
 import os
 import re
 import time
-from functools import wraps
-
+import random
+import string
 import pytest
+import inspect
+
+from functools import wraps
 from playwright._impl._errors import TimeoutError
+
 
 BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 
@@ -84,3 +87,9 @@ def change_permissions(page, username, permission):
     page.get_by_role("link", name="Edit profile").click()
     page.get_by_label(permission).check()
     page.get_by_role("button", name="Save").click()
+
+
+def generate_random_text():
+    length = random.randint(1, 250)
+    characters = string.ascii_letters + string.digits + " "
+    return "".join(random.choice(characters) for _ in range(length))
