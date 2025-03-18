@@ -20,7 +20,7 @@
             {% if estimated_resolution_date_request.estimated_resolution_date %}
                 <p class="govuk-body">The request to change the estimated resolution date to {{ estimated_resolution_date_request.estimated_resolution_date|date:"j F Y" }} will be rejected.</p>
             {% else %}
-                <p class="govuk-body">The request to delete the estimated resolution date of {{ estimated_resolution_date_request.estimated_resolution_date|date:"j F Y" }} will be rejected.</p>
+                <p class="govuk-body">The request to delete the estimated resolution date of {{ barrier.estimated_resolution_date|date:"j F Y" }} will be rejected.</p>
             {% endif %}
         </div>
 
