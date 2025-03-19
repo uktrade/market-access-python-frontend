@@ -148,10 +148,14 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
             filtersForAnalytics[category].push(filter.readable_value as string);
         });
 
-        window["dataLayer"].push({
+        const hasNonEmptyFilters = !Object.values(filtersForAnalytics).every(arr => arr.length === 0);
+        // execute if at least one filter array is not empty
+        if (hasNonEmptyFilters) {
+            window["dataLayer"].push({
             event: "event",
             eventProps: filtersForAnalytics,
-        });
+            });
+        }
     };
 
     const getReadableValue = (
@@ -390,9 +394,9 @@ const ApplyFilterController: React.FC<ApplyFilterControllerProps> = (props: Appl
                     ).toString(),
                 }));
             });
-        // update google analytics with the filters used
-        if(filters && filters.length > 0)
-            handleGoogleAnalytics(filters);
+
+        // push event to google analytics
+        handleGoogleAnalytics(filters);
 
         const activeFiltersContainer = document.getElementById("active filters");
         if (activeFiltersContainer) {

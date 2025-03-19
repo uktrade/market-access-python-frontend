@@ -25,15 +25,15 @@
     {% endif %}
 
     <div class="govuk-inset-text text-dark">
-        <p class="govuk-body">Check if you need to make a new progress update. These updates add context to the current status of the barrier so we can provide the best possible resources to help you resolve it.</p>
+        <p class="govuk-body">Check if you need to make a new <a href="{% url 'barriers:add_progress_update' barrier.id %}" id="progress-update-link">progress update</a>. These updates add context to the current status of the barrier so we can provide the best possible resources to help you resolve it.</p>
     </div>
 
     {% form_error_banner form %}
 
     <form action="" method="POST" class="restrict-width">
         {% csrf_token %}
-        <a href="{% url 'barriers:add_progress_update' barrier.id %}" class="govuk-button" id="progress-update-link">Add progress update</a>
-        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="form-cancel" id="return-to-barrier-information">Return to barrier information</a>
+        <a href="{% url 'barriers:barrier_detail' barrier.id %}" class="govuk-button" id="return-to-barrier-information">Return to barrier information</a>
+
     </form>
 
 {% endblock %}
