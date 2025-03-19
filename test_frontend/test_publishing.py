@@ -16,9 +16,8 @@ def test_publish_general_user(page, create_test_barrier):
 def test_publish_approver(page, create_test_barrier, is_admin, get_username):
     title = "test"
     url = create_test_barrier(title=title)
-    is_admin = is_admin()
     username = get_username()
-    if not is_admin:
+    if not is_admin():
         pytest.skip(
             f"You do not have the correct permissions to test approving barriers in {BASE_URL}"
         )
@@ -48,9 +47,8 @@ def test_publish_approver(page, create_test_barrier, is_admin, get_username):
 def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
     title = "test"
     url = create_test_barrier(title=title)
-    is_admin = is_admin()
     username = get_username()
-    if not is_admin:
+    if not is_admin():
         pytest.skip(
             f"You do not have the correct permissions to test publishing barriers in {BASE_URL}"
         )
@@ -85,8 +83,7 @@ def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
 def test_unpublish_publisher(page, create_test_barrier, is_admin):
     title = "test"
     url = create_test_barrier(title=title)
-    is_admin = is_admin()
-    if not is_admin:
+    if not is_admin():
         pytest.skip("You cannot publish barriers in this environment")
     page.goto(clean_full_url(url) + "public")
     page.get_by_role("link", name="Unpublish").click()
