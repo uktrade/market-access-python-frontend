@@ -1,14 +1,13 @@
-import os
-import re
-import time
-import random
-import string
-import pytest
 import inspect
-
+import os
+import random
+import re
+import string
+import time
 from functools import wraps
-from playwright._impl._errors import TimeoutError
 
+import pytest
+from playwright._impl._errors import TimeoutError
 
 BASE_URL = os.getenv("BASE_FRONTEND_TESTING_URL", "http://market-access.local:9880/")
 
