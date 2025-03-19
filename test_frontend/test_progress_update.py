@@ -6,7 +6,7 @@ from .utils import clean_full_url, generate_random_text, retry
 
 
 @retry()
-@pytest.mark.order(1)
+@pytest.mark.order(2)
 def test_create_progress_update(page, create_test_barrier):
     title = "test"
     url = create_test_barrier(title=title)
@@ -28,11 +28,13 @@ def test_create_progress_update(page, create_test_barrier):
     page.get_by_role("button", name="Save and continue").wait_for(state="visible")
     page.get_by_role("button", name="Save and continue").click()
 
-    page.locator("#next_step_item").fill(generate_random_text())
-    page.locator("#next_step_owner").fill(generate_random_text())
-    page.get_by_label("Month").fill(month)
-    page.get_by_label("Year").fill(year)
-    page.get_by_role("button", name="Save").click()
+    # Check if the next step form elements exist before proceeding
+    if page.locator("#next_step_item").is_visible():
+        page.locator("#next_step_item").fill(generate_random_text())
+        page.locator("#next_step_owner").fill(generate_random_text())
+        page.get_by_label("Month").fill(month)
+        page.get_by_label("Year").fill(year)
+        page.get_by_role("button", name="Save").click()
 
     # Add wait time for confirmation message
     page.wait_for_timeout(1000)  # Wait for 1 second

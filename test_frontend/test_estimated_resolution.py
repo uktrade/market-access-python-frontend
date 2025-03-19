@@ -7,7 +7,7 @@ from .utils import clean_full_url, generate_random_text, retry
 
 
 @retry()
-@pytest.mark.order(2)
+@pytest.mark.order(1)
 def test_estimated_resolution_change_happy_path(page, create_test_barrier):
     title = "test"
     month = str(datetime.date.today().month + 1)
