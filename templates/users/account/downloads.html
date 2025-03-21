@@ -10,7 +10,7 @@
 {% block page_content %}
     <section>
         <h2 class="ma-list-heading">
-            <span class="ma-list-heading__count">{{ barrier_downloads|length }}</span> download{{ barrier_downloads|length|pluralize:"s" }}
+            <span class="ma-list-heading__count">{{ all_downloads_count }}</span> download{{ all_downloads_count|pluralize:"s" }}
         </h2>
         {% if barrier_downloads|length == 0 %}
             <p>You have no downloads</p>
@@ -92,4 +92,5 @@
             </ul>
         {% endif %}
     </section>
+    {% include 'partials/pagination.html' %}
 {% endblock page_content %}
