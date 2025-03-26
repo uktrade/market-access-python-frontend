@@ -2655,11 +2655,7 @@ tornado = ["tornado (>=6)"]
 
 [[package]]
 name = "setuptools"
-<<<<<<< Updated upstream
-version = "78.0.2"
-=======
 version = "78.1.0"
->>>>>>> Stashed changes
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.9"
