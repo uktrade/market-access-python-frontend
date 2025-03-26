@@ -348,11 +348,13 @@ class MonthYearField(forms.MultiValueField):
             month, year = data_list
             if month in self.empty_values:
                 raise ValidationError(
-                    self.error_messages["invalid_month"], code="invalid_month"
+                    self.error_messages.get("invalid_month", "Enter a valid month"),
+                    code="invalid_month",
                 )
             if year in self.empty_values:
                 raise ValidationError(
-                    self.error_messages["invalid_year"], code="invalid_year"
+                    self.error_messages.get("invalid_year", "Enter a valid year"),
+                    code="invalid_year",
                 )
 
             return datetime.date(year, month, 1)
