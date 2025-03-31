@@ -355,7 +355,11 @@
                         {% if public_barrier.public_view_status == 20 %}
                              <!-- Public barrier status is Allowed -->
                             {% if public_barrier.title and public_barrier.summary %}
-                                <p class="govuk-body">Submit this barrier for clearance checks and GOV UK publication approval.</p>
+                                {% if countdown > 0 %}
+                                    <p class="govuk-body">Submit this barrier for clearance checks and GOV UK publication approval within {{ countdown }} days.</p>
+                                {% else %}
+                                    <p class="govuk-body">Please submit this barrier for clearance checks and GOV UK publication approval as it is overdue.</p>
+                                {% endif %}
                             {% else %}
                                 <p class="govuk-body">This barrier cannot be approved until the public title and summary have been added.</p>
                                 <p class="govuk-body">This needs to be done within the next {{ countdown }} days, along with a review from the approver, and the GOV.UK publishing team.</p>
