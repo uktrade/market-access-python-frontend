@@ -317,7 +317,11 @@
                     {% if countdown != 0 or public_barrier.public_view_status == 40 %}
                         {% if public_barrier.public_view_status == 20 %}
                             <!-- Public barrier status is Allowed -->
-                            This barrier is not ready for approval
+                            {% if public_barrier.title and public_barrier.summary %}
+                                This barrier is ready for approval
+                            {% else %}
+                                This barrier is not ready for approval
+                            {% endif %}
                         {% elif public_barrier.public_view_status == 70 %}
                             <!-- Public barrier status is Awaiting Approval -->
                             This barrier is awaiting approval
@@ -349,9 +353,13 @@
                     <!-- Published barriers will ignore countdown check as they do not have a deadline -->
                     {% if countdown != 0 or public_barrier.public_view_status == 40 %}
                         {% if public_barrier.public_view_status == 20 %}
-                            <!-- Public barrier status is Allowed -->
-                            <p class="govuk-body">This barrier cannot be approved until the public title and summary have been added.</p>
-                            <p class="govuk-body">This needs to be done within the next {{ countdown }} days, along with a review from the approver, and the GOV.UK publishing team.</p>
+                             <!-- Public barrier status is Allowed -->
+                            {% if public_barrier.title and public_barrier.summary %}
+                                <p class="govuk-body">Submit this barrier for clearance checks and GOV UK publication approval.</p>
+                            {% else %}
+                                <p class="govuk-body">This barrier cannot be approved until the public title and summary have been added.</p>
+                                <p class="govuk-body">This needs to be done within the next {{ countdown }} days, along with a review from the approver, and the GOV.UK publishing team.</p>
+                            {% endif %}
                         {% elif public_barrier.public_view_status == 70 %}
                             <!-- Public barrier status is Awaiting Approval -->
                             <p class="govuk-body">Once it has been approved, the barrier will be sent to the GOV.UK team for final content checks.</p>
