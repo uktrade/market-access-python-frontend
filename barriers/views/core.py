@@ -45,6 +45,10 @@ class Dashboard(AnalyticsMixin, TemplateView, PaginationMixin):
 
         if current_default == "home":
             return redirect("barriers:home")
+        elif current_default is None:
+            # No default has been set, therefore default to the new dashboard
+            self.request.session["default"] = "home"
+            return redirect("barriers:home")
 
         return super().get(*args, **kwargs)
 
@@ -137,6 +141,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
 
         # Check to see if new default is being set
         default_home_page = self.request.GET.get("default", None)
+
         if default_home_page == "home":
             # set home as the default
             self.request.session["default"] = "home"
@@ -146,6 +151,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
 
         # Check default dashboard current session
         current_default = self.request.session.get("default", None)
+
         if current_default == "dashboard":
             return redirect("barriers:dashboard")
 
