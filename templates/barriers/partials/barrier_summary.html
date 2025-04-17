@@ -30,7 +30,7 @@
                                 {% endif %}
                             {% elif barrier.priority_level != "NONE" %}
                                 {% if barrier.priority_level == "OVERSEAS" %}
-                                <li class="govuk-tag govuk-tag--{% if barrier.status.id == '4' %}resolved-in-full{% else %}overseas-delivery{% endif %}">OVERSEAS DELIVERY</li>
+                                    <li class="govuk-tag govuk-tag--{% if barrier.status.id == '4' %}resolved-in-full{% else %}overseas-delivery{% endif %}">OVERSEAS DELIVERY</li>
                                 {% elif barrier.priority_level == "COUNTRY" %}
                                     <li class="govuk-tag govuk-tag--country-priority">COUNTRY PRIORITY</li>
                                 {% elif barrier.priority_level == "WATCHLIST" %}
