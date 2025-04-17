@@ -333,11 +333,7 @@
                                                     <li class="govuk-tag govuk-tag--top-100-priority-resolved">TOP 100 PRIORITY RESOLVED</li>
                                                 {% elif barrier.priority_level %}
                                                     {% if barrier.priority_level == "OVERSEAS" %}
-                                                        {% if barrier.status.id == '4' %}
-                                                            <li class="govuk-tag govuk-tag--resolved-in-full">OVERSEAS DELIVERY</li>
-                                                        {% else %}
-                                                            <li class="govuk-tag govuk-tag--overseas-delivery">OVERSEAS DELIVERY</li>
-                                                        {% endif %}
+                                                        <li class="govuk-tag govuk-tag--{% if barrier.status.id == '4' %}resolved-in-full{% else %}overseas-delivery{% endif %}">OVERSEAS DELIVERY</li>
                                                     {% elif barrier.priority_level == "COUNTRY" %}
                                                         <li class="govuk-tag govuk-tag--country-priority">COUNTRY PRIORITY</li>
                                                     {% elif barrier.priority_level == "WATCHLIST" %}
