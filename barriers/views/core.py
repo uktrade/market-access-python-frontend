@@ -1,6 +1,8 @@
 import logging
 import urllib.parse
 
+from django.conf import settings
+
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views import View
@@ -196,7 +198,9 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
 
         search_params = query_string
 
-        summary_url = f"dashboard-summary?{search_params}"
+        summary_url = (
+            f"{settings.MARKET_ACCESS_API_URI}dashboard-summary?{search_params}"
+        )
         summary_stats = client.get(summary_url)
 
         metadata = get_metadata()
