@@ -197,7 +197,7 @@ class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
         search_params = query_string
 
         summary_url = f"dashboard-summary?{search_params}"
-        summary_stats = client.request(summary_url)
+        summary_stats = client.get(summary_url)
 
         metadata = get_metadata()
 
