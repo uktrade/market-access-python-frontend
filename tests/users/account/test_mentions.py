@@ -36,7 +36,7 @@ class MentionsTestCase(MarketAccessTestCase):
             }
         )
 
-        response = self.client.get(reverse("barriers:home"))
+        response = self.client.get(reverse("reports:new_report"))
 
         assert response.status_code == HTTPStatus.OK
         mock_get.assert_called_once()
@@ -56,7 +56,7 @@ class MentionsTestCase(MarketAccessTestCase):
             }
         )
 
-        response = self.client.get(reverse("barriers:home"))
+        response = self.client.get(reverse("reports:new_report"))
 
         assert response.status_code == HTTPStatus.OK
         mock_get.assert_called_once()
