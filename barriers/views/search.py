@@ -95,7 +95,7 @@ class BarrierSearch(PaginationMixin, BarrierSearchFormView):
                 ),
                 "search_ordering_choices": metadata.get_search_ordering_choices(),
                 "search_term_text": self.request.GET.get("search_term_text"),
-                "related_barrier_tags": SEARCH_TERM_TAGS,
+                "search_relevancy_tags": SEARCH_TERM_TAGS,
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)
