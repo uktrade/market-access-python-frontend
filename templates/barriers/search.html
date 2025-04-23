@@ -317,6 +317,15 @@
                                         <dd class="filter-results-list__item__definitions__value">
                                             {{ barrier.location }}
                                         </dd>
+                                        {% if barrier.similarity %}
+                                            <dt class="filter-results-list__item__definitions__key">Relevance Score:</dt>
+                                            {% widthratio barrier.similarity 1 100 %}%
+                                            {% for key, value in related_barrier_tags.items %}
+                                                {% if barrier.similarity|floatformat:2 < value.upper_boundary|floatformat:2 and barrier.similarity|floatformat:2 >= value.lower_boundary|floatformat:2 %}
+                                                    <strong class="govuk-tag {{ value.class }}">{{ value.label }}</strong>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
                                     </dl>
                                 </div>
                                 <div class="filter-results-list__item__sub-content">

@@ -362,6 +362,12 @@ class BarrierSearchForm(forms.Form):
 
     def set_ordering_choices(self):
         ordering_choices = self.metadata.get_search_ordering_choices()
+
+        if not self.data.get("search_term_text"):
+            # If there is no search term for similarity, we need to remove the relevance ordering filter
+            # from the list of options
+            ordering_choices.remove(["relevance", "Relevence to the search term"])
+
         self.fields["ordering"].choices = ordering_choices
 
     def clean_country(self):
