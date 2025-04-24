@@ -17,7 +17,7 @@ class UpdatePreliminaryAssessmentForm(APIFormMixin, forms.Form):
 
     preliminary_value_details = forms.CharField(
         widget=forms.Textarea,
-        label="Provide an explanation on how the value has been assessed",
+        label="Add additional comments on the preliminary assessment",
         error_messages={"required": "Enter details of the preliminary value"},
     )
 

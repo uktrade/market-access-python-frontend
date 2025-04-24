@@ -36,12 +36,12 @@ class MentionsTestCase(MarketAccessTestCase):
             }
         )
 
-        response = self.client.get(reverse("barriers:dashboard"))
+        response = self.client.get(reverse("reports:new_report"))
 
         assert response.status_code == HTTPStatus.OK
         mock_get.assert_called_once()
         html = response.content.decode("utf8")
-        assert "Mentions" in html
+        assert "Notifications" in html
         assert "govuk-tag ma-badge ma-badge--attention new-mention-count" not in html
 
     @patch("utils.api.resources.APIResource.get")
@@ -56,12 +56,12 @@ class MentionsTestCase(MarketAccessTestCase):
             }
         )
 
-        response = self.client.get(reverse("barriers:dashboard"))
+        response = self.client.get(reverse("reports:new_report"))
 
         assert response.status_code == HTTPStatus.OK
         mock_get.assert_called_once()
         html = response.content.decode("utf8")
-        assert "Mentions" in html
+        assert "Notifications" in html
         assert (
             '<span class="govuk-tag ma-badge ma-badge--attention new-mention-count">10</span>'
             in html
