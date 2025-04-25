@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView, View
 
+from barriers.constants import SEARCH_TERM_TAGS
 from utils.api.client import MarketAccessAPIClient
 from utils.metadata import get_metadata
 from utils.pagination import PaginationMixin
@@ -71,6 +72,7 @@ class BarrierSearch(PaginationMixin, BarrierSearchFormView):
         context_data.update(self.get_saved_search_context_data(form))
         barriers = self.get_barriers(form)
         metadata = get_metadata()
+
         context_data.update(
             {
                 "barriers": barriers,
@@ -93,6 +95,7 @@ class BarrierSearch(PaginationMixin, BarrierSearchFormView):
                 ),
                 "search_ordering_choices": metadata.get_search_ordering_choices(),
                 "search_term_text": self.request.GET.get("search_term_text"),
+                "search_relevancy_tags": SEARCH_TERM_TAGS,
             }
         )
         context_data = self.update_context_data_for_member(context_data, form)

@@ -325,6 +325,39 @@ RELATED_BARRIER_TAGS = {
     },
 }
 
+SEARCH_TERM_TAGS = {
+    "top_result": {
+        "lower_boundary": 0.9,
+        "upper_boundary": 2,
+        "label": "Top result",
+        "class": "govuk-tag--green",
+    },
+    "high": {
+        "lower_boundary": 0.7,
+        "upper_boundary": 0.9,
+        "label": "High relevance",
+        "class": "govuk-tag--turquoise",
+    },
+    "good": {
+        "lower_boundary": 0.4,
+        "upper_boundary": 0.7,
+        "label": "Some relevance",
+        "class": "govuk-tag--blue",
+    },
+    "some": {
+        "lower_boundary": 0.2,
+        "upper_boundary": 0.4,
+        "label": "Low relevance",
+        "class": "govuk-tag--purple",
+    },
+    "poor": {
+        "lower_boundary": 0,
+        "upper_boundary": 0.2,
+        "label": "Potential relevance",
+        "class": "govuk-tag--pink",
+    },
+}
+
 PROGRESS_UPDATES = Choices(
     ("ON_TRACK", "On Track"),
     ("RISK_OF_DELAY", "Risk of delay"),
