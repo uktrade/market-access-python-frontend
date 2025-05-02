@@ -515,6 +515,7 @@ function CompaniesForm(props) {
                         id="add-company-button"
                         className="govuk-button"
                         onClick={addCompany}
+                        tabIndex={0}
                     >
                         Add company
                     </div>
@@ -574,6 +575,7 @@ function CompaniesForm(props) {
                                         id={company}
                                         className="selection-list__list__item"
                                         key={company}
+                                        autoFocus
                                     >
                                         <span>{company}</span>
                                         <span
