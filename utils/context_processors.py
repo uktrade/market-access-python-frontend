@@ -49,6 +49,8 @@ def get_mention_counts(request):
         counts["display_count"] = unread_count if unread_count <= 99 else "99+"
     except APIHttpException as e:
         logger.warning(f"[MENTIONS_COUNT]: {e.__dict__}")
+        if e.status_code == 401:
+            return reverse("users:login")
 
     return counts
 
