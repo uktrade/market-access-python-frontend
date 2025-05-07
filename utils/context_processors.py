@@ -8,7 +8,6 @@ from users.models import User
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
 
-
 logger = logging.getLogger(__name__)
 
 
