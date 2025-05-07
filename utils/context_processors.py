@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.core.cache import cache
 from django.urls import reverse
@@ -5,6 +7,9 @@ from django.urls import reverse
 from users.models import User
 from utils.api.client import MarketAccessAPIClient
 from utils.exceptions import APIHttpException
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_user(request):
@@ -33,14 +38,18 @@ def get_mention_counts(request):
     if not sso_token:
         return
 
+    counts = {"total": None, "read_by_recipient": None, "display_count": None}
     client = MarketAccessAPIClient(sso_token)
-    resource = client.user_mention_counts.get()
-    unread_count = resource.total - resource.read_by_recipient
-    counts = {
-        "total": resource.total,
-        "read_by_recipient": resource.read_by_recipient,
-        "display_count": unread_count if unread_count <= 99 else "99+",
-    }
+
+    try:
+        resource = client.user_mention_counts.get()
+        unread_count = resource.total - resource.read_by_recipient
+        counts["total"] = resource.total
+        counts["read_by_recipient"] = resource.read_by_recipient
+        counts["display_count"] = unread_count if unread_count <= 99 else "99+"
+    except APIHttpException as e:
+        logger.warning(f"[MENTIONS_COUNT]: {e.__dict__}")
+
     return counts
 
 
