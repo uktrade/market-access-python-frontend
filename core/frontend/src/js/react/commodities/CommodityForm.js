@@ -86,6 +86,7 @@ function CommodityForm(props) {
         unconfirmedCommodities.splice(index, 1);
         setUnconfirmedCommodities([...unconfirmedCommodities]);
         clearCodeInput();
+        inputRefContainer.current[0].focus()
     };
 
     const confirmAll = (event) => {
@@ -98,6 +99,7 @@ function CommodityForm(props) {
     const removeCommodity = (event, index) => {
         confirmedCommodities.splice(index, 1);
         setConfirmedCommodities([...confirmedCommodities]);
+        inputRefContainer.current[0].focus()
     };
 
     async function lookupCode(code) {
