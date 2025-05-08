@@ -32,15 +32,15 @@
             </fieldset>
         </div>
 
-        <div id="{{ form.is_dont_know.name }}" class="govuk-form-group{% if form.is_dont_know.errors %} govuk-form-group--error{% endif %}">
+        <div class="govuk-form-group{% if form.is_dont_know.errors %} govuk-form-group--error{% endif %}">
 
             {% form_field_error form "is_dont_know" %}
 
             <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <div class="govuk-fieldset">
+                    <p class="govuk-fieldset__legend govuk-fieldset__legend--s">
                         Or
-                    </legend>
+                    </p>
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="{{ form.is_dont_know.name }}" name="{{ form.is_dont_know.name }}" type="checkbox" {% if form.is_dont_know.value == "True" %}checked="checked"{% endif %}>
@@ -49,7 +49,7 @@
                             </label>
                         </div>
                     </div>
-                </fieldset>
+                </div>
             </div>
         </div>
 
