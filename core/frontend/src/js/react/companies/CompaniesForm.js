@@ -300,9 +300,6 @@ function CompaniesForm(props) {
                                     <a
                                         className="search-card__link"
                                         role="button"
-                                        aria-label={
-                                            "View details for " + company.title
-                                        }
                                         href="#"
                                         onClick={(event) => {
                                             event.preventDefault();
