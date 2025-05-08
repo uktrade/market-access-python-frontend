@@ -26,6 +26,7 @@ def get_user(request):
         user = client.users.get_current()
         return user
     except APIHttpException as e:
+        logger.warning(f"get_user.exception: {e.__dict__}")
         if e.status_code == 401:
             return reverse("users:login")
         else:
