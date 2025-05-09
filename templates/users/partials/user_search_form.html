@@ -19,7 +19,6 @@
                 type="text"
                 value="{% if form.query.value %}{{ form.query.value }}{% endif %}"
                 placeholder="Search for user"
-                {% if not form.query.value and not form.query.error %}autofocus{% endif %}
                 aria-describedby="user-hint"
             >
         </div>
