@@ -30,6 +30,7 @@
                                name="barrier-public-information-gate-public_information"
                                type="radio"
                                value="{{ value }}"
+                               data-aria-controls="{{ form.public_information.id_for_label }}-{{ value }}"
                                {% if form.public_information.value == value %} checked="checked"{% endif %}>
                         <label class="govuk-label govuk-radios__label" for="{{ form.public_information.id_for_label }}-{{ value }}">
                             {{ name }}
