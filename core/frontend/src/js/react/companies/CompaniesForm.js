@@ -511,13 +511,14 @@ function CompaniesForm(props) {
                             </div>
                         ) : null}
                     </dl>
-                    <div
+                    <button
                         id="add-company-button"
                         className="govuk-button"
                         onClick={addCompany}
+                        tabIndex={0}
                     >
                         Add company
-                    </div>
+                    </button>
                     <div id="or-text" className="govuk-label--s">
                         Or
                     </div>
@@ -574,6 +575,7 @@ function CompaniesForm(props) {
                                         id={company}
                                         className="selection-list__list__item"
                                         key={company}
+                                        autoFocus
                                     >
                                         <span>{company}</span>
                                         <span
