@@ -1,6 +1,6 @@
 {% if item.old_value %}
     <div class="history-item__old-value">
-        <span class="diff__del" tabindex="0">
+        <span class="diff__del">
             <p class="govuk-visually-hidden">old value: </p>
             &pound; {{ item.old_value }}
         </span>
@@ -8,7 +8,7 @@
 {% endif %}
 {% if item.new_value %}
     <div class="history-item__new-value">
-        <span class="diff__ins" tabindex="0">
+        <span class="diff__ins">
             <p class="govuk-visually-hidden">new value: </p>
             &pound; {{ item.new_value }}
         </span>
