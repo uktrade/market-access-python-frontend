@@ -49,7 +49,7 @@
                                name="barrier-public-eligibility-public_eligibility"
                                type="radio"
                                value="{{ value }}"
-                               data-aria-controls="conditional-public_eligibility-{{ value }}"
+                               data-aria-controls="{{ form.public_eligibility.id_for_label }}-{{ value }}"
                                {% if form.public_eligibility.value == value %} checked="checked"{% endif %}>
                         <label class="govuk-label govuk-radios__label" for="{{ form.public_eligibility.id_for_label }}-{{ value }}">
                             {{ name }}
