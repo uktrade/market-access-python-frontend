@@ -19,17 +19,13 @@
                 {% for value, name in form.fields.trade_direction.choices %}
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input"
-                               id="{{ form.trade_direction.id_for_label }}"
+                               id="{{ name }}"
                                name="barrier-trade-direction-trade_direction"
                                type="radio"
                                value="{{ value }}"
                                {% if form.trade_direction.value == value %} checked="checked"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for={{ name }}>
-                            {% if name == "export" %}
-                                Exporting from the UK or investing overseas
-                            {% else %}
-                                Importing or investing into the UK
-                            {% endif %}
+                        <label class="govuk-label govuk-radios__label" for="{{ name }}">
+                            {{ name }}
                         </label>
 
                         {% for help_text in form.trade_direction.help_text %}
