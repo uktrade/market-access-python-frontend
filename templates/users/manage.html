@@ -101,6 +101,7 @@
                     <!-- Name cell -->
                     <td class="govuk-table__cell">
                         <a href="{% url 'users:user_detail' user.id %}">
+                            <span class="govuk-visually-hidden">Edit </span>
                             <span class="team-member__full-name">{{ user.full_name }}</span>
                         </a>
                     </td>
@@ -116,7 +117,7 @@
                     <td class="govuk-table__cell">{{ user.groups_display }}</td>
                     <!-- Action cell -->
                     <td class="govuk-table__cell">
-                        <a href="{% url 'users:edit_user' user.id %}">Edit</a>
+                        <a href="{% url 'users:edit_user' user.id %}">Edit<span class="govuk-visually-hidden"> profile for {{ user.full_name }}</span></a>
                     </td>
                 </tr>
             {% endfor %}
