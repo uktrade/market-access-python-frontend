@@ -110,7 +110,7 @@
                                 <span class="govuk-heading-xl" id="current_year-resolved-count">{{ summary_stats.barriers_current_year.resolved }}</span> barriers have been resolved in the current financial year.
                             </li>
                             <li class="summary-card__data-link" id="current_year-resolved-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=4&status_date_resolved_in_full_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_resolved_in_full_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_resolved_in_full_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_resolved_in_full_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers<span class="govuk-visually-hidden"> for barriers have been resolved in the current financial yearv.</span></a>
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=4&status_date_resolved_in_full_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_resolved_in_full_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_resolved_in_full_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_resolved_in_full_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers<span class="govuk-visually-hidden"> for barriers that have been resolved in the current financial yearv.</span></a>
                             </li>
                         </ul>
                     </div>
