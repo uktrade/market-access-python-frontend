@@ -64,34 +64,49 @@
     <table class="govuk-table">
         <caption class="govuk-table__caption visually-hidden">List of all users</caption>
         <thead>
+            <div id="sort-instruction" class="govuk-visually-hidden">Click to sort this column</div>
             <tr class="govuk-table__row sort-table">
-                <th scope="col" class="govuk-table__header">
-                    {% if ordering == 'first_name' %}
-                        <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-first_name' %}">Name</a>
-                    {% elif ordering == '-first_name' %}
-                        <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name</a>
-                    {% else %}
-                        <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}">Name</a>
-                    {% endif %}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                    {% if ordering == 'email' %}
-                        <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-email' %}">Email</a>
-                    {% elif ordering == '-email' %}
-                        <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email</a>
-                    {% else %}
-                        <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}">Email</a>
-                    {% endif %}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                    {% if ordering == 'role' %}
-                        <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-role' %}">Role</a>
-                    {% elif ordering == '-role' %}
-                        <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role</a>
-                    {% else %}
-                        <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}">Role</a>
-                    {% endif %}
-                </th>
+                {% if ordering == 'first_name' %}
+                    <th scope="col" class="govuk-table__header" aria-sort="ascending">
+                        <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-first_name' %}" aria-describedby="sort-instruction">Name</a>
+                    </th>
+                {% elif ordering == '-first_name' %}
+                    <th scope="col" class="govuk-table__header" aria-sort="descending">
+                        <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}" aria-describedby="sort-instruction">Name</a>
+                    </th>
+                {% else %}
+                    <th scope="col" class="govuk-table__header" aria-sort="none">
+                        <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='first_name' %}" aria-describedby="sort-instruction">Name</a>
+                    </th>
+                {% endif %}
+
+                {% if ordering == 'email' %}
+                    <th scope="col" class="govuk-table__header" aria-sort="ascending">
+                        <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-email' %}" aria-describedby="sort-instruction">Email</a>
+                    </th>
+                {% elif ordering == '-email' %}
+                    <th scope="col" class="govuk-table__header" aria-sort="descending">
+                        <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}" aria-describedby="sort-instruction">Email</a>
+                    </th>
+                {% else %}
+                    <th scope="col" class="govuk-table__header" aria-sort="none">
+                        <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='email' %}" aria-describedby="sort-instruction">Email</a>
+                    </th>
+                {% endif %}
+
+                {% if ordering == 'role' %}
+                    <th scope="col" class="govuk-table__header">
+                        <a class="sort-asc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='-role' %}" aria-describedby="sort-instruction">Role</a>
+                    </th>
+                {% elif ordering == '-role' %}
+                    <th scope="col" class="govuk-table__header">
+                        <a class="sort-desc" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}" aria-describedby="sort-instruction">Role</a>
+                    </th>
+                {% else %}
+                    <th scope="col" class="govuk-table__header">
+                        <a class="sort-default" href="{% updated_user_search_url current_path=request.get_full_path page=1 ordering='role' %}" aria-describedby="sort-instruction">Role</a>
+                    </th>
+                {% endif %}
                 <th scope="col" class="govuk-table__header">Action</th>
             </tr>
         </thead>
