@@ -45,13 +45,13 @@
                 {% for value, name in form.fields.public_eligibility.choices %}
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input"
-                               id="{{ form.public_eligibility.id_for_label }}"
+                               id="{{ form.public_eligibility.id_for_label }}-{{ value }}"
                                name="barrier-public-eligibility-public_eligibility"
                                type="radio"
                                value="{{ value }}"
-                               data-aria-controls="conditional-public_eligibility-{{ value }}"
+                               data-aria-controls="{{ form.public_eligibility.id_for_label }}-{{ value }}"
                                {% if form.public_eligibility.value == value %} checked="checked"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="{{ form.public_eligibility.id_for_label }}">
+                        <label class="govuk-label govuk-radios__label" for="{{ form.public_eligibility.id_for_label }}-{{ value }}">
                             {{ name }}
                         </label>
                     </div>
