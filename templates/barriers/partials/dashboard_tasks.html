@@ -18,12 +18,12 @@
                         <p>
                             <strong>{{ barrier.task_list|length }} Tasks on this barrier</strong>
                         </p>
-                        <ul class="govuk-list govuk-list--bullet m-l-2">
+                        <ul class="govuk-list govuk-list--bullet govuk-list--spaced m-l-2">
                             {% for task in barrier.task_list %}
                                 <li>
                                     {% for text_section in task.message %}
                                         {% if text_section == task.link_text %}
-                                            <a class="govuk-link" href="{% url task.task_url barrier.barrier_id %}">{{ text_section }}</a>
+                                            <a class="govuk-link" href="{% url task.task_url barrier.barrier_id %}">{{ text_section }}dsadadsa</a>
                                         {% else %}
                                             {{ text_section }}
                                         {% endif %}
