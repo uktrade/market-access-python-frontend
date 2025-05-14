@@ -18,12 +18,12 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Barrier title</h4>
                     <div class="answer">{{title}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-about" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-about" class="govuk-link">Change<span class="govuk-visually-hidden"> barrier title</span></a></div>
                 </div>
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Barrier description</h4>
                     <div class="answer">{{summary}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-about" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-about" class="govuk-link">Change<span class="govuk-visually-hidden"> barrier description</span></a></div>
                 </div>
             </div>
 
@@ -33,12 +33,12 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Barrier status</h4>
                     <div class="answer">{{status}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-status" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-status" class="govuk-link">Change<span class="govuk-visually-hidden"> barrier status</span></a></div>
                 </div>
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Barrier start date</h4>
                     <div class="answer">{{start_date|date:"F Y"}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-status" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-status" class="govuk-link">Change<span class="govuk-visually-hidden"> barrier start date</span></a></div>
                 </div>
             </div>
 
@@ -48,7 +48,7 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Barrier location</h4>
                     <div class="answer">{{barrier_location}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-location" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-location" class="govuk-link">Change<span class="govuk-visually-hidden"> barrier location</span></a></div>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Trade direction</h4>
                     <div class="answer">{{trade_direction}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-trade-direction" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-trade-direction" class="govuk-link">Change<span class="govuk-visually-hidden"> trade direction</span></a></div>
                 </div>
             </div>
 
@@ -68,12 +68,12 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Main sector affected</h4>
                     <div class="answer">{{main_sector}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-sectors-affected" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-sectors-affected" class="govuk-link">Change<span class="govuk-visually-hidden"> main sector affected</span></a></div>
                 </div>
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Other sectors affected</h4>
                     <div class="answer">{% for sector in sectors %}{{sector}} <br> {% endfor %}</div>
-                    <div class="edit-url"><a href="/reports/barrier-sectors-affected" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-sectors-affected" class="govuk-link">Change<span class="govuk-visually-hidden"> other sectors affected</span></a></div>
                 </div>
             </div>
 
@@ -83,7 +83,7 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Name of companies affected by the barrier</h4>
                     <div class="answer">{% for company in companies %}{{company}} <br> {% endfor %}{% for company in related_organisations %}{{company}} <br> {% endfor %}</div>
-                    <div class="edit-url"><a href="/reports/barrier-companies-affected" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-companies-affected" class="govuk-link">Change<span class="govuk-visually-hidden"> companies affected</span></a></div>
                 </div>
             </div>
 
@@ -93,12 +93,12 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Export type</h4>
                     <div class="answer">{% for export_type in export_types %}{{export_type|lower|capfirst}} <br> {% endfor %}</div>
-                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change<span class="govuk-visually-hidden"> export type</span></a></div>
                 </div>
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Goods, services or investments affected</h4>
                     <div class="answer">{{export_description}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change<span class="govuk-visually-hidden"> goods, services or investments affected</span></a></div>
                 </div>
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">HS commodity codes</h4>
@@ -111,7 +111,7 @@
                             <div class="answer govuk-heading-s govuk-!-font-size-14">{{commodity.code}}</div>
                             <div class="answer">{{commodity.description}}</div>
                         </div>
-                        <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change</a></div>
+                        <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change<span class="govuk-visually-hidden"> commodity code</span></a></div>
                     </div>
                 {% endfor %}
 
@@ -123,27 +123,27 @@
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">Publishing</h4>
                     <div class="answer">{{public_eligibility}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-public-eligibility" class="govuk-link">Change</a></div>
+                    <div class="edit-url"><a href="/reports/barrier-public-eligibility" class="govuk-link">Change<span class="govuk-visually-hidden"> publishing</span></a></div>
                 </div>
                 {% if public_eligibility == "Cannot be published" %}
                     <div class="report-barrier-questions__question">
                         <h4 class="govuk-heading-s question-label">Reason</h4>
                         <div class="answer">{{public_eligibility_summary}}</div>
-                        <div class="edit-url"><a href="/reports/barrier-public-eligibility" class="govuk-link">Change</a></div>
+                        <div class="edit-url"><a href="/reports/barrier-public-eligibility" class="govuk-link">Change<span class="govuk-visually-hidden"> reason</span></a></div>
                     </div>
                 {% else %}
                     {% if public_title %}
                         <div class="report-barrier-questions__question">
                             <h4 class="govuk-heading-s question-label">Public title</h4>
                             <div class="answer">{{public_title}}</div>
-                            <div class="edit-url"><a href="/reports/barrier-public-title" class="govuk-link">Change</a></div>
+                            <div class="edit-url"><a href="/reports/barrier-public-title" class="govuk-link">Change<span class="govuk-visually-hidden"> public title</span></a></div>
                         </div>
                     {% endif %}
                     {% if public_summary %}
                         <div class="report-barrier-questions__question">
                             <h4 class="govuk-heading-s question-label">Public summary</h4>
                             <div class="answer">{{public_summary}}</div>
-                            <div class="edit-url"><a href="/reports/barrier-public-summary" class="govuk-link">Change</a></div>
+                            <div class="edit-url"><a href="/reports/barrier-public-summary" class="govuk-link">Change<span class="govuk-visually-hidden"> public summary</span></a></div>
                         </div>
                     {% endif %}
                 {% endif %}
