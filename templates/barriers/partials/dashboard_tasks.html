@@ -23,7 +23,7 @@
                                 <li>
                                     {% for text_section in task.message %}
                                         {% if text_section == task.link_text %}
-                                            <a class="govuk-link" href="{% url task.task_url barrier.barrier_id %}">{{ text_section }}dsadadsa</a>
+                                            <a class="govuk-link" href="{% url task.task_url barrier.barrier_id %}">{{ text_section }}</a>
                                         {% else %}
                                             {{ text_section }}
                                         {% endif %}
