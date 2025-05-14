@@ -90,15 +90,15 @@
                     <!-- Public eligibility set to allowed. Show confirmation of status and link to edit eligibility.-->
                     <p class="govuk-body govuk-!-margin-bottom-2">Yes</p>
                     {% if countdown is not None %}
-                        <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
+                        <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit<span class="govuk-visually-hidden"> publishing</span></a>
                     {% else %}
-                        <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
+                        <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit<span class="govuk-visually-hidden"> publishing</span></a>
                     {% endif %}
                 {% else %}
                     <!-- Public eligibility set to not allowed. Show confirmation of status, the given reason and a link to edit eligibility.-->
                     <p class="govuk-body govuk-!-margin-bottom-2">No</p>
                     <p class="govuk-body govuk-!-margin-bottom-2"><span class="govuk-!-font-weight-bold">Reason:</span> {{ barrier.public_eligibility_summary }} </p>
-                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit</a>
+                    <a href="{% url 'barriers:edit_public_eligibility' barrier.id countdown %}" class="govuk-link--no-visited-state govuk-!-font-size-19">Edit<span class="govuk-visually-hidden"> publishing</span></a>
                 {% endif %}
             {% endif %}
         </div>
@@ -122,7 +122,7 @@
                     <dd class="summary-group__list__value">{{ public_barrier.title }}
                     <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps (including unpublished)-->
                         {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
-                            <br><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state">Edit</a></dd>
+                            <br><a href="{% url 'barriers:edit_public_barrier_title' barrier.id countdown %}" class="govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> public title</span></a></dd>
                         {% else %}
                             </dd>
                         {% endif %}
@@ -136,7 +136,7 @@
                     <dd class="summary-group__list__value">{{ public_barrier.summary }}
                     <!-- Edit function available to General Users and Approvers when in Allowed or Awaiting Approval steps, Publishers across all steps (including unpublished)-->
                         {% if public_barrier.public_view_status == 20 or public_barrier.public_view_status == 70 or public_barrier.public_view_status == 30 and user_role == "Publisher" or public_barrier.public_view_status == 50 and user_role == "Publisher" %}
-                            <br><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state">Edit</a></dd>
+                            <br><a href="{% url 'barriers:edit_public_barrier_summary' barrier.id countdown %}" class="govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> public summary</span></a></dd>
                         {% else %}
                             </dd>
                         {% endif %}
