@@ -1,3 +1,7 @@
+# ======
+# DO NOT EDIT - use pyproject.toml instead!
+# Generated: 2025-05-14_15-38
+# ======
 amqp==5.3.1 ; python_full_version >= "3.9.2" and python_version < "4.0"
 asgiref==3.8.1 ; python_full_version >= "3.9.2" and python_version < "4"
 async-timeout==5.0.1 ; python_full_version >= "3.9.2" and python_version <= "3.11.2"
@@ -38,7 +42,7 @@ envier==0.6.1 ; python_full_version >= "3.9.2" and python_version < "4"
 filelock==3.18.0 ; python_full_version >= "3.9.2" and python_version < "4"
 gevent==23.9.1 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
 googleapis-common-protos==1.70.0 ; python_full_version >= "3.9.2" and python_version < "4.0"
-greenlet==3.2.1 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
+greenlet==3.2.2 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
 grpcio==1.71.0 ; python_full_version >= "3.9.2" and python_version < "4.0"
 gunicorn==23.0.0 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
 identify==2.6.10 ; python_full_version >= "3.9.2" and python_version < "4"
@@ -78,7 +82,7 @@ pyyaml==6.0.2 ; python_full_version >= "3.9.2" and python_version < "4"
 redis==4.5.4 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
 requests==2.32.3 ; python_full_version >= "3.9.2" and python_version < "4.0"
 sentry-sdk==2.8.0 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
-setuptools==80.3.1 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
+setuptools==80.4.0 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
 simplejson==3.17.2 ; python_full_version >= "3.9.2" and python_full_version < "4.0.0"
 six==1.17.0 ; python_full_version >= "3.9.2" and python_version < "4.0"
 sqlparse==0.5.0 ; python_full_version >= "3.9.2" and python_version < "4"
