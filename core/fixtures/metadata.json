@@ -8373,6 +8373,13 @@
       "description": "",
       "show_at_reporting": true,
       "order": 13
+    },
+    {
+      "id": 14,
+      "title": "Market Shaping",
+      "description": "",
+      "show_at_reporting": true,
+      "order": 14
     }
   ],
   "barrier_type_categories": {
