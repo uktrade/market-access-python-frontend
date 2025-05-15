@@ -67,11 +67,7 @@
                     <div class="answer">{% for export_type in export_types %}{{export_type|lower|capfirst}} <br> {% endfor %}</div>
                     <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change<span class="govuk-visually-hidden"> export type</span></a></div>
                 </div>
-                <div class="report-barrier-questions__question">
-                    <h4 class="govuk-heading-s question-label">Goods, services or investments affected</h4>
-                    <div class="answer">{{export_description}}</div>
-                    <div class="edit-url"><a href="/reports/barrier-export-type" class="govuk-link">Change<span class="govuk-visually-hidden"> goods, services or investments affected</span></a></div>
-                </div>
+                {% include 'reports/partials/summary_q_and_a.html' with question='Goods, services or investments affected' answer=export_description change_url='/reports/barrier-export-type' %}
                 <div class="report-barrier-questions__question">
                     <h4 class="govuk-heading-s question-label">HS commodity codes</h4>
                 </div>
