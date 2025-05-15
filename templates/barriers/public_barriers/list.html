@@ -73,6 +73,7 @@
                 <!-- Barrier Code -->
                             <td class="govuk-table__cell">
                                 <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}" class="govuk-link">
+                                    <span class="govuk-visually-hidden">Edit </span>
                                     {{ barrier.internal_code }}
                                 </a>
                             </td>
@@ -140,6 +141,7 @@
                                 <a href="{% url "barriers:public_barrier_detail" barrier.internal_id %}?add-note=1"
                                    class="govuk-link" target="_blank">
                                     Add new note
+                                    <span class="govuk-visually-hidden"> to {{ barrier.internal_code }}</span>
                                 </a>
                             </td>
                         </tr>
