@@ -4,14 +4,16 @@ ma.pages.report.sectorsWizardStep = function () {
     var currentMainSectorSelected = mainSectorSelect.value;
     const addSectorButton = document.getElementById("add-other-sector-button");
     const otherSectorSelect = document.getElementById("sectors_select");
-    const confirmButton = document.getElementById("confirm-other-sector-button")
+    const confirmButton = document.getElementById(
+        "confirm-other-sector-button",
+    );
     const display_list = document.getElementById("sectors_list_display");
 
     mainSectorSelect.addEventListener("change", function () {
         updateOtherSectorsList(mainSectorSelect.value);
         removeItem(mainSectorSelect.value);
     });
-    
+
     addSectorButton.addEventListener("click", function () {
         otherSectorSelect.style.display = "block";
         otherSectorSelect.focus();
@@ -67,7 +69,7 @@ ma.pages.report.sectorsWizardStep = function () {
         const sector_list = document.getElementById("sectors_select");
         const current_selected_list = document.getElementById(
             "id_barrier-sectors-affected-sectors",
-        );        
+        );
 
         if (current_selected_list.value == "") {
             const selected_list = current_selected_list.value;
@@ -157,7 +159,7 @@ ma.pages.report.sectorsWizardStep = function () {
             current_selected_list.value = JSON.stringify(selected_list);
             updateSectorDisplay();
         }
-        addSectorButton.focus(); 
+        addSectorButton.focus();
     };
 
     // Set initial visibility mode & initial list of selected sectors
