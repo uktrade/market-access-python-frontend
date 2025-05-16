@@ -97,8 +97,8 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
         help_text=(
-            "This description will only be used internally."
-            "Explain how the barrier is affecting trade, and why it exists"
+            "This description will only be used internally. "
+            "Explain how the barrier is affecting trade, and why it exists. "
             "Where relevant include the specific laws or measures blocking trade, and any political context."
         ),
     )
