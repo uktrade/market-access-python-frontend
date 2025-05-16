@@ -2,28 +2,35 @@ ma.pages.report.sectorsWizardStep = function () {
     // Get buttons from sections and assign them onclick events to call relevant function
     const mainSectorSelect = document.getElementById("main_sector_select");
     var currentMainSectorSelected = mainSectorSelect.value;
-    console.log(currentMainSectorSelected);
+    const addSectorButton = document.getElementById("add-other-sector-button");
+    const otherSectorSelect = document.getElementById("sectors_select");
+    const confirmButton = document.getElementById("confirm-other-sector-button")
+
     mainSectorSelect.addEventListener("change", function () {
         updateOtherSectorsList(mainSectorSelect.value);
         removeItem(mainSectorSelect.value);
     });
-    const addSectorButton = document.getElementById("add-other-sector-button");
+    
     addSectorButton.addEventListener("click", function () {
+        otherSectorSelect.style.display = "block";
+        otherSectorSelect.focus()
+        confirmButton.style.display = "";
+        addSectorButton.style.display = "none";
+    });
+
+    confirmButton.addEventListener("click", function () {
         additionMode();
     });
-    const otherSectorSelect = document.getElementById("sectors_select");
 
     const additionMode = function () {
-        if (otherSectorSelect.style.display == "none") {
-            otherSectorSelect.style.display = "block";
-        } else {
-            appendSector(
-                "id_barrier-sectors-affected-sectors",
-                "sectors_select",
-                "sectors_list_display",
-            );
-            otherSectorSelect.style.display = "none";
-        }
+        appendSector(
+            "id_barrier-sectors-affected-sectors",
+            "sectors_select",
+            "sectors_list_display",
+        );
+        otherSectorSelect.style.display = "none";
+        confirmButton.style.display = "none";
+        addSectorButton.style.display = "";
     };
 
     const appendSector = function (fieldname, select, display_list) {
@@ -152,6 +159,7 @@ ma.pages.report.sectorsWizardStep = function () {
 
     // Set initial visibility mode & initial list of selected sectors
     otherSectorSelect.style.display = "none";
+    confirmButton.style.display = "none";
     updateOtherSectorsList(currentMainSectorSelected);
     updateSectorDisplay();
 };
