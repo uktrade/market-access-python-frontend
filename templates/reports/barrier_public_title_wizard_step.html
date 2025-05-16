@@ -12,10 +12,12 @@
 {% endblock %}
 {% block fields %}
     <div class="govuk-form-group govuk-!-margin-0">
-        <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">Public title</h1>
-            </legend>
+        <div class="govuk-fieldset">
+            <h1 class="govuk-fieldset__heading">
+                <label class="govuk-fieldset__legend govuk-fieldset__legend--l" for="{{ form.title.id_for_label }}">
+                    Public title
+                </label>
+            </h1>
             {% form_error_banner form %}
             <div id="{{ form.title.name }}-form-group"
                  class="govuk-character-count"
@@ -23,9 +25,7 @@
                  data-maxlength="255">
                 <div class="{% form_group_classes form.title.errors %}">
                     {% form_field_error form "title" %}
-                    <label class="govuk-label" for="{{form.title.id_for_label}}"></label>
-                        <span id="{{ form.title.name }}_hint" class="govuk-hint">{{ form.title.help_text }}</span>
-                    </label>
+                    <span id="{{ form.title.name }}_hint" class="govuk-hint">{{ form.title.help_text }}</span>
                     <div class="govuk-body">
                         <a href='https://data-services-help.trade.gov.uk/market-access/how-guides/how-prepare-market-access-barrier-report-public-view/' target='_blank'>Find out how to write a public title (opens in a new tab)</a>
                     </div>
@@ -51,6 +51,6 @@
                     </p>
                 </div>
             </details>
-        </fieldset>
+        </div>
     </div>
 {% endblock %}
