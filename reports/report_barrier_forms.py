@@ -645,6 +645,7 @@ class BarrierPublicTitleForm(forms.Form):
             attrs={
                 "class": "govuk-input govuk-js-character-count js-character-count",
                 "rows": 10,
+                "aria-describedby": "title_hint",
             },
         ),
     )
