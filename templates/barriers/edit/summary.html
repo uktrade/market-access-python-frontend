@@ -22,7 +22,7 @@
              data-maxlength="500">
             <div class="govuk-form-group{% if form.summary.errors %} govuk-form-group--error{% endif %}">
                 <label class="govuk-label govuk-label--s"
-                       for="{{ form.summary.id_for_label }}">{{ form.summary.label }}</label>
+                       for="{{ form.summary.name }}">{{ form.summary.label }}</label>
                 {% form_field_error form "summary" %}
                 <span class="govuk-hint">{{ form.summary.help_text }}</span>
                 <textarea id="{{ form.summary.name }}"
