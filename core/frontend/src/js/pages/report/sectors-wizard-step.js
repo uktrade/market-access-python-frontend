@@ -131,7 +131,6 @@ ma.pages.report.sectorsWizardStep = function () {
                 previousSectorItemElementName = "other-sectors-select-".concat(
                     currentMainSectorSelected,
                 );
-                console.log(previousSectorItemElementName);
                 const previousSectorItem = document.getElementById(
                     previousSectorItemElementName,
                 );
