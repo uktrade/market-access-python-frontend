@@ -13,7 +13,7 @@ ma.pages.report.sectorsWizardStep = function () {
     
     addSectorButton.addEventListener("click", function () {
         otherSectorSelect.style.display = "block";
-        otherSectorSelect.focus()
+        otherSectorSelect.focus();
         confirmButton.style.display = "";
         addSectorButton.style.display = "none";
     });
@@ -105,6 +105,7 @@ ma.pages.report.sectorsWizardStep = function () {
                         );
                         sector_entry.appendChild(remove_link);
                         display_list.appendChild(sector_entry);
+                        remove_link.focus();
                     }
                 }
             }
