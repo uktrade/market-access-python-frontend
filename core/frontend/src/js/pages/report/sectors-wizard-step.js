@@ -74,6 +74,9 @@ ma.pages.report.sectorsWizardStep = function () {
         } else {
             display_list.style.display = "";
             const selected_list = JSON.parse(current_selected_list.value);
+            if (selected_list.length == 0) {
+                display_list.style.display = "none";
+            }
             display_list.innerHTML = "";
             for (let i = 0; i < selected_list.length; i++) {
                 for (let x = 0; x < sector_list.length; x++) {
@@ -155,6 +158,7 @@ ma.pages.report.sectorsWizardStep = function () {
             current_selected_list.value = JSON.stringify(selected_list);
             updateSectorDisplay();
         }
+        addSectorButton.focus(); 
     };
 
     // Set initial visibility mode & initial list of selected sectors
