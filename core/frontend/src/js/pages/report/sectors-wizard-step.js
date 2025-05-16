@@ -2,28 +2,36 @@ ma.pages.report.sectorsWizardStep = function () {
     // Get buttons from sections and assign them onclick events to call relevant function
     const mainSectorSelect = document.getElementById("main_sector_select");
     var currentMainSectorSelected = mainSectorSelect.value;
-    console.log(currentMainSectorSelected);
+    const addSectorButton = document.getElementById("add-other-sector-button");
+    const otherSectorSelect = document.getElementById("sectors_select");
+    const confirmButton = document.getElementById(
+        "confirm-other-sector-button",
+    );
+    const display_list = document.getElementById("sectors_list_display");
+
     mainSectorSelect.addEventListener("change", function () {
         updateOtherSectorsList(mainSectorSelect.value);
         removeItem(mainSectorSelect.value);
     });
-    const addSectorButton = document.getElementById("add-other-sector-button");
+
     addSectorButton.addEventListener("click", function () {
+        otherSectorSelect.style.display = "block";
+        otherSectorSelect.focus();
+        confirmButton.style.display = "";
+    });
+
+    confirmButton.addEventListener("click", function () {
         additionMode();
     });
-    const otherSectorSelect = document.getElementById("sectors_select");
 
     const additionMode = function () {
-        if (otherSectorSelect.style.display == "none") {
-            otherSectorSelect.style.display = "block";
-        } else {
-            appendSector(
-                "id_barrier-sectors-affected-sectors",
-                "sectors_select",
-                "sectors_list_display",
-            );
-            otherSectorSelect.style.display = "none";
-        }
+        appendSector(
+            "id_barrier-sectors-affected-sectors",
+            "sectors_select",
+            "sectors_list_display",
+        );
+        otherSectorSelect.style.display = "none";
+        confirmButton.style.display = "none";
     };
 
     const appendSector = function (fieldname, select, display_list) {
@@ -62,12 +70,15 @@ ma.pages.report.sectorsWizardStep = function () {
         const current_selected_list = document.getElementById(
             "id_barrier-sectors-affected-sectors",
         );
-        const display_list = document.getElementById("sectors_list_display");
 
         if (current_selected_list.value == "") {
             const selected_list = current_selected_list.value;
         } else {
+            display_list.style.display = "";
             const selected_list = JSON.parse(current_selected_list.value);
+            if (selected_list.length == 0) {
+                display_list.style.display = "none";
+            }
             display_list.innerHTML = "";
             for (let i = 0; i < selected_list.length; i++) {
                 for (let x = 0; x < sector_list.length; x++) {
@@ -98,6 +109,7 @@ ma.pages.report.sectorsWizardStep = function () {
                         );
                         sector_entry.appendChild(remove_link);
                         display_list.appendChild(sector_entry);
+                        addSectorButton.focus();
                     }
                 }
             }
@@ -121,7 +133,6 @@ ma.pages.report.sectorsWizardStep = function () {
                 previousSectorItemElementName = "other-sectors-select-".concat(
                     currentMainSectorSelected,
                 );
-                console.log(previousSectorItemElementName);
                 const previousSectorItem = document.getElementById(
                     previousSectorItemElementName,
                 );
@@ -148,10 +159,13 @@ ma.pages.report.sectorsWizardStep = function () {
             current_selected_list.value = JSON.stringify(selected_list);
             updateSectorDisplay();
         }
+        addSectorButton.focus();
     };
 
     // Set initial visibility mode & initial list of selected sectors
     otherSectorSelect.style.display = "none";
+    confirmButton.style.display = "none";
+    display_list.style.display = "none";
     updateOtherSectorsList(currentMainSectorSelected);
     updateSectorDisplay();
 };
