@@ -68,7 +68,7 @@ def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
     ).to_be_visible()
 
     # Barriers cannot be published on local environment
-    if BASE_URL != "http://market-access.local:9880/":
+    if "local" not in BASE_URL:
         page.get_by_role("button", name="Confirm").click()
 
         expect(
@@ -77,7 +77,7 @@ def test_publish_publisher(page, create_test_barrier, is_admin, get_username):
 
 
 @pytest.mark.skipif(
-    BASE_URL == "http://market-access.local:9880/",
+    "local" in BASE_URL,
     reason=f"Barriers cannot be published in {BASE_URL}",
 )
 def test_unpublish_publisher(page, create_test_barrier, is_admin):

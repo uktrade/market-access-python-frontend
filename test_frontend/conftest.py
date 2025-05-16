@@ -176,7 +176,7 @@ def is_admin(page):
 @pytest.fixture(scope="session")
 def get_username(page):
     def _get_username():
-        if BASE_URL == "http://market-access.local:9880/":
+        if "local" in BASE_URL:
             return "Your"
         page.goto(BASE_URL + "account")
         page.locator("dt").filter(has_text="Name").click()

@@ -117,7 +117,7 @@
                     <td class="govuk-table__cell">
                         <a href="{% url 'users:user_detail' user.id %}">
                             <span class="govuk-visually-hidden">Edit </span>
-                            <span class="team-member__full-name">{{ user.full_name }}</span>
+                            <span class="team-member__full-name" data-testid="{{ user.full_name }}_permissions">{{ user.full_name }}</span>
                         </a>
                     </td>
                     <!-- Email cell -->
