@@ -23,7 +23,7 @@
                  data-maxlength="255">
                 <div class="{% form_group_classes form.title.errors %}">
                     {% form_field_error form "title" %}
-                    <label class="govuk-label" for={{form.title.id_for_label}}></label>
+                    <label class="govuk-label" for="{{form.title.id_for_label}}"></label>
                         <span id="{{ form.title.name }}_hint" class="govuk-hint">{{ form.title.help_text }}</span>
                     </label>
                     <div class="govuk-body">

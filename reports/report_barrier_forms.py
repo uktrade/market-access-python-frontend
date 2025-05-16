@@ -664,6 +664,7 @@ class BarrierPublicSummaryForm(forms.Form):
             attrs={
                 "class": "govuk-textarea govuk-js-character-count js-character-count",
                 "rows": 5,
+                "aria-describedby": "summary_hint",
             },
         ),
     )
