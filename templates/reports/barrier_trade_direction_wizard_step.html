@@ -19,12 +19,12 @@
                 {% for value, name in form.fields.trade_direction.choices %}
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input"
-                               id="{{ form.trade_direction.id_for_label }}"
+                               id="{{ name }}"
                                name="barrier-trade-direction-trade_direction"
                                type="radio"
                                value="{{ value }}"
                                {% if form.trade_direction.value == value %} checked="checked"{% endif %}>
-                        <label class="govuk-label govuk-radios__label" for="{{ form.trade_direction.id_for_label }}">
+                        <label class="govuk-label govuk-radios__label" for="{{ name }}">
                             {{ name }}
                         </label>
 
