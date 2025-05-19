@@ -57,6 +57,10 @@ fi
 # Install python dependencies from the chosen requirements file
 pip install -r $requirements_file
 
+# Update playwright additional browser etc
+playwright install
+playwright install-deps
+
 if [ -z "$target_url" ]; then
     echo "Error: No target URL specified."
     exit 1

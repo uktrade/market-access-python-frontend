@@ -6,7 +6,7 @@ from .utils import BASE_URL, clean_full_url, retry
 @retry()
 def test_report_a_barrier_page(page):
     page.goto(clean_full_url(BASE_URL))
-    page.get_by_role("button", name="Report a barrier Add a market").click()
+    page.get_by_role("link", name="Report a barrier").click()
     expect(
         page.get_by_role("heading", name="Market access barriers Report")
     ).to_be_visible()

@@ -66,34 +66,34 @@
                     </h3>
                     <span class="govuk-caption-m p-l-3">This includes all open and resolved in part barriers.</span>
                     <div class="govuk-grid-column-one-third">
-                        <div class="govuk-inset-text summary-card">
-                            <p>
+                        <ul class="govuk-inset-text summary-card govuk-list">
+                            <li>
                                 <span class="govuk-heading-xl" id="open-count">{{ summary_stats.barriers.open }}</span> barriers are open in total.
-                            </p>
-                            <div class="summary-card__data-link" id="open-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3">See the barriers</a>
-                            </div>
-                        </div>
+                            </li>
+                            <li class="summary-card__data-link" id="open-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3">See the barriers<span class="govuk-visually-hidden"> for total open barriers.</span></a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="govuk-grid-column-one-third">
-                        <div class="govuk-inset-text summary-card">
-                            <p>
+                        <ul class="govuk-inset-text summary-card govuk-list">
+                            <li>
                                 <span class="govuk-heading-xl" id="pb100-count">{{ summary_stats.barriers.pb100 }}</span> PB100 barriers are open.
-                            </p>
-                            <div class="summary-card__data-link" id="pb100-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED">See the barriers</a>
-                            </div>
-                        </div>
+                            </li>
+                            <li class="summary-card__data-link" id="pb100-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED">See the barriers<span class="govuk-visually-hidden"> for open PB100 barriers.</span></a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="govuk-grid-column-one-third">
-                        <div class="govuk-inset-text summary-card">
-                            <p>
+                        <ul class="govuk-inset-text summary-card govuk-list">
+                            <li>
                                 <span class="govuk-heading-xl" id="overseas_delivery-count">{{ summary_stats.barriers.overseas_delivery }}</span> Overseas delivery barriers are open.
-                            </p>
-                            <div class="summary-card__data-link" id="overseas_delivery-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS">See the barriers</a>
-                            </div>
-                        </div>
+                            </li>
+                            <li class="summary-card__data-link" id="overseas_delivery-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS">See the barriers<span class="govuk-visually-hidden"> for open overseas barriers.</span></a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="govuk-grid-row">
@@ -105,34 +105,34 @@
                         estimated resolution date in the financial year
                     </span>
                     <div class="govuk-grid-column-one-third">
-                        <div class="govuk-inset-text summary-card">
-                            <p>
+                        <ul class="govuk-inset-text summary-card govuk-list">
+                            <li>
                                 <span class="govuk-heading-xl" id="current_year-resolved-count">{{ summary_stats.barriers_current_year.resolved }}</span> barriers have been resolved in the current financial year.
-                            </p>
-                            <div class="summary-card__data-link" id="current_year-resolved-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=4&status_date_resolved_in_full_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_resolved_in_full_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_resolved_in_full_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_resolved_in_full_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
-                            </div>
-                        </div>
+                            </li>
+                            <li class="summary-card__data-link" id="current_year-resolved-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=4&status_date_resolved_in_full_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_resolved_in_full_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_resolved_in_full_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_resolved_in_full_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers<span class="govuk-visually-hidden"> for barriers that have been resolved in the current financial yearv.</span></a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="govuk-grid-column-one-third">
-                        <div class="govuk-inset-text summary-card">
-                            <p>
+                        <ul class="govuk-inset-text summary-card govuk-list">
+                            <li>
                                 <span class="govuk-heading-xl" id="current_year-pb100-count">{{ summary_stats.barriers_current_year.pb100 }}</span> PB100 barriers are estimated to be resolved in the current financial year.
-                            </p>
-                            <div class="summary-card__data-link" id="current_year-pb100-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED&estimated_resolution_date_resolved_in_part_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&estimated_resolution_date_resolved_in_part_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
-                            </div>
-                        </div>
+                            </li>
+                            <li class="summary-card__data-link" id="current_year-pb100-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=APPROVED&estimated_resolution_date_resolved_in_part_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&estimated_resolution_date_resolved_in_part_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers<span class="govuk-visually-hidden"> for PB100 barriers that are estimated to be resolved in the current financial year.</span></a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="govuk-grid-column-one-third">
-                        <div class="govuk-inset-text summary-card">
-                            <p>
+                        <ul class="govuk-inset-text summary-card govuk-list">
+                            <li>
                                 <span class="govuk-heading-xl" id="current_year-overseas_delivery-count">{{ summary_stats.barriers_current_year.overseas_delivery }}</span> Overseas delivery barriers are estimated to be resolved in the current financial year.
-                            </p>
-                            <div class="summary-card__data-link" id="current_year-overseas_delivery-link">
-                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS&estimated_resolution_date_resolved_in_part_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&estimated_resolution_date_resolved_in_part_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers</a>
-                            </div>
-                        </div>
+                            </li>
+                            <li class="summary-card__data-link" id="current_year-overseas_delivery-link">
+                                <a href="{% url 'barriers:search' %}?{{ search_params }}&status=2&status=3&combined_priority=OVERSEAS&estimated_resolution_date_resolved_in_part_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&estimated_resolution_date_resolved_in_part_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&estimated_resolution_date_resolved_in_part_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}&status_date_open_in_progress_0_0={{ summary_stats.financial_year.current_start|parse_iso|date:"m" }}&status_date_open_in_progress_0_1={{ summary_stats.financial_year.current_start|parse_iso|date:"Y" }}&status_date_open_in_progress_1_0={{ summary_stats.financial_year.current_end|parse_iso|date:"m" }}&status_date_open_in_progress_1_1={{ summary_stats.financial_year.current_end|parse_iso|date:"Y" }}">See the barriers<span class="govuk-visually-hidden"> for overseas delivery barriers that are estimated to be resolved in the current financial year.</span></a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

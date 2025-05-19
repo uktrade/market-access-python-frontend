@@ -7,12 +7,12 @@ import { useWindowQueryParams } from "../hooks";
 import { addLocation } from "./ApplyFilterController";
 
 const colorTheme = [
+    "#28a197",
+    "#4C2C92",
     "#d53880",
     "#003078",
-    "#28a197",
     "#f47738",
     "#5694ca",
-    "#4C2C92",
     "#6F72AF",
     "#F499BE",
     "#85994B",
