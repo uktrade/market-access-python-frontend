@@ -79,10 +79,10 @@ def retry(tries=3, delay=3, backoff=2, logger=None):
 
 def change_permissions(page, username, permission):
     page.goto(BASE_URL + "users")
-    if not page.get_by_role("link", name=username).is_visible():
+    if not page.get_by_test_id(f"{username}_permissions").is_visible():
         page.get_by_placeholder("E.g. full name").fill(username)
         page.get_by_role("button", name="Search").click()
-    page.get_by_role("link", name=username).click()
+    page.get_by_test_id(f"{username}_permissions").click()
     page.get_by_role("link", name="Edit profile").click()
     page.get_by_label(permission).check()
     page.get_by_role("button", name="Save").click()
