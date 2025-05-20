@@ -26,7 +26,7 @@ function TextAreaWithMentions({
         mentionsRef.current?.classList.add("govuk-textarea");
         console.log(
             "mentionsRef",
-            mentionsRef.current?.classList.add("govuk-textarea")
+            mentionsRef.current?.classList.add("govuk-textarea"),
         );
         if (autofocus) {
             mentionsRef.current?.focus();
@@ -97,7 +97,7 @@ function TextAreaWithMentions({
                         search,
                         highlightedDisplay,
                         index,
-                        focused
+                        focused,
                     ) => {
                         const classNames = ["mentions-item"];
                         if (focused) {
