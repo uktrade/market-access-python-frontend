@@ -288,7 +288,9 @@ function CompaniesForm(props) {
                             {companiesList.length}
                         </span>
                         <span> companies match </span>
-                        <span className="govuk-visually-hidden">your seach term </span>
+                        <span className="govuk-visually-hidden">
+                            your seach term{" "}
+                        </span>
                         <span className="highlight">{searchTerm}</span>
                     </h2>
                     <ul className="search-card-list">
