@@ -80,6 +80,7 @@ function TextAreaWithMentions({
                 singleLine={isSingleLine}
                 inputRef={mentionsRef}
                 style={mentionsStyling}
+                id={textAreaId}
             >
                 <Mention
                     trigger={trigger}
