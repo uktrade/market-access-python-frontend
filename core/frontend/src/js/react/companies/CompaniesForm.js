@@ -289,7 +289,7 @@ function CompaniesForm(props) {
                         </span>
                         <span> companies match </span>
                         <span className="govuk-visually-hidden">
-                            your seach term{" "}
+                            your seach term
                         </span>
                         <span className="highlight">{searchTerm}</span>
                     </h2>
