@@ -116,7 +116,7 @@ class BarrierStatusForm(APIFormMixin, forms.Form):
     )
     start_date = MonthYearInFutureField(
         label="When did or will the barrier start to affect trade?",
-        help_text="If you don’t know the month, enter 06.",
+        help_text="For example, 3 2007. If you don’t know the month, enter 06.",
         error_messages={
             "required": "Enter a date",
             "invalid_year": "Enter a date in the format 01 2023",
@@ -645,6 +645,7 @@ class BarrierPublicTitleForm(forms.Form):
             attrs={
                 "class": "govuk-input govuk-js-character-count js-character-count",
                 "rows": 10,
+                "aria-describedby": "title_hint",
             },
         ),
     )
@@ -663,6 +664,7 @@ class BarrierPublicSummaryForm(forms.Form):
             attrs={
                 "class": "govuk-textarea govuk-js-character-count js-character-count",
                 "rows": 5,
+                "aria-describedby": "summary_hint",
             },
         ),
     )

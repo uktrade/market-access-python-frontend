@@ -12,10 +12,12 @@
 {% endblock %}
 {% block fields %}
     <div class="govuk-form-group govuk-!-margin-0">
-        <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">Public summary</h1>
-            </legend>
+        <div class="govuk-fieldset">
+            <h1 class="govuk-fieldset__heading">
+                <label class="govuk-fieldset__legend govuk-fieldset__legend--l" for="{{ form.summary.id_for_label }}">
+                    Public summary
+                </label>
+            </h1>
             {% form_error_banner form %}
             <div id="{{ form.summary.name }}-form-group"
                  class="govuk-character-count"
@@ -49,6 +51,6 @@
                     </p>
                 </div>
             </details>
-        </fieldset>
+        </div>
     </div>
 {% endblock %}

@@ -97,8 +97,8 @@ class UpdateBarrierSummaryForm(APIFormMixin, forms.Form):
         widget=forms.Textarea,
         error_messages={"required": "Enter a brief description for this barrier"},
         help_text=(
-            "This description will only be used internally."
-            "Explain how the barrier is affecting trade, and why it exists"
+            "This description will only be used internally. "
+            "Explain how the barrier is affecting trade, and why it exists. "
             "Where relevant include the specific laws or measures blocking trade, and any political context."
         ),
     )
@@ -753,7 +753,7 @@ class NextStepsItemForm(APIFormMixin, forms.Form):
 class UpdateBarrierStartDateForm(ClearableMixin, APIFormMixin, forms.Form):
     start_date = MonthYearInFutureField(
         label="When did or will the barrier start to affect trade?",
-        help_text="If you don’t know the month, enter 06.",
+        help_text="For example, 3 2007. If you don’t know the month, enter 06.",
         error_messages={"required": "Enter a barrier start date"},
         required=False,
     )
