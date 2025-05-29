@@ -1,5 +1,4 @@
 from django.urls import path
-from django.views.generic import TemplateView
 
 from barriers.views.feedback import FeedbackFormView, FeedbackGratitudeView
 from utils.company_search import SearchCompany
