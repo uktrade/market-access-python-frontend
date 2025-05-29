@@ -8,11 +8,6 @@ app_name = "core"
 
 urlpatterns = [
     path(
-        "accessibility/",
-        TemplateView.as_view(template_name="accessibility.html"),
-        name="accessibility",
-    ),
-    path(
         "feedback/",
         FeedbackFormView.as_view(),
         name="feedback",
