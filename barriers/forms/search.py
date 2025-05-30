@@ -333,7 +333,7 @@ class BarrierSearchForm(forms.Form):
             (str(policy_team["id"]), policy_team["title"])
             for policy_team in self.metadata.data["policy_teams"]
         ]
-        self.fields["policy_team"].choices = choices
+        self.fields["policy_team"].choices = sorted(choices, key=lambda k: k[1])
 
     def set_region_choices(self):
         choices = [
