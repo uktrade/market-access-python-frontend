@@ -6,6 +6,7 @@ from django.forms import Form
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView, View
+from django.shortcuts import render
 
 from barriers.constants import SEARCH_TERM_TAGS
 from utils.api.client import MarketAccessAPIClient
@@ -182,6 +183,25 @@ class BarrierSearch(PaginationMixin, BarrierSearchFormView):
         params = self.request.GET.copy()
         params.pop("page", None)
         return params.urlencode()
+
+
+class BarrrierSearchTypeahead(FormView):
+    form_class = BarrierSearchForm
+    template_name = "barriers/partials/barrier_search_list.html"
+
+    def post(self, request, *args, **kwargs):
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        search_term = request.POST.get("search_term_text", None)
+        if search_term is None:
+            barrier_list = None
+        else:
+            barrier_list = client.barriers.list(
+                search_term_text=search_term,
+                limit=10,
+            )
+        context = {"barriers": barrier_list, "search_term": search_term}
+
+        return render(request, self.template_name, context)
 
 
 class DownloadBarriers(SearchFormMixin, View):

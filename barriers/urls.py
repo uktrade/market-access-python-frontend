@@ -140,6 +140,7 @@ from barriers.views.saved_searches import (
 from barriers.views.search import (
     BarrierDownloadLink,
     BarrierSearch,
+    BarrrierSearchTypeahead,
     DownloadBarriers,
     DownloadBarriersDelete,
     DownloadBarriersDetail,
@@ -173,6 +174,7 @@ from .views.core import (
     Dashboard,
     GetDashboardSummary,
     Home,
+    Home2,
     WhatIsABarrier,
 )
 from .views.estimated_resolution_date import (
@@ -191,6 +193,9 @@ app_name = "barriers"
 urlpatterns = [
     path("", Dashboard.as_view(), name="dashboard"),
     path("search/", BarrierSearch.as_view(), name="search"),
+    path(
+        "search-typeahead/", BarrrierSearchTypeahead.as_view(), name="search_typeahead"
+    ),
     path("find-a-barrier/", BarrierSearch.as_view(), name="find_a_barrier"),
     path("search/download/", DownloadBarriers.as_view(), name="download"),
     path(
@@ -876,6 +881,7 @@ urlpatterns = [
         name="mention_turn_notifications_on",
     ),
     path("home/", Home.as_view(), name="home"),
+    path("home2/", Home2.as_view(), name="home2"),
     path(
         "barriers/<uuid:barrier_id>/related/",
         RelatedBarriers.as_view(),

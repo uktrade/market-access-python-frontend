@@ -123,6 +123,131 @@ class WhatIsABarrier(TemplateView):
         return context_data
 
 
+class Home2(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
+    template_name = "barriers/home_2.html"
+    utm_tags = {
+        "en": {
+            "utm_source": "notification-email",
+            "utm_medium": "email",
+            "utm_campaign": "dashboard",
+        }
+    }
+    form_class = BarrierSearchForm
+
+    # Let the pagination mixin know how many results the API will return per page
+    pagination_limit = 3
+
+    def get(self, form, *args, **kwargs):
+
+        # Check to see if new default is being set
+        default_home_page = self.request.GET.get("default", None)
+
+        if default_home_page == "home":
+            # set home as the default
+            self.request.session["default"] = "home"
+        elif default_home_page == "dashboard":
+            # set home as the default
+            self.request.session["default"] = "dashboard"
+
+        # Check default dashboard current session
+        current_default = self.request.session.get("default", None)
+
+        if current_default == "dashboard":
+            return redirect("barriers:dashboard")
+
+        return super().get(form, *args, **kwargs)
+
+    def get_context_data(self, form, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        client = MarketAccessAPIClient(self.request.session.get("sso_token"))
+        mentions = client.mentions.list()
+
+        are_all_mentions_read: bool = not any(
+            not mention.read_by_recipient for mention in mentions
+        )
+
+        # Get page number for task list pagination from URL
+        page_number = (
+            self.request.GET.get("page") if self.request.GET.get("page") else 1
+        )
+        api_task_list_params = {
+            "limit": self.get_pagination_limit(),
+            "offset": self.get_pagination_offset(),
+            "page": page_number,
+        }
+        # Get list of tasks for the user from the API
+        barrier_task_list = client.dashboard_tasks.list(**api_task_list_params)
+
+        params = form.get_api_search_parameters()
+
+        query_string = ""
+        for parameter in params:
+
+            if isinstance(params[parameter], list):
+                for value in params[parameter]:
+                    query_string = (
+                        query_string + f"&{urllib.parse.urlencode({parameter: value})}"
+                    )
+            else:
+                query_string = (
+                    query_string
+                    + f"&{urllib.parse.urlencode({parameter: params[parameter]})}"
+                )
+
+        search_params = query_string
+
+        summary_url = f"dashboard-summary?{search_params}"
+        summary_stats = client.get(summary_url)
+
+        metadata = get_metadata()
+
+        context_data.update(
+            {
+                "page": "dashboard",
+                "trading_blocs": metadata.get_trading_bloc_list(),
+                "admin_areas": self.get_admin_areas_data(
+                    metadata.get_admin_area_list()
+                ),
+                "countries_with_admin_areas": metadata.get_countries_with_admin_areas_list(),
+                "mentions": mentions,
+                "are_all_mentions_read": are_all_mentions_read,
+                "new_mentions_count": len(
+                    [mention for mention in mentions if not mention.read_by_recipient]
+                ),
+                "filters": form.get_readable_filters(True),
+                "barrier_task_list": barrier_task_list,
+                "summary_stats": summary_stats,
+                "search_params": search_params,
+            }
+        )
+
+        context_data["pagination"] = self.get_pagination_data(
+            object_list=barrier_task_list
+        )
+
+        return context_data
+
+    def get_admin_areas_data(self, admin_areas_metadata):
+        # Admin area data works differently to both trading blocs and countries
+        # We only want admin areas for specific countries and we need them formatted and
+        # sorted in a particular way so the Javascript and HTML can display them correctly
+        # in seperate drop down lists.
+        filtered_areas = {}
+
+        for area in admin_areas_metadata:
+            country = area["country"]["id"]
+            if filtered_areas.get(f"{country}") is None:
+                filtered_areas[f"{country}"] = [
+                    {"value": area["id"], "label": area["name"]}
+                ]
+            else:
+                filtered_areas[f"{country}"].append(
+                    {"value": area["id"], "label": area["name"]}
+                )
+
+        return filtered_areas
+
+
 class Home(AnalyticsMixin, SearchFormView, TemplateView, PaginationMixin):
     template_name = "barriers/home.html"
     utm_tags = {
