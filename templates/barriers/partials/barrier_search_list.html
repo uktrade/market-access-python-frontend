@@ -1,0 +1,27 @@
+{% if barriers %}
+    <table class="govuk-table">
+        <caption class="visually-hidden govuk-table__caption govuk-table__caption--m">List of barriers containing {{ search_term_text }}</caption>
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header app-custom-class">Short code</th>
+                <th class="govuk-table__header app-custom-class">Title</th>
+                <th class="govuk-table__header app-custom-class">Reported on</th>
+                <th class="govuk-table__header app-custom-class">Link</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            {% for barrier in barriers %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__row">
+                        <a href="{% url 'barriers:barrier_detail' barrier.id %}">{{ barrier.code }}</a>
+                    </td>
+                    <td class="govuk-table__row">{{ barrier.title }} (score {{ barrier.similarity }} )</td>
+                    <td class="govuk-table__row">{{ barrier.reported_on }}</td>
+                    <td class="govuk-table__row">
+                        <a href="{% url 'barriers:barrier_detail' barrier.id %}">View barrier details</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
