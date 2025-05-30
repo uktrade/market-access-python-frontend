@@ -4,11 +4,10 @@
 {% block page_title %}{{ block.super }} - Homepage{% endblock %}
 {% block head %}
     {% block body_script %}
-        {% comment %} <script src="https://unpkg.com/htmx.org@2.0.4"
+         <script src="https://unpkg.com/htmx.org@2.0.4"
                 integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
                 crossorigin="anonymous"
-                nonce="{{request.csp_nonce}}">/></script> {% endcomment %}
-        <script nonce="{{request.csp_nonce}}">/** window.htmx = require("htmx.org") **/</script>
+                nonce="{{request.csp_nonce}}">/></script> 
     {% endblock body_script %}
 {% endblock head %}
 {% block masthead %}

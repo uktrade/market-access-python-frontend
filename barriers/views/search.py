@@ -189,6 +189,9 @@ class BarrrierSearchTypeahead(FormView):
     form_class = BarrierSearchForm
     template_name = "barriers/partials/barrier_search_list.html"
 
+    # This view could be removed and combined with the BarrierSearch endpoint
+    # modifying it to return the partial if call is HTMX
+
     def post(self, request, *args, **kwargs):
         client = MarketAccessAPIClient(self.request.session.get("sso_token"))
         search_term = request.POST.get("search_term_text", None)
